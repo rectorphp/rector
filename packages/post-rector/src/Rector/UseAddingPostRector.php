@@ -73,7 +73,7 @@ final class UseAddingPostRector extends AbstractPostRector
         }
 
         $smartFileInfo = $this->getSmartFileInfo($nodes);
-        if ($smartFileInfo === null) {
+        if (! $smartFileInfo instanceof SmartFileInfo) {
             return $nodes;
         }
 

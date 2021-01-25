@@ -11,6 +11,8 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
@@ -169,7 +171,8 @@ CODE_SAMPLE
     private function removeClassPrivatePropertiesByNames(Class_ $class, array $unusedPropertyNames): Class_
     {
         foreach ($class->getProperties() as $property) {
-            if ($this->hasPhpDocTagValueNode($property, IdTagValueNode::class)) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+            if ($phpDocInfo->hasByType(IdTagValueNode::class)) {
                 continue;
             }
 
@@ -185,7 +188,7 @@ CODE_SAMPLE
                 $this->removeNode($this->collectionByPropertyName[$propertyName]);
             }
 
-            $this->removeInversedByOrMappedByOnRelatedProperty($property);
+            $this->removeInversedByOrMappedByOnRelatedProperty($phpDocInfo, $property);
         }
 
         return $class;
@@ -226,14 +229,15 @@ CODE_SAMPLE
         return $usedPropertyNames;
     }
 
-    private function removeInversedByOrMappedByOnRelatedProperty(Property $property): void
+    private function removeInversedByOrMappedByOnRelatedProperty(PhpDocInfo $phpDocInfo, Property $property): void
     {
-        $otherRelationProperty = $this->getOtherRelationProperty($property);
-        if ($otherRelationProperty === null) {
+        $otherRelationProperty = $this->getOtherRelationProperty($phpDocInfo, $property);
+        if (! $otherRelationProperty instanceof Property) {
             return;
         }
 
-        $this->doctrineEntityManipulator->removeMappedByOrInversedByFromProperty($otherRelationProperty);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($otherRelationProperty);
+        $this->doctrineEntityManipulator->removeMappedByOrInversedByFromProperty($phpDocInfo);
     }
 
     private function isPropertyFetchAssignOfArrayCollection(PropertyFetch $propertyFetch): bool
@@ -253,10 +257,15 @@ CODE_SAMPLE
         return $this->isName($new->class, ArrayCollection::class);
     }
 
-    private function getOtherRelationProperty(Property $property): ?Property
+    private function getOtherRelationProperty(PhpDocInfo $phpDocInfo, Property $property): ?Property
     {
-        $targetEntity = $this->docBlockManipulator->getDoctrineFqnTargetEntity($property);
-        if ($targetEntity === null) {
+        $doctrineRelationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
+        if (! $doctrineRelationTagValueNode instanceof DoctrineRelationTagValueNodeInterface) {
+            return null;
+        }
+
+        $fullyQualifiedTargetEntity = $doctrineRelationTagValueNode->getFullyQualifiedTargetEntity();
+        if ($fullyQualifiedTargetEntity === null) {
             return null;
         }
 
@@ -266,7 +275,7 @@ CODE_SAMPLE
         }
 
         // get the class property and remove "mappedBy/inversedBy" from annotation
-        $relatedEntityClass = $this->nodeRepository->findClass($targetEntity);
+        $relatedEntityClass = $this->nodeRepository->findClass($fullyQualifiedTargetEntity);
         if (! $relatedEntityClass instanceof Class_) {
             return null;
         }

@@ -6,7 +6,7 @@ namespace Rector\NetteToSymfony\Analyzer;
 
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Type\TypeWithClassName;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 final class NetteControlFactoryInterfaceAnalyzer
@@ -16,9 +16,15 @@ final class NetteControlFactoryInterfaceAnalyzer
      */
     private $returnTypeInferer;
 
-    public function __construct(ReturnTypeInferer $returnTypeInferer)
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    public function __construct(ReturnTypeInferer $returnTypeInferer, NodeTypeResolver $nodeTypeResolver)
     {
         $this->returnTypeInferer = $returnTypeInferer;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**
@@ -32,7 +38,7 @@ final class NetteControlFactoryInterfaceAnalyzer
                 return false;
             }
 
-            $className = $this->resolveClassName($returnType);
+            $className = $this->nodeTypeResolver->getFullyQualifiedClassName($returnType);
             if (is_a($className, 'Nette\Application\UI\Control', true)) {
                 return true;
             }
@@ -43,14 +49,5 @@ final class NetteControlFactoryInterfaceAnalyzer
         }
 
         return false;
-    }
-
-    private function resolveClassName(TypeWithClassName $typeWithClassName): string
-    {
-        if ($typeWithClassName instanceof ShortenedObjectType) {
-            return $typeWithClassName->getFullyQualifiedName();
-        }
-
-        return $typeWithClassName->getClassName();
     }
 }

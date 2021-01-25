@@ -5,27 +5,19 @@ declare(strict_types=1);
 namespace Rector\NetteToSymfony\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NetteToSymfony\Collector\OnFormVariableMethodCallsCollector;
+use Rector\NetteToSymfony\NodeFactory\BuildFormClassMethodFactory;
 use Rector\NetteToSymfony\NodeFactory\SymfonyControllerFactory;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Rector\NetteToSymfony\NodeFactory\SymfonyMethodCallsFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ExtraFileCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see https://symfony.com/doc/current/forms.html#creating-form-classes
@@ -44,12 +36,27 @@ final class FormControlToControllerAndFormTypeRector extends AbstractRector
      */
     private $symfonyControllerFactory;
 
+    /**
+     * @var BuildFormClassMethodFactory
+     */
+    private $buildFormClassMethodFactory;
+
+    /**
+     * @var SymfonyMethodCallsFactory
+     */
+    private $symfonyMethodCallsFactory;
+
     public function __construct(
         OnFormVariableMethodCallsCollector $onFormVariableMethodCallsCollector,
-        SymfonyControllerFactory $symfonyControllerFactory
+        SymfonyControllerFactory $symfonyControllerFactory,
+        BuildFormClassMethodFactory $buildFormClassMethodFactory,
+        SymfonyMethodCallsFactory $symfonyMethodCallsFactory
+
     ) {
         $this->onFormVariableMethodCallsCollector = $onFormVariableMethodCallsCollector;
         $this->symfonyControllerFactory = $symfonyControllerFactory;
+        $this->buildFormClassMethodFactory = $buildFormClassMethodFactory;
+        $this->symfonyMethodCallsFactory = $symfonyMethodCallsFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -140,20 +147,16 @@ CODE_SAMPLE
             }
 
             $formTypeClass = $this->collectFormMethodCallsAndCreateFormTypeClass($classMethod);
-            if ($formTypeClass === null) {
+            if (! $formTypeClass instanceof \PhpParser\Node\Stmt\Class_) {
                 continue;
             }
 
             $symfonyControllerNamespace = $this->symfonyControllerFactory->createNamespace($node, $formTypeClass);
-            if ($symfonyControllerNamespace === null) {
+            if (! $symfonyControllerNamespace instanceof Namespace_) {
                 continue;
             }
 
-            /** @var SmartFileInfo $smartFileInfo */
-            $smartFileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-            $filePath = dirname($smartFileInfo->getRealPath()) . DIRECTORY_SEPARATOR . 'SomeFormController.php';
-
-            $this->printToFile([$symfonyControllerNamespace], $filePath);
+            $this->printNodesToFilePath([$symfonyControllerNamespace], 'src/Controller/SomeFormController.php');
 
             return $formTypeClass;
         }
@@ -174,59 +177,15 @@ CODE_SAMPLE
         $formBuilderVariable = new Variable('formBuilder');
 
         // public function buildForm(\Symfony\Component\Form\FormBuilderInterface $formBuilder, array $options)
-        $buildFormClassMethod = $this->createBuildFormClassMethod($formBuilderVariable);
+        $buildFormClassMethod = $this->buildFormClassMethodFactory->create($formBuilderVariable);
 
-        $symfonyMethodCalls = [];
-
-        // create symfony form from nette form method calls
-        foreach ($onFormVariableMethodCalls as $onFormVariableMethodCall) {
-            if ($this->isName($onFormVariableMethodCall->name, 'addText')) {
-                // text input
-                $inputName = $onFormVariableMethodCall->args[0];
-                $formTypeClassConstant = $this->createClassConstantReference(TextType::class);
-
-                $args = $this->createAddTextArgs($inputName, $formTypeClassConstant, $onFormVariableMethodCall);
-                $methodCall = new MethodCall($formBuilderVariable, 'add', $args);
-
-                $symfonyMethodCalls[] = new Expression($methodCall);
-            }
-        }
-
+        $symfonyMethodCalls = $this->symfonyMethodCallsFactory->create(
+            $onFormVariableMethodCalls,
+            $formBuilderVariable
+        );
         $buildFormClassMethod->stmts = $symfonyMethodCalls;
 
         return $this->createFormTypeClassFromBuildFormClassMethod($buildFormClassMethod);
-    }
-
-    private function createBuildFormClassMethod(Variable $formBuilderVariable): ClassMethod
-    {
-        $buildFormClassMethod = $this->nodeFactory->createPublicMethod('buildForm');
-        $buildFormClassMethod->params[] = new Param($formBuilderVariable, null, new FullyQualified(
-            'Symfony\Component\Form\FormBuilderInterface'
-        ));
-        $buildFormClassMethod->params[] = new Param(new Variable('options'), null, new Identifier('array'));
-
-        return $buildFormClassMethod;
-    }
-
-    /**
-     * @return Arg[]
-     */
-    private function createAddTextArgs(
-        Arg $arg,
-        ClassConstFetch $classConstFetch,
-        MethodCall $onFormVariableMethodCall
-    ): array {
-        $args = [$arg, new Arg($classConstFetch)];
-
-        if (isset($onFormVariableMethodCall->args[1])) {
-            $optionsArray = new Array_([
-                new ArrayItem($onFormVariableMethodCall->args[1]->value, new String_('label')),
-            ]);
-
-            $args[] = new Arg($optionsArray);
-        }
-
-        return $args;
     }
 
     private function createFormTypeClassFromBuildFormClassMethod(ClassMethod $buildFormClassMethod): Class_

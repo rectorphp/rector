@@ -189,6 +189,11 @@ final class SetList
     /**
      * @var string
      */
+    public const FLYSYSTEM_20 = __DIR__ . '/../../../../config/set/flysystem-20.php';
+
+    /**
+     * @var string
+     */
     public const FRAMEWORK_EXTRA_BUNDLE_40 = __DIR__ . '/../../../../config/set/framework-extra-bundle-40.php';
 
     /**
@@ -325,6 +330,11 @@ final class SetList
      * @var string
      */
     public const NETTE_30_DEPENDENCY_INJECTION = __DIR__ . '/../../../../config/set/nette-30-dependency-injection.php';
+
+    /**
+     * @var string
+     */
+    public const NETTE_31 = __DIR__ . '/../../../../config/set/nette-31.php';
 
     /**
      * @var string

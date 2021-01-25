@@ -6,19 +6,19 @@ namespace Rector\BetterPhpDocParser\Comment;
 
 use PhpParser\Comment;
 use PhpParser\Node;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class CommentsMerger
 {
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     /**
@@ -45,19 +45,19 @@ final class CommentsMerger
     public function keepParent(Node $newNode, Node $oldNode): void
     {
         $parent = $oldNode->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent === null) {
+        if (! $parent instanceof Node) {
             return;
         }
 
-        $arrayPhpDocInfo = $parent->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $arrayComments = $parent->getComments();
+        $phpDocInfo = $parent->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $comments = $parent->getComments();
 
-        if ($arrayPhpDocInfo === null && $arrayComments === []) {
+        if ($phpDocInfo === null && $comments === []) {
             return;
         }
 
-        $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $arrayPhpDocInfo);
-        $newNode->setAttribute(AttributeKey::COMMENTS, $arrayComments);
+        $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
+        $newNode->setAttribute(AttributeKey::COMMENTS, $comments);
     }
 
     public function keepChildren(Node $newNode, Node $oldNode): void
@@ -83,7 +83,7 @@ final class CommentsMerger
     {
         $childrenComments = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
             &$childrenComments
         ): void {
             $comments = $node->getComments();

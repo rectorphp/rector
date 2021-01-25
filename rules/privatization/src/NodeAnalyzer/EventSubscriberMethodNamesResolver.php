@@ -8,18 +8,18 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class EventSubscriberMethodNamesResolver
 {
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     /**
@@ -28,19 +28,20 @@ final class EventSubscriberMethodNamesResolver
     public function resolveFromClassMethod(ClassMethod $classMethod): array
     {
         $methodNames = [];
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            &$methodNames
-        ) {
-            if (! $node instanceof ArrayItem) {
-                return null;
-            }
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            (array) $classMethod->stmts,
+            function (Node $node) use (&$methodNames) {
+                if (! $node instanceof ArrayItem) {
+                    return null;
+                }
 
-            if (! $node->value instanceof String_) {
-                return null;
-            }
+                if (! $node->value instanceof String_) {
+                    return null;
+                }
 
-            $methodNames[] = $node->value->value;
-        });
+                $methodNames[] = $node->value->value;
+            }
+        );
 
         return $methodNames;
     }

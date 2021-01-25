@@ -7,7 +7,7 @@ namespace Rector\Nette\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,6 +19,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ContextGetByTypeToConstructorInjectionRector extends AbstractToConstructorInjectionRector
 {
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
+    {
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -82,7 +92,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isInTestClass($node)) {
+        if ($this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
 
@@ -99,15 +109,5 @@ CODE_SAMPLE
         }
 
         return $this->processMethodCallNode($node);
-    }
-
-    private function isInTestClass(MethodCall $methodCall): bool
-    {
-        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
-            return false;
-        }
-
-        return $this->isObjectTypes($classLike, ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase']);
     }
 }

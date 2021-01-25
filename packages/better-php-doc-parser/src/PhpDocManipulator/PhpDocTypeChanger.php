@@ -12,9 +12,6 @@ use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\ChangesReporting\Collector\RectorChangeCollector;
-use Rector\Core\Configuration\CurrentNodeProvider;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
@@ -32,16 +29,6 @@ final class PhpDocTypeChanger
     private $staticTypeMapper;
 
     /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
-
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    /**
      * @var ParamPhpDocNodeFactory
      */
     private $paramPhpDocNodeFactory;
@@ -49,14 +36,10 @@ final class PhpDocTypeChanger
     public function __construct(
         StaticTypeMapper $staticTypeMapper,
         TypeComparator $typeComparator,
-        RectorChangeCollector $rectorChangeCollector,
-        CurrentNodeProvider $currentNodeProvider,
         ParamPhpDocNodeFactory $paramPhpDocNodeFactory
     ) {
         $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->rectorChangeCollector = $rectorChangeCollector;
-        $this->currentNodeProvider = $currentNodeProvider;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
     }
 
@@ -79,14 +62,12 @@ final class PhpDocTypeChanger
         if ($currentVarTagValueNode !== null) {
             // only change type
             $currentVarTagValueNode->type = $newPHPStanPhpDocType;
+            $phpDocInfo->markAsChanged();
         } else {
             // add completely new one
             $attributeAwareVarTagValueNode = new AttributeAwareVarTagValueNode($newPHPStanPhpDocType, '', '');
             $phpDocInfo->addTagValueNode($attributeAwareVarTagValueNode);
         }
-
-        // notify about node change
-        $this->notifyChange();
     }
 
     public function changeReturnType(PhpDocInfo $phpDocInfo, Type $newType): void
@@ -103,20 +84,17 @@ final class PhpDocTypeChanger
         if ($currentReturnTagValueNode !== null) {
             // only change type
             $currentReturnTagValueNode->type = $newPHPStanPhpDocType;
+            $phpDocInfo->markAsChanged();
         } else {
             // add completely new one
             $attributeAwareReturnTagValueNode = new AttributeAwareReturnTagValueNode($newPHPStanPhpDocType, '');
             $phpDocInfo->addTagValueNode($attributeAwareReturnTagValueNode);
         }
-
-        // notify about node change
-        $this->notifyChange();
     }
 
     public function changeParamType(PhpDocInfo $phpDocInfo, Type $newType, Param $param, string $paramName): void
     {
         $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
-
         $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
 
         // override existing type
@@ -132,22 +110,10 @@ final class PhpDocTypeChanger
             }
 
             $paramTagValueNode->type = $phpDocType;
+            $phpDocInfo->markAsChanged();
         } else {
             $paramTagValueNode = $this->paramPhpDocNodeFactory->create($phpDocType, $param);
             $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
-
-        // notify about node change
-        $this->notifyChange();
-    }
-
-    private function notifyChange(): void
-    {
-        $node = $this->currentNodeProvider->getNode();
-        if ($node === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $this->rectorChangeCollector->notifyNodeFileInfo($node);
     }
 }

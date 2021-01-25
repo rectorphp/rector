@@ -87,37 +87,33 @@ final class AssignManipulator
 
     public function isLeftPartOfAssign(Node $node): bool
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Assign && $parentNode->var === $node) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Assign && $this->betterStandardPrinter->areNodesEqual($parent->var, $node)) {
             return true;
         }
 
-        if ($parentNode !== null && $this->isValueModifyingNode($parentNode)) {
+        if ($parent !== null && $this->isValueModifyingNode($parent)) {
             return true;
         }
 
         // traverse up to array dim fetches
-        if ($parentNode instanceof ArrayDimFetch) {
-            $previousParentNode = $parentNode;
-            while ($parentNode instanceof ArrayDimFetch) {
-                $previousParentNode = $parentNode;
-                $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof ArrayDimFetch) {
+            $previousParent = $parent;
+            while ($parent instanceof ArrayDimFetch) {
+                $previousParent = $parent;
+                $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
             }
 
-            if ($parentNode instanceof Assign) {
-                return $parentNode->var === $previousParentNode;
+            if ($parent instanceof Assign) {
+                return $parent->var === $previousParent;
             }
         }
 
         return false;
     }
 
-    public function isNodePartOfAssign(?Node $node): bool
+    public function isNodePartOfAssign(Node $node): bool
     {
-        if ($node === null) {
-            return false;
-        }
-
         $previousNode = $node;
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 

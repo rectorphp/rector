@@ -16,6 +16,16 @@ jobs:
                         run: "composer changelog"
                         branch: 'automated-regenerated-changelog'
 
+                    -
+                        name: "Re-Generate Nodes/Rectors Documentation"
+                        run: "composer docs"
+                        branch: 'automated-regenerated-nodes-rectors-documentation'
+
+                    -
+                        name: 'Apply Coding Standard'
+                        run: "composer fix-cs"
+                        branch: 'automated-apply-coding-standards'
+
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
 
@@ -31,7 +41,7 @@ jobs:
                 with:
                     php-version: 7.4
                     coverage: xdebug
-                    tools: composer:v2
+
 
             -
                 run: composer install --no-progress --ansi

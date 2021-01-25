@@ -22,7 +22,7 @@ final class RectorRuleAndValueObjectHaveSameStartsRuleTest extends AbstractServi
 
     public function provideData(): Iterator
     {
-        yield [__DIR__ . '/Fixture/HaveSameStarts.php', []];
+        yield [__DIR__ . '/Fixture/SkipHaveSameStarts.php', []];
         yield [__DIR__ . '/Fixture/SkipDifferentType.php', []];
         yield [__DIR__ . '/Fixture/SkipNoCall.php', []];
         yield [__DIR__ . '/Fixture/SkipNoCallConfigure.php', []];

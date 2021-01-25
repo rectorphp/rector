@@ -1,0 +1,11 @@
+{
+    "require": {
+        "vendor1/package1": "^1.0"
+    }
+}
+-----
+{
+    "require": {
+        "vendor1/package3": "^4.0"
+    }
+}

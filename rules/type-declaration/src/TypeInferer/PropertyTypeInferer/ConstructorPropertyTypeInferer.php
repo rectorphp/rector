@@ -41,22 +41,21 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
 
     public function inferProperty(Property $property): Type
     {
-        /** @var Class_|null $classLike */
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof Class_) {
             // anonymous class
             return new MixedType();
         }
 
         $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return new MixedType();
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
 
         $param = $this->classMethodPropertyFetchManipulator->resolveParamForPropertyFetch($classMethod, $propertyName);
-        if ($param === null) {
+        if (! $param instanceof Param) {
             return new MixedType();
         }
 
@@ -125,22 +124,22 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
     {
         $paramStaticType = new ArrayType(new MixedType(), new MixedType());
 
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $propertyName,
-            &$paramStaticType
-        ): ?int {
-            if (! $node instanceof Variable) {
-                return null;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            (array) $classMethod->stmts,
+            function (Node $node) use ($propertyName, &$paramStaticType): ?int {
+                if (! $node instanceof Variable) {
+                    return null;
+                }
+
+                if (! $this->nodeNameResolver->isName($node, $propertyName)) {
+                    return null;
+                }
+
+                $paramStaticType = $this->nodeTypeResolver->getStaticType($node);
+
+                return NodeTraverser::STOP_TRAVERSAL;
             }
-
-            if (! $this->nodeNameResolver->isName($node, $propertyName)) {
-                return null;
-            }
-
-            $paramStaticType = $this->nodeTypeResolver->getStaticType($node);
-
-            return NodeTraverser::STOP_TRAVERSAL;
-        });
+        );
 
         return $paramStaticType;
     }

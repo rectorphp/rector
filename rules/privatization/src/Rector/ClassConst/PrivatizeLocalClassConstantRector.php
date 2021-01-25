@@ -6,14 +6,15 @@ namespace Rector\Privatization\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\Privatization\NodeFinder\ParentClassConstantNodeFinder;
 use Rector\Privatization\Reflection\ParentConstantReflectionResolver;
 use Rector\Privatization\ValueObject\ConstantVisibility;
+use ReflectionClassConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -149,9 +150,8 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classConst->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo !== null && $phpDocInfo->hasByName('api')) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classConst);
+        if ($phpDocInfo->hasByName(TagName::API)) {
             return true;
         }
 
@@ -177,7 +177,7 @@ CODE_SAMPLE
         }
 
         $parentClassConstantReflection = $this->parentConstantReflectionResolver->resolve($class, $constant);
-        if ($parentClassConstantReflection === null) {
+        if (! $parentClassConstantReflection instanceof ReflectionClassConstant) {
             return null;
         }
 

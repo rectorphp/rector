@@ -7,6 +7,7 @@ namespace Rector\Symfony3\Rector\ClassMethod;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -71,7 +72,7 @@ CODE_SAMPLE
         }
 
         $returnedExpr = $this->resolveOnlyStmtReturnExpr($node);
-        if ($returnedExpr === null) {
+        if (! $returnedExpr instanceof Expr) {
             return null;
         }
 
@@ -94,7 +95,12 @@ CODE_SAMPLE
 
     private function isObjectMethodNameMatch(ClassMethod $classMethod): bool
     {
-        if (! $this->isInObjectType($classMethod, 'Symfony\Component\Form\AbstractType')) {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
+            return false;
+        }
+
+        if (! $this->isObjectType($classMethod, 'Symfony\Component\Form\AbstractType')) {
             return false;
         }
 

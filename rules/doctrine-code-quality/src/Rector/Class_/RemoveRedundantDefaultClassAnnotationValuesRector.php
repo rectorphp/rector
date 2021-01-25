@@ -6,8 +6,8 @@ namespace Rector\DoctrineCodeQuality\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrineClassAnalyzer;
 use Rector\DoctrineCodeQuality\NodeManipulator\DoctrineItemDefaultValueManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,20 +18,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveRedundantDefaultClassAnnotationValuesRector extends AbstractRector
 {
     /**
-     * @var DoctrineClassAnalyzer
-     */
-    private $doctrineClassAnalyzer;
-
-    /**
      * @var DoctrineItemDefaultValueManipulator
      */
     private $doctrineItemDefaultValueManipulator;
 
-    public function __construct(
-        DoctrineClassAnalyzer $doctrineClassAnalyzer,
-        DoctrineItemDefaultValueManipulator $doctrineItemDefaultValueManipulator
-    ) {
-        $this->doctrineClassAnalyzer = $doctrineClassAnalyzer;
+    public function __construct(DoctrineItemDefaultValueManipulator $doctrineItemDefaultValueManipulator)
+    {
         $this->doctrineItemDefaultValueManipulator = $doctrineItemDefaultValueManipulator;
     }
 
@@ -80,13 +72,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->doctrineItemDefaultValueManipulator->resetHasModifiedAnnotation();
         if ($node instanceof Class_) {
             $this->refactorClassAnnotations($node);
-        }
-
-        if (! $this->doctrineItemDefaultValueManipulator->hasModifiedAnnotation()) {
-            return null;
         }
 
         return $node;
@@ -99,11 +86,13 @@ CODE_SAMPLE
 
     private function refactorEntityAnnotation(Class_ $class): void
     {
-        $entityTagValueNode = $this->doctrineClassAnalyzer->matchDoctrineEntityTagValueNode($class);
-        if ($entityTagValueNode === null) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
+
+        $entityTagValueNode = $phpDocInfo->getByType(EntityTagValueNode::class);
+        if (! $entityTagValueNode instanceof EntityTagValueNode) {
             return;
         }
 
-        $this->doctrineItemDefaultValueManipulator->remove($entityTagValueNode, 'readOnly', false);
+        $this->doctrineItemDefaultValueManipulator->remove($phpDocInfo, $entityTagValueNode, 'readOnly', false);
     }
 }

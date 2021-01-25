@@ -7,7 +7,6 @@ namespace Rector\Privatization\Rector\Class_;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -185,7 +184,7 @@ CODE_SAMPLE
             }
 
             $constantName = $this->createConstName($node->value);
-            return new ClassConstFetch(new Name('self'), $constantName);
+            return $this->nodeFactory->createSelfFetchConstant($constantName, $node);
         });
     }
 
@@ -254,11 +253,13 @@ CODE_SAMPLE
         }
 
         // convert camelcase parts to underscore
+        $parts = explode(self::UNDERSCORE, $value);
+
         $parts = array_map(
-            function (string $v): string {
-                return StaticRectorStrings::camelCaseToUnderscore($v);
+            function (string $value): string {
+                return StaticRectorStrings::camelCaseToUnderscore($value);
             },
-            explode(self::UNDERSCORE, $value)
+            $parts
         );
 
         // apply "CONST" prefix if constant beginning with number

@@ -22,9 +22,15 @@ final class VarAnnotationManipulator
      */
     private $phpDocInfoFactory;
 
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function decorateNodeWithInlineVarType(
@@ -56,28 +62,17 @@ final class VarAnnotationManipulator
             return;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
-        }
-
-        $phpDocInfo->changeVarType($staticType);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $staticType);
     }
 
     private function resolvePhpDocInfo(Node $node): PhpDocInfo
     {
         $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         if ($currentStmt instanceof Expression) {
-            /** @var PhpDocInfo|null $phpDocInfo */
-            $phpDocInfo = $currentStmt->getAttribute(AttributeKey::PHP_DOC_INFO);
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($currentStmt);
         } else {
-            /** @var PhpDocInfo|null $phpDocInfo */
-            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        }
-
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         }
 
         $phpDocInfo->makeSingleLined();

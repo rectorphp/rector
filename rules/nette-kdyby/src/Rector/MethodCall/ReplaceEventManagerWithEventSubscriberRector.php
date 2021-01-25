@@ -139,9 +139,8 @@ CODE_SAMPLE
         // 3. create new event class with args
         $eventClassInNamespace = $this->eventValueObjectClassFactory->create($eventClassName, $args);
 
-        /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo === null) {
+        if (! $fileInfo instanceof SmartFileInfo) {
             throw new ShouldNotHappenException();
         }
 

@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Node;
 
 use Nette\Utils\Strings;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class DocAliasResolver
 {
@@ -22,13 +23,21 @@ final class DocAliasResolver
     private const DOC_ALIAS_REGEX = '#\@(?<possible_alias>\w+)(\\\\)?#s';
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser)
-    {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        PhpDocInfoFactory $phpDocInfoFactory
+    ) {
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -38,17 +47,15 @@ final class DocAliasResolver
     {
         $possibleDocAliases = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
             &$possibleDocAliases
         ): void {
             $docComment = $node->getDocComment();
-            if ($docComment === null) {
+            if (! $docComment instanceof Doc) {
                 return;
             }
 
-            /** @var PhpDocInfo $phpDocInfo */
-            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
             $possibleDocAliases = $this->collectVarType($phpDocInfo, $possibleDocAliases);
 
             // e.g. "use Dotrine\ORM\Mapping as ORM" etc.

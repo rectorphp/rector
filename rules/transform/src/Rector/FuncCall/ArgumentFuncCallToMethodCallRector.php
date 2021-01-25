@@ -14,6 +14,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
@@ -158,9 +159,10 @@ CODE_SAMPLE
     private function shouldSkipFuncCall(FuncCall $funcCall): bool
     {
         // we can inject only in injectable class method  context
+        // we can inject only in injectable class method  context
         /** @var ClassMethod|null $classMethod */
         $classMethod = $funcCall->getAttribute(AttributeKey::METHOD_NODE);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return true;
         }
 
@@ -178,7 +180,7 @@ CODE_SAMPLE
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($argumentFuncCallToMethodCall->getClass());
         $expectedName = $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
 
-        if ($expectedName === null) {
+        if (! $expectedName instanceof ExpectedName) {
             throw new ShouldNotHappenException();
         }
 

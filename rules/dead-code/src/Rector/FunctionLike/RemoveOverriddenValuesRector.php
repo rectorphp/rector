@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use Rector\Core\Context\ContextAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\FlowControl\VariableUseFinder;
 use Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector;
+use Rector\DeadCode\NodeFinder\VariableUseFinder;
 use Rector\DeadCode\ValueObject\VariableNodeUse;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -174,10 +174,16 @@ CODE_SAMPLE
         $nodesToRemove = [];
 
         foreach ($assignedVariableNames as $assignedVariableName) {
-            /** @var VariableNodeUse|null $previousNode */
             $previousNode = null;
 
             foreach ($nodesByTypeAndPosition as $nodeByTypeAndPosition) {
+                $variableNode = $nodeByTypeAndPosition->getVariableNode();
+                $comments = $variableNode->getAttribute(AttributeKey::COMMENTS);
+
+                if ($comments !== null) {
+                    continue;
+                }
+
                 if (! $nodeByTypeAndPosition->isName($assignedVariableName)) {
                     continue;
                 }
@@ -202,7 +208,7 @@ CODE_SAMPLE
         VariableNodeUse $nodeByTypeAndPosition
     ): bool {
         // this node was just used, skip to next one
-        if ($previousNode === null) {
+        if (! $previousNode instanceof VariableNodeUse) {
             return false;
         }
 

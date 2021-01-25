@@ -12,7 +12,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -34,22 +34,22 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
     private $node;
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var SmartFileSystem
      */
     private $smartFileSystem;
+
+    /**
+     * @var DocBlockTagReplacer
+     */
+    private $docBlockTagReplacer;
 
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
 
         $this->phpDocInfoPrinter = $this->getService(PhpDocInfoPrinter::class);
-        $this->docBlockManipulator = $this->getService(DocBlockManipulator::class);
         $this->smartFileSystem = $this->getService(SmartFileSystem::class);
+        $this->docBlockTagReplacer = $this->getService(DocBlockTagReplacer::class);
 
         $this->phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/Source/doc.txt');
     }
@@ -75,13 +75,10 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
     public function testReplaceTagByAnother(): void
     {
         $phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/Source/test-tag.txt');
+        $this->docBlockTagReplacer->replaceTagByAnother($phpDocInfo, 'test', 'flow');
 
-        $this->docBlockManipulator->replaceTagByAnother($phpDocInfo->getPhpDocNode(), 'test', 'flow');
-
-        $this->assertStringEqualsFile(
-            __DIR__ . '/Source/expected-replaced-tag.txt',
-            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo)
-        );
+        $printedPhpDocInfo = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+        $this->assertStringEqualsFile(__DIR__ . '/Source/expected-replaced-tag.txt', $printedPhpDocInfo);
     }
 
     private function createPhpDocInfoFromFile(string $path): PhpDocInfo

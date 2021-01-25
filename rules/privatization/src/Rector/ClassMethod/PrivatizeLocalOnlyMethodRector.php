@@ -8,9 +8,9 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
@@ -45,12 +45,19 @@ final class PrivatizeLocalOnlyMethodRector extends AbstractRector implements Zer
      */
     private $classMethodExternalCallNodeAnalyzer;
 
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
     public function __construct(
         ClassMethodExternalCallNodeAnalyzer $classMethodExternalCallNodeAnalyzer,
-        ClassMethodVisibilityVendorLockResolver $classMethodVisibilityVendorLockResolver
+        ClassMethodVisibilityVendorLockResolver $classMethodVisibilityVendorLockResolver,
+        DoctrineDocBlockResolver $doctrineDocBlockResolver
     ) {
         $this->classMethodVisibilityVendorLockResolver = $classMethodVisibilityVendorLockResolver;
         $this->classMethodExternalCallNodeAnalyzer = $classMethodExternalCallNodeAnalyzer;
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -127,15 +134,11 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isAnonymousClass($classLike)) {
+        if ($this->shouldSkipClassLike($classLike)) {
             return true;
         }
 
-        if ($this->isObjectType($classLike, 'PHPUnit\Framework\TestCase')) {
-            return true;
-        }
-
-        if ($this->isDoctrineEntityClass($classLike)) {
+        if ($this->hasTagByName($classMethod, TagName::API)) {
             return true;
         }
 
@@ -156,13 +159,25 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return false;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        return $phpDocInfo->hasByNames([TagName::API, TagName::REQUIRED]);
+    }
+
+    private function shouldSkipClassLike(Class_ $class): bool
+    {
+        if ($this->isAnonymousClass($class)) {
+            return true;
         }
 
-        return $phpDocInfo->hasByNames(['api', TagName::REQUIRED]);
+        if ($this->doctrineDocBlockResolver->isDoctrineEntityClass($class)) {
+            return true;
+        }
+
+        if ($this->isObjectType($class, 'PHPUnit\Framework\TestCase')) {
+            return true;
+        }
+
+        return $this->hasTagByName($class, TagName::API);
     }
 
     private function isControllerAction(Class_ $class, ClassMethod $classMethod): bool
@@ -182,17 +197,16 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return false;
-        }
-
-        return $phpDocInfo->hasByName('inject');
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        return $phpDocInfo->hasByName(TagName::INJECT);
     }
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
+        if ($this->hasTagByName($classMethod, TagName::API)) {
+            return true;
+        }
+
         if ($classMethod->isPrivate()) {
             return true;
         }

@@ -12,7 +12,6 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
@@ -35,21 +34,16 @@ final class PhpDocTypeRenamer
     }
 
     public function changeUnderscoreType(
+        PhpDocInfo $phpDocInfo,
         Node $node,
         PseudoNamespaceToNamespace $pseudoNamespaceToNamespace
     ): void {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return;
-        }
-
         $attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
         $phpParserNode = $node;
 
         $this->phpDocNodeTraverser->traverseWithCallable($attributeAwarePhpDocNode, '', function (
             PhpDocParserNode $node
-        ) use ($pseudoNamespaceToNamespace, $phpParserNode): PhpDocParserNode {
+        ) use ($pseudoNamespaceToNamespace, $phpParserNode, $phpDocInfo): PhpDocParserNode {
             if (! $node instanceof TypeNode) {
                 return $node;
             }
@@ -67,6 +61,8 @@ final class PhpDocTypeRenamer
             // change underscore to \\
             $slashedName = '\\' . Strings::replace($staticType->getClassName(), '#_#', '\\');
             $node->name = $slashedName;
+
+            $phpDocInfo->markAsChanged();
 
             return $node;
         });

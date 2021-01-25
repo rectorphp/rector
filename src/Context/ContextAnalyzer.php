@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Util\StaticInstanceOf;
 
 final class ContextAnalyzer
 {
@@ -42,38 +43,24 @@ final class ContextAnalyzer
     {
         $stopNodes = array_merge(self::LOOP_NODES, self::BREAK_NODES);
 
-        $firstParent = $this->betterNodeFinder->findFirstParentInstanceOf($node, $stopNodes);
-        if ($firstParent === null) {
+        $firstParent = $this->betterNodeFinder->findParentTypes($node, $stopNodes);
+        if (! $firstParent instanceof Node) {
             return false;
         }
 
-        return $this->isTypes($firstParent, self::LOOP_NODES);
+        return StaticInstanceOf::isOneOf($firstParent, self::LOOP_NODES);
     }
 
     public function isInIf(Node $node): bool
     {
         $breakNodes = array_merge([If_::class], self::BREAK_NODES);
 
-        $previousNode = $this->betterNodeFinder->findFirstParentInstanceOf($node, $breakNodes);
+        $previousNode = $this->betterNodeFinder->findParentTypes($node, $breakNodes);
 
-        if ($previousNode === null) {
+        if (! $previousNode instanceof Node) {
             return false;
         }
 
-        return $this->isTypes($previousNode, [If_::class]);
-    }
-
-    /**
-     * @param string[] $types
-     */
-    private function isTypes(Node $node, array $types): bool
-    {
-        foreach ($types as $type) {
-            if (is_a($node, $type, true)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $previousNode instanceof If_;
     }
 }

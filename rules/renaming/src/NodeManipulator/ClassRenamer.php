@@ -15,15 +15,17 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpDoc\PhpDocClassRenamer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ClassRenamer
 {
@@ -33,19 +35,14 @@ final class ClassRenamer
     private $alreadyProcessedClasses = [];
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var PhpDocClassRenamer
@@ -62,20 +59,32 @@ final class ClassRenamer
      */
     private $betterNodeFinder;
 
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    /**
+     * @var DocBlockClassRenamer
+     */
+    private $docBlockClassRenamer;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         ClassNaming $classNaming,
-        DocBlockManipulator $docBlockManipulator,
         NodeNameResolver $nodeNameResolver,
-        PhpDocClassRenamer $phpDocClassRenamer
+        PhpDocClassRenamer $phpDocClassRenamer,
+        PhpDocInfoFactory $phpDocInfoFactory,
+        DocBlockClassRenamer $docBlockClassRenamer
     ) {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->phpDocClassRenamer = $phpDocClassRenamer;
         $this->classNaming = $classNaming;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->docBlockClassRenamer = $docBlockClassRenamer;
     }
 
     /**
@@ -108,7 +117,8 @@ final class ClassRenamer
      */
     private function refactorPhpDoc(Node $node, array $oldToNewClasses): void
     {
-        if (! $this->docBlockManipulator->hasNodeTypeTags($node)) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        if (! $phpDocInfo->hasByType(TypeAwareTagValueNodeInterface::class)) {
             return;
         }
 
@@ -116,10 +126,10 @@ final class ClassRenamer
             $oldClassType = new ObjectType($oldClass);
             $newClassType = new FullyQualifiedObjectType($newClass);
 
-            $this->docBlockManipulator->changeType($node, $oldClassType, $newClassType);
+            $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldClassType, $newClassType, $node);
         }
 
-        $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $oldToNewClasses);
+        $this->phpDocClassRenamer->changeTypeInAnnotationTypes($phpDocInfo, $oldToNewClasses);
     }
 
     /**
@@ -162,7 +172,7 @@ final class ClassRenamer
         }
 
         $classLike = $this->getClassOfNamespaceToRefactor($namespace, $oldToNewClasses);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 
@@ -323,7 +333,7 @@ final class ClassRenamer
 
     private function changeNameToFullyQualifiedName(ClassLike $classLike): void
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable($classLike, function (Node $node) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike, function (Node $node) {
             if (! $node instanceof FullyQualified) {
                 return null;
             }

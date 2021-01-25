@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -38,7 +39,7 @@ final class SetterClassMethodAnalyzer
     public function matchNullalbeClassMethodProperty(ClassMethod $classMethod): ?Property
     {
         $propertyFetch = $this->matchNullalbeClassMethodPropertyFetch($classMethod);
-        if ($propertyFetch === null) {
+        if (! $propertyFetch instanceof PropertyFetch) {
             return null;
         }
 
@@ -48,7 +49,7 @@ final class SetterClassMethodAnalyzer
     public function matchDateTimeSetterProperty(ClassMethod $classMethod): ?Property
     {
         $propertyFetch = $this->matchDateTimeSetterPropertyFetch($classMethod);
-        if ($propertyFetch === null) {
+        if (! $propertyFetch instanceof PropertyFetch) {
             return null;
         }
 
@@ -66,7 +67,7 @@ final class SetterClassMethodAnalyzer
     private function matchNullalbeClassMethodPropertyFetch(ClassMethod $classMethod): ?PropertyFetch
     {
         $propertyFetch = $this->matchSetterOnlyPropertyFetch($classMethod);
-        if ($propertyFetch === null) {
+        if (! $propertyFetch instanceof PropertyFetch) {
             return null;
         }
 
@@ -97,7 +98,7 @@ final class SetterClassMethodAnalyzer
     private function matchDateTimeSetterPropertyFetch(ClassMethod $classMethod): ?PropertyFetch
     {
         $propertyFetch = $this->matchSetterOnlyPropertyFetch($classMethod);
-        if ($propertyFetch === null) {
+        if (! $propertyFetch instanceof PropertyFetch) {
             return null;
         }
 
@@ -127,7 +128,7 @@ final class SetterClassMethodAnalyzer
         }
 
         $onlyStmt = $stmts[0] ?? null;
-        if ($onlyStmt === null) {
+        if (! $onlyStmt instanceof Stmt) {
             return null;
         }
 

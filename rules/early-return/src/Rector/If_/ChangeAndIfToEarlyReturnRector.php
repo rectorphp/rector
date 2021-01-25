@@ -118,7 +118,7 @@ CODE_SAMPLE
         }
 
         $ifReturn = $this->getIfReturn($node);
-        if ($ifReturn === null) {
+        if (! $ifReturn instanceof Stmt) {
             return null;
         }
 
@@ -245,7 +245,7 @@ CODE_SAMPLE
 
     private function isIfInLoop(If_ $if): bool
     {
-        $parentLoop = $this->betterNodeFinder->findFirstParentInstanceOf($if, self::LOOP_TYPES);
+        $parentLoop = $this->betterNodeFinder->findParentTypes($if, self::LOOP_TYPES);
 
         return $parentLoop !== null;
     }
@@ -271,9 +271,8 @@ CODE_SAMPLE
 
     private function isFunctionLikeReturnsVoid(If_ $if): bool
     {
-        /** @var FunctionLike|null $functionLike */
-        $functionLike = $this->betterNodeFinder->findFirstParentInstanceOf($if, FunctionLike::class);
-        if ($functionLike === null) {
+        $functionLike = $this->betterNodeFinder->findParentType($if, FunctionLike::class);
+        if (! $functionLike instanceof FunctionLike) {
             return true;
         }
 
@@ -298,16 +297,13 @@ CODE_SAMPLE
         if (! $this->isIfInLoop($if)) {
             return false;
         }
-        return (bool) $this->betterNodeFinder->findFirstParentInstanceOf(
-            $if,
-            [If_::class, Else_::class, ElseIf_::class]
-        );
+        return (bool) $this->betterNodeFinder->findParentTypes($if, [If_::class, Else_::class, ElseIf_::class]);
     }
 
     private function isLastIfOrBeforeLastReturn(If_ $if): bool
     {
         $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if ($nextNode === null) {
+        if (! $nextNode instanceof Node) {
             return true;
         }
         return $nextNode instanceof Return_;

@@ -51,10 +51,9 @@ final class MovedFileWithNodesFactory
         array $nodes,
         string $desiredGroupName
     ): ?MovedFileWithNodes {
-        /** @var Namespace_|null $currentNamespace */
         $currentNamespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
         // file without namespace → skip
-        if ($currentNamespace === null) {
+        if (! $currentNamespace instanceof Namespace_) {
             return null;
         }
         if ($currentNamespace->name === null) {
@@ -93,9 +92,8 @@ final class MovedFileWithNodesFactory
         );
 
         // 3. update fully qualifed name of the class like - will be used further
-        /** @var ClassLike|null $classLike */
         $classLike = $this->betterNodeFinder->findFirstInstanceOf($nodes, ClassLike::class);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 

@@ -9,17 +9,19 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 /**
  * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver\ParamTypeResolverTest
@@ -32,9 +34,9 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
     private $nodeNameResolver;
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var NodeTypeResolver
@@ -46,10 +48,19 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
      */
     private $staticTypeMapper;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeNameResolver $nodeNameResolver,
+        PhpDocInfoFactory $phpDocInfoFactory
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -105,7 +116,7 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
     private function resolveFromFirstVariableUse(Param $param): Type
     {
         $classMethod = $param->getAttribute(AttributeKey::METHOD_NODE);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return new MixedType();
         }
 
@@ -113,7 +124,7 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
         $paramStaticType = new MixedType();
 
         // special case for param inside method/function
-        $this->callableNodeTraverser->traverseNodesWithCallable(
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->stmts,
             function (Node $node) use ($paramName, &$paramStaticType): ?int {
                 if (! $node instanceof Variable) {
@@ -136,21 +147,17 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
     private function resolveFromFunctionDocBlock(Param $param): Type
     {
         $phpDocInfo = $this->getFunctionLikePhpDocInfo($param);
-        if ($phpDocInfo === null) {
-            return new MixedType();
-        }
-
         $paramName = $this->nodeNameResolver->getName($param);
         return $phpDocInfo->getParamType($paramName);
     }
 
-    private function getFunctionLikePhpDocInfo(Param $param): ?PhpDocInfo
+    private function getFunctionLikePhpDocInfo(Param $param): PhpDocInfo
     {
         $parentNode = $param->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof FunctionLike) {
             throw new ShouldNotHappenException();
         }
 
-        return $parentNode->getAttribute(AttributeKey::PHP_DOC_INFO);
+        return $this->phpDocInfoFactory->createFromNodeOrEmpty($parentNode);
     }
 }

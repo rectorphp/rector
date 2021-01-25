@@ -61,9 +61,8 @@ final class FactoryClassPrinter
 
     private function createFactoryClassFilePath(Class_ $oldClass): string
     {
-        /** @var SmartFileInfo|null $classFileInfo */
         $classFileInfo = $oldClass->getAttribute(AttributeKey::FILE_INFO);
-        if ($classFileInfo === null) {
+        if (! $classFileInfo instanceof SmartFileInfo) {
             throw new ShouldNotHappenException();
         }
 

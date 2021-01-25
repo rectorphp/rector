@@ -7,6 +7,7 @@ namespace Rector\NodeNestingScope;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
 
 final class ScopeNestingComparator
@@ -16,9 +17,15 @@ final class ScopeNestingComparator
      */
     private $betterNodeFinder;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    public function __construct(BetterNodeFinder $betterNodeFinder, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     public function areScopeNestingEqual(Node $firstNode, Node $secondNode): bool
@@ -26,17 +33,17 @@ final class ScopeNestingComparator
         $firstNodeScopeNode = $this->findParentControlStructure($firstNode);
         $secondNodeScopeNode = $this->findParentControlStructure($secondNode);
 
-        return $firstNodeScopeNode === $secondNodeScopeNode;
+        return $this->betterStandardPrinter->areNodesEqual($firstNodeScopeNode, $secondNodeScopeNode);
     }
 
     public function isNodeConditionallyScoped(Node $node): bool
     {
-        $foundParentType = $this->betterNodeFinder->findFirstParentInstanceOf(
+        $foundParentType = $this->betterNodeFinder->findParentTypes(
             $node,
             ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [FunctionLike::class]
         );
 
-        if ($foundParentType === null) {
+        if (! $foundParentType instanceof Node) {
             return false;
         }
 
@@ -45,6 +52,6 @@ final class ScopeNestingComparator
 
     private function findParentControlStructure(Node $node): ?Node
     {
-        return $this->betterNodeFinder->findFirstParentInstanceOf($node, ControlStructure::BREAKING_SCOPE_NODE_TYPES);
+        return $this->betterNodeFinder->findParentTypes($node, ControlStructure::BREAKING_SCOPE_NODE_TYPES);
     }
 }

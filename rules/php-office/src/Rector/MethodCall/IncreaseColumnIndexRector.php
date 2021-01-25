@@ -89,7 +89,7 @@ CODE_SAMPLE
         if ($firstArgumentValue instanceof Variable) {
             // check if for() value, rather update that
             $lNumber = $this->findPreviousForWithVariable($firstArgumentValue);
-            if ($lNumber === null) {
+            if (! $lNumber instanceof LNumber) {
                 $node->args[0]->value = new Plus($firstArgumentValue, new LNumber(1));
                 return null;
             }
@@ -115,9 +115,8 @@ CODE_SAMPLE
 
     private function findPreviousForWithVariable(Variable $variable): ?LNumber
     {
-        /** @var For_|null $for */
         $for = $this->betterNodeFinder->findFirstPreviousOfTypes($variable, [For_::class]);
-        if ($for === null) {
+        if (! $for instanceof For_) {
             return null;
         }
 

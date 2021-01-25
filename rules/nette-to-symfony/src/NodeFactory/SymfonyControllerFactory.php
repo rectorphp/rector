@@ -34,9 +34,8 @@ final class SymfonyControllerFactory
 
     public function createNamespace(Class_ $node, Class_ $formTypeClass): ?Namespace_
     {
-        /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo === null) {
+        if (! $fileInfo instanceof SmartFileInfo) {
             return null;
         }
 

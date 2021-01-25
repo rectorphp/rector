@@ -6,24 +6,16 @@ namespace Rector\CodeQuality\Rector\Array_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Return_;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\CodeQuality\NodeAnalyzer\CallableClassMethodMatcher;
+use Rector\CodeQuality\NodeFactory\AnonymousFunctionFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -38,6 +30,24 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
 {
+    /**
+     * @var CallableClassMethodMatcher
+     */
+    private $callableClassMethodMatcher;
+
+    /**
+     * @var AnonymousFunctionFactory
+     */
+    private $anonymousFunctionFactory;
+
+    public function __construct(
+        CallableClassMethodMatcher $callableClassMethodMatcher,
+        AnonymousFunctionFactory $anonymousFunctionFactory
+    ) {
+        $this->callableClassMethodMatcher = $callableClassMethodMatcher;
+        $this->anonymousFunctionFactory = $anonymousFunctionFactory;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -123,12 +133,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $classMethod = $this->matchCallableMethod($objectVariable, $methodName);
-        if ($classMethod === null) {
+        $classMethod = $this->callableClassMethodMatcher->match($objectVariable, $methodName);
+        if (! $classMethod instanceof ClassMethod) {
             return null;
         }
 
-        return $this->createAnonymousFunction($classMethod, $objectVariable);
+        return $this->anonymousFunctionFactory->create($classMethod, $objectVariable);
     }
 
     private function shouldSkipArray(Array_ $array): bool
@@ -150,80 +160,6 @@ CODE_SAMPLE
         return $this->isCallbackAtFunctionName($array, 'register_shutdown_function');
     }
 
-    /**
-     * @param Variable|PropertyFetch $objectExpr
-     */
-    private function matchCallableMethod(Expr $objectExpr, String_ $string): ?ClassMethod
-    {
-        $methodName = $this->getValue($string);
-        if (! is_string($methodName)) {
-            throw new ShouldNotHappenException();
-        }
-
-        $objectType = $this->getObjectType($objectExpr);
-        $objectType = $this->popFirstObjectType($objectType);
-
-        if ($objectType instanceof ObjectType) {
-            $class = $this->nodeRepository->findClass($objectType->getClassName());
-
-            if ($class === null) {
-                return null;
-            }
-
-            $classMethod = $class->getMethod($methodName);
-
-            if ($classMethod === null) {
-                return null;
-            }
-
-            if ($this->isName($objectExpr, 'this')) {
-                return $classMethod;
-            }
-
-            // is public method of another service
-            if ($classMethod->isPublic()) {
-                return $classMethod;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param Variable|PropertyFetch $node
-     */
-    private function createAnonymousFunction(ClassMethod $classMethod, Node $node): Closure
-    {
-        $classMethodReturns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Return_::class);
-
-        $anonymousFunction = new Closure();
-        $newParams = $this->copyParams($classMethod->params);
-
-        $anonymousFunction->params = $newParams;
-
-        $innerMethodCall = new MethodCall($node, $classMethod->name);
-        $innerMethodCall->args = $this->convertParamsToArgs($newParams);
-
-        if ($classMethod->returnType !== null) {
-            $newReturnType = $classMethod->returnType;
-            $newReturnType->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $anonymousFunction->returnType = $newReturnType;
-        }
-
-        // does method return something?
-        if ($this->hasClassMethodReturn($classMethodReturns)) {
-            $anonymousFunction->stmts[] = new Return_($innerMethodCall);
-        } else {
-            $anonymousFunction->stmts[] = new Expression($innerMethodCall);
-        }
-
-        if ($node instanceof Variable && ! $this->isName($node, 'this')) {
-            $anonymousFunction->uses[] = new ClosureUse($node);
-        }
-
-        return $anonymousFunction;
-    }
-
     private function isCallbackAtFunctionName(Array_ $array, string $functionName): bool
     {
         $parentNode = $array->getAttribute(AttributeKey::PARENT_NODE);
@@ -237,64 +173,5 @@ CODE_SAMPLE
         }
 
         return $this->isName($parentParentNode, $functionName);
-    }
-
-    private function popFirstObjectType(Type $type): Type
-    {
-        if ($type instanceof UnionType) {
-            foreach ($type->getTypes() as $unionedType) {
-                if (! $unionedType instanceof ObjectType) {
-                    continue;
-                }
-
-                return $unionedType;
-            }
-        }
-
-        return $type;
-    }
-
-    /**
-     * @param Param[] $params
-     * @return Param[]
-     */
-    private function copyParams(array $params): array
-    {
-        $newParams = [];
-        foreach ($params as $param) {
-            $newParam = clone $param;
-            $newParam->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $newParam->var->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $newParams[] = $newParam;
-        }
-
-        return $newParams;
-    }
-
-    /**
-     * @param Param[] $params
-     * @return Arg[]
-     */
-    private function convertParamsToArgs(array $params): array
-    {
-        $args = [];
-        foreach ($params as $param) {
-            $args[] = new Arg($param->var);
-        }
-
-        return $args;
-    }
-
-    /**
-     * @param Return_[] $nodes
-     */
-    private function hasClassMethodReturn(array $nodes): bool
-    {
-        foreach ($nodes as $node) {
-            if ($node->expr !== null) {
-                return true;
-            }
-        }
-        return false;
     }
 }

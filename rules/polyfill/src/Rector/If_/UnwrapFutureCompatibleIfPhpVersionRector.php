@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Polyfill\ConditionEvaluator;
 use Rector\Polyfill\ConditionResolver;
+use Rector\Polyfill\Contract\ConditionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -77,7 +78,7 @@ CODE_SAMPLE
         }
 
         $condition = $this->conditionResolver->resolveFromExpr($node->cond);
-        if ($condition === null) {
+        if (! $condition instanceof ConditionInterface) {
             return null;
         }
 

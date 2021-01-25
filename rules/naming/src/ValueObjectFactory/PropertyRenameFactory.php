@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Naming\ValueObjectFactory;
 
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Naming\Contract\ExpectedNameResolver\ExpectedNameResolverInterface;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -40,13 +40,13 @@ final class PropertyRenameFactory
         $currentName = $this->nodeNameResolver->getName($property);
 
         $propertyClassLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($propertyClassLike === null) {
-            throw new ShouldNotHappenException("There shouldn't be a property without AttributeKey::CLASS_NODE");
+        if (! $propertyClassLike instanceof ClassLike) {
+            return null;
         }
 
         $propertyClassLikeName = $property->getAttribute(AttributeKey::CLASS_NAME);
         if ($propertyClassLikeName === null) {
-            throw new ShouldNotHappenException("There shouldn't be a property without AttributeKey::CLASS_NAME");
+            return null;
         }
 
         return new PropertyRename(

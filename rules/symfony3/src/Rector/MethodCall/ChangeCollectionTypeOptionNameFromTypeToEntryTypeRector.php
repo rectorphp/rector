@@ -94,7 +94,7 @@ CODE_SAMPLE
         }
 
         $optionsArray = $this->matchOptionsArray($node);
-        if ($optionsArray === null) {
+        if (! $optionsArray instanceof Array_) {
             return null;
         }
 

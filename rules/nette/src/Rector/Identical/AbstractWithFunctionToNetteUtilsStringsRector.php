@@ -29,7 +29,7 @@ abstract class AbstractWithFunctionToNetteUtilsStringsRector extends AbstractRec
     public function refactor(Node $node): ?Node
     {
         $contentExprAndNeedleExpr = $this->resolveContentExprAndNeedleExpr($node);
-        if ($contentExprAndNeedleExpr === null) {
+        if (! $contentExprAndNeedleExpr instanceof ContentExprAndNeedleExpr) {
             return null;
         }
 

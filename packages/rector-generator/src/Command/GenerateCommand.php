@@ -155,6 +155,16 @@ final class GenerateCommand extends Command
         return ShellCode::SUCCESS;
     }
 
+    private function getRectorRecipe(InputInterface $input): RectorRecipe
+    {
+        $isInteractive = $input->getOption(self::INTERACTIVE_MODE_NAME);
+        if (! $isInteractive) {
+            return $this->rectorRecipeProvider->provide();
+        }
+
+        return $this->rectorRecipeInteractiveFactory->create();
+    }
+
     /**
      * @param string[] $generatedFilePaths
      */
@@ -170,17 +180,6 @@ final class GenerateCommand extends Command
         }
 
         throw new ShouldNotHappenException();
-    }
-
-    private function isGeneratedFilePathTestCase(string $generatedFilePath): bool
-    {
-        if (Strings::endsWith($generatedFilePath, 'Test.php')) {
-            return true;
-        }
-        if (! Strings::endsWith($generatedFilePath, 'Test.php.inc')) {
-            return false;
-        }
-        return StaticPHPUnitEnvironment::isPHPUnitRun();
     }
 
     /**
@@ -204,13 +203,14 @@ final class GenerateCommand extends Command
         $this->symfonyStyle->success($message);
     }
 
-    private function getRectorRecipe(InputInterface $input): RectorRecipe
+    private function isGeneratedFilePathTestCase(string $generatedFilePath): bool
     {
-        $isInteractive = $input->getOption(self::INTERACTIVE_MODE_NAME);
-        if (! $isInteractive) {
-            return $this->rectorRecipeProvider->provide();
+        if (Strings::endsWith($generatedFilePath, 'Test.php')) {
+            return true;
         }
-
-        return $this->rectorRecipeInteractiveFactory->create();
+        if (! Strings::endsWith($generatedFilePath, 'Test.php.inc')) {
+            return false;
+        }
+        return StaticPHPUnitEnvironment::isPHPUnitRun();
     }
 }

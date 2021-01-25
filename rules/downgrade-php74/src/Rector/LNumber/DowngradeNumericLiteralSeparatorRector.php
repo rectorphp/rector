@@ -68,6 +68,12 @@ CODE_SAMPLE
             return null;
         }
 
+        $numberNode = clone $node;
+        $numberNodeValue = (string) $numberNode->value;
+        if (Strings::contains($numberNodeValue, '+')) {
+            return null;
+        }
+
         $node->value = (string) $node->value;
 
         /**

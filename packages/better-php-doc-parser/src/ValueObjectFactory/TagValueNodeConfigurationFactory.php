@@ -12,6 +12,7 @@ use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
+use Symplify\PackageBuilder\Php\TypeChecker;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\ValueObjectFactory\TagValueNodeConfigurationFactoryTest
@@ -47,6 +48,16 @@ final class TagValueNodeConfigurationFactory
      * @see https://regex101.com/r/0KlSQv/1
      */
     public const ARRAY_COLON_SEPARATOR_REGEX = '#{([^{}]+)[:]([^{}]+)}#';
+
+    /**
+     * @var TypeChecker
+     */
+    private $typeChecker;
+
+    public function __construct(TypeChecker $typeChecker)
+    {
+        $this->typeChecker = $typeChecker;
+    }
 
     public function createFromOriginalContent(
         ?string $originalContent,
@@ -151,15 +162,11 @@ final class TagValueNodeConfigurationFactory
      */
     private function resolveArrayEqualSignByPhpNodeClass(PhpDocTagValueNode $phpDocTagValueNode): string
     {
-        if ($phpDocTagValueNode instanceof SymfonyRouteTagValueNode) {
-            return '=';
-        }
-
-        if ($phpDocTagValueNode instanceof DoctrineTagNodeInterface) {
-            return '=';
-        }
-
-        if ($phpDocTagValueNode instanceof SensioRouteTagValueNode) {
+        if ($this->typeChecker->isInstanceOf($phpDocTagValueNode, [
+            SymfonyRouteTagValueNode::class,
+            DoctrineTagNodeInterface::class,
+            SensioRouteTagValueNode::class,
+        ])) {
             return '=';
         }
 

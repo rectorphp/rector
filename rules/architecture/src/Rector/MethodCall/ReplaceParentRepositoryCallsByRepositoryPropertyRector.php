@@ -104,6 +104,6 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $this->isInObjectType($classLike, 'Doctrine\ORM\EntityRepository');
+        return ! $this->isObjectType($classLike, 'Doctrine\ORM\EntityRepository');
     }
 }

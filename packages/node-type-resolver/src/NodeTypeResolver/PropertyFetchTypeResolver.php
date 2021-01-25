@@ -10,11 +10,12 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -22,7 +23,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use ReflectionProperty;
 
 /**
  * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\NameTypeResolver\NameTypeResolverTest
@@ -45,11 +45,6 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
     private $nodeNameResolver;
 
     /**
-     * @var BetterPhpDocParser
-     */
-    private $betterPhpDocParser;
-
-    /**
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
@@ -60,7 +55,6 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
     private $traitNodeScopeCollector;
 
     public function __construct(
-        BetterPhpDocParser $betterPhpDocParser,
         NodeNameResolver $nodeNameResolver,
         ParsedNodeCollector $parsedNodeCollector,
         StaticTypeMapper $staticTypeMapper,
@@ -68,7 +62,6 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
     ) {
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterPhpDocParser = $betterPhpDocParser;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
     }
@@ -103,25 +96,24 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
         /** @var Scope|null $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
 
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
             if ($classNode instanceof Trait_) {
                 /** @var string $traitName */
                 $traitName = $classNode->getAttribute(AttributeKey::CLASS_NAME);
 
-                /** @var Scope|null $scope */
                 $scope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $node);
             }
         }
 
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
             // fallback to class, since property fetches are not scoped by PHPStan
             if ($classNode instanceof ClassLike) {
                 $scope = $classNode->getAttribute(AttributeKey::SCOPE);
             }
 
-            if ($scope === null) {
+            if (! $scope instanceof Scope) {
                 return new MixedType();
             }
         }
@@ -151,20 +143,17 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        // property is used
-        $reflectionProperty = new ReflectionProperty($varObjectType->getClassName(), $propertyName);
-        if (! $reflectionProperty->getDocComment()) {
+        $phpDocInfo = $propertyFetch->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return $varObjectType;
+        }
+
+        $tagValueNode = $phpDocInfo->getVarTagValueNode();
+        if (! $tagValueNode instanceof VarTagValueNode) {
             return new MixedType();
         }
 
-        $phpDocNode = $this->betterPhpDocParser->parseString((string) $reflectionProperty->getDocComment());
-        $varTagValues = $phpDocNode->getVarTagValues();
-
-        if (! isset($varTagValues[0])) {
-            return new MixedType();
-        }
-
-        $typeNode = $varTagValues[0]->type;
+        $typeNode = $tagValueNode->type;
         if (! $typeNode instanceof TypeNode) {
             return new MixedType();
         }

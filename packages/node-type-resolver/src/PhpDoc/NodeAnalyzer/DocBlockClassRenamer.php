@@ -6,21 +6,16 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 final class DocBlockClassRenamer
 {
-    /**
-     * @var bool
-     */
-    private $hasNodeChanged = false;
-
     /**
      * @var StaticTypeMapper
      */
@@ -41,26 +36,26 @@ final class DocBlockClassRenamer
      * @param Type[] $oldTypes
      */
     public function renamePhpDocTypes(
-        PhpDocNode $phpDocNode,
+        PhpDocInfo $phpDocInfo,
         array $oldTypes,
         Type $newType,
         Node $phpParserNode
     ): void {
         foreach ($oldTypes as $oldType) {
-            $this->renamePhpDocType($phpDocNode, $oldType, $newType, $phpParserNode);
+            $this->renamePhpDocType($phpDocInfo, $oldType, $newType, $phpParserNode);
         }
     }
 
     public function renamePhpDocType(
-        PhpDocNode $phpDocNode,
+        PhpDocInfo $phpDocInfo,
         Type $oldType,
         Type $newType,
         Node $phpParserNode
-    ): bool {
+    ): void {
         $this->phpDocNodeTraverser->traverseWithCallable(
-            $phpDocNode,
+            $phpDocInfo->getPhpDocNode(),
             '',
-            function (PhpDocParserNode $node) use ($phpParserNode, $oldType, $newType): PhpDocParserNode {
+            function (PhpDocParserNode $node) use ($phpDocInfo, $phpParserNode, $oldType, $newType): PhpDocParserNode {
                 if (! $node instanceof IdentifierTypeNode) {
                     return $node;
                 }
@@ -76,12 +71,10 @@ final class DocBlockClassRenamer
                     return $node;
                 }
 
-                $this->hasNodeChanged = true;
+                $phpDocInfo->markAsChanged();
 
                 return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
             }
         );
-
-        return $this->hasNodeChanged;
     }
 }

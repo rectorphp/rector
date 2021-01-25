@@ -36,7 +36,8 @@ final class ExistingClassesProvider
             /** @var string[] $existingClasses */
             $existingClasses = $this->findClassesInDirectories($psr4Paths);
 
-            $existingClasses = array_merge($existingClasses, get_declared_classes());
+            $declaredClasses = get_declared_classes();
+            $existingClasses = array_merge($existingClasses, $declaredClasses);
 
             $this->existingClasses = $existingClasses;
         }

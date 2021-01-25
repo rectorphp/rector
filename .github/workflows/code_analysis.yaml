@@ -4,19 +4,11 @@ on:
     pull_request: null
 
 jobs:
-    matrix:
+    code_analysis:
         strategy:
             fail-fast: false
             matrix:
                 actions:
-                    -
-                        name: 'PHPStan'
-                        run: composer phpstan
-
-                    -
-                        name: 'PHPStan for config'
-                        run: composer phpstan-config
-
                     -
                         name: 'Show command'
                         run: bin/rector show --ansi
@@ -34,13 +26,18 @@ jobs:
                         run: bin/rector validate-fixture-classname --ansi
 
                     -
+                        name: Validate Fixtures file name
+                        run: bin/rector validate-fixture-filename --ansi
+
+                    # make sure skipped files have "skip_" prefix
+                    -
+                        name: Validate Fixtures skip file prefix
+                        run: vendor/symplify/easy-testing/bin/easy-testing validate-fixture-skip-naming rules tests
+
+                    -
                         name: 'Validate Sets Loading'
                         # this is very slow, so it has to be in own workflow
                         run: bin/rector validate-sets --ansi
-
-                    -
-                        name: 'Validate PHPStan Types Compatibility'
-                        run: bin/rector sync-types --ansi
 
                     -
                         name: 'Validate PHPStan Mappers Compatibility'
@@ -52,7 +49,7 @@ jobs:
 
                     -
                         name: 'PHP Linter'
-                        run: vendor/bin/parallel-lint src bin/rector config tests packages rules --exclude packages/rector-generator/templates --colors --exclude rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source --exclude rules/autodiscovery/tests/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector/Expected
+                        run: vendor/bin/parallel-lint src bin/rector config tests packages rules --colors --exclude packages/rector-generator/templates --exclude rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source --exclude rules/autodiscovery/tests/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector/Expected
 
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
@@ -66,7 +63,6 @@ jobs:
                 with:
                     php-version: 7.3
                     coverage: none
-                    tools: composer:v2
 
             -   uses: "ramsey/composer-install@v1"
 

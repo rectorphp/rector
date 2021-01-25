@@ -28,12 +28,13 @@ final class ValueResolverTest extends AbstractKernelTestCase
     }
 
     /**
-     * @param mixed $expected
+     * @param mixed $expectedValue
      * @dataProvider dataProvider
      */
-    public function test($expected, Expr $expr): void
+    public function test(Expr $expr, $expectedValue): void
     {
-        $this->assertSame($expected, $this->valueResolver->getValue($expr));
+        $resolvedValue = $this->valueResolver->getValue($expr);
+        $this->assertSame($expectedValue, $resolvedValue);
     }
 
     public function dataProvider(): Iterator
@@ -46,12 +47,12 @@ final class ValueResolverTest extends AbstractKernelTestCase
             new FullyQualified('SomeClassResolveName')
         );
 
-        yield ['SomeClassResolveName::SOME_CONSTANT', $classConstFetchNode];
-        yield [true, $builderFactory->val(true)];
-        yield [1, $builderFactory->val(1)];
-        yield [1.0, $builderFactory->val(1.0)];
-        yield [null, $builderFactory->var('foo')];
-        yield [2, new Plus($builderFactory->val(1), $builderFactory->val(1))];
-        yield [null, new Plus($builderFactory->val(1), $builderFactory->var('foo'))];
+        yield [$classConstFetchNode, 'SomeClassResolveName::SOME_CONSTANT'];
+        yield [$builderFactory->val(true), true];
+        yield [$builderFactory->val(1), 1];
+        yield [$builderFactory->val(1.0), 1.0];
+        yield [$builderFactory->var('foo'), null];
+        yield [new Plus($builderFactory->val(1), $builderFactory->val(1)), 2];
+        yield [new Plus($builderFactory->val(1), $builderFactory->var('foo')), null];
     }
 }

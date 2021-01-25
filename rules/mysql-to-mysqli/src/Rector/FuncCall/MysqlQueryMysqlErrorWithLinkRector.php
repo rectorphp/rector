@@ -139,7 +139,7 @@ CODE_SAMPLE
 
                 $this->removeExistingConnectionParameter($node);
 
-                if ($connectionVariable === null) {
+                if (! $connectionVariable instanceof Expr) {
                     return null;
                 }
 
@@ -173,7 +173,8 @@ CODE_SAMPLE
         if (! $expr instanceof Variable) {
             return false;
         }
-        return $this->isName($expr, 'connection');
+
+        return $this->isMysqliConnect($expr);
     }
 
     private function findConnectionVariable(FuncCall $funcCall): ?Expr
@@ -216,5 +217,26 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function isMysqliConnect(Variable $variable): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (Node $node) use (
+            $variable
+        ): bool {
+            if (! $node instanceof Assign) {
+                return false;
+            }
+
+            if (! $node->expr instanceof FuncCall) {
+                return false;
+            }
+
+            if (! $this->areNodesEqual($node->var, $variable)) {
+                return false;
+            }
+
+            return $this->isName($node->expr, 'mysqli_connect');
+        });
     }
 }

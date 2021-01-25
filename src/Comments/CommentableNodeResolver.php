@@ -20,7 +20,7 @@ final class CommentableNodeResolver
 
         while (! $currentNode instanceof Stmt) {
             $currentNode = $currentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($currentNode === null) {
+            if (! $currentNode instanceof Node) {
                 return $previousNode;
             }
 

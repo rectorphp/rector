@@ -130,9 +130,8 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var ClassLike|null $classLike */
         $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return true;
         }
 
@@ -164,7 +163,7 @@ CODE_SAMPLE
         AddParamTypeDeclaration $addParamTypeDeclaration
     ): void {
         $parameter = $classMethod->params[$addParamTypeDeclaration->getPosition()] ?? null;
-        if ($parameter === null) {
+        if (! $parameter instanceof Param) {
             return;
         }
 

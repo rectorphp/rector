@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Rector\NetteToSymfony\Routing;
 
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
@@ -23,17 +22,22 @@ final class ExplicitRouteAnnotationDecorator
      */
     private $useNodesToAddCollector;
 
-    public function __construct(UseNodesToAddCollector $useNodesToAddCollector)
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(UseNodesToAddCollector $useNodesToAddCollector, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->useNodesToAddCollector = $useNodesToAddCollector;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function decorateClassMethodWithRouteAnnotation(
         ClassMethod $classMethod,
         SymfonyRouteTagValueNode $symfonyRouteTagValueNode
     ): void {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $phpDocInfo->addTagValueNodeWithShortName($symfonyRouteTagValueNode);
 
         $fullyQualifiedObjectType = new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME);

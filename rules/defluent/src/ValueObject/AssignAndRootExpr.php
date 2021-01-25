@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Defluent\ValueObject;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -47,7 +48,7 @@ final class AssignAndRootExpr extends AbstractRootExpr implements RootExprAwareI
 
     public function getReturnSilentVariable(): Return_
     {
-        if ($this->silentVariable === null) {
+        if (! $this->silentVariable instanceof Variable) {
             throw new ShouldNotHappenException();
         }
 
@@ -71,7 +72,7 @@ final class AssignAndRootExpr extends AbstractRootExpr implements RootExprAwareI
     public function getFactoryAssignVariable(): Expr
     {
         $firstAssign = $this->getFirstAssign();
-        if ($firstAssign === null) {
+        if (! $firstAssign instanceof Assign) {
             return $this->getCallerExpr();
         }
 

@@ -9,12 +9,13 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\ClassLike\RemoveAnnotationRector\RemoveAnnotationRectorTest
@@ -27,9 +28,19 @@ final class RemoveAnnotationRector extends AbstractRector implements Configurabl
     public const ANNOTATIONS_TO_REMOVE = 'annotations_to_remove';
 
     /**
-     * @var mixed[]
+     * @var string[]|class-string[]
      */
     private $annotationsToRemove = [];
+
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
+    public function __construct(PhpDocTagRemover $phpDocTagRemover)
+    {
+        $this->phpDocTagRemover = $phpDocTagRemover;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -70,28 +81,40 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
+        if ($this->annotationsToRemove === []) {
             return null;
         }
 
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
         foreach ($this->annotationsToRemove as $annotationToRemove) {
-            if (! $phpDocInfo->hasByName($annotationToRemove)) {
+            if ($phpDocInfo->hasByName($annotationToRemove)) {
+                $this->phpDocTagRemover->removeByName($phpDocInfo, $annotationToRemove);
                 continue;
             }
 
-            $phpDocInfo->removeByName($annotationToRemove);
+            if (is_a($annotationToRemove, PhpDocTagValueNode::class, true) && $phpDocInfo->hasByType(
+                $annotationToRemove
+            )) {
+                $phpDocInfo->removeByType($annotationToRemove);
+            }
+        }
+
+        if ($phpDocInfo->hasChanged()) {
+            return null;
         }
 
         return $node;
     }
 
     /**
-     * @param mixed[] $configuration
+     * @param array<string, string[]> $configuration
      */
     public function configure(array $configuration): void
     {
-        $this->annotationsToRemove = $configuration[self::ANNOTATIONS_TO_REMOVE] ?? [];
+        $annotationsToRemove = $configuration[self::ANNOTATIONS_TO_REMOVE] ?? [];
+        Assert::allString($annotationsToRemove);
+
+        $this->annotationsToRemove = $annotationsToRemove;
     }
 }

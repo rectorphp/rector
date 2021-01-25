@@ -82,12 +82,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($classLike->extends === null) {
-            $this->makePrivate($node);
-            return $node;
+        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($node)) {
+            return null;
         }
 
-        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($node, $classLike)) {
+        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByTrait($node)) {
             return null;
         }
 

@@ -26,8 +26,6 @@ jobs:
                             # Coveralls.io
                             composer require --dev php-coveralls/php-coveralls:^2.4
                             vendor/bin/php-coveralls --coverage_clover=clover.xml -v
-                        env:
-                            COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                         branch: 'master'
 
         name: ${{ matrix.actions.name }}
@@ -36,8 +34,6 @@ jobs:
         steps:
             -
                 uses: actions/checkout@v2
-                with:
-                    token: ${{ secrets.ACCESS_TOKEN }}
 
             # see https://github.com/shivammathur/setup-php
             -
@@ -45,10 +41,12 @@ jobs:
                 with:
                     php-version: 7.4
                     coverage: xdebug
-                    tools: composer:v2
+
 
             -
                 run: composer install --no-progress --ansi
 
             -
                 run: ${{ matrix.actions.run }}
+                env:
+                    COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}

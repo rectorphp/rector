@@ -8,11 +8,23 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
 {
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    /**
+     * @required
+     */
+    public function autowireAbstractPHPUnitRector(TestsNodeAnalyzer $testsNodeAnalyzer): void
+    {
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+    }
+
     protected function isTestClassMethod(ClassMethod $classMethod): bool
     {
         if (! $classMethod->isPublic()) {
@@ -23,13 +35,8 @@ abstract class AbstractPHPUnitRector extends AbstractRector
             return true;
         }
 
-        $phpDocInfo = $classMethod->getAttribute(PhpDocInfo::class);
-
-        if ($phpDocInfo instanceof PhpDocInfo) {
-            return $phpDocInfo->hasByName('test');
-        }
-
-        return false;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        return $phpDocInfo->hasByName('test');
     }
 
     protected function isPHPUnitMethodName(Node $node, string $name): bool
@@ -57,12 +64,7 @@ abstract class AbstractPHPUnitRector extends AbstractRector
 
     protected function isInTestClass(Node $node): bool
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
-            return false;
-        }
-
-        return $this->isObjectTypes($classLike, ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase']);
+        return $this->testsNodeAnalyzer->isInTestClass($node);
     }
 
     /**

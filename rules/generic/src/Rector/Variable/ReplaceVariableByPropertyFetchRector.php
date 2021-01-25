@@ -125,9 +125,8 @@ CODE_SAMPLE
             return false;
         }
 
-        /** @var ClassMethod|null $classMethod */
         $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return false;
         }
 

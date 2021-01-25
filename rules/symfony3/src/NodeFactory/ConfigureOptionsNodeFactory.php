@@ -15,8 +15,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\PhpParser\Builder\MethodBuilder;
-use Rector\Core\PhpParser\Builder\ParamBuilder;
+use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 
 final class ConfigureOptionsNodeFactory
 {

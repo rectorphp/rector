@@ -9,13 +9,13 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\LocaleTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\TranslatableTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DoctrineGedmoToKnplabs\NodeFactory\TranslationClassNodeFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -41,10 +41,19 @@ final class TranslationBehaviorRector extends AbstractRector
      */
     private $classInsertManipulator;
 
-    public function __construct(ClassInsertManipulator $classInsertManipulator, ClassManipulator $classManipulator)
-    {
+    /**
+     * @var TranslationClassNodeFactory
+     */
+    private $translationClassNodeFactory;
+
+    public function __construct(
+        ClassInsertManipulator $classInsertManipulator,
+        ClassManipulator $classManipulator,
+        TranslationClassNodeFactory $translationClassNodeFactory
+    ) {
         $this->classManipulator = $classManipulator;
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->translationClassNodeFactory = $translationClassNodeFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -189,10 +198,7 @@ CODE_SAMPLE
         $removedPropertyNameToPhpDocInfo = [];
 
         foreach ($class->getProperties() as $property) {
-            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($propertyPhpDocInfo === null) {
-                continue;
-            }
+            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
             $hasTypeLocaleTagValueNode = $propertyPhpDocInfo->hasByType(LocaleTagValueNode::class);
 
             if ($hasTypeLocaleTagValueNode) {
@@ -243,9 +249,8 @@ CODE_SAMPLE
      */
     private function dumpEntityTranslation(Class_ $class, array $translatedPropertyToPhpDocInfos): void
     {
-        /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $class->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo === null) {
+        if (! $fileInfo instanceof SmartFileInfo) {
             throw new ShouldNotHappenException();
         }
 
@@ -258,16 +263,7 @@ CODE_SAMPLE
         }
 
         $namespace = new Namespace_($namespace->name);
-
-        $class = new Class_($classShortName);
-        $class->implements[] = new FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface');
-        $this->classInsertManipulator->addAsFirstTrait(
-            $class,
-            'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait'
-        );
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-        $phpDocInfo->addTagValueNodeWithShortName(new EntityTagValueNode([]));
+        $class = $this->translationClassNodeFactory->create($classShortName);
 
         foreach ($translatedPropertyToPhpDocInfos as $translatedPropertyName => $translatedPhpDocInfo) {
             $property = $this->nodeFactory->createPrivateProperty($translatedPropertyName);
@@ -277,7 +273,6 @@ CODE_SAMPLE
         }
 
         $namespace->stmts[] = $class;
-
-        $this->printToFile([$namespace], $filePath);
+        $this->printNodesToFilePath([$namespace], $filePath);
     }
 }

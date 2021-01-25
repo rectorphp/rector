@@ -7,6 +7,7 @@ namespace Rector\Naming\ExpectedNameResolver;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\Naming\ValueObject\ExpectedName;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class MatchParamTypeExpectedNameResolver extends AbstractExpectedNameResolver
@@ -44,7 +45,7 @@ final class MatchParamTypeExpectedNameResolver extends AbstractExpectedNameResol
 
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->type);
         $expectedName = $this->propertyNaming->getExpectedNameFromType($staticType);
-        if ($expectedName === null) {
+        if (! $expectedName instanceof ExpectedName) {
             return null;
         }
 

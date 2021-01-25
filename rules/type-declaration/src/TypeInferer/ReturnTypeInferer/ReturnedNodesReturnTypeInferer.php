@@ -94,7 +94,7 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
     {
         $returns = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (
             Node $node
         ) use (&$returns): ?int {
             if ($node instanceof Switch_) {

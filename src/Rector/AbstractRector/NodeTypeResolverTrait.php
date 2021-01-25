@@ -70,18 +70,6 @@ trait NodeTypeResolverTrait
         $this->typeUnwrapper = $typeUnwrapper;
     }
 
-    public function isInObjectType(Node $node, string $type): bool
-    {
-        $objectType = $this->nodeTypeResolver->resolve($node);
-
-        $desiredObjectType = new ObjectType($type);
-        if ($objectType->isSuperTypeOf($desiredObjectType)->yes()) {
-            return true;
-        }
-
-        return $objectType->equals($desiredObjectType);
-    }
-
     public function isPropertyBoolean(Property $property): bool
     {
         return $this->nodeTypeResolver->isPropertyBoolean($property);
@@ -100,13 +88,7 @@ trait NodeTypeResolverTrait
      */
     protected function isObjectTypes(Node $node, array $requiredTypes): bool
     {
-        foreach ($requiredTypes as $requiredType) {
-            if ($this->isObjectType($node, $requiredType)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->nodeTypeResolver->isObjectTypes($node, $requiredTypes);
     }
 
     protected function isReturnOfObjectType(Return_ $return, string $objectType): bool
@@ -193,10 +175,6 @@ trait NodeTypeResolverTrait
     protected function isMethodStaticCallOrClassMethodObjectType(Node $node, string $type): bool
     {
         if ($node instanceof MethodCall) {
-            if ($node->var instanceof Variable) {
-                return $this->isObjectType($node->var, $type);
-            }
-
             // method call is variable return
             return $this->isObjectType($node->var, $type);
         }
@@ -206,9 +184,8 @@ trait NodeTypeResolverTrait
         }
 
         if ($node instanceof ClassMethod) {
-            /** @var Class_|null $classLike */
             $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-            if ($classLike === null) {
+            if (! $classLike instanceof Class_) {
                 return false;
             }
 

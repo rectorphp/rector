@@ -14,8 +14,10 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Error;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -41,18 +43,21 @@ use PhpParser\Node\UnionType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\PhpParser\Builder\MethodBuilder;
-use Rector\Core\PhpParser\Builder\ParamBuilder;
-use Rector\Core\PhpParser\Builder\PropertyBuilder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpAttribute\ValueObject\TagName;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\NodeFactoryTest
@@ -109,18 +114,32 @@ final class NodeFactory
      */
     private $nodeNameResolver;
 
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
     public function __construct(
         BuilderFactory $builderFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpVersionProvider $phpVersionProvider,
         StaticTypeMapper $staticTypeMapper,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        PhpDocTypeChanger $phpDocTypeChanger,
+        CurrentNodeProvider $currentNodeProvider
     ) {
         $this->builderFactory = $builderFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     /**
@@ -245,13 +264,8 @@ final class NodeFactory
         $this->decorateParentPropertyProperty($property);
 
         // add @inject
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($property);
-        }
-
-        $phpDocInfo->addBareTag('inject');
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $phpDocInfo->addBareTag(TagName::INJECT);
 
         return $property;
     }
@@ -318,7 +332,7 @@ final class NodeFactory
         return new StaticCall(
             new Name(self::REFERENCE_PARENT),
             new Identifier(MethodName::CONSTRUCT),
-            $this->convertParamNodesToArgNodes($params)
+            $this->createArgsFromParams($params)
         );
     }
 
@@ -462,15 +476,15 @@ final class NodeFactory
         return $uses;
     }
 
-    public function createStaticCall(string $class, string $method): StaticCall
+    /**
+     * @param Node[] $args
+     */
+    public function createStaticCall(string $class, string $method, array $args = []): StaticCall
     {
-        if (in_array($class, self::REFERENCES, true)) {
-            $class = new Name($class);
-        } else {
-            $class = new FullyQualified($class);
-        }
-
-        return new StaticCall($class, $method);
+        $class = $this->createClassPart($class);
+        $staticCall = new StaticCall($class, $method);
+        $staticCall->args = $this->createArgs($args);
+        return $staticCall;
     }
 
     /**
@@ -482,12 +496,67 @@ final class NodeFactory
         return new FuncCall(new Name($name), $arguments);
     }
 
+    public function createSelfFetchConstant(string $constantName, Node $node): ClassConstFetch
+    {
+        $name = new Name('self');
+        $name->setAttribute(AttributeKey::CLASS_NAME, $node->getAttribute(AttributeKey::CLASS_NAME));
+        return new ClassConstFetch($name, $constantName);
+    }
+
+    /**
+     * @param Param[] $params
+     * @return Arg[]
+     */
+    public function createArgsFromParams(array $params): array
+    {
+        $args = [];
+        foreach ($params as $param) {
+            $args[] = new Arg($param->var);
+        }
+
+        return $args;
+    }
+
+    public function createNull(): ConstFetch
+    {
+        return new ConstFetch(new Name('null'));
+    }
+
+    public function createPromotedPropertyParam(PropertyMetadata $propertyMetadata): Param
+    {
+        $paramBuilder = new ParamBuilder($propertyMetadata->getName());
+        $propertyType = $propertyMetadata->getType();
+        if ($propertyType !== null) {
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
+            if ($typeNode !== null) {
+                $paramBuilder->setType($typeNode);
+            }
+        }
+
+        $param = $paramBuilder->getNode();
+        $propertyFlags = $propertyMetadata->getFlags();
+        $param->flags = $propertyFlags !== 0 ? $propertyFlags : Class_::MODIFIER_PRIVATE;
+
+        return $param;
+    }
+
     private function createClassConstFetchFromName(Name $className, string $constantName): ClassConstFetch
     {
-        $classConstFetchNode = $this->builderFactory->classConstFetch($className, $constantName);
-        $classConstFetchNode->class->setAttribute(AttributeKey::RESOLVED_NAME, (string) $className);
+        $classConstFetch = $this->builderFactory->classConstFetch($className, $constantName);
 
-        return $classConstFetchNode;
+        $classNameString = $className->toString();
+        if (in_array($classNameString, ['self', 'static'], true)) {
+            $currentNode = $this->currentNodeProvider->getNode();
+            if ($currentNode !== null) {
+                $className = $currentNode->getAttribute(AttributeKey::CLASS_NAME);
+                $classConstFetch->class->setAttribute(AttributeKey::RESOLVED_NAME, $className);
+                $classConstFetch->class->setAttribute(AttributeKey::CLASS_NAME, $className);
+            }
+        } else {
+            $classConstFetch->class->setAttribute(AttributeKey::RESOLVED_NAME, $classNameString);
+        }
+
+        return $classConstFetch;
     }
 
     /**
@@ -504,6 +573,7 @@ final class NodeFactory
             || $item instanceof FuncCall
             || $item instanceof Concat
             || $item instanceof Scalar
+            || $item instanceof Cast
         ) {
             $arrayItem = new ArrayItem($item);
         } elseif ($item instanceof Identifier) {
@@ -516,19 +586,17 @@ final class NodeFactory
             $arrayItem = new ArrayItem($this->createArray($item));
         }
 
-        if ($arrayItem !== null) {
-            if ($key === null) {
-                return $arrayItem;
-            }
-
-            $arrayItem->key = BuilderHelpers::normalizeValue($key);
-
-            return $arrayItem;
-        }
-
         if ($item instanceof ClassConstFetch) {
             $itemValue = BuilderHelpers::normalizeValue($item);
-            return new ArrayItem($itemValue);
+            $arrayItem = new ArrayItem($itemValue);
+        }
+
+        if ($item instanceof Arg) {
+            $arrayItem = new ArrayItem($item->value);
+        }
+
+        if ($arrayItem !== null) {
+            return $this->createArrayItemWithKey($key, $arrayItem);
         }
 
         throw new NotImplementedException(sprintf(
@@ -566,14 +634,14 @@ final class NodeFactory
                 $property->type = $phpParserType;
 
                 if ($type instanceof GenericObjectType) {
-                    $phpDocInfo->changeVarType($type);
+                    $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
                 }
 
                 return;
             }
         }
 
-        $phpDocInfo->changeVarType($type);
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
     }
 
     private function decorateParentPropertyProperty(Property $property): void
@@ -581,20 +649,6 @@ final class NodeFactory
         // complete property property parent, needed for other operations
         $propertyProperty = $property->props[0];
         $propertyProperty->setAttribute(AttributeKey::PARENT_NODE, $property);
-    }
-
-    /**
-     * @param Param[] $paramNodes
-     * @return Arg[]
-     */
-    private function convertParamNodesToArgNodes(array $paramNodes): array
-    {
-        $args = [];
-        foreach ($paramNodes as $paramNode) {
-            $args[] = new Arg($paramNode->var);
-        }
-
-        return $args;
     }
 
     /**
@@ -612,10 +666,31 @@ final class NodeFactory
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($value);
 
         if (! $staticType instanceof MixedType) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classConst);
-            $phpDocInfo->changeVarType($staticType);
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classConst);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $staticType);
         }
 
         return $classConst;
+    }
+
+    private function createClassPart(string $class): Name
+    {
+        if (in_array($class, self::REFERENCES, true)) {
+            return new Name($class);
+        }
+
+        return new FullyQualified($class);
+    }
+
+    /**
+     * @param int|string|null $key
+     */
+    private function createArrayItemWithKey($key, ArrayItem $arrayItem): ArrayItem
+    {
+        if ($key !== null) {
+            $arrayItem->key = BuilderHelpers::normalizeValue($key);
+        }
+
+        return $arrayItem;
     }
 }

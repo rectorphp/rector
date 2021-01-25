@@ -139,13 +139,13 @@ CODE_SAMPLE
     private function splitProcessCommandToItems(string $process): array
     {
         $privatesCaller = new PrivatesCaller();
-        return $privatesCaller->callPrivateMethod(new StringInput(''), 'tokenize', $process);
+        return $privatesCaller->callPrivateMethod(new StringInput(''), 'tokenize', [$process]);
     }
 
     private function processPreviousAssign(Node $node, Expr $firstArgumentExpr): void
     {
         $previousNodeAssign = $this->findPreviousNodeAssign($node, $firstArgumentExpr);
-        if ($previousNodeAssign === null) {
+        if (! $previousNodeAssign instanceof Assign) {
             return;
         }
 

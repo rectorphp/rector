@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -73,8 +74,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removeNode($node);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Expression) {
+            return null;
+        }
 
+        $this->removeNode($node);
         return $node;
     }
 

@@ -10,7 +10,10 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
 use Rector\Defluent\Rector\Return_\DefluentReturnMethodCallRector;
+use Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd;
 use Rector\Defluent\ValueObject\FluentCallsKind;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,6 +25,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FluentChainMethodCallToNormalMethodCallRector extends AbstractFluentChainMethodCallRector
 {
+    /**
+     * @var TypeChecker
+     */
+    private $typeChecker;
+
+    public function __construct(TypeChecker $typeChecker)
+    {
+        $this->typeChecker = $typeChecker;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -70,7 +83,7 @@ CODE_SAMPLE
             FluentCallsKind::NORMAL
         );
 
-        if ($assignAndRootExprAndNodesToAdd === null) {
+        if (! $assignAndRootExprAndNodesToAdd instanceof AssignAndRootExprAndNodesToAdd) {
             return null;
         }
 
@@ -87,6 +100,7 @@ CODE_SAMPLE
      */
     private function isHandledByAnotherRule(MethodCall $methodCall): bool
     {
-        return $this->hasParentTypes($methodCall, [Return_::class, Arg::class]);
+        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        return $this->typeChecker->isInstanceOf($parent, [Return_::class, Arg::class]);
     }
 }

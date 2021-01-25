@@ -52,10 +52,10 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
     {
         /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $positionNode->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo === null) {
+        if (! $fileInfo instanceof SmartFileInfo) {
             // fallback for freshly created Name nodes
             $fileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-            if ($fileInfo === null) {
+            if (! $fileInfo instanceof SmartFileInfo) {
                 return;
             }
         }
@@ -65,16 +65,18 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
 
     public function addFunctionUseImport(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
-        /** @var SmartFileInfo $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        if (! $fileInfo instanceof SmartFileInfo) {
+            return;
+        }
+
         $this->functionUseImportTypesInFilePath[$fileInfo->getRealPath()][] = $fullyQualifiedObjectType;
     }
 
     public function removeShortUse(Node $node, string $shortUse): void
     {
-        /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo === null) {
+        if (! $fileInfo instanceof SmartFileInfo) {
             return;
         }
 
@@ -188,7 +190,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
         }
 
         $smartFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        if ($smartFileInfo === null) {
+        if (! $smartFileInfo instanceof SmartFileInfo) {
             return null;
         }
 

@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\ChangesReporting\Rector\AbstractRector\NotifyingRemovingNodeTrait;
-use Rector\Doctrine\AbstractRector\DoctrineTrait;
 use Rector\FileSystemRector\Behavior\FileSystemRectorTrait;
 use Rector\PostRector\Rector\AbstractRector\NodeCommandersTrait;
 
@@ -17,7 +16,6 @@ trait AbstractRectorTrait
     use FileSystemRectorTrait;
     use PhpDocTrait;
     use RemovedAndAddedFilesTrait;
-    use DoctrineTrait;
     use NodeTypeResolverTrait;
     use NameResolverTrait;
     use ConstFetchAnalyzerTrait;
@@ -26,7 +24,7 @@ trait AbstractRectorTrait
     use NodeFactoryTrait;
     use VisibilityTrait;
     use ValueResolverTrait;
-    use CallableNodeTraverserTrait;
+    use SimpleCallableNodeTraverserTrait;
     use ComplexRemovalTrait;
     use NodeCollectorTrait;
     use NotifyingRemovingNodeTrait;

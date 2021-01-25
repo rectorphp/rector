@@ -146,7 +146,12 @@ final class NodeNameResolver
 
     public function areNamesEqual(Node $firstNode, Node $secondNode): bool
     {
-        return $this->getName($firstNode) === $this->getName($secondNode);
+        $secondResolvedName = $this->getName($secondNode);
+        if ($secondResolvedName === null) {
+            return false;
+        }
+
+        return $this->isName($firstNode, $secondResolvedName);
     }
 
     /**
@@ -216,6 +221,16 @@ final class NodeNameResolver
         }
 
         return $this->isNames($node, $names);
+    }
+
+    /**
+     * Ends with ucname
+     * Starts with adjective, e.g. (Post $firstPost, Post $secondPost)
+     */
+    public function endsWith(string $currentName, string $expectedName): bool
+    {
+        $suffixNamePattern = '#\w+' . ucfirst($expectedName) . '#';
+        return (bool) Strings::match($currentName, $suffixNamePattern);
     }
 
     private function isCallOrIdentifier(Node $node): bool

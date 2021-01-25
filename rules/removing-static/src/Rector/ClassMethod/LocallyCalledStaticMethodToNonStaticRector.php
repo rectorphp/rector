@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,6 +20,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class LocallyCalledStaticMethodToNonStaticRector extends AbstractRector
 {
+    /**
+     * @var ClassMethodVisibilityGuard
+     */
+    private $classMethodVisibilityGuard;
+
+    public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard)
+    {
+        $this->classMethodVisibilityGuard = $classMethodVisibilityGuard;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -89,6 +100,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($classMethod)) {
+            return null;
+        }
+
         // change static calls to non-static ones, but only if in non-static method!!!
         $this->makeNonStatic($classMethod);
 
@@ -98,7 +113,7 @@ CODE_SAMPLE
     private function refactorStaticCall(StaticCall $staticCall): ?MethodCall
     {
         $classMethod = $this->nodeRepository->findClassMethodByStaticCall($staticCall);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return null;
         }
 
@@ -141,9 +156,8 @@ CODE_SAMPLE
 
     private function isInStaticClassMethod(StaticCall $staticCall): bool
     {
-        /** @var ClassMethod|null $locationClassMethod */
         $locationClassMethod = $staticCall->getAttribute(AttributeKey::METHOD_NODE);
-        if ($locationClassMethod === null) {
+        if (! $locationClassMethod instanceof ClassMethod) {
             return false;
         }
 

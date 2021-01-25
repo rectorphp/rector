@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture\AutoImportNamesParameter;
+namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\FixtureAutoImportNames;
 
 use PhpParser\Node;
 
@@ -16,7 +16,7 @@ class PartialExpression
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture\AutoImportNamesParameter;
+namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\FixtureAutoImportNames;
 
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node;

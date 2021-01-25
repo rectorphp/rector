@@ -18,10 +18,8 @@ use Rector\Symfony4\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRe
 
 final class SomeController extends ContainerAwareParentClass
 {
-    private \stdClass $stdClass;
-    public function __construct(\stdClass $stdClass)
+    public function __construct(private \stdClass $stdClass)
     {
-        $this->stdClass = $stdClass;
     }
     protected function execute()
     {

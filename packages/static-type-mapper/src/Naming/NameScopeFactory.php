@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Rector\StaticTypeMapper\Naming;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\NameScope;
 use PHPStan\Type\Generic\TemplateTypeMap;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -23,6 +25,20 @@ final class NameScopeFactory
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
+
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    /**
+     * This is needed to avoid circular references
+     * @required
+     */
+    public function autowireNameScopeFactory(PhpDocInfoFactory $phpDocInfoFactory): void
+    {
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    }
 
     public function createNameScopeFromNodeWithoutTemplateTypes(Node $node): NameScope
     {
@@ -87,16 +103,31 @@ final class NameScopeFactory
 
     private function templateTemplateTypeMap(Node $node): TemplateTypeMap
     {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $nodeTemplateTypes = $this->resolveTemplateTypesFromNode($node);
 
-        $templateTypes = [];
-        if ($phpDocInfo instanceof PhpDocInfo) {
-            foreach ($phpDocInfo->getTemplateTagValueNodes() as $templateTagValueNode) {
-                $phpstanType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($templateTagValueNode, $node);
-                $templateTypes[$templateTagValueNode->name] = $phpstanType;
-            }
+        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classTemplateTypes = [];
+        if ($class instanceof ClassLike) {
+            $classTemplateTypes = $this->resolveTemplateTypesFromNode($class);
         }
 
+        $templateTypes = array_merge($nodeTemplateTypes, $classTemplateTypes);
         return new TemplateTypeMap($templateTypes);
+    }
+
+    /**
+     * @return Type[]
+     */
+    private function resolveTemplateTypesFromNode(Node $node): array
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
+        $templateTypes = [];
+        foreach ($phpDocInfo->getTemplateTagValueNodes() as $templateTagValueNode) {
+            $phpstanType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($templateTagValueNode, $node);
+            $templateTypes[$templateTagValueNode->name] = $phpstanType;
+        }
+
+        return $templateTypes;
     }
 }

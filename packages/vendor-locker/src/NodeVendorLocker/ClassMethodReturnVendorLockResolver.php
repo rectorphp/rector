@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -14,7 +15,7 @@ final class ClassMethodReturnVendorLockResolver extends AbstractNodeVendorLockRe
     public function isVendorLocked(ClassMethod $classMethod): bool
     {
         $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        if (! $classNode instanceof ClassLike) {
             return false;
         }
 

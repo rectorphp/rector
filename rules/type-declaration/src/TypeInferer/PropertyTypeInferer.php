@@ -92,37 +92,33 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
             }
         }
 
-        if ($resolvedType === null) {
-            return new MixedType();
-        }
-
         return $resolvedType;
     }
 
-    private function shouldUnionWithDefaultValue(Type $defaultValueType, ?Type $type = null): bool
+    private function shouldUnionWithDefaultValue(Type $defaultValueType, Type $type): bool
     {
         if ($defaultValueType instanceof MixedType) {
             return false;
         }
 
         // skip empty array type (mixed[])
-        if ($defaultValueType instanceof ArrayType && $defaultValueType->getItemType() instanceof NeverType && $type !== null) {
+        if ($defaultValueType instanceof ArrayType && $defaultValueType->getItemType() instanceof NeverType && ! $type instanceof MixedType) {
             return false;
         }
 
-        if ($type === null) {
+        if ($type instanceof MixedType) {
             return true;
         }
 
         return ! $this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($type);
     }
 
-    private function unionWithDefaultValueType(Type $defaultValueType, ?Type $resolvedType): Type
+    private function unionWithDefaultValueType(Type $defaultValueType, Type $resolvedType): Type
     {
         $types = [];
         $types[] = $defaultValueType;
 
-        if ($resolvedType !== null) {
+        if (! $resolvedType instanceof MixedType) {
             $types[] = $resolvedType;
         }
 

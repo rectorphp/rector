@@ -13,11 +13,13 @@ use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInte
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToOneTagNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToOneTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -39,12 +41,26 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
      */
     private $uuidMigrationDataCollector;
 
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
     public function __construct(
         PhpDocTagNodeFactory $phpDocTagNodeFactory,
-        UuidMigrationDataCollector $uuidMigrationDataCollector
+        UuidMigrationDataCollector $uuidMigrationDataCollector,
+        PhpDocTagRemover $phpDocTagRemover,
+        DoctrineDocBlockResolver $doctrineDocBlockResolver
     ) {
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
         $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
+        $this->phpDocTagRemover = $phpDocTagRemover;
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -140,7 +156,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isDoctrineEntityClass($node)) {
+        if (! $this->doctrineDocBlockResolver->isDoctrineEntityClass($node)) {
             return null;
         }
 
@@ -168,7 +184,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $targetEntity = $this->getTargetEntity($property);
+        $targetEntity = $this->doctrineDocBlockResolver->getTargetEntity($property);
         if ($targetEntity === null) {
             return true;
         }
@@ -177,15 +193,11 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var PhpDocInfo|null $propertyPhpDocInfo */
-        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($propertyPhpDocInfo === null) {
-            return true;
-        }
+        $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $oneToOneTagValueNode = $propertyPhpDocInfo->getByType(OneToOneTagValueNode::class);
         // skip mappedBy oneToOne, as the column doesn't really exist
-        if ($oneToOneTagValueNode === null) {
+        if (! $oneToOneTagValueNode instanceof OneToOneTagValueNode) {
             return false;
         }
         return (bool) $oneToOneTagValueNode->getMappedBy();
@@ -230,13 +242,10 @@ CODE_SAMPLE
 
     private function mirrorPhpDocInfoToUuid(Property $property): void
     {
-        /** @var PhpDocInfo $propertyPhpDocInfo */
-        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $newPropertyPhpDocInfo = clone $phpDocInfo;
 
-        $newPropertyPhpDocInfo = clone $propertyPhpDocInfo;
-
-        /** @var DoctrineRelationTagValueNodeInterface $doctrineRelationTagValueNode */
-        $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($property);
+        $doctrineRelationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
 
         if ($doctrineRelationTagValueNode instanceof ToManyTagNodeInterface) {
             $this->refactorToManyPropertyPhpDocInfo($newPropertyPhpDocInfo, $property);
@@ -250,11 +259,15 @@ CODE_SAMPLE
         string $oldPropertyName,
         string $uuidPropertyName
     ): void {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+
+        $doctrineRelationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
+        if (! $doctrineRelationTagValueNode instanceof DoctrineRelationTagValueNodeInterface) {
+            return;
+        }
+
         /** @var string $className */
         $className = $property->getAttribute(AttributeKey::CLASS_NAME);
-
-        /** @var DoctrineRelationTagValueNodeInterface $doctrineRelationTagValueNode */
-        $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($property);
 
         $this->uuidMigrationDataCollector->addClassToManyRelationProperty(
             $className,
@@ -264,16 +277,16 @@ CODE_SAMPLE
         );
     }
 
-    private function refactorToManyPropertyPhpDocInfo(PhpDocInfo $propertyPhpDocInfo, Property $property): void
+    private function refactorToManyPropertyPhpDocInfo(PhpDocInfo $phpDocInfo, Property $property): void
     {
-        $doctrineJoinColumnTagValueNode = $propertyPhpDocInfo->getByType(JoinColumnTagValueNode::class);
+        $doctrineJoinColumnTagValueNode = $phpDocInfo->getByType(JoinColumnTagValueNode::class);
         if ($doctrineJoinColumnTagValueNode !== null) {
             // replace @ORM\JoinColumn with @ORM\JoinTable
-            $propertyPhpDocInfo->removeTagValueNodeFromNode($doctrineJoinColumnTagValueNode);
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineJoinColumnTagValueNode);
         }
 
         $joinTableTagNode = $this->phpDocTagNodeFactory->createJoinTableTagNode($property);
-        $propertyPhpDocInfo->addPhpDocTagNode($joinTableTagNode);
+        $phpDocInfo->addPhpDocTagNode($joinTableTagNode);
     }
 
     private function refactorToOnePropertyPhpDocInfo(PhpDocInfo $propertyPhpDocInfo): void

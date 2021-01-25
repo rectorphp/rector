@@ -24,9 +24,8 @@ final class ExprNodeMapper implements PhpParserNodeMapperInterface
      */
     public function mapToPHPStan(Node $node): Type
     {
-        /** @var Scope|null $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             return new MixedType();
         }
 

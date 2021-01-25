@@ -6,6 +6,7 @@ namespace Rector\PHPStanExtensions\Rule;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
@@ -63,7 +64,7 @@ final class KeepRectorNamespaceForRectorRule implements Rule
         }
 
         $name = $classLike->name;
-        if ($name === null) {
+        if (! $name instanceof Identifier) {
             return true;
         }
 

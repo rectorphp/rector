@@ -6,12 +6,14 @@ namespace Rector\NetteCodeQuality\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -27,9 +29,15 @@ final class MoveInjectToExistingConstructorRector extends AbstractRector
      */
     private $propertyUsageAnalyzer;
 
-    public function __construct(PropertyUsageAnalyzer $propertyUsageAnalyzer)
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
+    public function __construct(PropertyUsageAnalyzer $propertyUsageAnalyzer, PhpDocTagRemover $phpDocTagRemover)
     {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -103,16 +111,18 @@ CODE_SAMPLE
         }
 
         $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod === null) {
+        if (! $constructClassMethod instanceof ClassMethod) {
             return null;
         }
 
         foreach ($injectProperties as $injectProperty) {
             $this->removeInjectAnnotation($injectProperty);
-
             $this->changePropertyVisibility($injectProperty);
-
             $this->addPropertyToCollector($injectProperty);
+
+            if ($this->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+                $this->removeNode($injectProperty);
+            }
         }
 
         return $node;
@@ -130,9 +140,8 @@ CODE_SAMPLE
 
     private function removeInjectAnnotation(Property $property): void
     {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->removeByName('inject');
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $this->phpDocTagRemover->removeByName($phpDocInfo, TagName::INJECT);
     }
 
     private function changePropertyVisibility(Property $injectProperty): void
@@ -150,12 +159,7 @@ CODE_SAMPLE
             return false;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return false;
-        }
-
-        return (bool) $phpDocInfo->getTagsByName('inject');
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        return $phpDocInfo->hasByName(TagName::INJECT);
     }
 }

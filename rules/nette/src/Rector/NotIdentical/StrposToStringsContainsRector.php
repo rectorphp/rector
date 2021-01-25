@@ -68,7 +68,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $funcCall = $this->matchStrposInComparisonToFalse($node);
-        if ($funcCall === null) {
+        if (! $funcCall instanceof FuncCall) {
             return null;
         }
 

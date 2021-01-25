@@ -39,7 +39,7 @@ final class ClassReflectionToAstResolver
     public function getClassFromObjectType(ObjectType $objectType): ?Class_
     {
         $classReflection = $objectType->getClassReflection();
-        if ($classReflection === null) {
+        if (! $classReflection instanceof ClassReflection) {
             return null;
         }
 

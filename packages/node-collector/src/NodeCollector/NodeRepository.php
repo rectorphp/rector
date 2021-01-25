@@ -7,10 +7,12 @@ namespace Rector\NodeCollector\NodeCollector;
 use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -30,6 +32,7 @@ use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -37,6 +40,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use ReflectionMethod;
 
 /**
  * @rector-doc
@@ -106,6 +110,11 @@ final class NodeRepository
      */
     private $typeUnwrapper;
 
+    /**
+     * @var array<string, Attribute[]>
+     */
+    private $attributes = [];
+
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
@@ -141,7 +150,7 @@ final class NodeRepository
         // array callable - [$this, 'someCall']
         if ($node instanceof Array_) {
             $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($node);
-            if ($arrayCallable === null) {
+            if (! $arrayCallable instanceof ArrayCallable) {
                 return;
             }
 
@@ -166,6 +175,11 @@ final class NodeRepository
         if ($node instanceof FuncCall) {
             $functionName = $this->nodeNameResolver->getName($node);
             $this->funcCallsByName[$functionName][] = $node;
+        }
+
+        if ($node instanceof Attribute) {
+            $attributeClass = $this->nodeNameResolver->getName($node->name);
+            $this->attributes[$attributeClass][] = $node;
         }
     }
 
@@ -278,12 +292,15 @@ final class NodeRepository
         });
     }
 
-    public function findClassMethodByMethodReflection(MethodReflection $methodReflection): ?ClassMethod
+    /**
+     * @param MethodReflection|ReflectionMethod $methodReflection
+     */
+    public function findClassMethodByMethodReflection(object $methodReflection): ?ClassMethod
     {
         $methodName = $methodReflection->getName();
 
-        $classReflection = $methodReflection->getDeclaringClass();
-        $className = $classReflection->getName();
+        $declaringClass = $methodReflection->getDeclaringClass();
+        $className = $declaringClass->getName();
 
         return $this->findClassMethod($className, $methodName);
     }
@@ -362,8 +379,8 @@ final class NodeRepository
                 continue;
             }
 
-            // include child usages
-            if (! is_a($desiredClassName, $className, true)) {
+            // include child usages and parent usages
+            if (! is_a($className, $desiredClassName, true) && ! is_a($desiredClassName, $className, true)) {
                 continue;
             }
 
@@ -493,6 +510,33 @@ final class NodeRepository
     public function findClassConstByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
     {
         return $this->parsedNodeCollector->findClassConstByClassConstFetch($classConstFetch);
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    public function findAttributes(string $class): array
+    {
+        return $this->attributes[$class] ?? [];
+    }
+
+    public function findClassMethodConstructorByNew(New_ $new): ?ClassMethod
+    {
+        $className = $this->nodeTypeResolver->resolve($new->class);
+        if (! $className instanceof TypeWithClassName) {
+            return null;
+        }
+
+        $constructorClassMethod = $this->findClassMethod($className->getClassName(), MethodName::CONSTRUCT);
+        if (! $constructorClassMethod instanceof ClassMethod) {
+            return null;
+        }
+
+        if ($constructorClassMethod->getParams() === []) {
+            return null;
+        }
+
+        return $constructorClassMethod;
     }
 
     private function addMethod(ClassMethod $classMethod): void

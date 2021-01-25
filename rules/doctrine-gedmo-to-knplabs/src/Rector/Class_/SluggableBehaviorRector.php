@@ -12,10 +12,10 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\SlugTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -32,9 +32,15 @@ final class SluggableBehaviorRector extends AbstractRector
      */
     private $classInsertManipulator;
 
-    public function __construct(ClassInsertManipulator $classInsertManipulator)
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function __construct(ClassInsertManipulator $classInsertManipulator, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -105,14 +111,10 @@ CODE_SAMPLE
         $matchedProperty = null;
 
         foreach ($node->getProperties() as $property) {
-            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($propertyPhpDocInfo === null) {
-                continue;
-            }
+            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
-            /** @var SlugTagValueNode|null $slugTagValueNode */
             $slugTagValueNode = $propertyPhpDocInfo->getByType(SlugTagValueNode::class);
-            if ($slugTagValueNode === null) {
+            if (! $slugTagValueNode instanceof SlugTagValueNode) {
                 continue;
             }
 
@@ -157,9 +159,9 @@ CODE_SAMPLE
         $classMethod->stmts[] = new Return_($this->createArray($slugFields));
 
         $returnType = new ArrayType(new MixedType(), new StringType());
+
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $phpDocInfo->changeReturnType($returnType);
-//        $this->docBlockManipulator->addReturnTag($classMethod, new ArrayType(new MixedType(), new StringType()));
+        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $returnType);
 
         $this->classInsertManipulator->addAsFirstMethod($class, $classMethod);
     }

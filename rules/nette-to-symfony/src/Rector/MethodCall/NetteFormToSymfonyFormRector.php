@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassLike;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -113,7 +114,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 
@@ -168,7 +169,7 @@ CODE_SAMPLE
         $this->addChoiceTypeOptions($method, $optionsArray);
         $this->addMultiFileTypeOptions($method, $optionsArray);
 
-        $methodCall->args[1] = new Arg($this->createClassConstantReference($classType));
+        $methodCall->args[1] = new Arg($this->createClassConstReference($classType));
 
         if ($optionsArray->items !== []) {
             $methodCall->args[2] = new Arg($optionsArray);

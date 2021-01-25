@@ -31,19 +31,8 @@ use DateTimeInterface;
 
 class ClassWithInjects
 {
-    /**
-     * @var stdClass
-     */
-    private $property;
-
-    /**
-     * @var DateTimeInterface
-     */
-    private $otherProperty;
-    public function __construct(\stdClass $property, \DateTimeInterface $otherProperty)
+    public function __construct(private \stdClass $property, private \DateTimeInterface $otherProperty)
     {
-        $this->property = $property;
-        $this->otherProperty = $otherProperty;
     }
 }
 

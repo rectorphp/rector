@@ -7,11 +7,11 @@ namespace Rector\DoctrineCodeQuality\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ManyToOneTagValueNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\DoctrineCodeQuality\NodeAnalyzer\SetterClassMethodAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -29,9 +29,17 @@ final class MakeEntitySetterNullabilityInSyncWithPropertyRector extends Abstract
      */
     private $setterClassMethodAnalyzer;
 
-    public function __construct(SetterClassMethodAnalyzer $setterClassMethodAnalyzer)
-    {
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
+    public function __construct(
+        SetterClassMethodAnalyzer $setterClassMethodAnalyzer,
+        DoctrineDocBlockResolver $doctrineDocBlockResolver
+    ) {
         $this->setterClassMethodAnalyzer = $setterClassMethodAnalyzer;
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -99,23 +107,19 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // is setter in doctrine?
-        if (! $this->isInDoctrineEntityClass($node)) {
+        if (! $this->doctrineDocBlockResolver->isInDoctrineEntityClass($node)) {
             return null;
         }
 
         $property = $this->setterClassMethodAnalyzer->matchNullalbeClassMethodProperty($node);
-        if ($property === null) {
+        if (! $property instanceof Property) {
             return null;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $manyToOneTagValueNode = $phpDocInfo->getByType(ManyToOneTagValueNode::class);
-        if ($manyToOneTagValueNode === null) {
+        if (! $manyToOneTagValueNode instanceof ManyToOneTagValueNode) {
             return null;
         }
 

@@ -9,7 +9,6 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 
 final class ConstantReturnToParamTypeConverter
@@ -33,7 +32,7 @@ final class ConstantReturnToParamTypeConverter
         return $this->unwrapConstantTypeToObjectType($type);
     }
 
-    private function unwrapConstantTypeToObjectType(Type $type): Type
+    private function unwrapConstantTypeToObjectType(Type $type): ?Type
     {
         if ($type instanceof ConstantArrayType) {
             return $this->unwrapConstantTypeToObjectType($type->getItemType());
@@ -44,11 +43,14 @@ final class ConstantReturnToParamTypeConverter
         if ($type instanceof UnionType) {
             $types = [];
             foreach ($type->getTypes() as $unionedType) {
-                $types[] = $this->unwrapConstantTypeToObjectType($unionedType);
+                $type = $this->unwrapConstantTypeToObjectType($unionedType);
+                if ($type !== null) {
+                    $types[] = $type;
+                }
             }
             return $this->typeFactory->createMixedPassedOrUnionType($types);
         }
 
-        throw new NotImplementedYetException();
+        return null;
     }
 }

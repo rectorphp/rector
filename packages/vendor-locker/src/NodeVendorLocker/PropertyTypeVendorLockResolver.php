@@ -15,9 +15,8 @@ final class PropertyTypeVendorLockResolver extends AbstractNodeVendorLockResolve
 {
     public function isVendorLocked(Property $property): bool
     {
-        /** @var Class_|null $classLike */
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof Class_) {
             return false;
         }
 

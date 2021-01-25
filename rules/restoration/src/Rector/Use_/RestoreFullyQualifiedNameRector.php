@@ -11,10 +11,10 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\MixedType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Restoration\NameMatcher\FullyQualifiedNameMatcher;
 use Rector\Restoration\NameMatcher\PhpDocTypeNodeNameMatcher;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -105,7 +105,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $useUse->name = $fullyQualifiedName;
+            $useUse->name = new Name($fullyQualifiedName->toString());
         }
 
         return $use;
@@ -148,16 +148,12 @@ CODE_SAMPLE
 
     private function refactorReturnTagValueNode(ClassMethod $classMethod): void
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if (! $attributeAwareReturnTagValueNode instanceof AttributeAwareReturnTagValueNode) {
             return;
         }
 
-        $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if ($attributeAwareReturnTagValueNode === null) {
-            return;
-        }
         if (! $phpDocInfo->getReturnType() instanceof MixedType) {
             return;
         }
@@ -166,11 +162,12 @@ CODE_SAMPLE
             $fullyQualifiedTypeNode = $this->phpDocTypeNodeNameMatcher->matchIdentifier(
                 $attributeAwareReturnTagValueNode->type->name
             );
-            if ($fullyQualifiedTypeNode === null) {
+            if (! $fullyQualifiedTypeNode instanceof TypeNode) {
                 return;
             }
 
             $attributeAwareReturnTagValueNode->type = $fullyQualifiedTypeNode;
+            $phpDocInfo->markAsChanged();
         }
     }
 }

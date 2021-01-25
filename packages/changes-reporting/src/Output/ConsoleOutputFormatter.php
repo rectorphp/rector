@@ -170,7 +170,8 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
     private function normalizePathsToRelativeWithLine(string $errorMessage): string
     {
-        $errorMessage = Strings::replace($errorMessage, '#' . preg_quote(getcwd(), '#') . '/#', '');
+        $regex = '#' . preg_quote(getcwd(), '#') . '/#';
+        $errorMessage = Strings::replace($errorMessage, $regex, '');
         return $errorMessage = Strings::replace($errorMessage, self::ON_LINE_REGEX, ':');
     }
 

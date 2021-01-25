@@ -98,7 +98,7 @@ CODE_SAMPLE
     private function resolvePromotedParams(Class_ $class): array
     {
         $constructorClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if ($constructorClassMethod === null) {
+        if (! $constructorClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return [];
         }
 

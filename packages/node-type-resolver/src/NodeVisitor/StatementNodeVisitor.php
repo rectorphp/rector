@@ -30,7 +30,7 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node): ?Node
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent === null) {
+        if (! $parent instanceof Node) {
             if (! $node instanceof Stmt) {
                 return null;
             }

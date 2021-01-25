@@ -7,17 +7,19 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\Type;
+use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionClass;
-use ReflectionProperty;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 
 final class ClassDependencyManipulator
 {
@@ -46,30 +48,59 @@ final class ClassDependencyManipulator
      */
     private $classInsertManipulator;
 
+    /**
+     * @var PhpVersionProvider
+     */
+    private $phpVersionProvider;
+
+    /**
+     * @var PropertyPresenceChecker
+     */
+    private $propertyPresenceChecker;
+
     public function __construct(
         ChildAndParentClassManipulator $childAndParentClassManipulator,
         ClassInsertManipulator $classInsertManipulator,
         ClassMethodAssignManipulator $classMethodAssignManipulator,
         NodeFactory $nodeFactory,
-        StmtsManipulator $stmtsManipulator
+        StmtsManipulator $stmtsManipulator,
+        PhpVersionProvider $phpVersionProvider,
+        PropertyPresenceChecker $propertyPresenceChecker
     ) {
         $this->classMethodAssignManipulator = $classMethodAssignManipulator;
         $this->nodeFactory = $nodeFactory;
         $this->childAndParentClassManipulator = $childAndParentClassManipulator;
         $this->stmtsManipulator = $stmtsManipulator;
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->phpVersionProvider = $phpVersionProvider;
+        $this->propertyPresenceChecker = $propertyPresenceChecker;
     }
 
-    public function addConstructorDependency(Class_ $class, string $name, ?Type $type): void
+    public function addConstructorDependency(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
-        if ($this->isPropertyAlreadyAvailableInTheClassOrItsParents($class, $name)) {
+        if ($this->propertyPresenceChecker->hasClassPropertyByName($class, $propertyMetadata->getName())) {
             return;
         }
 
-        $this->classInsertManipulator->addPropertyToClass($class, $name, $type);
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+            $this->classInsertManipulator->addPropertyToClass(
+                $class,
+                $propertyMetadata->getName(),
+                $propertyMetadata->getType()
+            );
+        }
 
-        $assign = $this->nodeFactory->createPropertyAssignment($name);
-        $this->addConstructorDependencyWithCustomAssign($class, $name, $type, $assign);
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+            $this->addPromotedProperty($class, $propertyMetadata);
+        } else {
+            $assign = $this->nodeFactory->createPropertyAssignment($propertyMetadata->getName());
+            $this->addConstructorDependencyWithCustomAssign(
+                $class,
+                $propertyMetadata->getName(),
+                $propertyMetadata->getType(),
+                $assign
+            );
+        }
     }
 
     public function addConstructorDependencyWithCustomAssign(
@@ -94,11 +125,9 @@ final class ClassDependencyManipulator
         $constructorMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
 
         $this->classMethodAssignManipulator->addParameterAndAssignToMethod($constructorMethod, $name, $type, $assign);
-
-        $this->childAndParentClassManipulator->completeParentConstructor($class, $constructorMethod);
-
         $this->classInsertManipulator->addAsFirstMethod($class, $constructorMethod);
 
+        $this->childAndParentClassManipulator->completeParentConstructor($class, $constructorMethod);
         $this->childAndParentClassManipulator->completeChildConstructors($class, $constructorMethod);
     }
 
@@ -133,37 +162,30 @@ final class ClassDependencyManipulator
         $classMethod->stmts = array_merge($stmts, (array) $classMethod->stmts);
     }
 
-    public function addInjectProperty(Class_ $class, string $propertyName, ?Type $propertyType): void
+    public function addInjectProperty(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
-        if ($this->isPropertyAlreadyAvailableInTheClassOrItsParents($class, $propertyName)) {
+        if ($this->propertyPresenceChecker->hasClassPropertyByName($class, $propertyMetadata->getName())) {
             return;
         }
 
-        $this->classInsertManipulator->addInjectPropertyToClass($class, $propertyName, $propertyType);
+        $this->classInsertManipulator->addInjectPropertyToClass($class, $propertyMetadata);
     }
 
-    private function isPropertyAlreadyAvailableInTheClassOrItsParents(Class_ $class, string $propertyName): bool
+    private function addPromotedProperty(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
-        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return false;
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        $param = $this->nodeFactory->createPromotedPropertyParam($propertyMetadata);
+
+        if ($constructClassMethod instanceof ClassMethod) {
+            $constructClassMethod->params[] = $param;
+        } else {
+            $constructClassMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
+            $constructClassMethod->params[] = $param;
+            $this->classInsertManipulator->addAsFirstMethod($class, $constructClassMethod);
         }
 
-        if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
-            return false;
-        }
-
-        $availablePropertyReflections = $this->getParentClassPublicAndProtectedPropertyReflections($className);
-
-        foreach ($availablePropertyReflections as $availablePropertyReflection) {
-            if ($availablePropertyReflection->getName() !== $propertyName) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
+        $this->childAndParentClassManipulator->completeParentConstructor($class, $constructClassMethod);
+        $this->childAndParentClassManipulator->completeChildConstructors($class, $constructClassMethod);
     }
 
     private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
@@ -181,27 +203,5 @@ final class ClassDependencyManipulator
         $staticCall = new StaticCall(new Name('parent'), $methodName);
 
         return new Expression($staticCall);
-    }
-
-    /**
-     * @return ReflectionProperty[]
-     */
-    private function getParentClassPublicAndProtectedPropertyReflections(string $className): array
-    {
-        /** @var string[] $parentClassNames */
-        $parentClassNames = (array) class_parents($className);
-
-        $propertyReflections = [];
-
-        foreach ($parentClassNames as $parentClassName) {
-            $parentClassReflection = new ReflectionClass($parentClassName);
-
-            $currentPropertyReflections = $parentClassReflection->getProperties(
-                ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED
-            );
-            $propertyReflections = array_merge($propertyReflections, $currentPropertyReflections);
-        }
-
-        return $propertyReflections;
     }
 }

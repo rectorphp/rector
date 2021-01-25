@@ -102,7 +102,7 @@ CODE_SAMPLE
         }
 
         $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod === null) {
+        if (! $constructClassMethod instanceof ClassMethod) {
             return null;
         }
 

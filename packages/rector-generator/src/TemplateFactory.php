@@ -11,6 +11,9 @@ final class TemplateFactory
      */
     public function create(string $content, array $variables): string
     {
-        return str_replace(array_keys($variables), array_values($variables), $content);
+        $variableKeys = array_keys($variables);
+        $variableValues = array_values($variables);
+
+        return str_replace($variableKeys, $variableValues, $content);
     }
 }

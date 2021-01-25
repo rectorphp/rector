@@ -25,10 +25,8 @@ use Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionR
 class SomeService
 {
     private \Nette\DI\Container $context;
-    private \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject $someInterfaceToInject;
-    public function __construct(\Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject $someInterfaceToInject)
+    public function __construct(private \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject $someInterfaceToInject)
     {
-        $this->someInterfaceToInject = $someInterfaceToInject;
     }
 
     public function run()

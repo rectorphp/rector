@@ -9,18 +9,18 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class NextVariableUsageNodeFinder
 {
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var BetterStandardPrinter
@@ -45,11 +45,11 @@ final class NextVariableUsageNodeFinder
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         ParentScopeFinder $parentScopeFinder
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->parentScopeFinder = $parentScopeFinder;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -65,17 +65,16 @@ final class NextVariableUsageNodeFinder
 
         /** @var Variable $expr */
         $expr = $assign->var;
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $scopeNode->stmts, function (Node $currentNode) use (
-            $expr,
-            &$nextUsageOfVariable
-        ): ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $scopeNode->stmts, function (
+            Node $currentNode
+        ) use ($expr, &$nextUsageOfVariable): ?int {
             // used above the assign
             if ($currentNode->getStartTokenPos() < $expr->getStartTokenPos()) {
                 return null;
             }
 
             // skip self
-            if ($currentNode === $expr) {
+            if ($this->betterStandardPrinter->areSameNode($currentNode, $expr)) {
                 return null;
             }
 

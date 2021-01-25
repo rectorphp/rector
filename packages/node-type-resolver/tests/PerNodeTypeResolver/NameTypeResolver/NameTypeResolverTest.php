@@ -23,7 +23,8 @@ final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         $nameNodes = $this->getNodesForFileOfType($file, Name::class);
 
-        $this->assertEquals($expectedType, $this->nodeTypeResolver->resolve($nameNodes[$nodePosition]));
+        $resolvedType = $this->nodeTypeResolver->resolve($nameNodes[$nodePosition]);
+        $this->assertEquals($expectedType, $resolvedType);
     }
 
     public function provideData(): Iterator

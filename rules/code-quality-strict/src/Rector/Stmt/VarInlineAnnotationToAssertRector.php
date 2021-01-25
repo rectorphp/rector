@@ -88,10 +88,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         $docVariableName = $this->getVarDocVariableName($phpDocInfo);
         if ($docVariableName === null) {
@@ -114,7 +111,7 @@ CODE_SAMPLE
     private function getVarDocVariableName(PhpDocInfo $phpDocInfo): ?string
     {
         $attributeAwareVarTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if ($attributeAwareVarTagValueNode === null) {
+        if (! $attributeAwareVarTagValueNode instanceof VarTagValueNode) {
             return null;
         }
 
@@ -156,7 +153,7 @@ CODE_SAMPLE
         $type = $phpDocInfo->getVarType();
 
         $assertFuncCall = $this->createFuncCallBasedOnType($type, $variable);
-        if ($assertFuncCall === null) {
+        if (! $assertFuncCall instanceof FuncCall) {
             return null;
         }
 
@@ -170,7 +167,7 @@ CODE_SAMPLE
     private function refactorAlreadyCreatedNode(Stmt $stmt, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
     {
         $varTagValue = $phpDocInfo->getVarTagValueNode();
-        if ($varTagValue === null) {
+        if (! $varTagValue instanceof VarTagValueNode) {
             throw new ShouldNotHappenException();
         }
 
@@ -180,7 +177,7 @@ CODE_SAMPLE
         );
 
         $assertFuncCall = $this->createFuncCallBasedOnType($phpStanType, $variable);
-        if ($assertFuncCall === null) {
+        if (! $assertFuncCall instanceof FuncCall) {
             return null;
         }
 

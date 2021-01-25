@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\Generic\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -57,7 +59,7 @@ class SunshineCommand extends ParentClassWithNewConstructor
 CODE_SAMPLE
                     , [
                         self::METHODS_BY_PARENT_TYPES => [
-                            'ParentClassWithNewConstructor' => '__construct',
+                            'ParentClassWithNewConstructor' => MethodName::CONSTRUCT,
                         ],
                     ]
                 ),
@@ -79,7 +81,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 

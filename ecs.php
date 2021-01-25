@@ -15,7 +15,6 @@ use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer;
 use PhpCsFixer\Fixer\Strict\StrictComparisonFixer;
 use PhpCsFixer\Fixer\Whitespace\ArrayIndentationFixer;
-use SlevomatCodingStandard\Sniffs\Variables\UnusedVariableSniff;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer;
@@ -79,7 +78,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/packages/rector-generator/templates',
 
         // broken
-        UnusedVariableSniff::class,
         GlobalNamespaceImportFixer::class,
         MethodDeclarationSniff::class . '.Underscore',
         UnaryOperatorSpacesFixer::class,

@@ -22,22 +22,21 @@ final class SingleMethodAssignedNodePropertyTypeInferer extends AbstractTypeInfe
 {
     public function inferProperty(Property $property): Type
     {
-        /** @var Class_|null $classLike */
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof Class_) {
             // anonymous class
             return new MixedType();
         }
 
         $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return new MixedType();
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
 
         $assignedNode = $this->resolveAssignedNodeToProperty($classMethod, $propertyName);
-        if ($assignedNode === null) {
+        if (! $assignedNode instanceof Expr) {
             return new MixedType();
         }
 
@@ -52,22 +51,22 @@ final class SingleMethodAssignedNodePropertyTypeInferer extends AbstractTypeInfe
     private function resolveAssignedNodeToProperty(ClassMethod $classMethod, string $propertyName): ?Expr
     {
         $assignedNode = null;
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $propertyName,
-            &$assignedNode
-        ): ?int {
-            if (! $node instanceof Assign) {
-                return null;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            (array) $classMethod->stmts,
+            function (Node $node) use ($propertyName, &$assignedNode): ?int {
+                if (! $node instanceof Assign) {
+                    return null;
+                }
+
+                if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
+                    return null;
+                }
+
+                $assignedNode = $node->expr;
+
+                return NodeTraverser::STOP_TRAVERSAL;
             }
-
-            if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
-                return null;
-            }
-
-            $assignedNode = $node->expr;
-
-            return NodeTraverser::STOP_TRAVERSAL;
-        });
+        );
 
         return $assignedNode;
     }

@@ -2,7 +2,6 @@
 
 [![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
-[![SonarCube](https://img.shields.io/badge/SonarCube_Debt-%3C30-brightgreen.svg?style=flat-square)](https://sonarcloud.io/dashboard?id=rectorphp_rector)
 
 <br>
 
@@ -60,27 +59,27 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 
 ## Documentation
 
-- [Explore 630+ Rector Rules](/docs/rector_rules_overview.md)
+- [Explore 660+ Rector Rules](/docs/rector_rules_overview.md)
 - [How Does Rector Work?](/docs/how_it_works.md)
-- [PHP Parser Nodes Overview](/docs/nodes_overview.md)
+- [PHP Parser Nodes](/docs/nodes_overview.md)
 
 ### Advanced
 
-- [How To Run Rector on Changed Files Only](/docs/how_to_run_rector_on_changed_files_only.md)
 - [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
-- [How To Work with Doc Block and Comments](/docs/how_to_work_with_doc_block_and_comments.md)
-- [How run Rector in Docker](/docs/how_to_run_rector_in_docker.md)
+- [How to Run Rector on Changed Files Only](/docs/how_to_run_rector_on_changed_files_only.md)
 
 ### Contributing
 
-- [How to Add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
+- [How to add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
+- [How to work with Doc Block and Comments](/docs/how_to_work_with_doc_block_and_comments.md)
 - [How to Create New Rector Rule](/docs/create_own_rule.md)
-- [How to Generate New Rector Rule with Recipe](/docs/rector_recipe.md)
 
-## CI
+### CI
 
 - [Add Checkstyle with your CI](/docs/checkstyle.md)
+
+<br>
 
 ## Install
 
@@ -234,7 +233,7 @@ Or with Xdebug:
 vendor/bin/rector process src/Controller --dry-run --xdebug
 ```
 
-To assist with echo-style debugging rector provides a `rd()` helper method which is usefull to pretty-print AST-nodes:
+To assist with echo-style debugging rector provides a `rd()` helper method which is useful to pretty-print AST-nodes:
 
 ```php
 /**

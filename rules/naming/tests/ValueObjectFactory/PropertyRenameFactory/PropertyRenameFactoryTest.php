@@ -72,16 +72,15 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
 
     public function provideData(): Iterator
     {
-        yield [new SmartFileInfo(__DIR__ . '/Fixture/SomeClass.php.inc'), 'eliteManager', 'eventManager'];
+        yield [new SmartFileInfo(__DIR__ . '/Fixture/skip_some_class.php.inc'), 'eliteManager', 'eventManager'];
     }
 
     private function getPropertyFromFileInfo(SmartFileInfo $fileInfo): Property
     {
         $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($fileInfo);
 
-        /** @var Property|null $property */
         $property = $this->betterNodeFinder->findFirstInstanceOf($nodes, Property::class);
-        if ($property === null) {
+        if (! $property instanceof Property) {
             throw new ShouldNotHappenException();
         }
 

@@ -12,10 +12,13 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
+use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -88,7 +91,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($node);
-        if ($arrayCallable === null) {
+        if (! $arrayCallable instanceof ArrayCallable) {
             return null;
         }
         if ($this->isAssignedToNetteMagicOnProperty($node)) {
@@ -109,6 +112,9 @@ CODE_SAMPLE
         }
 
         $reflectionMethod = $arrayCallable->getReflectionMethod();
+
+        $this->privatizeClassMethod($reflectionMethod);
+
         if ($reflectionMethod->getNumberOfParameters() > 0) {
             $classMethod = $this->nodeRepository->findClassMethod(
                 $arrayCallable->getClass(),
@@ -146,8 +152,22 @@ CODE_SAMPLE
 
     private function isInsideProperty(Array_ $array): bool
     {
-        $parentProperty = $this->betterNodeFinder->findFirstParentInstanceOf($array, [Property::class]);
+        $parentProperty = $this->betterNodeFinder->findParentType($array, Property::class);
 
         return $parentProperty !== null;
+    }
+
+    private function privatizeClassMethod(ReflectionMethod $reflectionMethod): void
+    {
+        $classMethod = $this->nodeRepository->findClassMethodByMethodReflection($reflectionMethod);
+        if (! $classMethod instanceof ClassMethod) {
+            return;
+        }
+
+        if ($classMethod->isPrivate()) {
+            return;
+        }
+
+        $this->makePrivate($classMethod);
     }
 }

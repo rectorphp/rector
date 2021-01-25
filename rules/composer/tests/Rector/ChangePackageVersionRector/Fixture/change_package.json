@@ -1,0 +1,13 @@
+{
+    "require-dev": {
+        "vendor1/package1": "^1.0",
+        "vendor1/package3": "^2.0"
+    }
+}
+-----
+{
+    "require-dev": {
+        "vendor1/package1": "^1.0",
+        "vendor1/package3": "^15.0"
+    }
+}

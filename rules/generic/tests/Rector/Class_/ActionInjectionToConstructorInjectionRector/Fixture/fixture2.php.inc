@@ -29,10 +29,8 @@ use Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRect
 
 final class AnotherController
 {
-    private \Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\ProductRepository $productRepository;
-    public function __construct(\Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\ProductRepository $productRepository)
+    public function __construct(private \Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\ProductRepository $productRepository)
     {
-        $this->productRepository = $productRepository;
     }
     public function default()
     {

@@ -136,9 +136,10 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var SensioTemplateTagValueNode|null $sensioTemplateTagValueNode */
-        $sensioTemplateTagValueNode = $this->getPhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
-        if ($sensioTemplateTagValueNode === null) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+
+        $sensioTemplateTagValueNode = $phpDocInfo->getByType(SensioTemplateTagValueNode::class);
+        if (! $sensioTemplateTagValueNode instanceof SensioTemplateTagValueNode) {
             return null;
         }
 
@@ -150,7 +151,8 @@ CODE_SAMPLE
     private function classHasTemplateAnnotations(Class_ $class): bool
     {
         foreach ($class->getMethods() as $classMethod) {
-            if ($this->hasPhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class)) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+            if ($phpDocInfo->hasByType(SensioTemplateTagValueNode::class)) {
                 return true;
             }
         }
@@ -212,9 +214,8 @@ CODE_SAMPLE
 
     private function hasLastReturnResponse(ClassMethod $classMethod): bool
     {
-        /** @var Return_|null $lastReturn */
         $lastReturn = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
-        if ($lastReturn === null) {
+        if (! $lastReturn instanceof Return_) {
             return false;
         }
 
@@ -253,7 +254,8 @@ CODE_SAMPLE
 
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
 
-        $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        $phpDocInfo->removeByType(SensioTemplateTagValueNode::class);
     }
 
     private function refactorReturnWithValue(
@@ -288,7 +290,8 @@ CODE_SAMPLE
         }
 
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
-        $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        $phpDocInfo->removeByType(SensioTemplateTagValueNode::class);
     }
 
     private function processClassMethodWithoutReturn(

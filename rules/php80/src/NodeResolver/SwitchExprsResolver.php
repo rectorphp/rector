@@ -32,7 +32,7 @@ final class SwitchExprsResolver
 
             if ($expr instanceof Return_) {
                 $returnedExpr = $expr->expr;
-                if ($returnedExpr === null) {
+                if (! $returnedExpr instanceof Expr) {
                     return [];
                 }
                 $condAndExpr[] = new CondAndExpr($case->cond, $returnedExpr, CondAndExpr::TYPE_RETURN);

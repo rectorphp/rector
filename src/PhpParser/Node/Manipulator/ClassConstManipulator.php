@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
@@ -60,9 +61,8 @@ final class ClassConstManipulator
      */
     public function getAllClassConstFetch(ClassConst $classConst): array
     {
-        /** @var Class_|null $classLike */
         $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof Class_) {
             return [];
         }
 
@@ -71,7 +71,7 @@ final class ClassConstManipulator
         $usedTraitNames = $this->classManipulator->getUsedTraits($classLike);
         foreach ($usedTraitNames as $name) {
             $name = $this->parsedNodeCollector->findTrait((string) $name);
-            if ($name === null) {
+            if (! $name instanceof Trait_) {
                 continue;
             }
 

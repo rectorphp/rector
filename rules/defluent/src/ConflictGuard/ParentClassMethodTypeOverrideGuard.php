@@ -45,7 +45,7 @@ final class ParentClassMethodTypeOverrideGuard
         $parentClassMethodReflection = $this->getParentClassMethod($classMethod);
 
         // nothign to check
-        if ($parentClassMethodReflection === null) {
+        if (! $parentClassMethodReflection instanceof MethodReflection) {
             return true;
         }
 

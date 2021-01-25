@@ -124,6 +124,8 @@ final class FilesFinder
         $finder = Finder::create()
             ->followLinks()
             ->files()
+            // skip empty files
+            ->size('> 0')
             ->in($absoluteDirectories)
             ->name($suffixesPattern)
             ->sortByName();
@@ -141,7 +143,17 @@ final class FilesFinder
         $plainDiff = shell_exec('git diff --name-only') ?: '';
         $relativePaths = explode(PHP_EOL, trim($plainDiff));
 
-        return array_values(array_filter(array_map('realpath', $relativePaths)));
+        $realPaths = [];
+        foreach ($relativePaths as $relativePath) {
+            $realPath = realpath($relativePath);
+            if ($realPath === false) {
+                continue;
+            }
+
+            $realPaths[] = $realPath;
+        }
+
+        return $realPaths;
     }
 
     /**
@@ -150,7 +162,6 @@ final class FilesFinder
     private function normalizeSuffixesToPattern(array $suffixes): string
     {
         $suffixesPattern = implode('|', $suffixes);
-
         return '#\.(' . $suffixesPattern . ')$#';
     }
 

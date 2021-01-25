@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -28,6 +28,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeCovariantReturnTypeRector extends AbstractRector
 {
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
+    {
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make method return same type as parent', [
@@ -118,15 +128,14 @@ CODE_SAMPLE
 
     private function getDifferentReturnTypeNameFromAncestorClass(ClassMethod $classMethod): ?string
     {
-        /** @var Scope|null $scope */
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
+        if (! $scope instanceof Scope) {
             // possibly trait
             return null;
         }
 
         $classReflection = $scope->getClassReflection();
-        if ($classReflection === null) {
+        if (! $classReflection instanceof ClassReflection) {
             return null;
         }
 
@@ -145,24 +154,25 @@ CODE_SAMPLE
         $methodName = $this->getName($classMethod->name);
 
         // Either Ancestor classes or implemented interfaces
-        $parentClassNames = array_merge(
-            $classReflection->getParentClassesNames(),
-            array_map(
-                function (ClassReflection $interfaceReflection): string {
-                    return $interfaceReflection->getName();
-                },
-                $classReflection->getInterfaces()
-            )
+        $interfaceName = array_map(
+            function (ClassReflection $interfaceReflection): string {
+                return $interfaceReflection->getName();
+            },
+            $classReflection->getInterfaces()
         );
-        foreach ($parentClassNames as $parentClassName) {
-            if (! method_exists($parentClassName, $methodName)) {
+
+        $parentClassesNames = $classReflection->getParentClassesNames();
+
+        $parentClassLikes = array_merge($parentClassesNames, $interfaceName);
+
+        foreach ($parentClassLikes as $parentClassLike) {
+            if (! method_exists($parentClassLike, $methodName)) {
                 continue;
             }
 
-            $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
-            /** @var ReflectionNamedType|null $parentReflectionMethodReturnType */
+            $parentReflectionMethod = new ReflectionMethod($parentClassLike, $methodName);
             $parentReflectionMethodReturnType = $parentReflectionMethod->getReturnType();
-            if ($parentReflectionMethodReturnType === null || $parentReflectionMethodReturnType->getName() === $nodeReturnTypeName) {
+            if (! $parentReflectionMethodReturnType instanceof ReflectionNamedType || $parentReflectionMethodReturnType->getName() === $nodeReturnTypeName) {
                 continue;
             }
             // This is an ancestor class with a different return type
@@ -174,15 +184,12 @@ CODE_SAMPLE
 
     private function addDocBlockReturn(ClassMethod $classMethod): void
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
         /** @var Node $returnType */
         $returnType = $classMethod->returnType;
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
-        $phpDocInfo->changeReturnType($type);
+
+        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
     }
 }

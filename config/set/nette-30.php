@@ -25,6 +25,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    $containerConfigurator->import(__DIR__ . '/nette-30-composer.php');
     $containerConfigurator->import(__DIR__ . '/nette-30-dependency-injection.php');
     $containerConfigurator->import(__DIR__ . '/nette-30-return-types.php');
     $containerConfigurator->import(__DIR__ . '/nette-30-param-types.php');

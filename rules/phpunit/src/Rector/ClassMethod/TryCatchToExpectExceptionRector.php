@@ -32,7 +32,7 @@ final class TryCatchToExpectExceptionRector extends AbstractPHPUnitRector
             new CodeSample(
                 <<<'CODE_SAMPLE'
 try {
-	$someService->run();
+    $someService->run();
 } catch (Throwable $exception) {
     $this->assertInstanceOf(RuntimeException::class, $e);
     $this->assertContains('There was an error executing the following script', $e->getMessage());
@@ -101,7 +101,7 @@ CODE_SAMPLE
         $this->newExpressions = [];
 
         $exceptionVariable = $tryCatch->catches[0]->var;
-        if ($exceptionVariable === null) {
+        if (! $exceptionVariable instanceof Variable) {
             return null;
         }
 
@@ -145,7 +145,6 @@ CODE_SAMPLE
             return;
         }
 
-        /** @var MethodCall $methodCall */
         $argumentVariableName = $this->getName($methodCall->args[1]->value);
         if ($argumentVariableName === null) {
             return;

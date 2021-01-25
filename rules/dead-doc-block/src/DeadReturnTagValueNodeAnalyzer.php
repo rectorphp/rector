@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DeadDocBlock;
 
-use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\FunctionLike;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 
@@ -20,15 +20,15 @@ final class DeadReturnTagValueNodeAnalyzer
         $this->typeComparator = $typeComparator;
     }
 
-    public function isDead(ReturnTagValueNode $returnTagValueNode, ClassMethod $classMethod): bool
+    public function isDead(ReturnTagValueNode $returnTagValueNode, FunctionLike $functionLike): bool
     {
-        $returnType = $classMethod->getReturnType();
+        $returnType = $functionLike->getReturnType();
         if ($returnType === null) {
             return false;
         }
 
         if (! $this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($returnType, $returnTagValueNode->type,
-            $classMethod
+            $functionLike
         )) {
             return false;
         }

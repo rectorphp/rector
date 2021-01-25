@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php74\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\MagicConst\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -64,6 +62,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return new ClassConstFetch(new Name('self'), 'class');
+        return $this->nodeFactory->createSelfFetchConstant('class', $node);
     }
 }

@@ -115,7 +115,7 @@ CODE_SAMPLE
         }
 
         $searchNode = $this->resolveSearchNode($node);
-        if ($searchNode === null) {
+        if (! $searchNode instanceof Node) {
             return null;
         }
 

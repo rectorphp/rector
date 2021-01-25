@@ -1757,7 +1757,7 @@ return $class;
 ↓
 
 ```php
-final class ClassName extends ParentClass
+final class ClassName extends \ParentClass
 {
 }
 ```
@@ -2428,7 +2428,7 @@ return new TryCatch($tryStmts, [$catch]);
 ```php
 try {
     echo 'one';
-} catch (CatchedType) {
+} catch (\CatchedType) {
     echo 'two';
 }
 ```

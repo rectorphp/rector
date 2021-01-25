@@ -78,7 +78,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $callWithParamRename = $this->matchTypeAndMethodName($node);
-        if ($callWithParamRename === null) {
+        if (! $callWithParamRename instanceof RenameMethodCallBasedOnParameter) {
             return null;
         }
 
@@ -96,6 +96,12 @@ CODE_SAMPLE
 
     private function matchTypeAndMethodName(MethodCall $methodCall): ?RenameMethodCallBasedOnParameter
     {
+        if (count($methodCall->args) < 1) {
+            return null;
+        }
+
+        $firstArgValue = $methodCall->args[0]->value;
+
         foreach ($this->callsWithParamRenames as $callWithParamRename) {
             if (! $this->isObjectType($methodCall, $callWithParamRename->getOldClass())) {
                 continue;
@@ -105,12 +111,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (count($methodCall->args) < 1) {
-                continue;
-            }
-
-            $arg = $methodCall->args[0];
-            if (! $this->isValue($arg->value, $callWithParamRename->getParameterName())) {
+            if (! $this->isValue($firstArgValue, $callWithParamRename->getParameterName())) {
                 continue;
             }
 

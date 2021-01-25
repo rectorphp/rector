@@ -90,7 +90,7 @@ CODE_SAMPLE
         }
 
         $parentVariable = $this->getParentOfGetStatusCode($node->args[1]->value);
-        if ($parentVariable === null) {
+        if (! $parentVariable instanceof Expr) {
             return null;
         }
 

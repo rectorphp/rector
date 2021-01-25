@@ -19,6 +19,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
+use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -87,19 +88,17 @@ CODE_SAMPLE
             /** @var Expr $object */
             $object = $issetVar->var->getAttribute(AttributeKey::ORIGINAL_NODE);
 
-            /** @var Scope $scope */
-            $scope = $object->getAttribute(AttributeKey::SCOPE);
-            /** @var ThisType|ObjectType $type */
-            $type = $scope->getType($object);
+            /** @var ThisType|ObjectType|null $type */
+            $type = $this->getType($object);
+            /** @var Identifier|Variable $name */
+            $name = $issetVar->name;
 
-            if ($type instanceof ThisType) {
-                $newNodes[] = new NotIdentical($issetVar, $this->createNull());
+            if ($type === null || ! $name instanceof Identifier) {
                 continue;
             }
 
-            /** @var Identifier|Variable $name */
-            $name = $issetVar->name;
-            if (! $name instanceof Identifier) {
+            if ($type instanceof ThisType) {
+                $newNodes[] = new NotIdentical($issetVar, $this->createNull());
                 continue;
             }
 
@@ -119,6 +118,17 @@ CODE_SAMPLE
         }
 
         return $this->createReturnNodes($newNodes);
+    }
+
+    private function getType(Expr $expr): ?Type
+    {
+        $scope = $expr->getAttribute(AttributeKey::SCOPE);
+
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
+        return $scope->getType($expr);
     }
 
     private function replaceToPropertyExistsWithNullCheck(

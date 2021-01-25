@@ -7,6 +7,7 @@ namespace Rector\Privatization\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -15,6 +16,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FinalizeClassesWithoutChildrenRector extends AbstractRector
 {
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
+    public function __construct(DoctrineDocBlockResolver $doctrineDocBlockResolver)
+    {
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Finalize every class that has no children', [
@@ -66,13 +77,16 @@ CODE_SAMPLE
         if ($node->isFinal()) {
             return null;
         }
+
         if ($node->isAbstract()) {
             return null;
         }
+
         if ($this->isAnonymousClass($node)) {
             return null;
         }
-        if ($this->isDoctrineEntityClass($node)) {
+
+        if ($this->doctrineDocBlockResolver->isDoctrineEntityClass($node)) {
             return null;
         }
 

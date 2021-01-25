@@ -1,5 +1,15 @@
 services:
     -
+        class: Symplify\PHPStanRules\Rules\PreferredMethodCallOverIdenticalCompareRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            identicalToPreferredMethodCalls:
+                Rector\Core\Rector\AbstractRector:
+                    getName: isName
+                Rector\NodeNameResolver\NodeNameResolver:
+                    getName: isName
+
+    -
         class: Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
         tags: [phpstan.rules.rule]
 
@@ -78,9 +88,9 @@ services:
         arguments:
             maxClassCognitiveComplexity: 50
             limitsByTypes:
-                Rector\Core\Rector\AbstractRector: 40
-                Symfony\Component\Console\Command\Command: 40
+                Rector\Core\Rector\AbstractRector: 30
                 PHPStan\Rule\Rule: 30
+                Symfony\Component\Console\Command\Command: 40
 
     # require constant in argument position
     -
@@ -122,6 +132,7 @@ services:
         arguments:
             parentClasses:
                 - Rector
+                - Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface
 
     -
         class: Symplify\PHPStanRules\Rules\PreferredClassRule

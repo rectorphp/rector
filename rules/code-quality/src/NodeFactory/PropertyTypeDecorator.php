@@ -9,10 +9,10 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class PropertyTypeDecorator
@@ -27,10 +27,26 @@ final class PropertyTypeDecorator
      */
     private $staticTypeMapper;
 
-    public function __construct(PhpVersionProvider $phpVersionProvider, StaticTypeMapper $staticTypeMapper)
-    {
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(
+        PhpVersionProvider $phpVersionProvider,
+        StaticTypeMapper $staticTypeMapper,
+        PhpDocTypeChanger $phpDocTypeChanger,
+        PhpDocInfoFactory $phpDocInfoFactory
+    ) {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function decorateProperty(Property $property, Type $propertyType): void
@@ -41,11 +57,10 @@ final class PropertyTypeDecorator
 
     private function decoratePropertyWithVarDoc(Property $property, Type $propertyType): void
     {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         if ($this->isNonMixedArrayType($propertyType)) {
-            $phpDocInfo->changeVarType($propertyType);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
             $property->type = new Identifier('array');
             return;
         }
@@ -54,10 +69,10 @@ final class PropertyTypeDecorator
             $phpParserNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
             if ($phpParserNode === null) {
                 // fallback to doc type in PHP 7.4
-                $phpDocInfo->changeVarType($propertyType);
+                $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
             }
         } else {
-            $phpDocInfo->changeVarType($propertyType);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
         }
     }
 

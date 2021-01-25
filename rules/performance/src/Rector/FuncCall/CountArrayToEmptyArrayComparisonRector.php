@@ -67,7 +67,7 @@ CODE_SAMPLE
             return $this->processMarkTruthyNegation($node);
         }
 
-        if ($this->getName($node) !== 'count') {
+        if (! $this->isName($node, 'count')) {
             return null;
         }
 
@@ -103,9 +103,11 @@ CODE_SAMPLE
         if (! $booleanNot->expr instanceof FuncCall) {
             return null;
         }
-        if ($this->getName($booleanNot->expr) !== 'count') {
+
+        if (! $this->isName($booleanNot->expr, 'count')) {
             return null;
         }
+
         /** @var Expr $expr */
         $expr = $booleanNot->expr->args[0]->value;
 

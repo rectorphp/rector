@@ -102,7 +102,7 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
     private function addCustomItems(array $items): array
     {
         if ($this->indexes !== []) {
-            if ($this->indexesAroundSpaces === null) {
+            if (! $this->indexesAroundSpaces instanceof AroundSpaces) {
                 throw new ShouldNotHappenException();
             }
 
@@ -115,7 +115,7 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         }
 
         if ($this->uniqueConstraints !== []) {
-            if ($this->uniqueConstraintsAroundSpaces === null) {
+            if (! $this->uniqueConstraintsAroundSpaces instanceof AroundSpaces) {
                 throw new ShouldNotHappenException();
             }
 

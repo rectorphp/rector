@@ -18,10 +18,8 @@ use Rector\Generic\Tests\Rector\Class_\AddPropertyByParentRector\Source\SomePare
 
 final class SomeClass extends SomeParentClassToAddDependencyBy
 {
-    private \SomeDependency $someDependency;
-    public function __construct(\SomeDependency $someDependency)
+    public function __construct(private \SomeDependency $someDependency)
     {
-        $this->someDependency = $someDependency;
     }
 }
 

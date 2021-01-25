@@ -20,6 +20,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Type\MixedType;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
@@ -137,7 +138,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
             $node
         );
 
-        if ($parametersAcceptor === null) {
+        if (! $parametersAcceptor instanceof ParametersAcceptor) {
             return [];
         }
 

@@ -77,7 +77,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->hasPhpDocTagValueNode($node, ColumnTagValueNode::class)) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        if (! $phpDocInfo->hasByType(ColumnTagValueNode::class)) {
             return null;
         }
 

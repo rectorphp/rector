@@ -4,6 +4,9 @@ declare(strict_types=1);
 namespace Rector\NodeRemoval;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
@@ -39,5 +42,20 @@ final class NodeRemover
 
         $this->nodesToRemoveCollector->addNodeToRemove($node);
         $this->rectorChangeCollector->notifyNodeFileInfo($node);
+    }
+
+    /**
+     * @param Class_|ClassMethod|Function_ $nodeWithStatements
+     */
+    public function removeNodeFromStatements(Node $nodeWithStatements, Node $nodeToRemove): void
+    {
+        foreach ((array) $nodeWithStatements->stmts as $key => $stmt) {
+            if ($nodeToRemove !== $stmt) {
+                continue;
+            }
+
+            unset($nodeWithStatements->stmts[$key]);
+            break;
+        }
     }
 }

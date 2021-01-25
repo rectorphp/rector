@@ -97,7 +97,7 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
         $classMethod = $node->getMethod('let');
 
         // add let if missing
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             if (! $this->letManipulator->isLetNeededInClass($node)) {
                 return null;
             }

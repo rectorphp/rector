@@ -9,6 +9,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
+use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,6 +28,16 @@ final class MoveEntitiesToEntityDirectoryRector extends AbstractRector
      * @see https://regex101.com/r/auSMk3/1
      */
     private const ENTITY_PATH_REGEX = '#\bEntity\b#';
+
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
+    public function __construct(DoctrineDocBlockResolver $doctrineDocBlockResolver)
+    {
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -92,7 +104,7 @@ CODE_SAMPLE
             $node->stmts,
             'Entity'
         );
-        if ($movedFileWithNodes === null) {
+        if (! $movedFileWithNodes instanceof MovedFileWithNodes) {
             return null;
         }
 
@@ -103,12 +115,11 @@ CODE_SAMPLE
 
     private function isDoctrineEntityFileNode(FileNode $fileNode): bool
     {
-        /** @var Class_|null $class */
         $class = $this->betterNodeFinder->findFirstInstanceOf($fileNode->stmts, Class_::class);
-        if ($class === null) {
+        if (! $class instanceof Class_) {
             return false;
         }
 
-        return $this->isDoctrineEntityClass($class);
+        return $this->doctrineDocBlockResolver->isDoctrineEntityClass($class);
     }
 }

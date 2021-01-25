@@ -6,11 +6,12 @@ namespace Rector\DeadCode\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use PhpParser\Node\Stmt\ClassLike;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassConstManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -118,12 +119,15 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classConst->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return false;
+        if ($this->hasTagByName($classConst, TagName::API)) {
+            return true;
         }
 
-        return $phpDocInfo->hasByName('api');
+        $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike instanceof ClassLike) {
+            return $this->hasTagByName($classLike, TagName::API);
+        }
+
+        return false;
     }
 }

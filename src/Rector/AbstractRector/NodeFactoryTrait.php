@@ -71,7 +71,7 @@ trait NodeFactoryTrait
 
     protected function createNull(): ConstFetch
     {
-        return new ConstFetch(new Name('null'));
+        return $this->nodeFactory->createNull();
     }
 
     protected function createFalse(): ConstFetch
@@ -117,7 +117,7 @@ trait NodeFactoryTrait
         return $this->nodeFactory->createFuncCall($name, $arguments);
     }
 
-    protected function createClassConstantReference(string $class): ClassConstFetch
+    protected function createClassConstReference(string $class): ClassConstFetch
     {
         return $this->nodeFactory->createClassConstReference($class);
     }

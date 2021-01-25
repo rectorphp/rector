@@ -111,16 +111,33 @@ final class PhpDocInfoPrinter
      */
     private $emptyPhpDocDetector;
 
+    /**
+     * @var DocBlockInliner
+     */
+    private $docBlockInliner;
+
     public function __construct(
         EmptyPhpDocDetector $emptyPhpDocDetector,
         MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
         OriginalSpacingRestorer $originalSpacingRestorer,
-        SpacePatternFactory $spacePatternFactory
+        SpacePatternFactory $spacePatternFactory,
+        DocBlockInliner $docBlockInliner
     ) {
         $this->originalSpacingRestorer = $originalSpacingRestorer;
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
         $this->spacePatternFactory = $spacePatternFactory;
         $this->emptyPhpDocDetector = $emptyPhpDocDetector;
+        $this->docBlockInliner = $docBlockInliner;
+    }
+
+    public function printNew(PhpDocInfo $phpDocInfo): string
+    {
+        $docContent = (string) $phpDocInfo->getPhpDocNode();
+        if ($phpDocInfo->isSingleLine()) {
+            return $this->docBlockInliner->inline($docContent);
+        }
+
+        return $docContent;
     }
 
     /**

@@ -10,9 +10,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,9 +28,15 @@ final class AddArrayParamDocTypeRector extends AbstractRector
      */
     private $paramTypeInferer;
 
-    public function __construct(ParamTypeInferer $paramTypeInferer)
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function __construct(ParamTypeInferer $paramTypeInferer, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->paramTypeInferer = $paramTypeInferer;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -94,22 +99,28 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         foreach ($node->getParams() as $param) {
             if ($this->shouldSkipParam($param)) {
-                return null;
+                continue;
             }
+
             $type = $this->paramTypeInferer->inferParam($param);
             if ($type instanceof MixedType) {
-                return null;
+                continue;
             }
 
             $paramName = $this->getName($param);
-            $phpDocInfo->changeParamType($type, $param, $paramName);
+
+            $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
+        }
+
+        if ($phpDocInfo->hasChanged()) {
             return $node;
         }
+
+        return null;
     }
 
     private function shouldSkipParam(Param $param): bool

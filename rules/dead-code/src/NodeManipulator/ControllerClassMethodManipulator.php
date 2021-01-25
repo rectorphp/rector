@@ -7,8 +7,7 @@ namespace Rector\DeadCode\NodeManipulator;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -19,9 +18,15 @@ final class ControllerClassMethodManipulator
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function isControllerClassMethodWithBehaviorAnnotation(ClassMethod $classMethod): bool
@@ -30,22 +35,8 @@ final class ControllerClassMethodManipulator
             return false;
         }
 
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return false;
-        }
-
-        foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if ($phpDocChildNode->value instanceof GenericTagValueNode) {
-                return true;
-            }
-        }
-
-        return false;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        return $phpDocInfo->hasByType(GenericTagValueNode::class);
     }
 
     private function isControllerClassMethod(ClassMethod $classMethod): bool

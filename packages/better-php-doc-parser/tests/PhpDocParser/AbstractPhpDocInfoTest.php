@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser;
 
 use Iterator;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\BetterPhpDocParser\Tests\PhpDocParser\Helper\TagValueToPhpParserNodeMap;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FileSystemRector\Parser\FileInfoParser;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -35,6 +35,11 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
      */
     private $phpDocInfoPrinter;
 
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
@@ -43,6 +48,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
 
         $this->betterNodeFinder = $this->getService(BetterNodeFinder::class);
         $this->phpDocInfoPrinter = $this->getService(PhpDocInfoPrinter::class);
+        $this->phpDocInfoFactory = $this->getService(PhpDocInfoFactory::class);
     }
 
     /**
@@ -64,7 +70,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         $nodeWithPhpDocInfo = $this->parseFileAndGetFirstNodeOfType($fileInfo, $nodeType);
 
         $docComment = $nodeWithPhpDocInfo->getDocComment();
-        if ($docComment === null) {
+        if (! $docComment instanceof Doc) {
             throw new ShouldNotHappenException(sprintf('Doc comments for "%s" file cannot not be empty', $fileInfo));
         }
 
@@ -88,22 +94,25 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     }
 
     /**
-     * @param class-string $nodeType
+     * @template T as Node
+     * @param class-string<T> $nodeType
+     * @return T
      */
     private function parseFileAndGetFirstNodeOfType(SmartFileInfo $fileInfo, string $nodeType): Node
     {
         $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($fileInfo);
 
-        return $this->betterNodeFinder->findFirstInstanceOf($nodes, $nodeType);
+        $foundNode = $this->betterNodeFinder->findFirstInstanceOf($nodes, $nodeType);
+        if (! $foundNode instanceof Node) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $foundNode;
     }
 
     private function printNodePhpDocInfoToString(Node $node): string
     {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            throw new ShouldNotHappenException();
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
     }
 
@@ -114,9 +123,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
 
     private function doTestContainsTagValueNodeType(Node $node, string $tagValueNodeType, SmartFileInfo $fileInfo): void
     {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->assertTrue($phpDocInfo->hasByType($tagValueNodeType), $fileInfo->getRelativeFilePathFromCwd());
     }
 }

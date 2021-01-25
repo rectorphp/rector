@@ -12,9 +12,8 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToOneTagNodeInterface;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
@@ -31,21 +30,23 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
      */
     private $typeFactory;
 
-    public function __construct(TypeFactory $typeFactory)
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(TypeFactory $typeFactory, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->typeFactory = $typeFactory;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function inferProperty(Property $property): Type
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return new MixedType();
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
-        if ($relationTagValueNode === null) {
+        if (! $relationTagValueNode instanceof DoctrineRelationTagValueNodeInterface) {
             return new MixedType();
         }
 
@@ -92,7 +93,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         }
 
         // nullable by default
-        if ($joinColumnTagValueNode === null || $joinColumnTagValueNode->isNullable()) {
+        if (! $joinColumnTagValueNode instanceof JoinColumnTagValueNode || $joinColumnTagValueNode->isNullable()) {
             $types[] = new NullType();
         }
 

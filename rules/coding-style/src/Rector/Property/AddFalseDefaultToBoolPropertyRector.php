@@ -7,9 +7,7 @@ namespace Rector\CodingStyle\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\BooleanType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -81,12 +79,7 @@ CODE_SAMPLE
 
     private function isBoolDocType(Property $property): bool
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return false;
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         return $phpDocInfo->getVarType() instanceof BooleanType;
     }
 }

@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
@@ -56,9 +57,8 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        /** @var Class_|null $classLike */
         $classLike = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof Class_) {
             return false;
         }
 
@@ -143,7 +143,7 @@ final class PropertyFetchManipulator
     private function hasPublicProperty(PropertyFetch $propertyFetch, string $propertyName): bool
     {
         $nodeScope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
-        if ($nodeScope === null) {
+        if (! $nodeScope instanceof Scope) {
             throw new ShouldNotHappenException();
         }
 

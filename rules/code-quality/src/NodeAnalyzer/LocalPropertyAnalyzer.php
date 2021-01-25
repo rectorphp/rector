@@ -20,11 +20,11 @@ use Rector\CodeQuality\TypeResolver\ArrayDimFetchTypeResolver;
 use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class LocalPropertyAnalyzer
 {
@@ -34,9 +34,9 @@ final class LocalPropertyAnalyzer
     private const LARAVEL_COLLECTION_CLASS = 'Illuminate\Support\Collection';
 
     /**
-     * @var CallableNodeTraverser
+     * @var SimpleCallableNodeTraverser
      */
-    private $callableNodeTraverser;
+    private $simpleCallableNodeTraverser;
 
     /**
      * @var ClassNodeAnalyzer
@@ -74,7 +74,7 @@ final class LocalPropertyAnalyzer
     private $typeFactory;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         ClassNodeAnalyzer $classNodeAnalyzer,
         NodeNameResolver $nodeNameResolver,
         BetterNodeFinder $betterNodeFinder,
@@ -83,7 +83,7 @@ final class LocalPropertyAnalyzer
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
         TypeFactory $typeFactory
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->classNodeAnalyzer = $classNodeAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -100,7 +100,7 @@ final class LocalPropertyAnalyzer
     {
         $fetchedLocalPropertyNameToTypes = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             &$fetchedLocalPropertyNameToTypes
         ): ?int {
             // skip anonymous class scope
@@ -199,7 +199,7 @@ final class LocalPropertyAnalyzer
      */
     private function isPartOfClosureBind(PropertyFetch $propertyFetch): bool
     {
-        $parentStaticCall = $this->betterNodeFinder->findFirstParentInstanceOf($propertyFetch, StaticCall::class);
+        $parentStaticCall = $this->betterNodeFinder->findParentType($propertyFetch, StaticCall::class);
         if (! $parentStaticCall instanceof StaticCall) {
             return false;
         }
@@ -213,7 +213,7 @@ final class LocalPropertyAnalyzer
 
     private function isPartOfClosureBindTo(PropertyFetch $propertyFetch): bool
     {
-        $parentMethodCall = $this->betterNodeFinder->findFirstParentInstanceOf($propertyFetch, MethodCall::class);
+        $parentMethodCall = $this->betterNodeFinder->findParentType($propertyFetch, MethodCall::class);
         if (! $parentMethodCall instanceof MethodCall) {
             return false;
         }

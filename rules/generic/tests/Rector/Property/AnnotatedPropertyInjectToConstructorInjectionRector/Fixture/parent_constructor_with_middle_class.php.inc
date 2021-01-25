@@ -32,13 +32,8 @@ namespace Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstruc
 
 class ClassWithInjects10ParentParent
 {
-    /**
-     * @var \DateTimeInterface
-     */
-    private $dateTime;
-    public function __construct(\DateTimeInterface $dateTime)
+    public function __construct(private \DateTimeInterface $dateTime)
     {
-        $this->dateTime = $dateTime;
     }
 }
 
@@ -48,13 +43,8 @@ class ClassWithInjects10Parent extends ClassWithInjects10ParentParent
 
 class ClassWithInjects10 extends ClassWithInjects10Parent
 {
-    /**
-     * @var \stdClass
-     */
-    private $property;
-    public function __construct(\DateTimeInterface $dateTime, \stdClass $property)
+    public function __construct(\DateTimeInterface $dateTime, private \stdClass $property)
     {
-        $this->property = $property;
         parent::__construct($dateTime);
     }
 }

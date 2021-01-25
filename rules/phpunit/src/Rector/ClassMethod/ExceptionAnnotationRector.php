@@ -6,9 +6,8 @@ namespace Rector\PHPUnit\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractPHPUnitRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\NodeFactory\ExpectExceptionMethodCallFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -38,9 +37,17 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
      */
     private $expectExceptionMethodCallFactory;
 
-    public function __construct(ExpectExceptionMethodCallFactory $expectExceptionMethodCallFactory)
-    {
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
+    public function __construct(
+        ExpectExceptionMethodCallFactory $expectExceptionMethodCallFactory,
+        PhpDocTagRemover $phpDocTagRemover
+    ) {
         $this->expectExceptionMethodCallFactory = $expectExceptionMethodCallFactory;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -90,12 +97,7 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
-
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         foreach (self::ANNOTATION_TO_METHOD as $annotationName => $methodName) {
             if (! $phpDocInfo->hasByName($annotationName)) {
                 continue;
@@ -107,7 +109,7 @@ CODE_SAMPLE
             );
             $node->stmts = array_merge($methodCallExpressions, (array) $node->stmts);
 
-            $phpDocInfo->removeByName($annotationName);
+            $this->phpDocTagRemover->removeByName($phpDocInfo, $annotationName);
         }
 
         return $node;

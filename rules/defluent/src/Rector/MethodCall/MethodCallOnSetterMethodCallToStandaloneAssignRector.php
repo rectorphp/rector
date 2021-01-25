@@ -7,6 +7,7 @@ namespace Rector\Defluent\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use Rector\Defluent\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer;
 use Rector\Defluent\NodeFactory\VariableFromNewFactory;
@@ -98,12 +99,12 @@ CODE_SAMPLE
         }
 
         $rootMethodCall = $this->fluentChainMethodCallNodeAnalyzer->resolveRootMethodCall($node);
-        if ($rootMethodCall === null) {
+        if (! $rootMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
 
         $new = $this->newFluentChainMethodCallNodeAnalyzer->matchNewInFluentSetterMethodCall($rootMethodCall);
-        if ($new === null) {
+        if (! $new instanceof New_) {
             return null;
         }
 

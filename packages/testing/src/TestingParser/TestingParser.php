@@ -62,6 +62,8 @@ final class TestingParser
     }
 
     /**
+     * @template T of Node
+     * @param class-string<T> $nodeClass
      * @return Node[]
      */
     public function parseFileToDecoratedNodesAndFindNodesByType(string $file, string $nodeClass): array

@@ -5,22 +5,14 @@ declare(strict_types=1);
 namespace Rector\Privatization\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\Const_;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\NodeFactory\ClassConstantFactory;
+use Rector\Privatization\NodeReplacer\PropertyFetchWithConstFetchReplacer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -35,14 +27,23 @@ final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends Abstr
     private $propertyManipulator;
 
     /**
-     * @var PropertyFetchAnalyzer
+     * @var ClassConstantFactory
      */
-    private $propertyFetchAnalyzer;
+    private $classConstantFactory;
 
-    public function __construct(PropertyManipulator $propertyManipulator, PropertyFetchAnalyzer $propertyFetchAnalyzer)
-    {
+    /**
+     * @var PropertyFetchWithConstFetchReplacer
+     */
+    private $propertyFetchWithConstFetchReplacer;
+
+    public function __construct(
+        PropertyManipulator $propertyManipulator,
+        ClassConstantFactory $classConstantFactory,
+        PropertyFetchWithConstFetchReplacer $propertyFetchWithConstFetchReplacer
+    ) {
         $this->propertyManipulator = $propertyManipulator;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->classConstantFactory = $classConstantFactory;
+        $this->propertyFetchWithConstFetchReplacer = $propertyFetchWithConstFetchReplacer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -129,9 +130,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->replacePropertyFetchWithClassConstFetch($node, $onlyProperty);
+        /** @var Class_ $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $this->propertyFetchWithConstFetchReplacer->replace($classLike, $node);
 
-        return $this->createClassConst($node, $onlyProperty);
+        return $this->classConstantFactory->createFromProperty($node);
     }
 
     private function shouldSkip(Property $property): bool
@@ -146,59 +149,5 @@ CODE_SAMPLE
         }
 
         return $this->isObjectType($classLike, 'PHP_CodeSniffer\Sniffs\Sniff');
-    }
-
-    private function replacePropertyFetchWithClassConstFetch(
-        Property $property,
-        PropertyProperty $propertyProperty
-    ): void {
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $propertyName = $this->getName($propertyProperty);
-        $constantName = $this->createConstantNameFromProperty($propertyProperty);
-
-        $this->traverseNodesWithCallable($classLike, function (Node $node) use (
-            $propertyName,
-            $constantName
-        ): ?ClassConstFetch {
-            if (! $this->propertyFetchAnalyzer->isLocalPropertyFetch($node)) {
-                return null;
-            }
-
-            /** @var PropertyFetch|StaticPropertyFetch $node */
-            if (! $this->isName($node->name, $propertyName)) {
-                return null;
-            }
-
-            // replace with constant fetch
-            return new ClassConstFetch(new Name('self'), $constantName);
-        });
-    }
-
-    private function createClassConst(Property $property, PropertyProperty $propertyProperty): ClassConst
-    {
-        $constantName = $this->createConstantNameFromProperty($propertyProperty);
-
-        /** @var Expr $defaultValue */
-        $defaultValue = $propertyProperty->default;
-        $const = new Const_($constantName, $defaultValue);
-
-        $classConst = new ClassConst([$const]);
-        $classConst->flags = $property->flags & ~ Class_::MODIFIER_STATIC;
-
-        $classConst->setAttribute(AttributeKey::PHP_DOC_INFO, $property->getAttribute(AttributeKey::PHP_DOC_INFO));
-
-        return $classConst;
-    }
-
-    private function createConstantNameFromProperty(PropertyProperty $propertyProperty): string
-    {
-        $propertyName = $this->getName($propertyProperty);
-        $constantName = StaticRectorStrings::camelCaseToUnderscore($propertyName);
-
-        return strtoupper($constantName);
     }
 }

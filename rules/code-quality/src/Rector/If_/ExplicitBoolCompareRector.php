@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
@@ -101,7 +102,7 @@ CODE_SAMPLE
         }
 
         $newConditionNode = $this->resolveNewConditionNode($conditionNode, $isNegated);
-        if ($newConditionNode === null) {
+        if (! $newConditionNode instanceof BinaryOp) {
             return null;
         }
 
@@ -158,8 +159,12 @@ CODE_SAMPLE
     /**
      * @return Identical|NotIdentical
      */
-    private function resolveArray(bool $isNegated, Expr $expr): BinaryOp
+    private function resolveArray(bool $isNegated, Expr $expr): ?BinaryOp
     {
+        if (! $expr instanceof Variable) {
+            return null;
+        }
+
         $array = new Array_([]);
 
         // compare === []

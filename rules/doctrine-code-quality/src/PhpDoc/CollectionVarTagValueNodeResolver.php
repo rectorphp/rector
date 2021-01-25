@@ -6,31 +6,25 @@ namespace Rector\DoctrineCodeQuality\PhpDoc;
 
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\DoctrineCodeQuality\NodeAnalyzer\DoctrinePropertyAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
 
 final class CollectionVarTagValueNodeResolver
 {
     /**
-     * @var DoctrinePropertyAnalyzer
+     * @var PhpDocInfoFactory
      */
-    private $doctrinePropertyAnalyzer;
+    private $phpDocInfoFactory;
 
-    public function __construct(DoctrinePropertyAnalyzer $doctrinePropertyAnalyzer)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
     {
-        $this->doctrinePropertyAnalyzer = $doctrinePropertyAnalyzer;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function resolve(Property $property): ?VarTagValueNode
     {
-        $doctrineOneToManyTagValueNode = $this->doctrinePropertyAnalyzer->matchDoctrineOneToManyTagValueNode($property);
-        if ($doctrineOneToManyTagValueNode === null) {
-            return null;
-        }
-
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        if (! $phpDocInfo->hasByType(OneToManyTagValueNode::class)) {
             return null;
         }
 

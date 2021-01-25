@@ -8,11 +8,12 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Ramsey\Uuid\UuidInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -24,6 +25,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddUuidAnnotationsToIdPropertyRector extends AbstractRector
 {
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
+    {
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add uuid annotations to $id property', [
@@ -81,7 +92,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isDoctrineProperty($node)) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        if (! $phpDocInfo->hasByType(AbstractDoctrineTagValueNode::class)) {
             return null;
         }
 
@@ -89,11 +101,11 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         $fullyQualifiedObjectType = new FullyQualifiedObjectType(UuidInterface::class);
-        $phpDocInfo->changeVarType($fullyQualifiedObjectType);
+
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $fullyQualifiedObjectType);
 
         $phpDocInfo->removeByType(GeneratedValueTagValueNode::class);
         $this->changeColumnTypeToUuidBinary($phpDocInfo);
@@ -105,7 +117,7 @@ CODE_SAMPLE
     private function changeColumnTypeToUuidBinary(PhpDocInfo $phpDocInfo): void
     {
         $columnTagValueNode = $phpDocInfo->getByType(ColumnTagValueNode::class);
-        if ($columnTagValueNode === null) {
+        if (! $columnTagValueNode instanceof ColumnTagValueNode) {
             return;
         }
 
@@ -114,9 +126,8 @@ CODE_SAMPLE
 
     private function changeSerializerTypeToString(PhpDocInfo $phpDocInfo): void
     {
-        /** @var SerializerTypeTagValueNode|null $serializerTypeTagValueNode */
         $serializerTypeTagValueNode = $phpDocInfo->getByType(SerializerTypeTagValueNode::class);
-        if ($serializerTypeTagValueNode === null) {
+        if (! $serializerTypeTagValueNode instanceof SerializerTypeTagValueNode) {
             return;
         }
 

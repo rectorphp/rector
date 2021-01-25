@@ -9,7 +9,10 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
+use Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd;
 use Rector\Defluent\ValueObject\FluentCallsKind;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,6 +25,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NewFluentChainMethodCallToNonFluentRector extends AbstractFluentChainMethodCallRector
 {
+    /**
+     * @var TypeChecker
+     */
+    private $typeChecker;
+
+    public function __construct(TypeChecker $typeChecker)
+    {
+        $this->typeChecker = $typeChecker;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -57,7 +70,8 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // handled by another rule
-        if ($this->hasParentTypes($node, [Return_::class, Arg::class])) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($this->typeChecker->isInstanceOf($parent, [Return_::class, Arg::class])) {
             return null;
         }
 
@@ -69,7 +83,7 @@ CODE_SAMPLE
             $node,
             FluentCallsKind::NORMAL
         );
-        if ($assignAndRootExprAndNodesToAdd === null) {
+        if (! $assignAndRootExprAndNodesToAdd instanceof AssignAndRootExprAndNodesToAdd) {
             return null;
         }
 

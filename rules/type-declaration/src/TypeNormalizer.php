@@ -14,7 +14,6 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 use Rector\TypeDeclaration\ValueObject\NestedArrayType;
 
@@ -33,15 +32,9 @@ final class TypeNormalizer
      */
     private $typeFactory;
 
-    /**
-     * @var TypeHasher
-     */
-    private $typeHasher;
-
-    public function __construct(TypeFactory $typeFactory, TypeHasher $typeHasher)
+    public function __construct(TypeFactory $typeFactory)
     {
         $this->typeFactory = $typeFactory;
-        $this->typeHasher = $typeHasher;
     }
 
     public function convertConstantArrayTypeToArrayType(ConstantArrayType $constantArrayType): ?ArrayType
@@ -99,48 +92,6 @@ final class TypeNormalizer
         }
 
         return $this->createUnionedTypesFromArrayTypes($this->collectedNestedArrayTypes);
-    }
-
-    public function uniqueateConstantArrayType(Type $type): Type
-    {
-        if (! $type instanceof ConstantArrayType) {
-            return $type;
-        }
-
-        // nothing to normalize
-        if ($type->getValueTypes() === []) {
-            return $type;
-        }
-
-        $uniqueTypes = [];
-        $removedKeys = [];
-        foreach ($type->getValueTypes() as $key => $valueType) {
-            $typeHash = $this->typeHasher->createTypeHash($valueType);
-
-            $valueType = $this->uniqueateConstantArrayType($valueType);
-            $valueType = $this->normalizeArrayOfUnionToUnionArray($valueType);
-
-            if (! isset($uniqueTypes[$typeHash])) {
-                $uniqueTypes[$typeHash] = $valueType;
-            } else {
-                $removedKeys[] = $key;
-            }
-        }
-
-        // re-index keys
-        $uniqueTypes = array_values($uniqueTypes);
-
-        $keyTypes = [];
-        foreach ($type->getKeyTypes() as $key => $keyType) {
-            if (in_array($key, $removedKeys, true)) {
-                // remove it
-                continue;
-            }
-
-            $keyTypes[$key] = $keyType;
-        }
-
-        return new ConstantArrayType($keyTypes, $uniqueTypes);
     }
 
     /**

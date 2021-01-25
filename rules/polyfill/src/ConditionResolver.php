@@ -77,7 +77,7 @@ final class ConditionResolver
             $funcCall = $expr->right;
 
             $versionCompareCondition = $this->resolveVersionCompareConditionForFuncCall($funcCall);
-            if ($versionCompareCondition === null) {
+            if (! $versionCompareCondition instanceof VersionCompareCondition) {
                 return null;
             }
 
@@ -125,7 +125,7 @@ final class ConditionResolver
         string $binaryClass
     ): ?BinaryToVersionCompareCondition {
         $versionCompareCondition = $this->resolveVersionCompareConditionForFuncCall($funcCall);
-        if ($versionCompareCondition === null) {
+        if (! $versionCompareCondition instanceof VersionCompareCondition) {
             return null;
         }
 

@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -48,12 +48,19 @@ final class InferParamFromClassMethodReturnRector extends AbstractRector impleme
      */
     private $constantReturnToParamTypeConverter;
 
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
     public function __construct(
         ReturnTypeInferer $returnTypeInferer,
-        ConstantReturnToParamTypeConverter $constantReturnToParamTypeConverter
+        ConstantReturnToParamTypeConverter $constantReturnToParamTypeConverter,
+        PhpDocTypeChanger $phpDocTypeChanger
     ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->constantReturnToParamTypeConverter = $constantReturnToParamTypeConverter;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -123,20 +130,16 @@ CODE_SAMPLE
 
         foreach ($this->inferParamFromClassMethodReturn as $inferParamFromClassMethodReturn) {
             $returnClassMethod = $this->matchReturnClassMethod($node, $inferParamFromClassMethodReturn);
-            if ($returnClassMethod === null) {
+            if (! $returnClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 continue;
             }
 
             $returnType = $this->returnTypeInferer->inferFunctionLike($returnClassMethod);
 
-            /** @var PhpDocInfo|null $currentPhpDocInfo */
-            $currentPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($currentPhpDocInfo === null) {
-                $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-            }
+            $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
             $paramType = $this->constantReturnToParamTypeConverter->convert($returnType);
-            if ($paramType === null) {
+            if (! $paramType instanceof Type) {
                 continue;
             }
 
@@ -144,7 +147,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $currentPhpDocInfo->changeParamType($paramType, $firstParam, $paramName);
+            $this->phpDocTypeChanger->changeParamType($currentPhpDocInfo, $paramType, $firstParam, $paramName);
 
             return $node;
         }

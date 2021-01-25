@@ -7,7 +7,6 @@ namespace Rector\DeadCode\Rector\Expression;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -65,8 +64,7 @@ CODE_SAMPLE
 
     private function removeNodeAndKeepComments(Expression $expression): ?Node
     {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $expression->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($expression);
 
         if ($expression->getComments() !== []) {
             $nop = new Nop();

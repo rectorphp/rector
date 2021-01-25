@@ -35,7 +35,7 @@ final class FluentChainMethodCallRootExtractorTest extends AbstractKernelTestCas
     public function test(): void
     {
         $assignAndRootExpr = $this->parseFileAndCreateAssignAndRootExprForSure(
-            __DIR__ . '/Fixture/variable_double_method_call.php.inc'
+            __DIR__ . '/Fixture/skip_variable_double_method_call.php.inc'
         );
 
         $this->assertFalse($assignAndRootExpr->isFirstCallFactory());
@@ -46,7 +46,7 @@ final class FluentChainMethodCallRootExtractorTest extends AbstractKernelTestCas
     public function testFactory(): void
     {
         $assignAndRootExpr = $this->parseFileAndCreateAssignAndRootExprForSure(
-            __DIR__ . '/Fixture/is_factory_variable_double_method_call.php.inc'
+            __DIR__ . '/Fixture/skip_is_factory_variable_double_method_call.php.inc'
         );
 
         $this->assertTrue($assignAndRootExpr->isFirstCallFactory());
@@ -55,7 +55,7 @@ final class FluentChainMethodCallRootExtractorTest extends AbstractKernelTestCas
     public function testNew(): void
     {
         $assignAndRootExpr = $this->parseFileAndCreateAssignAndRootExprForSure(
-            __DIR__ . '/Fixture/return_new_double_method_call.php.inc'
+            __DIR__ . '/Fixture/skip_return_new_double_method_call.php.inc'
         );
 
         $this->assertFalse($assignAndRootExpr->isFirstCallFactory());

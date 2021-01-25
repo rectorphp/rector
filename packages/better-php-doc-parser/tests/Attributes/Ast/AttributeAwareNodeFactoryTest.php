@@ -29,8 +29,7 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-
-        $this->attributeAwareNodeFactory = static::$container->get(AttributeAwareNodeFactory::class);
+        $this->attributeAwareNodeFactory = $this->getService(AttributeAwareNodeFactory::class);
     }
 
     public function testPhpDocNodeAndChildren(): void

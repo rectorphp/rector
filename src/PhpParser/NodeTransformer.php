@@ -34,7 +34,7 @@ final class NodeTransformer
     public function transformSprintfToArray(FuncCall $sprintfFuncCall): ?Array_
     {
         $sprintfStringAndArgs = $this->splitMessageAndArgs($sprintfFuncCall);
-        if ($sprintfStringAndArgs === null) {
+        if (! $sprintfStringAndArgs instanceof SprintfStringAndArgs) {
             return null;
         }
 

@@ -23,7 +23,7 @@ final class SimplifyIfElseToTernaryRector extends AbstractRector
     /**
      * @var int
      */
-    private const LINE_LENGHT_LIMIT = 120;
+    private const LINE_LENGTH_LIMIT = 120;
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -82,10 +82,10 @@ CODE_SAMPLE
 
         $ifAssignVar = $this->resolveOnlyStmtAssignVar($node->stmts);
         $elseAssignVar = $this->resolveOnlyStmtAssignVar($node->else->stmts);
-        if ($ifAssignVar === null) {
+        if (! $ifAssignVar instanceof Expr) {
             return null;
         }
-        if ($elseAssignVar === null) {
+        if (! $elseAssignVar instanceof Expr) {
             return null;
         }
 
@@ -95,10 +95,10 @@ CODE_SAMPLE
 
         $ternaryIf = $this->resolveOnlyStmtAssignExpr($node->stmts);
         $ternaryElse = $this->resolveOnlyStmtAssignExpr($node->else->stmts);
-        if ($ternaryIf === null) {
+        if (! $ternaryIf instanceof Expr) {
             return null;
         }
-        if ($ternaryElse === null) {
+        if (! $ternaryElse instanceof Expr) {
             return null;
         }
 
@@ -169,6 +169,6 @@ CODE_SAMPLE
 
     private function isNodeTooLong(Assign $assign): bool
     {
-        return Strings::length($this->print($assign)) > self::LINE_LENGHT_LIMIT;
+        return Strings::length($this->print($assign)) > self::LINE_LENGTH_LIMIT;
     }
 }

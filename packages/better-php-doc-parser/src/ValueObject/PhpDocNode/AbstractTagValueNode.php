@@ -15,6 +15,7 @@ use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
 use Rector\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Symplify\PackageBuilder\Php\TypeChecker;
 
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
 {
@@ -167,7 +168,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
     protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
     {
-        $tagValueNodeConfigurationFactory = new TagValueNodeConfigurationFactory();
+        $tagValueNodeConfigurationFactory = new TagValueNodeConfigurationFactory(new TypeChecker());
 
         // prevent override
         if ($this->tagValueNodeConfiguration !== null) {

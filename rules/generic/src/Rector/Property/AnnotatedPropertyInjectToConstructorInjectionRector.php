@@ -6,12 +6,15 @@ namespace Rector\Generic\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpAttribute\ValueObject\TagName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -27,11 +30,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const INJECT_ANNOTATION = 'inject';
-
-    /**
      * @var PropertyUsageAnalyzer
      */
     private $propertyUsageAnalyzer;
@@ -41,10 +39,19 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      */
     private $classChildAnalyzer;
 
-    public function __construct(ClassChildAnalyzer $classChildAnalyzer, PropertyUsageAnalyzer $propertyUsageAnalyzer)
-    {
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
+    public function __construct(
+        ClassChildAnalyzer $classChildAnalyzer,
+        PropertyUsageAnalyzer $propertyUsageAnalyzer,
+        PhpDocTagRemover $phpDocTagRemover
+    ) {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
         $this->classChildAnalyzer = $classChildAnalyzer;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -94,9 +101,8 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->removeByName(self::INJECT_ANNOTATION);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $this->phpDocTagRemover->removeByName($phpDocInfo, TagName::INJECT);
 
         if ($this->propertyUsageAnalyzer->isPropertyFetchedInChildClass($node)) {
             $this->makeProtected($node);
@@ -106,23 +112,23 @@ CODE_SAMPLE
 
         $this->addPropertyToCollector($node);
 
+        if ($this->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+            $this->removeNode($node);
+            return null;
+        }
+
         return $node;
     }
 
     private function shouldSkipProperty(Property $property): bool
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return true;
-        }
-
-        if (! $phpDocInfo->hasByName(self::INJECT_ANNOTATION)) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        if (! $phpDocInfo->hasByName(TagName::INJECT)) {
             return true;
         }
 
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return true;
         }
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Naming;
 
-use Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
@@ -20,10 +19,11 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
+use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class ExpectedNameResolver
@@ -39,25 +39,25 @@ final class ExpectedNameResolver
     private $propertyNaming;
 
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
+
+    /**
+     * @var MatchParamTypeExpectedNameResolver
+     */
+    private $matchParamTypeExpectedNameResolver;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         PropertyNaming $propertyNaming,
-        StaticTypeMapper $staticTypeMapper
+        MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyNaming = $propertyNaming;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
     }
 
     public function resolveForParamIfNotYet(Param $param): ?string
@@ -66,7 +66,7 @@ final class ExpectedNameResolver
             return null;
         }
 
-        $expectedName = $this->resolveForParam($param);
+        $expectedName = $this->matchParamTypeExpectedNameResolver->resolve($param);
         if ($expectedName === null) {
             return null;
         }
@@ -77,27 +77,11 @@ final class ExpectedNameResolver
             return null;
         }
 
-        if ($this->endsWith($currentName, $expectedName)) {
+        if ($this->nodeNameResolver->endsWith($currentName, $expectedName)) {
             return null;
         }
 
         return $expectedName;
-    }
-
-    public function resolveForParam(Param $param): ?string
-    {
-        // nothing to verify
-        if ($param->type === null) {
-            return null;
-        }
-
-        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-        $expectedName = $this->propertyNaming->getExpectedNameFromType($staticType);
-        if ($expectedName === null) {
-            return null;
-        }
-
-        return $expectedName->getName();
     }
 
     public function resolveForAssignNonNew(Assign $assign): ?string
@@ -136,7 +120,7 @@ final class ExpectedNameResolver
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($className);
 
         $expectedName = $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
-        if ($expectedName === null) {
+        if (! $expectedName instanceof ExpectedName) {
             return null;
         }
 
@@ -207,7 +191,7 @@ final class ExpectedNameResolver
 
         if ($returnedType instanceof ArrayType) {
             $returnedType = $this->resolveReturnTypeFromArrayType($expr, $returnedType);
-            if ($returnedType === null) {
+            if (! $returnedType instanceof Type) {
                 return null;
             }
         }
@@ -219,7 +203,7 @@ final class ExpectedNameResolver
         }
 
         $expectedNameFromMethodName = $this->propertyNaming->getExpectedNameFromMethodName($name);
-        if ($expectedNameFromMethodName === null) {
+        if (! $expectedNameFromMethodName instanceof ExpectedName) {
             return null;
         }
 
@@ -228,16 +212,6 @@ final class ExpectedNameResolver
         }
 
         return $expectedNameFromMethodName->getSingularized();
-    }
-
-    /**
-     * Ends with ucname
-     * Starts with adjective, e.g. (Post $firstPost, Post $secondPost)
-     */
-    private function endsWith(string $currentName, string $expectedName): bool
-    {
-        $suffixNamePattern = '#\w+' . ucfirst($expectedName) . '#';
-        return (bool) Strings::match($currentName, $suffixNamePattern);
     }
 
     /**
