@@ -1,4 +1,4 @@
-# 674 Rules Overview
+# 668 Rules Overview
 
 <br>
 
@@ -12,7 +12,7 @@
 
 - [Carbon](#carbon) (2)
 
-- [CodeQuality](#codequality) (64)
+- [CodeQuality](#codequality) (65)
 
 - [CodeQualityStrict](#codequalitystrict) (4)
 
@@ -52,8 +52,6 @@
 
 - [Generic](#generic) (35)
 
-- [JMS](#jms) (2)
-
 - [Laravel](#laravel) (11)
 
 - [Legacy](#legacy) (4)
@@ -80,7 +78,7 @@
 
 - [NetteUtilsCodeQuality](#netteutilscodequality) (1)
 
-- [Order](#order) (7)
+- [Order](#order) (6)
 
 - [PHPOffice](#phpoffice) (14)
 
@@ -91,8 +89,6 @@
 - [PSR4](#psr4) (2)
 
 - [Performance](#performance) (2)
-
-- [Phalcon](#phalcon) (4)
 
 - [Php52](#php52) (2)
 
@@ -313,12 +309,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
         ->call('configure', [[
-            MoveValueObjectsToValueObjectDirectoryRector::TYPES => [
-                'ValueObjectInterfaceClassName',
-            ],
-            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => [
-                'Search',
-            ],
+            MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
+            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
             MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
         ]]);
 };
@@ -1694,6 +1686,31 @@ Changes `in_array()` with single element to ===
 
 <br>
 
+### SingularSwitchToIfRector
+
+Change switch with only 1 check to if
+
+- class: `Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector`
+
+```diff
+ class SomeObject
+ {
+     public function run($value)
+     {
+         $result = 1;
+-        switch ($value) {
+-            case 100:
++        if ($value === 100) {
+             $result = 1000;
+         }
+
+         return $result;
+     }
+ }
+```
+
+<br>
+
 ### SplitListAssignToSeparateLineRector
 
 Splits `[$a, $b] = [5, 10]` scalar assign to standalone lines
@@ -2496,7 +2513,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
+Split multiple inline assigns to each own lines default value, to prevent undefined array issues
 
 - class: `Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`
 
@@ -6815,7 +6832,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            'added_arguments' => ValueObjectInliner::inline([
+            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
             ]),
         ]]);
@@ -6843,7 +6860,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            'added_arguments' => ValueObjectInliner::inline([
+            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
             ]),
         ]]);
@@ -7274,7 +7291,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(InjectAnnotationClassRector::class)
         ->call('configure', [[
-            InjectAnnotationClassRector::ANNOTATION_CLASSES => ['DI\Annotation\Inject', 'JMS\DiExtraBundle\Annotation\Inject'],
+            InjectAnnotationClassRector::ANNOTATION_CLASSES => [
+                'DI\Annotation\Inject',
+                'JMS\DiExtraBundle\Annotation\Inject',
+            ],
         ]]);
 };
 ```
@@ -7964,53 +7984,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
-## JMS
-
-### RemoveJmsInjectParamsAnnotationRector
-
-Removes JMS\DiExtraBundle\Annotation\InjectParams annotation
-
-- class: `Rector\JMS\Rector\ClassMethod\RemoveJmsInjectParamsAnnotationRector`
-
-```diff
- use JMS\DiExtraBundle\Annotation as DI;
-
- class SomeClass
- {
--    /**
--     * @DI\InjectParams({
--     *     "subscribeService" = @DI\Inject("app.email.service.subscribe"),
--     *     "ipService" = @DI\Inject("app.util.service.ip")
--     * })
--     */
-     public function __construct()
-     {
-     }
--}
-+}
-```
-
-<br>
-
-### RemoveJmsInjectServiceAnnotationRector
-
-Removes JMS\DiExtraBundle\Annotation\Services annotation
-
-- class: `Rector\JMS\Rector\Class_\RemoveJmsInjectServiceAnnotationRector`
-
-```diff
- use JMS\DiExtraBundle\Annotation as DI;
-
--/**
-- * @DI\Service("email.web.services.subscribe_token", public=true)
-- */
- class SomeClass
- {
- }
-```
-
-<br>
-
 ## Laravel
 
 ### AddGuardToLoginEventRector
@@ -8285,10 +8258,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddTopIncludeRector::class)
         ->call('configure', [[
             AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-            AddTopIncludeRector::PATTERNS => [
-                'pat*/*/?ame.php',
-                'somepath/?ame.php',
-            ],
+            AddTopIncludeRector::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
         ]]);
 };
 ```
@@ -10089,48 +10059,6 @@ Orders constants by visibility
 
 <br>
 
-### OrderConstructorDependenciesByTypeAlphabeticallyRector
-
-Order __constructor dependencies by type A-Z
-
-:wrench: **configure it!**
-
-- class: `Rector\Order\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector`
-
-```php
-use Rector\Order\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(OrderConstructorDependenciesByTypeAlphabeticallyRector::class)
-        ->call('configure', [[
-            OrderConstructorDependenciesByTypeAlphabeticallyRector::SKIP_PATTERNS => ['Cla*ame', 'Ano?herClassName'],
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function __construct(
-+        LatteAndTwigFinder $latteAndTwigFinder,
-         LatteToTwigConverter $latteToTwigConverter,
--        SymfonyStyle $symfonyStyle,
--        LatteAndTwigFinder $latteAndTwigFinder,
--        SmartFileSystem $smartFileSystem
-+        SmartFileSystem $smartFileSystem,
-+        SymfonyStyle $symfonyStyle
-     ) {
-     }
- }
-```
-
-<br>
-
 ### OrderFirstLevelClassStatementsRector
 
 Orders first level Class statements
@@ -11539,92 +11467,6 @@ Add pre-slash to short named functions to improve performance
      {
 -        return trim($value);
 +        return \trim($value);
-     }
- }
-```
-
-<br>
-
-## Phalcon
-
-### AddRequestToHandleMethodCallRector
-
-Add $_SERVER REQUEST_URI to method call
-
-- class: `Rector\Phalcon\Rector\MethodCall\AddRequestToHandleMethodCallRector`
-
-```diff
- class SomeClass
- {
-     public function run($di)
-     {
-         $application = new \Phalcon\Mvc\Application();
--        $response = $application->handle();
-+        $response = $application->handle($_SERVER["REQUEST_URI"]);
-     }
- }
-```
-
-<br>
-
-### DecoupleSaveMethodCallWithArgumentToAssignRector
-
-Decouple `Phalcon\Mvc\Model::save()` with argument to `assign()`
-
-- class: `Rector\Phalcon\Rector\MethodCall\DecoupleSaveMethodCallWithArgumentToAssignRector`
-
-```diff
- class SomeClass
- {
-     public function run(\Phalcon\Mvc\Model $model, $data)
-     {
--        $model->save($data);
-+        $model->save();
-+        $model->assign($data);
-     }
- }
-```
-
-<br>
-
-### FlashWithCssClassesToExtraCallRector
-
-Add `$cssClasses` in Flash to separated method call
-
-- class: `Rector\Phalcon\Rector\Assign\FlashWithCssClassesToExtraCallRector`
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         $cssClasses = [];
--        $flash = new Phalcon\Flash($cssClasses);
-+        $flash = new Phalcon\Flash();
-+        $flash->setCssClasses($cssClasses);
-     }
- }
-```
-
-<br>
-
-### NewApplicationToToFactoryWithDefaultContainerRector
-
-Change new application to default factory with application
-
-- class: `Rector\Phalcon\Rector\Assign\NewApplicationToToFactoryWithDefaultContainerRector`
-
-```diff
- class SomeClass
- {
-     public function run($di)
-     {
--        $application = new \Phalcon\Mvc\Application($di);
-+        $container = new \Phalcon\Di\FactoryDefault();
-+        $application = new \Phalcon\Mvc\Application($container);
-
--        $response = $application->handle();
-+        $response = $application->handle($_SERVER["REQUEST_URI"]);
      }
  }
 ```
@@ -13758,11 +13600,11 @@ Post Rector that adds nodes
 
 <br>
 
-### NodeRemovingRector
+### NodeRemovingPostRector
 
 PostRector that removes nodes
 
-- class: `Rector\PostRector\Rector\NodeRemovingRector`
+- class: `Rector\PostRector\Rector\NodeRemovingPostRector`
 
 ```diff
 -$value = 1000;
@@ -14422,7 +14264,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
 
 :wrench: **configure it!**
 
@@ -15360,7 +15202,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GetToConstructorInjectionRector::class)
         ->call('configure', [[
-            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => ['SymfonyControllerClassName', 'GetTraitClassName'],
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
+                'SymfonyControllerClassName',
+                'GetTraitClassName',
+            ],
         ]]);
 };
 ```
