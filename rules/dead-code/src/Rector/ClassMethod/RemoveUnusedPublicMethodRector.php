@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
+use Rector\CodingStyle\ValueObject\ObjectMagicMethods;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -94,7 +94,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isName($node, MethodName::CONSTRUCT)) {
+        if ($this->isNames($node, ObjectMagicMethods::METHOD_NAMES)) {
             return null;
         }
 
