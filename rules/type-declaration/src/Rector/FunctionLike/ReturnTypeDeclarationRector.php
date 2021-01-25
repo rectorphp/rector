@@ -190,6 +190,14 @@ CODE_SAMPLE
             return false;
         }
 
+        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($functionLike)) {
+            return true;
+        }
+
+        if ($this->isNames($functionLike, self::EXCLUDED_METHOD_NAMES)) {
+            return true;
+        }
+
         $parent = $functionLike->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Class_ && $parent->extends instanceof FullyQualified) {
             $parentName = $parent->extends->toString();
@@ -202,11 +210,7 @@ CODE_SAMPLE
             return Strings::contains((string) $fileName, 'vendor');
         }
 
-        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($functionLike)) {
-            return true;
-        }
-
-        return $this->isNames($functionLike, self::EXCLUDED_METHOD_NAMES);
+        return false;
     }
 
     /**
