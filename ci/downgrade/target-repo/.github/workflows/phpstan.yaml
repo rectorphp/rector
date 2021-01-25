@@ -1,0 +1,28 @@
+name: PHPStan
+
+on: [pull_request, push]
+
+jobs:
+    along_phpstan:
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php_version: ['7.1', '7.2']
+
+        name: "PHP ${{ matrix.php_version }}"
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php_version }}
+                    coverage: none
+
+            -   run: |
+                    mkdir temp && cd temp
+                    composer require phpstan/phpstan --dev --ansi --no-interaction
+                    cd ..
+                    temp/vendor/bin/phpstan analyse -c ci/downgrade/phpstan.neon --ansi

@@ -138,7 +138,7 @@ CODE_SAMPLE
 
         // Obtain the list of the ancestors classes and implemented interfaces
         // with a different signature
-        $ancestorAndInterfaceClassNames = array_merge(
+        $ancestorAndInterfaces = array_merge(
             $this->getClassesWithDifferentSignature($classReflection, $methodName, $paramName),
             $this->getInterfacesWithDifferentSignature($classReflection, $methodName, $paramName)
         );
@@ -146,8 +146,7 @@ CODE_SAMPLE
         // Remove the types in:
         // - all ancestors + their descendant classes
         // - all implemented interfaces + their implementing classes
-        foreach ($ancestorAndInterfaceClassNames as $ancestorClassOrInterface) {
-            /** @var string $parentClassName */
+        foreach ($ancestorAndInterfaces as $ancestorClassOrInterface) {
             $parentClassName = $ancestorClassOrInterface->getAttribute(AttributeKey::CLASS_NAME);
             $classMethod = $this->nodeRepository->findClassMethod($parentClassName, $methodName);
             /**

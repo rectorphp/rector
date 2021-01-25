@@ -38,6 +38,7 @@
         "sebastian/diff": "^4.0",
         "symfony/cache": "^4.4.8|^5.1",
         "symfony/console": "^4.4.8|^5.1",
+        "symfony/expression-language": "^4.4|^5.1",
         "symfony/dependency-injection": "^5.1",
         "symfony/finder": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
@@ -56,7 +57,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.17.3",
-        "nette/application": "^3.0",
+        "nette/application": "^3.0.7",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
         "ocramius/package-versions": "^1.9",
