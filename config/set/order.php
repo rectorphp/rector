@@ -13,9 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(OrderPrivateMethodsByUseRector::class);
-
     $services->set(OrderClassConstantsByIntegerValueRector::class);
-
     $services->set(OrderMethodsByVisibilityRector::class);
     $services->set(OrderPropertiesByVisibilityRector::class);
     $services->set(OrderConstantsByVisibilityRector::class);
