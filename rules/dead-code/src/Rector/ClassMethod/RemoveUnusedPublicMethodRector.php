@@ -94,7 +94,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isName($node, MethodName::CONSTRUCT)) {
+        if ($this->isNames($node, [MethodName::CONSTRUCT, MethodName::INVOKE])) {
             return null;
         }
 
