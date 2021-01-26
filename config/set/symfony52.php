@@ -107,4 +107,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ),
             ]),
         ]]);
+
+    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#dependencyinjection
+    $services->set(RenameMethodRector::class)
+        ->call('configure', [[
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
+                new MethodCallRename('Symfony\Component\DependencyInjection\Definition', 'setPrivate', 'setPublic'),
+                new MethodCallRename('Symfony\Component\DependencyInjection\Alias', 'setPrivate', 'setPublic'),
+            ]),
+        ]]);
 };
