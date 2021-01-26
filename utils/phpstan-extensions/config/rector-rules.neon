@@ -133,7 +133,7 @@ services:
             # @todo fix so the child clases respect this suffix
             parentClasses:
                 - Rector\Core\Rector\AbstractRector
-                - Rector\PostRector\Rector\AbstractPostRector
+                - Rector\PostRector\Contract\Rector\PostRectorInterface
                 - Rector\Composer\Contract\Rector\ComposerRectorInterface
 
     -
