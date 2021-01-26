@@ -198,7 +198,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->isParentInVendor($functionLike);
+        return $this->vendorLockResolver->isReturnChangeVendorLockedIn($functionLike);
     }
 
     private function isParentInVendor(ClassMethod $classMethod): bool
