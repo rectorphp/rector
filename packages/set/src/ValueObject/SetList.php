@@ -65,12 +65,6 @@ final class SetList
      * @var string
      */
     public const CAKEPHP_FLUENT_OPTIONS = __DIR__ . '/../../../../config/set/cakephp-fluent-options.php';
-
-    /**
-     * @var string
-     */
-    public const CODEIGNITER_40 = __DIR__ . '/../../../../config/set/codeigniter-40.php';
-
     /**
      * @var string
      */
