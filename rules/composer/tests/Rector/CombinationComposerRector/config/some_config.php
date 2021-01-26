@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Composer\Rector\ChangePackageVersionComposerRector;
-use Rector\Composer\Rector\MovePackageToRequireDevComposerRector;
 use Rector\Composer\Rector\ReplacePackageAndVersionComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Composer\ValueObject\ReplacePackageAndVersion;
@@ -12,11 +11,6 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
-    $services->set(MovePackageToRequireDevComposerRector::class)
-        ->call('configure', [[
-            MovePackageToRequireDevComposerRector::PACKAGE_NAMES => ['vendor1/package1'],
-        ]]);
 
     $services->set(ReplacePackageAndVersionComposerRector::class)
         ->call('configure', [[
