@@ -131,8 +131,9 @@ services:
         tags: [phpstan.rules.rule]
         arguments:
             parentClasses:
-                - Rector
-                - Rector\Composer\Contract\ComposerModifier\ComposerModifierInterface
+                - Rector\Core\Rector\AbstractRector
+                - Rector\PostRector\Contract\Rector\PostRectorInterface
+                - Rector\Composer\Contract\Rector\ComposerRectorInterface
 
     -
         class: Symplify\PHPStanRules\Rules\PreferredClassRule

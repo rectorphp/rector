@@ -5,8 +5,8 @@ declare(strict_types=1);
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
-use Rector\Composer\Rector\ChangePackageVersionRector;
-use Rector\Composer\Rector\RemovePackageRector;
+use Rector\Composer\Rector\ChangePackageVersionComposerRector;
+use Rector\Composer\Rector\RemovePackageComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Generic\Rector\Assign\DimFetchAssignToMethodCallRector;
 use Rector\Generic\ValueObject\DimFetchAssignToMethodCall;
@@ -126,9 +126,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ContextGetByTypeToConstructorInjectionRector::class);
 
-    $services->set(ChangePackageVersionRector::class)
+    $services->set(ChangePackageVersionComposerRector::class)
         ->call('configure', [[
-            ChangePackageVersionRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+            ChangePackageVersionComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
                 // meta package
                 new PackageAndVersion('nette/nette', '^3.1'),
                 // https://github.com/nette/nette/blob/v3.0.0/composer.json vs https://github.com/nette/nette/blob/v3.1.0/composer.json
@@ -161,8 +161,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
-    $services->set(RemovePackageRector::class)
+    $services->set(RemovePackageComposerRector::class)
         ->call('configure', [[
-            RemovePackageRector::PACKAGE_NAMES => ['nette/component-model', 'nette/neon'],
+            RemovePackageComposerRector::PACKAGE_NAMES => ['nette/component-model', 'nette/neon'],
         ]]);
 };
