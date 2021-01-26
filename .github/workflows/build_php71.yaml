@@ -1,7 +1,6 @@
 name: Rector Run
 
 on:
-    pull_request: null
     push:
         branches:
             - master
