@@ -65,6 +65,7 @@ final class SetList
      * @var string
      */
     public const CAKEPHP_FLUENT_OPTIONS = __DIR__ . '/../../../../config/set/cakephp-fluent-options.php';
+
     /**
      * @var string
      */
@@ -458,11 +459,6 @@ final class SetList
     /**
      * @var string
      */
-    public const PHPUNIT_INJECTOR = __DIR__ . '/../../../../config/set/phpunit-injector.php';
-
-    /**
-     * @var string
-     */
     public const PHPUNIT_MOCK = __DIR__ . '/../../../../config/set/phpunit-mock.php';
 
     /**
@@ -634,11 +630,6 @@ final class SetList
      * @var string
      */
     public const SYMFONY_CONSTRUCTOR_INJECTION = __DIR__ . '/../../../../config/set/symfony-constructor-injection.php';
-
-    /**
-     * @var string
-     */
-    public const SYMFONY_PHPUNIT = __DIR__ . '/../../../../config/set/symfony-phpunit.php';
 
     /**
      * @var string
