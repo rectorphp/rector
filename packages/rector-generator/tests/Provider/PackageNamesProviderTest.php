@@ -25,7 +25,7 @@ final class PackageNamesProviderTest extends AbstractKernelTestCase
     {
         $packageNames = $this->packageNamesProvider->provide();
         $packageNameCount = count($packageNames);
-        $this->assertGreaterThan(70, $packageNameCount);
+        $this->assertGreaterThan(60, $packageNameCount);
 
         $this->assertContains('DeadCode', $packageNames);
         $this->assertContains('Symfony5', $packageNames);

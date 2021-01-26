@@ -69,11 +69,6 @@ final class SetList
     /**
      * @var string
      */
-    public const CODEIGNITER_40 = __DIR__ . '/../../../../config/set/codeigniter-40.php';
-
-    /**
-     * @var string
-     */
     public const CODE_QUALITY = __DIR__ . '/../../../../config/set/code-quality.php';
 
     /**
@@ -205,11 +200,6 @@ final class SetList
      * @var string
      */
     public const GMAGICK_TO_IMAGICK = __DIR__ . '/../../../../config/set/gmagick_to_imagick.php';
-
-    /**
-     * @var string
-     */
-    public const JMS_DECOUPLE = __DIR__ . '/../../../../config/set/jms-decouple.php';
 
     /**
      * @var string
@@ -469,11 +459,6 @@ final class SetList
     /**
      * @var string
      */
-    public const PHPUNIT_INJECTOR = __DIR__ . '/../../../../config/set/phpunit-injector.php';
-
-    /**
-     * @var string
-     */
     public const PHPUNIT_MOCK = __DIR__ . '/../../../../config/set/phpunit-mock.php';
 
     /**
@@ -540,16 +525,6 @@ final class SetList
      * @var string
      */
     public const PHP_80 = __DIR__ . '/../../../../config/set/php80.php';
-
-    /**
-     * @var string
-     */
-    public const PHP_CODE_SNIFFER_30 = __DIR__ . '/../../../../config/set/php-code-sniffer30.php';
-
-    /**
-     * @var string
-     */
-    public const PHP_DI_DECOUPLE = __DIR__ . '/../../../../config/set/php-di-decouple.php';
 
     /**
      * @var string
@@ -655,11 +630,6 @@ final class SetList
      * @var string
      */
     public const SYMFONY_CONSTRUCTOR_INJECTION = __DIR__ . '/../../../../config/set/symfony-constructor-injection.php';
-
-    /**
-     * @var string
-     */
-    public const SYMFONY_PHPUNIT = __DIR__ . '/../../../../config/set/symfony-phpunit.php';
 
     /**
      * @var string
