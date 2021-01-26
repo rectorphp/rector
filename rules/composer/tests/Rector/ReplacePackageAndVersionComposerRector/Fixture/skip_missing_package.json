@@ -1,0 +1,5 @@
+{
+    "require": {
+        "vendor1/package4": "^1.0"
+    }
+}

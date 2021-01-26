@@ -160,7 +160,6 @@ parameters:
             message: '#Separate function "Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ref\(\)" in method call to standalone row to improve readability#'
             path: 'packages/rector-generator/config/config.php'
 
-        - '#Parameter \#1 \$shortControlString of method Rector\\NetteCodeQuality\\Rector\\Assign\\MakeGetComponentAssignAnnotatedRector\:\:resolveTypeFromShortControlNameAndVariable\(\) expects PhpParser\\Node\\Scalar\\String_, PhpParser\\Node\\Expr\|null given#'
         - '#Parameter \#1 \$variable of class Rector\\Php70\\ValueObject\\VariableAssignPair constructor expects PhpParser\\Node\\Expr\\ArrayDimFetch\|PhpParser\\Node\\Expr\\PropertyFetch\|PhpParser\\Node\\Expr\\StaticPropertyFetch\|PhpParser\\Node\\Expr\\Variable, PhpParser\\Node\\Expr given#'
 
         # is nested expr
@@ -243,7 +242,6 @@ parameters:
                 - packages/better-php-doc-parser/src/PhpDocNode/PrintTagValueNodeTrait.php # 13
                 - packages/changes-reporting/src/Rector/AbstractRector/NotifyingRemovingNodeTrait.php # 17
                 - packages/post-rector/src/Rector/AbstractRector/NodeCommandersTrait.php # 31
-                - rules/doctrine/src/AbstractRector/DoctrineTrait.php # 13
                 - src/Rector/AbstractRector/*
 
         -
@@ -300,7 +298,6 @@ parameters:
                 - rules/dead-doc-block/src/Rector/Node/RemoveNonExistingVarAnnotationRector.php
                 - rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecMocksToPHPUnitMocksRector.php
                 - packages/better-php-doc-parser/src/Comment/CommentsMerger.php
-                - packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php
                 - rules/coding-style/src/Node/DocAliasResolver.php
                 - packages/comments/src/NodeDocBlock/DocBlockUpdater.php
                 - packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfoFactory.php
@@ -329,15 +326,8 @@ parameters:
                 # prevent circular dependnecy
                 - packages/static-type-mapper/src/Naming/NameScopeFactory.php
 
-                - rules/composer/src/Modifier/ComposerModifier.php
-
         # class-string vs string
         - '#Parameter \#1 \$expected of method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) expects class\-string<object\>, string given#'
-
-        -
-            message: '#Method "renamePhpDocType\(\)" returns bool type, so the name should start with is/has/was#'
-            paths:
-                 - packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockClassRenamer.php
 
         -
             message: '#Cannot cast array<string\>\|bool\|string\|null to string#'
@@ -368,11 +358,6 @@ parameters:
                 - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
 
         ###################################################
-
-        -
-            message: '#Class cognitive complexity is 43, keep it under 40#'
-            paths:
-                - rules/phpunit/src/Rector/Class_/ArrayArgumentInTestToDataProviderRector.php
 
         - '#should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
 
@@ -453,11 +438,6 @@ parameters:
                 - src/Rector/AbstractRector/NodeTypeResolverTrait.php
                 - rules/php70/src/Rector/FuncCall/MultiDirnameRector.php
 
-        -
-            message: '#Class cognitive complexity is 42, keep it under 40#'
-            paths:
-                - rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
-
         # @todo fix later
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
@@ -483,8 +463,6 @@ parameters:
                 - rules/symfony/tests/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeTranslator.php #9
                 - rules/transform/tests/Rector/MethodCall/MethodCallToStaticCallRector/AnotherDependency.php #7
 
-        - '#Anonymous class is not allowed#'
-
         # generics nullable bugs
         - '#Method (.*?) should return T of PhpParser\\Node\|null but returns PhpParser\\Node\|null#'
         - '#Method (.*?) should return T of PhpParser\\Node\|null but returns PhpParser\\Node#'
@@ -499,11 +477,6 @@ parameters:
         - '#Method Rector\\SymfonyCodeQuality\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
         - '#Parameter \#4 \$classWithConstants of class Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant constructor expects class\-string, string given#'
 
-        -
-             message: '#Call to an undefined method PhpParser\\Node\\Expr\|PhpParser\\Node\\Name\:\:toString\(\)#'
-             paths:
-                - utils/phpstan-extensions/src/ReturnTypeExtension/NodeFinder/FindFirstInstanceOfReturnTypeExtension.php
-
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return T of PhpParser\\Node but returns PhpParser\\Node#'
 
         -
@@ -513,48 +486,20 @@ parameters:
 
         - '#Class with base "FileNode" name is already used in "PHPStan\\Node\\FileNode", "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileNode"\. Use unique name to make classes easy to recognize#'
 
-        - '#Content of method "removeFirstArgument\(\)" is duplicated with method "moveArguments\(\)" in "Rector\\PHPUnit\\Rector\\MethodCall\\AssertSameBoolNullToSpecificMethodRector" class\. Use unique content or abstract service instead#'
-
-        -
-            message: '#Class Rector\\RemovingStatic\\Tests\\Rector\\ClassMethod\\DesiredClassMethodTypeToDynamicRector\\Fixture\\SomeClassMethod not found#'
-            paths:
-                - rules/removing-static/tests/Rector/ClassMethod/DesiredClassMethodTypeToDynamicRector/config/some_config.php
-
         -
             message: '#Class Rector\\RemovingStatic\\Tests\\Rector\\Property\\DesiredPropertyClassMethodTypeToDynamicRector\\Fixture\\StaticProperty not found#'
 
             paths:
                 - rules/removing-static/tests/Rector/Property/DesiredPropertyClassMethodTypeToDynamicRector/config/some_config.php
 
-        - '#Content of method "mapToPhpParserNode\(\)" is duplicated with method "mapToPhpParserNode\(\)" in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper" class\. Use unique content or abstract service instead#'
+        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\AddPackageToRequireComposerRector" class\. Use unique content or abstract service instead#'
 
-        # defined in Application, part of abstract
-        -
-            message: '#Argument and options "debug", "clear\-cache" got confused#'
-            path: src/Console/Command/AbstractCommand.php
-
-        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\AddPackageToRequireRector" class\. Use unique content or abstract service instead#'
         - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer" class\. Use unique content or abstract service instead#'
-        - '#Content of method "getNodeReturnPhpDocType\(\)" is duplicated with method "inferFunctionLike\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\\ReturnTagReturnTypeInferer" class\. Use unique content or abstract service instead#'
         - '#Parameter \#1 \$type of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:hasByType\(\) expects class\-string<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\>, string given#'
         - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:findAllByType\(\) should return array<T of PHPStan\\PhpDocParser\\Ast\\Node\> but returns array<int, PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|\(PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode&T of PHPStan\\PhpDocParser\\Ast\\Node\)\>#'
-        - '#Content of method "inferFunctionLike\(\)" is duplicated with method "getNodeReturnPhpDocType\(\)" in "Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddArrayReturnDocTypeRector" class\. Use unique content or abstract service instead#'
-        - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:getParamTagValueByName\(\) should return Rector\\AttributeAwarePhpDoc\\Ast\\PhpDoc\\AttributeAwareParamTagValueNode\|null but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ParamTagValueNode\|null#'
-        - '#Instanceof between Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\Doctrine\\Property_\\ManyToOneTagValueNode\|null and Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\Doctrine\\Property_\\ManyToManyTagValueNode will always evaluate to false#'
-
-        -
-            message: '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\ChangePackageVersionRector" class\. Use unique content or abstract service instead#'
-            paths:
-                - rules/composer/src/Rector/AddPackageToRequireRector.php #71
 
         # buggy phpstan clas-string
         - '#Method (.*?) should return class\-string but returns string#'
-        - '#Method (.*?) should return array<class\-string\> but returns array<int, string\>#'
-
-        -
-            message: '#Unreachable statement \- code above always terminates#'
-            paths:
-                - rules/php80/src/Rector/Property/TypedPropertyFromStrictConstructorRector.php
 
         -
             message: '#\$this as argument is not allowed\. Refator method to service composition#'
@@ -567,14 +512,3 @@ parameters:
                 - packages/phpstan-static-type-mapper/src/PHPStanStaticTypeMapper.php
                 # refactor later
                 - packages/better-php-doc-parser/src/PhpDocParser/BetterPhpDocParser.php
-
-        -
-            message: '#Use separate function calls with readable variable names#'
-            paths:
-                - packages/changes-reporting/src/Output/ConsoleOutputFormatter.php
-
-#        -
-#            message: '#Assign in loop is not allowed#'
-#            paths:
-                # weird case
-#                - packages/better-php-doc-parser/src/PhpDocParser/AnnotationContentResolver.php
