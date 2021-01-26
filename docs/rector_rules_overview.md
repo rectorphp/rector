@@ -2835,7 +2835,7 @@ Add package to "require-dev" in `composer.json`
 - class: `Rector\Composer\Rector\AddPackageToRequireDevRector`
 
 ```php
-use Rector\Composer\Rector\AddPackageToRequireDevRector;
+use Rector\Composer\Rector\AddPackageToRequireDevComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -2843,9 +2843,9 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(AddPackageToRequireDevRector::class)
+    $services->set(AddPackageToRequireDevComposerRector::class)
         ->call('configure', [[
-            AddPackageToRequireDevRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+            AddPackageToRequireDevComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
                 new PackageAndVersion('symfony/console', '^3.4'),
             ]),
         ]]);
@@ -2873,7 +2873,7 @@ Add package to "require" in `composer.json`
 - class: `Rector\Composer\Rector\AddPackageToRequireRector`
 
 ```php
-use Rector\Composer\Rector\AddPackageToRequireRector;
+use Rector\Composer\Rector\AddPackageToRequireComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -2881,9 +2881,9 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(AddPackageToRequireRector::class)
+    $services->set(AddPackageToRequireComposerRector::class)
         ->call('configure', [[
-            AddPackageToRequireRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+            AddPackageToRequireComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
                 new PackageAndVersion('symfony/console', '^3.4'),
             ]),
         ]]);
@@ -2911,7 +2911,7 @@ Change package version `composer.json`
 - class: `Rector\Composer\Rector\ChangePackageVersionRector`
 
 ```php
-use Rector\Composer\Rector\ChangePackageVersionRector;
+use Rector\Composer\Rector\ChangePackageVersionComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -2919,9 +2919,9 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(ChangePackageVersionRector::class)
+    $services->set(ChangePackageVersionComposerRector::class)
         ->call('configure', [[
-            ChangePackageVersionRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+            ChangePackageVersionComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
                 new PackageAndVersion('symfony/console', '^4.4'),
             ]),
         ]]);
@@ -2951,15 +2951,15 @@ Moves package from "require" to "require-dev" in `composer.json`
 - class: `Rector\Composer\Rector\MovePackageToRequireDevRector`
 
 ```php
-use Rector\Composer\Rector\MovePackageToRequireDevRector;
+use Rector\Composer\Rector\MovePackageToRequireDevComposerRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(MovePackageToRequireDevRector::class)
+    $services->set(MovePackageToRequireDevComposerRector::class)
         ->call('configure', [[
-            MovePackageToRequireDevRector::PACKAGE_NAMES => ['symfony/console'],
+            MovePackageToRequireDevComposerRector::PACKAGE_NAMES => ['symfony/console'],
         ]]);
 };
 ```
@@ -2986,15 +2986,15 @@ Moves package from "require-dev" to "require" in `composer.json`
 - class: `Rector\Composer\Rector\MovePackageToRequireRector`
 
 ```php
-use Rector\Composer\Rector\MovePackageToRequireRector;
+use Rector\Composer\Rector\MovePackageToRequireComposerRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(MovePackageToRequireRector::class)
+    $services->set(MovePackageToRequireComposerRector::class)
         ->call('configure', [[
-            MovePackageToRequireRector::PACKAGE_NAMES => ['symfony/console'],
+            MovePackageToRequireComposerRector::PACKAGE_NAMES => ['symfony/console'],
         ]]);
 };
 ```
@@ -3021,15 +3021,15 @@ Remove package from "require" and "require-dev" in `composer.json`
 - class: `Rector\Composer\Rector\RemovePackageRector`
 
 ```php
-use Rector\Composer\Rector\RemovePackageRector;
+use Rector\Composer\Rector\RemovePackageComposerRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(RemovePackageRector::class)
+    $services->set(RemovePackageComposerRector::class)
         ->call('configure', [[
-            RemovePackageRector::PACKAGE_NAMES => ['symfony/console'],
+            RemovePackageComposerRector::PACKAGE_NAMES => ['symfony/console'],
         ]]);
 };
 ```
@@ -3055,7 +3055,7 @@ Change package name and version `composer.json`
 - class: `Rector\Composer\Rector\ReplacePackageAndVersionRector`
 
 ```php
-use Rector\Composer\Rector\ReplacePackageAndVersionRector;
+use Rector\Composer\Rector\ReplacePackageAndVersionComposerRector;
 use Rector\Composer\ValueObject\ReplacePackageAndVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -3063,9 +3063,9 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(ReplacePackageAndVersionRector::class)
+    $services->set(ReplacePackageAndVersionComposerRector::class)
         ->call('configure', [[
-            ReplacePackageAndVersionRector::REPLACE_PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+            ReplacePackageAndVersionComposerRector::REPLACE_PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
                 new ReplacePackageAndVersion('symfony/console', 'symfony/http-kernel', '^4.4'),
             ]),
         ]]);
