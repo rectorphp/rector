@@ -203,11 +203,6 @@ final class SetList
     /**
      * @var string
      */
-    public const JMS_DECOUPLE = __DIR__ . '/../../../../config/set/jms-decouple.php';
-
-    /**
-     * @var string
-     */
     public const KDYBY_EVENTS_TO_CONTRIBUTTE_EVENT_DISPATCHER = __DIR__ . '/../../../../config/set/kdyby-events-to-contributte-event-dispatcher.php';
 
     /**
@@ -534,16 +529,6 @@ final class SetList
      * @var string
      */
     public const PHP_80 = __DIR__ . '/../../../../config/set/php80.php';
-
-    /**
-     * @var string
-     */
-    public const PHP_CODE_SNIFFER_30 = __DIR__ . '/../../../../config/set/php-code-sniffer30.php';
-
-    /**
-     * @var string
-     */
-    public const PHP_DI_DECOUPLE = __DIR__ . '/../../../../config/set/php-di-decouple.php';
 
     /**
      * @var string
