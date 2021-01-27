@@ -31,16 +31,18 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector implem
 
     public function getRuleDefinition(): RuleDefinition
     {
+        $configuration = [
+            self::CLASS_CONST_FETCHES_TO_VALUES => [
+                new ClassConstFetchToValue('Nette\Configurator', 'DEVELOPMENT', 'development'),
+                new ClassConstFetchToValue('Nette\Configurator', 'PRODUCTION', 'production'),
+            ],
+        ];
+
         return new RuleDefinition('Replaces constant by value', [
             new ConfiguredCodeSample(
                 '$value === Nette\Configurator::DEVELOPMENT',
                 '$value === "development"',
-                [
-                    self::CLASS_CONST_FETCHES_TO_VALUES => [
-                        new ClassConstFetchToValue('Nette\Configurator', 'DEVELOPMENT', 'development'),
-                        new ClassConstFetchToValue('Nette\Configurator', 'PRODUCTION', 'production'),
-                    ],
-                ]
+                $configuration
             ),
         ]);
     }

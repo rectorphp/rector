@@ -84,6 +84,7 @@ final class ConfigurationNodeFactory
         $classConsts = [];
 
         foreach (array_keys($ruleConfiguration) as $constantName) {
+            $constantName = strtoupper($constantName);
             $constantValue = strtolower($constantName);
             $classConst = $this->nodeFactory->createPublicClassConst($constantName, $constantValue);
             $classConsts[] = $classConst;

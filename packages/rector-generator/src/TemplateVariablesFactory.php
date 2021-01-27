@@ -160,6 +160,8 @@ final class TemplateVariablesFactory
     {
         $arrayItems = [];
         foreach ($configuration as $constantName => $variableConfiguration) {
+            $constantName = strtoupper($constantName);
+
             if ($rectorClass === self::SELF) {
                 $class = new Name(self::SELF);
             } else {
