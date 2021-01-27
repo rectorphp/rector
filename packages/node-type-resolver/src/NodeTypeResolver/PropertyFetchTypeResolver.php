@@ -178,6 +178,8 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             if ($propertyPropertyResolutionType instanceof Type) {
                 return $propertyPropertyResolutionType;
             }
+
+            return new MixedType();
         }
 
         return $this->getTypeFromPhpDocInfo($phpDocInfo);
