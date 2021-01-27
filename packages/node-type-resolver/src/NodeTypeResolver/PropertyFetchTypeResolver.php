@@ -174,12 +174,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
 
         $phpDocInfo = $propertyFetch->getAttribute(AttributeKey::PHP_DOC_INFO);
         if (! $phpDocInfo instanceof PhpDocInfo && $varObjectType instanceof ObjectType) {
-            $propertyPropertyResolutionType = $this->getPropertyPropertyResolution($varObjectType, $propertyName);
-            if ($propertyPropertyResolutionType instanceof Type) {
-                return $propertyPropertyResolutionType;
-            }
-
-            return new MixedType();
+            return $this->getPropertyPropertyResolution($varObjectType, $propertyName);
         }
 
         return $this->getTypeFromPhpDocInfo($phpDocInfo);
@@ -200,7 +195,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
         return $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, new Nop());
     }
 
-    private function getPropertyPropertyResolution(ObjectType $varObjectType, string $propertyName): ?Type
+    private function getPropertyPropertyResolution(ObjectType $varObjectType, string $propertyName): Type
     {
         $classReflection = $varObjectType->getClassReflection();
         if (! $classReflection instanceof ClassReflection || $classReflection->isBuiltIn()) {
@@ -226,11 +221,6 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        $phpDocInfo = $propertyProperty->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return new MixedType();
-        }
-
-        return null;
+        return new MixedType();
     }
 }
