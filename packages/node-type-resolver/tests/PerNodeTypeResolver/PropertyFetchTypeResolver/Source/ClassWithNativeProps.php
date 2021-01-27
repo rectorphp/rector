@@ -8,8 +8,6 @@ class ClassWithNativeProps
 {
     public $implicitMixed;
 
-    public mixed $explicitMixed;
-
     public string $text;
 
     public int $number;
