@@ -5,18 +5,22 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Property;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\Trait_;
+use PhpParser\ParserFactory;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -24,14 +28,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use ReflectionProperty;
-use PHPStan\Reflection\ClassReflection;
-use PhpParser\ParserFactory;
-use Rector\Testing\PHPUnit\Runnable\NodeVisitor\ClassLikeNameCollectingNodeVisitor;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use PhpParser\Node\Stmt\PropertyProperty;
 
 /**
  * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver\PropertyFetchTypeResolverTest
@@ -167,9 +163,11 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             }
 
             $phpParser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-            $nodes     = $phpParser->parse(file_get_contents($classReflection->getFileName()));
+            $nodes = $phpParser->parse(file_get_contents($classReflection->getFileName()));
 
-            $propertyProperty = $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($propertyName): bool {
+            $propertyProperty = $this->betterNodeFinder->findFirst($nodes, function (Node $node) use (
+                $propertyName
+            ): bool {
                 if ($node instanceof PropertyProperty && $node->name->toString() === $propertyName) {
                     return true;
                 }
