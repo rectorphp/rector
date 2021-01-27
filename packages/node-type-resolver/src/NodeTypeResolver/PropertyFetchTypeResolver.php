@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\VarLikeIdentifier;
 use PhpParser\Parser;
-use PhpParser\ParserFactory;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -85,7 +84,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
         TraitNodeScopeCollector $traitNodeScopeCollector,
         SmartFileSystem $smartFileSystem,
         BetterNodeFinder $betterNodeFinder,
-        ParserFactory $parserFactory
+        Parser $parser
     ) {
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -93,7 +92,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->smartFileSystem = $smartFileSystem;
-        $this->parser = $parserFactory->create(ParserFactory::PREFER_PHP7);
+        $this->parser = $parser;
     }
 
     /**
