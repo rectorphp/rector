@@ -7,6 +7,7 @@ use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\Rector\String_\RenameStringRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Transform\Rector\New_\NewArgToMethodCallRector;
@@ -133,12 +134,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StaticCallToNewRector::class)
         ->call('configure', [[
-            // see https://github.com/symfony/symfony/pull/36943
             StaticCallToNewRector::STATIC_CALLS_TO_NEWS => ValueObjectInliner::inline([
                 new StaticCallToNew('Symfony\Component\HttpFoundation\Response', 'create'),
                 new StaticCallToNew('Symfony\Component\HttpFoundation\JsonResponse', 'create'),
                 new StaticCallToNew('Symfony\Component\HttpFoundation\RedirectResponse', 'create'),
                 new StaticCallToNew('Symfony\Component\HttpFoundation\StreamedResponse', 'create'),
             ]),
+        ]]);
+
+    $services->set(RenameStringRector::class)
+        ->call('configure', [[
+            // @see https://github.com/symfony/symfony/pull/35858
+            RenameStringRector::STRING_CHANGES => [
+                'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
+            ]
         ]]);
 };
