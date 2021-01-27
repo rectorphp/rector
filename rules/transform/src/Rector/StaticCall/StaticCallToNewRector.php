@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Transform\Rector\StaticCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -65,7 +67,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
 
     /**
@@ -87,7 +89,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            return new Node\Expr\New_(new FullyQualified($class));
+            return new New_(new FullyQualified($class));
         }
 
         return $node;
