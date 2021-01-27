@@ -56,7 +56,13 @@ final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
             yield [$file, 4, new ObjectType(Abc::class)];
             yield [$file, 5, new UnionType([new ObjectType(Abc::class), new NullType()])];
             yield [$file, 6, new ObjectType(Abc::class)];
-            yield [$file, 7, new ObjectType(\Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver\Source\IDontExist::class)];
+            yield [
+                $file,
+                7,
+                new ObjectType(
+                    \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver\Source\IDontExist::class
+                ),
+            ];
             yield [$file, 8, new ObjectType(\A\B\C\IDontExist::class)];
             yield [$file, 9, new ArrayType(new MixedType(), new MixedType())];
             yield [$file, 10, new ArrayType(new MixedType(), new ObjectType(Abc::class))];
@@ -102,7 +108,13 @@ final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
             yield [$file, 4, new ObjectType(Abc::class)];
             yield [$file, 5, new UnionType([new ObjectType(Abc::class), new NullType()])];
             yield [$file, 6, new ObjectType(Abc::class)];
-            yield [$file, 7, new ObjectType(\Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver\Source\IDontExist::class)];
+            yield [
+                $file,
+                7,
+                new ObjectType(
+                    \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver\Source\IDontExist::class
+                ),
+            ];
             yield [$file, 8, new ObjectType(\A\B\C\IDontExist::class)];
             yield [$file, 9, new ArrayType(new MixedType(), new MixedType())];
             yield [$file, 10, new ArrayType(new MixedType(), new ObjectType(Abc::class))];
