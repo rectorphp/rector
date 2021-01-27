@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Symfony5\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
 use Symfony\Component\DependencyInjection\Alias;
@@ -88,10 +90,19 @@ CODE_SAMPLE
         }
 
         $argValue = $node->args[0]->value;
-        $argValue = $this->isFalse($argValue)
-            ? $this->createTrue()
-            : $this->createFalse();
+        $argValue = $argValue instanceof ConstFetch
+            ? $this->createNegationConsFetch($argValue)
+            : new BooleanNot($argValue);
 
         return $this->createMethodCall($node->var, 'setPublic', [$argValue]);
+    }
+
+    private function createNegationConsFetch(ConstFetch $constFetch): ConstFetch
+    {
+        if ($this->isFalse($constFetch)) {
+            return $this->createTrue();
+        }
+
+        return $this->createFalse();
     }
 }
