@@ -512,3 +512,6 @@ parameters:
                 - packages/phpstan-static-type-mapper/src/PHPStanStaticTypeMapper.php
                 # refactor later
                 - packages/better-php-doc-parser/src/PhpDocParser/BetterPhpDocParser.php
+
+        - '#Class Rector\\NodeTypeResolver\\Tests\\PerNodeTypeResolver\\PropertyFetchTypeResolver\\Source\\IDontExist not found\.#'
+        - '#Class A\\B\\C\\IDontExist not found\.#'
