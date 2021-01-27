@@ -186,6 +186,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
         if (! $classReflection instanceof ClassReflection) {
             return $varObjectType;
         }
+
         if ($classReflection->isBuiltIn()) {
             return $varObjectType;
         }
@@ -204,6 +205,10 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
 
             return $node->name->toString() === $propertyName;
         });
+
+        if ($propertyProperty instanceof PropertyProperty) {
+            return $this->nodeTypeResolver->resolve($propertyProperty);
+        }
 
         return new MixedType();
     }
