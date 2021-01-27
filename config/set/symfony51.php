@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -60,6 +59,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new NewArgToMethodCall('Symfony\Component\Dotenv\Dotenv', true, 'usePutenv'),
             ]),
         ]]);
-
-    $services->set(Rector\Generic\Tests\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector\::class)
 };

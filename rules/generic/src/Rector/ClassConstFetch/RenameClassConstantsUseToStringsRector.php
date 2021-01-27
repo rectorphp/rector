@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Generic\Rector\ClassConstFetch;
 
+use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Generic\ValueObject\ClassConstFetchToValue;
@@ -58,18 +58,16 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector implem
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->classConstFetchesToValues as $type => $oldConstantsToNewValues) {
-            if (! $this->isObjectType($node->class, $type)) {
+        foreach ($this->classConstFetchesToValues as $classConstFetchToValue) {
+            if (! $this->isObjectType($node->class, $classConstFetchToValue->getClass())) {
                 continue;
             }
 
-            foreach ($oldConstantsToNewValues as $oldConstant => $newValue) {
-                if (! $this->isName($node->name, $oldConstant)) {
-                    continue;
-                }
-
-                return new String_($newValue);
+            if (! $this->isName($node->name, $classConstFetchToValue->getConstant())) {
+                continue;
             }
+
+            return BuilderHelpers::normalizeValue($classConstFetchToValue->getValue());
         }
 
         return $node;
