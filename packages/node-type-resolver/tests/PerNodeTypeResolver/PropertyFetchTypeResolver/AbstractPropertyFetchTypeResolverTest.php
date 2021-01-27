@@ -6,10 +6,11 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeRes
 
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
-trait StringFromTypeTrait
+abstract class AbstractPropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
 {
-    private function getStringFromType(Type $type): string
+    protected function getStringFromType(Type $type): string
     {
         return $type->describe(VerbosityLevel::precise());
     }

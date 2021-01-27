@@ -15,16 +15,13 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver\Source\Abc;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\PropertyFetchTypeResolver
  */
-final class Php74Test extends AbstractNodeTypeResolverTest
+final class Php74Test extends AbstractPropertyFetchTypeResolverTest
 {
-    use StringFromTypeTrait;
-
     /**
      * @requires PHP 7.4
      * @dataProvider provideData()

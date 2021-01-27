@@ -9,17 +9,14 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver\Source\Abc;
 use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\PropertyFetchTypeResolver
  */
-final class Php80Test extends AbstractNodeTypeResolverTest
+final class Php80Test extends AbstractPropertyFetchTypeResolverTest
 {
-    use StringFromTypeTrait;
-
     /**
      * @requires PHP 8.0
      * @dataProvider provideData()
