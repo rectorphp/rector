@@ -25,11 +25,13 @@ use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
  */
 final class Php80Test extends AbstractNodeTypeResolverTest
 {
+    use StringFromTypeTrait;
+
     /**
      * @requires PHP 8.0
-     * @dataProvider providePhp80Data()
+     * @dataProvider provideData()
      */
-    public function testPhp80(string $file, int $nodePosition, Type $expectedType): void
+    public function test(string $file, int $nodePosition, Type $expectedType): void
     {
         $propertyFetchNodes = $this->getNodesForFileOfType($file, PropertyFetch::class);
 
@@ -44,7 +46,7 @@ final class Php80Test extends AbstractNodeTypeResolverTest
         $this->assertEquals($expectedTypeAsString, $resolvedTypeAsString);
     }
 
-    public function providePhp80Data(): Iterator
+    public function provideData(): Iterator
     {
         foreach ([
             __DIR__ . '/Source/nativePropertyFetchOnTypedVarPhp80.php',
@@ -53,10 +55,5 @@ final class Php80Test extends AbstractNodeTypeResolverTest
             yield [$file, 0, new MixedType()];
             yield [$file, 1, TypeFactoryStaticHelper::createUnionObjectType([Abc::class, new StringType()])];
         }
-    }
-
-    private function getStringFromType(Type $type): string
-    {
-        return $type->describe(VerbosityLevel::precise());
     }
 }

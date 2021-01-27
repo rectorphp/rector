@@ -25,11 +25,13 @@ use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
  */
 final class Php74Test extends AbstractNodeTypeResolverTest
 {
+    use StringFromTypeTrait;
+
     /**
      * @requires PHP 7.4
-     * @dataProvider providePhp74Data()
+     * @dataProvider provideData()
      */
-    public function testPhp74(string $file, int $nodePosition, Type $expectedType): void
+    public function test(string $file, int $nodePosition, Type $expectedType): void
     {
         $propertyFetchNodes = $this->getNodesForFileOfType($file, PropertyFetch::class);
 
@@ -44,7 +46,7 @@ final class Php74Test extends AbstractNodeTypeResolverTest
         $this->assertEquals($expectedTypeAsString, $resolvedTypeAsString);
     }
 
-    public function providePhp74Data(): Iterator
+    public function provideData(): Iterator
     {
         foreach ([
             __DIR__ . '/Source/nativePropertyFetchOnTypedVar.php',
@@ -70,10 +72,5 @@ final class Php74Test extends AbstractNodeTypeResolverTest
             yield [$file, 11, new MixedType()];
             yield [$file, 12, new ErrorType()];
         }
-    }
-
-    private function getStringFromType(Type $type): string
-    {
-        return $type->describe(VerbosityLevel::precise());
     }
 }

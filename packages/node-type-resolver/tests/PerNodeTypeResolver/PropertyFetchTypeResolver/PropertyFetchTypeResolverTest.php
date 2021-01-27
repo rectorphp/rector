@@ -25,6 +25,8 @@ use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
  */
 final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
 {
+    use StringFromTypeTrait;
+
     /**
      * @dataProvider provideData()
      */
