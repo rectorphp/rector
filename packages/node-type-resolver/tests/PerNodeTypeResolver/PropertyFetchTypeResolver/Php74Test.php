@@ -23,12 +23,13 @@ use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\PropertyFetchTypeResolver
  */
-final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
+final class Php74Test extends AbstractNodeTypeResolverTest
 {
     /**
-     * @dataProvider provideData()
+     * @requires PHP 7.4
+     * @dataProvider providePhp74Data()
      */
-    public function test(string $file, int $nodePosition, Type $expectedType): void
+    public function testPhp74(string $file, int $nodePosition, Type $expectedType): void
     {
         $propertyFetchNodes = $this->getNodesForFileOfType($file, PropertyFetch::class);
 
@@ -43,11 +44,11 @@ final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
         $this->assertEquals($expectedTypeAsString, $resolvedTypeAsString);
     }
 
-    public function provideData(): Iterator
+    public function providePhp74Data(): Iterator
     {
         foreach ([
-            __DIR__ . '/Source/phpDocPropertyFetchOnTypedVar.php',
-            __DIR__ . '/Source/phpDocPropertyFetchOnVarInScope.php',
+            __DIR__ . '/Source/nativePropertyFetchOnTypedVar.php',
+            __DIR__ . '/Source/nativePropertyFetchOnVarInScope.php',
         ] as $file) {
             yield [$file, 0, new StringType()];
             yield [$file, 1, new IntegerType()];
@@ -67,13 +68,8 @@ final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
             yield [$file, 9, new ArrayType(new MixedType(), new MixedType())];
             yield [$file, 10, new ArrayType(new MixedType(), new ObjectType(Abc::class))];
             yield [$file, 11, new MixedType()];
-            yield [$file, 12, new MixedType()];
-            yield [$file, 13, new ErrorType()];
+            yield [$file, 12, new ErrorType()];
         }
-
-        yield [__DIR__ . '/Source/propertyFetchOnMixedVar.php', 0, new MixedType()];
-        yield [__DIR__ . '/Source/propertyFetchOnMixedVar.php', 1, new MixedType()];
-        yield [__DIR__ . '/Source/propertyFetchOnMixedVar.php', 2, new MixedType()];
     }
 
     private function getStringFromType(Type $type): string
