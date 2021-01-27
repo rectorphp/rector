@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
+use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\RenameClassConstant;
+use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Rector\Symfony3\Rector\ClassMethod\FormTypeGetParentRector;
 use Rector\Symfony3\Rector\ClassMethod\GetRequestRector;
 use Rector\Symfony3\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
@@ -42,23 +42,23 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeStringCollectionOptionToConstantRector::class);
     $services->set(ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector::class);
 
-    $services->set(RenameClassConstantRector::class)
+    $services->set(RenameClassConstFetchRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
-                new RenameClassConstant('Symfony\Component\Form\FormEvents', 'PRE_BIND', 'PRE_SUBMIT'),
-                new RenameClassConstant('Symfony\Component\Form\FormEvents', 'BIND', 'SUBMIT'),
-                new RenameClassConstant('Symfony\Component\Form\FormEvents', 'POST_BIND', 'POST_SUBMIT'),
-                new RenameClassConstant(
+            RenameClassConstFetchRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
+                new RenameClassConstFetch('Symfony\Component\Form\FormEvents', 'PRE_BIND', 'PRE_SUBMIT'),
+                new RenameClassConstFetch('Symfony\Component\Form\FormEvents', 'BIND', 'SUBMIT'),
+                new RenameClassConstFetch('Symfony\Component\Form\FormEvents', 'POST_BIND', 'POST_SUBMIT'),
+                new RenameClassConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer',
                     'ROUND_HALFEVEN',
                     'ROUND_HALF_EVEN'
                 ),
-                new RenameClassConstant(
+                new RenameClassConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer',
                     'ROUND_HALFUP',
                     'ROUND_HALF_UP'
                 ),
-                new RenameClassConstant(
+                new RenameClassConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer',
                     'ROUND_HALFDOWN',
                     'ROUND_HALF_DOWN'

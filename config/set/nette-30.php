@@ -14,11 +14,11 @@ use Rector\Nette\Rector\MethodCall\MagicHtmlCallToAppendAttributeRector;
 use Rector\Nette\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector;
 use Rector\Nette\Rector\MethodCall\RequestGetCookieDefaultArgumentToCoalesceRector;
 use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector;
-use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
+use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\RenameClassConstant;
+use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Transform\ValueObject\StaticCallToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -51,11 +51,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]),
     ]]);
     // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
-    $services->set(RenameClassConstantRector::class)->call('configure', [[
-        RenameClassConstantRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
-            new RenameClassConstant('Contributte\Events\Extra\Event\Security\LoggedInEvent', 'NAME', 'class'),
-            new RenameClassConstant('Contributte\Events\Extra\Event\Security\LoggedOutEvent', 'NAME', 'class'),
-            new RenameClassConstant('Contributte\Events\Extra\Event\Application\ShutdownEvent', 'NAME', 'class'),
+    $services->set(RenameClassConstFetchRector::class)->call('configure', [[
+        RenameClassConstFetchRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
+            new RenameClassConstFetch('Contributte\Events\Extra\Event\Security\LoggedInEvent', 'NAME', 'class'),
+            new RenameClassConstFetch('Contributte\Events\Extra\Event\Security\LoggedOutEvent', 'NAME', 'class'),
+            new RenameClassConstFetch('Contributte\Events\Extra\Event\Application\ShutdownEvent', 'NAME', 'class'),
         ]),
     ]]);
     $services->set(RenameClassRector::class)->call('configure', [[

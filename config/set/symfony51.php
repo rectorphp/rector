@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 use PHPStan\Type\ObjectType;
-use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
+use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\RenameClassConstant;
+use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Rector\Transform\Rector\New_\NewArgToMethodCallRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
 use Rector\Transform\ValueObject\NewArgToMethodCall;
@@ -70,40 +70,40 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
-    $services->set(RenameClassConstantRector::class)
+    $services->set(RenameClassConstFetchRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
-                new RenameClassConstant(
+            RenameClassConstFetchRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
+                new RenameClassConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_FLOOR',
                     'NumberFormatter::ROUND_FLOOR'
                 ),
-                new RenameClassConstant(
+                new RenameClassConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_DOWN',
                     'NumberFormatter::ROUND_DOWN'
                 ),
-                new RenameClassConstant(
+                new RenameClassConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_HALF_DOWN',
                     'NumberFormatter::ROUND_HALFDOWN'
                 ),
-                new RenameClassConstant(
+                new RenameClassConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_HALF_EVEN',
                     'NumberFormatter::ROUND_HALFEVEN'
                 ),
-                new RenameClassConstant(
+                new RenameClassConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_HALFUP',
                     'NumberFormatter::ROUND_HALFUP'
                 ),
-                new RenameClassConstant(
+                new RenameClassConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_UP',
                     'NumberFormatter::ROUND_UP'
                 ),
-                new RenameClassConstant(
+                new RenameClassConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_CEILING',
                     'NumberFormatter::ROUND_CEILING'

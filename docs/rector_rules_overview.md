@@ -14479,19 +14479,19 @@ Replaces defined class constants in their calls.
 - class: `Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector`
 
 ```php
-use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
-use Rector\Renaming\ValueObject\RenameClassConstant;
+use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
+use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(RenameClassConstantRector::class)
+    $services->set(RenameClassConstFetchRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
-                new RenameClassConstant('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
-                new RenameClassConstant('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'),
+            RenameClassConstFetchRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
+                new RenameClassConstFetch('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
+                new RenameClassConstFetch('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'),
             ]),
         ]]);
 };

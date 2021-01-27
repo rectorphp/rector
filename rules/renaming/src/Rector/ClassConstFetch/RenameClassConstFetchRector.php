@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace Rector\Renaming\Rector\ClassConstFetch;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Renaming\ValueObject\RenameClassConstant;
+use Rector\Renaming\Contract\RenameClassConstFetchInterface;
+use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
+use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector\RenameClassConstantRectorTest
+ * @see \Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstFetchRector\RenameClassConstFetchRectorTest
  */
-final class RenameClassConstantRector extends AbstractRector implements ConfigurableRectorInterface
+final class RenameClassConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -27,16 +28,16 @@ final class RenameClassConstantRector extends AbstractRector implements Configur
     public const CLASS_CONSTANT_RENAME = 'constant_rename';
 
     /**
-     * @var RenameClassConstant[]
+     * @var RenameClassConstFetchInterface[]
      */
-    private $classConstantRenames = [];
+    private $renameClassConstFetches = [];
 
     public function getRuleDefinition(): RuleDefinition
     {
         $configuration = [
             self::CLASS_CONSTANT_RENAME => [
-                new RenameClassConstant('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
-                new RenameClassConstant('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'),
+                new RenameClassConstFetch('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
+                new RenameClassAndConstFetch('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass', 'NEW_CONSTANT'),
             ],
         ];
 
@@ -73,7 +74,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->classConstantRenames as $classConstantRename) {
+        foreach ($this->renameClassConstFetches as $classConstantRename) {
             if (! $this->isObjectType($node, $classConstantRename->getOldClass())) {
                 continue;
             }
@@ -82,8 +83,8 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (Strings::contains($classConstantRename->getNewConstant(), '::')) {
-                return $this->createClassConstantFetchNodeFromDoubleColonFormat($classConstantRename->getNewConstant());
+            if ($classConstantRename instanceof RenameClassAndConstFetch) {
+                return $this->createClassAndConstFetch($classConstantRename);
             }
 
             $node->name = new Identifier($classConstantRename->getNewConstant());
@@ -95,19 +96,21 @@ CODE_SAMPLE
     }
 
     /**
-     * @param mixed[] $configuration
+     * @param array<string, RenameClassConstFetchInterface[]> $configuration
      */
     public function configure(array $configuration): void
     {
-        $classConstantRenames = $configuration[self::CLASS_CONSTANT_RENAME] ?? [];
-        Assert::allIsInstanceOf($classConstantRenames, RenameClassConstant::class);
-        $this->classConstantRenames = $classConstantRenames;
+        $renameClassConstFetches = $configuration[self::CLASS_CONSTANT_RENAME] ?? [];
+        Assert::allIsInstanceOf($renameClassConstFetches, RenameClassConstFetchInterface::class);
+
+        $this->renameClassConstFetches = $renameClassConstFetches;
     }
 
-    private function createClassConstantFetchNodeFromDoubleColonFormat(string $constant): ClassConstFetch
+    private function createClassAndConstFetch(RenameClassAndConstFetch $renameClassAndConstFetch): ClassConstFetch
     {
-        [$constantClass, $constantName] = explode('::', $constant);
-
-        return new ClassConstFetch(new FullyQualified($constantClass), new Identifier($constantName));
+        return new ClassConstFetch(
+            new FullyQualified($renameClassAndConstFetch->getNewClass()),
+            new Identifier($renameClassAndConstFetch->getNewConstant())
+        );
     }
 }

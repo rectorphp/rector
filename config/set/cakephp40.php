@@ -13,13 +13,13 @@ use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
 use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter;
-use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
+use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\RenameClassConstant;
+use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Rector\Renaming\ValueObject\RenameProperty;
 use Rector\Renaming\ValueObject\RenameStaticMethod;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
@@ -42,15 +42,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ]]);
 
-    $services->set(RenameClassConstantRector::class)
+    $services->set(RenameClassConstFetchRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
-                new RenameClassConstant('Cake\View\View', 'NAME_ELEMENT', 'TYPE_ELEMENT'),
-                new RenameClassConstant('Cake\View\View', 'NAME_LAYOUT', 'TYPE_LAYOUT'),
-                new RenameClassConstant('Cake\Mailer\Email', 'MESSAGE_HTML', 'Cake\Mailer\Message::MESSAGE_HTML'),
-                new RenameClassConstant('Cake\Mailer\Email', 'MESSAGE_TEXT', 'Cake\Mailer\Message::MESSAGE_TEXT'),
-                new RenameClassConstant('Cake\Mailer\Email', 'MESSAGE_BOTH', 'Cake\Mailer\Message::MESSAGE_BOTH'),
-                new RenameClassConstant('Cake\Mailer\Email', 'EMAIL_PATTERN', 'Cake\Mailer\Message::EMAIL_PATTERN'),
+            RenameClassConstFetchRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
+                new RenameClassConstFetch('Cake\View\View', 'NAME_ELEMENT', 'TYPE_ELEMENT'),
+                new RenameClassConstFetch('Cake\View\View', 'NAME_LAYOUT', 'TYPE_LAYOUT'),
+                new RenameClassConstFetch('Cake\Mailer\Email', 'MESSAGE_HTML', 'Cake\Mailer\Message::MESSAGE_HTML'),
+                new RenameClassConstFetch('Cake\Mailer\Email', 'MESSAGE_TEXT', 'Cake\Mailer\Message::MESSAGE_TEXT'),
+                new RenameClassConstFetch('Cake\Mailer\Email', 'MESSAGE_BOTH', 'Cake\Mailer\Message::MESSAGE_BOTH'),
+                new RenameClassConstFetch('Cake\Mailer\Email', 'EMAIL_PATTERN', 'Cake\Mailer\Message::EMAIL_PATTERN'),
             ]),
         ]]);
 

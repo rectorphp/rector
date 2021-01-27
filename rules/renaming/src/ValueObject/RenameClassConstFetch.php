@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Renaming\ValueObject;
 
-final class RenameClassConstant
+use Rector\Renaming\Contract\RenameClassConstFetchInterface;
+
+final class RenameClassConstFetch implements RenameClassConstFetchInterface
 {
     /**
      * @var string
