@@ -84,6 +84,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $this->isName($node->name, 'setPrivate')) {
+            return null;
+        }
+
         return $node;
     }
 }
