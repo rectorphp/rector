@@ -12,38 +12,54 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#dependencyinjection
- * @see \Rector\Symfony5\Tests\Rector\MethodCall\DefinitionSetPrivateToSetPublicRector\DefinitionSetPrivateToSetPublicRectorTest
+ * @see \Rector\Symfony5\Tests\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector\DefinitionAliasSetPrivateToSetPublicRectorTest
  */
-final class DefinitionSetPrivateToSetPublicRector extends AbstractRector
+final class DefinitionAliasSetPrivateToSetPublicRector extends AbstractRector
 {
+    /**
+     * @var class-string[]
+     */
+    private const REQUIRED_CLASS_TYPES = [
+        Definition::class,
+        Alias::class,
+    ];
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Migrates from deprecated setPrivate() to setPublic()',
+            'Migrates from deprecated Definition/Alias->setPrivate() to Definition/Alias->setPublic()',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Definition;
 
 class SomeClass
 {
-    public function run(Definition $definition)
+    public function run()
     {
-        $definition->setPrivate(true);
+        $definition = new Definition('Example\Foo');
         $definition->setPrivate(false);
+
+        $alias = new Alias('Example\Foo');
+        $alias->setPrivate(false);
     }
 }
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Definition;
 
 class SomeClass
 {
-    public function run(Definition $definition)
+    public function run()
     {
-        $definition->setPublic(false);
+        $definition = new Definition('Example\Foo');
         $definition->setPublic(true);
+
+        $alias = new Alias('Example\Foo');
+        $alias->setPublic(true);
     }
 }
 CODE_SAMPLE
@@ -64,6 +80,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isObjectTypes($node->var, self::REQUIRED_CLASS_TYPES)) {
+            return null;
+        }
+
         return $node;
     }
 }
