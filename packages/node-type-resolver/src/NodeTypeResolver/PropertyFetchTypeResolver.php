@@ -173,7 +173,6 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
                     return false;
                 }
                 return $node->name->toString() === $propertyName;
-                return $node instanceof PropertyProperty && $node->name->toString() === $propertyName;
             });
 
             if (! $propertyProperty instanceof PropertyProperty) {
