@@ -7,6 +7,8 @@ namespace Rector\Symfony5\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
+use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\Definition;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,10 +21,7 @@ final class DefinitionAliasSetPrivateToSetPublicRector extends AbstractRector
     /**
      * @var class-string[]
      */
-    private const REQUIRED_CLASS_TYPES = [
-        Definition::class,
-        Alias::class,
-    ];
+    private const REQUIRED_CLASS_TYPES = [Definition::class, Alias::class];
 
     public function getRuleDefinition(): RuleDefinition
     {
