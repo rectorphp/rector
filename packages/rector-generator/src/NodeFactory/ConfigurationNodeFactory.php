@@ -143,6 +143,8 @@ final class ConfigurationNodeFactory
         string $constantName,
         Variable $configurationVariable
     ): Coalesce {
+        $constantName = strtoupper($constantName);
+
         $classConstFetch = new ClassConstFetch(new Name('self'), $constantName);
         $arrayDimFetch = new ArrayDimFetch($configurationVariable, $classConstFetch);
 
