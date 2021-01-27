@@ -7,7 +7,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\UuidInterface;
 use Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector\Source\Project;
 
-final class OtherProjectRepository extends ServiceEntityRepository
+final class DoNotChangeOtherMethods extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -30,7 +30,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\UuidInterface;
 use Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector\Source\Project;
 
-final class OtherProjectRepository extends ServiceEntityRepository
+final class DoNotChangeOtherMethods extends ServiceEntityRepository
 {
     /**
      * @var \Doctrine\ORM\EntityRepository<\Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector\Source\Project>
