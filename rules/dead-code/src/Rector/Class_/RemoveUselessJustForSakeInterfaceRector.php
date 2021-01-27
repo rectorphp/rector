@@ -154,8 +154,11 @@ CODE_SAMPLE
         );
     }
 
-    private function removeOrReplaceImplementedInterface(string $implementedInterfaceName, Class_ $class, int $key): void
-    {
+    private function removeOrReplaceImplementedInterface(
+        string $implementedInterfaceName,
+        Class_ $class,
+        int $key
+    ): void {
         $parentInterface = $this->getParentInterfaceIfFound($implementedInterfaceName);
         if ($parentInterface !== null) {
             $class->implements[$key] = new FullyQualified($parentInterface);

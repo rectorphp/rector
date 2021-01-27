@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\SymfonyCodeQuality\ApplicationMetadata\ListenerServiceDefinitionProvider;
-use Rector\SymfonyCodeQuality\NodeFactory\GetSubscriberEventsClassMethodFactory;
+use Rector\SymfonyCodeQuality\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\SymfonyCodeQuality\ValueObject\EventNameToClassAndConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -54,13 +54,13 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     private $listenerServiceDefinitionProvider;
 
     /**
-     * @var GetSubscriberEventsClassMethodFactory
+     * @var GetSubscribedEventsClassMethodFactory
      */
-    private $getSubscriberEventsClassMethodFactory;
+    private $getSubscribedEventsClassMethodFactory;
 
     public function __construct(
         ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider,
-        GetSubscriberEventsClassMethodFactory $getSubscriberEventsClassMethodFactory
+        GetSubscribedEventsClassMethodFactory $getSubscriberEventsClassMethodFactory
     ) {
         $this->eventNamesToClassConstants = [
             // kernel events
@@ -82,7 +82,7 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
             new EventNameToClassAndConstant('console.error', self::CONSOLE_EVENTS_CLASS, 'ERROR'),
         ];
         $this->listenerServiceDefinitionProvider = $listenerServiceDefinitionProvider;
-        $this->getSubscriberEventsClassMethodFactory = $getSubscriberEventsClassMethodFactory;
+        $this->getSubscribedEventsClassMethodFactory = $getSubscriberEventsClassMethodFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -191,7 +191,7 @@ CODE_SAMPLE
 
         $class->name = new Identifier($classShortName . 'EventSubscriber');
 
-        $classMethod = $this->getSubscriberEventsClassMethodFactory->createFromEventsToMethods(
+        $classMethod = $this->getSubscribedEventsClassMethodFactory->createFromServiceDefinitionsAndEventsToMethods(
             $eventsToMethods,
             $this->eventNamesToClassConstants
         );

@@ -147,6 +147,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             // @see https://github.com/symfony/symfony/pull/35858
             RenameStringRector::STRING_CHANGES => [
                 'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
-            ]
+            ],
         ]]);
 };

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\SymfonyCodeQuality\NodeFactory;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -16,6 +15,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\StringType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Php\PhpVersionProvider;
@@ -27,9 +27,15 @@ use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\Tag;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 use Rector\SymfonyCodeQuality\ValueObject\EventNameToClassAndConstant;
+use Rector\SymfonyCodeQuality\ValueObject\EventReferenceToMethodName;
 
-final class GetSubscriberEventsClassMethodFactory
+final class GetSubscribedEventsClassMethodFactory
 {
+    /**
+     * @var string
+     */
+    private const GET_SUBSCRIBED_EVENTS_METHOD_NAME = 'getSubscribedEvents';
+
     /**
      * @var NodeFactory
      */
@@ -55,34 +61,70 @@ final class GetSubscriberEventsClassMethodFactory
      */
     private $phpDocTypeChanger;
 
+    /**
+     * @var EventReferenceFactory
+     */
+    private $eventReferenceFactory;
+
     public function __construct(
         NodeFactory $nodeFactory,
         VisibilityManipulator $visibilityManipulator,
         PhpVersionProvider $phpVersionProvider,
         PhpDocInfoFactory $phpDocInfoFactory,
-        PhpDocTypeChanger $phpDocTypeChanger
+        PhpDocTypeChanger $phpDocTypeChanger,
+        EventReferenceFactory $eventReferenceFactory
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->eventReferenceFactory = $eventReferenceFactory;
+    }
+
+    /**
+     * @param EventReferenceToMethodName[] $eventReferencesToMethodNames
+     */
+    public function create(array $eventReferencesToMethodNames): ClassMethod
+    {
+        $getSubscribersClassMethod = $this->createClassMethod();
+
+        $eventsToMethodsArray = new Array_();
+
+        foreach ($eventReferencesToMethodNames as $eventReferencesToMethodName) {
+            $eventsToMethodsArray->items[] = $this->createArrayItemFromMethodAndPriority(
+                null,
+                $eventReferencesToMethodName->getMethodName(),
+                $eventReferencesToMethodName->getClassConstFetch()
+            );
+        }
+
+        $getSubscribersClassMethod->stmts[] = new Return_($eventsToMethodsArray);
+
+        $this->decorateClassMethodWithReturnType($getSubscribersClassMethod);
+
+        return $getSubscribersClassMethod;
     }
 
     /**
      * @param array<string, ServiceDefinition[]> $eventsToMethods
      * @param EventNameToClassAndConstant[] $eventNamesToClassConstants
      */
-    public function createFromEventsToMethods(array $eventsToMethods, array $eventNamesToClassConstants): ClassMethod
-    {
-        $getSubscribersClassMethod = $this->nodeFactory->createPublicMethod('getSubscribedEvents');
+    public function createFromServiceDefinitionsAndEventsToMethods(
+        array $eventsToMethods,
+        array $eventNamesToClassConstants
+    ): ClassMethod {
+        $getSubscribersClassMethod = $this->createClassMethod();
 
         $eventsToMethodsArray = new Array_();
 
-        $this->visibilityManipulator->makeStatic($getSubscribersClassMethod);
-
         foreach ($eventsToMethods as $eventName => $methodNamesWithPriorities) {
-            $eventNameExpr = $this->createEventName($eventName, $eventNamesToClassConstants);
+            $eventNameExpr = $this->eventReferenceFactory->createEventName($eventName, $eventNamesToClassConstants);
+
+            // just method name, without a priority
+            if (! is_array($methodNamesWithPriorities)) {
+                $methodNamesWithPriorities = [$methodNamesWithPriorities];
+            }
 
             if (count($methodNamesWithPriorities) === 1) {
                 $this->createSingleMethod(
@@ -108,31 +150,6 @@ final class GetSubscriberEventsClassMethodFactory
     }
 
     /**
-     * @param EventNameToClassAndConstant[] $eventNamesToClassConstants
-     * @return String_|ClassConstFetch
-     */
-    private function createEventName(string $eventName, array $eventNamesToClassConstants): Node
-    {
-        if (class_exists($eventName)) {
-            return $this->nodeFactory->createClassConstReference($eventName);
-        }
-
-        // is string a that could be caught in constant, e.g. KernelEvents?
-        foreach ($eventNamesToClassConstants as $eventNameToClassConstant) {
-            if ($eventNameToClassConstant->getEventName() !== $eventName) {
-                continue;
-            }
-
-            return $this->nodeFactory->createClassConstFetch(
-                $eventNameToClassConstant->getEventClass(),
-                $eventNameToClassConstant->getEventConstant()
-            );
-        }
-
-        return new String_($eventName);
-    }
-
-    /**
      * @param ClassConstFetch|String_ $expr
      * @param ServiceDefinition[] $methodNamesWithPriorities
      */
@@ -142,30 +159,13 @@ final class GetSubscriberEventsClassMethodFactory
         Expr $expr,
         Array_ $eventsToMethodsArray
     ): void {
-
-        /** @var EventListenerTag[]|Tag[] $eventTags */
-        $eventTags = $methodNamesWithPriorities[0]->getTags();
-        foreach ($eventTags as $eventTag) {
-            if ($eventTag instanceof EventListenerTag && $eventTag->getEvent() === $eventName) {
-                $methodName = $eventTag->getMethod();
-                $priority = $eventTag->getPriority();
-                break;
-            }
-        }
-
-        if (! isset($methodName, $priority)) {
+        $methodName = $this->resolveMethodName($methodNamesWithPriorities[0], $eventName);
+        $priority = $this->resolvePriority($methodNamesWithPriorities[0], $eventName);
+        if ($methodName === null) {
             return;
         }
 
-        if ($priority !== 0) {
-            $methodNameWithPriorityArray = new Array_();
-            $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($methodName));
-            $methodNameWithPriorityArray->items[] = new ArrayItem(new LNumber((int) $priority));
-
-            $eventsToMethodsArray->items[] = new ArrayItem($methodNameWithPriorityArray, $expr);
-        } else {
-            $eventsToMethodsArray->items[] = new ArrayItem(new String_($methodName), $expr);
-        }
+        $eventsToMethodsArray->items[] = $this->createArrayItemFromMethodAndPriority($priority, $methodName, $expr);
     }
 
     /**
@@ -192,13 +192,11 @@ final class GetSubscriberEventsClassMethodFactory
                 }
 
                 $eventItems[] = $this->createEventItem($tag);
-
                 $alreadyUsedTags[] = $tag;
             }
         }
 
         $multipleMethodsArray = new Array_($eventItems);
-
         $eventsToMethodsArray->items[] = new ArrayItem($multipleMethodsArray, $expr);
     }
 
@@ -208,7 +206,7 @@ final class GetSubscriberEventsClassMethodFactory
             $classMethod->returnType = new Identifier('array');
         }
 
-        $returnType = new ArrayType(new MixedType(), new MixedType(true));
+        $returnType = new ArrayType(new StringType(), new MixedType(true));
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $returnType);
     }
@@ -236,5 +234,52 @@ final class GetSubscriberEventsClassMethodFactory
         }
 
         return new ArrayItem(new String_($eventListenerTag->getMethod()));
+    }
+
+    private function resolveMethodName(ServiceDefinition $serviceDefinition, string $eventName): ?string
+    {
+        /** @var EventListenerTag[]|Tag[] $eventTags */
+        $eventTags = $serviceDefinition->getTags();
+        foreach ($eventTags as $eventTag) {
+            if ($eventTag instanceof EventListenerTag && $eventTag->getEvent() === $eventName) {
+                return $eventTag->getMethod();
+            }
+        }
+
+        return null;
+    }
+
+    private function resolvePriority(ServiceDefinition $serviceDefinition, string $eventName): ?int
+    {
+        /** @var EventListenerTag[]|Tag[] $eventTags */
+        $eventTags = $serviceDefinition->getTags();
+        foreach ($eventTags as $eventTag) {
+            if ($eventTag instanceof EventListenerTag && $eventTag->getEvent() === $eventName) {
+                return $eventTag->getPriority();
+            }
+        }
+
+        return null;
+    }
+
+    private function createClassMethod(): ClassMethod
+    {
+        $classMethod = $this->nodeFactory->createPublicMethod(self::GET_SUBSCRIBED_EVENTS_METHOD_NAME);
+        $this->visibilityManipulator->makeStatic($classMethod);
+
+        return $classMethod;
+    }
+
+    private function createArrayItemFromMethodAndPriority(?int $priority, string $methodName, Expr $expr): ArrayItem
+    {
+        if ($priority !== null && $priority !== 0) {
+            $methodNameWithPriorityArray = new Array_();
+            $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($methodName));
+            $methodNameWithPriorityArray->items[] = new ArrayItem(new LNumber((int) $priority));
+
+            return new ArrayItem($methodNameWithPriorityArray, $expr);
+        }
+
+        return new ArrayItem(new String_($methodName), $expr);
     }
 }

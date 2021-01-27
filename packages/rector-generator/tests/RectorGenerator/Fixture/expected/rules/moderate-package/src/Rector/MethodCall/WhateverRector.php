@@ -30,7 +30,7 @@ private $classTypeToMethodName = [];
     {
         return new RuleDefinition('Change $service->arg(...) to $service->call(...)', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -39,9 +39,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SomeClass::class)
         ->arg('$key', 'value');
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -52,7 +52,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             '$key' => 'value'
         ]]);
 }
-PHP
+CODE_SAMPLE
 ,
                 [self::CLASS_TYPE_TO_METHOD_NAME => ['SomeClass' => 'configure']]
             )
