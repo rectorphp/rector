@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony5\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
 use Symfony\Component\DependencyInjection\Alias;
@@ -93,10 +92,6 @@ CODE_SAMPLE
             ? $this->createTrue()
             : $this->createFalse();
 
-        return $this->createMethodCall(
-            $node->var,
-            'setPublic',
-            [$argValue]
-        );
+        return $this->createMethodCall($node->var, 'setPublic', [$argValue]);
     }
 }
