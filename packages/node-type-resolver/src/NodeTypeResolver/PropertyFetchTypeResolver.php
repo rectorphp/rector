@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
+use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Property;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -163,16 +164,16 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             }
 
             $phpParser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-            $nodes = $phpParser->parse(file_get_contents($classReflection->getFileName()));
+            $nodes = $phpParser->parse(FileSystem::read($classReflection->getFileName()));
 
             $propertyProperty = $this->betterNodeFinder->findFirst($nodes, function (Node $node) use (
                 $propertyName
             ): bool {
-                if ($node instanceof PropertyProperty && $node->name->toString() === $propertyName) {
-                    return true;
+                if (! $node instanceof PropertyProperty) {
+                    return false;
                 }
-
-                return false;
+                return $node->name->toString() === $propertyName;
+                return $node instanceof PropertyProperty && $node->name->toString() === $propertyName;
             });
 
             if (! $propertyProperty instanceof PropertyProperty) {
