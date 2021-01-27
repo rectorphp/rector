@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Renaming\Rector\String_;
 
 use PhpParser\Node;
+use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -65,11 +66,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [\PhpParser\Node\Scalar\String_::class];
+        return [String_::class];
     }
 
     /**
-     * @param \PhpParser\Node\Scalar\String_ $node
+     * @param String_ $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -78,7 +79,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            return new Node\Scalar\String_($newValue);
+            return new String_($newValue);
         }
 
         return null;

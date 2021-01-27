@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace Rector\Renaming\Tests\Rector\String_\RenameStringRector;
 
+use Iterator;
+use Rector\Renaming\Rector\String_\RenameStringRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameStringRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo): void
+    public function test(SmartFileInfo $fileInfo): void
     {
         $this->doTestFileInfo($fileInfo);
     }
 
-    public function provideData(): \Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
@@ -27,9 +30,9 @@ final class RenameStringRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            \Rector\Renaming\Rector\String_\RenameStringRector::class =>
+            RenameStringRector::class =>
                 [
-                    \Rector\Renaming\Rector\String_\RenameStringRector::STRING_CHANGES => [
+                    RenameStringRector::STRING_CHANGES => [
                         'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
                     ],
                 ],
