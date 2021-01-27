@@ -7773,7 +7773,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassConstantsUseToStringsRector::class)
         ->call('configure', [[
-            RenameClassConstantsUseToStringsRector::OLD_CONSTANTS_TO_NEW_VALUES_BY_TYPE => [
+            RenameClassConstantsUseToStringsRector::CLASS_CONST_FETCHES_TO_VALUES => [
                 'Nette\Configurator' => [
                     'DEVELOPMENT' => 'development',
                     'PRODUCTION' => 'production',

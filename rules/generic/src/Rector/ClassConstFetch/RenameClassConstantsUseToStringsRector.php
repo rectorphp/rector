@@ -9,8 +9,10 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Generic\ValueObject\ClassConstFetchToValue;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector\RenameClassConstantsUseToStringsRectorTest
@@ -20,12 +22,12 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector implem
     /**
      * @var string
      */
-    public const OLD_CONSTANTS_TO_NEW_VALUES_BY_TYPE = '$oldConstantsToNewValuesByType';
+    public const CLASS_CONST_FETCHES_TO_VALUES = 'old_constants_to_new_valuesByType';
 
     /**
-     * @var string[][]
+     * @var ClassConstFetchToValue[]
      */
-    private $oldConstantsToNewValuesByType = [];
+    private $classConstFetchesToValues = [];
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -34,11 +36,9 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector implem
                 '$value === Nette\Configurator::DEVELOPMENT',
                 '$value === "development"',
                 [
-                    self::OLD_CONSTANTS_TO_NEW_VALUES_BY_TYPE => [
-                        'Nette\Configurator' => [
-                            'DEVELOPMENT' => 'development',
-                            'PRODUCTION' => 'production',
-                        ],
+                    self::CLASS_CONST_FETCHES_TO_VALUES => [
+                        new ClassConstFetchToValue('Nette\Configurator', 'DEVELOPMENT', 'development'),
+                        new ClassConstFetchToValue('Nette\Configurator', 'PRODUCTION', 'production'),
                     ],
                 ]
             ),
@@ -58,7 +58,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector implem
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->oldConstantsToNewValuesByType as $type => $oldConstantsToNewValues) {
+        foreach ($this->classConstFetchesToValues as $type => $oldConstantsToNewValues) {
             if (! $this->isObjectType($node->class, $type)) {
                 continue;
             }
@@ -75,8 +75,14 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector implem
         return $node;
     }
 
+    /**
+     * @param array<string, ClassConstFetchToValue[]> $configuration
+     */
     public function configure(array $configuration): void
     {
-        $this->oldConstantsToNewValuesByType = $configuration[self::OLD_CONSTANTS_TO_NEW_VALUES_BY_TYPE] ?? [];
+        $classConstFetchesToValues = $configuration[self::CLASS_CONST_FETCHES_TO_VALUES] ?? [];
+        Assert::allIsInstanceOf($classConstFetchesToValues, ClassConstFetchToValue::class);
+
+        $this->classConstFetchesToValues = $classConstFetchesToValues;
     }
 }
