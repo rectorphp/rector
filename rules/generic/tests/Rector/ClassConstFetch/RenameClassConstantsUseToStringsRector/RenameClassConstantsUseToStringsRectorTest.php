@@ -7,6 +7,7 @@ namespace Rector\Generic\Tests\Rector\ClassConstFetch\RenameClassConstantsUseToS
 use Iterator;
 use Rector\Generic\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector;
 use Rector\Generic\Tests\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector\Source\OldClassWithConstants;
+use Rector\Generic\ValueObject\ClassConstFetchToValue;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -32,11 +33,9 @@ final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTes
     {
         return [
             RenameClassConstantsUseToStringsRector::class => [
-                RenameClassConstantsUseToStringsRector::OLD_CONSTANTS_TO_NEW_VALUES_BY_TYPE => [
-                    OldClassWithConstants::class => [
-                        'DEVELOPMENT' => 'development',
-                        'PRODUCTION' => 'production',
-                    ],
+                RenameClassConstantsUseToStringsRector::CLASS_CONST_FETCHES_TO_VALUES => [
+                    new ClassConstFetchToValue(OldClassWithConstants::class, 'DEVELOPMENT', 'development'),
+                    new ClassConstFetchToValue(OldClassWithConstants::class, 'PRODUCTION', 'production'),
                 ],
             ],
         ];

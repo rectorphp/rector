@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
+use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\RenameClassConstant;
+use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Symfony5\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector;
 use Rector\Symfony5\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector;
 use Rector\Symfony5\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector;
@@ -42,13 +42,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReflectionExtractorEnableMagicCallExtractorRector::class);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#security
-    $services->set(RenameClassConstantRector::class)
+    $services->set(RenameClassConstFetchRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
-                new RenameClassConstant(
+            RenameClassConstFetchRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
+                new RenameClassAndConstFetch(
                     'Symfony\Component\Security\Http\Firewall\AccessListener',
                     'PUBLIC_ACCESS',
-                    'Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter::PUBLIC_ACCESS'
+                    'Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter',
+                    'PUBLIC_ACCESS'
                 ),
             ]),
         ]]);
