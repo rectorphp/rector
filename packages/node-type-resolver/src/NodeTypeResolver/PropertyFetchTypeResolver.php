@@ -180,25 +180,13 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
         return $this->getTypeFromPhpDocInfo($phpDocInfo);
     }
 
-    private function getTypeFromPhpDocInfo(PhpDocInfo $phpDocInfo): Type
-    {
-        $tagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (! $tagValueNode instanceof VarTagValueNode) {
-            return new MixedType();
-        }
-
-        $typeNode = $tagValueNode->type;
-        if (! $typeNode instanceof TypeNode) {
-            return new MixedType();
-        }
-
-        return $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, new Nop());
-    }
-
     private function getPropertyPropertyResolution(ObjectType $varObjectType, string $propertyName): Type
     {
         $classReflection = $varObjectType->getClassReflection();
-        if (! $classReflection instanceof ClassReflection || $classReflection->isBuiltIn()) {
+        if (! $classReflection instanceof ClassReflection) {
+            return $varObjectType;
+        }
+        if ($classReflection->isBuiltIn()) {
             return $varObjectType;
         }
 
@@ -217,10 +205,21 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             return $node->name->toString() === $propertyName;
         });
 
-        if (! $propertyProperty instanceof PropertyProperty) {
+        return new MixedType();
+    }
+
+    private function getTypeFromPhpDocInfo(PhpDocInfo $phpDocInfo): Type
+    {
+        $tagValueNode = $phpDocInfo->getVarTagValueNode();
+        if (! $tagValueNode instanceof VarTagValueNode) {
             return new MixedType();
         }
 
-        return new MixedType();
+        $typeNode = $tagValueNode->type;
+        if (! $typeNode instanceof TypeNode) {
+            return new MixedType();
+        }
+
+        return $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, new Nop());
     }
 }
