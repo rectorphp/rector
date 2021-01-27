@@ -8,7 +8,7 @@ use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\RenameClassConstFetch;
+use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Transform\Rector\New_\NewArgToMethodCallRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
 use Rector\Transform\ValueObject\NewArgToMethodCall;
@@ -27,9 +27,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy' => 'Symfony\Component\EventDispatcher\EventDispatcherInterface',
-                'Symfony\Component\Form\Extension\Validator\Util\ServerParams' => [
-                    'Symfony\Component\Form\Util\ServerParams',
-                ],
+                'Symfony\Component\Form\Extension\Validator\Util\ServerParams' => 'Symfony\Component\Form\Util\ServerParams',
+                // see https://github.com/symfony/symfony/pull/35092
+                'Symfony\Component\Inflector' => 'Symfony\Component\String\Inflector\InflectorInterface',
             ],
         ]]);
 
@@ -73,40 +73,47 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameClassConstFetchRector::class)
         ->call('configure', [[
             RenameClassConstFetchRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
-                new RenameClassConstFetch(
+                new RenameClassAndConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_FLOOR',
-                    'NumberFormatter::ROUND_FLOOR'
+                    'NumberFormatter',
+                    'ROUND_FLOOR'
                 ),
-                new RenameClassConstFetch(
+                new RenameClassAndConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_DOWN',
-                    'NumberFormatter::ROUND_DOWN'
+                    'NumberFormatter',
+                    'ROUND_DOWN'
                 ),
-                new RenameClassConstFetch(
+                new RenameClassAndConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_HALF_DOWN',
-                    'NumberFormatter::ROUND_HALFDOWN'
+                    'NumberFormatter',
+                    'ROUND_HALFDOWN'
                 ),
-                new RenameClassConstFetch(
+                new RenameClassAndConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_HALF_EVEN',
-                    'NumberFormatter::ROUND_HALFEVEN'
+                    'NumberFormatter',
+                    'ROUND_HALFEVEN'
                 ),
-                new RenameClassConstFetch(
+                new RenameClassAndConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_HALFUP',
-                    'NumberFormatter::ROUND_HALFUP'
+                    'NumberFormatter',
+                    'ROUND_HALFUP'
                 ),
-                new RenameClassConstFetch(
+                new RenameClassAndConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_UP',
-                    'NumberFormatter::ROUND_UP'
+                    'NumberFormatter',
+                    'ROUND_UP'
                 ),
-                new RenameClassConstFetch(
+                new RenameClassAndConstFetch(
                     'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                     'ROUND_CEILING',
-                    'NumberFormatter::ROUND_CEILING'
+                    'NumberFormatter',
+                    'ROUND_CEILING'
                 ),
             ]),
         ]]);

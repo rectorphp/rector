@@ -6,6 +6,7 @@ namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToNewRector;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Tests\Rector\StaticCall\StaticCallToNewRector\Source\SomeJsonResponse;
+use Rector\Transform\ValueObject\StaticCallToNew;
 
 final class StaticCallToNewRectorTest extends AbstractRectorTestCase
 {
@@ -31,7 +32,7 @@ final class StaticCallToNewRectorTest extends AbstractRectorTestCase
             \Rector\Transform\Rector\StaticCall\StaticCallToNewRector::class =>
                 [
                     \Rector\Transform\Rector\StaticCall\StaticCallToNewRector::STATIC_CALLS_TO_NEWS => [
-                        SomeJsonResponse::class => 'create',
+                        new StaticCallToNew(SomeJsonResponse::class, 'create'),
                     ],
                 ],
         ];

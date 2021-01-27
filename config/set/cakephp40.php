@@ -19,6 +19,7 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Rector\Renaming\ValueObject\RenameProperty;
 use Rector\Renaming\ValueObject\RenameStaticMethod;
@@ -47,10 +48,30 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameClassConstFetchRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
                 new RenameClassConstFetch('Cake\View\View', 'NAME_ELEMENT', 'TYPE_ELEMENT'),
                 new RenameClassConstFetch('Cake\View\View', 'NAME_LAYOUT', 'TYPE_LAYOUT'),
-                new RenameClassConstFetch('Cake\Mailer\Email', 'MESSAGE_HTML', 'Cake\Mailer\Message::MESSAGE_HTML'),
-                new RenameClassConstFetch('Cake\Mailer\Email', 'MESSAGE_TEXT', 'Cake\Mailer\Message::MESSAGE_TEXT'),
-                new RenameClassConstFetch('Cake\Mailer\Email', 'MESSAGE_BOTH', 'Cake\Mailer\Message::MESSAGE_BOTH'),
-                new RenameClassConstFetch('Cake\Mailer\Email', 'EMAIL_PATTERN', 'Cake\Mailer\Message::EMAIL_PATTERN'),
+                new RenameClassAndConstFetch(
+                    'Cake\Mailer\Email',
+                    'MESSAGE_HTML',
+                    'Cake\Mailer\Message',
+                    'MESSAGE_HTML'
+                ),
+                new RenameClassAndConstFetch(
+                    'Cake\Mailer\Email',
+                    'MESSAGE_TEXT',
+                    'Cake\Mailer\Message',
+                    'MESSAGE_TEXT'
+                ),
+                new RenameClassAndConstFetch(
+                    'Cake\Mailer\Email',
+                    'MESSAGE_BOTH',
+                    'Cake\Mailer\Message',
+                    'MESSAGE_BOTH'
+                ),
+                new RenameClassAndConstFetch(
+                    'Cake\Mailer\Email',
+                    'EMAIL_PATTERN',
+                    'Cake\Mailer\Message',
+                    'EMAIL_PATTERN'
+                ),
             ]),
         ]]);
 
