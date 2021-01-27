@@ -18,7 +18,6 @@ use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver\Source\Abc;
-use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\PropertyFetchTypeResolver
@@ -76,10 +75,5 @@ final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
         yield [__DIR__ . '/Source/propertyFetchOnMixedVar.php', 0, new MixedType()];
         yield [__DIR__ . '/Source/propertyFetchOnMixedVar.php', 1, new MixedType()];
         yield [__DIR__ . '/Source/propertyFetchOnMixedVar.php', 2, new MixedType()];
-    }
-
-    private function getStringFromType(Type $type): string
-    {
-        return $type->describe(VerbosityLevel::precise());
     }
 }

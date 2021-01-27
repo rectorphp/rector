@@ -6,16 +6,9 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeRes
 
 use Iterator;
 use PhpParser\Node\Expr\PropertyFetch;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\ErrorType;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use PHPStan\Type\VerbosityLevel;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver\Source\Abc;
 use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
@@ -43,7 +36,7 @@ final class Php80Test extends AbstractNodeTypeResolverTest
         $expectedTypeAsString = $this->getStringFromType($expectedType);
         $resolvedTypeAsString = $this->getStringFromType($resolvedType);
 
-        $this->assertEquals($expectedTypeAsString, $resolvedTypeAsString);
+        $this->assertSame($expectedTypeAsString, $resolvedTypeAsString);
     }
 
     public function provideData(): Iterator
