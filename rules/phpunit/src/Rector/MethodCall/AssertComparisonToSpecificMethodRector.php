@@ -22,7 +22,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertComparisonToSpecificMethodRector\AssertComparisonToSpecificMethodRectorTest
  */
-final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
+final class AssertComparisonToSpecificMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var BinaryOpWithAssertMethod[]
@@ -42,7 +42,12 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
      */
     private $identifierManipulator;
 
-    public function __construct(IdentifierManipulator $identifierManipulator)
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
 
@@ -64,6 +69,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
                 'assertGreaterThanOrEqual'
             ),
         ];
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -96,7 +102,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, ['assertTrue', 'assertFalse'])) {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodNames($node, ['assertTrue', 'assertFalse'])) {
             return null;
         }
 

@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,14 +19,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertTrueFalseToSpecificMethodRector\AssertTrueFalseToSpecificMethodRectorTest
  */
-final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
+final class AssertTrueFalseToSpecificMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var FunctionNameWithAssertMethods[]
      */
     private $functionNameWithAssertMethods = [];
 
-    public function __construct()
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->functionNameWithAssertMethods = [
             new FunctionNameWithAssertMethods('is_readable', 'assertIsReadable', 'assertNotIsReadable'),
@@ -42,6 +47,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
             new FunctionNameWithAssertMethods('is_nan', 'assertNan', ''),
             new FunctionNameWithAssertMethods('is_a', 'assertInstanceOf', 'assertNotInstanceOf'),
         ];
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -70,7 +76,10 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, ['assertTrue', 'assertFalse', 'assertNotTrue', 'assertNotFalse'])) {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodNames(
+            $node,
+            ['assertTrue', 'assertFalse', 'assertNotTrue', 'assertNotFalse']
+        )) {
             return null;
         }
 

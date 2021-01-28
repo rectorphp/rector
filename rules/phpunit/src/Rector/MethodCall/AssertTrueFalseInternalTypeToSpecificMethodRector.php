@@ -11,14 +11,14 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertTrueFalseInternalTypeToSpecificMethodRector\AssertTrueFalseInternalTypeToSpecificMethodRectorTest
  */
-final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPHPUnitRector
+final class AssertTrueFalseInternalTypeToSpecificMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var array<string, string>
@@ -53,9 +53,15 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
      */
     private $identifierManipulator;
 
-    public function __construct(IdentifierManipulator $identifierManipulator)
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -89,7 +95,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
     public function refactor(Node $node): ?Node
     {
         $oldMethods = array_keys(self::RENAME_METHODS_MAP);
-        if (! $this->isPHPUnitMethodNames($node, $oldMethods)) {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodNames($node, $oldMethods)) {
             return null;
         }
 

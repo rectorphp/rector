@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\SpecificAssertContainsRector\SpecificAssertContainsRectorTest
  */
-final class SpecificAssertContainsRector extends AbstractPHPUnitRector
+final class SpecificAssertContainsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var array<string, string>
@@ -29,6 +29,16 @@ final class SpecificAssertContainsRector extends AbstractPHPUnitRector
         'assertContains' => 'assertStringContainsString',
         'assertNotContains' => 'assertStringNotContainsString',
     ];
+
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
+    {
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -75,7 +85,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, ['assertContains', 'assertNotContains'])) {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodNames($node, ['assertContains', 'assertNotContains'])) {
             return null;
         }
 

@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertCompareToSpecificMethodRector\AssertCompareToSpecificMethodRectorTest
  */
-final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
+final class AssertCompareToSpecificMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -35,7 +35,12 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
      */
     private $functionNamesWithAssertMethods = [];
 
-    public function __construct()
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->functionNamesWithAssertMethods = [
             new FunctionNameWithAssertMethods('count', self::ASSERT_COUNT, self::ASSERT_NOT_COUNT),
@@ -44,6 +49,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
             new FunctionNameWithAssertMethods('gettype', 'assertInternalType', 'assertNotInternalType'),
             new FunctionNameWithAssertMethods('get_class', 'assertInstanceOf', 'assertNotInstanceOf'),
         ];
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -76,7 +82,10 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals'])) {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodNames(
+            $node,
+            ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals']
+        )) {
             return null;
         }
 

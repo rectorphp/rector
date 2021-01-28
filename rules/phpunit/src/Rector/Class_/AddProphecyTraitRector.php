@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\Rector\Class_\AddProphecyTraitRector\AddProphecyTraitRectorTest
  */
-final class AddProphecyTraitRector extends AbstractPHPUnitRector
+final class AddProphecyTraitRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -36,10 +36,19 @@ final class AddProphecyTraitRector extends AbstractPHPUnitRector
      */
     private $classManipulator;
 
-    public function __construct(ClassInsertManipulator $classInsertManipulator, ClassManipulator $classManipulator)
-    {
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(
+        ClassInsertManipulator $classInsertManipulator,
+        ClassManipulator $classManipulator,
+        TestsNodeAnalyzer $testsNodeAnalyzer
+    ) {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->classManipulator = $classManipulator;
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

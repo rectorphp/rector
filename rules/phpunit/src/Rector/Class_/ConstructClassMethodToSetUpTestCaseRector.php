@@ -9,9 +9,9 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeManipulator\SetUpClassMethodNodeManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\Rector\Class_\ConstructClassMethodToSetUpTestCaseRector\ConstructClassMethodToSetUpTestCaseRectorTest
  */
-final class ConstructClassMethodToSetUpTestCaseRector extends AbstractPHPUnitRector
+final class ConstructClassMethodToSetUpTestCaseRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var SetUpClassMethodNodeManipulator
@@ -33,12 +33,19 @@ final class ConstructClassMethodToSetUpTestCaseRector extends AbstractPHPUnitRec
      */
     private $staticCallAnalyzer;
 
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
     public function __construct(
         SetUpClassMethodNodeManipulator $setUpClassMethodNodeManipulator,
-        StaticCallAnalyzer $staticCallAnalyzer
+        StaticCallAnalyzer $staticCallAnalyzer,
+        TestsNodeAnalyzer $testsNodeAnalyzer
     ) {
         $this->setUpClassMethodNodeManipulator = $setUpClassMethodNodeManipulator;
         $this->staticCallAnalyzer = $staticCallAnalyzer;
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

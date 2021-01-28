@@ -7,7 +7,8 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\PHPUnit\NodeFactory\AssertCallFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -17,8 +18,24 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/sebastianbergmann/phpunit/commit/a4b60a5c625ff98a52bb3222301d223be7367483
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector\AssertEqualsParameterToSpecificMethodsTypeRectorTest
  */
-final class AssertEqualsParameterToSpecificMethodsTypeRector extends AbstractPHPUnitRector
+final class AssertEqualsParameterToSpecificMethodsTypeRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var AssertCallFactory
+     */
+    private $assertCallFactory;
+
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(AssertCallFactory $assertCallFactory, TestsNodeAnalyzer $testsNodeAnalyzer)
+    {
+        $this->assertCallFactory = $assertCallFactory;
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -76,7 +93,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, ['assertEquals', 'assertNotEquals'])) {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodNames($node, ['assertEquals', 'assertNotEquals'])) {
             return null;
         }
 
@@ -105,7 +122,7 @@ CODE_SAMPLE
     {
         if (isset($node->args[6])) {
             if ($this->isTrue($node->args[6]->value)) {
-                $newMethodCall = $this->createPHPUnitCallWithName($node, 'assertEqualsIgnoringCase');
+                $newMethodCall = $this->assertCallFactory->createCallWithName($node, 'assertEqualsIgnoringCase');
                 $newMethodCall->args[0] = $node->args[0];
                 $newMethodCall->args[1] = $node->args[1];
                 $newMethodCall->args[2] = $node->args[2];
@@ -124,7 +141,7 @@ CODE_SAMPLE
         if (isset($node->args[5])) {
             // add new node only in case of non-default value
             if ($this->isTrue($node->args[5]->value)) {
-                $newMethodCall = $this->createPHPUnitCallWithName($node, 'assertEqualsCanonicalizing');
+                $newMethodCall = $this->assertCallFactory->createCallWithName($node, 'assertEqualsCanonicalizing');
                 $newMethodCall->args[0] = $node->args[0];
                 $newMethodCall->args[1] = $node->args[1];
                 $newMethodCall->args[2] = $node->args[2];
@@ -143,7 +160,7 @@ CODE_SAMPLE
         if (isset($node->args[3])) {
             // add new node only in case of non-default value
             if ($this->getValue($node->args[3]->value) !== 0.0) {
-                $newMethodCall = $this->createPHPUnitCallWithName($node, 'assertEqualsWithDelta');
+                $newMethodCall = $this->assertCallFactory->createCallWithName($node, 'assertEqualsWithDelta');
                 $newMethodCall->args[0] = $node->args[0];
                 $newMethodCall->args[1] = $node->args[1];
                 $newMethodCall->args[2] = $node->args[3];

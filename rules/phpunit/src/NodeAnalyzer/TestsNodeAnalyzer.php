@@ -80,10 +80,23 @@ final class TestsNodeAnalyzer
 
     public function isPHPUnitTestCaseCall(Node $node): bool
     {
-        if (! $this->testsNodeAnalyzer->isInTestClass($node)) {
+        if (! $this->isInTestClass($node)) {
             return false;
         }
 
         return $node instanceof MethodCall || $node instanceof StaticCall;
+    }
+
+    /**
+     * @param string[] $names
+     */
+    public function isPHPUnitMethodNames(Node $node, array $names): bool
+    {
+        if (! $this->isPHPUnitTestCaseCall($node)) {
+            return false;
+        }
+
+        /** @var MethodCall|StaticCall $node */
+        return $this->nodeNameResolver->isNames($node->name, $names);
     }
 }
