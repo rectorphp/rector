@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\ClassLike\RemoveAnnotationRector;
+namespace Rector\DeadDocBlock\Tests\Rector\ClassLike\RemoveAnnotationRector;
 
 use Iterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectParamsTagValueNode;
-use Rector\Generic\Rector\ClassLike\RemoveAnnotationRector;
+use Rector\DeadDocBlock\Rector\ClassLike\RemoveAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

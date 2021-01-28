@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\ClassLike\RemoveAnnotationRector\Fixture;
+namespace Rector\DeadDocBlock\Tests\Rector\ClassLike\RemoveAnnotationRector\Fixture;
 
 use JMS\DiExtraBundle\Annotation as DI;
 
@@ -21,7 +21,7 @@ final class RemoveByType
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\ClassLike\RemoveAnnotationRector\Fixture;
+namespace Rector\DeadDocBlock\Tests\Rector\ClassLike\RemoveAnnotationRector\Fixture;
 
 use JMS\DiExtraBundle\Annotation as DI;
 

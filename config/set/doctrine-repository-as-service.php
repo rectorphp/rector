@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector;
 use Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector;
+use Rector\DeadDocBlock\Rector\ClassLike\RemoveAnnotationRector;
 use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
 use Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector;
 use Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector;
 use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
 use Rector\Generic\Rector\Class_\RemoveParentRector;
-use Rector\Generic\Rector\ClassLike\RemoveAnnotationRector;
 use Rector\Generic\ValueObject\AddPropertyByParent;
 use Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector;
 use Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;

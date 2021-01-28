@@ -37,13 +37,7 @@ final class PropertyFetchToMethodCallRectorTest extends AbstractRectorTestCase
                 PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => [
                     new PropertyFetchToMethodCall(Translator::class, 'locale', 'getLocale', 'setLocale'),
 
-                    new PropertyFetchToMethodCall(
-                        Fixture2::class,
-                        'parameter',
-                        'getConfig',
-                        null,
-                        ['parameter']
-                    ),
+                    new PropertyFetchToMethodCall('Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\Fixture\Fixture2', 'parameter', 'getConfig', null, ['parameter']),
                 ],
             ],
         ];

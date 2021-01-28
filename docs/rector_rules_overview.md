@@ -7488,10 +7488,10 @@ Remove annotation by names
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassLike\RemoveAnnotationRector`
+- class: `Rector\DeadDocBlock\Rector\ClassLike\RemoveAnnotationRector`
 
 ```php
-use Rector\Generic\Rector\ClassLike\RemoveAnnotationRector;
+use Rector\DeadDocBlock\Rector\ClassLike\RemoveAnnotationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\ClassLike;
+namespace Rector\DeadDocBlock\Rector\ClassLike;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Generic\Tests\Rector\ClassLike\RemoveAnnotationRector\RemoveAnnotationRectorTest
+ * @see \Rector\DeadDocBlock\Tests\Rector\ClassLike\RemoveAnnotationRector\RemoveAnnotationRectorTest
  */
 final class RemoveAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
 {
