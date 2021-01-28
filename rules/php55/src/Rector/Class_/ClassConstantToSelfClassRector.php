@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php74\Rector\Class_;
+namespace Rector\Php55\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Scalar\MagicConst\Class_;
@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
  * @see https://3v4l.org/INd7o
- * @see \Rector\Php74\Tests\Rector\Class_\ClassConstantToSelfClassRector\ClassConstantToSelfClassRectorTest
+ * @see \Rector\Php55\Tests\Rector\Class_\ClassConstantToSelfClassRector\ClassConstantToSelfClassRectorTest
  */
 final class ClassConstantToSelfClassRector extends AbstractRector
 {

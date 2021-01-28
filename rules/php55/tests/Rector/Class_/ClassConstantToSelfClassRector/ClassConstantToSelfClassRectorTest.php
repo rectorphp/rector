@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php74\Tests\Rector\Class_\ClassConstantToSelfClassRector;
+namespace Rector\Php55\Tests\Rector\Class_\ClassConstantToSelfClassRector;
 
 use Iterator;
-use Rector\Php74\Rector\Class_\ClassConstantToSelfClassRector;
+use Rector\Php55\Rector\Class_\ClassConstantToSelfClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Php74\Rector\Assign\NullCoalescingOperatorRector;
-use Rector\Php74\Rector\Class_\ClassConstantToSelfClassRector;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php74\Rector\Double\RealToFloatTypeCastRector;
 use Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector;
@@ -43,8 +42,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FilterVarToAddSlashesRector::class);
 
     $services->set(ExportToReflectionFunctionRector::class);
-
-    $services->set(ClassConstantToSelfClassRector::class);
 
     $services->set(GetCalledClassToStaticClassRector::class);
 
