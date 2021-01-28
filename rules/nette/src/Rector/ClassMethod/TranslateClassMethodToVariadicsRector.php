@@ -113,6 +113,9 @@ CODE_SAMPLE
     private function replaceSecondParamInClassMethodBody(ClassMethod $classMethod, Param $param): void
     {
         $paramName = $this->getName($param->var);
+        if ($paramName === null) {
+            return;
+        }
 
         $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use ($paramName): ?int {
             if (! $node instanceof Variable) {
