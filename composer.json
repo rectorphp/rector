@@ -65,6 +65,7 @@
         "phpstan/phpstan-nette": "^0.12.12",
         "phpunit/phpunit": "^9.5",
         "sebastian/diff": "^4.0.4",
+        "symfony/form": "^5.2",
         "symplify/changelog-linker": "^9.0.34",
         "symplify/coding-standard": "^9.0.34",
         "symplify/easy-coding-standard": "^9.0.34",
