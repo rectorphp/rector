@@ -10,6 +10,7 @@ use Rector\Core\Rector\AbstractRector;
 use Symfony\Component\Form\FormConfigBuilderInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symfony\Component\Form\Extension\Core\DataMapper\DataMapper;
 
 /**
  * @see https://github.com/symfony/symfony/commit/878effaf47cfb23f73c984d806eb8e9d9206cb5c
@@ -21,6 +22,11 @@ final class FormBuilderSetDataMapperRector extends AbstractRector
      * @var class-string[]
      */
     private const REQUIRED_TYPE = FormConfigBuilderInterface::class;
+
+    /**
+     * @var class-string[]
+     */
+    private const ARG_CORRECT_TYPE = DataMapper::class;
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -76,6 +82,11 @@ CODE_SAMPLE
         }
 
         if (! $this->isName($node->name, 'setDataMapper')) {
+            return null;
+        }
+
+        $argValue = $node->args[0]->value;
+        if (! $this->isObjectType($argValue, self::ARG_CORRECT_TYPE)) {
             return null;
         }
 
