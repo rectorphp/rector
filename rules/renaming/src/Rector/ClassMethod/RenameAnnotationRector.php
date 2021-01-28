@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
 use Rector\Renaming\ValueObject\RenameAnnotation;
@@ -20,7 +20,7 @@ use Webmozart\Assert\Assert;
 /**
  * @see \Rector\Renaming\Tests\Rector\ClassMethod\RenameAnnotationRector\RenameAnnotationRectorTest
  */
-final class RenameAnnotationRector extends AbstractPHPUnitRector implements ConfigurableRectorInterface
+final class RenameAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string

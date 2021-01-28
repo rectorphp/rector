@@ -7,7 +7,8 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\Core\Rector\AbstractRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeManipulator\ArgumentMover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -15,16 +16,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector\AssertSameTrueFalseToAssertTrueFalseRectorTest
  */
-final class AssertSameTrueFalseToAssertTrueFalseRector extends AbstractPHPUnitRector
+final class AssertSameTrueFalseToAssertTrueFalseRector extends AbstractRector
 {
     /**
      * @var ArgumentMover
      */
     private $argumentMover;
 
-    public function __construct(ArgumentMover $argumentMover)
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(ArgumentMover $argumentMover, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->argumentMover = $argumentMover;
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -78,7 +85,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, ['assertSame', 'assertEqual', 'assertNotSame', 'assertNotEqual'])) {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodNames(
+            $node,
+            ['assertSame', 'assertEqual', 'assertNotSame', 'assertNotEqual']
+        )) {
             return null;
         }
 

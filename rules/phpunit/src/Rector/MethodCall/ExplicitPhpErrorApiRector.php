@@ -7,7 +7,9 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\Core\Rector\AbstractRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\PHPUnit\NodeFactory\AssertCallFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -17,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\ExplicitPhpErrorApiRector\ExplicitPhpErrorApiRectorTest
  */
-final class ExplicitPhpErrorApiRector extends AbstractPHPUnitRector
+final class ExplicitPhpErrorApiRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -28,6 +30,22 @@ final class ExplicitPhpErrorApiRector extends AbstractPHPUnitRector
         'PHPUnit\Framework\TestCase\Error' => 'expectError',
         'PHPUnit\Framework\TestCase\Warning' => 'expectWarning',
     ];
+
+    /**
+     * @var AssertCallFactory
+     */
+    private $assertCallFactory;
+
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(AssertCallFactory $assertCallFactory, TestsNodeAnalyzer $testsNodeAnalyzer)
+    {
+        $this->assertCallFactory = $assertCallFactory;
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -78,7 +96,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, ['expectException'])) {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodNames($node, ['expectException'])) {
             return null;
         }
 
@@ -105,6 +123,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->createPHPUnitCallWithName($node, $explicitMethod);
+        return $this->assertCallFactory->createCallWithName($node, $explicitMethod);
     }
 }

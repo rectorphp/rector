@@ -6,15 +6,26 @@ namespace Rector\PHPUnit\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\Core\Rector\AbstractRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\RemoveEmptyTestMethodRector\RemoveEmptyTestMethodRectorTest
  */
-final class RemoveEmptyTestMethodRector extends AbstractPHPUnitRector
+final class RemoveEmptyTestMethodRector extends AbstractRector
 {
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
+    {
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove empty test methods', [
@@ -55,7 +66,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
+        if (! $this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
 

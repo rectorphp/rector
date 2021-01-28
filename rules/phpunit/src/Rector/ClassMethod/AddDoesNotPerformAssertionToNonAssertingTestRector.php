@@ -8,9 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ClassMethodReflectionFactory;
 use Rector\FileSystemRector\Parser\FileInfoParser;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -22,7 +23,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector\AddDoesNotPerformAssertionToNonAssertingTestRectorTest
  */
-final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractPHPUnitRector
+final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractRector
 {
     /**
      * @var int
@@ -66,12 +67,19 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
      */
     private $analyzedMethodsInFileName = [];
 
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
     public function __construct(
+        TestsNodeAnalyzer $testsNodeAnalyzer,
         ClassMethodReflectionFactory $classMethodReflectionFactory,
         FileInfoParser $fileInfoParser
     ) {
         $this->fileInfoParser = $fileInfoParser;
         $this->classMethodReflectionFactory = $classMethodReflectionFactory;
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -137,11 +145,11 @@ CODE_SAMPLE
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
-        if (! $this->isInTestClass($classMethod)) {
+        if (! $this->testsNodeAnalyzer->isInTestClass($classMethod)) {
             return true;
         }
 
-        if (! $this->isTestClassMethod($classMethod)) {
+        if (! $this->testsNodeAnalyzer->isTestClassMethod($classMethod)) {
             return true;
         }
 

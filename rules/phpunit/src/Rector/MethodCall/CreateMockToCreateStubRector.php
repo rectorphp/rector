@@ -10,8 +10,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use Rector\Core\PhpParser\Node\Manipulator\MethodCallManipulator;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -21,16 +22,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\CreateMockToCreateStubRector\CreateMockToCreateStubRectorTest
  */
-final class CreateMockToCreateStubRector extends AbstractPHPUnitRector
+final class CreateMockToCreateStubRector extends AbstractRector
 {
     /**
      * @var MethodCallManipulator
      */
     private $methodCallManipulator;
 
-    public function __construct(MethodCallManipulator $methodCallManipulator)
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(MethodCallManipulator $methodCallManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->methodCallManipulator = $methodCallManipulator;
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -100,7 +107,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
+        if (! $this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
 
