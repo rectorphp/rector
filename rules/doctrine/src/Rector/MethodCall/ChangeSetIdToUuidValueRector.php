@@ -168,6 +168,9 @@ CODE_SAMPLE
         }
 
         $variableName = $this->getName($methodCall->var);
+        if ($variableName === null) {
+            return null;
+        }
 
         /** @var ObjectType $variableType */
         $variableType = $this->getStaticType($methodCall->var);

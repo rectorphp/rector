@@ -265,7 +265,6 @@ parameters:
                 - packages/node-collector/src/NodeCollector/NodeRepository.php
                 - packages/node-type-resolver/src/NodeTypeResolver.php
                 - rules/code-quality-strict/src/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
-                - src/Rector/AbstractRector.php
                 - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
                 - rules/code-quality/src/Rector/For_/ForToForeachRector.php
                 - rules/phpunit/src/Rector/ClassMethod/TryCatchToExpectExceptionRector.php
@@ -289,7 +288,7 @@ parameters:
             paths:
                 # merging comments
                 - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php
-                - src/Rector/AbstractRector.php
+                - src/Rector/AbstractTemporaryRector.php
                 - src/PhpParser/NodeTransformer.php
                 # playing around with doc block format
                 - rules/coding-style/src/Rector/Assign/PHPStormVarAnnotationRector.php
@@ -504,7 +503,7 @@ parameters:
         -
             message: '#\$this as argument is not allowed\. Refactor method to service composition#'
             paths:
-                - src/Rector/AbstractRector.php
+                - src/Rector/AbstractTemporaryRector.php
                 # setter to avoid circular dependency in nested collector
                 - rules/nette-code-quality/src/NodeResolver/MethodNamesByInputNamesResolver.php
                 - packages/static-type-mapper/src/StaticTypeMapper.php
@@ -519,3 +518,8 @@ parameters:
         -
             message: '#Use non\-dynamic property on static call#'
             path: packages/better-php-doc-parser/src/AnnotationReader/AnnotationReaderFactory.php #56
+
+        # todo - skip in Symplify if imlements an interface
+        -
+            message: '#There should be no empty class#'
+            path: src/Rector/AbstractRector.php

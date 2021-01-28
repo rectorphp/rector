@@ -113,7 +113,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     /**
      * @required
      */
-    public function autowireAbstractRector(
+    public function autowireAbstractTemporaryRector(
         SymfonyStyle $symfonyStyle,
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory,
