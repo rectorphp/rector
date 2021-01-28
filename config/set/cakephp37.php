@@ -7,10 +7,10 @@ use Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToPascalRector;
 use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Transform\Rector\Assign\PropertyToMethodRector;
+use Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector;
 use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 use Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments;
-use Rector\Transform\ValueObject\PropertyToMethod;
+use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -29,28 +29,33 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
-    $services->set(PropertyToMethodRector::class)
+    $services->set(PropertyFetchToMethodCallRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
-                new PropertyToMethod('Cake\Http\Client\Response', 'body', 'getStringBody'),
-                new PropertyToMethod('Cake\Http\Client\Response', 'json', 'getJson'),
-                new PropertyToMethod('Cake\Http\Client\Response', 'xml', 'getXml'),
-                new PropertyToMethod('Cake\Http\Client\Response', 'cookies', 'getCookies'),
-                new PropertyToMethod('Cake\Http\Client\Response', 'code', 'getStatusCode'),
+            PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
+                new PropertyFetchToMethodCall('Cake\Http\Client\Response', 'body', 'getStringBody'),
+                new PropertyFetchToMethodCall('Cake\Http\Client\Response', 'json', 'getJson'),
+                new PropertyFetchToMethodCall('Cake\Http\Client\Response', 'xml', 'getXml'),
+                new PropertyFetchToMethodCall('Cake\Http\Client\Response', 'cookies', 'getCookies'),
+                new PropertyFetchToMethodCall('Cake\Http\Client\Response', 'code', 'getStatusCode'),
 
-                new PropertyToMethod('Cake\View\View', 'request', 'getRequest', 'setRequest'),
-                new PropertyToMethod('Cake\View\View', 'response', 'getResponse', 'setResponse'),
-                new PropertyToMethod('Cake\View\View', 'templatePath', 'getTemplatePath', 'setTemplatePath'),
-                new PropertyToMethod('Cake\View\View', 'template', 'getTemplate', 'setTemplate'),
-                new PropertyToMethod('Cake\View\View', 'layout', 'getLayout', 'setLayout'),
-                new PropertyToMethod('Cake\View\View', 'layoutPath', 'getLayoutPath', 'setLayoutPath'),
-                new PropertyToMethod('Cake\View\View', 'autoLayout', 'isAutoLayoutEnabled', 'enableAutoLayout'),
-                new PropertyToMethod('Cake\View\View', 'theme', 'getTheme', 'setTheme'),
-                new PropertyToMethod('Cake\View\View', 'subDir', 'getSubDir', 'setSubDir'),
-                new PropertyToMethod('Cake\View\View', 'plugin', 'getPlugin', 'setPlugin'),
-                new PropertyToMethod('Cake\View\View', 'name', 'getName', 'setName'),
-                new PropertyToMethod('Cake\View\View', 'elementCache', 'getElementCache', 'setElementCache'),
-                new PropertyToMethod('Cake\View\View', 'helpers', 'helpers'),
+                new PropertyFetchToMethodCall('Cake\View\View', 'request', 'getRequest', 'setRequest'),
+                new PropertyFetchToMethodCall('Cake\View\View', 'response', 'getResponse', 'setResponse'),
+                new PropertyFetchToMethodCall('Cake\View\View', 'templatePath', 'getTemplatePath', 'setTemplatePath'),
+                new PropertyFetchToMethodCall('Cake\View\View', 'template', 'getTemplate', 'setTemplate'),
+                new PropertyFetchToMethodCall('Cake\View\View', 'layout', 'getLayout', 'setLayout'),
+                new PropertyFetchToMethodCall('Cake\View\View', 'layoutPath', 'getLayoutPath', 'setLayoutPath'),
+                new PropertyFetchToMethodCall(
+                    'Cake\View\View',
+                    'autoLayout',
+                    'isAutoLayoutEnabled',
+                    'enableAutoLayout'
+                ),
+                new PropertyFetchToMethodCall('Cake\View\View', 'theme', 'getTheme', 'setTheme'),
+                new PropertyFetchToMethodCall('Cake\View\View', 'subDir', 'getSubDir', 'setSubDir'),
+                new PropertyFetchToMethodCall('Cake\View\View', 'plugin', 'getPlugin', 'setPlugin'),
+                new PropertyFetchToMethodCall('Cake\View\View', 'name', 'getName', 'setName'),
+                new PropertyFetchToMethodCall('Cake\View\View', 'elementCache', 'getElementCache', 'setElementCache'),
+                new PropertyFetchToMethodCall('Cake\View\View', 'helpers', 'helpers'),
             ]),
         ]]);
 

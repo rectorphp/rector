@@ -16383,18 +16383,18 @@ Replaces properties assign calls be defined methods.
 - class: `Rector\Transform\Rector\Assign\PropertyToMethodRector`
 
 ```php
-use Rector\Transform\Rector\Assign\PropertyToMethodRector;
-use Rector\Transform\ValueObject\PropertyToMethod;
+use Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector;
+use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(PropertyToMethodRector::class)
+    $services->set(PropertyFetchToMethodCallRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
-                new PropertyToMethod('SomeObject', 'property', 'getProperty', [], 'setProperty'),
+            PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
+                new PropertyFetchToMethodCall('SomeObject', 'property', 'getProperty', [], 'setProperty'),
             ]),
         ]]);
 };
@@ -16412,18 +16412,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ```php
-use Rector\Transform\Rector\Assign\PropertyToMethodRector;
-use Rector\Transform\ValueObject\PropertyToMethod;
+use Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector;
+use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(PropertyToMethodRector::class)
+    $services->set(PropertyFetchToMethodCallRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
-                new PropertyToMethod('SomeObject', 'property', 'getConfig', ['someArg'], null),
+            PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
+                new PropertyFetchToMethodCall('SomeObject', 'property', 'getConfig', ['someArg'], null),
             ]),
         ]]);
 };

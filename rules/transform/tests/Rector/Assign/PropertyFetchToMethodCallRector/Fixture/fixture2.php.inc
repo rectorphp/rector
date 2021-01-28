@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector\Fixture;
+namespace Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\Fixture;
 
 final class Fixture2
 {
@@ -16,7 +16,7 @@ final class Fixture2
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector\Fixture;
+namespace Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\Fixture;
 
 final class Fixture2
 {

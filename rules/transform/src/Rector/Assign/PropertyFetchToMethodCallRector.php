@@ -11,15 +11,15 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Transform\ValueObject\PropertyToMethod;
+use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector\PropertyToMethodRectorTest
+ * @see \Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\PropertyFetchToMethodCallRectorTest
  */
-final class PropertyToMethodRector extends AbstractRector implements ConfigurableRectorInterface
+final class PropertyFetchToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -27,7 +27,7 @@ final class PropertyToMethodRector extends AbstractRector implements Configurabl
     public const PROPERTIES_TO_METHOD_CALLS = 'properties_to_method_calls';
 
     /**
-     * @var PropertyToMethod[]
+     * @var PropertyFetchToMethodCall[]
      */
     private $propertiesToMethodCalls = [];
 
@@ -35,13 +35,13 @@ final class PropertyToMethodRector extends AbstractRector implements Configurabl
     {
         $firstConfiguration = [
             self::PROPERTIES_TO_METHOD_CALLS => [
-                new PropertyToMethod('SomeObject', 'property', 'getProperty', 'setProperty'),
+                new PropertyFetchToMethodCall('SomeObject', 'property', 'getProperty', 'setProperty'),
             ],
         ];
 
         $secondConfiguration = [
             self::PROPERTIES_TO_METHOD_CALLS => [
-                new PropertyToMethod('SomeObject', 'property', 'getConfig', null, ['someArg']),
+                new PropertyFetchToMethodCall('SomeObject', 'property', 'getConfig', null, ['someArg']),
             ],
         ];
         return new RuleDefinition('Replaces properties assign calls be defined methods.', [
@@ -96,10 +96,13 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, PropertyFetchToMethodCall[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $propertiesToMethodCalls = $configuration[self::PROPERTIES_TO_METHOD_CALLS] ?? [];
-        Assert::allIsInstanceOf($propertiesToMethodCalls, PropertyToMethod::class);
+        Assert::allIsInstanceOf($propertiesToMethodCalls, PropertyFetchToMethodCall::class);
         $this->propertiesToMethodCalls = $propertiesToMethodCalls;
     }
 
@@ -109,7 +112,7 @@ CODE_SAMPLE
         $propertyFetchNode = $assign->var;
 
         $propertyToMethodCall = $this->matchPropertyFetchCandidate($propertyFetchNode);
-        if (! $propertyToMethodCall instanceof PropertyToMethod) {
+        if (! $propertyToMethodCall instanceof PropertyFetchToMethodCall) {
             return null;
         }
 
@@ -131,7 +134,7 @@ CODE_SAMPLE
         $propertyFetchNode = $assign->expr;
 
         $propertyToMethodCall = $this->matchPropertyFetchCandidate($propertyFetchNode);
-        if (! $propertyToMethodCall instanceof PropertyToMethod) {
+        if (! $propertyToMethodCall instanceof PropertyFetchToMethodCall) {
             return null;
         }
 
@@ -150,7 +153,7 @@ CODE_SAMPLE
         return $assign;
     }
 
-    private function matchPropertyFetchCandidate(PropertyFetch $propertyFetch): ?PropertyToMethod
+    private function matchPropertyFetchCandidate(PropertyFetch $propertyFetch): ?PropertyFetchToMethodCall
     {
         foreach ($this->propertiesToMethodCalls as $propertyToMethodCall) {
             if (! $this->isObjectType($propertyFetch->var, $propertyToMethodCall->getOldType())) {
