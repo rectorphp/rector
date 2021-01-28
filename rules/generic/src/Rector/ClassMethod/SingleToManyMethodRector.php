@@ -6,7 +6,7 @@ namespace Rector\Generic\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Generic\Tests\Rector\ClassMethod\ChangeContractMethodSingleToManyRector\ChangeContractMethodSingleToManyRectorTest
+ * @see \Rector\Generic\Tests\Rector\ClassMethod\SingleToManyMethodRector\SingleToManyMethodRectorTest
  */
 final class SingleToManyMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {
@@ -91,31 +91,30 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Class_ $classLike */
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof ClassLike) {
+            return null;
+        }
 
-        /** @var string $type */
-        foreach ($this->singleToManyMethods as $type => $oldToNewMethod) {
-            if (! $this->isObjectType($classLike, $type)) {
+        foreach ($this->singleToManyMethods as $singleToManyMethod) {
+            if (! $this->isObjectType($classLike, $singleToManyMethod->getClass())) {
                 continue;
             }
 
-            foreach ($oldToNewMethod as $oldMethod => $newMethod) {
-                if (! $this->isName($node, $oldMethod)) {
-                    continue;
-                }
-
-                $node->name = new Identifier($newMethod);
-                $this->keepOldReturnTypeInDocBlock($node);
-
-                $node->returnType = new Identifier('array');
-                $this->wrapReturnValueToArray($node);
-
-                break;
+            if (! $this->isName($node, $singleToManyMethod->getSingleMethodName())) {
+                continue;
             }
+
+            $node->name = new Identifier($singleToManyMethod->getManyMethodName());
+            $this->keepOldReturnTypeInDocBlock($node);
+
+            $node->returnType = new Identifier('array');
+            $this->wrapReturnValueToArray($node);
+
+            return $node;
         }
 
-        return $node;
+        return null;
     }
 
     /**
