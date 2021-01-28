@@ -59,7 +59,6 @@
         "friendsofphp/php-cs-fixer": "^2.17.3",
         "nette/application": "^3.0.7",
         "nette/di": "^3.0",
-        "nette/forms": "^3.0",
         "ocramius/package-versions": "^1.9",
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpstan/phpstan-nette": "^0.12.12",

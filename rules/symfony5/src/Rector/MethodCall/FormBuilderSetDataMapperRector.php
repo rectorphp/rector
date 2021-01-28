@@ -30,6 +30,7 @@ final class FormBuilderSetDataMapperRector extends AbstractRector
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 use Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper;
+use Symfony\Component\Form\FormConfigBuilderInterface;
 
 class SomeClass
 {
@@ -43,6 +44,7 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 use Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor;
 use Symfony\Component\Form\Extension\Core\DataMapper\DataMapper;
+use Symfony\Component\Form\FormConfigBuilderInterface;
 
 class SomeClass
 {
