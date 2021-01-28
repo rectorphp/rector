@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source;
+namespace Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source;
 
 final class MyClassFactory
 {

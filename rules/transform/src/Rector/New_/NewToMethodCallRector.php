@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\New_;
+namespace Rector\Transform\Rector\New_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -20,9 +20,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\NewObjectToFactoryCreateRectorTest
+ * @see \Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\NewToMethodCallRectorTest
  */
-final class NewObjectToFactoryCreateRector extends AbstractRector implements ConfigurableRectorInterface
+final class NewToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string

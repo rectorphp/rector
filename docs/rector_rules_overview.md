@@ -7371,15 +7371,15 @@ Replaces creating object instances with "new" keyword with factory method.
 - class: `Rector\Generic\Rector\New_\NewObjectToFactoryCreateRector`
 
 ```php
-use Rector\Generic\Rector\New_\NewObjectToFactoryCreateRector;
+use Rector\Transform\Rector\New_\NewToMethodCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(NewObjectToFactoryCreateRector::class)
+    $services->set(NewToMethodCallRector::class)
         ->call('configure', [[
-            NewObjectToFactoryCreateRector::OBJECT_TO_FACTORY_METHOD => [
+            NewToMethodCallRector::OBJECT_TO_FACTORY_METHOD => [
                 'MyClass' => [
                     'class' => 'MyClassFactory',
                     'method' => 'create',

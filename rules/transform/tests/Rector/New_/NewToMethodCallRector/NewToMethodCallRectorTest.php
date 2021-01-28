@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector;
+namespace Rector\Transform\Tests\Rector\New_\NewToMethodCallRector;
 
 use Iterator;
-use Rector\Generic\Rector\New_\NewObjectToFactoryCreateRector;
-use Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClass;
-use Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Transform\Rector\New_\NewToMethodCallRector;
+use Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClass;
+use Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClassFactory;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class NewObjectToFactoryCreateRectorTest extends AbstractRectorTestCase
+final class NewToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -32,8 +32,8 @@ final class NewObjectToFactoryCreateRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            NewObjectToFactoryCreateRector::class => [
-                NewObjectToFactoryCreateRector::OBJECT_TO_FACTORY_METHOD => [
+            NewToMethodCallRector::class => [
+                NewToMethodCallRector::OBJECT_TO_FACTORY_METHOD => [
                     MyClass::class => [
                         'class' => MyClassFactory::class,
                         'method' => 'create',
