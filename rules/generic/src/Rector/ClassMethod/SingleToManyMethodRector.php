@@ -14,25 +14,27 @@ use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Generic\ValueObject\SingleToManyMethod;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\ClassMethod\ChangeContractMethodSingleToManyRector\ChangeContractMethodSingleToManyRectorTest
  */
-final class ChangeContractMethodSingleToManyRector extends AbstractRector implements ConfigurableRectorInterface
+final class SingleToManyMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @api
      * @var string
      */
-    public const OLD_TO_NEW_METHOD_BY_TYPE = 'old_to_new_method_by_type';
+    public const SINGLES_TO_MANY_METHODS = 'singles_to_many_methods';
 
     /**
-     * @var mixed[]
+     * @var SingleToManyMethod[]
      */
-    private $oldToNewMethodByType = [];
+    private $singleToManyMethods = [];
 
     /**
      * @var PhpDocTypeChanger
@@ -71,11 +73,7 @@ class SomeClass
 }
 CODE_SAMPLE
             , [
-                self::OLD_TO_NEW_METHOD_BY_TYPE => [
-                    'SomeClass' => [
-                        'getNode' => 'getNodes',
-                    ],
-                ],
+                self::SINGLES_TO_MANY_METHODS => [new SingleToManyMethod('SomeClass', 'getNode', 'getNodes')],
             ]),
         ]);
     }
@@ -97,7 +95,7 @@ CODE_SAMPLE
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         /** @var string $type */
-        foreach ($this->oldToNewMethodByType as $type => $oldToNewMethod) {
+        foreach ($this->singleToManyMethods as $type => $oldToNewMethod) {
             if (! $this->isObjectType($classLike, $type)) {
                 continue;
             }
@@ -120,9 +118,15 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param array<string, SingleToManyMethod[]> $configuration
+     */
     public function configure(array $configuration): void
     {
-        $this->oldToNewMethodByType = $configuration[self::OLD_TO_NEW_METHOD_BY_TYPE] ?? [];
+        $singleToManyMethods = $configuration[self::SINGLES_TO_MANY_METHODS] ?? [];
+        Assert::allIsInstanceOf($singleToManyMethods, SingleToManyMethod::class);
+
+        $this->singleToManyMethods = $singleToManyMethods;
     }
 
     private function keepOldReturnTypeInDocBlock(ClassMethod $classMethod): void

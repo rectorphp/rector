@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\ClassMethod\ChangeContractMethodSingleToManyRector\Fixture;
+namespace Rector\Generic\Tests\Rector\ClassMethod\SingleToManyMethodRector\Fixture;
 
-use Rector\Generic\Tests\Rector\ClassMethod\ChangeContractMethodSingleToManyRector\Source\OneToManyInterface;
+use Rector\Generic\Tests\Rector\ClassMethod\SingleToManyMethodRector\Source\OneToManyInterface;
 
 class MultiReturn implements OneToManyInterface
 {
@@ -20,9 +20,9 @@ class MultiReturn implements OneToManyInterface
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\ClassMethod\ChangeContractMethodSingleToManyRector\Fixture;
+namespace Rector\Generic\Tests\Rector\ClassMethod\SingleToManyMethodRector\Fixture;
 
-use Rector\Generic\Tests\Rector\ClassMethod\ChangeContractMethodSingleToManyRector\Source\OneToManyInterface;
+use Rector\Generic\Tests\Rector\ClassMethod\SingleToManyMethodRector\Source\OneToManyInterface;
 
 class MultiReturn implements OneToManyInterface
 {

@@ -6931,15 +6931,15 @@ Change method that returns single value to multiple values
 - class: `Rector\Generic\Rector\ClassMethod\ChangeContractMethodSingleToManyRector`
 
 ```php
-use Rector\Generic\Rector\ClassMethod\ChangeContractMethodSingleToManyRector;
+use Rector\Generic\Rector\ClassMethod\SingleToManyMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(ChangeContractMethodSingleToManyRector::class)
+    $services->set(SingleToManyMethodRector::class)
         ->call('configure', [[
-            ChangeContractMethodSingleToManyRector::OLD_TO_NEW_METHOD_BY_TYPE => [
+            SingleToManyMethodRector::SINGLES_TO_MANY_METHODS => [
                 'SomeClass' => [
                     'getNode' => 'getNodes',
                 ],
