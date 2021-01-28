@@ -35,14 +35,14 @@ final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector
     /**
      * @var GetSubscribedEventsClassMethodFactory
      */
-    private $getSubscriberEventsClassMethodFactory;
+    private $getSubscribedEventsClassMethodFactory;
 
     public function __construct(
         OnLogoutClassMethodFactory $onLogoutClassMethodFactory,
-        GetSubscribedEventsClassMethodFactory $getSubscriberEventsClassMethodFactory
+        GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory
     ) {
         $this->onLogoutClassMethodFactory = $onLogoutClassMethodFactory;
-        $this->getSubscriberEventsClassMethodFactory = $getSubscriberEventsClassMethodFactory;
+        $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -124,7 +124,7 @@ CODE_SAMPLE
         $classConstFetch = $this->createClassConstReference('Symfony\Component\Security\Http\Event\LogoutEvent');
 
         $eventReferencesToMethodNames = [new EventReferenceToMethodName($classConstFetch, 'onLogout')];
-        $getSubscribedEventsClassMethod = $this->getSubscriberEventsClassMethodFactory->create(
+        $getSubscribedEventsClassMethod = $this->getSubscribedEventsClassMethodFactory->create(
             $eventReferencesToMethodNames
         );
         $node->stmts[] = $getSubscribedEventsClassMethod;

@@ -21,7 +21,7 @@ class SomeEventSubscriber implements \Symfony\Component\EventDispatcher\EventSub
     {
     }
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public static function getSubscribedEvents(): array
     {
