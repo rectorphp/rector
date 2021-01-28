@@ -10,9 +10,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Rector\AbstractRector;
-use Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor;
-use Symfony\Component\Form\Extension\Core\DataMapper\DataMapper;
-use Symfony\Component\Form\FormConfigBuilderInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -23,14 +20,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormBuilderSetDataMapperRector extends AbstractRector
 {
     /**
-     * @var class-string[]
+     * @var string[]
      */
-    private const REQUIRED_TYPE = FormConfigBuilderInterface::class;
+    private const REQUIRED_TYPE = 'Symfony\Component\Form\FormConfigBuilderInterface';
 
     /**
-     * @var class-string[]
+     * @var string[]
      */
-    private const ARG_CORRECT_TYPE = DataMapper::class;
+    private const ARG_CORRECT_TYPE = 'Symfony\Component\Form\Extension\Core\DataMapper\DataMapper';
+
+    /**
+     * @var string[]
+     */
+    private const ARG_MAPPER_TYPE = 'Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor';
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -93,9 +95,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $propertyPathAccessor = new New_(new FullyQualified(PropertyPathAccessor::class));
-
-        $newArgumentValue = new New_(new FullyQualified(DataMapper::class), [new Arg($propertyPathAccessor)]);
+        $propertyPathAccessor = new New_(new FullyQualified(self::ARG_MAPPER_TYPE));
+        $newArgumentValue = new New_(new FullyQualified(self::ARG_CORRECT_TYPE), [new Arg($propertyPathAccessor)]);
         $node->args[0]->value = $newArgumentValue;
 
         return $node;
