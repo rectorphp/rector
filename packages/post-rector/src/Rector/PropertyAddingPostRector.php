@@ -10,8 +10,6 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\NodeAnalyzer\NetteInjectDetector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Adds new private properties to class + to constructor
@@ -68,26 +66,6 @@ final class PropertyAddingPostRector extends AbstractPostRector
         $this->addPropertiesWithoutConstructor($node);
 
         return $node;
-    }
-
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition('Post Rector that adds properties', [
-            new CodeSample(
-            <<<'CODE_SAMPLE'
-class SomeClass
-{
-}
-CODE_SAMPLE
-,
-            <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public $someProperty;
-}
-CODE_SAMPLE
-            ),
-        ]);
     }
 
     private function addConstants(Class_ $class): void

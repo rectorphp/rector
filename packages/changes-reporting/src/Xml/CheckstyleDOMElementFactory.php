@@ -96,7 +96,8 @@ final class CheckstyleDOMElementFactory
         $domElement->setAttribute('column', '1');
         $domElement->setAttribute('severity', self::ERROR);
 
-        $message = $rectorWithFileAndLineChange->getRectorDefinitionsDescription() . ' (Reported by: ' . $rectorWithFileAndLineChange->getRectorClass() . ')';
+        $message = $rectorWithFileAndLineChange->
+            getRectorDefinitionsDescription() . ' (Reported by: ' . $rectorWithFileAndLineChange->getRectorClass() . ')';
         $domElement->setAttribute('message', $this->escapeForXml($message));
 
         return $domElement;

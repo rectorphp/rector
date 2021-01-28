@@ -12,8 +12,6 @@ use Rector\CodingStyle\Node\NameImporter;
 use Rector\Core\Configuration\Option;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class NameImportingPostRector extends AbstractPostRector
 {
@@ -81,26 +79,6 @@ final class NameImportingPostRector extends AbstractPostRector
     public function getPriority(): int
     {
         return 600;
-    }
-
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition(
-            'Imports fully qualified class names in parameter types, return types, extended classes, implemented, interfaces and even docblocks',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
-$someClass = new \Some\FullyQualified\SomeClass();
-CODE_SAMPLE
-,
-                    <<<'CODE_SAMPLE'
-use Some\FullyQualified\SomeClass;
-
-$someClass = new SomeClass();
-CODE_SAMPLE
-                ),
-            ]
-        );
     }
 
     private function processNodeName(Name $name): ?Node
