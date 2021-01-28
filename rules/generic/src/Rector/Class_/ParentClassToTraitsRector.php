@@ -24,10 +24,10 @@ final class ParentClassToTraitsRector extends AbstractRector implements Configur
     /**
      * @var string
      */
-    public const PARENT_CLASS_TO_TRAITS = '$parentClassToTraits';
+    public const PARENT_CLASS_TO_TRAITS = 'parent_class_to_traits';
 
     /**
-     * @var string[][] { parent class => [ traits ] }
+     * @var array<string, string[]>
      */
     private $parentClassToTraits = [];
 
@@ -105,6 +105,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param array<string, array<string, string[]>> $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? [];

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToStaticCallRector;
+namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToStaticCallRector;
 
 use Iterator;
-use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
 use Rector\Transform\ValueObject\FuncCallToStaticCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

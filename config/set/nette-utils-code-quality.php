@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
 use Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector;
 use Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector;
 use Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector;
@@ -12,6 +11,7 @@ use Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector;
 use Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector;
 use Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector;
 use Rector\NetteUtilsCodeQuality\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector;
+use Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
 use Rector\Transform\ValueObject\FuncCallToStaticCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

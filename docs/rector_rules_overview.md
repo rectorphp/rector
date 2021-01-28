@@ -7171,10 +7171,10 @@ Turns defined function call to static method call.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector`
+- class: `Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector`
 
 ```php
-use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
+use Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
 use Rector\Transform\ValueObject\FuncCallToStaticCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
