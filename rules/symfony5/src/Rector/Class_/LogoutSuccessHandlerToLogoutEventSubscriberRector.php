@@ -9,59 +9,72 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Symfony5\NodeFactory\OnLogoutClassMethodFactory;
+use Rector\Symfony5\NodeFactory\OnSuccessLogoutClassMethodFactory;
 use Rector\SymfonyCodeQuality\NodeFactory\GetSubscribedEventsClassMethodFactory;
-use Rector\SymfonyCodeQuality\ValueObject\EventReferenceToMethodName;
+use Rector\SymfonyCodeQuality\ValueObject\EventReferenceToMethodNameWithPriority;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/symfony/symfony/pull/36243
  *
- * @see \Rector\Symfony5\Tests\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector\LogoutHandlerToLogoutEventSubscriberRectorTest
+ * @see \Rector\Symfony5\Tests\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector\LogoutSuccessHandlerToLogoutEventSubscriberRectorTest
  */
-final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector
+final class LogoutSuccessHandlerToLogoutEventSubscriberRector extends AbstractRector
 {
     /**
      * @var string
      */
-    private const LOGOUT_HANDLER_TYPE = 'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface';
-
-    /**
-     * @var OnLogoutClassMethodFactory
-     */
-    private $onLogoutClassMethodFactory;
+    private const LOGOUT_SUCCESS_HANDLER_TYPE = 'Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface';
 
     /**
      * @var GetSubscribedEventsClassMethodFactory
      */
     private $getSubscribedEventsClassMethodFactory;
 
+    /**
+     * @var OnSuccessLogoutClassMethodFactory
+     */
+    private $onSuccessLogoutClassMethodFactory;
+
     public function __construct(
-        OnLogoutClassMethodFactory $onLogoutClassMethodFactory,
+        OnSuccessLogoutClassMethodFactory $onSuccessLogoutClassMethodFactory,
         GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory
     ) {
-        $this->onLogoutClassMethodFactory = $onLogoutClassMethodFactory;
         $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
+        $this->onSuccessLogoutClassMethodFactory = $onSuccessLogoutClassMethodFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change logout handler to an event listener that listens to LogoutEvent', [
+        return new RuleDefinition('Change logout success handler to an event listener that listens to LogoutEvent', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
+use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-final class SomeLogoutHandler implements LogoutHandlerInterface
+final class SomeLogoutHandler implements LogoutSuccessHandlerInterface
 {
-    public function logout(Request $request, Response $response, TokenInterface $token)
+    /**
+      * @var HttpUtils
+      */
+    private $httpUtils;
+
+    public function __construct(HttpUtils $httpUtils)
     {
+        $this->httpUtils = $httpUtils;
+    }
+
+    public function onLogoutSuccess(Request $request)
+    {
+        $response = $this->httpUtils->createRedirectResponse($request, 'some_url');
+        return $response;
     }
 }
 CODE_SAMPLE
+
                 ,
                 <<<'CODE_SAMPLE'
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -69,20 +82,28 @@ use Symfony\Component\Security\Http\Event\LogoutEvent;
 
 final class SomeLogoutHandler implements EventSubscriberInterface
 {
+    /**
+      * @var HttpUtils
+      */
+    private $httpUtils;
+
     public function onLogout(LogoutEvent $logoutEvent): void
     {
-        $request = $logoutEvent->getRequest();
-        $response = $logoutEvent->getResponse();
-        $token = $logoutEvent->getToken();
+        if ($logoutEvent->getResponse() !== null) {
+            return;
+        }
+
+        $response = $this->httpUtils->createRedirectResponse($logoutEvent->getRequest(), 'some_url');
+        $logoutEvent->setResponse($response);
     }
 
     /**
-     * @return array<string, string[]>
+     * @return array<string, mixed>
      */
     public static function getSubscribedEvents(): array
     {
         return [
-            LogoutEvent::class => ['onLogout'],
+            LogoutEvent::class => [['onLogout', 64]],
         ];
     }
 }
@@ -105,29 +126,32 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, self::LOGOUT_HANDLER_TYPE)) {
+        if (! $this->isObjectType($node, self::LOGOUT_SUCCESS_HANDLER_TYPE)) {
             return null;
         }
 
         $this->refactorImplements($node);
 
         // 2. refactor logout() class method to onLogout()
-        $logoutClassMethod = $node->getMethod('logout');
-        if (! $logoutClassMethod instanceof ClassMethod) {
+        $onLogoutSuccessClassMethod = $node->getMethod('onLogoutSuccess');
+        if (! $onLogoutSuccessClassMethod instanceof ClassMethod) {
             return null;
         }
 
-        $node->stmts[] = $this->onLogoutClassMethodFactory->createFromLogoutClassMethod($logoutClassMethod);
-        $this->removeNode($logoutClassMethod);
+        $node->stmts[] = $this->onSuccessLogoutClassMethodFactory->createFromOnLogoutSuccessClassMethod(
+            $onLogoutSuccessClassMethod
+        );
 
         // 3. add getSubscribedEvents() class method
         $classConstFetch = $this->createClassConstReference('Symfony\Component\Security\Http\Event\LogoutEvent');
 
-        $eventReferencesToMethodNames = [new EventReferenceToMethodName($classConstFetch, 'onLogout')];
+        $eventReferencesToMethodNames = [new EventReferenceToMethodNameWithPriority($classConstFetch, 'onLogout', 64)];
         $getSubscribedEventsClassMethod = $this->getSubscribedEventsClassMethodFactory->create(
             $eventReferencesToMethodNames
         );
         $node->stmts[] = $getSubscribedEventsClassMethod;
+
+        $this->removeNode($onLogoutSuccessClassMethod);
 
         return $node;
     }
@@ -137,7 +161,7 @@ CODE_SAMPLE
         $class->implements[] = new FullyQualified('Symfony\Component\EventDispatcher\EventSubscriberInterface');
 
         foreach ($class->implements as $key => $implement) {
-            if (! $this->isName($implement, self::LOGOUT_HANDLER_TYPE)) {
+            if (! $this->isName($implement, self::LOGOUT_SUCCESS_HANDLER_TYPE)) {
                 continue;
             }
 

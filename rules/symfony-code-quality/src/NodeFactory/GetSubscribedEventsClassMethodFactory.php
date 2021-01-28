@@ -26,8 +26,9 @@ use Rector\Symfony\Contract\Tag\TagInterface;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\Tag;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
+use Rector\SymfonyCodeQuality\Contract\EventReferenceToMethodNameInterface;
 use Rector\SymfonyCodeQuality\ValueObject\EventNameToClassAndConstant;
-use Rector\SymfonyCodeQuality\ValueObject\EventReferenceToMethodName;
+use Rector\SymfonyCodeQuality\ValueObject\EventReferenceToMethodNameWithPriority;
 
 final class GetSubscribedEventsClassMethodFactory
 {
@@ -83,7 +84,7 @@ final class GetSubscribedEventsClassMethodFactory
     }
 
     /**
-     * @param EventReferenceToMethodName[] $eventReferencesToMethodNames
+     * @param EventReferenceToMethodNameInterface[] $eventReferencesToMethodNames
      */
     public function create(array $eventReferencesToMethodNames): ClassMethod
     {
@@ -92,8 +93,10 @@ final class GetSubscribedEventsClassMethodFactory
         $eventsToMethodsArray = new Array_();
 
         foreach ($eventReferencesToMethodNames as $eventReferencesToMethodName) {
+            $priority = $eventReferencesToMethodName instanceof EventReferenceToMethodNameWithPriority ? $eventReferencesToMethodName->getPriority() : null;
+
             $eventsToMethodsArray->items[] = $this->createArrayItemFromMethodAndPriority(
-                null,
+                $priority,
                 $eventReferencesToMethodName->getMethodName(),
                 $eventReferencesToMethodName->getClassConstFetch()
             );
