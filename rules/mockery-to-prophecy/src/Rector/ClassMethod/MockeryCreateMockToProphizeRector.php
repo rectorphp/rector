@@ -10,16 +10,17 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\MockeryToProphecy\Collector\MockVariableCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\MockeryToProphecy\Tests\Rector\ClassMethod\MockeryToProphecyRector\MockeryToProphecyRectorTest
  */
-final class MockeryCreateMockToProphizeRector extends AbstractPHPUnitRector
+final class MockeryCreateMockToProphizeRector extends AbstractRector
 {
     /**
      * @var array<string, class-string>
@@ -31,9 +32,15 @@ final class MockeryCreateMockToProphizeRector extends AbstractPHPUnitRector
      */
     private $mockVariableCollector;
 
-    public function __construct(MockVariableCollector $mockVariableCollector)
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(MockVariableCollector $mockVariableCollector, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->mockVariableCollector = $mockVariableCollector;
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
 
     /**
@@ -49,7 +56,7 @@ final class MockeryCreateMockToProphizeRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
+        if (! $this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
 

@@ -103,7 +103,7 @@ CODE_SAMPLE
 
     private function shouldSkipClass(Class_ $class): bool
     {
-        if (! $this->isInTestClass($class)) {
+        if (! $this->testsNodeAnalyzer->isInTestClass($class)) {
             return true;
         }
 
