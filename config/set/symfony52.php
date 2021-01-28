@@ -7,6 +7,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Symfony5\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector;
+use Rector\Symfony5\Rector\MethodCall\FormBuilderSetDataMapperRector;
 use Rector\Symfony5\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector;
 use Rector\Symfony5\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector;
 use Rector\Symfony5\Rector\New_\PropertyPathMapperToDataMapperRector;
@@ -112,4 +113,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#dependencyinjection
     $services->set(DefinitionAliasSetPrivateToSetPublicRector::class);
+
+    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
+    $services->set(FormBuilderSetDataMapperRector::class);
 };

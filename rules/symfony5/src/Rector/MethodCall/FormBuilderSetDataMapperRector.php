@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://github.com/symfony/symfony/commit/878effaf47cfb23f73c984d806eb8e9d9206cb5c
+ * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
  * @see \Rector\Symfony5\Tests\Rector\MethodCall\FormBuilderSetDataMapperRector\FormBuilderSetDataMapperRectorTest
  */
 final class FormBuilderSetDataMapperRector extends AbstractRector
