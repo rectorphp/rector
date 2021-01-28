@@ -7132,10 +7132,10 @@ Change configured function calls to new Instance
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\FuncCall\FuncCallToNewRector`
+- class: `Rector\Transform\Rector\FuncCall\FuncCallToNewRector`
 
 ```php
-use Rector\Generic\Rector\FuncCall\FuncCallToNewRector;
+use Rector\Transform\Rector\FuncCall\FuncCallToNewRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -7143,7 +7143,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FuncCallToNewRector::class)
         ->call('configure', [[
-            FuncCallToNewRector::FUNCTION_TO_NEW => [
+            FuncCallToNewRector::FUNCTIONS_TO_NEWS => [
                 'collection' => ['Collection'],
             ],
         ]]);

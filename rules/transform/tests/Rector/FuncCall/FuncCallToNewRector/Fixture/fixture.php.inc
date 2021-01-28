@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToNewRector\Fixture;
+namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToNewRector\Fixture;
 
 class Fixture
 {
@@ -14,7 +14,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToNewRector\Fixture;
+namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToNewRector\Fixture;
 
 class Fixture
 {

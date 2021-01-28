@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToNewRector;
+namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToNewRector;
 
 use Iterator;
-use Rector\Generic\Rector\FuncCall\FuncCallToNewRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Transform\Rector\FuncCall\FuncCallToNewRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FuncCallToNewRectorTest extends AbstractRectorTestCase
@@ -31,7 +31,7 @@ final class FuncCallToNewRectorTest extends AbstractRectorTestCase
     {
         return [
             FuncCallToNewRector::class => [
-                FuncCallToNewRector::FUNCTION_TO_NEW => [
+                FuncCallToNewRector::FUNCTIONS_TO_NEWS => [
                     'collection' => ['Collection'],
                 ],
             ],

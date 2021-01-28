@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\FuncCall;
+namespace Rector\Transform\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
@@ -14,14 +14,14 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\FuncCall\FuncCallToNewRector\FuncCallToNewRectorTest
+ * @see \Rector\Transform\Tests\Rector\FuncCall\FuncCallToNewRector\FuncCallToNewRectorTest
  */
 final class FuncCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
      */
-    public const FUNCTION_TO_NEW = '$functionToNew';
+    public const FUNCTIONS_TO_NEWS = 'functions_to_news';
 
     /**
      * @var string[]
@@ -53,7 +53,7 @@ class SomeClass
 CODE_SAMPLE
 ,
                 [
-                    self::FUNCTION_TO_NEW => [
+                    self::FUNCTIONS_TO_NEWS => [
                         'collection' => ['Collection'],
                     ],
                 ]
@@ -85,8 +85,11 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, mixed> $configuration
+     */
     public function configure(array $configuration): void
     {
-        $this->functionToNew = $configuration[self::FUNCTION_TO_NEW] ?? [];
+        $this->functionToNew = $configuration[self::FUNCTIONS_TO_NEWS] ?? [];
     }
 }
