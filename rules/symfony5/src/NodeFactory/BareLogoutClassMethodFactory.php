@@ -12,9 +12,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NetteKdyby\NodeManipulator\ListeningClassMethodArgumentManipulator;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class BareLogoutClassMethodFactory
 {
@@ -28,33 +25,10 @@ final class BareLogoutClassMethodFactory
      */
     private $phpVersionProvider;
 
-    /**
-     * @var ListeningClassMethodArgumentManipulator
-     */
-    private $listeningClassMethodArgumentManipulator;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    public function __construct(
-        NodeFactory $nodeFactory,
-        PhpVersionProvider $phpVersionProvider,
-        ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator,
-        NodeNameResolver $nodeNameResolver,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
-    ) {
+    public function __construct(NodeFactory $nodeFactory, PhpVersionProvider $phpVersionProvider)
+    {
         $this->nodeFactory = $nodeFactory;
         $this->phpVersionProvider = $phpVersionProvider;
-        $this->listeningClassMethodArgumentManipulator = $listeningClassMethodArgumentManipulator;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     public function create(): ClassMethod

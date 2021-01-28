@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony5\NodeFactory;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -11,28 +12,21 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\NetteKdyby\NodeManipulator\ListeningClassMethodArgumentManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class OnSuccessLogoutClassMethodFactory
 {
     /**
+     * @var string
+     */
+    private const LOGOUT_EVENT = 'logoutEvent';
+
+    /**
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    /**
-     * @var ListeningClassMethodArgumentManipulator
-     */
-    private $listeningClassMethodArgumentManipulator;
 
     /**
      * @var NodeNameResolver
@@ -51,15 +45,11 @@ final class OnSuccessLogoutClassMethodFactory
 
     public function __construct(
         NodeFactory $nodeFactory,
-        PhpVersionProvider $phpVersionProvider,
-        ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator,
         NodeNameResolver $nodeNameResolver,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         BareLogoutClassMethodFactory $bareLogoutClassMethodFactory
     ) {
         $this->nodeFactory = $nodeFactory;
-        $this->phpVersionProvider = $phpVersionProvider;
-        $this->listeningClassMethodArgumentManipulator = $listeningClassMethodArgumentManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->bareLogoutClassMethodFactory = $bareLogoutClassMethodFactory;
@@ -69,7 +59,7 @@ final class OnSuccessLogoutClassMethodFactory
     {
         $classMethod = $this->bareLogoutClassMethodFactory->create();
 
-        $getResponseMethodCall = new MethodCall(new Variable('logoutEvent'), 'getResponse');
+        $getResponseMethodCall = new MethodCall(new Variable(self::LOGOUT_EVENT), 'getResponse');
         $notIdentical = new NotIdentical($getResponseMethodCall, $this->nodeFactory->createNull());
 
         $if = new If_($notIdentical);
@@ -88,7 +78,7 @@ final class OnSuccessLogoutClassMethodFactory
 
     private function replaceReturnResponseWithSetResponse(ClassMethod $classMethod): void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (\PhpParser\Node $node) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node): ?Expression {
             if (! $node instanceof Return_) {
                 return null;
             }
@@ -98,7 +88,7 @@ final class OnSuccessLogoutClassMethodFactory
             }
 
             $args = $this->nodeFactory->createArgs([$node->expr]);
-            $methodCall = new MethodCall(new Variable('logoutEvent'), 'setResponse', $args);
+            $methodCall = new MethodCall(new Variable(self::LOGOUT_EVENT), 'setResponse', $args);
 
             return new Expression($methodCall);
         });
@@ -106,7 +96,7 @@ final class OnSuccessLogoutClassMethodFactory
 
     private function replaceRequestWithGetRequest(ClassMethod $classMethod): void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (\PhpParser\Node $node) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node): ?MethodCall {
             if (! $node instanceof Variable) {
                 return null;
             }
@@ -115,7 +105,7 @@ final class OnSuccessLogoutClassMethodFactory
                 return null;
             }
 
-            return new MethodCall(new Variable('logoutEvent'), 'getRequest');
+            return new MethodCall(new Variable(self::LOGOUT_EVENT), 'getRequest');
         });
     }
 }

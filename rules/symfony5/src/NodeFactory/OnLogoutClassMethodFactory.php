@@ -61,26 +61,12 @@ final class OnLogoutClassMethodFactory
     }
 
     /**
-     * @param Param[] $params
-     * @return Expression[]
+     * @return Stmt[]
      */
-    private function createAssignStmts(array $params): array
+    private function createAssignStmtFromOldClassMethod(ClassMethod $onLogoutSuccessClassMethod): array
     {
-        $logoutEventVariable = new Variable('logoutEvent');
-
-        $assignStmts = [];
-        foreach ($params as $param) {
-            foreach (self::PARAMETER_TO_GETTER_NAMES as $parameterName => $getterName) {
-                if (! $this->nodeNameResolver->isName($param, $parameterName)) {
-                    continue;
-                }
-
-                $assign = new Assign($param->var, new MethodCall($logoutEventVariable, $getterName));
-                $assignStmts[] = new Expression($assign);
-            }
-        }
-
-        return $assignStmts;
+        $usedParams = $this->resolveUsedParams($onLogoutSuccessClassMethod);
+        return $this->createAssignStmts($usedParams);
     }
 
     /**
@@ -103,11 +89,25 @@ final class OnLogoutClassMethodFactory
     }
 
     /**
-     * @return Stmt[]
+     * @param Param[] $params
+     * @return Expression[]
      */
-    private function createAssignStmtFromOldClassMethod(ClassMethod $onLogoutSuccessClassMethod): array
+    private function createAssignStmts(array $params): array
     {
-        $usedParams = $this->resolveUsedParams($onLogoutSuccessClassMethod);
-        return $this->createAssignStmts($usedParams);
+        $logoutEventVariable = new Variable('logoutEvent');
+
+        $assignStmts = [];
+        foreach ($params as $param) {
+            foreach (self::PARAMETER_TO_GETTER_NAMES as $parameterName => $getterName) {
+                if (! $this->nodeNameResolver->isName($param, $parameterName)) {
+                    continue;
+                }
+
+                $assign = new Assign($param->var, new MethodCall($logoutEventVariable, $getterName));
+                $assignStmts[] = new Expression($assign);
+            }
+        }
+
+        return $assignStmts;
     }
 }
