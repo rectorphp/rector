@@ -9,6 +9,7 @@ class SkipCorrectArg
 {
     public function run(FormConfigBuilderInterface $builder)
     {
-        $builder->setDataMapper(new \Symfony\Component\Form\Extension\Core\DataMapper\DataMapper(new \Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor()));
+        $propertyPathAccessor = new \Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor();
+        $builder->setDataMapper(new \Symfony\Component\Form\Extension\Core\DataMapper\DataMapper($propertyPathAccessor));
     }
 }

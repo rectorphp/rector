@@ -7,14 +7,14 @@ namespace Rector\Symfony5\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Rector\AbstractRector;
+use Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor;
+use Symfony\Component\Form\Extension\Core\DataMapper\DataMapper;
 use Symfony\Component\Form\FormConfigBuilderInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Symfony\Component\Form\Extension\Core\DataMapper\DataMapper;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Name\FullyQualified;
-use Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor;
 
 /**
  * @see https://github.com/symfony/symfony/commit/878effaf47cfb23f73c984d806eb8e9d9206cb5c
@@ -52,15 +52,14 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-use Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor;
-use Symfony\Component\Form\Extension\Core\DataMapper\DataMapper;
+use Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper;
 use Symfony\Component\Form\FormConfigBuilderInterface;
 
 class SomeClass
 {
     public function run(FormConfigBuilderInterface $builder)
     {
-        $builder->setDataMapper(new DataMapper(new PropertyPathAccessor()));
+        $builder->setDataMapper(new \Symfony\Component\Form\Extension\Core\DataMapper\DataMapper(new \Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor()));
     }
 }
 CODE_SAMPLE
@@ -90,15 +89,13 @@ CODE_SAMPLE
         }
 
         $argumentValue = $node->args[0]->value;
-        if (! $this->isObjectType($argumentValue, self::ARG_CORRECT_TYPE)) {
+        if ($this->isObjectType($argumentValue, self::ARG_CORRECT_TYPE)) {
             return null;
         }
 
-        $dataMapperArgumentValue = new New_(
-            new FullyQualified(PropertyPathAccessor::class)
-        );
+        $propertyPathAccessor = new New_(new FullyQualified(PropertyPathAccessor::class));
 
-        $newArgumentValue = new New_(new FullyQualified(DataMapper::class), [new Arg($dataMapperArgumentValue)]);
+        $newArgumentValue = new New_(new FullyQualified(DataMapper::class), [new Arg($propertyPathAccessor)]);
         $node->args[0]->value = $newArgumentValue;
 
         return $node;
