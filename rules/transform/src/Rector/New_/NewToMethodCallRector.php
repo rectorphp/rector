@@ -15,9 +15,11 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Transform\ValueObject\NewToMethodCall;
 use ReflectionClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\NewToMethodCallRectorTest
@@ -27,12 +29,12 @@ final class NewToMethodCallRector extends AbstractRector implements Configurable
     /**
      * @var string
      */
-    public const OBJECT_TO_FACTORY_METHOD = 'object_to_factory_method';
+    public const NEWS_TO_METHOD_CALLS = 'news_to_method_calls';
 
     /**
-     * @var string[][]
+     * @var NewToMethodCall[]
      */
-    private $objectToFactoryMethod = [];
+    private $newsToMethodCalls = [];
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -62,12 +64,7 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 [
-                    self::OBJECT_TO_FACTORY_METHOD => [
-                        'MyClass' => [
-                            'class' => 'MyClassFactory',
-                            'method' => 'create',
-                        ],
-                    ],
+                    self::NEWS_TO_METHOD_CALLS => [new NewToMethodCall('MyClass', 'MyClassFactory', 'create')],
                 ]
             ),
         ]);
@@ -86,52 +83,55 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->objectToFactoryMethod as $object => $factoryInfo) {
-            if (! $this->isObjectType($node, $object)) {
+        foreach ($this->newsToMethodCalls as $newToMethodCall) {
+            if (! $this->isObjectType($node, $newToMethodCall->getNewType())) {
                 continue;
             }
 
-            $factoryClass = $factoryInfo['class'];
-            $factoryMethod = $factoryInfo['method'];
+            $serviceType = $newToMethodCall->getServiceType();
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-
-            if ($className === $factoryClass) {
+            if ($className === $serviceType) {
                 continue;
             }
 
             /** @var Class_ $classNode */
             $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-            $propertyName = $this->getExistingFactoryPropertyName($classNode, $factoryClass);
+            $propertyName = $this->getExistingFactoryPropertyName($classNode, $serviceType);
 
             if ($propertyName === null) {
-                $propertyName = $this->getFactoryPropertyName($factoryClass);
+                $propertyName = $this->getFactoryPropertyName($serviceType);
 
-                $factoryObjectType = new ObjectType($factoryClass);
+                $factoryObjectType = new ObjectType($serviceType);
 
                 $this->addConstructorDependencyToClass($classNode, $factoryObjectType, $propertyName);
             }
 
-            return new MethodCall(
-                new PropertyFetch(new Variable('this'), $propertyName),
-                $factoryMethod,
-                $node->args
-            );
+            $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
+
+            return new MethodCall($propertyFetch, $newToMethodCall->getServiceMethod(), $node->args);
         }
 
         return $node;
     }
 
+    /**
+     * @param array<string, NewToMethodCall[]> $configuration
+     */
     public function configure(array $configuration): void
     {
-        $this->objectToFactoryMethod = $configuration[self::OBJECT_TO_FACTORY_METHOD] ?? [];
+        $newsToMethodCalls = $configuration[self::NEWS_TO_METHOD_CALLS] ?? [];
+        Assert::allIsInstanceOf($newsToMethodCalls, NewToMethodCall::class);
+        $this->newsToMethodCalls = $newsToMethodCalls;
     }
 
     private function getExistingFactoryPropertyName(Class_ $class, string $factoryClass): ?string
     {
         foreach ($class->getProperties() as $property) {
-            if ($this->isObjectType($property, $factoryClass)) {
-                return (string) $property->props[0]->name;
+            if (! $this->isObjectType($property, $factoryClass)) {
+                continue;
             }
+
+            return $this->getName($property);
         }
 
         return null;

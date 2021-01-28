@@ -9,6 +9,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\New_\NewToMethodCallRector;
 use Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClass;
 use Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClassFactory;
+use Rector\Transform\ValueObject\NewToMethodCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NewToMethodCallRectorTest extends AbstractRectorTestCase
@@ -33,11 +34,8 @@ final class NewToMethodCallRectorTest extends AbstractRectorTestCase
     {
         return [
             NewToMethodCallRector::class => [
-                NewToMethodCallRector::OBJECT_TO_FACTORY_METHOD => [
-                    MyClass::class => [
-                        'class' => MyClassFactory::class,
-                        'method' => 'create',
-                    ],
+                NewToMethodCallRector::NEWS_TO_METHOD_CALLS => [
+                    new NewToMethodCall(MyClass::class, MyClassFactory::class, 'create'),
                 ],
             ],
         ];

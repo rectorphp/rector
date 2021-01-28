@@ -7379,7 +7379,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(NewToMethodCallRector::class)
         ->call('configure', [[
-            NewToMethodCallRector::OBJECT_TO_FACTORY_METHOD => [
+            NewToMethodCallRector::NEWS_TO_METHOD_CALLS => [
                 'MyClass' => [
                     'class' => 'MyClassFactory',
                     'method' => 'create',
