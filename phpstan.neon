@@ -502,7 +502,7 @@ parameters:
         - '#Method (.*?) should return class\-string but returns string#'
 
         -
-            message: '#\$this as argument is not allowed\. Refator method to service composition#'
+            message: '#\$this as argument is not allowed\. Refactor method to service composition#'
             paths:
                 - src/Rector/AbstractRector.php
                 # setter to avoid circular dependency in nested collector
