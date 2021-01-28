@@ -7020,10 +7020,10 @@ Change visibility of property from parent class.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Property\ChangePropertyVisibilityRector`
+- class: `Rector\Visibility\Rector\Property\ChangePropertyVisibilityRector`
 
 ```php
-use Rector\Generic\Rector\Property\ChangePropertyVisibilityRector;
+use Rector\Visibility\Rector\Property\ChangePropertyVisibilityRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

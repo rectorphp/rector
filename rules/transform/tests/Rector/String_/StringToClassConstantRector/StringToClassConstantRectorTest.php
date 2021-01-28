@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Transform\Tests\Rector\String_\StringToClassConstantRector;
 
 use Iterator;
-use Rector\Transform\ValueObject\StringToClassConstant;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\String_\StringToClassConstantRector;
+use Rector\Transform\ValueObject\StringToClassConstant;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class StringToClassConstantRectorTest extends AbstractRectorTestCase
