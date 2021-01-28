@@ -540,6 +540,16 @@ final class NodeFactory
         return $param;
     }
 
+    public function createFalse(): ConstFetch
+    {
+        return new ConstFetch(new Name('false'));
+    }
+
+    public function createTrue(): ConstFetch
+    {
+        return new ConstFetch(new Name('true'));
+    }
+
     private function createClassConstFetchFromName(Name $className, string $constantName): ClassConstFetch
     {
         $classConstFetch = $this->builderFactory->classConstFetch($className, $constantName);

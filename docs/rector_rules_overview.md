@@ -6885,10 +6885,10 @@ Change visibility of constant from parent class.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassConst\ChangeConstantVisibilityRector`
+- class: `Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector`
 
 ```php
-use Rector\Generic\Rector\ClassConst\ChangeConstantVisibilityRector;
+use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
 use Rector\Generic\ValueObject\ClassConstantVisibilityChange;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -7020,10 +7020,10 @@ Change visibility of property from parent class.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Property\ChangePropertyVisibilityRector`
+- class: `Rector\Visibility\Rector\Property\ChangePropertyVisibilityRector`
 
 ```php
-use Rector\Generic\Rector\Property\ChangePropertyVisibilityRector;
+use Rector\Visibility\Rector\Property\ChangePropertyVisibilityRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -7063,10 +7063,10 @@ Change magic array access add to `$list,` to explicit `$list->$addMethod(...)`
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Assign\DimFetchAssignToMethodCallRector`
+- class: `Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector`
 
 ```php
-use Rector\Generic\Rector\Assign\DimFetchAssignToMethodCallRector;
+use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
 use Rector\Generic\ValueObject\DimFetchAssignToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -7324,10 +7324,10 @@ Wrap method call to return
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Expression\MethodCallToReturnRector`
+- class: `Rector\Transform\Rector\Expression\MethodCallToReturnRector`
 
 ```php
-use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
+use Rector\Transform\Rector\Expression\MethodCallToReturnRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -7371,15 +7371,15 @@ Replaces creating object instances with "new" keyword with factory method.
 - class: `Rector\Generic\Rector\New_\NewObjectToFactoryCreateRector`
 
 ```php
-use Rector\Generic\Rector\New_\NewObjectToFactoryCreateRector;
+use Rector\Transform\Rector\New_\NewToMethodCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(NewObjectToFactoryCreateRector::class)
+    $services->set(NewToMethodCallRector::class)
         ->call('configure', [[
-            NewObjectToFactoryCreateRector::OBJECT_TO_FACTORY_METHOD => [
+            NewToMethodCallRector::NEWS_TO_METHOD_CALLS => [
                 'MyClass' => [
                     'class' => 'MyClassFactory',
                     'method' => 'create',
@@ -7488,10 +7488,10 @@ Remove annotation by names
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassLike\RemoveAnnotationRector`
+- class: `Rector\DeadDocBlock\Rector\ClassLike\RemoveAnnotationRector`
 
 ```php
-use Rector\Generic\Rector\ClassLike\RemoveAnnotationRector;
+use Rector\DeadDocBlock\Rector\ClassLike\RemoveAnnotationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -7691,17 +7691,17 @@ Replaces constant by value
 - class: `Rector\Generic\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector`
 
 ```php
-use Rector\Generic\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector;
-use Rector\Generic\ValueObject\ClassConstFetchToValue;
+use Rector\Transform\Rector\ClassConstFetch\ClassConstFetchToStringRector;
+use Rector\Transform\ValueObject\ClassConstFetchToValue;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(RenameClassConstantsUseToStringsRector::class)
+    $services->set(ClassConstFetchToStringRector::class)
         ->call('configure', [[
-            RenameClassConstantsUseToStringsRector::CLASS_CONST_FETCHES_TO_VALUES => ValueObjectInliner::inline([
+            ClassConstFetchToStringRector::CLASS_CONST_FETCHES_TO_VALUES => ValueObjectInliner::inline([
                 new ClassConstFetchToValue('Nette\Configurator', 'DEVELOPMENT', 'development'),
                 new ClassConstFetchToValue('Nette\Configurator', 'PRODUCTION', 'production'),
             ]),
@@ -7753,11 +7753,11 @@ Changes strings to specific constants
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\String_\StringToClassConstantRector`
+- class: `Rector\Transform\Rector\String_\StringToClassConstantRector`
 
 ```php
-use Rector\Generic\Rector\String_\StringToClassConstantRector;
-use Rector\Generic\ValueObject\StringToClassConstant;
+use Rector\Transform\Rector\String_\StringToClassConstantRector;
+use Rector\Transform\ValueObject\StringToClassConstant;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -16383,18 +16383,18 @@ Replaces properties assign calls be defined methods.
 - class: `Rector\Transform\Rector\Assign\PropertyToMethodRector`
 
 ```php
-use Rector\Transform\Rector\Assign\PropertyToMethodRector;
-use Rector\Transform\ValueObject\PropertyToMethod;
+use Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector;
+use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(PropertyToMethodRector::class)
+    $services->set(PropertyFetchToMethodCallRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
-                new PropertyToMethod('SomeObject', 'property', 'getProperty', [], 'setProperty'),
+            PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
+                new PropertyFetchToMethodCall('SomeObject', 'property', 'getProperty', [], 'setProperty'),
             ]),
         ]]);
 };
@@ -16412,18 +16412,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ```php
-use Rector\Transform\Rector\Assign\PropertyToMethodRector;
-use Rector\Transform\ValueObject\PropertyToMethod;
+use Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector;
+use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(PropertyToMethodRector::class)
+    $services->set(PropertyFetchToMethodCallRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
-                new PropertyToMethod('SomeObject', 'property', 'getConfig', ['someArg'], null),
+            PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
+                new PropertyFetchToMethodCall('SomeObject', 'property', 'getConfig', ['someArg'], null),
             ]),
         ]]);
 };

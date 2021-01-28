@@ -14,25 +14,25 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameProperty;
-use Rector\Transform\Rector\Assign\PropertyToMethodRector;
-use Rector\Transform\ValueObject\PropertyToMethod;
+use Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector;
+use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(PropertyToMethodRector::class)
+    $services->set(PropertyFetchToMethodCallRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
+            PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
                 // source: https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html
-                new PropertyToMethod('Cake\Network\Request', 'params', 'getAttribute', null, ['params']),
-                new PropertyToMethod('Cake\Network\Request', 'data', 'getData'),
-                new PropertyToMethod('Cake\Network\Request', 'query', 'getQueryParams'),
-                new PropertyToMethod('Cake\Network\Request', 'cookies', 'getCookie'),
-                new PropertyToMethod('Cake\Network\Request', 'base', 'getAttribute', null, ['base']),
-                new PropertyToMethod('Cake\Network\Request', 'webroot', 'getAttribute', null, ['webroot']),
-                new PropertyToMethod('Cake\Network\Request', 'here', 'getAttribute', null, ['here']),
+                new PropertyFetchToMethodCall('Cake\Network\Request', 'params', 'getAttribute', null, ['params']),
+                new PropertyFetchToMethodCall('Cake\Network\Request', 'data', 'getData'),
+                new PropertyFetchToMethodCall('Cake\Network\Request', 'query', 'getQueryParams'),
+                new PropertyFetchToMethodCall('Cake\Network\Request', 'cookies', 'getCookie'),
+                new PropertyFetchToMethodCall('Cake\Network\Request', 'base', 'getAttribute', null, ['base']),
+                new PropertyFetchToMethodCall('Cake\Network\Request', 'webroot', 'getAttribute', null, ['webroot']),
+                new PropertyFetchToMethodCall('Cake\Network\Request', 'here', 'getAttribute', null, ['here']),
             ]),
         ]]);
 
