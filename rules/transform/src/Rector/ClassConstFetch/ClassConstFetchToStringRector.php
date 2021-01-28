@@ -25,7 +25,7 @@ final class ClassConstFetchToStringRector extends AbstractRector implements Conf
     public const CLASS_CONST_FETCHES_TO_VALUES = 'old_constants_to_new_valuesByType';
 
     /**
-     * @var \Rector\Transform\ValueObject\ClassConstFetchToValue[]
+     * @var ClassConstFetchToValue[]
      */
     private $classConstFetchesToValues = [];
 
@@ -76,7 +76,7 @@ final class ClassConstFetchToStringRector extends AbstractRector implements Conf
     }
 
     /**
-     * @param array<string, \Rector\Transform\ValueObject\ClassConstFetchToValue[]> $configuration
+     * @param array<string, ClassConstFetchToValue[]> $configuration
      */
     public function configure(array $configuration): void
     {

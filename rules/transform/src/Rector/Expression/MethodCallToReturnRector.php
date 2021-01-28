@@ -27,7 +27,7 @@ final class MethodCallToReturnRector extends AbstractRector implements Configura
     public const METHOD_CALL_WRAPS = 'method_call_wraps';
 
     /**
-     * @var \Rector\Transform\ValueObject\MethodCallToReturn[]
+     * @var MethodCallToReturn[]
      */
     private $methodCallWraps = [];
 
