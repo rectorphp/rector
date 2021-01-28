@@ -2,7 +2,7 @@
 
 namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\Fixture;
 
-class NotIdentical
+final class SomeNotIdentical
 {
     public function accept($something, $somethingelse)
     {
@@ -16,7 +16,7 @@ class NotIdentical
 
 namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\Fixture;
 
-class NotIdentical
+final class SomeNotIdentical
 {
     public function accept($something, $somethingelse)
     {
