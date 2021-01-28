@@ -21,6 +21,7 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
@@ -37,7 +38,7 @@ use Webmozart\Assert\Assert;
  *
  * @see why → https://blog.martinhujer.cz/how-to-use-data-providers-in-phpunit/
  */
-final class ArrayArgumentInTestToDataProviderRector extends \Rector\Core\Rector\AbstractRector implements ConfigurableRectorInterface
+final class ArrayArgumentInTestToDataProviderRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @api
