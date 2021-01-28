@@ -13,9 +13,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/symfony/symfony/commit/878effaf47cfb23f73c984d806eb8e9d9206cb5c
- * @see \Rector\Symfony5\Tests\Rector\MethodCall\BuilderSetDataMapperRector\BuilderSetDataMapperRectorTest
+ * @see \Rector\Symfony5\Tests\Rector\MethodCall\FormBuilderSetDataMapperRector\FormBuilderSetDataMapperRectorTest
  */
-final class BuilderSetDataMapperRector extends AbstractRector
+final class FormBuilderSetDataMapperRector extends AbstractRector
 {
     /**
      * @var class-string[]
