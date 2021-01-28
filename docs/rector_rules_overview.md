@@ -6885,10 +6885,10 @@ Change visibility of constant from parent class.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassConst\ChangeConstantVisibilityRector`
+- class: `Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector`
 
 ```php
-use Rector\Generic\Rector\ClassConst\ChangeConstantVisibilityRector;
+use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
 use Rector\Generic\ValueObject\ClassConstantVisibilityChange;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

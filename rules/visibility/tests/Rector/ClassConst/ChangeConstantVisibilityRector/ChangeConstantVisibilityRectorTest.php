@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector;
+namespace Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRector;
 
 use Iterator;
 use Rector\Core\ValueObject\Visibility;
-use Rector\Generic\Rector\ClassConst\ChangeConstantVisibilityRector;
-use Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Source\ParentObject;
 use Rector\Generic\ValueObject\ClassConstantVisibilityChange;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
+use Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Source\ParentObject;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
@@ -47,7 +47,7 @@ final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
                         Visibility::PRIVATE
                     ),
                     new ClassConstantVisibilityChange(
-                        'Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture\Fixture2',
+                        'Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture\Fixture2',
                         'TO_BE_PRIVATE_CONSTANT',
                         Visibility::PRIVATE
                     ),
