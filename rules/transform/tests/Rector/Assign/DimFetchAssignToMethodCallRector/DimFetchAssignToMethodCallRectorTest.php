@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Assign\DimFetchAssignToMethodCallRector;
+namespace Rector\Transform\Tests\Rector\Assign\DimFetchAssignToMethodCallRector;
 
 use Iterator;
-use Rector\Generic\Rector\Assign\DimFetchAssignToMethodCallRector;
 use Rector\Generic\ValueObject\DimFetchAssignToMethodCall;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DimFetchAssignToMethodCallRectorTest extends AbstractRectorTestCase

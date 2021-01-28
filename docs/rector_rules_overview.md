@@ -7063,10 +7063,10 @@ Change magic array access add to `$list,` to explicit `$list->$addMethod(...)`
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Assign\DimFetchAssignToMethodCallRector`
+- class: `Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector`
 
 ```php
-use Rector\Generic\Rector\Assign\DimFetchAssignToMethodCallRector;
+use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
 use Rector\Generic\ValueObject\DimFetchAssignToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-use Rector\Generic\Rector\Assign\DimFetchAssignToMethodCallRector;
+use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
 use Rector\Generic\ValueObject\DimFetchAssignToMethodCall;
 
 final class ConfigurationWithStringStringArray
@@ -29,7 +29,7 @@ final class ConfigurationWithStringStringArray
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-use Rector\Generic\Rector\Assign\DimFetchAssignToMethodCallRector;
+use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
 use Rector\Generic\ValueObject\DimFetchAssignToMethodCall;
 
 final class ConfigurationWithStringStringArray
