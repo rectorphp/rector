@@ -52,11 +52,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::DEFLUENT,
         SetList::TYPE_DECLARATION,
         SetList::PHPUNIT_CODE_QUALITY,
-        Setlist::SYMFONY_AUTOWIRE,
-        Setlist::PHP_71,
-        Setlist::PHP_72,
-        Setlist::PHP_73,
-        Setlist::EARLY_RETURN,
+        SetList::SYMFONY_AUTOWIRE,
+        SetList::PHP_71,
+        SetList::PHP_72,
+        SetList::PHP_73,
+        SetList::EARLY_RETURN,
     ]);
 
     $parameters->set(Option::PATHS, [

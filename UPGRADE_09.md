@@ -18,10 +18,10 @@ Sets with ambiguous naming were removed and rules moved to proper-named sets:
      $parameters = $containerConfigurator->parameters();
 
      $parameters->set(Option::SETS, [
--        Setlist::SOLID,
+-        SetList::SOLID,
 +        SetList::CODING_STYLE,
--        Setlist::PHPSTAN,
-+        Setlist::PRIVATIZATION,
+-        SetList::PHPSTAN,
++        SetList::PRIVATIZATION,
      ]);
  };
 ```
