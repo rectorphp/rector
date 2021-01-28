@@ -108,7 +108,7 @@ CODE_SAMPLE
 
     private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectType($methodCall, 'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor')) {
+        if (! $this->isObjectType($methodCall->var, 'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor')) {
             return true;
         }
 
@@ -155,16 +155,17 @@ CODE_SAMPLE
 
     private function prepareEnableMagicMethodsExtractionFlags(bool $enableMagicCallExtractionValue): BitwiseOr
     {
-        $classConstFetch = $this->createClassConstFetch(
+        $magicGetClassConstFetch = $this->createClassConstFetch(
             'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor',
             'MAGIC_GET'
         );
-        $magicSet = $this->createClassConstFetch(
+        $magicSetClassConstFetch = $this->createClassConstFetch(
             'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor',
             'MAGIC_SET'
         );
+
         if (! $enableMagicCallExtractionValue) {
-            return new BitwiseOr($classConstFetch, $magicSet);
+            return new BitwiseOr($magicGetClassConstFetch, $magicSetClassConstFetch);
         }
 
         return new BitwiseOr(
@@ -173,9 +174,9 @@ CODE_SAMPLE
                     'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor',
                     'MAGIC_CALL'
                 ),
-                $classConstFetch,
+                $magicGetClassConstFetch,
             ),
-            $magicSet,
+            $magicSetClassConstFetch,
         );
     }
 }

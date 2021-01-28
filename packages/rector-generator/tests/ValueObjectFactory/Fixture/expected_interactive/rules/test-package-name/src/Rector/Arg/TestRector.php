@@ -19,7 +19,7 @@ final class TestRector extends AbstractRector
     {
         return new RuleDefinition('Description', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -27,10 +27,10 @@ class SomeClass
         $this->something();
     }
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -38,7 +38,7 @@ class SomeClass
         $this->somethingElse();
     }
 }
-PHP
+CODE_SAMPLE
 
             )
         ]);

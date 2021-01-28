@@ -37,7 +37,7 @@ class MultipleMethodsEventSubscriber implements \Symfony\Component\EventDispatch
     {
     }
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public static function getSubscribedEvents(): array
     {

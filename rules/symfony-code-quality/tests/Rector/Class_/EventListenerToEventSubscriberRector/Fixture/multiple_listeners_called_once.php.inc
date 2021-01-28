@@ -29,7 +29,7 @@ class MultipleListenersCalledOnceEventSubscriber implements \Symfony\Component\E
     {
     }
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public static function getSubscribedEvents(): array
     {

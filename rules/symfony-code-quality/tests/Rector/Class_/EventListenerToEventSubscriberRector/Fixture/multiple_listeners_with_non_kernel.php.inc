@@ -29,7 +29,7 @@ class MultipleMethodsWithNonKernelEventSubscriber implements \Symfony\Component\
     {
     }
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public static function getSubscribedEvents(): array
     {
