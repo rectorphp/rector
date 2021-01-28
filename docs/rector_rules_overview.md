@@ -7753,11 +7753,11 @@ Changes strings to specific constants
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\String_\StringToClassConstantRector`
+- class: `Rector\Transform\Rector\String_\StringToClassConstantRector`
 
 ```php
-use Rector\Generic\Rector\String_\StringToClassConstantRector;
-use Rector\Generic\ValueObject\StringToClassConstant;
+use Rector\Transform\Rector\String_\StringToClassConstantRector;
+use Rector\Transform\ValueObject\StringToClassConstant;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

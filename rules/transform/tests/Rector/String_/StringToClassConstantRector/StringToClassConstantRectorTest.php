@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\String_\StringToClassConstantRector;
+namespace Rector\Transform\Tests\Rector\String_\StringToClassConstantRector;
 
 use Iterator;
-use Rector\Generic\Rector\String_\StringToClassConstantRector;
-use Rector\Generic\ValueObject\StringToClassConstant;
+use Rector\Transform\ValueObject\StringToClassConstant;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Transform\Rector\String_\StringToClassConstantRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class StringToClassConstantRectorTest extends AbstractRectorTestCase

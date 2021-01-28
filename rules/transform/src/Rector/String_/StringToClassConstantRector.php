@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\String_;
+namespace Rector\Transform\Rector\String_;
 
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Generic\ValueObject\StringToClassConstant;
+use Rector\Transform\ValueObject\StringToClassConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Generic\Tests\Rector\String_\StringToClassConstantRector\StringToClassConstantRectorTest
+ * @see \Rector\Transform\Tests\Rector\String_\StringToClassConstantRector\StringToClassConstantRectorTest
  */
 final class StringToClassConstantRector extends AbstractRector implements ConfigurableRectorInterface
 {
