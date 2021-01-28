@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Rector\Symfony5\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
 use Symfony\Component\Form\FormConfigBuilderInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symfony\Component\Form\Extension\Core\DataMapper\DataMapper;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name\FullyQualified;
+use Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor;
 
 /**
  * @see https://github.com/symfony/symfony/commit/878effaf47cfb23f73c984d806eb8e9d9206cb5c
@@ -85,10 +89,17 @@ CODE_SAMPLE
             return null;
         }
 
-        $argValue = $node->args[0]->value;
-        if (! $this->isObjectType($argValue, self::ARG_CORRECT_TYPE)) {
+        $argumentValue = $node->args[0]->value;
+        if (! $this->isObjectType($argumentValue, self::ARG_CORRECT_TYPE)) {
             return null;
         }
+
+        $dataMapperArgumentValue = new New_(
+            new FullyQualified(PropertyPathAccessor::class)
+        );
+
+        $newArgumentValue = new New_(new FullyQualified(DataMapper::class), [new Arg($dataMapperArgumentValue)]);
+        $node->args[0]->value = $newArgumentValue;
 
         return $node;
     }
