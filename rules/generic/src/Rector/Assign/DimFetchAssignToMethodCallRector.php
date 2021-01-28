@@ -35,7 +35,7 @@ final class DimFetchAssignToMethodCallRector extends AbstractRector implements C
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Change magic array access add to $list, to explicit $list->$addMethod(...)',
+            'Change magic array access add to $list[], to explicit $list->addMethod(...)',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
@@ -47,8 +47,7 @@ class RouterFactory
     public static function createRouter()
     {
         $routeList = new RouteList();
-        $routeList[] = new Route('<module>/<presenter>/<action>[/<id>]', 'Homepage:default');
-        return $routeList;
+        $routeList[] = new Route('...');
     }
 }
 CODE_SAMPLE
@@ -61,8 +60,7 @@ class RouterFactory
     public static function createRouter()
     {
         $routeList = new RouteList();
-        $routeList->addRoute('<module>/<presenter>/<action>[/<id>]', 'Homepage:default');
-        return $routeList;
+        $routeList->addRoute('...');
     }
 }
 CODE_SAMPLE

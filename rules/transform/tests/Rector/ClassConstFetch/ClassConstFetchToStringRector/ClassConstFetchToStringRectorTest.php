@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector;
+namespace Rector\Transform\Tests\Rector\ClassConstFetch\ClassConstFetchToStringRector;
 
 use Iterator;
-use Rector\Generic\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector;
-use Rector\Generic\Tests\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector\Source\OldClassWithConstants;
-use Rector\Generic\ValueObject\ClassConstFetchToValue;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Transform\Rector\ClassConstFetch\ClassConstFetchToStringRector;
+use Rector\Transform\Tests\Rector\ClassConstFetch\ClassConstFetchToStringRector\Source\OldClassWithConstants;
+use Rector\Transform\ValueObject\ClassConstFetchToValue;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTestCase
+final class ClassConstFetchToStringRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -32,8 +32,8 @@ final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTes
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            RenameClassConstantsUseToStringsRector::class => [
-                RenameClassConstantsUseToStringsRector::CLASS_CONST_FETCHES_TO_VALUES => [
+            ClassConstFetchToStringRector::class => [
+                ClassConstFetchToStringRector::CLASS_CONST_FETCHES_TO_VALUES => [
                     new ClassConstFetchToValue(OldClassWithConstants::class, 'DEVELOPMENT', 'development'),
                     new ClassConstFetchToValue(OldClassWithConstants::class, 'PRODUCTION', 'production'),
                 ],

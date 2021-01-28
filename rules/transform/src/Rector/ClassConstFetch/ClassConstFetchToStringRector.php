@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\ClassConstFetch;
+namespace Rector\Transform\Rector\ClassConstFetch;
 
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Generic\ValueObject\ClassConstFetchToValue;
+use Rector\Transform\ValueObject\ClassConstFetchToValue;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Generic\Tests\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector\RenameClassConstantsUseToStringsRectorTest
+ * @see \Rector\Transform\Tests\Rector\ClassConstFetch\ClassConstFetchToStringRector\ClassConstFetchToStringTest
  */
-final class RenameClassConstantsUseToStringsRector extends AbstractRector implements ConfigurableRectorInterface
+final class ClassConstFetchToStringRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -25,7 +25,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector implem
     public const CLASS_CONST_FETCHES_TO_VALUES = 'old_constants_to_new_valuesByType';
 
     /**
-     * @var ClassConstFetchToValue[]
+     * @var \Rector\Transform\ValueObject\ClassConstFetchToValue[]
      */
     private $classConstFetchesToValues = [];
 
@@ -76,7 +76,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector implem
     }
 
     /**
-     * @param array<string, ClassConstFetchToValue[]> $configuration
+     * @param array<string, \Rector\Transform\ValueObject\ClassConstFetchToValue[]> $configuration
      */
     public function configure(array $configuration): void
     {

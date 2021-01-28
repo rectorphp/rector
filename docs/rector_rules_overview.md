@@ -7691,17 +7691,17 @@ Replaces constant by value
 - class: `Rector\Generic\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector`
 
 ```php
-use Rector\Generic\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector;
-use Rector\Generic\ValueObject\ClassConstFetchToValue;
+use Rector\Transform\Rector\ClassConstFetch\ClassConstFetchToStringRector;
+use Rector\Transform\ValueObject\ClassConstFetchToValue;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(RenameClassConstantsUseToStringsRector::class)
+    $services->set(ClassConstFetchToStringRector::class)
         ->call('configure', [[
-            RenameClassConstantsUseToStringsRector::CLASS_CONST_FETCHES_TO_VALUES => ValueObjectInliner::inline([
+            ClassConstFetchToStringRector::CLASS_CONST_FETCHES_TO_VALUES => ValueObjectInliner::inline([
                 new ClassConstFetchToValue('Nette\Configurator', 'DEVELOPMENT', 'development'),
                 new ClassConstFetchToValue('Nette\Configurator', 'PRODUCTION', 'production'),
             ]),

@@ -6,7 +6,7 @@ namespace Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRect
 
 use Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Source\ParentObject;
 
-class ClassWithInvalidConstants extends ParentObject
+final class ClassWithInvalidConstants extends ParentObject
 {
     public const TO_BE_PUBLIC_CONSTANT = 1;
     public const TO_BE_PROTECTED_CONSTANT = 2;
@@ -23,7 +23,7 @@ namespace Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRect
 
 use Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Source\ParentObject;
 
-class ClassWithInvalidConstants extends ParentObject
+final class ClassWithInvalidConstants extends ParentObject
 {
     public const TO_BE_PUBLIC_CONSTANT = 1;
     protected const TO_BE_PROTECTED_CONSTANT = 2;
