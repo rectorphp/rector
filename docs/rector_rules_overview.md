@@ -6973,10 +6973,10 @@ Change visibility of method from parent class.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector`
+- class: `Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector`
 
 ```php
-use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
+use Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

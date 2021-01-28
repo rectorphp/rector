@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\ClassMethod\ChangeMethodVisibilityRector;
+namespace Rector\Visibility\Tests\Rector\ClassMethod\ChangeMethodVisibilityRector;
 
 use Iterator;
 use Rector\Core\ValueObject\Visibility;
-use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
-use Rector\Generic\Tests\Rector\ClassMethod\ChangeMethodVisibilityRector\Source\ParentObject;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector;
+use Rector\Visibility\Tests\Rector\ClassMethod\ChangeMethodVisibilityRector\Source\ParentObject;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeMethodVisibilityRectorTest extends AbstractRectorTestCase
