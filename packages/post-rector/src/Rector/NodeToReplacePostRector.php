@@ -6,8 +6,6 @@ namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
 use Rector\PostRector\Collector\NodesToReplaceCollector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class NodeToReplacePostRector extends AbstractPostRector
 {
@@ -35,20 +33,5 @@ final class NodeToReplacePostRector extends AbstractPostRector
         }
 
         return null;
-    }
-
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition('Post Rector that replaces one nodes with another', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
-$string = new String_(...);
-CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
-$value = 1000;
-CODE_SAMPLE
-            ),
-        ]);
     }
 }

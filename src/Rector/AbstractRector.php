@@ -20,7 +20,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Contract\Rector\PhpCoreRectorInterface;
+use Rector\Core\Contract\Rector\CorePhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
@@ -34,7 +34,7 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\Skipper\Skipper\Skipper;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-abstract class AbstractRector extends NodeVisitorAbstract implements PhpCoreRectorInterface
+abstract class AbstractRector extends NodeVisitorAbstract implements CorePhpRectorInterface
 {
     use AbstractRectorTrait;
 

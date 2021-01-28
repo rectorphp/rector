@@ -6,6 +6,6 @@ namespace Rector\Core\Contract\Rector;
 
 use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
 
-interface PhpCoreRectorInterface extends PhpRectorInterface, DocumentedRuleInterface
+interface CorePhpRectorInterface extends PhpRectorInterface, DocumentedRuleInterface
 {
 }
