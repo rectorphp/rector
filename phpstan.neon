@@ -502,7 +502,7 @@ parameters:
         - '#Method (.*?) should return class\-string but returns string#'
 
         -
-            message: '#\$this as argument is not allowed\. Refator method to service composition#'
+            message: '#\$this as argument is not allowed\. Refactor method to service composition#'
             paths:
                 - src/Rector/AbstractRector.php
                 # setter to avoid circular dependency in nested collector
@@ -515,3 +515,7 @@ parameters:
 
         - '#Class Rector\\NodeTypeResolver\\Tests\\PerNodeTypeResolver\\PropertyFetchTypeResolver\\Source\\IDontExist not found\.#'
         - '#Class A\\B\\C\\IDontExist not found\.#'
+
+        -
+            message: '#Use non\-dynamic property on static call#'
+            path: packages/better-php-doc-parser/src/AnnotationReader/AnnotationReaderFactory.php #56
