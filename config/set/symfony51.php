@@ -10,6 +10,7 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\String_\RenameStringRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
+use Rector\Symfony5\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector;
 use Rector\Transform\Rector\New_\NewArgToMethodCallRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
 use Rector\Transform\ValueObject\NewArgToMethodCall;
@@ -23,6 +24,9 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
+
+    // see https://github.com/symfony/symfony/pull/36243
+    $services->set(LogoutHandlerToLogoutEventSubscriberRector::class);
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
