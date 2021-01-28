@@ -7324,10 +7324,10 @@ Wrap method call to return
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Expression\MethodCallToReturnRector`
+- class: `Rector\Transform\Rector\Expression\MethodCallToReturnRector`
 
 ```php
-use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
+use Rector\Transform\Rector\Expression\MethodCallToReturnRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

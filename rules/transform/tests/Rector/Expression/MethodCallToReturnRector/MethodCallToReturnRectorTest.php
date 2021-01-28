@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector;
+namespace Rector\Transform\Tests\Rector\Expression\MethodCallToReturnRector;
 
 use Iterator;
-use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
-use Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
-use Rector\Generic\ValueObject\MethodCallToReturn;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Transform\Rector\Expression\MethodCallToReturnRector;
+use Rector\Transform\Tests\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
+use Rector\Transform\ValueObject\MethodCallToReturn;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MethodCallToReturnRectorTest extends AbstractRectorTestCase

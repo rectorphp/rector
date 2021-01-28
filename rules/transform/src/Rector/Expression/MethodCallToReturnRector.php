@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Expression;
+namespace Rector\Transform\Rector\Expression;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -10,14 +10,14 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Generic\ValueObject\MethodCallToReturn;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Transform\ValueObject\MethodCallToReturn;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector\MethodCallToReturnRectorTest
+ * @see \Rector\Transform\Tests\Rector\Expression\MethodCallToReturnRector\MethodCallToReturnRectorTest
  */
 final class MethodCallToReturnRector extends AbstractRector implements ConfigurableRectorInterface
 {
@@ -27,7 +27,7 @@ final class MethodCallToReturnRector extends AbstractRector implements Configura
     public const METHOD_CALL_WRAPS = 'method_call_wraps';
 
     /**
-     * @var MethodCallToReturn[]
+     * @var \Rector\Transform\ValueObject\MethodCallToReturn[]
      */
     private $methodCallWraps = [];
 

@@ -27,7 +27,7 @@ final class NewObjectToFactoryCreateRector extends AbstractRector implements Con
     /**
      * @var string
      */
-    public const OBJECT_TO_FACTORY_METHOD = '$objectToFactoryMethod';
+    public const OBJECT_TO_FACTORY_METHOD = 'object_to_factory_method';
 
     /**
      * @var string[][]
