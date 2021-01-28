@@ -515,3 +515,7 @@ parameters:
 
         - '#Class Rector\\NodeTypeResolver\\Tests\\PerNodeTypeResolver\\PropertyFetchTypeResolver\\Source\\IDontExist not found\.#'
         - '#Class A\\B\\C\\IDontExist not found\.#'
+
+        -
+            message: '#Use non\-dynamic property on static call#'
+            path: packages/better-php-doc-parser/src/AnnotationReader/AnnotationReaderFactory.php #56
