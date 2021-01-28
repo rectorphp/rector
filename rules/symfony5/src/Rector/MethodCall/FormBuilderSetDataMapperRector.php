@@ -20,7 +20,7 @@ final class FormBuilderSetDataMapperRector extends AbstractRector
     /**
      * @var class-string[]
      */
-    private const REQUIRED_TYPE = [FormConfigBuilderInterface::class];
+    private const REQUIRED_TYPE = FormConfigBuilderInterface::class;
 
     public function getRuleDefinition(): RuleDefinition
     {
