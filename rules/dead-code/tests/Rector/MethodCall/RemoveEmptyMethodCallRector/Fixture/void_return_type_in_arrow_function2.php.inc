@@ -7,7 +7,7 @@ class VoidReturnTypeInArrowFunction2
     public function test() {}
 }
 
-if (fn() => (new VoidReturnTypeInArrayFunction())->test()) {
+if (fn() => (new VoidReturnTypeInArrowFunction2())->test()) {
 
 }
 
