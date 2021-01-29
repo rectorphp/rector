@@ -82,7 +82,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($node->args[0]->value, self::ARG_OLD_TYPE)) {
+        if ($this->isBool($node->args[0]->value)) {
             return null;
         }
 
