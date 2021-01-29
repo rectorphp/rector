@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
+use Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
 use Rector\Transform\ValueObject\FuncCallToStaticCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

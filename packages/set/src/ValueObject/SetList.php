@@ -304,6 +304,11 @@ final class SetList
     /**
      * @var string
      */
+    public const NETTE_24 = __DIR__ . '/../../../../config/set/nette-24.php';
+
+    /**
+     * @var string
+     */
     public const NETTE_30 = __DIR__ . '/../../../../config/set/nette-30.php';
 
     /**

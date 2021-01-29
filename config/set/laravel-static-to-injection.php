@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\FuncCall\FuncCallToNewRector;
 use Rector\Laravel\Rector\FuncCall\HelperFuncCallToFacadeClassRector;
 use Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector;
+use Rector\Transform\Rector\FuncCall\FuncCallToNewRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
 use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
@@ -176,7 +176,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]),
     ]]);
     $services->set(FuncCallToNewRector::class)->call('configure', [[
-        FuncCallToNewRector::FUNCTION_TO_NEW => [
+        FuncCallToNewRector::FUNCTIONS_TO_NEWS => [
             'collect' => 'Illuminate\Support\Collection',
         ],
     ]]);

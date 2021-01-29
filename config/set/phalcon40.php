@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\StaticCall\SwapClassMethodArgumentsRector;
-use Rector\Generic\ValueObject\SwapClassMethodArguments;
 use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -14,15 +12,6 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 # https://docs.phalcon.io/4.0/en/upgrade#general-notes
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
-    # !!! be careful not to run this twice, since it swaps arguments back and forth
-    # see https://github.com/rectorphp/rector/issues/2408#issue-534441142
-    $services->set(SwapClassMethodArgumentsRector::class)
-        ->call('configure', [[
-            SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => ValueObjectInliner::inline([
-                new SwapClassMethodArguments('Phalcon\Model', 'assign', [0, 2, 1]),
-            ]),
-        ]]);
 
     # for class renames is better - https://docs.phalcon.io/4.0/en/upgrade#cheat-sheet
     $services->set(RenameClassRector::class)

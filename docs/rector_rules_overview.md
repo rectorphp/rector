@@ -6889,7 +6889,7 @@ Change visibility of constant from parent class.
 
 ```php
 use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
-use Rector\Generic\ValueObject\ClassConstantVisibilityChange;
+use Rector\Visibility\ValueObject\ClassConstantVisibilityChange;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -6931,15 +6931,15 @@ Change method that returns single value to multiple values
 - class: `Rector\Generic\Rector\ClassMethod\ChangeContractMethodSingleToManyRector`
 
 ```php
-use Rector\Generic\Rector\ClassMethod\ChangeContractMethodSingleToManyRector;
+use Rector\Generic\Rector\ClassMethod\SingleToManyMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(ChangeContractMethodSingleToManyRector::class)
+    $services->set(SingleToManyMethodRector::class)
         ->call('configure', [[
-            ChangeContractMethodSingleToManyRector::OLD_TO_NEW_METHOD_BY_TYPE => [
+            SingleToManyMethodRector::SINGLES_TO_MANY_METHODS => [
                 'SomeClass' => [
                     'getNode' => 'getNodes',
                 ],
@@ -6973,11 +6973,11 @@ Change visibility of method from parent class.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector`
+- class: `Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector`
 
 ```php
-use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
-use Rector\Generic\ValueObject\ChangeMethodVisibility;
+use Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector;
+use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -7132,10 +7132,10 @@ Change configured function calls to new Instance
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\FuncCall\FuncCallToNewRector`
+- class: `Rector\Transform\Rector\FuncCall\FuncCallToNewRector`
 
 ```php
-use Rector\Generic\Rector\FuncCall\FuncCallToNewRector;
+use Rector\Transform\Rector\FuncCall\FuncCallToNewRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -7143,7 +7143,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FuncCallToNewRector::class)
         ->call('configure', [[
-            FuncCallToNewRector::FUNCTION_TO_NEW => [
+            FuncCallToNewRector::FUNCTIONS_TO_NEWS => [
                 'collection' => ['Collection'],
             ],
         ]]);
@@ -7171,10 +7171,10 @@ Turns defined function call to static method call.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector`
+- class: `Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector`
 
 ```php
-use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
+use Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
 use Rector\Transform\ValueObject\FuncCallToStaticCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
