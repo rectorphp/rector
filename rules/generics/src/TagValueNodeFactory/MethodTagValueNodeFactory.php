@@ -16,6 +16,7 @@ use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Generics\ValueObject\ChildParentClassReflections;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class MethodTagValueNodeFactory
@@ -40,17 +41,15 @@ final class MethodTagValueNodeFactory
 
     public function createFromMethodReflectionAndReturnTagValueNode(
         MethodReflection $methodReflection,
-        ReturnTagValueNode $returnTagValueNode
+        ReturnTagValueNode $returnTagValueNode,
+        ChildParentClassReflections $childParentClassReflections
     ): MethodTagValueNode {
+        $templateTypeMap = $childParentClassReflections->getTemplateTypeMap();
+        $returnTagTypeNode = $this->resolveReturnTagTypeNode($returnTagValueNode, $templateTypeMap);
+
         $parameterReflections = $methodReflection->getVariants()[0]
             ->getParameters();
-
         $stringParameters = $this->resolveStringParameters($parameterReflections);
-
-        $classReflection = $methodReflection->getDeclaringClass();
-        $templateTypeMap = $classReflection->getTemplateTypeMap();
-
-        $returnTagTypeNode = $this->resolveReturnTagTypeNode($returnTagValueNode, $templateTypeMap);
 
         return new MethodTagValueNode(
             false,
@@ -135,8 +134,7 @@ final class MethodTagValueNodeFactory
         $genericType = $templateTypeMap->getType($typeName);
 
         if ($genericType instanceof Type) {
-            $returnTagType = $genericType;
-            return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($returnTagType);
+            return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($genericType);
         }
 
         return $fallbackTypeNode;

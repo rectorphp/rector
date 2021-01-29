@@ -129,6 +129,7 @@ final class StaticTypeMapper
     ): Type {
         $nameScope = $this->nameScopeFactory->createNameScopeFromNode($node);
         $nameScope = $nameScope->withTemplateTypeMap($templateTypeMap);
+
         return $this->phpDocTypeMapper->mapToPHPStanType($typeNode, $node, $nameScope);
     }
 }

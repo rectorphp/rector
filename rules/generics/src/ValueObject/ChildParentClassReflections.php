@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Rector\Generics\ValueObject;
 
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\Generic\TemplateTypeMap;
 
-final class GenericChildParentClassReflections
+final class ChildParentClassReflections
 {
     /**
      * @var ClassReflection
@@ -32,5 +33,16 @@ final class GenericChildParentClassReflections
     public function getParentClassReflection(): ClassReflection
     {
         return $this->parentClassReflection;
+    }
+
+    /**
+     * Child class has priority with template map
+     */
+    public function getTemplateTypeMap(): TemplateTypeMap
+    {
+        $parentClassTemplateTypeMap = $this->parentClassReflection->getTemplateTypeMap();
+        $childClassTemplateTypeMap = $this->childClassReflection->getTemplateTypeMap();
+
+        return $childClassTemplateTypeMap->intersect($parentClassTemplateTypeMap);
     }
 }
