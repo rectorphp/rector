@@ -204,7 +204,7 @@ then
     config=ci/downgrade/rector-downgrade-rector
     config="${config}-${rector_config}.php"
     note "Running rector_config ${rector_config} for main package ${rootPackage} on path(s) ${path_to_downgrade}"
-    bin/rector process $path_to_downgrade --config=$config --ansi
+    bin/rector process $path_to_downgrade --config=$config --ansi --no-diffs
 
     #Downgrade all the dependencies then
     packages_to_downgrade=$(join_by " " ${dependency_packages[@]})
@@ -212,7 +212,7 @@ then
     config=ci/downgrade/rector-downgrade-dependency
     config="${config}-${rector_config}.php"
     note "Running rector_config ${rector_config} for dependency packages ${packages_to_downgrade} on paths ${paths_to_downgrade}"
-    bin/rector process $paths_to_downgrade --config=$config --ansi
+    bin/rector process $paths_to_downgrade --config=$config --ansi --no-diffs
 
     # Success
     exit 0
