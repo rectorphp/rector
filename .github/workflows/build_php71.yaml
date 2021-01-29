@@ -29,6 +29,7 @@ jobs:
             -   uses: montudor/action-zip@v0.1.1
                 with:
                     args: zip -X -r build/rector-php71.zip . -x *.git* .* "*/\.*" build** ci** stubs** tests** "**/tests**"
+
             -   uses: actions/upload-artifact@v2
                 with:
                     name: rector-downgraded-code

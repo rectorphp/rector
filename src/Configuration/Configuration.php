@@ -85,6 +85,11 @@ final class Configuration
      */
     private $configFileInfo;
 
+    /**
+     * @var bool
+     */
+    private $showDiffs = true;
+
     public function __construct(ParameterProvider $parameterProvider)
     {
         $this->isCacheEnabled = (bool) $parameterProvider->provideParameter(Option::ENABLE_CACHE);
@@ -102,6 +107,7 @@ final class Configuration
         $this->shouldClearCache = (bool) $input->getOption(Option::OPTION_CLEAR_CACHE);
         $this->mustMatchGitDiff = (bool) $input->getOption(Option::MATCH_GIT_DIFF);
         $this->showProgressBar = $this->canShowProgressBar($input);
+        $this->showDiffs = ! (bool) $input->getOption(Option::OPTION_NO_DIFFS);
         $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
 
         /** @var string|null $outputFileOption */
@@ -265,6 +271,11 @@ final class Configuration
             return true;
         }
         return $this->outputFormat === CheckstyleOutputFormatter::NAME;
+    }
+
+    public function shouldShowDiffs(): bool
+    {
+        return $this->showDiffs;
     }
 
     private function canShowProgressBar(InputInterface $input): bool
