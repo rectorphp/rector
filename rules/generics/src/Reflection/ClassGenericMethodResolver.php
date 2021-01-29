@@ -6,13 +6,9 @@ namespace Rector\Generics\Reflection;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueParameterNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParameterReflection;
-use PHPStan\Type\MixedType;
-use Rector\Generics\TagValueNodeFactory\MethodTagValueParameterNodeFactory;
+use Rector\Generics\TagValueNodeFactory\MethodTagValueNodeFactory;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\SimplePhpDocParser\SimplePhpDocParser;
 use Symplify\SimplePhpDocParser\ValueObject\Ast\PhpDoc\SimplePhpDocNode;
@@ -28,19 +24,20 @@ final class ClassGenericMethodResolver
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
+
     /**
-     * @var MethodTagValueParameterNodeFactory
+     * @var MethodTagValueNodeFactory
      */
-    private $methodTagValueParameterNodeFactory;
+    private $methodTagValueNodeFactory;
 
     public function __construct(
         SimplePhpDocParser $simplePhpDocParser,
         StaticTypeMapper $staticTypeMapper,
-        MethodTagValueParameterNodeFactory $methodTagValueParameterNodeFactory
+        MethodTagValueNodeFactory $methodTagValueNodeFactory
     ) {
         $this->simplePhpDocParser = $simplePhpDocParser;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->methodTagValueParameterNodeFactory = $methodTagValueParameterNodeFactory;
+        $this->methodTagValueNodeFactory = $methodTagValueNodeFactory;
     }
 
     /**
@@ -76,23 +73,6 @@ final class ClassGenericMethodResolver
     }
 
     /**
-     * @param ParameterReflection[] $parameterReflections
-     * @return MethodTagValueParameterNode[]
-     */
-    private function resolveStringParameters(array $parameterReflections): array
-    {
-        $stringParameters = [];
-
-        foreach ($parameterReflections as $parameterReflection) {
-            $stringParameters[] = $this->methodTagValueParameterNodeFactory->createFromParamReflection($parameterReflection);
-        }
-
-        return $stringParameters;
-    }
-
-
-
-    /**
      * @param string[] $templateNames
      */
     private function resolveMethodTagValueNode(
@@ -107,18 +87,9 @@ final class ClassGenericMethodResolver
                     continue;
                 }
 
-                // @todo resolve params etc
-                $parameterReflections = $methodReflection->getVariants()[0]
-                    ->getParameters();
-
-                $stringParameters = $this->resolveStringParameters($parameterReflections);
-
-                return new MethodTagValueNode(
-                    false,
-                    $returnTagValueNode->type,
-                    $methodReflection->getName(),
-                    $stringParameters,
-                    ''
+                return $this->methodTagValueNodeFactory->createFromMethodReflectionAndReturnTagValueNode(
+                    $methodReflection,
+                    $returnTagValueNode
                 );
             }
         }

@@ -46,7 +46,6 @@ final class PhpDocTypeMapper
         }
 
         // fallback to PHPStan resolver
-
         return $this->typeNodeResolver->resolve($typeNode, $nameScope);
     }
 }
