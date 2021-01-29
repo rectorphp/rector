@@ -19,6 +19,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class GenericsPHPStormMethodAnnotationRector extends AbstractRector
 {
+    /**
+     * @var \Rector\Generics\Reflection\ClassGenericMethodResolver
+     */
+    private $classGenericMethodResolver;
+
+    public function __construct(\Rector\Generics\Reflection\ClassGenericMethodResolver $classGenericMethodResolver)
+    {
+        $this->classGenericMethodResolver = $classGenericMethodResolver;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -72,9 +82,7 @@ final class AndroidDeviceRepository extends AbstractRepository
 {
 }
 CODE_SAMPLE
-
                 ),
-                
             ]);
     }
 
@@ -110,12 +118,21 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($parentClassReflection->getTemplateTags() === []) {
+        if (! $parentClassReflection->isGeneric()) {
             return null;
         }
 
-        dump($parentClassReflection);
-        die;
+        // resolve generic method from parent
+
+        $methodTagValueNodes = $this->classGenericMethodResolver->resolveFromClass($parentClassReflection);
+
+        // @todo replace TTypes with specific types
+        $templateNames = array_keys($parentClassReflection->getTemplateTags());
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        foreach ($methodTagValueNodes as $methodTagValueNode) {
+            $phpDocInfo->addTagValueNode($methodTagValueNode);
+        }
 
         return $node;
     }

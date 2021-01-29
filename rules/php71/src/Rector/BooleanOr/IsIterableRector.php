@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php73\Rector\BinaryOp;
+namespace Rector\Php71\Rector\BooleanOr;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
@@ -13,9 +13,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector\IsCountableRectorTest
+ * @see \Rector\Php71\Tests\Rector\BooleanOr\IsIterableRector\IsIterableRectorTest
  */
-final class IsCountableRector extends AbstractRector
+final class IsIterableRector extends AbstractRector
 {
     /**
      * @var IsArrayAndDualCheckToAble
@@ -30,19 +30,8 @@ final class IsCountableRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Changes is_array + Countable check to is_countable',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
-is_array($foo) || $foo instanceof Countable;
-CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
-is_countable($foo);
-CODE_SAMPLE
-                ),
-            ]
-        );
+            'Changes is_array + Traversable check to is_iterable',
+            [new CodeSample('is_array($foo) || $foo instanceof Traversable;', 'is_iterable($foo);')]);
     }
 
     /**
@@ -62,15 +51,15 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->isArrayAndDualCheckToAble->processBooleanOr($node, 'Countable', 'is_countable') ?: $node;
+        return $this->isArrayAndDualCheckToAble->processBooleanOr($node, 'Traversable', 'is_iterable') ?: $node;
     }
 
     private function shouldSkip(): bool
     {
-        if (function_exists('is_countable')) {
+        if (function_exists('is_iterable')) {
             return false;
         }
 
-        return $this->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE);
+        return ! $this->isAtLeastPhpVersion(PhpVersionFeature::IS_ITERABLE);
     }
 }

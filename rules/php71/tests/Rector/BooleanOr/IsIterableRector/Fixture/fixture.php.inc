@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector\Fixture;
+namespace Rector\Php71\Tests\Rector\BooleanOr\IsIterableRector\Fixture;
 
 use Traversable;
 
@@ -19,7 +19,7 @@ function isIterable()
 -----
 <?php
 
-namespace Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector\Fixture;
+namespace Rector\Php71\Tests\Rector\BooleanOr\IsIterableRector\Fixture;
 
 use Traversable;
 

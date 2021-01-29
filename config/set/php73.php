@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Php73\Rector\BinaryOp\IsCountableRector;
+use Rector\Php73\Rector\BooleanOr\IsCountableRector;
 use Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector;
 use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
