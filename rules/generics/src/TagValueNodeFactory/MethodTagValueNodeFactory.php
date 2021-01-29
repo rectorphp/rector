@@ -51,6 +51,7 @@ final class MethodTagValueNodeFactory
         $templateTypeMap = $classReflection->getTemplateTypeMap();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         $returnTagTypeNode = $this->resolveReturnTagTypeNode($returnTagValueNode, $templateTypeMap);
 =======
         $returnTagTypeNode = $returnTagValueNode->type;
@@ -78,6 +79,9 @@ final class MethodTagValueNodeFactory
             );
         }
 >>>>>>> 58ee1742b... [Generics] Add nullable type support
+=======
+        $returnTagTypeNode = $this->resolveReturnTagTypeNode($returnTagValueNode, $templateTypeMap);
+>>>>>>> 9d1edbbfb... bump deps
 
         return new MethodTagValueNode(
             false,
@@ -106,16 +110,26 @@ final class MethodTagValueNodeFactory
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9d1edbbfb... bump deps
     private function resolveReturnTagTypeNode(
         ReturnTagValueNode $returnTagValueNode,
         TemplateTypeMap $templateTypeMap
     ): TypeNode {
         $returnTagTypeNode = $returnTagValueNode->type;
+<<<<<<< HEAD
         if ($returnTagValueNode->type instanceof UnionTypeNode) {
             return $this->resolveUnionTypeNode($returnTagValueNode->type, $templateTypeMap);
         }
 
         if ($returnTagValueNode->type instanceof IdentifierTypeNode) {
+=======
+
+        if ($returnTagValueNode->type instanceof UnionTypeNode) {
+            return $this->resolveUnionTypeNode($returnTagValueNode->type, $templateTypeMap);
+        } elseif ($returnTagValueNode->type instanceof IdentifierTypeNode) {
+>>>>>>> 9d1edbbfb... bump deps
             return $this->resolveIdentifierTypeNode(
                 $returnTagValueNode->type,
                 $templateTypeMap,
@@ -126,6 +140,7 @@ final class MethodTagValueNodeFactory
         return $returnTagTypeNode;
     }
 
+<<<<<<< HEAD
     private function resolveUnionTypeNode(UnionTypeNode $unionTypeNode, TemplateTypeMap $templateTypeMap): UnionTypeNode
     {
         $resolvedTypes = [];
@@ -156,6 +171,8 @@ final class MethodTagValueNodeFactory
 
 =======
 >>>>>>> 58ee1742b... [Generics] Add nullable type support
+=======
+>>>>>>> 9d1edbbfb... bump deps
     private function resolveIdentifierTypeNode(
         IdentifierTypeNode $identifierTypeNode,
         TemplateTypeMap $templateTypeMap,
@@ -170,5 +187,33 @@ final class MethodTagValueNodeFactory
         }
 
         return $fallbackTypeNode;
+    }
+
+    private function resolveUnionTypeNode(UnionTypeNode $unionTypeNode, TemplateTypeMap $templateTypeMap): UnionTypeNode
+    {
+        $resolvedTypes = [];
+        foreach ($unionTypeNode->types as $unionedTypeNode) {
+            if ($unionedTypeNode instanceof ArrayTypeNode) {
+                if (! $unionedTypeNode->type instanceof IdentifierTypeNode) {
+                    throw new ShouldNotHappenException();
+                }
+
+                $resolvedType = $this->resolveIdentifierTypeNode(
+                    $unionedTypeNode->type,
+                    $templateTypeMap,
+                    $unionedTypeNode
+                );
+
+                $resolvedTypes[] = new ArrayTypeNode($resolvedType);
+            } elseif ($unionedTypeNode instanceof IdentifierTypeNode) {
+                $resolvedTypes[] = $this->resolveIdentifierTypeNode(
+                    $unionedTypeNode,
+                    $templateTypeMap,
+                    $unionedTypeNode
+                );
+            }
+        }
+
+        return new UnionTypeNode($resolvedTypes);
     }
 }
