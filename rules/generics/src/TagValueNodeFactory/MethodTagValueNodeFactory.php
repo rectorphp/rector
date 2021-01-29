@@ -50,7 +50,30 @@ final class MethodTagValueNodeFactory
         $classReflection = $methodReflection->getDeclaringClass();
         $templateTypeMap = $classReflection->getTemplateTypeMap();
 
+<<<<<<< HEAD
         $returnTagTypeNode = $this->resolveReturnTagTypeNode($returnTagValueNode, $templateTypeMap);
+=======
+        $returnTagTypeNode = $returnTagValueNode->type;
+
+        if ($returnTagValueNode->type instanceof UnionTypeNode) {
+            $resolvedTypes = [];
+            foreach ($returnTagValueNode->type->types as $unionedTypeNode) {
+                $resolvedTypes[] = $this->resolveIdentifierTypeNode(
+                    $unionedTypeNode,
+                    $templateTypeMap,
+                    $unionedTypeNode
+                );
+            }
+
+            $returnTagTypeNode = new UnionTypeNode($resolvedTypes);
+        } elseif ($returnTagValueNode->type instanceof IdentifierTypeNode) {
+            $returnTagTypeNode = $this->resolveIdentifierTypeNode(
+                $returnTagValueNode->type,
+                $templateTypeMap,
+                $returnTagTypeNode
+            );
+        }
+>>>>>>> 58ee1742b... [Generics] Add nullable type support
 
         return new MethodTagValueNode(
             false,
@@ -78,6 +101,7 @@ final class MethodTagValueNodeFactory
         return $stringParameters;
     }
 
+<<<<<<< HEAD
     private function resolveReturnTagTypeNode(
         ReturnTagValueNode $returnTagValueNode,
         TemplateTypeMap $templateTypeMap
@@ -126,6 +150,8 @@ final class MethodTagValueNodeFactory
         return new UnionTypeNode($resolvedTypes);
     }
 
+=======
+>>>>>>> 58ee1742b... [Generics] Add nullable type support
     private function resolveIdentifierTypeNode(
         IdentifierTypeNode $identifierTypeNode,
         TemplateTypeMap $templateTypeMap,
