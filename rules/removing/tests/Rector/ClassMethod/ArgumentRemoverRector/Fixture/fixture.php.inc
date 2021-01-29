@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\ClassMethod\ArgumentRemoverRector\Fixture;
+namespace Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Fixture;
 
-class SomeClassExtendingAbstractEntityInheritancePersister extends \Rector\Generic\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\Persister
+class SomeClassExtendingAbstractEntityInheritancePersister extends \Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\Persister
 {
     public function getSelectJoinColumnSQL($tableAlias, $joinColumnName, $quotedColumnName, $type, $className)
     {
@@ -14,9 +14,9 @@ class SomeClassExtendingAbstractEntityInheritancePersister extends \Rector\Gener
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\ClassMethod\ArgumentRemoverRector\Fixture;
+namespace Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Fixture;
 
-class SomeClassExtendingAbstractEntityInheritancePersister extends \Rector\Generic\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\Persister
+class SomeClassExtendingAbstractEntityInheritancePersister extends \Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\Persister
 {
     public function getSelectJoinColumnSQL($tableAlias, $joinColumnName, $quotedColumnName, $type)
     {

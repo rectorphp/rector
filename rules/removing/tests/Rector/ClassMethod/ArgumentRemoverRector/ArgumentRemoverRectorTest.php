@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\ClassMethod\ArgumentRemoverRector;
+namespace Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector;
 
 use Iterator;
-use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
-use Rector\Generic\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\Persister;
-use Rector\Generic\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\RemoveInTheMiddle;
 use Rector\Generic\ValueObject\ArgumentRemover;
+use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
+use Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\Persister;
+use Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\RemoveInTheMiddle;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\SmartFileSystem\SmartFileInfo;

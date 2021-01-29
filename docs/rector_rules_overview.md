@@ -6849,10 +6849,10 @@ Removes defined arguments in defined methods and their calls.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector`
+- class: `Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector`
 
 ```php
-use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
+use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\ValueObject\ArgumentRemover;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

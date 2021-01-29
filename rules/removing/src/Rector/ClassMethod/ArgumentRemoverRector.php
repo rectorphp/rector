@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\ClassMethod;
+namespace Rector\Removing\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Generic\Tests\Rector\ClassMethod\ArgumentRemoverRector\ArgumentRemoverRectorTest
+ * @see \Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\ArgumentRemoverRectorTest
  */
 final class ArgumentRemoverRector extends AbstractRector implements ConfigurableRectorInterface
 {
