@@ -42,7 +42,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
     private const SPLIT_BY_UNDERSCORE_REGEX = '#([a-zA-Z])(_)?(_)([a-zA-Z])#';
 
     /**
-     * @var \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace[]
+     * @var PseudoNamespaceToNamespace[]
      */
     private $pseudoNamespacesToNamespaces = [];
 

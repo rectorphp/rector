@@ -9,7 +9,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use Rector\Generics\TagValueNodeFactory\MethodTagValueNodeFactory;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\SimplePhpDocParser\SimplePhpDocParser;
 use Symplify\SimplePhpDocParser\ValueObject\Ast\PhpDoc\SimplePhpDocNode;
 
@@ -21,22 +20,15 @@ final class ClassGenericMethodResolver
     private $simplePhpDocParser;
 
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @var MethodTagValueNodeFactory
      */
     private $methodTagValueNodeFactory;
 
     public function __construct(
         SimplePhpDocParser $simplePhpDocParser,
-        StaticTypeMapper $staticTypeMapper,
         MethodTagValueNodeFactory $methodTagValueNodeFactory
     ) {
         $this->simplePhpDocParser = $simplePhpDocParser;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->methodTagValueNodeFactory = $methodTagValueNodeFactory;
     }
 
@@ -62,7 +54,7 @@ final class ClassGenericMethodResolver
                 $templateNames,
                 $methodReflection
             );
-            if ($methodTagValueNode === null) {
+            if (! $methodTagValueNode instanceof MethodTagValueNode) {
                 continue;
             }
 
