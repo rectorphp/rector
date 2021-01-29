@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
 use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

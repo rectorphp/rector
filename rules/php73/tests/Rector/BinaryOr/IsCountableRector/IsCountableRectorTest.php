@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector;
+namespace Rector\Php73\Tests\Rector\BinaryOr\IsCountableRector;
 
 use Iterator;
-use Rector\Php71\Rector\BinaryOp\IsIterableRector;
+use Rector\Php73\Rector\BooleanOr\IsCountableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class IsIterableRectorTest extends AbstractRectorTestCase
+final class IsCountableRectorTest extends AbstractRectorTestCase
 {
     /**
+     * @requires PHP 7.3
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
@@ -26,6 +27,6 @@ final class IsIterableRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return IsIterableRector::class;
+        return IsCountableRector::class;
     }
 }

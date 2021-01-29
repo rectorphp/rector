@@ -12024,7 +12024,7 @@ Changes `count()` on null to safe ternary check
 
 Changes `is_array` + Traversable check to `is_iterable`
 
-- class: `Rector\Php71\Rector\BinaryOp\IsIterableRector`
+- class: `Rector\Php71\Rector\BooleanOr\IsIterableRector`
 
 ```diff
 -is_array($foo) || $foo instanceof Traversable;
@@ -12353,7 +12353,7 @@ Make use of `array_key_first()` and `array_key_last()`
 
 Changes `is_array` + Countable check to `is_countable`
 
-- class: `Rector\Php73\Rector\BinaryOp\IsCountableRector`
+- class: `Rector\Php73\Rector\BooleanOr\IsCountableRector`
 
 ```diff
 -is_array($foo) || $foo instanceof Countable;
@@ -14197,7 +14197,7 @@ Replaces defined Pseudo_Namespaces by Namespace\Ones.
 - class: `Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector`
 
 ```php
-use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
+use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

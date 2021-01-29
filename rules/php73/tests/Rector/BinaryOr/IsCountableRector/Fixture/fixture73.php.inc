@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector\Fixture;
+namespace Rector\Php73\Tests\Rector\BinaryOr\IsCountableRector\Fixture;
 
 class Fixture73
 {
@@ -14,7 +14,7 @@ class Fixture73
 -----
 <?php
 
-namespace Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector\Fixture;
+namespace Rector\Php73\Tests\Rector\BinaryOr\IsCountableRector\Fixture;
 
 class Fixture73
 {

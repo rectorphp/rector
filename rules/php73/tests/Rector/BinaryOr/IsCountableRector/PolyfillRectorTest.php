@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector;
+namespace Rector\Php73\Tests\Rector\BinaryOr\IsCountableRector;
 
 use Iterator;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Php73\Rector\BinaryOp\IsCountableRector;
+use Rector\Php73\Rector\BooleanOr\IsCountableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

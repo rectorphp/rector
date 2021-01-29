@@ -23,7 +23,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FalseBooleanType;
 final class ScalarStringToTypeMapper
 {
     /**
-     * @var string[][]
+     * @var array<class-string<Type>, string[]>
      */
     private const SCALAR_NAME_BY_TYPE = [
         StringType::class => ['string'],

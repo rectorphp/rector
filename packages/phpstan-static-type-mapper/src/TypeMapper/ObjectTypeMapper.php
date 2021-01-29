@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -50,7 +51,12 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
         }
 
         if ($type instanceof GenericObjectType) {
-            $identifierTypeNode = new IdentifierTypeNode('\\' . $type->getClassName());
+            if (Strings::contains($type->getClassName(), '\\')) {
+                $name = '\\' . $type->getClassName();
+            } else {
+                $name = $type->getClassName();
+            }
+            $identifierTypeNode = new IdentifierTypeNode($name);
 
             $genericTypeNodes = [];
             foreach ($type->getTypes() as $genericType) {

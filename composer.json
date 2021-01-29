@@ -1,7 +1,12 @@
 {
     "name": "rector/rector",
     "description": "Instant upgrade and refactoring of your PHP code",
-    "keywords": ["instant upgrades", "instant refactoring", "ast", "automated refactoring"],
+    "keywords": [
+        "instant upgrades",
+        "instant refactoring",
+        "ast",
+        "automated refactoring"
+    ],
     "homepage": "https://getrector.org",
     "license": "MIT",
     "authors": [
@@ -38,8 +43,8 @@
         "sebastian/diff": "^4.0",
         "symfony/cache": "^4.4.8|^5.1",
         "symfony/console": "^4.4.8|^5.1",
-        "symfony/expression-language": "^4.4|^5.1",
         "symfony/dependency-injection": "^5.1",
+        "symfony/expression-language": "^4.4|^5.1",
         "symfony/finder": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
         "symfony/process": "^4.4.8|^5.1",
@@ -49,7 +54,7 @@
         "symplify/package-builder": "^9.0.34",
         "symplify/rule-doc-generator": "^9.0.34",
         "symplify/set-config-resolver": "^9.0.34",
-        "symplify/simple-php-doc-parser": "^9.0.34",
+        "symplify/simple-php-doc-parser": "^9.0",
         "symplify/skipper": "^9.0.34",
         "symplify/smart-file-system": "^9.0.34",
         "symplify/symfony-php-config": "^9.0.34",
@@ -176,7 +181,8 @@
             "Rector\\Twig\\": "rules/twig/src",
             "Rector\\TypeDeclaration\\": "rules/type-declaration/src",
             "Rector\\VendorLocker\\": "packages/vendor-locker/src",
-            "Rector\\Carbon\\": "rules/carbon/src"
+            "Rector\\Carbon\\": "rules/carbon/src",
+            "Rector\\Generics\\": "rules/generics/src"
         }
     },
     "autoload-dev": {
@@ -300,7 +306,8 @@
             "Rector\\Utils\\NodeDocumentationGenerator\\Tests\\": "utils/node-documentation-generator/tests",
             "Rector\\Utils\\PHPStanTypeMapperChecker\\": "utils/phpstan-type-mapper-checker/src",
             "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src",
-            "Rector\\Carbon\\Tests\\": "rules/carbon/tests"
+            "Rector\\Carbon\\Tests\\": "rules/carbon/tests",
+            "Rector\\Generics\\Tests\\": "rules/generics/tests"
         }
     },
     "scripts": {

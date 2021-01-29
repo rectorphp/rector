@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
 use Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector;
 use Rector\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
 use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

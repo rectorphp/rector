@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector;
+namespace Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Php71\Rector\BinaryOp\IsIterableRector;
+use Rector\Generics\Rector\Class_\GenericsPHPStormMethodAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class PolyfillRectorTest extends AbstractRectorTestCase
+final class GenericsPHPStormMethodAnnotationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -27,11 +26,6 @@ final class PolyfillRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return IsIterableRector::class;
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::ITERABLE_TYPE;
+        return GenericsPHPStormMethodAnnotationRector::class;
     }
 }
