@@ -138,7 +138,6 @@ CODE_SAMPLE
             $genericChildParentClassReflections->getChildClassReflection()
         );
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         foreach ($methodTagValueNodes as $methodTagValueNode) {
             $phpDocInfo->addTagValueNode($methodTagValueNode);
         }
