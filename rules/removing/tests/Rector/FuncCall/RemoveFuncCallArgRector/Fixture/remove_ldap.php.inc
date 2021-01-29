@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\FuncCall\RemoveFuncCallArgRector\Fixture;
+namespace Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallArgRector\Fixture;
 
 class RemoveLdap
 {
@@ -17,7 +17,7 @@ class RemoveLdap
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\FuncCall\RemoveFuncCallArgRector\Fixture;
+namespace Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallArgRector\Fixture;
 
 class RemoveLdap
 {

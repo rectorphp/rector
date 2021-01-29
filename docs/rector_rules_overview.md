@@ -7523,10 +7523,10 @@ Remove argument by position by function name
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector`
+- class: `Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector`
 
 ```php
-use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
+use Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Generic\ValueObject\RemoveFuncCallArg;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

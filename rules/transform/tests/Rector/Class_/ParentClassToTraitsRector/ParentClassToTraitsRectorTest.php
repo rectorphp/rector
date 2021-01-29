@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector;
 
 use Iterator;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\Class_\ParentClassToTraitsRector;
 use Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherParentObject;
 use Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject;
 use Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SecondTrait;
 use Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
 use Rector\Transform\ValueObject\ParentClassToTraits;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ParentClassToTraitsRectorTest extends AbstractRectorTestCase

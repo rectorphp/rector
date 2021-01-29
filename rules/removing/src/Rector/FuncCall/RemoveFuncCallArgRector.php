@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\FuncCall;
+namespace Rector\Removing\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
@@ -16,7 +16,7 @@ use Webmozart\Assert\Assert;
 /**
  * @sponsor Thanks https://twitter.com/afilina & Zenika (CAN) for sponsoring this rule - visit them on https://zenika.ca/en/en
  *
- * @see \Rector\Generic\Tests\Rector\FuncCall\RemoveFuncCallArgRector\RemoveFuncCallArgRectorTest
+ * @see \Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallArgRector\RemoveFuncCallArgRectorTest
  */
 final class RemoveFuncCallArgRector extends AbstractRector implements ConfigurableRectorInterface
 {

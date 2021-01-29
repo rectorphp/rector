@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Generic\ValueObject\RemoveFuncCallArg;
 use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
+use Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
