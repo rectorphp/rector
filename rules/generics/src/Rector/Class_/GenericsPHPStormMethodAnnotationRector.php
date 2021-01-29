@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Type\Generic\TemplateTypeHelper;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Generics\NodeType\GenericTypeSpecifier;
 use Rector\Generics\Reflection\ClassGenericMethodResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,9 +27,17 @@ final class GenericsPHPStormMethodAnnotationRector extends AbstractRector
      */
     private $classGenericMethodResolver;
 
-    public function __construct(ClassGenericMethodResolver $classGenericMethodResolver)
-    {
+    /**
+     * @var GenericTypeSpecifier
+     */
+    private $genericTypeSpecifier;
+
+    public function __construct(
+        ClassGenericMethodResolver $classGenericMethodResolver,
+        GenericTypeSpecifier $genericTypeSpecifier
+    ) {
         $this->classGenericMethodResolver = $classGenericMethodResolver;
+        $this->genericTypeSpecifier = $genericTypeSpecifier;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -116,6 +124,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $classReflection->isGeneric()) {
+            return null;
+        }
+
         $parentClassReflection = $classReflection->getParentClass();
         if (! $parentClassReflection instanceof ClassReflection) {
             return null;
@@ -128,23 +140,11 @@ CODE_SAMPLE
         // resolve generic method from parent
         $methodTagValueNodes = $this->classGenericMethodResolver->resolveFromClass($parentClassReflection);
 
-        $templateTypeMap = $classReflection->getTemplateTypeMap();
-
-        // @todo replace TTypes with specific types
-        foreach ($methodTagValueNodes as $methodTagValueNode) {
-            if ($methodTagValueNode->returnType === null) {
-                continue;
-            }
-
-            $returnType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
-                $methodTagValueNode->returnType,
-                $node
-            );
-
-            $resolvedType = TemplateTypeHelper::resolveTemplateTypes($returnType, $templateTypeMap);
-            $resolvedTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($resolvedType);
-            $methodTagValueNode->returnType = $resolvedTypeNode;
-        }
+        $this->genericTypeSpecifier->replaceGenericTypesWithSpecificTypes(
+            $methodTagValueNodes,
+            $node,
+            $classReflection->getTemplateTypeMap()
+        );
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         foreach ($methodTagValueNodes as $methodTagValueNode) {

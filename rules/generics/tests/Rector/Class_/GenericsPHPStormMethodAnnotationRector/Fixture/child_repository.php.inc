@@ -11,7 +11,7 @@ use Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector\S
  * @template TEntity as RealObject
  * @extends AbstractRepository<TEntity>
  */
-final class AndroidDeviceRepository extends AbstractGenericRepository
+final class ChildRepository extends AbstractGenericRepository
 {
 }
 
@@ -31,7 +31,7 @@ use Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector\S
  * @extends AbstractRepository<TEntity>
  * @method RealObject find($id)
  */
-final class AndroidDeviceRepository extends AbstractGenericRepository
+final class ChildRepository extends AbstractGenericRepository
 {
 }
 
