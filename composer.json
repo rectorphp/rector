@@ -1,7 +1,12 @@
 {
     "name": "rector/rector",
     "description": "Instant upgrade and refactoring of your PHP code",
-    "keywords": ["instant upgrades", "instant refactoring", "ast", "automated refactoring"],
+    "keywords": [
+        "instant upgrades",
+        "instant refactoring",
+        "ast",
+        "automated refactoring"
+    ],
     "homepage": "https://getrector.org",
     "license": "MIT",
     "authors": [
@@ -176,7 +181,8 @@
             "Rector\\Twig\\": "rules/twig/src",
             "Rector\\TypeDeclaration\\": "rules/type-declaration/src",
             "Rector\\VendorLocker\\": "packages/vendor-locker/src",
-            "Rector\\Carbon\\": "rules/carbon/src"
+            "Rector\\Carbon\\": "rules/carbon/src",
+            "Rector\\Generics\\": "rules/generics/src"
         }
     },
     "autoload-dev": {
@@ -300,7 +306,8 @@
             "Rector\\Utils\\NodeDocumentationGenerator\\Tests\\": "utils/node-documentation-generator/tests",
             "Rector\\Utils\\PHPStanTypeMapperChecker\\": "utils/phpstan-type-mapper-checker/src",
             "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src",
-            "Rector\\Carbon\\Tests\\": "rules/carbon/tests"
+            "Rector\\Carbon\\Tests\\": "rules/carbon/tests",
+            "Rector\\Generics\\Tests\\": "rules/generics/tests"
         }
     },
     "scripts": {
