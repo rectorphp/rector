@@ -6,6 +6,8 @@ namespace Rector\Generics\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Generics\NodeType\GenericTypeSpecifier;
 use Rector\Generics\Reflection\ClassGenericMethodResolver;
@@ -126,18 +128,45 @@ CODE_SAMPLE
             $genericChildParentClassReflections->getParentClassReflection()
         );
 
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
+        $methodTagValueNodes = $this->filterOutExistingMethodTagValuesNodes($methodTagValueNodes, $phpDocInfo);
+
         $this->genericTypeSpecifier->replaceGenericTypesWithSpecificTypes(
             $methodTagValueNodes,
             $node,
             $genericChildParentClassReflections->getChildClassReflection()
         );
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-
         foreach ($methodTagValueNodes as $methodTagValueNode) {
             $phpDocInfo->addTagValueNode($methodTagValueNode);
         }
 
         return $node;
+    }
+
+    /**
+     * @param MethodTagValueNode[] $methodTagValueNodes
+     * @return MethodTagValueNode[]
+     */
+    private function filterOutExistingMethodTagValuesNodes(
+        array $methodTagValueNodes,
+        PhpDocInfo $phpDocInfo
+    ): array {
+        $methodTagNames = $phpDocInfo->getMethodTagNames();
+        if ($methodTagNames === []) {
+            return $methodTagValueNodes;
+        }
+
+        $filteredMethodTagValueNodes = [];
+        foreach ($methodTagValueNodes as $methodTagValueNode) {
+            if (in_array($methodTagValueNode->methodName, $methodTagNames, true)) {
+                continue;
+            }
+
+            $filteredMethodTagValueNodes[] = $methodTagValueNode;
+        }
+
+        return $filteredMethodTagValueNodes;
     }
 }
