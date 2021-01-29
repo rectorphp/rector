@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
@@ -19,7 +20,6 @@ use Rector\Core\Reflection\ClassReflectionToAstResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PhpParser\Node\Expr\ArrowFunction;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\RemoveEmptyMethodCallRectorTest
@@ -113,6 +113,12 @@ CODE_SAMPLE
         }
 
         if ($parent instanceof ArrowFunction && $this->areNodesEqual($parent->expr, $node)) {
+            $parentOfParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentOfParent instanceof Expression) {
+                $this->removeNode($parent);
+                return $node;
+            }
+
             return $this->createFalse();
         }
 

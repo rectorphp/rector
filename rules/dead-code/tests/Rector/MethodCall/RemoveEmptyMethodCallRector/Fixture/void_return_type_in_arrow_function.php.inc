@@ -20,6 +20,4 @@ class VoidReturnTypeInArrayFunction
     public function test() {}
 }
 
-fn() => false;
-
 ?>
