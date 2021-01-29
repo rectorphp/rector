@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Class_;
+namespace Rector\Removing\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
@@ -16,14 +16,14 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Class_\RemoveTraitRector\RemoveTraitRectorTest
+ * @see \Rector\Removing\Tests\Rector\Class_\RemoveTraitRector\RemoveTraitRectorTest
  */
 final class RemoveTraitRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
      */
-    public const TRAITS_TO_REMOVE = '$traitsToRemove';
+    public const TRAITS_TO_REMOVE = 'traits_to_remove';
 
     /**
      * @var bool
@@ -93,9 +93,10 @@ CODE_SAMPLE
         // invoke re-print
         if ($this->classHasChanged) {
             $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            return $node;
         }
 
-        return $node;
+        return null;
     }
 
     public function configure(array $configuration): void
@@ -110,11 +111,13 @@ CODE_SAMPLE
     {
         foreach ($usedTraits as $usedTrait) {
             foreach ($this->traitsToRemove as $traitToRemove) {
-                if ($this->isName($usedTrait, $traitToRemove)) {
-                    $this->removeNode($usedTrait);
-                    $this->classHasChanged = true;
-                    continue 2;
+                if (! $this->isName($usedTrait, $traitToRemove)) {
+                    continue;
                 }
+
+                $this->removeNode($usedTrait);
+                $this->classHasChanged = true;
+                continue 2;
             }
         }
     }

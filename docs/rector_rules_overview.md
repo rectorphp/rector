@@ -7655,10 +7655,10 @@ Remove specific traits from code
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Class_\RemoveTraitRector`
+- class: `Rector\Removing\Rector\Class_\RemoveTraitRector`
 
 ```php
-use Rector\Generic\Rector\Class_\RemoveTraitRector;
+use Rector\Removing\Rector\Class_\RemoveTraitRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

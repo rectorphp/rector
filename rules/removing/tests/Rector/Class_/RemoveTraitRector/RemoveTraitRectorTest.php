@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Class_\RemoveTraitRector;
+namespace Rector\Removing\Tests\Rector\Class_\RemoveTraitRector;
 
 use Iterator;
-use Rector\Generic\Rector\Class_\RemoveTraitRector;
-use Rector\Generic\Tests\Rector\Class_\RemoveTraitRector\Source\TraitToBeRemoved;
+use Rector\Removing\Rector\Class_\RemoveTraitRector;
+use Rector\Removing\Tests\Rector\Class_\RemoveTraitRector\Source\TraitToBeRemoved;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
