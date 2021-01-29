@@ -6,10 +6,10 @@ namespace Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRect
 
 use Iterator;
 use Rector\Core\ValueObject\Visibility;
-use Rector\Visibility\ValueObject\ClassConstantVisibilityChange;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
 use Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Source\ParentObject;
+use Rector\Visibility\ValueObject\ClassConstantVisibilityChange;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase

@@ -14,7 +14,6 @@ use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
 use Rector\Generic\ValueObject\ArgumentRemover;
-use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Rector\Generic\ValueObject\WrapReturn;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -27,6 +26,7 @@ use Rector\Transform\ValueObject\NewToStaticCall;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector;
+use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
