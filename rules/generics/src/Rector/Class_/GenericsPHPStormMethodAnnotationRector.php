@@ -6,13 +6,17 @@ namespace Rector\Generics\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
+use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Generics\NodeType\GenericTypeSpecifier;
 use Rector\Generics\Reflection\ClassGenericMethodResolver;
+use Rector\Generics\Reflection\ClassMethodAnalyzer;
 use Rector\Generics\Reflection\GenericClassReflectionAnalyzer;
 use Rector\Generics\ValueObject\GenericChildParentClassReflections;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -38,14 +42,21 @@ final class GenericsPHPStormMethodAnnotationRector extends AbstractRector
      */
     private $genericClassReflectionAnalyzer;
 
+    /**
+     * @var ClassMethodAnalyzer
+     */
+    private $classMethodAnalyzer;
+
     public function __construct(
         ClassGenericMethodResolver $classGenericMethodResolver,
         GenericTypeSpecifier $genericTypeSpecifier,
-        GenericClassReflectionAnalyzer $genericClassReflectionAnalyzer
+        GenericClassReflectionAnalyzer $genericClassReflectionAnalyzer,
+        ClassMethodAnalyzer $classMethodAnalyzer
     ) {
         $this->classGenericMethodResolver = $classGenericMethodResolver;
         $this->genericTypeSpecifier = $genericTypeSpecifier;
         $this->genericClassReflectionAnalyzer = $genericClassReflectionAnalyzer;
+        $this->classMethodAnalyzer = $classMethodAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -118,6 +129,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
         $genericChildParentClassReflections = $this->genericClassReflectionAnalyzer->resolveChildParent($node);
         if (! $genericChildParentClassReflections instanceof GenericChildParentClassReflections) {
             return null;
@@ -130,7 +146,12 @@ CODE_SAMPLE
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        $methodTagValueNodes = $this->filterOutExistingMethodTagValuesNodes($methodTagValueNodes, $phpDocInfo);
+        $methodTagValueNodes = $this->filterOutExistingClassMethod(
+            $methodTagValueNodes,
+            $phpDocInfo,
+            $genericChildParentClassReflections,
+            $scope
+        );
 
         $this->genericTypeSpecifier->replaceGenericTypesWithSpecificTypes(
             $methodTagValueNodes,
@@ -149,6 +170,25 @@ CODE_SAMPLE
      * @param MethodTagValueNode[] $methodTagValueNodes
      * @return MethodTagValueNode[]
      */
+    private function filterOutExistingClassMethod(
+        array $methodTagValueNodes,
+        PhpDocInfo $phpDocInfo,
+        GenericChildParentClassReflections $genericChildParentClassReflections,
+        Scope $scope
+    ): array {
+        $methodTagValueNodes = $this->filterOutExistingMethodTagValuesNodes($methodTagValueNodes, $phpDocInfo);
+
+        return $this->filterOutImplementedClassMethods(
+            $methodTagValueNodes,
+            $genericChildParentClassReflections->getChildClassReflection(),
+            $scope
+        );
+    }
+
+    /**
+     * @param MethodTagValueNode[] $methodTagValueNodes
+     * @return MethodTagValueNode[]
+     */
     private function filterOutExistingMethodTagValuesNodes(
         array $methodTagValueNodes,
         PhpDocInfo $phpDocInfo
@@ -161,6 +201,32 @@ CODE_SAMPLE
         $filteredMethodTagValueNodes = [];
         foreach ($methodTagValueNodes as $methodTagValueNode) {
             if (in_array($methodTagValueNode->methodName, $methodTagNames, true)) {
+                continue;
+            }
+
+            $filteredMethodTagValueNodes[] = $methodTagValueNode;
+        }
+
+        return $filteredMethodTagValueNodes;
+    }
+
+    /**
+     * @param MethodTagValueNode[] $methodTagValueNodes
+     * @return MethodTagValueNode[]
+     */
+    private function filterOutImplementedClassMethods(
+        array $methodTagValueNodes, ClassReflection $classReflection,
+        Scope $scope
+    ): array {
+        $filteredMethodTagValueNodes = [];
+        foreach ($methodTagValueNodes as $methodTagValueNode) {
+            $hasClassMethodDirectly = $this->classMethodAnalyzer->hasClassMethodDirectly(
+                $classReflection,
+                $methodTagValueNode->methodName,
+                $scope
+            );
+
+            if ($hasClassMethodDirectly) {
                 continue;
             }
 
