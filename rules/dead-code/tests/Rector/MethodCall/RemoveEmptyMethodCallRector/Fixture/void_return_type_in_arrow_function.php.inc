@@ -1,11 +1,25 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Array_\RemoveDuplicatedArrayKeyRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
 
-class Tester
+class VoidReturnTypeInArrayFunction
 {
     public function test() {}
 }
 
-fn() => (new Tester)->test()
+fn() => (new VoidReturnTypeInArrayFunction())->test();
+
+?>
+-----
+<?php
+
+namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
+
+class VoidReturnTypeInArrayFunction
+{
+    public function test() {}
+}
+
+fn() => false;
+
 ?>
