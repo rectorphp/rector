@@ -6,14 +6,11 @@ namespace Rector\Generics\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Generics\NodeType\GenericTypeSpecifier;
 use Rector\Generics\Reflection\ClassGenericMethodResolver;
 use Rector\Generics\Reflection\GenericClassReflectionAnalyzer;
 use Rector\Generics\ValueObject\GenericChildParentClassReflections;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -119,11 +116,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->extends === null) {
-            return null;
-        }
-
-        $genericChildParentClassReflections = $this->resolveGenericChildParentClassReflections($node);
+        $genericChildParentClassReflections = $this->genericClassReflectionAnalyzer->resolveChildParent($node);
         if (! $genericChildParentClassReflections instanceof GenericChildParentClassReflections) {
             return null;
         }
@@ -140,38 +133,11 @@ CODE_SAMPLE
         );
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
         foreach ($methodTagValueNodes as $methodTagValueNode) {
             $phpDocInfo->addTagValueNode($methodTagValueNode);
         }
 
         return $node;
-    }
-
-    private function resolveGenericChildParentClassReflections(Class_ $class): ?GenericChildParentClassReflections
-    {
-        $scope = $class->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return null;
-        }
-
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return null;
-        }
-
-        if (! $this->genericClassReflectionAnalyzer->isGeneric($classReflection)) {
-            return null;
-        }
-
-        $parentClassReflection = $classReflection->getParentClass();
-        if (! $parentClassReflection instanceof ClassReflection) {
-            return null;
-        }
-
-        if (! $this->genericClassReflectionAnalyzer->isGeneric($parentClassReflection)) {
-            return null;
-        }
-
-        return new GenericChildParentClassReflections($classReflection, $parentClassReflection);
     }
 }
