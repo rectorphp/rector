@@ -121,17 +121,6 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function processArrowFunction(ArrowFunction $arrowFunction, MethodCall $methodCall): Node
-    {
-        $parentOfParent = $arrowFunction->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentOfParent instanceof Expression) {
-            $this->removeNode($arrowFunction);
-            return $methodCall;
-        }
-
-        return $this->createFalse();
-    }
-
     private function shouldSkipClassMethod(Class_ $class, MethodCall $methodCall): bool
     {
         $methodName = $this->getName($methodCall->name);
@@ -149,5 +138,16 @@ CODE_SAMPLE
         }
 
         return count((array) $classMethod->stmts) !== 0;
+    }
+
+    private function processArrowFunction(ArrowFunction $arrowFunction, MethodCall $methodCall): Node
+    {
+        $parentOfParent = $arrowFunction->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentOfParent instanceof Expression) {
+            $this->removeNode($arrowFunction);
+            return $methodCall;
+        }
+
+        return $this->createFalse();
     }
 }
