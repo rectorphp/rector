@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Class_;
+namespace Rector\Removing\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -12,14 +12,14 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Class_\RemoveInterfacesRector\RemoveInterfacesRectorTest
+ * @see \Rector\Removing\Tests\Rector\Class_\RemoveInterfacesRector\RemoveInterfacesRectorTest
  */
 final class RemoveInterfacesRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
      */
-    public const INTERFACES_TO_REMOVE = '$interfacesToRemove';
+    public const INTERFACES_TO_REMOVE = 'interfaces_to_remove';
 
     /**
      * @var string[]

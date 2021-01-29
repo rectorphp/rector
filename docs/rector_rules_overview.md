@@ -7589,10 +7589,10 @@ Removes interfaces usage from class.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Class_\RemoveInterfacesRector`
+- class: `Rector\Removing\Rector\Class_\RemoveInterfacesRector`
 
 ```php
-use Rector\Generic\Rector\Class_\RemoveInterfacesRector;
+use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

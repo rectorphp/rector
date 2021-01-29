@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Class_\RemoveInterfacesRector;
+namespace Rector\Removing\Tests\Rector\Class_\RemoveInterfacesRector;
 
 use Iterator;
-use Rector\Generic\Rector\Class_\RemoveInterfacesRector;
-use Rector\Generic\Tests\Rector\Class_\RemoveInterfacesRector\Source\SomeInterface;
+use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
+use Rector\Removing\Tests\Rector\Class_\RemoveInterfacesRector\Source\SomeInterface;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

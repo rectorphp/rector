@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 use PHPStan\Type\ObjectType;
-use Rector\Generic\Rector\Class_\RemoveInterfacesRector;
-
 use Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector;
+
 use Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector;
 use Rector\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector;
 use Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector;
 use Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector;
+use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
