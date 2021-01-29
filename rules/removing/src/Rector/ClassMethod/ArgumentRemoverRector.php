@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Generic\ValueObject\ArgumentRemover;
+use Rector\Removing\ValueObject\ArgumentRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -27,7 +27,7 @@ final class ArgumentRemoverRector extends AbstractRector implements Configurable
     public const REMOVED_ARGUMENTS = 'removed_arguments';
 
     /**
-     * @var ArgumentRemover[]
+     * @var \Rector\Removing\ValueObject\ArgumentRemover[]
      */
     private $removedArguments = [];
 

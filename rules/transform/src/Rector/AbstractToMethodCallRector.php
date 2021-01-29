@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector;
+namespace Rector\Transform\Rector;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
@@ -14,10 +14,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Generic\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\Transform\NodeFactory\PropertyFetchFactory;
+use Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
 
 abstract class AbstractToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {

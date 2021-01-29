@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\ValueObject\ArgumentRemover;
 use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
+use Rector\Removing\ValueObject\ArgumentRemover;
 use Rector\Symfony3\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
