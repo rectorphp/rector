@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\FixturePhp74;
 
 class VoidReturnTypeInArrowFunction2
 {
@@ -15,7 +15,7 @@ if (fn() => (new VoidReturnTypeInArrowFunction2())->test()) {
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\FixturePhp74;
 
 class VoidReturnTypeInArrowFunction2
 {
