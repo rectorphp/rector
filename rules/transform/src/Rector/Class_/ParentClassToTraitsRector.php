@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Class_;
+namespace Rector\Transform\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Generic\ValueObject\ParentClassToTraits;
+use Rector\Transform\ValueObject\ParentClassToTraits;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -19,7 +19,7 @@ use Webmozart\Assert\Assert;
  * - https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
  * - https://github.com/silverstripe/silverstripe-upgrader/issues/71#issue-320145944
  *
- * @see \Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\ParentClassToTraitsRectorTest
+ * @see \Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\ParentClassToTraitsRectorTest
  */
 final class ParentClassToTraitsRector extends AbstractRector implements ConfigurableRectorInterface
 {
@@ -29,7 +29,7 @@ final class ParentClassToTraitsRector extends AbstractRector implements Configur
     public const PARENT_CLASS_TO_TRAITS = 'parent_class_to_traits';
 
     /**
-     * @var ParentClassToTraits[]
+     * @var \Rector\Transform\ValueObject\ParentClassToTraits[]
      */
     private $parentClassToTraits = [];
 
@@ -108,7 +108,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, ParentClassToTraits[]> $configuration
+     * @param array<string, \Rector\Transform\ValueObject\ParentClassToTraits[]> $configuration
      */
     public function configure(array $configuration): void
     {

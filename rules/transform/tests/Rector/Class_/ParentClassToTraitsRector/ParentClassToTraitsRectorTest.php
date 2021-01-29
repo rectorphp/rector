@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector;
+namespace Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector;
 
 use Iterator;
-use Rector\Generic\Rector\Class_\ParentClassToTraitsRector;
-use Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherParentObject;
-use Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject;
-use Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SecondTrait;
-use Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
-use Rector\Generic\ValueObject\ParentClassToTraits;
+use Rector\Transform\Rector\Class_\ParentClassToTraitsRector;
+use Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherParentObject;
+use Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject;
+use Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SecondTrait;
+use Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
+use Rector\Transform\ValueObject\ParentClassToTraits;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

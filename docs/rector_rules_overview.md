@@ -7452,10 +7452,10 @@ Replaces parent class to specific traits
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Class_\ParentClassToTraitsRector`
+- class: `Rector\Transform\Rector\Class_\ParentClassToTraitsRector`
 
 ```php
-use Rector\Generic\Rector\Class_\ParentClassToTraitsRector;
+use Rector\Transform\Rector\Class_\ParentClassToTraitsRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
