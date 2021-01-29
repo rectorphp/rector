@@ -7,7 +7,7 @@ use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Generic\ValueObject\ArgumentRemover;
-use Rector\Generic\ValueObject\ChangeMethodVisibility;
+use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Rector\Laravel\Rector\Class_\AddMockConsoleOutputFalseToConsoleTestsRector;
 use Rector\Laravel\Rector\ClassMethod\AddParentBootToModelClassMethodRector;
 use Rector\Laravel\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector;

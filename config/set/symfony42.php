@@ -14,7 +14,7 @@ use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
 use Rector\Generic\ValueObject\ArgumentRemover;
-use Rector\Generic\ValueObject\ChangeMethodVisibility;
+use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Rector\Generic\ValueObject\WrapReturn;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\StaticCall\SwapClassMethodArgumentsRector;
-use Rector\Generic\ValueObject\SwapClassMethodArguments;
 use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;

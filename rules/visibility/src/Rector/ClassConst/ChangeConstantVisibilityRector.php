@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\Visibility;
-use Rector\Generic\ValueObject\ClassConstantVisibilityChange;
+use Rector\Visibility\ValueObject\ClassConstantVisibilityChange;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;

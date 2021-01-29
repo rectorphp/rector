@@ -9,8 +9,10 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Generic\ValueObject\ParentClassToTraits;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * Can handle cases like:
@@ -27,7 +29,7 @@ final class ParentClassToTraitsRector extends AbstractRector implements Configur
     public const PARENT_CLASS_TO_TRAITS = 'parent_class_to_traits';
 
     /**
-     * @var array<string, string[]>
+     * @var ParentClassToTraits[]
      */
     private $parentClassToTraits = [];
 
@@ -83,34 +85,36 @@ CODE_SAMPLE
         if ($node->extends === null) {
             return null;
         }
+
         if ($node->isAnonymous()) {
             return null;
         }
-        $nodeParentClassName = $this->getName($node->extends);
-        if (! isset($this->parentClassToTraits[$nodeParentClassName])) {
-            return null;
+
+        foreach ($this->parentClassToTraits as $parentClassToTrait) {
+            if (! $this->isObjectType($node, $parentClassToTrait->getParentType())){
+                continue;
+            }
+
+            foreach ($parentClassToTrait->getTraitNames() as $traitName) {
+                $this->classInsertManipulator->addAsFirstTrait($node, $traitName);
+            }
+
+            $this->removeParentClass($node);
+
+            return $node;
         }
 
-        $traitNames = $this->parentClassToTraits[$nodeParentClassName];
-
-        // keep the Trait order the way it is in config
-        $traitNames = array_reverse($traitNames);
-
-        foreach ($traitNames as $traitName) {
-            $this->classInsertManipulator->addAsFirstTrait($node, $traitName);
-        }
-
-        $this->removeParentClass($node);
-
-        return $node;
+        return null;
     }
 
     /**
-     * @param array<string, array<string, string[]>> $configuration
+     * @param array<string, ParentClassToTraits[]> $configuration
      */
     public function configure(array $configuration): void
     {
-        $this->parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? [];
+        $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? [];
+        Assert::allIsInstanceOf($parentClassToTraits, ParentClassToTraits::class);
+        $this->parentClassToTraits = $parentClassToTraits;
     }
 
     private function removeParentClass(Class_ $class): void

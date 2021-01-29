@@ -6889,7 +6889,7 @@ Change visibility of constant from parent class.
 
 ```php
 use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
-use Rector\Generic\ValueObject\ClassConstantVisibilityChange;
+use Rector\Visibility\ValueObject\ClassConstantVisibilityChange;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -6977,7 +6977,7 @@ Change visibility of method from parent class.
 
 ```php
 use Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector;
-use Rector\Generic\ValueObject\ChangeMethodVisibility;
+use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

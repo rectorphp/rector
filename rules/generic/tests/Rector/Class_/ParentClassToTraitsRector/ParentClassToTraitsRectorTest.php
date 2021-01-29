@@ -10,6 +10,7 @@ use Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherP
 use Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject;
 use Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SecondTrait;
 use Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
+use Rector\Generic\ValueObject\ParentClassToTraits;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -36,8 +37,8 @@ final class ParentClassToTraitsRectorTest extends AbstractRectorTestCase
         return [
             ParentClassToTraitsRector::class => [
                 ParentClassToTraitsRector::PARENT_CLASS_TO_TRAITS => [
-                    ParentObject::class => [SomeTrait::class],
-                    AnotherParentObject::class => [SomeTrait::class, SecondTrait::class],
+                    new ParentClassToTraits(ParentObject::class, [SomeTrait::class]),
+                    new ParentClassToTraits(AnotherParentObject::class, [SomeTrait::class, SecondTrait::class]),
                 ],
             ],
         ];

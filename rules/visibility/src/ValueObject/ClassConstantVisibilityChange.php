@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\ValueObject;
+namespace Rector\Visibility\ValueObject;
 
-final class ChangeMethodVisibility
+final class ClassConstantVisibilityChange
 {
     /**
      * @var string
@@ -14,17 +14,17 @@ final class ChangeMethodVisibility
     /**
      * @var string
      */
-    private $method;
+    private $constant;
 
     /**
      * @var int
      */
     private $visibility;
 
-    public function __construct(string $class, string $method, int $visibility)
+    public function __construct(string $class, string $constant, int $visibility)
     {
         $this->class = $class;
-        $this->method = $method;
+        $this->constant = $constant;
         $this->visibility = $visibility;
     }
 
@@ -33,9 +33,9 @@ final class ChangeMethodVisibility
         return $this->class;
     }
 
-    public function getMethod(): string
+    public function getConstant(): string
     {
-        return $this->method;
+        return $this->constant;
     }
 
     public function getVisibility(): int

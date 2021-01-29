@@ -6,7 +6,7 @@ namespace Rector\Visibility\Tests\Rector\ClassMethod\ChangeMethodVisibilityRecto
 
 use Iterator;
 use Rector\Core\ValueObject\Visibility;
-use Rector\Generic\ValueObject\ChangeMethodVisibility;
+use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Visibility\Tests\Rector\ClassMethod\ChangeMethodVisibilityRector\Source\ParentObject;

@@ -6,7 +6,7 @@ namespace Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRect
 
 use Iterator;
 use Rector\Core\ValueObject\Visibility;
-use Rector\Generic\ValueObject\ClassConstantVisibilityChange;
+use Rector\Visibility\ValueObject\ClassConstantVisibilityChange;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
 use Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Source\ParentObject;
