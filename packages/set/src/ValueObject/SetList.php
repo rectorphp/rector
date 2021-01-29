@@ -14,11 +14,6 @@ final class SetList
     /**
      * @var string
      */
-    public const ACTION_INJECTION_TO_CONSTRUCTOR_INJECTION = __DIR__ . '/../../../../config/set/action-injection-to-constructor-injection.php';
-
-    /**
-     * @var string
-     */
     public const ARRAY_STR_FUNCTIONS_TO_STATIC_CALL = __DIR__ . '/../../../../config/set/laravel-array-str-functions-to-static-call.php';
 
     /**
