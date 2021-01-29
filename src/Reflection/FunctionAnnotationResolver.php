@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpDoc\PhpDocTagsFinder;
-use Rector\Core\PhpParser\Parser\FunctionParser;
+use Rector\Core\PhpParser\Parser\FunctionLikeParser;
 use ReflectionFunction;
 
 final class FunctionAnnotationResolver
@@ -20,7 +20,7 @@ final class FunctionAnnotationResolver
     private $classNaming;
 
     /**
-     * @var FunctionParser
+     * @var FunctionLikeParser
      */
     private $functionParser;
 
@@ -31,7 +31,7 @@ final class FunctionAnnotationResolver
 
     public function __construct(
         ClassNaming $classNaming,
-        FunctionParser $functionParser,
+        FunctionLikeParser $functionParser,
         PhpDocTagsFinder $phpDocTagsFinder
     ) {
         $this->functionParser = $functionParser;
