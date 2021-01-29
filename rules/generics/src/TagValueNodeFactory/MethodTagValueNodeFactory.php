@@ -7,6 +7,7 @@ namespace Rector\Generics\TagValueNodeFactory;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueParameterNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
@@ -14,6 +15,7 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class MethodTagValueNodeFactory
@@ -48,30 +50,7 @@ final class MethodTagValueNodeFactory
         $classReflection = $methodReflection->getDeclaringClass();
         $templateTypeMap = $classReflection->getTemplateTypeMap();
 
-        $returnTagTypeNode = $returnTagValueNode->type;
-
-        if ($returnTagValueNode->type instanceof UnionTypeNode) {
-            $resolvedTypes = [];
-            foreach ($returnTagValueNode->type->types as $unionedTypeNode) {
-                if (! $unionedTypeNode instanceof IdentifierTypeNode) {
-                    continue;
-                }
-
-                $resolvedTypes[] = $this->resolveIdentifierTypeNode(
-                    $unionedTypeNode,
-                    $templateTypeMap,
-                    $unionedTypeNode
-                );
-            }
-
-            $returnTagTypeNode = new UnionTypeNode($resolvedTypes);
-        } elseif ($returnTagValueNode->type instanceof IdentifierTypeNode) {
-            $returnTagTypeNode = $this->resolveIdentifierTypeNode(
-                $returnTagValueNode->type,
-                $templateTypeMap,
-                $returnTagTypeNode
-            );
-        }
+        $returnTagTypeNode = $this->resolveReturnTagTypeNode($returnTagValueNode, $templateTypeMap);
 
         return new MethodTagValueNode(
             false,
@@ -99,6 +78,23 @@ final class MethodTagValueNodeFactory
         return $stringParameters;
     }
 
+    private function resolveReturnTagTypeNode(ReturnTagValueNode $returnTagValueNode, TemplateTypeMap $templateTypeMap): TypeNode
+    {
+        $returnTagTypeNode = $returnTagValueNode->type;
+
+        if ($returnTagValueNode->type instanceof UnionTypeNode) {
+            return $this->resolveUnionTypeNode($returnTagValueNode->type, $templateTypeMap);
+        } elseif ($returnTagValueNode->type instanceof IdentifierTypeNode) {
+            return $this->resolveIdentifierTypeNode(
+                $returnTagValueNode->type,
+                $templateTypeMap,
+                $returnTagTypeNode
+            );
+        }
+
+        return $returnTagTypeNode;
+    }
+
     private function resolveIdentifierTypeNode(
         IdentifierTypeNode $identifierTypeNode,
         TemplateTypeMap $templateTypeMap,
@@ -113,5 +109,33 @@ final class MethodTagValueNodeFactory
         }
 
         return $fallbackTypeNode;
+    }
+
+    private function resolveUnionTypeNode(UnionTypeNode $unionTypeNode, TemplateTypeMap $templateTypeMap): UnionTypeNode
+    {
+        $resolvedTypes = [];
+        foreach ($unionTypeNode->types as $unionedTypeNode) {
+            if ($unionedTypeNode instanceof ArrayTypeNode) {
+                if (! $unionedTypeNode->type instanceof IdentifierTypeNode) {
+                    throw new ShouldNotHappenException();
+                }
+
+                $resolvedType = $this->resolveIdentifierTypeNode(
+                    $unionedTypeNode->type,
+                    $templateTypeMap,
+                    $unionedTypeNode
+                );
+
+                $resolvedTypes[] = new ArrayTypeNode($resolvedType);
+            } elseif ($unionedTypeNode instanceof IdentifierTypeNode) {
+                $resolvedTypes[] = $this->resolveIdentifierTypeNode(
+                    $unionedTypeNode,
+                    $templateTypeMap,
+                    $unionedTypeNode
+                );
+            }
+        }
+
+        return new UnionTypeNode($resolvedTypes);
     }
 }
