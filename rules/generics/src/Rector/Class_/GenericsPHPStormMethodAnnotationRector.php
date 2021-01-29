@@ -6,14 +6,13 @@ namespace Rector\Generics\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
+use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Generics\NodeType\GenericTypeSpecifier;
 use Rector\Generics\Reflection\ClassGenericMethodResolver;
 use Rector\Generics\Reflection\GenericClassReflectionAnalyzer;
 use Rector\Generics\ValueObject\GenericChildParentClassReflections;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -119,11 +118,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->extends === null) {
-            return null;
-        }
-
-        $genericChildParentClassReflections = $this->resolveGenericChildParentClassReflections($node);
+        $genericChildParentClassReflections = $this->genericClassReflectionAnalyzer->resolveChildParent($node);
         if (! $genericChildParentClassReflections instanceof GenericChildParentClassReflections) {
             return null;
         }
@@ -133,13 +128,16 @@ CODE_SAMPLE
             $genericChildParentClassReflections->getParentClassReflection()
         );
 
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
+        $methodTagValueNodes = $this->filterOutExistingMethodTagValuesNodes($methodTagValueNodes, $phpDocInfo);
+
         $this->genericTypeSpecifier->replaceGenericTypesWithSpecificTypes(
             $methodTagValueNodes,
             $node,
             $genericChildParentClassReflections->getChildClassReflection()
         );
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         foreach ($methodTagValueNodes as $methodTagValueNode) {
             $phpDocInfo->addTagValueNode($methodTagValueNode);
         }
@@ -147,31 +145,28 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function resolveGenericChildParentClassReflections(Class_ $class): ?GenericChildParentClassReflections
-    {
-        $scope = $class->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return null;
+    /**
+     * @param MethodTagValueNode[] $methodTagValueNodes
+     * @return MethodTagValueNode[]
+     */
+    private function filterOutExistingMethodTagValuesNodes(
+        array $methodTagValueNodes,
+        PhpDocInfo $phpDocInfo
+    ): array {
+        $methodTagNames = $phpDocInfo->getMethodTagNames();
+        if ($methodTagNames === []) {
+            return $methodTagValueNodes;
         }
 
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return null;
+        $filteredMethodTagValueNodes = [];
+        foreach ($methodTagValueNodes as $methodTagValueNode) {
+            if (in_array($methodTagValueNode->methodName, $methodTagNames, true)) {
+                continue;
+            }
+
+            $filteredMethodTagValueNodes[] = $methodTagValueNode;
         }
 
-        if (! $this->genericClassReflectionAnalyzer->isGeneric($classReflection)) {
-            return null;
-        }
-
-        $parentClassReflection = $classReflection->getParentClass();
-        if (! $parentClassReflection instanceof ClassReflection) {
-            return null;
-        }
-
-        if (! $this->genericClassReflectionAnalyzer->isGeneric($parentClassReflection)) {
-            return null;
-        }
-
-        return new GenericChildParentClassReflections($classReflection, $parentClassReflection);
+        return $filteredMethodTagValueNodes;
     }
 }
