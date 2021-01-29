@@ -113,18 +113,23 @@ CODE_SAMPLE
         }
 
         if ($parent instanceof ArrowFunction && $this->areNodesEqual($parent->expr, $node)) {
-            $parentOfParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentOfParent instanceof Expression) {
-                $this->removeNode($parent);
-                return $node;
-            }
-
-            return $this->createFalse();
+            return $this->processArrowFunction($parent, $node);
         }
 
         $this->removeNode($node);
 
         return $node;
+    }
+
+    private function processArrowFunction(ArrowFunction $arrowFunction, MethodCall $methodCall): Node
+    {
+        $parentOfParent = $arrowFunction->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentOfParent instanceof Expression) {
+            $this->removeNode($arrowFunction);
+            return $methodCall;
+        }
+
+        return $this->createFalse();
     }
 
     private function shouldSkipClassMethod(Class_ $class, MethodCall $methodCall): bool
