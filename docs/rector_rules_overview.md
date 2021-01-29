@@ -7067,7 +7067,7 @@ Change magic array access add to `$list,` to explicit `$list->$addMethod(...)`
 
 ```php
 use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
-use Rector\Generic\ValueObject\DimFetchAssignToMethodCall;
+use Rector\Transform\ValueObject\DimFetchAssignToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

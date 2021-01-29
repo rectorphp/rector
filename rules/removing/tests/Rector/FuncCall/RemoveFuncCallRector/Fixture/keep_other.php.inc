@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\FuncCall\RemoveIniGetSetFuncCallRector\Fixture;
+namespace Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallRector\Fixture;
 
 ini_get('bla');
 ini_set('y2kcompliance', 0);

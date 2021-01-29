@@ -3,7 +3,7 @@
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
 use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
-use Rector\Generic\ValueObject\DimFetchAssignToMethodCall;
+use Rector\Transform\ValueObject\DimFetchAssignToMethodCall;
 
 final class ConfigurationWithStringStringArray
 {
@@ -30,12 +30,12 @@ final class ConfigurationWithStringStringArray
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
 use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
-use Rector\Generic\ValueObject\DimFetchAssignToMethodCall;
+use Rector\Transform\ValueObject\DimFetchAssignToMethodCall;
 
 final class ConfigurationWithStringStringArray
 {
     /**
-     * @return array<string, array<string, \Rector\Generic\ValueObject\DimFetchAssignToMethodCall[]>>
+     * @return array<string, array<string, \Rector\Transform\ValueObject\DimFetchAssignToMethodCall[]>>
      */
     public function getSome(): array
     {

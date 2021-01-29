@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\FuncCall\RemoveIniGetSetFuncCallRector\Fixture;
+namespace Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallRector\Fixture;
 
 $aRandomVar = false;
 
@@ -13,7 +13,7 @@ ini_set('safe_mode', $aRandomVar);
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\FuncCall\RemoveIniGetSetFuncCallRector\Fixture;
+namespace Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallRector\Fixture;
 
 $aRandomVar = false;
 

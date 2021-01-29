@@ -136,8 +136,6 @@ final class RectorsFinder
         }
 
         if (! class_exists($class)) {
-            dump($class);
-
             $message = sprintf('Class "%s" was not found', $class);
             throw new ShouldNotHappenException($message);
         }

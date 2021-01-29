@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\FuncCall\RemoveIniGetSetFuncCallRector\Fixture;
+namespace Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallRector\Fixture;
 
 class GetAssign
 {
@@ -16,7 +16,7 @@ class GetAssign
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\FuncCall\RemoveIniGetSetFuncCallRector\Fixture;
+namespace Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallRector\Fixture;
 
 class GetAssign
 {
