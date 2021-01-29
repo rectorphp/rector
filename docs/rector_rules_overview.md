@@ -7622,10 +7622,10 @@ Removes extends class by name
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Class_\RemoveParentRector`
+- class: `Rector\Removing\Rector\Class_\RemoveParentRector`
 
 ```php
-use Rector\Generic\Rector\Class_\RemoveParentRector;
+use Rector\Removing\Rector\Class_\RemoveParentRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

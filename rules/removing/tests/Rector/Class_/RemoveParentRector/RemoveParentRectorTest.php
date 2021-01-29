@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Class_\RemoveParentRector;
+namespace Rector\Removing\Tests\Rector\Class_\RemoveParentRector;
 
 use Iterator;
-use Rector\Generic\Rector\Class_\RemoveParentRector;
-use Rector\Generic\Tests\Rector\Class_\RemoveParentRector\Source\ParentTypeToBeRemoved;
+use Rector\Removing\Rector\Class_\RemoveParentRector;
+use Rector\Removing\Tests\Rector\Class_\RemoveParentRector\Source\ParentTypeToBeRemoved;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
