@@ -5,6 +5,7 @@ declare(strict_types=1);
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 
+use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\Visibility;
 use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
@@ -202,14 +203,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentDefaultValueReplacer(
                     'Symfony\Component\HttpFoundation\Cookie',
-                    '__construct',
+                    MethodName::CONSTRUCT,
                     5,
                     false,
                     null
                 ),
                 new ArgumentDefaultValueReplacer(
                     'Symfony\Component\HttpFoundation\Cookie',
-                    '__construct',
+                    MethodName::CONSTRUCT,
                     8,
                     null,
                     'lax'
@@ -223,13 +224,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ArgumentRemoverRector::REMOVED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentRemover(
                     'Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector',
-                    '__construct',
+                    MethodName::CONSTRUCT,
                     0,
                     null
                 ),
                 new ArgumentRemover(
                     'Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector',
-                    '__construct',
+                    MethodName::CONSTRUCT,
                     1,
                     null
                 ),

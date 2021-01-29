@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPStan\Type\MixedType;
 use PHPStan\Type\VoidType;
+use Rector\Core\ValueObject\MethodName;
 use Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector;
 use Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector;
@@ -25,7 +26,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => ValueObjectInliner::inline([
                 // https://github.com/rectorphp/rector/issues/1024 - no type, $dataName
-                new AddParamTypeDeclaration('PHPUnit\Framework\TestCase', '__construct', 2, new MixedType()),
+                new AddParamTypeDeclaration('PHPUnit\Framework\TestCase', MethodName::CONSTRUCT, 2, new MixedType()),
             ]),
         ]]);
 
