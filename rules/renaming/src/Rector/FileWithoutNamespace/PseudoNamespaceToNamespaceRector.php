@@ -18,9 +18,9 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticInstanceOf;
-use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer;
+use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -42,7 +42,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
     private const SPLIT_BY_UNDERSCORE_REGEX = '#([a-zA-Z])(_)?(_)([a-zA-Z])#';
 
     /**
-     * @var PseudoNamespaceToNamespace[]
+     * @var \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace[]
      */
     private $pseudoNamespacesToNamespaces = [];
 

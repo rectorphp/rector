@@ -4,16 +4,29 @@ declare(strict_types=1);
 
 namespace Rector\Php71\Rector\BinaryOp;
 
+use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Generic\Rector\AbstractIsAbleFunCallRector;
+use Rector\Php71\IsArrayAndDualCheckToAble;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector\IsIterableRectorTest
  */
-final class IsIterableRector extends AbstractIsAbleFunCallRector
+final class IsIterableRector extends AbstractRector
 {
+    /**
+     * @var IsArrayAndDualCheckToAble
+     */
+    private $isArrayAndDualCheckToAble;
+
+    public function __construct(IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble)
+    {
+        $this->isArrayAndDualCheckToAble = $isArrayAndDualCheckToAble;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -21,18 +34,32 @@ final class IsIterableRector extends AbstractIsAbleFunCallRector
             [new CodeSample('is_array($foo) || $foo instanceof Traversable;', 'is_iterable($foo);')]);
     }
 
-    public function getFuncName(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return 'is_iterable';
+        return [BooleanOr::class];
     }
 
-    public function getPhpVersion(): int
+    /**
+     * @param BooleanOr $node
+     */
+    public function refactor(Node $node): ?Node
     {
-        return PhpVersionFeature::IS_ITERABLE;
+        if ($this->shouldSkip()) {
+            return null;
+        }
+
+        return $this->isArrayAndDualCheckToAble->processBooleanOr($node, 'Traversable', 'is_iterable') ?: $node;
     }
 
-    public function getType(): string
+    private function shouldSkip(): bool
     {
-        return 'Traversable';
+        if (function_exists('is_iterable')) {
+            return false;
+        }
+
+        return ! $this->isAtLeastPhpVersion(PhpVersionFeature::IS_ITERABLE);
     }
 }

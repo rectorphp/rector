@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\ValueObject;
+namespace Rector\Renaming\ValueObject;
 
 final class PseudoNamespaceToNamespace
 {

@@ -14197,7 +14197,7 @@ Replaces defined Pseudo_Namespaces by Namespace\Ones.
 - class: `Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector`
 
 ```php
-use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
+use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

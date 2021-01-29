@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Rector\Generics\Rector\Class_;
 
 use PhpParser\Node;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,9 +21,11 @@ final class GenericsPHPStormMethodAnnotationRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Complete PHPStorm @method annotations, to make it understand the PHPStan/Psalm generics', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Complete PHPStorm @method annotations, to make it understand the PHPStan/Psalm generics',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 /**
  * @template TEntity as object
  */
@@ -43,8 +48,8 @@ final class AndroidDeviceRepository extends AbstractRepository
 }
 CODE_SAMPLE
 
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 /**
  * @template TEntity as object
  */
@@ -68,8 +73,9 @@ final class AndroidDeviceRepository extends AbstractRepository
 }
 CODE_SAMPLE
 
-            )
-        ]);
+                ),
+                
+            ]);
     }
 
     /**
@@ -85,7 +91,31 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // change the node
+        if ($node->extends === null) {
+            return null;
+        }
+
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        $parentClassReflection = $classReflection->getParentClass();
+        if (! $parentClassReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        if ($parentClassReflection->getTemplateTags() === []) {
+            return null;
+        }
+
+        dump($parentClassReflection);
+        die;
 
         return $node;
     }
