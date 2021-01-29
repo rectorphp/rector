@@ -24,7 +24,7 @@ final class ValidatorBuilderEnableAnnotationMappingRector extends AbstractRector
     /**
      * @var string
      */
-    private const ARG_OLD_TYPE = 'use Doctrine\Common\Annotations\Reader';
+    private const ARG_OLD_TYPE = 'Doctrine\Common\Annotations\Reader';
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -79,6 +79,10 @@ CODE_SAMPLE
         }
 
         if (! $this->isName($node->name, 'enableAnnotationMapping')) {
+            return null;
+        }
+
+        if (! $this->isObjectType($node->args[0]->value, self::ARG_OLD_TYPE)) {
             return null;
         }
 
