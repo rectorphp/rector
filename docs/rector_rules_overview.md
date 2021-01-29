@@ -7107,7 +7107,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Change null in argument, that is now not nullable anymore
 
-- class: `Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector`
+- class: `Rector\TypeDeclaration\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector`
 
 ```diff
  final class SomeClass
