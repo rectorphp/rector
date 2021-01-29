@@ -58,6 +58,10 @@ final class MethodTagValueNodeFactory
         if ($returnTagValueNode->type instanceof UnionTypeNode) {
             $resolvedTypes = [];
             foreach ($returnTagValueNode->type->types as $unionedTypeNode) {
+                if (! $unionedTypeNode instanceof IdentifierTypeNode) {
+                    continue;
+                }
+
                 $resolvedTypes[] = $this->resolveIdentifierTypeNode(
                     $unionedTypeNode,
                     $templateTypeMap,
