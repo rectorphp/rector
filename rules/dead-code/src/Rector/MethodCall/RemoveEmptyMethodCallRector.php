@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
@@ -92,10 +94,6 @@ CODE_SAMPLE
         }
 
         $class = $this->classReflectionToAstResolver->getClassFromObjectType($type);
-        if (! $class instanceof Class_) {
-            return null;
-        }
-
         if ($this->shouldSkipClassMethod($class, $node)) {
             return null;
         }
@@ -110,13 +108,21 @@ CODE_SAMPLE
             return $this->createFalse();
         }
 
+        if ($parent instanceof ArrowFunction && $this->areNodesEqual($parent->expr, $node)) {
+            return $this->processArrowFunction($parent, $node);
+        }
+
         $this->removeNode($node);
 
         return $node;
     }
 
-    private function shouldSkipClassMethod(Class_ $class, MethodCall $methodCall): bool
+    private function shouldSkipClassMethod(?Class_ $class, MethodCall $methodCall): bool
     {
+        if (! $class instanceof Class_) {
+            return true;
+        }
+
         $methodName = $this->getName($methodCall->name);
         if ($methodName === null) {
             return true;
@@ -132,5 +138,16 @@ CODE_SAMPLE
         }
 
         return count((array) $classMethod->stmts) !== 0;
+    }
+
+    private function processArrowFunction(ArrowFunction $arrowFunction, MethodCall $methodCall): Node
+    {
+        $parentOfParent = $arrowFunction->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentOfParent instanceof Expression) {
+            $this->removeNode($arrowFunction);
+            return $methodCall;
+        }
+
+        return $this->createFalse();
     }
 }
