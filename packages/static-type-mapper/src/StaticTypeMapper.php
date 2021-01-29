@@ -15,6 +15,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedException;
@@ -112,13 +113,22 @@ final class StaticTypeMapper
     public function mapPHPStanPhpDocTypeNodeToPhpDocString(TypeNode $typeNode, Node $node): string
     {
         $phpStanType = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, $node);
-
         return $this->mapPHPStanTypeToDocString($phpStanType);
     }
 
     public function mapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, Node $node): Type
     {
         $nameScope = $this->nameScopeFactory->createNameScopeFromNode($node);
+        return $this->phpDocTypeMapper->mapToPHPStanType($typeNode, $node, $nameScope);
+    }
+
+    public function mapPHPStanPhpDocTypeNodeToPHPStanTypeWithTemplateTypeMap(
+        TypeNode $typeNode,
+        Node $node,
+        TemplateTypeMap $templateTypeMap
+    ): Type {
+        $nameScope = $this->nameScopeFactory->createNameScopeFromNode($node);
+        $nameScope = $nameScope->withTemplateTypeMap($templateTypeMap);
         return $this->phpDocTypeMapper->mapToPHPStanType($typeNode, $node, $nameScope);
     }
 }
