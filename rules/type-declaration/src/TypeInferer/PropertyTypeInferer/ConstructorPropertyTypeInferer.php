@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
@@ -61,7 +62,13 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
 
         // A. infer from type declaration of parameter
         if ($param->type !== null) {
-            return $this->resolveFromParamType($param, $classMethod, $propertyName);
+            $type = $this->resolveFromParamType($param, $classMethod, $propertyName);
+
+            if ($param->variadic) {
+                return new ArrayType(new ConstantIntegerType(0), $type);
+            }
+
+            return $type;
         }
 
         return new MixedType();

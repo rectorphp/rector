@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyFromStrictConstructorRector\Fixture;
 
-final class DemoFile
+final class VariadicConstructorParam
 {
     /**
      * @var DateTime[]
@@ -19,7 +19,7 @@ final class DemoFile
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyFromStrictConstructorRector\Fixture;
 
-final class DemoFile
+final class VariadicConstructorParam
 {
     /**
      * @var DateTime[]
