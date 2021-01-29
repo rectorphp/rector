@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Generics\Reflection;
 
+use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Reflection\ClassReflection;
 
 final class GenericClassReflectionAnalyzer
@@ -18,15 +19,15 @@ final class GenericClassReflectionAnalyzer
             return true;
         }
 
-        $resolvedPhpDoc = $classReflection->getResolvedPhpDoc();
-        if ($resolvedPhpDoc === null) {
+        $resolvedPhpDocBlock = $classReflection->getResolvedPhpDoc();
+        if (! $resolvedPhpDocBlock instanceof ResolvedPhpDocBlock) {
             return false;
         }
 
-        if ($resolvedPhpDoc->getExtendsTags() !== []) {
+        if ($resolvedPhpDocBlock->getExtendsTags() !== []) {
             return true;
         }
 
-        return $resolvedPhpDoc->getImplementsTags() !== [];
+        return $resolvedPhpDocBlock->getImplementsTags() !== [];
     }
 }

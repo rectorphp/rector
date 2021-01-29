@@ -124,7 +124,7 @@ CODE_SAMPLE
         }
 
         $genericChildParentClassReflections = $this->resolveGenericChildParentClassReflections($node);
-        if ($genericChildParentClassReflections === null) {
+        if (! $genericChildParentClassReflections instanceof GenericChildParentClassReflections) {
             return null;
         }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Generics\NodeType;
 
+use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\PhpDoc\Tag\ExtendsTag;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Generic\GenericObjectType;
@@ -58,20 +59,6 @@ final class ExtendsTemplateTypeMapFallbackFactory
         return null;
     }
 
-    private function createTemplateObjectType(
-        TemplateTypeScope $templateTypeScope,
-        string $parentGenericTypeName,
-        TypeWithClassName $typeWithClassName
-    ): TemplateObjectType {
-        return new TemplateObjectType(
-            $templateTypeScope,
-            new TemplateTypeParameterStrategy(),
-            TemplateTypeVariance::createInvariant(),
-            $parentGenericTypeName,
-            $typeWithClassName->getClassName()
-        );
-    }
-
     /**
      * @return ExtendsTag[]
      */
@@ -82,12 +69,12 @@ final class ExtendsTemplateTypeMapFallbackFactory
             return [];
         }
 
-        $resolvedPhpDoc = $classReflection->getResolvedPhpDoc();
-        if ($resolvedPhpDoc === null) {
+        $resolvedPhpDocBlock = $classReflection->getResolvedPhpDoc();
+        if (! $resolvedPhpDocBlock instanceof ResolvedPhpDocBlock) {
             return [];
         }
 
-        return $resolvedPhpDoc->getExtendsTags();
+        return $resolvedPhpDocBlock->getExtendsTags();
     }
 
     /**
@@ -101,5 +88,19 @@ final class ExtendsTemplateTypeMapFallbackFactory
         }
 
         return array_keys($parentClassReflection->getTemplateTypeMap()->getTypes());
+    }
+
+    private function createTemplateObjectType(
+        TemplateTypeScope $templateTypeScope,
+        string $parentGenericTypeName,
+        TypeWithClassName $typeWithClassName
+    ): TemplateObjectType {
+        return new TemplateObjectType(
+            $templateTypeScope,
+            new TemplateTypeParameterStrategy(),
+            TemplateTypeVariance::createInvariant(),
+            $parentGenericTypeName,
+            $typeWithClassName->getClassName()
+        );
     }
 }
