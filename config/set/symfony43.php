@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Core\ValueObject\MethodName;
 use Rector\Generic\Rector\ClassMethod\AddMethodParentCallRector;
 
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
@@ -96,7 +97,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddMethodParentCallRector::class)
         ->call('configure', [[
             AddMethodParentCallRector::METHODS_BY_PARENT_TYPES => [
-                'Symfony\Component\EventDispatcher\EventDispatcher' => '__construct',
+                'Symfony\Component\EventDispatcher\EventDispatcher' => MethodName::CONSTRUCT,
             ],
         ]]);
 };

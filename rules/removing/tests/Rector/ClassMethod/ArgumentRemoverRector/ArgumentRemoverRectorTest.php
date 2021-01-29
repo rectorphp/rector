@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector;
 
 use Iterator;
-use Rector\Generic\ValueObject\ArgumentRemover;
 use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\Persister;
 use Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\RemoveInTheMiddle;
+use Rector\Removing\ValueObject\ArgumentRemover;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\SmartFileSystem\SmartFileInfo;

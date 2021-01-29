@@ -6853,7 +6853,7 @@ Removes defined arguments in defined methods and their calls.
 
 ```php
 use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
-use Rector\Generic\ValueObject\ArgumentRemover;
+use Rector\Removing\ValueObject\ArgumentRemover;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -7067,7 +7067,7 @@ Change magic array access add to `$list,` to explicit `$list->$addMethod(...)`
 
 ```php
 use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
-use Rector\Generic\ValueObject\DimFetchAssignToMethodCall;
+use Rector\Transform\ValueObject\DimFetchAssignToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -7107,7 +7107,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Change null in argument, that is now not nullable anymore
 
-- class: `Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector`
+- class: `Rector\TypeDeclaration\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector`
 
 ```diff
  final class SomeClass
@@ -7527,7 +7527,7 @@ Remove argument by position by function name
 
 ```php
 use Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector;
-use Rector\Generic\ValueObject\RemoveFuncCallArg;
+use Rector\Removing\ValueObject\RemoveFuncCallArg;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

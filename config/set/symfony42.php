@@ -5,6 +5,7 @@ declare(strict_types=1);
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 
+use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\Visibility;
 use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
@@ -12,9 +13,9 @@ use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
-use Rector\Generic\ValueObject\ArgumentRemover;
 use Rector\Generic\ValueObject\WrapReturn;
 use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
+use Rector\Removing\ValueObject\ArgumentRemover;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -202,14 +203,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentDefaultValueReplacer(
                     'Symfony\Component\HttpFoundation\Cookie',
-                    '__construct',
+                    MethodName::CONSTRUCT,
                     5,
                     false,
                     null
                 ),
                 new ArgumentDefaultValueReplacer(
                     'Symfony\Component\HttpFoundation\Cookie',
-                    '__construct',
+                    MethodName::CONSTRUCT,
                     8,
                     null,
                     'lax'
@@ -223,13 +224,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ArgumentRemoverRector::REMOVED_ARGUMENTS => ValueObjectInliner::inline([
                 new ArgumentRemover(
                     'Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector',
-                    '__construct',
+                    MethodName::CONSTRUCT,
                     0,
                     null
                 ),
                 new ArgumentRemover(
                     'Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector',
-                    '__construct',
+                    MethodName::CONSTRUCT,
                     1,
                     null
                 ),

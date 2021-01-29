@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallArgRector;
+namespace Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallRector;
 
 use Iterator;
-use Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector;
-use Rector\Removing\ValueObject\RemoveFuncCallArg;
+use Rector\Removing\Rector\FuncCall\RemoveFuncCallRector;
+use Rector\Removing\ValueObject\RemoveFuncCall;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use SplFileInfo;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class RemoveFuncCallArgRectorTest extends AbstractRectorTestCase
+final class RemoveFuncCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -35,9 +35,14 @@ final class RemoveFuncCallArgRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            RemoveFuncCallArgRector::class => [
-                RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => [
-                    new RemoveFuncCallArg('ldap_first_attribute', 2),
+            RemoveFuncCallRector::class => [
+                RemoveFuncCallRector::REMOVE_FUNC_CALLS => [
+                    new RemoveFuncCall('ini_get', [
+                        0 => ['y2k_compliance', 'safe_mode', 'magic_quotes_runtime'],
+                    ]),
+                    new RemoveFuncCall('ini_set', [
+                        0 => ['y2k_compliance', 'safe_mode', 'magic_quotes_runtime'],
+                    ]),
                 ],
             ],
         ];
