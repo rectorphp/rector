@@ -287,6 +287,14 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo, array $extraFiles = []): void
     {
+        $fileName = $fixtureFileInfo->getFileName();
+        if (! Strings::endswith($fileName, '.php.inc')) {
+            throw new ShouldNotHappenException(sprintf(
+                '"%s" has invalid suffix, use .php.inc suffix instead',
+                $fileName
+            ));
+        }
+
         $this->fixtureGuard->ensureFileInfoHasDifferentBeforeAndAfterContent($fixtureFileInfo);
 
         $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
