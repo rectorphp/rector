@@ -94,10 +94,6 @@ CODE_SAMPLE
         }
 
         $class = $this->classReflectionToAstResolver->getClassFromObjectType($type);
-        if (! $class instanceof Class_) {
-            return null;
-        }
-
         if ($this->shouldSkipClassMethod($class, $node)) {
             return null;
         }
@@ -121,8 +117,12 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkipClassMethod(Class_ $class, MethodCall $methodCall): bool
+    private function shouldSkipClassMethod(?Class_ $class, MethodCall $methodCall): bool
     {
+        if (! $class instanceof Class_) {
+            return true;
+        }
+
         $methodName = $this->getName($methodCall->name);
         if ($methodName === null) {
             return true;
