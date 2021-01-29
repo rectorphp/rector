@@ -29,7 +29,7 @@ use Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector\S
 /**
  * @template TEntity as RealObject
  * @extends AbstractRepository<TEntity>
- * @method RealObject find($id)
+ * @method \Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Source\RealObject find($id)
  */
 final class ChildRepository extends AbstractGenericRepository
 {

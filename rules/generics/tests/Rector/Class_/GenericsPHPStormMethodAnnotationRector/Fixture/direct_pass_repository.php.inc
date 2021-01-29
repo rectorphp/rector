@@ -27,7 +27,7 @@ use Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector\S
 
 /**
  * @extends AbstractRepository<RealObject>
- * @method RealObject find($id)
+ * @method \Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Source\RealObject find($id)
  */
 final class DirectPassRepository extends AbstractGenericRepository
 {

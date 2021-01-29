@@ -11,6 +11,8 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Generics\NodeType\GenericTypeSpecifier;
 use Rector\Generics\Reflection\ClassGenericMethodResolver;
+use Rector\Generics\Reflection\GenericClassReflectionAnalyzer;
+use Rector\Generics\ValueObject\GenericChildParentClassReflections;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -32,12 +34,19 @@ final class GenericsPHPStormMethodAnnotationRector extends AbstractRector
      */
     private $genericTypeSpecifier;
 
+    /**
+     * @var GenericClassReflectionAnalyzer
+     */
+    private $genericClassReflectionAnalyzer;
+
     public function __construct(
         ClassGenericMethodResolver $classGenericMethodResolver,
-        GenericTypeSpecifier $genericTypeSpecifier
+        GenericTypeSpecifier $genericTypeSpecifier,
+        GenericClassReflectionAnalyzer $genericClassReflectionAnalyzer
     ) {
         $this->classGenericMethodResolver = $classGenericMethodResolver;
         $this->genericTypeSpecifier = $genericTypeSpecifier;
+        $this->genericClassReflectionAnalyzer = $genericClassReflectionAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -114,7 +123,33 @@ CODE_SAMPLE
             return null;
         }
 
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        $genericChildParentClassReflections = $this->resolveGenericChildParentClassReflections($node);
+        if ($genericChildParentClassReflections === null) {
+            return null;
+        }
+
+        // resolve generic method from parent
+        $methodTagValueNodes = $this->classGenericMethodResolver->resolveFromClass(
+            $genericChildParentClassReflections->getParentClassReflection()
+        );
+
+        $this->genericTypeSpecifier->replaceGenericTypesWithSpecificTypes(
+            $methodTagValueNodes,
+            $node,
+            $genericChildParentClassReflections->getChildClassReflection()
+        );
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        foreach ($methodTagValueNodes as $methodTagValueNode) {
+            $phpDocInfo->addTagValueNode($methodTagValueNode);
+        }
+
+        return $node;
+    }
+
+    private function resolveGenericChildParentClassReflections(Class_ $class): ?GenericChildParentClassReflections
+    {
+        $scope = $class->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             return null;
         }
@@ -124,7 +159,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $classReflection->isGeneric()) {
+        if (! $this->genericClassReflectionAnalyzer->isGeneric($classReflection)) {
             return null;
         }
 
@@ -133,24 +168,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $parentClassReflection->isGeneric()) {
+        if (! $this->genericClassReflectionAnalyzer->isGeneric($parentClassReflection)) {
             return null;
         }
 
-        // resolve generic method from parent
-        $methodTagValueNodes = $this->classGenericMethodResolver->resolveFromClass($parentClassReflection);
-
-        $this->genericTypeSpecifier->replaceGenericTypesWithSpecificTypes(
-            $methodTagValueNodes,
-            $node,
-            $classReflection->getTemplateTypeMap()
-        );
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        foreach ($methodTagValueNodes as $methodTagValueNode) {
-            $phpDocInfo->addTagValueNode($methodTagValueNode);
-        }
-
-        return $node;
+        return new GenericChildParentClassReflections($classReflection, $parentClassReflection);
     }
 }
