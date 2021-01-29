@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
 
-class VoidReturnTypeInArrayFunction2
+class VoidReturnTypeInArrowFunction2
 {
     public function test() {}
 }
@@ -17,7 +17,7 @@ if (fn() => (new VoidReturnTypeInArrayFunction())->test()) {
 
 namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
 
-class VoidReturnTypeInArrayFunction2
+class VoidReturnTypeInArrowFunction2
 {
     public function test() {}
 }
