@@ -212,19 +212,16 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     {
         $changeCount = $errorAndDiffCollector->getFileDiffsCount()
             + $errorAndDiffCollector->getRemovedAndAddedFilesCount();
-        $message = 'Rector is done!';
 
         if ($changeCount === 0) {
-            return $message;
+            return 'Rector is done!';
         }
 
-        $message .= sprintf(
-            ' %d file%s %s.',
+        return sprintf(
+            'Rector changed %d file%s %s.',
             $changeCount,
             $changeCount > 1 ? 's' : '',
             $this->configuration->isDryRun() ? 'would have changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed'
         );
-
-        return $message;
     }
 }
