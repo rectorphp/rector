@@ -9,8 +9,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\Visibility;
-use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -26,7 +26,7 @@ final class ChangeMethodVisibilityRector extends AbstractRector implements Confi
     public const METHOD_VISIBILITIES = 'method_visibilities';
 
     /**
-     * @var \Rector\Visibility\ValueObject\ChangeMethodVisibility[]
+     * @var ChangeMethodVisibility[]
      */
     private $methodVisibilities = [];
 

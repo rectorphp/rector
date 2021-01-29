@@ -14,7 +14,7 @@ final class ParentClassToTraits
     /**
      * @var string[]
      */
-    private $traitNames;
+    private $traitNames = [];
 
     /**
      * @param string[] $traitNames
