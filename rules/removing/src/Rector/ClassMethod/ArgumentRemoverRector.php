@@ -27,7 +27,7 @@ final class ArgumentRemoverRector extends AbstractRector implements Configurable
     public const REMOVED_ARGUMENTS = 'removed_arguments';
 
     /**
-     * @var \Rector\Removing\ValueObject\ArgumentRemover[]
+     * @var ArgumentRemover[]
      */
     private $removedArguments = [];
 

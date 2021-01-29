@@ -29,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormerNullableArgumentToScalarTypedRector extends AbstractRector
 {
     /**
-     * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\CallTypeAnalyzer
+     * @var CallTypeAnalyzer
      */
     private $callTypeAnalyzer;
 

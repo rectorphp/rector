@@ -117,18 +117,6 @@ CODE_SAMPLE
         $this->removeFuncCalls = $removeFuncCalls;
     }
 
-    /**
-     * @param mixed[] $values
-     */
-    private function isArgumentPositionValueMatch(FuncCall $funcCall, int $argumentPosition, array $values): bool
-    {
-        if (! isset($funcCall->args[$argumentPosition])) {
-            return false;
-        }
-
-        return $this->isValues($funcCall->args[$argumentPosition]->value, $values);
-    }
-
     private function refactorFuncCallsWithPositions(FuncCall $funcCall, RemoveFuncCall $removeFuncCall): void
     {
         foreach ($removeFuncCall->getArgumentPositionAndValues() as $argumentPosition => $values) {
@@ -143,5 +131,17 @@ CODE_SAMPLE
                 $commentableNode->setAttribute(AttributeKey::COMMENTS, [new Comment('// @fixme')]);
             }
         }
+    }
+
+    /**
+     * @param mixed[] $values
+     */
+    private function isArgumentPositionValueMatch(FuncCall $funcCall, int $argumentPosition, array $values): bool
+    {
+        if (! isset($funcCall->args[$argumentPosition])) {
+            return false;
+        }
+
+        return $this->isValues($funcCall->args[$argumentPosition]->value, $values);
     }
 }
