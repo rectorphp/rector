@@ -29,7 +29,7 @@ final class ParentClassToTraitsRector extends AbstractRector implements Configur
     public const PARENT_CLASS_TO_TRAITS = 'parent_class_to_traits';
 
     /**
-     * @var \Rector\Transform\ValueObject\ParentClassToTraits[]
+     * @var ParentClassToTraits[]
      */
     private $parentClassToTraits = [];
 
@@ -108,7 +108,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, \Rector\Transform\ValueObject\ParentClassToTraits[]> $configuration
+     * @param array<string, ParentClassToTraits[]> $configuration
      */
     public function configure(array $configuration): void
     {
