@@ -78,13 +78,16 @@ final class MethodTagValueNodeFactory
         return $stringParameters;
     }
 
-    private function resolveReturnTagTypeNode(ReturnTagValueNode $returnTagValueNode, TemplateTypeMap $templateTypeMap): TypeNode
-    {
+    private function resolveReturnTagTypeNode(
+        ReturnTagValueNode $returnTagValueNode,
+        TemplateTypeMap $templateTypeMap
+    ): TypeNode {
         $returnTagTypeNode = $returnTagValueNode->type;
-
         if ($returnTagValueNode->type instanceof UnionTypeNode) {
             return $this->resolveUnionTypeNode($returnTagValueNode->type, $templateTypeMap);
-        } elseif ($returnTagValueNode->type instanceof IdentifierTypeNode) {
+        }
+
+        if ($returnTagValueNode->type instanceof IdentifierTypeNode) {
             return $this->resolveIdentifierTypeNode(
                 $returnTagValueNode->type,
                 $templateTypeMap,
@@ -93,22 +96,6 @@ final class MethodTagValueNodeFactory
         }
 
         return $returnTagTypeNode;
-    }
-
-    private function resolveIdentifierTypeNode(
-        IdentifierTypeNode $identifierTypeNode,
-        TemplateTypeMap $templateTypeMap,
-        TypeNode $fallbackTypeNode
-    ): TypeNode {
-        $typeName = $identifierTypeNode->name;
-        $genericType = $templateTypeMap->getType($typeName);
-
-        if ($genericType instanceof Type) {
-            $returnTagType = $genericType;
-            return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($returnTagType);
-        }
-
-        return $fallbackTypeNode;
     }
 
     private function resolveUnionTypeNode(UnionTypeNode $unionTypeNode, TemplateTypeMap $templateTypeMap): UnionTypeNode
@@ -137,5 +124,21 @@ final class MethodTagValueNodeFactory
         }
 
         return new UnionTypeNode($resolvedTypes);
+    }
+
+    private function resolveIdentifierTypeNode(
+        IdentifierTypeNode $identifierTypeNode,
+        TemplateTypeMap $templateTypeMap,
+        TypeNode $fallbackTypeNode
+    ): TypeNode {
+        $typeName = $identifierTypeNode->name;
+        $genericType = $templateTypeMap->getType($typeName);
+
+        if ($genericType instanceof Type) {
+            $returnTagType = $genericType;
+            return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($returnTagType);
+        }
+
+        return $fallbackTypeNode;
     }
 }
