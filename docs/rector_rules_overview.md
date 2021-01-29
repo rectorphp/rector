@@ -6849,10 +6849,10 @@ Removes defined arguments in defined methods and their calls.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector`
+- class: `Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector`
 
 ```php
-use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
+use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\ValueObject\ArgumentRemover;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -7452,10 +7452,10 @@ Replaces parent class to specific traits
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Class_\ParentClassToTraitsRector`
+- class: `Rector\Transform\Rector\Class_\ParentClassToTraitsRector`
 
 ```php
-use Rector\Generic\Rector\Class_\ParentClassToTraitsRector;
+use Rector\Transform\Rector\Class_\ParentClassToTraitsRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -7523,10 +7523,10 @@ Remove argument by position by function name
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector`
+- class: `Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector`
 
 ```php
-use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
+use Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Generic\ValueObject\RemoveFuncCallArg;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -7589,10 +7589,10 @@ Removes interfaces usage from class.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Class_\RemoveInterfacesRector`
+- class: `Rector\Removing\Rector\Class_\RemoveInterfacesRector`
 
 ```php
-use Rector\Generic\Rector\Class_\RemoveInterfacesRector;
+use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -7622,10 +7622,10 @@ Removes extends class by name
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Class_\RemoveParentRector`
+- class: `Rector\Removing\Rector\Class_\RemoveParentRector`
 
 ```php
-use Rector\Generic\Rector\Class_\RemoveParentRector;
+use Rector\Removing\Rector\Class_\RemoveParentRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -7655,10 +7655,10 @@ Remove specific traits from code
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Class_\RemoveTraitRector`
+- class: `Rector\Removing\Rector\Class_\RemoveTraitRector`
 
 ```php
-use Rector\Generic\Rector\Class_\RemoveTraitRector;
+use Rector\Removing\Rector\Class_\RemoveTraitRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

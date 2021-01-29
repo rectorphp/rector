@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\Class_\ParentClassToTraitsRector;
-use Rector\Generic\ValueObject\ParentClassToTraits;
+use Rector\Transform\Rector\Class_\ParentClassToTraitsRector;
+use Rector\Transform\ValueObject\ParentClassToTraits;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

@@ -79,9 +79,6 @@
         "rector/rector-prefixed": "self.version"
     },
     "autoload": {
-        "files": [
-            "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php"
-        ],
         "psr-4": {
             "Rector\\Testing\\": "packages/testing/src",
             "Rector\\Comments\\": "packages/comments/src",
@@ -158,6 +155,7 @@
             "Rector\\Compiler\\": "utils/compiler/src",
             "Rector\\PostRector\\": "packages/post-rector/src",
             "Rector\\Visibility\\": "rules/visibility/src",
+            "Rector\\Removing\\": "rules/removing/src",
             "Rector\\Privatization\\": "rules/privatization/src",
             "Rector\\RectorGenerator\\": "packages/rector-generator/src",
             "Rector\\RemovingStatic\\": "rules/removing-static/src",
@@ -192,6 +190,7 @@
             "rules/symfony4/tests/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source"
         ],
         "files": [
+            "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/AnotherClass.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Foo.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Function_/count.php",
@@ -230,6 +229,7 @@
             "Rector\\Comments\\Tests\\": "packages/comments/tests",
             "Rector\\Doctrine\\Tests\\": "rules/doctrine/tests",
             "Rector\\DowngradePhp70\\Tests\\": "rules/downgrade-php70/tests",
+            "Rector\\Removing\\Tests\\": "rules/removing/tests",
             "Rector\\DowngradePhp71\\Tests\\": "rules/downgrade-php71/tests",
             "Rector\\DowngradePhp72\\Tests\\": "rules/downgrade-php72/tests",
             "Rector\\DowngradePhp73\\Tests\\": "rules/downgrade-php73/tests",
