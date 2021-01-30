@@ -8,12 +8,12 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Generics\ValueObject\GenericChildParentClassReflections;
+use Rector\Generics\ValueObject\ChildParentClassReflections;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class GenericClassReflectionAnalyzer
 {
-    public function resolveChildParent(Class_ $class): ?GenericChildParentClassReflections
+    public function resolveChildParent(Class_ $class): ?ChildParentClassReflections
     {
         if ($class->extends === null) {
             return null;
@@ -42,7 +42,7 @@ final class GenericClassReflectionAnalyzer
             return null;
         }
 
-        return new GenericChildParentClassReflections($classReflection, $parentClassReflection);
+        return new ChildParentClassReflections($classReflection, $parentClassReflection);
     }
 
     /**
