@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Rector\AbstractRector;
 
-use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 
 /**
@@ -24,11 +23,5 @@ trait PhpDocTrait
     public function autowirePhpDocTrait(PhpDocInfoFactory $phpDocInfoFactory): void
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-    }
-
-    protected function hasTagByName(Node $node, string $tagName): bool
-    {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        return $phpDocInfo->hasByName($tagName);
     }
 }
