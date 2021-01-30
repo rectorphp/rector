@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\PhpDoc;
+namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;

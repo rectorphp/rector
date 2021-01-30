@@ -7,8 +7,8 @@ namespace Rector\Core\Reflection;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagsFinder;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\PhpDoc\PhpDocTagsFinder;
 use Rector\Core\PhpParser\Parser\FunctionLikeParser;
 use ReflectionFunction;
 
@@ -25,7 +25,7 @@ final class FunctionAnnotationResolver
     private $functionLikeParser;
 
     /**
-     * @var PhpDocTagsFinder
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagsFinder
      */
     private $phpDocTagsFinder;
 

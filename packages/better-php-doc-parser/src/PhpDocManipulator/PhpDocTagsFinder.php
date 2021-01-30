@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\PhpDoc;
+namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
@@ -11,7 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Symplify\SimplePhpDocParser\SimplePhpDocParser;
 
 /**
- * @see \Rector\Core\Tests\PhpDoc\PhpDocTagsFinderTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocManipulator\PhpDocTagsFinderTest
  */
 final class PhpDocTagsFinder
 {
@@ -32,15 +32,6 @@ final class PhpDocTagsFinder
     {
         $simplePhpDocNode = $this->simplePhpDocParser->parseDocBlock($docBlock);
         return $this->resolveTypes($simplePhpDocNode->getThrowsTagValues());
-    }
-
-    /**
-     * @return string[]
-     */
-    public function extractReturnTypesFromDocBlock(string $docBlock): array
-    {
-        $simplePhpDocNode = $this->simplePhpDocParser->parseDocBlock($docBlock);
-        return $this->resolveTypes($simplePhpDocNode->getReturnTagValues());
     }
 
     /**
