@@ -68,13 +68,13 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node->cond instanceof BooleanNot && $this->isNullableNonScalarType($node->cond->expr)) {
-            $node->cond = new Identical($node->cond->expr, $this->createNull());
+            $node->cond = new Identical($node->cond->expr, $this->nodeFactory->createNull());
 
             return $node;
         }
 
         if ($this->isNullableNonScalarType($node->cond)) {
-            $node->cond = new NotIdentical($node->cond, $this->createNull());
+            $node->cond = new NotIdentical($node->cond, $this->nodeFactory->createNull());
 
             return $node;
         }

@@ -195,12 +195,12 @@ CODE_SAMPLE
         }
 
         $optionsArray->items[] = new ArrayItem(
-            $expanded ? $this->createTrue() : $this->createFalse(),
+            $expanded ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse(),
             new String_('expanded')
         );
 
         $optionsArray->items[] = new ArrayItem(
-            $multiple ? $this->createTrue() : $this->createFalse(),
+            $multiple ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse(),
             new String_('multiple')
         );
     }
@@ -211,6 +211,6 @@ CODE_SAMPLE
             return;
         }
 
-        $optionsArray->items[] = new ArrayItem($this->createTrue(), new String_('multiple'));
+        $optionsArray->items[] = new ArrayItem($this->nodeFactory->createTrue(), new String_('multiple'));
     }
 }

@@ -89,7 +89,7 @@ CODE_SAMPLE
         }
 
         $node->type = new NullableType($currentPropertyType);
-        $onlyProperty->default = $this->createNull();
+        $onlyProperty->default = $this->nodeFactory->createNull();
 
         return $node;
     }

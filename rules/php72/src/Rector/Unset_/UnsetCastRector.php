@@ -69,6 +69,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->createNull();
+        return $this->nodeFactory->createNull();
     }
 }

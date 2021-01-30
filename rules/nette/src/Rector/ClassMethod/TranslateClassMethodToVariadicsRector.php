@@ -140,7 +140,7 @@ CODE_SAMPLE
     private function createCoalesceAssign(Variable $variable): Assign
     {
         $arrayDimFetch = new ArrayDimFetch(new Variable(self::PARAMETERS), new LNumber(0));
-        $coalesce = new Coalesce($arrayDimFetch, $this->createNull());
+        $coalesce = new Coalesce($arrayDimFetch, $this->nodeFactory->createNull());
 
         return new Assign(new Variable($variable->name), $coalesce);
     }

@@ -107,7 +107,7 @@ CODE_SAMPLE
 
             $value = $this->isArray($undefinedVariable, (array) $node->stmts)
                 ? new Array_([])
-                : $this->createNull();
+                : $this->nodeFactory->createNull();
 
             $variablesInitiation[] = new Expression(new Assign(new Variable($undefinedVariable), $value));
         }

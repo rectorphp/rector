@@ -9,9 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -56,32 +54,9 @@ trait NodeFactoryTrait
         return new StaticCall($class, $method, $args);
     }
 
-    /**
-     * @param Expr[] $exprsToConcat
-     */
-    protected function createConcat(array $exprsToConcat): ?Concat
-    {
-        return $this->nodeFactory->createConcat($exprsToConcat);
-    }
-
     protected function createClassConstFetch(string $class, string $constant): ClassConstFetch
     {
         return $this->nodeFactory->createClassConstFetch($class, $constant);
-    }
-
-    protected function createNull(): ConstFetch
-    {
-        return $this->nodeFactory->createNull();
-    }
-
-    protected function createFalse(): ConstFetch
-    {
-        return $this->nodeFactory->createFalse();
-    }
-
-    protected function createTrue(): ConstFetch
-    {
-        return $this->nodeFactory->createTrue();
     }
 
     /**

@@ -220,7 +220,7 @@ CODE_SAMPLE
      */
     private function resolveNullable(bool $isNegated, Expr $expr): BinaryOp
     {
-        $constFetch = $this->createNull();
+        $constFetch = $this->nodeFactory->createNull();
 
         if ($isNegated) {
             return new Identical($expr, $constFetch);

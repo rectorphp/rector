@@ -163,7 +163,7 @@ final class EregToPregMatchRector extends AbstractRector
         $arrayDimFetch = new ArrayDimFetch($funcCall->args[2]->value, new LNumber(0));
         $strlenFuncCall = $this->createFuncCall('strlen', [$arrayDimFetch]);
 
-        return new Ternary($funcCall, $strlenFuncCall, $this->createFalse());
+        return new Ternary($funcCall, $strlenFuncCall, $this->nodeFactory->createFalse());
     }
 
     private function isCaseInsensitiveFunction(string $functionName): bool

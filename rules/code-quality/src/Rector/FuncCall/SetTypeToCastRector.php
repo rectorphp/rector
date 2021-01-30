@@ -120,7 +120,7 @@ CODE_SAMPLE
         }
 
         if ($typeNode === 'null') {
-            return new Assign($varNode, $this->createNull());
+            return new Assign($varNode, $this->nodeFactory->createNull());
         }
 
         return $node;

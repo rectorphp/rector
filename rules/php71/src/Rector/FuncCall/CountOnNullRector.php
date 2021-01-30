@@ -103,7 +103,7 @@ CODE_SAMPLE
         }
 
         if ($this->isNullableType($countedNode) || $this->isStaticType($countedNode, NullType::class)) {
-            $identical = new Identical($countedNode, $this->createNull());
+            $identical = new Identical($countedNode, $this->nodeFactory->createNull());
             $ternary = new Ternary($identical, new LNumber(0), $node);
             // prevent infinity loop re-resolution
             $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, true);

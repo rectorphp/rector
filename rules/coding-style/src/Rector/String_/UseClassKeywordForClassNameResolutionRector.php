@@ -66,7 +66,7 @@ CODE_SAMPLE
         }
 
         $exprsToConcat = $this->createExpressionsToConcat($parts);
-        return $this->createConcat($exprsToConcat);
+        return $this->nodeFactory->createConcat($exprsToConcat);
     }
 
     /**

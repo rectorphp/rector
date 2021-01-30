@@ -53,6 +53,6 @@ CODE_SAMPLE
             ? new MethodCall($node->var, $node->name, $node->args)
             : new PropertyFetch($node->var, $node->name);
 
-        return new Ternary($node->var, $called, $this->createNull());
+        return new Ternary($node->var, $called, $this->nodeFactory->createNull());
     }
 }

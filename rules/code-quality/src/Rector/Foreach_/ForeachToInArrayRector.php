@@ -215,7 +215,7 @@ CODE_SAMPLE
         $arguments = $this->createArgs([$expr, $foreach->expr]);
 
         if ($binaryOp instanceof Identical) {
-            $arguments[] = $this->createArg($this->createTrue());
+            $arguments[] = $this->createArg($this->nodeFactory->createTrue());
         }
 
         return $this->createFuncCall('in_array', $arguments);

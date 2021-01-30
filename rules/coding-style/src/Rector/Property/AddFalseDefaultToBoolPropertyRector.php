@@ -72,7 +72,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $onlyProperty->default = $this->createFalse();
+        $onlyProperty->default = $this->nodeFactory->createFalse();
 
         return $node;
     }

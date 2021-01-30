@@ -229,6 +229,6 @@ CODE_SAMPLE
             return;
         }
 
-        $onlyProperty->default = $this->createNull();
+        $onlyProperty->default = $this->nodeFactory->createNull();
     }
 }

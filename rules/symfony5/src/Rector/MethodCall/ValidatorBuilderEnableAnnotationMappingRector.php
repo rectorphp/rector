@@ -91,7 +91,7 @@ CODE_SAMPLE
         }
 
         $readerType = $node->args[0]->value;
-        $node->args[0]->value = $this->createTrue();
+        $node->args[0]->value = $this->nodeFactory->createTrue();
         return $this->createMethodCall($node, 'setDoctrineAnnotationReader', [$readerType]);
     }
 }
