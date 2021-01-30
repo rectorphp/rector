@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadDocBlock\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadDocBlock\TagRemover\VarTagRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -56,11 +57,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [\PhpParser\Node\Stmt\Property::class];
+        return [Property::class];
     }
 
     /**
-     * @param \PhpParser\Node\Stmt\Property $node
+     * @param Property $node
      */
     public function refactor(Node $node): ?Node
     {

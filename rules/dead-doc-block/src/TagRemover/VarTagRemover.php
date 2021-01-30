@@ -15,6 +15,7 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\DeadDocBlock\DeadVarTagValueNodeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
@@ -42,7 +43,7 @@ final class VarTagRemover
     private $classLikeExistenceChecker;
 
     /**
-     * @var \Rector\DeadDocBlock\DeadVarTagValueNodeAnalyzer
+     * @var DeadVarTagValueNodeAnalyzer
      */
     private $deadVarTagValueNodeAnalyzer;
 
@@ -51,7 +52,7 @@ final class VarTagRemover
         StaticTypeMapper $staticTypeMapper,
         PhpDocInfoFactory $phpDocInfoFactory,
         ClassLikeExistenceChecker $classLikeExistenceChecker,
-        \Rector\DeadDocBlock\DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer
+        DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer
     ) {
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->staticTypeMapper = $staticTypeMapper;

@@ -6,24 +6,17 @@ namespace Rector\DeadDocBlock;
 
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 
 final class DeadVarTagValueNodeAnalyzer
 {
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
      * @var TypeComparator
      */
     private $typeComparator;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, TypeComparator $typeComparator)
+    public function __construct(TypeComparator $typeComparator)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->typeComparator = $typeComparator;
     }
 
