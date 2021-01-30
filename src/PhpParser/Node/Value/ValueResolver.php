@@ -52,18 +52,18 @@ final class ValueResolver
     /**
      * @var ConstFetchAnalyzer
      */
-    private $constFetchManipulator;
+    private $constFetchAnalyzer;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         ParsedNodeCollector $parsedNodeCollector,
-        ConstFetchAnalyzer $constFetchManipulator
+        ConstFetchAnalyzer $constFetchAnalyzer
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->constFetchManipulator = $constFetchManipulator;
+        $this->constFetchAnalyzer = $constFetchAnalyzer;
     }
 
     /**
@@ -139,22 +139,22 @@ final class ValueResolver
 
     public function isFalse(Node $node): bool
     {
-        return $this->constFetchManipulator->isFalse($node);
+        return $this->constFetchAnalyzer->isFalse($node);
     }
 
     public function isTrueOrFalse(Node $node): bool
     {
-        return $this->constFetchManipulator->isTrueOrFalse($node);
+        return $this->constFetchAnalyzer->isTrueOrFalse($node);
     }
 
     public function isTrue(Node $node): bool
     {
-        return $this->constFetchManipulator->isTrue($node);
+        return $this->constFetchAnalyzer->isTrue($node);
     }
 
     public function isNull(Node $node): bool
     {
-        return $this->constFetchManipulator->isNull($node);
+        return $this->constFetchAnalyzer->isNull($node);
     }
 
     private function processConcat(Concat $concat, bool $resolvedClassReference): string
