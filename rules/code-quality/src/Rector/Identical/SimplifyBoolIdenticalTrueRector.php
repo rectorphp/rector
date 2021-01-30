@@ -64,13 +64,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isStaticType($node->left, BooleanType::class) && ! $this->constFetchManipulator->isBool(
+        if ($this->isStaticType($node->left, BooleanType::class) && ! $this->valueResolver->isTrueOrFalse(
             $node->left
         )) {
             return $this->processBoolTypeToNotBool($node, $node->left, $node->right);
         }
 
-        if ($this->isStaticType($node->right, BooleanType::class) && ! $this->constFetchManipulator->isBool(
+        if ($this->isStaticType($node->right, BooleanType::class) && ! $this->valueResolver->isTrueOrFalse(
             $node->right
         )) {
             return $this->processBoolTypeToNotBool($node, $node->right, $node->left);
@@ -94,11 +94,11 @@ CODE_SAMPLE
 
     private function refactorIdentical(Expr $leftExpr, Expr $rightExpr): ?Expr
     {
-        if ($this->constFetchManipulator->isTrue($rightExpr)) {
+        if ($this->valueResolver->isTrue($rightExpr)) {
             return $leftExpr;
         }
 
-        if ($this->constFetchManipulator->isFalse($rightExpr)) {
+        if ($this->valueResolver->isFalse($rightExpr)) {
             // prevent !!
             if ($leftExpr instanceof BooleanNot) {
                 return $leftExpr->expr;
@@ -112,11 +112,11 @@ CODE_SAMPLE
 
     private function refactorNotIdentical(Expr $leftExpr, Expr $rightExpr): ?Expr
     {
-        if ($this->constFetchManipulator->isFalse($rightExpr)) {
+        if ($this->valueResolver->isFalse($rightExpr)) {
             return $leftExpr;
         }
 
-        if ($this->constFetchManipulator->isTrue($rightExpr)) {
+        if ($this->valueResolver->isTrue($rightExpr)) {
             return new BooleanNot($leftExpr);
         }
 

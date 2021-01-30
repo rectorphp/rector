@@ -156,7 +156,7 @@ CODE_SAMPLE
         }
         // Skip for null
         // Allow for everything else (Array_, Variable, PropertyFetch, ConstFetch, ClassConstFetch, FuncCall, MethodCall, Coalesce, Ternary, others?)
-        return ! $this->constFetchManipulator->isNull($allowableTagsParam);
+        return ! $this->valueResolver->isNull($allowableTagsParam);
     }
 
     /**

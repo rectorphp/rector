@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 
@@ -28,11 +29,6 @@ final class IfManipulator
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
-
-    /**
-     * @var ConstFetchManipulator
-     */
-    private $constFetchManipulator;
 
     /**
      * @var StmtsManipulator
@@ -49,18 +45,23 @@ final class IfManipulator
      */
     private $betterNodeFinder;
 
+    /**
+     * @var ValueResolver
+     */
+    private $valueResolver;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        ConstFetchManipulator $constFetchManipulator,
         NodeNameResolver $nodeNameResolver,
-        StmtsManipulator $stmtsManipulator
+        StmtsManipulator $stmtsManipulator,
+        ValueResolver $valueResolver
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->constFetchManipulator = $constFetchManipulator;
         $this->stmtsManipulator = $stmtsManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->valueResolver = $valueResolver;
     }
 
     /**
@@ -340,14 +341,14 @@ final class IfManipulator
         if ($this->betterStandardPrinter->areNodesEqual(
             $notIdentical->left,
             $return->expr
-        ) && $this->constFetchManipulator->isNull($notIdentical->right)) {
+        ) && $this->valueResolver->isNull($notIdentical->right)) {
             return $notIdentical->left;
         }
 
         if (! $this->betterStandardPrinter->areNodesEqual($notIdentical->right, $return->expr)) {
             return null;
         }
-        if ($this->constFetchManipulator->isNull($notIdentical->left)) {
+        if ($this->valueResolver->isNull($notIdentical->left)) {
             return $notIdentical->right;
         }
 
@@ -360,7 +361,7 @@ final class IfManipulator
             return false;
         }
 
-        return $this->constFetchManipulator->isNull($notIdentical->right) || $this->constFetchManipulator->isNull(
+        return $this->valueResolver->isNull($notIdentical->right) || $this->valueResolver->isNull(
             $notIdentical->left
         );
     }
@@ -398,6 +399,6 @@ final class IfManipulator
         /** @var Identical|NotIdentical $ifCond */
         $ifCond = $if->cond;
 
-        return $this->constFetchManipulator->isNull($ifCond->left) ? $ifCond->right : $ifCond->left;
+        return $this->valueResolver->isNull($ifCond->left) ? $ifCond->right : $ifCond->left;
     }
 }

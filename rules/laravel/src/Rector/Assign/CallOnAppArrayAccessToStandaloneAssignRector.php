@@ -74,7 +74,7 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends AbstractRector
         }
 
         foreach ($this->serviceNameTypeAndVariableNames as $serviceNameTypeAndVariableName) {
-            if (! $this->isValue($arrayDimFetchDim, $serviceNameTypeAndVariableName->getServiceName())) {
+            if (! $this->valueResolver->isValue($arrayDimFetchDim, $serviceNameTypeAndVariableName->getServiceName())) {
                 continue;
             }
 

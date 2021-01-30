@@ -134,7 +134,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $classConst = $this->getValue($methodCall->args[1]->value);
+        $classConst = $this->valueResolver->getValue($methodCall->args[1]->value);
         $eventStaticType = $this->getStaticType($methodCall->args[0]->value);
 
         if (! $eventStaticType instanceof ObjectType) {

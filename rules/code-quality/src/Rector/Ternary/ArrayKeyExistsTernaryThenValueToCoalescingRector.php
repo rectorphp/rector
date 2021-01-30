@@ -79,7 +79,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->constFetchManipulator->isNull($node->else)) {
+        if (! $this->valueResolver->isNull($node->else)) {
             return null;
         }
 

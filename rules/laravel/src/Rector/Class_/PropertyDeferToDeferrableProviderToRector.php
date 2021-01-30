@@ -91,7 +91,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($this->constFetchManipulator->isTrue($onlyProperty->default)) {
+            if ($this->valueResolver->isTrue($onlyProperty->default)) {
                 return $property;
             }
         }

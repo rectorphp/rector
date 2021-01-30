@@ -17,10 +17,8 @@ trait AbstractRectorTrait
     use NameResolverTrait;
     use BetterStandardPrinterTrait;
     use NodeCommandersTrait;
-    use ValueResolverTrait;
     use SimpleCallableNodeTraverserTrait;
     use ComplexRemovalTrait;
-    use NodeCollectorTrait;
     use NotifyingRemovingNodeTrait;
 
     protected function isNonAnonymousClass(Node $node): bool

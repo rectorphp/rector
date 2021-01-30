@@ -173,7 +173,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->isValues($arrayItem->key, ['entry', 'entry_type'])) {
+            if (! $this->valueResolver->isValues($arrayItem->key, ['entry', 'entry_type'])) {
                 continue;
             }
 

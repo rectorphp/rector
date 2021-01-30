@@ -224,7 +224,7 @@ CODE_SAMPLE
         Scope $scope,
         Expr $expr
     ): Type {
-        $componentName = $this->getValue($shortControlString);
+        $componentName = $this->valueResolver->getValue($shortControlString);
         $componentName = ucfirst($componentName);
 
         $methodName = sprintf('createComponent%s', $componentName);

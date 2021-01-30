@@ -73,7 +73,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->getValue($node->args[2]->value) !== 301) {
+        $is301 = $this->valueResolver->isValue($node->args[2]->value, 301);
+        if (! $is301) {
             return null;
         }
 

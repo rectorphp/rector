@@ -13,9 +13,9 @@ use PhpParser\Node\Expr\ConstFetch;
  */
 final class ConstFetchManipulator
 {
-    public function isBool(Node $node): bool
+    public function isTrueOrFalse(Node $node): bool
     {
-        return $this->constFetchManipulator->isTrue($node) || $this->constFetchManipulator->isFalse($node);
+        return $this->isTrue($node) || $this->isFalse($node);
     }
 
     public function isFalse(Node $node): bool

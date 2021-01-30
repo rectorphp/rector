@@ -122,7 +122,7 @@ CODE_SAMPLE
     private function processAssertEqualsIgnoringCase(Node $node): void
     {
         if (isset($node->args[6])) {
-            if ($this->constFetchManipulator->isTrue($node->args[6]->value)) {
+            if ($this->valueResolver->isTrue($node->args[6]->value)) {
                 $newMethodCall = $this->assertCallFactory->createCallWithName($node, 'assertEqualsIgnoringCase');
                 $newMethodCall->args[0] = $node->args[0];
                 $newMethodCall->args[1] = $node->args[1];
@@ -141,7 +141,7 @@ CODE_SAMPLE
     {
         if (isset($node->args[5])) {
             // add new node only in case of non-default value
-            if ($this->constFetchManipulator->isTrue($node->args[5]->value)) {
+            if ($this->valueResolver->isTrue($node->args[5]->value)) {
                 $newMethodCall = $this->assertCallFactory->createCallWithName($node, 'assertEqualsCanonicalizing');
                 $newMethodCall->args[0] = $node->args[0];
                 $newMethodCall->args[1] = $node->args[1];
@@ -160,7 +160,7 @@ CODE_SAMPLE
     {
         if (isset($node->args[3])) {
             // add new node only in case of non-default value
-            if ($this->getValue($node->args[3]->value) !== 0.0) {
+            if (! $this->valueResolver->isValue($node->args[3]->value, 0.0)) {
                 $newMethodCall = $this->assertCallFactory->createCallWithName($node, 'assertEqualsWithDelta');
                 $newMethodCall->args[0] = $node->args[0];
                 $newMethodCall->args[1] = $node->args[1];

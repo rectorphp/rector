@@ -62,7 +62,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $functionName = $this->getValue($node->args[0]->value);
+        $functionName = $this->valueResolver->getValue($node->args[0]->value);
         if (! is_string($functionName)) {
             return null;
         }

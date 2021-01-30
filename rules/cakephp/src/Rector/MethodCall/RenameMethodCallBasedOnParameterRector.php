@@ -111,7 +111,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->isValue($firstArgValue, $callWithParamRename->getParameterName())) {
+            if (! $this->valueResolver->isValue($firstArgValue, $callWithParamRename->getParameterName())) {
                 continue;
             }
 

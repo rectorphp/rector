@@ -104,7 +104,7 @@ CODE_SAMPLE
         }
 
         //when 5th argument check identity is true: do nothing
-        if ($this->isValue($node->args[4]->value, true)) {
+        if ($this->valueResolver->isValue($node->args[4]->value, true)) {
             return null;
         }
 

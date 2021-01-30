@@ -89,7 +89,7 @@ final class GetClassToInstanceOfRector extends AbstractRector
         $varNode = $funcCall->args[0]->value;
 
         if ($firstExpr instanceof String_) {
-            $className = $this->getValue($firstExpr);
+            $className = $this->valueResolver->getValue($firstExpr);
         } else {
             $className = $this->getName($firstExpr->class);
         }

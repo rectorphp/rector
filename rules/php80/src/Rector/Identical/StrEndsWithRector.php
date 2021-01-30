@@ -95,12 +95,12 @@ CODE_SAMPLE
     {
         if ($this->isFuncCallName($binaryOp->left, 'substr_compare')) {
             $substrCompareFuncCall = $binaryOp->left;
-            if (! $this->isValue($binaryOp->right, 0)) {
+            if (! $this->valueResolver->isValue($binaryOp->right, 0)) {
                 return null;
             }
         } elseif ($this->isFuncCallName($binaryOp->right, 'substr_compare')) {
             $substrCompareFuncCall = $binaryOp->right;
-            if (! $this->isValue($binaryOp->left, 0)) {
+            if (! $this->valueResolver->isValue($binaryOp->left, 0)) {
                 return null;
             }
         } else {

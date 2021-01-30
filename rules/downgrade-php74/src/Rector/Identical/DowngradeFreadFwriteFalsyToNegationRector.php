@@ -61,7 +61,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->constFetchManipulator->isFalse($compareValue)) {
+        if (! $this->valueResolver->isFalse($compareValue)) {
             return null;
         }
 

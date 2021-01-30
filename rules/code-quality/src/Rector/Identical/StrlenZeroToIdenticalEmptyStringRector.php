@@ -67,7 +67,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->isValue($node->right, 0)) {
+            if (! $this->valueResolver->isValue($node->right, 0)) {
                 return null;
             }
 
@@ -77,7 +77,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->isValue($node->left, 0)) {
+            if (! $this->valueResolver->isValue($node->left, 0)) {
                 return null;
             }
 

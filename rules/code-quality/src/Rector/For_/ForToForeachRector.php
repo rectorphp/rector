@@ -199,7 +199,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->isValue($initExpr->expr, 0)) {
+            if ($this->valueResolver->isValue($initExpr->expr, 0)) {
                 $this->keyValueName = $this->getName($initExpr->var);
             }
 

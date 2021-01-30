@@ -178,7 +178,7 @@ CODE_SAMPLE
 
     private function mulByNumber(Expr $argExpr, int $value): Expr
     {
-        if ($this->isValue($argExpr, 1)) {
+        if ($this->valueResolver->isValue($argExpr, 1)) {
             return new LNumber($value);
         }
 

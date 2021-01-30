@@ -146,7 +146,10 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
             }
 
             // not the tested type
-            if (! $this->isValue($innerClassMethodStmt->args[0]->value, $this->testedObjectType->getClassName())) {
+            if (! $this->valueResolver->isValue(
+                $innerClassMethodStmt->args[0]->value,
+                $this->testedObjectType->getClassName()
+            )) {
                 continue;
             }
 

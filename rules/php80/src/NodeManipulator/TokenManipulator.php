@@ -339,24 +339,17 @@ final class TokenManipulator
     {
         $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Identical) {
-            if ($parentNode->left === $funcCall && $this->constFetchManipulator->isTrueConstant($parentNode->right)) {
+            $isRightValueTrue = $this->valueResolver->isValue($parentNode->right, true);
+            if ($parentNode->left === $funcCall && $isRightValueTrue) {
                 return $parentNode;
             }
 
-            if ($parentNode->right === $funcCall && $this->constFetchManipulator->isTrueConstant($parentNode->left)) {
+            $isLeftValueTrue = $this->valueResolver->isValue($parentNode->left, true);
+            if ($parentNode->right === $funcCall && $isLeftValueTrue) {
                 return $parentNode;
             }
         }
 
         return $funcCall;
-    }
-
-    private function isTrueConstant(Expr $expr): bool
-    {
-        if (! $expr instanceof ConstFetch) {
-            return false;
-        }
-
-        return $expr->name->toLowerString() === 'true';
     }
 }

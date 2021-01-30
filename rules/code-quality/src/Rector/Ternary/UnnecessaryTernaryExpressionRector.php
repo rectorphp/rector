@@ -59,12 +59,12 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         }
 
         $ifExpression = $ternaryExpression->if;
-        if (! $this->constFetchManipulator->isBool($ifExpression)) {
+        if (! $this->valueResolver->isTrueOrFalse($ifExpression)) {
             return null;
         }
 
         $elseExpression = $ternaryExpression->else;
-        if (! $this->constFetchManipulator->isBool($elseExpression)) {
+        if (! $this->valueResolver->isTrueOrFalse($elseExpression)) {
             return null;
         }
 
@@ -72,19 +72,17 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         if (! $condition instanceof BinaryOp) {
             return $this->processNonBinaryCondition($ifExpression, $elseExpression, $condition);
         }
-        if ($this->constFetchManipulator->isNull($ifExpression)) {
+        if ($this->valueResolver->isNull($ifExpression)) {
             return null;
         }
-        if ($this->constFetchManipulator->isNull($elseExpression)) {
+        if ($this->valueResolver->isNull($elseExpression)) {
             return null;
         }
 
         /** @var BinaryOp $binaryOperation */
         $binaryOperation = $node->cond;
 
-        if ($this->constFetchManipulator->isTrue($ifExpression) && $this->constFetchManipulator->isFalse(
-            $elseExpression
-        )) {
+        if ($this->valueResolver->isTrue($ifExpression) && $this->valueResolver->isFalse($elseExpression)) {
             return $binaryOperation;
         }
 
@@ -98,9 +96,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
 
     private function processNonBinaryCondition(Expr $ifExpression, Expr $elseExpression, Expr $condition): ?Node
     {
-        if ($this->constFetchManipulator->isTrue($ifExpression) && $this->constFetchManipulator->isFalse(
-            $elseExpression
-        )) {
+        if ($this->valueResolver->isTrue($ifExpression) && $this->valueResolver->isFalse($elseExpression)) {
             if ($this->isStaticType($condition, BooleanType::class)) {
                 return $condition;
             }
@@ -108,9 +104,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
             return new Bool_($condition);
         }
 
-        if ($this->constFetchManipulator->isFalse($ifExpression) && $this->constFetchManipulator->isTrue(
-            $elseExpression
-        )) {
+        if ($this->valueResolver->isFalse($ifExpression) && $this->valueResolver->isTrue($elseExpression)) {
             if ($this->isStaticType($condition, BooleanType::class)) {
                 return new BooleanNot($condition);
             }

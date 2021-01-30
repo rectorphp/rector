@@ -75,7 +75,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->stringChanges as $oldValue => $newValue) {
-            if (! $this->isValue($node, $oldValue)) {
+            if (! $this->valueResolver->isValue($node, $oldValue)) {
                 continue;
             }
 

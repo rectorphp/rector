@@ -86,7 +86,7 @@ CODE_SAMPLE
             }
 
             $firstArgValue = $node->args[0]->value;
-            if (! $this->isValue($firstArgValue, $newArgToMethodCall->getValue())) {
+            if (! $this->valueResolver->isValue($firstArgValue, $newArgToMethodCall->getValue())) {
                 continue;
             }
 

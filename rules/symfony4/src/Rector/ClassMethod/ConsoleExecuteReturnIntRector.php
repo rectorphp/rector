@@ -150,12 +150,12 @@ CODE_SAMPLE
             return;
         }
 
-        if ($this->constFetchManipulator->isNull($return->expr)) {
+        if ($this->valueResolver->isNull($return->expr)) {
             $return->expr = new LNumber(0);
             return;
         }
 
-        if ($return->expr instanceof Coalesce && $this->constFetchManipulator->isNull($return->expr->right)) {
+        if ($return->expr instanceof Coalesce && $this->valueResolver->isNull($return->expr->right)) {
             $return->expr->right = new LNumber(0);
             return;
         }
@@ -177,12 +177,12 @@ CODE_SAMPLE
     private function isSuccessfulRefactorTernaryReturn(Ternary $ternary): bool
     {
         $hasChanged = false;
-        if ($ternary->if && $this->constFetchManipulator->isNull($ternary->if)) {
+        if ($ternary->if && $this->valueResolver->isNull($ternary->if)) {
             $ternary->if = new LNumber(0);
             $hasChanged = true;
         }
 
-        if ($this->constFetchManipulator->isNull($ternary->else)) {
+        if ($this->valueResolver->isNull($ternary->else)) {
             $ternary->else = new LNumber(0);
             $hasChanged = true;
         }

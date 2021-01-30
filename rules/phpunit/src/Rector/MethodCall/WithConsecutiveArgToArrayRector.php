@@ -177,7 +177,7 @@ CODE_SAMPLE
                 'createMock'
             )) {
                 $firstArgumentValue = $assignedMethodCall->args[0]->value;
-                return $this->getValue($firstArgumentValue);
+                return $this->valueResolver->getValue($firstArgumentValue);
             }
         }
 

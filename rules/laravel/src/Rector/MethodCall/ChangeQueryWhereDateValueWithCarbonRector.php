@@ -132,7 +132,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isValues($methodCall->args[1]->value, ['>=', '<='])) {
+        if ($this->valueResolver->isValues($methodCall->args[1]->value, ['>=', '<='])) {
             return null;
         }
 

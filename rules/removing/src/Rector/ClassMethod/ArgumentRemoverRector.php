@@ -150,8 +150,7 @@ CODE_SAMPLE
      */
     private function isArgumentValueMatch(Arg $arg, array $values): bool
     {
-        $nodeValue = $this->getValue($arg->value);
-
+        $nodeValue = $this->valueResolver->getValue($arg->value);
         return in_array($nodeValue, $values, true);
     }
 }

@@ -142,15 +142,13 @@ CODE_SAMPLE
         if ($this->areNodesEqual(
             $ternary->cond->left,
             $funcCall->args[0]->value
-        ) && ! $this->constFetchManipulator->isNull(
-            $ternary->cond->right
-        )) {
+        ) && ! $this->valueResolver->isNull($ternary->cond->right)) {
             return true;
         }
         if (! $this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
             return false;
         }
-        return ! $this->constFetchManipulator->isNull($ternary->cond->left);
+        return ! $this->valueResolver->isNull($ternary->cond->left);
     }
 
     /**
@@ -165,14 +163,12 @@ CODE_SAMPLE
         if ($this->areNodesEqual(
             $ternary->cond->left,
             $funcCall->args[0]->value
-        ) && $this->constFetchManipulator->isNull(
-            $ternary->cond->right
-        )) {
+        ) && $this->valueResolver->isNull($ternary->cond->right)) {
             return true;
         }
         if (! $this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
             return false;
         }
-        return $this->constFetchManipulator->isNull($ternary->cond->left);
+        return $this->valueResolver->isNull($ternary->cond->left);
     }
 }

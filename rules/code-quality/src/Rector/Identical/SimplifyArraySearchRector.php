@@ -63,7 +63,7 @@ final class SimplifyArraySearchRector extends AbstractRector
                 return $this->isFuncCallName($node, 'array_search');
             },
             function (Node $node): bool {
-                return $this->constFetchManipulator->isFalse($node);
+                return $this->valueResolver->isFalse($node);
             }
         );
 

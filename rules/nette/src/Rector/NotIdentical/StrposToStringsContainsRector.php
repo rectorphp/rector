@@ -72,7 +72,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (isset($funcCall->args[2]) && ! $this->isValue($funcCall->args[2]->value, 0)) {
+        if (isset($funcCall->args[2]) && ! $this->valueResolver->isValue($funcCall->args[2]->value, 0)) {
             return null;
         }
 
@@ -89,7 +89,7 @@ CODE_SAMPLE
 
     private function matchStrposInComparisonToFalse(BinaryOp $binaryOp): ?FuncCall
     {
-        if ($this->constFetchManipulator->isFalse($binaryOp->left)) {
+        if ($this->valueResolver->isFalse($binaryOp->left)) {
             if (! $binaryOp->right instanceof FuncCall) {
                 return null;
             }
@@ -99,7 +99,7 @@ CODE_SAMPLE
             }
         }
 
-        if ($this->constFetchManipulator->isFalse($binaryOp->right)) {
+        if ($this->valueResolver->isFalse($binaryOp->right)) {
             if (! $binaryOp->left instanceof FuncCall) {
                 return null;
             }

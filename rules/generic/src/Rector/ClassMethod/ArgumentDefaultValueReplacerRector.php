@@ -123,7 +123,7 @@ CODE_SAMPLE
     {
         $position = $argumentDefaultValueReplacer->getPosition();
 
-        $argValue = $this->getValue($node->args[$position]->value);
+        $argValue = $this->valueResolver->getValue($node->args[$position]->value);
 
         if (is_scalar(
             $argumentDefaultValueReplacer->getValueBefore()
@@ -202,7 +202,7 @@ CODE_SAMPLE
             }
 
             $nextArg = $argumentNodes[$argumentDefaultValueReplacer->getPosition() + $i];
-            $argumentValues[] = $this->getValue($nextArg->value);
+            $argumentValues[] = $this->valueResolver->getValue($nextArg->value);
         }
 
         return $argumentValues;
