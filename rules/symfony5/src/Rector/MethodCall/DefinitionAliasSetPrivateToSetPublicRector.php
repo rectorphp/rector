@@ -94,7 +94,7 @@ CODE_SAMPLE
             ? $this->createNegationConsFetch($argValue)
             : new BooleanNot($argValue);
 
-        return $this->createMethodCall($node->var, 'setPublic', [$argValue]);
+        return $this->nodeFactory->createMethodCall($node->var, 'setPublic', [$argValue]);
     }
 
     private function createNegationConsFetch(ConstFetch $constFetch): ConstFetch

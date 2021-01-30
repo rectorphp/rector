@@ -126,7 +126,7 @@ CODE_SAMPLE
                 $collectedVariableTypesByNames
             );
 
-            return $this->createStaticCall('Mockery', 'mock', $node->args);
+            return $this->nodeFactory->createStaticCall('Mockery', 'mock', $node->args);
         });
     }
 

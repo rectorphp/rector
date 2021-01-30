@@ -115,7 +115,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
             $expectedArg = $methodCall->var->args[0]->value ?? null;
 
             $methodCall->var->name = new Identifier('expects');
-            $thisOnceMethodCall = $this->createLocalMethodCall('atLeastOnce');
+            $thisOnceMethodCall = $this->nodeFactory->createLocalMethodCall('atLeastOnce');
             $methodCall->var->args = [new Arg($thisOnceMethodCall)];
 
             $methodCall->name = new Identifier('method');
@@ -177,7 +177,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
                 }
             }
         } else {
-            $newExpr = $this->createLocalMethodCall('equalTo');
+            $newExpr = $this->nodeFactory->createLocalMethodCall('equalTo');
             $newExpr->args = [new Arg($expr)];
             $expr = $newExpr;
         }
@@ -189,7 +189,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
     private function createNewMockVariableAssign(Param $param, Name $name): Expression
     {
-        $methodCall = $this->createLocalMethodCall('createMock');
+        $methodCall = $this->nodeFactory->createLocalMethodCall('createMock');
         $methodCall->args[] = new Arg(new ClassConstFetch($name, 'class'));
 
         $assign = new Assign($param->var, $methodCall);
@@ -211,7 +211,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
         $propertyFetch = new PropertyFetch(new Variable('this'), $variable);
 
-        $methodCall = $this->createLocalMethodCall('createMock');
+        $methodCall = $this->nodeFactory->createLocalMethodCall('createMock');
         $methodCall->args[] = new Arg(new ClassConstFetch($name, 'class'));
 
         $assign = new Assign($propertyFetch, $methodCall);
@@ -225,7 +225,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
         $name = $this->typeAnalyzer->isPhpReservedType($type) ? 'isType' : 'isInstanceOf';
 
-        return $this->createLocalMethodCall($name, $staticCall->args);
+        return $this->nodeFactory->createLocalMethodCall($name, $staticCall->args);
     }
 
     private function createMockVarDoc(Param $param, Name $name): string

@@ -153,7 +153,7 @@ CODE_SAMPLE
             $eventClassName = $this->eventClassNaming->createEventClassNameFromClassPropertyReference(
                 $eventPropertyReferenceName
             );
-            $node->key = $this->createClassConstReference($eventClassName);
+            $node->key = $this->nodeFactory->createClassConstReference($eventClassName);
         });
     }
 }

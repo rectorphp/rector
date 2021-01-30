@@ -64,7 +64,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->args = $this->createArgs([$this->nodeFactory->createTrue()]);
+        $node->args = $this->nodeFactory->createArgs([$this->nodeFactory->createTrue()]);
 
         return $node;
     }

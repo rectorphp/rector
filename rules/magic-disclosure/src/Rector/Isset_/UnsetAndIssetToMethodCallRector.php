@@ -119,7 +119,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            return $this->createMethodCall(
+            return $this->nodeFactory->createMethodCall(
                 $arrayDimFetch->var,
                 $issetUnsetToMethodCall->getIssetMethodCall(),
                 [$arrayDimFetch->dim]
@@ -131,7 +131,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            return $this->createMethodCall(
+            return $this->nodeFactory->createMethodCall(
                 $arrayDimFetch->var,
                 $issetUnsetToMethodCall->getUnsedMethodCall(),
                 [$arrayDimFetch->dim]

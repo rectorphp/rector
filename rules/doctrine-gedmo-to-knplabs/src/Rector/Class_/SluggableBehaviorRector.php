@@ -156,7 +156,7 @@ CODE_SAMPLE
     {
         $classMethod = $this->nodeFactory->createPublicMethod('getSluggableFields');
         $classMethod->returnType = new Identifier('array');
-        $classMethod->stmts[] = new Return_($this->createArray($slugFields));
+        $classMethod->stmts[] = new Return_($this->nodeFactory->createArray($slugFields));
 
         $returnType = new ArrayType(new MixedType(), new StringType());
 

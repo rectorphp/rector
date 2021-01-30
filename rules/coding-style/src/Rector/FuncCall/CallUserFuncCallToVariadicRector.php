@@ -70,6 +70,6 @@ CODE_SAMPLE
         $args = [];
         $args[] = new Arg($node->args[1]->value, false, true);
 
-        return $this->createFuncCall($functionName, $args);
+        return $this->nodeFactory->createFuncCall($functionName, $args);
     }
 }

@@ -114,7 +114,10 @@ CODE_SAMPLE
             $conditionNode = new FuncCall(new Name('is_countable'), [new Arg($countedNode)]);
         } else {
             $instanceof = new Instanceof_($countedNode, new FullyQualified('Countable'));
-            $conditionNode = new BooleanOr($this->createFuncCall('is_array', [new Arg($countedNode)]), $instanceof);
+            $conditionNode = new BooleanOr($this->nodeFactory->createFuncCall(
+                'is_array',
+                [new Arg($countedNode)]
+            ), $instanceof);
         }
 
         // prevent infinity loop re-resolution

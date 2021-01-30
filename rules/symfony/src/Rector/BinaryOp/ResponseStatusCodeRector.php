@@ -166,7 +166,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $classConstFetch = $this->createClassConstFetch(self::RESPONSE_CLASS, self::CODE_TO_CONST[$statusCode->value]);
+        $classConstFetch = $this->nodeFactory->createClassConstFetch(
+            self::RESPONSE_CLASS,
+            self::CODE_TO_CONST[$statusCode->value]
+        );
         $methodCall->args[0] = new Arg($classConstFetch);
 
         return $methodCall;
@@ -215,6 +218,6 @@ CODE_SAMPLE
             return $lNumber;
         }
 
-        return $this->createClassConstFetch(self::RESPONSE_CLASS, self::CODE_TO_CONST[$lNumber->value]);
+        return $this->nodeFactory->createClassConstFetch(self::RESPONSE_CLASS, self::CODE_TO_CONST[$lNumber->value]);
     }
 }

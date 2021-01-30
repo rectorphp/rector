@@ -120,7 +120,7 @@ final class AssertPropertyExistsRector extends AbstractRector
 
         unset($node->args[0]);
 
-        $newArgs = $this->createArgs([$secondArgument->value->value, $secondArg]);
+        $newArgs = $this->nodeFactory->createArgs([$secondArgument->value->value, $secondArg]);
 
         $node->args = $this->appendArgs($newArgs, $node->args);
 

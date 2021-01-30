@@ -148,7 +148,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->createMethodCall('this', 'createFormBuilder');
+        return $this->nodeFactory->createMethodCall('this', 'createFormBuilder');
     }
 
     private function processAddMethod(MethodCall $methodCall, string $method, string $classType): void
@@ -169,7 +169,7 @@ CODE_SAMPLE
         $this->addChoiceTypeOptions($method, $optionsArray);
         $this->addMultiFileTypeOptions($method, $optionsArray);
 
-        $methodCall->args[1] = new Arg($this->createClassConstReference($classType));
+        $methodCall->args[1] = new Arg($this->nodeFactory->createClassConstReference($classType));
 
         if ($optionsArray->items !== []) {
             $methodCall->args[2] = new Arg($optionsArray);

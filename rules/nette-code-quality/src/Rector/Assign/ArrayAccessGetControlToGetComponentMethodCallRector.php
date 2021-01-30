@@ -75,7 +75,7 @@ CODE_SAMPLE
         /** @var ArrayDimFetch $arrayDimFetch */
         $arrayDimFetch = $node->expr;
 
-        $args = $this->createArgs([$arrayDimFetch->dim]);
+        $args = $this->nodeFactory->createArgs([$arrayDimFetch->dim]);
         $node->expr = new MethodCall($arrayDimFetch->var, 'getComponent', $args);
 
         return $node;

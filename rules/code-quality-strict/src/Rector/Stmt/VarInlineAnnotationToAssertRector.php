@@ -190,27 +190,27 @@ CODE_SAMPLE
     {
         if ($type instanceof ObjectType) {
             $instanceOf = new Instanceof_($variable, new FullyQualified($type->getClassName()));
-            return $this->createFuncCall(self::ASSERT, [$instanceOf]);
+            return $this->nodeFactory->createFuncCall(self::ASSERT, [$instanceOf]);
         }
 
         if ($type instanceof IntegerType) {
-            $isInt = $this->createFuncCall('is_int', [$variable]);
-            return $this->createFuncCall(self::ASSERT, [$isInt]);
+            $isInt = $this->nodeFactory->createFuncCall('is_int', [$variable]);
+            return $this->nodeFactory->createFuncCall(self::ASSERT, [$isInt]);
         }
 
         if ($type instanceof FloatType) {
-            $funcCall = $this->createFuncCall('is_float', [$variable]);
-            return $this->createFuncCall(self::ASSERT, [$funcCall]);
+            $funcCall = $this->nodeFactory->createFuncCall('is_float', [$variable]);
+            return $this->nodeFactory->createFuncCall(self::ASSERT, [$funcCall]);
         }
 
         if ($type instanceof StringType) {
-            $isString = $this->createFuncCall('is_string', [$variable]);
-            return $this->createFuncCall(self::ASSERT, [$isString]);
+            $isString = $this->nodeFactory->createFuncCall('is_string', [$variable]);
+            return $this->nodeFactory->createFuncCall(self::ASSERT, [$isString]);
         }
 
         if ($type instanceof BooleanType) {
-            $isInt = $this->createFuncCall('is_bool', [$variable]);
-            return $this->createFuncCall(self::ASSERT, [$isInt]);
+            $isInt = $this->nodeFactory->createFuncCall('is_bool', [$variable]);
+            return $this->nodeFactory->createFuncCall(self::ASSERT, [$isInt]);
         }
 
         return null;

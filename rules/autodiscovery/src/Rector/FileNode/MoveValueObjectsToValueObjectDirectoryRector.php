@@ -12,6 +12,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
+use Rector\FileSystemRector\ValueObjectFactory\MovedFileWithNodesFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -69,9 +70,15 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
      */
     private $classAnalyzer;
 
-    public function __construct(ClassAnalyzer $classAnalyzer)
+    /**
+     * @var MovedFileWithNodesFactory
+     */
+    private $movedFileWithNodesFactory;
+
+    public function __construct(ClassAnalyzer $classAnalyzer, MovedFileWithNodesFactory $movedFileWithNodesFactory)
     {
         $this->classAnalyzer = $classAnalyzer;
+        $this->movedFileWithNodesFactory = $movedFileWithNodesFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -129,7 +129,7 @@ CODE_SAMPLE
 
         $args = $this->compensateMatchAllEnforcedFlag($methodName, $funcCall, $args);
 
-        return $this->createStaticCall('Nette\Utils\Strings', $methodName, $args);
+        return $this->nodeFactory->createStaticCall('Nette\Utils\Strings', $methodName, $args);
     }
 
     /**

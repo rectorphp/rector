@@ -127,7 +127,7 @@ CODE_SAMPLE
             }
         } elseif ($firstArgumentExpr instanceof String_) {
             $parts = $this->splitProcessCommandToItems($firstArgumentExpr->value);
-            $expr->args[$argumentPosition]->value = $this->createArray($parts);
+            $expr->args[$argumentPosition]->value = $this->nodeFactory->createArray($parts);
         }
 
         $this->processPreviousAssign($expr, $firstArgumentExpr);

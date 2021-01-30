@@ -92,7 +92,7 @@ CODE_SAMPLE
 
         return new New_(
             new FullyQualified('Symfony\Component\Form\Extension\Core\DataMapper\DataMapper'),
-            [$this->createArg($new)]
+            [$this->nodeFactory->createArg($new)]
         );
     }
 }

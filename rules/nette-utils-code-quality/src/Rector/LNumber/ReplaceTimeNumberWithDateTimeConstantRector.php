@@ -80,6 +80,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->createClassConstFetch('Nette\Utils\DateTime', $constantName);
+        return $this->nodeFactory->createClassConstFetch('Nette\Utils\DateTime', $constantName);
     }
 }

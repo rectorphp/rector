@@ -291,7 +291,7 @@ CODE_SAMPLE
 
     private function createParentSetUpStaticCall(): Expression
     {
-        $parentSetupStaticCall = $this->createStaticCall('parent', MethodName::SET_UP);
+        $parentSetupStaticCall = $this->nodeFactory->createStaticCall('parent', MethodName::SET_UP);
         return new Expression($parentSetupStaticCall);
     }
 

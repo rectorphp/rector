@@ -263,7 +263,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             }
 
             // 1. assign callable to variable
-            $thisGetMatchers = $this->createMethodCall(self::THIS, 'getMatchers');
+            $thisGetMatchers = $this->nodeFactory->createMethodCall(self::THIS, 'getMatchers');
             $arrayDimFetch = new ArrayDimFetch($thisGetMatchers, new String_($matcherKey));
             $matcherCallableVariable = new Variable('matcherCallable');
             $assign = new Assign($matcherCallableVariable, $arrayDimFetch);

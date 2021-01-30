@@ -93,7 +93,7 @@ CODE_SAMPLE
 
         $notIdentical = new NotIdentical($firstArgValue, $this->nodeFactory->createNull());
         $funcCall = $this->createGetClassFuncCall($node);
-        $selfClassConstFetch = $this->createClassConstReference('self');
+        $selfClassConstFetch = $this->nodeFactory->createClassConstReference('self');
 
         return new Ternary($notIdentical, $funcCall, $selfClassConstFetch);
     }

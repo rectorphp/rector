@@ -82,6 +82,6 @@ CODE_SAMPLE
         $getConfigMethodCall = new MethodCall(new Variable('this'), 'getConfig');
         $firstArgValue = $node->args[0]->value;
 
-        return $this->createFuncCall('array_merge', [$firstArgValue, $getConfigMethodCall]);
+        return $this->nodeFactory->createFuncCall('array_merge', [$firstArgValue, $getConfigMethodCall]);
     }
 }

@@ -66,6 +66,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->createClassConstFetch('static', 'class');
+        return $this->nodeFactory->createClassConstFetch('static', 'class');
     }
 }

@@ -11,6 +11,7 @@ use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
+use Rector\FileSystemRector\ValueObjectFactory\MovedFileWithNodesFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -34,9 +35,17 @@ final class MoveEntitiesToEntityDirectoryRector extends AbstractRector
      */
     private $doctrineDocBlockResolver;
 
-    public function __construct(DoctrineDocBlockResolver $doctrineDocBlockResolver)
-    {
+    /**
+     * @var MovedFileWithNodesFactory
+     */
+    private $movedFileWithNodesFactory;
+
+    public function __construct(
+        DoctrineDocBlockResolver $doctrineDocBlockResolver,
+        MovedFileWithNodesFactory $movedFileWithNodesFactory
+    ) {
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
+        $this->movedFileWithNodesFactory = $movedFileWithNodesFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition

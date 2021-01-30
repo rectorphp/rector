@@ -284,6 +284,15 @@ final class NodeFactory
     }
 
     /**
+     * @param mixed[] $arguments
+     */
+    public function createLocalMethodCall(string $method, array $arguments = []): MethodCall
+    {
+        $variable = new Variable('this');
+        return $this->createMethodCall($variable, $method, $arguments);
+    }
+
+    /**
      * @param string|Expr $variable
      * @param mixed[] $arguments
      */
@@ -481,6 +490,19 @@ final class NodeFactory
      */
     public function createStaticCall(string $class, string $method, array $args = []): StaticCall
     {
+//
+//        $args = $this->wrapToArg($args);
+//
+//        if (in_array($class, ['self', 'parent', 'static'], true)) {
+//            $class = new Name($class);
+//        } else {
+//            $class = new FullyQualified($class);
+//        }
+//
+//        return new StaticCall($class, $method, $args);
+
+
+
         $class = $this->createClassPart($class);
         $staticCall = new StaticCall($class, $method);
         $staticCall->args = $this->createArgs($args);
@@ -490,7 +512,7 @@ final class NodeFactory
     /**
      * @param mixed[] $arguments
      */
-    public function createFuncCall(string $name, array $arguments): FuncCall
+    public function createFuncCall(string $name, array $arguments = []): FuncCall
     {
         $arguments = $this->createArgs($arguments);
         return new FuncCall(new Name($name), $arguments);
