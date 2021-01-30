@@ -9,9 +9,13 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PHPStan\Analyser\Scope;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantBooleanType;
 use Rector\Core\PhpParser\Node\Manipulator\ConstFetchManipulator;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class AssertMethodCallFactory
 {
@@ -74,18 +78,26 @@ final class AssertMethodCallFactory
 
     private function resolveBoolMethodName(string $name, Expr $expr): string
     {
-        if (! $this->constFetchManipulator->isBool($expr)) {
+        $scope = $expr->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
             return $name;
         }
 
+        $exprType = $scope->getType($expr);
+        if (! $exprType instanceof BooleanType) {
+            return $name;
+        }
+
+        $isFalse = $exprType instanceof ConstantBooleanType && $exprType->getValue() === false;
+
         if ($name === 'assertSame') {
             $this->isBoolAssert = true;
-            return $this->constFetchManipulator->isFalse($expr) ? 'assertFalse' : 'assertTrue';
+            return $isFalse ? 'assertFalse' : 'assertTrue';
         }
 
         if ($name === 'assertNotSame') {
             $this->isBoolAssert = true;
-            return $this->constFetchManipulator->isFalse($expr) ? 'assertNotFalse' : 'assertNotTrue';
+            return $isFalse ? 'assertNotFalse' : 'assertNotTrue';
         }
 
         return $name;
