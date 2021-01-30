@@ -38,9 +38,6 @@ final class ChildClass extends AbstractParentClass
     {
     }
 
-    /**
-     * @param int $number
-     */
     public function change(int $number)
     {
     }

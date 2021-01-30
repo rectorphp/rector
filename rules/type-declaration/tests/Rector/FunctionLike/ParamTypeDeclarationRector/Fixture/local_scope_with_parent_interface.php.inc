@@ -28,9 +28,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationR
 
 interface SniffInterface
 {
-    /**
-     * @param int $position
-     */
     public function process(string $file, int $position);
 }
 

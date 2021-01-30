@@ -30,10 +30,6 @@ class Bar
 {
 }
 
-/**
- * @param Foo|null $a
- * @param Bar|null $b
- */
 function test2(?\Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\Nikic\Nullable\Foo $a, ?\Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\Nikic\Nullable\Bar $b = null) {}
 
 ?>

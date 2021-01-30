@@ -63,8 +63,6 @@ function foo()
 /**
  * Must be converted.
  *
- * @param int|null $c
- * @param string   $d
  *
  * @return float
  */

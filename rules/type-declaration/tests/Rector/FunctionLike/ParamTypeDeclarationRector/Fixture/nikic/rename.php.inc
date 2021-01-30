@@ -22,10 +22,6 @@ class B extends A {
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\Rename;
 
 class A {
-    /**
-     * @param string $a
-     * @param int $b
-     */
     public function test(string $a, int $b) {}
 }
 

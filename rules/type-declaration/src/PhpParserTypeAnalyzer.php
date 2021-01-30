@@ -79,9 +79,11 @@ final class PhpParserTypeAnalyzer
         if (in_array($possibleSubtype, ['array', 'Traversable'], true) && $possibleParentType === 'iterable') {
             return true;
         }
+
         if (! in_array($possibleSubtype, ['array', 'ArrayIterator'], true)) {
             return false;
         }
+
         return $possibleParentType === 'countable';
     }
 }

@@ -10,15 +10,13 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\DeadDocBlock\TagRemover\ParamTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator;
+use Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Rector\TypeDeclaration\ValueObject\NewType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -40,25 +38,25 @@ final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
     private $childParamPopulator;
 
     /**
-     * @var NodeTypeResolver
+     * @var TraitTypeAnalyzer
      */
-    private $nodeTypeResolver;
+    private $traitTypeAnalyzer;
 
     /**
-     * @var ReflectionProvider
+     * @var ParamTagRemover
      */
-    private $reflectionProvider;
+    private $paramTagRemover;
 
     public function __construct(
         ChildParamPopulator $childParamPopulator,
         ParamTypeInferer $paramTypeInferer,
-        NodeTypeResolver $nodeTypeResolver,
-        ReflectionProvider $reflectionProvider
+        TraitTypeAnalyzer $traitTypeAnalyzer,
+        ParamTagRemover $paramTagRemover
     ) {
         $this->paramTypeInferer = $paramTypeInferer;
         $this->childParamPopulator = $childParamPopulator;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->reflectionProvider = $reflectionProvider;
+        $this->traitTypeAnalyzer = $traitTypeAnalyzer;
+        $this->paramTagRemover = $paramTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -116,9 +114,6 @@ final class ChildClass extends ParentClass
     {
     }
 
-    /**
-     * @param int $number
-     */
     public function change(int $number)
     {
     }
@@ -137,9 +132,7 @@ CODE_SAMPLE
         if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return null;
         }
-        if ($node->params === null) {
-            return null;
-        }
+
         if ($node->params === []) {
             return null;
         }
@@ -165,7 +158,7 @@ CODE_SAMPLE
             return;
         }
 
-        if ($this->isTraitType($inferedType)) {
+        if ($this->traitTypeAnalyzer->isTraitType($inferedType)) {
             return;
         }
 
@@ -184,6 +177,10 @@ CODE_SAMPLE
         }
 
         $param->type = $paramTypeNode;
+
+        $functionLikePhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
+        $this->paramTagRemover->removeParamTagsIfUseless($functionLikePhpDocInfo, $functionLike);
+
         $this->childParamPopulator->populateChildClassMethod($functionLike, $position, $inferedType);
     }
 
@@ -204,17 +201,5 @@ CODE_SAMPLE
 
         // already set → skip
         return ! $param->type->getAttribute(NewType::HAS_NEW_INHERITED_TYPE, false);
-    }
-
-    private function isTraitType(Type $type): bool
-    {
-        if (! $type instanceof TypeWithClassName) {
-            return false;
-        }
-
-        $fullyQualifiedName = $this->nodeTypeResolver->getFullyQualifiedClassName($type);
-        $classReflection = $this->reflectionProvider->getClass($fullyQualifiedName);
-
-        return $classReflection->isTrait();
     }
 }

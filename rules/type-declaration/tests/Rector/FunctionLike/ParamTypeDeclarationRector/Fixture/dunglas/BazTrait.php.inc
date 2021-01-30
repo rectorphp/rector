@@ -22,7 +22,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationR
 trait BazTrait
 {
     /**
-     * @param int $a
      *
      * @return \DateTime
      */

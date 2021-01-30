@@ -21,10 +21,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationR
 
 class NullableFalse
 {
-    /**
-     * @param true|false|null $ojoj3
-     * @param null|BOOL|true|false $ojoj6
-     */
     function someFunction(?bool $ojoj3, ?bool $ojoj6)
     {
     }

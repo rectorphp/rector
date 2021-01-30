@@ -20,9 +20,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationR
 function myFunction($param = false)
 {
 }
-/**
- * @param string $param
- */
 function myOtherFunction(string $param)
 {
 }

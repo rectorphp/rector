@@ -31,6 +31,8 @@ use Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveOverriddenValuesRector;
 use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
 use Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector;
+use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
+use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
 use Rector\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector;
 use Rector\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector;
 use Rector\DeadCode\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector;
@@ -47,6 +49,10 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
+
+    $services->set(UnwrapFutureCompatibleIfFunctionExistsRector::class);
+
+    $services->set(UnwrapFutureCompatibleIfPhpVersionRector::class);
 
     $services->set(RecastingRemovalRector::class);
 

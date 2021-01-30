@@ -41,7 +41,6 @@ trait TraitWithInterfaceImplementation
 interface SomeInterface
 {
     /**
-     * @param array $items
      * @return int
      */
     public function getCount(array $items);
