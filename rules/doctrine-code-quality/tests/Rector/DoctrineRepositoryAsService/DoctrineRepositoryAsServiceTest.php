@@ -7,7 +7,6 @@ namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService;
 use Iterator;
 use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
 use Rector\Doctrine\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector;
-use Rector\Doctrine\Rector\MethodCall\ServiceLocatorToDIRector;
 use Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -15,7 +14,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Doctrine\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector
  * @see \Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector
- * @see \Rector\Doctrine\Rector\MethodCall\ServiceLocatorToDIRector
+ * @see \Rector\Doctrine\Rector\MethodCall\EntityRepositoryServiceLocatorToDIRector
  */
 final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
 {
@@ -40,7 +39,6 @@ final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
         return [
             # order matters, this needs to be first to correctly detect parent repository
             MoveRepositoryFromParentToConstructorRector::class => [],
-            ServiceLocatorToDIRector::class => [],
             ReplaceParentRepositoryCallsByRepositoryPropertyRector::class => [],
             RemoveRepositoryFromEntityAnnotationRector::class => [],
         ];

@@ -6,5 +6,4 @@ namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\So
 
 abstract class RandomClass
 {
-
 }

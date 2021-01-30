@@ -2,7 +2,7 @@
 
 namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Fixture;
 
-use App\Entity\Post;
+use Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Source\Entity\Post;
 use Doctrine\ORM\EntityRepository;
 
 final class FirstPostRepository extends EntityRepository
@@ -18,12 +18,6 @@ final class FirstPostRepository extends EntityRepository
             'author' => $authorId
         ]);
     }
-
-    public function shouldSkip()
-    {
-        $anotherClass = new \stdClass();
-        $anotherClass->findBy();
-    }
 }
 
 ?>
@@ -32,7 +26,7 @@ final class FirstPostRepository extends EntityRepository
 
 namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Fixture;
 
-use App\Entity\Post;
+use Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Source\Entity\Post;
 use Doctrine\ORM\EntityRepository;
 
 final class FirstPostRepository
@@ -40,7 +34,7 @@ final class FirstPostRepository
     private \Doctrine\ORM\EntityRepository $repository;
     public function __construct(\Doctrine\ORM\EntityManager $entityManager)
     {
-        $this->repository = $entityManager->getRepository(\App\Entity\FirstPost::class);
+        $this->repository = $entityManager->getRepository(\Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Source\Entity\Post::class);
     }
     /**
      * Our custom method
@@ -52,12 +46,6 @@ final class FirstPostRepository
         return $this->repository->findBy([
             'author' => $authorId
         ]);
-    }
-
-    public function shouldSkip()
-    {
-        $anotherClass = new \stdClass();
-        $anotherClass->findBy();
     }
 }
 
