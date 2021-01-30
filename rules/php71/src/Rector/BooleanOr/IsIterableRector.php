@@ -7,7 +7,6 @@ namespace Rector\Php71\Rector\BooleanOr;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php71\IsArrayAndDualCheckToAble;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -57,7 +56,5 @@ final class IsIterableRector extends AbstractRector
     private function shouldSkip(): bool
     {
         return false;
-
-        return ! $this->isAtLeastPhpVersion(PhpVersionFeature::IS_ITERABLE);
     }
 }
