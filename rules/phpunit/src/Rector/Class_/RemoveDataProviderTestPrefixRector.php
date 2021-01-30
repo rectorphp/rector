@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\DataProviderTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit\PHPUnitDataProviderTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -112,27 +112,23 @@ CODE_SAMPLE
         foreach ($class->getMethods() as $classMethod) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
-            /** @var DataProviderTagValueNode[] $dataProviderTagValueNodes */
-            $dataProviderTagValueNodes = $phpDocInfo->findAllByType(DataProviderTagValueNode::class);
-            if ($dataProviderTagValueNodes === []) {
+            /** @var PHPUnitDataProviderTagValueNode[] $phpunitDataProviderTagValueNodes */
+            $phpunitDataProviderTagValueNodes = $phpDocInfo->findAllByType(PHPUnitDataProviderTagValueNode::class);
+            if ($phpunitDataProviderTagValueNodes === []) {
                 continue;
             }
 
-            foreach ($dataProviderTagValueNodes as $dataProviderTagValueNode) {
-                $oldMethodName = $dataProviderTagValueNode->getMethod();
+            foreach ($phpunitDataProviderTagValueNodes as $dataProviderTagValueNode) {
+                $oldMethodName = $dataProviderTagValueNode->getMethodName();
                 if (! Strings::startsWith($oldMethodName, 'test')) {
                     continue;
                 }
 
                 $newMethodName = $this->createNewMethodName($oldMethodName);
-                $dataProviderTagValueNode->changeMethod($newMethodName);
-
-                $oldMethodName = trim($oldMethodName, '()');
-                $newMethodName = trim($newMethodName, '()');
+                $dataProviderTagValueNode->changeMethodName($newMethodName);
+                $phpDocInfo->markAsChanged();
 
                 $this->providerMethodNamesToNewNames[$oldMethodName] = $newMethodName;
-
-                $phpDocInfo->markAsChanged();
             }
         }
     }

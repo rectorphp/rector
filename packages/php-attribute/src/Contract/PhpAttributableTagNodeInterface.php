@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\PhpAttribute\Contract;
 
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\Node;
 
-interface PhpAttributableTagNodeInterface extends PhpDocTagValueNode
+interface PhpAttributableTagNodeInterface extends Node
 {
     public function getShortName(): string;
 

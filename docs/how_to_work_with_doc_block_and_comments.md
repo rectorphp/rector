@@ -19,16 +19,10 @@ To get e.g. return type, use `PhpDocInfo` value object with useful methods:
 ```php
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 
-// ...
-
-/** @var PhpDocInfo|null $phpDocInfo */
-$phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-// be always sure to check the PhpDocInfo exists and was set
-if ($phpDocInfo === null) {
-    return null;
-}
+/** @var PhpDocInfoFactory $phpDocInfoFactory */
+$phpDocInfo = $phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
 // then use any method you like
 $returnType = $phpDocInfo->getReturnType();
@@ -39,16 +33,11 @@ var_dump($returnType);
 ## How to Remove node?
 
 ```php
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-
-public function __construct(
-    private PhpDocTagRemover $phpDocTagRemover
-) {
-}
 
 /** @var PhpDocInfo $phpDocInfo */
-$this->phpDocTagRemover->removeByName($phpDocInfo, 'return');
+$phpDocInfo->removeByType(ReturnTagValueNode::class);
 ```
 
 ## How create PhpDocInfo for a new node?
@@ -57,7 +46,10 @@ In case you build a new node and want to work with its doc block, you need to cr
 
 ```php
 // the "PhpDocInfoFactory" service is already available in children of "AbstractRector"
-$phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+
+/** @var PhpDocInfoFactory $phpDocInfoFactory */
+$phpDocInfo = $phpDocInfoFactory->createFromNodeOrEmpty($node);
 ```
 
 ## How to get Param with Names and Types?

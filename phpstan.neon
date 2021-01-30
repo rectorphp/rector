@@ -523,3 +523,14 @@ parameters:
         -
             message: '#There should be no empty class#'
             path: src/Rector/AbstractRector.php
+
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\MultiPhpDocNodeFactory\:\:getTagValueNodeClassesToAnnotationClasses\(\) should return array<class\-string<Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode\>, class\-string<Doctrine\\ORM\\Mapping\\Annotation\>\> but returns array<string, string\>#'
+        -
+            message: '#Use value object over return of values#'
+            path: packages/better-php-doc-parser/src/PhpDocNodeFactory/MultiPhpDocNodeFactory.php
+
+        -
+            message: '#Do not use setter on a service#'
+            path: packages/better-php-doc-parser/src/PhpDocNodeFactory/NetteInjectDocNodeFactory.php
+
+        - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\NodeTypeResolver\\NodeTypeResolver\\ParamTypeResolver" class\. Use unique content or abstract service instead#'

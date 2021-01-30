@@ -106,6 +106,7 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
         foreach (self::ANNOTATION_TO_METHOD as $annotationName => $methodName) {
             if (! $phpDocInfo->hasByName($annotationName)) {
                 continue;

@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SymfonyRequiredTagNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\ValueObject\TagName;
@@ -26,9 +28,9 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
     private const ANNOTATIONS_REQUIRING_PUBLIC = [
         TagName::API,
         // Symfony DI
-        TagName::REQUIRED,
+        SymfonyRequiredTagNode::NAME,
         // other DI
-        TagName::INJECT,
+        NetteInjectTagNode::NAME,
     ];
 
     /**

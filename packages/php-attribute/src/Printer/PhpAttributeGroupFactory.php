@@ -14,12 +14,15 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\PhpAttribute\Contract\ManyPhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
-final class PhpAttributteGroupFactory
+final class PhpAttributeGroupFactory
 {
     /**
+     * A dummy placeholder for annotation, that we know will be converted to attributes,
+     * but don't have specific attribute class yet.
+     *
      * @var string
      */
-    public const TBA = 'TBA';
+    public const TO_BE_ANNOUNCED = 'TBA';
 
     /**
      * @param PhpAttributableTagNodeInterface[] $phpAttributableTagNodes
@@ -100,7 +103,7 @@ final class PhpAttributteGroupFactory
 
     private function resolveAttributeClassName(PhpAttributableTagNodeInterface $phpAttributableTagNode): Name
     {
-        if ($phpAttributableTagNode->getAttributeClassName() !== self::TBA) {
+        if ($phpAttributableTagNode->getAttributeClassName() !== self::TO_BE_ANNOUNCED) {
             return new FullyQualified($phpAttributableTagNode->getAttributeClassName());
         }
 

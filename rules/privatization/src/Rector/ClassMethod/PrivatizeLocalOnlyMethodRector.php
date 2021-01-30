@@ -8,6 +8,8 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SymfonyRequiredTagNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagNode;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
@@ -160,7 +162,11 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        return $phpDocInfo->hasByNames([TagName::API, TagName::REQUIRED]);
+        if ($phpDocInfo->hasByType(SymfonyRequiredTagNode::class)) {
+            return true;
+        }
+
+        return $phpDocInfo->hasByName(TagName::API);
     }
 
     private function shouldSkipClassLike(Class_ $class): bool
@@ -198,7 +204,7 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        return $phpDocInfo->hasByName(TagName::INJECT);
+        return $phpDocInfo->hasByType(NetteInjectTagNode::class);
     }
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool

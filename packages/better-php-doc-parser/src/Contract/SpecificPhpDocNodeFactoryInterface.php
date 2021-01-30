@@ -7,7 +7,7 @@ namespace Rector\BetterPhpDocParser\Contract;
 interface SpecificPhpDocNodeFactoryInterface extends PhpDocNodeFactoryInterface
 {
     /**
-     * @return string[]
+     * @return class-string[]
      */
     public function getClasses(): array;
 }

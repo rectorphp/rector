@@ -13,9 +13,9 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\DataProviderTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit\PHPUnitDataProviderTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -86,8 +86,8 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
     {
         $phpDocInfo = $this->getFunctionLikePhpDocInfo($param);
 
-        $attributeAwareDataProviderTagValueNode = $phpDocInfo->getByType(DataProviderTagValueNode::class);
-        if (! $attributeAwareDataProviderTagValueNode instanceof DataProviderTagValueNode) {
+        $phpUnitDataProviderTagValueNode = $phpDocInfo->getByType(PHPUnitDataProviderTagValueNode::class);
+        if (! $phpUnitDataProviderTagValueNode instanceof PHPUnitDataProviderTagValueNode) {
             return null;
         }
 
@@ -96,7 +96,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
             return null;
         }
 
-        return $classLike->getMethod($attributeAwareDataProviderTagValueNode->getMethodName());
+        return $classLike->getMethod($phpUnitDataProviderTagValueNode->getMethodName());
     }
 
     /**

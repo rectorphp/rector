@@ -15,18 +15,17 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\RequiredTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
-use Rector\BetterPhpDocParser\PhpDocNodeFactory\PHPUnitDataProviderDocNodeFactory;
+use Rector\BetterPhpDocParser\Contract\StringTagMatchingPhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\PhpDocNodeFactory\MultiPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\PhpAttribute\ValueObject\TagName;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -82,12 +81,13 @@ final class BetterPhpDocParser extends PhpDocParser
     private $annotationContentResolver;
 
     /**
-     * @var PHPUnitDataProviderDocNodeFactory
+     * @var StringTagMatchingPhpDocNodeFactoryInterface[]
      */
-    private $phpUnitDataProviderDocNodeFactory;
+    private $stringTagMatchingPhpDocNodeFactories = [];
 
     /**
      * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
+     * @param StringTagMatchingPhpDocNodeFactoryInterface[] $stringTagMatchingPhpDocNodeFactories
      */
     public function __construct(
         TypeParser $typeParser,
@@ -97,8 +97,8 @@ final class BetterPhpDocParser extends PhpDocParser
         CurrentNodeProvider $currentNodeProvider,
         ClassAnnotationMatcher $classAnnotationMatcher,
         AnnotationContentResolver $annotationContentResolver,
-        PHPUnitDataProviderDocNodeFactory $phpUnitDataProviderDocNodeFactory,
-        array $phpDocNodeFactories = []
+        array $phpDocNodeFactories = [],
+        array $stringTagMatchingPhpDocNodeFactories = []
     ) {
         parent::__construct($typeParser, $constExprParser);
 
@@ -109,9 +109,9 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->annotationContentResolver = $annotationContentResolver;
-        $this->phpUnitDataProviderDocNodeFactory = $phpUnitDataProviderDocNodeFactory;
 
         $this->setPhpDocNodeFactories($phpDocNodeFactories);
+        $this->stringTagMatchingPhpDocNodeFactories = $stringTagMatchingPhpDocNodeFactories;
     }
 
     /**
@@ -150,43 +150,41 @@ final class BetterPhpDocParser extends PhpDocParser
     {
         $tag = $this->resolveTag($tokenIterator);
 
-        $phpDocTagValueNode = $this->parseTagValue($tokenIterator, $tag);
+        $phpDocTagNode = $this->createPhpDocTagNodeFromStringMatch($tag, $tokenIterator);
+        if ($phpDocTagNode instanceof PhpDocTagNode) {
+            return $phpDocTagNode;
+        }
 
+        if ($phpDocTagNode instanceof PhpDocTagValueNode) {
+            return new PhpDocTagNode($tag, $phpDocTagNode);
+        }
+
+        $phpDocTagValueNode = $this->parseTagValue($tokenIterator, $tag);
         return new PhpDocTagNode($tag, $phpDocTagValueNode);
     }
 
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
-        // needed for reference support in params, see https://github.com/rectorphp/rector/issues/1734
-        $tagValueNode = null;
-
         $currentPhpNode = $this->currentNodeProvider->getNode();
         if (! $currentPhpNode instanceof \PhpParser\Node) {
             throw new ShouldNotHappenException();
         }
 
-        $lowercasedTag = strtolower($tag);
+        $tagValueNode = null;
 
-        if ($lowercasedTag === '@dataprovider') {
-            $this->phpUnitDataProviderDocNodeFactory->setPhpDocParser($this);
-            $tagValueNode = $this->phpUnitDataProviderDocNodeFactory->createFromTokens($tokenIterator);
-        } elseif ($lowercasedTag === '@' . TagName::REQUIRED) {
-            $tagValueNode = new RequiredTagValueNode();
-        } else {
-            // class-annotation
-            $phpDocNodeFactory = $this->matchTagToPhpDocNodeFactory($tag);
-            if ($phpDocNodeFactory !== null) {
-                $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
-                    $tag,
-                    $currentPhpNode
-                );
+        // class-annotation
+        $phpDocNodeFactory = $this->matchTagToPhpDocNodeFactory($tag);
+        if ($phpDocNodeFactory !== null) {
+            $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
+                $tag,
+                $currentPhpNode
+            );
 
-                $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens(
-                    $currentPhpNode,
-                    $tokenIterator,
-                    $fullyQualifiedAnnotationClass
-                );
-            }
+            $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens(
+                $currentPhpNode,
+                $tokenIterator,
+                $fullyQualifiedAnnotationClass
+            );
         }
 
         $originalTokenIterator = clone $tokenIterator;
@@ -303,7 +301,7 @@ final class BetterPhpDocParser extends PhpDocParser
             return $phpDocNodeFactory->getClasses();
         }
 
-        if ($phpDocNodeFactory instanceof GenericPhpDocNodeFactoryInterface) {
+        if ($phpDocNodeFactory instanceof MultiPhpDocNodeFactory) {
             return $phpDocNodeFactory->getTagValueNodeClassesToAnnotationClasses();
         }
 
@@ -372,5 +370,22 @@ final class BetterPhpDocParser extends PhpDocParser
         ++$tokenEnd;
 
         return $tokenEnd;
+    }
+
+    private function createPhpDocTagNodeFromStringMatch(string $tag, TokenIterator $tokenIterator): ?Node
+    {
+        foreach ($this->stringTagMatchingPhpDocNodeFactories as $stringTagMatchingPhpDocNodeFactory) {
+            if (! $stringTagMatchingPhpDocNodeFactory->match($tag)) {
+                continue;
+            }
+
+            if ($stringTagMatchingPhpDocNodeFactory instanceof PhpDocParserAwareInterface) {
+                $stringTagMatchingPhpDocNodeFactory->setPhpDocParser($this);
+            }
+
+            return $stringTagMatchingPhpDocNodeFactory->createFromTokens($tokenIterator);
+        }
+
+        return null;
     }
 }

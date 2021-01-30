@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_;
 
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
+use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 
 final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements PhpAttributableTagNodeInterface
 {
@@ -39,6 +40,6 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements P
 
     public function getAttributeClassName(): string
     {
-        return 'TBA';
+        return PhpAttributeGroupFactory::TO_BE_ANNOUNCED;
     }
 }

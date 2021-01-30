@@ -16,7 +16,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassAnnotationMatcher
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private $fullyQualifiedNameByHash = [];
 
