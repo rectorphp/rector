@@ -22,7 +22,7 @@ final class FunctionAnnotationResolver
     /**
      * @var FunctionLikeParser
      */
-    private $functionParser;
+    private $functionLikeParser;
 
     /**
      * @var PhpDocTagsFinder
@@ -31,10 +31,10 @@ final class FunctionAnnotationResolver
 
     public function __construct(
         ClassNaming $classNaming,
-        FunctionLikeParser $functionParser,
+        FunctionLikeParser $functionLikeParser,
         PhpDocTagsFinder $phpDocTagsFinder
     ) {
-        $this->functionParser = $functionParser;
+        $this->functionLikeParser = $functionLikeParser;
         $this->classNaming = $classNaming;
         $this->phpDocTagsFinder = $phpDocTagsFinder;
     }
@@ -59,7 +59,7 @@ final class FunctionAnnotationResolver
      */
     private function expandAnnotatedClasses(ReflectionFunction $reflectionFunction, array $classNames): array
     {
-        $namespace = $this->functionParser->parseFunction($reflectionFunction);
+        $namespace = $this->functionLikeParser->parseFunction($reflectionFunction);
         if (! $namespace instanceof Namespace_) {
             return [];
         }
