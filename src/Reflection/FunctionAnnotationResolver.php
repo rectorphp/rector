@@ -25,7 +25,7 @@ final class FunctionAnnotationResolver
     private $functionLikeParser;
 
     /**
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagsFinder
+     * @var PhpDocTagsFinder
      */
     private $phpDocTagsFinder;
 
