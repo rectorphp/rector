@@ -8,9 +8,9 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\DocParser;
 use Doctrine\Common\Annotations\Reader;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagNode;
 use Rector\DoctrineAnnotationGenerated\ConstantPreservingAnnotationReader;
 use Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser;
-use Rector\PhpAttribute\ValueObject\TagName;
 
 final class AnnotationReaderFactory
 {
@@ -39,7 +39,7 @@ final class AnnotationReaderFactory
         'Gedmo\Versioned',
         'Versioned',
         // nette @inject dummy annotation
-        TagName::INJECT,
+        NetteInjectTagNode::NAME,
     ];
 
     public function create(): Reader

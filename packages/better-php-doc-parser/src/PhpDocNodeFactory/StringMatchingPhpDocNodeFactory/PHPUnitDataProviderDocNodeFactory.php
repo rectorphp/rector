@@ -61,7 +61,7 @@ final class PHPUnitDataProviderDocNodeFactory implements StringTagMatchingPhpDoc
 
     public function match(string $tag): bool
     {
-        return strtolower($tag) === '@dataprovider';
+        return strtolower($tag) === PHPUnitDataProviderTagValueNode::NAME;
     }
 
     /**

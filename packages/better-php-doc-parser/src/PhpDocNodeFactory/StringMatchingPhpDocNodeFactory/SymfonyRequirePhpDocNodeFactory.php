@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\StringMatchingPhpDocNodeFactory;
 
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SymfonyRequiredTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SymfonyRequiredTagNode;
 use Rector\BetterPhpDocParser\Contract\StringTagMatchingPhpDocNodeFactoryInterface;
-use Rector\PhpAttribute\ValueObject\TagName;
 
 final class SymfonyRequirePhpDocNodeFactory implements StringTagMatchingPhpDocNodeFactoryInterface
 {
     public function match(string $tag): bool
     {
-        return $tag === '@' . TagName::REQUIRED;
+        return $tag === SymfonyRequiredTagNode::NAME;
     }
 
-    public function createFromTokens(TokenIterator $tokenIterator): ?PhpDocTagValueNode
+    public function createFromTokens(TokenIterator $tokenIterator): ?PhpDocTagNode
     {
-        return new SymfonyRequiredTagValueNode();
+        return new SymfonyRequiredTagNode();
     }
 }

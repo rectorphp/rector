@@ -366,6 +366,9 @@ final class PhpDocInfo
         return $paramTypesByName;
     }
 
+    /**
+     * @todo remove to keep united API, just 1 usage
+     */
     public function addBareTag(string $tag): void
     {
         $tag = '@' . ltrim($tag, '@');
@@ -376,6 +379,10 @@ final class PhpDocInfo
 
     public function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): void
     {
+        if (is_a($phpDocTagValueNode, PhpDocTagNode::class)) {
+            throw new ShouldNotHappenException();
+        }
+
         $name = $this->resolveNameForPhpDocTagValueNode($phpDocTagValueNode);
 
         $attributeAwarePhpDocTagNode = new AttributeAwarePhpDocTagNode($name, $phpDocTagValueNode);
@@ -513,7 +520,7 @@ final class PhpDocInfo
             }
         }
 
-        throw new NotImplementedException();
+        throw new NotImplementedException(get_class($phpDocTagValueNode));
     }
 
     /**

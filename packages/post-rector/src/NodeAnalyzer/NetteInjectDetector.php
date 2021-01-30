@@ -6,9 +6,9 @@ namespace Rector\PostRector\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagNode;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PhpAttribute\ValueObject\TagName;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -47,7 +47,7 @@ final class NetteInjectDetector
             }
 
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-            if ($phpDocInfo->hasByName(TagName::INJECT)) {
+            if ($phpDocInfo->hasByType(NetteInjectTagNode::class)) {
                 return true;
             }
         }

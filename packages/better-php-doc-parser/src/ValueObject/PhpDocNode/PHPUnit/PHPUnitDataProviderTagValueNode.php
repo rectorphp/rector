@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
+namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
-final class DataProviderTagValueNode implements PhpDocTagValueNode, AttributeAwareNodeInterface
+final class PHPUnitDataProviderTagValueNode implements PhpDocTagValueNode, AttributeAwareNodeInterface
 {
     use AttributeTrait;
 
@@ -42,8 +42,8 @@ final class DataProviderTagValueNode implements PhpDocTagValueNode, AttributeAwa
         return trim($this->method, '()');
     }
 
-    public function changeMethod(string $method): void
+    public function changeMethodName(string $method): void
     {
-        $this->method = $method;
+        $this->method = $method . '()';
     }
 }
