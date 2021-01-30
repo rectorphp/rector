@@ -48,7 +48,7 @@ final class SomePresenter extends Presenter
 }
 CODE_SAMPLE
 
-            )
+            ),
         ]);
     }
 
