@@ -67,9 +67,7 @@ CODE_SAMPLE
 
     private function shouldSkip(): bool
     {
-        if (function_exists('is_countable')) {
-            return false;
-        }
+        return false;
 
         return $this->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE);
     }

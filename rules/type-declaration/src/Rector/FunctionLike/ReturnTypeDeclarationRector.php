@@ -66,7 +66,7 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
     private $childReturnPopulator;
 
     /**
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
+     * @var ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
 

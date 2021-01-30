@@ -14,7 +14,6 @@ use PHPStan\Type\MixedType;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadDocBlock\TagRemover\ParamTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer;
@@ -39,11 +38,6 @@ final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
     private $childParamPopulator;
 
     /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
      * @var TraitTypeAnalyzer
      */
     private $traitTypeAnalyzer;
@@ -56,13 +50,11 @@ final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
     public function __construct(
         ChildParamPopulator $childParamPopulator,
         ParamTypeInferer $paramTypeInferer,
-        NodeTypeResolver $nodeTypeResolver,
         TraitTypeAnalyzer $traitTypeAnalyzer,
         ParamTagRemover $paramTagRemover
     ) {
         $this->paramTypeInferer = $paramTypeInferer;
         $this->childParamPopulator = $childParamPopulator;
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->traitTypeAnalyzer = $traitTypeAnalyzer;
         $this->paramTagRemover = $paramTagRemover;
     }

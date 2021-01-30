@@ -56,9 +56,7 @@ final class IsIterableRector extends AbstractRector
 
     private function shouldSkip(): bool
     {
-        if (function_exists('is_iterable')) {
-            return false;
-        }
+        return false;
 
         return ! $this->isAtLeastPhpVersion(PhpVersionFeature::IS_ITERABLE);
     }
