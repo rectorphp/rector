@@ -114,16 +114,35 @@ CODE_SAMPLE
     private function unsetUnusedArguments(FuncCall $funcCall, Scope $scope): void
     {
         foreach ($funcCall->args as $key => $arg) {
-            if ($arg->value instanceof Array_) {
-                continue;
-            }
+            $variablesNames = $this->resolveVariableNames($arg);
+            foreach ($variablesNames as $variablesName) {
+                if (! $scope->hasVariableType($variablesName)->no()) {
+                    continue;
+                }
 
-            $argValue = $this->getValue($arg->value);
-            if (! $scope->hasVariableType($argValue)->no()) {
-                continue;
+                unset($funcCall->args[$key]);
             }
-
-            unset($funcCall->args[$key]);
         }
+
+        if (count($funcCall->args) === 0) {
+            $this->removeNode($funcCall);
+        }
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveVariableNames(Node\Arg $arg): array
+    {
+        $argValue = $this->getValue($arg->value);
+        if (is_string($argValue)) {
+            return [$argValue];
+        }
+
+        if (is_array($argValue)) {
+            return $argValue;
+        }
+
+        return [];
     }
 }
