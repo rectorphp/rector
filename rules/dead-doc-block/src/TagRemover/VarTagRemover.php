@@ -16,6 +16,7 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 
 final class VarTagRemover
 {
@@ -34,14 +35,21 @@ final class VarTagRemover
      */
     private $phpDocInfoFactory;
 
+    /**
+     * @var ClassLikeExistenceChecker
+     */
+    private $classLikeExistenceChecker;
+
     public function __construct(
         DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
         StaticTypeMapper $staticTypeMapper,
-        PhpDocInfoFactory $phpDocInfoFactory
+        PhpDocInfoFactory $phpDocInfoFactory,
+        ClassLikeExistenceChecker $classLikeExistenceChecker
     ) {
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
     }
 
     /**
@@ -86,7 +94,7 @@ final class VarTagRemover
     {
         if ($varTagValueNode->type instanceof AttributeAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
-                if ($type instanceof AttributeAwareArrayTypeNode && $this->doesClassOrInterfaceExists($type)) {
+                if ($type instanceof AttributeAwareArrayTypeNode && $this->classLikeExistenceChecker->doesClassLikeExist((string) $type->type)) {
                     return true;
                 }
             }
@@ -102,19 +110,6 @@ final class VarTagRemover
         );
 
         return $varTypeDocString !== 'array';
-    }
-
-    private function doesClassOrInterfaceExists(AttributeAwareArrayTypeNode $type): bool
-    {
-        if (class_exists((string) $type->type)) {
-            return true;
-        }
-
-        if (interface_exists((string) $type->type)) {
-            return true;
-        }
-
-        return false;
     }
 
     private function isArrayTypeNode(VarTagValueNode $varTagValueNode): bool
