@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Composer\Rector;
 
-use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Rector\Composer\Contract\Rector\CoreComposerRectorInterface;
 use Rector\Composer\Guard\VersionGuard;
 use Rector\Composer\ValueObject\PackageAndVersion;

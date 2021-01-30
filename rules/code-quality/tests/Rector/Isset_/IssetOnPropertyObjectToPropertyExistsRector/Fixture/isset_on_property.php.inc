@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
 
-class Property
+final class IssetOnProperty
 {
     private $x;
     private $y;
@@ -21,7 +21,7 @@ class Property
 
 namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
 
-class Property
+final class IssetOnProperty
 {
     private $x;
     private $y;
