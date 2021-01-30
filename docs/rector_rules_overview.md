@@ -1,4 +1,4 @@
-# 656 Rules Overview
+# 661 Rules Overview
 
 <br>
 
@@ -15,6 +15,8 @@
 - [CodeQualityStrict](#codequalitystrict) (4)
 
 - [CodingStyle](#codingstyle) (39)
+
+- [Composer](#composer) (5)
 
 - [DeadCode](#deadcode) (47)
 
@@ -2795,6 +2797,197 @@ return static function (ContainerConfigurator $containerConfigurator): void {
      {
 -        yield 'event' => 'callback';
 +        return ['event' => 'callback'];
+     }
+ }
+```
+
+<br>
+
+## Composer
+
+### AddPackageToRequireComposerRector
+
+Add package to "require" in `composer.json`
+
+:wrench: **configure it!**
+
+- class: `Rector\Composer\Rector\AddPackageToRequireComposerRector`
+
+```php
+use Rector\Composer\Rector\AddPackageToRequireComposerRector;
+use Rector\Composer\ValueObject\PackageAndVersion;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddPackageToRequireComposerRector::class)
+        ->call('configure', [[
+            AddPackageToRequireComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new PackageAndVersion('symfony/console', '^3.4'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ {
++    "require": {
++        "symfony/console": "^3.4"
++    }
+ }
+```
+
+<br>
+
+### AddPackageToRequireDevComposerRector
+
+Add package to "require-dev" in `composer.json`
+
+:wrench: **configure it!**
+
+- class: `Rector\Composer\Rector\AddPackageToRequireDevComposerRector`
+
+```php
+use Rector\Composer\Rector\AddPackageToRequireDevComposerRector;
+use Rector\Composer\ValueObject\PackageAndVersion;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddPackageToRequireDevComposerRector::class)
+        ->call('configure', [[
+            AddPackageToRequireDevComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new PackageAndVersion('symfony/console', '^3.4'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ {
++    "require-dev": {
++        "symfony/console": "^3.4"
++    }
+ }
+```
+
+<br>
+
+### ChangePackageVersionComposerRector
+
+Change package version `composer.json`
+
+:wrench: **configure it!**
+
+- class: `Rector\Composer\Rector\ChangePackageVersionComposerRector`
+
+```php
+use Rector\Composer\Rector\ChangePackageVersionComposerRector;
+use Rector\Composer\ValueObject\PackageAndVersion;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ChangePackageVersionComposerRector::class)
+        ->call('configure', [[
+            ChangePackageVersionComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new PackageAndVersion('symfony/console', '^4.4'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ {
+-    "require-dev": {
+-        "symfony/console": "^3.4"
++    "require": {
++        "symfony/console": "^4.4"
+     }
+ }
+```
+
+<br>
+
+### RemovePackageComposerRector
+
+Remove package from "require" and "require-dev" in `composer.json`
+
+:wrench: **configure it!**
+
+- class: `Rector\Composer\Rector\RemovePackageComposerRector`
+
+```php
+use Rector\Composer\Rector\RemovePackageComposerRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(RemovePackageComposerRector::class)
+        ->call('configure', [[
+            RemovePackageComposerRector::PACKAGE_NAMES => ['symfony/console'],
+        ]]);
+};
+```
+
+↓
+
+```diff
+ {
+-    "require": {
+-        "symfony/console": "^3.4"
+-    }
+ }
+```
+
+<br>
+
+### ReplacePackageAndVersionComposerRector
+
+Change package name and version `composer.json`
+
+:wrench: **configure it!**
+
+- class: `Rector\Composer\Rector\ReplacePackageAndVersionComposerRector`
+
+```php
+use Rector\Composer\Rector\ReplacePackageAndVersionComposerRector;
+use Rector\Composer\ValueObject\ReplacePackageAndVersion;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ReplacePackageAndVersionComposerRector::class)
+        ->call('configure', [[
+            ReplacePackageAndVersionComposerRector::REPLACE_PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new ReplacePackageAndVersion('symfony/console', 'symfony/http-kernel', '^4.4'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ {
+     "require-dev": {
+-        "symfony/console": "^3.4"
++        "symfony/http-kernel": "^4.4"
      }
  }
 ```

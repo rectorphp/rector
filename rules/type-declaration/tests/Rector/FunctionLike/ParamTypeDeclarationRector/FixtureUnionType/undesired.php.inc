@@ -17,8 +17,6 @@ function someFunction($a, $b, $c) {
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\FixtureUnionType;
 
 /**
- * @param real|int $a
- * @param int $b
  * @param int|void $c
  */
 function someFunction(float|int $a, int $b, $c) {
