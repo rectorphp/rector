@@ -138,7 +138,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->makeStatic($classMethodNode);
+        $this->visibilityManipulator->makeStatic($classMethodNode);
 
         return null;
     }

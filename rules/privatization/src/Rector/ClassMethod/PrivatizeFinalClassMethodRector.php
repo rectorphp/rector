@@ -90,7 +90,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->makePrivate($node);
+        $this->visibilityManipulator->makePrivate($node);
 
         return $node;
     }

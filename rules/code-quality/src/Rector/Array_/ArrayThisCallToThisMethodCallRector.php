@@ -168,6 +168,6 @@ CODE_SAMPLE
             return;
         }
 
-        $this->makePrivate($classMethod);
+        $this->visibilityManipulator->makePrivate($classMethod);
     }
 }

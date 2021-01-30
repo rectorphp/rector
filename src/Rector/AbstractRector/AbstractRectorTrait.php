@@ -18,7 +18,6 @@ trait AbstractRectorTrait
     use ConstFetchAnalyzerTrait;
     use BetterStandardPrinterTrait;
     use NodeCommandersTrait;
-    use VisibilityTrait;
     use ValueResolverTrait;
     use SimpleCallableNodeTraverserTrait;
     use ComplexRemovalTrait;

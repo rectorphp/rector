@@ -83,7 +83,7 @@ CODE_SAMPLE
 
         // 0. constants declared in interfaces have to be public
         if ($nodeRepositoryFindInterface !== null) {
-            $this->makePublic($node);
+            $this->visibilityManipulator->makePublic($node);
             return $node;
         }
 

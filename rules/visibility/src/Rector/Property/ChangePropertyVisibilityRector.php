@@ -99,7 +99,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $this->changeNodeVisibility($node, $visibility);
+                $this->visibilityManipulator->changeNodeVisibility($node, $visibility);
 
                 return $node;
             }

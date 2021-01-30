@@ -55,11 +55,11 @@ final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitR
 
         if ($this->isName($node, 'letGo')) {
             $node->name = new Identifier(MethodName::TEAR_DOWN);
-            $this->makeProtected($node);
+            $this->visibilityManipulator->makeProtected($node);
             $this->phpUnitTypeDeclarationDecorator->decorate($node);
         } elseif ($this->isName($node, 'let')) {
             $node->name = new Identifier(MethodName::SET_UP);
-            $this->makeProtected($node);
+            $this->visibilityManipulator->makeProtected($node);
             $this->phpUnitTypeDeclarationDecorator->decorate($node);
         } else {
             $this->processTestMethod($node);

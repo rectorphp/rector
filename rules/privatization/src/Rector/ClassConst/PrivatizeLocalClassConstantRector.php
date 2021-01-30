@@ -106,7 +106,7 @@ CODE_SAMPLE
 
         // 0. constants declared in interfaces have to be public
         if ($nodeRepositoryFindInterface !== null) {
-            $this->makePublic($node);
+            $this->visibilityManipulator->makePublic($node);
             return $node;
         }
 
@@ -117,7 +117,7 @@ CODE_SAMPLE
 
         // The parent's constant is public, so this one must become public too
         if ($parentClassConstantVisibility !== null && $parentClassConstantVisibility->isPublic()) {
-            $this->makePublic($node);
+            $this->visibilityManipulator->makePublic($node);
             return $node;
         }
 
@@ -219,20 +219,20 @@ CODE_SAMPLE
 
         // 3. used by children → protected
         if ($this->isUsedByChildrenOnly($directUseClasses, $class)) {
-            $this->makeProtected($classConst);
+            $this->visibilityManipulator->makeProtected($classConst);
         } else {
-            $this->makePublic($classConst);
+            $this->visibilityManipulator->makePublic($classConst);
         }
     }
 
     private function makePrivateOrWeaker(ClassConst $classConst, ?ConstantVisibility $parentConstantVisibility): void
     {
         if ($parentConstantVisibility !== null && $parentConstantVisibility->isProtected()) {
-            $this->makeProtected($classConst);
+            $this->visibilityManipulator->makeProtected($classConst);
         } elseif ($parentConstantVisibility !== null && $parentConstantVisibility->isPrivate() && ! $parentConstantVisibility->isProtected()) {
-            $this->makePrivate($classConst);
+            $this->visibilityManipulator->makePrivate($classConst);
         } elseif ($parentConstantVisibility === null) {
-            $this->makePrivate($classConst);
+            $this->visibilityManipulator->makePrivate($classConst);
         }
     }
 

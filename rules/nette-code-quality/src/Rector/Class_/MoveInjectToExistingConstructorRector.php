@@ -140,9 +140,9 @@ CODE_SAMPLE
     private function changePropertyVisibility(Property $injectProperty): void
     {
         if ($this->propertyUsageAnalyzer->isPropertyFetchedInChildClass($injectProperty)) {
-            $this->makeProtected($injectProperty);
+            $this->visibilityManipulator->makeProtected($injectProperty);
         } else {
-            $this->makePrivate($injectProperty);
+            $this->visibilityManipulator->makePrivate($injectProperty);
         }
     }
 

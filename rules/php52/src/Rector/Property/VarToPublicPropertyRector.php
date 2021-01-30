@@ -54,7 +54,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->makePublic($node);
+        $this->visibilityManipulator->makePublic($node);
 
         return $node;
     }
