@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\NodeFactory;
 
 use PhpParser\BuilderHelpers;
+use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
@@ -93,7 +94,7 @@ final class ExpectExceptionMethodCallFactory
         $expectedTypeNode = $phpUnitExpectedExceptionTagValueNode->getTypeNode();
 
         $currentNode = $this->currentNodeProvider->getNode();
-        if ($currentNode === null) {
+        if (! $currentNode instanceof Node) {
             throw new ShouldNotHappenException();
         }
 
