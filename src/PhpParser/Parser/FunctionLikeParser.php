@@ -30,11 +30,8 @@ final class FunctionLikeParser
      */
     private $nodeFinder;
 
-    public function __construct(
-        Parser $parser,
-        SmartFileSystem $smartFileSystem,
-        NodeFinder $nodeFinder
-    ) {
+    public function __construct(Parser $parser, SmartFileSystem $smartFileSystem, NodeFinder $nodeFinder)
+    {
         $this->parser = $parser;
         $this->smartFileSystem = $smartFileSystem;
         $this->nodeFinder = $nodeFinder;
