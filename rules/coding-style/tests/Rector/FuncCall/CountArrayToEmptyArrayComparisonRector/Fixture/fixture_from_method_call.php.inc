@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
 class FixtureFromMethodCall
 {
@@ -23,7 +23,7 @@ class FixtureFromMethodCall
 -----
 <?php
 
-namespace Rector\Performance\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
 class FixtureFromMethodCall
 {

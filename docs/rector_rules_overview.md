@@ -11339,7 +11339,7 @@ Adds namespace to namespace-less files or correct namespace to match PSR-4 in `c
 
 Change `count` array comparison to empty array comparison to improve performance
 
-- class: `Rector\Performance\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector`
+- class: `Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector`
 
 ```diff
 -count($array) === 0;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\Fixture;
 
 class SkipVariableName
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\FixtureAutoImport;
+namespace Rector\CodingStyle\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\FixtureAutoImport;
 
 class AutoImportNames
 {
@@ -14,7 +14,7 @@ class AutoImportNames
 -----
 <?php
 
-namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\FixtureAutoImport;
+namespace Rector\CodingStyle\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\FixtureAutoImport;
 
 use stdClass;
 class AutoImportNames

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector;
+namespace Rector\CodingStyle\Tests\Rector\FuncCall\PreslashSimpleFunctionRector;
 
 use Iterator;
 use Rector\Core\Configuration\Option;
