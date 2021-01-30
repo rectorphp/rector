@@ -550,7 +550,7 @@ final class NodeFactory
         return new ConstFetch(new Name('true'));
     }
 
-    private function createClassConstFetchFromName(Name $className, string $constantName): ClassConstFetch
+    public function createClassConstFetchFromName(Name $className, string $constantName): ClassConstFetch
     {
         $classConstFetch = $this->builderFactory->classConstFetch($className, $constantName);
 

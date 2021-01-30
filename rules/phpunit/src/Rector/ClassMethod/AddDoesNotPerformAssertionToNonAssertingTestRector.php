@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit\PHPUnitDoesNotPerformAssertionTagNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit\PHPUnitExpectedExceptionTagNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit\PHPUnitExpectedExceptionTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ClassMethodReflectionFactory;
 use Rector\FileSystemRector\Parser\FileInfoParser;
@@ -147,7 +147,7 @@ CODE_SAMPLE
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         if ($phpDocInfo->hasByTypes(
-            [PHPUnitDoesNotPerformAssertionTagNode::class, PHPUnitExpectedExceptionTagNode::class]
+            [PHPUnitDoesNotPerformAssertionTagNode::class, PHPUnitExpectedExceptionTagValueNode::class]
         )) {
             return true;
         }
