@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveOverriddenValuesRector extends AbstractRector
 {
     /**
-     * @var \Rector\NodeNestingScope\ContextAnalyzer
+     * @var ContextAnalyzer
      */
     private $contextAnalyzer;
 

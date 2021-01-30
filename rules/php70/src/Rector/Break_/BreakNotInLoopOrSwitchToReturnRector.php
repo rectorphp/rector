@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class BreakNotInLoopOrSwitchToReturnRector extends AbstractRector
 {
     /**
-     * @var \Rector\NodeNestingScope\ContextAnalyzer
+     * @var ContextAnalyzer
      */
     private $contextAnalyzer;
 

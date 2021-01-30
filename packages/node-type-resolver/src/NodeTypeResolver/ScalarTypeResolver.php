@@ -16,7 +16,7 @@ use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 
 final class ScalarTypeResolver implements NodeTypeResolverInterface
@@ -51,6 +51,6 @@ final class ScalarTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        throw new NotImplementedException();
+        throw new NotImplementedYetException();
     }
 }
