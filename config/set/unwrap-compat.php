@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
+use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

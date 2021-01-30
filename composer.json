@@ -48,20 +48,20 @@
         "symfony/finder": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
         "symfony/process": "^4.4.8|^5.1",
-        "symplify/astral": "^9.0.48",
-        "symplify/autowire-array-parameter": "^9.0.48",
-        "symplify/console-color-diff": "^9.0.48",
-        "symplify/package-builder": "^9.0.48",
-        "symplify/rule-doc-generator": "^9.0.48",
-        "symplify/set-config-resolver": "^9.0.48",
-        "symplify/simple-php-doc-parser": "^9.0.48",
-        "symplify/skipper": "^9.0.48",
-        "symplify/smart-file-system": "^9.0.48",
-        "symplify/symfony-php-config": "^9.0.48",
+        "symplify/astral": "^9.0.47",
+        "symplify/autowire-array-parameter": "^9.0.47",
+        "symplify/console-color-diff": "^9.0.47",
+        "symplify/package-builder": "^9.0.47",
+        "symplify/rule-doc-generator": "^9.0.47",
+        "symplify/set-config-resolver": "^9.0.47",
+        "symplify/simple-php-doc-parser": "^9.0.47",
+        "symplify/skipper": "^9.0.47",
+        "symplify/smart-file-system": "^9.0.47",
+        "symplify/symfony-php-config": "^9.0.47",
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.17.3",
+        "friendsofphp/php-cs-fixer": "^2.18.2",
         "nette/application": "^3.0.7",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
@@ -72,13 +72,12 @@
         "sebastian/diff": "^4.0.4",
         "symfony/security-core": "^5.2",
         "symfony/security-http": "^5.2",
-        "symplify/changelog-linker": "^9.0.48",
-        "symplify/coding-standard": "^9.0.48",
-        "symplify/easy-coding-standard": "^9.0.48",
-        "symplify/easy-testing": "^9.0.48",
-        "symplify/phpstan-extensions": "^9.0.48",
-        "symplify/phpstan-rules": "^9.0.48",
-        "tracy/tracy": "^2.7"
+        "symplify/changelog-linker": "^9.0.47",
+        "symplify/coding-standard": "^9.0.47",
+        "symplify/easy-coding-standard": "^9.0.47",
+        "symplify/easy-testing": "^9.0.47",
+        "symplify/phpstan-extensions": "^9.0.47",
+        "symplify/phpstan-rules": "^9.0.47"
     },
     "replace": {
         "rector/rector-prefixed": "self.version"
@@ -141,7 +140,6 @@
             "Rector\\PHPUnitSymfony\\": "rules/phpunit-symfony/src",
             "Rector\\PHPUnit\\": "rules/phpunit/src",
             "Rector\\PSR4\\": "rules/psr4/src",
-            "Rector\\Performance\\": "rules/performance/src",
             "Rector\\Php52\\": "rules/php52/src",
             "Rector\\Php53\\": "rules/php53/src",
             "Rector\\Php54\\": "rules/php54/src",
@@ -155,7 +153,6 @@
             "Rector\\Php80\\": "rules/php80/src",
             "Rector\\PhpAttribute\\": "packages/php-attribute/src",
             "Rector\\PhpSpecToPHPUnit\\": "rules/php-spec-to-phpunit/src",
-            "Rector\\Polyfill\\": "rules/polyfill/src",
             "Rector\\Compiler\\": "utils/compiler/src",
             "Rector\\PostRector\\": "packages/post-rector/src",
             "Rector\\Visibility\\": "rules/visibility/src",
@@ -268,7 +265,6 @@
             "Rector\\PHPUnitSymfony\\Tests\\": "rules/phpunit-symfony/tests",
             "Rector\\PHPUnit\\Tests\\": "rules/phpunit/tests",
             "Rector\\PSR4\\Tests\\": "rules/psr4/tests",
-            "Rector\\Performance\\Tests\\": "rules/performance/tests",
             "Rector\\Php52\\Tests\\": "rules/php52/tests",
             "Rector\\Php53\\Tests\\": "rules/php53/tests",
             "Rector\\Php54\\Tests\\": "rules/php54/tests",
@@ -281,7 +277,6 @@
             "Rector\\Php74\\Tests\\": "rules/php74/tests",
             "Rector\\Php80\\Tests\\": "rules/php80/tests",
             "Rector\\PhpSpecToPHPUnit\\Tests\\": "rules/php-spec-to-phpunit/tests",
-            "Rector\\Polyfill\\Tests\\": "rules/polyfill/tests",
             "Rector\\Privatization\\Tests\\": "rules/privatization/tests",
             "Rector\\RectorGenerator\\Tests\\": "packages/rector-generator/tests",
             "Rector\\RemovingStatic\\Tests\\": "rules/removing-static/tests",
@@ -340,7 +335,5 @@
     },
     "config": {
         "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }

@@ -11339,7 +11339,7 @@ Adds namespace to namespace-less files or correct namespace to match PSR-4 in `c
 
 Change `count` array comparison to empty array comparison to improve performance
 
-- class: `Rector\Performance\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector`
+- class: `Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector`
 
 ```diff
 -count($array) === 0;
@@ -11356,7 +11356,7 @@ Change `count` array comparison to empty array comparison to improve performance
 
 Add pre-slash to short named functions to improve performance
 
-- class: `Rector\Performance\Rector\FuncCall\PreslashSimpleFunctionRector`
+- class: `Rector\CodingStyle\Rector\FuncCall\PreslashSimpleFunctionRector`
 
 ```diff
  class SomeClass
@@ -13417,7 +13417,7 @@ Rename "*Spec.php" file to "*Test.php" file
 
 Remove functions exists if with else for always existing
 
-- class: `Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector`
+- class: `Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector`
 
 ```diff
  class SomeClass
@@ -13441,7 +13441,7 @@ Remove functions exists if with else for always existing
 
 Remove php version checks if they are passed
 
-- class: `Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector`
+- class: `Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector`
 
 ```diff
  // current PHP: 7.2

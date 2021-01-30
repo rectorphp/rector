@@ -374,11 +374,6 @@ final class SetList
     /**
      * @var string
      */
-    public const PERFORMANCE = __DIR__ . '/../../../../config/set/performance.php';
-
-    /**
-     * @var string
-     */
     public const PHALCON_40 = __DIR__ . '/../../../../config/set/phalcon40.php';
 
     /**
