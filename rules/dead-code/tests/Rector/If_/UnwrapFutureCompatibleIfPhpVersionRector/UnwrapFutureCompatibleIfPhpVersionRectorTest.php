@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
+namespace Rector\DeadCode\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
 
 use Iterator;
-use Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
+use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class UnwrapFutureCompatibleIfFunctionExistsRectorTest extends AbstractRectorTestCase
+final class UnwrapFutureCompatibleIfPhpVersionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class UnwrapFutureCompatibleIfFunctionExistsRectorTest extends AbstractRec
 
     protected function getRectorClass(): string
     {
-        return UnwrapFutureCompatibleIfFunctionExistsRector::class;
+        return UnwrapFutureCompatibleIfPhpVersionRector::class;
     }
 }

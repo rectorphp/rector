@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector\Fixture;
 
 class Fixture
 {
@@ -12,7 +12,7 @@ class Fixture
         } else {
             session_write_close();
         }
-        
+
         // session locking trough other addons
         if (function_exists('session_abort')) {
             session_abort();
@@ -24,7 +24,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector\Fixture;
 
 class Fixture
 {
@@ -32,7 +32,7 @@ class Fixture
     {
         // session locking trough other addons
         session_abort();
-        
+
         // session locking trough other addons
         session_abort();
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Polyfill\Contract;
+namespace Rector\DeadCode\Contract;
 
 interface ConditionInterface
 {

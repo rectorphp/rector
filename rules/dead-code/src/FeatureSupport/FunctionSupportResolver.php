@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Polyfill\FeatureSupport;
+namespace Rector\DeadCode\FeatureSupport;
 
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersion;

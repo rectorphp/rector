@@ -13417,7 +13417,7 @@ Rename "*Spec.php" file to "*Test.php" file
 
 Remove functions exists if with else for always existing
 
-- class: `Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector`
+- class: `Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector`
 
 ```diff
  class SomeClass
@@ -13441,7 +13441,7 @@ Remove functions exists if with else for always existing
 
 Remove php version checks if they are passed
 
-- class: `Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector`
+- class: `Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector`
 
 ```diff
  // current PHP: 7.2

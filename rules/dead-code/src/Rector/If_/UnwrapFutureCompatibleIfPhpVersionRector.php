@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Rector\Polyfill\Rector\If_;
+namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Polyfill\ConditionEvaluator;
-use Rector\Polyfill\ConditionResolver;
-use Rector\Polyfill\Contract\ConditionInterface;
+use Rector\DeadCode\ConditionEvaluator;
+use Rector\DeadCode\ConditionResolver;
+use Rector\DeadCode\Contract\ConditionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://www.php.net/manual/en/function.version-compare.php
  *
- * @see \Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\UnwrapFutureCompatibleIfPhpVersionRectorTest
+ * @see \Rector\DeadCode\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\UnwrapFutureCompatibleIfPhpVersionRectorTest
  */
 final class UnwrapFutureCompatibleIfPhpVersionRector extends AbstractRector
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Polyfill;
+namespace Rector\DeadCode;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -14,10 +14,10 @@ use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Util\PhpVersionFactory;
+use Rector\DeadCode\Contract\ConditionInterface;
+use Rector\DeadCode\ValueObject\BinaryToVersionCompareCondition;
+use Rector\DeadCode\ValueObject\VersionCompareCondition;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\Polyfill\Contract\ConditionInterface;
-use Rector\Polyfill\ValueObject\BinaryToVersionCompareCondition;
-use Rector\Polyfill\ValueObject\VersionCompareCondition;
 
 final class ConditionResolver
 {

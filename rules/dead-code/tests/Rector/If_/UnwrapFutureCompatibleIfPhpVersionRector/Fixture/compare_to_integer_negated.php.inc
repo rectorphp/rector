@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\Fixture;
 
 class CompareToIntegerNegated
 {
@@ -19,7 +19,7 @@ class CompareToIntegerNegated
 -----
 <?php
 
-namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\Fixture;
 
 class CompareToIntegerNegated
 {

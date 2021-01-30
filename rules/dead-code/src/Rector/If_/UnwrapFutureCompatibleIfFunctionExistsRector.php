@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Rector\Polyfill\Rector\If_;
+namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Polyfill\FeatureSupport\FunctionSupportResolver;
+use Rector\DeadCode\FeatureSupport\FunctionSupportResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector\UnwrapFutureCompatibleIfFunctionExistsRectorTest
+ * @see \Rector\DeadCode\Tests\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector\UnwrapFutureCompatibleIfFunctionExistsRectorTest
  */
 final class UnwrapFutureCompatibleIfFunctionExistsRector extends AbstractRector
 {

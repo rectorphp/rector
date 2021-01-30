@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Polyfill;
+namespace Rector\DeadCode;
 
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Polyfill\Contract\ConditionInterface;
-use Rector\Polyfill\ValueObject\BinaryToVersionCompareCondition;
-use Rector\Polyfill\ValueObject\VersionCompareCondition;
+use Rector\DeadCode\Contract\ConditionInterface;
+use Rector\DeadCode\ValueObject\BinaryToVersionCompareCondition;
+use Rector\DeadCode\ValueObject\VersionCompareCondition;
 
 final class ConditionEvaluator
 {
@@ -68,12 +68,12 @@ final class ConditionEvaluator
 
         if ($binaryToVersionCompareCondition->getBinaryClass() === Equal::class) {
             // weak comparison on purpose
-            return $binaryToVersionCompareCondition->getExpectedValue() == $versionCompareResult;
+            return $binaryToVersionCompareCondition->getExpectedValue() === $versionCompareResult;
         }
 
         if ($binaryToVersionCompareCondition->getBinaryClass() === NotEqual::class) {
             // weak comparison on purpose
-            return $binaryToVersionCompareCondition->getExpectedValue() != $versionCompareResult;
+            return $binaryToVersionCompareCondition->getExpectedValue() !== $versionCompareResult;
         }
 
         throw new ShouldNotHappenException();

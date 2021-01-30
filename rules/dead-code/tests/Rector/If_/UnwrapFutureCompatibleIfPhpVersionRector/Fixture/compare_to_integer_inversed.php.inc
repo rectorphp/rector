@@ -1,13 +1,13 @@
 <?php
 
-namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\Fixture;
 
 class CompareToIntegerInversed
 {
     public function run()
     {
         // current PHP: 10.0
-        if (1 == version_compare('7.2', PHP_VERSION, '<')) {
+        if (version_compare('7.2', PHP_VERSION, '<') == 1) {
             return 'is PHP 7.1-';
         } else {
             return 'is PHP 7.2+';
@@ -19,14 +19,14 @@ class CompareToIntegerInversed
 -----
 <?php
 
-namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\Fixture;
 
 class CompareToIntegerInversed
 {
     public function run()
     {
         // current PHP: 10.0
-        return 'is PHP 7.1-';
+        return 'is PHP 7.2+';
     }
 }
 

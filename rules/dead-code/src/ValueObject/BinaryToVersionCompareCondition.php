@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Polyfill\ValueObject;
+namespace Rector\DeadCode\ValueObject;
 
-use Rector\Polyfill\Contract\ConditionInterface;
+use Rector\DeadCode\Contract\ConditionInterface;
 
 final class BinaryToVersionCompareCondition implements ConditionInterface
 {
