@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\PreslashSimpleFunctionRector;
 
 use Iterator;
-use Rector\Performance\Rector\FuncCall\PreslashSimpleFunctionRector;
+use Rector\CodingStyle\Rector\FuncCall\PreslashSimpleFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

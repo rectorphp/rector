@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Performance\Rector\FuncCall;
+namespace Rector\CodingStyle\Rector\FuncCall;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;

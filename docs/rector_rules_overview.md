@@ -11356,7 +11356,7 @@ Change `count` array comparison to empty array comparison to improve performance
 
 Add pre-slash to short named functions to improve performance
 
-- class: `Rector\Performance\Rector\FuncCall\PreslashSimpleFunctionRector`
+- class: `Rector\CodingStyle\Rector\FuncCall\PreslashSimpleFunctionRector`
 
 ```diff
  class SomeClass
