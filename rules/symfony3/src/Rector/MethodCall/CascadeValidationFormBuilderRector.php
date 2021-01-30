@@ -133,7 +133,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->isTrue($arrayItem->value)) {
+            if (! $this->constFetchManipulator->isTrue($arrayItem->value)) {
                 continue;
             }
 

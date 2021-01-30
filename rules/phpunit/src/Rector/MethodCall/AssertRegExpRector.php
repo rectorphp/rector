@@ -122,7 +122,7 @@ final class AssertRegExpRector extends AbstractRector
         }
 
         if ($expr instanceof ConstFetch) {
-            return $this->isTrue($expr) ? 1 : 0;
+            return $this->constFetchManipulator->isTrue($expr) ? 1 : 0;
         }
 
         throw new ShouldNotHappenException();

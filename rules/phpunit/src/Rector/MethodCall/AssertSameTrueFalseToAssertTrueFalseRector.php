@@ -92,7 +92,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isTrue($node->args[0]->value)) {
+        if ($this->constFetchManipulator->isTrue($node->args[0]->value)) {
             $this->argumentMover->removeFirst($node);
 
             $node->name = new Identifier('assertTrue');
@@ -100,7 +100,7 @@ CODE_SAMPLE
             return $node;
         }
 
-        if ($this->isFalse($node->args[0]->value)) {
+        if ($this->constFetchManipulator->isFalse($node->args[0]->value)) {
             $this->argumentMover->removeFirst($node);
 
             $node->name = new Identifier('assertFalse');

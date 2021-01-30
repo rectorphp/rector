@@ -99,7 +99,7 @@ CODE_SAMPLE
 
     private function createNegationConsFetch(ConstFetch $constFetch): ConstFetch
     {
-        if ($this->isFalse($constFetch)) {
+        if ($this->constFetchManipulator->isFalse($constFetch)) {
             return $this->nodeFactory->createTrue();
         }
 

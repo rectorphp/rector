@@ -15,7 +15,6 @@ trait AbstractRectorTrait
     use RemovedAndAddedFilesTrait;
     use NodeTypeResolverTrait;
     use NameResolverTrait;
-    use ConstFetchAnalyzerTrait;
     use BetterStandardPrinterTrait;
     use NodeCommandersTrait;
     use ValueResolverTrait;

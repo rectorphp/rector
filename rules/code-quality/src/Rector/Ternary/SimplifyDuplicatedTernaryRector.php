@@ -68,10 +68,10 @@ CODE_SAMPLE
         if ($node->if === null) {
             return null;
         }
-        if (! $this->isTrue($node->if)) {
+        if (! $this->constFetchManipulator->isTrue($node->if)) {
             return null;
         }
-        if (! $this->isFalse($node->else)) {
+        if (! $this->constFetchManipulator->isFalse($node->else)) {
             return null;
         }
 

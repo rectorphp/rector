@@ -15,7 +15,7 @@ final class ConstFetchManipulator
 {
     public function isBool(Node $node): bool
     {
-        return $this->isTrue($node) || $this->isFalse($node);
+        return $this->constFetchManipulator->isTrue($node) || $this->constFetchManipulator->isFalse($node);
     }
 
     public function isFalse(Node $node): bool

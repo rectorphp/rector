@@ -62,7 +62,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $isTrue = $this->isTrue($node->args[0]->value);
+        $isTrue = $this->constFetchManipulator->isTrue($node->args[0]->value);
         $bitwiseOr = $this->prepareFlags($isTrue);
         $node->args[0] = $this->nodeFactory->createArg($bitwiseOr);
 
@@ -78,7 +78,7 @@ CODE_SAMPLE
         if (! $this->isName($new->class, 'Symfony\Component\PropertyAccess\PropertyAccessor')) {
             return true;
         }
-        return ! $this->isBool($new->args[0]->value);
+        return ! $this->constFetchManipulator->isBool($new->args[0]->value);
     }
 
     private function prepareFlags(bool $currentValue): BitwiseOr

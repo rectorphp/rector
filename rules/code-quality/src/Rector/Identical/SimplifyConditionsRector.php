@@ -87,7 +87,7 @@ final class SimplifyConditionsRector extends AbstractRector
                 return $binaryOp instanceof Identical || $binaryOp instanceof NotIdentical;
             },
             function (Node $binaryOp): bool {
-                return $this->isBool($binaryOp);
+                return $this->constFetchManipulator->isBool($binaryOp);
             }
         );
 
@@ -99,7 +99,7 @@ final class SimplifyConditionsRector extends AbstractRector
         $subBinaryOp = $twoNodeMatch->getFirstExpr();
 
         $otherNode = $twoNodeMatch->getSecondExpr();
-        if ($this->isFalse($otherNode)) {
+        if ($this->constFetchManipulator->isFalse($otherNode)) {
             return $this->createInversedBooleanOp($subBinaryOp);
         }
 

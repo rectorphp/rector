@@ -71,11 +71,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isFalse($node->else)) {
+        if (! $this->constFetchManipulator->isFalse($node->else)) {
             return null;
         }
 
-        if ($this->isTrue($node->if)) {
+        if ($this->constFetchManipulator->isTrue($node->if)) {
             return null;
         }
 

@@ -115,7 +115,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isBool($returnToRemove->expr)) {
+        if (! $this->constFetchManipulator->isBool($returnToRemove->expr)) {
             return null;
         }
 
@@ -161,7 +161,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->isBool($returnExpression)) {
+        if (! $this->constFetchManipulator->isBool($returnExpression)) {
             return true;
         }
 
@@ -204,7 +204,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isBool($ifStatment->expr);
+        return $this->constFetchManipulator->isBool($ifStatment->expr);
     }
 
     /**
@@ -223,7 +223,7 @@ CODE_SAMPLE
 
     private function createReturn(Expr $expr, FuncCall $funcCall): Return_
     {
-        $expr = $this->isFalse($expr) ? new BooleanNot($funcCall) : $funcCall;
+        $expr = $this->constFetchManipulator->isFalse($expr) ? new BooleanNot($funcCall) : $funcCall;
 
         return new Return_($expr);
     }

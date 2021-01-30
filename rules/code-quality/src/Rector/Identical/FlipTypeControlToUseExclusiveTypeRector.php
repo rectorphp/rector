@@ -90,11 +90,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isNull($node->left) && ! $this->isNull($node->right)) {
+        if (! $this->constFetchManipulator->isNull($node->left) && ! $this->constFetchManipulator->isNull(
+            $node->right
+        )) {
             return null;
         }
 
-        $variable = $this->isNull($node->left)
+        $variable = $this->constFetchManipulator->isNull($node->left)
             ? $node->right
             : $node->left;
 

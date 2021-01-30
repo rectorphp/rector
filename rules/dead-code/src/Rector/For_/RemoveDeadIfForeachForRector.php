@@ -140,6 +140,6 @@ CODE_SAMPLE
         if ($expr instanceof Scalar) {
             return false;
         }
-        return ! $this->isBool($expr);
+        return ! $this->constFetchManipulator->isBool($expr);
     }
 }

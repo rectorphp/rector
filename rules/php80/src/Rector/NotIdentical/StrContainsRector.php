@@ -84,7 +84,7 @@ CODE_SAMPLE
      */
     private function matchNotIdenticalToFalse(NotIdentical $notIdentical): ?Expr
     {
-        if ($this->isFalse($notIdentical->left)) {
+        if ($this->constFetchManipulator->isFalse($notIdentical->left)) {
             if (! $this->isFuncCallNames($notIdentical->right, self::OLD_STR_NAMES)) {
                 return null;
             }
@@ -92,7 +92,7 @@ CODE_SAMPLE
             return $notIdentical->right;
         }
 
-        if ($this->isFalse($notIdentical->right)) {
+        if ($this->constFetchManipulator->isFalse($notIdentical->right)) {
             if (! $this->isFuncCallNames($notIdentical->left, self::OLD_STR_NAMES)) {
                 return null;
             }

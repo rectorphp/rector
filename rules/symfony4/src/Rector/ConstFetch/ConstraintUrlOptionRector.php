@@ -49,7 +49,7 @@ final class ConstraintUrlOptionRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isTrue($node)) {
+        if (! $this->constFetchManipulator->isTrue($node)) {
             return null;
         }
 

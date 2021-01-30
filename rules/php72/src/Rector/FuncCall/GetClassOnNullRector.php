@@ -139,15 +139,18 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($this->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value) && ! $this->isNull(
-                $ternary->cond->right
-            )) {
+        if ($this->areNodesEqual(
+            $ternary->cond->left,
+            $funcCall->args[0]->value
+        ) && ! $this->constFetchManipulator->isNull(
+            $ternary->cond->right
+        )) {
             return true;
         }
         if (! $this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
             return false;
         }
-        return ! $this->isNull($ternary->cond->left);
+        return ! $this->constFetchManipulator->isNull($ternary->cond->left);
     }
 
     /**
@@ -159,14 +162,17 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($this->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value) && $this->isNull(
-                $ternary->cond->right
-            )) {
+        if ($this->areNodesEqual(
+            $ternary->cond->left,
+            $funcCall->args[0]->value
+        ) && $this->constFetchManipulator->isNull(
+            $ternary->cond->right
+        )) {
             return true;
         }
         if (! $this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
             return false;
         }
-        return $this->isNull($ternary->cond->left);
+        return $this->constFetchManipulator->isNull($ternary->cond->left);
     }
 }

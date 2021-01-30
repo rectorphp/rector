@@ -339,11 +339,11 @@ final class TokenManipulator
     {
         $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Identical) {
-            if ($parentNode->left === $funcCall && $this->isTrueConstant($parentNode->right)) {
+            if ($parentNode->left === $funcCall && $this->constFetchManipulator->isTrueConstant($parentNode->right)) {
                 return $parentNode;
             }
 
-            if ($parentNode->right === $funcCall && $this->isTrueConstant($parentNode->left)) {
+            if ($parentNode->right === $funcCall && $this->constFetchManipulator->isTrueConstant($parentNode->left)) {
                 return $parentNode;
             }
         }

@@ -133,7 +133,7 @@ CODE_SAMPLE
                     return false;
                 }
 
-                return $this->isFalse($node->expr);
+                return $this->constFetchManipulator->isFalse($node->expr);
             }
 
             return false;

@@ -55,11 +55,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isTrueOrBooleanAndTrues($node->left)) {
+        if ($this->constFetchManipulator->isTrueOrBooleanAndTrues($node->left)) {
             return $node->right;
         }
 
-        if ($this->isTrueOrBooleanAndTrues($node->right)) {
+        if ($this->constFetchManipulator->isTrueOrBooleanAndTrues($node->right)) {
             return $node->left;
         }
 
@@ -68,7 +68,7 @@ CODE_SAMPLE
 
     private function isTrueOrBooleanAndTrues(Node $node): bool
     {
-        if ($this->isTrue($node)) {
+        if ($this->constFetchManipulator->isTrue($node)) {
             return true;
         }
 
@@ -76,10 +76,10 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $this->isTrueOrBooleanAndTrues($node->left)) {
+        if (! $this->constFetchManipulator->isTrueOrBooleanAndTrues($node->left)) {
             return false;
         }
 
-        return $this->isTrueOrBooleanAndTrues($node->right);
+        return $this->constFetchManipulator->isTrueOrBooleanAndTrues($node->right);
     }
 }

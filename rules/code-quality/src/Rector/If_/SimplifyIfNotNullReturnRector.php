@@ -77,7 +77,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->isNull($nextNode->expr)) {
+            if (! $this->constFetchManipulator->isNull($nextNode->expr)) {
                 return null;
             }
 

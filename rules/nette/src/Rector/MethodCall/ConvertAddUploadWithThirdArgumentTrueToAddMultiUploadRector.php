@@ -64,7 +64,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isTrue($node->args[2]->value)) {
+        if ($this->constFetchManipulator->isTrue($node->args[2]->value)) {
             $node->name = new Identifier('addMultiUpload');
             unset($node->args[2]);
             return $node;

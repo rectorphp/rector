@@ -146,7 +146,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $contextOptionValue = $this->isTrue($arrayItem->value);
+            $contextOptionValue = $this->constFetchManipulator->isTrue($arrayItem->value);
             unset($contextOptions->items[$index]);
         }
 

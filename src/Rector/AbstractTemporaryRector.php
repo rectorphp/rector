@@ -26,6 +26,7 @@ use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
 use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\PhpParser\Node\Manipulator\ConstFetchManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\VisibilityManipulator;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
@@ -94,6 +95,11 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected $visibilityManipulator;
 
     /**
+     * @var ConstFetchManipulator
+     */
+    protected $constFetchManipulator;
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -132,6 +138,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      * @required
      */
     public function autowireAbstractTemporaryRector(
+        ConstFetchManipulator $constFetchManipulator,
         VisibilityManipulator $visibilityManipulator,
         NodeFactory $nodeFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
@@ -159,6 +166,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         $this->classNodeAnalyzer = $classNodeAnalyzer;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->skipper = $skipper;
+        $this->constFetchManipulator = $constFetchManipulator;
     }
 
     /**

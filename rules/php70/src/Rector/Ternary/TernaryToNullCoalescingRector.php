@@ -107,7 +107,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector
 
     private function isNullMatch(Node $possibleNullNode, Node $firstNode, Node $secondNode): bool
     {
-        if (! $this->isNull($possibleNullNode)) {
+        if (! $this->constFetchManipulator->isNull($possibleNullNode)) {
             return false;
         }
 

@@ -99,7 +99,7 @@ CODE_SAMPLE
         }
 
         foreach ($node->args as $key => $arg) {
-            if (! $this->isNull($arg->value)) {
+            if (! $this->constFetchManipulator->isNull($arg->value)) {
                 continue;
             }
 

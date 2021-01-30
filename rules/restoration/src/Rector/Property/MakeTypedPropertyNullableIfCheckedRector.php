@@ -185,9 +185,9 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->left instanceof PropertyFetch && $this->isNull($node->right)) {
+        if ($node->left instanceof PropertyFetch && $this->constFetchManipulator->isNull($node->right)) {
             $propertyFetch = $node->left;
-        } elseif ($node->right instanceof PropertyFetch && $this->isNull($node->left)) {
+        } elseif ($node->right instanceof PropertyFetch && $this->constFetchManipulator->isNull($node->left)) {
             $propertyFetch = $node->right;
         } else {
             return null;

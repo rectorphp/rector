@@ -223,13 +223,19 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($this->propertyFetchManipulator->isLocalPropertyOfNames($node->left, $propertyNames) && $this->isNull(
+            if ($this->propertyFetchManipulator->isLocalPropertyOfNames(
+                $node->left,
+                $propertyNames
+            ) && $this->constFetchManipulator->isNull(
                 $node->right
             )) {
                 $node->right = new Array_();
             }
 
-            if ($this->propertyFetchManipulator->isLocalPropertyOfNames($node->right, $propertyNames) && $this->isNull(
+            if ($this->propertyFetchManipulator->isLocalPropertyOfNames(
+                $node->right,
+                $propertyNames
+            ) && $this->constFetchManipulator->isNull(
                 $node->left
             )) {
                 $node->left = new Array_();
@@ -257,7 +263,10 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($this->propertyFetchManipulator->isLocalPropertyOfNames($expr->left, $propertyNames) && $this->isNull(
+        if ($this->propertyFetchManipulator->isLocalPropertyOfNames(
+            $expr->left,
+            $propertyNames
+        ) && $this->constFetchManipulator->isNull(
             $expr->right
         )) {
             return true;
@@ -265,6 +274,6 @@ CODE_SAMPLE
         if (! $this->propertyFetchManipulator->isLocalPropertyOfNames($expr->right, $propertyNames)) {
             return false;
         }
-        return $this->isNull($expr->left);
+        return $this->constFetchManipulator->isNull($expr->left);
     }
 }

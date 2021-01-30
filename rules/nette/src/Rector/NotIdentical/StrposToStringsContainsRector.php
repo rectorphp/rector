@@ -89,7 +89,7 @@ CODE_SAMPLE
 
     private function matchStrposInComparisonToFalse(BinaryOp $binaryOp): ?FuncCall
     {
-        if ($this->isFalse($binaryOp->left)) {
+        if ($this->constFetchManipulator->isFalse($binaryOp->left)) {
             if (! $binaryOp->right instanceof FuncCall) {
                 return null;
             }
@@ -99,7 +99,7 @@ CODE_SAMPLE
             }
         }
 
-        if ($this->isFalse($binaryOp->right)) {
+        if ($this->constFetchManipulator->isFalse($binaryOp->right)) {
             if (! $binaryOp->left instanceof FuncCall) {
                 return null;
             }
