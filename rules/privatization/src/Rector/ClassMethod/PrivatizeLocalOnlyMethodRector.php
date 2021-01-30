@@ -16,7 +16,6 @@ use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodVisibilityVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -165,11 +164,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($phpDocInfo->hasByType(SymfonyRequiredTagNode::class)) {
-            return true;
-        }
-
-        return $phpDocInfo->hasByName(TagName::API);
+        return $phpDocInfo->hasByTypes([SymfonyRequiredTagNode::class, ApiPhpDocTagNode::class]);
     }
 
     private function shouldSkipClassLike(Class_ $class): bool

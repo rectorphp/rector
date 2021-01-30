@@ -534,3 +534,5 @@ parameters:
             path: packages/better-php-doc-parser/src/PhpDocNodeFactory/NetteInjectDocNodeFactory.php
 
         - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\NodeTypeResolver\\NodeTypeResolver\\ParamTypeResolver" class\. Use unique content or abstract service instead#'
+        # constants
+        - '#Parameter \#1 \$types of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:hasByTypes\(\) expects array<class\-string<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\>\>, array<int, (.*?)\> given#'

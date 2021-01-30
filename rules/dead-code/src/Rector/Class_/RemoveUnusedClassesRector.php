@@ -146,7 +146,7 @@ CODE_SAMPLE
     private function hasMethodWithApiAnnotation(Class_ $class): bool
     {
         foreach ($class->getMethods() as $classMethod) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
             if (! $phpDocInfo->hasByType(ApiPhpDocTagNode::class)) {
                 continue;
             }

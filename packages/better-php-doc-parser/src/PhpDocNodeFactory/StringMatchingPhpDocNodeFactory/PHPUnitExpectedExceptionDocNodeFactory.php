@@ -7,17 +7,17 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\StringMatchingPhpDocNodeFa
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Contract\StringTagMatchingPhpDocNodeFactoryInterface;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit\PHPUnitDoesNotPerformAssertionTagNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit\PHPUnitExpectedExceptionTagNode;
 
-final class PHPUnitDataDoesNotPerformAssertionDocNodeFactory implements StringTagMatchingPhpDocNodeFactoryInterface
+final class PHPUnitExpectedExceptionDocNodeFactory implements StringTagMatchingPhpDocNodeFactoryInterface
 {
     public function createFromTokens(TokenIterator $tokenIterator): ?Node
     {
-        return new PHPUnitDoesNotPerformAssertionTagNode();
+        return new PHPUnitExpectedExceptionTagNode();
     }
 
     public function match(string $tag): bool
     {
-        return strtolower($tag) === strtolower(PHPUnitDoesNotPerformAssertionTagNode::NAME);
+        return strtolower($tag) === strtolower(PHPUnitExpectedExceptionTagNode::NAME);
     }
 }

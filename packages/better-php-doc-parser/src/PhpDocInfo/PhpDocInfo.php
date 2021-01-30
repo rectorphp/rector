@@ -240,8 +240,7 @@ final class PhpDocInfo
     }
 
     /**
-     * @template T as \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
-     * @param class-string<T>[] $types
+     * @param class-string<\PHPStan\PhpDocParser\Ast\Node>[] $types
      */
     public function hasByTypes(array $types): bool
     {

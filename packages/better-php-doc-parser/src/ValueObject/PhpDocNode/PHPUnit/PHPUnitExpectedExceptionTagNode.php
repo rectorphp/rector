@@ -10,16 +10,16 @@ use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 /**
- * @see \Rector\BetterPhpDocParser\PhpDocNodeFactory\StringMatchingPhpDocNodeFactory\PHPUnitDataDoesNotPerformAssertionDocNodeFactory
+ * @see \Rector\BetterPhpDocParser\PhpDocNodeFactory\StringMatchingPhpDocNodeFactory\PHPUnitExpectedExceptionDocNodeFactory
  */
-final class PHPUnitDoesNotPerformAssertionTagNode extends PhpDocTagNode implements AttributeAwareNodeInterface
+final class PHPUnitExpectedExceptionTagNode extends PhpDocTagNode implements AttributeAwareNodeInterface
 {
     use AttributeTrait;
 
     /**
      * @var string
      */
-    public const NAME = '@doesNotPerformAssertions';
+    public const NAME = '@expectedException';
 
     public function __construct()
     {

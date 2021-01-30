@@ -9,10 +9,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SymfonyRequiredTagNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\ApiPhpDocTagNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\VendorLocker\NodeVendorLocker\PropertyVisibilityVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -23,14 +23,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<class-string<\PHPStan\PhpDocParser\Ast\Node>>
      */
-    private const ANNOTATIONS_REQUIRING_PUBLIC = [
-        TagName::API,
+    private const TAG_NODES_REQUIRING_PUBLIC = [
+        ApiPhpDocTagNode::class,
         // Symfony DI
-        SymfonyRequiredTagNode::NAME,
+        SymfonyRequiredTagNode::class,
         // other DI
-        NetteInjectTagNode::NAME,
+        NetteInjectTagNode::class,
     ];
 
     /**
@@ -140,13 +140,7 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        foreach (self::ANNOTATIONS_REQUIRING_PUBLIC as $annotationRequiringPublic) {
-            if ($phpDocInfo->hasByName($annotationRequiringPublic)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $phpDocInfo->hasByTypes(self::TAG_NODES_REQUIRING_PUBLIC);
     }
 
     private function shouldSkipClass(ClassLike $classLike): bool

@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit\PHPUnitDoesNotPerformAssertionTagNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit\PHPUnitExpectedExceptionTagNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ClassMethodReflectionFactory;
 use Rector\FileSystemRector\Parser\FileInfoParser;
@@ -30,11 +31,6 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractR
      * @var int
      */
     private const MAX_LOOKING_FOR_ASSERT_METHOD_CALL_NESTING_LEVEL = 3;
-
-    /**
-     * @var string
-     */
-    private const EXPECTED_EXCEPTION_TAG = 'expectedException';
 
     /**
      * This should prevent segfaults while going too deep into to parsed code.
@@ -150,11 +146,9 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        if ($phpDocInfo->hasByType(PHPUnitDoesNotPerformAssertionTagNode::class)) {
-            return true;
-        }
-
-        if ($phpDocInfo->hasByName(self::EXPECTED_EXCEPTION_TAG)) {
+        if ($phpDocInfo->hasByTypes(
+            [PHPUnitDoesNotPerformAssertionTagNode::class, PHPUnitExpectedExceptionTagNode::class]
+        )) {
             return true;
         }
 
