@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Context;
+namespace Rector\NodeNestingScope;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
