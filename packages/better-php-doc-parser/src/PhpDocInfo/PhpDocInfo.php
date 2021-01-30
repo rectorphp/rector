@@ -6,7 +6,6 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Node as PhpDocNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;

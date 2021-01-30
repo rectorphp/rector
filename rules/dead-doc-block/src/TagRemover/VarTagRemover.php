@@ -94,7 +94,9 @@ final class VarTagRemover
     {
         if ($varTagValueNode->type instanceof AttributeAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
-                if ($type instanceof AttributeAwareArrayTypeNode && $this->classLikeExistenceChecker->doesClassLikeExist((string) $type->type)) {
+                if ($type instanceof AttributeAwareArrayTypeNode && $this->classLikeExistenceChecker->doesClassLikeExist(
+                    (string) $type->type
+                )) {
                     return true;
                 }
             }
