@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php73\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
@@ -124,15 +125,15 @@ CODE_SAMPLE
             }
         }
 
-        if (count($funcCall->args) === 0) {
+        if ($funcCall->args === []) {
             $this->removeNode($funcCall);
         }
     }
 
     /**
-     * @return string[]
+     * @return string[]|mixed[]
      */
-    private function resolveVariableNames(Node\Arg $arg): array
+    private function resolveVariableNames(Arg $arg): array
     {
         $argValue = $this->getValue($arg->value);
         if (is_string($argValue)) {
