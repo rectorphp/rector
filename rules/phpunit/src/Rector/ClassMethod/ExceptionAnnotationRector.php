@@ -114,7 +114,7 @@ CODE_SAMPLE
 
             $methodCallExpressions = $this->expectExceptionMethodCallFactory->createFromTagValueNodes(
                 $phpDocInfo->getTagsByName($annotationName),
-                $methodName
+                $methodName,
             );
             $node->stmts = array_merge($methodCallExpressions, (array) $node->stmts);
 

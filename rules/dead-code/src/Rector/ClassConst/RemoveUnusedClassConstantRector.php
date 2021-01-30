@@ -7,11 +7,11 @@ namespace Rector\DeadCode\Rector\ClassConst;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\ApiPhpDocTagNode;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassConstManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpAttribute\ValueObject\TagName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -119,13 +119,15 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->hasTagByName($classConst, TagName::API)) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classConst);
+        if ($phpDocInfo->hasByType(ApiPhpDocTagNode::class)) {
             return true;
         }
 
         $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
         if ($classLike instanceof ClassLike) {
-            return $this->hasTagByName($classLike, TagName::API);
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classLike);
+            return $phpDocInfo->hasByType(ApiPhpDocTagNode::class);
         }
 
         return false;

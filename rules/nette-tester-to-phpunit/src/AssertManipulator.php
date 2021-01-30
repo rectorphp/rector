@@ -17,6 +17,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\BooleanType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit\PHPUnitDoesNotPerformAssertionTagNode;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -273,7 +274,7 @@ final class AssertManipulator
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $phpDocInfo->addBareTag('@doesNotPerformAssertions');
+        $phpDocInfo->addPhpDocTagNode(new PHPUnitDoesNotPerformAssertionTagNode());
     }
 
     private function renameAssertMethod(StaticCall $staticCall): void
@@ -309,12 +310,10 @@ final class AssertManipulator
 
     private function refactorExpectExceptionCode(StaticCall $staticCall): void
     {
-        $method = 'expectExceptionCode';
-
         if ($this->sholdBeStaticCall($staticCall)) {
-            $expectExceptionCode = new StaticCall(new Name(self::SELF), $method);
+            $expectExceptionCode = new StaticCall(new Name(self::SELF), 'expectExceptionCode');
         } else {
-            $expectExceptionCode = new MethodCall(new Variable(self::THIS), $method);
+            $expectExceptionCode = new MethodCall(new Variable(self::THIS), 'expectExceptionCode');
         }
 
         $expectExceptionCode->args[] = $staticCall->args[3];

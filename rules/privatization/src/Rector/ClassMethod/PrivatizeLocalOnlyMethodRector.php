@@ -9,12 +9,13 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SymfonyRequiredTagNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\ApiPhpDocTagNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagNode;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpAttribute\ValueObject\TagName;
 use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodVisibilityVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -140,7 +141,8 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->hasTagByName($classMethod, TagName::API)) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        if ($phpDocInfo->hasByType(ApiPhpDocTagNode::class)) {
             return true;
         }
 
@@ -148,7 +150,8 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->shouldSkipClassMethod($classMethod)) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        if ($this->shouldSkipClassMethod($classMethod, $phpDocInfo)) {
             return true;
         }
 
@@ -161,12 +164,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        if ($phpDocInfo->hasByType(SymfonyRequiredTagNode::class)) {
-            return true;
-        }
-
-        return $phpDocInfo->hasByName(TagName::API);
+        return $phpDocInfo->hasByTypes([SymfonyRequiredTagNode::class, ApiPhpDocTagNode::class]);
     }
 
     private function shouldSkipClassLike(Class_ $class): bool
@@ -183,7 +181,8 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->hasTagByName($class, TagName::API);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
+        return $phpDocInfo->hasByType(ApiPhpDocTagNode::class);
     }
 
     private function isControllerAction(Class_ $class, ClassMethod $classMethod): bool
@@ -207,9 +206,9 @@ CODE_SAMPLE
         return $phpDocInfo->hasByType(NetteInjectTagNode::class);
     }
 
-    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod, PhpDocInfo $phpDocInfo): bool
     {
-        if ($this->hasTagByName($classMethod, TagName::API)) {
+        if ($phpDocInfo->hasByType(ApiPhpDocTagNode::class)) {
             return true;
         }
 
