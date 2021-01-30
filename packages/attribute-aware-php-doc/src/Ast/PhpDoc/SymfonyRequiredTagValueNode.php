@@ -9,7 +9,7 @@ use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
-final class RequiredTagValueNode implements PhpDocTagValueNode, AttributeAwareNodeInterface, PhpAttributableTagNodeInterface
+final class SymfonyRequiredTagValueNode implements PhpDocTagValueNode, AttributeAwareNodeInterface, PhpAttributableTagNodeInterface
 {
     use AttributeTrait;
 

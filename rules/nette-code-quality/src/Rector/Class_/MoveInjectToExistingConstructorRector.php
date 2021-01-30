@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -141,7 +142,7 @@ CODE_SAMPLE
     private function removeInjectAnnotation(Property $property): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $this->phpDocTagRemover->removeByName($phpDocInfo, TagName::INJECT);
+        $phpDocInfo->removeByType(NetteInjectTagValueNode::class);
     }
 
     private function changePropertyVisibility(Property $injectProperty): void

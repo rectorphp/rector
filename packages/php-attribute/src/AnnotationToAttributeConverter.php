@@ -23,7 +23,7 @@ final class AnnotationToAttributeConverter
     /**
      * @var PhpAttributeGroupFactory
      */
-    private $phpAttributteGroupFactory;
+    private $phpAttributeGroupFactory;
 
     /**
      * @var PhpDocInfoFactory
@@ -36,11 +36,11 @@ final class AnnotationToAttributeConverter
     private $phpDocTagRemover;
 
     public function __construct(
-        PhpAttributeGroupFactory $phpAttributteGroupFactory,
+        PhpAttributeGroupFactory $phpAttributeGroupFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocTagRemover $phpDocTagRemover
     ) {
-        $this->phpAttributteGroupFactory = $phpAttributteGroupFactory;
+        $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocTagRemover = $phpDocTagRemover;
     }
@@ -73,7 +73,7 @@ final class AnnotationToAttributeConverter
         }
 
         // 3. convert annotations to attributes
-        $newAttrGroups = $this->phpAttributteGroupFactory->create($phpAttributableTagNodes);
+        $newAttrGroups = $this->phpAttributeGroupFactory->create($phpAttributableTagNodes);
         $node->attrGroups = array_merge($node->attrGroups, $newAttrGroups);
 
         if ($hasNewAttrGroups) {

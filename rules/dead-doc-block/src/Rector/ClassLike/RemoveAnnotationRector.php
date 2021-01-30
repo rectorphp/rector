@@ -88,14 +88,9 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         foreach ($this->annotationsToRemove as $annotationToRemove) {
-            if ($phpDocInfo->hasByName($annotationToRemove)) {
-                $this->phpDocTagRemover->removeByName($phpDocInfo, $annotationToRemove);
-                continue;
-            }
+            $this->phpDocTagRemover->removeByName($phpDocInfo, $annotationToRemove);
 
-            if (is_a($annotationToRemove, PhpDocTagValueNode::class, true) && $phpDocInfo->hasByType(
-                $annotationToRemove
-            )) {
+            if (is_a($annotationToRemove, PhpDocTagValueNode::class, true)) {
                 $phpDocInfo->removeByType($annotationToRemove);
             }
         }

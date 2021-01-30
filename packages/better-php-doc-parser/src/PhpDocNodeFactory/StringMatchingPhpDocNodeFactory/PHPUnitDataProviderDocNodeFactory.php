@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
+namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\StringMatchingPhpDocNodeFactory;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -10,9 +10,11 @@ use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\DataProviderTagValueNode;
+use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
+use Rector\BetterPhpDocParser\Contract\StringTagMatchingPhpDocNodeFactoryInterface;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
-final class PHPUnitDataProviderDocNodeFactory
+final class PHPUnitDataProviderDocNodeFactory implements StringTagMatchingPhpDocNodeFactoryInterface, PhpDocParserAwareInterface
 {
     /**
      * @var PrivatesCaller
@@ -55,6 +57,11 @@ final class PHPUnitDataProviderDocNodeFactory
     public function setPhpDocParser(PhpDocParser $phpDocParser): void
     {
         $this->phpDocParser = $phpDocParser;
+    }
+
+    public function match(string $tag): bool
+    {
+        return strtolower($tag) === '@dataprovider';
     }
 
     /**

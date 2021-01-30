@@ -13,7 +13,6 @@ use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInte
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToOneTagNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToOneTagValueNode;
 use Rector\Core\Rector\AbstractRector;
@@ -42,11 +41,6 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
     private $uuidMigrationDataCollector;
 
     /**
-     * @var PhpDocTagRemover
-     */
-    private $phpDocTagRemover;
-
-    /**
      * @var DoctrineDocBlockResolver
      */
     private $doctrineDocBlockResolver;
@@ -54,12 +48,10 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
     public function __construct(
         PhpDocTagNodeFactory $phpDocTagNodeFactory,
         UuidMigrationDataCollector $uuidMigrationDataCollector,
-        PhpDocTagRemover $phpDocTagRemover,
         DoctrineDocBlockResolver $doctrineDocBlockResolver
     ) {
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
         $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
-        $this->phpDocTagRemover = $phpDocTagRemover;
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
     }
 
@@ -279,11 +271,8 @@ CODE_SAMPLE
 
     private function refactorToManyPropertyPhpDocInfo(PhpDocInfo $phpDocInfo, Property $property): void
     {
-        $doctrineJoinColumnTagValueNode = $phpDocInfo->getByType(JoinColumnTagValueNode::class);
-        if ($doctrineJoinColumnTagValueNode !== null) {
-            // replace @ORM\JoinColumn with @ORM\JoinTable
-            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineJoinColumnTagValueNode);
-        }
+        // replace @ORM\JoinColumn with @ORM\JoinTable
+        $phpDocInfo->removeByType(JoinColumnTagValueNode::class);
 
         $joinTableTagNode = $this->phpDocTagNodeFactory->createJoinTableTagNode($property);
         $phpDocInfo->addPhpDocTagNode($joinTableTagNode);

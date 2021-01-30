@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_;
 
+use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 
-final class EmbeddedTagValueNode extends AbstractDoctrineTagValueNode
+final class EmbeddedTagValueNode extends AbstractDoctrineTagValueNode implements DoctrineRelationTagValueNodeInterface
 {
     /**
      * @var string
@@ -24,18 +25,23 @@ final class EmbeddedTagValueNode extends AbstractDoctrineTagValueNode
         return '@ORM\Embedded';
     }
 
-    public function getClass(): string
+    public function getColumnPrefix(): ?string
+    {
+        return $this->items['columnPrefix'];
+    }
+
+    public function getTargetEntity(): ?string
     {
         return $this->items['class'];
     }
 
-    public function getFullyQualifiedClassName(): string
+    public function getFullyQualifiedTargetEntity(): string
     {
         return $this->fullyQualifiedClassName;
     }
 
-    public function getColumnPrefix(): ?string
+    public function changeTargetEntity(string $targetEntity): void
     {
-        return $this->items['columnPrefix'];
+        $this->items['class'] = $targetEntity;
     }
 }

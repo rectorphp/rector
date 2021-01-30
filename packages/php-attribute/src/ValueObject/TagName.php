@@ -19,6 +19,7 @@ final class TagName
     public const API = 'api';
 
     /**
+     * Nette @inject annotation mostly
      * @var string
      */
     public const INJECT = 'inject';
