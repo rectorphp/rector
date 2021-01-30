@@ -2,19 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Architecture\Rector\MethodCall;
+namespace Rector\Doctrine\Rector\MethodCall;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Exception\Bridge\RectorProviderException;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\Contract\Mapper\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Naming\Naming\PropertyNaming;
@@ -37,12 +33,19 @@ final class ServiceLocatorToDIRector extends AbstractRector
      */
     private $propertyNaming;
 
+    /**
+     * @var \Rector\Doctrine\NodeAnalyzer\EntityClassOrAliasResolver
+     */
+    private $entityClassOrAliasResolver;
+
     public function __construct(
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
-        PropertyNaming $propertyNaming
+        PropertyNaming $propertyNaming,
+        \Rector\Doctrine\NodeAnalyzer\EntityClassOrAliasResolver $entityClassOrAliasResolver
     ) {
         $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
         $this->propertyNaming = $propertyNaming;
+        $this->entityClassOrAliasResolver = $entityClassOrAliasResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -136,7 +139,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $repositoryFqn = $this->resolveRepositoryFqnFromGetRepositoryMethodCall($node);
+        $repositoryFqn = $this->entityClassOrAliasResolver->resolve($node);
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
             return null;
@@ -151,38 +154,5 @@ CODE_SAMPLE
         );
 
         return $this->createPropertyFetch('this', $this->propertyNaming->fqnToVariableName($repositoryObjectType));
-    }
-
-    private function resolveRepositoryFqnFromGetRepositoryMethodCall(MethodCall $methodCall): string
-    {
-        $entityFqnOrAlias = $this->entityFqnOrAlias($methodCall);
-
-        if ($entityFqnOrAlias !== null) {
-            $repositoryClassName = $this->doctrineEntityAndRepositoryMapper->mapEntityToRepository($entityFqnOrAlias);
-            if ($repositoryClassName !== null) {
-                return $repositoryClassName;
-            }
-        }
-
-        throw new RectorProviderException(sprintf(
-            'A repository was not provided for "%s" entity by your "%s" class.',
-            $entityFqnOrAlias,
-            get_class($this->doctrineEntityAndRepositoryMapper)
-        ));
-    }
-
-    private function entityFqnOrAlias(MethodCall $methodCall): string
-    {
-        $repositoryArgument = $methodCall->args[0]->value;
-
-        if ($repositoryArgument instanceof String_) {
-            return $repositoryArgument->value;
-        }
-
-        if ($repositoryArgument instanceof ClassConstFetch && $repositoryArgument->class instanceof Name) {
-            return $this->getName($repositoryArgument->class);
-        }
-
-        throw new ShouldNotHappenException('Unable to resolve repository argument');
     }
 }

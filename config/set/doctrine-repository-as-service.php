@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector;
-use Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector;
 use Rector\DeadDocBlock\Rector\ClassLike\RemoveAnnotationRector;
 use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
 use Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector;
+use Rector\Doctrine\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector;
+use Rector\Doctrine\Rector\MethodCall\ServiceLocatorToDIRector;
 use Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector;
 use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
 use Rector\Generic\ValueObject\AddPropertyByParent;

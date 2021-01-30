@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService;
 
 use Iterator;
-use Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector;
-use Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector;
 use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
+use Rector\Doctrine\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector;
+use Rector\Doctrine\Rector\MethodCall\ServiceLocatorToDIRector;
 use Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
- * @see \Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector
+ * @see \Rector\Doctrine\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector
  * @see \Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector
- * @see \Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector
+ * @see \Rector\Doctrine\Rector\MethodCall\ServiceLocatorToDIRector
  */
 final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
 {
