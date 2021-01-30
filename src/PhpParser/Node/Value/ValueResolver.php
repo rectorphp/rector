@@ -17,7 +17,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Manipulator\ConstFetchManipulator;
+use Rector\Core\NodeAnalyzer\ConstFetchAnalyzer;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -50,7 +50,7 @@ final class ValueResolver
     private $nodeTypeResolver;
 
     /**
-     * @var ConstFetchManipulator
+     * @var ConstFetchAnalyzer
      */
     private $constFetchManipulator;
 
@@ -58,7 +58,7 @@ final class ValueResolver
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         ParsedNodeCollector $parsedNodeCollector,
-        ConstFetchManipulator $constFetchManipulator
+        ConstFetchAnalyzer $constFetchManipulator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->parsedNodeCollector = $parsedNodeCollector;

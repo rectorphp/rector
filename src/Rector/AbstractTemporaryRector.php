@@ -27,7 +27,6 @@ use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Manipulator\ConstFetchManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\VisibilityManipulator;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
@@ -151,7 +150,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      * @required
      */
     public function autowireAbstractTemporaryRector(
-        ConstFetchManipulator $constFetchManipulator,
         VisibilityManipulator $visibilityManipulator,
         NodeFactory $nodeFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
