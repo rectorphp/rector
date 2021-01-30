@@ -86,7 +86,7 @@ final class VarTagRemover
     {
         if ($varTagValueNode->type instanceof AttributeAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
-                if ($type instanceof AttributeAwareArrayTypeNode && class_exists((string) $type->type)) {
+                if ($type instanceof AttributeAwareArrayTypeNode && $this->doesClassOrInterfaceExists($type)) {
                     return true;
                 }
             }
@@ -102,6 +102,19 @@ final class VarTagRemover
         );
 
         return $varTypeDocString !== 'array';
+    }
+
+    private function doesClassOrInterfaceExists(AttributeAwareArrayTypeNode $type): bool
+    {
+        if (class_exists((string) $type->type)) {
+            return true;
+        }
+
+        if (interface_exists((string) $type->type)) {
+            return true;
+        }
+
+        return false;
     }
 
     private function isArrayTypeNode(VarTagValueNode $varTagValueNode): bool
