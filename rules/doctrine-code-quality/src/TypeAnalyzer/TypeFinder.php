@@ -18,13 +18,13 @@ final class TypeFinder
             return $type;
         }
 
-        if ($type instanceof ArrayType) {
-            if (is_a($type->getItemType(), $desiredTypeClass, true)) {
-                return $type->getItemType();
-            }
+        if ($type instanceof ArrayType && is_a($type->getItemType(), $desiredTypeClass, true)) {
+            return $type->getItemType();
         }
-
-        if ($type instanceof UnionType || $type instanceof IntersectionType) {
+        if ($type instanceof UnionType) {
+            return $this->findInJoinedType($type, $desiredTypeClass);
+        }
+        if ($type instanceof IntersectionType) {
             return $this->findInJoinedType($type, $desiredTypeClass);
         }
 
