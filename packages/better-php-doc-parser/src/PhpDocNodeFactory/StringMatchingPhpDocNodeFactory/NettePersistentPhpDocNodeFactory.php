@@ -6,18 +6,19 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\StringMatchingPhpDocNodeFa
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SymfonyRequiredTagNode;
 use Rector\BetterPhpDocParser\Contract\StringTagMatchingPhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteCrossOriginTagNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NettePersistentTagNode;
 
-final class SymfonyRequirePhpDocNodeFactory implements StringTagMatchingPhpDocNodeFactoryInterface
+final class NettePersistentPhpDocNodeFactory implements StringTagMatchingPhpDocNodeFactoryInterface
 {
     public function match(string $tag): bool
     {
-        return $tag === SymfonyRequiredTagNode::NAME;
+        return $tag === NettePersistentTagNode::NAME;
     }
 
     public function createFromTokens(TokenIterator $tokenIterator): ?Node
     {
-        return new SymfonyRequiredTagNode();
+        return new NettePersistentTagNode();
     }
 }

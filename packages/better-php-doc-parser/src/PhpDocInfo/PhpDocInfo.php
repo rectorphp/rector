@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\Node as PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -274,15 +275,19 @@ final class PhpDocInfo
     }
 
     /**
-     * @template T as \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
+     * @template T as \PHPStan\PhpDocParser\Ast\Node
      * @param class-string<T> $type
      * @return T|null
      */
-    public function getByType(string $type): ?PhpDocTagValueNode
+    public function getByType(string $type): ?PhpDocNode
     {
         $this->ensureTypeIsTagValueNode($type, __METHOD__);
 
         foreach ($this->phpDocNode->children as $phpDocChildNode) {
+            if (is_a($phpDocChildNode, $type, true)) {
+                return $phpDocChildNode;
+            }
+
             if (! $phpDocChildNode instanceof PhpDocTagNode) {
                 continue;
             }
@@ -309,6 +314,11 @@ final class PhpDocInfo
         $foundTagsValueNodes = [];
 
         foreach ($this->phpDocNode->children as $phpDocChildNode) {
+            if (is_a($phpDocChildNode, $type, true)) {
+                $foundTagsValueNodes[] = $phpDocChildNode;
+                continue;
+            }
+
             if (! $phpDocChildNode instanceof PhpDocTagNode) {
                 continue;
             }
@@ -333,6 +343,11 @@ final class PhpDocInfo
         $this->ensureTypeIsTagValueNode($type, __METHOD__);
 
         foreach ($this->phpDocNode->children as $key => $phpDocChildNode) {
+            if (is_a($phpDocChildNode, $type, true)) {
+                unset($this->phpDocNode->children[$key]);
+                $this->markAsChanged();
+            }
+
             if (! $phpDocChildNode instanceof PhpDocTagNode) {
                 continue;
             }
@@ -342,7 +357,6 @@ final class PhpDocInfo
             }
 
             unset($this->phpDocNode->children[$key]);
-
             $this->markAsChanged();
         }
     }

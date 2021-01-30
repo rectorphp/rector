@@ -10,17 +10,14 @@ use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
-/**
- * @see \Rector\BetterPhpDocParser\PhpDocNodeFactory\StringMatchingPhpDocNodeFactory\NetteInjectPhpDocNodeFactory
- */
-final class NetteInjectTagNode extends PhpDocTagNode implements PhpAttributableTagNodeInterface, AttributeAwareNodeInterface
+final class NetteCrossOriginTagNode extends PhpDocTagNode implements PhpAttributableTagNodeInterface, AttributeAwareNodeInterface
 {
     use AttributeTrait;
 
     /**
      * @var string
      */
-    public const NAME = '@inject';
+    public const NAME = '@crossOrigin';
 
     public function __construct()
     {
@@ -34,7 +31,7 @@ final class NetteInjectTagNode extends PhpDocTagNode implements PhpAttributableT
 
     public function getAttributeClassName(): string
     {
-        return 'Nette\DI\Attributes\Inject';
+        return 'Nette\Application\Attributes\CrossOrigin';
     }
 
     /**

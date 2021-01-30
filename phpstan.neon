@@ -533,3 +533,4 @@ parameters:
             message: '#Do not use setter on a service#'
             path: packages/better-php-doc-parser/src/PhpDocNodeFactory/NetteInjectDocNodeFactory.php
 
+        - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\NodeTypeResolver\\NodeTypeResolver\\ParamTypeResolver" class\. Use unique content or abstract service instead#'

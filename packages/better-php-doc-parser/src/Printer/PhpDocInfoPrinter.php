@@ -14,7 +14,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -326,7 +325,6 @@ final class PhpDocInfoPrinter
             $output .= $tagSpaceSeparator;
         }
 
-        /** @var AttributeAwarePhpDocTagNode $phpDocTagNode */
         if ($this->hasDescription($phpDocTagNode)) {
             $quotedDescription = preg_quote($phpDocTagNode->value->description, '#');
             $pattern = Strings::replace($quotedDescription, '#[\s]+#', '\s+');
@@ -421,20 +419,24 @@ final class PhpDocInfoPrinter
         return '';
     }
 
-    private function hasDescription(AttributeAwarePhpDocTagNode $attributeAwarePhpDocTagNode): bool
+    /**
+     * @param AttributeAwareNodeInterface&PhpDocTagNode $phpDocTagNode
+     */
+    private function hasDescription(PhpDocTagNode $phpDocTagNode): bool
     {
-        $hasDescriptionWithOriginalSpaces = $attributeAwarePhpDocTagNode->getAttribute(
+        $hasDescriptionWithOriginalSpaces = $phpDocTagNode->getAttribute(
             Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES
         );
+
         if (! $hasDescriptionWithOriginalSpaces) {
             return false;
         }
 
-        if (! property_exists($attributeAwarePhpDocTagNode->value, 'description')) {
+        if (! property_exists($phpDocTagNode->value, 'description')) {
             return false;
         }
 
-        return (bool) $attributeAwarePhpDocTagNode->value->description;
+        return (bool) $phpDocTagNode->value->description;
     }
 
     private function explodeAndImplode(string $content, string $explodeChar, string $implodeChar): string

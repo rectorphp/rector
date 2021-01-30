@@ -52,14 +52,14 @@ final class AnnotationToAttributeConverter
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        $hasNewAttrGroups = false;
-
         // 0. has 0 nodes, nothing to change
         /** @var PhpAttributableTagNodeInterface[] $phpAttributableTagNodes */
         $phpAttributableTagNodes = $phpDocInfo->findAllByType(PhpAttributableTagNodeInterface::class);
         if ($phpAttributableTagNodes === []) {
             return null;
         }
+
+        $hasNewAttrGroups = false;
 
         // 1. keep only those, whom's attribute class exists
         $phpAttributableTagNodes = $this->filterOnlyExistingAttributes($phpAttributableTagNodes);

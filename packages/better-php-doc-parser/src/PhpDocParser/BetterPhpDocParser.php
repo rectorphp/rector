@@ -150,37 +150,41 @@ final class BetterPhpDocParser extends PhpDocParser
     {
         $tag = $this->resolveTag($tokenIterator);
 
-        $phpDocTagValueNode = $this->parseTagValue($tokenIterator, $tag);
+        $phpDocTagNode = $this->createPhpDocTagNodeFromStringMatch($tag, $tokenIterator);
+        if ($phpDocTagNode instanceof PhpDocTagNode) {
+            return $phpDocTagNode;
+        }
 
+        if ($phpDocTagNode instanceof PhpDocTagValueNode) {
+            return new PhpDocTagNode($tag, $phpDocTagNode);
+        }
+
+        $phpDocTagValueNode = $this->parseTagValue($tokenIterator, $tag);
         return new PhpDocTagNode($tag, $phpDocTagValueNode);
     }
 
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
-        // needed for reference support in params, see https://github.com/rectorphp/rector/issues/1734
-        $tagValueNode = null;
-
         $currentPhpNode = $this->currentNodeProvider->getNode();
         if (! $currentPhpNode instanceof \PhpParser\Node) {
             throw new ShouldNotHappenException();
         }
 
-        $tagValueNode = $this->createTagValueNodeFromStringMatch($tag, $tokenIterator);
-        if (! $tagValueNode instanceof PhpDocTagValueNode) {
-            // class-annotation
-            $phpDocNodeFactory = $this->matchTagToPhpDocNodeFactory($tag);
-            if ($phpDocNodeFactory !== null) {
-                $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
-                    $tag,
-                    $currentPhpNode
-                );
+        $tagValueNode = null;
 
-                $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens(
-                    $currentPhpNode,
-                    $tokenIterator,
-                    $fullyQualifiedAnnotationClass
-                );
-            }
+        // class-annotation
+        $phpDocNodeFactory = $this->matchTagToPhpDocNodeFactory($tag);
+        if ($phpDocNodeFactory !== null) {
+            $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
+                $tag,
+                $currentPhpNode
+            );
+
+            $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens(
+                $currentPhpNode,
+                $tokenIterator,
+                $fullyQualifiedAnnotationClass
+            );
         }
 
         $originalTokenIterator = clone $tokenIterator;
@@ -368,7 +372,7 @@ final class BetterPhpDocParser extends PhpDocParser
         return $tokenEnd;
     }
 
-    private function createTagValueNodeFromStringMatch(string $tag, TokenIterator $tokenIterator): ?PhpDocTagValueNode
+    private function createPhpDocTagNodeFromStringMatch(string $tag, TokenIterator $tokenIterator): ?Node
     {
         foreach ($this->stringTagMatchingPhpDocNodeFactories as $stringTagMatchingPhpDocNodeFactory) {
             if (! $stringTagMatchingPhpDocNodeFactory->match($tag)) {
