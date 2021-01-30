@@ -9,7 +9,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\NodeAnalyzer\ConstFetchAnalyzer;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -20,11 +19,6 @@ final class AssertMethodCallFactory
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    /**
-     * @var \Rector\Core\NodeAnalyzer\ConstFetchAnalyzer
-     */
-    private $constFetchManipulator;
 
     /**
      * @var bool
@@ -43,12 +37,10 @@ final class AssertMethodCallFactory
 
     public function __construct(
         NodeFactory $nodeFactory,
-        ConstFetchAnalyzer $constFetchManipulator,
         NodeNameResolver $nodeNameResolver,
         ValueResolver $valueResolver
     ) {
         $this->nodeFactory = $nodeFactory;
-        $this->constFetchManipulator = $constFetchManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
     }
