@@ -380,17 +380,6 @@ final class PhpDocInfo
         return $paramTypesByName;
     }
 
-    /**
-     * @todo remove to keep united API, just 1 usage
-     */
-    public function addBareTag(string $tag): void
-    {
-        $tag = '@' . ltrim($tag, '@');
-
-        $attributeAwarePhpDocTagNode = new AttributeAwarePhpDocTagNode($tag, new GenericTagValueNode(''));
-        $this->addPhpDocTagNode($attributeAwarePhpDocTagNode);
-    }
-
     public function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): void
     {
         if (is_a($phpDocTagValueNode, PhpDocTagNode::class)) {
