@@ -13,7 +13,9 @@ use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\DeadDocBlock\DeadVarTagValueNodeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
@@ -40,16 +42,38 @@ final class VarTagRemover
      */
     private $classLikeExistenceChecker;
 
+    /**
+     * @var DeadVarTagValueNodeAnalyzer
+     */
+    private $deadVarTagValueNodeAnalyzer;
+
     public function __construct(
         DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
         StaticTypeMapper $staticTypeMapper,
         PhpDocInfoFactory $phpDocInfoFactory,
-        ClassLikeExistenceChecker $classLikeExistenceChecker
+        ClassLikeExistenceChecker $classLikeExistenceChecker,
+        DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer
     ) {
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->classLikeExistenceChecker = $classLikeExistenceChecker;
+        $this->deadVarTagValueNodeAnalyzer = $deadVarTagValueNodeAnalyzer;
+    }
+
+    public function removeVarTagIfUseless(PhpDocInfo $phpDocInfo, Property $property): void
+    {
+        $varTagValueNode = $phpDocInfo->getVarTagValueNode();
+        if (! $varTagValueNode instanceof VarTagValueNode) {
+            return;
+        }
+
+        $isVarTagValueDead = $this->deadVarTagValueNodeAnalyzer->isDead($varTagValueNode, $property);
+        if (! $isVarTagValueDead) {
+            return;
+        }
+
+        $phpDocInfo->removeByType(VarTagValueNode::class);
     }
 
     /**
