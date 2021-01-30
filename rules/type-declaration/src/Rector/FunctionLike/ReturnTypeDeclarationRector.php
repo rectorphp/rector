@@ -20,7 +20,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\ChildPopulator\ChildReturnPopulator;
-use Rector\TypeDeclaration\OverrideGuard\ClassMethodReturnTypeOverrideGuard;
+use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover;
 use Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -66,7 +66,7 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
     private $childReturnPopulator;
 
     /**
-     * @var ClassMethodReturnTypeOverrideGuard
+     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
 
