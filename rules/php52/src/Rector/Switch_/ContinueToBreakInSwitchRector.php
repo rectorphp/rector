@@ -94,7 +94,8 @@ CODE_SAMPLE
         }
 
         if ($continue->num instanceof LNumber) {
-            if ($this->getValue($continue->num) <= 1) {
+            $continueNumber = $this->valueResolver->getValue($continue->num);
+            if ($continueNumber <= 1) {
                 return new Break_();
             }
         } elseif ($continue->num instanceof Variable) {

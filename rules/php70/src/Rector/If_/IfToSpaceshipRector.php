@@ -201,7 +201,7 @@ CODE_SAMPLE
                 return;
             }
 
-            $this->onEqual = $this->getValue($onlyIfStmt->expr);
+            $this->onEqual = $this->valueResolver->getValue($onlyIfStmt->expr);
         }
     }
 
@@ -229,19 +229,19 @@ CODE_SAMPLE
             $this->secondValue = $ternary->cond->right;
 
             if ($ternary->if !== null) {
-                $this->onSmaller = $this->getValue($ternary->if);
+                $this->onSmaller = $this->valueResolver->getValue($ternary->if);
             }
 
-            $this->onGreater = $this->getValue($ternary->else);
+            $this->onGreater = $this->valueResolver->getValue($ternary->else);
         } elseif ($ternary->cond instanceof Greater) {
             $this->firstValue = $ternary->cond->right;
             $this->secondValue = $ternary->cond->left;
 
             if ($ternary->if !== null) {
-                $this->onGreater = $this->getValue($ternary->if);
+                $this->onGreater = $this->valueResolver->getValue($ternary->if);
             }
 
-            $this->onSmaller = $this->getValue($ternary->else);
+            $this->onSmaller = $this->valueResolver->getValue($ternary->else);
         }
     }
 }

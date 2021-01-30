@@ -66,7 +66,7 @@ CODE_SAMPLE
         }
 
         /** @var FuncCall $node */
-        if (! $this->isValue($node->args[1]->value, 0)) {
+        if (! $this->valueResolver->isValue($node->args[1]->value, 0)) {
             return null;
         }
 

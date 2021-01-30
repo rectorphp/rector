@@ -146,7 +146,7 @@ CODE_SAMPLE
             }
 
             // match!
-            $filterName = $this->getValue($arrayItem->key);
+            $filterName = $this->valueResolver->getValue($arrayItem->key);
 
             $arrayItem->key = null;
             $arrayItem->value->class = new FullyQualified($newClass);

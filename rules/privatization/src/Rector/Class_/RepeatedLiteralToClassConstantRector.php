@@ -179,7 +179,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->isValues($node, $stringsToReplace)) {
+            if (! $this->valueResolver->isValues($node, $stringsToReplace)) {
                 return null;
             }
 

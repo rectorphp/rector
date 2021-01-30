@@ -92,9 +92,9 @@ CODE_SAMPLE
         /** @var Node $innerIfInnerNode */
         $innerIfInnerNode = $ifInnerNode->expr;
 
-        if ($this->isTrue($innerIfInnerNode)) {
+        if ($this->valueResolver->isTrue($innerIfInnerNode)) {
             $newReturnNode = $this->processReturnTrue($node, $nextNode);
-        } elseif ($this->isFalse($innerIfInnerNode)) {
+        } elseif ($this->valueResolver->isFalse($innerIfInnerNode)) {
             $newReturnNode = $this->processReturnFalse($node, $nextNode);
         } else {
             return null;
@@ -130,7 +130,7 @@ CODE_SAMPLE
         /** @var Expr $returnedExpr */
         $returnedExpr = $ifInnerNode->expr;
 
-        if (! $this->isBool($returnedExpr)) {
+        if (! $this->valueResolver->isTrueOrFalse($returnedExpr)) {
             return true;
         }
 
@@ -143,16 +143,16 @@ CODE_SAMPLE
         }
 
         // negate + negate → skip for now
-        if ($this->isFalse($returnedExpr) && Strings::contains($this->print($if->cond), '!=')) {
+        if ($this->valueResolver->isFalse($returnedExpr) && Strings::contains($this->print($if->cond), '!=')) {
             return true;
         }
 
-        return ! $this->isBool($nextNode->expr);
+        return ! $this->valueResolver->isTrueOrFalse($nextNode->expr);
     }
 
     private function processReturnTrue(If_ $if, Return_ $nextReturnNode): Return_
     {
-        if ($if->cond instanceof BooleanNot && $nextReturnNode->expr !== null && $this->isTrue(
+        if ($if->cond instanceof BooleanNot && $nextReturnNode->expr !== null && $this->valueResolver->isTrue(
             $nextReturnNode->expr
         )) {
             return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($if->cond->expr));
@@ -173,7 +173,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isTrue($nextReturnNode->expr)) {
+        if (! $this->valueResolver->isTrue($nextReturnNode->expr)) {
             return null;
         }
 

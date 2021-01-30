@@ -142,6 +142,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isValues($funcCall->args[$argumentPosition]->value, $values);
+        return $this->valueResolver->isValues($funcCall->args[$argumentPosition]->value, $values);
     }
 }

@@ -141,7 +141,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isNull($node->expr);
+        return $this->valueResolver->isNull($node->expr);
     }
 
     /**

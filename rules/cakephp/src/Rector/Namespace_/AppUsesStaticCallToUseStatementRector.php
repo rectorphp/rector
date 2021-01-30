@@ -137,10 +137,10 @@ CODE_SAMPLE
     private function createFullyQualifiedNameFromAppUsesStaticCall(StaticCall $staticCall): string
     {
         /** @var string $shortClassName */
-        $shortClassName = $this->getValue($staticCall->args[0]->value);
+        $shortClassName = $this->valueResolver->getValue($staticCall->args[0]->value);
 
         /** @var string $namespaceName */
-        $namespaceName = $this->getValue($staticCall->args[1]->value);
+        $namespaceName = $this->valueResolver->getValue($staticCall->args[1]->value);
 
         return $this->cakePHPFullyQualifiedClassNameResolver->resolveFromPseudoNamespaceAndShortClassName(
             $namespaceName,

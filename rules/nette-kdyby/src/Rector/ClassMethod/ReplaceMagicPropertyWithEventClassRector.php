@@ -143,7 +143,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $eventPropertyReferenceName = $this->getValue($arrayKey);
+            $eventPropertyReferenceName = $this->valueResolver->getValue($arrayKey);
 
             // is property?
             if (! Strings::contains($eventPropertyReferenceName, '::')) {

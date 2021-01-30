@@ -73,7 +73,7 @@ CODE_SAMPLE
         }
 
         /** @var string $includeValue */
-        $includeValue = $this->getValue($node->expr);
+        $includeValue = $this->valueResolver->getValue($node->expr);
 
         // skip phar
         if (Strings::startsWith($includeValue, 'phar://')) {

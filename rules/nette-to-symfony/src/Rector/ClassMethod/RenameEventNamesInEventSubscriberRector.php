@@ -142,7 +142,7 @@ CODE_SAMPLE
 
             // method name
             $className = (string) $return->getAttribute(AttributeKey::CLASS_NAME);
-            $methodName = (string) $this->getValue($arrayItem->value);
+            $methodName = (string) $this->valueResolver->getValue($arrayItem->value);
             $this->processMethodArgument($className, $methodName, $eventInfo);
         }
     }
@@ -155,7 +155,7 @@ CODE_SAMPLE
 
         foreach ($this->symfonyClassConstWithAliases as $symfonyClassConst) {
             foreach ($symfonyClassConst->getOldStringAliases() as $netteStringName) {
-                if ($this->isValue($arrayItem->key, $netteStringName)) {
+                if ($this->valueResolver->isValue($arrayItem->key, $netteStringName)) {
                     return $symfonyClassConst;
                 }
             }

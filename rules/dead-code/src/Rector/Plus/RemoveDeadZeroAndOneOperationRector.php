@@ -116,7 +116,7 @@ CODE_SAMPLE
     {
         // +=, -=
         if ($node instanceof AssignPlus || $node instanceof AssignMinus) {
-            if (! $this->isValue($node->expr, 0)) {
+            if (! $this->valueResolver->isValue($node->expr, 0)) {
                 return null;
             }
 
@@ -127,7 +127,7 @@ CODE_SAMPLE
 
         // *, /
         if ($node instanceof AssignMul || $node instanceof AssignDiv) {
-            if (! $this->isValue($node->expr, 1)) {
+            if (! $this->valueResolver->isValue($node->expr, 1)) {
                 return null;
             }
             if ($this->isNumberType($node->var)) {
@@ -160,14 +160,14 @@ CODE_SAMPLE
      */
     private function processBinaryPlusAndMinus(BinaryOp $binaryOp): ?Expr
     {
-        if ($this->isValue($binaryOp->left, 0) && $this->isNumberType($binaryOp->right)) {
+        if ($this->valueResolver->isValue($binaryOp->left, 0) && $this->isNumberType($binaryOp->right)) {
             if ($binaryOp instanceof Minus) {
                 return new UnaryMinus($binaryOp->right);
             }
             return $binaryOp->right;
         }
 
-        if ($this->isValue($binaryOp->right, 0) && $this->isNumberType($binaryOp->left)) {
+        if ($this->valueResolver->isValue($binaryOp->right, 0) && $this->isNumberType($binaryOp->left)) {
             return $binaryOp->left;
         }
 
@@ -179,11 +179,13 @@ CODE_SAMPLE
      */
     private function processBinaryMulAndDiv(BinaryOp $binaryOp): ?Expr
     {
-        if ($binaryOp instanceof Mul && $this->isValue($binaryOp->left, 1) && $this->isNumberType($binaryOp->right)) {
+        if ($binaryOp instanceof Mul && $this->valueResolver->isValue($binaryOp->left, 1) && $this->isNumberType(
+            $binaryOp->right
+        )) {
             return $binaryOp->right;
         }
 
-        if ($this->isValue($binaryOp->right, 1) && $this->isNumberType($binaryOp->left)) {
+        if ($this->valueResolver->isValue($binaryOp->right, 1) && $this->isNumberType($binaryOp->left)) {
             return $binaryOp->left;
         }
 

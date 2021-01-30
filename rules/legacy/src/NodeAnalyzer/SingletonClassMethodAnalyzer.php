@@ -13,18 +13,13 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
-use Rector\Core\PhpParser\Node\Manipulator\ConstFetchManipulator;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class SingletonClassMethodAnalyzer
 {
-    /**
-     * @var ConstFetchManipulator
-     */
-    private $constFetchManipulator;
-
     /**
      * @var BetterStandardPrinter
      */
@@ -35,14 +30,19 @@ final class SingletonClassMethodAnalyzer
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var ValueResolver
+     */
+    private $valueResolver;
+
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
-        ConstFetchManipulator $constFetchManipulator,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        ValueResolver $valueResolver
     ) {
-        $this->constFetchManipulator = $constFetchManipulator;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->valueResolver = $valueResolver;
     }
 
     /**
@@ -107,11 +107,11 @@ final class SingletonClassMethodAnalyzer
     {
         // matching: "self::$static === null"
         if ($expr instanceof Identical) {
-            if ($this->constFetchManipulator->isNull($expr->left) && $expr->right instanceof StaticPropertyFetch) {
+            if ($this->valueResolver->isNull($expr->left) && $expr->right instanceof StaticPropertyFetch) {
                 return $expr->right;
             }
 
-            if ($this->constFetchManipulator->isNull($expr->right) && $expr->left instanceof StaticPropertyFetch) {
+            if ($this->valueResolver->isNull($expr->right) && $expr->left instanceof StaticPropertyFetch) {
                 return $expr->left;
             }
         }

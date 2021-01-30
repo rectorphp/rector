@@ -9,8 +9,8 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\PhpParser\Node\Manipulator\ConstFetchManipulator;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class AssertMethodCallFactory
@@ -19,11 +19,6 @@ final class AssertMethodCallFactory
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    /**
-     * @var ConstFetchManipulator
-     */
-    private $constFetchManipulator;
 
     /**
      * @var bool
@@ -35,14 +30,19 @@ final class AssertMethodCallFactory
      */
     private $nodeNameResolver;
 
+    /**
+     * @var ValueResolver
+     */
+    private $valueResolver;
+
     public function __construct(
         NodeFactory $nodeFactory,
-        ConstFetchManipulator $constFetchManipulator,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        ValueResolver $valueResolver
     ) {
         $this->nodeFactory = $nodeFactory;
-        $this->constFetchManipulator = $constFetchManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->valueResolver = $valueResolver;
     }
 
     public function createAssertMethod(
@@ -74,18 +74,19 @@ final class AssertMethodCallFactory
 
     private function resolveBoolMethodName(string $name, Expr $expr): string
     {
-        if (! $this->constFetchManipulator->isBool($expr)) {
+        if (! $this->valueResolver->isTrueOrFalse($expr)) {
             return $name;
         }
 
+        $isFalse = $this->valueResolver->isFalse($expr);
         if ($name === 'assertSame') {
             $this->isBoolAssert = true;
-            return $this->constFetchManipulator->isFalse($expr) ? 'assertFalse' : 'assertTrue';
+            return $isFalse ? 'assertFalse' : 'assertTrue';
         }
 
         if ($name === 'assertNotSame') {
             $this->isBoolAssert = true;
-            return $this->constFetchManipulator->isFalse($expr) ? 'assertNotFalse' : 'assertNotTrue';
+            return $isFalse ? 'assertNotFalse' : 'assertNotTrue';
         }
 
         return $name;

@@ -79,7 +79,7 @@ CODE_SAMPLE
         }
 
         $secondArgValue = $node->args[1]->value;
-        if ($this->isTrue($secondArgValue)) {
+        if ($this->valueResolver->isTrue($secondArgValue)) {
             $node->args[1]->value = $this->nodeFactory->createClassConstFetch(
                 'Carbon\CarbonInterface',
                 'DIFF_ABSOLUTE'
@@ -87,7 +87,7 @@ CODE_SAMPLE
             return $node;
         }
 
-        if ($this->isFalse($secondArgValue)) {
+        if ($this->valueResolver->isFalse($secondArgValue)) {
             $node->args[1]->value = $this->nodeFactory->createClassConstFetch(
                 'Carbon\CarbonInterface',
                 'DIFF_RELATIVE_AUTO'

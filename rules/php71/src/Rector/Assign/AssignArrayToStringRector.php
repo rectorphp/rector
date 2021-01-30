@@ -153,7 +153,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $this->isValue($node->expr, '');
+            return $this->valueResolver->isValue($node->expr, '');
         });
 
         if ($variableAssign instanceof Assign) {

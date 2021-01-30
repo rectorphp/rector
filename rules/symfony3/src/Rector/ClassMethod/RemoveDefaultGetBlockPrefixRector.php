@@ -76,7 +76,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $returnedValue = $this->getValue($returnedExpr);
+        $returnedValue = $this->valueResolver->getValue($returnedExpr);
 
         $classShortName = $node->getAttribute(AttributeKey::CLASS_SHORT_NAME);
         if (Strings::endsWith($classShortName, 'Type')) {

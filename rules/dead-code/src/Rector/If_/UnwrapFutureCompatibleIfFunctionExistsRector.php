@@ -97,7 +97,7 @@ CODE_SAMPLE
         /** @var FuncCall $funcCall */
         $funcCall = $node->cond;
 
-        $functionToExistName = $this->getValue($funcCall->args[0]->value);
+        $functionToExistName = $this->valueResolver->getValue($funcCall->args[0]->value);
         if (! is_string($functionToExistName)) {
             return null;
         }

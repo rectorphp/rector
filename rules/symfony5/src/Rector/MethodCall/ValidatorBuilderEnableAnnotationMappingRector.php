@@ -82,7 +82,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isBool($node->args[0]->value)) {
+        if ($this->valueResolver->isTrueOrFalse($node->args[0]->value)) {
             return null;
         }
 

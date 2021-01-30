@@ -92,7 +92,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $typeNode = $this->getValue($node->args[1]->value);
+        $typeNode = $this->valueResolver->getValue($node->args[1]->value);
         if ($typeNode === null) {
             return null;
         }

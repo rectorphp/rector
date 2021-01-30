@@ -75,7 +75,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->stringsToClassConstants as $stringToClassConstant) {
-            if (! $this->isValue($node, $stringToClassConstant->getString())) {
+            if (! $this->valueResolver->isValue($node, $stringToClassConstant->getString())) {
                 continue;
             }
 

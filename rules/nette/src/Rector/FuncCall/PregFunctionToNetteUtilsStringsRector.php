@@ -83,14 +83,14 @@ CODE_SAMPLE
 
         if ($identical->left instanceof FuncCall) {
             $refactoredFuncCall = $this->refactorFuncCall($identical->left);
-            if ($refactoredFuncCall !== null && $this->isValue($identical->right, 1)) {
+            if ($refactoredFuncCall !== null && $this->valueResolver->isValue($identical->right, 1)) {
                 return $this->createBoolCast($parentNode, $refactoredFuncCall);
             }
         }
 
         if ($identical->right instanceof FuncCall) {
             $refactoredFuncCall = $this->refactorFuncCall($identical->right);
-            if ($refactoredFuncCall !== null && $this->isValue($identical->left, 1)) {
+            if ($refactoredFuncCall !== null && $this->valueResolver->isValue($identical->left, 1)) {
                 return new Bool_($refactoredFuncCall);
             }
         }
@@ -162,7 +162,7 @@ CODE_SAMPLE
             return $matchStaticCall;
         }
 
-        if ($this->isValue($funcCall->args[2]->value, -1)) {
+        if ($this->valueResolver->isValue($funcCall->args[2]->value, -1)) {
             if (isset($funcCall->args[3])) {
                 $matchStaticCall->args[] = $funcCall->args[3];
             }
@@ -178,7 +178,7 @@ CODE_SAMPLE
      */
     private function compensateNetteUtilsSplitDelimCapture(StaticCall $staticCall): StaticCall
     {
-        $patternValue = $this->getValue($staticCall->args[1]->value);
+        $patternValue = $this->valueResolver->getValue($staticCall->args[1]->value);
         if (! is_string($patternValue)) {
             return $staticCall;
         }

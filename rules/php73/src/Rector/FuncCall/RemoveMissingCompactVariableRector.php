@@ -97,7 +97,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $value = $this->getValue($item->value);
+                $value = $this->valueResolver->getValue($item->value);
                 if ($scope->hasVariableType($value)->yes()) {
                     continue;
                 }
@@ -135,7 +135,7 @@ CODE_SAMPLE
      */
     private function resolveVariableNames(Arg $arg): array
     {
-        $argValue = $this->getValue($arg->value);
+        $argValue = $this->valueResolver->getValue($arg->value);
         if (is_string($argValue)) {
             return [$argValue];
         }

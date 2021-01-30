@@ -143,7 +143,7 @@ CODE_SAMPLE
     {
         $arrayItemsHashes = [];
         foreach ($node->items as $arrayItem) {
-            $arrayItemsHashes[] = $this->printWithoutComments($arrayItem);
+            $arrayItemsHashes[] = $this->betterStandardPrinter->printWithoutComments($arrayItem);
         }
 
         sort($arrayItemsHashes);

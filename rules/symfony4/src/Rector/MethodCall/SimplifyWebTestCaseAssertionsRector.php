@@ -152,7 +152,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $statusCode = $this->getValue($methodCall->args[0]->value);
+        $statusCode = $this->valueResolver->getValue($methodCall->args[0]->value);
 
         // handled by another methods
         if (in_array($statusCode, [200, 301], true)) {

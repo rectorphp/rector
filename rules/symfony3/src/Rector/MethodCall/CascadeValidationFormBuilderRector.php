@@ -133,7 +133,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->isTrue($arrayItem->value)) {
+            if (! $this->valueResolver->isTrue($arrayItem->value)) {
                 continue;
             }
 
