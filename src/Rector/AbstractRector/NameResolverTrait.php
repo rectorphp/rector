@@ -7,7 +7,6 @@ namespace Rector\Core\Rector\AbstractRector;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -27,7 +26,7 @@ trait NameResolverTrait
     /**
      * @var NodeNameResolver
      */
-    private $nodeNameResolver;
+    protected $nodeNameResolver;
 
     /**
      * @var ClassNaming
@@ -81,23 +80,7 @@ trait NameResolverTrait
 
     protected function isLocalMethodCallNamed(Node $node, string $name): bool
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if ($node->var instanceof StaticCall) {
-            return false;
-        }
-
-        if ($node->var instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isName($node->var, 'this')) {
-            return false;
-        }
-
-        return $this->isName($node->name, $name);
+        return $this->nodeNameResolver->isLocalMethodCallNamed($node, $name);
     }
 
     /**
@@ -105,22 +88,12 @@ trait NameResolverTrait
      */
     protected function isLocalMethodCallsNamed(Node $node, array $names): bool
     {
-        foreach ($names as $name) {
-            if ($this->isLocalMethodCallNamed($node, $name)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->nodeNameResolver->isLocalMethodCallsNamed($node, $names);
     }
 
     protected function isFuncCallName(Node $node, string $name): bool
     {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        return $this->isName($node, $name);
+        return $this->nodeNameResolver->isFuncCallName($node, $name);
     }
 
     /**
@@ -155,6 +128,14 @@ trait NameResolverTrait
         }
 
         return $this->isName($node->name, $methodName);
+    }
+
+    /**
+     * @param string[] $names
+     */
+    protected function isFuncCallNames(Node $node, array $names): bool
+    {
+        return $this->nodeNameResolver->isFuncCallNames($node, $names);
     }
 
     /**
@@ -223,13 +204,5 @@ trait NameResolverTrait
         }
 
         return false;
-    }
-
-    /**
-     * @param string[] $names
-     */
-    protected function isFuncCallNames(Node $node, array $names): bool
-    {
-        return $this->nodeNameResolver->isFuncCallNames($node, $names);
     }
 }

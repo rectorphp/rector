@@ -108,6 +108,11 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected $nodeRepository;
 
     /**
+     * @var BetterNodeFinder
+     */
+    protected $betterNodeFinder;
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -141,11 +146,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      * @var string|null
      */
     private $previousAppliedClass;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
 
     /**
      * @required

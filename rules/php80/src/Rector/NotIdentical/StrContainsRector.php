@@ -85,7 +85,7 @@ CODE_SAMPLE
     private function matchNotIdenticalToFalse(NotIdentical $notIdentical): ?Expr
     {
         if ($this->valueResolver->isFalse($notIdentical->left)) {
-            if (! $this->isFuncCallNames($notIdentical->right, self::OLD_STR_NAMES)) {
+            if (! $this->nodeNameResolver->isFuncCallNames($notIdentical->right, self::OLD_STR_NAMES)) {
                 return null;
             }
 
