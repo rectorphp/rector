@@ -156,7 +156,7 @@
 
 Handles method calls in child of Doctrine EntityRepository and moves them to `$this->repository` property.
 
-- class: `Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector`
+- class: `Rector\Doctrine\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector`
 
 ```diff
  use Doctrine\ORM\EntityRepository;
@@ -177,7 +177,7 @@ Handles method calls in child of Doctrine EntityRepository and moves them to `$t
 
 Turns `$this->getRepository()` in Symfony Controller to constructor injection and private property access.
 
-- class: `Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector`
+- class: `Rector\Doctrine\Rector\MethodCall\ServiceLocatorToDIRector`
 
 ```diff
  class ProductController extends Controller

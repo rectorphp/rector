@@ -87,7 +87,6 @@
         "psr-4": {
             "Rector\\Testing\\": "packages/testing/src",
             "Rector\\Comments\\": "packages/comments/src",
-            "Rector\\Architecture\\": "rules/architecture/src",
             "Rector\\AttributeAwarePhpDoc\\": "packages/attribute-aware-php-doc/src",
             "Rector\\Autodiscovery\\": "rules/autodiscovery/src",
             "Rector\\BetterPhpDocParser\\": "packages/better-php-doc-parser/src",
@@ -218,7 +217,6 @@
             "tests/debug_functions.php"
         ],
         "psr-4": {
-            "Rector\\Architecture\\Tests\\": "rules/architecture/tests",
             "Rector\\Autodiscovery\\Tests\\": "rules/autodiscovery/tests",
             "Rector\\BetterPhpDocParser\\Tests\\": "packages/better-php-doc-parser/tests",
             "Rector\\Caching\\Tests\\": "packages/caching/tests",

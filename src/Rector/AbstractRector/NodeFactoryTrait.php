@@ -117,9 +117,9 @@ trait NodeFactoryTrait
         return $this->nodeFactory->createFuncCall($name, $arguments);
     }
 
-    protected function createClassConstReference(string $class): ClassConstFetch
+    protected function createClassConstReference(string $className): ClassConstFetch
     {
-        return $this->nodeFactory->createClassConstReference($class);
+        return $this->nodeFactory->createClassConstReference($className);
     }
 
     protected function createPropertyAssignmentWithExpr(string $propertyName, Expr $expr): Assign

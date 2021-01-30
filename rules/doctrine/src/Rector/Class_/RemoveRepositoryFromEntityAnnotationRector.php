@@ -68,6 +68,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $entityTagValueNode->hasRepositoryClass()) {
+            return null;
+        }
+
         $entityTagValueNode->removeRepositoryClass();
         $phpDocInfo->markAsChanged();
 

@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
-final class ItemRepositoryTest extends TestCase
+final class SkipTestCase extends TestCase
 {
     public function testGetThrowsExceptionIfNotFound(): void
     {
