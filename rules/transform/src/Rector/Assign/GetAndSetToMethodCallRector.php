@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\MagicDisclosure\Rector\Assign;
+namespace Rector\Transform\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\GetAndSetToMethodCallRectorTest
+ * @see \Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\GetAndSetToMethodCallRectorTest
  */
 final class GetAndSetToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {

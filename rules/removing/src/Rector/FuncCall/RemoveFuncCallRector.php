@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Removing\Rector\FuncCall;
 
-use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use Rector\Core\Comments\CommentableNodeResolver;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeRemoval\BreakingRemovalGuard;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Removing\ValueObject\RemoveFuncCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -40,17 +37,9 @@ final class RemoveFuncCallRector extends AbstractRector implements ConfigurableR
      */
     private $breakingRemovalGuard;
 
-    /**
-     * @var CommentableNodeResolver
-     */
-    private $commentableNodeResolver;
-
-    public function __construct(
-        BreakingRemovalGuard $breakingRemovalGuard,
-        CommentableNodeResolver $commentableNodeResolver
-    ) {
+    public function __construct(BreakingRemovalGuard $breakingRemovalGuard)
+    {
         $this->breakingRemovalGuard = $breakingRemovalGuard;
-        $this->commentableNodeResolver = $commentableNodeResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -126,9 +115,6 @@ CODE_SAMPLE
 
             if ($this->breakingRemovalGuard->isLegalNodeRemoval($funcCall)) {
                 $this->removeNode($funcCall);
-            } else {
-                $commentableNode = $this->commentableNodeResolver->resolve($funcCall);
-                $commentableNode->setAttribute(AttributeKey::COMMENTS, [new Comment('// @fixme')]);
             }
         }
     }

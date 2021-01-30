@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector;
+namespace Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector;
 
 use Iterator;
-use Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector;
-use Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\Klarka;
-use Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\SomeContainer;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
+use Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\Klarka;
+use Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\SomeContainer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\Fixture;
+namespace Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Fixture;
 
-use Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\Klarka;
+use Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\Klarka;
 
 class KlarkaExtended extends Klarka
 {
@@ -28,9 +28,9 @@ class KlarkaExtended extends Klarka
 -----
 <?php
 
-namespace Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\Fixture;
+namespace Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Fixture;
 
-use Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\Klarka;
+use Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\Klarka;
 
 class KlarkaExtended extends Klarka
 {

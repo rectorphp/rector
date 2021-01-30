@@ -7535,10 +7535,10 @@ Turns defined `__get`/`__set` to specific method calls.
 
 :wrench: **configure it!**
 
-- class: `Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector`
+- class: `Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector`
 
 ```php
-use Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector;
+use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -7566,7 +7566,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ```php
-use Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector;
+use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -7599,10 +7599,10 @@ Turns defined code uses of `"__toString()"` method  to specific method calls.
 
 :wrench: **configure it!**
 
-- class: `Rector\MagicDisclosure\Rector\String_\ToStringToMethodCallRector`
+- class: `Rector\Transform\Rector\String_\ToStringToMethodCallRector`
 
 ```php
-use Rector\MagicDisclosure\Rector\String_\ToStringToMethodCallRector;
+use Rector\Transform\Rector\String_\ToStringToMethodCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -7635,11 +7635,11 @@ Turns defined `__isset`/`__unset` calls to specific method calls.
 
 :wrench: **configure it!**
 
-- class: `Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector`
+- class: `Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector`
 
 ```php
-use Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector;
-use Rector\MagicDisclosure\ValueObject\IssetUnsetToMethodCall;
+use Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector;
+use Rector\Transform\ValueObject\IssetUnsetToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -7666,8 +7666,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ```php
-use Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector;
-use Rector\MagicDisclosure\ValueObject\IssetUnsetToMethodCall;
+use Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector;
+use Rector\Transform\ValueObject\IssetUnsetToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

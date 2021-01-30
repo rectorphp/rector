@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\MagicDisclosure\Rector\String_;
+namespace Rector\Transform\Rector\String_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\MagicDisclosure\Tests\Rector\String_\ToStringToMethodCallRector\ToStringToMethodCallRectorTest
+ * @see \Rector\Transform\Tests\Rector\String_\ToStringToMethodCallRector\ToStringToMethodCallRectorTest
  */
 final class ToStringToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {

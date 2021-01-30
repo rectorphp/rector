@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source;
+namespace Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source;
 
 final class SomeContainer
 {

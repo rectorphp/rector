@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\MagicDisclosure\Tests\Rector\String_\ToStringToMethodCallRector;
+namespace Rector\Transform\Tests\Rector\String_\ToStringToMethodCallRector;
 
 use Iterator;
-use Rector\MagicDisclosure\Rector\String_\ToStringToMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Transform\Rector\String_\ToStringToMethodCallRector;
 use Symfony\Component\Config\ConfigCache;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
