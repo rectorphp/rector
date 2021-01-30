@@ -74,7 +74,7 @@ final class SimplifyArraySearchRector extends AbstractRector
         /** @var FuncCall $arraySearchFuncCall */
         $arraySearchFuncCall = $twoNodeMatch->getFirstExpr();
 
-        $inArrayFuncCall = $this->createFuncCall('in_array', $arraySearchFuncCall->args);
+        $inArrayFuncCall = $this->nodeFactory->createFuncCall('in_array', $arraySearchFuncCall->args);
 
         if ($node instanceof Identical) {
             return new BooleanNot($inArrayFuncCall);

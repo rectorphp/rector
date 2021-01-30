@@ -146,7 +146,7 @@ CODE_SAMPLE
         // class constants → turn string to composite
         if (is_string($value) && Strings::contains($value, '::')) {
             [$class, $constant] = explode('::', $value);
-            $classConstFetch = $this->createClassConstFetch($class, $constant);
+            $classConstFetch = $this->nodeFactory->createClassConstFetch($class, $constant);
 
             return new Arg($classConstFetch);
         }

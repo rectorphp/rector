@@ -115,7 +115,7 @@ final class EregToPregMatchRector extends AbstractRector
 
     private function processVariablePattern(FuncCall $funcCall, Variable $variable, string $functionName): void
     {
-        $pregQuotePatternNode = $this->createFuncCall('preg_quote', [
+        $pregQuotePatternNode = $this->nodeFactory->createFuncCall('preg_quote', [
             new Arg($variable),
             new Arg(new String_('#')),
         ]);
@@ -161,9 +161,9 @@ final class EregToPregMatchRector extends AbstractRector
     private function createTernaryWithStrlenOfFirstMatch(FuncCall $funcCall): Ternary
     {
         $arrayDimFetch = new ArrayDimFetch($funcCall->args[2]->value, new LNumber(0));
-        $strlenFuncCall = $this->createFuncCall('strlen', [$arrayDimFetch]);
+        $strlenFuncCall = $this->nodeFactory->createFuncCall('strlen', [$arrayDimFetch]);
 
-        return new Ternary($funcCall, $strlenFuncCall, $this->createFalse());
+        return new Ternary($funcCall, $strlenFuncCall, $this->nodeFactory->createFalse());
     }
 
     private function isCaseInsensitiveFunction(string $functionName): bool

@@ -150,7 +150,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $node->expr = $this->createArray([$node->expr]);
+            $node->expr = $this->nodeFactory->createArray([$node->expr]);
             return null;
         });
     }

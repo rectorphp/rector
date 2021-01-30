@@ -67,6 +67,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->createStaticCall('Illuminate\Support\Facades\App', 'get', $node->args);
+        return $this->nodeFactory->createStaticCall('Illuminate\Support\Facades\App', 'get', $node->args);
     }
 }

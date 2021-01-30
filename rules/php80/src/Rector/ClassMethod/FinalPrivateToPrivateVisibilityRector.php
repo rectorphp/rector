@@ -57,7 +57,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->makeNonFinal($node);
+        $this->visibilityManipulator->makeNonFinal($node);
 
         return $node;
     }

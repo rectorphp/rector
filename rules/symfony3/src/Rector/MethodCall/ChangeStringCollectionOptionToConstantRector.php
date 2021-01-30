@@ -116,7 +116,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $optionsArrayItem->value = $this->createClassConstReference($formClass);
+            $optionsArrayItem->value = $this->nodeFactory->createClassConstReference($formClass);
         }
 
         return $node;

@@ -110,7 +110,9 @@ CODE_SAMPLE
 
         $defaultExpr = $propertyProperty->default;
         if ($defaultExpr instanceof String_) {
-            $propertyProperty->default = boolval($defaultExpr->value) ? $this->createTrue() : $this->createFalse();
+            $propertyProperty->default = boolval(
+                $defaultExpr->value
+            ) ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse();
             return $property;
         }
         if ($defaultExpr instanceof ConstFetch) {

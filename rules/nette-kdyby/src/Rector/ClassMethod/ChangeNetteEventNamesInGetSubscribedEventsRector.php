@@ -122,7 +122,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->makeStatic($node);
+        $this->visibilityManipulator->makeStatic($node);
         $this->refactorEventNames($node);
 
         $listeningClassMethods = $this->listeningMethodsCollector->collectFromClassAndGetSubscribedEventClassMethod(

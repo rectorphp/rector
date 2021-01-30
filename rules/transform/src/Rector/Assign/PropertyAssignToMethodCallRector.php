@@ -84,7 +84,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            return $this->createMethodCall(
+            return $this->nodeFactory->createMethodCall(
                 $propertyNode,
                 $propertyAssignToMethodCall->getNewMethodName(),
                 [$node->expr]

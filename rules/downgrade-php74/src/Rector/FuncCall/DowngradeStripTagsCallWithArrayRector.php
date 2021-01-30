@@ -177,7 +177,7 @@ CODE_SAMPLE
     private function createIsArrayTernaryFromExpression(Expr $expr): Ternary
     {
         $isArrayFuncCall = new FuncCall(new Name('is_array'), [new Arg($expr)]);
-        $nullNotIdentical = new NotIdentical($expr, $this->createNull());
+        $nullNotIdentical = new NotIdentical($expr, $this->nodeFactory->createNull());
         $booleanAnd = new BooleanAnd($nullNotIdentical, $isArrayFuncCall);
 
         return new Ternary($booleanAnd, $this->createArrayFromString($expr), $expr);

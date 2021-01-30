@@ -33,7 +33,7 @@ abstract class AbstractWithFunctionToNetteUtilsStringsRector extends AbstractRec
             return null;
         }
 
-        $staticCall = $this->createStaticCall('Nette\Utils\Strings', $this->getMethodName(), [
+        $staticCall = $this->nodeFactory->createStaticCall('Nette\Utils\Strings', $this->getMethodName(), [
             $contentExprAndNeedleExpr->getContentExpr(),
             $contentExprAndNeedleExpr->getNeedleExpr(),
         ]);

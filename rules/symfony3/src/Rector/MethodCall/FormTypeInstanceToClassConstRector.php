@@ -150,7 +150,9 @@ CODE_SAMPLE
             }
         }
 
-        $methodCall->args[$position]->value = $this->createClassConstReference($argValue->class->toString());
+        $methodCall->args[$position]->value = $this->nodeFactory->createClassConstReference(
+            $argValue->class->toString()
+        );
 
         return $methodCall;
     }
@@ -185,7 +187,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $arrayItem->value = $this->createClassConstReference($newClass->toString());
+            $arrayItem->value = $this->nodeFactory->createClassConstReference($newClass->toString());
         }
     }
 
@@ -203,7 +205,7 @@ CODE_SAMPLE
 
         // set default data in between
         if ($position + 1 !== $optionsPosition && ! isset($methodCall->args[$position + 1])) {
-            $methodCall->args[$position + 1] = new Arg($this->createNull());
+            $methodCall->args[$position + 1] = new Arg($this->nodeFactory->createNull());
         }
 
         // @todo decopule and name, so I know what it is

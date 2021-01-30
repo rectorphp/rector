@@ -133,7 +133,7 @@ CODE_SAMPLE
         }
 
         if ($parameterType instanceof BooleanType) {
-            $arg->value = $this->createFalse();
+            $arg->value = $this->nodeFactory->createFalse();
         }
     }
 }

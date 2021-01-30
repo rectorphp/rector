@@ -11,6 +11,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
+use Rector\FileSystemRector\ValueObjectFactory\MovedFileWithNodesFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -41,9 +42,17 @@ final class MoveServicesBySuffixToDirectoryRector extends AbstractRector impleme
      */
     private $expectedFileLocationResolver;
 
-    public function __construct(ExpectedFileLocationResolver $expectedFileLocationResolver)
-    {
+    /**
+     * @var MovedFileWithNodesFactory
+     */
+    private $movedFileWithNodesFactory;
+
+    public function __construct(
+        ExpectedFileLocationResolver $expectedFileLocationResolver,
+        MovedFileWithNodesFactory $movedFileWithNodesFactory
+    ) {
         $this->expectedFileLocationResolver = $expectedFileLocationResolver;
+        $this->movedFileWithNodesFactory = $movedFileWithNodesFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition

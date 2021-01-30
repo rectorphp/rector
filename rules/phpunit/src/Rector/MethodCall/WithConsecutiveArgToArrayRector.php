@@ -136,7 +136,7 @@ CODE_SAMPLE
         // split into chunks of X parameters
         $valueChunks = array_chunk($values, $numberOfParameters);
         foreach ($valueChunks as $valueChunk) {
-            $node->args[] = new Arg($this->createArray($valueChunk));
+            $node->args[] = new Arg($this->nodeFactory->createArray($valueChunk));
         }
 
         return $node;

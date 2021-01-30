@@ -94,7 +94,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->makeFinal($node);
+        $this->visibilityManipulator->makeFinal($node);
 
         return $node;
     }

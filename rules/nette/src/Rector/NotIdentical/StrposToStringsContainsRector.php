@@ -76,7 +76,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $containsStaticCall = $this->createStaticCall('Nette\Utils\Strings', 'contains');
+        $containsStaticCall = $this->nodeFactory->createStaticCall('Nette\Utils\Strings', 'contains');
         $containsStaticCall->args[0] = $funcCall->args[0];
         $containsStaticCall->args[1] = $funcCall->args[1];
 

@@ -84,7 +84,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $node->var = $this->createPropertyFetch('this', $parentCallToProperty->getProperty());
+            $node->var = $this->nodeFactory->createPropertyFetch('this', $parentCallToProperty->getProperty());
             return $node;
         }
 

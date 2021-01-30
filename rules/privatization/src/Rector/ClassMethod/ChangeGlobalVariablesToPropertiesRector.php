@@ -146,6 +146,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->createPropertyFetch('this', $variableName);
+        return $this->nodeFactory->createPropertyFetch('this', $variableName);
     }
 }

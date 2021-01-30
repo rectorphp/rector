@@ -58,7 +58,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->makeStatic($node);
+        $this->visibilityManipulator->makeStatic($node);
 
         return $node;
     }

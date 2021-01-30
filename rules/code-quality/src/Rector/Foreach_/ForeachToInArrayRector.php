@@ -212,13 +212,13 @@ CODE_SAMPLE
      */
     private function createInArrayFunction(Expr $expr, BinaryOp $binaryOp, Foreach_ $foreach): FuncCall
     {
-        $arguments = $this->createArgs([$expr, $foreach->expr]);
+        $arguments = $this->nodeFactory->createArgs([$expr, $foreach->expr]);
 
         if ($binaryOp instanceof Identical) {
-            $arguments[] = $this->createArg($this->createTrue());
+            $arguments[] = $this->nodeFactory->createArg($this->nodeFactory->createTrue());
         }
 
-        return $this->createFuncCall('in_array', $arguments);
+        return $this->nodeFactory->createFuncCall('in_array', $arguments);
     }
 
     private function createReturn(Expr $expr, FuncCall $funcCall): Return_

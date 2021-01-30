@@ -77,7 +77,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            return $this->createStaticCall(
+            return $this->nodeFactory->createStaticCall(
                 $typeToStaticCall->getStaticCallClass(),
                 $typeToStaticCall->getStaticCallMethod(),
                 $node->args

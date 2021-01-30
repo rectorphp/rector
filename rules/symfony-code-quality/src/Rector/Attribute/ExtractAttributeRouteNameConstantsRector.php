@@ -137,7 +137,10 @@ CODE_SAMPLE
                 continue;
             }
 
-            $arg->value = $this->createClassConstFetch(ClassName::ROUTE_CLASS_NAME, $constantNameAndValue->getName());
+            $arg->value = $this->nodeFactory->createClassConstFetch(
+                ClassName::ROUTE_CLASS_NAME,
+                $constantNameAndValue->getName()
+            );
         }
 
         return $node;

@@ -158,7 +158,7 @@ CODE_SAMPLE
         return new If_(
             $expr,
             [
-                'stmts' => [new Return_($this->createFalse())],
+                'stmts' => [new Return_($this->nodeFactory->createFalse())],
             ]
         );
     }

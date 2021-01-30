@@ -155,11 +155,11 @@ CODE_SAMPLE
 
     private function prepareEnableMagicMethodsExtractionFlags(bool $enableMagicCallExtractionValue): BitwiseOr
     {
-        $magicGetClassConstFetch = $this->createClassConstFetch(
+        $magicGetClassConstFetch = $this->nodeFactory->createClassConstFetch(
             'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor',
             'MAGIC_GET'
         );
-        $magicSetClassConstFetch = $this->createClassConstFetch(
+        $magicSetClassConstFetch = $this->nodeFactory->createClassConstFetch(
             'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor',
             'MAGIC_SET'
         );
@@ -170,7 +170,7 @@ CODE_SAMPLE
 
         return new BitwiseOr(
             new BitwiseOr(
-                $this->createClassConstFetch(
+                $this->nodeFactory->createClassConstFetch(
                     'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor',
                     'MAGIC_CALL'
                 ),

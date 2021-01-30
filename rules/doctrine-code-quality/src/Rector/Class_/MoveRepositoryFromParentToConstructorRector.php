@@ -156,7 +156,7 @@ CODE_SAMPLE
             ));
         }
 
-        $classConstFetch = $this->createClassConstReference($entityObjectType->getClassName());
+        $classConstFetch = $this->nodeFactory->createClassConstReference($entityObjectType->getClassName());
 
         $methodCall = $this->builderFactory->methodCall(
             new Variable('entityManager'),
@@ -165,6 +165,7 @@ CODE_SAMPLE
         );
 
         $methodCall->setAttribute(AttributeKey::CLASS_NODE, $repositoryClassName);
-        return $this->createPropertyAssignmentWithExpr('repository', $methodCall);
+
+        return $this->nodeFactory->createPropertyAssignmentWithExpr('repository', $methodCall);
     }
 }

@@ -126,7 +126,7 @@ CODE_SAMPLE
 
     private function createMockeryClose(): Stmt
     {
-        $staticCall = $this->createStaticCall('Mockery', 'close');
+        $staticCall = $this->nodeFactory->createStaticCall('Mockery', 'close');
 
         return BuilderHelpers::normalizeStmt($staticCall);
     }

@@ -110,7 +110,7 @@ CODE_SAMPLE
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof Arg) {
                 $prophesizeMethodCall = $this->createProphesizeMethodCall($node);
-                return $this->createMethodCall($prophesizeMethodCall, 'reveal');
+                return $this->nodeFactory->createMethodCall($prophesizeMethodCall, 'reveal');
             }
 
             return $this->createProphesizeMethodCall($node);
@@ -139,12 +139,12 @@ CODE_SAMPLE
                 return null;
             }
 
-            return $this->createMethodCall($node->value, 'reveal');
+            return $this->nodeFactory->createMethodCall($node->value, 'reveal');
         });
     }
 
     private function createProphesizeMethodCall(StaticCall $staticCall): MethodCall
     {
-        return $this->createLocalMethodCall('prophesize', [$staticCall->args[0]]);
+        return $this->nodeFactory->createLocalMethodCall('prophesize', [$staticCall->args[0]]);
     }
 }

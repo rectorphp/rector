@@ -186,7 +186,7 @@ CODE_SAMPLE
 
         $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $expectedName->getName());
 
-        $propertyFetchNode = $this->createPropertyFetch('this', $expectedName->getName());
+        $propertyFetchNode = $this->nodeFactory->createPropertyFetch('this', $expectedName->getName());
 
         if ($funcCall->args === []) {
             return $this->refactorEmptyFuncCallArgs($argumentFuncCallToMethodCall, $propertyFetchNode);
@@ -213,7 +213,7 @@ CODE_SAMPLE
         Class_ $class
     ): ?Node {
         $propertyName = $this->propertyNaming->fqnToVariableName($arrayFuncCallToMethodCall->getClass());
-        $propertyFetch = $this->createPropertyFetch('this', $propertyName);
+        $propertyFetch = $this->nodeFactory->createPropertyFetch('this', $propertyName);
 
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($arrayFuncCallToMethodCall->getClass());
 

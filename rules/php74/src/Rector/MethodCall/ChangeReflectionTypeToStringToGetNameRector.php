@@ -101,7 +101,7 @@ CODE_SAMPLE
             }
 
             if ($node->expr instanceof Variable && $this->isObjectType($node->expr, 'ReflectionType')) {
-                return $this->createMethodCall($node->expr, self::GET_NAME);
+                return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
             }
         }
 
@@ -139,7 +139,7 @@ CODE_SAMPLE
 
         // we already know it has return type
         if (in_array('hasReturnType', $callsByVariable, true)) {
-            return $this->createMethodCall($methodCall, self::GET_NAME);
+            return $this->nodeFactory->createMethodCall($methodCall, self::GET_NAME);
         }
 
         return null;
@@ -189,8 +189,8 @@ CODE_SAMPLE
 
     private function refactorReflectionParameterGetName(MethodCall $methodCall): Ternary
     {
-        $getNameMethodCall = $this->createMethodCall($methodCall, self::GET_NAME);
-        $ternary = new Ternary($methodCall, $getNameMethodCall, $this->createNull());
+        $getNameMethodCall = $this->nodeFactory->createMethodCall($methodCall, self::GET_NAME);
+        $ternary = new Ternary($methodCall, $getNameMethodCall, $this->nodeFactory->createNull());
 
         // to prevent looping
         $methodCall->setAttribute(AttributeKey::PARENT_NODE, $ternary);
@@ -214,8 +214,8 @@ CODE_SAMPLE
             return $refactoredMethodCall;
         }
 
-        $getNameMethodCall = $this->createMethodCall($methodCall, self::GET_NAME);
-        $ternary = new Ternary($methodCall, $getNameMethodCall, $this->createNull());
+        $getNameMethodCall = $this->nodeFactory->createMethodCall($methodCall, self::GET_NAME);
+        $ternary = new Ternary($methodCall, $getNameMethodCall, $this->nodeFactory->createNull());
 
         // to prevent looping
         $methodCall->setAttribute(AttributeKey::PARENT_NODE, $ternary);

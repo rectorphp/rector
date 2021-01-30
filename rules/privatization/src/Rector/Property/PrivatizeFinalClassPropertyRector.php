@@ -65,7 +65,7 @@ CODE_SAMPLE
         }
 
         if ($classLike->extends === null) {
-            $this->makePrivate($node);
+            $this->visibilityManipulator->makePrivate($node);
             return $node;
         }
 
@@ -73,7 +73,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->makePrivate($node);
+        $this->visibilityManipulator->makePrivate($node);
 
         return $node;
     }

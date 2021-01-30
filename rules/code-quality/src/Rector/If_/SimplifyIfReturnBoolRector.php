@@ -229,10 +229,10 @@ CODE_SAMPLE
 //            if ($exprStaticType instanceof UnionType) {
 //                $unionTypeWithoutNullType = $this->typeUnwrapper->removeNullTypeFromUnionType($exprStaticType);
 //                if ($this->staticTypeAnalyzer->isAlwaysTruableType($unionTypeWithoutNullType)) {
-//                    return new NotIdentical($expr, $this->createNull());
+//                    return new NotIdentical($expr, $this->nodeFactory->createNull());
 //                }
 //            } elseif ($this->staticTypeAnalyzer->isAlwaysTruableType($exprStaticType)) {
-//                return new NotIdentical($expr, $this->createNull());
+//                return new NotIdentical($expr, $this->nodeFactory->createNull());
 //            }
 //        }
 //

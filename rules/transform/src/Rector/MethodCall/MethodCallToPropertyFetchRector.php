@@ -78,7 +78,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            return $this->createPropertyFetch('this', $propertyName);
+            return $this->nodeFactory->createPropertyFetch('this', $propertyName);
         }
 
         return null;

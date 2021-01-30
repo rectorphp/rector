@@ -179,7 +179,7 @@ CODE_SAMPLE
         /** @var Variable $variableNode */
         $variableNode = $propertyFetch->var;
 
-        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetch), $expr]);
+        return $this->nodeFactory->createMethodCall($variableNode, $method, [$this->getName($propertyFetch), $expr]);
     }
 
     private function createMethodCallNodeFromPropertyFetchNode(
@@ -189,6 +189,6 @@ CODE_SAMPLE
         /** @var Variable $variableNode */
         $variableNode = $propertyFetch->var;
 
-        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetch)]);
+        return $this->nodeFactory->createMethodCall($variableNode, $method, [$this->getName($propertyFetch)]);
     }
 }

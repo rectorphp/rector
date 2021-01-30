@@ -82,7 +82,7 @@ CODE_SAMPLE
 
         $arguments = [$node->expr, $arrayDimFetch->dim];
 
-        $arg = $this->createArgs($arguments);
+        $arg = $this->nodeFactory->createArgs($arguments);
 
         return new MethodCall($arrayDimFetch->var, 'addComponent', $arg);
     }

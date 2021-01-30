@@ -63,7 +63,7 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 
         if ($node->args[2]->value instanceof String_) {
             $node->args[3] = $node->args[2];
-            $node->args[2] = $this->createArg(0);
+            $node->args[2] = $this->nodeFactory->createArg(0);
 
             return $node;
         }

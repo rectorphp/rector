@@ -86,7 +86,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $staticCall = $this->createStaticCall(Strings::class, 'endsWith', [$substr->args[0]->value, $string]);
+        $staticCall = $this->nodeFactory->createStaticCall(
+            Strings::class,
+            'endsWith',
+            [$substr->args[0]->value, $string]
+        );
 
         if ($node instanceof Identical) {
             return $staticCall;

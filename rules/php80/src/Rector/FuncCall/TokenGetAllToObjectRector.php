@@ -99,7 +99,7 @@ CODE_SAMPLE
 
         $this->refactorTokensVariable($node);
 
-        return $this->createStaticCall('PhpToken', 'getAll', $node->args);
+        return $this->nodeFactory->createStaticCall('PhpToken', 'getAll', $node->args);
     }
 
     private function refactorTokensVariable(FuncCall $funcCall): void

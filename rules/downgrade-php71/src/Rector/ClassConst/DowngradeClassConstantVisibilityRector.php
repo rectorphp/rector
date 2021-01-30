@@ -56,7 +56,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->removeVisibility($node);
+        $this->visibilityManipulator->removeVisibility($node);
 
         return $node;
     }

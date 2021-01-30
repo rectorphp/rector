@@ -73,7 +73,7 @@ final class VisibilityManipulator
      *
      * @param ClassMethod|Property|ClassConst $node
      */
-    public function removeOriginalVisibilityFromFlags(Node $node): void
+    public function removeVisibility(Node $node): void
     {
         $this->ensureIsClassMethodOrProperty($node, __METHOD__);
 
@@ -168,11 +168,11 @@ final class VisibilityManipulator
     {
         $isStatic = $node instanceof ClassMethod && $node->isStatic();
         if ($isStatic) {
-            $this->removeOriginalVisibilityFromFlags($node);
+            $this->removeVisibility($node);
         }
 
         if ($visibility !== Visibility::STATIC && $visibility !== Visibility::ABSTRACT && $visibility !== Visibility::FINAL) {
-            $this->removeOriginalVisibilityFromFlags($node);
+            $this->removeVisibility($node);
         }
 
         $this->addVisibilityFlag($node, $visibility);

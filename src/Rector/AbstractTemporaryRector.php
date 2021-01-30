@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitorAbstract;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
@@ -25,6 +26,8 @@ use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
 use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\PhpParser\Node\Manipulator\VisibilityManipulator;
+use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\Core\ValueObject\ProjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -76,6 +79,21 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected $staticTypeMapper;
 
     /**
+     * @var PhpDocInfoFactory
+     */
+    protected $phpDocInfoFactory;
+
+    /**
+     * @var NodeFactory
+     */
+    protected $nodeFactory;
+
+    /**
+     * @var VisibilityManipulator
+     */
+    protected $visibilityManipulator;
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -114,6 +132,9 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      * @required
      */
     public function autowireAbstractTemporaryRector(
+        VisibilityManipulator $visibilityManipulator,
+        NodeFactory $nodeFactory,
+        PhpDocInfoFactory $phpDocInfoFactory,
         SymfonyStyle $symfonyStyle,
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory,
@@ -125,6 +146,9 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         CurrentNodeProvider $currentNodeProvider,
         Skipper $skipper
     ): void {
+        $this->visibilityManipulator = $visibilityManipulator;
+        $this->nodeFactory = $nodeFactory;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;

@@ -98,7 +98,7 @@ CODE_SAMPLE
             }
 
             if ($type instanceof ThisType) {
-                $newNodes[] = new NotIdentical($issetVar, $this->createNull());
+                $newNodes[] = new NotIdentical($issetVar, $this->nodeFactory->createNull());
                 continue;
             }
 
@@ -109,7 +109,7 @@ CODE_SAMPLE
 
                 $isPropertyAlwaysExists = property_exists($className, $property);
                 if ($isPropertyAlwaysExists) {
-                    $newNodes[] = new NotIdentical($issetVar, $this->createNull());
+                    $newNodes[] = new NotIdentical($issetVar, $this->nodeFactory->createNull());
                     continue;
                 }
             }
@@ -139,7 +139,10 @@ CODE_SAMPLE
         $args = [new Arg($expr), new Arg(new String_($property))];
         $propertyExistsFuncCall = new FuncCall(new Name('property_exists'), $args);
 
-        return new BooleanAnd($propertyExistsFuncCall, new NotIdentical($propertyFetch, $this->createNull()));
+        return new BooleanAnd($propertyExistsFuncCall, new NotIdentical(
+            $propertyFetch,
+            $this->nodeFactory->createNull()
+        ));
     }
 
     /**

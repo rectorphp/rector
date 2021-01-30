@@ -101,11 +101,11 @@ CODE_SAMPLE
         // if->cond cannot removed, it has to be replaced with false, see https://3v4l.org/U9S9i
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof If_ && $parent->cond === $node) {
-            return $this->createFalse();
+            return $this->nodeFactory->createFalse();
         }
 
         if ($parent instanceof Assign) {
-            return $this->createFalse();
+            return $this->nodeFactory->createFalse();
         }
 
         if ($parent instanceof ArrowFunction && $this->areNodesEqual($parent->expr, $node)) {
@@ -148,6 +148,6 @@ CODE_SAMPLE
             return $methodCall;
         }
 
-        return $this->createFalse();
+        return $this->nodeFactory->createFalse();
     }
 }

@@ -86,7 +86,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->makeAbstract($node);
+        $this->visibilityManipulator->makeAbstract($node);
 
         return $node;
     }

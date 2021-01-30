@@ -86,9 +86,9 @@ CODE_SAMPLE
         $entityMethodCall = $twoNodeMatch->getFirstExpr();
         $comparedVariable = $twoNodeMatch->getSecondExpr();
 
-        $staticCall = $this->createStaticCall(Uuid::class, 'fromString', [$comparedVariable]);
+        $staticCall = $this->nodeFactory->createStaticCall(Uuid::class, 'fromString', [$comparedVariable]);
 
-        return $this->createMethodCall($entityMethodCall, 'equals', [$staticCall]);
+        return $this->nodeFactory->createMethodCall($entityMethodCall, 'equals', [$staticCall]);
     }
 
     private function matchEntityCallAndComparedVariable(Identical $identical): ?TwoNodeMatch

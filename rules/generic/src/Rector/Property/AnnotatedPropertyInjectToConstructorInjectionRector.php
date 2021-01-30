@@ -97,9 +97,9 @@ CODE_SAMPLE
         $phpDocInfo->removeByType(NetteInjectTagNode::class);
 
         if ($this->propertyUsageAnalyzer->isPropertyFetchedInChildClass($node)) {
-            $this->makeProtected($node);
+            $this->visibilityManipulator->makeProtected($node);
         } else {
-            $this->makePrivate($node);
+            $this->visibilityManipulator->makePrivate($node);
         }
 
         $this->addPropertyToCollector($node);
