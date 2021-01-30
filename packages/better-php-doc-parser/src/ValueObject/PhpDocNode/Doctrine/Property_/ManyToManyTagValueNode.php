@@ -9,6 +9,7 @@ use Rector\BetterPhpDocParser\Contract\Doctrine\MappedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
+use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 
 final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implements ToManyTagNodeInterface, MappedByNodeInterface, InversedByNodeInterface, PhpAttributableTagNodeInterface
 {
@@ -74,6 +75,6 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
 
     public function getAttributeClassName(): string
     {
-        return 'TBA';
+        return PhpAttributeGroupFactory::TO_BE_ANNOUNCED;
     }
 }

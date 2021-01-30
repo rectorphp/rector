@@ -15,13 +15,13 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\Printer\PhpAttributteGroupFactory;
+use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
 final class AnnotationToAttributeConverter
 {
     /**
-     * @var PhpAttributteGroupFactory
+     * @var PhpAttributeGroupFactory
      */
     private $phpAttributteGroupFactory;
 
@@ -36,7 +36,7 @@ final class AnnotationToAttributeConverter
     private $phpDocTagRemover;
 
     public function __construct(
-        PhpAttributteGroupFactory $phpAttributteGroupFactory,
+        PhpAttributeGroupFactory $phpAttributteGroupFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocTagRemover $phpDocTagRemover
     ) {

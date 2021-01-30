@@ -35,6 +35,6 @@ final class AssertEmailTagValueNode extends AbstractTagValueNode implements Type
 
     public function getAttributeClassName(): string
     {
-        return 'TBA';
+        return 'Symfony\Component\Validator\Constraints\Email';
     }
 }
