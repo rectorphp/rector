@@ -37,9 +37,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationR
 
 final class LocalChildClass extends AbstractLocalParentClass
 {
-    /**
-     * @param int $number
-     */
     public function change(int $number)
     {
     }
@@ -54,9 +51,6 @@ final class LocalChildClass extends AbstractLocalParentClass
 
 abstract class AbstractLocalParentClass
 {
-    /**
-     * @param int $number
-     */
     public function changeToo(int $number)
     {
     }

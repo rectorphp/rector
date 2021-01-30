@@ -93,8 +93,6 @@ function foo()
 /**
  * Must be converted.
  *
- * @param \DateTime|null $a
- * @param int|null       $c
  * @param string[]|null  $d
  *
  * @return float

@@ -29,8 +29,6 @@ class Number {
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\Basic;
 
 /**
- * @param int $a
- * @param int $b
  * @return int
  */
 function add2(int $a, int $b) {
@@ -39,8 +37,6 @@ function add2(int $a, int $b) {
 
 class Number {
     /**
-     * @param int $a
-     * @param int $b
      * @return int
      */
     public function add2(int $a, int $b) {

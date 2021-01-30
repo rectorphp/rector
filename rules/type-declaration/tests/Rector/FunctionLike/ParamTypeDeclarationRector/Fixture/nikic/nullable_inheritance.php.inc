@@ -24,12 +24,10 @@ class Foo
 {}
 
 class A {
-    /** @param Foo $a */
     public function test2(\Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\NullableInheritance\Foo $a) {}
 }
 
 class B extends A {
-    /** @param null|Foo $a */
     public function test2(?\Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\NullableInheritance\Foo $a) {}
 }
 ?>

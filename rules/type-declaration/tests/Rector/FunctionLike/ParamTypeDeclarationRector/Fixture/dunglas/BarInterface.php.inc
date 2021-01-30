@@ -21,8 +21,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationR
 interface BarInterface
 {
     /**
-     * @param array $a
-     * @param int   $b
      *
      * @return float
      */

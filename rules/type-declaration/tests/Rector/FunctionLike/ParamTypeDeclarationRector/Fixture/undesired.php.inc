@@ -18,7 +18,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationR
 
 /**
  * @param real|int $a
- * @param int $b
  * @param int|void $c
  */
 function someFunction($a, int $b, $c) {

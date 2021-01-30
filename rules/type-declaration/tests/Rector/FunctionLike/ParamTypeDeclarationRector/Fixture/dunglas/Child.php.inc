@@ -80,9 +80,6 @@ class Foo
     public function bar($foo)
     {
     }
-    /**
-     * @param float $a
-     */
     public function test(float $a)
     {
         $closure = function ($a, $c) {
@@ -93,7 +90,6 @@ class Foo
 trait BazTrait
 {
     /**
-     * @param int $a
      *
      * @return \DateTime
      */
@@ -105,8 +101,6 @@ trait BazTrait
 interface BarInterface
 {
     /**
-     * @param array $a
-     * @param int   $b
      *
      * @return float
      */

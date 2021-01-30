@@ -9,5 +9,5 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationR
 
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\PhpCsFixerParam\ArrayNativeType;
 
-/** @param array $foo */ function my_foo(array $foo) {}
+function my_foo(array $foo) {}
 ?>
