@@ -50,9 +50,8 @@ final class TemplatePropertyAssignCollector
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function collectTemplateFileNameVariablesAndNodesToRemove(
-        ClassMethod $classMethod
-    ): MagicTemplatePropertyCalls {
+    public function collectMagicTemplatePropertyCalls(ClassMethod $classMethod): MagicTemplatePropertyCalls
+    {
         $this->templateFileExpr = null;
         $this->templateVariables = [];
         $this->nodesToRemove = [];

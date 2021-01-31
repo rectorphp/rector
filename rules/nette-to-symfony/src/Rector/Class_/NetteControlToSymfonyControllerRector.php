@@ -149,7 +149,7 @@ CODE_SAMPLE
 
         $classMethod->name = new Identifier('action');
 
-        $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectTemplateFileNameVariablesAndNodesToRemove(
+        $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectMagicTemplatePropertyCalls(
             $classMethod
         );
 

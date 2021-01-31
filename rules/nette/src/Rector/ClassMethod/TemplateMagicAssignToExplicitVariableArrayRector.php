@@ -92,7 +92,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectTemplateFileNameVariablesAndNodesToRemove(
+        $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectMagicTemplatePropertyCalls(
             $node
         );
 
@@ -115,11 +115,12 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isName($classMethod, MethodName::CONSTRUCT)) {
+        if (! $this->isNames($classMethod, ['render', 'render*', 'action*'])) {
             return true;
         }
 
-        if ($this->betterNodeFinder->findInstanceOf($classLike, Return_::class)) {
+        $hasReturn = (bool) $this->betterNodeFinder->findInstanceOf($classLike, Return_::class);
+        if ($hasReturn) {
             return true;
         }
 
