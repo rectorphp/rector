@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\Type;
-use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedYetException;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 
 final class PhpParserNodeMapper
@@ -42,6 +42,6 @@ final class PhpParserNodeMapper
             return $phpParserNodeMapper->mapToPHPStan($node);
         }
 
-        throw new NotImplementedException(get_class($node));
+        throw new NotImplementedYetException(get_class($node));
     }
 }

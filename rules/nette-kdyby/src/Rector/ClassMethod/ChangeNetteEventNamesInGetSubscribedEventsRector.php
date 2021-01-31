@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NetteKdyby\NodeManipulator\GetSubscribedEventsArrayManipulator;
 use Rector\NetteKdyby\NodeManipulator\ListeningClassMethodArgumentManipulator;
 use Rector\NetteKdyby\NodeResolver\ListeningMethodsCollector;
@@ -181,6 +181,6 @@ CODE_SAMPLE
             return (string) Strings::after($kdybyEventName, '::', - 1);
         }
 
-        throw new NotImplementedException($kdybyEventName);
+        throw new NotImplementedYetException($kdybyEventName);
     }
 }

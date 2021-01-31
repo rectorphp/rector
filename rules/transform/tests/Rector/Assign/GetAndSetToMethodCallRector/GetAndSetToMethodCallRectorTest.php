@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector;
+
+use Iterator;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
+use Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\Klarka;
+use Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\SomeContainer;
+use Symplify\SmartFileSystem\SmartFileInfo;
+
+final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
+{
+    /**
+     * @dataProvider provideData()
+     */
+    public function test(SmartFileInfo $fileInfo): void
+    {
+        $this->doTestFileInfo($fileInfo);
+    }
+
+    public function provideData(): Iterator
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+    }
+
+    /**
+     * @return array<string, mixed[]>
+     */
+    protected function getRectorsWithConfiguration(): array
+    {
+        return [
+            GetAndSetToMethodCallRector::class => [
+                GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
+                    SomeContainer::class => [
+                        'get' => 'getService',
+                        'set' => 'addService',
+                    ],
+                    Klarka::class => [
+                        'get' => 'get',
+                    ],
+                ],
+            ],
+        ];
+    }
+}

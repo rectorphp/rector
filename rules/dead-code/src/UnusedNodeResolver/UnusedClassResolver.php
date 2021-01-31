@@ -9,7 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
@@ -107,7 +107,7 @@ final class UnusedClassResolver
                 $paramTypeName = $this->nodeNameResolver->getName($param->type);
                 $classNames[] = $paramTypeName;
             } else {
-                throw new NotImplementedException();
+                throw new NotImplementedYetException();
             }
         }
 

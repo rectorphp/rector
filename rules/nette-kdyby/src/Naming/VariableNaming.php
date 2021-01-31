@@ -24,7 +24,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Util\StaticInstanceOf;
@@ -166,7 +165,7 @@ final class VariableNaming
         }
 
         if (! $node instanceof Node) {
-            throw new NotImplementedException();
+            throw new NotImplementedYetException();
         }
 
         $paramName = $this->nodeNameResolver->getName($node);
@@ -236,12 +235,12 @@ final class VariableNaming
     {
         $varName = $this->nodeNameResolver->getName($propertyFetch->var);
         if (! is_string($varName)) {
-            throw new NotImplementedException();
+            throw new NotImplementedYetException();
         }
 
         $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
         if (! is_string($propertyName)) {
-            throw new NotImplementedException();
+            throw new NotImplementedYetException();
         }
 
         if ($varName === 'this') {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Reflection;
 
 use Nette\Utils\Reflection;
-use Rector\Core\PhpDoc\PhpDocTagsFinder;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagsFinder;
 use ReflectionMethod;
 
 final class ClassMethodReflectionHelper

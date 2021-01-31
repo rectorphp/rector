@@ -10,7 +10,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
-use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedYetException;
 use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
@@ -60,7 +60,7 @@ final class PHPStanStaticTypeMapper
             return $typeMapper->mapToPHPStanPhpDocTypeNode($type);
         }
 
-        throw new NotImplementedException(__METHOD__ . ' for ' . get_class($type));
+        throw new NotImplementedYetException(__METHOD__ . ' for ' . get_class($type));
     }
 
     /**
@@ -76,7 +76,7 @@ final class PHPStanStaticTypeMapper
             return $typeMapper->mapToPhpParserNode($type, $kind);
         }
 
-        throw new NotImplementedException(__METHOD__ . ' for ' . get_class($type));
+        throw new NotImplementedYetException(__METHOD__ . ' for ' . get_class($type));
     }
 
     public function mapToDocString(Type $type, ?Type $parentType = null): string
@@ -89,6 +89,6 @@ final class PHPStanStaticTypeMapper
             return $typeMapper->mapToDocString($type, $parentType);
         }
 
-        throw new NotImplementedException(__METHOD__ . ' for ' . get_class($type));
+        throw new NotImplementedYetException(__METHOD__ . ' for ' . get_class($type));
     }
 }

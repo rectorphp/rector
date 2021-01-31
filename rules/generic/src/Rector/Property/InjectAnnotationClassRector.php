@@ -19,7 +19,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -182,7 +182,7 @@ CODE_SAMPLE
             implode('", "', $availableAnnotations)
         );
 
-        throw new NotImplementedException($errorMessage);
+        throw new NotImplementedYetException($errorMessage);
     }
 
     private function isParameterInject(PhpDocTagValueNode $phpDocTagValueNode): bool
