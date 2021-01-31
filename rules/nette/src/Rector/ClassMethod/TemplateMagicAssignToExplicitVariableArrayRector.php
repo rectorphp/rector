@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
+use Rector\Nette\NodeAnalyzer\RenderMethodAnalyzer;
 use Rector\Nette\NodeFactory\ActionRenderFactory;
 use Rector\Nette\TemplatePropertyAssignCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -32,18 +32,25 @@ final class TemplateMagicAssignToExplicitVariableArrayRector extends AbstractRec
      */
     private $actionRenderFactory;
 
+    /**
+     * @var RenderMethodAnalyzer
+     */
+    private $renderMethodAnalyzer;
+
     public function __construct(
         ActionRenderFactory $actionRenderFactory,
-        TemplatePropertyAssignCollector $templatePropertyAssignCollector
+        TemplatePropertyAssignCollector $templatePropertyAssignCollector,
+        RenderMethodAnalyzer $renderMethodAnalyzer
     ) {
         $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
         $this->actionRenderFactory = $actionRenderFactory;
+        $this->renderMethodAnalyzer = $renderMethodAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Change `$this->templates->{magic}` to `$this->template->render(..., $values)`',
+            'Change `$this->templates->{magic}` to `$this->template->render(..., $values)` in components',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -71,7 +78,6 @@ class SomeControl extends Control
 }
 CODE_SAMPLE
                 ),
-
             ]);
     }
 
@@ -115,7 +121,11 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->isNames($classMethod, ['render', 'render*', 'action*'])) {
+        if ($this->isObjectType($classLike, 'Nette\Application\UI\Presenter')) {
+            return true;
+        }
+
+        if (! $this->isName($classMethod, 'render')) {
             return true;
         }
 
@@ -124,6 +134,6 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $classMethod->isPublic();
+        return $this->renderMethodAnalyzer->hasConditionalTemplateAssigns($classMethod);
     }
 }
