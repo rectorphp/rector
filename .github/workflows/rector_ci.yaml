@@ -65,8 +65,8 @@ jobs:
                     # The arguments for the `git add` command (see the paragraph below for more info)
                     add: .
                     message: "[ci-review] Rector Rectify"
-                    author_name: rector-bot
-                    author_email: tomas@getrector.org
+                    author_name: "kaizen-ci"
+                    author_email: "info@kaizen-ci.org"
                 env:
                     # to get push access
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
