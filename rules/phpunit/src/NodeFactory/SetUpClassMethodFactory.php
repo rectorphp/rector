@@ -6,7 +6,6 @@ namespace Rector\PHPUnit\NodeFactory;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\PHPUnit\NodeManipulator\StmtManipulator;
@@ -21,11 +20,6 @@ final class SetUpClassMethodFactory
     private $phpUnitTypeDeclarationDecorator;
 
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var StmtManipulator
      */
     private $stmtManipulator;
@@ -37,12 +31,10 @@ final class SetUpClassMethodFactory
 
     public function __construct(
         PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
-        NodeFactory $nodeFactory,
         StmtManipulator $stmtManipulator,
         SetUpFactory $setUpFactory
     ) {
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
-        $this->nodeFactory = $nodeFactory;
         $this->stmtManipulator = $stmtManipulator;
         $this->setUpFactory = $setUpFactory;
     }
