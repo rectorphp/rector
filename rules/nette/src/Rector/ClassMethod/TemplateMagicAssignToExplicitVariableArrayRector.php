@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Nette\NodeAnalyzer\RenderMethodAnalyzer;
 use Rector\Nette\NodeFactory\ActionRenderFactory;
 use Rector\Nette\TemplatePropertyAssignCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -31,12 +32,19 @@ final class TemplateMagicAssignToExplicitVariableArrayRector extends AbstractRec
      */
     private $actionRenderFactory;
 
+    /**
+     * @var RenderMethodAnalyzer
+     */
+    private $renderMethodAnalyzer;
+
     public function __construct(
         ActionRenderFactory $actionRenderFactory,
-        TemplatePropertyAssignCollector $templatePropertyAssignCollector
+        TemplatePropertyAssignCollector $templatePropertyAssignCollector,
+        RenderMethodAnalyzer $renderMethodAnalyzer
     ) {
         $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
         $this->actionRenderFactory = $actionRenderFactory;
+        $this->renderMethodAnalyzer = $renderMethodAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -126,6 +134,6 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $classMethod->isPublic();
+        return $this->renderMethodAnalyzer->hasConditionalTemplateAssigns($classMethod);
     }
 }
