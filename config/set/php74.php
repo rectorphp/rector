@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Rector\Composer\Rector\ChangePackageVersionComposerRector;
+use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Php74\Rector\Assign\NullCoalescingOperatorRector;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php74\Rector\Double\RealToFloatTypeCastRector;
@@ -18,6 +20,7 @@ use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -62,4 +65,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeReflectionTypeToStringToGetNameRector::class);
 
     $services->set(RestoreDefaultNullToNullableTypePropertyRector::class);
+
+    $services->set(ChangePackageVersionComposerRector::class)
+        ->call('configure', [[
+            ChangePackageVersionComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new PackageAndVersion('php', '^7.4'),
+            ]),
+        ]]);
 };

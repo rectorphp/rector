@@ -5,6 +5,8 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
+use Rector\Composer\Rector\ChangePackageVersionComposerRector;
+use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
@@ -88,4 +90,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);
     $parameters->set(Option::ENABLE_CACHE, true);
+
+    $services->set(ChangePackageVersionComposerRector::class)
+        ->call('configure', [[
+            ChangePackageVersionComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new PackageAndVersion('php', '^7.3|^8.0'),
+            ]),
+        ]]);
 };

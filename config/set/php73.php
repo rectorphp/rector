@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Rector\Composer\Rector\ChangePackageVersionComposerRector;
+use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Php73\Rector\BooleanOr\IsCountableRector;
 use Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector;
 use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
@@ -12,6 +14,7 @@ use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
 use Rector\Php73\Rector\String_\SensitiveHereNowDocRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -46,4 +49,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(StringifyStrNeedlesRector::class);
     $services->set(JsonThrowOnErrorRector::class);
     $services->set(RegexDashEscapeRector::class);
+
+    $services->set(ChangePackageVersionComposerRector::class)
+        ->call('configure', [[
+            ChangePackageVersionComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new PackageAndVersion('php', '^7.3'),
+            ]),
+        ]]);
 };

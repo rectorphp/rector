@@ -2,10 +2,13 @@
 
 declare(strict_types=1);
 
+use Rector\Composer\Rector\ChangePackageVersionComposerRector;
+use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Php56\Rector\FuncCall\PowToExpRector;
 use Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -55,4 +58,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     # inspired by level in psalm - https://github.com/vimeo/psalm/blob/82e0bcafac723fdf5007a31a7ae74af1736c9f6f/tests/FileManipulationTest.php#L1063
     $services->set(AddDefaultValueForUndefinedVariableRector::class);
+
+    $services->set(ChangePackageVersionComposerRector::class)
+        ->call('configure', [[
+            ChangePackageVersionComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new PackageAndVersion('php', '^5.6'),
+            ]),
+        ]]);
 };

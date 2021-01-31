@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Rector\Composer\Rector\ChangePackageVersionComposerRector;
+use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector;
@@ -20,6 +22,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => ValueObjectInliner::inline([
                 // see https://www.php.net/manual/en/function.ldap-first-attribute.php
                 new RemoveFuncCallArg('ldap_first_attribute', 2),
+            ]),
+        ]]);
+
+    $services->set(ChangePackageVersionComposerRector::class)
+        ->call('configure', [[
+            ChangePackageVersionComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new PackageAndVersion('php', '^5.2'),
             ]),
         ]]);
 };

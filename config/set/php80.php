@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Rector\Composer\Rector\ChangePackageVersionComposerRector;
+use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
@@ -78,4 +80,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
     ]]);
     $services->set(OptionalParametersAfterRequiredRector::class);
+
+    $services->set(ChangePackageVersionComposerRector::class)
+        ->call('configure', [[
+            ChangePackageVersionComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
+                new PackageAndVersion('php', '^8.0'),
+            ]),
+        ]]);
 };
