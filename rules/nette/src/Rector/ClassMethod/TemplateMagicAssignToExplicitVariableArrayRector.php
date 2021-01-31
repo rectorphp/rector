@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeFactory\ActionRenderFactory;
 use Rector\Nette\TemplatePropertyAssignCollector;
-use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -93,11 +92,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectTemplateFileNameVariablesAndNodesToRemove(
+        $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectMagicTemplatePropertyCalls(
             $node
         );
 
-        $renderMethodCall = $this->createRenderMethodCall($node, $magicTemplatePropertyCalls);
+        $renderMethodCall = $this->actionRenderFactory->createThisTemplateRenderMethodCall($magicTemplatePropertyCalls);
         $node->stmts = array_merge((array) $node->stmts, [new Expression($renderMethodCall)]);
 
         $this->removeNodes($magicTemplatePropertyCalls->getNodesToRemove());
@@ -116,17 +115,15 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isName($classMethod, MethodName::CONSTRUCT)) {
+        if (! $this->isNames($classMethod, ['render', 'render*', 'action*'])) {
+            return true;
+        }
+
+        $hasReturn = (bool) $this->betterNodeFinder->findInstanceOf($classLike, Return_::class);
+        if ($hasReturn) {
             return true;
         }
 
         return ! $classMethod->isPublic();
-    }
-
-    private function createRenderMethodCall(
-        ClassMethod $classMethod,
-        MagicTemplatePropertyCalls $magicTemplatePropertyCalls
-    ): MethodCall {
-        return $this->actionRenderFactory->createThisTemplateRenderMethodCall($magicTemplatePropertyCalls);
     }
 }
