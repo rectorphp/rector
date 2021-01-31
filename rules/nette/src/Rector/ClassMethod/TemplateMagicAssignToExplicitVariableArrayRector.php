@@ -102,6 +102,10 @@ CODE_SAMPLE
             $node
         );
 
+        if ($magicTemplatePropertyCalls->hasMultipleTemplateFileExprs()) {
+            return null;
+        }
+
         $renderMethodCall = $this->actionRenderFactory->createThisTemplateRenderMethodCall($magicTemplatePropertyCalls);
         $node->stmts = array_merge((array) $node->stmts, [new Expression($renderMethodCall)]);
 
