@@ -7,7 +7,6 @@ use Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector;
 use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Php73\Rector\FuncCall\RegexDashEscapeRector;
-use Rector\Php73\Rector\FuncCall\RemoveMissingCompactVariableRector;
 use Rector\Php73\Rector\FuncCall\SensitiveDefineRector;
 use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
 use Rector\Php73\Rector\String_\SensitiveHereNowDocRector;
@@ -18,13 +17,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(IsCountableRector::class);
-
     $services->set(ArrayKeyFirstLastRector::class);
-
     $services->set(SensitiveDefineRector::class);
-
     $services->set(SensitiveConstantNameRector::class);
-
     $services->set(SensitiveHereNowDocRector::class);
 
     $services->set(RenameFunctionRector::class)
@@ -49,10 +44,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
 
     $services->set(StringifyStrNeedlesRector::class);
-
     $services->set(JsonThrowOnErrorRector::class);
-
     $services->set(RegexDashEscapeRector::class);
-
-    $services->set(RemoveMissingCompactVariableRector::class);
 };
