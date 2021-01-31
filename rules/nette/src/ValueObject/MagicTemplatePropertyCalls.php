@@ -20,24 +20,38 @@ final class MagicTemplatePropertyCalls
     private $templateVariables = [];
 
     /**
-     * @var Expr|null
+     * @var Expr[]
      */
-    private $templateFileExpr;
+    private $templateFileExprs = [];
 
     /**
+     * @param Expr[] $templateFileExprs
      * @param Expr[] $templateVariables
      * @param Node[] $nodesToRemove
      */
-    public function __construct(?Expr $templateFileExpr, array $templateVariables, array $nodesToRemove)
+    public function __construct(array $templateFileExprs, array $templateVariables, array $nodesToRemove)
     {
-        $this->templateFileExpr = $templateFileExpr;
+        $this->templateFileExprs = $templateFileExprs;
         $this->templateVariables = $templateVariables;
         $this->nodesToRemove = $nodesToRemove;
     }
 
-    public function getTemplateFileExpr(): ?Expr
+    /**
+     * @return Expr[]
+     */
+    public function getTemplateFileExprs(): array
     {
-        return $this->templateFileExpr;
+        return $this->templateFileExprs;
+    }
+
+    public function getFirstTemplateFileExpr(): ?Expr
+    {
+        return $this->templateFileExprs[0] ?? null;
+    }
+
+    public function hasMultipleTemplateFileExprs(): bool
+    {
+        return count($this->templateFileExprs) > 1;
     }
 
     /**

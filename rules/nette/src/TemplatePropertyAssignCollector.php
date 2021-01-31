@@ -38,9 +38,9 @@ final class TemplatePropertyAssignCollector
     private $nodeNameResolver;
 
     /**
-     * @var Expr|null
+     * @var Expr[]
      */
-    private $templateFileExpr;
+    private $templateFileExprs = [];
 
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
@@ -52,7 +52,7 @@ final class TemplatePropertyAssignCollector
 
     public function collectMagicTemplatePropertyCalls(ClassMethod $classMethod): MagicTemplatePropertyCalls
     {
-        $this->templateFileExpr = null;
+        $this->templateFileExprs = [];
         $this->templateVariables = [];
         $this->nodesToRemove = [];
 
@@ -69,22 +69,19 @@ final class TemplatePropertyAssignCollector
             }
         );
 
-        return new MagicTemplatePropertyCalls($this->templateFileExpr, $this->templateVariables, $this->nodesToRemove);
+        return new MagicTemplatePropertyCalls($this->templateFileExprs, $this->templateVariables, $this->nodesToRemove);
     }
 
     private function collectTemplateFileExpr(MethodCall $methodCall): void
     {
-        if ($this->nodeNameResolver->isName($methodCall->name, 'render')) {
-            if (isset($methodCall->args[0])) {
-                $this->templateFileExpr = $methodCall->args[0]->value;
+        if ($this->nodeNameResolver->isNames($methodCall->name, ['render', 'setFile'])) {
+            $this->nodesToRemove[] = $methodCall;
+
+            if (! isset($methodCall->args[0])) {
+                return;
             }
 
-            $this->nodesToRemove[] = $methodCall;
-        }
-
-        if ($this->nodeNameResolver->isName($methodCall->name, 'setFile')) {
-            $this->templateFileExpr = $methodCall->args[0]->value;
-            $this->nodesToRemove[] = $methodCall;
+            $this->templateFileExprs[] = $methodCall->args[0]->value;
         }
     }
 
