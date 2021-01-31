@@ -7,6 +7,7 @@ namespace Rector\PHPUnit\Composer;
 use Nette\Utils\Arrays;
 use Nette\Utils\Json;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ComposerAutoloadedDirectoryProvider
@@ -14,7 +15,7 @@ final class ComposerAutoloadedDirectoryProvider
     /**
      * @var string[]
      */
-    private const AUTOLOAD_SECTIONS = ['autoload', 'autoload-dev'];
+    private const AUTOLOAD_SECTIONS = [ComposerJsonSection::AUTOLOAD, ComposerJsonSection::AUTOLOAD_DEV];
 
     /**
      * @var string

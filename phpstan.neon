@@ -543,3 +543,9 @@ parameters:
             paths:
                 - rules/php71/src/Rector/BooleanOr/IsIterableRector.php
                 - rules/php73/src/Rector/BooleanOr/IsCountableRector.php
+
+        -
+             message: '#Use defined constant Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJsonSection\:\:REQUIRE over string require#'
+             path:
+                 # is "require" in PHP
+                 - src/Php/ReservedKeywordAnalyzer.php
