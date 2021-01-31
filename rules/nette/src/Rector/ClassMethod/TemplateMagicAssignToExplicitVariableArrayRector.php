@@ -125,7 +125,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->isName($classMethod, 'render')) {
+        if (! $this->isNames($classMethod, ['render', 'render*'])) {
             return true;
         }
 
