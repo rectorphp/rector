@@ -96,7 +96,6 @@
             "Rector\\CodeQuality\\": "rules/code-quality/src",
             "Rector\\CodingStyle\\": "rules/coding-style/src",
             "Rector\\Composer\\": "rules/composer/src",
-            "Rector\\ConsoleDiffer\\": "packages/console-differ/src",
             "Rector\\Core\\": "src",
             "Rector\\DeadCode\\": "rules/dead-code/src",
             "Rector\\DependencyInjection\\": "rules/dependency-injection/src",
