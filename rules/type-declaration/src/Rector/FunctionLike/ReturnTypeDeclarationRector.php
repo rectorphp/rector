@@ -188,9 +188,9 @@ CODE_SAMPLE
             return false;
         }
 
-        $class       = $functionLike->getAttribute(AttributeKey::PARENT_NODE);
+        $class = $functionLike->getAttribute(AttributeKey::PARENT_NODE);
         $hasChildren = $class instanceof Class_ && $this->nodeRepository->hasClassChildren($class);
-        $lastStmt    = $functionLike->stmts[count((array) $functionLike->stmts) - 1] ?? null;
+        $lastStmt = $functionLike->stmts[count((array) $functionLike->stmts) - 1] ?? null;
 
         if ($hasChildren && ! $lastStmt instanceof Return_ && $functionLike->returnType === null) {
             return true;
