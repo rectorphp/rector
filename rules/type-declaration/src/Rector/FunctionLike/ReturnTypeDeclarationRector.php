@@ -8,8 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -184,6 +186,14 @@ CODE_SAMPLE
 
         if (! $functionLike instanceof ClassMethod) {
             return false;
+        }
+
+        $class       = $functionLike->getAttribute(AttributeKey::PARENT_NODE);
+        $hasChildren = $class instanceof Class_ && $this->nodeRepository->hasClassChildren($class);
+        $lastStmt    = $functionLike->stmts[count((array) $functionLike->stmts) - 1] ?? null;
+
+        if ($hasChildren && ! $lastStmt instanceof Return_ && $functionLike->returnType === null) {
+            return true;
         }
 
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($functionLike)) {
