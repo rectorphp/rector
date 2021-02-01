@@ -55,7 +55,7 @@ final class ErrorAndDiffCollector
     private $consoleDiffer;
 
     /**
-     * @var \Rector\Core\Differ\DefaultDiffer
+     * @var DefaultDiffer
      */
     private $defaultDiffer;
 
