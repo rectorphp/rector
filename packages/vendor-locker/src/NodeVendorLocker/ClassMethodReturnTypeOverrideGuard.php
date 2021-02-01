@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Rector\VendorLocker\NodeVendorLocker;
 
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitor;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -34,10 +37,19 @@ final class ClassMethodReturnTypeOverrideGuard
      */
     private $nodeTypeResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
-    {
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        NodeTypeResolver $nodeTypeResolver,
+        NodeRepository $nodeRepository
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function shouldSkipClassMethod(ClassMethod $classMethod): bool
@@ -48,7 +60,22 @@ final class ClassMethodReturnTypeOverrideGuard
         }
 
         // 2. skip chaotic contract class methods
-        return $this->shouldSkipChaoticClassMethods($classMethod);
+        if ($this->shouldSkipChaoticClassMethods($classMethod)) {
+            return true;
+        }
+
+        // 3. skip has children and current has no return
+        $class = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
+        $hasChildren = $class instanceof Class_ && $this->nodeRepository->hasClassChildren($class);
+        $lastStmt = $classMethod->stmts[count((array) $classMethod->stmts) - 1] ?? null;
+        if (! $hasChildren) {
+            return false;
+        }
+        if ($lastStmt instanceof Return_) {
+            return false;
+        }
+
+        return $classMethod->returnType === null;
     }
 
     public function shouldSkipClassMethodOldTypeWithNewType(Type $oldType, Type $newType): bool
