@@ -260,16 +260,21 @@ CODE_SAMPLE
      */
     private function addReturnType(FunctionLike $functionLike, Node $inferredReturnNode): void
     {
-        if ($functionLike->returnType !== null) {
-            $isSubtype = $this->phpParserTypeAnalyzer->isSubtypeOf($inferredReturnNode, $functionLike->returnType);
-            if ($this->isAtLeastPhpVersion(PhpVersionFeature::COVARIANT_RETURN) && $isSubtype) {
-                $functionLike->returnType = $inferredReturnNode;
-            } elseif (! $isSubtype) {
-                // type override with correct one
-                $functionLike->returnType = $inferredReturnNode;
-            }
-        } else {
+        if ($functionLike->returnType === null) {
             $functionLike->returnType = $inferredReturnNode;
+            return;
+        }
+
+        $isSubtype = $this->phpParserTypeAnalyzer->isSubtypeOf($inferredReturnNode, $functionLike->returnType);
+        if ($this->isAtLeastPhpVersion(PhpVersionFeature::COVARIANT_RETURN) && $isSubtype) {
+            $functionLike->returnType = $inferredReturnNode;
+            return;
+        }
+
+        if (! $isSubtype) {
+            // type override with correct one
+            $functionLike->returnType = $inferredReturnNode;
+            return;
         }
     }
 
