@@ -8,10 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -128,10 +126,6 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node instanceof ClassMethod && $this->hasChildrenNoReturn($node)) {
-            return null;
-        }
-
         $inferedType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
             $node,
             [ReturnTypeDeclarationReturnTypeInferer::class]
@@ -189,11 +183,11 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->overrideExistingReturnTypes && $classMethod->returnType !== null) {
+        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($classMethod)) {
             return true;
         }
 
-        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($classMethod)) {
+        if (! $this->overrideExistingReturnTypes && $classMethod->returnType !== null) {
             return true;
         }
 
@@ -202,20 +196,6 @@ CODE_SAMPLE
         }
 
         return $this->vendorLockResolver->isReturnChangeVendorLockedIn($classMethod);
-    }
-
-    private function hasChildrenNoReturn(ClassMethod $classMethod): bool
-    {
-        $class = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
-        $hasChildren = $class instanceof Class_ && $this->nodeRepository->hasClassChildren($class);
-        $lastStmt = $classMethod->stmts[count((array) $classMethod->stmts) - 1] ?? null;
-        if (!$hasChildren) {
-            return false;
-        }
-        if ($lastStmt instanceof Return_) {
-            return false;
-        }
-        return $classMethod->returnType === null;
     }
 
     /**
