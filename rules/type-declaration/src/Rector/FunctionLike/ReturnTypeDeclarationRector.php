@@ -124,7 +124,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($node instanceof ClassMethod && $this->shouldSkip($node)) {
+            return null;
+        }
+
+        if ($node instanceof ClassMethod && $this->hasChildrenNoReturn($node)) {
             return null;
         }
 
@@ -172,39 +176,36 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param ClassMethod $classMethod
      */
-    private function shouldSkip(FunctionLike $functionLike): bool
+    private function shouldSkip(ClassMethod $classMethod): bool
     {
         if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return true;
         }
 
-        if (! $this->overrideExistingReturnTypes && $functionLike->returnType !== null) {
+        if (! $this->overrideExistingReturnTypes && $classMethod->returnType !== null) {
             return true;
         }
 
-        if (! $functionLike instanceof ClassMethod) {
-            return false;
+        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($classMethod)) {
+            return true;
         }
 
-        $class = $functionLike->getAttribute(AttributeKey::PARENT_NODE);
+        if ($this->isNames($classMethod, self::EXCLUDED_METHOD_NAMES)) {
+            return true;
+        }
+
+        return $this->vendorLockResolver->isReturnChangeVendorLockedIn($classMethod);
+    }
+
+    private function hasChildrenNoReturn(ClassMethod $classMethod): bool
+    {
+        $class = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
         $hasChildren = $class instanceof Class_ && $this->nodeRepository->hasClassChildren($class);
-        $lastStmt = $functionLike->stmts[count((array) $functionLike->stmts) - 1] ?? null;
+        $lastStmt = $classMethod->stmts[count((array) $classMethod->stmts) - 1] ?? null;
 
-        if ($hasChildren && ! $lastStmt instanceof Return_ && $functionLike->returnType === null) {
-            return true;
-        }
-
-        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($functionLike)) {
-            return true;
-        }
-
-        if ($this->isNames($functionLike, self::EXCLUDED_METHOD_NAMES)) {
-            return true;
-        }
-
-        return $this->vendorLockResolver->isReturnChangeVendorLockedIn($functionLike);
+        return $hasChildren && ! $lastStmt instanceof Return_ && $classMethod->returnType === null;
     }
 
     /**
