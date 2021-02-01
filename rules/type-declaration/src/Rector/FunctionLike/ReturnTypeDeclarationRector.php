@@ -145,6 +145,14 @@ CODE_SAMPLE
             return null;
         }
 
+        return $this->processType($node, $inferedType);
+    }
+
+    /**
+     * @param ClassMethod|Function_ $node
+     */
+    private function processType(Node $node, Type $inferedType): ?Node
+    {
         $inferredReturnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $inferedType,
             PHPStanStaticTypeMapper::KIND_RETURN
@@ -175,9 +183,6 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param ClassMethod $classMethod
-     */
     private function shouldSkip(ClassMethod $classMethod): bool
     {
         if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
@@ -204,8 +209,13 @@ CODE_SAMPLE
         $class = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
         $hasChildren = $class instanceof Class_ && $this->nodeRepository->hasClassChildren($class);
         $lastStmt = $classMethod->stmts[count((array) $classMethod->stmts) - 1] ?? null;
-
-        return $hasChildren && ! $lastStmt instanceof Return_ && $classMethod->returnType === null;
+        if (!$hasChildren) {
+            return false;
+        }
+        if ($lastStmt instanceof Return_) {
+            return false;
+        }
+        return $classMethod->returnType === null;
     }
 
     /**
