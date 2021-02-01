@@ -2,13 +2,30 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector\Fixture;
 
-use Bar\Baz as BarBaz;
+use Rector\TypeDeclaration\Tests\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector\Source\NowString as NowStringAlias;
 
-class FooBarBaz
+final class SomeAliasedClass
 {
-    public function doSomething()
+    public function run(NowStringAlias $nowString)
     {
-        $barBaz = new BarBaz();
-        return $barBaz->process('someValue');
+        $nowString->setValue(null);
     }
 }
+
+?>
+    -----
+<?php
+
+namespace Rector\TypeDeclaration\Tests\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector\Fixture;
+
+use Rector\TypeDeclaration\Tests\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector\Source\NowString as NowStringAlias;
+
+final class SomeAliasedClass
+{
+    public function run(NowStringAlias $nowString)
+    {
+        $nowString->setValue('');
+    }
+}
+
+?>
