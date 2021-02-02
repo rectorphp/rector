@@ -77,21 +77,42 @@ final class ObjectTypeSpecifier
                 $alias = $useUse->alias->toString();
                 $fullyQualifiedName = $useUse->name->toString();
 
-                // A. is alias in use statement matching this class alias
-                if ($alias === $className) {
-                    return new AliasedObjectType($alias, $fullyQualifiedName);
-                }
-
-                // B. is aliased classes matching the class name and parent node is MethodCall/StaticCall
-                if ($useName === $className && ($parentNode instanceof MethodCall || $parentNode instanceof StaticCall)) {
-                    return new AliasedObjectType($useName, $fullyQualifiedName);
-                }
-
-                // C. is aliased classes matching the class name
-                if ($useName === $className) {
-                    return new AliasedObjectType($alias, $fullyQualifiedName);
+                $processAliasedObject = $this->processAliasedObject(
+                    $alias,
+                    $className,
+                    $useName,
+                    $parentNode,
+                    $fullyQualifiedName
+                );
+                if ($processAliasedObject instanceof AliasedObjectType) {
+                    return $processAliasedObject;
                 }
             }
+        }
+
+        return null;
+    }
+
+    private function processAliasedObject(
+        string $alias,
+        string $className,
+        string $useName,
+        Node $parentNode,
+        string $fullyQualifiedName
+    ): ?AliasedObjectType {
+        // A. is alias in use statement matching this class alias
+        if ($alias === $className) {
+            return new AliasedObjectType($alias, $fullyQualifiedName);
+        }
+
+        // B. is aliased classes matching the class name and parent node is MethodCall/StaticCall
+        if ($useName === $className && ($parentNode instanceof MethodCall || $parentNode instanceof StaticCall)) {
+            return new AliasedObjectType($useName, $fullyQualifiedName);
+        }
+
+        // C. is aliased classes matching the class name
+        if ($useName === $className) {
+            return new AliasedObjectType($alias, $fullyQualifiedName);
         }
 
         return null;
