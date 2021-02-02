@@ -119,16 +119,6 @@ final class BetterStandardPrinter extends Standard
     {
         $newStmts = $this->resolveNewStmts($stmts);
 
-        foreach ($newStmts as $key => $stmt) {
-            if (! $stmt instanceof ClassLike && ! $stmt instanceof FunctionLike) {
-                continue;
-            }
-
-            if (isset($newStmts[$key - 1]) && $this->areNodesEqual($stmt, $newStmts[$key - 1])) {
-                unset($newStmts[$key]);
-            }
-        }
-
         // detect per print
         $this->tabOrSpaceIndentCharacter = $this->indentCharacterDetector->detect($newStmts);
 
@@ -513,10 +503,26 @@ final class BetterStandardPrinter extends Standard
      */
     private function resolveNewStmts(array $stmts): array
     {
-        if (count($stmts) === 1) {
-            $onlyStmt = $stmts[0];
-            if ($onlyStmt instanceof FileWithoutNamespace) {
-                return $onlyStmt->stmts;
+        if (count($stmts) === 1 && $stmts[0] instanceof FileWithoutNamespace) {
+            return $this->cleanUpStmts($stmts[0]->stmts);
+        }
+
+        return $this->cleanUpStmts($stmts);
+    }
+
+    /**
+     * @param Node[] $stmts
+     * @return Node[]|mixed[]
+     */
+    private function cleanUpStmts(array $stmts): array
+    {
+        foreach ($stmts as $key => $stmt) {
+            if (! $stmt instanceof ClassLike && ! $stmt instanceof FunctionLike) {
+                continue;
+            }
+
+            if (isset($stmts[$key - 1]) && $this->areNodesEqual($stmt, $stmts[$key - 1])) {
+                unset($stmts[$key]);
             }
         }
 
