@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Transform\NodeFactory;
 
+use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
@@ -14,7 +15,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 final class UnwrapClosureFactory
 {
     /**
-     * @return \PhpParser\Node[]
+     * @return Node[]
      */
     public function createAssign(Variable $resultVariable, Arg $arg): array
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Transform\Tests\Rector\MethodCall\CallableInMethodCallToVariableRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector;
 use Rector\Transform\Tests\Rector\MethodCall\CallableInMethodCallToVariableRector\Source\DummyCache;
@@ -20,7 +21,7 @@ final class CallableInMethodCallToVariableRectorTest extends AbstractRectorTestC
         $this->doTestFileInfo($fileInfo);
     }
 
-    public function provideData(): \Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
