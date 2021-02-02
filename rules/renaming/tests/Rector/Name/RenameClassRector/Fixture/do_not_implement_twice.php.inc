@@ -11,8 +11,7 @@ final class DoNotImplementTwice implements \MyFooInterface, \MyBarInterface
 -----
 <?php
 
-interface MyFooInterface {};
-interface MyBarInterface {};
+interface MyBazInterface {};
 
 final class DoNotImplementTwice implements \MyBazInterface
 {

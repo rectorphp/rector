@@ -102,7 +102,7 @@ final class ClassRenamer
             return $this->refactorNamespace($node, $oldToNewClasses);
         }
 
-        if ($node instanceof ClassLike && ! interface_exists($node->name->toString())) {
+        if ($node instanceof ClassLike) {
             return $this->refactorClassLike($node, $oldToNewClasses);
         }
 
