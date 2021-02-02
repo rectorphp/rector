@@ -63,6 +63,7 @@ final class ObjectTypeSpecifier
             return null;
         }
 
+        $className = $objectType->getClassName();
         foreach ($uses as $use) {
             foreach ($use->uses as $useUse) {
                 if ($useUse->alias === null) {
@@ -72,7 +73,6 @@ final class ObjectTypeSpecifier
                 $useName = $useUse->name->toString();
                 $alias = $useUse->alias->toString();
                 $fullyQualifiedName = $useUse->name->toString();
-                $className = $objectType->getClassName();
 
                 // A. is alias in use statement matching this class alias
                 if ($alias === $className) {
