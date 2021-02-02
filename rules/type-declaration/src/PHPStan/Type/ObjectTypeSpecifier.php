@@ -79,8 +79,13 @@ final class ObjectTypeSpecifier
                     return new AliasedObjectType($alias, $fullyQualifiedName);
                 }
 
-                // B. is aliased classes matching the class name
-                if ($useName === $className) {
+                // B. is aliased classes matching the class name non namespaced
+                if (strpos($useName, '\\') === false && $useName === $className) {
+                    return new AliasedObjectType($alias, $fullyQualifiedName);
+                }
+
+                // C. is aliased with namespaced
+                if (strpos($useName, '\\') !== false && $useName === $className) {
                     return new AliasedObjectType($useName, $fullyQualifiedName);
                 }
             }
