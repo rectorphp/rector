@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
 
-class MirorComment
+class MirrorComment
 {
     public function run($tokens)
     {
@@ -18,7 +18,7 @@ class MirorComment
 
 namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
 
-class MirorComment
+class MirrorComment
 {
     public function run($tokens)
     {
