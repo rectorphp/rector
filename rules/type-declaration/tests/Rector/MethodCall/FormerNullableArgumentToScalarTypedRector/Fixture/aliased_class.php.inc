@@ -9,6 +9,7 @@ final class AliasedClass
     public function run(NowStringAlias $nowString)
     {
         $nowString->setValue(null);
+        $nowString::setValue(null);
     }
 }
 
@@ -25,6 +26,7 @@ final class AliasedClass
     public function run(NowStringAlias $nowString)
     {
         $nowString->setValue('');
+        $nowString::setValue('');
     }
 }
 
