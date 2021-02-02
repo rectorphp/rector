@@ -6,6 +6,8 @@ namespace Rector\TypeDeclaration\PHPStan\Type;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\MixedType;
@@ -64,6 +66,7 @@ final class ObjectTypeSpecifier
         }
 
         $className = $objectType->getClassName();
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         foreach ($uses as $use) {
             foreach ($use->uses as $useUse) {
                 if ($useUse->alias === null) {
@@ -79,14 +82,14 @@ final class ObjectTypeSpecifier
                     return new AliasedObjectType($alias, $fullyQualifiedName);
                 }
 
-                // B. is aliased classes matching the class name non namespaced
-                if (strpos($useName, '\\') === false && $useName === $className) {
-                    return new AliasedObjectType($alias, $fullyQualifiedName);
+                // B. is aliased classes matching the class name and parent node is MethodCall/StaticCall
+                if ($useName === $className && ($parentNode instanceof MethodCall || $parentNode instanceof StaticCall)) {
+                    return new AliasedObjectType($useName, $fullyQualifiedName);
                 }
 
-                // C. is aliased with namespaced
-                if (strpos($useName, '\\') !== false && $useName === $className) {
-                    return new AliasedObjectType($useName, $fullyQualifiedName);
+                // C. is aliased classes matching the class name
+                if ($useName === $className) {
+                    return new AliasedObjectType($alias, $fullyQualifiedName);
                 }
             }
         }
