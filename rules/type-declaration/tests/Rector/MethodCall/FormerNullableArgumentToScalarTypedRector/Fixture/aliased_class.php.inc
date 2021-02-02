@@ -4,7 +4,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\MethodCall\FormerNullableArgumentT
 
 use Rector\TypeDeclaration\Tests\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector\Source\NowString as NowStringAlias;
 
-final class SomeAliasedClass
+final class AliasedClass
 {
     public function run(NowStringAlias $nowString)
     {
@@ -13,14 +13,14 @@ final class SomeAliasedClass
 }
 
 ?>
-    -----
+-----
 <?php
 
 namespace Rector\TypeDeclaration\Tests\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector\Fixture;
 
 use Rector\TypeDeclaration\Tests\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector\Source\NowString as NowStringAlias;
 
-final class SomeAliasedClass
+final class AliasedClass
 {
     public function run(NowStringAlias $nowString)
     {

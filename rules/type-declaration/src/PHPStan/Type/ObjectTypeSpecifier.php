@@ -74,13 +74,13 @@ final class ObjectTypeSpecifier
                 $fullyQualifiedName = $useUse->name->toString();
 
                 // A. is alias in use statement matching this class alias
-                if ($useUse->alias->toString() === $objectType->getClassName()) {
+                if ($alias === $objectType->getClassName()) {
                     return new AliasedObjectType($alias, $fullyQualifiedName);
                 }
 
                 // B. is aliased classes matching the class name
                 if ($useName === $objectType->getClassName()) {
-                    return new AliasedObjectType($alias, $fullyQualifiedName);
+                    return new AliasedObjectType($useName, $fullyQualifiedName);
                 }
             }
         }
