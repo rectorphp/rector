@@ -66,6 +66,9 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
                     'MyNamespace\AnotherMyClass' => 'MyNewClassWithoutNamespace',
                     // test duplicated class - @see https://github.com/rectorphp/rector/issues/1438
                     'Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture\SingularClass' => DuplicatedClass::class,
+                    // test duplicated class - @see https://github.com/rectorphp/rector/issues/5389
+                    'MyFooInterface' => 'MyBazInterface',
+                    'MyBarInterface' => 'MyBazInterface',
                 ],
             ],
         ];

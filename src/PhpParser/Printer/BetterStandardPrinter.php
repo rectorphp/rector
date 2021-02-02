@@ -9,12 +9,14 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Expression;
@@ -384,15 +386,17 @@ final class BetterStandardPrinter extends Standard
     protected function pScalar_String(String_ $string): string
     {
         $isRegularPattern = $string->getAttribute(AttributeKey::IS_REGULAR_PATTERN);
-        if ($isRegularPattern) {
-            $kind = $string->getAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
-            if ($kind === String_::KIND_DOUBLE_QUOTED) {
-                return $this->wrapValueWith($string, '"');
-            }
+        if (! $isRegularPattern) {
+            return parent::pScalar_String($string);
+        }
 
-            if ($kind === String_::KIND_SINGLE_QUOTED) {
-                return $this->wrapValueWith($string, "'");
-            }
+        $kind = $string->getAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
+        if ($kind === String_::KIND_DOUBLE_QUOTED) {
+            return $this->wrapValueWith($string, '"');
+        }
+
+        if ($kind === String_::KIND_SINGLE_QUOTED) {
+            return $this->wrapValueWith($string, "'");
         }
 
         return parent::pScalar_String($string);
@@ -501,10 +505,26 @@ final class BetterStandardPrinter extends Standard
      */
     private function resolveNewStmts(array $stmts): array
     {
-        if (count($stmts) === 1) {
-            $onlyStmt = $stmts[0];
-            if ($onlyStmt instanceof FileWithoutNamespace) {
-                return $onlyStmt->stmts;
+        if (count($stmts) === 1 && $stmts[0] instanceof FileWithoutNamespace) {
+            return $this->cleanUpStmts($stmts[0]->stmts);
+        }
+
+        return $this->cleanUpStmts($stmts);
+    }
+
+    /**
+     * @param Node[] $stmts
+     * @return Node[]|mixed[]
+     */
+    private function cleanUpStmts(array $stmts): array
+    {
+        foreach ($stmts as $key => $stmt) {
+            if (! $stmt instanceof ClassLike && ! $stmt instanceof FunctionLike) {
+                continue;
+            }
+
+            if (isset($stmts[$key - 1]) && $this->areNodesEqual($stmt, $stmts[$key - 1])) {
+                unset($stmts[$key]);
             }
         }
 
