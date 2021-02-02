@@ -10,9 +10,9 @@ class SkipRespectChildrenReturnTypeParent
     }
 }
 
-class RespectChildrenReturnType extends SkipRespectChildrenReturnTypeParent {    
+class RespectChildrenReturnType extends SkipRespectChildrenReturnTypeParent {
     public function run() : Baba {
-       return new Baba();        
+       return new Baba();
     }
 }
 
