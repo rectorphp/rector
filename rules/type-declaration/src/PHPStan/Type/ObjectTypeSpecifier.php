@@ -97,7 +97,7 @@ final class ObjectTypeSpecifier
         string $alias,
         string $className,
         string $useName,
-        Node $parentNode,
+        ?Node $parentNode,
         string $fullyQualifiedName
     ): ?AliasedObjectType {
         // A. is alias in use statement matching this class alias
