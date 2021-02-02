@@ -9,12 +9,14 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Expression;
@@ -118,6 +120,10 @@ final class BetterStandardPrinter extends Standard
         $newStmts = $this->resolveNewStmts($stmts);
 
         foreach ($newStmts as $key => $stmt) {
+            if (! $stmt instanceof ClassLike && ! $stmt instanceof FunctionLike) {
+                continue;
+            }
+
             if (isset($newStmts[$key - 1]) && $this->areNodesEqual($stmt, $newStmts[$key - 1])) {
                 unset($newStmts[$key]);
             }
