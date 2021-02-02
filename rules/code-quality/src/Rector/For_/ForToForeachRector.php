@@ -175,6 +175,7 @@ CODE_SAMPLE
 
         $iteratedVariableSingle = $this->inflector->singularize($iteratedVariable);
         $foreach = $this->createForeach($node, $iteratedVariableSingle);
+        $this->mirrorComments($foreach, $node);
 
         $this->useForeachVariableInStmts($foreach->expr, $foreach->valueVar, $foreach->stmts);
 
