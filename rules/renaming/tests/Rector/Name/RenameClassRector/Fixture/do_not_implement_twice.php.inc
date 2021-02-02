@@ -3,20 +3,19 @@
 interface MyFooInterface {};
 interface MyBarInterface {};
 
-final class DemoFile implements \MyFooInterface, \MyBarInterface
+final class DoNotImplementTwice implements \MyFooInterface, \MyBarInterface
 {
-
 }
 
 ?>
 -----
 <?php
 
-interface MyBazInterface {};
+interface MyFooInterface {};
+interface MyBarInterface {};
 
-final class DemoFile implements \MyBazInterface
+final class DoNotImplementTwice implements \MyBazInterface
 {
-
 }
 
 ?>

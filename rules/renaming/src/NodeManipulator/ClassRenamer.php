@@ -69,6 +69,11 @@ final class ClassRenamer
      */
     private $docBlockClassRenamer;
 
+    /**
+     * @var string
+     */
+    private $classLikes;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
@@ -102,7 +107,7 @@ final class ClassRenamer
             return $this->refactorNamespace($node, $oldToNewClasses);
         }
 
-        if ($node instanceof ClassLike) {
+        if ($node instanceof ClassLike && ! interface_exists($node->name->toString())) {
             return $this->refactorClassLike($node, $oldToNewClasses);
         }
 
@@ -305,6 +310,7 @@ final class ClassRenamer
             return;
         }
 
+        $classLike->implements = array_unique($classLike->implements);
         foreach ($classLike->implements as $key => $implementName) {
             if (! $implementName instanceof Name) {
                 continue;
