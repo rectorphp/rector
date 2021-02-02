@@ -117,6 +117,12 @@ final class BetterStandardPrinter extends Standard
     {
         $newStmts = $this->resolveNewStmts($stmts);
 
+        foreach ($newStmts as $key => $stmt) {
+            if (isset($newStmts[$key - 1]) && $this->areNodesEqual($stmt, $newStmts[$key - 1])) {
+                unset($newStmts[$key]);
+            }
+        }
+
         // detect per print
         $this->tabOrSpaceIndentCharacter = $this->indentCharacterDetector->detect($newStmts);
 
