@@ -69,11 +69,6 @@ final class ClassRenamer
      */
     private $docBlockClassRenamer;
 
-    /**
-     * @var string
-     */
-    private $classLikes;
-
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
