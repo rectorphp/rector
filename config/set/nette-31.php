@@ -15,6 +15,8 @@ use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameStaticMethod;
 use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
+use Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector;
+use Rector\Transform\ValueObject\CallableInMethodCallToVariable;
 use Rector\Transform\ValueObject\DimFetchAssignToMethodCall;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
@@ -23,6 +25,14 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
+
+    $services->set(CallableInMethodCallToVariableRector::class)
+        ->call('configure', [[
+            // see https://github.com/nette/caching/commit/5ffe263752af5ccf3866a28305e7b2669ab4da82
+            CallableInMethodCallToVariableRector::CALLABLE_IN_METHOD_CALL_TO_VARIABLE => ValueObjectInliner::inline([
+                new CallableInMethodCallToVariable('Nette\Caching\Cache', 'save', 1),
+            ]),
+        ]]);
 
     $services->set(RenameClassRector::class)->call('configure', [[
         RenameClassRector::OLD_TO_NEW_CLASSES => [
