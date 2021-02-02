@@ -234,7 +234,6 @@ final class ServiceMapProvider
     {
         $tagValueObjects = [];
         foreach ($tagsData as $key => $tag) {
-
             if (is_string($tag)) {
                 $tagValueObjects[$key] = new Tag($tag);
                 continue;
