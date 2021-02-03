@@ -226,7 +226,7 @@ CODE_SAMPLE
         return $ifs;
     }
 
-    private function getIfNextReturn(If_ $if): ?Return_
+    private function getIfNextReturn(If_ $if): ?Node
     {
         return $if->getAttribute(AttributeKey::NEXT_NODE) ?: null;
     }
@@ -267,7 +267,10 @@ CODE_SAMPLE
         return ! (bool) $this->betterNodeFinder->findFirst(
             (array) $functionLike->getStmts(),
             function (Node $node): bool {
-                return $node instanceof Return_ && $node->expr instanceof Expr;
+                if (! $node instanceof Return_) {
+                    return false;
+                }
+                return $node->expr instanceof Expr;
             }
         );
     }
