@@ -304,8 +304,16 @@ CODE_SAMPLE
     {
         $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
         if (! $nextNode instanceof Node) {
+            $parent = $if->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parent instanceof If_) {
+                return $this->isLastIfOrBeforeLastReturn($parent);
+            }
+        }
+
+        if (! $nextNode instanceof Node) {
             return true;
         }
+
         return $nextNode instanceof Return_;
     }
 }
