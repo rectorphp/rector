@@ -4,7 +4,7 @@ namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fix
 
 class SkipHasNextStmtAfterIf
 {
-    public function canDrive(Car $car)
+    public function run()
     {
         $firstStatement  = isFirstStatementTrue();
         $secondStatement = isSecondStatementTrue();
