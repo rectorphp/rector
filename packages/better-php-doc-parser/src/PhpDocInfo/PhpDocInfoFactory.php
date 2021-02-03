@@ -115,7 +115,7 @@ final class PhpDocInfoFactory
             try {
                 $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
             } catch (ParserException $parserException) {
-                return $this->createEmpty($node);
+                return null;
             }
 
             $this->setPositionOfLastToken($phpDocNode);
