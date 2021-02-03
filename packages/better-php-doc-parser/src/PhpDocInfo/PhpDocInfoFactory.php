@@ -114,7 +114,7 @@ final class PhpDocInfoFactory
             $tokens = $this->lexer->tokenize($content);
             try {
                 $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
-            } catch (ParserException $e) {
+            } catch (ParserException $parserException) {
                 return $this->createEmpty($node);
             }
 
