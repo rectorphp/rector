@@ -182,12 +182,7 @@ CODE_SAMPLE
 
     private function getIfReturn(If_ $if): ?Stmt
     {
-        $ifStmt = end($if->stmts);
-        if ($ifStmt === false) {
-            return null;
-        }
-
-        return $ifStmt;
+        return end($if->stmts) ?: null;
     }
 
     /**
@@ -221,11 +216,9 @@ CODE_SAMPLE
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if = new If_($invertedCondition);
-            if ($isIfInLoop && $this->getIfNextReturn($node) === null) {
-                $if->stmts = [new Continue_()];
-            } else {
-                $if->stmts = [new Return_()];
-            }
+            $if->stmts = $isIfInLoop && $this->getIfNextReturn($node) === null
+                ? [new Continue_()]
+                : [new Return_()];
 
             $ifs[] = $if;
         }
@@ -235,12 +228,7 @@ CODE_SAMPLE
 
     private function getIfNextReturn(If_ $if): ?Return_
     {
-        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $nextNode instanceof Return_) {
-            return null;
-        }
-
-        return $nextNode;
+        return $if->getAttribute(AttributeKey::NEXT_NODE) ?: null;
     }
 
     private function isIfInLoop(If_ $if): bool
@@ -276,16 +264,12 @@ CODE_SAMPLE
             return true;
         }
 
-        $returns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->getStmts(), Return_::class);
-        if ($returns === []) {
-            return true;
-        }
-
-        $nonVoidReturns = array_filter($returns, function (Return_ $return): bool {
-            return $return->expr instanceof Expr;
-        });
-
-        return $nonVoidReturns === [];
+        return ! (bool) $this->betterNodeFinder->findFirst(
+            (array) $functionLike->getStmts(),
+            function (Node $node): bool {
+                return $node instanceof Return_ && $node->expr instanceof Expr;
+            }
+        );
     }
 
     private function isNestedIfInLoop(If_ $if): bool
