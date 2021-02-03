@@ -122,7 +122,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($node instanceof ClassMethod && $this->shouldSkip($node)) {
             return null;
         }
 
@@ -139,6 +139,14 @@ CODE_SAMPLE
             return null;
         }
 
+        return $this->processType($node, $inferedType);
+    }
+
+    /**
+     * @param ClassMethod|Function_ $node
+     */
+    private function processType(Node $node, Type $inferedType): ?Node
+    {
         $inferredReturnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $inferedType,
             PHPStanStaticTypeMapper::KIND_RETURN
@@ -169,32 +177,25 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
-    private function shouldSkip(FunctionLike $functionLike): bool
+    private function shouldSkip(ClassMethod $classMethod): bool
     {
         if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return true;
         }
 
-        if (! $this->overrideExistingReturnTypes && $functionLike->returnType !== null) {
+        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($classMethod)) {
             return true;
         }
 
-        if (! $functionLike instanceof ClassMethod) {
-            return false;
-        }
-
-        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($functionLike)) {
+        if (! $this->overrideExistingReturnTypes && $classMethod->returnType !== null) {
             return true;
         }
 
-        if ($this->isNames($functionLike, self::EXCLUDED_METHOD_NAMES)) {
+        if ($this->isNames($classMethod, self::EXCLUDED_METHOD_NAMES)) {
             return true;
         }
 
-        return $this->vendorLockResolver->isReturnChangeVendorLockedIn($functionLike);
+        return $this->vendorLockResolver->isReturnChangeVendorLockedIn($classMethod);
     }
 
     /**
@@ -239,16 +240,21 @@ CODE_SAMPLE
      */
     private function addReturnType(FunctionLike $functionLike, Node $inferredReturnNode): void
     {
-        if ($functionLike->returnType !== null) {
-            $isSubtype = $this->phpParserTypeAnalyzer->isSubtypeOf($inferredReturnNode, $functionLike->returnType);
-            if ($this->isAtLeastPhpVersion(PhpVersionFeature::COVARIANT_RETURN) && $isSubtype) {
-                $functionLike->returnType = $inferredReturnNode;
-            } elseif (! $isSubtype) {
-                // type override with correct one
-                $functionLike->returnType = $inferredReturnNode;
-            }
-        } else {
+        if ($functionLike->returnType === null) {
             $functionLike->returnType = $inferredReturnNode;
+            return;
+        }
+
+        $isSubtype = $this->phpParserTypeAnalyzer->isSubtypeOf($inferredReturnNode, $functionLike->returnType);
+        if ($this->isAtLeastPhpVersion(PhpVersionFeature::COVARIANT_RETURN) && $isSubtype) {
+            $functionLike->returnType = $inferredReturnNode;
+            return;
+        }
+
+        if (! $isSubtype) {
+            // type override with correct one
+            $functionLike->returnType = $inferredReturnNode;
+            return;
         }
     }
 

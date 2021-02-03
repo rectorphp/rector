@@ -7,12 +7,13 @@ namespace Rector\ChangesReporting\Application;
 use PhpParser\Node;
 use PHPStan\AnalysedCodeException;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
-use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
+use Rector\Core\Differ\DefaultDiffer;
 use Rector\Core\Error\ExceptionCorrector;
 use Rector\Core\ValueObject\Application\RectorError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
+use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 
@@ -27,11 +28,6 @@ final class ErrorAndDiffCollector
      * @var FileDiff[]
      */
     private $fileDiffs = [];
-
-    /**
-     * @var DifferAndFormatter
-     */
-    private $differAndFormatter;
 
     /**
      * @var RectorChangeCollector
@@ -53,18 +49,30 @@ final class ErrorAndDiffCollector
      */
     private $nodesToRemoveCollector;
 
+    /**
+     * @var ConsoleDiffer
+     */
+    private $consoleDiffer;
+
+    /**
+     * @var DefaultDiffer
+     */
+    private $defaultDiffer;
+
     public function __construct(
-        DifferAndFormatter $differAndFormatter,
         ExceptionCorrector $exceptionCorrector,
         NodesToRemoveCollector $nodesToRemoveCollector,
         RectorChangeCollector $rectorChangeCollector,
-        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        ConsoleDiffer $consoleDiffer,
+        DefaultDiffer $defaultDiffer
     ) {
-        $this->differAndFormatter = $differAndFormatter;
         $this->rectorChangeCollector = $rectorChangeCollector;
         $this->exceptionCorrector = $exceptionCorrector;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
+        $this->consoleDiffer = $consoleDiffer;
+        $this->defaultDiffer = $defaultDiffer;
     }
 
     /**
@@ -112,12 +120,13 @@ final class ErrorAndDiffCollector
         $rectorChanges = $this->rectorChangeCollector->getRectorChangesByFileInfo($smartFileInfo);
 
         // always keep the most recent diff
-        $this->fileDiffs[$smartFileInfo->getRealPath()] = new FileDiff(
+        $fileDiff = new FileDiff(
             $smartFileInfo,
-            $this->differAndFormatter->diff($oldContent, $newContent),
-            $this->differAndFormatter->diffAndFormat($oldContent, $newContent),
+            $this->defaultDiffer->diff($oldContent, $newContent),
+            $this->consoleDiffer->diff($oldContent, $newContent),
             $rectorChanges
         );
+        $this->fileDiffs[$smartFileInfo->getRealPath()] = $fileDiff;
     }
 
     /**

@@ -1,0 +1,14 @@
+name: Composer validate
+
+on:
+    pull_request: null
+
+jobs:
+    tests:
+        runs-on: ubuntu-latest
+
+        name: Composer validate
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   run: composer validate --strict
