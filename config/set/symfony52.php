@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\ObjectType;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -13,6 +14,8 @@ use Rector\Symfony5\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRec
 use Rector\Symfony5\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector;
 use Rector\Symfony5\Rector\New_\PropertyPathMapperToDataMapperRector;
 use Rector\Symfony5\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
+use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -120,4 +123,35 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#validator
     $services->set(ValidatorBuilderEnableAnnotationMappingRector::class);
+
+    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#notifier
+    $services->set(AddParamTypeDeclarationRector::class)
+        ->call('configure', [[
+            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => ValueObjectInliner::inline([
+                new AddParamTypeDeclaration(
+                    'Symfony\Component\Notifier\NotifierInterface',
+                    'send',
+                    1,
+                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface'),
+                ),
+                new AddParamTypeDeclaration(
+                    'Symfony\Component\Notifier\Notifier',
+                    'getChannels',
+                    1,
+                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface'),
+                ),
+                new AddParamTypeDeclaration(
+                    'Symfony\Component\Notifier\Channel\ChannelInterface',
+                    'notify',
+                    1,
+                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface'),
+                ),
+                new AddParamTypeDeclaration(
+                    'Symfony\Component\Notifier\Channel\ChannelInterface',
+                    'supports',
+                    1,
+                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface'),
+                ),
+            ]),
+        ]]);
 };
