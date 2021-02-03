@@ -13,7 +13,7 @@ namespace Acme\Foo {
      */
     final class DoNotUpdateExistingTargetNamespace
     {
-        public function run()
+        public static function run()
         {
             return 5;
         }
@@ -25,7 +25,7 @@ namespace Acme\Bar {
 
     final class DoNotUpdateExistingTargetNamespace
     {
-        public function run()
+        public static function run()
         {
             return 5;
         }
@@ -49,7 +49,7 @@ namespace Acme\Foo {
      */
     final class DoNotUpdateExistingTargetNamespace
     {
-        public function run()
+        public static function run()
         {
             return 5;
         }
@@ -61,7 +61,7 @@ namespace Acme\Bar {
 
     final class DoNotUpdateExistingTargetNamespace
     {
-        public function run()
+        public static function run()
         {
             return 5;
         }
