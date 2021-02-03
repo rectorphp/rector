@@ -182,12 +182,7 @@ CODE_SAMPLE
 
     private function getIfReturn(If_ $if): ?Stmt
     {
-        $ifStmt = end($if->stmts);
-        if ($ifStmt === false) {
-            return null;
-        }
-
-        return $ifStmt;
+        return end($if->stmts) ?: null;
     }
 
     /**
@@ -221,11 +216,9 @@ CODE_SAMPLE
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if = new If_($invertedCondition);
-            if ($isIfInLoop && $this->getIfNextReturn($node) === null) {
-                $if->stmts = [new Continue_()];
-            } else {
-                $if->stmts = [new Return_()];
-            }
+            $if->stmts = $isIfInLoop && $this->getIfNextReturn($node) === null
+                ? [new Continue_()]
+                : [new Return_()];
 
             $ifs[] = $if;
         }
@@ -276,20 +269,15 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($functionLike->getStmts() === null) {
-            return true;
-        }
-
-        $returns = $this->betterNodeFinder->findInstanceOf($functionLike->getStmts(), Return_::class);
-        if ($returns === []) {
-            return true;
-        }
-
-        $nonVoidReturns = array_filter($returns, function (Return_ $return): bool {
-            return $return->expr !== null;
-        });
-
-        return $nonVoidReturns === [];
+        return ! (bool) $this->betterNodeFinder->findFirst(
+            (array) $functionLike->getStmts(),
+            function (Node $node): bool {
+                if (! $node instanceof Return_) {
+                    return false;
+                }
+                return $node->expr instanceof Expr;
+            }
+        );
     }
 
     private function isNestedIfInLoop(If_ $if): bool
@@ -303,9 +291,15 @@ CODE_SAMPLE
     private function isLastIfOrBeforeLastReturn(If_ $if): bool
     {
         $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $nextNode instanceof Node) {
-            return true;
+        if ($nextNode instanceof Node) {
+            return $nextNode instanceof Return_;
         }
-        return $nextNode instanceof Return_;
+
+        $parent = $if->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof If_) {
+            return $this->isLastIfOrBeforeLastReturn($parent);
+        }
+
+        return true;
     }
 }
