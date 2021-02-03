@@ -181,6 +181,10 @@ final class ClassRenamer
         $newClassFqn = $oldToNewClasses[$currentName];
         $newNamespace = $this->classNaming->getNamespace($newClassFqn);
 
+        if (ClassExistenceStaticHelper::doesClassLikeExist($newClassFqn)) {
+            return null;
+        }
+
         // Renaming to class without namespace (example MyNamespace\DateTime -> DateTimeImmutable)
         if (! $newNamespace) {
             $classLike->name = new Identifier($newClassFqn);

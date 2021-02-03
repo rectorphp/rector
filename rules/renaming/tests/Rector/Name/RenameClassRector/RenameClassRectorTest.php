@@ -69,6 +69,7 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
                     // test duplicated class - @see https://github.com/rectorphp/rector/issues/5389
                     'MyFooInterface' => 'MyBazInterface',
                     'MyBarInterface' => 'MyBazInterface',
+                    \Acme\Foo\DoNotUpdateExistingTargetNamespace::class => \Acme\Bar\DoNotUpdateExistingTargetNamespace::class,
                 ],
             ],
         ];
