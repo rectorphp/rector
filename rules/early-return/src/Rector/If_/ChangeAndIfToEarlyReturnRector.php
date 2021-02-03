@@ -226,9 +226,14 @@ CODE_SAMPLE
         return $ifs;
     }
 
-    private function getIfNextReturn(If_ $if): ?Node
+    private function getIfNextReturn(If_ $if): ?Return_
     {
-        return $if->getAttribute(AttributeKey::NEXT_NODE) ?: null;
+        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $nextNode instanceof Return_) {
+            return null;
+        }
+
+        return $nextNode;
     }
 
     private function isIfInLoop(If_ $if): bool
