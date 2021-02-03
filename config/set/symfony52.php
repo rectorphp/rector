@@ -15,6 +15,7 @@ use Rector\Symfony5\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector;
 use Rector\Symfony5\Rector\New_\PropertyPathMapperToDataMapperRector;
 use Rector\Symfony5\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
+use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
