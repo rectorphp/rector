@@ -276,17 +276,13 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($functionLike->getStmts() === null) {
-            return true;
-        }
-
-        $returns = $this->betterNodeFinder->findInstanceOf($functionLike->getStmts(), Return_::class);
+        $returns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->getStmts(), Return_::class);
         if ($returns === []) {
             return true;
         }
 
         $nonVoidReturns = array_filter($returns, function (Return_ $return): bool {
-            return $return->expr !== null;
+            return $return->expr instanceof Expr;
         });
 
         return $nonVoidReturns === [];
