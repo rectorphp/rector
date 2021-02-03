@@ -291,17 +291,15 @@ CODE_SAMPLE
     private function isLastIfOrBeforeLastReturn(If_ $if): bool
     {
         $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $nextNode instanceof Node) {
-            $parent = $if->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parent instanceof If_) {
-                return $this->isLastIfOrBeforeLastReturn($parent);
-            }
+        if ($nextNode instanceof Node) {
+            return $nextNode instanceof Return_;
         }
 
-        if (! $nextNode instanceof Node) {
-            return true;
+        $parent = $if->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof If_) {
+            return $this->isLastIfOrBeforeLastReturn($parent);
         }
 
-        return $nextNode instanceof Return_;
+        return true;
     }
 }
