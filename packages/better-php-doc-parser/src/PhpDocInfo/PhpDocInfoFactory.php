@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
@@ -111,7 +112,12 @@ final class PhpDocInfoFactory
         } else {
             $content = $docComment->getText();
             $tokens = $this->lexer->tokenize($content);
-            $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
+            try {
+                $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
+            } catch (ParserException $parserException) {
+                return null;
+            }
+
             $this->setPositionOfLastToken($phpDocNode);
         }
 
