@@ -549,3 +549,6 @@ parameters:
             paths:
                 # is "require" in PHP
                 - src/Php/ReservedKeywordAnalyzer.php
+
+        - '#Class Acme\\Bar\\DoNotUpdateExistingTargetNamespace not found#'
+        - '#Class Acme\\Foo\\DoNotUpdateExistingTargetNamespace not found#'
