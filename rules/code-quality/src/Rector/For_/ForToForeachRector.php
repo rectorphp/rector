@@ -173,23 +173,28 @@ CODE_SAMPLE
             return null;
         }
 
+        return $this->processForToForeach($node, $iteratedVariable);
+    }
+
+    private function processForToForeach(For_ $for, string $iteratedVariable): ?Foreach_
+    {
         $originalVariableSingle = $this->inflector->singularize($iteratedVariable);
         $iteratedVariableSingle = $originalVariableSingle;
         if ($iteratedVariableSingle === $iteratedVariable) {
             $iteratedVariableSingle = 'single' . ucfirst($iteratedVariableSingle);
         }
 
-        if ($this->isValueVarUsedNext($node, $iteratedVariableSingle)) {
+        if ($this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
             $iteratedVariableSingle = $originalVariableSingle;
         }
 
         // double check for final $iteratedVariableSingle value
-        if ($this->isValueVarUsedNext($node, $iteratedVariableSingle)) {
+        if ($this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
             return null;
         }
 
-        $foreach = $this->createForeach($node, $iteratedVariableSingle);
-        $this->mirrorComments($foreach, $node);
+        $foreach = $this->createForeach($for, $iteratedVariableSingle);
+        $this->mirrorComments($foreach, $for);
 
         $this->useForeachVariableInStmts($foreach->expr, $foreach->valueVar, $foreach->stmts);
 
