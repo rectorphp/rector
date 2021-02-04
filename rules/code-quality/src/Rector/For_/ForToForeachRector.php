@@ -188,8 +188,9 @@ CODE_SAMPLE
             $iteratedVariableSingle = $originalVariableSingle;
         }
 
-        // double check for final $iteratedVariableSingle value
-        if ($this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
+        if (
+            $originalVariableSingle === $iteratedVariableSingle
+            && $this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
             return null;
         }
 
