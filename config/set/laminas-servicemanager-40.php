@@ -28,27 +28,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     0,
                     new ObjectType('Psr\Container\ContainerInterface'),
                 ),
-            ]),
-
-            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => ValueObjectInliner::inline([
                 new AddParamTypeDeclaration(
                     'Laminas\ServiceManager\Factory\DelegatorFactoryInterface',
                     '__invoke',
                     0,
                     new ObjectType('Psr\Container\ContainerInterface'),
                 ),
-            ]),
-
-            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => ValueObjectInliner::inline([
                 new AddParamTypeDeclaration(
                     'Laminas\ServiceManager\Factory\FactoryInterface',
                     '__invoke',
                     0,
                     new ObjectType('Psr\Container\ContainerInterface'),
                 ),
-            ]),
-
-            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => ValueObjectInliner::inline([
                 new AddParamTypeDeclaration(
                     'Laminas\ServiceManager\Factory\InvokableFactory',
                     '__invoke',
