@@ -12,8 +12,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Interop\Container\ContainerInterface' => 'Psr\Container\ContainerInterface',
-                'Laminas\ServiceManager\ServiceLocatorInterface' => 'Psr\Container\ContainerInterface',
-                'Zend\ServiceManager\ServiceLocatorInterface' => 'Psr\Container\ContainerInterface',
             ],
         ]]);
 };
