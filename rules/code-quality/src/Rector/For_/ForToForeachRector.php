@@ -211,7 +211,7 @@ CODE_SAMPLE
 
     private function isValueVarUsedNext(Node $node, string $iteratedVariableSingle): bool
     {
-        return (bool) $this->betterNodeFinder->findFirstNext($node,  function (Node $node) use (
+        return (bool) $this->betterNodeFinder->findFirstNext($node, function (Node $node) use (
             $iteratedVariableSingle
         ): bool {
             if (! $node instanceof Variable) {
