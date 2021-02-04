@@ -169,7 +169,7 @@ CODE_SAMPLE
         }
 
         $params = $constructClassMethod->getParams();
-        if ($params !== []) {
+        if ($params !== [] && $this->hasPropertyPromotion($params)) {
             return;
         }
 
@@ -196,6 +196,17 @@ CODE_SAMPLE
         }
 
         $this->removeNode($constructClassMethod);
+    }
+
+    private function hasPropertyPromotion(array $params): bool
+    {
+        foreach ($params as $param) {
+            if ($param->flags > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function matchCommandNameNodeInConstruct(StaticCall $staticCall): ?Expr
