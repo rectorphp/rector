@@ -11,8 +11,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\Greater;
-use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreInc;
@@ -21,6 +19,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Unset_;
+use Rector\CodeQuality\NodeAnalyzer\ForNodeAnalyzer;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -69,10 +68,19 @@ final class ForToForeachRector extends AbstractRector
      */
     private $iteratedExpr;
 
-    public function __construct(AssignManipulator $assignManipulator, Inflector $inflector)
-    {
+    /**
+     * @var ForNodeAnalyzer
+     */
+    private $forNodeAnalyzer;
+
+    public function __construct(
+        AssignManipulator $assignManipulator,
+        Inflector $inflector,
+        ForNodeAnalyzer $forNodeAnalyzer
+    ) {
         $this->assignManipulator = $assignManipulator;
         $this->inflector = $inflector;
+        $this->forNodeAnalyzer = $forNodeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -265,7 +273,11 @@ CODE_SAMPLE
         }
 
         if ($this->countValueName !== null) {
-            return $this->isSmallerOrGreater($condExprs, $this->keyValueName, $this->countValueName);
+            return $this->forNodeAnalyzer->isCondExprSmallerOrGreater(
+                $condExprs,
+                $this->keyValueName,
+                $this->countValueName
+            );
         }
 
         if (! $condExprs[0] instanceof BinaryOp) {
@@ -413,32 +425,6 @@ CODE_SAMPLE
 
             return $singleValue;
         });
-    }
-
-    /**
-     * @param Expr[] $condExprs
-     */
-    private function isSmallerOrGreater(array $condExprs, string $keyValueName, string $countValueName): bool
-    {
-        // $i < $count
-        if ($condExprs[0] instanceof Smaller) {
-            if (! $this->isName($condExprs[0]->left, $keyValueName)) {
-                return false;
-            }
-
-            return $this->isName($condExprs[0]->right, $countValueName);
-        }
-
-        // $i > $count
-        if ($condExprs[0] instanceof Greater) {
-            if (! $this->isName($condExprs[0]->left, $countValueName)) {
-                return false;
-            }
-
-            return $this->isName($condExprs[0]->right, $keyValueName);
-        }
-
-        return false;
     }
 
     private function shouldSkipNode(ArrayDimFetch $arrayDimFetch): bool
