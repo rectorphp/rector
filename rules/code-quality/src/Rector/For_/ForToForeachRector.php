@@ -215,7 +215,10 @@ CODE_SAMPLE
             $isFound = (bool) $this->betterNodeFinder->findFirst($next, function (Node $node) use (
                 $iteratedVariableSingle
             ): bool {
-                return $node instanceof Variable && $this->isName($node, $iteratedVariableSingle);
+                if (! $node instanceof Variable) {
+                    return false;
+                }
+                return $this->isName($node, $iteratedVariableSingle);
             });
 
             if ($isFound) {
