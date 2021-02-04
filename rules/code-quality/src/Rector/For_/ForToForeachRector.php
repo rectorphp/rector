@@ -184,15 +184,22 @@ CODE_SAMPLE
             $iteratedVariableSingle = 'single' . ucfirst($iteratedVariableSingle);
         }
 
-        if ($this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
+        if (! $this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
+            return $this->createForeachFromForWithIteratedVariableSingle($for, $iteratedVariableSingle);
+        }
+
+        if ($iteratedVariableSingle !== $originalVariableSingle) {
             $iteratedVariableSingle = $originalVariableSingle;
+            if (! $this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
+                return $this->createForeachFromForWithIteratedVariableSingle($for, $iteratedVariableSingle);
+            }
         }
 
-        // p
-        if ($this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
-            return null;
-        }
+        return null;
+    }
 
+    private function createForeachFromForWithIteratedVariableSingle(For_ $for, string $iteratedVariableSingle): Foreach_
+    {
         $foreach = $this->createForeach($for, $iteratedVariableSingle);
         $this->mirrorComments($foreach, $for);
 
