@@ -191,6 +191,10 @@ CODE_SAMPLE
             return;
         }
 
+        if (! $this->isName($onlyNode->name, MethodName::CONSTRUCT)) {
+            return;
+        }
+
         if ($onlyNode->args !== []) {
             return;
         }
