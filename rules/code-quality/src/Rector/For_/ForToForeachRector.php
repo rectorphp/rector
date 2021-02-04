@@ -183,6 +183,11 @@ CODE_SAMPLE
             $iteratedVariableSingle = $originalVariableSingle;
         }
 
+        // double check for final $iteratedVariableSingle value
+        if ($this->isValueVarUsedNext($node, $iteratedVariableSingle)) {
+            return null;
+        }
+
         $foreach = $this->createForeach($node, $iteratedVariableSingle);
         $this->mirrorComments($foreach, $node);
 
