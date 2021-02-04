@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Rector\Class_;
 
-use PhpParser\Node\Param;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
