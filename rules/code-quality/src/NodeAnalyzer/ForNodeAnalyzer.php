@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\NodeAnalyzer;
 
+use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ForNodeAnalyzer
 {
+    /**
+     * @var string
+     */
+    private const COUNT = 'count';
+
     /**
      * @var NodeNameResolver
      */
@@ -45,5 +53,17 @@ final class ForNodeAnalyzer
         }
 
         return false;
+    }
+
+    public function isArgParentCount(Node $node): bool
+    {
+        if (! $node instanceof Arg) {
+            return false;
+        }
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Node) {
+            return false;
+        }
+        return $this->nodeNameResolver->isFuncCallName($parent, self::COUNT);
     }
 }
