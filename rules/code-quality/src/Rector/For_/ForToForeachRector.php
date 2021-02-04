@@ -173,13 +173,68 @@ CODE_SAMPLE
             return null;
         }
 
-        $iteratedVariableSingle = $this->inflector->singularize($iteratedVariable);
-        $foreach = $this->createForeach($node, $iteratedVariableSingle);
-        $this->mirrorComments($foreach, $node);
+        return $this->processForToForeach($node, $iteratedVariable);
+    }
+
+    private function processForToForeach(For_ $for, string $iteratedVariable): ?Foreach_
+    {
+        $originalVariableSingle = $this->inflector->singularize($iteratedVariable);
+        $iteratedVariableSingle = $originalVariableSingle;
+        if ($iteratedVariableSingle === $iteratedVariable) {
+            $iteratedVariableSingle = 'single' . ucfirst($iteratedVariableSingle);
+        }
+
+        if (! $this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
+            return $this->createForeachFromForWithIteratedVariableSingle($for, $iteratedVariableSingle);
+        }
+
+        if ($iteratedVariableSingle === $originalVariableSingle) {
+            return null;
+        }
+
+        if (! $this->isValueVarUsedNext($for, $originalVariableSingle)) {
+            return $this->createForeachFromForWithIteratedVariableSingle($for, $originalVariableSingle);
+        }
+
+        return null;
+    }
+
+    private function createForeachFromForWithIteratedVariableSingle(For_ $for, string $iteratedVariableSingle): Foreach_
+    {
+        $foreach = $this->createForeach($for, $iteratedVariableSingle);
+        $this->mirrorComments($foreach, $for);
 
         $this->useForeachVariableInStmts($foreach->expr, $foreach->valueVar, $foreach->stmts);
 
         return $foreach;
+    }
+
+    private function isValueVarUsedNext(Node $node, string $iteratedVariableSingle): bool
+    {
+        $next = $node->getAttribute(AttributeKey::NEXT_NODE);
+        if ($next instanceof Node) {
+            $isFound = (bool) $this->betterNodeFinder->findFirst($next, function (Node $node) use (
+                $iteratedVariableSingle
+            ): bool {
+                if (! $node instanceof Variable) {
+                    return false;
+                }
+                return $this->isName($node, $iteratedVariableSingle);
+            });
+
+            if ($isFound) {
+                return true;
+            }
+
+            return $this->isValueVarUsedNext($next, $iteratedVariableSingle);
+        }
+
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Node) {
+            return $this->isValueVarUsedNext($parent, $iteratedVariableSingle);
+        }
+
+        return false;
     }
 
     private function reset(): void
