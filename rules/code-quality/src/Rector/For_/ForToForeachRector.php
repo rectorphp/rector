@@ -211,30 +211,14 @@ CODE_SAMPLE
 
     private function isValueVarUsedNext(Node $node, string $iteratedVariableSingle): bool
     {
-        $next = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if ($next instanceof Node) {
-            $isFound = (bool) $this->betterNodeFinder->findFirst($next, function (Node $node) use (
-                $iteratedVariableSingle
-            ): bool {
-                if (! $node instanceof Variable) {
-                    return false;
-                }
-                return $this->isName($node, $iteratedVariableSingle);
-            });
-
-            if ($isFound) {
-                return true;
+        return (bool) $this->betterNodeFinder->findFirstNext($node,  function (Node $node) use (
+            $iteratedVariableSingle
+        ): bool {
+            if (! $node instanceof Variable) {
+                return false;
             }
-
-            return $this->isValueVarUsedNext($next, $iteratedVariableSingle);
-        }
-
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Node) {
-            return $this->isValueVarUsedNext($parent, $iteratedVariableSingle);
-        }
-
-        return false;
+            return $this->isName($node, $iteratedVariableSingle);
+        });
     }
 
     private function reset(): void

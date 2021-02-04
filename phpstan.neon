@@ -266,7 +266,6 @@ parameters:
                 - packages/node-type-resolver/src/NodeTypeResolver.php
                 - rules/code-quality-strict/src/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
                 - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
-                - rules/code-quality/src/Rector/For_/ForToForeachRector.php
                 - rules/phpunit/src/Rector/ClassMethod/TryCatchToExpectExceptionRector.php
 
         # symplify 9
