@@ -214,6 +214,11 @@ final class SetList
     /**
      * @var string
      */
+    public const LAMINAS_SERVICEMANGER_40 = __DIR__ . '/../../../../config/set/laminas-servicemanager-40.php';
+
+    /**
+     * @var string
+     */
     public const LARAVEL_50 = __DIR__ . '/../../../../config/set/laravel50.php';
 
     /**
