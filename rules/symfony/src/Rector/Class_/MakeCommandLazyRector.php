@@ -163,6 +163,11 @@ CODE_SAMPLE
             return;
         }
 
+        $params = $constructClassMethod->getParams();
+        if ($params !== []) {
+            return;
+        }
+
         $stmts = (array) $constructClassMethod->stmts;
         if (count($stmts) !== 1) {
             return;
