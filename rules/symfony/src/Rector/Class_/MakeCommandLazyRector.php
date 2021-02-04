@@ -201,7 +201,7 @@ CODE_SAMPLE
     private function hasPropertyPromotion(array $params): bool
     {
         foreach ($params as $param) {
-            if ($param->flags > 0) {
+            if ($param->flags !== 0) {
                 return true;
             }
         }
