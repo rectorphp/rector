@@ -188,6 +188,7 @@ CODE_SAMPLE
             $iteratedVariableSingle = $originalVariableSingle;
         }
 
+        // p
         if ($this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
             return null;
         }
