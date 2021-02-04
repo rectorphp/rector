@@ -154,4 +154,29 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ),
             ]),
         ]]);
+
+    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#notifier
+    $services->set(AddParamTypeDeclarationRector::class)
+        ->call('configure', [[
+            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => ValueObjectInliner::inline([
+                new AddParamTypeDeclaration(
+                    'Symfony\Component\Notifier\Notification\ChatNotificationInterface',
+                    'asChatMessage',
+                    0,
+                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface'),
+                ),
+                new AddParamTypeDeclaration(
+                    'Symfony\Component\Notifier\Notification\EmailNotificationInterface',
+                    'asEmailMessage',
+                    0,
+                    new ObjectType('Symfony\Component\Notifier\Recipient\EmailRecipientInterface'),
+                ),
+                new AddParamTypeDeclaration(
+                    'Symfony\Component\Notifier\Notification\SmsNotificationInterface',
+                    'asSmsMessage',
+                    0,
+                    new ObjectType('Symfony\Component\Notifier\Recipient\SmsRecipientInterface'),
+                ),
+            ]),
+        ]]);
 };
