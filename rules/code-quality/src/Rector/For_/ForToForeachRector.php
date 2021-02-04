@@ -6,14 +6,11 @@ namespace Rector\CodeQuality\Rector\For_;
 
 use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\PostInc;
-use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\For_;
@@ -23,7 +20,6 @@ use Rector\CodeQuality\NodeAnalyzer\ForNodeAnalyzer;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -169,7 +165,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isCountValueVariableUsedInsideForStatements($node)) {
+        if ($this->forNodeAnalyzer->isCountValueVariableUsedInsideForStatements($node, $this->countValueVariable)) {
             return null;
         }
 
@@ -293,16 +289,6 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    private function isCountValueVariableUsedInsideForStatements(For_ $for): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst(
-            $for->stmts,
-            function (Node $node): bool {
-                return $this->areNodesEqual($this->countValueVariable, $node);
-            }
-        );
     }
 
     private function isAssignmentWithArrayDimFetchAsVariableInsideForStatements(For_ $for): bool

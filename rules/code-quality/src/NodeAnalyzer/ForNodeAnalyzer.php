@@ -11,6 +11,9 @@ use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreInc;
+use PhpParser\Node\Stmt\For_;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -27,9 +30,24 @@ final class ForNodeAnalyzer
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        BetterNodeFinder $betterNodeFinder,
+        BetterStandardPrinter $betterStandardPrinter
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**
@@ -91,5 +109,15 @@ final class ForNodeAnalyzer
         }
 
         return false;
+    }
+
+    public function isCountValueVariableUsedInsideForStatements(For_ $for, ?Node $countValueVariable): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $for->stmts,
+            function (Node $node) use ($countValueVariable): bool {
+                return $this->betterStandardPrinter->areNodesEqual($countValueVariable, $node);
+            }
+        );
     }
 }
