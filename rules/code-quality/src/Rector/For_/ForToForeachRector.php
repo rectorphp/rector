@@ -188,11 +188,13 @@ CODE_SAMPLE
             return $this->createForeachFromForWithIteratedVariableSingle($for, $iteratedVariableSingle);
         }
 
-        if ($iteratedVariableSingle !== $originalVariableSingle) {
-            $iteratedVariableSingle = $originalVariableSingle;
-            if (! $this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
-                return $this->createForeachFromForWithIteratedVariableSingle($for, $iteratedVariableSingle);
-            }
+        if ($iteratedVariableSingle === $originalVariableSingle) {
+            return null;
+        }
+
+        $iteratedVariableSingle = $originalVariableSingle;
+        if (! $this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
+            return $this->createForeachFromForWithIteratedVariableSingle($for, $iteratedVariableSingle);
         }
 
         return null;
