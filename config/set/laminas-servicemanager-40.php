@@ -18,34 +18,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'Interop\Container\ContainerInterface' => 'Psr\Container\ContainerInterface',
             ],
         ]]);
-
-    $services->set(AddParamTypeDeclarationRector::class)
-        ->call('configure', [[
-            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => ValueObjectInliner::inline([
-                new AddParamTypeDeclaration(
-                    'Laminas\ServiceManager\Factory\AbstractFactoryInterface',
-                    '__invoke',
-                    0,
-                    new ObjectType('Psr\Container\ContainerInterface'),
-                ),
-                new AddParamTypeDeclaration(
-                    'Laminas\ServiceManager\Factory\DelegatorFactoryInterface',
-                    '__invoke',
-                    0,
-                    new ObjectType('Psr\Container\ContainerInterface'),
-                ),
-                new AddParamTypeDeclaration(
-                    'Laminas\ServiceManager\Factory\FactoryInterface',
-                    '__invoke',
-                    0,
-                    new ObjectType('Psr\Container\ContainerInterface'),
-                ),
-                new AddParamTypeDeclaration(
-                    'Laminas\ServiceManager\Factory\InvokableFactory',
-                    '__invoke',
-                    0,
-                    new ObjectType('Psr\Container\ContainerInterface'),
-                ),
-            ]),
-        ]]);
 };
