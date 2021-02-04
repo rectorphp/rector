@@ -172,6 +172,11 @@ CODE_SAMPLE
             return;
         }
 
+        $params = $constructClassMethod->getParams();
+        if ($params !== []) {
+            return;
+        }
+
         $onlyNode = $stmts[0];
         if ($onlyNode instanceof Expression) {
             $onlyNode = $onlyNode->expr;
@@ -187,11 +192,6 @@ CODE_SAMPLE
         }
 
         if ($onlyNode->args !== []) {
-            return;
-        }
-
-        $params = $constructClassMethod->getParams();
-        if ($params !== []) {
             return;
         }
 
