@@ -164,10 +164,6 @@ CODE_SAMPLE
         }
 
         $stmts = (array) $constructClassMethod->stmts;
-        if ($stmts === []) {
-            $this->removeNode($constructClassMethod);
-        }
-
         if (count($stmts) !== 1) {
             return;
         }
