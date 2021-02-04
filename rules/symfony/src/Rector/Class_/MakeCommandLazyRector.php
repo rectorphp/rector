@@ -163,11 +163,6 @@ CODE_SAMPLE
             return;
         }
 
-        $params = $constructClassMethod->getParams();
-        if ($params !== []) {
-            return;
-        }
-
         $stmts = (array) $constructClassMethod->stmts;
         if (count($stmts) !== 1) {
             return;
@@ -188,6 +183,11 @@ CODE_SAMPLE
         }
 
         if ($onlyNode->args !== []) {
+            return;
+        }
+
+        $params = $constructClassMethod->getParams();
+        if ($params !== []) {
             return;
         }
 
