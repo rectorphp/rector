@@ -9,6 +9,9 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
+use PhpParser\Node\Expr\PostInc;
+use PhpParser\Node\Expr\PreInc;
+use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -65,5 +68,28 @@ final class ForNodeAnalyzer
             return false;
         }
         return $this->nodeNameResolver->isFuncCallName($parent, self::COUNT);
+    }
+
+    /**
+     * @param Expr[] $loopExprs
+     * $param
+     */
+    public function isLoopMatch(array $loopExprs, ?string $keyValueName): bool
+    {
+        if (count($loopExprs) !== 1) {
+            return false;
+        }
+
+        if ($keyValueName === null) {
+            return false;
+        }
+
+        /** @var PreInc|PostInc $prePostInc */
+        $prePostInc = $loopExprs[0];
+        if (StaticInstanceOf::isOneOf($prePostInc, [PreInc::class, PostInc::class])) {
+            return $this->nodeNameResolver->isName($prePostInc->var, $keyValueName);
+        }
+
+        return false;
     }
 }

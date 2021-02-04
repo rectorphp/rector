@@ -147,7 +147,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isLoopMatch($node->loop)) {
+        if (! $this->forNodeAnalyzer->isLoopMatch($node->loop, $this->keyValueName)) {
             return null;
         }
 
@@ -290,29 +290,6 @@ CODE_SAMPLE
             $countFuncCall = $condExprs[0]->right;
             $this->iteratedExpr = $countFuncCall->args[0]->value;
             return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param Expr[] $loopExprs
-     * $param
-     */
-    private function isLoopMatch(array $loopExprs): bool
-    {
-        if (count($loopExprs) !== 1) {
-            return false;
-        }
-
-        if ($this->keyValueName === null) {
-            return false;
-        }
-
-        /** @var PreInc|PostInc $prePostInc */
-        $prePostInc = $loopExprs[0];
-        if (StaticInstanceOf::isOneOf($prePostInc, [PreInc::class, PostInc::class])) {
-            return $this->isName($prePostInc->var, $this->keyValueName);
         }
 
         return false;
