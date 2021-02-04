@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Rector\Class_;
 
+use PhpParser\Node\Param;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
@@ -198,6 +199,9 @@ CODE_SAMPLE
         $this->removeNode($constructClassMethod);
     }
 
+    /**
+     * @param Param[] $params
+     */
     private function hasPropertyPromotion(array $params): bool
     {
         foreach ($params as $param) {
