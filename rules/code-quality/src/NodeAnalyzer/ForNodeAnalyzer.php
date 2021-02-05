@@ -183,4 +183,16 @@ final class ForNodeAnalyzer
             return $this->nodeNameResolver->isName($node, $iteratedVariableSingle);
         });
     }
+
+    /**
+     * @param Expr[] $condExprs
+     */
+    public function isCondExprOneOrKeyValueNameNotNull(array $condExprs, ?string $keyValueName): bool
+    {
+        if (count($condExprs) !== 1) {
+            return true;
+        }
+
+        return $keyValueName === null;
+    }
 }

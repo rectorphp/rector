@@ -262,18 +262,16 @@ CODE_SAMPLE
      */
     private function isConditionMatch(array $condExprs): bool
     {
-        if (count($condExprs) !== 1) {
+        if ($this->forNodeAnalyzer->isCondExprOneOrKeyValueNameNotNull($condExprs, $this->keyValueName)) {
             return false;
         }
 
-        if ($this->keyValueName === null) {
-            return false;
-        }
-
+        /** @var string $keyValueName */
+        $keyValueName = $this->keyValueName;
         if ($this->countValueName !== null) {
             return $this->forNodeAnalyzer->isCondExprSmallerOrGreater(
                 $condExprs,
-                $this->keyValueName,
+                $keyValueName,
                 $this->countValueName
             );
         }
