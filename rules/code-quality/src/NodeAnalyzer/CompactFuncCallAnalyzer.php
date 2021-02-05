@@ -11,7 +11,7 @@ use PHPStan\Analyser\Scope;
 
 final class CompactFuncCallAnalyzer
 {
-    public function hasArrayDefinedVariableNames(Array_ $array, Scope $scope): bool
+    public function hasArrayExclusiveDefinedVariableNames(Array_ $array, Scope $scope): bool
     {
         foreach ($array->items as $arrayItem) {
             if (! $arrayItem instanceof ArrayItem) {

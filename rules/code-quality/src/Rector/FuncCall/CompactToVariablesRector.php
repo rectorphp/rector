@@ -128,7 +128,7 @@ CODE_SAMPLE
             return;
         }
 
-        if ($this->compactFuncCallAnalyzer->hasArrayDefinedVariableNames($array, $assignScope)) {
+        if ($this->compactFuncCallAnalyzer->hasArrayExclusiveDefinedVariableNames($array, $assignScope)) {
             $this->arrayCompacter->compactStringToVariableArray($array);
             return;
         }
