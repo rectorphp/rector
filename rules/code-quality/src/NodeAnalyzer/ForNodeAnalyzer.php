@@ -116,12 +116,12 @@ final class ForNodeAnalyzer
         return false;
     }
 
-    public function isCountValueVariableUsedInsideForStatements(For_ $for, ?Node $node): bool
+    public function isCountValueVariableUsedInsideForStatements(For_ $for, ?Expr $expr): bool
     {
         return (bool) $this->betterNodeFinder->findFirst(
             $for->stmts,
-            function (Node $node) use ($node): bool {
-                return $this->betterStandardPrinter->areNodesEqual($node, $node);
+            function (Node $node) use ($expr): bool {
+                return $this->betterStandardPrinter->areNodesEqual($node, $expr);
             }
         );
     }
