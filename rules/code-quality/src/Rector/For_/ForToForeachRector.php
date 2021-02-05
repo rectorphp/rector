@@ -17,7 +17,6 @@ use PhpParser\Node\Stmt\Foreach_;
 use Rector\CodeQuality\NodeAnalyzer\ForNodeAnalyzer;
 use Rector\CodeQuality\NodeFactory\ForeachFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -31,11 +30,6 @@ final class ForToForeachRector extends AbstractRector
      * @var string
      */
     private const COUNT = 'count';
-
-    /**
-     * @var AssignManipulator
-     */
-    private $assignManipulator;
 
     /**
      * @var Inflector
@@ -73,12 +67,10 @@ final class ForToForeachRector extends AbstractRector
     private $foreachFactory;
 
     public function __construct(
-        AssignManipulator $assignManipulator,
         Inflector $inflector,
         ForNodeAnalyzer $forNodeAnalyzer,
         ForeachFactory $foreachFactory
     ) {
-        $this->assignManipulator = $assignManipulator;
         $this->inflector = $inflector;
         $this->forNodeAnalyzer = $forNodeAnalyzer;
         $this->foreachFactory = $foreachFactory;
