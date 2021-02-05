@@ -6,26 +6,18 @@ namespace Rector\CodeQuality\Rector\For_;
 
 use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\Greater;
-use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\PostInc;
-use PhpParser\Node\Expr\PreInc;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\Unset_;
+use Rector\CodeQuality\NodeAnalyzer\ForNodeAnalyzer;
+use Rector\CodeQuality\NodeFactory\ForeachFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticInstanceOf;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -38,11 +30,6 @@ final class ForToForeachRector extends AbstractRector
      * @var string
      */
     private const COUNT = 'count';
-
-    /**
-     * @var AssignManipulator
-     */
-    private $assignManipulator;
 
     /**
      * @var Inflector
@@ -69,10 +56,24 @@ final class ForToForeachRector extends AbstractRector
      */
     private $iteratedExpr;
 
-    public function __construct(AssignManipulator $assignManipulator, Inflector $inflector)
-    {
-        $this->assignManipulator = $assignManipulator;
+    /**
+     * @var ForNodeAnalyzer
+     */
+    private $forNodeAnalyzer;
+
+    /**
+     * @var ForeachFactory
+     */
+    private $foreachFactory;
+
+    public function __construct(
+        Inflector $inflector,
+        ForNodeAnalyzer $forNodeAnalyzer,
+        ForeachFactory $foreachFactory
+    ) {
         $this->inflector = $inflector;
+        $this->forNodeAnalyzer = $forNodeAnalyzer;
+        $this->foreachFactory = $foreachFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -139,7 +140,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isLoopMatch($node->loop)) {
+        if (! $this->forNodeAnalyzer->isLoopMatch($node->loop, $this->keyValueName)) {
             return null;
         }
 
@@ -161,15 +162,18 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isCountValueVariableUsedInsideForStatements($node)) {
+        if ($this->forNodeAnalyzer->isCountValueVariableUsedInsideForStatements($node, $this->countValueVariable)) {
             return null;
         }
 
-        if ($this->isAssignmentWithArrayDimFetchAsVariableInsideForStatements($node)) {
+        if ($this->forNodeAnalyzer->isAssignmentWithArrayDimFetchAsVariableInsideForStatements(
+            $node,
+            $this->keyValueName
+        )) {
             return null;
         }
 
-        if ($this->isArrayWithKeyValueNameUnsetted($node)) {
+        if ($this->forNodeAnalyzer->isArrayWithKeyValueNameUnsetted($node)) {
             return null;
         }
 
@@ -184,7 +188,7 @@ CODE_SAMPLE
             $iteratedVariableSingle = 'single' . ucfirst($iteratedVariableSingle);
         }
 
-        if (! $this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
+        if (! $this->forNodeAnalyzer->isValueVarUsedNext($for, $iteratedVariableSingle)) {
             return $this->createForeachFromForWithIteratedVariableSingle($for, $iteratedVariableSingle);
         }
 
@@ -192,7 +196,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isValueVarUsedNext($for, $originalVariableSingle)) {
+        if (! $this->forNodeAnalyzer->isValueVarUsedNext($for, $originalVariableSingle)) {
             return $this->createForeachFromForWithIteratedVariableSingle($for, $originalVariableSingle);
         }
 
@@ -201,40 +205,17 @@ CODE_SAMPLE
 
     private function createForeachFromForWithIteratedVariableSingle(For_ $for, string $iteratedVariableSingle): Foreach_
     {
-        $foreach = $this->createForeach($for, $iteratedVariableSingle);
+        $foreach = $this->foreachFactory->createFromFor(
+            $for,
+            $iteratedVariableSingle,
+            $this->iteratedExpr,
+            $this->keyValueName
+        );
         $this->mirrorComments($foreach, $for);
 
         $this->useForeachVariableInStmts($foreach->expr, $foreach->valueVar, $foreach->stmts);
 
         return $foreach;
-    }
-
-    private function isValueVarUsedNext(Node $node, string $iteratedVariableSingle): bool
-    {
-        $next = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if ($next instanceof Node) {
-            $isFound = (bool) $this->betterNodeFinder->findFirst($next, function (Node $node) use (
-                $iteratedVariableSingle
-            ): bool {
-                if (! $node instanceof Variable) {
-                    return false;
-                }
-                return $this->isName($node, $iteratedVariableSingle);
-            });
-
-            if ($isFound) {
-                return true;
-            }
-
-            return $this->isValueVarUsedNext($next, $iteratedVariableSingle);
-        }
-
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Node) {
-            return $this->isValueVarUsedNext($parent, $iteratedVariableSingle);
-        }
-
-        return false;
     }
 
     private function reset(): void
@@ -272,16 +253,18 @@ CODE_SAMPLE
      */
     private function isConditionMatch(array $condExprs): bool
     {
-        if (count($condExprs) !== 1) {
+        if ($this->forNodeAnalyzer->isCondExprOneOrKeyValueNameNotNull($condExprs, $this->keyValueName)) {
             return false;
         }
 
-        if ($this->keyValueName === null) {
-            return false;
-        }
-
+        /** @var string $keyValueName */
+        $keyValueName = $this->keyValueName;
         if ($this->countValueName !== null) {
-            return $this->isSmallerOrGreater($condExprs, $this->keyValueName, $this->countValueName);
+            return $this->forNodeAnalyzer->isCondExprSmallerOrGreater(
+                $condExprs,
+                $keyValueName,
+                $this->countValueName
+            );
         }
 
         if (! $condExprs[0] instanceof BinaryOp) {
@@ -297,98 +280,6 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    /**
-     * @param Expr[] $loopExprs
-     * $param
-     */
-    private function isLoopMatch(array $loopExprs): bool
-    {
-        if (count($loopExprs) !== 1) {
-            return false;
-        }
-
-        if ($this->keyValueName === null) {
-            return false;
-        }
-
-        /** @var PreInc|PostInc $prePostInc */
-        $prePostInc = $loopExprs[0];
-        if (StaticInstanceOf::isOneOf($prePostInc, [PreInc::class, PostInc::class])) {
-            return $this->isName($prePostInc->var, $this->keyValueName);
-        }
-
-        return false;
-    }
-
-    private function isCountValueVariableUsedInsideForStatements(For_ $for): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst(
-            $for->stmts,
-            function (Node $node): bool {
-                return $this->areNodesEqual($this->countValueVariable, $node);
-            }
-        );
-    }
-
-    private function isAssignmentWithArrayDimFetchAsVariableInsideForStatements(For_ $for): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst(
-            $for->stmts,
-            function (Node $node): bool {
-                if (! $node instanceof Assign) {
-                    return false;
-                }
-
-                if (! $node->var instanceof ArrayDimFetch) {
-                    return false;
-                }
-
-                if ($this->keyValueName === null) {
-                    throw new ShouldNotHappenException();
-                }
-
-                $arrayDimFetch = $node->var;
-                if ($arrayDimFetch->dim === null) {
-                    return false;
-                }
-
-                return $this->isVariableName($arrayDimFetch->dim, $this->keyValueName);
-            }
-        );
-    }
-
-    private function isArrayWithKeyValueNameUnsetted(For_ $for): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst(
-            $for->stmts,
-            function (Node $node): bool {
-                /** @var Node $parent */
-                $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-                if (! $parent instanceof Unset_) {
-                    return false;
-                }
-                return $node instanceof ArrayDimFetch;
-            }
-        );
-    }
-
-    private function createForeach(For_ $for, string $iteratedVariableName): Foreach_
-    {
-        if ($this->iteratedExpr === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        if ($this->keyValueName === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $foreach = new Foreach_($this->iteratedExpr, new Variable($iteratedVariableName));
-        $foreach->stmts = $for->stmts;
-        $foreach->keyVar = new Variable($this->keyValueName);
-
-        return $foreach;
     }
 
     /**
@@ -410,7 +301,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($this->shouldSkipNode($node)) {
+            if ($this->forNodeAnalyzer->isArrayDimFetchPartOfAssignOrArgParentCount($node)) {
                 return null;
             }
 
@@ -429,59 +320,5 @@ CODE_SAMPLE
 
             return $singleValue;
         });
-    }
-
-    /**
-     * @param Expr[] $condExprs
-     */
-    private function isSmallerOrGreater(array $condExprs, string $keyValueName, string $countValueName): bool
-    {
-        // $i < $count
-        if ($condExprs[0] instanceof Smaller) {
-            if (! $this->isName($condExprs[0]->left, $keyValueName)) {
-                return false;
-            }
-
-            return $this->isName($condExprs[0]->right, $countValueName);
-        }
-
-        // $i > $count
-        if ($condExprs[0] instanceof Greater) {
-            if (! $this->isName($condExprs[0]->left, $countValueName)) {
-                return false;
-            }
-
-            return $this->isName($condExprs[0]->right, $keyValueName);
-        }
-
-        return false;
-    }
-
-    private function shouldSkipNode(ArrayDimFetch $arrayDimFetch): bool
-    {
-        $parentNode = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Node) {
-            return false;
-        }
-
-        if ($this->assignManipulator->isNodePartOfAssign($parentNode)) {
-            return true;
-        }
-
-        return $this->isArgParentCount($parentNode);
-    }
-
-    private function isArgParentCount(Node $node): bool
-    {
-        if (! $node instanceof Arg) {
-            return false;
-        }
-
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Node) {
-            return false;
-        }
-
-        return $this->isFuncCallName($parent, self::COUNT);
     }
 }
