@@ -11,11 +11,11 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\CodeQuality\NodeAnalyzer\ForNodeAnalyzer;
+use Rector\CodeQuality\NodeFactory\ForeachFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -68,14 +68,21 @@ final class ForToForeachRector extends AbstractRector
      */
     private $forNodeAnalyzer;
 
+    /**
+     * @var ForeachFactory
+     */
+    private $foreachFactory;
+
     public function __construct(
         AssignManipulator $assignManipulator,
         Inflector $inflector,
-        ForNodeAnalyzer $forNodeAnalyzer
+        ForNodeAnalyzer $forNodeAnalyzer,
+        ForeachFactory $foreachFactory
     ) {
         $this->assignManipulator = $assignManipulator;
         $this->inflector = $inflector;
         $this->forNodeAnalyzer = $forNodeAnalyzer;
+        $this->foreachFactory = $foreachFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -207,7 +214,12 @@ CODE_SAMPLE
 
     private function createForeachFromForWithIteratedVariableSingle(For_ $for, string $iteratedVariableSingle): Foreach_
     {
-        $foreach = $this->createForeach($for, $iteratedVariableSingle);
+        $foreach = $this->foreachFactory->createFromFor(
+            $for,
+            $iteratedVariableSingle,
+            $this->iteratedExpr,
+            $this->keyValueName
+        );
         $this->mirrorComments($foreach, $for);
 
         $this->useForeachVariableInStmts($foreach->expr, $foreach->valueVar, $foreach->stmts);
@@ -279,23 +291,6 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    private function createForeach(For_ $for, string $iteratedVariableName): Foreach_
-    {
-        if ($this->iteratedExpr === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        if ($this->keyValueName === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $foreach = new Foreach_($this->iteratedExpr, new Variable($iteratedVariableName));
-        $foreach->stmts = $for->stmts;
-        $foreach->keyVar = new Variable($this->keyValueName);
-
-        return $foreach;
     }
 
     /**
