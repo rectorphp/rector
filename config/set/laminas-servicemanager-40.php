@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\LaminasServiceManager4\Rector\MethodCall\RemoveServiceLocatorRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -27,4 +28,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'Zend\ServiceManager\InitializerInterface' => 'Laminas\ServiceManager\Initializer\InitializerInterface',
             ],
         ]]);
+    $services->set(RemoveServiceLocatorRector::class);
 };
