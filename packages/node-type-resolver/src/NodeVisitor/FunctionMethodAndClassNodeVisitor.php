@@ -12,19 +12,10 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeVisitorAbstract;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-/**
- * @see \Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitor\FunctionMethodAndClassNodeVisitorTest
- */
 final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
     /**
      * @var string|null
      */
@@ -34,11 +25,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
      * @var string|null
      */
     private $className;
-
-    /**
-     * @var string|null
-     */
-    private $classShortName;
 
     /**
      * @var ClassLike[]|null[]
@@ -69,11 +55,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
      * @var Closure|null
      */
     private $closure;
-
-    public function __construct(ClassNaming $classNaming)
-    {
-        $this->classNaming = $classNaming;
-    }
 
     /**
      * @param Node[] $nodes
@@ -129,7 +110,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
 
         $node->setAttribute(AttributeKey::CLASS_NODE, $this->classLike);
         $node->setAttribute(AttributeKey::CLASS_NAME, $this->className);
-        $node->setAttribute(AttributeKey::CLASS_SHORT_NAME, $this->classShortName);
 
         if ($this->classLike instanceof Class_) {
             $this->setParentClassName($this->classLike, $node);
@@ -174,10 +154,8 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
             $this->className = null;
         } elseif (property_exists($classLike, 'namespacedName')) {
             $this->className = $classLike->namespacedName->toString();
-            $this->classShortName = $this->classNaming->getShortName($this->className);
         } else {
             $this->className = (string) $classLike->name;
-            $this->classShortName = $this->classNaming->getShortName($this->className);
         }
     }
 

@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PHPStan\Type\Constant\ConstantArrayType;
 use Rector\CodeQuality\CompactConverter;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -78,10 +79,21 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->compactConverter->hasAllArgumentsNamed($node)) {
+        if ($this->compactConverter->hasAllArgumentsNamed($node)) {
+            return $this->compactConverter->convertToArray($node);
+        }
+
+        $firstValue = $node->args[0]->value;
+        $firstValueStaticType = $this->getStaticType($firstValue);
+
+        if (! $firstValueStaticType instanceof ConstantArrayType) {
             return null;
         }
 
-        return $this->compactConverter->convertToArray($node);
+        $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($firstValue);
+
+        dump($previousAssign);
+//        dump($firstValueStaticType);
+        die;
     }
 }
