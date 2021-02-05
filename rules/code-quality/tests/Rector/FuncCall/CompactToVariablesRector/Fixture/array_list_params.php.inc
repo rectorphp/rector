@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
-final class ArrayListParam
+final class ArrayListParams
 {
     public function run($one, $two)
     {
@@ -18,7 +18,7 @@ final class ArrayListParam
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
-final class ArrayListParam
+final class ArrayListParams
 {
     public function run($one, $two)
     {
