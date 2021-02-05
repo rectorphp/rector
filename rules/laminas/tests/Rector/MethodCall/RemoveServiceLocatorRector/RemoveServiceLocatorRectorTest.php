@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\LaminasServiceManager4\Tests\Rector\MethodCall\RemoveServiceLocatorRector;
+namespace Rector\Laminas\Tests\Rector\MethodCall\RemoveServiceLocatorRector;
 
 use Iterator;
-use Rector\LaminasServiceManager4\Rector\MethodCall\RemoveServiceLocatorRector;
+use Rector\Laminas\Rector\MethodCall\RemoveServiceLocatorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

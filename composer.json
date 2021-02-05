@@ -177,7 +177,7 @@
             "Rector\\VendorLocker\\": "packages/vendor-locker/src",
             "Rector\\Carbon\\": "rules/carbon/src",
             "Rector\\Generics\\": "rules/generics/src",
-            "Rector\\LaminasServiceManager4\\": "rules/laminas-servicemanager4/src"
+            "Rector\\Laminas\\": "rules/laminas/src"
         }
     },
     "autoload-dev": {
@@ -299,7 +299,7 @@
             "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src",
             "Rector\\Carbon\\Tests\\": "rules/carbon/tests",
             "Rector\\Generics\\Tests\\": "rules/generics/tests",
-            "Rector\\LaminasServiceManager4\\Tests\\": "rules/laminas-servicemanager4/tests"
+            "Rector\\Laminas\\Tests\\": "rules/laminas/tests"
         }
     },
     "scripts": {

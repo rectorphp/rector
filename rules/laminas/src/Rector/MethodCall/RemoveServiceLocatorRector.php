@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\LaminasServiceManager4\Rector\MethodCall;
+namespace Rector\Laminas\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -11,7 +11,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\LaminasServiceManager4\Tests\Rector\MethodCall\RemoveServiceLocatorRector\RemoveServiceLocatorRectorTest
+ * @see \Rector\Laminas\Tests\Rector\MethodCall\RemoveServiceLocatorRector\RemoveServiceLocatorRectorTest
  */
 final class RemoveServiceLocatorRector extends AbstractRector
 {

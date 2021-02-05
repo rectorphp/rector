@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\LaminasServiceManager4\Tests\Rector\MethodCall\RemoveServiceLocatorRector\Fixture;
+namespace Rector\Laminas\Tests\Rector\MethodCall\RemoveServiceLocatorRector\Fixture;
 
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
@@ -16,7 +16,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\LaminasServiceManager4\Tests\Rector\MethodCall\RemoveServiceLocatorRector\Fixture;
+namespace Rector\Laminas\Tests\Rector\MethodCall\RemoveServiceLocatorRector\Fixture;
 
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
