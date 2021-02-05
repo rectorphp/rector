@@ -53,11 +53,6 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const CLASS_SHORT_NAME = 'classShortName';
-
-    /**
-     * @var string
-     */
     public const CLASS_NODE = ClassLike::class;
 
     /**

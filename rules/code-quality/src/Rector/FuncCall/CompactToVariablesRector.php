@@ -5,7 +5,14 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\Constant\ConstantArrayType;
 use Rector\CodeQuality\CompactConverter;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -78,10 +85,53 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->compactConverter->hasAllArgumentsNamed($node)) {
+        if ($this->compactConverter->hasAllArgumentsNamed($node)) {
+            return $this->compactConverter->convertToArray($node);
+        }
+
+        $firstValue = $node->args[0]->value;
+        $firstValueStaticType = $this->getStaticType($firstValue);
+
+        if ($firstValueStaticType instanceof ConstantArrayType) {
+            return $this->refactorAssignArray($firstValue);
+        }
+
+        return null;
+    }
+
+    private function refactorAssignedArray(Array_ $array): void
+    {
+        foreach ($array->items as $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
+            if ($arrayItem->key !== null) {
+                continue;
+            }
+
+            if (! $arrayItem->value instanceof String_) {
+                continue;
+            }
+
+            $arrayItem->key = $arrayItem->value;
+            $arrayItem->value = new Variable($arrayItem->value->value);
+        }
+    }
+
+    private function refactorAssignArray(Expr $expr): ?Expr
+    {
+        $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($expr);
+        if (! $previousAssign instanceof Assign) {
             return null;
         }
 
-        return $this->compactConverter->convertToArray($node);
+        if (! $previousAssign->expr instanceof Array_) {
+            return null;
+        }
+
+        $this->refactorAssignedArray($previousAssign->expr);
+
+        return $expr;
     }
 }

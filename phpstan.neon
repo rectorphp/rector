@@ -230,7 +230,10 @@ parameters:
         # 3rd party code
         -
             message: '#Do not use static property#'
-            path: packages/doctrine-annotation-generated/src/DataCollector/ResolvedConstantStaticCollector.php
+            paths:
+                 - packages/doctrine-annotation-generated/src/DataCollector/ResolvedConstantStaticCollector.php
+                 # tracy::$maxDepth
+                 - tests/bootstrap.php
 
         - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector\:\:refactor\(\) expects PhpParser\\Node\\Expr\\AssignOp\\Div\|PhpParser\\Node\\Expr\\AssignOp\\Minus\|PhpParser\\Node\\Expr\\AssignOp\\Mul\|PhpParser\\Node\\Expr\\AssignOp\\Plus\|PhpParser\\Node\\Expr\\BinaryOp\\Div\|PhpParser\\Node\\Expr\\BinaryOp\\Minus\|PhpParser\\Node\\Expr\\BinaryOp\\Mul\|PhpParser\\Node\\Expr\\BinaryOp\\Plus, PhpParser\\Node\\Expr\\AssignOp\|PhpParser\\Node\\Expr\\BinaryOp given#'
 

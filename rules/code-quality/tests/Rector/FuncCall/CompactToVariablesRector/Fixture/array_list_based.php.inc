@@ -4,14 +4,16 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixt
 
 use Rector\Testing\Contract\RunnableInterface;
 
-final class Fixture implements RunnableInterface
+final class ArrayListBased implements RunnableInterface
 {
     public function run()
     {
-        $checkout = 'one';
-        $form = 'two';
+        $one = 1000;
+        $two = 'hey';
 
-        return compact('checkout', 'form');
+        $names = ['one', 'two'];
+
+        return compact($names);
     }
 }
 
@@ -23,14 +25,16 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixt
 
 use Rector\Testing\Contract\RunnableInterface;
 
-final class Fixture implements RunnableInterface
+final class ArrayListBased implements RunnableInterface
 {
     public function run()
     {
-        $checkout = 'one';
-        $form = 'two';
+        $one = 1000;
+        $two = 'hey';
 
-        return ['checkout' => $checkout, 'form' => $form];
+        $names = ['one' => $one, 'two' => $two];
+
+        return $names;
     }
 }
 

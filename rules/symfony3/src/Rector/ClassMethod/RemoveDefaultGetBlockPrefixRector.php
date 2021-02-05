@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticRectorStrings;
@@ -24,6 +25,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDefaultGetBlockPrefixRector extends AbstractRector
 {
+    /**
+     * @var ClassNaming
+     */
+    private $classNaming;
+
+    public function __construct(ClassNaming $classNaming)
+    {
+        $this->classNaming = $classNaming;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -78,12 +89,17 @@ CODE_SAMPLE
 
         $returnedValue = $this->valueResolver->getValue($returnedExpr);
 
-        $classShortName = $node->getAttribute(AttributeKey::CLASS_SHORT_NAME);
-        if (Strings::endsWith($classShortName, 'Type')) {
-            $classShortName = Strings::before($classShortName, 'Type');
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        if (! is_string($className)) {
+            return null;
         }
 
-        $underscoredClassShortName = StaticRectorStrings::camelCaseToUnderscore($classShortName);
+        $shortClassName = $this->classNaming->getShortName($className);
+        if (Strings::endsWith($shortClassName, 'Type')) {
+            $shortClassName = (string) Strings::before($shortClassName, 'Type');
+        }
+
+        $underscoredClassShortName = StaticRectorStrings::camelCaseToUnderscore($shortClassName);
         if ($underscoredClassShortName !== $returnedValue) {
             return null;
         }
