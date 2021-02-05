@@ -171,4 +171,16 @@ final class ForNodeAnalyzer
             }
         );
     }
+
+    public function isValueVarUsedNext(Node $node, string $iteratedVariableSingle): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstNext($node, function (Node $node) use (
+            $iteratedVariableSingle
+        ): bool {
+            if (! $node instanceof Variable) {
+                return false;
+            }
+            return $this->nodeNameResolver->isName($node, $iteratedVariableSingle);
+        });
+    }
 }

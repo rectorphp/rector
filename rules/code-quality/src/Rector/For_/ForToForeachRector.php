@@ -190,7 +190,7 @@ CODE_SAMPLE
             $iteratedVariableSingle = 'single' . ucfirst($iteratedVariableSingle);
         }
 
-        if (! $this->isValueVarUsedNext($for, $iteratedVariableSingle)) {
+        if (! $this->forNodeAnalyzer->isValueVarUsedNext($for, $iteratedVariableSingle)) {
             return $this->createForeachFromForWithIteratedVariableSingle($for, $iteratedVariableSingle);
         }
 
@@ -198,7 +198,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isValueVarUsedNext($for, $originalVariableSingle)) {
+        if (! $this->forNodeAnalyzer->isValueVarUsedNext($for, $originalVariableSingle)) {
             return $this->createForeachFromForWithIteratedVariableSingle($for, $originalVariableSingle);
         }
 
@@ -213,18 +213,6 @@ CODE_SAMPLE
         $this->useForeachVariableInStmts($foreach->expr, $foreach->valueVar, $foreach->stmts);
 
         return $foreach;
-    }
-
-    private function isValueVarUsedNext(Node $node, string $iteratedVariableSingle): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirstNext($node, function (Node $node) use (
-            $iteratedVariableSingle
-        ): bool {
-            if (! $node instanceof Variable) {
-                return false;
-            }
-            return $this->isName($node, $iteratedVariableSingle);
-        });
     }
 
     private function reset(): void
