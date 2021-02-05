@@ -13,7 +13,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantArrayType;
 use Rector\CodeQuality\CompactConverter;
 use Rector\CodeQuality\NodeAnalyzer\ArrayCompacter;
-use Rector\CodeQuality\NodeAnalyzer\CompactFuncCallAnalyzer;
+use Rector\CodeQuality\NodeAnalyzer\ArrayAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -32,9 +32,9 @@ final class CompactToVariablesRector extends AbstractRector
     private $compactConverter;
 
     /**
-     * @var CompactFuncCallAnalyzer
+     * @var ArrayAnalyzer
      */
-    private $compactFuncCallAnalyzer;
+    private $arrayAnalyzer;
 
     /**
      * @var ArrayCompacter
@@ -43,11 +43,11 @@ final class CompactToVariablesRector extends AbstractRector
 
     public function __construct(
         CompactConverter $compactConverter,
-        CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
+        ArrayAnalyzer $arrayAnalyzer,
         ArrayCompacter $arrayCompacter
     ) {
         $this->compactConverter = $compactConverter;
-        $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
+        $this->arrayAnalyzer = $arrayAnalyzer;
         $this->arrayCompacter = $arrayCompacter;
     }
 
@@ -128,9 +128,13 @@ CODE_SAMPLE
             return;
         }
 
-        if ($this->compactFuncCallAnalyzer->hasArrayExclusiveDefinedVariableNames($array, $assignScope)) {
-            $this->arrayCompacter->compactStringToVariableArray($array);
-            return;
+        if ($this->arrayAnalyzer->hasArrayExclusiveDefinedVariableNames($array, $assignScope)) {
+            $funcCallScope = $funcCall->getAttribute(AttributeKey::SCOPE);
+
+            if ($this->arrayAnalyzer->hasArrayExclusiveUndefinedVariableNames($array, $funcCallScope)) {
+                $this->arrayCompacter->compactStringToVariableArray($array);
+                return;
+            }
         }
 
         $this->removeNode($assign);
