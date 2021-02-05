@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveServiceLocatorRector extends AbstractRector
 {
     /**
-     * @var string
+     * @var string[]
      */
     private const OBJECT_TYPES = [
         'Laminas\ServiceManager\ServiceLocatorInterface',
