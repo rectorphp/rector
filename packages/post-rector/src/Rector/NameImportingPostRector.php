@@ -83,6 +83,10 @@ final class NameImportingPostRector extends AbstractPostRector
 
     private function processNodeName(Name $name): ?Node
     {
+        if ($name->isSpecialClassName()) {
+            return $name;
+        }
+
         $importName = $this->getName($name);
 
         if (! is_callable($importName)) {
