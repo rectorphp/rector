@@ -173,7 +173,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isArrayWithKeyValueNameUnsetted($node)) {
+        if ($this->forNodeAnalyzer->isArrayWithKeyValueNameUnsetted($node)) {
             return null;
         }
 
@@ -314,21 +314,6 @@ CODE_SAMPLE
                 }
 
                 return $this->isVariableName($arrayDimFetch->dim, $this->keyValueName);
-            }
-        );
-    }
-
-    private function isArrayWithKeyValueNameUnsetted(For_ $for): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst(
-            $for->stmts,
-            function (Node $node): bool {
-                /** @var Node $parent */
-                $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-                if (! $parent instanceof Unset_) {
-                    return false;
-                }
-                return $node instanceof ArrayDimFetch;
             }
         );
     }

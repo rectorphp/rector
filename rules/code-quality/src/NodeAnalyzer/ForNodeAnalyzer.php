@@ -7,11 +7,13 @@ namespace Rector\CodeQuality\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Stmt\For_;
+use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Util\StaticInstanceOf;
@@ -117,6 +119,21 @@ final class ForNodeAnalyzer
             $for->stmts,
             function (Node $node) use ($countValueVariable): bool {
                 return $this->betterStandardPrinter->areNodesEqual($countValueVariable, $node);
+            }
+        );
+    }
+
+    public function isArrayWithKeyValueNameUnsetted(For_ $for): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $for->stmts,
+            function (Node $node): bool {
+                /** @var Node $parent */
+                $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+                if (! $parent instanceof Unset_) {
+                    return false;
+                }
+                return $node instanceof ArrayDimFetch;
             }
         );
     }
