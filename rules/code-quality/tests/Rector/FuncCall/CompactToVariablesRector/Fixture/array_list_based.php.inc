@@ -22,10 +22,7 @@ final class ArrayListBased
 {
     public function run($one, $two)
     {
-        $names = [
-            'one' => $one,
-            'two' => $two,
-        ];
+        $names = ['one' => $one, 'two' => $two];
 
         return $names;
     }

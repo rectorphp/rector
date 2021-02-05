@@ -96,7 +96,7 @@ CODE_SAMPLE
 
         $shortClassName = $this->classNaming->getShortName($className);
         if (Strings::endsWith($shortClassName, 'Type')) {
-            $shortClassName = Strings::before($shortClassName, 'Type');
+            $shortClassName = (string) Strings::before($shortClassName, 'Type');
         }
 
         $underscoredClassShortName = StaticRectorStrings::camelCaseToUnderscore($shortClassName);
