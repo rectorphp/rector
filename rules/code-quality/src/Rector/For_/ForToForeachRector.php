@@ -19,7 +19,6 @@ use Rector\CodeQuality\NodeFactory\ForeachFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -310,7 +309,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($this->shouldSkipNode($node)) {
+            if ($this->forNodeAnalyzer->isArrayDimFetchPartOfAssignOrArgParentCount($node)) {
                 return null;
             }
 
@@ -329,19 +328,5 @@ CODE_SAMPLE
 
             return $singleValue;
         });
-    }
-
-    private function shouldSkipNode(ArrayDimFetch $arrayDimFetch): bool
-    {
-        $parentNode = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Node) {
-            return false;
-        }
-
-        if ($this->assignManipulator->isNodePartOfAssign($parentNode)) {
-            return true;
-        }
-
-        return $this->forNodeAnalyzer->isArgParentCount($parentNode);
     }
 }

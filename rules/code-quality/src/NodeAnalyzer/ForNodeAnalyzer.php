@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -45,14 +46,21 @@ final class ForNodeAnalyzer
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var AssignManipulator
+     */
+    private $assignManipulator;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        AssignManipulator $assignManipulator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->assignManipulator = $assignManipulator;
     }
 
     /**
@@ -79,18 +87,6 @@ final class ForNodeAnalyzer
         }
 
         return false;
-    }
-
-    public function isArgParentCount(Node $node): bool
-    {
-        if (! $node instanceof Arg) {
-            return false;
-        }
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Node) {
-            return false;
-        }
-        return $this->nodeNameResolver->isFuncCallName($parent, self::COUNT);
     }
 
     /**
@@ -194,5 +190,31 @@ final class ForNodeAnalyzer
         }
 
         return $keyValueName === null;
+    }
+
+    public function isArrayDimFetchPartOfAssignOrArgParentCount(ArrayDimFetch $arrayDimFetch): bool
+    {
+        $parentNode = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Node) {
+            return false;
+        }
+
+        if ($this->assignManipulator->isNodePartOfAssign($parentNode)) {
+            return true;
+        }
+
+        return $this->isArgParentCount($parentNode);
+    }
+
+    private function isArgParentCount(Node $node): bool
+    {
+        if (! $node instanceof Arg) {
+            return false;
+        }
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Node) {
+            return false;
+        }
+        return $this->nodeNameResolver->isFuncCallName($parent, self::COUNT);
     }
 }
