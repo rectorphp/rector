@@ -19,8 +19,8 @@ trait RunnableTestTrait
         $expectedInstance = $this->runnableRectorFactory->createRunnableClass($expectedFileInfo);
 
         $actualResult = $runnable->run();
-        $expectedResult = $expectedInstance->run();
 
+        $expectedResult = $expectedInstance->run();
         $this->assertSame($expectedResult, $actualResult);
     }
 }

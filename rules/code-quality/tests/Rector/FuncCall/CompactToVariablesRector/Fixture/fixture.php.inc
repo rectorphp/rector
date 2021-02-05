@@ -2,7 +2,9 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
-class Fixture
+use Rector\Testing\Contract\RunnableInterface;
+
+final class Fixture implements RunnableInterface
 {
     public function run()
     {
@@ -19,7 +21,9 @@ class Fixture
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
-class Fixture
+use Rector\Testing\Contract\RunnableInterface;
+
+final class Fixture implements RunnableInterface
 {
     public function run()
     {

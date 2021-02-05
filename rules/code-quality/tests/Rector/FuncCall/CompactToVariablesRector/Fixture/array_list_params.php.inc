@@ -2,15 +2,10 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-final class ArrayListBased implements RunnableInterface
+final class ArrayListParam
 {
-    public function run()
+    public function run($one, $two)
     {
-        $one = 1000;
-        $two = 'hey';
-
         $names = ['one', 'two'];
 
         return compact($names);
@@ -23,15 +18,10 @@ final class ArrayListBased implements RunnableInterface
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-final class ArrayListBased implements RunnableInterface
+final class ArrayListParam
 {
-    public function run()
+    public function run($one, $two)
     {
-        $one = 1000;
-        $two = 'hey';
-
         $names = ['one' => $one, 'two' => $two];
 
         return $names;
