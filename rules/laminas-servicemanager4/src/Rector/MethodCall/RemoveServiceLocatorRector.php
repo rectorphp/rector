@@ -32,7 +32,7 @@ final class RemoveServiceLocatorRector extends AbstractRector
                     <<<'CODE_SAMPLE'
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
-class SomeFactory extends FactoryInterface
+class SomeFactory implements FactoryInterface
 {
     public function __invoke(ServiceLocatorInterface $serviceLocator)
     {
@@ -44,7 +44,7 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
-class SomeFactory extends FactoryInterface
+class SomeFactory implements FactoryInterface
 {
     public function __invoke(ServiceLocatorInterface $serviceLocator)
     {
