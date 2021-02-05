@@ -11,9 +11,10 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\MixedType;
 use Rector\CodeQuality\CompactConverter;
 use Rector\CodeQuality\NodeAnalyzer\ArrayCompacter;
-use Rector\CodeQuality\NodeAnalyzer\ArrayAnalyzer;
+use Rector\CodeQuality\NodeAnalyzer\ArrayItemsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -32,9 +33,9 @@ final class CompactToVariablesRector extends AbstractRector
     private $compactConverter;
 
     /**
-     * @var ArrayAnalyzer
+     * @var ArrayItemsAnalyzer
      */
-    private $arrayAnalyzer;
+    private $arrayItemsAnalyzer;
 
     /**
      * @var ArrayCompacter
@@ -43,11 +44,11 @@ final class CompactToVariablesRector extends AbstractRector
 
     public function __construct(
         CompactConverter $compactConverter,
-        ArrayAnalyzer $arrayAnalyzer,
+        ArrayItemsAnalyzer $arrayItemsAnalyzer,
         ArrayCompacter $arrayCompacter
     ) {
         $this->compactConverter = $compactConverter;
-        $this->arrayAnalyzer = $arrayAnalyzer;
+        $this->arrayItemsAnalyzer = $arrayItemsAnalyzer;
         $this->arrayCompacter = $arrayCompacter;
     }
 
@@ -108,32 +109,43 @@ CODE_SAMPLE
         $firstValue = $node->args[0]->value;
         $firstValueStaticType = $this->getStaticType($firstValue);
 
-        if ($firstValueStaticType instanceof ConstantArrayType) {
+        if ($firstValueStaticType instanceof ConstantArrayType && ! $firstValueStaticType->getItemType() instanceof MixedType) {
             return $this->refactorAssignArray($firstValue, $node);
         }
 
         return null;
     }
 
-    private function refactorAssignedArray(Assign $assign, FuncCall $funcCall): void
+    private function refactorAssignedArray(Assign $assign, FuncCall $funcCall, Expr $expr): ?Expr
     {
         if (! $assign->expr instanceof Array_) {
-            return;
+            return null;
         }
 
         $array = $assign->expr;
 
         $assignScope = $assign->getAttribute(AttributeKey::SCOPE);
         if (! $assignScope instanceof Scope) {
-            return;
+            return null;
         }
 
-        if ($this->arrayAnalyzer->hasArrayExclusiveDefinedVariableNames($array, $assignScope)) {
+        $isCompactOfUndefinedVariables = $this->arrayItemsAnalyzer->hasArrayExclusiveDefinedVariableNames(
+            $array,
+            $assignScope
+        );
+        if ($isCompactOfUndefinedVariables) {
             $funcCallScope = $funcCall->getAttribute(AttributeKey::SCOPE);
+            if (! $funcCallScope instanceof Scope) {
+                return null;
+            }
 
-            if ($this->arrayAnalyzer->hasArrayExclusiveUndefinedVariableNames($array, $funcCallScope)) {
+            $isCompactOfDefinedVariables = $this->arrayItemsAnalyzer->hasArrayExclusiveUndefinedVariableNames(
+                $array,
+                $funcCallScope
+            );
+            if ($isCompactOfDefinedVariables) {
                 $this->arrayCompacter->compactStringToVariableArray($array);
-                return;
+                return $expr;
             }
         }
 
@@ -146,6 +158,8 @@ CODE_SAMPLE
 
         $currentStatement = $funcCall->getAttribute(AttributeKey::CURRENT_STATEMENT);
         $this->addNodeBeforeNode($preAssign, $currentStatement);
+
+        return $expr;
     }
 
     private function refactorAssignArray(Expr $expr, FuncCall $funcCall): ?Expr
@@ -155,8 +169,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->refactorAssignedArray($previousAssign, $funcCall);
-
-        return $expr;
+        return $this->refactorAssignedArray($previousAssign, $funcCall, $expr);
     }
 }

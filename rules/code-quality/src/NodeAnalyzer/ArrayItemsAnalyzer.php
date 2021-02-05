@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 
-final class ArrayAnalyzer
+final class ArrayItemsAnalyzer
 {
     public function hasArrayExclusiveDefinedVariableNames(Array_ $array, Scope $scope): bool
     {
@@ -47,11 +47,11 @@ final class ArrayAnalyzer
 
     private function resolveStringValue(?ArrayItem $arrayItem): ?string
     {
-        if (!$arrayItem instanceof ArrayItem) {
+        if (! $arrayItem instanceof ArrayItem) {
             return null;
         }
 
-        if (!$arrayItem->value instanceof String_) {
+        if (! $arrayItem->value instanceof String_) {
             return null;
         }
 
