@@ -44,10 +44,6 @@ jobs:
                         run: bin/rector check-static-type-mappers --ansi
 
                     -
-                        name: 'Validate Max File Length'
-                        run: bin/rector validate-file-length
-
-                    -
                         name: 'PHP Linter'
                         run: vendor/bin/parallel-lint src bin/rector config tests packages rules --colors --exclude packages/rector-generator/templates --exclude rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source --exclude rules/autodiscovery/tests/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector/Expected --exclude packages/node-type-resolver/tests/PerNodeTypeResolver/PropertyFetchTypeResolver/Source/ClassWithNativeProps.php --exclude packages/node-type-resolver/tests/PerNodeTypeResolver/PropertyFetchTypeResolver/Source/ClassWithNativePropsPhp80.php
 
