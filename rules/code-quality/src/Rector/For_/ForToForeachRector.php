@@ -15,7 +15,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\Unset_;
 use Rector\CodeQuality\NodeAnalyzer\ForNodeAnalyzer;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
@@ -169,7 +168,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isAssignmentWithArrayDimFetchAsVariableInsideForStatements($node)) {
+        if ($this->forNodeAnalyzer->isAssignmentWithArrayDimFetchAsVariableInsideForStatements(
+            $node,
+            $this->keyValueName
+        )) {
             return null;
         }
 
@@ -289,33 +291,6 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    private function isAssignmentWithArrayDimFetchAsVariableInsideForStatements(For_ $for): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst(
-            $for->stmts,
-            function (Node $node): bool {
-                if (! $node instanceof Assign) {
-                    return false;
-                }
-
-                if (! $node->var instanceof ArrayDimFetch) {
-                    return false;
-                }
-
-                if ($this->keyValueName === null) {
-                    throw new ShouldNotHappenException();
-                }
-
-                $arrayDimFetch = $node->var;
-                if ($arrayDimFetch->dim === null) {
-                    return false;
-                }
-
-                return $this->isVariableName($arrayDimFetch->dim, $this->keyValueName);
-            }
-        );
     }
 
     private function createForeach(For_ $for, string $iteratedVariableName): Foreach_

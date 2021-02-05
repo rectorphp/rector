@@ -8,12 +8,15 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreInc;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Unset_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Util\StaticInstanceOf;
@@ -134,6 +137,37 @@ final class ForNodeAnalyzer
                     return false;
                 }
                 return $node instanceof ArrayDimFetch;
+            }
+        );
+    }
+
+    public function isAssignmentWithArrayDimFetchAsVariableInsideForStatements(For_ $for, ?string $keyValueName): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $for->stmts,
+            function (Node $node) use ($keyValueName): bool {
+                if (! $node instanceof Assign) {
+                    return false;
+                }
+
+                if (! $node->var instanceof ArrayDimFetch) {
+                    return false;
+                }
+
+                if ($keyValueName === null) {
+                    throw new ShouldNotHappenException();
+                }
+
+                $arrayDimFetch = $node->var;
+                if ($arrayDimFetch->dim === null) {
+                    return false;
+                }
+
+                if (! $arrayDimFetch->dim instanceof Variable) {
+                    return false;
+                }
+
+                return $this->nodeNameResolver->isName($arrayDimFetch->dim, $keyValueName);
             }
         );
     }
