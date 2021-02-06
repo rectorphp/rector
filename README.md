@@ -23,12 +23,6 @@ It's a tool that [we develop](https://getrector.org/) and share for free, so any
 
 <br>
 
-## Show Case: Complete 2700 `@var` annotations in 2 mins
-
-![Rector-showcase](docs/images/rector-showcase-var.gif)
-
-<br>
-
 ## Open-Source First
 
 Rector **instantly upgrades and refactors the PHP code of your application**.
@@ -37,21 +31,27 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 <br>
 
 <p align="center">
-    <a href="/config/set/"><img src="/docs/images/php.png"></a>
+    <img src="/docs/images/php.png">
     <img src="/docs/images/space.png" width=40>
-    <a href="/config/set/"><img src="/docs/images/symfony.png"></a>
+    <img src="/docs/images/symfony.png">
     <img src="/docs/images/space.png" width=40>
     <a href="https://github.com/palantirnet/drupal-rector/tree/master/config/drupal-8"><img src="/docs/images/drupal.png" alt="Drupal Rector rules"></a>
+    <br>
+    <img src="/docs/images/space.png" height=15>
+    <br>
+    <img src="/docs/images/cakephp.png">
     <img src="/docs/images/space.png" width=40>
-    <a href="/config/set/"><img src="/docs/images/cakephp.png"></a>
+    <a href="https://github.com/sabbelasichon/typo3-rector">
+        <img src="/docs/images/typo3.png">
+    </a>
 </p>
 
 ### What Can Rector Do for You?
 
 - [Complete 2800 `@var` types in 2 minutes](https://tomasvotruba.com/blog/2019/07/29/how-we-completed-thousands-of-missing-var-annotations-in-a-day/)
-- [Upgrade 30 000 unit tests from PHPUnit 6 to 9 in 2 weeks](https://twitter.com/LBajsarowicz/status/1272947900016967683)
-- [Complete PHP 7.4 property type declarations](https://tomasvotruba.com/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
-- [Migrate your project from Nette to Symfony](https://tomasvotruba.com/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
+- [Upgrade 30 000 unit tests from PHPUnit 6 to 9](https://twitter.com/LBajsarowicz/status/1272947900016967683)
+- [Complete PHP 7.4 Property Types](https://tomasvotruba.com/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
+- [Migrate from Nette to Symfony](https://tomasvotruba.com/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
 - [Refactor Laravel Facades to Dependency Injection](https://tomasvotruba.com/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
 - And much more...
 
