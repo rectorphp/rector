@@ -52,16 +52,24 @@ final class ClassMethodExternalCallNodeAnalyzer
 
     public function hasExternalCall(ClassMethod $classMethod): bool
     {
+        return (bool) $this->getExternalCalls($classMethod);
+    }
+
+    /**
+     * @return MethodCall[]
+     */
+    public function getExternalCalls(ClassMethod $classMethod): array
+    {
         $methodCalls = $this->nodeRepository->findCallsByClassMethod($classMethod);
 
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
         if ($this->isArrayCallable($classMethod, $methodCalls, $methodName)) {
-            return true;
+            return $methodCalls;
         }
 
         if ($this->isEventSubscriberMethod($classMethod, $methodName)) {
-            return true;
+            return $methodCalls;
         }
 
         // remove static calls and [$this, 'call']
@@ -74,13 +82,13 @@ final class ClassMethodExternalCallNodeAnalyzer
             $callerType = $this->nodeTypeResolver->resolve($methodCall->var);
             if (! $callerType instanceof TypeWithClassName) {
                 // unable to handle reliably
-                return true;
+                return $methodCalls;
             }
 
             // external call
             $nodeClassName = $methodCall->getAttribute(AttributeKey::CLASS_NAME);
             if ($nodeClassName !== $callerType->getClassName()) {
-                return true;
+                return $methodCalls;
             }
 
             /** @var string $methodName */
@@ -89,11 +97,11 @@ final class ClassMethodExternalCallNodeAnalyzer
             // parent class name, must be at least protected
             $reflectionClass = $reflectionMethod->getDeclaringClass();
             if ($reflectionClass->getName() !== $nodeClassName) {
-                return true;
+                return $methodCalls;
             }
         }
 
-        return false;
+        return [];
     }
 
     /**
