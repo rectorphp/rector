@@ -24,13 +24,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * All parsed nodes grouped type
- * @template TNodeType of Node
  * @see https://phpstan.org/blog/generics-in-php-using-phpdocs
  */
 final class ParsedNodeCollector
 {
     /**
-     * @var class-string[]
+     * @var class-string<Node>[]
      */
     private const COLLECTABLE_NODE_TYPES = [
         Class_::class,
