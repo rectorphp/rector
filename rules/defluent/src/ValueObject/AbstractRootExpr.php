@@ -39,7 +39,7 @@ abstract class AbstractRootExpr implements RootExprAwareInterface, FirstCallFact
         return $this->createAssign($this->assignExpr, $this->rootExpr);
     }
 
-    public function createAssign(Expr $assignVar, Expr $assignExpr): Assign
+    protected function createAssign(Expr $assignVar, Expr $assignExpr): Assign
     {
         if ($assignVar === $assignExpr) {
             throw new ShouldNotHappenException();
