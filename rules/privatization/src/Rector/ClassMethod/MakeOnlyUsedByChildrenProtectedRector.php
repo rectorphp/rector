@@ -96,17 +96,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $currentClass = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $currentClass instanceof Class_) {
-            return null;
-        }
-
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return null;
-        }
-
-        if (! $node->isPublic()) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -114,6 +104,9 @@ CODE_SAMPLE
         if ($externalCalls === []) {
             return null;
         }
+
+        /** @var string $className */
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         foreach ($externalCalls as $call) {
             $class = $call->getAttribute(AttributeKey::CLASS_NODE);
@@ -131,12 +124,27 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($currentClass->extends instanceof FullyQualified) {
-            return null;
-        }
-
         $this->visibilityManipulator->makeProtected($node);
         return $node;
+    }
+
+    private function shouldSkip(ClassMethod $classMethod): bool
+    {
+        $currentClass = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $currentClass instanceof Class_) {
+            return true;
+        }
+
+        if ($currentClass->extends instanceof FullyQualified) {
+            return true;
+        }
+
+        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            return true;
+        }
+
+        return ! $classMethod->isPublic();
     }
 
     private function isOverriddenInChildClass(string $className, string $methodName): bool
@@ -144,9 +152,14 @@ CODE_SAMPLE
         $childrenClassNames = $this->familyRelationsAnalyzer->getChildrenOfClass($className);
         foreach ($childrenClassNames as $childrenClassName) {
             $reflectionClass = new ReflectionClass($childrenClassName);
-            if (method_exists($childrenClassName, $methodName) && $reflectionClass->getMethod(
-                $methodName
-            )->class === $childrenClassName) {
+            $isMethodExists = method_exists($childrenClassName, $methodName);
+            if (! $isMethodExists) {
+                continue;
+            }
+
+            $isMethodInChildrenClass = $reflectionClass->getMethod($methodName)
+                ->class === $childrenClassName;
+            if ($isMethodInChildrenClass) {
                 return true;
             }
         }
