@@ -30,7 +30,7 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 
 <br>
 
-<p align="center">
+<p align="center" style="margin-bottom: 1em">
     <img src="/docs/images/php.png">
     <img src="/docs/images/space.png" width=40>
     <img src="/docs/images/symfony.png">
