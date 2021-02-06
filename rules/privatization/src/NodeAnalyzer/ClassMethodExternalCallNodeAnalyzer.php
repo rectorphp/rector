@@ -52,25 +52,27 @@ final class ClassMethodExternalCallNodeAnalyzer
 
     public function hasExternalCall(ClassMethod $classMethod): bool
     {
-        return (bool) $this->getExternalCalls($classMethod);
-    }
-
-    /**
-     * @return MethodCall[]
-     */
-    public function getExternalCalls(ClassMethod $classMethod): array
-    {
         $methodCalls = $this->nodeRepository->findCallsByClassMethod($classMethod);
 
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
         if ($this->isArrayCallable($classMethod, $methodCalls, $methodName)) {
-            return $methodCalls;
+            return true;
         }
 
         if ($this->isEventSubscriberMethod($classMethod, $methodName)) {
-            return $methodCalls;
+            return true;
         }
+
+        return (bool) $this->getExternalCalls($classMethod, $methodCalls);
+    }
+
+    /**
+     * @return MethodCall[]
+     */
+    public function getExternalCalls(ClassMethod $classMethod, array $methodCalls = []): array
+    {
+        $methodCalls = $methodCalls ?: $this->nodeRepository->findCallsByClassMethod($classMethod);
 
         // remove static calls and [$this, 'call']
         /** @var MethodCall[] $methodCalls */
