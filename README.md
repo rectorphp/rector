@@ -30,7 +30,7 @@ It supports all versions of PHP from 5.2 and major open-source projects:
 
 <br>
 
-<p align="center" style="margin-bottom: 1em">
+<p align="center">
     <img src="/docs/images/php.png">
     <img src="/docs/images/space.png" width=40>
     <img src="/docs/images/symfony.png">
@@ -44,6 +44,8 @@ It supports all versions of PHP from 5.2 and major open-source projects:
     <a href="https://github.com/sabbelasichon/typo3-rector">
         <img src="/docs/images/typo3.png">
     </a>
+    <br>
+    <img src="/docs/images/space.png" height=15>
 </p>
 
 ### What Can Rector Do for You?
