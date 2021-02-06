@@ -69,7 +69,7 @@ final class ClassMethodExternalCallNodeAnalyzer
 
     /**
      * @param MethodCall[]|StaticCall[]|ArrayCallable[] $methodCalls
-     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
+     * @return MethodCall[]
      */
     public function getExternalCalls(ClassMethod $classMethod, array $methodCalls = []): array
     {
