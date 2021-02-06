@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Twig\Tests\Rector\Return_\SimpleFunctionAndFilterRector;
+namespace Rector\Symfony\Tests\Rector\Return_\SimpleFunctionAndFilterRector;
 
 use Iterator;
+use Rector\Symfony\Rector\Return_\SimpleFunctionAndFilterRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Twig\Rector\Return_\SimpleFunctionAndFilterRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SimpleFunctionAndFilterRectorTest extends AbstractRectorTestCase
