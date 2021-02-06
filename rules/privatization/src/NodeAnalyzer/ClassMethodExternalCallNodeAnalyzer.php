@@ -68,12 +68,12 @@ final class ClassMethodExternalCallNodeAnalyzer
     }
 
     /**
-     * @param MethodCall[] $methodCalls
-     * @return MethodCall[]
+     * @param MethodCall[]|StaticCall[]|ArrayCallable[] $methodCalls
+     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
      */
     public function getExternalCalls(ClassMethod $classMethod, array $methodCalls = []): array
     {
-        /** @var MethodCall[] $methodCalls */
+        /** @var MethodCall[]|StaticCall[]|ArrayCallable[] $methodCalls */
         $methodCalls = $methodCalls ?: $this->nodeRepository->findCallsByClassMethod($classMethod);
 
         $methodCalls = array_filter($methodCalls, function (object $node): bool {
