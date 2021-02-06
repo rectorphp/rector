@@ -68,6 +68,7 @@ final class ClassMethodExternalCallNodeAnalyzer
     }
 
     /**
+     * @param MethodCall[] $methodCalls
      * @return MethodCall[]
      */
     public function getExternalCalls(ClassMethod $classMethod, array $methodCalls = []): array
