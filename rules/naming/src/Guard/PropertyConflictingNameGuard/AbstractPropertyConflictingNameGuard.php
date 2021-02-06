@@ -49,7 +49,7 @@ abstract class AbstractPropertyConflictingNameGuard implements ConflictingGuardI
      * @param ClassLike $node
      * @return string[]
      */
-    public function resolve(Node $node): array
+    protected function resolve(Node $node): array
     {
         $expectedNames = [];
         foreach ($node->getProperties() as $property) {

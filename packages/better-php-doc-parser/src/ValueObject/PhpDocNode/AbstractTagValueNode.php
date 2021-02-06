@@ -75,7 +75,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
      * @param mixed[] $contentItems
      * @return mixed[]
      */
-    public function filterOutMissingItems(array $contentItems): array
+    protected function filterOutMissingItems(array $contentItems): array
     {
         if ($this->tagValueNodeConfiguration->getOrderedVisibleItems() === null) {
             return $contentItems;

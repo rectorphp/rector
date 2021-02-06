@@ -135,6 +135,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($currentClass->isFinal()) {
+            return true;
+        }
+
         if ($currentClass->extends instanceof FullyQualified) {
             return true;
         }

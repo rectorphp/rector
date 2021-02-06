@@ -105,7 +105,7 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
         return $renameValueObject->getProperty();
     }
 
-    public function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
+    protected function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
     {
         $this->propertyFetchRenamer->renamePropertyFetchesInClass(
             $propertyRename->getClassLike(),
