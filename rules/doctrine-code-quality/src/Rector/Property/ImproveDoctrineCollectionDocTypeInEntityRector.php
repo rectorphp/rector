@@ -6,7 +6,6 @@ namespace Rector\DoctrineCodeQuality\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
@@ -19,7 +18,6 @@ use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\DoctrineCodeQuality\PhpDoc\CollectionTypeFactory;
 use Rector\DoctrineCodeQuality\PhpDoc\CollectionTypeResolver;
 use Rector\DoctrineCodeQuality\PhpDoc\CollectionVarTagValueNodeResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -212,7 +210,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $property = $this->matchPropertyFetchToClassProperty($propertyFetches[0]);
+        $property = $this->nodeRepository->findPropertyByPropertyFetch($propertyFetches[0]);
         if (! $property instanceof Property) {
             return null;
         }
@@ -223,20 +221,5 @@ CODE_SAMPLE
         }
 
         return $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($varTagValueNode->type, $property);
-    }
-
-    private function matchPropertyFetchToClassProperty(PropertyFetch $propertyFetch): ?Property
-    {
-        $propertyName = $this->getName($propertyFetch);
-        if ($propertyName === null) {
-            return null;
-        }
-
-        $classLike = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
-            return null;
-        }
-
-        return $classLike->getProperty($propertyName);
     }
 }
