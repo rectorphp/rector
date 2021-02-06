@@ -9,13 +9,12 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\TypeWithClassName;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class SetterClassMethodAnalyzer
@@ -30,10 +29,19 @@ final class SetterClassMethodAnalyzer
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
+    public function __construct(
+        NodeTypeResolver $nodeTypeResolver,
+        NodeNameResolver $nodeNameResolver,
+        NodeRepository $nodeRepository
+    ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function matchNullalbeClassMethodProperty(ClassMethod $classMethod): ?Property
@@ -43,7 +51,7 @@ final class SetterClassMethodAnalyzer
             return null;
         }
 
-        return $this->getPropertyByPropertyFetch($classMethod, $propertyFetch);
+        return $this->nodeRepository->findPropertyByPropertyFetch($propertyFetch);
     }
 
     public function matchDateTimeSetterProperty(ClassMethod $classMethod): ?Property
@@ -53,7 +61,7 @@ final class SetterClassMethodAnalyzer
             return null;
         }
 
-        return $this->getPropertyByPropertyFetch($classMethod, $propertyFetch);
+        return $this->nodeRepository->findPropertyByPropertyFetch($propertyFetch);
     }
 
     /**
@@ -78,21 +86,6 @@ final class SetterClassMethodAnalyzer
         }
 
         return $propertyFetch;
-    }
-
-    private function getPropertyByPropertyFetch(ClassMethod $classMethod, PropertyFetch $propertyFetch): ?Property
-    {
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
-            return null;
-        }
-
-        $propertyName = $this->nodeNameResolver->getName($propertyFetch);
-        if ($propertyName === null) {
-            return null;
-        }
-
-        return $classLike->getProperty($propertyName);
     }
 
     private function matchDateTimeSetterPropertyFetch(ClassMethod $classMethod): ?PropertyFetch

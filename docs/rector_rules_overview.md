@@ -12032,7 +12032,7 @@ Add null default to properties with PHP 7.4 property nullable type
 
 Add typed properties based only on strict constructor types
 
-- class: `Rector\Php74\Rector\Property\TypedPropertyFromStrictConstructorRector`
+- class: `Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector`
 
 ```diff
  class SomeObject

@@ -2,19 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyFromStrictConstructorRector;
+namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector;
 
 use Iterator;
-use Rector\Php74\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @requires PHP 7.4
- */
-final class TypedPropertyFromStrictConstructorRectorTest extends AbstractRectorTestCase
+final class ReturnTypeFromStrictTypedPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
+     * @requires PHP 8.0
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
@@ -29,6 +27,6 @@ final class TypedPropertyFromStrictConstructorRectorTest extends AbstractRectorT
 
     protected function getRectorClass(): string
     {
-        return TypedPropertyFromStrictConstructorRector::class;
+        return ReturnTypeFromStrictTypedPropertyRector::class;
     }
 }
