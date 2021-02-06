@@ -9,12 +9,23 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
 
 /**
  * @see \Rector\Privatization\Tests\Rector\ClassMethod\MakeOnlyUsedByChildrenProtectedRector\MakeOnlyUsedByChildrenProtectedRectorTest
  */
 final class MakeOnlyUsedByChildrenProtectedRector extends AbstractRector
 {
+    /**
+     * @var ClassMethodExternalCallNodeAnalyzer
+     */
+    private $classMethodExternalCallNodeAnalyzer;
+
+    public function __construct(ClassMethodExternalCallNodeAnalyzer $classMethodExternalCallNodeAnalyzer)
+    {
+        $this->classMethodExternalCallNodeAnalyzer = $classMethodExternalCallNodeAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -72,6 +83,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $node->isPublic()) {
+            return null;
+        }
+
+        if (! $this->classMethodExternalCallNodeAnalyzer->hasExternalCall($node)) {
+            return null;
+        }
+
+        $this->visibilityManipulator->makeProtected($node);
         return $node;
     }
 }
