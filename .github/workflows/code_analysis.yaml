@@ -45,7 +45,7 @@ jobs:
 
                     -
                         name: 'Validate Max File Length'
-                        run: bin/rector validate-file-length
+                        run: vendor/bin/easy-ci validate-file-length packages rules src tests
 
                     -
                         name: 'PHP Linter'
