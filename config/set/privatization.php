@@ -9,6 +9,7 @@ use Rector\Privatization\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRect
 use Rector\Privatization\Rector\Class_\RepeatedLiteralToClassConstantRector;
 use Rector\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector;
 use Rector\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector;
+use Rector\Privatization\Rector\ClassMethod\MakeOnlyUsedByChildrenProtectedRector;
 use Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector;
 use Rector\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector;
 use Rector\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector;
@@ -35,4 +36,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PrivatizeLocalClassConstantRector::class);
     $services->set(PrivatizeFinalClassPropertyRector::class);
     $services->set(PrivatizeFinalClassMethodRector::class);
+    $services->set(MakeOnlyUsedByChildrenProtectedRector::class);
 };
