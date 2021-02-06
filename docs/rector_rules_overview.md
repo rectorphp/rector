@@ -16550,7 +16550,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.
 
-- class: `Rector\Twig\Rector\Return_\SimpleFunctionAndFilterRector`
+- class: `Rector\Symfony\Rector\Return_\SimpleFunctionAndFilterRector`
 
 ```diff
  class SomeExtension extends Twig_Extension
