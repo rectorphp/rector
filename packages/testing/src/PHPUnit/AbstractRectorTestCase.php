@@ -37,6 +37,7 @@ use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -306,6 +307,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         if (! file_exists($inputFileInfo->getPathname())) {
             return;
         }
+
+        $rectorObject = self::$container->get($this->getRectorClass());
+        $this->assertInstanceOf(RuleDefinition::class, $rectorObject->getRuleDefinition());
 
         if (! Strings::contains($inputFileInfo->getContents(), RunnableInterface::class)) {
             return;
