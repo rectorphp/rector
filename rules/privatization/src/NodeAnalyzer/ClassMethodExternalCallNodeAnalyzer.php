@@ -64,7 +64,7 @@ final class ClassMethodExternalCallNodeAnalyzer
             return true;
         }
 
-        return (bool) $this->getExternalCalls($classMethod, $methodCalls);
+        return $this->getExternalCalls($classMethod, $methodCalls) !== [];
     }
 
     /**
