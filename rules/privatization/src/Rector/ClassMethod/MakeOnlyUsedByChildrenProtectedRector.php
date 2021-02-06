@@ -107,7 +107,7 @@ CODE_SAMPLE
         foreach ($externalCalls as $call) {
             $class = $call->getAttribute(AttributeKey::CLASS_NODE);
             if (! $class instanceof Class_) {
-                continue;
+                return null;
             }
 
             if (! $this->isObjectType($class, $className)) {
