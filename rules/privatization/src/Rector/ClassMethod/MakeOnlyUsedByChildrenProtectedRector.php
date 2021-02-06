@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Rector\Privatization\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
-use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use PhpParser\Node\Stmt\Class_;
 
 /**
  * @see \Rector\Privatization\Tests\Rector\ClassMethod\MakeOnlyUsedByChildrenProtectedRector\MakeOnlyUsedByChildrenProtectedRectorTest
@@ -24,15 +23,9 @@ final class MakeOnlyUsedByChildrenProtectedRector extends AbstractRector
      */
     private $classMethodExternalCallNodeAnalyzer;
 
-    /**
-     * @var ClassChildAnalyzer
-     */
-    private $classChildAnalyzer;
-
-    public function __construct(ClassMethodExternalCallNodeAnalyzer $classMethodExternalCallNodeAnalyzer, ClassChildAnalyzer $classChildAnalyzer)
+    public function __construct(ClassMethodExternalCallNodeAnalyzer $classMethodExternalCallNodeAnalyzer)
     {
         $this->classMethodExternalCallNodeAnalyzer = $classMethodExternalCallNodeAnalyzer;
-        $this->classChildAnalyzer = $classChildAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
