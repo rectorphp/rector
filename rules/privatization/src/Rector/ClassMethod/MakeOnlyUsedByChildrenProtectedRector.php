@@ -85,6 +85,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $currentClass = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $currentClass instanceof Class_) {
+            return null;
+        }
+
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             return null;
