@@ -71,7 +71,7 @@ final class ClassMethodVisibilityVendorLockResolver extends AbstractNodeVendorLo
         return false;
     }
 
-    private function hasChildMethod(string $desiredClassName, string $methodName): bool
+    public function hasChildMethod(string $desiredClassName, string $methodName): bool
     {
         foreach (get_declared_classes() as $className) {
             if ($className === $desiredClassName) {

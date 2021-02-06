@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Rector\Privatization\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
+use ReflectionClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -23,9 +26,17 @@ final class MakeOnlyUsedByChildrenProtectedRector extends AbstractRector
      */
     private $classMethodExternalCallNodeAnalyzer;
 
-    public function __construct(ClassMethodExternalCallNodeAnalyzer $classMethodExternalCallNodeAnalyzer)
-    {
+    /**
+     * @var FamilyRelationsAnalyzer
+     */
+    private $familyRelationsAnalyzer;
+
+    public function __construct(
+        ClassMethodExternalCallNodeAnalyzer $classMethodExternalCallNodeAnalyzer,
+        FamilyRelationsAnalyzer $familyRelationsAnalyzer
+    ) {
         $this->classMethodExternalCallNodeAnalyzer = $classMethodExternalCallNodeAnalyzer;
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -115,7 +126,31 @@ CODE_SAMPLE
             }
         }
 
+        $methodName = $this->getName($node);
+        if ($this->isOverriddenInChildClass($className, $methodName)) {
+            return null;
+        }
+
+        if ($currentClass->extends instanceof FullyQualified) {
+            return null;
+        }
+
         $this->visibilityManipulator->makeProtected($node);
         return $node;
+    }
+
+    private function isOverriddenInChildClass(string $className, string $methodName): bool
+    {
+        $childrenClassNames = $this->familyRelationsAnalyzer->getChildrenOfClass($className);
+        foreach ($childrenClassNames as $childrenClassName) {
+            $reflectionClass = new ReflectionClass($childrenClassName);
+            if (method_exists($childrenClassName, $methodName) && $reflectionClass->getMethod(
+                $methodName
+            )->class === $childrenClassName) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
