@@ -10,10 +10,12 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType;
 use PHPStan\Type\MixedType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -79,6 +81,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
+            return null;
+        }
+
         if ($node->returnType !== null) {
             return null;
         }
@@ -128,7 +134,7 @@ CODE_SAMPLE
             }
 
             $property = $this->nodeRepository->findPropertyByPropertyFetch($return->expr);
-            if ($property === null) {
+            if (! $property instanceof Property) {
                 return [];
             }
 

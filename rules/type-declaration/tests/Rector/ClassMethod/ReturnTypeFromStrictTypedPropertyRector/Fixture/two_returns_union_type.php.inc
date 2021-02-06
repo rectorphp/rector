@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector\Fixture;
 
-final class TwoReturns
+final class TwoReturnsUnionType
 {
     private int $age = 100;
 
@@ -24,7 +24,7 @@ final class TwoReturns
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector\Fixture;
 
-final class TwoReturns
+final class TwoReturnsUnionType
 {
     private int $age = 100;
 
