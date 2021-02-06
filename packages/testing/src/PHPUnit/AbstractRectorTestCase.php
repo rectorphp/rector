@@ -308,8 +308,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             return;
         }
 
-        $rectorObject = self::$container->get($this->getRectorClass());
-        $this->assertInstanceOf(RuleDefinition::class, $rectorObject->getRuleDefinition());
+        $rectorClass = $this->getRectorClass();
+        if (self::$container->has($rectorClass)) {
+            $rectorObject = self::$container->get($rectorClass);
+            $this->assertInstanceOf(RuleDefinition::class, $rectorObject->getRuleDefinition());
+        }
 
         if (! Strings::contains($inputFileInfo->getContents(), RunnableInterface::class)) {
             return;
