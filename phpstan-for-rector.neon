@@ -6,8 +6,3 @@ includes:
     - utils/phpstan-extensions/config/phpstan-extensions.neon
     - vendor/phpstan/phpstan-nette/extension.neon
     - vendor/symplify/astral/config/services.neon
-
-services:
-    - Symplify\Astral\NodeValue\NodeValueResolver
-    - Symplify\Astral\NodeFinder\ParentNodeFinder
-    - Symplify\PackageBuilder\Php\TypeChecker

@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -86,9 +85,9 @@ CODE_SAMPLE
     /**
      * @return Variable[]
      */
-    private function findVariableUsages(ClassMethod $classMethod, Assign $assign): array
+    private function findVariableUsages(FunctionLike $functionLike, Assign $assign): array
     {
-        return $this->betterNodeFinder->find((array) $classMethod->getStmts(), function (Node $node) use (
+        return $this->betterNodeFinder->find((array) $functionLike->getStmts(), function (Node $node) use (
             $assign
         ): bool {
             if (! $node instanceof Variable) {

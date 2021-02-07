@@ -196,6 +196,7 @@ CODE_SAMPLE
             return false;
         }
 
+        /** @var ArrayDimFetch[] $arrayDimFetches */
         $arrayDimFetches = $this->betterNodeFinder->findInstanceOf($node, ArrayDimFetch::class);
 
         foreach ($arrayDimFetches as $arrayDimFetch) {

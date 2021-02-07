@@ -76,7 +76,7 @@ final class BetterNodeFinder
                 return $parent;
             }
 
-            if ($parent === null) {
+            if (! $parent instanceof Node) {
                 return null;
             }
         } while ($parent = $parent->getAttribute(AttributeKey::PARENT_NODE));
@@ -135,7 +135,8 @@ final class BetterNodeFinder
     public function findFirstAncestorInstancesOf(Node $node, array $types): ?Node
     {
         $currentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        while ($currentNode !== null) {
+
+        while ($currentNode instanceof Node) {
             foreach ($types as $type) {
                 if (is_a($currentNode, $type, true)) {
                     return $currentNode;

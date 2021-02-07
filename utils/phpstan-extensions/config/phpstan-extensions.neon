@@ -1,4 +1,10 @@
 services:
+    # $nodeFinder->findInstanceOf()
+    # $nodeFinder->findFirstInstanceOf()
+    -
+        class: Rector\PHPStanExtensions\ReturnTypeExtension\FindInstanceOfReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+
     # $node->getAttribute($1) => Type|null by $1
     -
         class: Rector\PHPStanExtensions\ReturnTypeExtension\GetAttributeReturnTypeExtension
