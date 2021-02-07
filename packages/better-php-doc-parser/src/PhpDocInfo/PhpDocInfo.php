@@ -36,6 +36,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 /**
+ * @template TNode as \PHPStan\PhpDocParser\Ast\Node
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
  */
 final class PhpDocInfo
@@ -231,8 +232,7 @@ final class PhpDocInfo
     }
 
     /**
-     * @template T as \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
-     * @param class-string<T> $type
+     * @param class-string<TNode> $type
      */
     public function hasByType(string $type): bool
     {
@@ -240,7 +240,7 @@ final class PhpDocInfo
     }
 
     /**
-     * @param class-string<\PHPStan\PhpDocParser\Ast\Node>[] $types
+     * @param class-string<TNode>[] $types
      */
     public function hasByTypes(array $types): bool
     {

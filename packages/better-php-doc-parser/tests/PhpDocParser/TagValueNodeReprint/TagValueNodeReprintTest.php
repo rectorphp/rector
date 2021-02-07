@@ -29,7 +29,7 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
 {
     /**
      * @dataProvider provideData()
-     * @param class-string $tagValueNodeClass
+     * @param class-string<\PHPStan\PhpDocParser\Ast\Node> $tagValueNodeClass
      */
     public function test(SmartFileInfo $fileInfo, string $tagValueNodeClass): void
     {
