@@ -155,11 +155,6 @@ parameters:
 
         - '#Class Rector\\Renaming\\Tests\\Rector\\MethodCall\\RenameMethodRector\\Fixture\\SkipSelfMethodRename not found#'
 
-        # fixed in symplfiy dev
-        -
-            message: '#Separate function "Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ref\(\)" in method call to standalone row to improve readability#'
-            path: 'packages/rector-generator/config/config.php'
-
         - '#Parameter \#1 \$variable of class Rector\\Php70\\ValueObject\\VariableAssignPair constructor expects PhpParser\\Node\\Expr\\ArrayDimFetch\|PhpParser\\Node\\Expr\\PropertyFetch\|PhpParser\\Node\\Expr\\StaticPropertyFetch\|PhpParser\\Node\\Expr\\Variable, PhpParser\\Node\\Expr given#'
 
         # is nested expr
@@ -206,11 +201,6 @@ parameters:
         -
             message: '#Use value object over return of values#'
             path: 'rules/php70/src/EregToPcreTransformer.php'
-
-#        -
-#            message: '#Instead of "Symfony\\Component\\Finder\\SplFileInfo" class/interface use "Symplify\\SmartFileSystem\\SmartFileInfo"#'
-#            paths:
-#                - src/FileSystem/FilesFinder.php
 
         -
             message: '#Instead of container injection, use specific service#'
@@ -474,10 +464,7 @@ parameters:
         - '#Parameter \#2 \$type of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<T of PhpParser\\Node\>\:\:findInstanceOfName\(\) expects class\-string<T of PhpParser\\Node\>, string given#'
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findVariableOfName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns T of PhpParser\\Node\|null#'
 
-        # fixed in php-parser master
         - '#Method Rector\\SymfonyCodeQuality\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
-        - '#Parameter \#4 \$classWithConstants of class Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant constructor expects class\-string, string given#'
-
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return T of PhpParser\\Node but returns PhpParser\\Node#'
 
         -
@@ -489,7 +476,6 @@ parameters:
 
         -
             message: '#Class Rector\\RemovingStatic\\Tests\\Rector\\Property\\DesiredPropertyClassMethodTypeToDynamicRector\\Fixture\\StaticProperty not found#'
-
             paths:
                 - rules/removing-static/tests/Rector/Property/DesiredPropertyClassMethodTypeToDynamicRector/config/some_config.php
 
@@ -538,13 +524,6 @@ parameters:
         - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\NodeTypeResolver\\NodeTypeResolver\\ParamTypeResolver" class\. Use unique content or abstract service instead#'
         # constants
         - '#Parameter \#1 \$types of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:hasByTypes\(\) expects array<class\-string<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\>\>, array<int, (.*?)\> given#'
-
-        # part of the rule, depends on PHP version
-        -
-            message: '#Unreachable statement \- code above always terminates#'
-            paths:
-                - rules/php71/src/Rector/BooleanOr/IsIterableRector.php
-                - rules/php73/src/Rector/BooleanOr/IsCountableRector.php
 
         -
             message: '#Use defined constant Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJsonSection\:\:REQUIRE over string require#'
