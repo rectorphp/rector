@@ -15,7 +15,6 @@ use PHPStan\Rules\Rule;
 use Rector\Core\Exception\ShouldNotHappenException;
 
 /**
- * @see \Rector\PHPStanExtensions\Tests\Rule\KeepRectorNamespaceForRectorRule\KeepRectorNamespaceForRectorRuleTest
  * @see \Rector\PHPStanExtensions\Tests\Rule\RequireRectorCategoryByGetNodeTypesRule\RequireRectorCategoryByGetNodeTypesRuleTest
  */
 final class RequireRectorCategoryByGetNodeTypesRule implements Rule

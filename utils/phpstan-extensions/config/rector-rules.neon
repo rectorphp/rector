@@ -13,10 +13,6 @@ services:
         class: Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
         tags: [phpstan.rules.rule]
 
-    -
-        class: Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule
-        tags: [phpstan.rules.rule]
-
     # solve later
 #    -
 #        class: Symplify\PHPStanRules\Rules\ForbiddenNullableParameterRule
