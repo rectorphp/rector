@@ -1,4 +1,4 @@
-# 662 Rules Overview
+# 664 Rules Overview
 
 <br>
 
@@ -56,8 +56,6 @@
 
 - [Legacy](#legacy) (4)
 
-- [MagicDisclosure](#magicdisclosure) (3)
-
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 
 - [MockistaToMockery](#mockistatomockery) (2)
@@ -104,15 +102,15 @@
 
 - [Php72](#php72) (10)
 
-- [Php73](#php73) (10)
+- [Php73](#php73) (9)
 
-- [Php74](#php74) (15)
+- [Php74](#php74) (14)
 
 - [Php80](#php80) (16)
 
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 
-- [Privatization](#privatization) (14)
+- [Privatization](#privatization) (15)
 
 - [RectorGenerator](#rectorgenerator) (1)
 
@@ -126,7 +124,7 @@
 
 - [Sensio](#sensio) (3)
 
-- [Symfony](#symfony) (7)
+- [Symfony](#symfony) (8)
 
 - [Symfony2](#symfony2) (3)
 
@@ -140,11 +138,9 @@
 
 - [SymfonyPhpConfig](#symfonyphpconfig) (1)
 
-- [Transform](#transform) (24)
+- [Transform](#transform) (28)
 
-- [Twig](#twig) (1)
-
-- [TypeDeclaration](#typedeclaration) (11)
+- [TypeDeclaration](#typedeclaration) (13)
 
 - [Visibility](#visibility) (3)
 
@@ -7549,172 +7545,6 @@ Remove includes (include, include_once, require, require_once) from source
 
 <br>
 
-## MagicDisclosure
-
-### GetAndSetToMethodCallRector
-
-Turns defined `__get`/`__set` to specific method calls.
-
-:wrench: **configure it!**
-
-- class: `Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector`
-
-```php
-use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(GetAndSetToMethodCallRector::class)
-        ->call('configure', [[
-            GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
-                'SomeContainer' => [
-                    'set' => 'addService',
-                ],
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
- $container = new SomeContainer;
--$container->someService = $someService;
-+$container->setService("someService", $someService);
-```
-
-<br>
-
-```php
-use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(GetAndSetToMethodCallRector::class)
-        ->call('configure', [[
-            GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
-                'SomeContainer' => [
-                    'get' => 'getService',
-                ],
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
- $container = new SomeContainer;
--$someService = $container->someService;
-+$someService = $container->getService("someService");
-```
-
-<br>
-
-### ToStringToMethodCallRector
-
-Turns defined code uses of `"__toString()"` method  to specific method calls.
-
-:wrench: **configure it!**
-
-- class: `Rector\Transform\Rector\String_\ToStringToMethodCallRector`
-
-```php
-use Rector\Transform\Rector\String_\ToStringToMethodCallRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ToStringToMethodCallRector::class)
-        ->call('configure', [[
-            ToStringToMethodCallRector::METHOD_NAMES_BY_TYPE => [
-                'SomeObject' => 'getPath',
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
- $someValue = new SomeObject;
--$result = (string) $someValue;
--$result = $someValue->__toString();
-+$result = $someValue->getPath();
-+$result = $someValue->getPath();
-```
-
-<br>
-
-### UnsetAndIssetToMethodCallRector
-
-Turns defined `__isset`/`__unset` calls to specific method calls.
-
-:wrench: **configure it!**
-
-- class: `Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector`
-
-```php
-use Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector;
-use Rector\Transform\ValueObject\IssetUnsetToMethodCall;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(UnsetAndIssetToMethodCallRector::class)
-        ->call('configure', [[
-            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => ValueObjectInliner::inline([
-                new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService'),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- $container = new SomeContainer;
--isset($container["someKey"]);
-+$container->hasService("someKey");
-```
-
-<br>
-
-```php
-use Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector;
-use Rector\Transform\ValueObject\IssetUnsetToMethodCall;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(UnsetAndIssetToMethodCallRector::class)
-        ->call('configure', [[
-            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => ValueObjectInliner::inline([
-                new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService'),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- $container = new SomeContainer;
--unset($container["someKey"]);
-+$container->removeService("someKey");
-```
-
-<br>
-
 ## MockeryToProphecy
 
 ### MockeryCloseRemoveRector
@@ -8531,7 +8361,7 @@ Use `Nette\Utils\Strings` over bare string-functions
 
 ### TemplateMagicAssignToExplicitVariableArrayRector
 
-Change `$this->templates->{magic}` to `$this->template->render(..., $values)`
+Change `$this->templates->{magic}` to `$this->template->render(..., $values)` in components
 
 - class: `Rector\Nette\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector`
 
@@ -11638,27 +11468,6 @@ Escape - in some cases
 
 <br>
 
-### RemoveMissingCompactVariableRector
-
-Remove non-existing vars from `compact()`
-
-- class: `Rector\Php73\Rector\FuncCall\RemoveMissingCompactVariableRector`
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         $value = 'yes';
-
--        compact('value', 'non_existing');
-+        compact('value');
-     }
- }
-```
-
-<br>
-
 ### SensitiveConstantNameRector
 
 Changes case insensitive constants to sensitive ones.
@@ -12023,27 +11832,6 @@ Add null default to properties with PHP 7.4 property nullable type
  {
 -    public ?string $name;
 +    public ?string $name = null;
- }
-```
-
-<br>
-
-### TypedPropertyFromStrictConstructorRector
-
-Add typed properties based only on strict constructor types
-
-- class: `Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector`
-
-```diff
- class SomeObject
- {
--    private $name;
-+    private string $name;
-
-     public function __construct(string $name)
-     {
-         $this->name = $name;
-     }
  }
 ```
 
@@ -12793,6 +12581,32 @@ Finalize every class that has no children
 -class ThirdClass extends SecondClass
 +final class ThirdClass extends SecondClass
  {
+ }
+```
+
+<br>
+
+### MakeOnlyUsedByChildrenProtectedRector
+
+Make public class method protected, if only used by its children
+
+- class: `Rector\Privatization\Rector\ClassMethod\MakeOnlyUsedByChildrenProtectedRector`
+
+```diff
+ abstract class AbstractSomeClass
+ {
+-    public function run()
++    protected function run()
+     {
+     }
+ }
+
+ class ChildClass extends AbstractSomeClass
+ {
+     public function go()
+     {
+         $this->run();
+     }
  }
 ```
 
@@ -14542,6 +14356,35 @@ Turns status code numbers to constants
 
 <br>
 
+### SimpleFunctionAndFilterRector
+
+Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.
+
+- class: `Rector\Symfony\Rector\Return_\SimpleFunctionAndFilterRector`
+
+```diff
+ class SomeExtension extends Twig_Extension
+ {
+     public function getFunctions()
+     {
+         return [
+-            'is_mobile' => new Twig_Function_Method($this, 'isMobile'),
++             new Twig_SimpleFunction('is_mobile', [$this, 'isMobile']),
+         ];
+     }
+
+     public function getFilters()
+     {
+         return [
+-            'is_mobile' => new Twig_Filter_Method($this, 'isMobile'),
++             new Twig_SimpleFilter('is_mobile', [$this, 'isMobile']),
+         ];
+     }
+ }
+```
+
+<br>
+
 ## Symfony2
 
 ### AddFlashRector
@@ -15514,6 +15357,51 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+### CallableInMethodCallToVariableRector
+
+Change a callable in method call to standalone variable assign
+
+:wrench: **configure it!**
+
+- class: `Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector`
+
+```php
+use Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector;
+use Rector\Transform\ValueObject\CallableInMethodCallToVariable;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(CallableInMethodCallToVariableRector::class)
+        ->call('configure', [[
+            CallableInMethodCallToVariableRector::CALLABLE_IN_METHOD_CALL_TO_VARIABLE => ValueObjectInliner::inline([
+                new CallableInMethodCallToVariable('Nette\Caching\Cache', 'save', 1),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+         /** @var \Nette\Caching\Cache $cache */
+-        $cache->save($key, function () use ($container) {
+-            return 100;
+-        });
++        $result = 100;
++        $cache->save($key, $result);
+     }
+ }
+```
+
+<br>
+
 ### ClassConstFetchToStringRector
 
 Replaces constant by value
@@ -15716,6 +15604,70 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
 -view("...", []);
 +SomeClass::render("...", []);
+```
+
+<br>
+
+### GetAndSetToMethodCallRector
+
+Turns defined `__get`/`__set` to specific method calls.
+
+:wrench: **configure it!**
+
+- class: `Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector`
+
+```php
+use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(GetAndSetToMethodCallRector::class)
+        ->call('configure', [[
+            GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
+                'SomeContainer' => [
+                    'set' => 'addService',
+                ],
+            ],
+        ]]);
+};
+```
+
+↓
+
+```diff
+ $container = new SomeContainer;
+-$container->someService = $someService;
++$container->setService("someService", $someService);
+```
+
+<br>
+
+```php
+use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(GetAndSetToMethodCallRector::class)
+        ->call('configure', [[
+            GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
+                'SomeContainer' => [
+                    'get' => 'getService',
+                ],
+            ],
+        ]]);
+};
+```
+
+↓
+
+```diff
+ $container = new SomeContainer;
+-$someService = $container->someService;
++$someService = $container->getService("someService");
 ```
 
 <br>
@@ -16490,6 +16442,106 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+### ToStringToMethodCallRector
+
+Turns defined code uses of `"__toString()"` method  to specific method calls.
+
+:wrench: **configure it!**
+
+- class: `Rector\Transform\Rector\String_\ToStringToMethodCallRector`
+
+```php
+use Rector\Transform\Rector\String_\ToStringToMethodCallRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ToStringToMethodCallRector::class)
+        ->call('configure', [[
+            ToStringToMethodCallRector::METHOD_NAMES_BY_TYPE => [
+                'SomeObject' => 'getPath',
+            ],
+        ]]);
+};
+```
+
+↓
+
+```diff
+ $someValue = new SomeObject;
+-$result = (string) $someValue;
+-$result = $someValue->__toString();
++$result = $someValue->getPath();
++$result = $someValue->getPath();
+```
+
+<br>
+
+### UnsetAndIssetToMethodCallRector
+
+Turns defined `__isset`/`__unset` calls to specific method calls.
+
+:wrench: **configure it!**
+
+- class: `Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector`
+
+```php
+use Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector;
+use Rector\Transform\ValueObject\IssetUnsetToMethodCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(UnsetAndIssetToMethodCallRector::class)
+        ->call('configure', [[
+            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => ValueObjectInliner::inline([
+                new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ $container = new SomeContainer;
+-isset($container["someKey"]);
++$container->hasService("someKey");
+```
+
+<br>
+
+```php
+use Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector;
+use Rector\Transform\ValueObject\IssetUnsetToMethodCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(UnsetAndIssetToMethodCallRector::class)
+        ->call('configure', [[
+            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => ValueObjectInliner::inline([
+                new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ $container = new SomeContainer;
+-unset($container["someKey"]);
++$container->removeService("someKey");
+```
+
+<br>
+
 ### VariableMethodCallToServiceCallRector
 
 Replace variable method call to a service one
@@ -16538,37 +16590,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
      {
 -        $phpDocInfo = $node->getAttribute('php_doc_info');
 +        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-     }
- }
-```
-
-<br>
-
-## Twig
-
-### SimpleFunctionAndFilterRector
-
-Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.
-
-- class: `Rector\Symfony\Rector\Return_\SimpleFunctionAndFilterRector`
-
-```diff
- class SomeExtension extends Twig_Extension
- {
-     public function getFunctions()
-     {
-         return [
--            'is_mobile' => new Twig_Function_Method($this, 'isMobile'),
-+             new Twig_SimpleFunction('is_mobile', [$this, 'isMobile']),
-         ];
-     }
-
-     public function getFilters()
-     {
-         return [
--            'is_mobile' => new Twig_Filter_Method($this, 'isMobile'),
-+             new Twig_SimpleFilter('is_mobile', [$this, 'isMobile']),
-         ];
      }
  }
 ```
@@ -16886,6 +16907,48 @@ Change `@return` types and type from static analysis to type declarations if not
 -    public function getCount()
 +    public function getCount(): int
      {
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromStrictTypedPropertyRector
+
+Add return method return type based on strict typed property
+
+- class: `Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector`
+
+```diff
+ final class SomeClass
+ {
+     private int $age = 100;
+
+-    public function getAge()
++    public function getAge(): int
+     {
+         return $this->age;
+     }
+ }
+```
+
+<br>
+
+### TypedPropertyFromStrictConstructorRector
+
+Add typed properties based only on strict constructor types
+
+- class: `Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector`
+
+```diff
+ class SomeObject
+ {
+-    private $name;
++    private string $name;
+
+     public function __construct(string $name)
+     {
+         $this->name = $name;
      }
  }
 ```
