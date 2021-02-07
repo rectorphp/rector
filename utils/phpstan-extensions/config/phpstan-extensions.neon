@@ -1,6 +1,4 @@
 services:
-    - Symplify\Astral\NodeValue\NodeValueResolver
-
     # $node->getAttribute($1) => Type|null by $1
     -
         class: Rector\PHPStanExtensions\ReturnTypeExtension\GetAttributeReturnTypeExtension
