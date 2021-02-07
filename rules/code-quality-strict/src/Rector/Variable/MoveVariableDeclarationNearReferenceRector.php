@@ -264,7 +264,24 @@ CODE_SAMPLE
     private function hasCall(Node $node): bool
     {
         return (bool) $this->betterNodeFinder->findFirst($node, function (Node $n): bool {
-            return $n instanceof StaticCall || $n instanceof MethodCall || ($n instanceof FuncCall && Strings::startsWith($this->getName($n), 'ob_'));
+            if ($n instanceof StaticCall) {
+                return true;
+            }
+
+            if ($n instanceof MethodCall) {
+                return true;
+            }
+
+            if (! $n instanceof FuncCall) {
+                return false;
+            }
+
+            $funcName = $this->getName($n);
+            if ($funcName === null) {
+                return false;
+            }
+
+            return Strings::startsWith($funcName, 'ob_');
         });
     }
 
