@@ -14,6 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
             new MethodCallRename(AbstractType::class, 'setDefaultOptions', 'configureOptions'),
             new MethodCallRename(Html::class, 'add', 'addHtml'),
+            new MethodCallRename('Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture\DemoFile', 'notify', '__invoke'),
             new MethodCallRename('*Presenter', 'run', '__invoke'),
             new MethodCallRename(
                 \Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture\SkipSelfMethodRename::class,
