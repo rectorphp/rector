@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\CodeQualityStrict\Rector\Variable;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
@@ -262,7 +264,7 @@ CODE_SAMPLE
     private function hasCall(Node $node): bool
     {
         return (bool) $this->betterNodeFinder->findFirst($node, function (Node $n): bool {
-            return $n instanceof StaticCall || $n instanceof MethodCall;
+            return $n instanceof StaticCall || $n instanceof MethodCall || ($n instanceof FuncCall && Strings::startsWith($this->getName($n), 'ob_'));
         });
     }
 
