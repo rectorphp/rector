@@ -8,6 +8,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\NodeFinder\NodeUsageFinder;
@@ -55,6 +56,10 @@ abstract class AbstractReadNodeAnalyzer
             }
 
             return $parentParent->var !== $parent;
+        }
+
+        if ($parent instanceof Expression) {
+            return false;
         }
 
         throw new NotImplementedYetException();
