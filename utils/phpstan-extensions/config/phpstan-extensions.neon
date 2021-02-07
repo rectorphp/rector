@@ -6,11 +6,6 @@ services:
         class: Rector\PHPStanExtensions\ReturnTypeExtension\GetAttributeReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
 
-    # ParsedNodesByType->getNodesByType($1) => $1[]
-    -
-        class: Rector\PHPStanExtensions\ReturnTypeExtension\ParsedNodesByTypeReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-
     # $nameResolver->getName() => in some cases always string
     -
         class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverReturnTypeExtension
