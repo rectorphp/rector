@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint;
 
 use Iterator;
+use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
@@ -29,7 +30,7 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
 {
     /**
      * @dataProvider provideData()
-     * @param class-string<\PHPStan\PhpDocParser\Ast\Node> $tagValueNodeClass
+     * @param class-string<Node> $tagValueNodeClass
      */
     public function test(SmartFileInfo $fileInfo, string $tagValueNodeClass): void
     {
