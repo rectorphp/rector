@@ -323,7 +323,6 @@
         ],
         "docs": [
             "vendor/bin/rule-doc-generator generate packages rules --output-file docs/rector_rules_overview.md --ansi --categorize",
-            "bin/rector dump-nodes --output-file docs/nodes_overview.md --ansi",
             "vendor/bin/ecs check-markdown docs/rector_rules_overview.md docs/nodes_overview.md --ansi --fix"
         ],
         "rector-ci": "bin/rector process --dry-run --ansi",
