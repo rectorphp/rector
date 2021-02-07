@@ -15,11 +15,6 @@ services:
         class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverTraitReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
 
-    # $phpDocInfo->getByType($1) => Type|null by $1
-    -
-        class: Rector\PHPStanExtensions\ReturnTypeExtension\PhpDocInfoGetByTypeReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-
     # node finder
     -
          class: Rector\PHPStanExtensions\ReturnTypeExtension\NodeFinder\FindFirstInstanceOfReturnTypeExtension

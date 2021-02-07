@@ -245,7 +245,7 @@ final class PhpDocInfo
     public function hasByTypes(array $types): bool
     {
         foreach ($types as $type) {
-            if ($this->getByType($type)) {
+            if ($this->hasByType($type)) {
                 return true;
             }
         }
