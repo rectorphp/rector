@@ -186,7 +186,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
             RenamePropertyRector::RENAMED_PROPERTIES => ValueObjectInliner::inline([
-                new RenameProperty('Symfony\Component\Security\Http\RememberMe\AbstractRememberMeServices', 'providerKey', 'firewallName'),
+                new RenameProperty(
+                    'Symfony\Component\Security\Http\RememberMe\AbstractRememberMeServices',
+                    'providerKey',
+                    'firewallName'
+                ),
             ]),
         ]]);
 };

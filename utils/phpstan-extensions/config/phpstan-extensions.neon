@@ -6,11 +6,6 @@ services:
         class: Rector\PHPStanExtensions\ReturnTypeExtension\GetAttributeReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
 
-    # ParsedNodesByType->getNodesByType($1) => $1[]
-    -
-        class: Rector\PHPStanExtensions\ReturnTypeExtension\ParsedNodesByTypeReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-
     # $nameResolver->getName() => in some cases always string
     -
         class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverReturnTypeExtension
@@ -18,11 +13,6 @@ services:
     # $nameResolverTrait->getName() => in some cases always string
     -
         class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverTraitReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-
-    # $phpDocInfo->getByType($1) => Type|null by $1
-    -
-        class: Rector\PHPStanExtensions\ReturnTypeExtension\PhpDocInfoGetByTypeReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
 
     # node finder

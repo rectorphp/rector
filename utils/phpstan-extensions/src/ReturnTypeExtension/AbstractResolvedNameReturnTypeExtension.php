@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanExtensions\ReturnTypeExtension;
 
+use PhpParser\Node;
 use PhpParser\Node\Const_ as NodeConst;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
@@ -31,7 +32,7 @@ use PHPStan\Type\Type;
 abstract class AbstractResolvedNameReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     /**
-     * @var class-string[]
+     * @var class-string<Node>
      */
     private const ALWAYS_NAMED_TYPES = [
         ClassMethod::class,

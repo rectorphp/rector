@@ -52,7 +52,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     }
 
     /**
-     * @param class-string $tagValueNodeType
+     * @param class-string<\PHPStan\PhpDocParser\Ast\Node> $tagValueNodeType
      */
     protected function doTestPrintedPhpDocInfo(SmartFileInfo $fileInfo, string $tagValueNodeType): void
     {
@@ -121,9 +121,14 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         return 'Caused by: ' . $fileInfo->getRelativeFilePathFromCwd() . PHP_EOL;
     }
 
+    /**
+     * @param class-string<\PHPStan\PhpDocParser\Ast\Node> $tagValueNodeType
+     */
     private function doTestContainsTagValueNodeType(Node $node, string $tagValueNodeType, SmartFileInfo $fileInfo): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $this->assertTrue($phpDocInfo->hasByType($tagValueNodeType), $fileInfo->getRelativeFilePathFromCwd());
+
+        $hasByType = $phpDocInfo->hasByType($tagValueNodeType);
+        $this->assertTrue($hasByType, $fileInfo->getRelativeFilePathFromCwd());
     }
 }

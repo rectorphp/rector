@@ -59,7 +59,6 @@ parameters:
         - rules/downgrade-php70/src/Rector/FunctionLike/AbstractDowngradeParamDeclarationRector.php
 
         # phsptan bug
-        - utils/phpstan-extensions/src/Rule/KeepRectorNamespaceForRectorRule.php
         - packages/rector-generator/templates/*
         # this invalidates whole cache everytime
         - 'packages/symfony-php-config/*'
