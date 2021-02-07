@@ -10,6 +10,60 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## Unreleased
+
+### Added
+
+- [#5419] [CodeQuality] Add "single" prefix for value var of Foreach on ForToForeachRector when singularize() got same name, Thanks to [@samsonasik]
+- [#5428] [CodeQuality] Add compact override protection
+- [#5432] [Privatization] Add MakeOnlyUsedByChildrenProtectedRector, Thanks to [@samsonasik]
+- [#5440] [README] Add Typo3 and its repository
+- [#5438] [TypeDeclaratoin] Add ReturnTypeFromStrictTypedPropertyRector
+- [#5430] Added Docker image for blackfire profiling, Thanks to [@JanMikes]
+- [#5409] [Nette 3.1] Add CallableInMethodCallToVariableRector
+
+### Changed
+
+- [#5405] [CodeQuality] improve ForToForeachRector: mirror the comments, Thanks to [@samsonasik]
+- [#5425] [CodeQuality] extract CompactFuncCallAnalyzer
+- [#5421] [CodeQuality] Reduce ForToForeachRector complexity, Thanks to [@samsonasik]
+- [#5400] [CodeQualityStrict] Improve MoveVariableDeclarationNearReferenceRector: Skip Usage next is method call, Thanks to [@samsonasik]
+- [#5412] [DeadDocBlock] Rollback other_comment_before_var.php.inc for RemoveNonExistingVarAnnotationRector, Thanks to [@samsonasik]
+- [#5415] [EarlyReturn] Skip ChangeAndIfToEarlyReturnRector when parent if has next statement, Thanks to [@samsonasik]
+- [#5431] [EasyCI] Using symplify/easy-ci for validate-file-length, Thanks to [@samsonasik]
+- [#5390] [Nette] Skip public method in template control
+- [#5394] [Nette] skip double template assign
+- [#5434] [Privatization] Register MakeOnlyUsedByChildrenProtectedRector to privatization config set, Thanks to [@samsonasik]
+- [#5416] [Renaming] Do not update target new namespace exists on RenameClassRector, Thanks to [@samsonasik]
+- [#5407] [Renaming] Handle RenameClassRector to avoid duplicate interface definition, Thanks to [@samsonasik]
+- [#5417] [Symfony] Skip construct with param Property Promotion on MakeCommandLazyRector in php 8, Thanks to [@samsonasik]
+- [#5404] [TypeDeclaration] Skip ReturnTypeDeclarationRector on has child with no return statement, Thanks to [@samsonasik]
+- [#5408] [TypeDeclaration] Handle alias usage on FormerNullableArgumentToScalarTypedRector, Thanks to [@samsonasik]
+- [#5388] template control
+- [#5391] Skip presenter and conditional parmaeters
+- [#5393] allow another render names
+- [#5420] [Symfony 5.2] Change Param type declaration for Chat/Email/Sms NotificationInterface, Thanks to [@samsonasik]
+- [#5427] Ignore special class names when using Option::AUTO_IMPORT_NAMES, Thanks to [@ruudk]
+- [#5439] misc
+- [#5414] [Symfony 5.2] Change Param type declaration for Notifier and Channel, Thanks to [@samsonasik]
+- [#5406] [VendorLocker] improve ClassMethodReturnTypeOverrideGuard::shouldSkipClassMethod() with skip the class method has no return with Expr, Thanks to [@samsonasik]
+- [#5387] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
+- [#5386] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+
+### Deprecated
+
+- [#5402] remove deprecated console differ, to use symplify
+
+### Fixed
+
+- [#5413] [TypeDeclaration] Typo fix parameter_typehintgs -> parameter_typehints, Thanks to [@samsonasik]
+
+### Removed
+
+- [#5399] Removed duplicit package sebastian/diff from composer.json, Thanks to [@lulco]
+- [#5396] [PHP 7.3] Remove compact checks of unused variable, better migrate in type-safe way
+- [#5385] Less traits 3, drop duplicated issue tests
+
 ### Added
 
 - [#5302] [CodeQuality] Add SingularSwitchToIfRector
@@ -6635,3 +6689,40 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#5296]: https://github.com/rectorphp/rector/pull/5296
 [#5295]: https://github.com/rectorphp/rector/pull/5295
 [@Jean85]: https://github.com/Jean85
+[#5440]: https://github.com/rectorphp/rector/pull/5440
+[#5439]: https://github.com/rectorphp/rector/pull/5439
+[#5438]: https://github.com/rectorphp/rector/pull/5438
+[#5434]: https://github.com/rectorphp/rector/pull/5434
+[#5432]: https://github.com/rectorphp/rector/pull/5432
+[#5431]: https://github.com/rectorphp/rector/pull/5431
+[#5430]: https://github.com/rectorphp/rector/pull/5430
+[#5428]: https://github.com/rectorphp/rector/pull/5428
+[#5427]: https://github.com/rectorphp/rector/pull/5427
+[#5425]: https://github.com/rectorphp/rector/pull/5425
+[#5421]: https://github.com/rectorphp/rector/pull/5421
+[#5420]: https://github.com/rectorphp/rector/pull/5420
+[#5419]: https://github.com/rectorphp/rector/pull/5419
+[#5417]: https://github.com/rectorphp/rector/pull/5417
+[#5416]: https://github.com/rectorphp/rector/pull/5416
+[#5415]: https://github.com/rectorphp/rector/pull/5415
+[#5414]: https://github.com/rectorphp/rector/pull/5414
+[#5413]: https://github.com/rectorphp/rector/pull/5413
+[#5412]: https://github.com/rectorphp/rector/pull/5412
+[#5409]: https://github.com/rectorphp/rector/pull/5409
+[#5408]: https://github.com/rectorphp/rector/pull/5408
+[#5407]: https://github.com/rectorphp/rector/pull/5407
+[#5406]: https://github.com/rectorphp/rector/pull/5406
+[#5405]: https://github.com/rectorphp/rector/pull/5405
+[#5404]: https://github.com/rectorphp/rector/pull/5404
+[#5402]: https://github.com/rectorphp/rector/pull/5402
+[#5400]: https://github.com/rectorphp/rector/pull/5400
+[#5399]: https://github.com/rectorphp/rector/pull/5399
+[#5396]: https://github.com/rectorphp/rector/pull/5396
+[#5394]: https://github.com/rectorphp/rector/pull/5394
+[#5393]: https://github.com/rectorphp/rector/pull/5393
+[#5391]: https://github.com/rectorphp/rector/pull/5391
+[#5390]: https://github.com/rectorphp/rector/pull/5390
+[#5388]: https://github.com/rectorphp/rector/pull/5388
+[#5387]: https://github.com/rectorphp/rector/pull/5387
+[#5386]: https://github.com/rectorphp/rector/pull/5386
+[#5385]: https://github.com/rectorphp/rector/pull/5385
