@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
+use PhpParser\NodeVisitorAbstract;
 use Rector\PostRector\Collector\NodesToAddCollector;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 
 /**
  * This class collects all to-be-added expresssions (= 1 line in code)
@@ -18,7 +20,7 @@ use Rector\PostRector\Collector\NodesToAddCollector;
  * - $this->someCall();
  * - $value = this->someNewCall(); // added expression
  */
-final class NodeAddingPostRector extends AbstractPostRector
+final class NodeAddingPostRector extends NodeVisitorAbstract implements PostRectorInterface
 {
     /**
      * @var NodesToAddCollector

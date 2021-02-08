@@ -6,15 +6,17 @@ namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\NodeVisitorAbstract;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\CodingStyle\Node\NameImporter;
 use Rector\Core\Configuration\Option;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
-final class NameImportingPostRector extends AbstractPostRector
+final class NameImportingPostRector extends NodeVisitorAbstract implements PostRectorInterface
 {
     /**
      * @var ParameterProvider

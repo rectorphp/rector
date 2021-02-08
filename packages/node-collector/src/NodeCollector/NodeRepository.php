@@ -603,6 +603,22 @@ final class NodeRepository
         return $this->parsedNodeCollector->getNews();
     }
 
+    /**
+     * @return StaticCall[]
+     */
+    public function getStaticCalls(): array
+    {
+        return $this->parsedNodeCollector->getStaticCalls();
+    }
+
+    /**
+     * @return ClassConstFetch[]
+     */
+    public function getClassConstFetches()
+    {
+        return $this->parsedNodeCollector->getClassConstFetches();
+    }
+
     private function addMethod(ClassMethod $classMethod): void
     {
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
@@ -731,21 +747,5 @@ final class NodeRepository
                 $this->callsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
             }
         }
-    }
-
-    /**
-     * @return StaticCall[]
-     */
-    public function getStaticCalls(): array
-    {
-        return $this->parsedNodeCollector->getStaticCalls();
-    }
-
-    /**
-     * @return ClassConstFetch[]
-     */
-    public function getClassConstFetches()
-    {
-        return $this->parsedNodeCollector->getClassConstFetches();
     }
 }

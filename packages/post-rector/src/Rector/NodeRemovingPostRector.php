@@ -8,12 +8,14 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 
-final class NodeRemovingPostRector extends AbstractPostRector
+final class NodeRemovingPostRector extends NodeVisitorAbstract implements PostRectorInterface
 {
     /**
      * @var NodesToRemoveCollector

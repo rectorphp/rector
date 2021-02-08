@@ -240,7 +240,6 @@ parameters:
                 - rules/type-declaration/src/Rector/FunctionLike/ReturnTypeDeclarationRector.php # 82
 
         # trait in trait call
-        - '#Call to an undefined method Rector\\PostRector\\Rector\\AbstractPostRector\:\:isObjectType\(\)#'
         - '#Parameter \#1 \$expr of class PhpParser\\Node\\Stmt\\Expression constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt given#'
 
         -
