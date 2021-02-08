@@ -79,7 +79,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->replacedArguments as $replacedArgument) {
-            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $replacedArgument->getClass())) {
+            if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(
+                $node,
+                $replacedArgument->getClass()
+            )) {
                 continue;
             }
 

@@ -101,6 +101,16 @@ final class NodesToAddCollector implements NodeCollectorInterface
         unset($this->nodesToAddBefore[$objectHash]);
     }
 
+    /**
+     * @param Node[] $newNodes
+     */
+    public function addNodesBeforeNode(array $newNodes, Node $positionNode): void
+    {
+        foreach ($newNodes as $newNode) {
+            $this->addNodeBeforeNode($newNode, $positionNode);
+        }
+    }
+
     private function resolveNearestExpressionPosition(Node $node): string
     {
         if (StaticInstanceOf::isOneOf($node, [Expression::class, Stmt::class])) {

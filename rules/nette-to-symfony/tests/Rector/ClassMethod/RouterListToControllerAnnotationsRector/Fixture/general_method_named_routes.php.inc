@@ -33,7 +33,7 @@ final class GeneralMethodNamedRoutesSomePresenter
 
 namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Fixture;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
 
 final class GeneralMethodNamedRoutesRouterFactory
@@ -49,14 +49,14 @@ final class GeneralMethodNamedRoutesRouterFactory
 final class GeneralMethodNamedRoutesSomePresenter
 {
     /**
-     * @Route(path="general-method-named-routes-some/first")
+     * @\Symfony\Component\Routing\Annotation\Route(path="general-method-named-routes-some/first")
      */
     public function actionFirst()
     {
     }
 
     /**
-     * @Route(path="general-method-named-routes-some/second")
+     * @\Symfony\Component\Routing\Annotation\Route(path="general-method-named-routes-some/second")
      */
     public function actionSecond()
     {

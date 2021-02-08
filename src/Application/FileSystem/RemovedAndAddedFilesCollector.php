@@ -7,6 +7,7 @@ namespace Rector\Core\Application\FileSystem;
 use Rector\FileSystemRector\Contract\MovedFileInterface;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
+use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemovedAndAddedFilesCollector
@@ -26,6 +27,16 @@ final class RemovedAndAddedFilesCollector
      */
     private $movedFiles = [];
 
+    /**
+     * @var RenamedClassesCollector
+     */
+    private $renamedClassesCollector;
+
+    public function __construct(RenamedClassesCollector $renamedClassesCollector)
+    {
+        $this->renamedClassesCollector = $renamedClassesCollector;
+    }
+
     public function removeFile(SmartFileInfo $smartFileInfo): void
     {
         $this->removedFiles[] = $smartFileInfo;
@@ -33,6 +44,13 @@ final class RemovedAndAddedFilesCollector
 
     public function addMovedFile(MovedFileInterface $movedFile): void
     {
+        if ($movedFile instanceof MovedFileWithNodes && $movedFile->hasClassRename()) {
+            $this->renamedClassesCollector->addClassRename(
+                $movedFile->getOldClassName(),
+                $movedFile->getNewClassName()
+            );
+        }
+
         $this->movedFiles[] = $movedFile;
     }
 

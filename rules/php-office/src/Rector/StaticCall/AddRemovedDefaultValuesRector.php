@@ -645,7 +645,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach (self::METHOD_NAMES_BY_TYPE_WITH_VALUE as $type => $defaultValuesByMethodName) {
-            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $type)) {
+            if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $type)) {
                 continue;
             }
 

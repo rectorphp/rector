@@ -37,7 +37,7 @@ final class LogIdentifierAndResolverValueInConstantClassMethodRector extends Abs
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInClassNamed($node, 'Doctrine\Common\Annotations\DocParser')) {
+        if (! $this->nodeNameResolver->isInClassNamed($node, 'Doctrine\Common\Annotations\DocParser')) {
             return null;
         }
 

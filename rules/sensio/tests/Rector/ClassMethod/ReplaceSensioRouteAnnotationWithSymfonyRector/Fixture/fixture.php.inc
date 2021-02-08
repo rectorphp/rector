@@ -20,12 +20,12 @@ final class SomeClass
 
 namespace Rector\Sensio\Tests\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector\Fixture;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 final class SomeClass
 {
     /**
-     * @Route()
+     * @\Symfony\Component\Routing\Annotation\Route()
      */
     public function run()
     {

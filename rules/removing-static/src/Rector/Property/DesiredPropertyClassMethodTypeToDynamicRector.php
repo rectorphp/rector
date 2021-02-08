@@ -71,7 +71,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->classTypes as $classType) {
-            if (! $this->isInClassNamed($node, $classType)) {
+            if (! $this->nodeNameResolver->isInClassNamed($node, $classType)) {
                 continue;
             }
 

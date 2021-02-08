@@ -130,10 +130,19 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$class#'
         - '#Property PhpParser\\Node\\Stmt\\Namespace_\:\:\$stmts \(array<PhpParser\\Node\\Stmt\>\) does not accept array<PhpParser\\Node\>#'
 
+
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\Type\\ObjectTypeSpecifier\:\:matchShortenedObjectType\(\)" is 10, keep it under 9#'
-        - '#Parameter \#1 \$type of method PhpParser\\Builder\\FunctionLike\:\:setReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
         - '#Cognitive complexity for "Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver\:\:getValue\(\)" is \d+, keep it under 9#'
         - '#Cognitive complexity for "Rector\\NetteKdyby\\ContributeEventClassResolver\:\:resolveGetterMethodByEventClassAndParam\(\)" is \d+, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\DeadCode\\NodeManipulator\\LivingCodeManipulator\:\:keepLivingCodeFromExpr\(\)" is \d+, keep it under 9#'
+        -
+             message: '#Class cognitive complexity is \d+, keep it under 50#'
+             paths:
+                  - packages/node-name-resolver/src/NodeNameResolver.php
+
+
+        - '#Parameter \#1 \$type of method PhpParser\\Builder\\FunctionLike\:\:setReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
+
         - '#Parameter \#1 \$type of class PhpParser\\Node\\NullableType constructor expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
         - '#Parameter \#1 \$objectType of method Rector\\Naming\\Naming\\PropertyNaming\:\:fqnToVariableName\(\) expects PHPStan\\Type\\ObjectType\|string, PHPStan\\Type\\Type given#'
         # known value
@@ -151,7 +160,7 @@ parameters:
 
         # is nested expr
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$expr#'
-        - '#Cognitive complexity for "Rector\\DeadCode\\NodeManipulator\\LivingCodeManipulator\:\:keepLivingCodeFromExpr\(\)" is \d+, keep it under 9#'
+
         - '#Parameter \#1 \$files of method Symplify\\SmartFileSystem\\Finder\\FinderSanitizer\:\:sanitize\(\) expects \(iterable<SplFileInfo\|string\>&Nette\\Utils\\Finder\)\|Symfony\\Component\\Finder\\Finder, array<string\> given#'
         # wtf
         -
@@ -250,12 +259,11 @@ parameters:
                 - packages/node-type-resolver/src/NodeTypeResolver.php
                 - rules/code-quality-strict/src/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
                 - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
-                - rules/phpunit/src/Rector/ClassMethod/TryCatchToExpectExceptionRector.php
 
         # symplify 9
         - '#Use decoupled factory service to create "(.*?)" object#'
         - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
-        - '#Trait method "(.*?)" should not contain any logic, but only delegate to other class call#'
+        #- '#Trait method "(.*?)" should not contain any logic, but only delegate to other class call#'
         - '#Do not use factory/method call in constructor\. Put factory in config and get service with dependency injection#'
         - '#Constant string value need to only have small letters, _, \-, \. and numbers#'
 
@@ -523,3 +531,7 @@ parameters:
 
         - '#Class with base "SetList" name is already used in "Symplify\\EasyCodingStandard\\ValueObject\\Set\\SetList", "Rector\\Set\\ValueObject\\SetList"\. Use unique name to make classes easy to recognize#'
         - '#Class with base "PhpVersion" name is already used in "PHPStan\\Php\\PhpVersion", "Rector\\Core\\ValueObject\\PhpVersion"\. Use unique name to make classes easy to recognize#'
+
+
+        - '#Trait method "printArrayItem\(\)" should not contain any logic, but only delegate to other class call#'
+        - '#Trait method "makeKeysExplicit\(\)" should not contain any logic, but only delegate to other class call#'

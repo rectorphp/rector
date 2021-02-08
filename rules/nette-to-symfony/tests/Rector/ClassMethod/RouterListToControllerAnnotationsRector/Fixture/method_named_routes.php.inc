@@ -35,7 +35,7 @@ final class MethodNamedRoutesSomePresenter
 
 namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Fixture;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
 
 final class MethodNamedRoutesRouterFactory
@@ -51,14 +51,14 @@ final class MethodNamedRoutesRouterFactory
 final class MethodNamedRoutesSomePresenter
 {
     /**
-     * @Route(path="hi")
+     * @\Symfony\Component\Routing\Annotation\Route(path="hi")
      */
     public function actionFirst()
     {
     }
 
     /**
-     * @Route(path="hello")
+     * @\Symfony\Component\Routing\Annotation\Route(path="hello")
      */
     public function actionSecond()
     {

@@ -69,7 +69,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->removedArguments as $removedArgument) {
-            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $removedArgument->getClass())) {
+            if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(
+                $node,
+                $removedArgument->getClass()
+            )) {
                 continue;
             }
 
@@ -135,14 +138,13 @@ CODE_SAMPLE
 
             return;
         }
-
-        if ($node instanceof ClassMethod) {
-            if (isset($node->params[$position]) && $this->isName($node->params[$position], $name)) {
-                $this->removeParam($node, $position);
-            }
-
+        if (! $node instanceof ClassMethod) {
             return;
         }
+        if (! (isset($node->params[$position]) && $this->isName($node->params[$position], $name))) {
+            return;
+        }
+        $this->removeParam($node, $position);
     }
 
     /**

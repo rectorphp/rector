@@ -82,7 +82,7 @@ CODE_SAMPLE
     {
         // A. remove local fetch
         foreach ($this->classTypes as $classType) {
-            if (! $this->isInClassNamed($node, $classType)) {
+            if (! $this->nodeNameResolver->isInClassNamed($node, $classType)) {
                 continue;
             }
 

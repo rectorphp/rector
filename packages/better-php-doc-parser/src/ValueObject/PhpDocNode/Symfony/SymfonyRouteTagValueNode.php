@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony;
 
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\ClassNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
@@ -13,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
-final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface, PhpAttributableTagNodeInterface
+final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface, PhpAttributableTagNodeInterface, ClassNameAwareTagInterface
 {
     /**
      * @var string
@@ -70,5 +71,10 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     public function getAttributeClassName(): string
     {
         return 'Symfony\Component\Routing\Annotation\Route';
+    }
+
+    public function getClassName(): string
+    {
+        return self::CLASS_NAME;
     }
 }

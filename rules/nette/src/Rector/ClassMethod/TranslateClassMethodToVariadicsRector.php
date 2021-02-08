@@ -80,7 +80,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isMethodStaticCallOrClassMethodObjectType($node, 'Nette\Localization\ITranslator')) {
+        if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(
+            $node,
+            'Nette\Localization\ITranslator'
+        )) {
             return null;
         }
 
