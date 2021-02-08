@@ -143,7 +143,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isNonAnonymousClass($classLike)) {
+        if ($this->classNodeAnalyzer->isAnonymousClass($classLike)) {
             return null;
         }
 
