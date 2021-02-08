@@ -125,16 +125,16 @@ CODE_SAMPLE
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function createMultipleIfs(Expr $expr, Continue_ $return, array $ifs): array
+    private function createMultipleIfs(Expr $expr, Continue_ $continue, array $ifs): array
     {
         while ($expr instanceof BooleanAnd) {
-            $ifs = array_merge($ifs, $this->collectLeftBooleanAndToIfs($expr, $return, $ifs));
-            $ifs[] = $this->ifManipulator->createIfNegation($expr->right, $return);
+            $ifs = array_merge($ifs, $this->collectLeftBooleanAndToIfs($expr, $continue, $ifs));
+            $ifs[] = $this->ifManipulator->createIfNegation($expr->right, $continue);
 
             $expr = $expr->right;
         }
 
-        return $ifs + [$this->ifManipulator->createIfNegation($expr, $return)];
+        return $ifs + [$this->ifManipulator->createIfNegation($expr, $continue)];
     }
 
     /**
