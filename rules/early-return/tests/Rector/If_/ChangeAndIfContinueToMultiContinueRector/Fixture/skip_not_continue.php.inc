@@ -7,7 +7,7 @@ class SkipNotContinue
     public function canDrive(Car $newCar)
     {
         foreach ($cars as $car) {
-            if ($car->hasWheels && $car->hasFuel) {
+            if ($car->hasWheels() && $car->hasFuel()) {
                 break;
             }
 
