@@ -17,7 +17,6 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ConstFetchAnalyzer;
-use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -39,11 +38,6 @@ final class ValueResolver
     private $constExprEvaluator;
 
     /**
-     * @var ParsedNodeCollector
-     */
-    private $parsedNodeCollector;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
@@ -56,11 +50,9 @@ final class ValueResolver
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        ParsedNodeCollector $parsedNodeCollector,
         ConstFetchAnalyzer $constFetchAnalyzer
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->constFetchAnalyzer = $constFetchAnalyzer;
     }
