@@ -19,7 +19,7 @@ require __DIR__ . '/../vendor/autoload.php';
 $fileRenamer = new FileRenamer();
 $fileRenamer->rename(
     // paths
-    [__DIR__ . '/../utils/node-documentation-generator/snippet'],
+    [__DIR__ . '/../utils'],
     '*.php.inc',
     '#(\.php\.inc)$#',
     '.php'

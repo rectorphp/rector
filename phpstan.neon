@@ -88,16 +88,8 @@ parameters:
         # known types
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$args#'
 
-        - '#Parameter \#2 \$name of method Rector\\Core\\Rector\\AbstractRector\:\:isName\(\) expects string, string\|null given#'
-
-        # sense-less errors
-
         # PHP 7.4 1_000 support
         - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\) does not accept string#'
-
-        -
-            message: '#Class Rector\\Generic\\Tests\\Rector\\StaticCall\\SwapClassMethodArgumentsRector\\Fixture\\SomeClass not found#'
-            path: rules/generic/tests/Rector/StaticCall/SwapClassMethodArgumentsRector/SwapClassMethodArgumentsRectorTest.php
 
         # mixed
         - '#Offset int\|string\|null does not exist on array<PhpParser\\Node\\Stmt>\|null#'
@@ -145,7 +137,6 @@ parameters:
         # known value
         - '#Property PhpParser\\Node\\Stmt\\Foreach_\:\:\$valueVar \(PhpParser\\Node\\Expr\) does not accept PhpParser\\Node\\Expr\|null#'
         - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$type#'
-        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\AddPackageToRequireComposerRector" class\. Use unique content or abstract service instead#'
 
         # only local use
         -
@@ -322,7 +313,6 @@ parameters:
         -
             message: '#Cannot cast array<string\>\|bool\|string\|null to string#'
             paths:
-                - utils/node-documentation-generator/src/Command/DumpNodesCommand.php
                 - src/Configuration/Configuration.php
                 - src/Console/Command/ProcessCommand.php
 
@@ -482,10 +472,6 @@ parameters:
 
         - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\AddPackageToRequireComposerRector" class\. Use unique content or abstract service instead#'
 
-        - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer" class\. Use unique content or abstract service instead#'
-        - '#Parameter \#1 \$type of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:hasByType\(\) expects class\-string<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\>, string given#'
-        - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:findAllByType\(\) should return array<T of PHPStan\\PhpDocParser\\Ast\\Node\> but returns array<int, PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|\(PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode&T of PHPStan\\PhpDocParser\\Ast\\Node\)\>#'
-
         # buggy phpstan clas-string
         - '#Method (.*?) should return class\-string but returns string#'
 
@@ -519,14 +505,6 @@ parameters:
             path: packages/better-php-doc-parser/src/PhpDocNodeFactory/MultiPhpDocNodeFactory.php
 
         -
-            message: '#Do not use setter on a service#'
-            path: packages/better-php-doc-parser/src/PhpDocNodeFactory/NetteInjectDocNodeFactory.php
-
-        - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\NodeTypeResolver\\NodeTypeResolver\\ParamTypeResolver" class\. Use unique content or abstract service instead#'
-        # constants
-        - '#Parameter \#1 \$types of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:hasByTypes\(\) expects array<class\-string<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\>\>, array<int, (.*?)\> given#'
-
-        -
             message: '#Use defined constant Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJsonSection\:\:REQUIRE over string require#'
             paths:
                 # is "require" in PHP
@@ -534,3 +512,10 @@ parameters:
 
         - '#Class Acme\\Bar\\DoNotUpdateExistingTargetNamespace not found#'
         - '#Class Acme\\Foo\\DoNotUpdateExistingTargetNamespace not found#'
+
+        - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer" class\. Use unique content or abstract service instead#'
+        - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentType\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'
+
+        -
+            message: '#Namespace "Rector\\Composer\\Tests\\Rector" is only reserved for "Rector"\. Move the class somewhere else#'
+            path: rules/composer/tests/Rector/AbstractComposerRectorTestCase.php

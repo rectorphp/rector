@@ -13,7 +13,6 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\Exception\NoRectorsLoadedException;
-use Rector\Utils\NodeDocumentationGenerator\Command\DumpNodesCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -89,11 +88,6 @@ final class ConsoleApplication extends Application
         }
 
         // skip in this case, since generate content must be clear from meta-info
-        $dumpCommands = [CommandNaming::classToName(DumpNodesCommand::class)];
-        if (in_array($input->getFirstArgument(), $dumpCommands, true)) {
-            return parent::doRun($input, $output);
-        }
-
         if ($this->shouldPrintMetaInformation($input)) {
             $output->writeln($this->getLongVersion());
             $shouldFollowByNewline = true;

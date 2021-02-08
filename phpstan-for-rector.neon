@@ -1,4 +1,9 @@
 # this config has extensions, that helps PHPStan inside Rector to resolve more precise types
+parameters:
+    inferPrivatePropertyTypeFromConstructor: true
+
 includes:
     - utils/phpstan-extensions/config/phpstan-extensions.neon
     - vendor/phpstan/phpstan-nette/extension.neon
+    - vendor/symplify/astral/config/services.neon
+    - vendor/symplify/phpstan-extensions/config/config.neon

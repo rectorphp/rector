@@ -2,31 +2,38 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStanExtensions\ReturnTypeExtension\NodeFinder;
+namespace Rector\PHPStanExtensions\ReturnTypeExtension;
 
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
+use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use PHPStan\Type\UnionType;
 
+/**
+ * Covers:
+ * - NodeFinder::findInstanceOf()
+ * - NodeFinder::findFirstInstanceOf()
+ */
 final class FindInstanceOfReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     public function getClass(): string
     {
-        return BetterNodeFinder::class;
+        return NodeFinder::class;
     }
 
     public function isMethodSupported(MethodReflection $methodReflection): bool
     {
-        return $methodReflection->getName() === 'findInstanceOf';
+        return in_array($methodReflection->getName(), ['findInstanceOf', 'findFirstInstanceOf'], true);
     }
 
     public function getTypeFromMethodCall(
@@ -46,6 +53,10 @@ final class FindInstanceOfReturnTypeExtension implements DynamicMethodReturnType
         }
 
         $class = $secondArgumentNode->class->toString();
+
+        if ($methodReflection->getName() === 'findFirstInstanceOf') {
+            return new UnionType([new ObjectType($class), new NullType()]);
+        }
 
         return new ArrayType(new MixedType(), new ObjectType($class));
     }

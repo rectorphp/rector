@@ -1,5 +1,19 @@
 services:
     -
+        class: Symplify\PHPStanRules\Rules\ServiceAndValueObjectHaveSameStartsRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            classSuffixes:
+                - 'Rector'
+
+    -
+        class: Symplify\PHPStanRules\Rules\ExclusiveNamespaceRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            namespaceParts:
+                - 'Rector'
+
+    -
         class: Symplify\PHPStanRules\Rules\PreferredMethodCallOverIdenticalCompareRule
         tags: [phpstan.rules.rule]
         arguments:

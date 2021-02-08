@@ -1,5 +1,9 @@
 services:
-    - Rector\PHPStanExtensions\Utils\PHPStanValueResolver
+    # $nodeFinder->findInstanceOf()
+    # $nodeFinder->findFirstInstanceOf()
+    -
+        class: Rector\PHPStanExtensions\ReturnTypeExtension\FindInstanceOfReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
 
     # $node->getAttribute($1) => Type|null by $1
     -
@@ -10,17 +14,8 @@ services:
     -
         class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+
     # $nameResolverTrait->getName() => in some cases always string
     -
         class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverTraitReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-
-    # node finder
-    -
-         class: Rector\PHPStanExtensions\ReturnTypeExtension\NodeFinder\FindFirstInstanceOfReturnTypeExtension
-         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-
-    # $betterNodeFinder->findByInstance(..., $1) => $1[]
-    -
-        class: Rector\PHPStanExtensions\ReturnTypeExtension\NodeFinder\FindInstanceOfReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
