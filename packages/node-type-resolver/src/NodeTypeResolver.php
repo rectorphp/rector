@@ -198,9 +198,11 @@ final class NodeTypeResolver
             return new MixedType();
         }
 
-        $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node->class);
-        if ($node instanceof New_ && $isAnonymousClass) {
-            return $this->resolveAnonymousClassType($node);
+        if ($node instanceof New_) {
+            $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node->class);
+            if ($isAnonymousClass) {
+                return $this->resolveAnonymousClassType($node);
+            }
         }
 
         $staticType = $nodeScope->getType($node);
@@ -389,9 +391,11 @@ final class NodeTypeResolver
         }
 
         // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
-        $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node->class);
-        if ($node instanceof New_ && $isAnonymousClass) {
-            return new ObjectWithoutClassType();
+        if ($node instanceof New_) {
+            $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node->class);
+            if ($isAnonymousClass) {
+                return new ObjectWithoutClassType();
+            }
         }
 
         $type = $nodeScope->getType($node);

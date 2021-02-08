@@ -14,7 +14,7 @@ use Rector\PostRector\ValueObject\PropertyMetadata;
 final class PropertyToAddCollector implements NodeCollectorInterface
 {
     /**
-     * @var ClassConst[][]
+     * @var array<string, array<string, ClassConst>>
      */
     private $constantsByClass = [];
 
@@ -76,7 +76,6 @@ final class PropertyToAddCollector implements NodeCollectorInterface
     }
 
     /**
-     * @var ClassConst[]
      * @return ClassConst[]
      */
     public function getConstantsByClass(Class_ $class): array
