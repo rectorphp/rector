@@ -29,7 +29,7 @@ final class AssertNotOperatorRector extends AbstractRector
     ];
 
     /**
-     * @var \Rector\Renaming\NodeManipulator\IdentifierManipulator
+     * @var IdentifierManipulator
      */
     private $identifierManipulator;
 

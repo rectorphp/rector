@@ -23,7 +23,7 @@ final class ActionSuffixRemoverRector extends AbstractRector
     private $controllerMethodAnalyzer;
 
     /**
-     * @var \Rector\Renaming\NodeManipulator\IdentifierManipulator
+     * @var IdentifierManipulator
      */
     private $identifierManipulator;
 

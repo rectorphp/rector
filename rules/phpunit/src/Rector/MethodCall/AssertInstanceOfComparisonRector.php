@@ -29,7 +29,7 @@ final class AssertInstanceOfComparisonRector extends AbstractRector
     ];
 
     /**
-     * @var \Rector\Renaming\NodeManipulator\IdentifierManipulator
+     * @var IdentifierManipulator
      */
     private $identifierManipulator;
 

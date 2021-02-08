@@ -41,7 +41,7 @@ final class LocalPropertyAnalyzer
     /**
      * @var ClassAnalyzer
      */
-    private $classNodeAnalyzer;
+    private $classAnalyzer;
 
     /**
      * @var NodeNameResolver
@@ -75,7 +75,7 @@ final class LocalPropertyAnalyzer
 
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        ClassAnalyzer $classNodeAnalyzer,
+        ClassAnalyzer $classAnalyzer,
         NodeNameResolver $nodeNameResolver,
         BetterNodeFinder $betterNodeFinder,
         ArrayDimFetchTypeResolver $arrayDimFetchTypeResolver,
@@ -84,7 +84,7 @@ final class LocalPropertyAnalyzer
         TypeFactory $typeFactory
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->classNodeAnalyzer = $classNodeAnalyzer;
+        $this->classAnalyzer = $classAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->arrayDimFetchTypeResolver = $arrayDimFetchTypeResolver;
@@ -104,7 +104,7 @@ final class LocalPropertyAnalyzer
             &$fetchedLocalPropertyNameToTypes
         ): ?int {
             // skip anonymous class scope
-            $isAnonymousClass = $this->classNodeAnalyzer->isAnonymousClass($node);
+            $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node);
             if ($isAnonymousClass) {
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }

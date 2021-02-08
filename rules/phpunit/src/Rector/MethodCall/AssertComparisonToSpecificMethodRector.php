@@ -39,7 +39,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
     private $binaryOpWithAssertMethods = [];
 
     /**
-     * @var \Rector\Renaming\NodeManipulator\IdentifierManipulator
+     * @var IdentifierManipulator
      */
     private $identifierManipulator;
 

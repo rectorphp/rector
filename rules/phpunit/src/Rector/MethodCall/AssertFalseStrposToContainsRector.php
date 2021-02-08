@@ -28,7 +28,7 @@ final class AssertFalseStrposToContainsRector extends AbstractRector
     ];
 
     /**
-     * @var \Rector\Renaming\NodeManipulator\IdentifierManipulator
+     * @var IdentifierManipulator
      */
     private $identifierManipulator;
 

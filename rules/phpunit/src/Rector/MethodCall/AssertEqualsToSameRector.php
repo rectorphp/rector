@@ -43,7 +43,7 @@ final class AssertEqualsToSameRector extends AbstractRector
     private const SCALAR_TYPES = [FloatType::class, IntegerType::class, StringType::class];
 
     /**
-     * @var \Rector\Renaming\NodeManipulator\IdentifierManipulator
+     * @var IdentifierManipulator
      */
     private $identifierManipulator;
 
