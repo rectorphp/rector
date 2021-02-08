@@ -52,13 +52,13 @@ final class TryCatchToExpectExceptionRector extends AbstractRector
     public function __construct(
         TestsNodeAnalyzer $testsNodeAnalyzer,
         ExpectExceptionCodeFactory $expectExceptionCodeFactory,
-        ExpectExceptionMessageRegExpFactory $exceptionMessageRegExpFactory,
+        ExpectExceptionMessageRegExpFactory $expectExceptionMessageRegExpFactory,
         ExpectExceptionFactory $expectExceptionFactory,
         ExpectExceptionMessageFactory $expectExceptionMessageFactory
     ) {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->expectExceptionCodeFactory = $expectExceptionCodeFactory;
-        $this->expectExceptionMessageRegExpFactory = $exceptionMessageRegExpFactory;
+        $this->expectExceptionMessageRegExpFactory = $expectExceptionMessageRegExpFactory;
         $this->expectExceptionFactory = $expectExceptionFactory;
         $this->expectExceptionMessageFactory = $expectExceptionMessageFactory;
     }
