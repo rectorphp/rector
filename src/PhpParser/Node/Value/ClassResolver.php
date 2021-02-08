@@ -31,19 +31,18 @@ final class ClassResolver
 
     public function getClassFromMethodCall(MethodCall $methodCall): ?FullyQualified
     {
-        $class = null;
         $previousExpression = $methodCall->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
 
         // [PhpParser\Node\Expr\Assign] $variable = new Class()
         if ($previousExpression instanceof Expression) {
-            $class = $this->resolveFromExpression($previousExpression);
+            return $this->resolveFromExpression($previousExpression);
         }
 
         if ($previousExpression instanceof ClassMethod) {
-            $class = $this->resolveFromClassMethod($previousExpression, $methodCall);
+            return $this->resolveFromClassMethod($previousExpression, $methodCall);
         }
 
-        return $class;
+        return null;
     }
 
     private function resolveFromExpression(Expression $expression): ?FullyQualified

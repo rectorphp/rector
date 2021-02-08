@@ -24,7 +24,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
-use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Manipulator\VisibilityManipulator;
@@ -112,7 +112,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected $betterNodeFinder;
 
     /**
-     * @var ClassNodeAnalyzer
+     * @var ClassAnalyzer
      */
     protected $classNodeAnalyzer;
 
@@ -160,7 +160,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         StaticTypeMapper $staticTypeMapper,
         ParameterProvider $parameterProvider,
         CurrentRectorProvider $currentRectorProvider,
-        ClassNodeAnalyzer $classNodeAnalyzer,
+        ClassAnalyzer $classNodeAnalyzer,
         CurrentNodeProvider $currentNodeProvider,
         Skipper $skipper,
         ValueResolver $valueResolver,

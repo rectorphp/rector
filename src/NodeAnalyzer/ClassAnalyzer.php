@@ -9,7 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\NodeNameResolver\NodeNameResolver;
 
-final class ClassNodeAnalyzer
+final class ClassAnalyzer
 {
     /**
      * @var string

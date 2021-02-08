@@ -30,7 +30,7 @@ use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -70,7 +70,7 @@ final class NodeTypeResolver
     private $typeUnwrapper;
 
     /**
-     * @var ClassNodeAnalyzer
+     * @var ClassAnalyzer
      */
     private $classNodeAnalyzer;
 
@@ -81,7 +81,7 @@ final class NodeTypeResolver
         ObjectTypeSpecifier $objectTypeSpecifier,
         ParentClassLikeTypeCorrector $parentClassLikeTypeCorrector,
         TypeUnwrapper $typeUnwrapper,
-        ClassNodeAnalyzer $classNodeAnalyzer,
+        ClassAnalyzer $classNodeAnalyzer,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
