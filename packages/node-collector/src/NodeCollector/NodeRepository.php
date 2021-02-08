@@ -614,7 +614,7 @@ final class NodeRepository
     /**
      * @return ClassConstFetch[]
      */
-    public function getClassConstFetches()
+    public function getClassConstFetches(): array
     {
         return $this->parsedNodeCollector->getClassConstFetches();
     }
