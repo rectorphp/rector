@@ -12,9 +12,9 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Exception\NodeChanger\NodeMissingIdentifierException;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Webmozart\Assert\Assert;
 
 /**
  * This class renames node identifier, e.g. ClassMethod rename:
@@ -24,13 +24,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
  */
 final class IdentifierManipulator
 {
-    /**
-     * @var string[]
-     */
-    private const NODE_CLASSES_WITH_IDENTIFIER = [
-        ClassConstFetch::class, MethodCall::class, PropertyFetch::class, StaticCall::class, ClassMethod::class,
-    ];
-
     /**
      * @var NodeNameResolver
      */
@@ -47,7 +40,14 @@ final class IdentifierManipulator
      */
     public function renameNodeWithMap(Node $node, array $renameMethodMap): void
     {
-        $this->ensureNodeHasIdentifier($node);
+        Assert::isAnyOf(
+            $node,
+            [ClassConstFetch::class,
+                MethodCall::class,
+                PropertyFetch::class,
+                StaticCall::class,
+                ClassMethod::class,
+            ]);
 
         $oldNodeMethodName = $this->resolveOldMethodName($node);
         if ($oldNodeMethodName === null) {
@@ -62,29 +62,23 @@ final class IdentifierManipulator
      */
     public function removeSuffix(Node $node, string $suffixToRemove): void
     {
-        $this->ensureNodeHasIdentifier($node);
+        Assert::isAnyOf(
+            $node,
+            [ClassConstFetch::class,
+                MethodCall::class,
+                PropertyFetch::class,
+                StaticCall::class,
+                ClassMethod::class,
+            ]);
 
         $name = $this->nodeNameResolver->getName($node);
         if ($name === null) {
             return;
         }
+
         $newName = Strings::replace($name, sprintf('#%s$#', $suffixToRemove), '');
 
         $node->name = new Identifier($newName);
-    }
-
-    private function ensureNodeHasIdentifier(Node $node): void
-    {
-        if (in_array(get_class($node), self::NODE_CLASSES_WITH_IDENTIFIER, true)) {
-            return;
-        }
-
-        throw new NodeMissingIdentifierException(sprintf(
-            'Node "%s" does not contain a "$name" property with "%s". Pass only one of "%s".',
-            get_class($node),
-            Identifier::class,
-            implode('", "', self::NODE_CLASSES_WITH_IDENTIFIER)
-        ));
     }
 
     private function resolveOldMethodName(Node $node): ?string
