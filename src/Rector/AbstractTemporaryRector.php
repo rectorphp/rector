@@ -160,7 +160,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         StaticTypeMapper $staticTypeMapper,
         ParameterProvider $parameterProvider,
         CurrentRectorProvider $currentRectorProvider,
-        ClassAnalyzer $classNodeAnalyzer,
+        ClassAnalyzer $classAnalyzer,
         CurrentNodeProvider $currentNodeProvider,
         Skipper $skipper,
         ValueResolver $valueResolver,
@@ -177,7 +177,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
         $this->currentRectorProvider = $currentRectorProvider;
-        $this->classNodeAnalyzer = $classNodeAnalyzer;
+        $this->classNodeAnalyzer = $classAnalyzer;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->skipper = $skipper;
         $this->valueResolver = $valueResolver;
