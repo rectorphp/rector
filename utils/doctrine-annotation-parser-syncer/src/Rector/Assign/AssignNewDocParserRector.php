@@ -30,7 +30,7 @@ final class AssignNewDocParserRector extends AbstractRector implements ClassSync
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInClassNamed($node, AnnotationReader::class)) {
+        if (! $this->nodeNameResolver->isInClassNamed($node, AnnotationReader::class)) {
             return null;
         }
 

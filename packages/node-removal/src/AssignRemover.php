@@ -53,7 +53,6 @@ final class AssignRemover
         /** @var Assign $assign */
         $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Expression) {
-//            $this->livingCodeManipulator->addLivingCodeBeforeNode($assign->expr, $currentStatement);
             $this->nodeRemover->removeNode($assign);
         } else {
             $this->nodesToReplaceCollector->addReplaceNodeWithAnotherNode($assign, $assign->expr);

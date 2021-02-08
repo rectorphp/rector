@@ -74,7 +74,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->methodCallRenames as $methodCallRename) {
-            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $methodCallRename->getOldClass())) {
+            if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(
+                $node,
+                $methodCallRename->getOldClass()
+            )) {
                 continue;
             }
 

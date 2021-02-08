@@ -10,6 +10,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
@@ -310,6 +311,39 @@ final class NodeTypeResolver
         }
 
         return $typeWithClassName->getClassName();
+    }
+
+    /**
+     * @param Type[] $desiredTypes
+     */
+    public function isSameObjectTypes(ObjectType $objectType, array $desiredTypes): bool
+    {
+        foreach ($desiredTypes as $abstractClassConstructorParamType) {
+            if ($abstractClassConstructorParamType->equals($objectType)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isMethodStaticCallOrClassMethodObjectType(Node $node, string $type): bool
+    {
+        if ($node instanceof MethodCall) {
+            // method call is variable return
+            return $this->isObjectType($node->var, $type);
+        }
+
+        if ($node instanceof StaticCall) {
+            return $this->isObjectType($node->class, $type);
+        }
+
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
+            return false;
+        }
+
+        return $this->isObjectType($classLike, $type);
     }
 
     private function addNodeTypeResolver(NodeTypeResolverInterface $nodeTypeResolver): void

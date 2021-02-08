@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagNode;
+use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
@@ -38,12 +39,19 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      */
     private $classChildAnalyzer;
 
+    /**
+     * @var ClassInsertManipulator
+     */
+    private $classInsertManipulator;
+
     public function __construct(
         ClassChildAnalyzer $classChildAnalyzer,
-        PropertyUsageAnalyzer $propertyUsageAnalyzer
+        PropertyUsageAnalyzer $propertyUsageAnalyzer,
+        ClassInsertManipulator $classInsertManipulator
     ) {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
         $this->classChildAnalyzer = $classChildAnalyzer;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function getRuleDefinition(): RuleDefinition

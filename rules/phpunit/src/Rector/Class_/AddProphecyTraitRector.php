@@ -127,8 +127,8 @@ CODE_SAMPLE
 
     private function hasProphesizeMethodCall(Class_ $class): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($class, function (Node $class): bool {
-            return $this->isMethodCall($class, 'this', 'prophesize');
+        return (bool) $this->betterNodeFinder->findFirst($class, function (Node $node): bool {
+            return $this->nodeNameResolver->isLocalMethodCallNamed($node, 'prophesize');
         });
     }
 }

@@ -30,7 +30,7 @@ final class ChangeOriginalTypeToCustomRector extends AbstractRector implements C
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInClassNamed($node, AnnotationReader::class)) {
+        if (! $this->nodeNameResolver->isInClassNamed($node, AnnotationReader::class)) {
             return null;
         }
 

@@ -9,7 +9,6 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\FileSystemRector\Contract\MovedFileInterface;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -48,19 +47,11 @@ trait RemovedAndAddedFilesTrait
     protected function printNodesToFilePath(array $nodes, string $fileLocation): void
     {
         $fileContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
-
         $this->removedAndAddedFilesCollector->addAddedFile(new AddedFileWithContent($fileLocation, $fileContent));
     }
 
     protected function addMovedFile(MovedFileInterface $movedFile): void
     {
-        if ($movedFile instanceof MovedFileWithNodes && $movedFile->hasClassRename()) {
-            $this->renamedClassesCollector->addClassRename(
-                $movedFile->getOldClassName(),
-                $movedFile->getNewClassName()
-            );
-        }
-
         $this->removedAndAddedFilesCollector->addMovedFile($movedFile);
     }
 
