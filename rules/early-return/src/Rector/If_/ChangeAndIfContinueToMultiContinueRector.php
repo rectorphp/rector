@@ -111,7 +111,7 @@ CODE_SAMPLE
         $node = $if;
         foreach ($ifs as $key => $if) {
             if ($key === 0) {
-                $this->mirrorComments($if, $if);
+                $this->mirrorComments($if, $node);
             }
 
             $this->addNodeBeforeNode($if, $node);
