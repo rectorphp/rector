@@ -154,9 +154,9 @@ CODE_SAMPLE
 
     private function createIfNegation(Expr $expr, Continue_ $continue): If_
     {
-        if (! $expr instanceof BooleanNot) {
-            $expr = new BooleanNot($expr);
-        }
+        $expr = $expr instanceof BooleanNot
+            ? $expr->expr
+            : new BooleanNot($expr);
 
         return new If_(
             $expr,
