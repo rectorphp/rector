@@ -17,7 +17,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -25,7 +25,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class RegexPatternArgumentManipulator
 {
     /**
-     * @var int[]
+     * @var array<string, int>
      */
     private const FUNCTIONS_WITH_PATTERNS_TO_ARGUMENT_POSITION = [
         'preg_match' => 0,
@@ -70,22 +70,22 @@ final class RegexPatternArgumentManipulator
     private $betterStandardPrinter;
 
     /**
-     * @var ParsedNodeCollector
+     * @var NodeRepository
      */
-    private $parsedNodeCollector;
+    private $nodeRepository;
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        ParsedNodeCollector $parsedNodeCollector
+        NodeRepository $nodeRepository
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -206,7 +206,7 @@ final class RegexPatternArgumentManipulator
      */
     private function resolveClassConstFetchValue(ClassConstFetch $classConstFetch): array
     {
-        $classConstNode = $this->parsedNodeCollector->findClassConstByClassConstFetch($classConstFetch);
+        $classConstNode = $this->nodeRepository->findClassConstByClassConstFetch($classConstFetch);
         if (! $classConstNode instanceof ClassConst) {
             return [];
         }

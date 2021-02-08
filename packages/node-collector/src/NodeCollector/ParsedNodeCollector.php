@@ -25,6 +25,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * All parsed nodes grouped type
  * @see https://phpstan.org/blog/generics-in-php-using-phpdocs
+ *
+ * @internal To be used only in NodeRepository
  */
 final class ParsedNodeCollector
 {

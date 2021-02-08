@@ -11,7 +11,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
-use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class EntityWithMissingUuidProvider
@@ -28,11 +28,6 @@ final class EntityWithMissingUuidProvider
     private $entitiesWithMissingUuidProperty = [];
 
     /**
-     * @var ParsedNodeCollector
-     */
-    private $parsedNodeCollector;
-
-    /**
      * @var DoctrineDocBlockResolver
      */
     private $doctrineDocBlockResolver;
@@ -47,16 +42,21 @@ final class EntityWithMissingUuidProvider
      */
     private $phpDocInfoFactory;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
         DoctrineDocBlockResolver $doctrineDocBlockResolver,
         NodeNameResolver $nodeNameResolver,
-        ParsedNodeCollector $parsedNodeCollector,
-        PhpDocInfoFactory $phpDocInfoFactory
+        PhpDocInfoFactory $phpDocInfoFactory,
+        NodeRepository $nodeRepository
     ) {
-        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -69,7 +69,7 @@ final class EntityWithMissingUuidProvider
         }
 
         $entitiesWithMissingUuidProperty = [];
-        foreach ($this->parsedNodeCollector->getClasses() as $class) {
+        foreach ($this->nodeRepository->getClasses() as $class) {
             if (! $this->doctrineDocBlockResolver->isDoctrineEntityClassWithIdProperty($class)) {
                 continue;
             }

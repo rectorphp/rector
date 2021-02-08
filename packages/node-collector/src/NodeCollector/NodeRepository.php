@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
@@ -576,6 +577,32 @@ final class NodeRepository
         return $this->parsedNodeCollector->findClassConstant($className, $constantName);
     }
 
+    public function findTrait(string $name): ?Trait_
+    {
+        return $this->parsedNodeCollector->findTrait($name);
+    }
+
+    public function findByShortName(string $shortName): ?Class_
+    {
+        return $this->parsedNodeCollector->findByShortName($shortName);
+    }
+
+    /**
+     * @return Param[]
+     */
+    public function getParams(): array
+    {
+        return $this->parsedNodeCollector->getParams();
+    }
+
+    /**
+     * @return New_[]
+     */
+    public function getNews(): array
+    {
+        return $this->parsedNodeCollector->getNews();
+    }
+
     private function addMethod(ClassMethod $classMethod): void
     {
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
@@ -704,5 +731,21 @@ final class NodeRepository
                 $this->callsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
             }
         }
+    }
+
+    /**
+     * @return StaticCall[]
+     */
+    public function getStaticCalls(): array
+    {
+        return $this->parsedNodeCollector->getStaticCalls();
+    }
+
+    /**
+     * @return ClassConstFetch[]
+     */
+    public function getClassConstFetches()
+    {
+        return $this->parsedNodeCollector->getClassConstFetches();
     }
 }
