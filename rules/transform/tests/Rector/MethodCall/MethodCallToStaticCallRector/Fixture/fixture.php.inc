@@ -2,7 +2,7 @@
 
 namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\AnotherDependency;
+use Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\Source\AnotherDependency;
 
 final class SomeClass
 {
@@ -25,7 +25,7 @@ final class SomeClass
 
 namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\AnotherDependency;
+use Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\Source\AnotherDependency;
 
 final class SomeClass
 {

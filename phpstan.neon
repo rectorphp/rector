@@ -516,3 +516,7 @@ parameters:
 
         - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer" class\. Use unique content or abstract service instead#'
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentType\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'
+
+        -
+            message: '#Namespace "Rector\\Composer\\Tests\\Rector" is only reserved for "Rector"\. Move the class somewhere else#'
+            path: rules/composer/tests/Rector/AbstractComposerRectorTestCase.php
