@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TryCatch;
-use Rector\ChangesReporting\NodeManipulator\NotifyingNodeRemover;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeRemoval\NodeRemover;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFactory\ExpectExceptionCodeFactory;
 use Rector\PHPUnit\NodeFactory\ExpectExceptionFactory;
@@ -51,9 +51,9 @@ final class TryCatchToExpectExceptionRector extends AbstractRector
     private $expectExceptionMessageFactory;
 
     /**
-     * @var NotifyingNodeRemover
+     * @var NodeRemover
      */
-    private $notifyingNodeRemover;
+    private $nodeRemover;
 
     public function __construct(
         TestsNodeAnalyzer $testsNodeAnalyzer,
@@ -61,14 +61,14 @@ final class TryCatchToExpectExceptionRector extends AbstractRector
         ExpectExceptionMessageRegExpFactory $expectExceptionMessageRegExpFactory,
         ExpectExceptionFactory $expectExceptionFactory,
         ExpectExceptionMessageFactory $expectExceptionMessageFactory,
-        NotifyingNodeRemover $notifyingNodeRemover
+        NodeRemover $nodeRemover
     ) {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->expectExceptionCodeFactory = $expectExceptionCodeFactory;
         $this->expectExceptionMessageRegExpFactory = $expectExceptionMessageRegExpFactory;
         $this->expectExceptionFactory = $expectExceptionFactory;
         $this->expectExceptionMessageFactory = $expectExceptionMessageFactory;
-        $this->notifyingNodeRemover = $notifyingNodeRemover;
+        $this->nodeRemover = $nodeRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -126,7 +126,7 @@ CODE_SAMPLE
             }
 
             /** @var int $key */
-            $this->notifyingNodeRemover->removeStmt($node, $key);
+            $this->nodeRemover->removeStmt($node, $key);
         }
 
         $node->stmts = array_merge($node->stmts, (array) $proccesed);

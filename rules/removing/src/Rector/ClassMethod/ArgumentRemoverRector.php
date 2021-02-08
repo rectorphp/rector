@@ -9,7 +9,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\ChangesReporting\NodeManipulator\NotifyingNodeRemover;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Removing\ValueObject\ArgumentRemover;
@@ -31,16 +30,6 @@ final class ArgumentRemoverRector extends AbstractRector implements Configurable
      * @var ArgumentRemover[]
      */
     private $removedArguments = [];
-
-    /**
-     * @var NotifyingNodeRemover
-     */
-    private $notifyingNodeRemover;
-
-    public function __construct(NotifyingNodeRemover $notifyingNodeRemover)
-    {
-        $this->notifyingNodeRemover = $notifyingNodeRemover;
-    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -144,26 +133,21 @@ CODE_SAMPLE
     {
         if ($node instanceof MethodCall || $node instanceof StaticCall) {
             if (isset($node->args[$position]) && $this->isName($node->args[$position], $name)) {
-                $this->notifyingNodeRemover->removeArg($node, $position);
+                $this->nodeRemover->removeArg($node, $position);
             }
 
             return;
         }
-<<<<<<< HEAD
+
         if (! $node instanceof ClassMethod) {
             return;
         }
+
         if (! (isset($node->params[$position]) && $this->isName($node->params[$position], $name))) {
             return;
-=======
-
-        if ($node instanceof ClassMethod) {
-            if (isset($node->params[$position]) && $this->isName($node->params[$position], $name)) {
-                $this->notifyingNodeRemover->removeParam($node, $position);
-            }
->>>>>>> 69554be6f... remove NotifyingRemovingNodeTrait
         }
-        $this->removeParam($node, $position);
+
+        $this->nodeRemover->removeParam($node, $position);
     }
 
     /**

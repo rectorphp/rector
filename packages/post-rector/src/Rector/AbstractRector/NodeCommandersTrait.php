@@ -32,6 +32,11 @@ trait NodeCommandersTrait
     protected $useNodesToAddCollector;
 
     /**
+     * @var NodeRemover
+     */
+    protected $nodeRemover;
+
+    /**
      * @var NodesToRemoveCollector
      */
     private $nodesToRemoveCollector;
@@ -52,16 +57,6 @@ trait NodeCommandersTrait
     private $rectorChangeCollector;
 
     /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var NodeRemover
-     */
-    private $nodeRemover;
-
-    /**
      * @var PropertyAdder
      */
     private $propertyAdder;
@@ -77,7 +72,7 @@ trait NodeCommandersTrait
         RectorChangeCollector $rectorChangeCollector,
         PropertyNaming $propertyNaming,
         NodeRemover $nodeRemover,
-        \Rector\PostRector\DependencyInjection\PropertyAdder $propertyAdder
+        PropertyAdder $propertyAdder
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->propertyToAddCollector = $propertyToAddCollector;

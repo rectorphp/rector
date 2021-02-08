@@ -7,7 +7,6 @@ namespace Rector\Generic\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use Rector\ChangesReporting\NodeManipulator\NotifyingNodeRemover;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -32,16 +31,6 @@ final class MergeInterfacesRector extends AbstractRector implements Configurable
      * @var string[]
      */
     private $oldToNewInterfaces = [];
-
-    /**
-     * @var NotifyingNodeRemover
-     */
-    private $notifyingNodeRemover;
-
-    public function __construct(NotifyingNodeRemover $notifyingNodeRemover)
-    {
-        $this->notifyingNodeRemover = $notifyingNodeRemover;
-    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -111,7 +100,7 @@ CODE_SAMPLE
         foreach ($class->implements as $key => $name) {
             $fqnName = $this->getName($name);
             if (in_array($fqnName, $alreadyAddedNames, true)) {
-                $this->notifyingNodeRemover->removeImplements($class, $key);
+                $this->nodeRemover->removeImplements($class, $key);
                 continue;
             }
 
