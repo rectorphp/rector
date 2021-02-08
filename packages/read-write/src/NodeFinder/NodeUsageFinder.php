@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\NodeFinder;
+namespace Rector\ReadWrite\NodeFinder;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
