@@ -7,9 +7,6 @@ namespace Rector\EarlyReturn\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -132,12 +129,12 @@ CODE_SAMPLE
     {
         while ($expr instanceof BooleanAnd) {
             $ifs = array_merge($ifs, $this->collectLeftBooleanAndToIfs($expr, $return, $ifs));
-            $ifs[] = $this->createIfNegation($expr->right, $return);
+            $ifs[] = $this->ifManipulator->createIfNegation($expr->right, $return);
 
             $expr = $expr->right;
         }
 
-        return $ifs + [$this->createIfNegation($expr, $return)];
+        return $ifs + [$this->ifManipulator->createIfNegation($expr, $return)];
     }
 
     /**
@@ -148,29 +145,9 @@ CODE_SAMPLE
     {
         $left = $booleanAnd->left;
         if (! $left instanceof BooleanAnd) {
-            return [$this->createIfNegation($left, $continue)];
+            return [$this->ifManipulator->createIfNegation($left, $continue)];
         }
 
         return $this->createMultipleIfs($left, $continue, $ifs);
-    }
-
-    private function createIfNegation(Expr $expr, Continue_ $continue): If_
-    {
-        if ($expr instanceof Identical) {
-            $expr = new NotIdentical($expr->left, $expr->right);
-        } elseif ($expr instanceof NotIdentical) {
-            $expr = new Identical($expr->left, $expr->right);
-        } elseif ($expr instanceof BooleanNot) {
-            $expr = $expr->expr;
-        } else {
-            $expr = new BooleanNot($expr);
-        }
-
-        return new If_(
-            $expr,
-            [
-                'stmts' => [$continue],
-            ]
-        );
     }
 }

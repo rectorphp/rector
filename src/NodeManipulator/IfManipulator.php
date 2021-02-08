@@ -9,11 +9,13 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
@@ -343,6 +345,26 @@ final class IfManipulator
         }
 
         return ! (bool) $if->elseifs;
+    }
+
+    public function createIfNegation(Expr $expr, Stmt $stmt): If_
+    {
+        if ($expr instanceof Identical) {
+            $expr = new NotIdentical($expr->left, $expr->right);
+        } elseif ($expr instanceof NotIdentical) {
+            $expr = new Identical($expr->left, $expr->right);
+        } elseif ($expr instanceof BooleanNot) {
+            $expr = $expr->expr;
+        } else {
+            $expr = new BooleanNot($expr);
+        }
+
+        return new If_(
+            $expr,
+            [
+                'stmts' => [$stmt],
+            ]
+        );
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $return): ?Expr
