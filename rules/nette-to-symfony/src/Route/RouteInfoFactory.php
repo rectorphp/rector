@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class RouteInfoFactory
@@ -28,11 +27,6 @@ final class RouteInfoFactory
      * @var ValueResolver
      */
     private $valueResolver;
-
-    /**
-     * @var ParsedNodeCollector
-     */
-    private $parsedNodeCollector;
 
     /**
      * @var NodeRepository

@@ -191,7 +191,7 @@ final class ComplexNodeRemover
                 return $this->betterStandardPrinter->areNodesEqual($param->var, $node);
             });
 
-            if ($variable === null) {
+            if (! $variable instanceof Node) {
                 continue;
             }
 
