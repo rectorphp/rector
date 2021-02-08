@@ -10,6 +10,7 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Rector\Core\NodeManipulator\IfManipulator;
+use PhpParser\Node\Stmt\Continue_;
 
 /**
  * @see \Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfContinueToMultiContinueRector\ChangeAndIfContinueToMultiContinueRectorTest
@@ -86,6 +87,11 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (! $this->ifManipulator->isIfWithOnlyOneStmt($node)) {
+            return null;
+        }
+
+        $stmt = $node->stmts[0];
+        if (! $stmt instanceof Continue_) {
             return null;
         }
 
