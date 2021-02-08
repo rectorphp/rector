@@ -40,7 +40,7 @@ final class Fixture
      */
     private $otherDependency;
 
-    public function __construct(OtherDependency $otherDependency, private \Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency $someDependency)
+    public function __construct(OtherDependency $otherDependency, private \Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstructorRector\Source\SomeDependency $someDependency)
     {
         $this->otherDependency = $otherDependency;
     }
