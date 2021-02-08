@@ -7,7 +7,7 @@ namespace Rector\DeadCode\NodeCollector;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
+use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;

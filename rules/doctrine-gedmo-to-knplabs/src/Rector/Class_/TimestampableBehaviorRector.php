@@ -7,7 +7,7 @@ namespace Rector\DoctrineGedmoToKnplabs\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;

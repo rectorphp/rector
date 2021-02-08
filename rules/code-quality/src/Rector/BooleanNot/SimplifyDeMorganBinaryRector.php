@@ -7,7 +7,7 @@ namespace Rector\CodeQuality\Rector\BooleanNot;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BooleanNot;
-use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
+use Rector\Core\NodeManipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;

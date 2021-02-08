@@ -72,7 +72,7 @@ final class NodeTypeResolver
     /**
      * @var ClassAnalyzer
      */
-    private $classNodeAnalyzer;
+    private $classAnalyzer;
 
     /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
@@ -81,7 +81,7 @@ final class NodeTypeResolver
         ObjectTypeSpecifier $objectTypeSpecifier,
         ParentClassLikeTypeCorrector $parentClassLikeTypeCorrector,
         TypeUnwrapper $typeUnwrapper,
-        ClassAnalyzer $classNodeAnalyzer,
+        ClassAnalyzer $classAnalyzer,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -91,7 +91,7 @@ final class NodeTypeResolver
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->parentClassLikeTypeCorrector = $parentClassLikeTypeCorrector;
         $this->typeUnwrapper = $typeUnwrapper;
-        $this->classNodeAnalyzer = $classNodeAnalyzer;
+        $this->classAnalyzer = $classAnalyzer;
     }
 
     /**
@@ -198,7 +198,8 @@ final class NodeTypeResolver
             return new MixedType();
         }
 
-        if ($node instanceof New_ && $this->classNodeAnalyzer->isAnonymousClass($node->class)) {
+        $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node->class);
+        if ($node instanceof New_ && $isAnonymousClass) {
             return $this->resolveAnonymousClassType($node);
         }
 
@@ -388,7 +389,8 @@ final class NodeTypeResolver
         }
 
         // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
-        if ($node instanceof New_ && $this->classNodeAnalyzer->isAnonymousClass($node->class)) {
+        $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node->class);
+        if ($node instanceof New_ && $isAnonymousClass) {
             return new ObjectWithoutClassType();
         }
 

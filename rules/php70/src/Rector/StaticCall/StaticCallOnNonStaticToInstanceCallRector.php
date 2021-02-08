@@ -12,7 +12,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
-use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
+use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\StaticAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;

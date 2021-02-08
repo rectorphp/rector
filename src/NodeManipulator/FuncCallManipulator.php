@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\PhpParser\Node\Manipulator;
+namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;

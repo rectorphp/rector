@@ -6,7 +6,7 @@ namespace Rector\DeadCode\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\Core\PhpParser\Node\Manipulator\ClassConstManipulator;
+use Rector\Core\NodeManipulator\ClassConstManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;

@@ -7,7 +7,7 @@ namespace Rector\DoctrineCodeQuality\NodeManipulator;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
+use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;

@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use Rector\Core\PhpParser\Node\Manipulator\MethodCallManipulator;
+use Rector\Core\NodeManipulator\MethodCallManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;

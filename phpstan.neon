@@ -523,3 +523,4 @@ parameters:
             path: rules/composer/tests/Rector/AbstractComposerRectorTestCase.php
 
         - '#Class with base "SetList" name is already used in "Symplify\\EasyCodingStandard\\ValueObject\\Set\\SetList", "Rector\\Set\\ValueObject\\SetList"\. Use unique name to make classes easy to recognize#'
+        - '#Class with base "PhpVersion" name is already used in "PHPStan\\Php\\PhpVersion", "Rector\\Core\\ValueObject\\PhpVersion"\. Use unique name to make classes easy to recognize#'

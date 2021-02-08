@@ -17,7 +17,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
-use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
+use Rector\Core\NodeManipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php71\ValueObject\TwoNodeMatch;

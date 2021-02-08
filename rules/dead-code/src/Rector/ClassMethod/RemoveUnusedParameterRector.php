@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeCollector\UnusedParameterResolver;
 use Rector\DeadCode\NodeManipulator\MagicMethodDetector;

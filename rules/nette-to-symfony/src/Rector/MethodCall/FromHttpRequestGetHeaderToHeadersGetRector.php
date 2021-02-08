@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
+use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symfony\Component\HttpFoundation\Request;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;

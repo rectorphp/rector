@@ -17,7 +17,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\Type\Type;
 use Rector\CodingStyle\TypeAnalyzer\IterableTypeAnalyzer;
-use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
+use Rector\Core\NodeManipulator\PropertyFetchManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;

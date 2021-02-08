@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\PhpParser\Node\Manipulator;
+namespace Rector\Core\NodeManipulator;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -143,7 +143,7 @@ final class VariableManipulator
 
     /**
      * Inspiration
-     * @see \Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator::isReadOnlyProperty()
+     * @see \Rector\Core\NodeManipulator\PropertyManipulator::isReadOnlyProperty()
      */
     private function isReadOnlyVariable(ClassMethod $classMethod, Variable $variable, Assign $assign): bool
     {

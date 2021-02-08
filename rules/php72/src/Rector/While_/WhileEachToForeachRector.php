@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\While_;
-use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
+use Rector\Core\NodeManipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;

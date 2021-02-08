@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
-use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
+use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;

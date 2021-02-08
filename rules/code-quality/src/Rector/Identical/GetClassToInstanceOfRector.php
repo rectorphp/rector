@@ -14,7 +14,7 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
+use Rector\Core\NodeManipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Php71\ValueObject\TwoNodeMatch;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
