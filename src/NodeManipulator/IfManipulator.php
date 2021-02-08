@@ -283,7 +283,7 @@ final class IfManipulator
         return $ifs;
     }
 
-    public function isIfWithOnlyReturn(Node $node): bool
+    public function isIfWithOnly(Node $node, string $className): bool
     {
         if (! $node instanceof If_) {
             return false;
@@ -293,20 +293,7 @@ final class IfManipulator
             return false;
         }
 
-        return $this->hasOnlyStmtOfType($node, Return_::class);
-    }
-
-    public function isIfWithOnlyForeach(Node $node): bool
-    {
-        if (! $node instanceof If_) {
-            return false;
-        }
-
-        if (! $this->isIfWithoutElseAndElseIfs($node)) {
-            return false;
-        }
-
-        return $this->hasOnlyStmtOfType($node, Foreach_::class);
+        return $this->hasOnlyStmtOfType($node, $className);
     }
 
     public function isIfWithOnlyOneStmt(If_ $if): bool

@@ -104,7 +104,7 @@ CODE_SAMPLE
 
     private function isUselessBeforeForeachCheck(If_ $if): bool
     {
-        if (! $this->ifManipulator->isIfWithOnlyForeach($if)) {
+        if (! $this->ifManipulator->isIfWithOnly($if, Foreach_::class)) {
             return false;
         }
 
