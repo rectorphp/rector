@@ -87,12 +87,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->ifManipulator->isIfWithOnlyOneStmt($node)) {
-            return null;
-        }
-
-        $stmt = $node->stmts[0];
-        if (! $stmt instanceof Continue_) {
+        if (! $this->ifManipulator->isIfWithOnly($node, Continue_::class)) {
             return null;
         }
 
