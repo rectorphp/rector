@@ -84,7 +84,7 @@ CODE_SAMPLE
         }
 
         $countedNode = $node->args[0]->value;
-        if ($this->isCountableType($countedNode)) {
+        if ($this->countableAnalyzer->isCastableArrayType($countedNode)) {
             return null;
         }
 

@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -20,6 +21,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MakeDispatchFirstArgumentEventRector extends AbstractRector
 {
+    /**
+     * @var StringTypeAnalyzer
+     */
+    private $stringTypeAnalyzer;
+
+    public function __construct(StringTypeAnalyzer $stringTypeAnalyzer)
+    {
+        $this->stringTypeAnalyzer = $stringTypeAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -72,7 +83,7 @@ CODE_SAMPLE
         }
 
         $firstArgumentValue = $node->args[0]->value;
-        if ($this->isStringOrUnionStringOnlyType($firstArgumentValue)) {
+        if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($firstArgumentValue)) {
             return $this->refactorStringArgument($node);
         }
 
