@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,7 +27,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeSetParametersArrayToArrayCollectionRector extends AbstractRector
 {
     /**
-     * @return string[]
+     * @var ArrayTypeAnalyzer
+     */
+    private $arrayTypeAnalyzer;
+
+    public function __construct(ArrayTypeAnalyzer $arrayTypeAnalyzer)
+    {
+        $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
+    }
+
+    /**
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
@@ -47,7 +58,7 @@ final class ChangeSetParametersArrayToArrayCollectionRector extends AbstractRect
             return null;
         }
         $firstArgument = $methodArguments[0];
-        if (! $this->isArrayType($firstArgument->value)) {
+        if (! $this->arrayTypeAnalyzer->isArrayType($firstArgument->value)) {
             return null;
         }
 

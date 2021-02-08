@@ -26,7 +26,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -43,18 +42,12 @@ final class DateTimeToDateTimeInterfaceRector extends AbstractRector
     ];
 
     /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
      * @var PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver, PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
     {
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 

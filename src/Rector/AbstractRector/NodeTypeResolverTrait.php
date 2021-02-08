@@ -9,13 +9,10 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
-use Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 /**
@@ -32,36 +29,17 @@ trait NodeTypeResolverTrait
     /**
      * @var NodeTypeResolver
      */
-    private $nodeTypeResolver;
-
-    /**
-     * @var ArrayTypeAnalyzer
-     */
-    private $arrayTypeAnalyzer;
-
-    /**
-     * @var CountableTypeAnalyzer
-     */
-    private $countableTypeAnalyzer;
+    protected $nodeTypeResolver;
 
     /**
      * @required
      */
     public function autowireNodeTypeResolverTrait(
         NodeTypeResolver $nodeTypeResolver,
-        ArrayTypeAnalyzer $arrayTypeAnalyzer,
-        CountableTypeAnalyzer $countableTypeAnalyzer,
         TypeUnwrapper $typeUnwrapper
     ): void {
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
-        $this->countableTypeAnalyzer = $countableTypeAnalyzer;
         $this->typeUnwrapper = $typeUnwrapper;
-    }
-
-    public function isPropertyBoolean(Property $property): bool
-    {
-        return $this->nodeTypeResolver->isPropertyBoolean($property);
     }
 
     /**
@@ -112,21 +90,6 @@ trait NodeTypeResolverTrait
     protected function isNullableType(Node $node): bool
     {
         return $this->nodeTypeResolver->isNullableType($node);
-    }
-
-    protected function isNullableObjectType(Node $node): bool
-    {
-        return $this->nodeTypeResolver->isNullableObjectType($node);
-    }
-
-    protected function isNullableArrayType(Node $node): bool
-    {
-        return $this->nodeTypeResolver->isNullableArrayType($node);
-    }
-
-    protected function isArrayType(Node $node): bool
-    {
-        return $this->arrayTypeAnalyzer->isArrayType($node);
     }
 
     protected function getObjectType(Node $node): Type

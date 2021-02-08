@@ -16,6 +16,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
 use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
@@ -53,9 +54,15 @@ final class ArgumentFuncCallToMethodCallRector extends AbstractRector implements
      */
     private $propertyNaming;
 
-    public function __construct(PropertyNaming $propertyNaming)
+    /**
+     * @var ArrayTypeAnalyzer
+     */
+    private $arrayTypeAnalyzer;
+
+    public function __construct(ArrayTypeAnalyzer $arrayTypeAnalyzer, PropertyNaming $propertyNaming)
     {
         $this->propertyNaming = $propertyNaming;
+        $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -268,11 +275,15 @@ CODE_SAMPLE
             return $propertyFetch;
         }
 
-        if ($arrayFuncCallToMethodCall->getArrayMethod() && $this->isArrayType($funcCall->args[0]->value)) {
+        if ($arrayFuncCallToMethodCall->getArrayMethod() && $this->arrayTypeAnalyzer->isArrayType(
+            $funcCall->args[0]->value
+        )) {
             return new MethodCall($propertyFetch, $arrayFuncCallToMethodCall->getArrayMethod(), $funcCall->args);
         }
 
-        if ($arrayFuncCallToMethodCall->getNonArrayMethod() && ! $this->isArrayType($funcCall->args[0]->value)) {
+        if ($arrayFuncCallToMethodCall->getNonArrayMethod() && ! $this->arrayTypeAnalyzer->isArrayType(
+            $funcCall->args[0]->value
+        )) {
             return new MethodCall($propertyFetch, $arrayFuncCallToMethodCall->getNonArrayMethod(), $funcCall->args);
         }
 
