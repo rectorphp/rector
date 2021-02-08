@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Rector\Sensio\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Use_;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\Core\Rector\AbstractRector;
@@ -66,18 +64,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class, Class_::class, Use_::class];
+        return [ClassMethod::class, Class_::class];
     }
 
     /**
-     * @param ClassMethod|Class_|Use_ $node
+     * @param ClassMethod|Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Use_) {
-            return $this->refactorUse($node);
-        }
-
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($phpDocInfo->hasByType(SymfonyRouteTagValueNode::class)) {
             return null;
@@ -95,25 +89,8 @@ CODE_SAMPLE
         $symfonyRouteTagValueNode = new SymfonyRouteTagValueNode($items);
         $symfonyRouteTagValueNode->mimicTagValueNodeConfiguration($sensioRouteTagValueNode);
 
-        $phpDocInfo->addTagValueNodeWithShortName($symfonyRouteTagValueNode);
+        $phpDocInfo->addTagValueNode($symfonyRouteTagValueNode);
 
         return $node;
-    }
-
-    private function refactorUse(Use_ $use): ?Use_
-    {
-        if ($use->type !== Use_::TYPE_NORMAL) {
-            return null;
-        }
-
-        foreach ($use->uses as $useUse) {
-            if (! $this->isName($useUse->name, 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route')) {
-                continue;
-            }
-
-            $useUse->name = new Name('Symfony\Component\Routing\Annotation\Route');
-        }
-
-        return $use;
     }
 }

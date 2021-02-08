@@ -143,8 +143,6 @@ CODE_SAMPLE
             if (isset($node->params[$position]) && $this->isName($node->params[$position], $name)) {
                 $this->removeParam($node, $position);
             }
-
-            return;
         }
     }
 

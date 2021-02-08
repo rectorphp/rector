@@ -33,7 +33,7 @@ final class ConstantReferenceSomePresenter
 
 namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Fixture;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
 
 final class ConstantReferenceRouterFactory
@@ -51,7 +51,7 @@ final class ConstantReferenceRouterFactory
 final class ConstantReferenceSomePresenter
 {
     /**
-     * @Route(path="/some-path", methods={"GET"})
+     * @\Symfony\Component\Routing\Annotation\Route(path="/some-path", methods={"GET"})
      */
     public function run()
     {

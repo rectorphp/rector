@@ -37,6 +37,7 @@ final class PropertyAdder
      * @var RectorChangeCollector
      */
     private $rectorChangeCollector;
+
     /**
      * @var PropertyNaming
      */
@@ -84,7 +85,7 @@ final class PropertyAdder
         $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
 
-    public function addServiceConstructorDependencyToClass(Class_ $class, string $className)
+    public function addServiceConstructorDependencyToClass(Class_ $class, string $className): void
     {
         $serviceObjectType = new ObjectType($className);
 

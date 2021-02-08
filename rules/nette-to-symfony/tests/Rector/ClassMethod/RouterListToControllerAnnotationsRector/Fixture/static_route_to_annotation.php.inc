@@ -31,7 +31,6 @@ final class StaticSomePresenter
 
 namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Fixture;
 
-use Symfony\Component\Routing\Annotation\Route;
 use Nette\Application\Routers\RouteList;
 use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Source\RouteFactory;
 
@@ -48,7 +47,7 @@ final class StaticRouterFactory
 final class StaticSomePresenter
 {
     /**
-     * @Route(path="some-path", methods={"GET"})
+     * @\Symfony\Component\Routing\Annotation\Route(path="some-path", methods={"GET"})
      */
     public function run()
     {

@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Naming\Naming\PropertyNaming;
@@ -174,9 +173,7 @@ trait NodeCommandersTrait
      */
     protected function removeNodes(array $nodes): void
     {
-        foreach ($nodes as $node) {
-            $this->removeNode($node);
-        }
+        $this->nodeRemover->removeNodes($nodes);
     }
 
     private function notifyNodeFileInfo(Node $node): void

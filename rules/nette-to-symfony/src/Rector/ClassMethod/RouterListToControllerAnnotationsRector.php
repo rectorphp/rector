@@ -148,6 +148,7 @@ CODE_SAMPLE
             return null;
         }
         $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
+
         $routeListObjectType = new ObjectType(self::ROUTE_LIST_CLASS);
         if (! $inferedReturnType->isSuperTypeOf($routeListObjectType)->yes()) {
             return null;
@@ -163,7 +164,7 @@ CODE_SAMPLE
         /** @var RouteInfo $routeInfo */
         foreach ($routeInfos as $routeInfo) {
             $classMethod = $this->resolveControllerClassMethod($routeInfo);
-            if (! $classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            if (! $classMethod instanceof ClassMethod) {
                 continue;
             }
 

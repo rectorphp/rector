@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -86,11 +87,7 @@ final class NodeNameResolver
      */
     public function isName($node, string $name): bool
     {
-        if (! is_array($node)) {
-            $nodes = [$node];
-        } else {
-            $nodes = $node;
-        }
+        $nodes = is_array($node) ? $node : [$node];
 
         foreach ($nodes as $node) {
             if ($this->isSingleName($node, $name)) {
@@ -271,7 +268,11 @@ final class NodeNameResolver
             return false;
         }
 
-        if (! $this->isName($node->class, $className)) {
+        if ($node->class instanceof New_) {
+            if (! $this->isName($node->class->class, $className)) {
+                return false;
+            }
+        } elseif (! $this->isName($node->class, $className)) {
             return false;
         }
 
