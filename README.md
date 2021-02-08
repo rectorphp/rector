@@ -26,7 +26,7 @@ It's a tool that [we develop](https://getrector.org/) and share for free, so any
 ## Open-Source First
 
 Rector **instantly upgrades and refactors the PHP code of your application**.
-It supports all versions of PHP from 5.2 and major open-source projects:
+It supports all versions of PHP from 5.3 and major open-source projects:
 
 <br>
 
