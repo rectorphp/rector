@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
+use Rector\ChangesReporting\NodeManipulator\NotifyingNodeRemover;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,6 +20,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveCodeAfterReturnRector extends AbstractRector
 {
+    /**
+     * @var NotifyingNodeRemover
+     */
+    private $notifyingNodeRemover;
+
+    public function __construct(NotifyingNodeRemover $notifyingNodeRemover)
+    {
+        $this->notifyingNodeRemover = $notifyingNodeRemover;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove dead code after return statement', [
@@ -72,12 +83,11 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $this->removeStmt($node, $key);
+                $this->notifyingNodeRemover->removeStmt($node, $key);
             }
 
             if ($stmt instanceof Return_) {
                 $isDeadAfterReturn = true;
-                continue;
             }
         }
 

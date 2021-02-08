@@ -10,7 +10,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\ChangesReporting\Rector\AbstractRector\NotifyingRemovingNodeTrait;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -23,7 +22,6 @@ trait AbstractRectorTrait
 {
     use RemovedAndAddedFilesTrait;
     use NodeCommandersTrait;
-    use NotifyingRemovingNodeTrait;
 
     /**
      * @var NodeNameResolver

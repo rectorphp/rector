@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use Rector\ChangesReporting\NodeManipulator\NotifyingNodeRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeManipulator\CallDefaultParamValuesResolver;
 use ReflectionFunction;
@@ -26,9 +27,17 @@ final class RemoveDefaultArgumentValueRector extends AbstractRector
      */
     private $callDefaultParamValuesResolver;
 
-    public function __construct(CallDefaultParamValuesResolver $callDefaultParamValuesResolver)
-    {
+    /**
+     * @var NotifyingNodeRemover
+     */
+    private $notifyingNodeRemover;
+
+    public function __construct(
+        CallDefaultParamValuesResolver $callDefaultParamValuesResolver,
+        NotifyingNodeRemover $notifyingNodeRemover
+    ) {
         $this->callDefaultParamValuesResolver = $callDefaultParamValuesResolver;
+        $this->notifyingNodeRemover = $notifyingNodeRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -108,7 +117,7 @@ CODE_SAMPLE
         }
 
         foreach ($keysToRemove as $keyToRemove) {
-            $this->removeArg($node, $keyToRemove);
+            $this->notifyingNodeRemover->removeArg($node, $keyToRemove);
         }
 
         return $node;

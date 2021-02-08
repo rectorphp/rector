@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TryCatch;
+use Rector\ChangesReporting\NodeManipulator\NotifyingNodeRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFactory\ExpectExceptionCodeFactory;
@@ -49,18 +50,25 @@ final class TryCatchToExpectExceptionRector extends AbstractRector
      */
     private $expectExceptionMessageFactory;
 
+    /**
+     * @var NotifyingNodeRemover
+     */
+    private $notifyingNodeRemover;
+
     public function __construct(
         TestsNodeAnalyzer $testsNodeAnalyzer,
         ExpectExceptionCodeFactory $expectExceptionCodeFactory,
         ExpectExceptionMessageRegExpFactory $expectExceptionMessageRegExpFactory,
         ExpectExceptionFactory $expectExceptionFactory,
-        ExpectExceptionMessageFactory $expectExceptionMessageFactory
+        ExpectExceptionMessageFactory $expectExceptionMessageFactory,
+        NotifyingNodeRemover $notifyingNodeRemover
     ) {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->expectExceptionCodeFactory = $expectExceptionCodeFactory;
         $this->expectExceptionMessageRegExpFactory = $expectExceptionMessageRegExpFactory;
         $this->expectExceptionFactory = $expectExceptionFactory;
         $this->expectExceptionMessageFactory = $expectExceptionMessageFactory;
+        $this->notifyingNodeRemover = $notifyingNodeRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -118,7 +126,7 @@ CODE_SAMPLE
             }
 
             /** @var int $key */
-            $this->removeStmt($node, $key);
+            $this->notifyingNodeRemover->removeStmt($node, $key);
         }
 
         $node->stmts = array_merge($node->stmts, (array) $proccesed);
