@@ -11,6 +11,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Rector\Core\NodeManipulator\IfManipulator;
 use PhpParser\Node\Stmt\Continue_;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 
 /**
  * @see \Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfContinueToMultiContinueRector\ChangeAndIfContinueToMultiContinueRectorTest
@@ -92,6 +93,10 @@ CODE_SAMPLE
 
         $stmt = $node->stmts[0];
         if (! $stmt instanceof Continue_) {
+            return null;
+        }
+
+        if (! $node->cond instanceof BooleanAnd) {
             return null;
         }
 
