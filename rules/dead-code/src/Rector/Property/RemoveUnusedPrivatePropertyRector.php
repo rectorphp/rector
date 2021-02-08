@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Removing\NodeManipulator\ComplexNodeRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -25,9 +26,15 @@ final class RemoveUnusedPrivatePropertyRector extends AbstractRector
      */
     private $propertyManipulator;
 
-    public function __construct(PropertyManipulator $propertyManipulator)
+    /**
+     * @var ComplexNodeRemover
+     */
+    private $complexNodeRemover;
+
+    public function __construct(PropertyManipulator $propertyManipulator, ComplexNodeRemover $complexNodeRemover)
     {
         $this->propertyManipulator = $propertyManipulator;
+        $this->complexNodeRemover = $complexNodeRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -71,7 +78,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removePropertyAndUsages($node);
+        $this->complexNodeRemover->removePropertyAndUsages($node);
 
         return $node;
     }

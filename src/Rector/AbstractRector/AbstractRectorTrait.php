@@ -19,6 +19,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\ChangesReporting\Rector\AbstractRector\NotifyingRemovingNodeTrait;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -29,9 +30,7 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 trait AbstractRectorTrait
 {
     use RemovedAndAddedFilesTrait;
-    use BetterStandardPrinterTrait;
     use NodeCommandersTrait;
-    use ComplexRemovalTrait;
     use NotifyingRemovingNodeTrait;
 
     /**
@@ -50,6 +49,11 @@ trait AbstractRectorTrait
     protected $nodeTypeResolver;
 
     /**
+     * @var BetterStandardPrinter
+     */
+    protected $betterStandardPrinter;
+
+    /**
      * @var ClassNaming
      */
     private $classNaming;
@@ -63,12 +67,14 @@ trait AbstractRectorTrait
      * @required
      */
     public function autowireAbstractRectorTrait(
+        BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
         ClassNaming $classNaming,
         NodeTypeResolver $nodeTypeResolver,
         TypeUnwrapper $typeUnwrapper,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ): void {
+        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classNaming = $classNaming;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -323,5 +329,24 @@ trait AbstractRectorTrait
     protected function traverseNodesWithCallable($nodes, callable $callable): void
     {
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, $callable);
+    }
+
+    /**
+     * @param Node|Node[]|null $node
+     */
+    protected function print($node): string
+    {
+        return $this->betterStandardPrinter->print($node);
+    }
+
+    /**
+     * Removes all comments from both nodes
+     *
+     * @param Node|Node[]|null $firstNode
+     * @param Node|Node[]|null $secondNode
+     */
+    protected function areNodesEqual($firstNode, $secondNode): bool
+    {
+        return $this->betterStandardPrinter->areNodesEqual($firstNode, $secondNode);
     }
 }

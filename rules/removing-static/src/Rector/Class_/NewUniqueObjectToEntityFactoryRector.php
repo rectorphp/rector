@@ -31,7 +31,7 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector implemen
      * @api
      * @var string
      */
-    public const TYPES_TO_SERVICES = '$typesToServices';
+    public const TYPES_TO_SERVICES = 'types_to_services';
 
     /**
      * @var string
@@ -190,7 +190,7 @@ CODE_SAMPLE
         }
 
         // temporary
-        $classes = $this->parsedNodeCollector->getClasses();
+        $classes = $this->nodeRepository->getClasses();
         if ($classes === []) {
             return [];
         }

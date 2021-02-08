@@ -15,7 +15,6 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition;
-use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -52,10 +51,8 @@ final class MinutesToSecondsInCacheRector extends AbstractRector
      */
     private $typeToTimeMethodsAndPositions = [];
 
-    public function __construct(ParsedNodeCollector $parsedNodeCollector)
+    public function __construct()
     {
-        $this->parsedNodeCollector = $parsedNodeCollector;
-
         $this->typeToTimeMethodsAndPositions = [
             new TypeToTimeMethodAndPosition('Illuminate\Support\Facades\Cache', self::PUT, 2),
             new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Repository', self::PUT, 2),

@@ -10,7 +10,7 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -32,25 +32,25 @@ final class ClassAnalyzer
     private $nodeTypeResolver;
 
     /**
-     * @var ParsedNodeCollector
-     */
-    private $parsedNodeCollector;
-
-    /**
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        ParsedNodeCollector $parsedNodeCollector,
-        PhpDocInfoFactory $phpDocInfoFactory
+        PhpDocInfoFactory $phpDocInfoFactory,
+        NodeRepository $nodeRepository
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function isValueObjectClass(Class_ $class): bool
@@ -81,7 +81,7 @@ final class ClassAnalyzer
 
             // awesome!
             // is it services or value object?
-            $paramTypeClass = $this->parsedNodeCollector->findClass($paramType->getClassName());
+            $paramTypeClass = $this->nodeRepository->findClass($paramType->getClassName());
             if (! $paramTypeClass instanceof Class_) {
                 // not sure :/
                 continue;

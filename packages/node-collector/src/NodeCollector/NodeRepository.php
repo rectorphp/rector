@@ -555,6 +555,27 @@ final class NodeRepository
         return $class->getProperty($propertyName);
     }
 
+    /**
+     * @return Class_[]
+     */
+    public function getClasses(): array
+    {
+        return $this->parsedNodeCollector->getClasses();
+    }
+
+    /**
+     * @return New_[]
+     */
+    public function findNewsByClass(string $className): array
+    {
+        return $this->parsedNodeCollector->findNewsByClass($className);
+    }
+
+    public function findClassConstant(string $className, string $constantName): ?ClassConst
+    {
+        return $this->parsedNodeCollector->findClassConstant($className, $constantName);
+    }
+
     private function addMethod(ClassMethod $classMethod): void
     {
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
