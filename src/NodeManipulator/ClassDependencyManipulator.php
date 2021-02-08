@@ -78,7 +78,7 @@ final class ClassDependencyManipulator
 
     public function addConstructorDependency(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
-        if ($this->propertyPresenceChecker->hasClassPropertyByName($class, $propertyMetadata->getName())) {
+        if ($this->propertyPresenceChecker->hasClassContextPropertyByName($class, $propertyMetadata->getName())) {
             return;
         }
 
@@ -164,7 +164,7 @@ final class ClassDependencyManipulator
 
     public function addInjectProperty(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
-        if ($this->propertyPresenceChecker->hasClassPropertyByName($class, $propertyMetadata->getName())) {
+        if ($this->propertyPresenceChecker->hasClassContextPropertyByName($class, $propertyMetadata->getName())) {
             return;
         }
 

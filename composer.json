@@ -234,7 +234,6 @@
             "Rector\\DowngradePhp73\\Tests\\": "rules/downgrade-php73/tests",
             "Rector\\DowngradePhp74\\Tests\\": "rules/downgrade-php74/tests",
             "Rector\\DowngradePhp80\\Tests\\": "rules/downgrade-php80/tests",
-            "Rector\\FileSystemRector\\Tests\\": "packages/file-system-rector/tests",
             "Rector\\Generic\\Tests\\": "rules/generic/tests",
             "Rector\\Laravel\\Tests\\": "rules/laravel/tests",
             "Rector\\Legacy\\Tests\\": "rules/legacy/tests",
