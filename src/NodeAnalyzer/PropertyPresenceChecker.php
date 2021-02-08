@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use ReflectionClass;
 use ReflectionProperty;
 

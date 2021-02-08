@@ -112,6 +112,11 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected $betterNodeFinder;
 
     /**
+     * @var ClassNodeAnalyzer
+     */
+    protected $classNodeAnalyzer;
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -125,11 +130,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      * @var CurrentRectorProvider
      */
     private $currentRectorProvider;
-
-    /**
-     * @var ClassNodeAnalyzer
-     */
-    private $classNodeAnalyzer;
 
     /**
      * @var CurrentNodeProvider
@@ -272,11 +272,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected function isAtLeastPhpVersion(int $version): bool
     {
         return $this->phpVersionProvider->isAtLeastPhpVersion($version);
-    }
-
-    protected function isAnonymousClass(Node $node): bool
-    {
-        return $this->classNodeAnalyzer->isAnonymousClass($node);
     }
 
     protected function mirrorComments(Node $newNode, Node $oldNode): void

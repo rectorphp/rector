@@ -169,7 +169,7 @@ CODE_SAMPLE
 
     private function shouldSkipClassLike(Class_ $class): bool
     {
-        if ($this->isAnonymousClass($class)) {
+        if ($this->classNodeAnalyzer->isAnonymousClass($class)) {
             return true;
         }
 

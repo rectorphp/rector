@@ -180,7 +180,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->isAnonymousClass($classLike);
+        return $this->classNodeAnalyzer->isAnonymousClass($classLike);
     }
 
     /**
