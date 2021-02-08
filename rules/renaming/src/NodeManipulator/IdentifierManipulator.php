@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\PhpParser\Node\Manipulator;
+namespace Rector\Renaming\NodeManipulator;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
