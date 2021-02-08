@@ -17,7 +17,7 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\CodeQuality\TypeResolver\ArrayDimFetchTypeResolver;
-use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -39,9 +39,9 @@ final class LocalPropertyAnalyzer
     private $simpleCallableNodeTraverser;
 
     /**
-     * @var ClassNodeAnalyzer
+     * @var ClassAnalyzer
      */
-    private $classNodeAnalyzer;
+    private $classAnalyzer;
 
     /**
      * @var NodeNameResolver
@@ -75,7 +75,7 @@ final class LocalPropertyAnalyzer
 
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        ClassNodeAnalyzer $classNodeAnalyzer,
+        ClassAnalyzer $classAnalyzer,
         NodeNameResolver $nodeNameResolver,
         BetterNodeFinder $betterNodeFinder,
         ArrayDimFetchTypeResolver $arrayDimFetchTypeResolver,
@@ -84,7 +84,7 @@ final class LocalPropertyAnalyzer
         TypeFactory $typeFactory
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->classNodeAnalyzer = $classNodeAnalyzer;
+        $this->classAnalyzer = $classAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->arrayDimFetchTypeResolver = $arrayDimFetchTypeResolver;
@@ -104,7 +104,8 @@ final class LocalPropertyAnalyzer
             &$fetchedLocalPropertyNameToTypes
         ): ?int {
             // skip anonymous class scope
-            if ($this->classNodeAnalyzer->isAnonymousClass($node)) {
+            $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node);
+            if ($isAnonymousClass) {
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
 

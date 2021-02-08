@@ -2,10 +2,6 @@
 
 declare(strict_types=1);
 
-use PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff;
-use PhpCsFixer\Fixer\Basic\Psr4Fixer;
-use PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer;
-use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 use PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
@@ -13,8 +9,6 @@ use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer;
-use PhpCsFixer\Fixer\Strict\StrictComparisonFixer;
-use PhpCsFixer\Fixer\Whitespace\ArrayIndentationFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer;
@@ -28,8 +22,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(StandaloneLineInMultilineArrayFixer::class);
     $services->set(ArrayOpenerAndCloserNewlineFixer::class);
-
-    $services->set(ClassAttributesSeparationFixer::class);
 
     $services->set(GeneralPhpdocAnnotationRemoveFixer::class)
         ->call('configure', [[
@@ -70,32 +62,22 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // template files
         __DIR__ . '/packages/rector-generator/templates',
 
-        // broken
-        GlobalNamespaceImportFixer::class,
-        MethodDeclarationSniff::class . '.Underscore',
         UnaryOperatorSpacesFixer::class,
-        // breaks on-purpose annotated variables
-        ReturnAssignmentFixer::class,
         // buggy with specific markdown snippet file in docs/rules_overview.md
         ArrayListItemNewlineFixer::class,
         BlankLineAfterOpeningTagFixer::class,
-        Psr4Fixer::class,
 
-        // buggy - fix on master
+        // buggy - @todo fix on Symplify master
         RemoveCommentedCodeFixer::class,
+
+        // breaks on-purpose annotated variables
+        ReturnAssignmentFixer::class,
 
         PhpdocTypesFixer::class => [__DIR__ . '/rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'],
         PhpUnitStrictFixer::class => [
             __DIR__ . '/packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php',
             __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',
             '*TypeResolverTest.php',
-        ],
-
-        StrictComparisonFixer::class => [__DIR__ . '/rules/polyfill/src/ConditionEvaluator.php'],
-
-        // bugged for some reason
-        ArrayIndentationFixer::class => [
-            __DIR__ . '/rules/order/src/Rector/Class_/OrderPublicInterfaceMethodRector.php',
         ],
     ]);
 

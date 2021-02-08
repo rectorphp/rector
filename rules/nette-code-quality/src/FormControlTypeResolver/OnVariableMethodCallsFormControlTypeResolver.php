@@ -7,7 +7,7 @@ namespace Rector\NetteCodeQuality\FormControlTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Manipulator\MethodCallManipulator;
+use Rector\Core\NodeManipulator\MethodCallManipulator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NetteCodeQuality\Contract\FormControlTypeResolverInterface;
 use Rector\NetteCodeQuality\ValueObject\NetteFormMethodNameToControlType;

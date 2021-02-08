@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
+use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -96,7 +96,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isAnonymousClass($classLike)) {
+        if ($this->classNodeAnalyzer->isAnonymousClass($classLike)) {
             // currently the classMethodManipulator isn't able to find usages of anonymous classes
             return null;
         }

@@ -92,7 +92,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isAnonymousClass($classLike)) {
+        if ($this->classNodeAnalyzer->isAnonymousClass($classLike)) {
             return true;
         }
 

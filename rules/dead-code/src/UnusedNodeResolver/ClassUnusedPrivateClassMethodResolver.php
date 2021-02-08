@@ -6,7 +6,7 @@ namespace Rector\DeadCode\UnusedNodeResolver;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use ReflectionMethod;

@@ -10,7 +10,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeTraverser;
-use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
+use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeCollector\ModifiedVariableNamesCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;

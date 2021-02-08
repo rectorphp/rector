@@ -6,8 +6,8 @@ namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
-use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
+use Rector\Core\NodeManipulator\ClassDependencyManipulator;
+use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\NodeAnalyzer\NetteInjectDetector;
 

@@ -24,10 +24,10 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
-use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\NodeManipulator\VisibilityManipulator;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Manipulator\VisibilityManipulator;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
@@ -112,6 +112,11 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected $betterNodeFinder;
 
     /**
+     * @var ClassAnalyzer
+     */
+    protected $classNodeAnalyzer;
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -125,11 +130,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      * @var CurrentRectorProvider
      */
     private $currentRectorProvider;
-
-    /**
-     * @var ClassNodeAnalyzer
-     */
-    private $classNodeAnalyzer;
 
     /**
      * @var CurrentNodeProvider
@@ -160,7 +160,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         StaticTypeMapper $staticTypeMapper,
         ParameterProvider $parameterProvider,
         CurrentRectorProvider $currentRectorProvider,
-        ClassNodeAnalyzer $classNodeAnalyzer,
+        ClassAnalyzer $classAnalyzer,
         CurrentNodeProvider $currentNodeProvider,
         Skipper $skipper,
         ValueResolver $valueResolver,
@@ -177,7 +177,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
         $this->currentRectorProvider = $currentRectorProvider;
-        $this->classNodeAnalyzer = $classNodeAnalyzer;
+        $this->classNodeAnalyzer = $classAnalyzer;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->skipper = $skipper;
         $this->valueResolver = $valueResolver;
@@ -272,11 +272,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected function isAtLeastPhpVersion(int $version): bool
     {
         return $this->phpVersionProvider->isAtLeastPhpVersion($version);
-    }
-
-    protected function isAnonymousClass(Node $node): bool
-    {
-        return $this->classNodeAnalyzer->isAnonymousClass($node);
     }
 
     protected function mirrorComments(Node $newNode, Node $oldNode): void

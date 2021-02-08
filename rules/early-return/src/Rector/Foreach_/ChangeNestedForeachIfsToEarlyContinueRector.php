@@ -14,7 +14,7 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
-use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
+use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
 use Rector\NodeTypeResolver\Node\AttributeKey;

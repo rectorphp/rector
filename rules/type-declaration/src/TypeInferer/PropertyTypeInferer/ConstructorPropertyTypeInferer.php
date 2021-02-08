@@ -19,7 +19,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
-use Rector\Core\PhpParser\Node\Manipulator\ClassMethodPropertyFetchManipulator;
+use Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;

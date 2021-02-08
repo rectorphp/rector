@@ -30,7 +30,7 @@ use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeAnalyzer\ClassNodeAnalyzer;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -70,9 +70,9 @@ final class NodeTypeResolver
     private $typeUnwrapper;
 
     /**
-     * @var ClassNodeAnalyzer
+     * @var ClassAnalyzer
      */
-    private $classNodeAnalyzer;
+    private $classAnalyzer;
 
     /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
@@ -81,7 +81,7 @@ final class NodeTypeResolver
         ObjectTypeSpecifier $objectTypeSpecifier,
         ParentClassLikeTypeCorrector $parentClassLikeTypeCorrector,
         TypeUnwrapper $typeUnwrapper,
-        ClassNodeAnalyzer $classNodeAnalyzer,
+        ClassAnalyzer $classAnalyzer,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -91,7 +91,7 @@ final class NodeTypeResolver
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->parentClassLikeTypeCorrector = $parentClassLikeTypeCorrector;
         $this->typeUnwrapper = $typeUnwrapper;
-        $this->classNodeAnalyzer = $classNodeAnalyzer;
+        $this->classAnalyzer = $classAnalyzer;
     }
 
     /**
@@ -198,8 +198,11 @@ final class NodeTypeResolver
             return new MixedType();
         }
 
-        if ($node instanceof New_ && $this->classNodeAnalyzer->isAnonymousClass($node->class)) {
-            return $this->resolveAnonymousClassType($node);
+        if ($node instanceof New_) {
+            $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node->class);
+            if ($isAnonymousClass) {
+                return $this->resolveAnonymousClassType($node);
+            }
         }
 
         $staticType = $nodeScope->getType($node);
@@ -388,8 +391,11 @@ final class NodeTypeResolver
         }
 
         // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
-        if ($node instanceof New_ && $this->classNodeAnalyzer->isAnonymousClass($node->class)) {
-            return new ObjectWithoutClassType();
+        if ($node instanceof New_) {
+            $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node->class);
+            if ($isAnonymousClass) {
+                return new ObjectWithoutClassType();
+            }
         }
 
         $type = $nodeScope->getType($node);

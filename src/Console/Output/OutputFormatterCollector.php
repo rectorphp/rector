@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Console\Output;
 
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
-use Rector\Core\Exception\Console\Output\MissingOutputFormatterException;
+use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 
 final class OutputFormatterCollector
 {
@@ -45,7 +45,7 @@ final class OutputFormatterCollector
             return;
         }
 
-        throw new MissingOutputFormatterException(sprintf(
+        throw new InvalidConfigurationException(sprintf(
             'Output formatter "%s" was not found. Pick one of "%s".',
             $name,
             implode('", "', $this->getNames())

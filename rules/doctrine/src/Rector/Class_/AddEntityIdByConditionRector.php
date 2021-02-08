@@ -7,8 +7,8 @@ namespace Rector\Doctrine\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\NodeManipulator\ClassInsertManipulator;
+use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeFactory\EntityIdNodeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -127,7 +127,7 @@ CODE_SAMPLE
 
     private function shouldSkip(Class_ $class): bool
     {
-        if ($this->isAnonymousClass($class)) {
+        if ($this->classNodeAnalyzer->isAnonymousClass($class)) {
             return true;
         }
 

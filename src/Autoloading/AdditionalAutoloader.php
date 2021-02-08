@@ -6,11 +6,11 @@ namespace Rector\Core\Autoloading;
 
 use Nette\Loaders\RobotLoader;
 use Rector\Core\Configuration\Option;
-use Rector\Core\FileSystem\FileGuard;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 use Symplify\SmartFileSystem\FileSystemFilter;
+use Symplify\SmartFileSystem\FileSystemGuard;
 
 /**
  * Should it pass autoload files/directories to PHPStan analyzer?
@@ -23,11 +23,6 @@ final class AdditionalAutoloader
     private $autoloadPaths = [];
 
     /**
-     * @var FileGuard
-     */
-    private $fileGuard;
-
-    /**
      * @var FileSystemFilter
      */
     private $fileSystemFilter;
@@ -37,16 +32,21 @@ final class AdditionalAutoloader
      */
     private $skippedPathsResolver;
 
+    /**
+     * @var FileSystemGuard
+     */
+    private $fileSystemGuard;
+
     public function __construct(
-        FileGuard $fileGuard,
         FileSystemFilter $fileSystemFilter,
         ParameterProvider $parameterProvider,
-        SkippedPathsResolver $skippedPathsResolver
+        SkippedPathsResolver $skippedPathsResolver,
+        FileSystemGuard $fileSystemGuard
     ) {
-        $this->fileGuard = $fileGuard;
         $this->autoloadPaths = (array) $parameterProvider->provideParameter(Option::AUTOLOAD_PATHS);
         $this->fileSystemFilter = $fileSystemFilter;
         $this->skippedPathsResolver = $skippedPathsResolver;
+        $this->fileSystemGuard = $fileSystemGuard;
     }
 
     /**
@@ -115,7 +115,7 @@ final class AdditionalAutoloader
     private function autoloadFiles(array $files): void
     {
         foreach ($files as $file) {
-            $this->fileGuard->ensureFileExists($file, 'Extra autoload');
+            $this->fileSystemGuard->ensureFileExists($file, 'Extra autoload');
 
             require_once $file;
         }
