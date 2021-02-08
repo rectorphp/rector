@@ -9,12 +9,23 @@ use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\Core\NodeManipulator\IfManipulator;
 
 /**
- * @see \Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfContinueToContinueEarlyRector\ChangeAndIfContinueToContinueEarlyRectorTest
+ * @see \Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfContinueToMultiContinueRector\ChangeAndIfContinueToMultiContinueRectorTest
  */
-final class ChangeAndIfContinueToContinueEarlyRector extends AbstractRector
+final class ChangeAndIfContinueToMultiContinueRector extends AbstractRector
 {
+    /**
+     * @var IfManipulator
+     */
+    private $ifManipulator;
+
+    public function __construct(IfManipulator $ifManipulator)
+    {
+        $this->ifManipulator = $ifManipulator;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes if && to early return', [
@@ -74,6 +85,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->ifManipulator->isIfWithOnlyOneStmt($node)) {
+            return null;
+        }
+
         return $node;
     }
 }
