@@ -6,3 +6,4 @@ includes:
     - utils/phpstan-extensions/config/phpstan-extensions.neon
     - vendor/phpstan/phpstan-nette/extension.neon
     - vendor/symplify/astral/config/services.neon
+    - vendor/symplify/phpstan-extensions/config/config.neon

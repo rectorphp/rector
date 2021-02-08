@@ -313,7 +313,6 @@ parameters:
         -
             message: '#Cannot cast array<string\>\|bool\|string\|null to string#'
             paths:
-                - utils/node-documentation-generator/src/Command/DumpNodesCommand.php
                 - src/Configuration/Configuration.php
                 - src/Console/Command/ProcessCommand.php
 
