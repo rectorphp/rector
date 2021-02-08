@@ -336,15 +336,9 @@ final class IfManipulator
 
     public function createIfNegation(Expr $expr, Stmt $stmt): If_
     {
-        if ($expr instanceof Identical) {
-            $expr = new NotIdentical($expr->left, $expr->right);
-        } elseif ($expr instanceof NotIdentical) {
-            $expr = new Identical($expr->left, $expr->right);
-        } elseif ($expr instanceof BooleanNot) {
-            $expr = $expr->expr;
-        } else {
-            $expr = new BooleanNot($expr);
-        }
+        $expr = $expr instanceof BooleanNot
+            ? $expr->expr
+            : $this->createNegationExpr($expr);
 
         return new If_(
             $expr,
@@ -352,6 +346,19 @@ final class IfManipulator
                 'stmts' => [$stmt],
             ]
         );
+    }
+
+    private function createNegationExpr(Expr $expr): Expr
+    {
+        if ($expr instanceof Identical) {
+            return new NotIdentical($expr->left, $expr->right);
+        }
+
+        if ($expr instanceof NotIdentical) {
+            return new Identical($expr->left, $expr->right);
+        }
+
+        return new BooleanNot($expr);
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $return): ?Expr
