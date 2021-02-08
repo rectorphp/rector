@@ -27,6 +27,8 @@ parameters:
     level: max
 
     paths:
+        - ecs.php
+        - rector.php
         - bin
         - src
         - rules
@@ -519,3 +521,5 @@ parameters:
         -
             message: '#Namespace "Rector\\Composer\\Tests\\Rector" is only reserved for "Rector"\. Move the class somewhere else#'
             path: rules/composer/tests/Rector/AbstractComposerRectorTestCase.php
+
+        - '#Class with base "SetList" name is already used in "Symplify\\EasyCodingStandard\\ValueObject\\Set\\SetList", "Rector\\Set\\ValueObject\\SetList"\. Use unique name to make classes easy to recognize#'

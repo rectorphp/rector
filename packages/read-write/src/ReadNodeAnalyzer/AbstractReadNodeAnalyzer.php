@@ -23,7 +23,7 @@ abstract class AbstractReadNodeAnalyzer
     protected $parentScopeFinder;
 
     /**
-     * @var \Rector\ReadWrite\NodeFinder\NodeUsageFinder
+     * @var NodeUsageFinder
      */
     protected $nodeUsageFinder;
 

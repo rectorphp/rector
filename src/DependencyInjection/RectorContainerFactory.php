@@ -62,7 +62,7 @@ final class RectorContainerFactory
             $configHashes[] = md5_file($configFileInfo->getRealPath());
         }
 
-        $configHashString = implode($configHashes);
+        $configHashString = implode('', $configHashes);
         return sha1($configHashString);
     }
 }
