@@ -6,15 +6,17 @@ namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\NodeVisitorAbstract;
 use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\PostRector\NodeAnalyzer\NetteInjectDetector;
 
 /**
  * Adds new private properties to class + to constructor
  */
-final class PropertyAddingPostRector extends AbstractPostRector
+final class PropertyAddingPostRector extends NodeVisitorAbstract implements PostRectorInterface
 {
     /**
      * @var ClassDependencyManipulator

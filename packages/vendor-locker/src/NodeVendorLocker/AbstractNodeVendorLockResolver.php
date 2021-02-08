@@ -9,17 +9,12 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
-use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 abstract class AbstractNodeVendorLockResolver
 {
-    /**
-     * @var ParsedNodeCollector
-     */
-    protected $parsedNodeCollector;
-
     /**
      * @var ClassManipulator
      */
@@ -31,6 +26,11 @@ abstract class AbstractNodeVendorLockResolver
     protected $nodeNameResolver;
 
     /**
+     * @var NodeRepository
+     */
+    protected $nodeRepository;
+
+    /**
      * @var FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
@@ -39,12 +39,12 @@ abstract class AbstractNodeVendorLockResolver
      * @required
      */
     public function autowireAbstractNodeVendorLockResolver(
-        ParsedNodeCollector $parsedNodeCollector,
+        NodeRepository $nodeRepository,
         ClassManipulator $classManipulator,
         NodeNameResolver $nodeNameResolver,
         FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ): void {
-        $this->parsedNodeCollector = $parsedNodeCollector;
+        $this->nodeRepository = $nodeRepository;
         $this->classManipulator = $classManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;

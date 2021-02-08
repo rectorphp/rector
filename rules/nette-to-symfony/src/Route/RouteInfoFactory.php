@@ -13,7 +13,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
-use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class RouteInfoFactory
@@ -29,18 +29,18 @@ final class RouteInfoFactory
     private $valueResolver;
 
     /**
-     * @var ParsedNodeCollector
+     * @var NodeRepository
      */
-    private $parsedNodeCollector;
+    private $nodeRepository;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        ParsedNodeCollector $parsedNodeCollector,
+        NodeRepository $nodeRepository,
         ValueResolver $valueResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
-        $this->parsedNodeCollector = $parsedNodeCollector;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function createFromNode(Node $node): ?RouteInfo
@@ -163,17 +163,17 @@ final class RouteInfoFactory
         // detect class by controller name?
         // foreach all instance and try to match a name $controller . 'Presenter/Controller'
 
-        $classNode = $this->parsedNodeCollector->findByShortName($controller . 'Presenter');
-        if (! $classNode instanceof Class_) {
-            $classNode = $this->parsedNodeCollector->findByShortName($controller . 'Controller');
+        $class = $this->nodeRepository->findByShortName($controller . 'Presenter');
+        if (! $class instanceof Class_) {
+            $class = $this->nodeRepository->findByShortName($controller . 'Controller');
         }
 
         // unable to find here
-        if (! $classNode instanceof Class_) {
+        if (! $class instanceof Class_) {
             return null;
         }
 
-        $controllerClass = $this->nodeNameResolver->getName($classNode);
+        $controllerClass = $this->nodeNameResolver->getName($class);
         if ($controllerClass === null) {
             return null;
         }

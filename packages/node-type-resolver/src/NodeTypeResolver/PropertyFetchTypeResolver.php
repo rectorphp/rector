@@ -23,7 +23,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -37,11 +37,6 @@ use Symplify\SmartFileSystem\SmartFileSystem;
  */
 final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
 {
-    /**
-     * @var ParsedNodeCollector
-     */
-    private $parsedNodeCollector;
-
     /**
      * @var NodeTypeResolver
      */
@@ -77,22 +72,27 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
      */
     private $parser;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        ParsedNodeCollector $parsedNodeCollector,
         StaticTypeMapper $staticTypeMapper,
         TraitNodeScopeCollector $traitNodeScopeCollector,
         SmartFileSystem $smartFileSystem,
         BetterNodeFinder $betterNodeFinder,
-        Parser $parser
+        Parser $parser,
+        NodeRepository $nodeRepository
     ) {
-        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->smartFileSystem = $smartFileSystem;
         $this->parser = $parser;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -157,7 +157,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        $class = $this->parsedNodeCollector->findClass($varObjectType->getClassName());
+        $class = $this->nodeRepository->findClass($varObjectType->getClassName());
         if ($class !== null) {
             return new MixedType();
         }

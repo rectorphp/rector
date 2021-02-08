@@ -76,7 +76,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removeFinal($node);
+        $this->visibilityManipulator->removeFinal($node);
 
         return $node;
     }

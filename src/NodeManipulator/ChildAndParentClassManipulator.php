@@ -11,7 +11,6 @@ use Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -28,11 +27,6 @@ final class ChildAndParentClassManipulator
     private $nodeNameResolver;
 
     /**
-     * @var ParsedNodeCollector
-     */
-    private $parsedNodeCollector;
-
-    /**
      * @var NodeRepository
      */
     private $nodeRepository;
@@ -45,13 +39,11 @@ final class ChildAndParentClassManipulator
     public function __construct(
         NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
-        ParsedNodeCollector $parsedNodeCollector,
         NodeRepository $nodeRepository,
         PromotedPropertyParamCleaner $promotedPropertyParamCleaner
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeRepository = $nodeRepository;
         $this->promotedPropertyParamCleaner = $promotedPropertyParamCleaner;
     }
@@ -68,7 +60,7 @@ final class ChildAndParentClassManipulator
         }
 
         // not in analyzed scope, nothing we can do
-        $parentClassNode = $this->parsedNodeCollector->findClass($parentClassName);
+        $parentClassNode = $this->nodeRepository->findClass($parentClassName);
         if ($parentClassNode !== null) {
             $this->completeParentConstructorBasedOnParentNode($parentClassNode, $classMethod);
             return;
@@ -144,7 +136,7 @@ final class ChildAndParentClassManipulator
                 return null;
             }
 
-            $class = $this->parsedNodeCollector->findClass($parentClassName);
+            $class = $this->nodeRepository->findClass($parentClassName);
         }
 
         return null;

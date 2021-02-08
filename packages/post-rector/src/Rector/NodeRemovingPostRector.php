@@ -8,11 +8,14 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 
-final class NodeRemovingPostRector extends AbstractPostRector
+final class NodeRemovingPostRector extends NodeVisitorAbstract implements PostRectorInterface
 {
     /**
      * @var NodesToRemoveCollector
@@ -24,10 +27,19 @@ final class NodeRemovingPostRector extends AbstractPostRector
      */
     private $nodeFactory;
 
-    public function __construct(NodeFactory $nodeFactory, NodesToRemoveCollector $nodesToRemoveCollector)
-    {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(
+        NodeFactory $nodeFactory,
+        NodeNameResolver $nodeNameResolver,
+        NodesToRemoveCollector $nodesToRemoveCollector
+    ) {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeFactory = $nodeFactory;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function getPriority(): int
@@ -58,7 +70,7 @@ final class NodeRemovingPostRector extends AbstractPostRector
 
             $this->nodesToRemoveCollector->unset($key);
 
-            $methodName = $this->getName($node->name);
+            $methodName = $this->nodeNameResolver->getName($node->name);
 
             /** @var MethodCall $nestedMethodCall */
             $nestedMethodCall = $node->var;
@@ -109,7 +121,7 @@ final class NodeRemovingPostRector extends AbstractPostRector
             return false;
         }
 
-        $methodName = $this->getName($mainMethodCall->name);
+        $methodName = $this->nodeNameResolver->getName($mainMethodCall->name);
 
         return $methodName !== null;
     }

@@ -14,7 +14,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EmbeddableT
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
@@ -28,19 +28,19 @@ final class DoctrineDocBlockResolver
     private const ORM_ENTITY_EMBEDDABLE_SHORT_ANNOTATION_REGEX = '#@ORM\\\\(Entity|Embeddable)#';
 
     /**
-     * @var ParsedNodeCollector
-     */
-    private $parsedNodeCollector;
-
-    /**
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
 
-    public function __construct(ParsedNodeCollector $parsedNodeCollector, PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
+    public function __construct(NodeRepository $nodeRepository, PhpDocInfoFactory $phpDocInfoFactory)
     {
-        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -109,7 +109,7 @@ final class DoctrineDocBlockResolver
             return false;
         }
 
-        $classNode = $this->parsedNodeCollector->findClass($class);
+        $classNode = $this->nodeRepository->findClass($class);
         if ($classNode !== null) {
             return $this->isDoctrineEntityClass($classNode);
         }

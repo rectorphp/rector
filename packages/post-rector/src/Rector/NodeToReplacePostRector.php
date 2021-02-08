@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
+use PhpParser\NodeVisitorAbstract;
 use Rector\PostRector\Collector\NodesToReplaceCollector;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 
-final class NodeToReplacePostRector extends AbstractPostRector
+final class NodeToReplacePostRector extends NodeVisitorAbstract implements PostRectorInterface
 {
     /**
      * @var NodesToReplaceCollector

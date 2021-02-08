@@ -24,6 +24,8 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
+use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -35,6 +37,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ExplicitBoolCompareRector extends AbstractRector
 {
+    /**
+     * @var StringTypeAnalyzer
+     */
+    private $stringTypeAnalyzer;
+
+    /**
+     * @var ArrayTypeAnalyzer
+     */
+    private $arrayTypeAnalyzer;
+
+    public function __construct(StringTypeAnalyzer $stringTypeAnalyzer, ArrayTypeAnalyzer $arrayTypeAnalyzer)
+    {
+        $this->stringTypeAnalyzer = $stringTypeAnalyzer;
+        $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make if conditions more explicit', [
@@ -118,11 +136,11 @@ CODE_SAMPLE
             return $this->resolveCount($isNegated, $expr);
         }
 
-        if ($this->isArrayType($expr)) {
+        if ($this->arrayTypeAnalyzer->isArrayType($expr)) {
             return $this->resolveArray($isNegated, $expr);
         }
 
-        if ($this->isStringOrUnionStringOnlyType($expr)) {
+        if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($expr)) {
             return $this->resolveString($isNegated, $expr);
         }
 
@@ -134,7 +152,7 @@ CODE_SAMPLE
             return $this->resolveFloat($isNegated, $expr);
         }
 
-        if ($this->isNullableObjectType($expr)) {
+        if ($this->nodeTypeResolver->isNullableObjectType($expr)) {
             return $this->resolveNullable($isNegated, $expr);
         }
 

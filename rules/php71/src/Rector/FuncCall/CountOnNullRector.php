@@ -22,6 +22,7 @@ use PHPStan\Type\NullType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer;
 use Rector\Php71\NodeAnalyzer\CountableAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -39,12 +40,18 @@ final class CountOnNullRector extends AbstractRector
     private const ALREADY_CHANGED_ON_COUNT = 'already_changed_on_count';
 
     /**
+     * @var CountableTypeAnalyzer
+     */
+    private $countableTypeAnalyzer;
+
+    /**
      * @var CountableAnalyzer
      */
     private $countableAnalyzer;
 
-    public function __construct(CountableAnalyzer $countableAnalyzer)
+    public function __construct(CountableTypeAnalyzer $countableTypeAnalyzer, CountableAnalyzer $countableAnalyzer)
     {
+        $this->countableTypeAnalyzer = $countableTypeAnalyzer;
         $this->countableAnalyzer = $countableAnalyzer;
     }
 
@@ -84,7 +91,7 @@ CODE_SAMPLE
         }
 
         $countedNode = $node->args[0]->value;
-        if ($this->isCountableType($countedNode)) {
+        if ($this->countableTypeAnalyzer->isCountableType($countedNode)) {
             return null;
         }
 
@@ -98,7 +105,7 @@ CODE_SAMPLE
             return $this->castToArray($countedNode, $node);
         }
 
-        if ($this->isNullableArrayType($countedNode)) {
+        if ($this->nodeTypeResolver->isNullableArrayType($countedNode)) {
             return $this->castToArray($countedNode, $node);
         }
 

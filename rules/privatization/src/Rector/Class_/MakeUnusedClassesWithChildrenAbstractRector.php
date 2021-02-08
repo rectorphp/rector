@@ -68,7 +68,7 @@ CODE_SAMPLE
         if ($nodeRepositoryFindMethodCallsOnClass !== []) {
             return null;
         }
-        $parsedNodeCollectorFindNewsByClass = $this->parsedNodeCollector->findNewsByClass($className);
+        $parsedNodeCollectorFindNewsByClass = $this->nodeRepository->findNewsByClass($className);
 
         // 2. is in new?
         if ($parsedNodeCollectorFindNewsByClass !== []) {
