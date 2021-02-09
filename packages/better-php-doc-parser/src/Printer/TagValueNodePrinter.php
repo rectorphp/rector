@@ -55,15 +55,20 @@ final class TagValueNodePrinter
             if (in_array($key, $skipKeys, true)) {
                 continue;
             }
-
             // do not quote constant references... unless twig template
-            if (Strings::match($item, self::CONSTANT_REFERENCE_REGEX) && ! Strings::endsWith($item, '.twig')) {
+            if (! Strings::match($item, self::CONSTANT_REFERENCE_REGEX)) {
+                continue;
+            }
+            if (Strings::endsWith($item, '.twig')) {
                 continue;
             }
 
             // no original quoting
             $keysByQuotedStatus = $tagValueNodeConfiguration->getKeysByQuotedStatus();
-            if (isset($keysByQuotedStatus[$key]) && ! $keysByQuotedStatus[$key]) {
+            if (! isset($keysByQuotedStatus[$key])) {
+                continue;
+            }
+            if ($keysByQuotedStatus[$key]) {
                 continue;
             }
 

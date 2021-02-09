@@ -90,10 +90,12 @@ final class UnionTypeMapper implements TypeMapperInterface
         $skipIterable = $this->shouldSkipIterable($type);
 
         foreach ($type->getTypes() as $unionedType) {
-            if ($unionedType instanceof IterableType && $skipIterable) {
+            if (! $unionedType instanceof IterableType) {
                 continue;
             }
-
+            if (! $skipIterable) {
+                continue;
+            }
             $unionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType);
         }
 

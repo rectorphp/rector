@@ -32,10 +32,12 @@ final class PhpParserNodeMapper
             if (! is_a($node, $phpParserNodeMapper->getNodeType())) {
                 continue;
             }
-
             // do not let Expr collect all the types
             // note: can be solve later with priorities on mapper interface, making this last
-            if ($phpParserNodeMapper->getNodeType() === Expr::class && is_a($node, String_::class)) {
+            if ($phpParserNodeMapper->getNodeType() !== Expr::class) {
+                continue;
+            }
+            if (! is_a($node, String_::class)) {
                 continue;
             }
 

@@ -374,9 +374,11 @@ final class NodeRepository
             if (! isset($classesByConstantName[$desiredConstantName])) {
                 continue;
             }
-
             // include child usages and parent usages
-            if (! is_a($className, $desiredClassName, true) && ! is_a($desiredClassName, $className, true)) {
+            if (is_a($className, $desiredClassName, true)) {
+                continue;
+            }
+            if (is_a($desiredClassName, $className, true)) {
                 continue;
             }
 
