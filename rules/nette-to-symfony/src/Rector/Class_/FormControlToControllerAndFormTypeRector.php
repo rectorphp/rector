@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\NetteToSymfony\Collector\OnFormVariableMethodCallsCollector;
 use Rector\NetteToSymfony\NodeFactory\BuildFormClassMethodFactory;
 use Rector\NetteToSymfony\NodeFactory\SymfonyControllerFactory;
@@ -156,7 +157,10 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->printNodesToFilePath([$symfonyControllerNamespace], 'src/Controller/SomeFormController.php');
+            $addedFileWithNodes = new AddedFileWithNodes('src/Controller/SomeFormController.php', [
+                $symfonyControllerNamespace,
+            ]);
+            $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
 
             return $formTypeClass;
         }

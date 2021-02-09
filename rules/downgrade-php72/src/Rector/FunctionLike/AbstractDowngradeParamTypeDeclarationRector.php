@@ -8,9 +8,20 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use Rector\DowngradePhp70\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 use Rector\DowngradePhp72\Contract\Rector\DowngradeTypeRectorInterface;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractDowngradeParamDeclarationRector implements DowngradeTypeRectorInterface
 {
+    /**
+     * @var TypeUnwrapper
+     */
+    private $typeUnwrapper;
+
+    public function __construct(TypeUnwrapper $typeUnwrapper)
+    {
+        $this->typeUnwrapper = $typeUnwrapper;
+    }
+
     public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool
     {
         if ($param->variadic) {

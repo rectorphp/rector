@@ -68,15 +68,13 @@ final class RemovedAndAddedFilesProcessor
 
     public function run(): void
     {
-        $this->processAddedFiles();
-        $this->processDeletedFiles();
-        $this->processMovedFiles();
-    }
-
-    private function processAddedFiles(): void
-    {
         $this->processAddedFilesWithContent();
         $this->processAddedFilesWithNodes();
+
+        $this->processMovedFiles();
+        $this->processMovedFilesWithNodes();
+
+        $this->processDeletedFiles();
     }
 
     private function processDeletedFiles(): void
@@ -115,14 +113,14 @@ final class RemovedAndAddedFilesProcessor
     {
         foreach ($this->removedAndAddedFilesCollector->getAddedFilesWithContent() as $addedFileWithContent) {
             if ($this->configuration->isDryRun()) {
-                $message = sprintf('File "%s" will be added:', $addedFileWithContent->getFilePath());
+                $message = sprintf('File "%s" will be added', $addedFileWithContent->getFilePath());
                 $this->symfonyStyle->note($message);
             } else {
                 $this->smartFileSystem->dumpFile(
                     $addedFileWithContent->getFilePath(),
                     $addedFileWithContent->getFileContent()
                 );
-                $message = sprintf('File "%s" was added:', $addedFileWithContent->getFilePath());
+                $message = sprintf('File "%s" was added', $addedFileWithContent->getFilePath());
                 $this->symfonyStyle->note($message);
             }
         }
@@ -130,17 +128,43 @@ final class RemovedAndAddedFilesProcessor
 
     private function processAddedFilesWithNodes(): void
     {
-        foreach ($this->removedAndAddedFilesCollector->getMovedFileWithNodes() as $addedFileWithNodes) {
+        foreach ($this->removedAndAddedFilesCollector->getAddedFilesWithNodes() as $addedFilesWithNode) {
             $fileContent = $this->nodesWithFileDestinationPrinter->printNodesWithFileDestination(
-                $addedFileWithNodes
+                $addedFilesWithNode
             );
 
             if ($this->configuration->isDryRun()) {
-                $message = sprintf('File "%s" will be added:', $addedFileWithNodes->getOldPathname());
+                $message = sprintf('File "%s" will be added', $addedFilesWithNode->getFilePath());
                 $this->symfonyStyle->note($message);
             } else {
-                $this->smartFileSystem->dumpFile($addedFileWithNodes->getNewPathname(), $fileContent);
-                $message = sprintf('File "%s" was added:', $addedFileWithNodes->getNewPathname());
+                $this->smartFileSystem->dumpFile($addedFilesWithNode->getFilePath(), $fileContent);
+                $message = sprintf('File "%s" was added', $addedFilesWithNode->getFilePath());
+                $this->symfonyStyle->note($message);
+            }
+        }
+    }
+
+    private function processMovedFilesWithNodes(): void
+    {
+        foreach ($this->removedAndAddedFilesCollector->getMovedFileWithNodes() as $movedFileWithNodes) {
+            $fileContent = $this->nodesWithFileDestinationPrinter->printNodesWithFileDestination(
+                $movedFileWithNodes
+            );
+
+            if ($this->configuration->isDryRun()) {
+                $message = sprintf(
+                    'File "%s" will be moved to "%s"',
+                    $movedFileWithNodes->getOldPathname(),
+                    $movedFileWithNodes->getNewPathname()
+                );
+                $this->symfonyStyle->note($message);
+            } else {
+                $this->smartFileSystem->dumpFile($movedFileWithNodes->getNewPathname(), $fileContent);
+                $message = sprintf(
+                    'File "%s" was moved to "%s":',
+                    $movedFileWithNodes->getOldPathname(),
+                    $movedFileWithNodes->getNewPathname(),
+                );
                 $this->symfonyStyle->note($message);
             }
         }

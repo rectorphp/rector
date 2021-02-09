@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Nette\Contract\PregToNetteUtilsStringInterface;
 
@@ -49,5 +53,17 @@ abstract class AbstractPregToNetteUtilsStringsRector extends AbstractRector impl
 
         $currentFunctionName = $this->getName($funcCall);
         return $functionRenameMap[$currentFunctionName];
+    }
+
+    /**
+     * @param Expr $expr
+     */
+    protected function createBoolCast(?Node $node, Node $expr): Bool_
+    {
+        if ($node instanceof Return_ && $expr instanceof Assign) {
+            $expr = $expr->expr;
+        }
+
+        return new Bool_($expr);
     }
 }

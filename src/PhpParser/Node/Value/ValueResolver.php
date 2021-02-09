@@ -148,6 +148,23 @@ final class ValueResolver
         return $this->constFetchAnalyzer->isNull($node);
     }
 
+    /**
+     * @param Expr[]|null[] $nodes
+     * @param mixed[] $expectedValues
+     */
+    public function areValues(array $nodes, array $expectedValues): bool
+    {
+        foreach ($nodes as $i => $node) {
+            if ($node !== null && $this->isValue($node, $expectedValues[$i])) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
     private function processConcat(Concat $concat, bool $resolvedClassReference): string
     {
         return $this->getValue($concat->left, $resolvedClassReference) . $this->getValue(

@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Rector\FileSystemRector\ValueObject;
 
-final class AddedFileWithContent
+use Rector\FileSystemRector\Contract\AddedFileInterface;
+
+final class AddedFileWithContent implements AddedFileInterface
 {
     /**
      * @var string

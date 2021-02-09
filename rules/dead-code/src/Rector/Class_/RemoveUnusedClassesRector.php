@@ -109,7 +109,7 @@ CODE_SAMPLE
                 throw new ShouldNotHappenException();
             }
 
-            $this->removeFile($smartFileInfo);
+            $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
         }
 
         return null;

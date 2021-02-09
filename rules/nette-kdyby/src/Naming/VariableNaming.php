@@ -23,7 +23,6 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Util\StaticInstanceOf;
@@ -47,24 +46,17 @@ final class VariableNaming
     private $valueResolver;
 
     /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
 
     public function __construct(
-        ClassNaming $classNaming,
         NodeNameResolver $nodeNameResolver,
         ValueResolver $valueResolver,
         NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
-        $this->classNaming = $classNaming;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
@@ -83,7 +75,7 @@ final class VariableNaming
 
         // adjust static to specific class
         if ($variableName === 'this' && $type instanceof ThisType) {
-            $shortClassName = $this->classNaming->getShortName($type->getClassName());
+            $shortClassName = $this->nodeNameResolver->getShortName($type->getClassName());
             $variableName = lcfirst($shortClassName);
         }
 
@@ -285,7 +277,7 @@ final class VariableNaming
     {
         if ($new->class instanceof Name) {
             $className = $this->nodeNameResolver->getName($new->class);
-            return $this->classNaming->getShortName($className);
+            return $this->nodeNameResolver->getShortName($className);
         }
 
         throw new NotImplementedYetException();

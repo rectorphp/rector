@@ -14,6 +14,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\NetteKdyby\Naming\EventClassNaming;
 use Rector\NetteKdyby\NodeFactory\EventValueObjectClassFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -149,7 +150,8 @@ CODE_SAMPLE
             $fileInfo
         );
 
-        $this->printNodesToFilePath([$eventClassInNamespace], $eventFileLocation);
+        $addedFileWithNodes = new AddedFileWithNodes($eventFileLocation, [$eventClassInNamespace]);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
 
         return $node;
     }

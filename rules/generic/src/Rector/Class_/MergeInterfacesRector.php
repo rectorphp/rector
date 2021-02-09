@@ -100,7 +100,7 @@ CODE_SAMPLE
         foreach ($class->implements as $key => $name) {
             $fqnName = $this->getName($name);
             if (in_array($fqnName, $alreadyAddedNames, true)) {
-                $this->removeImplements($class, $key);
+                $this->nodeRemover->removeImplements($class, $key);
                 continue;
             }
 

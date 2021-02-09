@@ -4,21 +4,27 @@ declare(strict_types=1);
 
 namespace Rector\Core\Rector;
 
-use PhpParser\BuilderFactory;
 use PhpParser\Comment;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitorAbstract;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
@@ -30,20 +36,27 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\ProjectType;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PostRector\Collector\NodesToAddCollector;
+use Rector\PostRector\Collector\NodesToRemoveCollector;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\Collector\UseNodesToAddCollector;
+use Rector\PostRector\DependencyInjection\PropertyAdder;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\Skipper\Skipper\Skipper;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
-    use AbstractRectorTrait;
-
     /**
      * @var string[]
      */
@@ -62,9 +75,24 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     ];
 
     /**
-     * @var BuilderFactory
+     * @var NodeNameResolver
      */
-    protected $builderFactory;
+    protected $nodeNameResolver;
+
+    /**
+     * @var NodeTypeResolver
+     */
+    protected $nodeTypeResolver;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    protected $betterStandardPrinter;
+
+    /**
+     * @var RemovedAndAddedFilesCollector
+     */
+    protected $removedAndAddedFilesCollector;
 
     /**
      * @var ParameterProvider
@@ -117,6 +145,21 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected $classNodeAnalyzer;
 
     /**
+     * @var UseNodesToAddCollector
+     */
+    protected $useNodesToAddCollector;
+
+    /**
+     * @var NodeRemover
+     */
+    protected $nodeRemover;
+
+    /**
+     * @var SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -147,15 +190,52 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     private $previousAppliedClass;
 
     /**
+     * @var NodesToRemoveCollector
+     */
+    private $nodesToRemoveCollector;
+
+    /**
+     * @var NodesToAddCollector
+     */
+    private $nodesToAddCollector;
+
+    /**
+     * @var PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+
+    /**
+     * @var RectorChangeCollector
+     */
+    private $rectorChangeCollector;
+
+    /**
+     * @var PropertyAdder
+     */
+    private $propertyAdder;
+
+    /**
      * @required
      */
     public function autowireAbstractTemporaryRector(
+        NodesToRemoveCollector $nodesToRemoveCollector,
+        PropertyToAddCollector $propertyToAddCollector,
+        UseNodesToAddCollector $useNodesToAddCollector,
+        NodesToAddCollector $nodesToAddCollector,
+        RectorChangeCollector $rectorChangeCollector,
+        NodeRemover $nodeRemover,
+        PropertyAdder $propertyAdder,
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        BetterStandardPrinter $betterStandardPrinter,
+        NodeNameResolver $nodeNameResolver,
+        ClassNaming $classNaming,
+        NodeTypeResolver $nodeTypeResolver,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         VisibilityManipulator $visibilityManipulator,
         NodeFactory $nodeFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
         SymfonyStyle $symfonyStyle,
         PhpVersionProvider $phpVersionProvider,
-        BuilderFactory $builderFactory,
         ExclusionManager $exclusionManager,
         StaticTypeMapper $staticTypeMapper,
         ParameterProvider $parameterProvider,
@@ -167,12 +247,23 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         NodeRepository $nodeRepository,
         BetterNodeFinder $betterNodeFinder
     ): void {
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
+        $this->propertyToAddCollector = $propertyToAddCollector;
+        $this->useNodesToAddCollector = $useNodesToAddCollector;
+        $this->nodesToAddCollector = $nodesToAddCollector;
+        $this->rectorChangeCollector = $rectorChangeCollector;
+        $this->nodeRemover = $nodeRemover;
+        $this->propertyAdder = $propertyAdder;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
+        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->nodeFactory = $nodeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
-        $this->builderFactory = $builderFactory;
         $this->exclusionManager = $exclusionManager;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
@@ -231,7 +322,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
             $this->mirrorAttributes($originalNodeWithAttributes, $node);
             $this->updateAttributes($node);
             $this->keepFileInfoAttribute($node, $originalNode);
-            $this->notifyNodeFileInfo($node);
+            $this->rectorChangeCollector->notifyNodeFileInfo($node);
         }
 
         // if stmt ("$value;") was replaced by expr ("$value"), add the ending ";" (Expression) to prevent breaking the code
@@ -240,6 +331,107 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         }
 
         return $node;
+    }
+
+    protected function isName(Node $node, string $name): bool
+    {
+        return $this->nodeNameResolver->isName($node, $name);
+    }
+
+    protected function areNamesEqual(Node $firstNode, Node $secondNode): bool
+    {
+        return $this->nodeNameResolver->areNamesEqual($firstNode, $secondNode);
+    }
+
+    /**
+     * @param string[] $names
+     */
+    protected function isNames(Node $node, array $names): bool
+    {
+        return $this->nodeNameResolver->isNames($node, $names);
+    }
+
+    protected function getName(Node $node): ?string
+    {
+        return $this->nodeNameResolver->getName($node);
+    }
+
+    protected function isFuncCallName(Node $node, string $name): bool
+    {
+        return $this->nodeNameResolver->isFuncCallName($node, $name);
+    }
+
+    protected function isStaticCallNamed(Node $node, string $className, string $methodName): bool
+    {
+        return $this->nodeNameResolver->isStaticCallNamed($node, $className, $methodName);
+    }
+
+    protected function isVariableName(Node $node, string $name): bool
+    {
+        return $this->nodeNameResolver->isVariableName($node, $name);
+    }
+
+    /**
+     * @param ObjectType|string $type
+     */
+    protected function isObjectType(Node $node, $type): bool
+    {
+        return $this->nodeTypeResolver->isObjectType($node, $type);
+    }
+
+    /**
+     * @param string[]|ObjectType[] $requiredTypes
+     */
+    protected function isObjectTypes(Node $node, array $requiredTypes): bool
+    {
+        return $this->nodeTypeResolver->isObjectTypes($node, $requiredTypes);
+    }
+
+    protected function isNumberType(Node $node): bool
+    {
+        return $this->nodeTypeResolver->isNumberType($node);
+    }
+
+    protected function isStaticType(Node $node, string $staticTypeClass): bool
+    {
+        return $this->nodeTypeResolver->isStaticType($node, $staticTypeClass);
+    }
+
+    protected function getStaticType(Node $node): Type
+    {
+        return $this->nodeTypeResolver->getStaticType($node);
+    }
+
+    protected function getObjectType(Node $node): Type
+    {
+        return $this->nodeTypeResolver->resolve($node);
+    }
+
+    /**
+     * @param Node|Node[] $nodes
+     */
+    protected function traverseNodesWithCallable($nodes, callable $callable): void
+    {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, $callable);
+    }
+
+    /**
+     * @param Node|Node[]|null $node
+     */
+    protected function print($node): string
+    {
+        return $this->betterStandardPrinter->print($node);
+    }
+
+    /**
+     * Removes all comments from both nodes
+     *
+     * @param Node|Node[]|null $firstNode
+     * @param Node|Node[]|null $secondNode
+     */
+    protected function areNodesEqual($firstNode, $secondNode): bool
+    {
+        return $this->betterStandardPrinter->areNodesEqual($firstNode, $secondNode);
     }
 
     protected function getNextExpression(Node $node): ?Node
@@ -258,15 +450,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      */
     protected function areValues(array $nodes, array $expectedValues): bool
     {
-        foreach ($nodes as $i => $node) {
-            if ($node !== null && $this->valueResolver->isValue($node, $expectedValues[$i])) {
-                continue;
-            }
-
-            return false;
-        }
-
-        return true;
+        return $this->valueResolver->areValues($nodes, $expectedValues);
     }
 
     protected function isAtLeastPhpVersion(int $version): bool
@@ -333,18 +517,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     }
 
     /**
-     * @param Expr $expr
-     */
-    protected function createBoolCast(?Node $parentNode, Node $expr): Bool_
-    {
-        if ($parentNode instanceof Return_ && $expr instanceof Assign) {
-            $expr = $expr->expr;
-        }
-
-        return new Bool_($expr);
-    }
-
-    /**
      * @param Arg[] $newArgs
      * @param Arg[] $appendingArgs
      * @return Arg[]
@@ -365,6 +537,87 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         }
 
         return $stmt;
+    }
+
+    /**
+     * @param Node[] $newNodes
+     */
+    protected function addNodesAfterNode(array $newNodes, Node $positionNode): void
+    {
+        $this->nodesToAddCollector->addNodesAfterNode($newNodes, $positionNode);
+    }
+
+    /**
+     * @param Node[] $newNodes
+     */
+    protected function addNodesBeforeNode(array $newNodes, Node $positionNode): void
+    {
+        $this->nodesToAddCollector->addNodesBeforeNode($newNodes, $positionNode);
+    }
+
+    protected function addNodeAfterNode(Node $newNode, Node $positionNode): void
+    {
+        $this->nodesToAddCollector->addNodeAfterNode($newNode, $positionNode);
+    }
+
+    protected function addNodeBeforeNode(Node $newNode, Node $positionNode): void
+    {
+        $this->nodesToAddCollector->addNodeBeforeNode($newNode, $positionNode);
+    }
+
+    protected function addPropertyToCollector(Property $property): void
+    {
+        $this->propertyAdder->addPropertyToCollector($property);
+    }
+
+    protected function addServiceConstructorDependencyToClass(Class_ $class, string $className): void
+    {
+        $this->propertyAdder->addServiceConstructorDependencyToClass($class, $className);
+    }
+
+    protected function addConstructorDependencyToClass(
+        Class_ $class,
+        ?Type $propertyType,
+        string $propertyName,
+        int $propertyFlags = 0
+    ): void {
+        $this->propertyAdder->addConstructorDependencyToClass($class, $propertyType, $propertyName, $propertyFlags);
+    }
+
+    protected function addConstantToClass(Class_ $class, ClassConst $classConst): void
+    {
+        $this->propertyToAddCollector->addConstantToClass($class, $classConst);
+    }
+
+    protected function addPropertyToClass(Class_ $class, ?Type $propertyType, string $propertyName): void
+    {
+        $this->propertyToAddCollector->addPropertyWithoutConstructorToClass($propertyName, $propertyType, $class);
+    }
+
+    protected function removeNode(Node $node): void
+    {
+        $this->nodeRemover->removeNode($node);
+    }
+
+    /**
+     * @param Class_|ClassMethod|Function_ $nodeWithStatements
+     */
+    protected function removeNodeFromStatements(Node $nodeWithStatements, Node $nodeToRemove): void
+    {
+        $this->nodeRemover->removeNodeFromStatements($nodeWithStatements, $nodeToRemove);
+    }
+
+    protected function isNodeRemoved(Node $node): bool
+    {
+        return $this->nodesToRemoveCollector->isNodeRemoved($node);
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    protected function removeNodes(array $nodes): void
+    {
+        $this->nodeRemover->removeNodes($nodes);
     }
 
     private function isMatchingNodeType(string $nodeClass): bool

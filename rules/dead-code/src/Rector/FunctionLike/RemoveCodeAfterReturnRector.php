@@ -72,12 +72,11 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $this->removeStmt($node, $key);
+                $this->nodeRemover->removeStmt($node, $key);
             }
 
             if ($stmt instanceof Return_) {
                 $isDeadAfterReturn = true;
-                continue;
             }
         }
 

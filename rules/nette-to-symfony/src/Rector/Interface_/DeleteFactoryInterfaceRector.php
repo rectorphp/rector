@@ -68,7 +68,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removeFile($smartFileInfo);
+        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
 
         return null;
     }

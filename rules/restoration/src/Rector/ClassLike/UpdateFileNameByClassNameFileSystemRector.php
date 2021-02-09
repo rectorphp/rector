@@ -6,7 +6,6 @@ namespace Rector\Restoration\Rector\ClassLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -20,16 +19,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 final class UpdateFileNameByClassNameFileSystemRector extends AbstractRector
 {
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    public function __construct(ClassNaming $classNaming)
-    {
-        $this->classNaming = $classNaming;
-    }
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Rename file to respect class name', [
@@ -69,7 +58,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $classShortName = $this->classNaming->getShortName($className);
+        $classShortName = $this->nodeNameResolver->getShortName($className);
 
         $smartFileInfo = $node->getAttribute(SmartFileInfo::class);
         if ($smartFileInfo === null) {
@@ -83,7 +72,7 @@ CODE_SAMPLE
 
         // no match → rename file
         $newFileLocation = $smartFileInfo->getPath() . DIRECTORY_SEPARATOR . $classShortName . '.php';
-        $this->addMovedFile(new MovedFileWithContent($smartFileInfo, $newFileLocation));
+        $this->removedAndAddedFilesCollector->addMovedFile(new MovedFileWithContent($smartFileInfo, $newFileLocation));
 
         return null;
     }

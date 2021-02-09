@@ -95,7 +95,7 @@ CODE_SAMPLE
             /** @var Expression $stmt */
             $stmt = $node->stmts[0];
 
-            if ($this->isLocalMethodCallNamed($stmt->expr, MethodName::CONSTRUCT)) {
+            if ($this->nodeNameResolver->isLocalMethodCallNamed($stmt->expr, MethodName::CONSTRUCT)) {
                 $this->removeNode($node);
 
                 return null;

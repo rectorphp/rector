@@ -16,6 +16,7 @@ use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DoctrineGedmoToKnplabs\NodeFactory\TranslationClassNodeFactory;
+use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -273,6 +274,8 @@ CODE_SAMPLE
         }
 
         $namespace->stmts[] = $class;
-        $this->printNodesToFilePath([$namespace], $filePath);
+
+        $addedFileWithNodes = new AddedFileWithNodes($filePath, [$namespace]);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
     }
 }

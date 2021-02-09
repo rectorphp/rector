@@ -117,13 +117,6 @@ parameters:
             count: 1
             path: packages/better-php-doc-parser/src/Printer/WhitespaceDetector.php
 
-        -
-            message: "#^Cognitive complexity for \"Rector\\\\PhpSpecToPHPUnit\\\\Rector\\\\MethodCall\\\\PhpSpecPromisesToPHPUnitAssertRector\\:\\:refactor\\(\\)\" is 13, keep it under 9$#"
-            count: 1
-            path: rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
-
-        - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 9$#"
-
         - '#Cannot cast PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Identifier to string#'
 
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
@@ -131,6 +124,22 @@ parameters:
         - '#Property PhpParser\\Node\\Stmt\\Namespace_\:\:\$stmts \(array<PhpParser\\Node\\Stmt\>\) does not accept array<PhpParser\\Node\>#'
 
 
+
+        - '#Cognitive complexity for "Rector\\Php80\\NodeResolver\\SwitchExprsResolver\:\:resolve\(\)" is \d+, keep it under 9#'
+        -
+            message: "#^Cognitive complexity for \"Rector\\\\PhpSpecToPHPUnit\\\\Rector\\\\MethodCall\\\\PhpSpecPromisesToPHPUnitAssertRector\\:\\:refactor\\(\\)\" is 13, keep it under 9$#"
+            count: 1
+            path: rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
+        -
+            message: '#Class cognitive complexity is \d+, keep it under \d+#'
+            paths:
+                - rules/php70/src/EregToPcreTransformer.php
+                - packages/node-collector/src/NodeCollector/NodeRepository.php
+                - packages/node-type-resolver/src/NodeTypeResolver.php
+                - rules/code-quality-strict/src/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
+                - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
+        - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 9$#"
+        - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\If_\\SimplifyIfIssetToNullCoalescingRector\:\:shouldSkip\(\)" is 10, keep it under 9#'
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\Type\\ObjectTypeSpecifier\:\:matchShortenedObjectType\(\)" is 10, keep it under 9#'
         - '#Cognitive complexity for "Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver\:\:getValue\(\)" is \d+, keep it under 9#'
         - '#Cognitive complexity for "Rector\\NetteKdyby\\ContributeEventClassResolver\:\:resolveGetterMethodByEventClassAndParam\(\)" is \d+, keep it under 9#'
@@ -231,12 +240,7 @@ parameters:
         -
             message: '#Do not use trait#'
             paths:
-                - packages/better-php-doc-parser/src/Attributes/Attribute/AttributeTrait.php # 7
-                - packages/better-php-doc-parser/src/PartPhpDocTagPrinter/Behavior/ArrayPartPhpDocTagPrinterTrait.php # 14
-                - packages/better-php-doc-parser/src/PhpDocNode/PrintTagValueNodeTrait.php # 13
-                - packages/changes-reporting/src/Rector/AbstractRector/NotifyingRemovingNodeTrait.php # 17
-                - packages/post-rector/src/Rector/AbstractRector/NodeCommandersTrait.php # 31
-                - src/Rector/AbstractRector/*
+                - packages/better-php-doc-parser/src/**/*Trait.php # 7
 
         -
             message: '#Do not use scalar or array as constructor parameter\. Use "Symplify\\PackageBuilder\\Parameter\\ParameterProvider" service instead#'
@@ -251,19 +255,9 @@ parameters:
         # trait in trait call
         - '#Parameter \#1 \$expr of class PhpParser\\Node\\Stmt\\Expression constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt given#'
 
-        -
-            message: '#Class cognitive complexity is \d+, keep it under \d+#'
-            paths:
-                - rules/php70/src/EregToPcreTransformer.php
-                - packages/node-collector/src/NodeCollector/NodeRepository.php
-                - packages/node-type-resolver/src/NodeTypeResolver.php
-                - rules/code-quality-strict/src/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
-                - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
-
         # symplify 9
         - '#Use decoupled factory service to create "(.*?)" object#'
         - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
-        #- '#Trait method "(.*?)" should not contain any logic, but only delegate to other class call#'
         - '#Do not use factory/method call in constructor\. Put factory in config and get service with dependency injection#'
         - '#Constant string value need to only have small letters, _, \-, \. and numbers#'
 
@@ -404,12 +398,13 @@ parameters:
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             paths:
                 - rules/defluent/src/ValueObject/*
+                - src/Rector/AbstractTemporaryRector.php
 
         - '#Parameter \#1 \$keyName of method Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareArrayShapeItemNode\:\:createKeyWithSpacePattern\(\) expects PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null, PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null given#'
         - '#AttributeAwarePhpDocNode#'
 
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
-        - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\If_\\SimplifyIfIssetToNullCoalescingRector\:\:shouldSkip\(\)" is 10, keep it under 9#'
+
         - '#Instanceof between PhpParser\\Node\\Stmt and Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace will always evaluate to false#'
 
         -
@@ -424,7 +419,6 @@ parameters:
             message: '#Unreachable statement \- code above always terminates#'
             paths:
                 - bin/rector.php
-                - src/Rector/AbstractRector/NodeTypeResolverTrait.php
                 - rules/php70/src/Rector/FuncCall/MultiDirnameRector.php
 
         # @todo fix later
@@ -433,8 +427,6 @@ parameters:
             paths:
                 - rules/naming/src/Guard/PropertyConflictingNameGuard/AbstractPropertyConflictingNameGuard.php
                 - rules/naming/src/PropertyRenamer/AbstractPropertyRenamer.php
-
-        - '#Cognitive complexity for "Rector\\Php80\\NodeResolver\\SwitchExprsResolver\:\:resolve\(\)" is \d+, keep it under 9#'
 
         -
             message: '#".*" regex need to use string named capture group instead of numeric#'

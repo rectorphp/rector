@@ -72,7 +72,7 @@ CODE_SAMPLE
 
         $newPathName = $this->createPathName($oldPathname);
         $movedFileWithContent = new MovedFileWithContent($fileInfo, $newPathName);
-        $this->addMovedFile($movedFileWithContent);
+        $this->removedAndAddedFilesCollector->addMovedFile($movedFileWithContent);
 
         return null;
     }

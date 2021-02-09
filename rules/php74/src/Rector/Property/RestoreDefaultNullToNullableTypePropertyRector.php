@@ -116,7 +116,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->isLocalPropertyFetchNamed($node->var, $propertyName)) {
+            if (! $this->nodeNameResolver->isLocalPropertyFetchNamed($node->var, $propertyName)) {
                 return null;
             }
 
