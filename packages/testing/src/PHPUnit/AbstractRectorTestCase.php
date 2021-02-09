@@ -37,6 +37,14 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 {
     use MovingFilesTrait;
+<<<<<<< HEAD
+=======
+
+    /**
+     * @var int
+     */
+    private const PHP_VERSION_UNDEFINED = 0;
+>>>>>>> 77c4fbe09... cleanup
 
     /**
      * @var FileProcessor
@@ -259,8 +267,26 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         SmartFileInfo $originalFileInfo,
         SmartFileInfo $expectedFileInfo
     ): void {
+<<<<<<< HEAD
         $runnable = self::$runnableRectorFactory->createRunnableClass($originalFileInfo);
         $expectedInstance = self::$runnableRectorFactory->createRunnableClass($expectedFileInfo);
+=======
+        $runnable = $this->runnableRectorFactory->createRunnableClass($originalFileInfo);
+        $expectedInstance = $this->runnableRectorFactory->createRunnableClass($expectedFileInfo);
+
+        $actualResult = $runnable->run();
+
+        $expectedResult = $expectedInstance->run();
+        $this->assertSame($expectedResult, $actualResult);
+    }
+
+    /**
+     * @return SmartFileInfo[]
+     */
+    private function resolveConfigs(SmartFileInfo $configFileInfo): array
+    {
+        $configFileInfos = [$configFileInfo];
+>>>>>>> 77c4fbe09... cleanup
 
         $actualResult = $runnable->run();
 
