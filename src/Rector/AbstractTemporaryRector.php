@@ -155,11 +155,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected $nodeRemover;
 
     /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
@@ -262,7 +257,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->classNaming = $classNaming;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->visibilityManipulator = $visibilityManipulator;
