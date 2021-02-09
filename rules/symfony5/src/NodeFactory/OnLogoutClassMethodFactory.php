@@ -11,7 +11,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NetteKdyby\NodeManipulator\ListeningClassMethodArgumentManipulator;
 use Rector\NetteKdyby\NodeManipulator\ParamAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 
@@ -25,11 +24,6 @@ final class OnLogoutClassMethodFactory
         'response' => 'getResponse',
         'token' => 'getToken',
     ];
-
-    /**
-     * @var ListeningClassMethodArgumentManipulator
-     */
-    private $listeningClassMethodArgumentManipulator;
 
     /**
      * @var NodeNameResolver
@@ -47,12 +41,10 @@ final class OnLogoutClassMethodFactory
     private $paramAnalyzer;
 
     public function __construct(
-        ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator,
         NodeNameResolver $nodeNameResolver,
         BareLogoutClassMethodFactory $bareLogoutClassMethodFactory,
         ParamAnalyzer $paramAnalyzer
     ) {
-        $this->listeningClassMethodArgumentManipulator = $listeningClassMethodArgumentManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->bareLogoutClassMethodFactory = $bareLogoutClassMethodFactory;
         $this->paramAnalyzer = $paramAnalyzer;

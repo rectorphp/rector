@@ -240,7 +240,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            unset($classMethod->params[$key]);
+            $this->nodeRemover->removeParam($classMethod, $key);
             $this->classMethodNodeRemover->removeParamFromMethodBody($classMethod, $param);
 
             $this->objectTypesToInject[] = $paramType;

@@ -12,8 +12,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NetteKdyby\ContributeEventClassResolver;
 use Rector\NetteKdyby\ValueObject\EventAndListenerTree;
 use Rector\NetteKdyby\ValueObject\EventClassAndClassMethod;
@@ -37,31 +35,17 @@ final class ListeningClassMethodArgumentManipulator
     private $contributeEventClassResolver;
 
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var ParamAnalyzer
      */
     private $paramAnalyzer;
 
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter,
         ClassNaming $classNaming,
         ContributeEventClassResolver $contributeEventClassResolver,
-        \Rector\NetteKdyby\NodeManipulator\ParamAnalyzer $paramAnalyzer
+        ParamAnalyzer $paramAnalyzer
     ) {
         $this->classNaming = $classNaming;
         $this->contributeEventClassResolver = $contributeEventClassResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->paramAnalyzer = $paramAnalyzer;
     }
 

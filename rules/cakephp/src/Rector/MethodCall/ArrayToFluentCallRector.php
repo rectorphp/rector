@@ -166,7 +166,8 @@ CODE_SAMPLE
         if ($arrayItemsAndFluentClass->getArrayItems() !== []) {
             $argumentValue->items = $arrayItemsAndFluentClass->getArrayItems();
         } else {
-            unset($methodCall->args[$argumentPosition - 1]);
+            $positionToRemove = $argumentPosition - 1;
+            $this->nodeRemover->removeArg($methodCall, $positionToRemove);
         }
 
         if ($arrayItemsAndFluentClass->getFluentCalls() === []) {
