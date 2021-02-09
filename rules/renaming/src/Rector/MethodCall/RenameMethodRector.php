@@ -129,7 +129,7 @@ CODE_SAMPLE
         ClassMethod $classMethod,
         MethodCallRenameInterface $methodCallRename
     ): bool {
-        if (! $classMethod instanceof ClassMethod) {
+        if (! $classMethod instanceof ClassMethod) { dump('here');
             return false;
         }
 
