@@ -142,7 +142,7 @@ CODE_SAMPLE
         }
 
         if (! $parentPreviousVar instanceof Param) {
-            return $this->isObjectType($node, $name);
+            return false;
         }
 
         $type = $parentPreviousVar->type;
