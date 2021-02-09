@@ -11,26 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NormalToFluentRector::class)->call('configure', [[
         NormalToFluentRector::CALLS_TO_FLUENT => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            new NormalToFluent(
-                FluentInterfaceClass::class,
-                ['someFunction', 'otherFunction', 'joinThisAsWell']),
+            new NormalToFluent(FluentInterfaceClass::class, ['someFunction', 'otherFunction', 'joinThisAsWell']),
         ]
         ),
     ]]);

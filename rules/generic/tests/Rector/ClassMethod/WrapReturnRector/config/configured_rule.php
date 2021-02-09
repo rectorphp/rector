@@ -11,48 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(WrapReturnRector::class)->call('configure', [[
         WrapReturnRector::TYPE_METHOD_WRAPS => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             new WrapReturn(SomeReturnClass::class, 'getItem', true),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         ]),
     ]]);

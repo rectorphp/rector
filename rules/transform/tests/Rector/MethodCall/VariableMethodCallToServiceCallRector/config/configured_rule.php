@@ -37,6 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 
 
+
                 new VariableMethodCallToServiceCall(
                     'PhpParser\Node',
                     'getAttribute',
@@ -44,6 +45,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory',
                     'createFromNodeOrEmpty'
                 ),
+
 
 
 

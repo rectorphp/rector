@@ -11,51 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddPropertyByParentRector::class)->call('configure', [[
         AddPropertyByParentRector::PARENT_DEPENDENCIES => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            new AddPropertyByParent(
-                SomeParentClassToAddDependencyBy::class,
-                'SomeDependency'
-            ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            new AddPropertyByParent(SomeParentClassToAddDependencyBy::class, 'SomeDependency'),
 
         ]),
     ]]);

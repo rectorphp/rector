@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
+use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
@@ -60,14 +61,21 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      */
     private $explicitRouteAnnotationDecorator;
 
+    /**
+     * @var SymfonyRouteTagValueNodeFactory
+     */
+    private $symfonyRouteTagValueNodeFactory;
+
     public function __construct(
         ExplicitRouteAnnotationDecorator $explicitRouteAnnotationDecorator,
         ReturnTypeInferer $returnTypeInferer,
-        RouteInfoFactory $routeInfoFactory
+        RouteInfoFactory $routeInfoFactory,
+        SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory
     ) {
         $this->routeInfoFactory = $routeInfoFactory;
         $this->returnTypeInferer = $returnTypeInferer;
         $this->explicitRouteAnnotationDecorator = $explicitRouteAnnotationDecorator;
+        $this->symfonyRouteTagValueNodeFactory = $symfonyRouteTagValueNodeFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -248,7 +256,7 @@ CODE_SAMPLE
 
     private function createSymfonyRoutePhpDocTagValueNode(RouteInfo $routeInfo): SymfonyRouteTagValueNode
     {
-        return new SymfonyRouteTagValueNode([
+        return $this->symfonyRouteTagValueNodeFactory->createFromItems([
             'path' => $routeInfo->getPath(),
             'methods' => $routeInfo->getHttpMethods(),
         ]);
@@ -265,7 +273,7 @@ CODE_SAMPLE
                 }
 
                 $path = $this->resolvePathFromClassAndMethodNodes($presenterClass, $classMethod);
-                $symfonyRoutePhpDocTagValueNode = new SymfonyRouteTagValueNode([
+                $symfonyRoutePhpDocTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems([
                     'path' => $path,
                 ]);
 

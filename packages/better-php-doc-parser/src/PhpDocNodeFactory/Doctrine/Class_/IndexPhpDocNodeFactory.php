@@ -6,6 +6,8 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Class_;
 
 use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\Annotation\AnnotationItemsResolver;
+use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
+use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\IndexTagValueNode;
 
 final class IndexPhpDocNodeFactory
@@ -21,9 +23,24 @@ final class IndexPhpDocNodeFactory
      */
     private $annotationItemsResolver;
 
-    public function __construct(AnnotationItemsResolver $annotationItemsResolver)
-    {
+    /**
+     * @var ArrayPartPhpDocTagPrinter
+     */
+    private $arrayPartPhpDocTagPrinter;
+
+    /**
+     * @var TagValueNodePrinter
+     */
+    private $tagValueNodePrinter;
+
+    public function __construct(
+        AnnotationItemsResolver $annotationItemsResolver,
+        ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
+        TagValueNodePrinter $tagValueNodePrinter
+    ) {
         $this->annotationItemsResolver = $annotationItemsResolver;
+        $this->arrayPartPhpDocTagPrinter = $arrayPartPhpDocTagPrinter;
+        $this->tagValueNodePrinter = $tagValueNodePrinter;
     }
 
     /**
@@ -43,7 +60,14 @@ final class IndexPhpDocNodeFactory
         foreach ($indexes as $key => $index) {
             $currentContent = $indexContents[$key];
             $items = $this->annotationItemsResolver->resolve($index);
-            $indexTagValueNodes[] = new IndexTagValueNode($items, $currentContent['content'], $currentContent['tag']);
+
+            $indexTagValueNodes[] = new IndexTagValueNode(
+                $this->arrayPartPhpDocTagPrinter,
+                $this->tagValueNodePrinter,
+                $items,
+                $currentContent['content'],
+                $currentContent['tag']
+            );
         }
 
         return $indexTagValueNodes;

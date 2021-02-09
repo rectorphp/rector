@@ -9,8 +9,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
-use Rector\BetterPhpDocParser\PartPhpDocTagPrinter\Behavior\ArrayPartPhpDocTagPrinterTrait;
-use Rector\BetterPhpDocParser\PhpDocNode\PrintTagValueNodeTrait;
+use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
+use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
 use Rector\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactory;
@@ -20,8 +20,6 @@ use Symplify\PackageBuilder\Php\TypeChecker;
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
 {
     use AttributeTrait;
-    use PrintTagValueNodeTrait;
-    use ArrayPartPhpDocTagPrinterTrait;
 
     /**
      * @var mixed[]
@@ -34,10 +32,27 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     protected $tagValueNodeConfiguration;
 
     /**
-     * @param mixed[] $items
+     * @var ArrayPartPhpDocTagPrinter
      */
-    public function __construct(array $items, ?string $originalContent = null)
-    {
+    protected $arrayPartPhpDocTagPrinter;
+
+    /**
+     * @var TagValueNodePrinter
+     */
+    protected $tagValueNodePrinter;
+
+    /**
+     * @param array<string, mixed> $items
+     */
+    public function __construct(
+        ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
+        TagValueNodePrinter $tagValueNodePrinter,
+        array $items = [],
+        ?string $originalContent = null
+    ) {
+        $this->arrayPartPhpDocTagPrinter = $arrayPartPhpDocTagPrinter;
+        $this->tagValueNodePrinter = $tagValueNodePrinter;
+
         $this->items = $items;
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
@@ -92,9 +107,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
      */
     protected function printItems(array $items): string
     {
-        $items = $this->completeItemsQuotes($items);
+        $items = $this->tagValueNodePrinter->completeItemsQuotes($this->tagValueNodeConfiguration, $items);
         $items = $this->filterOutMissingItems($items);
-        $items = $this->makeKeysExplicit($items);
+        $items = $this->tagValueNodePrinter->makeKeysExplicit($items, $this->tagValueNodeConfiguration);
 
         return $this->printContentItems($items);
     }
@@ -123,7 +138,11 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
                 continue;
             }
 
-            $arrayItemAsString = $this->printArrayItem($value, $key, $this->tagValueNodeConfiguration);
+            $arrayItemAsString = $this->arrayPartPhpDocTagPrinter->printArrayItem(
+                $value,
+                $key,
+                $this->tagValueNodeConfiguration
+            );
             $arrayItemAsString = $this->correctArraySingleItemPrint($value, $arrayItemAsString);
 
             /** @var string $key */

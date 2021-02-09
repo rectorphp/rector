@@ -10,48 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameAnnotationRector::class)->call('configure', [[
         RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             new RenameAnnotation('PHPUnit\Framework\TestCase', 'scenario', 'test'),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         ]),
     ]]);

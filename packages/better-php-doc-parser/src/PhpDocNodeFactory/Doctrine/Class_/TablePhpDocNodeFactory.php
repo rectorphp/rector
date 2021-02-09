@@ -12,6 +12,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
+use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
+use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\TableTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 
@@ -33,12 +35,26 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
      */
     private $uniqueConstraintPhpDocNodeFactory;
 
+    /**
+     * @var ArrayPartPhpDocTagPrinter
+     */
+    private $arrayPartPhpDocTagPrinter;
+
+    /**
+     * @var TagValueNodePrinter
+     */
+    private $tagValueNodePrinter;
+
     public function __construct(
+        ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
+        TagValueNodePrinter $tagValueNodePrinter,
         IndexPhpDocNodeFactory $indexPhpDocNodeFactory,
         UniqueConstraintPhpDocNodeFactory $uniqueConstraintPhpDocNodeFactory
     ) {
         $this->indexPhpDocNodeFactory = $indexPhpDocNodeFactory;
         $this->uniqueConstraintPhpDocNodeFactory = $uniqueConstraintPhpDocNodeFactory;
+        $this->arrayPartPhpDocTagPrinter = $arrayPartPhpDocTagPrinter;
+        $this->tagValueNodePrinter = $tagValueNodePrinter;
     }
 
     /**
@@ -92,6 +108,8 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
         );
 
         return new TableTagValueNode(
+            $this->arrayPartPhpDocTagPrinter,
+            $this->tagValueNodePrinter,
             $table->name,
             $table->schema,
             $indexTagValueNodes,

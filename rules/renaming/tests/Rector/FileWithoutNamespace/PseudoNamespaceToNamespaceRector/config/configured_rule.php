@@ -12,61 +12,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         [[
             PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                new PseudoNamespaceToNamespace('PHPUnit_', [
-                    'PHPUnit_Framework_MockObject_MockObject',
-                ]),
+                new PseudoNamespaceToNamespace('PHPUnit_', ['PHPUnit_Framework_MockObject_MockObject']),
                 new PseudoNamespaceToNamespace('ChangeMe_', ['KeepMe_']),
                 new PseudoNamespaceToNamespace(
                     'Rector_Renaming_Tests_Rector_FileWithoutNamespace_PseudoNamespaceToNamespaceRector_Fixture_'
                 ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             ]),
         ]]

@@ -37,11 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 
 
-                new CallableInMethodCallToVariable(
-                    DummyCache::class,
-                    'save',
-                    1
-                ),
+                new CallableInMethodCallToVariable(DummyCache::class, 'save', 1),
 
 
 

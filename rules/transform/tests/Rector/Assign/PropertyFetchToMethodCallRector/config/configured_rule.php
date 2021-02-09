@@ -28,12 +28,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 
 
-            new PropertyFetchToMethodCall(
-                Translator::class,
-                'locale',
-                'getLocale',
-                'setLocale'
-            ),
+            new PropertyFetchToMethodCall(Translator::class, 'locale', 'getLocale', 'setLocale'),
             new PropertyFetchToMethodCall(
                 'Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\Fixture\Fixture2',
                 'parameter',

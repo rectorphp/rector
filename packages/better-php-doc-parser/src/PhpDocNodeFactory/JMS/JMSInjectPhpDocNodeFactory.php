@@ -11,6 +11,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
+use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
+use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 
@@ -21,9 +23,23 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    /**
+     * @var ArrayPartPhpDocTagPrinter
+     */
+    private $arrayPartPhpDocTagPrinter;
+
+    /**
+     * @var TagValueNodePrinter
+     */
+    private $tagValueNodePrinter;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver, ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
+                                TagValueNodePrinter $tagValueNodePrinter)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->arrayPartPhpDocTagPrinter = $arrayPartPhpDocTagPrinter;
+        $this->tagValueNodePrinter = $tagValueNodePrinter;
     }
 
     /**
@@ -57,6 +73,13 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
         $items = $this->annotationItemsResolver->resolve($inject);
-        return new JMSInjectTagValueNode($items, $serviceName, $annotationContent);
+
+        return new JMSInjectTagValueNode(
+            $this->arrayPartPhpDocTagPrinter,
+            $this->tagValueNodePrinter,
+            $items,
+            $serviceName,
+            $annotationContent
+        );
     }
 }

@@ -7,6 +7,8 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_;
 use Rector\BetterPhpDocParser\Contract\Doctrine\InversedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\MappedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
+use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
+use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
@@ -24,13 +26,15 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
     private $fullyQualifiedTargetEntity;
 
     public function __construct(
+        ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
+        TagValueNodePrinter $tagValueNodePrinter,
         array $items,
         ?string $content = null,
         ?string $fullyQualifiedTargetEntity = null
     ) {
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
 
-        parent::__construct($items, $content);
+        parent::__construct($arrayPartPhpDocTagPrinter, $tagValueNodePrinter, $items, $content);
     }
 
     public function getTargetEntity(): string

@@ -12,23 +12,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameStaticMethodRector::class)->call('configure', [[
         RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             new RenameStaticMethod(Html::class, 'add', Html::class, 'addHtml'),
             new RenameStaticMethod(
                 FormMacros::class,
@@ -36,30 +19,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'Nette\Bridges\FormsLatte\Runtime',
                 'renderFormBegin'
             ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         ]),
     ]]);

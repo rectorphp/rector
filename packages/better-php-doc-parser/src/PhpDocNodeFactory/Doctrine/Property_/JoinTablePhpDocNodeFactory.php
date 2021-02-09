@@ -12,6 +12,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
+use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
+use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -33,6 +35,24 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
      * @see https://regex101.com/r/5JVito/1
      */
     private const JOIN_COLUMN_REGEX = '#(?<tag>@(ORM\\\\)?JoinColumn)\((?<content>.*?)\),?#si';
+
+    /**
+     * @var ArrayPartPhpDocTagPrinter
+     */
+    private $arrayPartPhpDocTagPrinter;
+
+    /**
+     * @var TagValueNodePrinter
+     */
+    private $tagValueNodePrinter;
+
+    public function __construct(
+        ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
+        TagValueNodePrinter $tagValueNodePrinter
+    ) {
+        $this->arrayPartPhpDocTagPrinter = $arrayPartPhpDocTagPrinter;
+        $this->tagValueNodePrinter = $tagValueNodePrinter;
+    }
 
     /**
      * @return string[]
@@ -90,6 +110,8 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
         );
 
         return new JoinTableTagValueNode(
+            $this->arrayPartPhpDocTagPrinter,
+            $this->tagValueNodePrinter,
             $joinTable->name,
             $joinTable->schema,
             $joinColumnValuesTags,
@@ -120,6 +142,8 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
 
             $items = $this->annotationItemsResolver->resolve($joinColumn);
             $joinColumnValuesTags[] = new JoinColumnTagValueNode(
+                $this->arrayPartPhpDocTagPrinter,
+                $this->tagValueNodePrinter,
                 $items,
                 $subAnnotation['content'],
                 $subAnnotation['tag']

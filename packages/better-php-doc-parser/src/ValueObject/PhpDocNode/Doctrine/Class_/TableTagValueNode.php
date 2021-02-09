@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
+use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
+use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\AroundSpaces;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -47,6 +49,8 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
      * @param UniqueConstraintTagValueNode[] $uniqueConstraints
      */
     public function __construct(
+        ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
+        TagValueNodePrinter $tagValueNodePrinter,
         ?string $name,
         ?string $schema,
         array $indexes,
@@ -58,14 +62,14 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         ?AroundSpaces $indexesAroundSpaces = null,
         ?AroundSpaces $uniqueConstraintsAroundSpaces = null
     ) {
+        parent::__construct($arrayPartPhpDocTagPrinter, $tagValueNodePrinter, [], $originalContent);
+
         $this->items['name'] = $name;
         $this->items['schema'] = $schema;
         $this->items['options'] = $options;
 
         $this->indexes = $indexes;
         $this->uniqueConstraints = $uniqueConstraints;
-
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
 
         $this->haveIndexesFinalComma = $haveIndexesFinalComma;
         $this->haveUniqueConstraintsFinalComma = $haveUniqueConstraintsFinalComma;
@@ -78,9 +82,13 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         $items = $this->items;
         $items = $this->addCustomItems($items);
 
-        $items = $this->completeItemsQuotes($items, ['indexes', 'uniqueConstraints']);
+        $items = $this->tagValueNodePrinter->completeItemsQuotes(
+            $this->tagValueNodeConfiguration,
+            $items,
+            ['indexes', 'uniqueConstraints']
+        );
         $items = $this->filterOutMissingItems($items);
-        $items = $this->makeKeysExplicit($items);
+        $items = $this->tagValueNodePrinter->makeKeysExplicit($items, $this->tagValueNodeConfiguration);
 
         return $this->printContentItems($items);
     }
