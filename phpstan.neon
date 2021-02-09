@@ -213,11 +213,6 @@ parameters:
             path: 'rules/php70/src/EregToPcreTransformer.php'
 
         -
-            message: '#Instead of container injection, use specific service#'
-            paths:
-                - src/Configuration/RectorClassesProvider.php
-
-        -
             message: '#Nested foreach with empty statement is not allowed#'
             path: packages/better-php-doc-parser/tests/PhpDocParser/TagValueNodeReprint/TagValueNodeReprintTest.php
 

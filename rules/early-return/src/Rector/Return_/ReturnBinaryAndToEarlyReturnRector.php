@@ -7,19 +7,17 @@ namespace Rector\EarlyReturn\Rector\Return_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\BooleanType;
+use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\Core\NodeManipulator\IfManipulator;
 
 /**
  * @see \Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\ReturnBinaryAndToEarlyReturnRectorTest
@@ -110,11 +108,16 @@ CODE_SAMPLE
     {
         while ($expr instanceof BooleanAnd) {
             $ifNegations = array_merge($ifNegations, $this->collectLeftBooleanAndToIfs($expr, $return, $ifNegations));
-            $ifNegations[] = $this->ifManipulator->createIfNegation($expr->right, new Return_($this->nodeFactory->createFalse()));
+            $ifNegations[] = $this->ifManipulator->createIfNegation(
+                $expr->right,
+                new Return_($this->nodeFactory->createFalse())
+            );
 
             $expr = $expr->right;
         }
-        return $ifNegations + [$this->ifManipulator->createIfNegation($expr, new Return_($this->nodeFactory->createFalse()))];
+        return $ifNegations + [
+            $this->ifManipulator->createIfNegation($expr, new Return_($this->nodeFactory->createFalse())),
+        ];
     }
 
     private function getLastReturnExpr(Expr $expr): Expr

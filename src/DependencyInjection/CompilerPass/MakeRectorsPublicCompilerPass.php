@@ -8,9 +8,6 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-/**
- * Needed for @see \Rector\Core\Configuration\RectorClassesProvider
- */
 final class MakeRectorsPublicCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $containerBuilder): void
