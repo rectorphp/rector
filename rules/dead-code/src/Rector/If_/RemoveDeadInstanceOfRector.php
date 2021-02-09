@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Type\NullType;
+use PHPStan\Type\UnionType;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -101,6 +103,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $objectType = $this->getObjectType($previousVar);
+        if ($objectType instanceof UnionType && $this->hasNullType($objectType)) {
+            return null;
+        }
+
         $isSameObject = $this->isObjectType($previousVar, $name);
         if (! $isSameObject) {
             return null;
@@ -115,5 +122,16 @@ CODE_SAMPLE
 
         $this->removeNode($if);
         return $if;
+    }
+
+    private function hasNullType(UnionType $unionType): bool
+    {
+        foreach ($unionType->getTypes() as $type) {
+            if ($type instanceof NullType) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
