@@ -23,7 +23,6 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Util\StaticInstanceOf;
@@ -47,24 +46,17 @@ final class VariableNaming
     private $valueResolver;
 
     /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
 
     public function __construct(
-        ClassNaming $classNaming,
         NodeNameResolver $nodeNameResolver,
         ValueResolver $valueResolver,
         NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
-        $this->classNaming = $classNaming;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
