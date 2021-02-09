@@ -30,6 +30,17 @@ final class RectorConfigsResolver
     }
 
     /**
+     * @return SmartFileInfo[]
+     */
+    public function resolveFromConfigFileInfo(SmartFileInfo $configFileInfo): array
+    {
+        $configFileInfos = [$configFileInfo];
+        $setFileInfos = $this->resolveSetFileInfosFromConfigFileInfos($configFileInfos);
+
+        return array_merge($configFileInfos, $setFileInfos);
+    }
+
+    /**
      * @noRector
      */
     public function getFirstResolvedConfig(): ?SmartFileInfo

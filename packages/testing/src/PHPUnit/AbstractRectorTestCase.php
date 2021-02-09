@@ -93,14 +93,20 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var RectorConfigsResolver
+     */
+    private $rectorConfigsResolver;
+
     protected function setUp(): void
     {
         $this->runnableRectorFactory = new RunnableRectorFactory();
         $this->smartFileSystem = new SmartFileSystem();
         $this->fixtureGuard = new FixtureGuard();
+        $this->rectorConfigsResolver = new RectorConfigsResolver();
 
         if ($this->provideConfigFileInfo() !== null) {
-            $configFileInfos = $this->resolveConfigs($this->provideConfigFileInfo());
+            $configFileInfos = $this->rectorConfigsResolver->resolveFromConfigFileInfo($this->provideConfigFileInfo());
 
             $this->bootKernelWithConfigs(RectorKernel::class, $configFileInfos);
 
@@ -127,7 +133,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
             $enabledRectorsProvider = $this->getService(EnabledRectorsProvider::class);
             $enabledRectorsProvider->reset();
-            $this->configureEnabledRectors($enabledRectorsProvider);
+            $enabledRectorsProvider->addEnabledRector($this->getRectorClass(), []);
         }
 
         // load stubs
@@ -274,19 +280,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->assertSame($expectedResult, $actualResult);
     }
 
-    /**
-     * @return SmartFileInfo[]
-     */
-    private function resolveConfigs(SmartFileInfo $configFileInfo): array
-    {
-        $configFileInfos = [$configFileInfo];
-
-        $rectorConfigsResolver = new RectorConfigsResolver();
-        $setFileInfos = $rectorConfigsResolver->resolveSetFileInfosFromConfigFileInfos($configFileInfos);
-
-        return array_merge($configFileInfos, $setFileInfos);
-    }
-
     private function createRectorRepositoryContainer(): void
     {
         if (self::$allRectorContainer === null) {
@@ -308,11 +301,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         ], $filePath);
 
         return $filePath;
-    }
-
-    private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
-    {
-        $enabledRectorsProvider->addEnabledRector($this->getRectorClass(), []);
     }
 
     /**
