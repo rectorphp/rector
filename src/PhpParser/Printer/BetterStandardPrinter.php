@@ -519,10 +519,12 @@ final class BetterStandardPrinter extends Standard
     private function cleanUpStmts(array $stmts): array
     {
         foreach ($stmts as $key => $stmt) {
-            if (! $stmt instanceof ClassLike && ! $stmt instanceof FunctionLike) {
+            if ($stmt instanceof ClassLike) {
                 continue;
             }
-
+            if ($stmt instanceof FunctionLike) {
+                continue;
+            }
             if (isset($stmts[$key - 1]) && $this->areNodesEqual($stmt, $stmts[$key - 1])) {
                 unset($stmts[$key]);
             }

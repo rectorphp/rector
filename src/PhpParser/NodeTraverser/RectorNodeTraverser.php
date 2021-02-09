@@ -57,10 +57,15 @@ final class RectorNodeTraverser extends NodeTraverser
         $this->enabledRectorsProvider = $enabledRectorsProvider;
 
         foreach ($phpRectors as $phpRector) {
-            if ($configuration->isCacheEnabled() && ! $configuration->shouldClearCache() && $phpRector instanceof ZeroCacheRectorInterface) {
+            if (! $configuration->isCacheEnabled()) {
                 continue;
             }
-
+            if ($configuration->shouldClearCache()) {
+                continue;
+            }
+            if (! $phpRector instanceof ZeroCacheRectorInterface) {
+                continue;
+            }
             $this->addVisitor($phpRector);
         }
 
