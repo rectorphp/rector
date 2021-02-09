@@ -79,10 +79,6 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 - [How to work with Doc Block and Comments](/docs/how_to_work_with_doc_block_and_comments.md)
 - [How to Create New Rector Rule](/docs/create_own_rule.md)
 
-### CI
-
-- [Add Checkstyle with your CI](/docs/checkstyle.md)
-
 <br>
 
 ## Install
