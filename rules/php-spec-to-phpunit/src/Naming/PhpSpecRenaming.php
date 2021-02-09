@@ -12,7 +12,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -36,11 +35,8 @@ final class PhpSpecRenaming
      */
     private $nodeNameResolver;
 
-    public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        StringFormatConverter $stringFormatConverter,
-        ClassNaming $classNaming
-    ) {
+    public function __construct(NodeNameResolver $nodeNameResolver, StringFormatConverter $stringFormatConverter)
+    {
         $this->stringFormatConverter = $stringFormatConverter;
         $this->nodeNameResolver = $nodeNameResolver;
     }
