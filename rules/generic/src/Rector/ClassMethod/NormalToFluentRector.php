@@ -128,11 +128,6 @@ CODE_SAMPLE
             return true;
         }
 
-        // we look for 2 methods calls in a row
-        if (! $expression instanceof Expression) {
-            return true;
-        }
-
         $prevStmt = $classMethod->stmts[$i - 1];
 
         return ! $prevStmt instanceof Expression;
