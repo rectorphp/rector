@@ -30,6 +30,7 @@ use Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveOverriddenValuesRector;
+use Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector;
 use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
 use Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector;
 use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
@@ -94,4 +95,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveEmptyMethodCallRector::class);
     $services->set(RemoveDeadConditionAboveReturnRector::class);
     $services->set(RemoveUnusedConstructorParamRector::class);
+    $services->set(RemoveDeadInstanceOfRector::class);
 };

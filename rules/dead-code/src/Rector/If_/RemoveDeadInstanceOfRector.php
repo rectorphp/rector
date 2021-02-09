@@ -5,11 +5,17 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Type\ObjectType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -89,6 +95,9 @@ CODE_SAMPLE
     private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): ?Node
     {
         $previousVar = $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($instanceof): bool {
+            if ($node === $instanceof->expr) {
+                return false;
+            }
             return $this->areNodesEqual($node, $instanceof->expr);
         });
 
@@ -101,7 +110,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $isSameObject = $this->isObjectType($previousVar, $name);
+        $isSameObject = $this->isSameObject($previousVar, $name);
         if (! $isSameObject) {
             return null;
         }
@@ -115,5 +124,38 @@ CODE_SAMPLE
 
         $this->removeNode($if);
         return $if;
+    }
+
+    private function isSameObject(Node $node, string $name): bool
+    {
+        $objectType = $this->getObjectType($node);
+        $parentPreviousVar = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        if (! $parentPreviousVar instanceof Param) {
+            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+            if ($phpDocInfo instanceof PhpDocInfo) {
+                return false;
+            }
+
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $parentNode instanceof Assign) {
+                return false;
+            }
+
+            $objectType = $this->getObjectType($parentNode->expr);
+            if (! $objectType instanceof ObjectType) {
+                return false;
+            }
+
+            return is_a($objectType, $name, true);
+        }
+
+        $type = $parentPreviousVar->type;
+        if ($type instanceof FullyQualified) {
+            $type = $type->toString();
+            return is_a($type, $name, true);
+        }
+
+        return false;
     }
 }
