@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node\Expr\Instanceof_;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\If_\RemoveDeadInstanceOfRector\RemoveDeadInstanceOfRectorTest
@@ -58,6 +59,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $node->cond instanceof BooleanNot && $node->cond->expr instanceof Instanceof_) {
+            return $this->processMayDeadInstanceOf($node, $node->cond->expr);
+        }
+
         return $node;
+    }
+
+    private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): Node
+    {
+        return $if;
     }
 }
