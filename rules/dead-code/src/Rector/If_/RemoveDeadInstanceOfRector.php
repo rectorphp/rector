@@ -11,12 +11,12 @@ use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\If_\RemoveDeadInstanceOfRector\RemoveDeadInstanceOfRectorTest
@@ -94,14 +94,12 @@ CODE_SAMPLE
     private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): ?Node
     {
         $previousVar = $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($instanceof): bool {
-            return $this->areNodesEqual($node, $instanceof->expr);
+            return $node !== $instanceof->expr && $this->areNodesEqual($node, $instanceof->expr);
         });
 
         if (! $previousVar instanceof Node) {
             return null;
         }
-
-        dump($previousVar);die;
 
         $phpDocInfo = $previousVar->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo instanceof PhpDocInfo) {
