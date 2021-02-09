@@ -12,7 +12,6 @@ use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
@@ -303,19 +302,17 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
     private function getConfigFor3rdPartyTest(): string
     {
-        $rectorClassesWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
-
         $filePath = sys_get_temp_dir() . '/rector_temp_tests/current_test.php';
-        $this->createPhpConfigFileAndDumpToPath($rectorClassesWithConfiguration, $filePath);
+        $this->createPhpConfigFileAndDumpToPath([
+            $this->getRectorClass() => [],
+        ], $filePath);
 
         return $filePath;
     }
 
     private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
     {
-        foreach ($this->getCurrentTestRectorClassesWithConfiguration() as $rectorClass => $configuration) {
-            $enabledRectorsProvider->addEnabledRector($rectorClass, (array) $configuration);
-        }
+        $enabledRectorsProvider->addEnabledRector($this->getRectorClass(), []);
     }
 
     /**
@@ -395,9 +392,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             $listForConfig[$rectorClass] = null;
         }
 
-        foreach (array_keys($this->getCurrentTestRectorClassesWithConfiguration()) as $rectorClass) {
-            $listForConfig[$rectorClass] = null;
-        }
+        $listForConfig[$this->getRectorClass()] = null;
 
         $filePath = sys_get_temp_dir() . '/rector_temp_tests/all_rectors.php';
         $this->createPhpConfigFileAndDumpToPath($listForConfig, $filePath);
