@@ -32,10 +32,20 @@ final class FileRelocationResolver
         return $newDirectory . DIRECTORY_SEPARATOR . $smartFileInfo->getFilename();
     }
 
+    public function resolveNewFileLocationFromOldClassToNewClass(
+        SmartFileInfo $smartFileInfo,
+        string $oldClass,
+        string $newClass
+    ): string {
+        $beforeToAfterPart = $this->resolveBeforeToAfterPartBetweenClassNames($oldClass, $newClass);
+
+        return $this->replaceRelativeFilePathsWithBeforeAfter($smartFileInfo, $beforeToAfterPart);
+    }
+
     /**
      * @param string[] $groupNames
      */
-    public function resolveNewNamespaceName(Namespace_ $namespace, string $suffixName, array $groupNames): string
+    private function resolveNewNamespaceName(Namespace_ $namespace, string $suffixName, array $groupNames): string
     {
         /** @var Name $name */
         $name = $namespace->name;
@@ -47,16 +57,6 @@ final class FileRelocationResolver
             self::NAMESPACE_SEPARATOR,
             $groupNames
         );
-    }
-
-    public function resolveNewFileLocationFromOldClassToNewClass(
-        SmartFileInfo $smartFileInfo,
-        string $oldClass,
-        string $newClass
-    ): string {
-        $beforeToAfterPart = $this->resolveBeforeToAfterPartBetweenClassNames($oldClass, $newClass);
-
-        return $this->replaceRelativeFilePathsWithBeforeAfter($smartFileInfo, $beforeToAfterPart);
     }
 
     /**

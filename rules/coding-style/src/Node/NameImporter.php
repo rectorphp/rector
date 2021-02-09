@@ -84,7 +84,7 @@ final class NameImporter
         $this->renamedClassesCollector = $renamedClassesCollector;
     }
 
-    public function importName(Name $name): ?Name
+    private function importName(Name $name): ?Name
     {
         if ($this->shouldSkipName($name)) {
             return null;

@@ -37,24 +37,6 @@ final class CallDefaultParamValuesResolver
     }
 
     /**
-     * @param Function_|ClassMethod $functionLike
-     * @return Node[]
-     */
-    public function resolveFromFunctionLike(FunctionLike $functionLike): array
-    {
-        $defaultValues = [];
-        foreach ($functionLike->getParams() as $key => $param) {
-            if ($param->default === null) {
-                continue;
-            }
-
-            $defaultValues[$key] = $param->default;
-        }
-
-        return $defaultValues;
-    }
-
-    /**
      * @param StaticCall|FuncCall|MethodCall $node
      * @return Node[]
      */
@@ -82,6 +64,24 @@ final class CallDefaultParamValuesResolver
         }
 
         return [];
+    }
+
+    /**
+     * @param Function_|ClassMethod $functionLike
+     * @return Node[]
+     */
+    private function resolveFromFunctionLike(FunctionLike $functionLike): array
+    {
+        $defaultValues = [];
+        foreach ($functionLike->getParams() as $key => $param) {
+            if ($param->default === null) {
+                continue;
+            }
+
+            $defaultValues[$key] = $param->default;
+        }
+
+        return $defaultValues;
     }
 
     /**

@@ -49,7 +49,7 @@ final class FileInfoDeletionAnalyzer
         return $baseFileName === $classShortName;
     }
 
-    public function clearNameFromTestingPrefix(string $name): string
+    private function clearNameFromTestingPrefix(string $name): string
     {
         return Strings::replace($name, self::TESTING_PREFIX_REGEX, '');
     }

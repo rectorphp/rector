@@ -53,7 +53,7 @@ final class ClassMethodVisibilityGuard
     /**
      * @return string[]
      */
-    public function getParentTraits(Class_ $class): array
+    private function getParentTraits(Class_ $class): array
     {
         /** @var string $className */
         $className = $this->nodeNameResolver->getName($class);

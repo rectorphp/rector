@@ -45,14 +45,6 @@ final class LivingCodeManipulator
         $this->nodesToAddCollector = $nodesToAddCollector;
     }
 
-    public function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
-    {
-        $livinExprs = $this->keepLivingCodeFromExpr($expr);
-        foreach ($livinExprs as $expr) {
-            $this->nodesToAddCollector->addNodeBeforeNode(new Expression($expr), $addBeforeThisNode);
-        }
-    }
-
     /**
      * @param Node|int|string|null $expr
      * @return Expr[]|mixed[]
@@ -114,6 +106,14 @@ final class LivingCodeManipulator
         }
 
         return [$expr];
+    }
+
+    private function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
+    {
+        $livinExprs = $this->keepLivingCodeFromExpr($expr);
+        foreach ($livinExprs as $expr) {
+            $this->nodesToAddCollector->addNodeBeforeNode(new Expression($expr), $addBeforeThisNode);
+        }
     }
 
     private function isNestedExpr(Expr $expr): bool

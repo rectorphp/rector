@@ -24,7 +24,7 @@ final class ObjectTypeSpecifier
     /**
      * @return AliasedObjectType|FullyQualifiedObjectType|ObjectType|MixedType
      */
-    public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType): Type
+    private function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType): Type
     {
         /** @var Use_[]|null $uses */
         $uses = $node->getAttribute(AttributeKey::USE_NODES);

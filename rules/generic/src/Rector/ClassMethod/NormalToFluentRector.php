@@ -121,7 +121,7 @@ CODE_SAMPLE
         $this->callsToFluent = $callsToFluent;
     }
 
-    private function shouldSkipPreviousStmt(ClassMethod $classMethod, int $i, Expression $expression): bool
+    private function shouldSkipPreviousStmt(ClassMethod $classMethod, int $i): bool
     {
         // we look only for 2+ stmts
         if (! isset($classMethod->stmts[$i - 1])) {

@@ -34,7 +34,7 @@ final class DefaultValuePropertyTypeInferer
         return $this->nodeTypeResolver->getStaticType($propertyProperty->default);
     }
 
-    public function getPriority(): int
+    private function getPriority(): int
     {
         return 100;
     }

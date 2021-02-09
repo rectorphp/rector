@@ -31,7 +31,7 @@ final class CategoryNamespaceProvider
     /**
      * @return string[]
      */
-    public function provide(): array
+    private function provide(): array
     {
         return self::CATEGORY_NAMESPACES;
     }

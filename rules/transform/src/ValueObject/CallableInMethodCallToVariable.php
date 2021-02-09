@@ -33,13 +33,13 @@ final class CallableInMethodCallToVariable
         return $this->classType;
     }
 
-    public function getMethodName(): string
-    {
-        return $this->methodName;
-    }
-
     public function getArgumentPosition(): int
     {
         return $this->argumentPosition;
+    }
+
+    private function getMethodName(): string
+    {
+        return $this->methodName;
     }
 }

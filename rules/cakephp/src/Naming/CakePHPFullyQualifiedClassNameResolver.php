@@ -16,7 +16,7 @@ final class CakePHPFullyQualifiedClassNameResolver
      * @var string
      * @see https://regex101.com/r/mbvKJp/1
      */
-    public const LIB_NAMESPACE_PART_REGEX = '#\\\\Lib\\\\#';
+    private const LIB_NAMESPACE_PART_REGEX = '#\\\\Lib\\\\#';
 
     /**
      * @var string

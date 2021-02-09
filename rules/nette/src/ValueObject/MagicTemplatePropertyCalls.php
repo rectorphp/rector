@@ -36,14 +36,6 @@ final class MagicTemplatePropertyCalls
         $this->nodesToRemove = $nodesToRemove;
     }
 
-    /**
-     * @return Expr[]
-     */
-    public function getTemplateFileExprs(): array
-    {
-        return $this->templateFileExprs;
-    }
-
     public function getFirstTemplateFileExpr(): ?Expr
     {
         return $this->templateFileExprs[0] ?? null;
@@ -68,5 +60,13 @@ final class MagicTemplatePropertyCalls
     public function getNodesToRemove(): array
     {
         return $this->nodesToRemove;
+    }
+
+    /**
+     * @return Expr[]
+     */
+    private function getTemplateFileExprs(): array
+    {
+        return $this->templateFileExprs;
     }
 }

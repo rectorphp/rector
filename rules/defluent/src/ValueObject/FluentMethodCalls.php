@@ -46,7 +46,7 @@ final class FluentMethodCalls
         return $this->fluentMethodCalls;
     }
 
-    public function getLastMethodCall(): MethodCall
+    private function getLastMethodCall(): MethodCall
     {
         return $this->lastMethodCall;
     }

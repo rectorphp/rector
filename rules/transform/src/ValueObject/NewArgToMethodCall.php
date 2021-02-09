@@ -44,7 +44,7 @@ final class NewArgToMethodCall
         return $this->value;
     }
 
-    public function getMethodCall(): string
+    private function getMethodCall(): string
     {
         return $this->methodCall;
     }

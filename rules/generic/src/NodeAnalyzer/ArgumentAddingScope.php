@@ -22,12 +22,12 @@ final class ArgumentAddingScope
     /**
      * @var string
      */
-    public const SCOPE_METHOD_CALL = 'method_call';
+    public const SCOPE_CLASS_METHOD = 'class_method';
 
     /**
      * @var string
      */
-    public const SCOPE_CLASS_METHOD = 'class_method';
+    private const SCOPE_METHOD_CALL = 'method_call';
 
     /**
      * @var NodeNameResolver

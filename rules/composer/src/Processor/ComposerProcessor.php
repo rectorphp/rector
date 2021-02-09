@@ -67,7 +67,7 @@ final class ComposerProcessor
         $this->composerModifier = $composerModifier;
     }
 
-    public function process(string $composerJsonFilePath): void
+    private function process(string $composerJsonFilePath): void
     {
         if (! $this->smartFileSystem->exists($composerJsonFilePath)) {
             return;

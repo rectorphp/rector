@@ -201,7 +201,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    private function shouldSkipInferredReturnNode(FunctionLike $functionLike, Node $inferredReturnNode): bool
+    private function shouldSkipInferredReturnNode(FunctionLike $functionLike): bool
     {
         // already overridden by previous populateChild() method run
         if ($functionLike->returnType === null) {

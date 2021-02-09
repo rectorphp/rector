@@ -33,7 +33,7 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
     /**
      * @var string[]
      */
-    public const LOOP_TYPES = [Foreach_::class, For_::class, While_::class];
+    private const LOOP_TYPES = [Foreach_::class, For_::class, While_::class];
 
     /**
      * @var IfManipulator

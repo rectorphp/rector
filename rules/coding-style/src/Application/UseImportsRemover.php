@@ -15,7 +15,7 @@ final class UseImportsRemover
      * @param string[] $removedShortUses
      * @return Stmt[]
      */
-    public function removeImportsFromStmts(array $stmts, array $removedShortUses): array
+    private function removeImportsFromStmts(array $stmts, array $removedShortUses): array
     {
         foreach ($stmts as $stmtKey => $stmt) {
             if (! $stmt instanceof Use_) {
@@ -36,7 +36,7 @@ final class UseImportsRemover
     /**
      * @param string[] $removedShortUses
      */
-    public function removeImportsFromNamespace(Namespace_ $namespace, array $removedShortUses): void
+    private function removeImportsFromNamespace(Namespace_ $namespace, array $removedShortUses): void
     {
         foreach ($namespace->stmts as $namespaceKey => $stmt) {
             if (! $stmt instanceof Use_) {
