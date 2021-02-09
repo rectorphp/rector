@@ -26,9 +26,9 @@ final class MyOfComparissonTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $this->assertInstanceOf(Foo::class, $something);
+        $this->assertInstanceOf(\Rector\PHPUnit\Tests\Rector\MethodCall\AssertInstanceOfComparisonRector\Fixture\Foo::class, $something);
         $this->assertNotInstanceOf(\Namespaced\Foo::class, $something);
-        $this->assertInstanceOf(Bar\Baz::class, $something);
+        $this->assertInstanceOf(\Foo\Bar\Baz::class, $something);
     }
 }
 

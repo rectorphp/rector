@@ -83,7 +83,7 @@ final class VariableNaming
 
         // adjust static to specific class
         if ($variableName === 'this' && $type instanceof ThisType) {
-            $shortClassName = $this->classNaming->getShortName($type->getClassName());
+            $shortClassName = $this->nodeNameResolver->getShortName($type->getClassName());
             $variableName = lcfirst($shortClassName);
         }
 
@@ -285,7 +285,7 @@ final class VariableNaming
     {
         if ($new->class instanceof Name) {
             $className = $this->nodeNameResolver->getName($new->class);
-            return $this->classNaming->getShortName($className);
+            return $this->nodeNameResolver->getShortName($className);
         }
 
         throw new NotImplementedYetException();

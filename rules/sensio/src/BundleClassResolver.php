@@ -79,7 +79,7 @@ final class BundleClassResolver
 
         $bundleClassName = $this->resolveClassNameFromFilePath($bundleFile);
         if ($bundleClassName !== null) {
-            return $this->classNaming->getShortName($bundleClassName);
+            return $this->nodeNameResolver->getShortName($bundleClassName);
         }
 
         return null;

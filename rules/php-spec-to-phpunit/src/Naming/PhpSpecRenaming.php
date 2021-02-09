@@ -95,7 +95,7 @@ final class PhpSpecRenaming
 
     public function renameClass(Class_ $class): void
     {
-        $classShortName = $this->classNaming->getShortName($class);
+        $classShortName = $this->nodeNameResolver->getShortName($class);
         // anonymous class?
         if ($classShortName === '') {
             throw new ShouldNotHappenException();
@@ -115,7 +115,7 @@ final class PhpSpecRenaming
             throw new ShouldNotHappenException();
         }
 
-        $shortClassName = $this->classNaming->getShortName($class);
+        $shortClassName = $this->nodeNameResolver->getShortName($class);
         $bareClassName = StaticRectorStrings::removeSuffixes($shortClassName, [self::SPEC, 'Test']);
 
         return lcfirst($bareClassName);
