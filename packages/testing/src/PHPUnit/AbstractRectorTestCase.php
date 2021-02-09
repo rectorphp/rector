@@ -13,6 +13,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
@@ -142,6 +143,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->removedAndAddedFilesCollector->reset();
     }
 
+    /**
+     * @return class-string<RectorInterface>
+     */
     protected function getRectorClass(): string
     {
         // can be implemented
