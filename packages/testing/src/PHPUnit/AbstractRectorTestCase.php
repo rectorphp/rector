@@ -16,6 +16,7 @@ use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
@@ -110,6 +111,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     private $oldParameterValues = [];
 
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
     protected function setUp(): void
     {
         $this->runnableRectorFactory = new RunnableRectorFactory();
@@ -158,6 +164,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->fileProcessor = $this->getService(FileProcessor::class);
         $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);
         $this->parameterProvider = $this->getService(ParameterProvider::class);
+        $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
 
@@ -331,13 +338,24 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             return;
         }
 
-        $movedFiles = $this->removedAndAddedFilesCollector->getMovedFiles();
-        foreach ($movedFiles as $movedFile) {
-            if (! Strings::endsWith($movedFile->getNewPathname(), $expectedExtraFileName)) {
+        $addedFilesWithNodes = $this->removedAndAddedFilesCollector->getAddedFilesWithNodes();
+        foreach ($addedFilesWithNodes as $addedFileWithNodes) {
+            if (! Strings::endsWith($addedFileWithNodes->getFilePath(), $expectedExtraFileName)) {
                 continue;
             }
 
-            $this->assertStringEqualsFile($expectedExtraContentFilePath, $movedFile->getFileContent());
+            $printedFileContent = $this->betterStandardPrinter->prettyPrintFile($addedFileWithNodes->getNodes());
+            $this->assertStringEqualsFile($expectedExtraContentFilePath, $printedFileContent);
+            return;
+        }
+
+        $movedFilesWithContent = $this->removedAndAddedFilesCollector->getMovedFileWithContent();
+        foreach ($movedFilesWithContent as $movedFileWithContent) {
+            if (! Strings::endsWith($movedFileWithContent->getNewPathname(), $expectedExtraFileName)) {
+                continue;
+            }
+
+            $this->assertStringEqualsFile($expectedExtraContentFilePath, $movedFileWithContent->getFileContent());
             return;
         }
 

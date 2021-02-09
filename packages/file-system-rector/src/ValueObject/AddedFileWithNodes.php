@@ -18,7 +18,7 @@ final class AddedFileWithNodes implements AddedFileInterface, FileWithNodesInter
     /**
      * @var Node[]
      */
-    private $nodes;
+    private $nodes = [];
 
     /**
      * @param Node[] $nodes

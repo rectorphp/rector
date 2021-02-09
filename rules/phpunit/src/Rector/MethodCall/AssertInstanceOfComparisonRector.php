@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Renaming\NodeManipulator\IdentifierManipulator;
@@ -98,13 +99,16 @@ final class AssertInstanceOfComparisonRector extends AbstractRector
         /** @var Instanceof_ $comparison */
         $comparison = $oldArguments[0]->value;
 
-        $class = $comparison->class;
         $argument = $comparison->expr;
-
         unset($oldArguments[0]);
 
+        $className = $this->getName($comparison->class);
+        if ($className === null) {
+            throw new ShouldNotHappenException();
+        }
+
         $node->args = array_merge([
-            new Arg($this->nodeFactory->createClassConstReference((string) $class)),
+            new Arg($this->nodeFactory->createClassConstReference($className)),
             new Arg($argument),
         ], $oldArguments);
     }

@@ -9,9 +9,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Function_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticRectorStrings;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -22,16 +20,6 @@ final class ClassNaming
      * @var string
      */
     private const INPUT_HASH_NAMING_REGEX = '#input_(.*?)_#';
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-    }
 
     /**
      * @param string|Name|Identifier $name
@@ -56,10 +44,7 @@ final class ClassNaming
         }
 
         if ($name instanceof Name || $name instanceof Identifier) {
-            $name = $this->nodeNameResolver->getName($name);
-            if ($name === null) {
-                throw new ShouldNotHappenException();
-            }
+            $name = $name->toString();
         }
 
         $name = trim($name, '\\');

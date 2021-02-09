@@ -328,7 +328,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
             $this->mirrorAttributes($originalNodeWithAttributes, $node);
             $this->updateAttributes($node);
             $this->keepFileInfoAttribute($node, $originalNode);
-            $this->notifyNodeFileInfo($node);
+            $this->rectorChangeCollector->notifyNodeFileInfo($node);
         }
 
         // if stmt ("$value;") was replaced by expr ("$value"), add the ending ";" (Expression) to prevent breaking the code
@@ -551,7 +551,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected function addNodesAfterNode(array $newNodes, Node $positionNode): void
     {
         $this->nodesToAddCollector->addNodesAfterNode($newNodes, $positionNode);
-        $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
 
     /**
@@ -560,19 +559,16 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected function addNodesBeforeNode(array $newNodes, Node $positionNode): void
     {
         $this->nodesToAddCollector->addNodesBeforeNode($newNodes, $positionNode);
-        $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
 
     protected function addNodeAfterNode(Node $newNode, Node $positionNode): void
     {
         $this->nodesToAddCollector->addNodeAfterNode($newNode, $positionNode);
-        $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
 
     protected function addNodeBeforeNode(Node $newNode, Node $positionNode): void
     {
         $this->nodesToAddCollector->addNodeBeforeNode($newNode, $positionNode);
-        $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
 
     protected function addPropertyToCollector(Property $property): void
@@ -597,13 +593,11 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected function addConstantToClass(Class_ $class, ClassConst $classConst): void
     {
         $this->propertyToAddCollector->addConstantToClass($class, $classConst);
-        $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
 
     protected function addPropertyToClass(Class_ $class, ?Type $propertyType, string $propertyName): void
     {
         $this->propertyToAddCollector->addPropertyWithoutConstructorToClass($propertyName, $propertyType, $class);
-        $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
 
     protected function removeNode(Node $node): void
@@ -730,10 +724,5 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
 
         // names are the same
         return $this->areNodesEqual($originalNode->getAttribute(AttributeKey::ORIGINAL_NAME), $node);
-    }
-
-    private function notifyNodeFileInfo(Node $node): void
-    {
-        $this->rectorChangeCollector->notifyNodeFileInfo($node);
     }
 }

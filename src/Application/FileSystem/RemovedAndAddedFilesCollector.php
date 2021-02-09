@@ -8,6 +8,7 @@ use Rector\FileSystemRector\Contract\AddedFileInterface;
 use Rector\FileSystemRector\Contract\MovedFileInterface;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
+use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
 use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -130,6 +131,16 @@ final class RemovedAndAddedFilesCollector
     {
         return array_filter($this->movedFiles, function (MovedFileInterface $movedFile): bool {
             return $movedFile instanceof MovedFileWithNodes;
+        });
+    }
+
+    /**
+     * @return MovedFileWithContent[]
+     */
+    public function getMovedFileWithContent(): array
+    {
+        return array_filter($this->movedFiles, function (MovedFileInterface $movedFile): bool {
+            return $movedFile instanceof MovedFileWithContent;
         });
     }
 
