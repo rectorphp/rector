@@ -110,7 +110,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         if ($this->provideConfigFileInfo() !== null) {
             $configFileInfos = self::$rectorConfigsResolver->resolveFromConfigFileInfo($this->provideConfigFileInfo());
 
-            $this->bootKernelWithConfigs(RectorKernel::class, $configFileInfos);
+            $this->bootKernelWithConfigsAndStaticCache(RectorKernel::class, $configFileInfos);
 
             $enabledRectorsProvider = $this->getService(EnabledRectorsProvider::class);
             $enabledRectorsProvider->reset();
