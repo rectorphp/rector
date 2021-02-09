@@ -6,8 +6,6 @@ namespace Rector\Transform\Tests\Rector\New_\NewToConstructorInjectionRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\New_\NewToConstructorInjectionRector;
-use Rector\Transform\Tests\Rector\New_\NewToConstructorInjectionRector\Source\DummyValidator;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NewToConstructorInjectionRectorTest extends AbstractRectorTestCase
@@ -25,15 +23,8 @@ final class NewToConstructorInjectionRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            NewToConstructorInjectionRector::class => [
-                NewToConstructorInjectionRector::TYPES_TO_CONSTRUCTOR_INJECTION => [DummyValidator::class],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

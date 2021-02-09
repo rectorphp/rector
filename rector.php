@@ -20,8 +20,6 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(\Rector\Core\Rector\ClassMethod\GetRectorsWithConfigurationToProvideConfigFileInfoRector::class);
-
     $configuration = ValueObjectInliner::inline([
         new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
     ]);

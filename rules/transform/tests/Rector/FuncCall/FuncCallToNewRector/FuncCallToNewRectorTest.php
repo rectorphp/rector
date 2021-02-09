@@ -6,7 +6,6 @@ namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToNewRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\FuncCall\FuncCallToNewRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FuncCallToNewRectorTest extends AbstractRectorTestCase
@@ -24,17 +23,8 @@ final class FuncCallToNewRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            FuncCallToNewRector::class => [
-                FuncCallToNewRector::FUNCTIONS_TO_NEWS => [
-                    'collection' => ['Collection'],
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

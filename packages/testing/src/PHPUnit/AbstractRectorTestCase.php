@@ -20,7 +20,6 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
-use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ContainerInterface;
 use Rector\Testing\Application\EnabledRectorsProvider;
 use Rector\Testing\Contract\RunnableInterface;
 use Rector\Testing\Finder\RectorsFinder;
@@ -31,8 +30,6 @@ use Rector\Testing\PHPUnit\Behavior\RunnableTestTrait;
 use Rector\Testing\ValueObject\InputFilePathWithExpectedFile;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
@@ -97,7 +94,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected $originalTempFileInfo;
 
     /**
-     * @var Container|ContainerInterface|null
+     * @var SmartFileInfo
      */
     protected static $allRectorContainer;
 
@@ -125,7 +122,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         if ($this->provideConfigFileInfo() !== null) {
             $configFileInfos = $this->resolveConfigs($this->provideConfigFileInfo());
 
-            $this->bootKernelWithConfigInfos(RectorKernel::class, $configFileInfos);
+            $this->bootKernelWithConfigs(RectorKernel::class, $configFileInfos);
 
             $enabledRectorsProvider = $this->getService(EnabledRectorsProvider::class);
             $enabledRectorsProvider->reset();
@@ -198,31 +195,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return null;
     }
 
-    /**
-     * @deprecated Use config instead, just to narrow 2 ways to add configured config to just 1. Now
-     * with PHP its easy pick.
-     *
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
-    {
-        // can be implemented, has the highest priority
-        return [];
-    }
-
-    /**
-     * @return mixed[]
-     */
     protected function getCurrentTestRectorClassesWithConfiguration(): array
     {
-        if ($this->getRectorsWithConfiguration() !== []) {
-            foreach (array_keys($this->getRectorsWithConfiguration()) as $rectorClass) {
-                $this->ensureRectorClassIsValid($rectorClass, 'getRectorsWithConfiguration');
-            }
-
-            return $this->getRectorsWithConfiguration();
-        }
-
         $rectorClass = $this->getRectorClass();
         $this->ensureRectorClassIsValid($rectorClass, 'getRectorClass');
 
@@ -251,35 +225,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $parameterProvider->changeParameter($name, $value);
     }
 
-    /**
-     * @deprecated Will be supported in Symplify 9
-     * @param SmartFileInfo[] $configFileInfos
-     */
-    protected function bootKernelWithConfigInfos(string $class, array $configFileInfos): KernelInterface
-    {
-        $configFiles = [];
-        foreach ($configFileInfos as $configFileInfo) {
-            $configFiles[] = $configFileInfo->getRealPath();
-        }
-
-        return $this->bootKernelWithConfigs($class, $configFiles);
-    }
-
     protected function getPhpVersion(): int
     {
         // to be implemented
         return self::PHP_VERSION_UNDEFINED;
-    }
-
-    protected function assertFileMissing(string $temporaryFilePath): void
-    {
-        // PHPUnit 9.0 ready
-        if (method_exists($this, 'assertFileDoesNotExist')) {
-            $this->assertFileDoesNotExist($temporaryFilePath);
-        } else {
-            // PHPUnit 8.0 ready
-            $this->assertFileNotExists($temporaryFilePath);
-        }
     }
 
     protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
@@ -518,6 +467,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $coreRectorClasses = $rectorsFinder->findCoreRectorClasses();
 
         $listForConfig = [];
+
         foreach ($coreRectorClasses as $rectorClass) {
             $listForConfig[$rectorClass] = null;
         }

@@ -6,9 +6,6 @@ namespace Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCa
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
-use Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Source\TypeClassToReplaceMethodCallBy;
-use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ReplaceParentCallByPropertyCallRectorTest extends AbstractRectorTestCase
@@ -26,21 +23,8 @@ final class ReplaceParentCallByPropertyCallRectorTest extends AbstractRectorTest
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            ReplaceParentCallByPropertyCallRector::class => [
-                ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => [
-                    new ReplaceParentCallByPropertyCall(
-                        TypeClassToReplaceMethodCallBy::class,
-                        'someMethod',
-                        'someProperty'
-                    ),
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

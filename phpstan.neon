@@ -527,3 +527,8 @@ parameters:
 
         - '#Trait method "printArrayItem\(\)" should not contain any logic, but only delegate to other class call#'
         - '#Trait method "makeKeysExplicit\(\)" should not contain any logic, but only delegate to other class call#'
+
+        -
+            message: '#For complex configuration use value object over array#'
+            paths:
+                 - '*/config/configured_rule.php'

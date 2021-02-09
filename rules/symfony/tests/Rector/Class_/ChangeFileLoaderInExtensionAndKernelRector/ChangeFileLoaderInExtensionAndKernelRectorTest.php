@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
 
 use Iterator;
-use Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,16 +23,8 @@ final class ChangeFileLoaderInExtensionAndKernelRectorTest extends AbstractRecto
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            ChangeFileLoaderInExtensionAndKernelRector::class => [
-                ChangeFileLoaderInExtensionAndKernelRector::FROM => 'xml',
-                ChangeFileLoaderInExtensionAndKernelRector::TO => 'yaml',
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

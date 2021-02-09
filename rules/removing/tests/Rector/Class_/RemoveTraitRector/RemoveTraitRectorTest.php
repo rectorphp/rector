@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\Removing\Tests\Rector\Class_\RemoveTraitRector;
 
 use Iterator;
-use Rector\Removing\Rector\Class_\RemoveTraitRector;
-use Rector\Removing\Tests\Rector\Class_\RemoveTraitRector\Source\TraitToBeRemoved;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -25,15 +23,8 @@ final class RemoveTraitRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            RemoveTraitRector::class => [
-                RemoveTraitRector::TRAITS_TO_REMOVE => [TraitToBeRemoved::class],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

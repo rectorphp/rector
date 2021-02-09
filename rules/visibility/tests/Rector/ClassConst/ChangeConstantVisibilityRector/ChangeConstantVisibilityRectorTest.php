@@ -5,11 +5,7 @@ declare(strict_types=1);
 namespace Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRector;
 
 use Iterator;
-use Rector\Core\ValueObject\Visibility;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
-use Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Source\ParentObject;
-use Rector\Visibility\ValueObject\ClassConstantVisibilityChange;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
@@ -27,32 +23,8 @@ final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            ChangeConstantVisibilityRector::class => [
-                ChangeConstantVisibilityRector::CLASS_CONSTANT_VISIBILITY_CHANGES => [
-                    new ClassConstantVisibilityChange(ParentObject::class, 'TO_BE_PUBLIC_CONSTANT', Visibility::PUBLIC),
-                    new ClassConstantVisibilityChange(
-                        ParentObject::class,
-                        'TO_BE_PROTECTED_CONSTANT',
-                        Visibility::PROTECTED
-                    ),
-                    new ClassConstantVisibilityChange(
-                        ParentObject::class,
-                        'TO_BE_PRIVATE_CONSTANT',
-                        Visibility::PRIVATE
-                    ),
-                    new ClassConstantVisibilityChange(
-                        'Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture\Fixture2',
-                        'TO_BE_PRIVATE_CONSTANT',
-                        Visibility::PRIVATE
-                    ),
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

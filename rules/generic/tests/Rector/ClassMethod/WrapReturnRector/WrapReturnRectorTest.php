@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\ClassMethod\WrapReturnRector;
 
 use Iterator;
-use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
-use Rector\Generic\Tests\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
-use Rector\Generic\ValueObject\WrapReturn;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -26,15 +23,8 @@ final class WrapReturnRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            WrapReturnRector::class => [
-                WrapReturnRector::TYPE_METHOD_WRAPS => [new WrapReturn(SomeReturnClass::class, 'getItem', true)],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

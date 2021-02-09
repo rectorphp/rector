@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Transform\ValueObject\IssetUnsetToMethodCall;
+use Rector\Transform\ValueObject\UnsetAndIssetToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -26,13 +26,13 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector implements Co
     public const ISSET_UNSET_TO_METHOD_CALL = 'isset_unset_to_method_call';
 
     /**
-     * @var IssetUnsetToMethodCall[]
+     * @var UnsetAndIssetToMethodCall[]
      */
     private $issetUnsetToMethodCalls = [];
 
     public function getRuleDefinition(): RuleDefinition
     {
-        $issetUnsetToMethodCall = new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService');
+        $issetUnsetToMethodCall = new UnsetAndIssetToMethodCall('SomeContainer', 'hasService', 'removeService');
 
         return new RuleDefinition('Turns defined `__isset`/`__unset` calls to specific method calls.', [
             new ConfiguredCodeSample(
@@ -104,7 +104,7 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $issetUnsetToMethodCalls = $configuration[self::ISSET_UNSET_TO_METHOD_CALL] ?? [];
-        Assert::allIsInstanceOf($issetUnsetToMethodCalls, IssetUnsetToMethodCall::class);
+        Assert::allIsInstanceOf($issetUnsetToMethodCalls, UnsetAndIssetToMethodCall::class);
 
         $this->issetUnsetToMethodCalls = $issetUnsetToMethodCalls;
     }
@@ -112,7 +112,7 @@ CODE_SAMPLE
     private function processArrayDimFetchNode(
         Node $node,
         ArrayDimFetch $arrayDimFetch,
-        IssetUnsetToMethodCall $issetUnsetToMethodCall
+        UnsetAndIssetToMethodCall $issetUnsetToMethodCall
     ): ?Node {
         if ($node instanceof Isset_) {
             if ($issetUnsetToMethodCall->getIssetMethodCall() === '') {

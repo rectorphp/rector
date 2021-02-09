@@ -6,9 +6,6 @@ namespace Rector\Transform\Tests\Rector\New_\NewArgToMethodCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\New_\NewArgToMethodCallRector;
-use Rector\Transform\Tests\Rector\New_\NewArgToMethodCallRector\Source\SomeDotenv;
-use Rector\Transform\ValueObject\NewArgToMethodCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NewArgToMethodCallRectorTest extends AbstractRectorTestCase
@@ -26,17 +23,8 @@ final class NewArgToMethodCallRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            NewArgToMethodCallRector::class => [
-                NewArgToMethodCallRector::NEW_ARGS_TO_METHOD_CALLS => [
-                    new NewArgToMethodCall(SomeDotenv::class, true, 'usePutenv'),
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

@@ -6,12 +6,6 @@ namespace Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\Class_\ParentClassToTraitsRector;
-use Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherParentObject;
-use Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject;
-use Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SecondTrait;
-use Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
-use Rector\Transform\ValueObject\ParentClassToTraits;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ParentClassToTraitsRectorTest extends AbstractRectorTestCase
@@ -29,18 +23,8 @@ final class ParentClassToTraitsRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            ParentClassToTraitsRector::class => [
-                ParentClassToTraitsRector::PARENT_CLASS_TO_TRAITS => [
-                    new ParentClassToTraits(ParentObject::class, [SomeTrait::class]),
-                    new ParentClassToTraits(AnotherParentObject::class, [SomeTrait::class, SecondTrait::class]),
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

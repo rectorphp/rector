@@ -6,9 +6,6 @@ namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToAnotherMethodCall
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
-use Rector\Transform\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\Source\NetteServiceDefinition;
-use Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MethodCallToAnotherMethodCallWithArgumentsRectorTest extends AbstractRectorTestCase
@@ -26,22 +23,8 @@ final class MethodCallToAnotherMethodCallWithArgumentsRectorTest extends Abstrac
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            MethodCallToAnotherMethodCallWithArgumentsRector::class => [
-                MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => [
-                    new MethodCallToAnotherMethodCallWithArguments(
-                        NetteServiceDefinition::class,
-                        'setInject',
-                        'addTag',
-                        ['inject']
-                    ),
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

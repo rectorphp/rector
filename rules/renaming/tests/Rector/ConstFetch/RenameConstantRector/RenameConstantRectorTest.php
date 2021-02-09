@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Renaming\Tests\Rector\ConstFetch\RenameConstantRector;
 
 use Iterator;
-use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,18 +23,8 @@ final class RenameConstantRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            RenameConstantRector::class => [
-                RenameConstantRector::OLD_TO_NEW_CONSTANTS => [
-                    'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
-                    'OLD_CONSTANT' => 'NEW_CONSTANT',
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

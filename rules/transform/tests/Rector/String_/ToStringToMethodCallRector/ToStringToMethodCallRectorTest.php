@@ -6,8 +6,6 @@ namespace Rector\Transform\Tests\Rector\String_\ToStringToMethodCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\String_\ToStringToMethodCallRector;
-use Symfony\Component\Config\ConfigCache;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ToStringToMethodCallRectorTest extends AbstractRectorTestCase
@@ -25,17 +23,8 @@ final class ToStringToMethodCallRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            ToStringToMethodCallRector::class => [
-                ToStringToMethodCallRector::METHOD_NAMES_BY_TYPE => [
-                    ConfigCache::class => 'getPath',
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

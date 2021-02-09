@@ -96,7 +96,7 @@
             "Rector\\CodeQuality\\": "rules/code-quality/src",
             "Rector\\CodingStyle\\": "rules/coding-style/src",
             "Rector\\Composer\\": "rules/composer/src",
-            "Rector\\Core\\": ["src", "rules/core/src"],
+            "Rector\\Core\\": "src",
             "Rector\\DeadCode\\": "rules/dead-code/src",
             "Rector\\DependencyInjection\\": "rules/dependency-injection/src",
             "Rector\\EarlyReturn\\": "rules/early-return/src",

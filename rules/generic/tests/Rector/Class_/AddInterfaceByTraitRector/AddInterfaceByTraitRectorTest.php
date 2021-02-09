@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Rector\Generic\Tests\Rector\Class_\AddInterfaceByTraitRector;
 
 use Iterator;
-use Rector\Generic\Rector\Class_\AddInterfaceByTraitRector;
-use Rector\Generic\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeInterface;
-use Rector\Generic\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -26,17 +23,8 @@ final class AddInterfaceByTraitRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            AddInterfaceByTraitRector::class => [
-                AddInterfaceByTraitRector::INTERFACE_BY_TRAIT => [
-                    SomeTrait::class => SomeInterface::class,
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

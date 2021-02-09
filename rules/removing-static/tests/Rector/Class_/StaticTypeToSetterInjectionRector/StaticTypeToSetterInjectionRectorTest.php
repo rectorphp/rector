@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector;
 
 use Iterator;
-use Rector\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector;
-use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory;
-use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactoryWithInterface;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -26,19 +23,8 @@ final class StaticTypeToSetterInjectionRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            StaticTypeToSetterInjectionRector::class => [
-                StaticTypeToSetterInjectionRector::STATIC_TYPES => [
-                    GenericEntityFactory::class,
-                    // with adding a parent interface to the class
-                    'ParentSetterEnforcingInterface' => GenericEntityFactoryWithInterface::class,
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

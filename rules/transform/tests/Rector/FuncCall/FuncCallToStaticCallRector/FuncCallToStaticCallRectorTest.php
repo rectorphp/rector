@@ -6,8 +6,6 @@ namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToStaticCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
-use Rector\Transform\ValueObject\FuncCallToStaticCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FuncCallToStaticCallRectorTest extends AbstractRectorTestCase
@@ -25,18 +23,8 @@ final class FuncCallToStaticCallRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            FuncCallToStaticCallRector::class => [
-                FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => [
-                    new FuncCallToStaticCall('view', 'SomeStaticClass', 'render'),
-                    new FuncCallToStaticCall('SomeNamespaced\view', 'AnotherStaticClass', 'render'),
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

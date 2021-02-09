@@ -6,9 +6,6 @@ namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
-use Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Source\SomeTranslator;
-use Rector\Transform\ValueObject\FuncNameToMethodCallName;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FuncCallToMethodCallRectorTest extends AbstractRectorTestCase
@@ -26,23 +23,8 @@ final class FuncCallToMethodCallRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            FuncCallToMethodCallRector::class => [
-                FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => [
-                    new FuncNameToMethodCallName('view', 'Namespaced\SomeRenderer', 'render'),
-                    new FuncNameToMethodCallName('translate', SomeTranslator::class, 'translateMethod'),
-                    new FuncNameToMethodCallName(
-                        'Rector\Generic\Tests\Rector\Function_\FuncCallToMethodCallRector\Source\some_view_function',
-                        'Namespaced\SomeRenderer',
-                        'render'
-                    ),
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

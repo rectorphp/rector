@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\Visibility;
-use Rector\Visibility\ValueObject\ClassConstantVisibilityChange;
+use Rector\Visibility\ValueObject\ChangeConstantVisibility;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -25,7 +25,7 @@ final class ChangeConstantVisibilityRector extends AbstractRector implements Con
     public const CLASS_CONSTANT_VISIBILITY_CHANGES = 'class_constant_visibility_changes';
 
     /**
-     * @var ClassConstantVisibilityChange[]
+     * @var ChangeConstantVisibility[]
      */
     private $classConstantVisibilityChanges = [];
 
@@ -61,7 +61,7 @@ CODE_SAMPLE
                                 ,
                                 [
                                     self::CLASS_CONSTANT_VISIBILITY_CHANGES => [
-                                        new ClassConstantVisibilityChange(
+                                        new ChangeConstantVisibility(
                                             'ParentObject',
                                             'SOME_CONSTANT',
                                             Visibility::PROTECTED
@@ -106,7 +106,7 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $classConstantVisibilityChanges = $configuration[self::CLASS_CONSTANT_VISIBILITY_CHANGES] ?? [];
-        Assert::allIsInstanceOf($classConstantVisibilityChanges, ClassConstantVisibilityChange::class);
+        Assert::allIsInstanceOf($classConstantVisibilityChanges, ChangeConstantVisibility::class);
         $this->classConstantVisibilityChanges = $classConstantVisibilityChanges;
     }
 }
