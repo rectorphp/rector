@@ -9,7 +9,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -23,6 +22,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class IfManipulator
@@ -52,18 +52,25 @@ final class IfManipulator
      */
     private $valueResolver;
 
+    /**
+     * @var ConditionInverter
+     */
+    private $conditionInverter;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
         StmtsManipulator $stmtsManipulator,
-        ValueResolver $valueResolver
+        ValueResolver $valueResolver,
+        ConditionInverter $conditionInverter
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->stmtsManipulator = $stmtsManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->valueResolver = $valueResolver;
+        $this->conditionInverter = $conditionInverter;
     }
 
     /**
@@ -336,9 +343,7 @@ final class IfManipulator
 
     public function createIfNegation(Expr $expr, Stmt $stmt): If_
     {
-        $expr = $expr instanceof BooleanNot
-            ? $expr->expr
-            : $this->createNegationExpr($expr);
+        $expr = $this->conditionInverter->createInvertedCondition($expr);
 
         return new If_(
             $expr,
@@ -346,19 +351,6 @@ final class IfManipulator
                 'stmts' => [$stmt],
             ]
         );
-    }
-
-    private function createNegationExpr(Expr $expr): Expr
-    {
-        if ($expr instanceof Identical) {
-            return new NotIdentical($expr->left, $expr->right);
-        }
-
-        if ($expr instanceof NotIdentical) {
-            return new Identical($expr->left, $expr->right);
-        }
-
-        return new BooleanNot($expr);
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $return): ?Expr
