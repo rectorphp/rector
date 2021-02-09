@@ -111,9 +111,6 @@ final class NodeRemovingPostRector extends NodeVisitorAbstract implements PostRe
         MethodCall $mainMethodCall,
         MethodCall $toBeRemovedMethodCall
     ): bool {
-        if (! $mainMethodCall instanceof MethodCall) {
-            return false;
-        }
         if (! $mainMethodCall->var instanceof MethodCall) {
             return false;
         }
