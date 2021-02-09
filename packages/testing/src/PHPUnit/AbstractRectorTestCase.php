@@ -159,11 +159,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     protected function getCurrentTestRectorClassesWithConfiguration(): array
     {
-        $rectorClass = $this->getRectorClass();
-        $this->ensureRectorClassIsValid($rectorClass, 'getRectorClass');
-
         return [
-            $rectorClass => null,
+            $this->getRectorClass() => null,
         ];
     }
 
@@ -315,20 +312,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         foreach ($this->getCurrentTestRectorClassesWithConfiguration() as $rectorClass => $configuration) {
             $enabledRectorsProvider->addEnabledRector($rectorClass, (array) $configuration);
         }
-    }
-
-    private function ensureRectorClassIsValid(string $rectorClass, string $methodName): void
-    {
-        if (is_a($rectorClass, PhpRectorInterface::class, true)) {
-            return;
-        }
-
-        throw new ShouldNotHappenException(sprintf(
-            'Class "%s" in "%s()" method must be type of "%s"',
-            $rectorClass,
-            $methodName,
-            PhpRectorInterface::class
-        ));
     }
 
     /**
