@@ -11,12 +11,13 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Type\ObjectType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Type\ObjectType;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\If_\RemoveDeadInstanceOfRector\RemoveDeadInstanceOfRectorTest
@@ -128,6 +129,11 @@ CODE_SAMPLE
         $parentPreviousVar = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         if (! $parentPreviousVar instanceof Param) {
+            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+            if ($phpDocInfo instanceof PhpDocInfo) {
+                return false;
+            }
+
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if (! $parentNode instanceof Assign) {
                 return false;
