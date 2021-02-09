@@ -28,7 +28,7 @@ final class RectorNodeTraverser extends NodeTraverser
     /**
      * @var EnabledRectorProvider
      */
-    private $enabledRectorsProvider;
+    private $enabledRectorProvider;
 
     /**
      * @var NodeFinder
@@ -41,7 +41,7 @@ final class RectorNodeTraverser extends NodeTraverser
     private $currentFileInfoProvider;
 
     public function __construct(
-        EnabledRectorProvider $enabledRectorsProvider,
+        EnabledRectorProvider $enabledRectorProvider,
         Configuration $configuration,
         ActiveRectorsProvider $activeRectorsProvider,
         NodeFinder $nodeFinder,
@@ -51,7 +51,7 @@ final class RectorNodeTraverser extends NodeTraverser
         $phpRectors = $activeRectorsProvider->provideByType(PhpRectorInterface::class);
 
         $this->allPhpRectors = $phpRectors;
-        $this->enabledRectorsProvider = $enabledRectorsProvider;
+        $this->enabledRectorProvider = $enabledRectorProvider;
 
         foreach ($phpRectors as $phpRector) {
             if ($configuration->isCacheEnabled() && ! $configuration->shouldClearCache() && $phpRector instanceof ZeroCacheRectorInterface) {
@@ -70,7 +70,7 @@ final class RectorNodeTraverser extends NodeTraverser
      */
     public function traverseFileNode(FileNode $fileNode): array
     {
-        if ($this->enabledRectorsProvider->isConfigured()) {
+        if ($this->enabledRectorProvider->isConfigured()) {
             $this->configureEnabledRectorOnly();
         }
 
@@ -92,7 +92,7 @@ final class RectorNodeTraverser extends NodeTraverser
      */
     public function traverse(array $nodes): array
     {
-        if ($this->enabledRectorsProvider->isConfigured()) {
+        if ($this->enabledRectorProvider->isConfigured()) {
             $this->configureEnabledRectorOnly();
         }
 
@@ -141,7 +141,7 @@ final class RectorNodeTraverser extends NodeTraverser
     private function configureEnabledRectorOnly(): void
     {
         $this->visitors = [];
-        $enabledRector = $this->enabledRectorsProvider->getEnabledRector();
+        $enabledRector = $this->enabledRectorProvider->getEnabledRector();
 
         foreach ($this->allPhpRectors as $phpRector) {
             if (! is_a($phpRector, $enabledRector, true)) {
