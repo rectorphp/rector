@@ -88,7 +88,7 @@ CODE_SAMPLE
         }
 
         $type = $node->types[0];
-        $typeShortName = $this->getShortName($type);
+        $typeShortName = $this->nodeNameResolver->getShortName($type);
 
         $newVariableName = Strings::replace(
             lcfirst($typeShortName),

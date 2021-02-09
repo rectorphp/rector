@@ -16,6 +16,8 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassLike;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
@@ -54,18 +56,25 @@ final class NodeNameResolver
     private $betterStandardPrinter;
 
     /**
+     * @var ClassNaming
+     */
+    private $classNaming;
+
+    /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
     public function __construct(
         RegexPatternDetector $regexPatternDetector,
         BetterStandardPrinter $betterStandardPrinter,
         CurrentFileInfoProvider $currentFileInfoProvider,
+        ClassNaming $classNaming,
         array $nodeNameResolvers = []
     ) {
         $this->regexPatternDetector = $regexPatternDetector;
         $this->nodeNameResolvers = $nodeNameResolvers;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->classNaming = $classNaming;
     }
 
     /**
@@ -329,6 +338,14 @@ final class NodeNameResolver
         }
 
         return is_a($className, $desiredClassName, true);
+    }
+
+    /**
+     * @param string|Name|Identifier|ClassLike $name
+     */
+    public function getShortName($name): string
+    {
+        return $this->classNaming->getShortName($name);
     }
 
     private function isCallOrIdentifier(Node $node): bool

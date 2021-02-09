@@ -9,20 +9,15 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -367,24 +362,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         return $this->nodeNameResolver->getName($node);
     }
 
-    /**
-     * @param string|Name|Identifier|ClassLike $name
-     */
-    protected function getShortName($name): string
-    {
-        return $this->classNaming->getShortName($name);
-    }
-
-    protected function isLocalPropertyFetchNamed(Node $node, string $name): bool
-    {
-        return $this->nodeNameResolver->isLocalPropertyFetchNamed($node, $name);
-    }
-
-    protected function isLocalMethodCallNamed(Node $node, string $name): bool
-    {
-        return $this->nodeNameResolver->isLocalMethodCallNamed($node, $name);
-    }
-
     protected function isFuncCallName(Node $node, string $name): bool
     {
         return $this->nodeNameResolver->isFuncCallName($node, $name);
@@ -429,11 +406,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected function getStaticType(Node $node): Type
     {
         return $this->nodeTypeResolver->getStaticType($node);
-    }
-
-    protected function isNullableType(Node $node): bool
-    {
-        return $this->nodeTypeResolver->isNullableType($node);
     }
 
     protected function getObjectType(Node $node): Type
@@ -484,15 +456,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      */
     protected function areValues(array $nodes, array $expectedValues): bool
     {
-        foreach ($nodes as $i => $node) {
-            if ($node !== null && $this->valueResolver->isValue($node, $expectedValues[$i])) {
-                continue;
-            }
-
-            return false;
-        }
-
-        return true;
+        return $this->valueResolver->areValues($nodes, $expectedValues);
     }
 
     protected function isAtLeastPhpVersion(int $version): bool
@@ -556,18 +520,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
             [ProjectType::OPEN_SOURCE, ProjectType::OPEN_SOURCE_UNDESCORED],
             true
         );
-    }
-
-    /**
-     * @param Expr $expr
-     */
-    protected function createBoolCast(?Node $parentNode, Node $expr): Bool_
-    {
-        if ($parentNode instanceof Return_ && $expr instanceof Assign) {
-            $expr = $expr->expr;
-        }
-
-        return new Bool_($expr);
     }
 
     /**

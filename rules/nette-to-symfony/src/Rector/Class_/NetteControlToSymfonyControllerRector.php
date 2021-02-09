@@ -105,7 +105,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $shortClassName = $this->getShortName($node);
+        $shortClassName = $this->nodeNameResolver->getShortName($node);
         $shortClassName = $this->removeSuffix($shortClassName, 'Control');
         $shortClassName .= 'Controller';
 

@@ -134,7 +134,7 @@ CODE_SAMPLE
         }
         /** @var MethodCall[] $getMethodCalls */
         $getMethodCalls = $this->betterNodeFinder->find($classMethod, function (Node $node): bool {
-            return $this->isLocalMethodCallNamed($node, 'get');
+            return $this->nodeNameResolver->isLocalMethodCallNamed($node, 'get');
         });
 
         foreach ($getMethodCalls as $getMethodCall) {
@@ -176,7 +176,7 @@ CODE_SAMPLE
     private function containsGetRequestMethod(ClassMethod $classMethod): bool
     {
         return (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node): bool {
-            return $this->isLocalMethodCallNamed($node, 'getRequest');
+            return $this->nodeNameResolver->isLocalMethodCallNamed($node, 'getRequest');
         });
     }
 
