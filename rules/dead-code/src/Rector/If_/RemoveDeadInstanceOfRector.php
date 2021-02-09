@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -17,6 +18,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDeadInstanceOfRector extends AbstractRector
 {
+    /**
+     * @var IfManipulator
+     */
+    private $ifManipulator;
+
+    public function __construct(IfManipulator $ifManipulator)
+    {
+        $this->ifManipulator = $ifManipulator;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove dead instanceof check on type hinted variable', [
@@ -60,6 +71,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->ifManipulator->isIfWithoutElseAndElseIfs($node)) {
+            return null;
+        }
+
         if ($node->cond instanceof BooleanNot && $node->cond->expr instanceof Instanceof_) {
             return $this->processMayDeadInstanceOf($node, $node->cond->expr);
         }
