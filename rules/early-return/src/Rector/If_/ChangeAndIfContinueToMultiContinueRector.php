@@ -100,10 +100,10 @@ CODE_SAMPLE
 
     private function processMultiIfContinue(If_ $if): If_
     {
+        $node = clone $if;
         /** @var Continue_ $continue */
         $continue = $if->stmts[0];
         $ifs = $this->createMultipleIfs($if->cond, $continue, []);
-        $node = $if;
         foreach ($ifs as $key => $if) {
             if ($key === 0) {
                 $this->mirrorComments($if, $node);
