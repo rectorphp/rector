@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
@@ -21,6 +22,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class IfManipulator
@@ -50,18 +52,25 @@ final class IfManipulator
      */
     private $valueResolver;
 
+    /**
+     * @var ConditionInverter
+     */
+    private $conditionInverter;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
         StmtsManipulator $stmtsManipulator,
-        ValueResolver $valueResolver
+        ValueResolver $valueResolver,
+        ConditionInverter $conditionInverter
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->stmtsManipulator = $stmtsManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->valueResolver = $valueResolver;
+        $this->conditionInverter = $conditionInverter;
     }
 
     /**
@@ -281,7 +290,7 @@ final class IfManipulator
         return $ifs;
     }
 
-    public function isIfWithOnlyReturn(Node $node): bool
+    public function isIfWithOnly(Node $node, string $className): bool
     {
         if (! $node instanceof If_) {
             return false;
@@ -291,20 +300,7 @@ final class IfManipulator
             return false;
         }
 
-        return $this->hasOnlyStmtOfType($node, Return_::class);
-    }
-
-    public function isIfWithOnlyForeach(Node $node): bool
-    {
-        if (! $node instanceof If_) {
-            return false;
-        }
-
-        if (! $this->isIfWithoutElseAndElseIfs($node)) {
-            return false;
-        }
-
-        return $this->hasOnlyStmtOfType($node, Foreach_::class);
+        return $this->hasOnlyStmtOfType($node, $className);
     }
 
     public function isIfWithOnlyOneStmt(If_ $if): bool
@@ -343,6 +339,18 @@ final class IfManipulator
         }
 
         return ! (bool) $if->elseifs;
+    }
+
+    public function createIfNegation(Expr $expr, Stmt $stmt): If_
+    {
+        $expr = $this->conditionInverter->createInvertedCondition($expr);
+
+        return new If_(
+            $expr,
+            [
+                'stmts' => [$stmt],
+            ]
+        );
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $return): ?Expr

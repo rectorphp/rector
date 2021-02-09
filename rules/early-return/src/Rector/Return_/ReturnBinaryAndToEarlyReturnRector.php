@@ -19,12 +19,23 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\Core\NodeManipulator\IfManipulator;
 
 /**
  * @see \Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\ReturnBinaryAndToEarlyReturnRectorTest
  */
 final class ReturnBinaryAndToEarlyReturnRector extends AbstractRector
 {
+    /**
+     * @var IfManipulator
+     */
+    private $ifManipulator;
+
+    public function __construct(IfManipulator $ifManipulator)
+    {
+        $this->ifManipulator = $ifManipulator;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes Single return of && && to early returns', [
@@ -99,11 +110,11 @@ CODE_SAMPLE
     {
         while ($expr instanceof BooleanAnd) {
             $ifNegations = array_merge($ifNegations, $this->collectLeftBooleanAndToIfs($expr, $return, $ifNegations));
-            $ifNegations[] = $this->createIfNegation($expr->right);
+            $ifNegations[] = $this->ifManipulator->createIfNegation($expr->right, new Return_($this->nodeFactory->createFalse()));
 
             $expr = $expr->right;
         }
-        return $ifNegations + [$this->createIfNegation($expr)];
+        return $ifNegations + [$this->ifManipulator->createIfNegation($expr, new Return_($this->nodeFactory->createFalse()))];
     }
 
     private function getLastReturnExpr(Expr $expr): Expr
@@ -137,29 +148,9 @@ CODE_SAMPLE
     {
         $left = $booleanAnd->left;
         if (! $left instanceof BooleanAnd) {
-            return [$this->createIfNegation($left)];
+            return [$this->ifManipulator->createIfNegation($left, new Return_($this->nodeFactory->createFalse()))];
         }
 
         return $this->createMultipleIfsNegation($left, $return, $ifNegations);
-    }
-
-    private function createIfNegation(Expr $expr): If_
-    {
-        if ($expr instanceof Identical) {
-            $expr = new NotIdentical($expr->left, $expr->right);
-        } elseif ($expr instanceof NotIdentical) {
-            $expr = new Identical($expr->left, $expr->right);
-        } elseif ($expr instanceof BooleanNot) {
-            $expr = $expr->expr;
-        } else {
-            $expr = new BooleanNot($expr);
-        }
-
-        return new If_(
-            $expr,
-            [
-                'stmts' => [new Return_($this->nodeFactory->createFalse())],
-            ]
-        );
     }
 }

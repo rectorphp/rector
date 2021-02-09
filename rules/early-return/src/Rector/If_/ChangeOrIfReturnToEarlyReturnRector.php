@@ -81,7 +81,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->ifManipulator->isIfWithOnlyReturn($node)) {
+        if (! $this->ifManipulator->isIfWithOnly($node, Return_::class)) {
             return null;
         }
 
