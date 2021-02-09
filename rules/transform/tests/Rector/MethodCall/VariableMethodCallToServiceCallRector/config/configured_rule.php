@@ -9,6 +9,7 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
+<<<<<<< HEAD
 
     $configuration = ValueObjectInliner::inline([
         new VariableMethodCallToServiceCall(
@@ -23,6 +24,76 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(VariableMethodCallToServiceCallRector::class)
         ->call('configure', [[
             VariableMethodCallToServiceCallRector::VARIABLE_METHOD_CALLS_TO_SERVICE_CALLS => $configuration,
+=======
+    $services->set(VariableMethodCallToServiceCallRector::class)->call(
+        'configure',
+        [[
+            VariableMethodCallToServiceCallRector::VARIABLE_METHOD_CALLS_TO_SERVICE_CALLS => ValueObjectInliner::inline([
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                new VariableMethodCallToServiceCall(
+                    'PhpParser\Node',
+                    'getAttribute',
+                    'php_doc_info',
+                    'Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory',
+                    'createFromNodeOrEmpty'
+                ),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            ]),
+>>>>>>> bb46bb10f... use config instead of setParameter()
         ]]
     );
 };
