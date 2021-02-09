@@ -532,3 +532,8 @@ parameters:
             message: '#Use local named constant instead of inline string for regex to explain meaning by constant name#'
             paths:
                 - packages/better-php-doc-parser/src/Printer/ArrayPartPhpDocTagPrinter.php
+
+        -
+            message: '#Do not use static property#'
+            paths:
+                - rules/sensio/tests/Rector/ClassMethod/TemplateAnnotationToThisRenderRector/DifferentBundleNameRectorTest.php
