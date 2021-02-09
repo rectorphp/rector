@@ -12,7 +12,6 @@ use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use Rector\Core\Bootstrap\NoRectorsLoadedReporter;
-use Rector\Core\Configuration\RectorClassesProvider;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
@@ -78,11 +77,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PrivatesCaller::class);
     $services->set(FinderSanitizer::class);
     $services->set(FileSystemFilter::class);
-    $services->set(ParameterProvider::class);
     $services->set(ParameterProvider::class)
-        ->arg('$container', service('service_container'));
-
-    $services->set(RectorClassesProvider::class)
         ->arg('$container', service('service_container'));
 
     $services->set(CommandNaming::class);

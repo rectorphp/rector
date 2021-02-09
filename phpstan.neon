@@ -213,11 +213,6 @@ parameters:
             path: 'rules/php70/src/EregToPcreTransformer.php'
 
         -
-            message: '#Instead of container injection, use specific service#'
-            paths:
-                - src/Configuration/RectorClassesProvider.php
-
-        -
             message: '#Nested foreach with empty statement is not allowed#'
             path: packages/better-php-doc-parser/tests/PhpDocParser/TagValueNodeReprint/TagValueNodeReprintTest.php
 
@@ -537,3 +532,8 @@ parameters:
             message: '#Use local named constant instead of inline string for regex to explain meaning by constant name#'
             paths:
                 - packages/better-php-doc-parser/src/Printer/ArrayPartPhpDocTagPrinter.php
+
+        -
+            message: '#Do not use static property#'
+            paths:
+                - rules/sensio/tests/Rector/ClassMethod/TemplateAnnotationToThisRenderRector/DifferentBundleNameRectorTest.php

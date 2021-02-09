@@ -11,29 +11,11 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(ParentClassToTraitsRector::class)->call('configure', [[
-        ParentClassToTraitsRector::PARENT_CLASS_TO_TRAITS => ValueObjectInliner::inline([
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            new ParentClassToTraits(ParentObject::class, [SomeTrait::class]),
-            new ParentClassToTraits(AnotherParentObject::class, [SomeTrait::class, SecondTrait::class]),
-        ]
-        ),
-    ]]);
+    $services->set(ParentClassToTraitsRector::class)
+        ->call('configure', [[
+            ParentClassToTraitsRector::PARENT_CLASS_TO_TRAITS => ValueObjectInliner::inline([
+                new ParentClassToTraits(ParentObject::class, [SomeTrait::class]),
+                new ParentClassToTraits(AnotherParentObject::class, [SomeTrait::class, SecondTrait::class]),
+            ]),
+        ]]);
 };

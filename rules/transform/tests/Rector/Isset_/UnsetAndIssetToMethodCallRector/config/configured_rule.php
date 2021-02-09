@@ -11,9 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(UnsetAndIssetToMethodCallRector::class)->call('configure', [[
         UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => ValueObjectInliner::inline([
 
-
             new UnsetAndIssetToMethodCall(LocalContainer::class, 'hasService', 'removeService'),
-
 
         ]),
     ]]);
