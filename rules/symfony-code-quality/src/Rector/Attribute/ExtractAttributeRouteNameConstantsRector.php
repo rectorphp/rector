@@ -7,6 +7,7 @@ namespace Rector\SymfonyCodeQuality\Rector\Attribute;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use Rector\Core\Rector\AbstractRector;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\SymfonyCodeQuality\ConstantNameAndValueMatcher;
 use Rector\SymfonyCodeQuality\ConstantNameAndValueResolver;
 use Rector\SymfonyCodeQuality\NodeFactory\RouteNameClassFactory;
@@ -161,7 +162,11 @@ CODE_SAMPLE
         $constantNameAndValues = $this->constantNameAndValueResolver->resolveFromAttributes($routeAttributes, 'ROUTE_');
 
         $namespace = $this->routeNameClassFactory->create($constantNameAndValues, self::ROUTE_NAME_FILE_LOCATION);
-        $this->printNodesToFilePath([$namespace], self::ROUTE_NAME_FILE_LOCATION);
+
+        $fileContent = $this->betterStandardPrinter->prettyPrintFile([$namespace]);
+        $addedFileWithContent = new AddedFileWithContent(self::ROUTE_NAME_FILE_LOCATION, $fileContent);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
+
         $this->isRouteNameValueObjectCreated = true;
     }
 }

@@ -187,7 +187,7 @@ CODE_SAMPLE
             }
         } else {
             $smartFileInfo = new SmartFileInfo($classFileLocation);
-            $this->removeFile($smartFileInfo);
+            $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
         }
     }
 

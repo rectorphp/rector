@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Legacy\Naming\FullyQualifiedNameResolver;
 use Rector\Legacy\NodeFactory\StaticMethodClassFactory;
 use Rector\Legacy\ValueObject\FunctionToStaticCall;
@@ -185,7 +186,10 @@ CODE_SAMPLE
         $classFileDestination = $smartFileInfo->getPath() . DIRECTORY_SEPARATOR . $shortClassName . '.php';
 
         $nodesToPrint = [$this->resolveNodeToPrint($node, $class)];
-        $this->printNodesToFilePath($nodesToPrint, $classFileDestination);
+
+        $fileContent = $this->betterStandardPrinter->prettyPrintFile($nodesToPrint);
+        $addedFileWithContent = new AddedFileWithContent($classFileDestination, $fileContent);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
     }
 
     /**

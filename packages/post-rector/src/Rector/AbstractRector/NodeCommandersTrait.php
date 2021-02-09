@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
-use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\PostRector\Collector\NodesToAddCollector;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
@@ -70,7 +69,6 @@ trait NodeCommandersTrait
         UseNodesToAddCollector $useNodesToAddCollector,
         NodesToAddCollector $nodesToAddCollector,
         RectorChangeCollector $rectorChangeCollector,
-        PropertyNaming $propertyNaming,
         NodeRemover $nodeRemover,
         PropertyAdder $propertyAdder
     ): void {
@@ -79,7 +77,6 @@ trait NodeCommandersTrait
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
         $this->rectorChangeCollector = $rectorChangeCollector;
-        $this->propertyNaming = $propertyNaming;
         $this->nodeRemover = $nodeRemover;
         $this->propertyAdder = $propertyAdder;
     }

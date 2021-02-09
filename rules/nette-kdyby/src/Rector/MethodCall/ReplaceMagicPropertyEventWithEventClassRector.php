@@ -13,6 +13,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Rector\AbstractRector;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\NetteKdyby\DataProvider\EventAndListenerTreeProvider;
 use Rector\NetteKdyby\ValueObject\EventAndListenerTree;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -110,7 +111,11 @@ CODE_SAMPLE
 
         // 3. create new event class with args
         $eventClassInNamespace = $eventAndListenerTree->getEventClassInNamespace();
-        $this->printNodesToFilePath([$eventClassInNamespace], $eventAndListenerTree->getEventFileLocation());
+
+        $fileContent = $this->betterStandardPrinter->prettyPrintFile([$eventClassInNamespace]);
+        $this->removedAndAddedFilesCollector->addAddedFile(
+            new AddedFileWithContent($eventAndListenerTree->getEventFileLocation(), $fileContent)
+        );
 
         // 4. ad dispatch method call
         $dispatchMethodCall = $eventAndListenerTree->getEventDispatcherDispatchMethodCall();

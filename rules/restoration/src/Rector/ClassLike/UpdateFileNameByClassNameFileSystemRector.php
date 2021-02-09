@@ -83,7 +83,7 @@ CODE_SAMPLE
 
         // no match → rename file
         $newFileLocation = $smartFileInfo->getPath() . DIRECTORY_SEPARATOR . $classShortName . '.php';
-        $this->addMovedFile(new MovedFileWithContent($smartFileInfo, $newFileLocation));
+        $this->removedAndAddedFilesCollector->addMovedFile(new MovedFileWithContent($smartFileInfo, $newFileLocation));
 
         return null;
     }

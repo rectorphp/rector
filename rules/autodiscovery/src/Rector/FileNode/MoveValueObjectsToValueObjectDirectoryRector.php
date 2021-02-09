@@ -163,7 +163,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->addMovedFile($movedFileWithNodes);
+        $this->removedAndAddedFilesCollector->addMovedFile($movedFileWithNodes);
 
         return null;
     }

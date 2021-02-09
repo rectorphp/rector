@@ -173,6 +173,6 @@ CODE_SAMPLE
             return;
         }
 
-        $this->addMovedFile($movedFileWithNodes);
+        $this->removedAndAddedFilesCollector->addMovedFile($movedFileWithNodes);
     }
 }

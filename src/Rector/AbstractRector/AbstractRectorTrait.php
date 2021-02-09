@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -20,7 +21,6 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 trait AbstractRectorTrait
 {
-    use RemovedAndAddedFilesTrait;
     use NodeCommandersTrait;
 
     /**
@@ -44,6 +44,11 @@ trait AbstractRectorTrait
     protected $betterStandardPrinter;
 
     /**
+     * @var RemovedAndAddedFilesCollector
+     */
+    protected $removedAndAddedFilesCollector;
+
+    /**
      * @var ClassNaming
      */
     private $classNaming;
@@ -57,6 +62,7 @@ trait AbstractRectorTrait
      * @required
      */
     public function autowireAbstractRectorTrait(
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
         ClassNaming $classNaming,
@@ -64,6 +70,7 @@ trait AbstractRectorTrait
         TypeUnwrapper $typeUnwrapper,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ): void {
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classNaming = $classNaming;

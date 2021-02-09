@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeRemoval\NodeRemover;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFactory\ExpectExceptionCodeFactory;
 use Rector\PHPUnit\NodeFactory\ExpectExceptionFactory;
@@ -50,25 +49,18 @@ final class TryCatchToExpectExceptionRector extends AbstractRector
      */
     private $expectExceptionMessageFactory;
 
-    /**
-     * @var NodeRemover
-     */
-    private $nodeRemover;
-
     public function __construct(
         TestsNodeAnalyzer $testsNodeAnalyzer,
         ExpectExceptionCodeFactory $expectExceptionCodeFactory,
         ExpectExceptionMessageRegExpFactory $expectExceptionMessageRegExpFactory,
         ExpectExceptionFactory $expectExceptionFactory,
-        ExpectExceptionMessageFactory $expectExceptionMessageFactory,
-        NodeRemover $nodeRemover
+        ExpectExceptionMessageFactory $expectExceptionMessageFactory
     ) {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->expectExceptionCodeFactory = $expectExceptionCodeFactory;
         $this->expectExceptionMessageRegExpFactory = $expectExceptionMessageRegExpFactory;
         $this->expectExceptionFactory = $expectExceptionFactory;
         $this->expectExceptionMessageFactory = $expectExceptionMessageFactory;
-        $this->nodeRemover = $nodeRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
