@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector;
+use Rector\EarlyReturn\Rector\If_\ChangeAndIfContinueToMultiContinueRector;
 use Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector;
@@ -20,4 +21,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveAlwaysElseRector::class);
     $services->set(ReturnBinaryAndToEarlyReturnRector::class);
     $services->set(ChangeOrIfReturnToEarlyReturnRector::class);
+    $services->set(ChangeAndIfContinueToMultiContinueRector::class);
 };
