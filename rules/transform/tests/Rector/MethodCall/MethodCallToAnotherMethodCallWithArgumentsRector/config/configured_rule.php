@@ -10,6 +10,7 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
+<<<<<<< HEAD
 
 <<<<<<< HEAD
     $configuration = ValueObjectInliner::inline([
@@ -25,6 +26,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => $configuration,
         ]]);
 =======
+=======
+    $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)->call(
+        'configure',
+        [[
+            MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => ValueObjectInliner::inline([
+                
+>>>>>>> 49a372577... fix cs
 
                 new MethodCallToAnotherMethodCallWithArguments(
                     NetteServiceDefinition::class,

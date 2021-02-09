@@ -31,32 +31,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             VariableMethodCallToServiceCallRector::VARIABLE_METHOD_CALLS_TO_SERVICE_CALLS => ValueObjectInliner::inline([
                 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 new VariableMethodCallToServiceCall(
                     'PhpParser\Node',
                     'getAttribute',
@@ -64,32 +38,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory',
                     'createFromNodeOrEmpty'
                 ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                 
             ]),
