@@ -96,11 +96,18 @@ CODE_SAMPLE
             return null;
         }
 
+        return $this->processChangeToConstant($optionsArray, $node);
+    }
+
+    private function processChangeToConstant(Array_ $optionsArray, MethodCall $methodCall): ?Node
+    {
         foreach ($optionsArray->items as $optionsArrayItem) {
-            if ($optionsArrayItem === null || $optionsArrayItem->key === null) {
+            if ($optionsArrayItem === null) {
                 continue;
             }
-
+            if ($optionsArrayItem->key === null) {
+                continue;
+            }
             if (! $this->valueResolver->isValues($optionsArrayItem->key, ['type', 'entry_type'])) {
                 continue;
             }
@@ -119,6 +126,6 @@ CODE_SAMPLE
             $optionsArrayItem->value = $this->nodeFactory->createClassConstReference($formClass);
         }
 
-        return $node;
+        return $methodCall;
     }
 }

@@ -92,8 +92,7 @@ CODE_SAMPLE
             $type = $this->getType($object);
             /** @var Identifier|Variable $name */
             $name = $issetVar->name;
-
-            if ($type === null || ! $name instanceof Identifier) {
+            if ($this->isTypeNullOrNameNotIdentifier($type, $name)) {
                 continue;
             }
 
@@ -102,6 +101,7 @@ CODE_SAMPLE
                 continue;
             }
 
+            /** @var Identifier $name */
             $property = $name->toString();
             if ($type instanceof ObjectType) {
                 /** @var string $className */
@@ -118,6 +118,15 @@ CODE_SAMPLE
         }
 
         return $this->createReturnNodes($newNodes);
+    }
+
+    private function isTypeNullOrNameNotIdentifier(?Type $type, Node $node): bool
+    {
+        if ($type === null) {
+            return true;
+        }
+
+        return ! $node instanceof Identifier;
     }
 
     private function getType(Expr $expr): ?Type

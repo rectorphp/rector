@@ -1,13 +1,13 @@
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfContinueToMultiContinueRector\Fixture;
+namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeOrIfContinueToMultiContinueRector\Fixture;
 
-class Negated
+class Identical
 {
     public function canDrive(Car $newCar)
     {
         foreach ($cars as $car) {
-            if (! $car->hasWheels() && ! $car->hasFuel() && ! $car->isRunnable()) {
+            if ($car->getWheel() === 4 || $car->getFuel() === 'full') {
                 continue;
             }
             $car->setWheel($newCar->wheel);
@@ -20,20 +20,17 @@ class Negated
 -----
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfContinueToMultiContinueRector\Fixture;
+namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeOrIfContinueToMultiContinueRector\Fixture;
 
-class Negated
+class Identical
 {
     public function canDrive(Car $newCar)
     {
         foreach ($cars as $car) {
-            if ($car->hasWheels()) {
+            if ($car->getWheel() === 4) {
                 continue;
             }
-            if ($car->hasFuel()) {
-                continue;
-            }
-            if ($car->isRunnable()) {
+            if ($car->getFuel() === 'full') {
                 continue;
             }
             $car->setWheel($newCar->wheel);

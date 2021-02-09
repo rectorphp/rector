@@ -96,7 +96,10 @@ CODE_SAMPLE
 
             /** @var Variable $variable */
             $variable = $assign->var;
-            if ($expectedName === null || $this->isName($variable, $expectedName)) {
+            if ($expectedName === null) {
+                continue;
+            }
+            if ($this->isName($variable, $expectedName)) {
                 continue;
             }
 

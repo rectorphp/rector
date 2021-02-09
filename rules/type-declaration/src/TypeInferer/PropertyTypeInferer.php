@@ -66,7 +66,10 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
 
         foreach ($this->propertyTypeInferers as $propertyTypeInferer) {
             $type = $propertyTypeInferer->inferProperty($property);
-            if ($type instanceof VoidType || $type instanceof MixedType) {
+            if ($type instanceof VoidType) {
+                continue;
+            }
+            if ($type instanceof MixedType) {
                 continue;
             }
 

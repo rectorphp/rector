@@ -87,10 +87,15 @@ final class ArrayTypeAnalyzer
         }
 
         foreach ($nodeType->getTypes() as $intersectionNodeType) {
-            if ($intersectionNodeType instanceof ArrayType || $intersectionNodeType instanceof HasOffsetType || $intersectionNodeType instanceof NonEmptyArrayType) {
+            if ($intersectionNodeType instanceof ArrayType) {
                 continue;
             }
-
+            if ($intersectionNodeType instanceof HasOffsetType) {
+                continue;
+            }
+            if ($intersectionNodeType instanceof NonEmptyArrayType) {
+                continue;
+            }
             return false;
         }
 

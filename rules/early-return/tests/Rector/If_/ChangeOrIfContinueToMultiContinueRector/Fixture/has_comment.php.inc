@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfContinueToMultiContinueRector\Fixture;
+namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeOrIfContinueToMultiContinueRector\Fixture;
 
 class HasComment
 {
@@ -8,7 +8,7 @@ class HasComment
     {
         foreach ($cars as $car) {
             // a comment
-            if ($car->hasWheels() && $car->hasFuel()) {
+            if ($car->hasWheels() || $car->hasFuel()) {
                 continue;
             }
             $car->setWheel($newCar->wheel);
@@ -21,7 +21,7 @@ class HasComment
 -----
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfContinueToMultiContinueRector\Fixture;
+namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeOrIfContinueToMultiContinueRector\Fixture;
 
 class HasComment
 {
@@ -29,10 +29,10 @@ class HasComment
     {
         foreach ($cars as $car) {
             // a comment
-            if (!$car->hasWheels()) {
+            if ($car->hasWheels()) {
                 continue;
             }
-            if (!$car->hasFuel()) {
+            if ($car->hasFuel()) {
                 continue;
             }
             $car->setWheel($newCar->wheel);

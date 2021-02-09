@@ -78,10 +78,12 @@ CODE_SAMPLE
 
             $newArguments = [];
             foreach ($functionArgumentSwap->getOrder() as $oldPosition => $newPosition) {
-                if (! isset($node->args[$oldPosition]) || ! isset($node->args[$newPosition])) {
+                if (! isset($node->args[$oldPosition])) {
                     continue;
                 }
-
+                if (! isset($node->args[$newPosition])) {
+                    continue;
+                }
                 $newArguments[$newPosition] = $node->args[$oldPosition];
             }
 

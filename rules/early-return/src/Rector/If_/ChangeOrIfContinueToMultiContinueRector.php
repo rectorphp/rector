@@ -6,7 +6,7 @@ namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -15,9 +15,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfContinueToMultiContinueRector\ChangeAndIfContinueToMultiContinueRectorTest
+ * @see \Rector\EarlyReturn\Tests\Rector\If_\ChangeOrIfContinueToMultiContinueRector\ChangeOrIfContinueToMultiContinueRectorTest
  */
-final class ChangeAndIfContinueToMultiContinueRector extends AbstractRector
+final class ChangeOrIfContinueToMultiContinueRector extends AbstractRector
 {
     /**
      * @var IfManipulator
@@ -39,7 +39,7 @@ class SomeClass
     public function canDrive(Car $newCar)
     {
         foreach ($cars as $car) {
-            if ($car->hasWheels() && $car->hasFuel()) {
+            if ($car->hasWheels() || $car->hasFuel()) {
                 continue;
             }
 
@@ -57,10 +57,10 @@ class SomeClass
     public function canDrive(Car $newCar)
     {
         foreach ($cars as $car) {
-            if (! $car->hasWheels()) {
+            if ($car->hasWheels()) {
                 continue;
             }
-            if (! $car->hasFuel()) {
+            if ($car->hasFuel()) {
                 continue;
             }
 
@@ -91,7 +91,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $node->cond instanceof BooleanAnd) {
+        if (! $node->cond instanceof BooleanOr) {
             return null;
         }
 
@@ -100,10 +100,10 @@ CODE_SAMPLE
 
     private function processMultiIfContinue(If_ $if): If_
     {
+        $node = clone $if;
         /** @var Continue_ $continue */
         $continue = $if->stmts[0];
         $ifs = $this->createMultipleIfs($if->cond, $continue, []);
-        $node = $if;
         foreach ($ifs as $key => $if) {
             if ($key === 0) {
                 $this->mirrorComments($if, $node);
@@ -122,25 +122,25 @@ CODE_SAMPLE
      */
     private function createMultipleIfs(Expr $expr, Continue_ $continue, array $ifs): array
     {
-        while ($expr instanceof BooleanAnd) {
-            $ifs = array_merge($ifs, $this->collectLeftBooleanAndToIfs($expr, $continue, $ifs));
-            $ifs[] = $this->ifManipulator->createIfNegation($expr->right, $continue);
+        while ($expr instanceof BooleanOr) {
+            $ifs = array_merge($ifs, $this->collectLeftbooleanOrToIfs($expr, $continue, $ifs));
+            $ifs[] = $this->ifManipulator->createIfExpr($expr->right, $continue);
 
             $expr = $expr->right;
         }
 
-        return $ifs + [$this->ifManipulator->createIfNegation($expr, $continue)];
+        return $ifs + [$this->ifManipulator->createIfExpr($expr, $continue)];
     }
 
     /**
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function collectLeftBooleanAndToIfs(BooleanAnd $booleanAnd, Continue_ $continue, array $ifs): array
+    private function collectLeftbooleanOrToIfs(BooleanOr $booleanOr, Continue_ $continue, array $ifs): array
     {
-        $left = $booleanAnd->left;
-        if (! $left instanceof BooleanAnd) {
-            return [$this->ifManipulator->createIfNegation($left, $continue)];
+        $left = $booleanOr->left;
+        if (! $left instanceof BooleanOr) {
+            return [$this->ifManipulator->createIfExpr($left, $continue)];
         }
 
         return $this->createMultipleIfs($left, $continue, $ifs);
