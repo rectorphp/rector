@@ -102,11 +102,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     private $autoloadTestFixture = true;
 
     /**
-     * @var mixed[]
-     */
-    private $oldParameterValues = [];
-
-    /**
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
@@ -167,18 +162,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->nodeScopeResolver = $this->getService(NodeScopeResolver::class);
 
         $this->configurePhpVersionFeatures();
-
-        $this->oldParameterValues = [];
-    }
-
-    protected function tearDown(): void
-    {
-        $this->restoreOldParameterValues();
-
-        // restore PHP version if changed
-        if ($this->getPhpVersion() !== self::PHP_VERSION_UNDEFINED) {
-            $this->setParameter(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_10);
-        }
     }
 
     protected function getRectorClass(): string
@@ -211,25 +194,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return StaticFixtureFinder::yieldDirectory($directory, $suffix);
     }
 
-    /**
-     * @param mixed $value
-     */
-    protected function setParameter(string $name, $value): void
-    {
-        $parameterProvider = $this->getService(ParameterProvider::class);
-
-        if ($name !== Option::PHP_VERSION_FEATURES) {
-            $oldParameterValue = $parameterProvider->provideParameter($name);
-            $this->oldParameterValues[$name] = $oldParameterValue;
-        }
-
-        $parameterProvider->changeParameter($name, $value);
-    }
-
     protected function getPhpVersion(): int
     {
-        // to be implemented
-        return self::PHP_VERSION_UNDEFINED;
+        // default value to be implemented for testing lower versions
+        return PhpVersion::PHP_10;
     }
 
     protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
@@ -379,20 +347,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             return;
         }
 
-        $this->setParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
-    }
-
-    private function restoreOldParameterValues(): void
-    {
-        if ($this->oldParameterValues === []) {
-            return;
-        }
-
-        $parameterProvider = $this->getService(ParameterProvider::class);
-
-        foreach ($this->oldParameterValues as $name => $oldParameterValue) {
-            $parameterProvider->changeParameter($name, $oldParameterValue);
-        }
+        $this->parameterProvider->changeParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
     }
 
     private function ensureRectorClassIsValid(string $rectorClass, string $methodName): void
@@ -418,7 +373,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         SmartFileInfo $fixtureFileInfo,
         array $extraFiles = []
     ): void {
-        $this->setParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
+        $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
         if (! Strings::endsWith($originalFileInfo->getFilename(), '.blade.php') && in_array(
             $originalFileInfo->getSuffix(),

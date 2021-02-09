@@ -13965,7 +13965,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(InferParamFromClassMethodReturnRector::class)
         ->call('configure', [[
-            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => ValueObjectInliner::inline([
+            InferParamFromClassMethodReturnRector::PARAM_FROM_CLASS_METHOD_RETURNS => ValueObjectInliner::inline([
                 new InferParamFromClassMethodReturn('SomeClass', 'process', 'getNodeTypes'),
             ]),
         ]]);
