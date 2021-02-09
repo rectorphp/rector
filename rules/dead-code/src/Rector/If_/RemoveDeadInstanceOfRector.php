@@ -93,11 +93,11 @@ CODE_SAMPLE
         }
 
         $isSameObject = $this->isObjectType($previousVar, $this->getName($instanceof->class));
-        if ($isSameObject) {
-            $this->removeNode($if);
-            return $if;
+        if (! $isSameObject) {
+            return null;
         }
 
+        $this->removeNode($if);
         return $if;
     }
 }
