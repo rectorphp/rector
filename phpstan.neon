@@ -537,3 +537,6 @@ parameters:
             message: '#Do not use static property#'
             paths:
                 - rules/sensio/tests/Rector/ClassMethod/TemplateAnnotationToThisRenderRector/DifferentBundleNameRectorTest.php
+
+        # known values
+        - '#Method Rector\\Testing\\Finder\\RectorsFinder\:\:findClassesInDirectoriesByName\(\) should return array<class\-string\> but returns array<int, \(int\|string\)\>#'

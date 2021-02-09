@@ -25,7 +25,7 @@ final class RectorsFinder
     ];
 
     /**
-     * @return string[]
+     * @return array<class-string<RectorInterface>>
      */
     public function findCoreRectorClasses(): array
     {
@@ -91,7 +91,7 @@ final class RectorsFinder
 
     /**
      * @param string[] $directories
-     * @return array<string>
+     * @return array<class-string>
      */
     private function findClassesInDirectoriesByName(array $directories, string $name): array
     {
@@ -101,17 +101,12 @@ final class RectorsFinder
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_finder');
 
         $robotLoader->acceptFiles = [$name];
-        $robotLoader->excludeDirectory(__DIR__ . '/../../../../packages/rector-generator/tests');
+        $robotLoader->excludeDirectory(__DIR__ . '/../../../../packages/rector-generator');
 
         $robotLoader->refresh();
         $robotLoader->rebuild();
 
-        $classNames = [];
-        foreach (array_keys($robotLoader->getIndexedClasses()) as $className) {
-            $classNames[] = (string) $className;
-        }
-
-        return $classNames;
+        return array_keys($robotLoader->getIndexedClasses());
     }
 
     private function shouldSkipClass(string $class): bool

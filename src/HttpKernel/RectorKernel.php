@@ -42,7 +42,6 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
     public function __construct(string $environment, bool $debug)
     {
         $this->configureCallValuesCollector = new ConfigureCallValuesCollector();
-
         parent::__construct($environment, $debug);
     }
 

@@ -16,7 +16,11 @@ use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+<<<<<<< HEAD
 use Rector\Testing\Application\EnabledRectorProvider;
+=======
+use Rector\Testing\Application\EnabledRectorsProvider;
+>>>>>>> 47c6a521f... [Tests] Split main test case and community test case
 
 final class RectorNodeTraverser extends NodeTraverser
 {
@@ -70,8 +74,13 @@ final class RectorNodeTraverser extends NodeTraverser
      */
     public function traverseFileNode(FileNode $fileNode): array
     {
+<<<<<<< HEAD
         if ($this->enabledRectorProvider->isConfigured()) {
             $this->configureEnabledRectorOnly();
+=======
+        if ($this->enabledRectorsProvider->isConfigured()) {
+            $this->activateEnabledRectorOnly();
+>>>>>>> 47c6a521f... [Tests] Split main test case and community test case
         }
 
         if (! $this->hasFileNodeRectorsEnabled()) {
@@ -92,8 +101,13 @@ final class RectorNodeTraverser extends NodeTraverser
      */
     public function traverse(array $nodes): array
     {
+<<<<<<< HEAD
         if ($this->enabledRectorProvider->isConfigured()) {
             $this->configureEnabledRectorOnly();
+=======
+        if ($this->enabledRectorsProvider->isConfigured()) {
+            $this->activateEnabledRectorOnly();
+>>>>>>> 47c6a521f... [Tests] Split main test case and community test case
         }
 
         $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
@@ -138,11 +152,20 @@ final class RectorNodeTraverser extends NodeTraverser
     /**
      * Mostly used for testing
      */
+<<<<<<< HEAD
     private function configureEnabledRectorOnly(): void
     {
         $this->visitors = [];
         $enabledRector = $this->enabledRectorProvider->getEnabledRector();
 
+=======
+    private function activateEnabledRectorOnly(): void
+    {
+        $this->visitors = [];
+
+        $enabledRector = $this->enabledRectorsProvider->getEnabledRector();
+
+>>>>>>> 47c6a521f... [Tests] Split main test case and community test case
         foreach ($this->allPhpRectors as $phpRector) {
             if (! is_a($phpRector, $enabledRector, true)) {
                 continue;
@@ -160,11 +183,9 @@ final class RectorNodeTraverser extends NodeTraverser
                 continue;
             }
 
-            if (! in_array(FileNode::class, $visitor->getNodeTypes(), true)) {
-                continue;
+            if (in_array(FileNode::class, $visitor->getNodeTypes(), true)) {
+                return true;
             }
-
-            return true;
         }
 
         return false;
