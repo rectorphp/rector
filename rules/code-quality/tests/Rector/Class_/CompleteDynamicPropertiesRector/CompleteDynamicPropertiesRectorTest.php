@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -25,13 +23,8 @@ final class CompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return CompleteDynamicPropertiesRector::class;
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::UNION_TYPES - 1;
+        return new SmartFileInfo(__DIR__ . '/config/pre_union_types.php');
     }
 }

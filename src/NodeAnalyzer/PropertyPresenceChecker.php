@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
@@ -43,6 +44,11 @@ final class PropertyPresenceChecker
 
         if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
             return false;
+        }
+
+        $property = $class->getProperty($propertyName);
+        if ($property instanceof Property) {
+            return true;
         }
 
         $availablePropertyReflections = $this->getParentClassPublicAndProtectedPropertyReflections($className);

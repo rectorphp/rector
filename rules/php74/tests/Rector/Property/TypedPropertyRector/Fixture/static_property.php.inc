@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
+use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
 final class ClassWithStaticProperty
 {
@@ -18,7 +18,7 @@ final class ClassWithStaticProperty
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
+use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
 final class ClassWithStaticProperty
 {

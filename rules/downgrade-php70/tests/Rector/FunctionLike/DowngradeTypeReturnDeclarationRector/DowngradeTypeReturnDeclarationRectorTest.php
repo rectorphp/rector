@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeReturnDeclarationRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeReturnDeclarationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DowngradeTypeReturnDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
+     * @requires PHP 7.0
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
@@ -25,13 +24,8 @@ final class DowngradeTypeReturnDeclarationRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return DowngradeTypeReturnDeclarationRector::class;
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::NULLABLE_TYPE - 1;
+        return new SmartFileInfo(__DIR__ . '/config/php_70.php');
     }
 }

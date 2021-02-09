@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -22,11 +21,6 @@ final class ServiceGetterToConstructorInjectionRectorTest extends AbstractRector
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::TYPED_PROPERTIES - 1;
     }
 
     protected function provideConfigFileInfo(): ?SmartFileInfo

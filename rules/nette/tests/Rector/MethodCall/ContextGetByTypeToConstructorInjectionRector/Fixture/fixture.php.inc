@@ -31,13 +31,8 @@ class SomeClass
      * @var \Nette\DI\Container
      */
     private $context;
-    /**
-     * @var \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\SomeTypeToInject
-     */
-    private $someTypeToInject;
-    public function __construct(\Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\SomeTypeToInject $someTypeToInject)
+    public function __construct(private \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\SomeTypeToInject $someTypeToInject)
     {
-        $this->someTypeToInject = $someTypeToInject;
     }
 
     public function run()

@@ -4,7 +4,7 @@ namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixt
 
 use Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\EliteManager;
 
-class PromotedPropertyRenameFetch
+final class PromotedPropertyRenameFetch
 {
     public function __construct(
         private EliteManager $eventManager
@@ -26,7 +26,7 @@ namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixt
 
 use Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\EliteManager;
 
-class PromotedPropertyRenameFetch
+final class PromotedPropertyRenameFetch
 {
     public function __construct(
         private EliteManager $eliteManager

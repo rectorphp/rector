@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Php80RectorTest extends AbstractRectorTestCase
@@ -25,13 +23,8 @@ final class Php80RectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureForPhp80');
     }
 
-    protected function getPhpVersion(): int
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return PhpVersionFeature::STATIC_RETURN_TYPE;
-    }
-
-    protected function getRectorClass(): string
-    {
-        return ReturnTypeDeclarationRector::class;
+        return new SmartFileInfo(__DIR__ . '/config/php_80.php');
     }
 }

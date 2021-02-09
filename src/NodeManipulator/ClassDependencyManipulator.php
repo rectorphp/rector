@@ -18,6 +18,7 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 
@@ -58,6 +59,11 @@ final class ClassDependencyManipulator
      */
     private $propertyPresenceChecker;
 
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
     public function __construct(
         ChildAndParentClassManipulator $childAndParentClassManipulator,
         ClassInsertManipulator $classInsertManipulator,
@@ -65,7 +71,8 @@ final class ClassDependencyManipulator
         NodeFactory $nodeFactory,
         StmtsManipulator $stmtsManipulator,
         PhpVersionProvider $phpVersionProvider,
-        PropertyPresenceChecker $propertyPresenceChecker
+        PropertyPresenceChecker $propertyPresenceChecker,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->classMethodAssignManipulator = $classMethodAssignManipulator;
         $this->nodeFactory = $nodeFactory;
@@ -74,11 +81,12 @@ final class ClassDependencyManipulator
         $this->classInsertManipulator = $classInsertManipulator;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->propertyPresenceChecker = $propertyPresenceChecker;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function addConstructorDependency(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
-        if ($this->propertyPresenceChecker->hasClassContextPropertyByName($class, $propertyMetadata->getName())) {
+        if ($this->hasClassPropertyAndDependency($class, $propertyMetadata)) {
             return;
         }
 
@@ -203,5 +211,30 @@ final class ClassDependencyManipulator
         $staticCall = new StaticCall(new Name('parent'), $methodName);
 
         return new Expression($staticCall);
+    }
+
+    private function isParamInConstructor(Class_ $class, string $propertyName): bool
+    {
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (! $constructClassMethod instanceof ClassMethod) {
+            return false;
+        }
+
+        foreach ($constructClassMethod->params as $param) {
+            if ($this->nodeNameResolver->isName($param, $propertyName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function hasClassPropertyAndDependency(Class_ $class, PropertyMetadata $propertyMetadata): bool
+    {
+        if (! $this->propertyPresenceChecker->hasClassContextPropertyByName($class, $propertyMetadata->getName())) {
+            return false;
+        }
+
+        return $this->isParamInConstructor($class, $propertyMetadata->getName());
     }
 }

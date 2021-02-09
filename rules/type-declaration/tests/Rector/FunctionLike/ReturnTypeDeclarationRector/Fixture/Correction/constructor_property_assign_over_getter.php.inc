@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\Correction;
 
-class ConstructorPropertyAssignOverGetter
+final class ConstructorPropertyAssignOverGetter
 {
     private $nullableValue;
 
@@ -23,7 +23,7 @@ class ConstructorPropertyAssignOverGetter
 
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\Correction;
 
-class ConstructorPropertyAssignOverGetter
+final class ConstructorPropertyAssignOverGetter
 {
     private $nullableValue;
 

@@ -77,8 +77,10 @@ CODE_SAMPLE
         if ($node->stmts === null) {
             return null;
         }
+
         $stmtValues = array_values($node->stmts);
         $lastStmt = end($stmtValues);
+
         if (! $lastStmt instanceof Return_) {
             return null;
         }

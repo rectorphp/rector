@@ -18,7 +18,6 @@ use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Stubs\StubLoader;
-use Rector\Core\ValueObject\PhpVersion;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\Testing\Application\EnabledRectorsProvider;
 use Rector\Testing\Contract\RunnableInterface;
@@ -40,11 +39,6 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 {
     use MovingFilesTrait;
-
-    /**
-     * @var int
-     */
-    private const PHP_VERSION_UNDEFINED = 0;
 
     /**
      * @var FileProcessor
@@ -70,11 +64,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      * @var RunnableRectorFactory
      */
     protected $runnableRectorFactory;
-
-    /**
-     * @var NodeScopeResolver
-     */
-    protected $nodeScopeResolver;
 
     /**
      * @var FixtureGuard
@@ -157,11 +146,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
-
-        // needed for PHPStan, because the analyzed file is just create in /temp
-        $this->nodeScopeResolver = $this->getService(NodeScopeResolver::class);
-
-        $this->configurePhpVersionFeatures();
     }
 
     protected function getRectorClass(): string
@@ -194,12 +178,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return StaticFixtureFinder::yieldDirectory($directory, $suffix);
     }
 
-    protected function getPhpVersion(): int
-    {
-        // default value to be implemented for testing lower versions
-        return PhpVersion::PHP_10;
-    }
-
     protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
     {
         $this->autoloadTestFixture = false;
@@ -220,7 +198,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         );
 
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
-        $this->nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
+
+        // needed for PHPStan, because the analyzed file is just create in /temp
+        /** @var NodeScopeResolver $nodeScopeResolver */
+        $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
+        $nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
 
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
 
@@ -339,15 +321,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         foreach ($this->getCurrentTestRectorClassesWithConfiguration() as $rectorClass => $configuration) {
             $enabledRectorsProvider->addEnabledRector($rectorClass, (array) $configuration);
         }
-    }
-
-    private function configurePhpVersionFeatures(): void
-    {
-        if ($this->getPhpVersion() === self::PHP_VERSION_UNDEFINED) {
-            return;
-        }
-
-        $this->parameterProvider->changeParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
     }
 
     private function ensureRectorClassIsValid(string $rectorClass, string $methodName): void
