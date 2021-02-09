@@ -161,16 +161,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return null;
     }
 
-    /**
-     * @return array<string, null>
-     */
-    protected function getCurrentTestRectorClassesWithConfiguration(): array
-    {
-        return [
-            $this->getRectorClass() => null,
-        ];
-    }
-
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc'): Iterator
     {
         return StaticFixtureFinder::yieldDirectory($directory, $suffix);
