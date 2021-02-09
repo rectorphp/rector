@@ -11,13 +11,13 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PHPStan\Type\ObjectType;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\If_\RemoveDeadInstanceOfRector\RemoveDeadInstanceOfRectorTest
@@ -140,7 +140,11 @@ CODE_SAMPLE
             }
 
             $objectType = $this->getObjectType($parentNode->expr);
-            return $objectType instanceof ObjectType;
+            if (! $objectType instanceof ObjectType) {
+                return false;
+            }
+
+            return is_a($objectType, $name, true);
         }
 
         $type = $parentPreviousVar->type;
