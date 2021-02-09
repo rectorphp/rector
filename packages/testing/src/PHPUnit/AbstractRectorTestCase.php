@@ -26,7 +26,6 @@ use Rector\Testing\Finder\RectorsFinder;
 use Rector\Testing\Guard\FixtureGuard;
 use Rector\Testing\PhpConfigPrinter\PhpConfigPrinterFactory;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
-use Rector\Testing\PHPUnit\Behavior\RunnableTestTrait;
 use Rector\Testing\ValueObject\InputFilePathWithExpectedFile;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -41,7 +40,6 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 {
     use MovingFilesTrait;
-    use RunnableTestTrait;
 
     /**
      * @var int
@@ -317,6 +315,19 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected function getFixtureTempDirectory(): string
     {
         return sys_get_temp_dir() . '/_temp_fixture_easy_testing';
+    }
+
+    protected function assertOriginalAndFixedFileResultEquals(
+        SmartFileInfo $originalFileInfo,
+        SmartFileInfo $expectedFileInfo
+    ): void {
+        $runnable = $this->runnableRectorFactory->createRunnableClass($originalFileInfo);
+        $expectedInstance = $this->runnableRectorFactory->createRunnableClass($expectedFileInfo);
+
+        $actualResult = $runnable->run();
+
+        $expectedResult = $expectedInstance->run();
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
