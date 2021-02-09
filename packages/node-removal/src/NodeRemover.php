@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -89,8 +90,17 @@ final class NodeRemover
         unset($node->stmts[$key]);
     }
 
-    public function removeParam(ClassMethod $classMethod, int $key): void
+    /**
+     * @param int|Param $keyOrParam
+     */
+    public function removeParam(ClassMethod $classMethod, $keyOrParam): void
     {
+        if ($keyOrParam instanceof Param) {
+            $key = $keyOrParam->getAttribute(AttributeKey::PARAMETER_POSITION);
+        } else {
+            $key = $keyOrParam;
+        }
+
         if ($classMethod->params === null) {
             throw new ShouldNotHappenException();
         }

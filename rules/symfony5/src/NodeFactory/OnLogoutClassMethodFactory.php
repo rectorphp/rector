@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NetteKdyby\NodeManipulator\ListeningClassMethodArgumentManipulator;
+use Rector\NetteKdyby\NodeManipulator\ParamAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class OnLogoutClassMethodFactory
@@ -40,14 +41,21 @@ final class OnLogoutClassMethodFactory
      */
     private $bareLogoutClassMethodFactory;
 
+    /**
+     * @var ParamAnalyzer
+     */
+    private $paramAnalyzer;
+
     public function __construct(
         ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator,
         NodeNameResolver $nodeNameResolver,
-        BareLogoutClassMethodFactory $bareLogoutClassMethodFactory
+        BareLogoutClassMethodFactory $bareLogoutClassMethodFactory,
+        ParamAnalyzer $paramAnalyzer
     ) {
         $this->listeningClassMethodArgumentManipulator = $listeningClassMethodArgumentManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->bareLogoutClassMethodFactory = $bareLogoutClassMethodFactory;
+        $this->paramAnalyzer = $paramAnalyzer;
     }
 
     public function createFromLogoutClassMethod(ClassMethod $logoutClassMethod): ClassMethod
@@ -76,10 +84,7 @@ final class OnLogoutClassMethodFactory
     {
         $usedParams = [];
         foreach ($logoutClassMethod->params as $oldParam) {
-            if (! $this->listeningClassMethodArgumentManipulator->isParamUsedInClassMethodBody(
-                $logoutClassMethod,
-                $oldParam
-            )) {
+            if (! $this->paramAnalyzer->isParamUsedInClassMethod($logoutClassMethod, $oldParam)) {
                 continue;
             }
 

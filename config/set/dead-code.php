@@ -17,6 +17,7 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDeadRecursiveClassMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
 use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
@@ -49,90 +50,48 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(UnwrapFutureCompatibleIfFunctionExistsRector::class);
-
     $services->set(UnwrapFutureCompatibleIfPhpVersionRector::class);
-
     $services->set(RecastingRemovalRector::class);
-
     $services->set(RemoveDeadStmtRector::class);
-
     $services->set(RemoveDuplicatedArrayKeyRector::class);
-
     $services->set(RemoveUnusedForeachKeyRector::class);
-
     $services->set(RemoveParentCallWithoutParentRector::class);
-
     $services->set(RemoveEmptyClassMethodRector::class);
-
     $services->set(RemoveUnusedPrivatePropertyRector::class);
-
     $services->set(RemoveDoubleAssignRector::class);
-
     $services->set(RemoveUnusedParameterRector::class);
-
     $services->set(SimplifyMirrorAssignRector::class);
-
     $services->set(RemoveOverriddenValuesRector::class);
-
     $services->set(RemoveUnusedPrivateConstantRector::class);
-
     $services->set(RemoveUnusedPrivateMethodRector::class);
-
     $services->set(RemoveCodeAfterReturnRector::class);
-
     $services->set(RemoveDeadConstructorRector::class);
-
     $services->set(RemoveDeadReturnRector::class);
-
     $services->set(RemoveDeadIfForeachForRector::class);
-
     $services->set(RemoveAndTrueRector::class);
-
     $services->set(RemoveDefaultArgumentValueRector::class);
-
     $services->set(RemoveConcatAutocastRector::class);
-
     $services->set(SimplifyUselessVariableRector::class);
-
     $services->set(RemoveDelegatingParentCallRector::class);
-
     $services->set(RemoveDuplicatedInstanceOfRector::class);
-
     $services->set(RemoveDuplicatedCaseInSwitchRector::class);
-
     $services->set(RemoveUnusedDoctrineEntityMethodAndPropertyRector::class);
-
     $services->set(RemoveSetterOnlyPropertyAndMethodCallRector::class);
-
     $services->set(RemoveNullPropertyInitializationRector::class);
-
     $services->set(RemoveUnreachableStatementRector::class);
-
     $services->set(SimplifyIfElseWithSameContentRector::class);
-
     $services->set(TernaryToBooleanOrFalseToBooleanAndRector::class);
-
     $services->set(RemoveEmptyTestMethodRector::class);
-
     $services->set(RemoveDeadTryCatchRector::class);
-
     $services->set(RemoveUnusedClassConstantRector::class);
-
     $services->set(RemoveUnusedVariableAssignRector::class);
-
     $services->set(RemoveDuplicatedIfReturnRector::class);
-
     $services->set(RemoveUnusedFunctionRector::class);
-
     $services->set(RemoveUnusedNonEmptyArrayBeforeForeachRector::class);
-
     $services->set(RemoveAssignOfVoidReturnFunctionRector::class);
-
     $services->set(RemoveDeadRecursiveClassMethodRector::class);
-
     $services->set(RemoveEmptyMethodCallRector::class);
-
     $services->set(RemoveDeadConditionAboveReturnRector::class);
+    $services->set(RemoveUnusedConstructorParamRector::class);
 };

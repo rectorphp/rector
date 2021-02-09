@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\NodeManipulator;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -47,16 +46,23 @@ final class ListeningClassMethodArgumentManipulator
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var ParamAnalyzer
+     */
+    private $paramAnalyzer;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         ClassNaming $classNaming,
-        ContributeEventClassResolver $contributeEventClassResolver
+        ContributeEventClassResolver $contributeEventClassResolver,
+        \Rector\NetteKdyby\NodeManipulator\ParamAnalyzer $paramAnalyzer
     ) {
         $this->classNaming = $classNaming;
         $this->contributeEventClassResolver = $contributeEventClassResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->paramAnalyzer = $paramAnalyzer;
     }
 
     public function changeFromEventAndListenerTreeAndCurrentClassName(
@@ -97,7 +103,7 @@ final class ListeningClassMethodArgumentManipulator
 
             // move params to getter on event
             foreach ($oldParams as $oldParam) {
-                if (! $this->isParamUsedInClassMethodBody($classMethod, $oldParam)) {
+                if (! $this->paramAnalyzer->isParamUsedInClassMethod($classMethod, $oldParam)) {
                     continue;
                 }
 
@@ -114,19 +120,6 @@ final class ListeningClassMethodArgumentManipulator
 
             $classMethod->setAttribute(self::EVENT_PARAMETER_REPLACED, true);
         }
-    }
-
-    public function isParamUsedInClassMethodBody(ClassMethod $classMethod, Param $param): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
-            $param
-        ): bool {
-            if (! $node instanceof Variable) {
-                return false;
-            }
-
-            return $this->betterStandardPrinter->areNodesEqual($node, $param->var);
-        });
     }
 
     private function changeClassParamToEventClass(string $eventClass, ClassMethod $classMethod): void
