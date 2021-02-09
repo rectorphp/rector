@@ -4,7 +4,7 @@ namespace Rector\DeadCode\Tests\Rector\If_\RemoveDeadInstanceOfRector\Fixture;
 
 use stdClass;
 
-class SkipAssign
+class SkipAssignUnion
 {
     public function go()
     {

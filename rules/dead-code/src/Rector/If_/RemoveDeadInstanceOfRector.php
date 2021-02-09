@@ -17,6 +17,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Type\ObjectType;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\If_\RemoveDeadInstanceOfRector\RemoveDeadInstanceOfRectorTest
@@ -97,11 +98,6 @@ CODE_SAMPLE
             return $node !== $instanceof->expr && $this->areNodesEqual($node, $instanceof->expr);
         });
 
-        $parentNode = $previousVar->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Assign) {
-            return null;
-        }
-
         if (! $previousVar instanceof Node) {
             return null;
         }
@@ -138,7 +134,13 @@ CODE_SAMPLE
         $parentPreviousVar = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         if (! $parentPreviousVar instanceof Param) {
-            return false;
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $parentNode instanceof Assign) {
+                return false;
+            }
+
+            $objectType = $this->getObjectType($parentNode->expr);
+            return $objectType instanceof ObjectType;
         }
 
         $type = $parentPreviousVar->type;
