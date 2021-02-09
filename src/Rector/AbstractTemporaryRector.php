@@ -49,7 +49,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\PostRector\Collector\NodesToAddCollector;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\PostRector\Collector\PropertyToAddCollector;
@@ -85,11 +84,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      * @var NodeNameResolver
      */
     protected $nodeNameResolver;
-
-    /**
-     * @var TypeUnwrapper
-     */
-    protected $typeUnwrapper;
 
     /**
      * @var NodeTypeResolver
@@ -252,7 +246,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         NodeNameResolver $nodeNameResolver,
         ClassNaming $classNaming,
         NodeTypeResolver $nodeTypeResolver,
-        TypeUnwrapper $typeUnwrapper,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         VisibilityManipulator $visibilityManipulator,
         NodeFactory $nodeFactory,
@@ -283,7 +276,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classNaming = $classNaming;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->typeUnwrapper = $typeUnwrapper;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->nodeFactory = $nodeFactory;

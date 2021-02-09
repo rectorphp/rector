@@ -9,9 +9,20 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\DowngradePhp70\Rector\FunctionLike\AbstractDowngradeReturnDeclarationRector;
 use Rector\DowngradePhp72\Contract\Rector\DowngradeTypeRectorInterface;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractDowngradeReturnDeclarationRector implements DowngradeTypeRectorInterface
 {
+    /**
+     * @var TypeUnwrapper
+     */
+    private $typeUnwrapper;
+
+    public function __construct(TypeUnwrapper $typeUnwrapper)
+    {
+        $this->typeUnwrapper = $typeUnwrapper;
+    }
+
     /**
      * @param ClassMethod|Function_ $functionLike
      */
