@@ -27,11 +27,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 
 
-            new StringToClassConstant(
-                'compiler.post_dump',
-                'Yet\AnotherClass',
-                'CONSTANT'
-            ),
+            new StringToClassConstant('compiler.post_dump', 'Yet\AnotherClass', 'CONSTANT'),
             new StringToClassConstant('compiler.to_class', 'Yet\AnotherClass', 'class'),
 
 

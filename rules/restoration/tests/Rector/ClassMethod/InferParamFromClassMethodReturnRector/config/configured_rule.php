@@ -16,6 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => ValueObjectInliner::inline([
                 
 
+
                 new InferParamFromClassMethodReturn(SomeType::class, 'process', 'getNodeTypes'),
 
                 

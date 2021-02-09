@@ -38,6 +38,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 
 
+
                 new MethodCallToAnotherMethodCallWithArguments(
                     NetteServiceDefinition::class,
                     'setInject',

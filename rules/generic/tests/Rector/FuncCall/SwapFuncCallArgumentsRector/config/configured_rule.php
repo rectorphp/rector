@@ -10,23 +10,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SwapFuncCallArgumentsRector::class)->call('configure', [[
         SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             new SwapFuncCallArguments('some_function', [1, 0]),
         ]
         ),

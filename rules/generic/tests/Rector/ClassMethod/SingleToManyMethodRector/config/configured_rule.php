@@ -11,48 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SingleToManyMethodRector::class)->call('configure', [[
         SingleToManyMethodRector::SINGLES_TO_MANY_METHODS => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             new SingleToManyMethod(OneToManyInterface::class, 'getNode', 'getNodes'),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         ]),
     ]]);

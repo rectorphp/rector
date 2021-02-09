@@ -13,28 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameClassConstFetchRector::class)->call('configure', [[
         RenameClassConstFetchRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            new RenameClassConstFetch(
-                LocalFormEvents::class,
-                'PRE_BIND',
-                'PRE_SUBMIT'
-            ),
+            new RenameClassConstFetch(LocalFormEvents::class, 'PRE_BIND', 'PRE_SUBMIT'),
             new RenameClassConstFetch(LocalFormEvents::class, 'BIND', 'SUBMIT'),
             new RenameClassConstFetch(LocalFormEvents::class, 'POST_BIND', 'POST_SUBMIT'),
             new RenameClassAndConstFetch(
@@ -43,30 +22,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 DifferentClass::class,
                 'NEW_CONSTANT'
             ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         ]),
     ]]);
