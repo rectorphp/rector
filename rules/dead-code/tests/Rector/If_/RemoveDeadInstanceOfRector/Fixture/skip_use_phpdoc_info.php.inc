@@ -6,7 +6,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 
-class SkipChild
+class SkipUsePhpdocInfo
 {
     /**
      * @param Class_|Interface_ $classLike
