@@ -11,6 +11,7 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
     $configuration = ValueObjectInliner::inline([
@@ -30,6 +31,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)->call(
         'configure',
         [[
+=======
+
+    $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)
+        ->call('configure', [[
+>>>>>>> 495b7788a... use more configs
             MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => ValueObjectInliner::inline([
                 
 >>>>>>> 49a372577... fix cs
@@ -39,9 +45,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'setInject',
                     'addTag',
                     ['inject']),
+<<<<<<< HEAD
             ]
             ),
         ]]
     );
 >>>>>>> bb46bb10f... use config instead of setParameter()
+=======
+
+                
+            ]),
+        ]]);
+>>>>>>> 495b7788a... use more configs
 };

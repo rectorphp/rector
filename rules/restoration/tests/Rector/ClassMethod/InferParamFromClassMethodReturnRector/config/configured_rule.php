@@ -18,12 +18,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(InferParamFromClassMethodReturnRector::class)
         ->call('configure', [[
 <<<<<<< HEAD
+<<<<<<< HEAD
             InferParamFromClassMethodReturnRector::PARAM_FROM_CLASS_METHOD_RETURNS => $configuration,
 =======
             InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => ValueObjectInliner::inline([
                 
+=======
+            InferParamFromClassMethodReturnRector::PARAM_FROM_CLASS_METHOD_RETURNS => ValueObjectInliner::inline([
+>>>>>>> 495b7788a... use more configs
                 new InferParamFromClassMethodReturn(SomeType::class, 'process', 'getNodeTypes'),
-                
             ]),
 >>>>>>> bb46bb10f... use config instead of setParameter()
         ]]);

@@ -97,11 +97,14 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     private static $runnableRectorFactory;
 
     /**
+<<<<<<< HEAD
      * @var bool
      */
     private $autoloadTestFixture = true;
 
     /**
+=======
+>>>>>>> 495b7788a... use more configs
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
@@ -152,6 +155,14 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
+<<<<<<< HEAD
+=======
+
+        // needed for PHPStan, because the analyzed file is just create in /temp
+        $this->nodeScopeResolver = $this->getService(NodeScopeResolver::class);
+
+        $this->configurePhpVersionFeatures();
+>>>>>>> 495b7788a... use more configs
     }
 
     /**
@@ -174,6 +185,15 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return StaticFixtureFinder::yieldDirectory($directory, $suffix);
     }
 
+<<<<<<< HEAD
+=======
+    protected function getPhpVersion(): int
+    {
+        // default value to be implemented for testing lower versions
+        return PhpVersion::PHP_10;
+    }
+
+>>>>>>> 495b7788a... use more configs
     protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
     {
         $this->autoloadTestFixture = false;
@@ -317,6 +337,39 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return $filePath;
     }
 
+<<<<<<< HEAD
+=======
+    private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
+    {
+        foreach ($this->getCurrentTestRectorClassesWithConfiguration() as $rectorClass => $configuration) {
+            $enabledRectorsProvider->addEnabledRector($rectorClass, (array) $configuration);
+        }
+    }
+
+    private function configurePhpVersionFeatures(): void
+    {
+        if ($this->getPhpVersion() === self::PHP_VERSION_UNDEFINED) {
+            return;
+        }
+
+        $this->parameterProvider->changeParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
+    }
+
+    private function ensureRectorClassIsValid(string $rectorClass, string $methodName): void
+    {
+        if (is_a($rectorClass, PhpRectorInterface::class, true)) {
+            return;
+        }
+
+        throw new ShouldNotHappenException(sprintf(
+            'Class "%s" in "%s()" method must be type of "%s"',
+            $rectorClass,
+            $methodName,
+            PhpRectorInterface::class
+        ));
+    }
+
+>>>>>>> 495b7788a... use more configs
     /**
      * @param InputFilePathWithExpectedFile[] $extraFiles
      */
