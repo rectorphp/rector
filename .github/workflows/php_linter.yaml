@@ -1,0 +1,34 @@
+name: PHP Linter
+
+on:
+    pull_request: null
+
+jobs:
+    php_linter:
+        strategy:
+            fail-fast: false
+            matrix:
+                actions:
+                    -
+                        php_version: 7.3
+                        run: vendor/bin/parallel-lint src bin/rector config tests packages rules --colors --exclude packages/rector-generator/templates --exclude rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source --exclude rules/autodiscovery/tests/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector/Expected --exclude packages/node-type-resolver/tests/PerNodeTypeResolver/PropertyFetchTypeResolver/Source/ClassWithNativeProps.php --exclude packages/node-type-resolver/tests/PerNodeTypeResolver/PropertyFetchTypeResolver/Source/ClassWithNativePropsPhp80.php --exclude packages/node-type-resolver/tests/PerNodeTypeResolver/PropertyFetchTypeResolver/Source/ClassWithTypedPropertyTypes.php --exclude rules/nette-kdyby/tests/Rector/MethodCall/ReplaceEventManagerWithEventSubscriberRector/Source/ExpectedSomeClassCopyEvent.php --exclude rules/nette-kdyby/tests/Rector/MethodCall/ReplaceMagicPropertyEventWithEventClassRector/Source/ExpectedFileManagerUploadEvent.php --exclude rules/nette-kdyby/tests/Rector/MethodCall/ReplaceMagicPropertyEventWithEventClassRector/Source/ExpectedDuplicatedEventParamsUploadEvent.php
+
+                    -
+                        php_version: 8.0
+                        run: vendor/bin/parallel-lint src bin/rector config tests packages rules --colors --exclude packages/rector-generator/templates
+
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            # see https://github.com/shivammathur/setup-php
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.actions.php_version }}
+                    coverage: none
+
+            -   uses: "ramsey/composer-install@v1"
+
+            -   run: ${{ matrix.actions.run }}
