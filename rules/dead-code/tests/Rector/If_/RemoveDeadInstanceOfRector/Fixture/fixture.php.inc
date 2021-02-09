@@ -6,9 +6,9 @@ use stdClass;
 
 class Fixture
 {
-    public function go(stdClass $stdClass)
+    public function go(stdClass $var)
     {
-        if (! $stdClass instanceof stdClass) {
+        if (! $var instanceof stdClass) {
             return false;
         }
         return true;
@@ -25,7 +25,7 @@ use stdClass;
 
 class Fixture
 {
-    public function go(stdClass $stdClass)
+    public function go(stdClass $var)
     {
         return true;
     }

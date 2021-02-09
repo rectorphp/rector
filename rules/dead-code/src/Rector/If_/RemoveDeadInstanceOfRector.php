@@ -10,6 +10,7 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Expr\Variable;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\If_\RemoveDeadInstanceOfRector\RemoveDeadInstanceOfRectorTest
@@ -68,6 +69,20 @@ CODE_SAMPLE
 
     private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): Node
     {
+        $previousVar = $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($instanceof) : bool {
+            return $this->areNodesEqual($node, $instanceof->expr);
+        });
+
+        if (! $previousVar instanceof Node) {
+            return null;
+        }
+
+        $isSameObject = $this->isObjectType($previousVar, $instanceof->class->toString());
+        if ($isSameObject) {
+            $this->removeNode($if);
+            return $if;
+        }
+
         return $if;
     }
 }
