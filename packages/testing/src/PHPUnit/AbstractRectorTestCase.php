@@ -26,8 +26,6 @@ use Rector\Testing\Guard\FixtureGuard;
 use Rector\Testing\PhpConfigPrinter\PhpConfigPrinterFactory;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
 use Rector\Testing\ValueObject\InputFilePathWithExpectedFile;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
@@ -135,10 +133,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         // load stubs
         $stubLoader = $this->getService(StubLoader::class);
         $stubLoader->loadStubs();
-
-        // disable any output
-        $symfonyStyle = $this->getService(SymfonyStyle::class);
-        $symfonyStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
 
         $this->fileProcessor = $this->getService(FileProcessor::class);
         $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);
