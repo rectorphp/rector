@@ -19,7 +19,7 @@ use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
-use Rector\Testing\Application\EnabledRectorsProvider;
+use Rector\Testing\Application\EnabledRectorProvider;
 use Rector\Testing\Contract\RunnableInterface;
 use Rector\Testing\Finder\RectorsFinder;
 use Rector\Testing\Guard\FixtureGuard;
@@ -112,7 +112,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
             $this->bootKernelWithConfigsAndStaticCache(RectorKernel::class, $configFileInfos);
 
-            $enabledRectorsProvider = $this->getService(EnabledRectorsProvider::class);
+            /** @var EnabledRectorProvider $enabledRectorsProvider */
+            $enabledRectorsProvider = $this->getService(EnabledRectorProvider::class);
             $enabledRectorsProvider->reset();
         } else {
             // prepare container with all rectors
@@ -133,9 +134,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
                 $this->bootKernelWithConfigs(RectorKernel::class, $configs);
             }
 
-            $enabledRectorsProvider = $this->getService(EnabledRectorsProvider::class);
-            $enabledRectorsProvider->reset();
-            $enabledRectorsProvider->addEnabledRector($this->getRectorClass(), []);
+            /** @var EnabledRectorProvider $enabledRectorsProvider */
+            $enabledRectorsProvider = $this->getService(EnabledRectorProvider::class);
+            $enabledRectorsProvider->setEnabledRector($this->getRectorClass());
         }
 
         $this->fileProcessor = $this->getService(FileProcessor::class);
@@ -209,11 +210,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->assertOriginalAndFixedFileResultEquals($inputFileInfo, $expectedFileInfo);
     }
 
-    protected function getTempPath(): string
-    {
-        return StaticFixtureSplitter::getTemporaryPath();
-    }
-
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
     {
         $addedFilesWithContents = $this->removedAndAddedFilesCollector->getAddedFilesWithContent();
@@ -259,20 +255,18 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         SmartFileInfo $originalFileInfo,
         SmartFileInfo $expectedFileInfo
     ): void {
-        $runnable = self::$runnableRectorFactory->createRunnableClass($originalFileInfo);
-        $expectedInstance = self::$runnableRectorFactory->createRunnableClass($expectedFileInfo);
+        $inputRunnable = self::$runnableRectorFactory->createRunnableClass($originalFileInfo);
+        $expectedRunnable = self::$runnableRectorFactory->createRunnableClass($expectedFileInfo);
 
-        $actualResult = $runnable->run();
-
-        $expectedResult = $expectedInstance->run();
-        $this->assertSame($expectedResult, $actualResult);
+        $inputResult = $inputRunnable->run();
+        $expectedResult = $expectedRunnable->run();
+        $this->assertSame($expectedResult, $inputResult);
     }
 
     private function createRectorRepositoryContainer(): void
     {
         if (self::$allRectorContainer === null) {
             $this->createContainerWithAllRectors();
-
             self::$allRectorContainer = self::$container;
             return;
         }
