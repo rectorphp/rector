@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfContinueToMultiContinueRector;
+namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
 
 use Iterator;
-use Rector\EarlyReturn\Rector\If_\ChangeAndIfContinueToMultiContinueRector;
+use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ChangeAndIfContinueToMultiContinueRectorTest extends AbstractRectorTestCase
+final class ChangeOrIfContinueToMultiContinueRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class ChangeAndIfContinueToMultiContinueRectorTest extends AbstractRectorT
 
     protected function getRectorClass(): string
     {
-        return ChangeAndIfContinueToMultiContinueRector::class;
+        return ChangeOrIfContinueToMultiContinueRector::class;
     }
 }

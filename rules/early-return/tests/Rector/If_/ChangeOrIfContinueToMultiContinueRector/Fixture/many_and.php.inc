@@ -1,13 +1,13 @@
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfContinueToMultiContinueRector\Fixture;
+namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeOrIfContinueToMultiContinueRector\Fixture;
 
 class ManyAnd
 {
     public function canDrive(Car $newCar)
     {
         foreach ($cars as $car) {
-            if ($car->hasWheels() && $car->hasFuel() && $car->isRunnable()) {
+            if ($car->hasWheels() || $car->hasFuel() || $car->isRunnable()) {
                 continue;
             }
             $car->setWheel($newCar->wheel);
@@ -20,20 +20,20 @@ class ManyAnd
 -----
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfContinueToMultiContinueRector\Fixture;
+namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeOrIfContinueToMultiContinueRector\Fixture;
 
 class ManyAnd
 {
     public function canDrive(Car $newCar)
     {
         foreach ($cars as $car) {
-            if (!$car->hasWheels()) {
+            if ($car->hasWheels()) {
                 continue;
             }
-            if (!$car->hasFuel()) {
+            if ($car->hasFuel()) {
                 continue;
             }
-            if (!$car->isRunnable()) {
+            if ($car->isRunnable()) {
                 continue;
             }
             $car->setWheel($newCar->wheel);
