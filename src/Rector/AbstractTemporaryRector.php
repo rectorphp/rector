@@ -25,6 +25,8 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitorAbstract;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\CodingStyle\Naming\ClassNaming;
@@ -237,28 +239,21 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     /**
      * @required
      */
-    public function autowireAbstractRectorTrait(
+    public function autowireAbstractTemporaryRector(
+        NodesToRemoveCollector $nodesToRemoveCollector,
+        PropertyToAddCollector $propertyToAddCollector,
+        UseNodesToAddCollector $useNodesToAddCollector,
+        NodesToAddCollector $nodesToAddCollector,
+        RectorChangeCollector $rectorChangeCollector,
+        NodeRemover $nodeRemover,
+        PropertyAdder $propertyAdder,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
         ClassNaming $classNaming,
         NodeTypeResolver $nodeTypeResolver,
         TypeUnwrapper $typeUnwrapper,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
-    ): void {
-        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
-        $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->classNaming = $classNaming;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->typeUnwrapper = $typeUnwrapper;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-    }
-
-    /**
-     * @required
-     */
-    public function autowireAbstractTemporaryRector(
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         VisibilityManipulator $visibilityManipulator,
         NodeFactory $nodeFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
@@ -276,6 +271,20 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         NodeRepository $nodeRepository,
         BetterNodeFinder $betterNodeFinder
     ): void {
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
+        $this->propertyToAddCollector = $propertyToAddCollector;
+        $this->useNodesToAddCollector = $useNodesToAddCollector;
+        $this->nodesToAddCollector = $nodesToAddCollector;
+        $this->rectorChangeCollector = $rectorChangeCollector;
+        $this->nodeRemover = $nodeRemover;
+        $this->propertyAdder = $propertyAdder;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
+        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->classNaming = $classNaming;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->typeUnwrapper = $typeUnwrapper;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->nodeFactory = $nodeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -349,27 +358,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         }
 
         return $node;
-    }
-
-    /**
-     * @required
-     */
-    public function autowireNodeCommandersTrait(
-        NodesToRemoveCollector $nodesToRemoveCollector,
-        PropertyToAddCollector $propertyToAddCollector,
-        UseNodesToAddCollector $useNodesToAddCollector,
-        NodesToAddCollector $nodesToAddCollector,
-        RectorChangeCollector $rectorChangeCollector,
-        NodeRemover $nodeRemover,
-        PropertyAdder $propertyAdder
-    ): void {
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
-        $this->propertyToAddCollector = $propertyToAddCollector;
-        $this->useNodesToAddCollector = $useNodesToAddCollector;
-        $this->nodesToAddCollector = $nodesToAddCollector;
-        $this->rectorChangeCollector = $rectorChangeCollector;
-        $this->nodeRemover = $nodeRemover;
-        $this->propertyAdder = $propertyAdder;
     }
 
     protected function isName(Node $node, string $name): bool

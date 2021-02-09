@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Rector\NodeRemoval;
 
-use Closure;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;

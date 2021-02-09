@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
-use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\Legacy\Naming\FullyQualifiedNameResolver;
 use Rector\Legacy\NodeFactory\StaticMethodClassFactory;
 use Rector\Legacy\ValueObject\FunctionToStaticCall;
@@ -187,9 +187,8 @@ CODE_SAMPLE
 
         $nodesToPrint = [$this->resolveNodeToPrint($node, $class)];
 
-        $fileContent = $this->betterStandardPrinter->prettyPrintFile($nodesToPrint);
-        $addedFileWithContent = new AddedFileWithContent($classFileDestination, $fileContent);
-        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
+        $addedFileWithNodes = new AddedFileWithNodes($classFileDestination, $nodesToPrint);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
     }
 
     /**

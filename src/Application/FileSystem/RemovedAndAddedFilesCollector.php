@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Core\Application\FileSystem;
 
+use Rector\FileSystemRector\Contract\AddedFileInterface;
 use Rector\FileSystemRector\Contract\MovedFileInterface;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -18,9 +20,9 @@ final class RemovedAndAddedFilesCollector
     private $removedFiles = [];
 
     /**
-     * @var AddedFileWithContent[]
+     * @var AddedFileInterface[]
      */
-    private $addedFileWithContents = [];
+    private $addedFiles = [];
 
     /**
      * @var MovedFileInterface[]
@@ -96,9 +98,9 @@ final class RemovedAndAddedFilesCollector
         return false;
     }
 
-    public function addAddedFile(AddedFileWithContent $addedFileWithContent): void
+    public function addAddedFile(AddedFileInterface $addedFile): void
     {
-        $this->addedFileWithContents[] = $addedFileWithContent;
+        $this->addedFiles[] = $addedFile;
     }
 
     /**
@@ -106,7 +108,19 @@ final class RemovedAndAddedFilesCollector
      */
     public function getAddedFilesWithContent(): array
     {
-        return $this->addedFileWithContents;
+        return array_filter($this->addedFiles, function (AddedFileInterface $addedFile): bool {
+            return $addedFile instanceof AddedFileWithContent;
+        });
+    }
+
+    /**
+     * @return AddedFileWithNodes[]
+     */
+    public function getAddedFilesWithNodes(): array
+    {
+        return array_filter($this->addedFiles, function (AddedFileInterface $addedFile): bool {
+            return $addedFile instanceof AddedFileWithNodes;
+        });
     }
 
     /**
@@ -121,12 +135,12 @@ final class RemovedAndAddedFilesCollector
 
     public function getAffectedFilesCount(): int
     {
-        return count($this->addedFileWithContents) + count($this->movedFiles) + count($this->removedFiles);
+        return count($this->addedFiles) + count($this->movedFiles) + count($this->removedFiles);
     }
 
     public function getAddedFileCount(): int
     {
-        return count($this->addedFileWithContents);
+        return count($this->addedFiles);
     }
 
     public function getRemovedFilesCount(): int
@@ -139,7 +153,7 @@ final class RemovedAndAddedFilesCollector
      */
     public function reset(): void
     {
-        $this->addedFileWithContents = [];
+        $this->addedFiles = [];
         $this->removedFiles = [];
         $this->movedFiles = [];
     }

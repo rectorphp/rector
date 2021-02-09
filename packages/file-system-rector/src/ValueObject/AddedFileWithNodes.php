@@ -1,12 +1,14 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Rector\FileSystemRector\ValueObject;
 
 use PhpParser\Node;
 use Rector\FileSystemRector\Contract\AddedFileInterface;
+use Rector\FileSystemRector\Contract\FileWithNodesInterface;
 
-final class AddedFileWithNodes implements AddedFileInterface
+final class AddedFileWithNodes implements AddedFileInterface, FileWithNodesInterface
 {
     /**
      * @var string

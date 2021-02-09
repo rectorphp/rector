@@ -6,10 +6,11 @@ namespace Rector\FileSystemRector\ValueObject;
 
 use PhpParser\Node;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\FileSystemRector\Contract\FileWithNodesInterface;
 use Rector\FileSystemRector\Contract\MovedFileInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class MovedFileWithNodes implements MovedFileInterface
+final class MovedFileWithNodes implements MovedFileInterface, FileWithNodesInterface
 {
     /**
      * @var string
