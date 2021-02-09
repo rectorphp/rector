@@ -78,6 +78,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     protected static $allRectorContainer;
 
+    /**
+     * @var bool
+     */
     private static $isInitialized = false;
 
     /**
