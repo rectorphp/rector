@@ -22,6 +22,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractCommunityRectorTestCase extends AbstractKernelTestCase implements CommunityRectorTestCaseInterface
 {
     /**
+     * @var BetterStandardPrinter
+     */
+    public $betterStandardPrinter;
+
+    /**
      * @var FileProcessor
      */
     protected $fileProcessor;
