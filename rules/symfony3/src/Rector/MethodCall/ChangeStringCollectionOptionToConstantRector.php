@@ -97,10 +97,12 @@ CODE_SAMPLE
         }
 
         foreach ($optionsArray->items as $optionsArrayItem) {
-            if ($optionsArrayItem === null || $optionsArrayItem->key === null) {
+            if ($optionsArrayItem === null) {
                 continue;
             }
-
+            if ($optionsArrayItem->key === null) {
+                continue;
+            }
             if (! $this->valueResolver->isValues($optionsArrayItem->key, ['type', 'entry_type'])) {
                 continue;
             }

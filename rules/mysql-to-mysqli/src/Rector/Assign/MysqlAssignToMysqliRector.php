@@ -177,7 +177,10 @@ CODE_SAMPLE
         foreach (self::FIELD_TO_FIELD_DIRECT as $funcName => $property) {
             if ($this->isName($funcCall, $funcName)) {
                 $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-                if ($parentNode instanceof PropertyFetch || $parentNode instanceof StaticPropertyFetch) {
+                if ($parentNode instanceof PropertyFetch) {
+                    continue;
+                }
+                if ($parentNode instanceof StaticPropertyFetch) {
                     continue;
                 }
 

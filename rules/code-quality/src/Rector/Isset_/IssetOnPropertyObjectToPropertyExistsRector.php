@@ -92,8 +92,10 @@ CODE_SAMPLE
             $type = $this->getType($object);
             /** @var Identifier|Variable $name */
             $name = $issetVar->name;
-
-            if ($type === null || ! $name instanceof Identifier) {
+            if ($type === null) {
+                continue;
+            }
+            if (! $name instanceof Identifier) {
                 continue;
             }
 

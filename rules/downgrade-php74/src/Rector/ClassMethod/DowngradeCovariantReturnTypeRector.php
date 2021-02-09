@@ -172,7 +172,10 @@ CODE_SAMPLE
 
             $parentReflectionMethod = new ReflectionMethod($parentClassLike, $methodName);
             $parentReflectionMethodReturnType = $parentReflectionMethod->getReturnType();
-            if (! $parentReflectionMethodReturnType instanceof ReflectionNamedType || $parentReflectionMethodReturnType->getName() === $nodeReturnTypeName) {
+            if (! $parentReflectionMethodReturnType instanceof ReflectionNamedType) {
+                continue;
+            }
+            if ($parentReflectionMethodReturnType->getName() === $nodeReturnTypeName) {
                 continue;
             }
             // This is an ancestor class with a different return type
