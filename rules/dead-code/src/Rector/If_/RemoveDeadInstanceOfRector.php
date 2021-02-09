@@ -82,7 +82,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): Node
+    private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): ?Node
     {
         $previousVar = $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($instanceof): bool {
             return $this->areNodesEqual($node, $instanceof->expr);
@@ -92,7 +92,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $isSameObject = $this->isObjectType($previousVar, $instanceof->class->toString());
+        $isSameObject = $this->isObjectType($previousVar, $this->getName($instanceof->class));
         if ($isSameObject) {
             $this->removeNode($if);
             return $if;
