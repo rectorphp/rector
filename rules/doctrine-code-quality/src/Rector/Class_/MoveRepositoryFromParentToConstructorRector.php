@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityRepository;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
@@ -158,12 +157,7 @@ CODE_SAMPLE
 
         $classConstFetch = $this->nodeFactory->createClassConstReference($entityObjectType->getClassName());
 
-        $methodCall = $this->builderFactory->methodCall(
-            new Variable('entityManager'),
-            'getRepository',
-            [$classConstFetch]
-        );
-
+        $methodCall = $this->nodeFactory->createMethodCall('entityManager', 'getRepository', [$classConstFetch]);
         $methodCall->setAttribute(AttributeKey::CLASS_NODE, $repositoryClassName);
 
         return $this->nodeFactory->createPropertyAssignmentWithExpr('repository', $methodCall);

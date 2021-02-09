@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Rector;
 
-use PhpParser\BuilderFactory;
 use PhpParser\Comment;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
@@ -99,11 +98,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      * @var RemovedAndAddedFilesCollector
      */
     protected $removedAndAddedFilesCollector;
-
-    /**
-     * @var BuilderFactory
-     */
-    protected $builderFactory;
 
     /**
      * @var ParameterProvider
@@ -252,7 +246,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         PhpDocInfoFactory $phpDocInfoFactory,
         SymfonyStyle $symfonyStyle,
         PhpVersionProvider $phpVersionProvider,
-        BuilderFactory $builderFactory,
         ExclusionManager $exclusionManager,
         StaticTypeMapper $staticTypeMapper,
         ParameterProvider $parameterProvider,
@@ -282,7 +275,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
-        $this->builderFactory = $builderFactory;
         $this->exclusionManager = $exclusionManager;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;

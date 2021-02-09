@@ -104,7 +104,7 @@ final class AssertInstanceOfComparisonRector extends AbstractRector
         unset($oldArguments[0]);
 
         $node->args = array_merge([
-            new Arg($this->builderFactory->classConstFetch($class, 'class')),
+            new Arg($this->nodeFactory->createClassConstReference((string) $class)),
             new Arg($argument),
         ], $oldArguments);
     }
