@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -97,6 +97,11 @@ CODE_SAMPLE
             return $node !== $instanceof->expr && $this->areNodesEqual($node, $instanceof->expr);
         });
 
+        $parentNode = $previousVar->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Assign) {
+            return null;
+        }
+
         if (! $previousVar instanceof Node) {
             return null;
         }
@@ -132,12 +137,12 @@ CODE_SAMPLE
         $objectType = $this->getObjectType($node);
         $parentPreviousVar = $node->getAttribute(AttributeKey::PARENT_NODE);
 
-        if (! $parentPreviousVar) {
+        if (! $parentPreviousVar instanceof Node) {
             return false;
         }
 
         if (! $parentPreviousVar instanceof Param) {
-            return ! $objectType instanceof UnionType && $this->isObjectType($node, $name);
+            return $this->isObjectType($node, $name);
         }
 
         $type = $parentPreviousVar->type;
