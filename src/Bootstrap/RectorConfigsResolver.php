@@ -22,6 +22,11 @@ final class RectorConfigsResolver
      */
     private $setAwareConfigResolver;
 
+    /**
+     * @var array<string, SmartFileInfo[]>
+     */
+    private $resolvedConfigFileInfos = [];
+
     public function __construct()
     {
         $this->configResolver = new ConfigResolver();
@@ -34,10 +39,16 @@ final class RectorConfigsResolver
      */
     public function resolveFromConfigFileInfo(SmartFileInfo $configFileInfo): array
     {
-        $configFileInfos = [$configFileInfo];
-        $setFileInfos = $this->resolveSetFileInfosFromConfigFileInfos($configFileInfos);
+        $hash = sha1($configFileInfo->getRealPath());
+        if (isset($this->resolvedConfigFileInfos[$hash])) {
+            return $this->resolvedConfigFileInfos[$hash];
+        }
 
-        return array_merge($configFileInfos, $setFileInfos);
+        $setFileInfos = $this->resolveSetFileInfosFromConfigFileInfos([$configFileInfo]);
+        $configFileInfos = array_merge([$configFileInfo], $setFileInfos);
+
+        $this->resolvedConfigFileInfos[$hash] = $configFileInfos;
+        return $configFileInfos;
     }
 
     /**

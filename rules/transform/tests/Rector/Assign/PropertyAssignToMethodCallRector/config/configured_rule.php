@@ -11,52 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PropertyAssignToMethodCallRector::class)->call('configure', [[
         PropertyAssignToMethodCallRector::PROPERTY_ASSIGNS_TO_METHODS_CALLS => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            new PropertyAssignToMethodCall(
-                ChoiceControl::class,
-                'checkAllowedValues',
-                'checkDefaultValue'
-            ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            new PropertyAssignToMethodCall(ChoiceControl::class, 'checkAllowedValues', 'checkDefaultValue'),
 
         ]),
     ]]);

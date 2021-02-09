@@ -16,6 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => ValueObjectInliner::inline([
                 
 
+
                 new MethodCallToAnotherMethodCallWithArguments(
                     NetteServiceDefinition::class,
                     'setInject',

@@ -46,7 +46,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     /**
      * @var SmartFileSystem
      */
-    protected $smartFileSystem;
+    protected static $smartFileSystem;
 
     /**
      * @var NonPhpFileProcessor
@@ -59,14 +59,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected $parameterProvider;
 
     /**
-     * @var RunnableRectorFactory
-     */
-    protected $runnableRectorFactory;
-
-    /**
      * @var FixtureGuard
      */
-    protected $fixtureGuard;
+    protected static $fixtureGuard;
 
     /**
      * @var RemovedAndAddedFilesCollector
@@ -83,6 +78,13 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     protected static $allRectorContainer;
 
+    private static $isInitialized = false;
+
+    /**
+     * @var RunnableRectorFactory
+     */
+    private static $runnableRectorFactory;
+
     /**
      * @var bool
      */
@@ -96,17 +98,14 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     /**
      * @var RectorConfigsResolver
      */
-    private $rectorConfigsResolver;
+    private static $rectorConfigsResolver;
 
     protected function setUp(): void
     {
-        $this->runnableRectorFactory = new RunnableRectorFactory();
-        $this->smartFileSystem = new SmartFileSystem();
-        $this->fixtureGuard = new FixtureGuard();
-        $this->rectorConfigsResolver = new RectorConfigsResolver();
+        $this->initializeDependencies();
 
         if ($this->provideConfigFileInfo() !== null) {
-            $configFileInfos = $this->rectorConfigsResolver->resolveFromConfigFileInfo($this->provideConfigFileInfo());
+            $configFileInfos = self::$rectorConfigsResolver->resolveFromConfigFileInfo($this->provideConfigFileInfo());
 
             $this->bootKernelWithConfigs(RectorKernel::class, $configFileInfos);
 
@@ -190,7 +189,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo, array $extraFiles = []): void
     {
-        $this->fixtureGuard->ensureFileInfoHasDifferentBeforeAndAfterContent($fixtureFileInfo);
+        self::$fixtureGuard->ensureFileInfoHasDifferentBeforeAndAfterContent($fixtureFileInfo);
 
         $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
             $fixtureFileInfo,
@@ -271,8 +270,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         SmartFileInfo $originalFileInfo,
         SmartFileInfo $expectedFileInfo
     ): void {
-        $runnable = $this->runnableRectorFactory->createRunnableClass($originalFileInfo);
-        $expectedInstance = $this->runnableRectorFactory->createRunnableClass($expectedFileInfo);
+        $runnable = self::$runnableRectorFactory->createRunnableClass($originalFileInfo);
+        $expectedInstance = self::$runnableRectorFactory->createRunnableClass($expectedFileInfo);
 
         $actualResult = $runnable->run();
 
@@ -397,11 +396,28 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $smartPhpConfigPrinter = $phpConfigPrinterFactory->create();
 
         $fileContent = $smartPhpConfigPrinter->printConfiguredServices($rectorClassesWithConfiguration);
-        $this->smartFileSystem->dumpFile($filePath, $fileContent);
+        self::$smartFileSystem->dumpFile($filePath, $fileContent);
     }
 
     private function normalizeNewlines(string $string): string
     {
         return Strings::replace($string, '#\r\n|\r|\n#', "\n");
+    }
+
+    /**
+     * Static to avoid reboot on each data fixture
+     */
+    private function initializeDependencies(): void
+    {
+        if (self::$isInitialized) {
+            return;
+        }
+
+        self::$runnableRectorFactory = new RunnableRectorFactory();
+        self::$smartFileSystem = new SmartFileSystem();
+        self::$fixtureGuard = new FixtureGuard();
+        self::$rectorConfigsResolver = new RectorConfigsResolver();
+
+        self::$isInitialized = true;
     }
 }

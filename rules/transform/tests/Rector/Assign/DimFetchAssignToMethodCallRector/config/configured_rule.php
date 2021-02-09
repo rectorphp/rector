@@ -10,52 +10,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DimFetchAssignToMethodCallRector::class)->call('configure', [[
         DimFetchAssignToMethodCallRector::DIM_FETCH_ASSIGN_TO_METHOD_CALL => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             new DimFetchAssignToMethodCall(
                 'Nette\Application\Routers\RouteList',
                 'Nette\Application\Routers\Route',
                 'addRoute'
             ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         ]),
     ]]);

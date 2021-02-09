@@ -11,48 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MethodCallToReturnRector::class)->call('configure', [[
         MethodCallToReturnRector::METHOD_CALL_WRAPS => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             new MethodCallToReturn(ReturnDeny::class, 'deny'),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         ]),
     ]]);
