@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -28,13 +26,8 @@ final class Php74Test extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp74');
     }
 
-    protected function getPhpVersion(): int
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return PhpVersionFeature::TYPED_PROPERTIES;
-    }
-
-    protected function getRectorClass(): string
-    {
-        return PropertyTypeDeclarationRector::class;
+        return new SmartFileInfo(__DIR__ . '/config/typed_property.php');
     }
 }

@@ -8,7 +8,7 @@ use Nette\Application\IPresenter;
 use Nette\Application\IResponse;
 use Nette\Application\Request;
 
-class ConstructorInjectionParentPresenter implements IPresenter
+abstract class ConstructorInjectionParentPresenter implements IPresenter
 {
     /**
      * @var SomeTypeToInject

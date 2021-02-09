@@ -6,7 +6,6 @@ namespace Rector\Autodiscovery\Tests\Rector\FileNode\MoveEntitiesToEntityDirecto
 
 use Iterator;
 use Rector\Autodiscovery\Rector\FileNode\MoveEntitiesToEntityDirectoryRector;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -41,10 +40,5 @@ final class MoveEntitiesToEntityDirectoryRectorTest extends AbstractRectorTestCa
     protected function getRectorClass(): string
     {
         return MoveEntitiesToEntityDirectoryRector::class;
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::TYPED_PROPERTIES - 1;
     }
 }

@@ -34,10 +34,9 @@ final class RespectInjectParentConstructPresenter extends ConstructorInjectionPa
      */
     private $context;
     /**
-     * @var \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject
      * @inject
      */
-    public $someInterfaceToInject;
+    public \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject $someInterfaceToInject;
 
     public function go()
     {

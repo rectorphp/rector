@@ -22,10 +22,8 @@ use stdClass;
 
 class TypedProperty
 {
-    private stdClass $property;
-    public function __construct(\stdClass $property)
+    public function __construct(private \stdClass $property)
     {
-        $this->property = $property;
     }
 }
 

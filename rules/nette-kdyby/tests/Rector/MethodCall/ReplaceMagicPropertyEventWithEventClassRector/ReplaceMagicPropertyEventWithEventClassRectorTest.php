@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NetteKdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -44,11 +43,6 @@ final class ReplaceMagicPropertyEventWithEventClassRectorTest extends AbstractRe
             '/Event/DuplicatedEventParamsUploadEvent.php',
             __DIR__ . '/Source/ExpectedDuplicatedEventParamsUploadEvent.php',
         ];
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::TYPED_PROPERTIES - 1;
     }
 
     protected function getRectorClass(): string

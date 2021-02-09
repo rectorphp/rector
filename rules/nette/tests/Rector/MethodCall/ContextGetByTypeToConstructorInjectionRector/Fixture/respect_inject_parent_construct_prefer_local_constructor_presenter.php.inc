@@ -38,15 +38,11 @@ final class RespectInjectParentConstructPreferLocalConstructorPresenter extends 
      * @var \Nette\DI\Container
      */
     private $context;
-    /**
-     * @var \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject
-     */
-    private $someInterfaceToInject;
 
-    public function __construct(\Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject $someInterfaceToInject)
+    public function __construct(private \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject $someInterfaceToInject)
     {
         $some = 100;
-        $this->someInterfaceToInject = $someInterfaceToInject;
+        parent::__construct();
     }
 
     public function go()

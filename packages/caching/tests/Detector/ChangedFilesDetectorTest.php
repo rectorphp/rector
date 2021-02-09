@@ -25,8 +25,6 @@ final class ChangedFilesDetectorTest extends AbstractRectorTestCase
 
     protected function tearDown(): void
     {
-        parent::tearDown();
-
         $this->changedFilesDetector->clear();
     }
 
@@ -35,11 +33,9 @@ final class ChangedFilesDetectorTest extends AbstractRectorTestCase
         $smartFileInfo = new SmartFileInfo(__DIR__ . '/Source/file.php');
 
         $this->assertTrue($this->changedFilesDetector->hasFileChanged($smartFileInfo));
-
         $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, []);
 
         $this->assertFalse($this->changedFilesDetector->hasFileChanged($smartFileInfo));
-
         $this->changedFilesDetector->invalidateFile($smartFileInfo);
 
         $this->assertTrue($this->changedFilesDetector->hasFileChanged($smartFileInfo));

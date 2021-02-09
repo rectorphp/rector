@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -28,13 +26,8 @@ final class SkipParentConstructOverrideInPHP72Test extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureForPhp72');
     }
 
-    protected function getRectorClass(): string
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return MakeInheritedMethodVisibilitySameAsParentRector::class;
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::PARENT_VISIBILITY_OVERRIDE;
+        return new SmartFileInfo(__DIR__ . '/config/php_72.php');
     }
 }

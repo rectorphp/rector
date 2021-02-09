@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PropertyTypeParamTypeDeclarationRectorTest extends AbstractRectorTestCase
@@ -26,13 +24,8 @@ final class PropertyTypeParamTypeDeclarationRectorTest extends AbstractRectorTes
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePropertyType');
     }
 
-    protected function getRectorClass(): string
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return ParamTypeDeclarationRector::class;
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::TYPED_PROPERTIES;
+        return new SmartFileInfo(__DIR__ . '/config/typed_properties.php');
     }
 }

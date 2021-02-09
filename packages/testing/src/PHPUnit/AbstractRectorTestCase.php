@@ -18,7 +18,6 @@ use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Stubs\StubLoader;
-use Rector\Core\ValueObject\PhpVersion;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\Testing\Application\EnabledRectorsProvider;
 use Rector\Testing\Contract\RunnableInterface;
@@ -26,7 +25,6 @@ use Rector\Testing\Finder\RectorsFinder;
 use Rector\Testing\Guard\FixtureGuard;
 use Rector\Testing\PhpConfigPrinter\PhpConfigPrinterFactory;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
-use Rector\Testing\PHPUnit\Behavior\RunnableTestTrait;
 use Rector\Testing\ValueObject\InputFilePathWithExpectedFile;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -41,12 +39,6 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 {
     use MovingFilesTrait;
-    use RunnableTestTrait;
-
-    /**
-     * @var int
-     */
-    private const PHP_VERSION_UNDEFINED = 0;
 
     /**
      * @var FileProcessor
@@ -74,11 +66,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected $runnableRectorFactory;
 
     /**
-     * @var NodeScopeResolver
-     */
-    protected $nodeScopeResolver;
-
-    /**
      * @var FixtureGuard
      */
     protected $fixtureGuard;
@@ -102,11 +89,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      * @var bool
      */
     private $autoloadTestFixture = true;
-
-    /**
-     * @var mixed[]
-     */
-    private $oldParameterValues = [];
 
     /**
      * @var BetterStandardPrinter
@@ -164,23 +146,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
-
-        // needed for PHPStan, because the analyzed file is just create in /temp
-        $this->nodeScopeResolver = $this->getService(NodeScopeResolver::class);
-
-        $this->configurePhpVersionFeatures();
-
-        $this->oldParameterValues = [];
-    }
-
-    protected function tearDown(): void
-    {
-        $this->restoreOldParameterValues();
-
-        // restore PHP version if changed
-        if ($this->getPhpVersion() !== self::PHP_VERSION_UNDEFINED) {
-            $this->setParameter(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_10);
-        }
     }
 
     protected function getRectorClass(): string
@@ -213,27 +178,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return StaticFixtureFinder::yieldDirectory($directory, $suffix);
     }
 
-    /**
-     * @param mixed $value
-     */
-    protected function setParameter(string $name, $value): void
-    {
-        $parameterProvider = $this->getService(ParameterProvider::class);
-
-        if ($name !== Option::PHP_VERSION_FEATURES) {
-            $oldParameterValue = $parameterProvider->provideParameter($name);
-            $this->oldParameterValues[$name] = $oldParameterValue;
-        }
-
-        $parameterProvider->changeParameter($name, $value);
-    }
-
-    protected function getPhpVersion(): int
-    {
-        // to be implemented
-        return self::PHP_VERSION_UNDEFINED;
-    }
-
     protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
     {
         $this->autoloadTestFixture = false;
@@ -254,7 +198,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         );
 
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
-        $this->nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
+
+        // needed for PHPStan, because the analyzed file is just create in /temp
+        /** @var NodeScopeResolver $nodeScopeResolver */
+        $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
+        $nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
 
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
 
@@ -319,6 +267,19 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return sys_get_temp_dir() . '/_temp_fixture_easy_testing';
     }
 
+    protected function assertOriginalAndFixedFileResultEquals(
+        SmartFileInfo $originalFileInfo,
+        SmartFileInfo $expectedFileInfo
+    ): void {
+        $runnable = $this->runnableRectorFactory->createRunnableClass($originalFileInfo);
+        $expectedInstance = $this->runnableRectorFactory->createRunnableClass($expectedFileInfo);
+
+        $actualResult = $runnable->run();
+
+        $expectedResult = $expectedInstance->run();
+        $this->assertSame($expectedResult, $actualResult);
+    }
+
     /**
      * @return SmartFileInfo[]
      */
@@ -362,28 +323,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         }
     }
 
-    private function configurePhpVersionFeatures(): void
-    {
-        if ($this->getPhpVersion() === self::PHP_VERSION_UNDEFINED) {
-            return;
-        }
-
-        $this->setParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
-    }
-
-    private function restoreOldParameterValues(): void
-    {
-        if ($this->oldParameterValues === []) {
-            return;
-        }
-
-        $parameterProvider = $this->getService(ParameterProvider::class);
-
-        foreach ($this->oldParameterValues as $name => $oldParameterValue) {
-            $parameterProvider->changeParameter($name, $oldParameterValue);
-        }
-    }
-
     private function ensureRectorClassIsValid(string $rectorClass, string $methodName): void
     {
         if (is_a($rectorClass, PhpRectorInterface::class, true)) {
@@ -407,7 +346,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         SmartFileInfo $fixtureFileInfo,
         array $extraFiles = []
     ): void {
-        $this->setParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
+        $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
         if (! Strings::endsWith($originalFileInfo->getFilename(), '.blade.php') && in_array(
             $originalFileInfo->getSuffix(),

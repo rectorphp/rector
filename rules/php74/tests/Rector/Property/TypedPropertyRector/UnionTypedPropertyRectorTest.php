@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -28,10 +27,5 @@ final class UnionTypedPropertyRectorTest extends AbstractRectorTestCase
     protected function getRectorClass(): string
     {
         return TypedPropertyRector::class;
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::UNION_TYPES;
     }
 }

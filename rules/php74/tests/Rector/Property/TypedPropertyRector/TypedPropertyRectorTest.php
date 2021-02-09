@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -22,11 +21,6 @@ final class TypedPropertyRectorTest extends AbstractRectorTestCase
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
-    }
-
-    protected function getPhpVersion(): int
-    {
-        return PhpVersionFeature::UNION_TYPES - 1;
     }
 
     protected function provideConfigFileInfo(): ?SmartFileInfo

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector;
 
 use Iterator;
-use Rector\Core\Configuration\Option;
-use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -20,8 +18,6 @@ final class NonNamespacedTest extends AbstractRectorTestCase
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        $this->setParameter(Option::AUTO_IMPORT_NAMES, true);
-
         $this->doTestFileInfo($fileInfo);
     }
 
@@ -30,8 +26,8 @@ final class NonNamespacedTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureNonNamespaced');
     }
 
-    protected function getRectorClass(): string
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return RenameClassRector::class;
+        return new SmartFileInfo(__DIR__ . '/config/import_config.php');
     }
 }

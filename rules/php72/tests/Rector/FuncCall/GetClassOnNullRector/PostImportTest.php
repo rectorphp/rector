@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector;
 
 use Iterator;
-use Rector\Core\Configuration\Option;
-use Rector\Php72\Rector\FuncCall\GetClassOnNullRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -17,7 +15,6 @@ final class PostImportTest extends AbstractRectorTestCase
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        $this->setParameter(Option::AUTO_IMPORT_NAMES, true);
         $this->doTestFileInfo($fileInfo);
     }
 
@@ -26,8 +23,8 @@ final class PostImportTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePostImport');
     }
 
-    protected function getRectorClass(): string
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return GetClassOnNullRector::class;
+        return new SmartFileInfo(__DIR__ . '/config/auto_import.php');
     }
 }

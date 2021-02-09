@@ -6,7 +6,6 @@ namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
-use Rector\Core\Configuration\Option;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -22,8 +21,6 @@ final class SimplifyUselessVariableRectorTest extends AbstractRectorTestCase
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        $this->setParameter(Option::AUTO_IMPORT_NAMES, true);
-
         $this->doTestFileInfo($fileInfo);
     }
 

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php73\Tests\Rector\BinaryOr\IsCountableRector;
 
 use Iterator;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Php73\Rector\BooleanOr\IsCountableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -25,13 +23,8 @@ final class PolyfillRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureWithPolyfill');
     }
 
-    protected function getPhpVersion(): int
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return PhpVersionFeature::IS_COUNTABLE - 1;
-    }
-
-    protected function getRectorClass(): string
-    {
-        return IsCountableRector::class;
+        return new SmartFileInfo(__DIR__ . '/config/polyfill_config.php');
     }
 }

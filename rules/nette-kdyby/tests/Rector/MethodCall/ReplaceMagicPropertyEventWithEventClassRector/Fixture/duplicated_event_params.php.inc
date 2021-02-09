@@ -24,14 +24,10 @@ use Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEvent
 
 final class DuplicatedEventParams
 {
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    public function __construct(\Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher)
+    public function __construct(private \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventDispatcher = $eventDispatcher;
     }
+
     public function run(SomeUser $user, string $some_underscore)
     {
         $duplicatedEventParamsUploadEvent = new \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Fixture\Event\DuplicatedEventParamsUploadEvent($user['owner_id'], $user->name_value, $some_underscore);

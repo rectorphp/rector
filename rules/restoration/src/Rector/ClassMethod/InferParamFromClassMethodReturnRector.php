@@ -31,7 +31,7 @@ final class InferParamFromClassMethodReturnRector extends AbstractRector impleme
     /**
      * @var string
      */
-    public const INFER_PARAMS_FROM_CLASS_METHOD_RETURNS = 'infer_params_from_class_method_returns';
+    public const PARAM_FROM_CLASS_METHOD_RETURNS = 'param_from_class_method_returns';
 
     /**
      * @var InferParamFromClassMethodReturn[]
@@ -99,7 +99,7 @@ class SomeClass
 CODE_SAMPLE
 ,
                 [
-                    self::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => [
+                    self::PARAM_FROM_CLASS_METHOD_RETURNS => [
                         new InferParamFromClassMethodReturn('SomeClass', 'process', 'getNodeTypes'),
                     ],
                 ]
@@ -160,7 +160,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $inferParamsFromClassMethodReturns = $configuration[self::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS] ?? [];
+        $inferParamsFromClassMethodReturns = $configuration[self::PARAM_FROM_CLASS_METHOD_RETURNS] ?? [];
         Assert::allIsInstanceOf($inferParamsFromClassMethodReturns, InferParamFromClassMethodReturn::class);
 
         $this->inferParamFromClassMethodReturn = $inferParamsFromClassMethodReturns;

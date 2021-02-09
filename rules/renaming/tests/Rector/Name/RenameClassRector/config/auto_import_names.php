@@ -15,7 +15,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
 
     $services = $containerConfigurator->services();
-
     $services->set(SimplifyEmptyArrayCheckRector::class);
 
     $services->set(RenameClassRector::class)

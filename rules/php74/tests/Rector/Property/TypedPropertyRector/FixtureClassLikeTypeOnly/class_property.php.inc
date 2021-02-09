@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\FixtureClassLikeTypeOnly;
 
-use Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
+use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
 final class ClassWithClassProperty
 {
@@ -18,11 +18,11 @@ final class ClassWithClassProperty
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\FixtureClassLikeTypeOnly;
 
-use Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
+use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
 final class ClassWithClassProperty
 {
-    private \Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $anotherClass;
+    private \Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $anotherClass;
 }
 
 ?>

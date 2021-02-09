@@ -44,10 +44,9 @@ class RespectInjectPresenter
      */
     public $otherInjectedService;
     /**
-     * @var \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject
      * @inject
      */
-    public $someInterfaceToInject;
+    public \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject $someInterfaceToInject;
 
     public function run()
     {

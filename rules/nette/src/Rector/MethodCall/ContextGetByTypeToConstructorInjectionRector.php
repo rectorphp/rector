@@ -58,14 +58,8 @@ class SomeClass
      */
     private $context;
 
-    /**
-     * @var SomeTypeToInject
-     */
-    private $someTypeToInject;
-
-    public function __construct(SomeTypeToInject $someTypeToInject)
+    public function __construct(private SomeTypeToInject $someTypeToInject)
     {
-        $this->someTypeToInject = $someTypeToInject;
     }
 
     public function run()
