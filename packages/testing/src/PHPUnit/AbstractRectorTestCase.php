@@ -138,10 +138,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             $enabledRectorsProvider->addEnabledRector($this->getRectorClass(), []);
         }
 
-        // load stubs
-        $stubLoader = $this->getService(StubLoader::class);
-        $stubLoader->loadStubs();
-
         $this->fileProcessor = $this->getService(FileProcessor::class);
         $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);
         $this->parameterProvider = $this->getService(ParameterProvider::class);
@@ -420,6 +416,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         self::$smartFileSystem = new SmartFileSystem();
         self::$fixtureGuard = new FixtureGuard();
         self::$rectorConfigsResolver = new RectorConfigsResolver();
+
+        // load stubs
+        $stubLoader = new StubLoader();
+        $stubLoader->loadStubs();
 
         self::$isInitialized = true;
     }
