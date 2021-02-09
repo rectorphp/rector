@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\NullType;
+use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -104,6 +105,10 @@ CODE_SAMPLE
         }
 
         $objectType = $this->getObjectType($previousVar);
+        if ($objectType instanceof UnionType && $this->isChild($objectType, $name)) {
+            return null;
+        }
+
         if ($objectType instanceof UnionType && $this->hasNullType($objectType)) {
             return null;
         }
@@ -124,9 +129,24 @@ CODE_SAMPLE
         return $if;
     }
 
-    private function hasNullType(UnionType $unionType): bool
+    private function isChild(UnionType $type, string $name): bool
     {
-        foreach ($unionType->getTypes() as $type) {
+        /** @var Type $firstType */
+        $firstType = current($type->getTypes());
+
+        if (! $firstType instanceof ObjectType) {
+            return false;
+        }
+
+        $className = $firstType->getClassName();
+        return is_a($className, $name, true);
+    }
+
+    private function hasNullType(UnionType $type): bool
+    {
+        $types = $type->getTypes();
+
+        foreach ($types as $type) {
             if ($type instanceof NullType) {
                 return true;
             }
