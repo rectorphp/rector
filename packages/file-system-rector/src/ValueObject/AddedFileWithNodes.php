@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Rector\FileSystemRector\ValueObject;
 
+use PhpParser\Node;
 use Rector\FileSystemRector\Contract\AddedFileInterface;
 
-final class AddedFileWithContent implements AddedFileInterface
+final class AddedFileWithNodes implements AddedFileInterface
 {
     /**
      * @var string
@@ -13,14 +14,17 @@ final class AddedFileWithContent implements AddedFileInterface
     private $filePath;
 
     /**
-     * @var string
+     * @var Node[]
      */
-    private $fileContent;
+    private $nodes;
 
-    public function __construct(string $filePath, string $fileContent)
+    /**
+     * @param Node[] $nodes
+     */
+    public function __construct(string $filePath, array $nodes)
     {
         $this->filePath = $filePath;
-        $this->fileContent = $fileContent;
+        $this->nodes = $nodes;
     }
 
     public function getFilePath(): string
@@ -28,8 +32,11 @@ final class AddedFileWithContent implements AddedFileInterface
         return $this->filePath;
     }
 
-    public function getFileContent(): string
+    /**
+     * @return Node[]
+     */
+    public function getNodes(): array
     {
-        return $this->fileContent;
+        return $this->nodes;
     }
 }
