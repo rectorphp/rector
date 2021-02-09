@@ -16,10 +16,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangePackageVersionComposerRector::class)
         ->call('configure', [[
             ChangePackageVersionComposerRector::PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
-                new PackageAndVersion('nette/nette', '^3.0'),
+                new PackageAndVersion('nette/nette', '~3.0.0'),
                 // https://github.com/nette/nette/blob/v2.4.0/composer.json vs https://github.com/nette/nette/blob/v3.0.0/composer.json
                 // older versions have security issues
-                new PackageAndVersion('nette/application', '^3.0.6'),
+                new PackageAndVersion('nette/application', '~3.0.6'),
                 new PackageAndVersion('nette/bootstrap', '^3.0'),
                 new PackageAndVersion('nette/caching', '^3.0'),
                 new PackageAndVersion('nette/component-model', '^3.0'),
