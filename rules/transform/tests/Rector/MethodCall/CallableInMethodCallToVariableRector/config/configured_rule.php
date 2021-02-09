@@ -13,55 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         [[
             CallableInMethodCallToVariableRector::CALLABLE_IN_METHOD_CALL_TO_VARIABLE => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 new CallableInMethodCallToVariable(DummyCache::class, 'save', 1),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             ]),
         ]]

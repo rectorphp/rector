@@ -11,23 +11,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PropertyFetchToMethodCallRector::class)->call('configure', [[
         PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             new PropertyFetchToMethodCall(Translator::class, 'locale', 'getLocale', 'setLocale'),
             new PropertyFetchToMethodCall(
                 'Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\Fixture\Fixture2',
