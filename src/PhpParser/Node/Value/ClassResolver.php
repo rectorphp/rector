@@ -95,7 +95,10 @@ final class ClassResolver
         foreach ($params as $param) {
             $paramVar = $param->var;
             $methodCallVar = $methodCall->var;
-            if (! $paramVar instanceof Variable || ! $methodCallVar instanceof Variable) {
+            if (! $paramVar instanceof Variable) {
+                continue;
+            }
+            if (! $methodCallVar instanceof Variable) {
                 continue;
             }
             if ($paramVar->name === $methodCallVar->name) {
