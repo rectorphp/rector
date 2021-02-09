@@ -136,7 +136,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
             /** @var EnabledRectorProvider $enabledRectorsProvider */
             $enabledRectorsProvider = $this->getService(EnabledRectorProvider::class);
-            $enabledRectorsProvider->reset();
             $enabledRectorsProvider->setEnabledRector($this->getRectorClass());
         }
 
@@ -211,11 +210,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->assertOriginalAndFixedFileResultEquals($inputFileInfo, $expectedFileInfo);
     }
 
-    protected function getTempPath(): string
-    {
-        return StaticFixtureSplitter::getTemporaryPath();
-    }
-
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
     {
         $addedFilesWithContents = $this->removedAndAddedFilesCollector->getAddedFilesWithContent();
@@ -261,20 +255,18 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         SmartFileInfo $originalFileInfo,
         SmartFileInfo $expectedFileInfo
     ): void {
-        $runnable = self::$runnableRectorFactory->createRunnableClass($originalFileInfo);
-        $expectedInstance = self::$runnableRectorFactory->createRunnableClass($expectedFileInfo);
+        $inputRunnable = self::$runnableRectorFactory->createRunnableClass($originalFileInfo);
+        $expectedRunnable = self::$runnableRectorFactory->createRunnableClass($expectedFileInfo);
 
-        $actualResult = $runnable->run();
-
-        $expectedResult = $expectedInstance->run();
-        $this->assertSame($expectedResult, $actualResult);
+        $inputResult = $inputRunnable->run();
+        $expectedResult = $expectedRunnable->run();
+        $this->assertSame($expectedResult, $inputResult);
     }
 
     private function createRectorRepositoryContainer(): void
     {
         if (self::$allRectorContainer === null) {
             $this->createContainerWithAllRectors();
-
             self::$allRectorContainer = self::$container;
             return;
         }
