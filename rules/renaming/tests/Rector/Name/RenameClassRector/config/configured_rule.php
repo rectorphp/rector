@@ -7,6 +7,7 @@ use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture\DuplicatedClass;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\AbstractManualExtension;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClassWithoutTypo;
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClassWithTypo;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -17,7 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'FqnizeNamespaced' => 'Abc\FqnizeNamespaced',
-                \Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass::class => NewClass::class,
+                OldClass::class => NewClass::class,
                 OldClassWithTypo::class => NewClassWithoutTypo::class,
                 'DateTime' => 'DateTimeInterface',
                 'Countable' => 'stdClass',

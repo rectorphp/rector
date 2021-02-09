@@ -1,12 +1,14 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector;
+use Rector\Renaming\ValueObject\RenameAnnotation;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector::class)->call('configure', [[
-        \Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
+    $services->set(RenameAnnotationRector::class)->call('configure', [[
+        RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => ValueObjectInliner::inline([
 
 
 
@@ -24,16 +26,8 @@ return static function (
 
 
 
-            new \Rector\Renaming\ValueObject\RenameAnnotation(
-                'PHPUnit\Framework\TestCase',
-                'scenario',
-                'test'
-            ),
 
-
-
-
-
+            new RenameAnnotation('PHPUnit\Framework\TestCase', 'scenario', 'test'),
 
 
 
@@ -53,7 +47,12 @@ return static function (
 
 
 
-            
+
+
+
+
+
+
         ]),
     ]]);
 };

@@ -1,30 +1,14 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector;
+use Rector\Removing\ValueObject\RemoveFuncCallArg;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector::class)->call('configure', [[
-        \Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            new \Rector\Removing\ValueObject\RemoveFuncCallArg('ldap_first_attribute', 2),
+    $services->set(RemoveFuncCallArgRector::class)->call('configure', [[
+        RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => ValueObjectInliner::inline([
 
 
 
@@ -43,13 +27,32 @@ return static function (
 
 
 
+            new RemoveFuncCallArg('ldap_first_attribute', 2),
 
 
 
 
 
 
-            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         ]),
     ]]);
 };

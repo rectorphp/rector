@@ -1,13 +1,14 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector::class)->call(
+    $services->set(MoveServicesBySuffixToDirectoryRector::class)->call(
         'configure',
         [[
-            \Rector\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector::GROUP_NAMES_BY_SUFFIX => [
+            MoveServicesBySuffixToDirectoryRector::GROUP_NAMES_BY_SUFFIX => [
                 'Repository',
                 'Command',
                 'Mapper',

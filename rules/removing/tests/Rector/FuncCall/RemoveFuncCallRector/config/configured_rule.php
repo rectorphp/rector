@@ -1,12 +1,14 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Removing\Rector\FuncCall\RemoveFuncCallRector;
+use Rector\Removing\ValueObject\RemoveFuncCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Removing\Rector\FuncCall\RemoveFuncCallRector::class)->call('configure', [[
-        \Rector\Removing\Rector\FuncCall\RemoveFuncCallRector::REMOVE_FUNC_CALLS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
+    $services->set(RemoveFuncCallRector::class)->call('configure', [[
+        RemoveFuncCallRector::REMOVE_FUNC_CALLS => ValueObjectInliner::inline([
 
 
 
@@ -24,9 +26,10 @@ return static function (
 
 
 
-            new \Rector\Removing\ValueObject\RemoveFuncCall('ini_get', [
+
+            new RemoveFuncCall('ini_get', [
                 0 => ['y2k_compliance', 'safe_mode', 'magic_quotes_runtime'],
-            ]), new \Rector\Removing\ValueObject\RemoveFuncCall('ini_set', [
+            ]), new RemoveFuncCall('ini_set', [
                 0 => ['y2k_compliance', 'safe_mode', 'magic_quotes_runtime'],
             ]), ]
         ),

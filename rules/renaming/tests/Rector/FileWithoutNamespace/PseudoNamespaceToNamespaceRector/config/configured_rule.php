@@ -1,14 +1,16 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
+use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector::class)->call(
+    $services->set(PseudoNamespaceToNamespaceRector::class)->call(
         'configure',
         [[
-            \Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-                
+            PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => ValueObjectInliner::inline([
 
 
 
@@ -33,11 +35,12 @@ return static function (
 
 
 
-                new \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace('PHPUnit_', [
+
+                new PseudoNamespaceToNamespace('PHPUnit_', [
                     'PHPUnit_Framework_MockObject_MockObject',
                 ]),
-                new \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace('ChangeMe_', ['KeepMe_']),
-                new \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace(
+                new PseudoNamespaceToNamespace('ChangeMe_', ['KeepMe_']),
+                new PseudoNamespaceToNamespace(
                     'Rector_Renaming_Tests_Rector_FileWithoutNamespace_PseudoNamespaceToNamespaceRector_Fixture_'
                 ),
 
@@ -64,7 +67,7 @@ return static function (
 
 
 
-                
+
             ]),
         ]]
     );

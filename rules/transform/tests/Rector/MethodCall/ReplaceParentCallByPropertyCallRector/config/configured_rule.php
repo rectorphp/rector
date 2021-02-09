@@ -1,14 +1,17 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
+use Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Source\TypeClassToReplaceMethodCallBy;
+use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector::class)->call(
+    $services->set(ReplaceParentCallByPropertyCallRector::class)->call(
         'configure',
         [[
-            \Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-                
+            ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => ValueObjectInliner::inline([
 
 
 
@@ -33,8 +36,9 @@ return static function (
 
 
 
-                new \Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall(
-                    \Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Source\TypeClassToReplaceMethodCallBy::class,
+
+                new ReplaceParentCallByPropertyCall(
+                    TypeClassToReplaceMethodCallBy::class,
                     'someMethod',
                     'someProperty'
                 ),
@@ -62,7 +66,7 @@ return static function (
 
 
 
-                
+
             ]),
         ]]
     );

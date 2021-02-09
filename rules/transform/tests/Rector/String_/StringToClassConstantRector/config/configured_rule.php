@@ -1,12 +1,14 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Transform\Rector\String_\StringToClassConstantRector;
+use Rector\Transform\ValueObject\StringToClassConstant;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Transform\Rector\String_\StringToClassConstantRector::class)->call('configure', [[
-        \Rector\Transform\Rector\String_\StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
+    $services->set(StringToClassConstantRector::class)->call('configure', [[
+        StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => ValueObjectInliner::inline([
 
 
 
@@ -24,12 +26,13 @@ return static function (
 
 
 
-            new \Rector\Transform\ValueObject\StringToClassConstant(
+
+            new StringToClassConstant(
                 'compiler.post_dump',
                 'Yet\AnotherClass',
                 'CONSTANT'
             ),
-            new \Rector\Transform\ValueObject\StringToClassConstant('compiler.to_class', 'Yet\AnotherClass', 'class'),
+            new StringToClassConstant('compiler.to_class', 'Yet\AnotherClass', 'class'),
 
 
 
@@ -54,7 +57,7 @@ return static function (
 
 
 
-            
+
         ]),
     ]]);
 };

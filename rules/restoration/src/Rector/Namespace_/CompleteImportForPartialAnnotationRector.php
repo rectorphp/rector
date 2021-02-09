@@ -114,7 +114,7 @@ CODE_SAMPLE
 
     private function addImportToNamespaceIfMissing(
         Namespace_ $namespace,
-        CompleteImportForPartialAnnotation $useWithAlias
+        CompleteImportForPartialAnnotation $completeImportForPartialAnnotation
     ): Namespace_ {
         foreach ($namespace->stmts as $stmt) {
             if (! $stmt instanceof Use_) {
@@ -126,22 +126,22 @@ CODE_SAMPLE
             // already there
             if ($this->isName(
                 $useUse->name,
-                $useWithAlias->getUse()
-            ) && (string) $useUse->alias === $useWithAlias->getAlias()) {
+                $completeImportForPartialAnnotation->getUse()
+            ) && (string) $useUse->alias === $completeImportForPartialAnnotation->getAlias()) {
                 return $namespace;
             }
         }
 
-        return $this->addImportToNamespace($namespace, $useWithAlias);
+        return $this->addImportToNamespace($namespace, $completeImportForPartialAnnotation);
     }
 
     private function addImportToNamespace(
         Namespace_ $namespace,
-        CompleteImportForPartialAnnotation $useWithAlias
+        CompleteImportForPartialAnnotation $completeImportForPartialAnnotation
     ): Namespace_ {
-        $useBuilder = new UseBuilder($useWithAlias->getUse());
-        if ($useWithAlias->getAlias() !== '') {
-            $useBuilder->as($useWithAlias->getAlias());
+        $useBuilder = new UseBuilder($completeImportForPartialAnnotation->getUse());
+        if ($completeImportForPartialAnnotation->getAlias() !== '') {
+            $useBuilder->as($completeImportForPartialAnnotation->getAlias());
         }
 
         /** @var Stmt $use */

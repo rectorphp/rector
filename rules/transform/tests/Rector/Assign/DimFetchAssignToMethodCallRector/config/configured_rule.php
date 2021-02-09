@@ -1,12 +1,14 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
+use Rector\Transform\ValueObject\DimFetchAssignToMethodCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector::class)->call('configure', [[
-        \Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector::DIM_FETCH_ASSIGN_TO_METHOD_CALL => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
+    $services->set(DimFetchAssignToMethodCallRector::class)->call('configure', [[
+        DimFetchAssignToMethodCallRector::DIM_FETCH_ASSIGN_TO_METHOD_CALL => ValueObjectInliner::inline([
 
 
 
@@ -24,7 +26,8 @@ return static function (
 
 
 
-            new \Rector\Transform\ValueObject\DimFetchAssignToMethodCall(
+
+            new DimFetchAssignToMethodCall(
                 'Nette\Application\Routers\RouteList',
                 'Nette\Application\Routers\Route',
                 'addRoute'
@@ -53,7 +56,7 @@ return static function (
 
 
 
-            
+
         ]),
     ]]);
 };

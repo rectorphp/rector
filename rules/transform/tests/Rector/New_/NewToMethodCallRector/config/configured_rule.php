@@ -1,12 +1,16 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Transform\Rector\New_\NewToMethodCallRector;
+use Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClass;
+use Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClassFactory;
+use Rector\Transform\ValueObject\NewToMethodCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Transform\Rector\New_\NewToMethodCallRector::class)->call('configure', [[
-        \Rector\Transform\Rector\New_\NewToMethodCallRector::NEWS_TO_METHOD_CALLS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
+    $services->set(NewToMethodCallRector::class)->call('configure', [[
+        NewToMethodCallRector::NEWS_TO_METHOD_CALLS => ValueObjectInliner::inline([
 
 
 
@@ -24,16 +28,8 @@ return static function (
 
 
 
-            new \Rector\Transform\ValueObject\NewToMethodCall(
-                \Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClass::class,
-                \Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClassFactory::class,
-                'create'
-            ),
 
-
-
-
-
+            new NewToMethodCall(MyClass::class, MyClassFactory::class, 'create'),
 
 
 
@@ -53,7 +49,12 @@ return static function (
 
 
 
-            
+
+
+
+
+
+
         ]),
     ]]);
 };

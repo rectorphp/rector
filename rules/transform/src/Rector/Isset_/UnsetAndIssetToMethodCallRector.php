@@ -32,7 +32,7 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector implements Co
 
     public function getRuleDefinition(): RuleDefinition
     {
-        $issetUnsetToMethodCall = new UnsetAndIssetToMethodCall('SomeContainer', 'hasService', 'removeService');
+        $unsetAndIssetToMethodCall = new UnsetAndIssetToMethodCall('SomeContainer', 'hasService', 'removeService');
 
         return new RuleDefinition('Turns defined `__isset`/`__unset` calls to specific method calls.', [
             new ConfiguredCodeSample(
@@ -47,7 +47,7 @@ $container->hasService("someKey");
 CODE_SAMPLE
                 ,
                 [
-                    self::ISSET_UNSET_TO_METHOD_CALL => [$issetUnsetToMethodCall],
+                    self::ISSET_UNSET_TO_METHOD_CALL => [$unsetAndIssetToMethodCall],
                 ]
             ),
             new ConfiguredCodeSample(
@@ -62,7 +62,7 @@ $container->removeService("someKey");
 CODE_SAMPLE
                 ,
                 [
-                    self::ISSET_UNSET_TO_METHOD_CALL => [$issetUnsetToMethodCall],
+                    self::ISSET_UNSET_TO_METHOD_CALL => [$unsetAndIssetToMethodCall],
                 ]
             ),
         ]);
@@ -112,28 +112,28 @@ CODE_SAMPLE
     private function processArrayDimFetchNode(
         Node $node,
         ArrayDimFetch $arrayDimFetch,
-        UnsetAndIssetToMethodCall $issetUnsetToMethodCall
+        UnsetAndIssetToMethodCall $unsetAndIssetToMethodCall
     ): ?Node {
         if ($node instanceof Isset_) {
-            if ($issetUnsetToMethodCall->getIssetMethodCall() === '') {
+            if ($unsetAndIssetToMethodCall->getIssetMethodCall() === '') {
                 return null;
             }
 
             return $this->nodeFactory->createMethodCall(
                 $arrayDimFetch->var,
-                $issetUnsetToMethodCall->getIssetMethodCall(),
+                $unsetAndIssetToMethodCall->getIssetMethodCall(),
                 [$arrayDimFetch->dim]
             );
         }
 
         if ($node instanceof Unset_) {
-            if ($issetUnsetToMethodCall->getUnsedMethodCall() === '') {
+            if ($unsetAndIssetToMethodCall->getUnsedMethodCall() === '') {
                 return null;
             }
 
             return $this->nodeFactory->createMethodCall(
                 $arrayDimFetch->var,
-                $issetUnsetToMethodCall->getUnsedMethodCall(),
+                $unsetAndIssetToMethodCall->getUnsedMethodCall(),
                 [$arrayDimFetch->dim]
             );
         }

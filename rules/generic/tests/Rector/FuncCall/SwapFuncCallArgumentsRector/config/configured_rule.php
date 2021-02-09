@@ -1,12 +1,14 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector;
+use Rector\Generic\ValueObject\SwapFuncCallArguments;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector::class)->call('configure', [[
-        \Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
+    $services->set(SwapFuncCallArgumentsRector::class)->call('configure', [[
+        SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => ValueObjectInliner::inline([
 
 
 
@@ -24,7 +26,8 @@ return static function (
 
 
 
-            new \Rector\Generic\ValueObject\SwapFuncCallArguments('some_function', [1, 0]),
+
+            new SwapFuncCallArguments('some_function', [1, 0]),
         ]
         ),
     ]]);

@@ -1,13 +1,14 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector::class)->call(
+    $services->set(EntityAliasToClassConstantReferenceRector::class)->call(
         'configure',
         [[
-            \Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => [
+            EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => [
                 'App' => 'App\Entity',
             ],
         ]]

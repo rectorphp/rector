@@ -1,14 +1,21 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
+use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Contract\ParentInterfaceWithChangeTypeInterface;
+use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Source\ClassMetadataFactory;
+use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Source\ParserInterface;
+use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector::class)->call(
+    $services->set(AddParamTypeDeclarationRector::class)->call(
         'configure',
         [[
-            \Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-                
+            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => ValueObjectInliner::inline([
 
 
 
@@ -33,23 +40,19 @@ return static function (
 
 
 
-                new \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration(
-                    \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Contract\ParentInterfaceWithChangeTypeInterface::class,
+
+                new AddParamTypeDeclaration(
+                    ParentInterfaceWithChangeTypeInterface::class,
                     'process',
                     0,
-                    new \PHPStan\Type\StringType()
+                    new StringType()
                 ),
-                new \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration(
-                    \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Source\ParserInterface::class,
-                    'parse',
-                    0,
-                    new \PHPStan\Type\StringType()
-                ),
-                new \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration(
-                    \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Source\ClassMetadataFactory::class,
+                new AddParamTypeDeclaration(ParserInterface::class, 'parse', 0, new StringType()),
+                new AddParamTypeDeclaration(
+                    ClassMetadataFactory::class,
                     'setEntityManager',
                     0,
-                    new \PHPStan\Type\ObjectType('Doctrine\ORM\EntityManagerInterface')
+                    new ObjectType('Doctrine\ORM\EntityManagerInterface')
                 ),
 
 
@@ -75,7 +78,7 @@ return static function (
 
 
 
-                
+
             ]),
         ]]
     );

@@ -1,12 +1,17 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
+use Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\Persister;
+use Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\RemoveInTheMiddle;
+use Rector\Removing\ValueObject\ArgumentRemover;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\Yaml\Yaml;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector::class)->call('configure', [[
-        \Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector::REMOVED_ARGUMENTS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
+    $services->set(ArgumentRemoverRector::class)->call('configure', [[
+        ArgumentRemoverRector::REMOVED_ARGUMENTS => ValueObjectInliner::inline([
 
 
 
@@ -24,13 +29,14 @@ return static function (
 
 
 
-            new \Rector\Removing\ValueObject\ArgumentRemover(
-                \Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\Persister::class,
+
+            new ArgumentRemover(
+                Persister::class,
                 'getSelectJoinColumnSQL',
                 4,
                 null
-            ), new \Rector\Removing\ValueObject\ArgumentRemover(
-                \Symfony\Component\Yaml\Yaml::class,
+            ), new ArgumentRemover(
+                Yaml::class,
                 'parse',
                 1,
                 [
@@ -39,7 +45,7 @@ return static function (
                     55,
                     5.5,
 
-                ]), new \Rector\Removing\ValueObject\ArgumentRemover(\Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\RemoveInTheMiddle::class, 'run', 1, [
+                ]), new ArgumentRemover(RemoveInTheMiddle::class, 'run', 1, [
                     'name' => 'second',
                 ]), ]
         ),

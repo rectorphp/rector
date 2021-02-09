@@ -1,12 +1,15 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
+use Rector\Generic\Tests\Rector\Class_\AddPropertyByParentRector\Source\SomeParentClassToAddDependencyBy;
+use Rector\Generic\ValueObject\AddPropertyByParent;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Generic\Rector\Class_\AddPropertyByParentRector::class)->call('configure', [[
-        \Rector\Generic\Rector\Class_\AddPropertyByParentRector::PARENT_DEPENDENCIES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
+    $services->set(AddPropertyByParentRector::class)->call('configure', [[
+        AddPropertyByParentRector::PARENT_DEPENDENCIES => ValueObjectInliner::inline([
 
 
 
@@ -24,8 +27,9 @@ return static function (
 
 
 
-            new \Rector\Generic\ValueObject\AddPropertyByParent(
-                \Rector\Generic\Tests\Rector\Class_\AddPropertyByParentRector\Source\SomeParentClassToAddDependencyBy::class,
+
+            new AddPropertyByParent(
+                SomeParentClassToAddDependencyBy::class,
                 'SomeDependency'
             ),
 
@@ -52,7 +56,7 @@ return static function (
 
 
 
-            
+
         ]),
     ]]);
 };

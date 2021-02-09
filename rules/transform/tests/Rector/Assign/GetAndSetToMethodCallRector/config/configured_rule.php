@@ -1,16 +1,19 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
+use Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\Klarka;
+use Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\SomeContainer;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector::class)->call('configure', [[
-        \Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
-            \Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\SomeContainer::class => [
+    $services->set(GetAndSetToMethodCallRector::class)->call('configure', [[
+        GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
+            SomeContainer::class => [
                 'get' => 'getService',
                 'set' => 'addService',
             ],
-            \Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\Klarka::class => [
+            Klarka::class => [
                 'get' => 'get',
             ],
         ],

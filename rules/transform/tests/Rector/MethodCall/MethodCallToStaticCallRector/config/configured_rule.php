@@ -1,12 +1,15 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector;
+use Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\Source\AnotherDependency;
+use Rector\Transform\ValueObject\MethodCallToStaticCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector::class)->call('configure', [[
-        \Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
+    $services->set(MethodCallToStaticCallRector::class)->call('configure', [[
+        MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS => ValueObjectInliner::inline([
 
 
 
@@ -24,8 +27,9 @@ return static function (
 
 
 
-            new \Rector\Transform\ValueObject\MethodCallToStaticCall(
-                \Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\Source\AnotherDependency::class,
+
+            new MethodCallToStaticCall(
+                AnotherDependency::class,
                 'process',
                 'StaticCaller',
                 'anotherMethod'
@@ -54,7 +58,7 @@ return static function (
 
 
 
-            
+
         ]),
     ]]);
 };

@@ -1,12 +1,15 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
+use Rector\Transform\Tests\Rector\StaticCall\StaticCallToFuncCallRector\Source\SomeOldStaticClass;
+use Rector\Transform\ValueObject\StaticCallToFuncCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector::class)->call('configure', [[
-        \Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
+    $services->set(StaticCallToFuncCallRector::class)->call('configure', [[
+        StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => ValueObjectInliner::inline([
 
 
 
@@ -24,16 +27,8 @@ return static function (
 
 
 
-            new \Rector\Transform\ValueObject\StaticCallToFuncCall(
-                \Rector\Transform\Tests\Rector\StaticCall\StaticCallToFuncCallRector\Source\SomeOldStaticClass::class,
-                'render',
-                'view'
-            ),
 
-
-
-
-
+            new StaticCallToFuncCall(SomeOldStaticClass::class, 'render', 'view'),
 
 
 
@@ -53,7 +48,12 @@ return static function (
 
 
 
-            
+
+
+
+
+
+
         ]),
     ]]);
 };

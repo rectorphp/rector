@@ -1,12 +1,12 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Removing\Rector\Class_\RemoveTraitRector;
+use Rector\Removing\Tests\Rector\Class_\RemoveTraitRector\Source\TraitToBeRemoved;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Removing\Rector\Class_\RemoveTraitRector::class)->call('configure', [[
-        \Rector\Removing\Rector\Class_\RemoveTraitRector::TRAITS_TO_REMOVE => [
-            \Rector\Removing\Tests\Rector\Class_\RemoveTraitRector\Source\TraitToBeRemoved::class,
-        ],
+    $services->set(RemoveTraitRector::class)->call('configure', [[
+        RemoveTraitRector::TRAITS_TO_REMOVE => [TraitToBeRemoved::class],
     ]]);
 };

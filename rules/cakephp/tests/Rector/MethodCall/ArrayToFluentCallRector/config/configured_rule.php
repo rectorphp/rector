@@ -5,11 +5,10 @@ use Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source\Config
 use Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source\FactoryClass;
 use Rector\CakePHP\ValueObject\ArrayToFluentCall;
 use Rector\CakePHP\ValueObject\FactoryMethod;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(ArrayToFluentCallRector::class)
         ->call('configure', [[

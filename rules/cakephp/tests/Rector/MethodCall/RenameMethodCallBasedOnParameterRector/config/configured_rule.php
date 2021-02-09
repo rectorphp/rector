@@ -1,29 +1,21 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
+use Rector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParameterRector\Source\SomeModelType;
+use Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector::class)->call(
+    $services->set(RenameMethodCallBasedOnParameterRector::class)->call(
         'configure',
         [[
-            \Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-                
+            RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => ValueObjectInliner::inline([
 
-                new \Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter(
-                    \Rector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParameterRector\Source\SomeModelType::class,
-                    'getParam',
-                    'paging',
-                    'getAttribute'
-                ),
-                new \Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter(
-                    \Rector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParameterRector\Source\SomeModelType::class,
-                    'withParam',
-                    'paging',
-                    'withAttribute'
-                ),
+                new RenameMethodCallBasedOnParameter(SomeModelType::class, 'getParam', 'paging', 'getAttribute'),
+                new RenameMethodCallBasedOnParameter(SomeModelType::class, 'withParam', 'paging', 'withAttribute'),
 
-                
             ]),
         ]]
     );

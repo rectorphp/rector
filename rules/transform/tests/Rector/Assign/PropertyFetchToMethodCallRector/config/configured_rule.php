@@ -1,12 +1,15 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector;
+use Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\Source\Translator;
+use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector::class)->call('configure', [[
-        \Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
+    $services->set(PropertyFetchToMethodCallRector::class)->call('configure', [[
+        PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
 
 
 
@@ -24,13 +27,14 @@ return static function (
 
 
 
-            new \Rector\Transform\ValueObject\PropertyFetchToMethodCall(
-                \Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\Source\Translator::class,
+
+            new PropertyFetchToMethodCall(
+                Translator::class,
                 'locale',
                 'getLocale',
                 'setLocale'
             ),
-            new \Rector\Transform\ValueObject\PropertyFetchToMethodCall(
+            new PropertyFetchToMethodCall(
                 'Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\Fixture\Fixture2',
                 'parameter',
                 'getConfig',

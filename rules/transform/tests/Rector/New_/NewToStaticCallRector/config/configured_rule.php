@@ -1,12 +1,16 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Transform\Rector\New_\NewToStaticCallRector;
+use Rector\Transform\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass;
+use Rector\Transform\Tests\Rector\New_\NewToStaticCallRector\Source\IntoStaticClass;
+use Rector\Transform\ValueObject\NewToStaticCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Transform\Rector\New_\NewToStaticCallRector::class)->call('configure', [[
-        \Rector\Transform\Rector\New_\NewToStaticCallRector::TYPE_TO_STATIC_CALLS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
+    $services->set(NewToStaticCallRector::class)->call('configure', [[
+        NewToStaticCallRector::TYPE_TO_STATIC_CALLS => ValueObjectInliner::inline([
 
 
 
@@ -24,16 +28,8 @@ return static function (
 
 
 
-            new \Rector\Transform\ValueObject\NewToStaticCall(
-                \Rector\Transform\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass::class,
-                \Rector\Transform\Tests\Rector\New_\NewToStaticCallRector\Source\IntoStaticClass::class,
-                'run'
-            ),
 
-
-
-
-
+            new NewToStaticCall(FromNewClass::class, IntoStaticClass::class, 'run'),
 
 
 
@@ -53,7 +49,12 @@ return static function (
 
 
 
-            
+
+
+
+
+
+
         ]),
     ]]);
 };

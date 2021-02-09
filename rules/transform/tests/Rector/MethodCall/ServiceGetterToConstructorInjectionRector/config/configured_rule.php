@@ -1,14 +1,18 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
+use Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService;
+use Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
+use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector::class)->call(
+    $services->set(ServiceGetterToConstructorInjectionRector::class)->call(
         'configure',
         [[
-            \Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-                
+            ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => ValueObjectInliner::inline([
 
 
 
@@ -33,10 +37,11 @@ return static function (
 
 
 
-                new \Rector\Transform\ValueObject\ServiceGetterToConstructorInjection(
-                    \Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService::class,
+
+                new ServiceGetterToConstructorInjection(
+                    FirstService::class,
                     'getAnotherService',
-                    \Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService::class
+                    AnotherService::class
                 ),
 
 
@@ -62,7 +67,7 @@ return static function (
 
 
 
-                
+
             ]),
         ]]
     );

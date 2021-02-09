@@ -1,12 +1,15 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
+use Rector\Renaming\Tests\Rector\PropertyFetch\RenamePropertyRector\Source\ClassWithProperties;
+use Rector\Renaming\ValueObject\RenameProperty;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector::class)->call('configure', [[
-        \Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector::RENAMED_PROPERTIES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-            
+    $services->set(RenamePropertyRector::class)->call('configure', [[
+        RenamePropertyRector::RENAMED_PROPERTIES => ValueObjectInliner::inline([
 
 
 
@@ -24,16 +27,13 @@ return static function (
 
 
 
-            new \Rector\Renaming\ValueObject\RenameProperty(
-                \Rector\Renaming\Tests\Rector\PropertyFetch\RenamePropertyRector\Source\ClassWithProperties::class,
+
+            new RenameProperty(
+                ClassWithProperties::class,
                 'oldProperty',
                 'newProperty'
             ),
-            new \Rector\Renaming\ValueObject\RenameProperty(
-                \Rector\Renaming\Tests\Rector\PropertyFetch\RenamePropertyRector\Source\ClassWithProperties::class,
-                'anotherOldProperty',
-                'anotherNewProperty'
-            ),
+            new RenameProperty(ClassWithProperties::class, 'anotherOldProperty', 'anotherNewProperty'),
 
 
 
@@ -58,7 +58,7 @@ return static function (
 
 
 
-            
+
         ]),
     ]]);
 };

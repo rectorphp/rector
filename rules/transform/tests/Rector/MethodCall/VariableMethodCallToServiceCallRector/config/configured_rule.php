@@ -1,13 +1,16 @@
 <?php
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\Transform\Rector\MethodCall\VariableMethodCallToServiceCallRector;
+use Rector\Transform\ValueObject\VariableMethodCallToServiceCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Transform\Rector\MethodCall\VariableMethodCallToServiceCallRector::class)->call(
+    $services->set(VariableMethodCallToServiceCallRector::class)->call(
         'configure',
         [[
-            \Rector\Transform\Rector\MethodCall\VariableMethodCallToServiceCallRector::VARIABLE_METHOD_CALLS_TO_SERVICE_CALLS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
+            VariableMethodCallToServiceCallRector::VARIABLE_METHOD_CALLS_TO_SERVICE_CALLS => ValueObjectInliner::inline([
                 
 
 
@@ -33,13 +36,15 @@ return static function (
 
 
 
-                new \Rector\Transform\ValueObject\VariableMethodCallToServiceCall(
+
+                new VariableMethodCallToServiceCall(
                     'PhpParser\Node',
                     'getAttribute',
                     'php_doc_info',
                     'Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory',
                     'createFromNodeOrEmpty'
                 ),
+
 
 
 
