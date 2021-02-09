@@ -137,10 +137,6 @@ CODE_SAMPLE
         $objectType = $this->getObjectType($node);
         $parentPreviousVar = $node->getAttribute(AttributeKey::PARENT_NODE);
 
-        if (! $parentPreviousVar instanceof Node) {
-            return false;
-        }
-
         if (! $parentPreviousVar instanceof Param) {
             return false;
         }
