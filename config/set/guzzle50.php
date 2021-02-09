@@ -7,7 +7,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
-use Rector\Transform\ValueObject\FuncNameToMethodCallName;
+use Rector\Transform\ValueObject\FuncCallToMethodCall;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -19,8 +19,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FluentChainMethodCallToNormalMethodCallRector::class);
 
     $configuration = [
-        new FuncNameToMethodCallName('GuzzleHttp\json_decode', 'GuzzleHttp\Utils', 'jsonDecode'),
-        new FuncNameToMethodCallName('GuzzleHttp\get_path', 'GuzzleHttp\Utils', 'getPath'),
+        new FuncCallToMethodCall('GuzzleHttp\json_decode', 'GuzzleHttp\Utils', 'jsonDecode'),
+        new FuncCallToMethodCall('GuzzleHttp\get_path', 'GuzzleHttp\Utils', 'getPath'),
     ];
 
     $services->set(FuncCallToMethodCallRector::class)

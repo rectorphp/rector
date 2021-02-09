@@ -6,7 +6,6 @@ namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToPropertyFetchRect
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MethodCallToPropertyFetchRectorTest extends AbstractRectorTestCase
@@ -24,17 +23,8 @@ final class MethodCallToPropertyFetchRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            MethodCallToPropertyFetchRector::class => [
-                MethodCallToPropertyFetchRector::METHOD_CALL_TO_PROPERTY_FETCHES => [
-                    'getEntityManager' => 'entityManager',
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

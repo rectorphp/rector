@@ -6,9 +6,6 @@ namespace Rector\Transform\Tests\Rector\Expression\MethodCallToReturnRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\Expression\MethodCallToReturnRector;
-use Rector\Transform\Tests\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
-use Rector\Transform\ValueObject\MethodCallToReturn;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MethodCallToReturnRectorTest extends AbstractRectorTestCase
@@ -26,15 +23,8 @@ final class MethodCallToReturnRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            MethodCallToReturnRector::class => [
-                MethodCallToReturnRector::METHOD_CALL_WRAPS => [new MethodCallToReturn(ReturnDeny::class, 'deny')],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

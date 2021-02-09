@@ -6,9 +6,6 @@ namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRec
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector;
-use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
-use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ArgumentFuncCallToMethodCallRectorTest extends AbstractRectorTestCase
@@ -26,28 +23,8 @@ final class ArgumentFuncCallToMethodCallRectorTest extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            ArgumentFuncCallToMethodCallRector::class => [
-                ArgumentFuncCallToMethodCallRector::FUNCTIONS_TO_METHOD_CALLS => [
-                    new ArgumentFuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'make'),
-                    new ArgumentFuncCallToMethodCall('route', 'Illuminate\Routing\UrlGenerator', 'route'),
-                    new ArgumentFuncCallToMethodCall('back', 'Illuminate\Routing\Redirector', 'back', 'back'),
-                    new ArgumentFuncCallToMethodCall(
-                        'broadcast',
-                        'Illuminate\Contracts\Broadcasting\Factory',
-                        'event'
-                    ),
-                ],
-                ArgumentFuncCallToMethodCallRector::ARRAY_FUNCTIONS_TO_METHOD_CALLS => [
-                    new ArrayFuncCallToMethodCall('config', 'Illuminate\Contracts\Config\Repository', 'set', 'get'),
-                    new ArrayFuncCallToMethodCall('session', 'Illuminate\Session\SessionManager', 'put', 'get'),
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

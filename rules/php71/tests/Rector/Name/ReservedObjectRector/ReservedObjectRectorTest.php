@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php71\Tests\Rector\Name\ReservedObjectRector;
 
 use Iterator;
-use Rector\Php71\Rector\Name\ReservedObjectRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,18 +23,8 @@ final class ReservedObjectRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            ReservedObjectRector::class => [
-                ReservedObjectRector::RESERVED_KEYWORDS_TO_REPLACEMENTS => [
-                    'ReservedObject' => 'SmartObject',
-                    'Object' => 'AnotherSmartObject',
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

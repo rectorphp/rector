@@ -6,8 +6,6 @@ namespace Rector\Transform\Tests\Rector\Assign\DimFetchAssignToMethodCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
-use Rector\Transform\ValueObject\DimFetchAssignToMethodCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DimFetchAssignToMethodCallRectorTest extends AbstractRectorTestCase
@@ -25,21 +23,8 @@ final class DimFetchAssignToMethodCallRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, array<string, DimFetchAssignToMethodCall[]>>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            DimFetchAssignToMethodCallRector::class => [
-                DimFetchAssignToMethodCallRector::DIM_FETCH_ASSIGN_TO_METHOD_CALL => [
-                    new DimFetchAssignToMethodCall(
-                        'Nette\Application\Routers\RouteList',
-                        'Nette\Application\Routers\Route',
-                        'addRoute'
-                    ),
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

@@ -9544,7 +9544,7 @@ Move array argument from tests into data provider [configurable]
 - class: `Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector`
 
 ```php
-use Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector;
+use Rector\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector;
 use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -9552,9 +9552,9 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(ArrayArgumentInTestToDataProviderRector::class)
+    $services->set(ArrayArgumentToDataProviderRector::class)
         ->call('configure', [[
-            ArrayArgumentInTestToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => ValueObjectInliner::inline([
+            ArrayArgumentToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => ValueObjectInliner::inline([
                 new ArrayArgumentToDataProvider('PHPUnit\Framework\TestCase', 'doTestMultiple', 'doTestSingle', 'number'),
             ]),
         ]]);
@@ -13868,7 +13868,7 @@ In case you have accidentally removed use imports but code still contains partia
 
 ```php
 use Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
-use Rector\Restoration\ValueObject\UseWithAlias;
+use Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -13878,7 +13878,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(CompleteImportForPartialAnnotationRector::class)
         ->call('configure', [[
             CompleteImportForPartialAnnotationRector::USE_IMPORTS_TO_RESTORE => ValueObjectInliner::inline([
-                new UseWithAlias('Doctrine\ORM\Mapping', 'ORM'),
+                new CompleteImportForPartialAnnotation('Doctrine\ORM\Mapping', 'ORM'),
             ]),
         ]]);
 };
@@ -15411,7 +15411,7 @@ Replaces constant by value
 - class: `Rector\Transform\Rector\ClassConstFetch\ClassConstFetchToStringRector`
 
 ```php
-use Rector\Transform\Rector\ClassConstFetch\ClassConstFetchToStringRector;
+use Rector\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector;
 use Rector\Transform\ValueObject\ClassConstFetchToValue;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -15419,9 +15419,9 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(ClassConstFetchToStringRector::class)
+    $services->set(ClassConstFetchToValueRector::class)
         ->call('configure', [[
-            ClassConstFetchToStringRector::CLASS_CONST_FETCHES_TO_VALUES => ValueObjectInliner::inline([
+            ClassConstFetchToValueRector::CLASS_CONST_FETCHES_TO_VALUES => ValueObjectInliner::inline([
                 new ClassConstFetchToValue('Nette\Configurator', 'DEVELOPMENT', 'development'),
                 new ClassConstFetchToValue('Nette\Configurator', 'PRODUCTION', 'production'),
             ]),
@@ -15493,7 +15493,7 @@ Turns defined function calls to local method calls.
 
 ```php
 use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
-use Rector\Transform\ValueObject\FuncNameToMethodCallName;
+use Rector\Transform\ValueObject\FuncCallToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -15503,7 +15503,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FuncCallToMethodCallRector::class)
         ->call('configure', [[
             FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => ValueObjectInliner::inline([
-                new FuncNameToMethodCallName('view', 'Namespaced\SomeRenderer', 'render'),
+                new FuncCallToMethodCall('view', 'Namespaced\SomeRenderer', 'render'),
             ]),
         ]]);
 };
@@ -16488,7 +16488,7 @@ Turns defined `__isset`/`__unset` calls to specific method calls.
 
 ```php
 use Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector;
-use Rector\Transform\ValueObject\IssetUnsetToMethodCall;
+use Rector\Transform\ValueObject\UnsetAndIssetToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -16498,7 +16498,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(UnsetAndIssetToMethodCallRector::class)
         ->call('configure', [[
             UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => ValueObjectInliner::inline([
-                new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService'),
+                new UnsetAndIssetToMethodCall('SomeContainer', 'hasService', 'removeService'),
             ]),
         ]]);
 };
@@ -16516,7 +16516,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ```php
 use Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector;
-use Rector\Transform\ValueObject\IssetUnsetToMethodCall;
+use Rector\Transform\ValueObject\UnsetAndIssetToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -16526,7 +16526,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(UnsetAndIssetToMethodCallRector::class)
         ->call('configure', [[
             UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => ValueObjectInliner::inline([
-                new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService'),
+                new UnsetAndIssetToMethodCall('SomeContainer', 'hasService', 'removeService'),
             ]),
         ]]);
 };
@@ -16967,7 +16967,7 @@ Change visibility of constant from parent class.
 
 ```php
 use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
-use Rector\Visibility\ValueObject\ClassConstantVisibilityChange;
+use Rector\Visibility\ValueObject\ChangeConstantVisibility;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -16977,7 +16977,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeConstantVisibilityRector::class)
         ->call('configure', [[
             ChangeConstantVisibilityRector::CLASS_CONSTANT_VISIBILITY_CHANGES => ValueObjectInliner::inline([
-                new ClassConstantVisibilityChange('ParentObject', 'SOME_CONSTANT', 2),
+                new ChangeConstantVisibility('ParentObject', 'SOME_CONSTANT', 2),
             ]),
         ]]);
 };

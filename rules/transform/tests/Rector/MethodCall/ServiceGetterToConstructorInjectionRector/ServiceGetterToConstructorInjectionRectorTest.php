@@ -7,10 +7,6 @@ namespace Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInj
 use Iterator;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
-use Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService;
-use Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
-use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ServiceGetterToConstructorInjectionRectorTest extends AbstractRectorTestCase
@@ -33,21 +29,8 @@ final class ServiceGetterToConstructorInjectionRectorTest extends AbstractRector
         return PhpVersionFeature::TYPED_PROPERTIES - 1;
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            ServiceGetterToConstructorInjectionRector::class => [
-                ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => [
-                    new ServiceGetterToConstructorInjection(
-                        FirstService::class,
-                        'getAnotherService',
-                        AnotherService::class
-                    ),
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

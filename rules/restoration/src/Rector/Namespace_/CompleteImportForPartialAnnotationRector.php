@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Restoration\ValueObject\UseWithAlias;
+use Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation;
 use Symplify\Astral\ValueObject\NodeBuilder\UseBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,7 +29,7 @@ final class CompleteImportForPartialAnnotationRector extends AbstractRector impl
     public const USE_IMPORTS_TO_RESTORE = '$useImportsToRestore';
 
     /**
-     * @var UseWithAlias[]
+     * @var CompleteImportForPartialAnnotation[]
      */
     private $useImportsToRestore = [];
 
@@ -60,7 +60,9 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 [
-                    self::USE_IMPORTS_TO_RESTORE => [new UseWithAlias('Doctrine\ORM\Mapping', 'ORM')],
+                    self::USE_IMPORTS_TO_RESTORE => [
+                        new CompleteImportForPartialAnnotation('Doctrine\ORM\Mapping', 'ORM'),
+                    ],
                 ]
             ),
         ]);
@@ -97,21 +99,23 @@ CODE_SAMPLE
     }
 
     /**
-     * @param UseWithAlias[][] $configuration
+     * @param CompleteImportForPartialAnnotation[][] $configuration
      */
     public function configure(array $configuration): void
     {
         $default = [
-            new UseWithAlias('Doctrine\ORM\Mapping', 'ORM'),
-            new UseWithAlias('Symfony\Component\Validator\Constraints', 'Assert'),
-            new UseWithAlias('JMS\Serializer\Annotation', 'Serializer'),
+            new CompleteImportForPartialAnnotation('Doctrine\ORM\Mapping', 'ORM'),
+            new CompleteImportForPartialAnnotation('Symfony\Component\Validator\Constraints', 'Assert'),
+            new CompleteImportForPartialAnnotation('JMS\Serializer\Annotation', 'Serializer'),
         ];
 
         $this->useImportsToRestore = array_merge($configuration[self::USE_IMPORTS_TO_RESTORE] ?? [], $default);
     }
 
-    private function addImportToNamespaceIfMissing(Namespace_ $namespace, UseWithAlias $useWithAlias): Namespace_
-    {
+    private function addImportToNamespaceIfMissing(
+        Namespace_ $namespace,
+        CompleteImportForPartialAnnotation $completeImportForPartialAnnotation
+    ): Namespace_ {
         foreach ($namespace->stmts as $stmt) {
             if (! $stmt instanceof Use_) {
                 continue;
@@ -122,20 +126,22 @@ CODE_SAMPLE
             // already there
             if ($this->isName(
                 $useUse->name,
-                $useWithAlias->getUse()
-            ) && (string) $useUse->alias === $useWithAlias->getAlias()) {
+                $completeImportForPartialAnnotation->getUse()
+            ) && (string) $useUse->alias === $completeImportForPartialAnnotation->getAlias()) {
                 return $namespace;
             }
         }
 
-        return $this->addImportToNamespace($namespace, $useWithAlias);
+        return $this->addImportToNamespace($namespace, $completeImportForPartialAnnotation);
     }
 
-    private function addImportToNamespace(Namespace_ $namespace, UseWithAlias $useWithAlias): Namespace_
-    {
-        $useBuilder = new UseBuilder($useWithAlias->getUse());
-        if ($useWithAlias->getAlias() !== '') {
-            $useBuilder->as($useWithAlias->getAlias());
+    private function addImportToNamespace(
+        Namespace_ $namespace,
+        CompleteImportForPartialAnnotation $completeImportForPartialAnnotation
+    ): Namespace_ {
+        $useBuilder = new UseBuilder($completeImportForPartialAnnotation->getUse());
+        if ($completeImportForPartialAnnotation->getAlias() !== '') {
+            $useBuilder->as($completeImportForPartialAnnotation->getAlias());
         }
 
         /** @var Stmt $use */

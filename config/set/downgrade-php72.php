@@ -22,5 +22,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // skip classes used in PHP DocBlocks, like in /** @var \Some\Class */ [default: true]
     $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
+
     $services->set(DowngradeParameterTypeWideningRector::class);
 };

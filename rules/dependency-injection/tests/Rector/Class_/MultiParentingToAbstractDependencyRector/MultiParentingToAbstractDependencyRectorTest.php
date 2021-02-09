@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector;
 
 use Iterator;
-use Rector\Core\ValueObject\FrameworkName;
-use Rector\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -25,15 +23,8 @@ final class MultiParentingToAbstractDependencyRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            MultiParentingToAbstractDependencyRector::class => [
-                MultiParentingToAbstractDependencyRector::FRAMEWORK => FrameworkName::NETTE,
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/nette_config.php');
     }
 }

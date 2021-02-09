@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Autodiscovery\Tests\Rector\FileNode\MoveServicesBySuffixToDirectoryRector;
 
 use Iterator;
-use Rector\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -77,20 +76,8 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractRectorTest
         ];
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            MoveServicesBySuffixToDirectoryRector::class => [
-                MoveServicesBySuffixToDirectoryRector::GROUP_NAMES_BY_SUFFIX => [
-                    'Repository',
-                    'Command',
-                    'Mapper',
-                    'Controller',
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

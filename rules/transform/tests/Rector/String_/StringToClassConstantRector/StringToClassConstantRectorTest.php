@@ -6,8 +6,6 @@ namespace Rector\Transform\Tests\Rector\String_\StringToClassConstantRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\String_\StringToClassConstantRector;
-use Rector\Transform\ValueObject\StringToClassConstant;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class StringToClassConstantRectorTest extends AbstractRectorTestCase
@@ -25,18 +23,8 @@ final class StringToClassConstantRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            StringToClassConstantRector::class => [
-                StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => [
-                    new StringToClassConstant('compiler.post_dump', 'Yet\AnotherClass', 'CONSTANT'),
-                    new StringToClassConstant('compiler.to_class', 'Yet\AnotherClass', 'class'),
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

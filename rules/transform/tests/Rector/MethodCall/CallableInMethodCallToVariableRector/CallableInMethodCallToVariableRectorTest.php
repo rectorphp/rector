@@ -6,9 +6,6 @@ namespace Rector\Transform\Tests\Rector\MethodCall\CallableInMethodCallToVariabl
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector;
-use Rector\Transform\Tests\Rector\MethodCall\CallableInMethodCallToVariableRector\Source\DummyCache;
-use Rector\Transform\ValueObject\CallableInMethodCallToVariable;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CallableInMethodCallToVariableRectorTest extends AbstractRectorTestCase
@@ -26,17 +23,8 @@ final class CallableInMethodCallToVariableRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            CallableInMethodCallToVariableRector::class => [
-                CallableInMethodCallToVariableRector::CALLABLE_IN_METHOD_CALL_TO_VARIABLE => [
-                    new CallableInMethodCallToVariable(DummyCache::class, 'save', 1),
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

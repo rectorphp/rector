@@ -5,11 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony4\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 
 use Iterator;
-use Rector\Core\Configuration\Option;
-use Rector\Symfony4\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
-use Rector\Symfony4\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
-use Rector\Symfony4\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentCommand;
-use Rector\Symfony4\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ThisClassCallsMethodInConstructor;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -20,7 +15,6 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        $this->setParameter(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ . '/xml/services.xml');
         $this->doTestFileInfo($fileInfo);
     }
 
@@ -29,19 +23,8 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            ContainerGetToConstructorInjectionRector::class => [
-                ContainerGetToConstructorInjectionRector::CONTAINER_AWARE_PARENT_TYPES => [
-                    ContainerAwareParentClass::class,
-                    ContainerAwareParentCommand::class,
-                    ThisClassCallsMethodInConstructor::class,
-                ],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

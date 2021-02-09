@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService;
 
 use Iterator;
-use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
-use Rector\Doctrine\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector;
-use Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -31,16 +28,8 @@ final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            # order matters, this needs to be first to correctly detect parent repository
-            MoveRepositoryFromParentToConstructorRector::class => [],
-            ReplaceParentRepositoryCallsByRepositoryPropertyRector::class => [],
-            RemoveRepositoryFromEntityAnnotationRector::class => [],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }

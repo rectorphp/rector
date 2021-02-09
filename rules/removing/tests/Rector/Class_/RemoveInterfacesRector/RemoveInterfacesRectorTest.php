@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\Removing\Tests\Rector\Class_\RemoveInterfacesRector;
 
 use Iterator;
-use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
-use Rector\Removing\Tests\Rector\Class_\RemoveInterfacesRector\Source\SomeInterface;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -25,15 +23,8 @@ final class RemoveInterfacesRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return array<string, mixed[]>
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function provideConfigFileInfo(): ?SmartFileInfo
     {
-        return [
-            RemoveInterfacesRector::class => [
-                RemoveInterfacesRector::INTERFACES_TO_REMOVE => [SomeInterface::class],
-            ],
-        ];
+        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
     }
 }
