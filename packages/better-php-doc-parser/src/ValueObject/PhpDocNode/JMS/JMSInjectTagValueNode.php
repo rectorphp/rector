@@ -6,6 +6,8 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
+use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
+use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
 
 final class JMSInjectTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface
@@ -15,11 +17,16 @@ final class JMSInjectTagValueNode extends AbstractTagValueNode implements ShortN
      */
     private $serviceName;
 
-    public function __construct(array $items, ?string $serviceName, ?string $annotationContent)
-    {
+    public function __construct(
+        ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
+        TagValueNodePrinter $tagValueNodePrinter,
+        array $items,
+        ?string $serviceName,
+        ?string $annotationContent
+    ) {
         $this->serviceName = $serviceName;
 
-        parent::__construct($items, $annotationContent);
+        parent::__construct($arrayPartPhpDocTagPrinter, $tagValueNodePrinter, $items, $annotationContent);
     }
 
     public function getServiceName(): ?string

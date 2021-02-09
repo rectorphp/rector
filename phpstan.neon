@@ -532,3 +532,8 @@ parameters:
             message: '#For complex configuration use value object over array#'
             paths:
                  - '*/config/configured_rule.php'
+
+        -
+            message: '#Use local named constant instead of inline string for regex to explain meaning by constant name#'
+            paths:
+                - packages/better-php-doc-parser/src/Printer/ArrayPartPhpDocTagPrinter.php

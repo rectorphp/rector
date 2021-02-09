@@ -2,26 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\PartPhpDocTagPrinter\Behavior;
+namespace Rector\BetterPhpDocParser\Tests\Printer;
 
 use Iterator;
 use PHPUnit\Framework\TestCase;
-use Rector\BetterPhpDocParser\Tests\PartPhpDocTagPrinter\Behavior\Source\PhpDocTagNodeWithArrayPrinter;
+use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
 
-/**
- * @see \Rector\BetterPhpDocParser\PartPhpDocTagPrinter\Behavior\ArrayPartPhpDocTagPrinterTrait
- */
 final class ArrayPartPhpDocTagPrinterTest extends TestCase
 {
     /**
-     * @var PhpDocTagNodeWithArrayPrinter
+     * @var ArrayPartPhpDocTagPrinter
      */
-    private $phpDocTagNodeWithArrayPrinter;
+    private $arrayPartPhpDocTagPrinter;
 
     protected function setUp(): void
     {
-        $this->phpDocTagNodeWithArrayPrinter = new PhpDocTagNodeWithArrayPrinter();
+        $this->arrayPartPhpDocTagPrinter = new ArrayPartPhpDocTagPrinter();
     }
 
     /**
@@ -31,7 +28,7 @@ final class ArrayPartPhpDocTagPrinterTest extends TestCase
     public function test(array $items, string $key, string $expectedContent): void
     {
         $tagValueNodeConfiguration = new TagValueNodeConfiguration();
-        $output = $this->phpDocTagNodeWithArrayPrinter->printArrayItem($items, $key, $tagValueNodeConfiguration);
+        $output = $this->arrayPartPhpDocTagPrinter->printArrayItem($items, $key, $tagValueNodeConfiguration);
 
         $this->assertSame($expectedContent, $output);
     }

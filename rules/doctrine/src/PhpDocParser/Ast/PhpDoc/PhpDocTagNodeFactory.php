@@ -10,10 +10,14 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
+use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
+use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\AroundSpaces;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
+use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Doctrine\ColumnTagValueNodeFactory;
+use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Doctrine\JoinColumnTagValueNodeFactory;
 use Rector\Doctrine\Uuid\JoinTableNameResolver;
 
 final class PhpDocTagNodeFactory
@@ -28,9 +32,38 @@ final class PhpDocTagNodeFactory
      */
     private $joinTableNameResolver;
 
-    public function __construct(JoinTableNameResolver $joinTableNameResolver)
-    {
+    /**
+     * @var ColumnTagValueNodeFactory
+     */
+    private $columnTagValueNodeFactory;
+
+    /**
+     * @var ArrayPartPhpDocTagPrinter
+     */
+    private $arrayPartPhpDocTagPrinter;
+
+    /**
+     * @var TagValueNodePrinter
+     */
+    private $tagValueNodePrinter;
+
+    /**
+     * @var JoinColumnTagValueNodeFactory
+     */
+    private $joinColumnTagValueNodeFactory;
+
+    public function __construct(
+        JoinTableNameResolver $joinTableNameResolver,
+        ColumnTagValueNodeFactory $columnTagValueNodeFactory,
+        ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
+        TagValueNodePrinter $tagValueNodePrinter,
+        JoinColumnTagValueNodeFactory $joinColumnTagValueNodeFactory
+    ) {
         $this->joinTableNameResolver = $joinTableNameResolver;
+        $this->columnTagValueNodeFactory = $columnTagValueNodeFactory;
+        $this->arrayPartPhpDocTagPrinter = $arrayPartPhpDocTagPrinter;
+        $this->tagValueNodePrinter = $tagValueNodePrinter;
+        $this->joinColumnTagValueNodeFactory = $joinColumnTagValueNodeFactory;
     }
 
     public function createVarTagIntValueNode(): AttributeAwareVarTagValueNode
@@ -47,14 +80,14 @@ final class PhpDocTagNodeFactory
 
     public function createIdColumnTagValueNode(): ColumnTagValueNode
     {
-        return new ColumnTagValueNode([
+        return $this->columnTagValueNodeFactory->createFromItems([
             'type' => 'integer',
         ]);
     }
 
     public function createUuidColumnTagValueNode(bool $isNullable): ColumnTagValueNode
     {
-        return new ColumnTagValueNode([
+        return $this->columnTagValueNodeFactory->createFromItems([
             'type' => 'uuid_binary',
             'unique' => true,
             'nullable' => $isNullable ? true : null,
@@ -65,11 +98,15 @@ final class PhpDocTagNodeFactory
     {
         $uuidJoinTable = $this->joinTableNameResolver->resolveManyToManyUuidTableNameForProperty($property);
 
-        $uuidJoinColumnTagValueNodes = [new JoinColumnTagValueNode([
+        $joinColumnTagValueNode = $this->joinColumnTagValueNodeFactory->createFromItems([
             'referencedColumnName' => self::UUID,
-        ])];
+        ]);
+
+        $uuidJoinColumnTagValueNodes = [$joinColumnTagValueNode];
 
         $joinTableTagValueNode = new JoinTableTagValueNode(
+            $this->arrayPartPhpDocTagPrinter,
+            $this->tagValueNodePrinter,
             $uuidJoinTable,
             null,
             $uuidJoinColumnTagValueNodes,
@@ -84,7 +121,7 @@ final class PhpDocTagNodeFactory
 
     public function createJoinColumnTagNode(bool $isNullable): JoinColumnTagValueNode
     {
-        return new JoinColumnTagValueNode([
+        return $this->joinColumnTagValueNodeFactory->createFromItems([
             'referencedColumn' => self::UUID,
             'nullable' => $isNullable,
         ]);

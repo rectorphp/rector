@@ -14,6 +14,8 @@ use Ramsey\Uuid\Uuid;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineTagNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
+use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\SerializerTypeTagValueNode;
@@ -37,7 +39,19 @@ final class EntityUuidNodeFactory
      */
     private $phpDocInfoFactory;
 
+    /**
+     * @var ArrayPartPhpDocTagPrinter
+     */
+    private $arrayPartPhpDocTagPrinter;
+
+    /**
+     * @var TagValueNodePrinter
+     */
+    private $tagValueNodePrinter;
+
     public function __construct(
+        ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
+        TagValueNodePrinter $tagValueNodePrinter,
         NodeFactory $nodeFactory,
         PhpDocTagNodeFactory $phpDocTagNodeFactory,
         PhpDocInfoFactory $phpDocInfoFactory
@@ -45,6 +59,8 @@ final class EntityUuidNodeFactory
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
         $this->nodeFactory = $nodeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->arrayPartPhpDocTagPrinter = $arrayPartPhpDocTagPrinter;
+        $this->tagValueNodePrinter = $tagValueNodePrinter;
     }
 
     public function createTemporaryUuidProperty(): Property
@@ -85,7 +101,7 @@ final class EntityUuidNodeFactory
 
         if ($isId) {
             // add @ORM\Id
-            $idTagValueNode = new IdTagValueNode([]);
+            $idTagValueNode = new IdTagValueNode($this->arrayPartPhpDocTagPrinter, $this->tagValueNodePrinter);
             $phpDocInfo->addTagValueNodeWithShortName($idTagValueNode);
         }
 
@@ -96,9 +112,11 @@ final class EntityUuidNodeFactory
             return;
         }
 
-        $generatedValueTagValueNode = new GeneratedValueTagValueNode([
-            'strategy' => 'CUSTOM',
-        ]);
+        $generatedValueTagValueNode = new GeneratedValueTagValueNode(
+            $this->arrayPartPhpDocTagPrinter, $this->tagValueNodePrinter,
+            [
+                'strategy' => 'CUSTOM',
+            ]);
         $phpDocInfo->addTagValueNodeWithShortName($generatedValueTagValueNode);
     }
 

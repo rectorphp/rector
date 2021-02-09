@@ -7,7 +7,7 @@ namespace Rector\DoctrineGedmoToKnplabs\NodeFactory;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
+use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Doctrine\EntityTagValueNodeFactory;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 
 final class TranslationClassNodeFactory
@@ -22,10 +22,17 @@ final class TranslationClassNodeFactory
      */
     private $classInsertManipulator;
 
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ClassInsertManipulator $classInsertManipulator)
+    /**
+     * @var EntityTagValueNodeFactory
+     */
+    private $entityTagValueNodeFactory;
+
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ClassInsertManipulator $classInsertManipulator,
+    EntityTagValueNodeFactory $entityTagValueNodeFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->entityTagValueNodeFactory = $entityTagValueNodeFactory;
     }
 
     public function create(string $classShortName): Class_
@@ -38,7 +45,9 @@ final class TranslationClassNodeFactory
         );
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-        $phpDocInfo->addTagValueNodeWithShortName(new EntityTagValueNode([]));
+
+        $entityTagValueNode = $this->entityTagValueNodeFactory->create();
+        $phpDocInfo->addTagValueNodeWithShortName($entityTagValueNode);
 
         return $class;
     }

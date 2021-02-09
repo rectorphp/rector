@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\ValueObjectFactory;
 
 use Iterator;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
+use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Doctrine\ColumnTagValueNodeFactory;
+use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory;
 use Rector\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactory;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
@@ -18,17 +18,31 @@ final class TagValueNodeConfigurationFactoryTest extends AbstractKernelTestCase
      */
     private $tagValueNodeConfigurationFactory;
 
+    /**
+     * @var SymfonyRouteTagValueNodeFactory
+     */
+    private $symfonyRouteTagValueNodeFactory;
+
+    /**
+     * @var ColumnTagValueNodeFactory
+     */
+    private $columnTagValueNodeFactory;
+
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
         $this->tagValueNodeConfigurationFactory = $this->getService(TagValueNodeConfigurationFactory::class);
+        $this->symfonyRouteTagValueNodeFactory = $this->getService(SymfonyRouteTagValueNodeFactory::class);
+        $this->columnTagValueNodeFactory = $this->getService(ColumnTagValueNodeFactory::class);
     }
 
     public function test(): void
     {
+        $symfonyRouteTagValueNode = $this->symfonyRouteTagValueNodeFactory->create();
+
         $tagValueNodeConfiguration = $this->tagValueNodeConfigurationFactory->createFromOriginalContent(
             '...',
-            new SymfonyRouteTagValueNode([])
+            $symfonyRouteTagValueNode
         );
 
         $this->assertSame('=', $tagValueNodeConfiguration->getArrayEqualSign());
@@ -41,7 +55,7 @@ final class TagValueNodeConfigurationFactoryTest extends AbstractKernelTestCase
     {
         $tagValueNodeConfiguration = $this->tagValueNodeConfigurationFactory->createFromOriginalContent(
             $originalContent,
-            new ColumnTagValueNode([])
+            $this->columnTagValueNodeFactory->create()
         );
 
         $this->assertSame(':', $tagValueNodeConfiguration->getArrayEqualSign());

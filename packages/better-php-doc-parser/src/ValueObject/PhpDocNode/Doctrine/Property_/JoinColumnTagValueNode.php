@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
+use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
+use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
@@ -21,11 +23,21 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
      */
     private $tag;
 
-    public function __construct(array $items, ?string $content = null, ?string $originalTag = null)
-    {
+    public function __construct(
+        ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
+        TagValueNodePrinter $tagValueNodePrinter,
+        array $items,
+        ?string $content = null,
+        ?string $originalTag = null
+    ) {
         $this->tag = $originalTag;
 
-        parent::__construct($items, $content);
+        parent::__construct(
+            $arrayPartPhpDocTagPrinter,
+            $tagValueNodePrinter,
+            $items,
+            $content
+        );
     }
 
     public function isNullable(): ?bool
