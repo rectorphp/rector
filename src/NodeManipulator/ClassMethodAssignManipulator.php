@@ -87,10 +87,24 @@ final class ClassMethodAssignManipulator
         $this->callReflectionResolver = $callReflectionResolver;
     }
 
+    public function addParameterAndAssignToMethod(
+        ClassMethod $classMethod,
+        string $name,
+        ?Type $type,
+        Assign $assign
+    ): void {
+        if ($this->hasMethodParameter($classMethod, $name)) {
+            return;
+        }
+
+        $classMethod->params[] = $this->nodeFactory->createParamFromNameAndType($name, $type);
+        $classMethod->stmts[] = new Expression($assign);
+    }
+
     /**
      * @return Assign[]
      */
-    public function collectReadyOnlyAssignScalarVariables(ClassMethod $classMethod): array
+    private function collectReadyOnlyAssignScalarVariables(ClassMethod $classMethod): array
     {
         $assignsOfScalarOrArrayToVariable = $this->variableManipulator->collectScalarOrArrayAssignsOfVariable(
             $classMethod
@@ -107,20 +121,6 @@ final class ClassMethodAssignManipulator
         $readOnlyVariableAssigns = $this->filterOutForeachVariables($readOnlyVariableAssigns);
 
         return $this->variableManipulator->filterOutChangedVariables($readOnlyVariableAssigns, $classMethod);
-    }
-
-    public function addParameterAndAssignToMethod(
-        ClassMethod $classMethod,
-        string $name,
-        ?Type $type,
-        Assign $assign
-    ): void {
-        if ($this->hasMethodParameter($classMethod, $name)) {
-            return;
-        }
-
-        $classMethod->params[] = $this->nodeFactory->createParamFromNameAndType($name, $type);
-        $classMethod->stmts[] = new Expression($assign);
     }
 
     /**

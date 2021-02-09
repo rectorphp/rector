@@ -32,7 +32,12 @@ final class PhpVersionProvider
         $this->projectComposerJsonPhpVersionResolver = $projectComposerJsonPhpVersionResolver;
     }
 
-    public function provide(): int
+    public function isAtLeastPhpVersion(int $phpVersion): bool
+    {
+        return $phpVersion <= $this->provide();
+    }
+
+    private function provide(): int
     {
         /** @var int|null $phpVersionFeatures */
         $phpVersionFeatures = $this->parameterProvider->provideParameter(Option::PHP_VERSION_FEATURES);
@@ -55,10 +60,5 @@ final class PhpVersionProvider
         }
 
         return PHP_VERSION_ID;
-    }
-
-    public function isAtLeastPhpVersion(int $phpVersion): bool
-    {
-        return $phpVersion <= $this->provide();
     }
 }

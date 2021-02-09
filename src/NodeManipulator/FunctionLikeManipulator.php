@@ -42,7 +42,7 @@ final class FunctionLikeManipulator
     /**
      * @return string[]
      */
-    public function getReturnedLocalPropertyNames(FunctionLike $functionLike): array
+    private function getReturnedLocalPropertyNames(FunctionLike $functionLike): array
     {
         // process only class methods
         if ($functionLike instanceof Function_) {

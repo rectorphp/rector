@@ -31,7 +31,7 @@ final class ClassMethodReflectionHelper
     /**
      * @return array<class-string>
      */
-    public function extractTagsFromMethodDocBlock(string $class, string $method): array
+    private function extractTagsFromMethodDocBlock(string $class, string $method): array
     {
         $reflectedMethod = $this->classMethodReflectionFactory->createReflectionMethodIfExists($class, $method);
         if (! $reflectedMethod instanceof ReflectionMethod) {

@@ -44,7 +44,7 @@ final class ClassMethodPropertyFetchManipulator
      * ↓
      * (SomeType $anotherValue)
      */
-    public function resolveParamForPropertyFetch(ClassMethod $classMethod, string $propertyName): ?Param
+    private function resolveParamForPropertyFetch(ClassMethod $classMethod, string $propertyName): ?Param
     {
         $assignedParamName = null;
 

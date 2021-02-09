@@ -60,7 +60,7 @@ final class ClassMethodManipulator
         $this->funcCallManipulator = $funcCallManipulator;
     }
 
-    public function isParameterUsedInClassMethod(Param $param, ClassMethod $classMethod): bool
+    private function isParameterUsedInClassMethod(Param $param, ClassMethod $classMethod): bool
     {
         $isUsedDirectly = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
             $param
@@ -86,7 +86,7 @@ final class ClassMethodManipulator
         return $this->nodeNameResolver->isNames($param, $arguments);
     }
 
-    public function isNamedConstructor(ClassMethod $classMethod): bool
+    private function isNamedConstructor(ClassMethod $classMethod): bool
     {
         if (! $this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
             return false;
@@ -100,7 +100,7 @@ final class ClassMethodManipulator
         return $classMethod->isPrivate() || (! $classLike->isFinal() && $classMethod->isProtected());
     }
 
-    public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod, ?string $methodName = null): bool
+    private function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod, ?string $methodName = null): bool
     {
         $methodName = $methodName ?? $this->nodeNameResolver->getName($classMethod->name);
 
@@ -136,7 +136,7 @@ final class ClassMethodManipulator
     /**
      * Is method actually static, or has some $this-> calls?
      */
-    public function isStaticClassMethod(ClassMethod $classMethod): bool
+    private function isStaticClassMethod(ClassMethod $classMethod): bool
     {
         return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
             if (! $node instanceof Variable) {
@@ -150,7 +150,7 @@ final class ClassMethodManipulator
     /**
      * @param string[] $possibleNames
      */
-    public function addMethodParameterIfMissing(Node $node, string $type, array $possibleNames): string
+    private function addMethodParameterIfMissing(Node $node, string $type, array $possibleNames): string
     {
         $classMethodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
         if (! $classMethodNode instanceof ClassMethod) {
@@ -177,7 +177,7 @@ final class ClassMethodManipulator
         return $paramName;
     }
 
-    public function isPropertyPromotion(ClassMethod $classMethod): bool
+    private function isPropertyPromotion(ClassMethod $classMethod): bool
     {
         foreach ($classMethod->params as $param) {
             /** @var Param $param */

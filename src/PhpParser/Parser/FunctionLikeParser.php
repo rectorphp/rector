@@ -59,7 +59,7 @@ final class FunctionLikeParser
         return $firstNode;
     }
 
-    public function parseMethodReflection(MethodReflection $methodReflection): ?ClassMethod
+    private function parseMethodReflection(MethodReflection $methodReflection): ?ClassMethod
     {
         $classReflection = $methodReflection->getDeclaringClass();
 

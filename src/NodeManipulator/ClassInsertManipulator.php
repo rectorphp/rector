@@ -54,25 +54,6 @@ final class ClassInsertManipulator
         $class->stmts[] = $stmt;
     }
 
-    public function addConstantToClass(Class_ $class, string $constantName, ClassConst $classConst): void
-    {
-        if ($this->hasClassConstant($class, $constantName)) {
-            return;
-        }
-
-        $this->addAsFirstMethod($class, $classConst);
-    }
-
-    /**
-     * @param Property[] $properties
-     */
-    public function addPropertiesToClass(Class_ $class, array $properties): void
-    {
-        foreach ($properties as $property) {
-            $this->addAsFirstMethod($class, $property);
-        }
-    }
-
     public function addPropertyToClass(Class_ $class, string $name, ?Type $type): void
     {
         if ($this->hasClassProperty($class, $name)) {
@@ -96,7 +77,26 @@ final class ClassInsertManipulator
         $this->addAsFirstMethod($class, $propertyNode);
     }
 
-    public function addAsFirstTrait(Class_ $class, string $traitName): void
+    private function addConstantToClass(Class_ $class, string $constantName, ClassConst $classConst): void
+    {
+        if ($this->hasClassConstant($class, $constantName)) {
+            return;
+        }
+
+        $this->addAsFirstMethod($class, $classConst);
+    }
+
+    /**
+     * @param Property[] $properties
+     */
+    private function addPropertiesToClass(Class_ $class, array $properties): void
+    {
+        foreach ($properties as $property) {
+            $this->addAsFirstMethod($class, $property);
+        }
+    }
+
+    private function addAsFirstTrait(Class_ $class, string $traitName): void
     {
         $traitUse = new TraitUse([new FullyQualified($traitName)]);
         $this->addTraitUse($class, $traitUse);
@@ -106,7 +106,7 @@ final class ClassInsertManipulator
      * @param Stmt[] $nodes
      * @return Stmt[]
      */
-    public function insertBefore(array $nodes, Stmt $stmt, int $key): array
+    private function insertBefore(array $nodes, Stmt $stmt, int $key): array
     {
         array_splice($nodes, $key, 0, [$stmt]);
 

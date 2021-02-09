@@ -84,7 +84,14 @@ final class AssignAndBinaryMap
         $this->binaryOpToAssignClasses = array_flip(self::ASSIGN_OP_TO_BINARY_OP_CLASSES);
     }
 
-    public function getAlternative(Node $node): ?string
+    public function getInversed(BinaryOp $binaryOp): ?string
+    {
+        $nodeClass = get_class($binaryOp);
+
+        return self::BINARY_OP_TO_INVERSE_CLASSES[$nodeClass] ?? null;
+    }
+
+    private function getAlternative(Node $node): ?string
     {
         $nodeClass = get_class($node);
 
@@ -97,12 +104,5 @@ final class AssignAndBinaryMap
         }
 
         return null;
-    }
-
-    public function getInversed(BinaryOp $binaryOp): ?string
-    {
-        $nodeClass = get_class($binaryOp);
-
-        return self::BINARY_OP_TO_INVERSE_CLASSES[$nodeClass] ?? null;
     }
 }

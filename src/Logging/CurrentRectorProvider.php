@@ -18,7 +18,7 @@ final class CurrentRectorProvider
         $this->currentRector = $rector;
     }
 
-    public function getCurrentRector(): ?RectorInterface
+    private function getCurrentRector(): ?RectorInterface
     {
         return $this->currentRector;
     }

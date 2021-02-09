@@ -181,60 +181,6 @@ final class BetterStandardPrinter extends Standard
         return parent::prettyPrintFile($stmts) . PHP_EOL;
     }
 
-    public function pFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace): string
-    {
-        $content = $this->pStmts($fileWithoutNamespace->stmts, false);
-
-        return ltrim($content);
-    }
-
-    public function pFileNode(FileNode $fileNode): string
-    {
-        return $this->pStmts($fileNode->stmts);
-    }
-
-    /**
-     * @param Node[] $availableNodes
-     */
-    public function isNodeEqual(Node $singleNode, array $availableNodes): bool
-    {
-        // remove comments, only content is relevant
-        $singleNode = clone $singleNode;
-        $singleNode->setAttribute(AttributeKey::COMMENTS, null);
-
-        foreach ($availableNodes as $availableNode) {
-            // remove comments, only content is relevant
-            $availableNode = clone $availableNode;
-            $availableNode->setAttribute(AttributeKey::COMMENTS, null);
-
-            if ($this->areNodesEqual($singleNode, $availableNode)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks even clone nodes
-     */
-    public function areSameNode(Node $firstNode, Node $secondNode): bool
-    {
-        if ($firstNode === $secondNode) {
-            return true;
-        }
-
-        if ($firstNode->getStartTokenPos() !== $secondNode->getStartTokenPos()) {
-            return false;
-        }
-
-        if ($firstNode->getEndTokenPos() !== $secondNode->getEndTokenPos()) {
-            return false;
-        }
-
-        return get_class($firstNode) === get_class($secondNode);
-    }
-
     /**
      * This allows to use both spaces and tabs vs. original space-only
      */
@@ -497,6 +443,60 @@ final class BetterStandardPrinter extends Standard
         }
 
         return $result;
+    }
+
+    private function pFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace): string
+    {
+        $content = $this->pStmts($fileWithoutNamespace->stmts, false);
+
+        return ltrim($content);
+    }
+
+    private function pFileNode(FileNode $fileNode): string
+    {
+        return $this->pStmts($fileNode->stmts);
+    }
+
+    /**
+     * @param Node[] $availableNodes
+     */
+    private function isNodeEqual(Node $singleNode, array $availableNodes): bool
+    {
+        // remove comments, only content is relevant
+        $singleNode = clone $singleNode;
+        $singleNode->setAttribute(AttributeKey::COMMENTS, null);
+
+        foreach ($availableNodes as $availableNode) {
+            // remove comments, only content is relevant
+            $availableNode = clone $availableNode;
+            $availableNode->setAttribute(AttributeKey::COMMENTS, null);
+
+            if ($this->areNodesEqual($singleNode, $availableNode)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks even clone nodes
+     */
+    private function areSameNode(Node $firstNode, Node $secondNode): bool
+    {
+        if ($firstNode === $secondNode) {
+            return true;
+        }
+
+        if ($firstNode->getStartTokenPos() !== $secondNode->getStartTokenPos()) {
+            return false;
+        }
+
+        if ($firstNode->getEndTokenPos() !== $secondNode->getEndTokenPos()) {
+            return false;
+        }
+
+        return get_class($firstNode) === get_class($secondNode);
     }
 
     /**

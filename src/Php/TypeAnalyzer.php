@@ -53,7 +53,7 @@ final class TypeAnalyzer
         }
     }
 
-    public function isPhpReservedType(string $type): bool
+    private function isPhpReservedType(string $type): bool
     {
         $types = explode('|', $type);
 
@@ -73,7 +73,7 @@ final class TypeAnalyzer
         return false;
     }
 
-    public function normalizeType(string $type): string
+    private function normalizeType(string $type): string
     {
         $loweredType = strtolower($type);
         if ($loweredType === 'boolean') {

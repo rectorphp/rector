@@ -68,23 +68,6 @@ final class AssignManipulator
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
-    /**
-     * Matches:
-     * each() = [1, 2];
-     */
-    public function isListToEachAssign(Assign $assign): bool
-    {
-        if (! $assign->expr instanceof FuncCall) {
-            return false;
-        }
-
-        if (! $assign->var instanceof List_) {
-            return false;
-        }
-
-        return $this->nodeNameResolver->isName($assign->expr, 'each');
-    }
-
     public function isLeftPartOfAssign(Node $node): bool
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
@@ -112,7 +95,24 @@ final class AssignManipulator
         return false;
     }
 
-    public function isNodePartOfAssign(Node $node): bool
+    /**
+     * Matches:
+     * each() = [1, 2];
+     */
+    private function isListToEachAssign(Assign $assign): bool
+    {
+        if (! $assign->expr instanceof FuncCall) {
+            return false;
+        }
+
+        if (! $assign->var instanceof List_) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isName($assign->expr, 'each');
+    }
+
+    private function isNodePartOfAssign(Node $node): bool
     {
         $previousNode = $node;
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
@@ -135,7 +135,7 @@ final class AssignManipulator
     /**
      * @return PropertyFetch[]
      */
-    public function resolveAssignsToLocalPropertyFetches(FunctionLike $functionLike): array
+    private function resolveAssignsToLocalPropertyFetches(FunctionLike $functionLike): array
     {
         return $this->betterNodeFinder->find((array) $functionLike->getStmts(), function (Node $node): bool {
             if (! $this->propertyFetchAnalyzer->isLocalPropertyFetch($node)) {

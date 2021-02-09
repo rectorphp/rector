@@ -27,7 +27,7 @@ final class ClassAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function isAnonymousClass(Node $node): bool
+    private function isAnonymousClass(Node $node): bool
     {
         if (! $node instanceof Class_) {
             return false;

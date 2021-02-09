@@ -46,7 +46,7 @@ final class MethodCallManipulator
     /**
      * @return string[]
      */
-    public function findMethodCallNamesOnVariable(Variable $variable): array
+    private function findMethodCallNamesOnVariable(Variable $variable): array
     {
         $methodCallsOnVariable = $this->findMethodCallsOnVariable($variable);
 
@@ -66,7 +66,7 @@ final class MethodCallManipulator
     /**
      * @return MethodCall[]
      */
-    public function findMethodCallsIncludingChain(MethodCall $methodCall): array
+    private function findMethodCallsIncludingChain(MethodCall $methodCall): array
     {
         $chainMethodCalls = [];
 
@@ -88,7 +88,7 @@ final class MethodCallManipulator
         return $this->uniquateObjects($methodCalls);
     }
 
-    public function findAssignToVariable(Variable $variable): ?Assign
+    private function findAssignToVariable(Variable $variable): ?Assign
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof Node) {
@@ -115,7 +115,7 @@ final class MethodCallManipulator
     /**
      * @return MethodCall[]
      */
-    public function findMethodCallsOnVariable(Variable $variable): array
+    private function findMethodCallsOnVariable(Variable $variable): array
     {
         // get scope node, e.g. parent function call, method call or anonymous function
         $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);

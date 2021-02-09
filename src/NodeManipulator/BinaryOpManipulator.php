@@ -33,7 +33,7 @@ final class BinaryOpManipulator
      * @param callable|string $firstCondition callable or Node to instanceof
      * @param callable|string $secondCondition callable or Node to instanceof
      */
-    public function matchFirstAndSecondConditionNode(
+    private function matchFirstAndSecondConditionNode(
         BinaryOp $binaryOp,
         $firstCondition,
         $secondCondition
@@ -55,7 +55,7 @@ final class BinaryOpManipulator
         return null;
     }
 
-    public function inverseBinaryOp(BinaryOp $binaryOp): ?BinaryOp
+    private function inverseBinaryOp(BinaryOp $binaryOp): ?BinaryOp
     {
         // no nesting
         if ($binaryOp->left instanceof BooleanOr) {
@@ -77,7 +77,7 @@ final class BinaryOpManipulator
         return new $inversedNodeClass($firstInversedNode, $secondInversedNode);
     }
 
-    public function invertCondition(BinaryOp $binaryOp): ?BinaryOp
+    private function invertCondition(BinaryOp $binaryOp): ?BinaryOp
     {
         // no nesting
         if ($binaryOp->left instanceof BooleanOr) {

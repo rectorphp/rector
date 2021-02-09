@@ -73,6 +73,18 @@ final class IfManipulator
         $this->conditionInverter = $conditionInverter;
     }
 
+    public function createIfNegation(Expr $expr, Stmt $stmt): If_
+    {
+        $expr = $this->conditionInverter->createInvertedCondition($expr);
+
+        return new If_(
+            $expr,
+            [
+                'stmts' => [$stmt],
+            ]
+        );
+    }
+
     /**
      * Matches:
      *
@@ -80,7 +92,7 @@ final class IfManipulator
      *     return $value;
      * }
      */
-    public function matchIfNotNullReturnValue(If_ $if): ?Expr
+    private function matchIfNotNullReturnValue(If_ $if): ?Expr
     {
         $stmts = $if->stmts;
         if (count($stmts) !== 1) {
@@ -106,7 +118,7 @@ final class IfManipulator
      *     $anotherValue = $value;
      * }
      */
-    public function matchIfNotNullNextAssignment(If_ $if): ?Assign
+    private function matchIfNotNullNextAssignment(If_ $if): ?Assign
     {
         if ($if->stmts === []) {
             return null;
@@ -140,7 +152,7 @@ final class IfManipulator
      *     return 53;
      * }
      */
-    public function matchIfValueReturnValue(If_ $if): ?Expr
+    private function matchIfValueReturnValue(If_ $if): ?Expr
     {
         $stmts = $if->stmts;
 
@@ -171,7 +183,7 @@ final class IfManipulator
     /**
      * @return mixed[]
      */
-    public function collectNestedIfsWithOnlyReturn(If_ $if): array
+    private function collectNestedIfsWithOnlyReturn(If_ $if): array
     {
         $ifs = [];
 
@@ -196,7 +208,7 @@ final class IfManipulator
         return $ifs;
     }
 
-    public function isIfAndElseWithSameVariableAssignAsLastStmts(If_ $if, Expr $desiredExpr): bool
+    private function isIfAndElseWithSameVariableAssignAsLastStmts(If_ $if, Expr $desiredExpr): bool
     {
         if ($if->else === null) {
             return false;
@@ -232,7 +244,7 @@ final class IfManipulator
      * } else {
      * }
      */
-    public function isIfOrIfElseWithFunctionCondition(If_ $if, string $functionName): bool
+    private function isIfOrIfElseWithFunctionCondition(If_ $if, string $functionName): bool
     {
         if ((bool) $if->elseifs) {
             return false;
@@ -247,7 +259,7 @@ final class IfManipulator
     /**
      * @return If_[]
      */
-    public function collectNestedIfsWithNonBreaking(Foreach_ $foreach): array
+    private function collectNestedIfsWithNonBreaking(Foreach_ $foreach): array
     {
         if (count($foreach->stmts) !== 1) {
             return [];
@@ -290,7 +302,7 @@ final class IfManipulator
         return $ifs;
     }
 
-    public function isIfWithOnly(Node $node, string $className): bool
+    private function isIfWithOnly(Node $node, string $className): bool
     {
         if (! $node instanceof If_) {
             return false;
@@ -303,12 +315,12 @@ final class IfManipulator
         return $this->hasOnlyStmtOfType($node, $className);
     }
 
-    public function isIfWithOnlyOneStmt(If_ $if): bool
+    private function isIfWithOnlyOneStmt(If_ $if): bool
     {
         return count($if->stmts) === 1;
     }
 
-    public function isIfCondUsingAssignIdenticalVariable(Node $if, Node $assign): bool
+    private function isIfCondUsingAssignIdenticalVariable(Node $if, Node $assign): bool
     {
         if (! ($if instanceof If_ && $assign instanceof Assign)) {
             return false;
@@ -321,7 +333,7 @@ final class IfManipulator
         return $this->betterStandardPrinter->areNodesEqual($this->getIfCondVar($if), $assign->var);
     }
 
-    public function isIfCondUsingAssignNotIdenticalVariable(If_ $if, Node $node): bool
+    private function isIfCondUsingAssignNotIdenticalVariable(If_ $if, Node $node): bool
     {
         if (! $node instanceof MethodCall && ! $node instanceof PropertyFetch) {
             return false;
@@ -332,25 +344,13 @@ final class IfManipulator
         return ! $this->betterStandardPrinter->areNodesEqual($this->getIfCondVar($if), $node->var);
     }
 
-    public function isIfWithoutElseAndElseIfs(If_ $if): bool
+    private function isIfWithoutElseAndElseIfs(If_ $if): bool
     {
         if ($if->else !== null) {
             return false;
         }
 
         return ! (bool) $if->elseifs;
-    }
-
-    public function createIfNegation(Expr $expr, Stmt $stmt): If_
-    {
-        $expr = $this->conditionInverter->createInvertedCondition($expr);
-
-        return new If_(
-            $expr,
-            [
-                'stmts' => [$stmt],
-            ]
-        );
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $return): ?Expr

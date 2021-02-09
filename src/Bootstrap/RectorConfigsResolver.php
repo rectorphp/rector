@@ -41,7 +41,7 @@ final class RectorConfigsResolver
      * @param SmartFileInfo[] $configFileInfos
      * @return SmartFileInfo[]
      */
-    public function resolveSetFileInfosFromConfigFileInfos(array $configFileInfos): array
+    private function resolveSetFileInfosFromConfigFileInfos(array $configFileInfos): array
     {
         return $this->setAwareConfigResolver->resolveFromParameterSetsFromConfigFiles($configFileInfos);
     }
@@ -49,7 +49,7 @@ final class RectorConfigsResolver
     /**
      * @return SmartFileInfo[]
      */
-    public function provide(): array
+    private function provide(): array
     {
         $configFileInfos = [];
 

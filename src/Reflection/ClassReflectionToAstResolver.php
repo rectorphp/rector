@@ -36,7 +36,7 @@ final class ClassReflectionToAstResolver
         $this->betterNodeFinder = $betterNodeFinder;
     }
 
-    public function getClassFromObjectType(ObjectType $objectType): ?Class_
+    private function getClassFromObjectType(ObjectType $objectType): ?Class_
     {
         $classReflection = $objectType->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {

@@ -47,7 +47,7 @@ final class ArrayManipulator
         return true;
     }
 
-    public function addItemToArrayUnderKey(Array_ $array, ArrayItem $newArrayItem, string $key): void
+    private function addItemToArrayUnderKey(Array_ $array, ArrayItem $newArrayItem, string $key): void
     {
         foreach ($array->items as $item) {
             if ($item === null) {
@@ -67,7 +67,7 @@ final class ArrayManipulator
         $array->items[] = new ArrayItem(new Array_([$newArrayItem]), new String_($key));
     }
 
-    public function findItemInInArrayByKeyAndUnset(Array_ $array, string $keyName): ?ArrayItem
+    private function findItemInInArrayByKeyAndUnset(Array_ $array, string $keyName): ?ArrayItem
     {
         foreach ($array->items as $i => $item) {
             if ($item === null) {
@@ -93,7 +93,7 @@ final class ArrayManipulator
         return null;
     }
 
-    public function hasKeyName(ArrayItem $arrayItem, string $name): bool
+    private function hasKeyName(ArrayItem $arrayItem, string $name): bool
     {
         if (! $arrayItem->key instanceof String_) {
             return false;

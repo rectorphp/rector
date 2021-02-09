@@ -23,7 +23,7 @@ final class DefaultDiffer
         $this->differ = new Differ($strictUnifiedDiffOutputBuilder);
     }
 
-    public function diff(string $old, string $new): string
+    private function diff(string $old, string $new): string
     {
         if ($old === $new) {
             return '';

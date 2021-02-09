@@ -47,7 +47,7 @@ final class FileNode extends NodeAbstract
         return ['stmts'];
     }
 
-    public function getFileInfo(): SmartFileInfo
+    private function getFileInfo(): SmartFileInfo
     {
         return $this->fileInfo;
     }

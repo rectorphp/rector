@@ -31,7 +31,7 @@ final class NodeTransformer
      * to:
      * - ["Hi %s", $name]
      */
-    public function transformSprintfToArray(FuncCall $sprintfFuncCall): ?Array_
+    private function transformSprintfToArray(FuncCall $sprintfFuncCall): ?Array_
     {
         $sprintfStringAndArgs = $this->splitMessageAndArgs($sprintfFuncCall);
         if (! $sprintfStringAndArgs instanceof SprintfStringAndArgs) {
@@ -62,7 +62,7 @@ final class NodeTransformer
     /**
      * @param Yield_[]|Expression[] $yieldNodes
      */
-    public function transformYieldsToArray(array $yieldNodes): Array_
+    private function transformYieldsToArray(array $yieldNodes): Array_
     {
         $arrayItems = [];
         foreach ($yieldNodes as $yieldNode) {
@@ -87,7 +87,7 @@ final class NodeTransformer
     /**
      * @return Expression[]
      */
-    public function transformArrayToYields(Array_ $array): array
+    private function transformArrayToYields(Array_ $array): array
     {
         $yieldNodes = [];
 
@@ -108,7 +108,7 @@ final class NodeTransformer
         return $yieldNodes;
     }
 
-    public function transformConcatToStringArray(Concat $concat): Array_
+    private function transformConcatToStringArray(Concat $concat): Array_
     {
         $arrayItems = $this->transformConcatToItems($concat);
 

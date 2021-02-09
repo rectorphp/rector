@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Foreach_;
 
 final class ForeachManipulator
 {
-    public function matchOnlyStmt(Foreach_ $foreach, callable $callable): ?Node
+    private function matchOnlyStmt(Foreach_ $foreach, callable $callable): ?Node
     {
         $stmts = $foreach->stmts;
 

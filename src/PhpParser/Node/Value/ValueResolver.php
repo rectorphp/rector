@@ -58,14 +58,6 @@ final class ValueResolver
     }
 
     /**
-     * @param mixed $value
-     */
-    public function isValue(Expr $expr, $value): bool
-    {
-        return $this->getValue($expr) === $value;
-    }
-
-    /**
      * @return mixed|null
      */
     public function getValue(Expr $expr, bool $resolvedClassReference = false)
@@ -114,35 +106,6 @@ final class ValueResolver
         return null;
     }
 
-    /**
-     * @param mixed[] $expectedValues
-     */
-    public function isValues(Expr $expr, array $expectedValues): bool
-    {
-        foreach ($expectedValues as $expectedValue) {
-            if ($this->isValue($expr, $expectedValue)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function isFalse(Node $node): bool
-    {
-        return $this->constFetchAnalyzer->isFalse($node);
-    }
-
-    public function isTrueOrFalse(Node $node): bool
-    {
-        return $this->constFetchAnalyzer->isTrueOrFalse($node);
-    }
-
-    public function isTrue(Node $node): bool
-    {
-        return $this->constFetchAnalyzer->isTrue($node);
-    }
-
     public function isNull(Node $node): bool
     {
         return $this->constFetchAnalyzer->isNull($node);
@@ -165,6 +128,43 @@ final class ValueResolver
         }
 
         return true;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private function isValue(Expr $expr, $value): bool
+    {
+        return $this->getValue($expr) === $value;
+    }
+
+    /**
+     * @param mixed[] $expectedValues
+     */
+    private function isValues(Expr $expr, array $expectedValues): bool
+    {
+        foreach ($expectedValues as $expectedValue) {
+            if ($this->isValue($expr, $expectedValue)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isFalse(Node $node): bool
+    {
+        return $this->constFetchAnalyzer->isFalse($node);
+    }
+
+    private function isTrueOrFalse(Node $node): bool
+    {
+        return $this->constFetchAnalyzer->isTrueOrFalse($node);
+    }
+
+    private function isTrue(Node $node): bool
+    {
+        return $this->constFetchAnalyzer->isTrue($node);
     }
 
     private function processConcat(Concat $concat, bool $resolvedClassReference): string

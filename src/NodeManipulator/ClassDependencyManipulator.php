@@ -84,7 +84,7 @@ final class ClassDependencyManipulator
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function addConstructorDependency(Class_ $class, PropertyMetadata $propertyMetadata): void
+    private function addConstructorDependency(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
         if ($this->hasClassPropertyAndDependency($class, $propertyMetadata)) {
             return;
@@ -111,7 +111,7 @@ final class ClassDependencyManipulator
         }
     }
 
-    public function addConstructorDependencyWithCustomAssign(
+    private function addConstructorDependencyWithCustomAssign(
         Class_ $class,
         string $name,
         ?Type $type,
@@ -142,7 +142,7 @@ final class ClassDependencyManipulator
     /**
      * @param Stmt[] $stmts
      */
-    public function addStmtsToConstructorIfNotThereYet(Class_ $class, array $stmts): void
+    private function addStmtsToConstructorIfNotThereYet(Class_ $class, array $stmts): void
     {
         $classMethod = $class->getMethod(MethodName::CONSTRUCT);
 
@@ -170,7 +170,7 @@ final class ClassDependencyManipulator
         $classMethod->stmts = array_merge($stmts, (array) $classMethod->stmts);
     }
 
-    public function addInjectProperty(Class_ $class, PropertyMetadata $propertyMetadata): void
+    private function addInjectProperty(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
         if ($this->propertyPresenceChecker->hasClassContextPropertyByName($class, $propertyMetadata->getName())) {
             return;

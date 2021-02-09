@@ -51,7 +51,7 @@ final class PropertyFetchManipulator
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function isPropertyToSelf(PropertyFetch $propertyFetch): bool
+    private function isPropertyToSelf(PropertyFetch $propertyFetch): bool
     {
         if (! $this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
             return false;
@@ -73,7 +73,7 @@ final class PropertyFetchManipulator
         return false;
     }
 
-    public function isMagicOnType(PropertyFetch $propertyFetch, Type $type): bool
+    private function isMagicOnType(PropertyFetch $propertyFetch, Type $type): bool
     {
         $varNodeType = $this->nodeTypeResolver->resolve($propertyFetch);
 
@@ -101,7 +101,7 @@ final class PropertyFetchManipulator
      * Matches:
      * "$this->someValue = $<variableName>;"
      */
-    public function isVariableAssignToThisPropertyFetch(Node $node, string $variableName): bool
+    private function isVariableAssignToThisPropertyFetch(Node $node, string $variableName): bool
     {
         if (! $node instanceof Assign) {
             return false;
@@ -121,7 +121,7 @@ final class PropertyFetchManipulator
     /**
      * @param string[] $propertyNames
      */
-    public function isLocalPropertyOfNames(Node $node, array $propertyNames): bool
+    private function isLocalPropertyOfNames(Node $node, array $propertyNames): bool
     {
         if (! $this->isLocalPropertyFetch($node)) {
             return false;
@@ -131,7 +131,7 @@ final class PropertyFetchManipulator
         return $this->nodeNameResolver->isNames($node->name, $propertyNames);
     }
 
-    public function isLocalPropertyFetch(Node $node): bool
+    private function isLocalPropertyFetch(Node $node): bool
     {
         if (! $node instanceof PropertyFetch) {
             return false;

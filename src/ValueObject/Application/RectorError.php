@@ -40,27 +40,27 @@ final class RectorError
         $this->rectorClass = $rectorClass;
     }
 
-    public function getRelativeFilePath(): string
+    private function getRelativeFilePath(): string
     {
         return $this->fileInfo->getRelativeFilePathFromCwd();
     }
 
-    public function getFileInfo(): SmartFileInfo
+    private function getFileInfo(): SmartFileInfo
     {
         return $this->fileInfo;
     }
 
-    public function getMessage(): string
+    private function getMessage(): string
     {
         return $this->message;
     }
 
-    public function getLine(): ?int
+    private function getLine(): ?int
     {
         return $this->line;
     }
 
-    public function getRectorClass(): ?string
+    private function getRectorClass(): ?string
     {
         return $this->rectorClass;
     }

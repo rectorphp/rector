@@ -91,7 +91,7 @@ final class RegexPatternArgumentManipulator
     /**
      * @return String_[]
      */
-    public function matchCallArgumentWithRegexPattern(Expr $expr): array
+    private function matchCallArgumentWithRegexPattern(Expr $expr): array
     {
         if ($expr instanceof FuncCall) {
             return $this->processFuncCall($expr);

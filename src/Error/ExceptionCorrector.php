@@ -10,7 +10,7 @@ use Throwable;
 
 final class ExceptionCorrector
 {
-    public function matchRectorClass(Throwable $throwable): ?string
+    private function matchRectorClass(Throwable $throwable): ?string
     {
         if (! isset($throwable->getTrace()[0])) {
             return null;
@@ -29,7 +29,7 @@ final class ExceptionCorrector
         return $class;
     }
 
-    public function getAutoloadExceptionMessageAndAddLocation(AnalysedCodeException $analysedCodeException): string
+    private function getAutoloadExceptionMessageAndAddLocation(AnalysedCodeException $analysedCodeException): string
     {
         return sprintf(
             'Analyze error: "%s". Include your files in "$parameters->set(Option::AUTOLOAD_PATHS, [...]);" in "rector.php" config.%sSee https://github.com/rectorphp/rector#configuration',

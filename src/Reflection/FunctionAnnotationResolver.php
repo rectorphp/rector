@@ -42,7 +42,7 @@ final class FunctionAnnotationResolver
     /**
      * @return mixed[]
      */
-    public function extractFunctionAnnotatedThrows(ReflectionFunction $reflectionFunction): array
+    private function extractFunctionAnnotatedThrows(ReflectionFunction $reflectionFunction): array
     {
         $docComment = $reflectionFunction->getDocComment();
         if (! is_string($docComment)) {

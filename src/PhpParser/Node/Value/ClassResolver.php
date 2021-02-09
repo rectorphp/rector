@@ -29,7 +29,7 @@ final class ClassResolver
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function getClassFromMethodCall(MethodCall $methodCall): ?FullyQualified
+    private function getClassFromMethodCall(MethodCall $methodCall): ?FullyQualified
     {
         $previousExpression = $methodCall->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
 

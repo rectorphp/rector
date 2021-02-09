@@ -44,22 +44,22 @@ final class FileDiff
         $this->diffConsoleFormatted = $diffConsoleFormatted;
     }
 
-    public function getDiff(): string
+    private function getDiff(): string
     {
         return $this->diff;
     }
 
-    public function getDiffConsoleFormatted(): string
+    private function getDiffConsoleFormatted(): string
     {
         return $this->diffConsoleFormatted;
     }
 
-    public function getRelativeFilePath(): string
+    private function getRelativeFilePath(): string
     {
         return $this->smartFileInfo->getRelativeFilePath();
     }
 
-    public function getFileInfo(): SmartFileInfo
+    private function getFileInfo(): SmartFileInfo
     {
         return $this->smartFileInfo;
     }
@@ -67,7 +67,7 @@ final class FileDiff
     /**
      * @return RectorWithFileAndLineChange[]
      */
-    public function getRectorChanges(): array
+    private function getRectorChanges(): array
     {
         return $this->rectorWithFileAndLineChanges;
     }
@@ -75,7 +75,7 @@ final class FileDiff
     /**
      * @return string[]
      */
-    public function getRectorClasses(): array
+    private function getRectorClasses(): array
     {
         $rectorClasses = [];
         foreach ($this->rectorWithFileAndLineChanges as $rectorWithFileAndLineChange) {

@@ -83,7 +83,7 @@ final class PropertyManipulator
         $this->propertyFetchFinder = $propertyFetchFinder;
     }
 
-    public function isPropertyUsedInReadContext(Property $property): bool
+    private function isPropertyUsedInReadContext(Property $property): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($phpDocInfo->hasByType(AbstractDoctrineTagValueNode::class)) {
@@ -118,7 +118,7 @@ final class PropertyManipulator
         });
     }
 
-    public function isPropertyChangeable(Property $property): bool
+    private function isPropertyChangeable(Property $property): bool
     {
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
 

@@ -12,18 +12,18 @@ final class RenamedClassesDataCollector
     private $oldToNewClasses = [];
 
     /**
-     * @param array<string, string> $oldToNewClasses
-     */
-    public function setOldToNewClasses(array $oldToNewClasses): void
-    {
-        $this->oldToNewClasses = $oldToNewClasses;
-    }
-
-    /**
      * @return array<string, string>
      */
     public function getOldToNewClasses(): array
     {
         return $this->oldToNewClasses;
+    }
+
+    /**
+     * @param array<string, string> $oldToNewClasses
+     */
+    private function setOldToNewClasses(array $oldToNewClasses): void
+    {
+        $this->oldToNewClasses = $oldToNewClasses;
     }
 }

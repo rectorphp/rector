@@ -34,7 +34,7 @@ final class PropertyFetchAnalyzer
         return false;
     }
 
-    public function isLocalPropertyFetchName(Node $node, string $desiredPropertyName): bool
+    private function isLocalPropertyFetchName(Node $node, string $desiredPropertyName): bool
     {
         if (! $this->isLocalPropertyFetch($node)) {
             return false;

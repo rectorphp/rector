@@ -34,7 +34,7 @@ final class PropertyFetchAssignManipulator
     /**
      * @return string[]
      */
-    public function getPropertyNamesOfAssignOfVariable(Node $node, string $paramName): array
+    private function getPropertyNamesOfAssignOfVariable(Node $node, string $paramName): array
     {
         $propertyNames = [];
 

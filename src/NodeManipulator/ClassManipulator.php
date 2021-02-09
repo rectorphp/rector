@@ -61,7 +61,7 @@ final class ClassManipulator
         return $usedTraits;
     }
 
-    public function hasParentMethodOrInterface(string $class, string $method): bool
+    private function hasParentMethodOrInterface(string $class, string $method): bool
     {
         if (! class_exists($class)) {
             return false;
@@ -88,7 +88,7 @@ final class ClassManipulator
     /**
      * @return string[]
      */
-    public function getPrivatePropertyNames(Class_ $class): array
+    private function getPrivatePropertyNames(Class_ $class): array
     {
         $privateProperties = array_filter($class->getProperties(), function (Property $property): bool {
             return $property->isPrivate();
@@ -100,7 +100,7 @@ final class ClassManipulator
     /**
      * @return string[]
      */
-    public function getPublicMethodNames(Class_ $class): array
+    private function getPublicMethodNames(Class_ $class): array
     {
         $publicMethods = array_filter($class->getMethods(), function (ClassMethod $classMethod): bool {
             if ($classMethod->isAbstract()) {
@@ -113,7 +113,7 @@ final class ClassManipulator
         return $this->nodeNameResolver->getNames($publicMethods);
     }
 
-    public function findPropertyByType(Class_ $class, string $serviceType): ?Property
+    private function findPropertyByType(Class_ $class, string $serviceType): ?Property
     {
         foreach ($class->getProperties() as $property) {
             if (! $this->nodeTypeResolver->isObjectType($property, $serviceType)) {
@@ -129,17 +129,17 @@ final class ClassManipulator
     /**
      * @return string[]
      */
-    public function getImplementedInterfaceNames(Class_ $class): array
+    private function getImplementedInterfaceNames(Class_ $class): array
     {
         return $this->nodeNameResolver->getNames($class->implements);
     }
 
-    public function hasInterface(Class_ $class, string $desiredInterface): bool
+    private function hasInterface(Class_ $class, string $desiredInterface): bool
     {
         return $this->nodeNameResolver->isName($class->implements, $desiredInterface);
     }
 
-    public function hasTrait(Class_ $class, string $desiredTrait): bool
+    private function hasTrait(Class_ $class, string $desiredTrait): bool
     {
         foreach ($class->getTraitUses() as $traitUse) {
             if (! $this->nodeNameResolver->isName($traitUse->traits, $desiredTrait)) {
@@ -152,7 +152,7 @@ final class ClassManipulator
         return false;
     }
 
-    public function replaceTrait(Class_ $class, string $oldTrait, string $newTrait): void
+    private function replaceTrait(Class_ $class, string $oldTrait, string $newTrait): void
     {
         foreach ($class->getTraitUses() as $traitUse) {
             foreach ($traitUse->traits as $key => $traitTrait) {
@@ -170,7 +170,7 @@ final class ClassManipulator
      * @param Class_|Interface_ $classLike
      * @return string[]
      */
-    public function getClassLikeNodeParentInterfaceNames(ClassLike $classLike): array
+    private function getClassLikeNodeParentInterfaceNames(ClassLike $classLike): array
     {
         if ($classLike instanceof Class_) {
             return $this->nodeNameResolver->getNames($classLike->implements);
@@ -179,7 +179,7 @@ final class ClassManipulator
         return $this->nodeNameResolver->getNames($classLike->extends);
     }
 
-    public function removeInterface(Class_ $class, string $desiredInterface): void
+    private function removeInterface(Class_ $class, string $desiredInterface): void
     {
         foreach ($class->implements as $implement) {
             if (! $this->nodeNameResolver->isName($implement, $desiredInterface)) {

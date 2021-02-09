@@ -146,14 +146,6 @@ final class Configuration
         return $version->getPrettyVersion();
     }
 
-    /**
-     * @forTests
-     */
-    public function setIsDryRun(bool $isDryRun): void
-    {
-        $this->isDryRun = $isDryRun;
-    }
-
     public function isDryRun(): bool
     {
         return $this->isDryRun;
@@ -168,15 +160,6 @@ final class Configuration
         return $this->showProgressBar;
     }
 
-    public function areAnyPhpRectorsLoaded(): bool
-    {
-        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            return true;
-        }
-
-        return $this->areAnyPhpRectorsLoaded;
-    }
-
     public function setAreAnyPhpRectorsLoaded(bool $areAnyPhpRectorsLoaded): void
     {
         $this->areAnyPhpRectorsLoaded = $areAnyPhpRectorsLoaded;
@@ -187,25 +170,12 @@ final class Configuration
         return $this->mustMatchGitDiff;
     }
 
-    public function getOutputFile(): ?string
-    {
-        return $this->outputFile;
-    }
-
     /**
      * @param SmartFileInfo[] $fileInfos
      */
     public function setFileInfos(array $fileInfos): void
     {
         $this->fileInfos = $fileInfos;
-    }
-
-    /**
-     * @return SmartFileInfo[]
-     */
-    public function getFileInfos(): array
-    {
-        return $this->fileInfos;
     }
 
     public function shouldClearCache(): bool
@@ -239,11 +209,6 @@ final class Configuration
         return $this->paths;
     }
 
-    public function getOutputFormat(): string
-    {
-        return $this->outputFormat;
-    }
-
     public function validateConfigParameters(): void
     {
         $symfonyContainerXmlPath = (string) $this->parameterProvider->provideParameter(
@@ -273,7 +238,42 @@ final class Configuration
         return $this->outputFormat === CheckstyleOutputFormatter::NAME;
     }
 
-    public function shouldShowDiffs(): bool
+    /**
+     * @forTests
+     */
+    private function setIsDryRun(bool $isDryRun): void
+    {
+        $this->isDryRun = $isDryRun;
+    }
+
+    private function areAnyPhpRectorsLoaded(): bool
+    {
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            return true;
+        }
+
+        return $this->areAnyPhpRectorsLoaded;
+    }
+
+    private function getOutputFile(): ?string
+    {
+        return $this->outputFile;
+    }
+
+    /**
+     * @return SmartFileInfo[]
+     */
+    private function getFileInfos(): array
+    {
+        return $this->fileInfos;
+    }
+
+    private function getOutputFormat(): string
+    {
+        return $this->outputFormat;
+    }
+
+    private function shouldShowDiffs(): bool
     {
         return $this->showDiffs;
     }

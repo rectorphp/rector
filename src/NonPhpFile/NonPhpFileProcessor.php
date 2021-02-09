@@ -72,7 +72,7 @@ final class NonPhpFileProcessor
         }
     }
 
-    public function processFileInfo(SmartFileInfo $smartFileInfo): string
+    private function processFileInfo(SmartFileInfo $smartFileInfo): string
     {
         $oldContents = $smartFileInfo->getContents();
 

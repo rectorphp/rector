@@ -15,7 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NullsafeManipulator
 {
-    public function processNullSafeExpr(Expr $expr): ?Expr
+    private function processNullSafeExpr(Expr $expr): ?Expr
     {
         if ($expr instanceof MethodCall) {
             return new NullsafeMethodCall($expr->var, $expr->name);
@@ -28,7 +28,7 @@ final class NullsafeManipulator
         return null;
     }
 
-    public function processNullSafeExprResult(?Expr $expr, Identifier $nextExprIdentifier): ?Expr
+    private function processNullSafeExprResult(?Expr $expr, Identifier $nextExprIdentifier): ?Expr
     {
         if ($expr === null) {
             return null;

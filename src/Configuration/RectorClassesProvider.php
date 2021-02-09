@@ -29,7 +29,7 @@ final class RectorClassesProvider
     /**
      * @return class-string[]
      */
-    public function provide(): array
+    private function provide(): array
     {
         $rectorClasses = [];
 

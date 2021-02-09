@@ -31,7 +31,7 @@ final class SimplePhpParser
     /**
      * @return Node[]
      */
-    public function parseFile(string $filePath): array
+    private function parseFile(string $filePath): array
     {
         $fileContent = $this->smartFileSystem->readFile($filePath);
         $nodes = $this->parser->parse($fileContent);
