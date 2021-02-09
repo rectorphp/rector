@@ -92,7 +92,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $isSameObject = $this->isObjectType($previousVar, $this->getName($instanceof->class));
+        $isSameObject = $this->isObjectType($previousVar, (string) $this->getName($instanceof->class));
         if (! $isSameObject) {
             return null;
         }
