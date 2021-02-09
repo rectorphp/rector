@@ -120,13 +120,13 @@ CODE_SAMPLE
         return $this->createReturnNodes($newNodes);
     }
 
-    private function isTypeNullOrNameNotIdentifier(?Type $type, Node $name): bool
+    private function isTypeNullOrNameNotIdentifier(?Type $type, Node $node): bool
     {
         if ($type === null) {
             return true;
         }
 
-        return ! $name instanceof Identifier;
+        return ! $node instanceof Identifier;
     }
 
     private function getType(Expr $expr): ?Type

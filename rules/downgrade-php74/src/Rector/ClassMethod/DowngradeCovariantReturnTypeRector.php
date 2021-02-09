@@ -174,7 +174,10 @@ CODE_SAMPLE
             $parentReflectionMethod = new ReflectionMethod($parentClassLike, $methodName);
             $parentReflectionMethodReturnType = $parentReflectionMethod->getReturnType();
 
-            if ($this->isNotReflectionNamedTypeOrNotEqualsToNodeReturnTypeName($parentReflectionMethodReturnType, $nodeReturnTypeName)) {
+            if ($this->isNotReflectionNamedTypeOrNotEqualsToNodeReturnTypeName(
+                $parentReflectionMethodReturnType,
+                $nodeReturnTypeName
+            )) {
                 continue;
             }
 
@@ -186,13 +189,15 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isNotReflectionNamedTypeOrNotEqualsToNodeReturnTypeName(?ReflectionType $parentReflectionMethodReturnType, ?string $nodeReturnTypeName): bool
-    {
-        if (! $parentReflectionMethodReturnType instanceof ReflectionNamedType) {
+    private function isNotReflectionNamedTypeOrNotEqualsToNodeReturnTypeName(
+        ?ReflectionType $reflectionType,
+        ?string $nodeReturnTypeName
+    ): bool {
+        if (! $reflectionType instanceof ReflectionNamedType) {
             return true;
         }
 
-        return $parentReflectionMethodReturnType->getName() === $nodeReturnTypeName;
+        return $reflectionType->getName() === $nodeReturnTypeName;
     }
 
     private function addDocBlockReturn(ClassMethod $classMethod): void
