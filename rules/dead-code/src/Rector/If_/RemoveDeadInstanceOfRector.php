@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Expr\Variable;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\If_\RemoveDeadInstanceOfRector\RemoveDeadInstanceOfRectorTest
@@ -60,7 +60,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->cond instanceof BooleanNot && $node->cond->expr instanceof Instanceof_) {
+        if ($node->cond instanceof BooleanNot && $node->cond->expr instanceof Instanceof_) {
             return $this->processMayDeadInstanceOf($node, $node->cond->expr);
         }
 
@@ -69,7 +69,7 @@ CODE_SAMPLE
 
     private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): Node
     {
-        $previousVar = $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($instanceof) : bool {
+        $previousVar = $this->betterNodeFinder->findFirstPrevious($if, function (Node $node) use ($instanceof): bool {
             return $this->areNodesEqual($node, $instanceof->expr);
         });
 
