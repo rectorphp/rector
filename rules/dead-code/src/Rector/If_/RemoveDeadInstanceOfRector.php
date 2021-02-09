@@ -79,6 +79,10 @@ CODE_SAMPLE
             return $this->processMayDeadInstanceOf($node, $node->cond->expr);
         }
 
+        if ($node->cond instanceof Instanceof_) {
+            return $this->processMayDeadInstanceOf($node, $node->cond);
+        }
+
         return $node;
     }
 
@@ -99,6 +103,13 @@ CODE_SAMPLE
 
         $isSameObject = $this->isObjectType($previousVar, $name);
         if (! $isSameObject) {
+            return null;
+        }
+
+        if ($if->cond === $instanceof) {
+            $this->unwrapStmts($if->stmts, $if);
+            $this->removeNode($if);
+
             return null;
         }
 
