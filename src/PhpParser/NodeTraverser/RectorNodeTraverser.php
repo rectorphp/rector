@@ -11,15 +11,12 @@ use PhpParser\NodeTraverser;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Application\ActiveRectorsProvider;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Testing\Application\EnabledRectorsProvider;
-use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Rector\Testing\Application\EnabledRectorProvider;
 
 final class RectorNodeTraverser extends NodeTraverser
 {
@@ -29,7 +26,7 @@ final class RectorNodeTraverser extends NodeTraverser
     private $allPhpRectors = [];
 
     /**
-     * @var EnabledRectorsProvider
+     * @var EnabledRectorProvider
      */
     private $enabledRectorsProvider;
 
@@ -44,7 +41,7 @@ final class RectorNodeTraverser extends NodeTraverser
     private $currentFileInfoProvider;
 
     public function __construct(
-        EnabledRectorsProvider $enabledRectorsProvider,
+        EnabledRectorProvider $enabledRectorsProvider,
         Configuration $configuration,
         ActiveRectorsProvider $activeRectorsProvider,
         NodeFinder $nodeFinder,
@@ -74,7 +71,7 @@ final class RectorNodeTraverser extends NodeTraverser
     public function traverseFileNode(FileNode $fileNode): array
     {
         if ($this->enabledRectorsProvider->isConfigured()) {
-            $this->configureEnabledRectorsOnly();
+            $this->configureEnabledRectorOnly();
         }
 
         if (! $this->hasFileNodeRectorsEnabled()) {
@@ -96,7 +93,7 @@ final class RectorNodeTraverser extends NodeTraverser
     public function traverse(array $nodes): array
     {
         if ($this->enabledRectorsProvider->isConfigured()) {
-            $this->configureEnabledRectorsOnly();
+            $this->configureEnabledRectorOnly();
         }
 
         $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
@@ -141,22 +138,18 @@ final class RectorNodeTraverser extends NodeTraverser
     /**
      * Mostly used for testing
      */
-    private function configureEnabledRectorsOnly(): void
+    private function configureEnabledRectorOnly(): void
     {
         $this->visitors = [];
-        $enabledRectors = $this->enabledRectorsProvider->getEnabledRectors();
+        $enabledRector = $this->enabledRectorsProvider->getEnabledRector();
 
-        foreach ($enabledRectors as $enabledRector => $configuration) {
-            foreach ($this->allPhpRectors as $phpRector) {
-                if (! is_a($phpRector, $enabledRector, true)) {
-                    continue;
-                }
-
-                $this->configureTestedRector($phpRector, $configuration);
-
-                $this->addVisitor($phpRector);
-                continue 2;
+        foreach ($this->allPhpRectors as $phpRector) {
+            if (! is_a($phpRector, $enabledRector, true)) {
+                continue;
             }
+
+            $this->addVisitor($phpRector);
+            break;
         }
     }
 
@@ -175,34 +168,5 @@ final class RectorNodeTraverser extends NodeTraverser
         }
 
         return false;
-    }
-
-    /**
-     * @param mixed[] $configuration
-     */
-    private function configureTestedRector(PhpRectorInterface $phpRector, array $configuration): void
-    {
-        if (! StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            if ($phpRector instanceof ConfigurableRectorInterface && $configuration === []) {
-                $message = sprintf(
-                    'Rule "%s" is running without any configuration, is that on purpose?',
-                    get_class($phpRector)
-                );
-                throw new ShouldNotHappenException($message);
-            }
-
-            return;
-        }
-
-        if ($phpRector instanceof ConfigurableRectorInterface) {
-            $phpRector->configure($configuration);
-        } elseif ($configuration !== []) {
-            $message = sprintf(
-                'Rule "%s" with configuration must implement "%s"',
-                get_class($phpRector),
-                ConfigurableRectorInterface::class
-            );
-            throw new ShouldNotHappenException($message);
-        }
     }
 }
