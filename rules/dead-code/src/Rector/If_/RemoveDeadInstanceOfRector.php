@@ -7,9 +7,9 @@ namespace Rector\DeadCode\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Type\NullType;
-use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -111,16 +111,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $objectType = $this->getObjectType($previousVar);
-        if ($objectType instanceof UnionType && $this->isChild($objectType, $name)) {
-            return null;
-        }
-
-        if ($objectType instanceof UnionType && $this->hasNullType($objectType)) {
-            return null;
-        }
-
-        $isSameObject = $this->isObjectType($previousVar, $name);
+        $isSameObject = $this->isSameObject($previousVar, $name);
         if (! $isSameObject) {
             return null;
         }
@@ -136,27 +127,23 @@ CODE_SAMPLE
         return $if;
     }
 
-    private function isChild(UnionType $type, string $name): bool
+    private function isSameObject(Node $node, string $name): bool
     {
-        /** @var Type $firstType */
-        $firstType = current($type->getTypes());
+        $objectType = $this->getObjectType($node);
+        $parentPreviousVar = $node->getAttribute(AttributeKey::PARENT_NODE);
 
-        if (! $firstType instanceof ObjectType) {
+        if (! $parentPreviousVar) {
             return false;
         }
 
-        $className = $firstType->getClassName();
-        return is_a($className, $name, true);
-    }
+        if (! $parentPreviousVar instanceof Param) {
+            return ! $objectType instanceof UnionType && $this->isObjectType($node, $name);
+        }
 
-    private function hasNullType(UnionType $type): bool
-    {
-        $types = $type->getTypes();
-
-        foreach ($types as $type) {
-            if ($type instanceof NullType) {
-                return true;
-            }
+        $type = $parentPreviousVar->type;
+        if ($type instanceof FullyQualified) {
+            $type = $type->toString();
+            return is_a($type, $name, true);
         }
 
         return false;
