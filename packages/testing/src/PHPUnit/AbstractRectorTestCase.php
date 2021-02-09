@@ -41,12 +41,15 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 =======
 
     /**
+<<<<<<< HEAD
      * @var int
      */
     private const PHP_VERSION_UNDEFINED = 0;
 >>>>>>> 77c4fbe09... cleanup
 
     /**
+=======
+>>>>>>> b1833ea1a... use php version right in config
      * @var FileProcessor
      */
     protected $fileProcessor;
@@ -67,6 +70,14 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected $parameterProvider;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var RunnableRectorFactory
+     */
+    protected $runnableRectorFactory;
+
+    /**
+>>>>>>> b1833ea1a... use php version right in config
      * @var FixtureGuard
      */
     protected static $fixtureGuard;
@@ -156,6 +167,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
         // needed for PHPStan, because the analyzed file is just create in /temp
@@ -163,6 +175,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         $this->configurePhpVersionFeatures();
 >>>>>>> 495b7788a... use more configs
+=======
+>>>>>>> b1833ea1a... use php version right in config
     }
 
     /**
@@ -186,6 +200,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     protected function getPhpVersion(): int
     {
@@ -194,6 +209,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     }
 
 >>>>>>> 495b7788a... use more configs
+=======
+>>>>>>> b1833ea1a... use php version right in config
     protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
     {
         $this->autoloadTestFixture = false;
@@ -344,15 +361,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         foreach ($this->getCurrentTestRectorClassesWithConfiguration() as $rectorClass => $configuration) {
             $enabledRectorsProvider->addEnabledRector($rectorClass, (array) $configuration);
         }
-    }
-
-    private function configurePhpVersionFeatures(): void
-    {
-        if ($this->getPhpVersion() === self::PHP_VERSION_UNDEFINED) {
-            return;
-        }
-
-        $this->parameterProvider->changeParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
     }
 
     private function ensureRectorClassIsValid(string $rectorClass, string $methodName): void

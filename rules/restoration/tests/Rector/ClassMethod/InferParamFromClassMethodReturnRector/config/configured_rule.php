@@ -19,6 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             InferParamFromClassMethodReturnRector::PARAM_FROM_CLASS_METHOD_RETURNS => $configuration,
 =======
             InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => ValueObjectInliner::inline([
@@ -29,5 +30,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new InferParamFromClassMethodReturn(SomeType::class, 'process', 'getNodeTypes'),
             ]),
 >>>>>>> bb46bb10f... use config instead of setParameter()
+=======
+            InferParamFromClassMethodReturnRector::PARAM_FROM_CLASS_METHOD_RETURNS => $configuration,
+>>>>>>> b1833ea1a... use php version right in config
         ]]);
 };
