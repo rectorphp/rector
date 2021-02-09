@@ -10,49 +10,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(StringToClassConstantRector::class)->call('configure', [[
         StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             new StringToClassConstant('compiler.post_dump', 'Yet\AnotherClass', 'CONSTANT'),
             new StringToClassConstant('compiler.to_class', 'Yet\AnotherClass', 'class'),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         ]),
     ]]);
