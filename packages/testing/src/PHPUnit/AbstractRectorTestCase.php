@@ -195,6 +195,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return null;
     }
 
+    /**
+     * @return array<string, null>
+     */
     protected function getCurrentTestRectorClassesWithConfiguration(): array
     {
         $rectorClass = $this->getRectorClass();
