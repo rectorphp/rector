@@ -43,7 +43,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
                 $smartFileSystem->readFile(__DIR__ . '/Expected/UnknownImageFileException.php')
             ),
         ];
-        yield [new SmartFileInfo(__DIR__ . '/Source/nette-exceptions.php'), $filePathsWithContents];
+        yield [new SmartFileInfo(__DIR__ . '/Source/nette-exceptions.php.inc'), $filePathsWithContents];
 
         $filePathsWithContents = [
             new AddedFileWithContent(
