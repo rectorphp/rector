@@ -17,30 +17,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         [[
             AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 new AddParamTypeDeclaration(
                     ParentInterfaceWithChangeTypeInterface::class,
                     'process',
@@ -54,30 +30,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     0,
                     new ObjectType('Doctrine\ORM\EntityManagerInterface')
                 ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             ]),
         ]]

@@ -17,13 +17,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new ChangeMethodVisibility(ParentObject::class, 'toBePrivateMethod', Visibility::PRIVATE),
             new ChangeMethodVisibility(ParentObject::class, 'toBePublicStaticMethod', Visibility::PUBLIC),
 
-
-
-
-
-
-
-
         ]),
     ]]);
 };

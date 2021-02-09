@@ -10,7 +10,6 @@ use Rector\Core\Application\FileProcessor;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Testing\Contract\CommunityRectorTestCaseInterface;
 use Rector\Testing\Guard\FixtureGuard;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
@@ -21,11 +20,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractCommunityRectorTestCase extends AbstractKernelTestCase implements CommunityRectorTestCaseInterface
 {
-    /**
-     * @var BetterStandardPrinter
-     */
-    public $betterStandardPrinter;
-
     /**
      * @var FileProcessor
      */
@@ -62,7 +56,6 @@ abstract class AbstractCommunityRectorTestCase extends AbstractKernelTestCase im
 
         $this->fileProcessor = $this->getService(FileProcessor::class);
         $this->parameterProvider = $this->getService(ParameterProvider::class);
-        $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
     }
 
     protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo): void
