@@ -96,6 +96,11 @@ CODE_SAMPLE
             return null;
         }
 
+        return $this->processChangeToConstant($optionsArray, $node);
+    }
+
+    private function processChangeToConstant(Array_ $optionsArray, MethodCall $node): ?Node
+    {
         foreach ($optionsArray->items as $optionsArrayItem) {
             if ($optionsArrayItem === null) {
                 continue;

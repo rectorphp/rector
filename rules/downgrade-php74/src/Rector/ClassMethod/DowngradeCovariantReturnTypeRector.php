@@ -18,6 +18,7 @@ use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use ReflectionNamedType;
+use ReflectionType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -172,17 +173,26 @@ CODE_SAMPLE
 
             $parentReflectionMethod = new ReflectionMethod($parentClassLike, $methodName);
             $parentReflectionMethodReturnType = $parentReflectionMethod->getReturnType();
-            if (! $parentReflectionMethodReturnType instanceof ReflectionNamedType) {
+
+            if ($this->isNotReflectionNamedTypeOrNotEqualsToNodeReturnTypeName($parentReflectionMethodReturnType, $nodeReturnTypeName)) {
                 continue;
             }
-            if ($parentReflectionMethodReturnType->getName() === $nodeReturnTypeName) {
-                continue;
-            }
+
             // This is an ancestor class with a different return type
+            /** @var ReflectionNamedType $parentReflectionMethodReturnType */
             return $parentReflectionMethodReturnType->getName();
         }
 
         return null;
+    }
+
+    private function isNotReflectionNamedTypeOrNotEqualsToNodeReturnTypeName(?ReflectionType $parentReflectionMethodReturnType, ?string $nodeReturnTypeName): bool
+    {
+        if (! $parentReflectionMethodReturnType instanceof ReflectionNamedType) {
+            return true;
+        }
+
+        return $parentReflectionMethodReturnType->getName() === $nodeReturnTypeName;
     }
 
     private function addDocBlockReturn(ClassMethod $classMethod): void
