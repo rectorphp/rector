@@ -140,7 +140,11 @@ CODE_SAMPLE
             return true;
         }
 
-        return $class->isAbstract();
+        if ($class->isAbstract()) {
+            return true;
+        }
+
+        return $this->nodeRepository->hasClassChildren($class);
     }
 
     private function hasMethodWithApiAnnotation(Class_ $class): bool

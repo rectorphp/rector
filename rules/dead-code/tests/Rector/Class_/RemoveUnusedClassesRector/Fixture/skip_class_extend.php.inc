@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Class_\RemoveUnusedClassesRector\Fixture;
 
-class Car extends Vehicle
+class SkipClassExtend extends Vehicle
 {
     /**
      * @var string
