@@ -291,9 +291,10 @@ final class ValueResolver
         }
 
         if ($this->classLikeExistenceChecker->doesClassLikeExist($class)) {
-            $classReflection = new ReflectionClass($class);
-            if ($classReflection->hasConstant($constant)) {
-                return $classReflection->getConstant($constant);
+            $reflectionClass = new ReflectionClass($class);
+            $reflectionClassHasConstant = $reflectionClass->hasConstant($constant);
+            if ($reflectionClassHasConstant) {
+                return $reflectionClass->getConstant($constant);
             }
         }
 
