@@ -58,7 +58,7 @@ abstract class AbstractCommunityRectorTestCase extends AbstractKernelTestCase im
         $this->parameterProvider = $this->getService(ParameterProvider::class);
     }
 
-    protected function doTestFileInfo(SmartFileInfo $fixturaeFileInfo, bool $shouldAutoload = true): void
+    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo, bool $shouldAutoload = true): void
     {
         self::$fixtureGuard->ensureFileInfoHasDifferentBeforeAndAfterContent($fixtureFileInfo);
 
