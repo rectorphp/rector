@@ -142,9 +142,9 @@ final class RectorNodeTraverser extends NodeTraverser
     {
         $this->visitors = [];
 
-        $enabledRector = $this->enabledRectorClassProvider->getEnabledRectorClass();
+        $enabledRectorClass = $this->enabledRectorClassProvider->getEnabledRectorClass();
         foreach ($this->allPhpRectors as $phpRector) {
-            if (! is_a($phpRector, $enabledRector, true)) {
+            if (! is_a($phpRector, $enabledRectorClass, true)) {
                 continue;
             }
 
