@@ -8,6 +8,7 @@ use Iterator;
 use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
+use Psr\Container\ContainerInterface;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
@@ -19,11 +20,10 @@ use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
-use Rector\Testing\Application\EnabledRectorProvider;
+use Rector\Testing\Application\EnabledRectorClassProvider;
+use Rector\Testing\Configuration\AllRectorConfigFactory;
 use Rector\Testing\Contract\RunnableInterface;
-use Rector\Testing\Finder\RectorsFinder;
 use Rector\Testing\Guard\FixtureGuard;
-use Rector\Testing\PhpConfigPrinter\PhpConfigPrinterFactory;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
 use Rector\Testing\ValueObject\InputFilePathWithExpectedFile;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
@@ -74,7 +74,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected $originalTempFileInfo;
 
     /**
-     * @var SmartFileInfo
+     * @var ContainerInterface|null
      */
     protected static $allRectorContainer;
 
@@ -112,37 +112,24 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
             $this->bootKernelWithConfigsAndStaticCache(RectorKernel::class, $configFileInfos);
 
-            /** @var EnabledRectorProvider $enabledRectorsProvider */
-            $enabledRectorsProvider = $this->getService(EnabledRectorProvider::class);
+            /** @var EnabledRectorClassProvider $enabledRectorsProvider */
+            $enabledRectorsProvider = $this->getService(EnabledRectorClassProvider::class);
             $enabledRectorsProvider->reset();
         } else {
             // prepare container with all rectors
             // cache only rector tests - defined in phpunit.xml
-            if (defined('RECTOR_REPOSITORY')) {
-                $this->createRectorRepositoryContainer();
-            } else {
-                // boot core config, where 3rd party services might be loaded
-                $rootRectorPhp = getcwd() . '/rector.php';
-                $configs = [];
+            $this->createRectorRepositoryContainer();
 
-                if (file_exists($rootRectorPhp)) {
-                    $configs[] = $rootRectorPhp;
-                }
-
-                // 3rd party
-                $configs[] = $this->getConfigFor3rdPartyTest();
-                $this->bootKernelWithConfigs(RectorKernel::class, $configs);
-            }
-
-            /** @var EnabledRectorProvider $enabledRectorsProvider */
-            $enabledRectorsProvider = $this->getService(EnabledRectorProvider::class);
-            $enabledRectorsProvider->setEnabledRector($this->getRectorClass());
+            /** @var EnabledRectorClassProvider $enabledRectorsProvider */
+            $enabledRectorsProvider = $this->getService(EnabledRectorClassProvider::class);
+            $enabledRectorsProvider->setEnabledRectorClass($this->getRectorClass());
         }
 
         $this->fileProcessor = $this->getService(FileProcessor::class);
         $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);
         $this->parameterProvider = $this->getService(ParameterProvider::class);
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
+
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
     }
@@ -266,23 +253,16 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     private function createRectorRepositoryContainer(): void
     {
         if (self::$allRectorContainer === null) {
-            $this->createContainerWithAllRectors();
+            $allRectorConfigFactory = new AllRectorConfigFactory();
+            $configFilePath = $allRectorConfigFactory->create();
+            $this->bootKernelWithConfigs(RectorKernel::class, [$configFilePath]);
+
             self::$allRectorContainer = self::$container;
             return;
         }
 
         // load from cache
         self::$container = self::$allRectorContainer;
-    }
-
-    private function getConfigFor3rdPartyTest(): string
-    {
-        $filePath = sys_get_temp_dir() . '/rector_temp_tests/current_test.php';
-        $this->createPhpConfigFileAndDumpToPath([
-            $this->getRectorClass() => [],
-        ], $filePath);
-
-        return $filePath;
     }
 
     /**
@@ -349,37 +329,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
             $this->assertStringMatchesFormat($contents, $changedContent, $relativeFilePathFromCwd);
         }
-    }
-
-    private function createContainerWithAllRectors(): void
-    {
-        $rectorsFinder = new RectorsFinder();
-        $coreRectorClasses = $rectorsFinder->findCoreRectorClasses();
-
-        $listForConfig = [];
-
-        foreach ($coreRectorClasses as $rectorClass) {
-            $listForConfig[$rectorClass] = null;
-        }
-
-        $listForConfig[$this->getRectorClass()] = null;
-
-        $filePath = sys_get_temp_dir() . '/rector_temp_tests/all_rectors.php';
-        $this->createPhpConfigFileAndDumpToPath($listForConfig, $filePath);
-
-        $this->bootKernelWithConfigs(RectorKernel::class, [$filePath]);
-    }
-
-    /**
-     * @param array<string, mixed[]|null> $rectorClassesWithConfiguration
-     */
-    private function createPhpConfigFileAndDumpToPath(array $rectorClassesWithConfiguration, string $filePath): void
-    {
-        $phpConfigPrinterFactory = new PhpConfigPrinterFactory();
-        $smartPhpConfigPrinter = $phpConfigPrinterFactory->create();
-
-        $fileContent = $smartPhpConfigPrinter->printConfiguredServices($rectorClassesWithConfiguration);
-        self::$smartFileSystem->dumpFile($filePath, $fileContent);
     }
 
     private function normalizeNewlines(string $string): string

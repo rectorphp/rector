@@ -11,48 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(StaticCallToFuncCallRector::class)->call('configure', [[
         StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => ValueObjectInliner::inline([
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             new StaticCallToFuncCall(SomeOldStaticClass::class, 'render', 'view'),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         ]),
     ]]);

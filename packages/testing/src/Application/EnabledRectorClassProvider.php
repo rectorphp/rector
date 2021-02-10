@@ -7,40 +7,40 @@ namespace Rector\Testing\Application;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 
-final class EnabledRectorProvider
+final class EnabledRectorClassProvider
 {
     /**
      * @var class-string<RectorInterface>|null
      */
-    private $enabledRector;
+    private $enabledRectorClass;
 
     /**
      * @param class-string<RectorInterface> $rectorClass
      */
-    public function setEnabledRector(string $rectorClass): void
+    public function setEnabledRectorClass(string $rectorClass): void
     {
-        $this->enabledRector = $rectorClass;
-    }
-
-    public function reset(): void
-    {
-        $this->enabledRector = null;
+        $this->enabledRectorClass = $rectorClass;
     }
 
     public function isConfigured(): bool
     {
-        return $this->enabledRector !== null;
+        return $this->enabledRectorClass !== null;
     }
 
     /**
      * @return class-string<RectorInterface>
      */
-    public function getEnabledRector(): string
+    public function getEnabledRectorClass(): string
     {
-        if ($this->enabledRector === null) {
+        if ($this->enabledRectorClass === null) {
             throw new ShouldNotHappenException();
         }
 
-        return $this->enabledRector;
+        return $this->enabledRectorClass;
+    }
+
+    public function reset(): void
+    {
+        $this->enabledRectorClass = null;
     }
 }
