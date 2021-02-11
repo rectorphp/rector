@@ -13,6 +13,7 @@ use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Testing\Contract\CommunityRectorTestCaseInterface;
 use Rector\Testing\Guard\FixtureGuard;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
+use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
@@ -97,6 +98,11 @@ abstract class AbstractCommunityRectorTestCase extends AbstractKernelTestCase im
         // mimic post-rectors
         $changedContent = $this->fileProcessor->printToString($originalFileInfo);
         $relativeFilePathFromCwd = $fixtureFileInfo->getRelativeFilePathFromCwd();
+
+        if (getenv('UPDATE_TESTS') || getenv('UT')) {
+            StaticFixtureUpdater::updateFixtureContent($originalFileInfo, $changedContent, $fixtureFileInfo);
+        }
+
         $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent, $relativeFilePathFromCwd);
     }
 
