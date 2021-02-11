@@ -6,6 +6,10 @@ on:
         branches:
             - master
 
+        # to avoid running tagged and non-tagged workflows at the same time
+        tags-ignore:
+            - '*'
+
 jobs:
     build_scoped_rector:
         runs-on: ubuntu-latest
