@@ -30,8 +30,8 @@ final class VariableHasSpace
     public function run()
     {
         $this->mysqli->select_db($this->databaseName);
-        $SHOWTABLESMysqliQuery = $this->mysqli->query('SHOW TABLES');
-        if (! $SHOWTABLESMysqliQuery) {
+        $mysqliQuery = $this->mysqli->query('SHOW TABLES');
+        if (! $mysqliQuery) {
             throw new DatabaseException('SHOW TABLES FAILED.');
         }
     }

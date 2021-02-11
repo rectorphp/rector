@@ -64,9 +64,11 @@ final class MethodCallToVariableNameResolver
         }
 
         $result = $this->getVariableName($methodCall, $methodCallVarName, $methodCallName);
-        $result = Strings::replace($result, self::SPACE_REGEX);
+        if (! Strings::match($result, self::SPACE_REGEX)) {
+            return $result;
+        }
 
-        return $result;
+        return $this->getFallbackVarName($methodCallVarName, $methodCallName);
     }
 
     private function getVariableName(MethodCall $methodCall, string $methodCallVarName, string $methodCallName): string
