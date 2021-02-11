@@ -125,7 +125,7 @@ CODE_SAMPLE
 
     private function moveOutMethodCall(MethodCall $methodCall, If_ $if): ?If_
     {
-        $hasParentAssign = $this->betterNodeFinder->findParentType($methodCall, Assign::class);
+        $hasParentAssign = (bool) $this->betterNodeFinder->findParentType($methodCall, Assign::class);
         if ($hasParentAssign) {
             return null;
         }
