@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\NonPhpFile;
 
+use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\PSR4\Collector\RenamedClassesCollector;
@@ -46,13 +47,19 @@ final class NonPhpFileProcessor
      */
     private $nonPhpFileClassRenamer;
 
+    /**
+     * @var ErrorAndDiffCollector
+     */
+    private $errorAndDiffCollector;
+
     public function __construct(
         RenamedClassesDataCollector $renamedClassesDataCollector,
         Configuration $configuration,
         RenamedClassesCollector $renamedClassesCollector,
         SmartFileSystem $smartFileSystem,
         SymfonyStyle $symfonyStyle,
-        NonPhpFileClassRenamer $nonPhpFileClassRenamer
+        NonPhpFileClassRenamer $nonPhpFileClassRenamer,
+        ErrorAndDiffCollector $errorAndDiffCollector
     ) {
         $this->configuration = $configuration;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
@@ -60,6 +67,7 @@ final class NonPhpFileProcessor
         $this->renamedClassesCollector = $renamedClassesCollector;
         $this->smartFileSystem = $smartFileSystem;
         $this->nonPhpFileClassRenamer = $nonPhpFileClassRenamer;
+        $this->errorAndDiffCollector = $errorAndDiffCollector;
     }
 
     /**
@@ -88,23 +96,16 @@ final class NonPhpFileProcessor
             return $oldContents;
         }
 
-        $this->reportFileContentChange($smartFileInfo, $newContents);
+        $this->reportFileContentChange($smartFileInfo, $newContents, $oldContents);
 
         return $newContents;
     }
 
-    private function reportFileContentChange(SmartFileInfo $smartFileInfo, string $newContent): void
+    private function reportFileContentChange(SmartFileInfo $smartFileInfo, string $newContents, string $oldContents): void
     {
-        $relativeFilePathFromCwd = $smartFileInfo->getRelativeFilePathFromCwd();
-
-        if ($this->configuration->isDryRun()) {
-            $message = sprintf('File "%s" would be changed ("dry-run" is on now)', $relativeFilePathFromCwd);
-            $this->symfonyStyle->note($message);
-        } else {
-            $message = sprintf('File "%s" was changed', $relativeFilePathFromCwd);
-            $this->symfonyStyle->note($message);
-
-            $this->smartFileSystem->dumpFile($smartFileInfo->getRealPath(), $newContent);
+        $this->errorAndDiffCollector->addFileDiff($smartFileInfo, $newContents, $oldContents);
+        if (!$this->configuration->isDryRun()) {
+            $this->smartFileSystem->dumpFile($smartFileInfo->getRealPath(), $newContents);
             $this->smartFileSystem->chmod($smartFileInfo->getRealPath(), $smartFileInfo->getPerms());
         }
     }
