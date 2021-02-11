@@ -27,6 +27,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class CommunityTestCaseRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const ABSTRACT_COMMUNITY_TEST_CLASS = 'Rector\Testing\PHPUnit\AbstractCommunityRectorTestCase';
+
+    /**
      * @var ProvideConfigFilePathClassMethodFactory
      */
     private $provideConfigFilePathClassMethodFactory;
@@ -94,7 +99,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isName($node->extends, 'Rector\Testing\PHPUnit\AbstractRectorTestCase')) {
+        if (! $this->isNames(
+            $node->extends,
+            [self::ABSTRACT_COMMUNITY_TEST_CLASS, 'Rector\Testing\PHPUnit\AbstractRectorTestCase']
+        )) {
             return null;
         }
 
@@ -103,7 +111,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->extends = new FullyQualified('Rector\Testing\PHPUnit\AbstractCommunityRectorTestCase');
+        $node->extends = new FullyQualified(self::ABSTRACT_COMMUNITY_TEST_CLASS);
 
         $this->removeNode($getRectorClassMethod);
         $node->stmts[] = $this->provideConfigFilePathClassMethodFactory->create();
