@@ -35,12 +35,26 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements Compil
 
     private function completeCollectedArguments(string $serviceClass, Definition $definition): void
     {
-        $configureCallValues = $this->configureCallValuesCollector->getConfigureCallValues($serviceClass);
+        $configureCallValues = $definition->hasMethodCall(self::CONFIGURE_METHOD_NAME)
+            ? $this->mergeConfigure($definition->getMethodCalls())
+            : $this->configureCallValuesCollector->getConfigureCallValues($serviceClass);
+
         if ($configureCallValues === []) {
             return;
         }
 
         $definition->removeMethodCall(self::CONFIGURE_METHOD_NAME);
         $definition->addMethodCall(self::CONFIGURE_METHOD_NAME, [$configureCallValues]);
+    }
+
+    private function mergeConfigure(array $configuration): array
+    {
+        $mergedConfigure  = [];
+
+        foreach ($configuration as $configure) {
+            $mergedConfigure = array_merge_recursive($mergedConfigure, $configure[1][0]);
+        }
+
+        return $mergedConfigure;
     }
 }
