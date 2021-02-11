@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php55\Rector\String_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
@@ -123,7 +124,12 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isPartOfIsAFuncCall($node)) {
+            return null;
+        }
+
         $fullyQualified = new FullyQualified($classLikeName);
+
         /** @see \Rector\PostRector\Collector\UseNodesToAddCollector::isShortImported() */
         $fullyQualified->setAttribute(AttributeKey::FILE_INFO, $node->getAttribute(AttributeKey::FILE_INFO));
 
@@ -161,5 +167,19 @@ CODE_SAMPLE
 
         $this->sensitiveExistingClasses[] = $classLikeName;
         return true;
+    }
+
+    private function isPartOfIsAFuncCall(String_ $string): bool
+    {
+        $parent = $string->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Arg) {
+            return false;
+        }
+        $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentParent instanceof Node) {
+            return false;
+        }
+
+        return $this->isFuncCallName($parentParent, 'is_a');
     }
 }
