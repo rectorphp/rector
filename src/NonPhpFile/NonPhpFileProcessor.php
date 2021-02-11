@@ -8,7 +8,6 @@ use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\PSR4\Collector\RenamedClassesCollector;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -26,11 +25,6 @@ final class NonPhpFileProcessor
      * @var RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
 
     /**
      * @var RenamedClassesCollector
@@ -57,13 +51,11 @@ final class NonPhpFileProcessor
         Configuration $configuration,
         RenamedClassesCollector $renamedClassesCollector,
         SmartFileSystem $smartFileSystem,
-        SymfonyStyle $symfonyStyle,
         NonPhpFileClassRenamer $nonPhpFileClassRenamer,
         ErrorAndDiffCollector $errorAndDiffCollector
     ) {
         $this->configuration = $configuration;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
-        $this->symfonyStyle = $symfonyStyle;
         $this->renamedClassesCollector = $renamedClassesCollector;
         $this->smartFileSystem = $smartFileSystem;
         $this->nonPhpFileClassRenamer = $nonPhpFileClassRenamer;
@@ -101,10 +93,13 @@ final class NonPhpFileProcessor
         return $newContents;
     }
 
-    private function reportFileContentChange(SmartFileInfo $smartFileInfo, string $newContents, string $oldContents): void
-    {
+    private function reportFileContentChange(
+        SmartFileInfo $smartFileInfo,
+        string $newContents,
+        string $oldContents
+    ): void {
         $this->errorAndDiffCollector->addFileDiff($smartFileInfo, $newContents, $oldContents);
-        if (!$this->configuration->isDryRun()) {
+        if (! $this->configuration->isDryRun()) {
             $this->smartFileSystem->dumpFile($smartFileInfo->getRealPath(), $newContents);
             $this->smartFileSystem->chmod($smartFileInfo->getRealPath(), $smartFileInfo->getPerms());
         }
