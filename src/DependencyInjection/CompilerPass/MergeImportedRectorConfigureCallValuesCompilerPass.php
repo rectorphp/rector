@@ -47,9 +47,12 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements Compil
         $definition->addMethodCall(self::CONFIGURE_METHOD_NAME, [$configureCallValues]);
     }
 
+    /**
+     * @return mixed[]
+     */
     private function mergeConfigure(array $configuration): array
     {
-        $mergedConfigure  = [];
+        $mergedConfigure = [];
 
         foreach ($configuration as $configure) {
             $mergedConfigure = array_merge_recursive($mergedConfigure, $configure[1][0]);
