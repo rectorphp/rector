@@ -26,6 +26,8 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 final class CommunityTestCaseRector extends AbstractRector
 {
+    public const ABSTRACT_COMMUNITY_TEST_CLASS = 'Rector\Testing\PHPUnit\AbstractCommunityRectorTestCase';
+
     /**
      * @var string
      */
