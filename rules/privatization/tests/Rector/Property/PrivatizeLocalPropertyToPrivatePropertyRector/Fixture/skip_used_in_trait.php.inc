@@ -2,7 +2,7 @@
 
 namespace Rector\Privatization\Tests\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector\Fixture;
 
-class SkipUsedInTrait
+final class SkipUsedInTrait
 {
     public $go;
 }
