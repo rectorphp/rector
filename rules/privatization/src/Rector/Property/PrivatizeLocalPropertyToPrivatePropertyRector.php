@@ -153,8 +153,10 @@ CODE_SAMPLE
         if ($this->isObjectTypes($classLike, ['PHPUnit\Framework\TestCase', 'PHP_CodeSniffer\Sniffs\Sniff'])) {
             return true;
         }
-
-        return $classLike->isAbstract() && $this->isOpenSourceProjectType();
+        if (! $classLike->isAbstract()) {
+            return false;
+        }
+        return $this->isOpenSourceProjectType();
     }
 
     private function shouldSkipProperty(Property $property): bool
