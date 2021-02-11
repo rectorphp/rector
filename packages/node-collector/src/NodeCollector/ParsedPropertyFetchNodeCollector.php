@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
@@ -57,6 +58,10 @@ final class ParsedPropertyFetchNodeCollector
         }
 
         $propertyType = $this->resolvePropertyCallerType($node);
+        if ($propertyType instanceof MixedType) {
+            return;
+        }
+
         // make sure name is valid
         if (StaticInstanceOf::isOneOf($node->name, [StaticCall::class, MethodCall::class])) {
             return;
@@ -84,10 +89,10 @@ final class ParsedPropertyFetchNodeCollector
     private function resolvePropertyCallerType(Node $node): Type
     {
         if ($node instanceof PropertyFetch) {
-            return $this->nodeTypeResolver->getStaticType($node->var);
+            return $this->nodeTypeResolver->resolve($node->var);
         }
 
-        return $this->nodeTypeResolver->getStaticType($node->class);
+        return $this->nodeTypeResolver->resolve($node->class);
     }
 
     /**

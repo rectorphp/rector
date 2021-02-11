@@ -45,11 +45,9 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition(
-            'Privatize local-only property to private property',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new RuleDefinition('Privatize local-only property to private property', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public $value;
@@ -61,7 +59,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                    <<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $value;
@@ -72,9 +70,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-
-            ]);
+            ),
+        ]);
     }
 
     /**
@@ -106,7 +103,7 @@ CODE_SAMPLE
         $propertyClassName = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         // has external usage
-        if ([$propertyClassName] !== $usedPropertyFetchClassNames) {
+        if ($usedPropertyFetchClassNames !== [] && [$propertyClassName] !== $usedPropertyFetchClassNames) {
             return null;
         }
 
@@ -153,7 +150,13 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->isObjectTypes($classLike, ['PHPUnit\Framework\TestCase', 'PHP_CodeSniffer\Sniffs\Sniff']);
+        if ($this->isObjectTypes($classLike, ['PHPUnit\Framework\TestCase', 'PHP_CodeSniffer\Sniffs\Sniff'])) {
+            return true;
+        }
+        if (! $classLike->isAbstract()) {
+            return false;
+        }
+        return $this->isOpenSourceProjectType();
     }
 
     private function shouldSkipProperty(Property $property): bool
