@@ -25,6 +25,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 Manual_Twig_Filter::class => TwigFilter::class,
                 'Twig_AbstractManualExtension' => AbstractManualExtension::class,
                 'Twig_Extension_Sandbox' => 'Twig\Extension\SandboxExtension',
+            ],
+        ]])
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 // Renaming class itself and its namespace
                 'MyNamespace\MyClass' => 'MyNewNamespace\MyNewClass',
                 'MyNamespace\MyTrait' => 'MyNewNamespace\MyNewTrait',
