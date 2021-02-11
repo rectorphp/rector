@@ -48,6 +48,7 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements Compil
     }
 
     /**
+     * @param array<int, array<int, mixed>> $configuration
      * @return mixed[]
      */
     private function mergeConfigure(array $configuration): array
