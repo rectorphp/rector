@@ -28,6 +28,12 @@ final class MethodCallToVariableNameResolver
     private const CONSTANT_REGEX = '#(_)([a-z])#';
 
     /**
+     * @var string
+     * @see https://regex101.com/r/dhAgLI/1
+     */
+    private const SPACE_REGEX = '#\s+#';
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -57,7 +63,12 @@ final class MethodCallToVariableNameResolver
             return null;
         }
 
-        return $this->getVariableName($methodCall, $methodCallVarName, $methodCallName);
+        $result = $this->getVariableName($methodCall, $methodCallVarName, $methodCallName);
+        if (! Strings::match($result, self::SPACE_REGEX)) {
+            return $result;
+        }
+
+        return $this->getFallbackVarName($methodCallVarName, $methodCallName);
     }
 
     private function getVariableName(MethodCall $methodCall, string $methodCallVarName, string $methodCallName): string
