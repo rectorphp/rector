@@ -107,8 +107,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     {
         $this->initializeDependencies();
 
-        if ($this->provideConfigFileInfo() !== null) {
-            $configFileInfos = self::$rectorConfigsResolver->resolveFromConfigFileInfo($this->provideConfigFileInfo());
+        if ($this->provideConfigFilePath() !== '') {
+            $configFileInfo = new SmartFileInfo($this->provideConfigFilePath());
+            $configFileInfos = self::$rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
 
             $this->bootKernelWithConfigsAndStaticCache(RectorKernel::class, $configFileInfos);
 
@@ -143,10 +144,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return '';
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
         // can be implemented
-        return null;
+        return '';
     }
 
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc'): Iterator

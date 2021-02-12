@@ -23,8 +23,8 @@ final class CompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/pre_union_types.php');
+        return __DIR__ . '/config/pre_union_types.php';
     }
 }

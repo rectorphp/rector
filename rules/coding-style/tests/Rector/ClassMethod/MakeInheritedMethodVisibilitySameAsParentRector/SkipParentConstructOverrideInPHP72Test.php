@@ -26,8 +26,8 @@ final class SkipParentConstructOverrideInPHP72Test extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureForPhp72');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/php_72.php');
+        return __DIR__ . '/config/php_72.php';
     }
 }

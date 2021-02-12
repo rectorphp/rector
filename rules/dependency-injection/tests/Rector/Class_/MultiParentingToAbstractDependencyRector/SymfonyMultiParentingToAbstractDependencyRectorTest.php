@@ -23,8 +23,8 @@ final class SymfonyMultiParentingToAbstractDependencyRectorTest extends Abstract
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureSymfony');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/symfony_config.php');
+        return __DIR__ . '/config/symfony_config.php';
     }
 }

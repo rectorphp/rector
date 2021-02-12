@@ -23,8 +23,8 @@ final class InheritanceTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureInheritance');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/scalar_types.php');
+        return __DIR__ . '/config/scalar_types.php';
     }
 }

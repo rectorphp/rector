@@ -23,8 +23,8 @@ final class MultiParentingToAbstractDependencyRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/nette_config.php');
+        return __DIR__ . '/config/nette_config.php';
     }
 }

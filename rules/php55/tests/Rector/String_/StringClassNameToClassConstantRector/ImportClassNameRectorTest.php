@@ -23,8 +23,8 @@ final class ImportClassNameRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureImport');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/import_config.php');
+        return __DIR__ . '/config/import_config.php';
     }
 }

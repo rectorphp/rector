@@ -23,8 +23,8 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRectorTest extends AbstractR
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function provideConfigFileInfo(): SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/normalize_namespace_without_namespace_config.php');
+        return __DIR__ . '/config/normalize_namespace_without_namespace_config.php';
     }
 }

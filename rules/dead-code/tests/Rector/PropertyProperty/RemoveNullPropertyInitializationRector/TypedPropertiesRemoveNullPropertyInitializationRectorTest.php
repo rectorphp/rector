@@ -24,8 +24,8 @@ final class TypedPropertiesRemoveNullPropertyInitializationRectorTest extends Ab
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureTypedProperties');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/typed_properties.php');
+        return __DIR__ . '/config/typed_properties.php';
     }
 }
