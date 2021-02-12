@@ -143,6 +143,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($currentClass->isAbstract() && $this->isOpenSourceProjectType()) {
+            return true;
+        }
+
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             return true;
