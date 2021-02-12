@@ -93,5 +93,19 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractRectorT
                 'Old' => 'New',
             ],
         ];
+
+        yield [
+            __DIR__ . '/config/two_sets.php', [
+                'PHPUnit_Framework_MockObject_Stub' => 'PHPUnit\Framework\MockObject\Stub',
+                'PHPUnit_Framework_MockObject_Stub_Return' => 'PHPUnit\Framework\MockObject\Stub\ReturnStub',
+                'PHPUnit_Framework_MockObject_Matcher_Parameters' => 'PHPUnit\Framework\MockObject\Matcher\Parameters',
+                'PHPUnit_Framework_MockObject_Matcher_Invocation' => 'PHPUnit\Framework\MockObject\Matcher\Invocation',
+                'PHPUnit_Framework_MockObject_MockObject' => 'PHPUnit\Framework\MockObject\MockObject',
+                'PHPUnit_Framework_MockObject_Invocation_Object' => 'PHPUnit\Framework\MockObject\Invocation\ObjectInvocation',
+                'Twig_SimpleFilter' => 'Twig_Filter',
+                'Twig_SimpleFunction' => 'Twig_Function',
+                'Twig_SimpleTest' => 'Twig_Test',
+            ],
+        ];
     }
 }
