@@ -13,6 +13,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'old_2' => 'new_2',
             ],
+        ]])
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                'old_4' => 'new_4',
+            ],
         ]]);
 
     $containerConfigurator->import(__DIR__ . '/first_config.php');

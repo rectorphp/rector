@@ -60,6 +60,7 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractRectorT
             __DIR__ . '/config/main_config_with_override_value.php', [
                 'old_2' => 'new_2',
                 'old_1' => 'new_1',
+                'old_4' => 'new_4',
             ],
         ];
 
@@ -67,6 +68,7 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractRectorT
             __DIR__ . '/config/main_config_with_own_value.php', [
                 'old_2' => 'new_2',
                 'old_1' => 'new_1',
+                'old_4' => 'new_4',
                 'old_3' => 'new_3',
             ],
         ];
