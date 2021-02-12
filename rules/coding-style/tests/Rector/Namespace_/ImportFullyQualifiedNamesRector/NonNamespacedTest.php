@@ -26,8 +26,8 @@ final class NonNamespacedTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureNonNamespaced');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/import_config.php');
+        return __DIR__ . '/config/import_config.php';
     }
 }

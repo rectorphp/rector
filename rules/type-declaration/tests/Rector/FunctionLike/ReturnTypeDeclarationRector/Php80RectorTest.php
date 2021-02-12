@@ -23,8 +23,8 @@ final class Php80RectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureForPhp80');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/php_80.php');
+        return __DIR__ . '/config/php_80.php';
     }
 }

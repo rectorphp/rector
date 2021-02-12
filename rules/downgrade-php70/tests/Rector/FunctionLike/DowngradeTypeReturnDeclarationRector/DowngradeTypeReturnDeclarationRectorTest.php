@@ -24,8 +24,8 @@ final class DowngradeTypeReturnDeclarationRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/php_70.php');
+        return __DIR__ . '/config/php_70.php';
     }
 }

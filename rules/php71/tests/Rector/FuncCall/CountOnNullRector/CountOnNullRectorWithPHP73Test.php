@@ -23,8 +23,8 @@ final class CountOnNullRectorWithPHP73Test extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureForPhp73');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/is_countable.php');
+        return __DIR__ . '/config/is_countable.php';
     }
 }

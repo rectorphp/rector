@@ -23,8 +23,8 @@ final class PostImportTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePostImport');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/auto_import.php');
+        return __DIR__ . '/config/auto_import.php';
     }
 }

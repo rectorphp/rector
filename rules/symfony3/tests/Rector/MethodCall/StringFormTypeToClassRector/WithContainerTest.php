@@ -23,8 +23,8 @@ final class WithContainerTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureWithContainer');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/xml_path_config.php');
+        return __DIR__ . '/config/xml_path_config.php';
     }
 }

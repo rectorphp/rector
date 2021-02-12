@@ -29,8 +29,8 @@ final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureRoot');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/not_import_short_classes.php');
+        return __DIR__ . '/config/not_import_short_classes.php';
     }
 }
