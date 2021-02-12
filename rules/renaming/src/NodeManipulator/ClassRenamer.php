@@ -364,8 +364,8 @@ final class ClassRenamer
 
         if ($class->extends === $name && class_exists($newName)) {
             // is final class?
-            $newNameClassReflection = new ReflectionClass($newName);
-            if ($newNameClassReflection->isFinal()) {
+            $reflectionClass = new ReflectionClass($newName);
+            if ($reflectionClass->isFinal()) {
                 return false;
             }
         }
