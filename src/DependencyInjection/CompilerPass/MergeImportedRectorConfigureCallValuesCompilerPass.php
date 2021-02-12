@@ -38,7 +38,7 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements Compil
         $getConfigureCallValues = $this->configureCallValuesCollector->getConfigureCallValues($serviceClass);
 
         $configureCallValues = $definition->hasMethodCall(self::CONFIGURE_METHOD_NAME) && $getConfigureCallValues === []
-            ? $this->mergeConfigure($definition->getMethodCalls())
+            ? $this->mergeConfigure($definition->getMethodCalls(), $getConfigureCallValues)
             : $getConfigureCallValues;
 
         if ($configureCallValues === []) {
@@ -51,9 +51,10 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements Compil
 
     /**
      * @param array<int, array<int, mixed>> $configuration
+     * @param array<int, array<int, mixed>> $getConfigureCallValues
      * @return mixed[]
      */
-    private function mergeConfigure(array $configuration): array
+    private function mergeConfigure(array $configuration, array $getConfigureCallValues): array
     {
         $mergedConfigure = [];
 
@@ -71,6 +72,9 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements Compil
             }
         }
 
-        return $mergedConfigure;
+        return array_merge_recursive(
+            $mergedConfigure,
+            $getConfigureCallValues
+        );
     }
 }
