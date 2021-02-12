@@ -58,7 +58,13 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements Compil
         $mergedConfigure = [];
 
         foreach ($configuration as $configure) {
-            $mergedConfigure = array_merge_recursive($mergedConfigure, $configure[1][0] ?? []);
+            if ($methodCall[0] !== 'configure') {
+                continue;
+            }
+
+            foreach ($methodCall[1] as $configureMethodCall) {
+                $mergedConfigure = array_merge_recursive($mergedConfigure, $configureMethodCall);
+            }
         }
 
         return $mergedConfigure;
