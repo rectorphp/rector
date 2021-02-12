@@ -25,6 +25,7 @@ use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use ReflectionClass;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ClassRenamer
@@ -151,10 +152,12 @@ final class ClassRenamer
         $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         // no need to preslash "use \SomeNamespace" of imported namespace
         if ($parentNode instanceof UseUse && ($parentNode->type === Use_::TYPE_NORMAL || $parentNode->type === Use_::TYPE_UNKNOWN)) {
-            $name = new Name($newName);
-        } else {
-            $name = new FullyQualified($newName);
+
+            // no need to rename imports, they will be handled by autoimport and coding standard
+            // also they might cause some rename
+            return null;
         }
+        $name = new FullyQualified($newName);
 
         $name->setAttribute(AttributeKey::PARENT_NODE, $parentNode);
 
@@ -349,10 +352,25 @@ final class ClassRenamer
 
     private function isValidClassNameChange(Name $name, string $newName, Class_ $class): bool
     {
+        // is class to interface?
         if ($class->extends === $name && interface_exists($newName)) {
             return false;
         }
-        return ! (in_array($name, $class->implements, true) && class_exists($newName));
+
+        // is interface to class?
+        if (in_array($name, $class->implements, true) && class_exists($newName)) {
+            return false;
+        }
+
+        if ($class->extends === $name && class_exists($newName)) {
+            // is final class?
+            $newNameClassReflection = new ReflectionClass($newName);
+            if ($newNameClassReflection->isFinal()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function isValidUseImportChange(string $newName, UseUse $useUse): bool
