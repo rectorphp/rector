@@ -58,7 +58,11 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements Compil
         $mergedConfigure = [];
 
         foreach ($configuration as $configure) {
-            if ($configure[0] !== 'configure') {
+            if (isset($configure[0]) && $configure[0] !== 'configure') {
+                continue;
+            }
+
+            if (! isset($configure[1])) {
                 continue;
             }
 
