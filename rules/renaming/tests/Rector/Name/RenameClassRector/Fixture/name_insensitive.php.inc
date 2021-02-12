@@ -18,7 +18,7 @@ class NameInsensitive extends OldClassWithTypO
 
 namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
 
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClassWithoutTypo;
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClassWithTypo;
 
 class NameInsensitive extends \Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClassWithoutTypo
 {
