@@ -7,9 +7,11 @@ namespace Rector\Nette\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\ScopeNestingComparator;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -31,14 +33,35 @@ final class RenderMethodAnalyzer
      */
     private $scopeNestingComparator;
 
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
-        ScopeNestingComparator $scopeNestingComparator
+        ScopeNestingComparator $scopeNestingComparator,
+        BetterNodeFinder $betterNodeFinder
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->scopeNestingComparator = $scopeNestingComparator;
+        $this->betterNodeFinder = $betterNodeFinder;
+    }
+
+    public function machRenderMethodCall(ClassMethod $classMethod): ?MethodCall
+    {
+        /** @var MethodCall[] $methodsCalls */
+        $methodsCalls = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, MethodCall::class);
+
+        foreach ($methodsCalls as $methodCall) {
+            if ($this->nodeNameResolver->isName($methodCall->name, 'render')) {
+                return $methodCall;
+            }
+        }
+
+        return null;
     }
 
     public function hasConditionalTemplateAssigns(ClassMethod $classMethod): bool

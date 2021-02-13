@@ -4,7 +4,7 @@ namespace Rector\Nette\Tests\Rector\ClassMethod\TemplateMagicAssignToExplicitVar
 
 use Nette\Application\UI\Control;
 
-final class AfterReturn extends Control
+final class RenderAfterReturn extends Control
 {
     public function render()
     {
@@ -28,7 +28,7 @@ namespace Rector\Nette\Tests\Rector\ClassMethod\TemplateMagicAssignToExplicitVar
 
 use Nette\Application\UI\Control;
 
-final class AfterReturn extends Control
+final class RenderAfterReturn extends Control
 {
     public function render()
     {
@@ -37,6 +37,7 @@ final class AfterReturn extends Control
         if (mt_rand(0, 1000)) {
             return;
         }
+
         $this->template->render(__DIR__ . '/someFile.latte', ['definitely' => 'true']);
     }
 }
