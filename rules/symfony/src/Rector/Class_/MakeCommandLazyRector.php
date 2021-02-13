@@ -210,20 +210,6 @@ CODE_SAMPLE
         $this->removeNode($constructClassMethod);
     }
 
-    /**
-     * @param Param[] $params
-     */
-    private function hasPropertyPromotion(array $params): bool
-    {
-        foreach ($params as $param) {
-            if ($param->flags !== 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private function matchCommandNameNodeInConstruct(StaticCall $staticCall): ?Expr
     {
         if (! $this->isName($staticCall->name, MethodName::CONSTRUCT)) {
