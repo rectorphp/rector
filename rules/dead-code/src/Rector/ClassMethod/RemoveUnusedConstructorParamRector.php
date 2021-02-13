@@ -83,6 +83,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->paramAnalyzer->hasPropertyPromotion($node->params)) {
+            return null;
+        }
+
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
         if ($classLike instanceof Interface_) {
             return null;

@@ -41,4 +41,18 @@ final class ParamAnalyzer
             return $this->betterStandardPrinter->areNodesEqual($node, $param->var);
         });
     }
+
+    /**
+     * @param Param[] $params
+     */
+    public function hasPropertyPromotion(array $params): bool
+    {
+        foreach ($params as $param) {
+            if ($param->flags !== 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
