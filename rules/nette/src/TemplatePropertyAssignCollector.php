@@ -20,7 +20,6 @@ use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class TemplatePropertyAssignCollector
@@ -70,25 +69,18 @@ final class TemplatePropertyAssignCollector
      */
     private $thisTemplatePropertyFetchAnalyzer;
 
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         ScopeNestingComparator $scopeNestingComparator,
         BetterNodeFinder $betterNodeFinder,
-        ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer,
-        NodeTypeResolver $nodeTypeResolver
+        ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->scopeNestingComparator = $scopeNestingComparator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->thisTemplatePropertyFetchAnalyzer = $thisTemplatePropertyFetchAnalyzer;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function collectMagicTemplatePropertyCalls(ClassMethod $classMethod): MagicTemplatePropertyCalls
