@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
+use Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source\ConfigurableClass;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -96,6 +97,11 @@ final class NodeNameResolver
      */
     public function isName($node, string $name): bool
     {
+        if ($node instanceof MethodCall) {
+            $message = sprintf('Name called on "%s" is not possible. Use $this->getName($node->name) instead', get_class($node));
+            throw new ShouldNotHappenException($message);
+        }
+
         $nodes = is_array($node) ? $node : [$node];
 
         foreach ($nodes as $node) {
