@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\EarlyReturn\Rector\Foreach_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Expression;
@@ -77,7 +76,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         /** @var Break_[] $breaks */
-        $breaks = $this->betterNodeFinder->findInstanceOf((array) $node->stmts, Break_::class);
+        $breaks = $this->betterNodeFinder->findInstanceOf($node->stmts, Break_::class);
         if (count($breaks) !== 1) {
             return null;
         }
@@ -97,9 +96,10 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Expr $variable */
-        $assignVariable   = $assign->var;
-        $variablePrevious = $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use ($assignVariable): bool {
+        $assignVariable = $assign->var;
+        $variablePrevious = $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use (
+            $assignVariable
+        ): bool {
             return $this->areNodesEqual($node, $assignVariable);
         });
 
