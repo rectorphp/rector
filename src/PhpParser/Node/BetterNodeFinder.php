@@ -306,7 +306,7 @@ final class BetterNodeFinder
         });
     }
 
-    public function findFirstPrevious(Node $node, callable $filter): ?Node
+    public function findFirstPreviousOfNode(Node $node, callable $filter): ?Node
     {
         // move to previous expression
         $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
@@ -317,15 +317,42 @@ final class BetterNodeFinder
                 return $foundNode;
             }
 
-            return $this->findFirstPrevious($previousStatement, $filter);
+            return $this->findFirstPreviousOfNode($previousStatement, $filter);
         }
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Node) {
-            return $this->findFirstPrevious($parent, $filter);
+            return $this->findFirstPreviousOfNode($parent, $filter);
         }
 
         return null;
+    }
+
+    public function findFirstPrevious(Node $node, callable $filter): ?Node
+    {
+        $node = $node instanceof Expression ? $node : $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if ($node === null) {
+            return null;
+        }
+
+        $foundNode = $this->findFirst([$node], $filter);
+        // we found what we need
+        if ($foundNode !== null) {
+            return $foundNode;
+        }
+
+        // move to previous expression
+        $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+        if ($previousStatement !== null) {
+            return $this->findFirstPrevious($previousStatement, $filter);
+        }
+
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent === null) {
+            return null;
+        }
+
+        return $this->findFirstPrevious($parent, $filter);
     }
 
     /**

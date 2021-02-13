@@ -97,7 +97,7 @@ CODE_SAMPLE
         }
 
         $assignVariable = $assign->var;
-        $variablePrevious = $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use (
+        $variablePrevious = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $node) use (
             $assignVariable
         ): bool {
             $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
