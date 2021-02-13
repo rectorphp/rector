@@ -7,8 +7,6 @@ use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
 use Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector;
 use Rector\Doctrine\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector;
 use Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector;
-use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
-use Rector\Generic\ValueObject\AddPropertyByParent;
 use Rector\Removing\Rector\Class_\RemoveParentRector;
 use Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector;
 use Rector\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
@@ -19,6 +17,7 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 /**
  * @see https://tomasvotruba.com/blog/2017/10/16/how-to-use-repository-with-doctrine-as-service-in-symfony/
  * @see https://tomasvotruba.com/blog/2018/04/02/rectify-turn-repositories-to-services-in-symfony/
+ * @see https://getrector.org/blog/2021/02/08/how-to-instantly-decouple-symfony-doctrine-repository-inheritance-to-clean-composition
  */
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -37,16 +36,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveAnnotationRector::class)
         ->call('configure', [[
             RemoveAnnotationRector::ANNOTATIONS_TO_REMOVE => ['method'],
-        ]]);
-
-    $services->set(AddPropertyByParentRector::class)
-        ->call('configure', [[
-            AddPropertyByParentRector::PARENT_DEPENDENCIES => ValueObjectInliner::inline([
-                new AddPropertyByParent(
-                    'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository',
-                    'Doctrine\ORM\EntityManagerInterface'
-                ),
-            ]),
         ]]);
 
     $services->set(ReplaceParentCallByPropertyCallRector::class)

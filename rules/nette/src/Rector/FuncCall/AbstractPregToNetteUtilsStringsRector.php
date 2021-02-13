@@ -15,7 +15,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Nette\Contract\PregToNetteUtilsStringInterface;
 
 /**
- * @see https://www.tomasvotruba.cz/blog/2019/02/07/what-i-learned-by-using-thecodingmachine-safe/#is-there-a-better-way
+ * @see https://tomasvotruba.com/blog/2019/02/07/what-i-learned-by-using-thecodingmachine-safe/#is-there-a-better-way
  *
  * @see \Rector\Nette\Tests\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector\PregMatchFunctionToNetteUtilsStringsRectorTest
  */
