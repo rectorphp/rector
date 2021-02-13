@@ -17,7 +17,7 @@ final class ReturnAfterToEarlyOnBreakRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change after foreach to early return in foreach on break', [
+        return new RuleDefinition('Change return after foreach to early return in foreach on break', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
