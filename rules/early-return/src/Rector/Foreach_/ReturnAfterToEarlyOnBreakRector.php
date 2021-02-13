@@ -29,6 +29,7 @@ class SomeClass
         foreach ($pathConstants as $allowedPath) {
             if ($dirPath == $allowedPath) {
                 $pathOK = true;
+                break;
             }
         }
 
