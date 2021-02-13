@@ -7,10 +7,9 @@ namespace Rector\NetteCodeQuality\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Nette\NodeAnalyzer\NetteClassAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,6 +18,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MergeTemplateSetFileToTemplateRenderRector extends AbstractRector
 {
+    /**
+     * @var NetteClassAnalyzer
+     */
+    private $netteClassAnalyzer;
+
+    public function __construct(NetteClassAnalyzer $netteClassAnalyzer)
+    {
+        $this->netteClassAnalyzer = $netteClassAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change $this->template->setFile() $this->template->render()', [
@@ -66,7 +75,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if (! $this->netteClassAnalyzer->isInComponent($node)) {
             return null;
         }
 
@@ -93,20 +102,6 @@ CODE_SAMPLE
         }
 
         return null;
-    }
-
-    private function shouldSkip(ClassMethod $classMethod): bool
-    {
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof ClassLike) {
-            return true;
-        }
-
-        if ($this->isObjectType($classMethod, 'Nette\Application\UI\Presenter')) {
-            return true;
-        }
-
-        return ! $this->isObjectType($classMethod, 'Nette\Application\UI\Control');
     }
 
     /**
