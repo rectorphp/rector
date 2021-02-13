@@ -2,20 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\Nette;
+namespace Rector\Nette\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer;
 use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\ScopeNestingComparator;
@@ -50,11 +48,6 @@ final class TemplatePropertyAssignCollector
     private $nodeNameResolver;
 
     /**
-     * @var Expr[]
-     */
-    private $templateFileExprs = [];
-
-    /**
      * @var ScopeNestingComparator
      */
     private $scopeNestingComparator;
@@ -68,6 +61,11 @@ final class TemplatePropertyAssignCollector
      * @var ThisTemplatePropertyFetchAnalyzer
      */
     private $thisTemplatePropertyFetchAnalyzer;
+
+    /**
+     * @var Return_|null
+     */
+    private $lastReturn;
 
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
@@ -85,18 +83,15 @@ final class TemplatePropertyAssignCollector
 
     public function collectMagicTemplatePropertyCalls(ClassMethod $classMethod): MagicTemplatePropertyCalls
     {
-        $this->templateFileExprs = [];
         $this->templateVariables = [];
         $this->nodesToRemove = [];
         $this->conditionalAssigns = [];
 
+        $this->lastReturn = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
+
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->stmts,
             function (Node $node): void {
-                if ($node instanceof MethodCall) {
-                    $this->collectTemplateFileExpr($node);
-                }
-
                 if ($node instanceof Assign) {
                     $this->collectVariableFromAssign($node);
                 }
@@ -104,25 +99,10 @@ final class TemplatePropertyAssignCollector
         );
 
         return new MagicTemplatePropertyCalls(
-            $this->templateFileExprs,
             $this->templateVariables,
             $this->nodesToRemove,
             $this->conditionalAssigns
         );
-    }
-
-    private function collectTemplateFileExpr(MethodCall $methodCall): void
-    {
-        if (! $this->nodeNameResolver->isNames($methodCall->name, ['render', 'setFile'])) {
-            return;
-        }
-
-        $this->nodesToRemove[] = $methodCall;
-        if (! isset($methodCall->args[0])) {
-            return;
-        }
-
-        $this->templateFileExprs[] = $methodCall->args[0]->value;
     }
 
     private function collectVariableFromAssign(Assign $assign): void
@@ -158,20 +138,30 @@ final class TemplatePropertyAssignCollector
                 return;
             }
 
+            // there is a return before this assign, to do not remove it and keep ti
+            if (! $this->isBeforeLastReturn($assign)) {
+                return;
+            }
+
             $this->templateVariables[$variableName] = $assign->expr;
             $this->nodesToRemove[] = $assign;
             return;
         }
 
         // $x = $this->template
-        if (! $assign->var instanceof Variable) {
-            return;
-        }
-
         if (! $this->thisTemplatePropertyFetchAnalyzer->isTemplatePropertyFetch($assign->expr)) {
             return;
         }
 
         $this->nodesToRemove[] = $assign;
+    }
+
+    private function isBeforeLastReturn(Assign $assign): bool
+    {
+        if (! $this->lastReturn instanceof Return_) {
+            return true;
+        }
+
+        return $this->lastReturn->getStartTokenPos() < $assign->getStartTokenPos();
     }
 }

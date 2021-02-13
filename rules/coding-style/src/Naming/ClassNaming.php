@@ -80,12 +80,13 @@ final class ClassNaming
         return StaticRectorStrings::underscoreToCamelCase($functionName);
     }
 
-    public function removeSuffix(string $content, string $suffix): string
+    public function replaceSuffix(string $content, string $oldSuffix, string $newSuffix): string
     {
-        if (! Strings::endsWith($content, $suffix)) {
-            return $content;
+        if (! Strings::endsWith($content, $oldSuffix)) {
+            return $content . $newSuffix;
         }
 
-        return Strings::substring($content, 0, -Strings::length($suffix));
+        $contentWithoutOldSuffix = Strings::substring($content, 0, -Strings::length($oldSuffix));
+        return $contentWithoutOldSuffix . $newSuffix;
     }
 }

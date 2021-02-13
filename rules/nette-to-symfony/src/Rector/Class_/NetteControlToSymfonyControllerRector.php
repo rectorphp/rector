@@ -19,7 +19,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Nette\NodeAnalyzer\NetteClassAnalyzer;
 use Rector\Nette\NodeFactory\ActionRenderFactory;
-use Rector\Nette\TemplatePropertyAssignCollector;
+use Rector\NetteToSymfony\NodeAnalyzer\ClassMethodRenderAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,11 +36,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NetteControlToSymfonyControllerRector extends AbstractRector
 {
     /**
-     * @var TemplatePropertyAssignCollector
-     */
-    private $templatePropertyAssignCollector;
-
-    /**
      * @var ActionRenderFactory
      */
     private $actionRenderFactory;
@@ -55,16 +50,21 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
      */
     private $classNaming;
 
+    /**
+     * @var ClassMethodRenderAnalyzer
+     */
+    private $classMethodRenderAnalyzer;
+
     public function __construct(
         ActionRenderFactory $actionRenderFactory,
-        TemplatePropertyAssignCollector $templatePropertyAssignCollector,
         NetteClassAnalyzer $netteClassAnalyzer,
-        ClassNaming $classNaming
+        ClassNaming $classNaming,
+        ClassMethodRenderAnalyzer $classMethodRenderAnalyzer
     ) {
-        $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
         $this->actionRenderFactory = $actionRenderFactory;
         $this->netteClassAnalyzer = $netteClassAnalyzer;
         $this->classNaming = $classNaming;
+        $this->classMethodRenderAnalyzer = $classMethodRenderAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -121,10 +121,10 @@ CODE_SAMPLE
         }
 
         $shortClassName = $this->nodeNameResolver->getShortName($node);
-        $shortClassName = $this->classNaming->removeSuffix($shortClassName, 'Control');
-        $shortClassName .= 'Controller';
+        $shortClassName = $this->classNaming->replaceSuffix($shortClassName, 'Control', 'Controller');
 
         $node->name = new Identifier($shortClassName);
+
         $node->extends = new FullyQualified(AbstractController::class);
 
         $classMethod = $node->getMethod('render');
@@ -141,11 +141,8 @@ CODE_SAMPLE
 
         $classMethod->name = new Identifier('action');
 
-        $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectMagicTemplatePropertyCalls(
-            $classMethod
-        );
-
-        $methodCall = $this->actionRenderFactory->createThisRenderMethodCall($magicTemplatePropertyCalls);
+        $classMethodRender = $this->classMethodRenderAnalyzer->collectFromClassMethod($classMethod);
+        $methodCall = $this->actionRenderFactory->createThisRenderMethodCall($classMethodRender);
 
         // add return in the end
         $return = new Return_($methodCall);
@@ -155,7 +152,7 @@ CODE_SAMPLE
             $classMethod->returnType = new FullyQualified(Response::class);
         }
 
-        $this->removeNodes($magicTemplatePropertyCalls->getNodesToRemove());
+        $this->removeNodes($classMethodRender->getNodesToRemove());
     }
 
     private function processGetPresenterGetSessionMethodCall(ClassMethod $classMethod): void
