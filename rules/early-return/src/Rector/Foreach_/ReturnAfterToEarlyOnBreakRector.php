@@ -44,11 +44,11 @@ class SomeClass
     {
         foreach ($pathConstants as $allowedPath) {
             if ($dirPath == $allowedPath) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 }
 CODE_SAMPLE
