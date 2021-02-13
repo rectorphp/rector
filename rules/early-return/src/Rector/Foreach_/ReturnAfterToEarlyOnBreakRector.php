@@ -101,7 +101,10 @@ CODE_SAMPLE
             $assignVariable
         ): bool {
             $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-            return $parent instanceof Assign && $this->areNodesEqual($node, $assignVariable);
+            if (! $parent instanceof Assign) {
+                return false;
+            }
+            return $this->areNodesEqual($node, $assignVariable);
         });
 
         if (! $variablePrevious instanceof Node) {
