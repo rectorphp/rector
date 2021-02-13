@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\EarlyReturn\Rector\Foreach_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -85,9 +87,21 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $beforeBreak->expr instanceof Assign) {
+        $assign = $beforeBreak->expr;
+        if (! $assign instanceof Assign) {
             return null;
         }
+
+        $nextForeach = $node->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $nextForeach instanceof Return_) {
+            return null;
+        }
+
+        /** @var Expr $variable */
+        $assignVariable   = $assign->var;
+        $variablePrevious = $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use ($assignVariable): bool {
+            return $this->areNodesEqual($node, $assignVariable);
+        });
 
         return $node;
     }
