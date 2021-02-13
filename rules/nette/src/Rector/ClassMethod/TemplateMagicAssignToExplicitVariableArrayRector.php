@@ -152,6 +152,7 @@ CODE_SAMPLE
                 $node,
                 $magicTemplatePropertyCalls->getConditionalAssigns()
             );
+
             if ($variableName === null) {
                 return null;
             }
@@ -165,8 +166,8 @@ CODE_SAMPLE
      */
     private function matchConditionalAssignVariableName(Assign $assign, array $condtionalAssignsByName): ?string
     {
-        foreach ($condtionalAssignsByName as $name => $condtionalAssigns) {
-            if (! $this->betterStandardPrinter->isNodeEqual($assign, $condtionalAssigns)) {
+        foreach ($condtionalAssignsByName as $name => $conditionalAssigns) {
+            if (! $this->betterStandardPrinter->isNodeEqual($assign, $conditionalAssigns)) {
                 continue;
             }
 

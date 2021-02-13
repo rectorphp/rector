@@ -14,6 +14,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer;
 use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
@@ -69,6 +70,11 @@ final class TemplatePropertyAssignCollector
      */
     private $thisTemplatePropertyFetchAnalyzer;
 
+    /**
+     * @var Return_|null
+     */
+    private $lastReturn;
+
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
@@ -89,6 +95,9 @@ final class TemplatePropertyAssignCollector
         $this->templateVariables = [];
         $this->nodesToRemove = [];
         $this->conditionalAssigns = [];
+
+        /** @var Return_|null $lastReturn */
+        $this->lastReturn = $this->betterNodeFinder->findLastInstanceOf($classMethod->stmts, Return_::class);
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->stmts,
@@ -158,7 +167,13 @@ final class TemplatePropertyAssignCollector
                 return;
             }
 
+            // there is a return before this assign, to do not remove it and keep ti
+            if ($this->lastReturn instanceof Return_ && $this->lastReturn->getStartTokenPos() > $assign->getStartTokenPos()) {
+                return;
+            }
+
             $this->templateVariables[$variableName] = $assign->expr;
+
             $this->nodesToRemove[] = $assign;
             return;
         }
