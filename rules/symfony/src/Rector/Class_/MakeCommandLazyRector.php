@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NetteKdyby\NodeManipulator\ParamAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,6 +27,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MakeCommandLazyRector extends AbstractRector
 {
+    /**
+     * @var ParamAnalyzer
+     */
+    private $paramAnalyzer;
+
+    public function __construct(ParamAnalyzer $paramAnalyzer)
+    {
+        $this->paramAnalyzer = $paramAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make Symfony commands lazy', [
@@ -170,7 +181,7 @@ CODE_SAMPLE
         }
 
         $params = $constructClassMethod->getParams();
-        if ($params !== [] && $this->hasPropertyPromotion($params)) {
+        if ($this->paramAnalyzer->hasPropertyPromotion($params)) {
             return;
         }
 
