@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\EarlyReturn\Rector\Foreach_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -70,6 +71,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $breaks = $this->betterNodeFinder->findInstanceOf((array) $node->stmts, Break_::class);
+        if (count($breaks) !== 1) {
+            return null;
+        }
+
         return $node;
     }
 }
