@@ -2,7 +2,7 @@
 
 namespace Rector\EarlyReturn\Tests\Rector\Foreach_\ReturnAfterToEarlyOnBreakRector\Fixture;
 
-class SkipvarUsedMultiply
+class SkipVarUsedMultiple
 {
     public function run(array $pathConstants, string $dirPath, string $allowedPath)
     {
