@@ -6,13 +6,12 @@ namespace Rector\Core\PhpParser\Node;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Param;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
