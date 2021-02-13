@@ -35,5 +35,5 @@ jobs:
 
             - name: Push images
               run: |
-                  docker push rector/rector
-                  docker push rector/rector-secured
+                  docker push --all-tags rector/rector
+                  docker push --all-tags rector/rector-secured
