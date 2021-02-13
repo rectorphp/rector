@@ -306,7 +306,7 @@ final class BetterNodeFinder
         });
     }
 
-    public function findFirstPrevious(?Node $node, callable $filter): ?Node
+    public function findFirstPrevious(Node $node, callable $filter): ?Node
     {
         // move to previous expression
         $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_NODE);

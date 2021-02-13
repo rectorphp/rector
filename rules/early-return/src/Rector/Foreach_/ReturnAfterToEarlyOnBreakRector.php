@@ -100,10 +100,36 @@ CODE_SAMPLE
         $variablePrevious = $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use (
             $assignVariable
         ): bool {
-            return $this->areNodesEqual($node, $assignVariable);
+            $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+            return $parent instanceof Assign && $this->areNodesEqual($node, $assignVariable);
         });
 
-        dump($variablePrevious);
+        if (! $variablePrevious instanceof Node) {
+            return null;
+        }
+
+        if (! $this->areNodesEqual($nextForeach->expr, $variablePrevious)) {
+            return null;
+        }
+
+        // ensure the variable only used once in foreach
+        $usedVariable = $this->betterNodeFinder->find($node->stmts, function (Node $node) use (
+            $assignVariable
+        ): bool {
+            return $this->areNodesEqual($node, $assignVariable);
+        });
+        if (count($usedVariable) > 1) {
+            return null;
+        }
+
+        $this->removeNode($beforeBreak);
+        $this->addNodeBeforeNode(new Return_($assign->expr), $breaks[0]);
+        $this->removeNode($breaks[0]);
+
+        /** @var Assign $assignPreviousVariable */
+        $assignPreviousVariable = $variablePrevious->getAttribute(AttributeKey::PARENT_NODE);
+        $nextForeach->expr = $assignPreviousVariable->expr;
+        $this->removeNode($assignPreviousVariable);
 
         return $node;
     }
