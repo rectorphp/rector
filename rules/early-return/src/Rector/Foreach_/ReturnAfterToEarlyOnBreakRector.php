@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Rector\EarlyReturn\Rector\Foreach_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Break_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -71,8 +74,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        /** @var Break_[] $breaks */
         $breaks = $this->betterNodeFinder->findInstanceOf((array) $node->stmts, Break_::class);
         if (count($breaks) !== 1) {
+            return null;
+        }
+
+        $beforeBreak = $breaks[0]->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if (! $beforeBreak instanceof Expression) {
+            return null;
+        }
+
+        if (! $beforeBreak->expr instanceof Assign) {
             return null;
         }
 
