@@ -56,7 +56,7 @@ final class RenderMethodAnalyzer
                     return null;
                 }
 
-                if ($this->scopeNestingComparator->isNodeConditionallyScoped($node)) {
+                if ($this->scopeNestingComparator->isNodeConditionallyScoped($node->var)) {
                     $hasConditionalAssigns = true;
                     return NodeTraverser::STOP_TRAVERSAL;
                 }

@@ -399,6 +399,14 @@ final class NodeTypeResolver
         }
 
         foreach ($resolvedType->getTypes() as $unionedType) {
+            if ($unionedType instanceof TypeWithClassName && $requiredType instanceof TypeWithClassName && is_a(
+                $unionedType->getClassName(),
+                $requiredType->getClassName(),
+                true
+            )) {
+                return true;
+            }
+
             if (! $unionedType->equals($requiredType)) {
                 continue;
             }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Rector\Class_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -14,9 +13,11 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Nette\NodeAnalyzer\NetteClassAnalyzer;
 use Rector\Nette\NodeFactory\ActionRenderFactory;
 use Rector\Nette\TemplatePropertyAssignCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -44,12 +45,26 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
      */
     private $actionRenderFactory;
 
+    /**
+     * @var NetteClassAnalyzer
+     */
+    private $netteClassAnalyzer;
+
+    /**
+     * @var ClassNaming
+     */
+    private $classNaming;
+
     public function __construct(
         ActionRenderFactory $actionRenderFactory,
-        TemplatePropertyAssignCollector $templatePropertyAssignCollector
+        TemplatePropertyAssignCollector $templatePropertyAssignCollector,
+        NetteClassAnalyzer $netteClassAnalyzer,
+        ClassNaming $classNaming
     ) {
         $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
         $this->actionRenderFactory = $actionRenderFactory;
+        $this->netteClassAnalyzer = $netteClassAnalyzer;
+        $this->classNaming = $classNaming;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -101,12 +116,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkipClass($node)) {
+        if (! $this->netteClassAnalyzer->isInComponent($node)) {
             return null;
         }
 
         $shortClassName = $this->nodeNameResolver->getShortName($node);
-        $shortClassName = $this->removeSuffix($shortClassName, 'Control');
+        $shortClassName = $this->classNaming->removeSuffix($shortClassName, 'Control');
         $shortClassName .= 'Controller';
 
         $node->name = new Identifier($shortClassName);
@@ -118,29 +133,6 @@ CODE_SAMPLE
         }
 
         return $node;
-    }
-
-    private function shouldSkipClass(Class_ $class): bool
-    {
-        if ($this->classNodeAnalyzer->isAnonymousClass($class)) {
-            return true;
-        }
-
-        // skip presenter
-        if ($this->isName($class, '*Presenter')) {
-            return true;
-        }
-
-        return ! $this->isObjectType($class, 'Nette\Application\UI\Control');
-    }
-
-    private function removeSuffix(string $content, string $suffix): string
-    {
-        if (! Strings::endsWith($content, $suffix)) {
-            return $content;
-        }
-
-        return Strings::substring($content, 0, -Strings::length($suffix));
     }
 
     private function processRenderMethod(ClassMethod $classMethod): void

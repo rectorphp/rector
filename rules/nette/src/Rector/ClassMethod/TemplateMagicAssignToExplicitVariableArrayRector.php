@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Nette\NodeAnalyzer\NetteClassAnalyzer;
 use Rector\Nette\NodeAnalyzer\RenderMethodAnalyzer;
 use Rector\Nette\NodeFactory\ActionRenderFactory;
 use Rector\Nette\TemplatePropertyAssignCollector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -37,14 +38,21 @@ final class TemplateMagicAssignToExplicitVariableArrayRector extends AbstractRec
      */
     private $renderMethodAnalyzer;
 
+    /**
+     * @var NetteClassAnalyzer
+     */
+    private $netteClassAnalyzer;
+
     public function __construct(
         ActionRenderFactory $actionRenderFactory,
         TemplatePropertyAssignCollector $templatePropertyAssignCollector,
-        RenderMethodAnalyzer $renderMethodAnalyzer
+        RenderMethodAnalyzer $renderMethodAnalyzer,
+        NetteClassAnalyzer $netteClassAnalyzer
     ) {
         $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
         $this->actionRenderFactory = $actionRenderFactory;
         $this->renderMethodAnalyzer = $renderMethodAnalyzer;
+        $this->netteClassAnalyzer = $netteClassAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -106,6 +114,8 @@ CODE_SAMPLE
             return null;
         }
 
+        $this->replaceConditionalAssignsWithVariables($node, $magicTemplatePropertyCalls);
+
         $renderMethodCall = $this->actionRenderFactory->createThisTemplateRenderMethodCall($magicTemplatePropertyCalls);
         $node->stmts = array_merge((array) $node->stmts, [new Expression($renderMethodCall)]);
 
@@ -116,28 +126,53 @@ CODE_SAMPLE
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
-            return true;
-        }
-
-        if (! $this->isObjectType($classLike, 'Nette\Application\UI\Control')) {
-            return true;
-        }
-
-        if ($this->isObjectType($classLike, 'Nette\Application\UI\Presenter')) {
-            return true;
-        }
-
         if (! $this->isNames($classMethod, ['render', 'render*'])) {
             return true;
         }
 
-        $hasReturn = (bool) $this->betterNodeFinder->findInstanceOf($classLike, Return_::class);
-        if ($hasReturn) {
+        if (! $this->netteClassAnalyzer->isInComponent($classMethod)) {
             return true;
         }
 
         return $this->renderMethodAnalyzer->hasConditionalTemplateAssigns($classMethod);
+    }
+
+    private function replaceConditionalAssignsWithVariables(
+        ClassMethod $classMethod,
+        MagicTemplatePropertyCalls $magicTemplatePropertyCalls
+    ): void {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
+            $magicTemplatePropertyCalls
+        ): ?Assign {
+            if (! $node instanceof Assign) {
+                return null;
+            }
+
+            $variableName = $this->matchConditionalAssignVariableName(
+                $node,
+                $magicTemplatePropertyCalls->getConditionalAssigns()
+            );
+            if ($variableName === null) {
+                return null;
+            }
+
+            return new Assign(new Variable($variableName), $node->expr);
+        });
+    }
+
+    /**
+     * @param array<string, Assign[]> $condtionalAssignsByName
+     */
+    private function matchConditionalAssignVariableName(Assign $assign, array $condtionalAssignsByName): ?string
+    {
+        foreach ($condtionalAssignsByName as $name => $condtionalAssigns) {
+            if (! $this->betterStandardPrinter->isNodeEqual($assign, $condtionalAssigns)) {
+                continue;
+            }
+
+            return $name;
+        }
+
+        return null;
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Nette\NodeFactory;
 
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
@@ -54,23 +53,23 @@ final class ActionRenderFactory
             $methodCall->args[0] = new Arg($magicTemplatePropertyCalls->getFirstTemplateFileExpr());
         }
 
-        if ($magicTemplatePropertyCalls->getTemplateVariables() !== []) {
-            $templateVariablesArray = $this->createTemplateVariablesArray(
-                $magicTemplatePropertyCalls->getTemplateVariables()
-            );
-
-            $methodCall->args[1] = new Arg($templateVariablesArray);
+        $templateVariablesArray = $this->createTemplateVariablesArray($magicTemplatePropertyCalls);
+        if ($templateVariablesArray->items === []) {
+            return;
         }
+
+        $methodCall->args[1] = new Arg($templateVariablesArray);
     }
 
-    /**
-     * @param Expr[] $templateVariables
-     */
-    private function createTemplateVariablesArray(array $templateVariables): Array_
+    private function createTemplateVariablesArray(MagicTemplatePropertyCalls $magicTemplatePropertyCalls): Array_
     {
         $array = new Array_();
-        foreach ($templateVariables as $name => $node) {
-            $array->items[] = new ArrayItem($node, new String_($name));
+        foreach ($magicTemplatePropertyCalls->getTemplateVariables() as $name => $expr) {
+            $array->items[] = new ArrayItem($expr, new String_($name));
+        }
+
+        foreach ($magicTemplatePropertyCalls->getConditionalVariableNames() as $variableName) {
+            $array->items[] = new ArrayItem(new Variable($variableName), new String_($variableName));
         }
 
         return $array;

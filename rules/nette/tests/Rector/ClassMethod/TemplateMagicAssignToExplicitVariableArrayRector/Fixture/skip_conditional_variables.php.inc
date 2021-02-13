@@ -14,7 +14,6 @@ final class SkipConditionalVariables extends Control
             $this->template->no = 'false';
         }
 
-        $this->template->setFile(__DIR__ . '/someFile.latte');
-        $this->template->render();
+        $this->template->render(__DIR__ . '/someFile.latte');
     }
 }

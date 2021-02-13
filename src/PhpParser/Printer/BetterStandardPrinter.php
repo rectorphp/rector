@@ -123,7 +123,6 @@ final class BetterStandardPrinter extends Standard
         $this->tabOrSpaceIndentCharacter = $this->indentCharacterDetector->detect($newStmts);
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
-        $contentOriginal = $this->print($origStmts);
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, self::NEWLINE_END_REGEX)) {
@@ -134,6 +133,7 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
+     * Removes all comments from both nodes
      * @param Node|Node[]|null $node
      */
     public function printWithoutComments($node): string
@@ -160,8 +160,6 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
-     * Removes all comments from both nodes
-     *
      * @param Node|Node[]|null $firstNode
      * @param Node|Node[]|null $secondNode
      */
@@ -171,7 +169,7 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
-     * @param Node[] $stmts Array of statements
+     * @param Node[] $stmts
      */
     public function prettyPrintFile(array $stmts): string
     {

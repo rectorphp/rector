@@ -79,4 +79,13 @@ final class ClassNaming
         $functionName = (string) $function->name;
         return StaticRectorStrings::underscoreToCamelCase($functionName);
     }
+
+    public function removeSuffix(string $content, string $suffix): string
+    {
+        if (! Strings::endsWith($content, $suffix)) {
+            return $content;
+        }
+
+        return Strings::substring($content, 0, -Strings::length($suffix));
+    }
 }
