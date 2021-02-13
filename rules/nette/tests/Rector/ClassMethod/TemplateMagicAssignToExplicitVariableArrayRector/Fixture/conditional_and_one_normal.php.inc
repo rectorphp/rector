@@ -32,7 +32,6 @@ final class ConditionalAndOneNormalVariables extends Control
         if (mt_rand(0, 1000)) {
             $this->template->yes = 'true';
         }
-
         $this->template->render(__DIR__ . '/someFile.latte', ['normalVariable' => 'include me!']);
     }
 }

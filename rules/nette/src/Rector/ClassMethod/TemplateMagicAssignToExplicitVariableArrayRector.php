@@ -145,10 +145,6 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->netteClassAnalyzer->isInComponent($classMethod)) {
-            return true;
-        }
-
-        return $this->renderMethodAnalyzer->hasConditionalTemplateAssigns($classMethod);
+        return ! $this->netteClassAnalyzer->isInComponent($classMethod);
     }
 }
