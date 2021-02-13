@@ -6,6 +6,7 @@ namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -337,6 +338,10 @@ final class PropertyNaming
 
             $node = $return->expr;
             if (! $node instanceof Expr) {
+                return false;
+            }
+
+            if ($node instanceof MethodCall) {
                 return false;
             }
 

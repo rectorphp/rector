@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -24,6 +25,10 @@ final class PropertyFetchAnalyzer
     public function isLocalPropertyFetch(Node $node): bool
     {
         if ($node instanceof PropertyFetch) {
+            if ($node->var instanceof MethodCall) {
+                return false;
+            }
+
             return $this->nodeNameResolver->isName($node->var, 'this');
         }
 
