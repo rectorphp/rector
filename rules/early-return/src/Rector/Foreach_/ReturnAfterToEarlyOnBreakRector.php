@@ -42,15 +42,13 @@ class SomeClass
 {
     public function run(array $pathConstants, string $allowedPath)
     {
-        $pathOK = false;
-
         foreach ($pathConstants as $allowedPath) {
             if ($dirPath == $allowedPath) {
-                $pathOK = true;
+                return false;
             }
         }
 
-        return $pathOK;
+        return true;
     }
 }
 CODE_SAMPLE
