@@ -103,6 +103,8 @@ CODE_SAMPLE
             return $this->areNodesEqual($node, $assignVariable);
         });
 
+        dump($variablePrevious);
+
         return $node;
     }
 }
