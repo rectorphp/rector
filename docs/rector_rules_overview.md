@@ -1,4 +1,4 @@
-# 664 Rules Overview
+# 669 Rules Overview
 
 <br>
 
@@ -14,17 +14,17 @@
 
 - [CodeQualityStrict](#codequalitystrict) (4)
 
-- [CodingStyle](#codingstyle) (39)
+- [CodingStyle](#codingstyle) (38)
 
 - [Composer](#composer) (5)
 
-- [DeadCode](#deadcode) (47)
+- [DeadCode](#deadcode) (49)
 
 - [DeadDocBlock](#deaddocblock) (5)
 
 - [Defluent](#defluent) (8)
 
-- [DependencyInjection](#dependencyinjection) (1)
+- [DependencyInjection](#dependencyinjection) (3)
 
 - [Doctrine](#doctrine) (18)
 
@@ -44,9 +44,7 @@
 
 - [DowngradePhp80](#downgradephp80) (12)
 
-- [EarlyReturn](#earlyreturn) (7)
-
-- [FileSystemRector](#filesystemrector) (1)
+- [EarlyReturn](#earlyreturn) (8)
 
 - [Generic](#generic) (12)
 
@@ -66,7 +64,7 @@
 
 - [Nette](#nette) (20)
 
-- [NetteCodeQuality](#nettecodequality) (7)
+- [NetteCodeQuality](#nettecodequality) (8)
 
 - [NetteKdyby](#nettekdyby) (4)
 
@@ -138,7 +136,7 @@
 
 - [SymfonyPhpConfig](#symfonyphpconfig) (1)
 
-- [Transform](#transform) (28)
+- [Transform](#transform) (29)
 
 - [TypeDeclaration](#typedeclaration) (13)
 
@@ -248,12 +246,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
         ->call('configure', [[
-            MoveValueObjectsToValueObjectDirectoryRector::TYPES => [
-                'ValueObjectInterfaceClassName',
-            ],
-            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => [
-                'Search',
-            ],
+            MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
+            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
             MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
         ]]);
 };
@@ -984,10 +978,6 @@ Change `for()` to `foreach()` where useful
 -            if ($tokens[$i][0] === T_STRING && $tokens[$i][1] === 'fn') {
 +        foreach ($tokens as $i => $token) {
 +            if ($token[0] === T_STRING && $token[1] === 'fn') {
-                 $previousNonSpaceToken = $this->getPreviousNonSpaceToken($tokens, $i);
-                 if ($previousNonSpaceToken !== null && $previousNonSpaceToken[0] === T_OBJECT_OPERATOR) {
-                     continue;
-                 }
                  $tokens[$i][0] = self::T_FN;
              }
          }
@@ -1930,30 +1920,6 @@ Add false default to bool properties, to prevent null compare errors
 
 <br>
 
-### AnnotateThrowablesRector
-
-Adds `@throws` DocBlock comments to methods that thrwo \Throwables.
-
-- class: `Rector\CodingStyle\Rector\Throw_\AnnotateThrowablesRector`
-
-```diff
- class RootExceptionInMethodWithDocblock
- {
-     /**
-      * This is a comment.
-      *
-      * @param int $code
-+     * @throws \RuntimeException
-      */
-     public function throwException(int $code)
-     {
-         throw new \RuntimeException('', $code);
-     }
- }
-```
-
-<br>
-
 ### BinarySwitchToIfElseRector
 
 Changes switch with 2 options to if-else
@@ -2492,7 +2458,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
+Split multiple inline assigns to each own lines default value, to prevent undefined array issues
 
 - class: `Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`
 
@@ -3184,6 +3150,28 @@ Remove if, foreach and for that does not do anything
 
 <br>
 
+### RemoveDeadInstanceOfRector
+
+Remove dead instanceof check on type hinted variable
+
+- class: `Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector`
+
+```diff
+ final class SomeClass
+ {
+     public function go(stdClass $stdClass)
+     {
+-        if (! $stdClass instanceof stdClass) {
+-            return false;
+-        }
+-
+         return true;
+     }
+ }
+```
+
+<br>
+
 ### RemoveDeadRecursiveClassMethodRector
 
 Remove unused public method that only calls itself recursively
@@ -3643,6 +3631,27 @@ Remove unused classes without interface
 -
 -class NowhereUsedClass
 -{
+ }
+```
+
+<br>
+
+### RemoveUnusedConstructorParamRector
+
+Remove unused parameter in constructor
+
+- class: `Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector`
+
+```diff
+ final class SomeClass
+ {
+     private $hey;
+
+-    public function __construct($hey, $man)
++    public function __construct($hey)
+     {
+         $this->hey = $hey;
+     }
  }
 ```
 
@@ -4270,6 +4279,35 @@ Removes "return `$this;"` from *fluent interfaces* for specified classes.
 
 ## DependencyInjection
 
+### ActionInjectionToConstructorInjectionRector
+
+Turns action injection in Controllers to constructor injection
+
+- class: `Rector\DependencyInjection\Rector\Class_\ActionInjectionToConstructorInjectionRector`
+
+```diff
+ final class SomeController
+ {
+-    public function default(ProductRepository $productRepository)
++    /**
++     * @var ProductRepository
++     */
++    private $productRepository;
++    public function __construct(ProductRepository $productRepository)
+     {
+-        $products = $productRepository->fetchAll();
++        $this->productRepository = $productRepository;
++    }
++
++    public function default()
++    {
++        $products = $this->productRepository->fetchAll();
+     }
+ }
+```
+
+<br>
+
 ### MultiParentingToAbstractDependencyRector
 
 Move dependency passed to all children to parent as `@inject/@required` dependency
@@ -4324,6 +4362,35 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 -    {
 -        parent::__construct($someDependency);
 -    }
+ }
+```
+
+<br>
+
+### ReplaceVariableByPropertyFetchRector
+
+Turns variable in controller action to property fetch, as follow up to action injection variable to property change.
+
+- class: `Rector\DependencyInjection\Rector\Variable\ReplaceVariableByPropertyFetchRector`
+
+```diff
+ final class SomeController
+ {
+     /**
+      * @var ProductRepository
+      */
+     private $productRepository;
+
+     public function __construct(ProductRepository $productRepository)
+     {
+         $this->productRepository = $productRepository;
+     }
+
+     public function default()
+     {
+-        $products = $productRepository->fetchAll();
++        $products = $this->productRepository->fetchAll();
+     }
  }
 ```
 
@@ -6562,6 +6629,35 @@ Change nested ifs to early return
 
 <br>
 
+### ChangeOrIfContinueToMultiContinueRector
+
+Changes if && to early return
+
+- class: `Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector`
+
+```diff
+ class SomeClass
+ {
+     public function canDrive(Car $newCar)
+     {
+         foreach ($cars as $car) {
+-            if ($car->hasWheels() || $car->hasFuel()) {
++            if ($car->hasWheels()) {
++                continue;
++            }
++            if ($car->hasFuel()) {
+                 continue;
+             }
+
+             $car->setWheel($newCar->wheel);
+             $car->setFuel($newCar->fuel);
+         }
+     }
+ }
+```
+
+<br>
+
 ### ChangeOrIfReturnToEarlyReturnRector
 
 Changes if || with return to early return
@@ -6630,38 +6726,6 @@ Changes Single return of && && to early returns
 +        return (bool) $somethingelse;
      }
  }
-```
-
-<br>
-
-## FileSystemRector
-
-### RemoveProjectFileRector
-
-Remove file relative to project directory
-
-:wrench: **configure it!**
-
-- class: `Rector\FileSystemRector\Rector\FileNode\RemoveProjectFileRector`
-
-```php
-use Rector\FileSystemRector\Rector\FileNode\RemoveProjectFileRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(RemoveProjectFileRector::class)
-        ->call('configure', [[
-            RemoveProjectFileRector::FILE_PATHS_TO_REMOVE => ['someFile/ToBeRemoved.txt'],
-        ]]);
-};
-```
-
-↓
-
-```diff
--// someFile/ToBeRemoved.txt
 ```
 
 <br>
@@ -6930,7 +6994,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(InjectAnnotationClassRector::class)
         ->call('configure', [[
-            InjectAnnotationClassRector::ANNOTATION_CLASSES => ['DI\Annotation\Inject', 'JMS\DiExtraBundle\Annotation\Inject'],
+            InjectAnnotationClassRector::ANNOTATION_CLASSES => [
+                'DI\Annotation\Inject',
+                'JMS\DiExtraBundle\Annotation\Inject',
+            ],
         ]]);
 };
 ```
@@ -7463,10 +7530,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddTopIncludeRector::class)
         ->call('configure', [[
             AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-            AddTopIncludeRector::PATTERNS => [
-                'pat*/*/?ame.php',
-                'somepath/?ame.php',
-            ],
+            AddTopIncludeRector::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
         ]]);
 };
 ```
@@ -8008,14 +8072,8 @@ Move dependency get via `$context->getByType()` to constructor injection
       */
      private $context;
 
-+    /**
-+     * @var SomeTypeToInject
-+     */
-+    private $someTypeToInject;
-+
-+    public function __construct(SomeTypeToInject $someTypeToInject)
++    public function __construct(private SomeTypeToInject $someTypeToInject)
 +    {
-+        $this->someTypeToInject = $someTypeToInject;
 +    }
 +
      public function run()
@@ -8534,6 +8592,28 @@ Add doc type for magic `$control->getComponent(...)` assign
 
  final class AnotherControl extends Control
  {
+ }
+```
+
+<br>
+
+### MergeTemplateSetFileToTemplateRenderRector
+
+Change `$this->template->setFile()` `$this->template->render()`
+
+- class: `Rector\NetteCodeQuality\Rector\ClassMethod\MergeTemplateSetFileToTemplateRenderRector`
+
+```diff
+ use Nette\Application\UI\Control;
+
+ final class SomeControl extends Control
+ {
+     public function render()
+     {
+-        $this->template->setFile(__DIR__ . '/someFile.latte');
+-        $this->template->render();
++        $this->template->render(__DIR__ . '/someFile.latte');
+     }
  }
 ```
 
@@ -9535,13 +9615,13 @@ Add `@see` annotation test of the class for faster jump to test. Make it FQN, so
 
 <br>
 
-### ArrayArgumentInTestToDataProviderRector
+### ArrayArgumentToDataProviderRector
 
 Move array argument from tests into data provider [configurable]
 
 :wrench: **configure it!**
 
-- class: `Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector`
+- class: `Rector\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector`
 
 ```php
 use Rector\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector;
@@ -13288,7 +13368,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
 
 :wrench: **configure it!**
 
@@ -14266,7 +14346,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GetToConstructorInjectionRector::class)
         ->call('configure', [[
-            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => ['SymfonyControllerClassName', 'GetTraitClassName'],
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
+                'SymfonyControllerClassName',
+                'GetTraitClassName',
+            ],
         ]]);
 };
 ```
@@ -15402,13 +15485,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
-### ClassConstFetchToStringRector
+### ClassConstFetchToValueRector
 
 Replaces constant by value
 
 :wrench: **configure it!**
 
-- class: `Rector\Transform\Rector\ClassConstFetch\ClassConstFetchToStringRector`
+- class: `Rector\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector`
 
 ```php
 use Rector\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector;
@@ -15434,6 +15517,30 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
 -$value === Nette\Configurator::DEVELOPMENT
 +$value === "development"
+```
+
+<br>
+
+### CommunityTestCaseRector
+
+Change Rector test case to Community version
+
+- class: `Rector\Transform\Rector\Class_\CommunityTestCaseRector`
+
+```diff
+-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
++use Rector\Testing\PHPUnit\AbstractCommunityRectorTestCase;
+
+-final class SomeClassTest extends AbstractRectorTestCase
++final class SomeClassTest extends AbstractCommunityRectorTestCase
+ {
+-    public function getRectorClass(): string
++    public function provideConfigFilePath(): string
+     {
+-        return SomeRector::class;
++        return __DIR__ . '/config/configured_rule.php';
+     }
+ }
 ```
 
 <br>
