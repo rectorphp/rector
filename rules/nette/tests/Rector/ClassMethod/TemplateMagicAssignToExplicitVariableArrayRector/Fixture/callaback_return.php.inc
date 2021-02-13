@@ -36,10 +36,7 @@ final class CallbackReturn extends Control
             return 100;
         };
 
-        $this->template->render(__DIR__ . '/someFile.latte', [
-            'maybe' => 'true',
-            'definitely' => 'true'
-        ]);
+        $this->template->render(__DIR__ . '/someFile.latte', ['maybe' => 'true', 'definitely' => 'true']);
     }
 }
 

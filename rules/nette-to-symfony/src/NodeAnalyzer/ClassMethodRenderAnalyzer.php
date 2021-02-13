@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Nette\NodeAnalyzer\ReturnAnalyzer;
 use Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer;
 use Rector\NetteToSymfony\ValueObject\ClassMethodRender;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -74,18 +75,25 @@ final class ClassMethodRenderAnalyzer
      */
     private $lastReturn;
 
+    /**
+     * @var ReturnAnalyzer
+     */
+    private $returnAnalyzer;
+
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         ScopeNestingComparator $scopeNestingComparator,
         BetterNodeFinder $betterNodeFinder,
-        ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer
+        ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer,
+        ReturnAnalyzer $returnAnalyzer
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->scopeNestingComparator = $scopeNestingComparator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->thisTemplatePropertyFetchAnalyzer = $thisTemplatePropertyFetchAnalyzer;
+        $this->returnAnalyzer = $returnAnalyzer;
     }
 
     public function collectFromClassMethod(ClassMethod $classMethod): ClassMethodRender
@@ -95,7 +103,7 @@ final class ClassMethodRenderAnalyzer
         $this->nodesToRemove = [];
         $this->conditionalAssigns = [];
 
-        $this->lastReturn = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
+        $this->lastReturn = $this->returnAnalyzer->findLastClassMethodReturn($classMethod);
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->stmts,
@@ -166,7 +174,7 @@ final class ClassMethodRenderAnalyzer
             }
 
             // there is a return before this assign, to do not remove it and keep ti
-            if (! $this->isBeforeLastReturn($assign)) {
+            if (! $this->returnAnalyzer->isBeforeLastReturn($assign, $this->lastReturn)) {
                 return;
             }
 
@@ -181,14 +189,5 @@ final class ClassMethodRenderAnalyzer
         }
 
         $this->nodesToRemove[] = $assign;
-    }
-
-    private function isBeforeLastReturn(Assign $assign): bool
-    {
-        if (! $this->lastReturn instanceof Return_) {
-            return true;
-        }
-
-        return $this->lastReturn->getStartTokenPos() < $assign->getStartTokenPos();
     }
 }
