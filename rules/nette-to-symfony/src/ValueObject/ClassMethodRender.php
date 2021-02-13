@@ -29,7 +29,7 @@ final class ClassMethodRender implements ParameterArrayInterface
     /**
      * @var Expr[]
      */
-    private $templateFileExprs;
+    private $templateFileExprs = [];
 
     /**
      * @param Expr[] $templateFileExprs

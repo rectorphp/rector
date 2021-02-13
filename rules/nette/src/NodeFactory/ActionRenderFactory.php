@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Nette\NodeFactory;
 
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -56,7 +57,7 @@ final class ActionRenderFactory
         }
 
         $templateVariablesArray = $this->renderParameterArrayFactory->createArray($classMethodRender);
-        if ($templateVariablesArray === null) {
+        if (! $templateVariablesArray instanceof Array_) {
             return;
         }
 

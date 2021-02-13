@@ -95,7 +95,6 @@ final class ClassMethodRenderAnalyzer
         $this->nodesToRemove = [];
         $this->conditionalAssigns = [];
 
-        /** @var Return_|null $lastReturn */
         $this->lastReturn = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(

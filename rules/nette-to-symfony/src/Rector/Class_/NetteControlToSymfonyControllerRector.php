@@ -122,6 +122,7 @@ CODE_SAMPLE
 
         $shortClassName = $this->nodeNameResolver->getShortName($node);
         $shortClassName = $this->classNaming->replaceSuffix($shortClassName, 'Control', 'Controller');
+
         $node->name = new Identifier($shortClassName);
 
         $node->extends = new FullyQualified(AbstractController::class);

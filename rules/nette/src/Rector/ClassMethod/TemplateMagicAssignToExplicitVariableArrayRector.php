@@ -6,6 +6,8 @@ namespace Rector\Nette\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Nette\NodeAnalyzer\ConditionalTemplateAssignReplacer;
@@ -112,7 +114,7 @@ CODE_SAMPLE
         }
 
         $renderMethodCall = $this->renderMethodAnalyzer->machRenderMethodCall($node);
-        if ($renderMethodCall === null) {
+        if (! $renderMethodCall instanceof MethodCall) {
             return null;
         }
 
@@ -125,7 +127,7 @@ CODE_SAMPLE
         );
 
         $array = $this->renderParameterArrayFactory->createArray($magicTemplatePropertyCalls);
-        if ($array === null) {
+        if (! $array instanceof Array_) {
             return null;
         }
 

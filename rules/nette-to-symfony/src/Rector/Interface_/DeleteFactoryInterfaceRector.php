@@ -18,7 +18,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class DeleteFactoryInterfaceRector extends AbstractRector
 {
     /**
-     * @var \Rector\NetteToSymfony\NodeAnalyzer\NetteControlFactoryInterfaceAnalyzer
+     * @var NetteControlFactoryInterfaceAnalyzer
      */
     private $netteControlFactoryInterfaceAnalyzer;
 
