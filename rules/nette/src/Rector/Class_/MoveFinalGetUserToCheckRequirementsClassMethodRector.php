@@ -101,7 +101,7 @@ CODE_SAMPLE
         }
 
         $checkRequirementsClassMethod = $node->getMethod('checkRequirements');
-        if ($checkRequirementsClassMethod === null) {
+        if (! $checkRequirementsClassMethod instanceof ClassMethod) {
             $checkRequirementsClassMethod = $this->checkRequirementsClassMethodFactory->create(
                 (array) $getUserClassMethod->stmts
             );

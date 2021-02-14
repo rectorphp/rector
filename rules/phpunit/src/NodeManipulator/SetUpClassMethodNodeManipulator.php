@@ -6,6 +6,7 @@ namespace Rector\PHPUnit\NodeManipulator;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\ValueObject\MethodName;
 use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
 
@@ -38,7 +39,7 @@ final class SetUpClassMethodNodeManipulator
 
         $setUpClassMethod = $class->getMethod(MethodName::SET_UP);
 
-        if ($setUpClassMethod === null) {
+        if (! $setUpClassMethod instanceof ClassMethod) {
             $setUpClassMethod = $this->setUpClassMethodFactory->createSetUpMethod($stmts);
             $class->stmts = array_merge([$setUpClassMethod], $class->stmts);
         } else {
