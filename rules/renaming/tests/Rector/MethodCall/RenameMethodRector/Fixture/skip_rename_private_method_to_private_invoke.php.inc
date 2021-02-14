@@ -2,7 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
-final class SkipPrivateMethodRenameToPrivateInvoke
+final class SkipRenamePrivateMethodToPrivateInvoke
 {
     private function notify()
     {
