@@ -9,18 +9,13 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(ReplaceParentCallByPropertyCallRector::class)
-        ->call(
-        'configure',
-        [[
+        ->call('configure', [[
             ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => ValueObjectInliner::inline([
-
                 new ReplaceParentCallByPropertyCall(
                     TypeClassToReplaceMethodCallBy::class,
                     'someMethod',
                     'someProperty'
                 ),
-
             ]),
-        ]]
-    );
+        ]]);
 };

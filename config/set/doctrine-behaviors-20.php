@@ -63,13 +63,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
 
     $services->set(AddEntityIdByConditionRector::class)
-        ->call(
-            'configure',
-            [[
-                AddEntityIdByConditionRector::DETECTED_TRAITS => [
-                    'Knp\DoctrineBehaviors\Model\Translatable\Translation',
-                    'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait',
-                ],
-            ]]
-        );
+        ->call('configure', [[
+            AddEntityIdByConditionRector::DETECTED_TRAITS => [
+                'Knp\DoctrineBehaviors\Model\Translatable\Translation',
+                'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait',
+            ],
+        ]]);
 };

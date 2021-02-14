@@ -75,14 +75,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
 
     $services->set(RenameClassRector::class)
-        ->call(
-            'configure',
-            [[
-                RenameClassRector::OLD_TO_NEW_CLASSES => [
-                    'Illuminate\Support\Facades\Input' => 'Illuminate\Support\Facades\Request',
-                ],
-            ]]
-        );
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                'Illuminate\Support\Facades\Input' => 'Illuminate\Support\Facades\Request',
+            ],
+        ]]);
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
