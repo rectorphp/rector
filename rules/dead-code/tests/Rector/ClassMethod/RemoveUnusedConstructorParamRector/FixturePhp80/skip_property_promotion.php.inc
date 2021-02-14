@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\RemoveUnusedConstructorParamRector\FixturePhp80;
+namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedConstructorParamRector\FixturePhp80;
 
 use stdClass;
 
