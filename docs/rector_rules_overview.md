@@ -1,4 +1,4 @@
-# 668 Rules Overview
+# 669 Rules Overview
 
 <br>
 
@@ -44,7 +44,7 @@
 
 - [DowngradePhp80](#downgradephp80) (12)
 
-- [EarlyReturn](#earlyreturn) (8)
+- [EarlyReturn](#earlyreturn) (9)
 
 - [Generic](#generic) (11)
 
@@ -313,8 +313,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArrayToFluentCallRector::class)
         ->call('configure', [[
             ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => ValueObjectInliner::inline([
-                new ArrayToFluentCall('ArticlesTable', ['setForeignKey', 'setProperty']),
-]
+                new ArrayToFluentCall('ArticlesTable', ['setForeignKey', 'setProperty']), ]
             ),
         ]]);
 };
@@ -2459,7 +2458,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
+Split multiple inline assigns to each own lines default value, to prevent undefined array issues
 
 - class: `Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`
 
@@ -5184,17 +5183,16 @@ Turns parent EntityRepository class to constructor dependency
 
 +use App\Entity\Post;
  use Doctrine\ORM\EntityRepository;
++use Doctrine\ORM\EntityManagerInterface;
 
 -final class PostRepository extends EntityRepository
 +final class PostRepository
  {
-+    /**
-+     * @var \Doctrine\ORM\EntityRepository
-+     */
-+    private $repository;
-+    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
++    private EntityRepository $repository;
++
++    public function __construct(EntityManagerInterface $entityManager)
 +    {
-+        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
++        $this->repository = $entityManager->getRepository(Post::class);
 +    }
  }
 ```
@@ -6709,6 +6707,35 @@ Split if statement, when if condition always break execution flow
 
 <br>
 
+### ReturnAfterToEarlyOnBreakRector
+
+Change return after foreach to early return in foreach on break
+
+- class: `Rector\EarlyReturn\Rector\Foreach_\ReturnAfterToEarlyOnBreakRector`
+
+```diff
+ class SomeClass
+ {
+     public function run(array $pathConstants, string $allowedPath)
+     {
+-        $pathOK = false;
+-
+         foreach ($pathConstants as $allowedPath) {
+             if ($dirPath == $allowedPath) {
+-                $pathOK = true;
+-                break;
++                return true;
+             }
+         }
+
+-        return $pathOK;
++        return false;
+     }
+ }
+```
+
+<br>
+
 ### ReturnBinaryAndToEarlyReturnRector
 
 Changes Single return of && && to early returns
@@ -7037,8 +7064,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
             NormalToFluentRector::CALLS_TO_FLUENT => ValueObjectInliner::inline([
-                new NormalToFluent('SomeClass', ['someFunction', 'otherFunction']),
-]
+                new NormalToFluent('SomeClass', ['someFunction', 'otherFunction']), ]
             ),
         ]]);
 };
@@ -7121,8 +7147,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SwapFuncCallArgumentsRector::class)
         ->call('configure', [[
             SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => ValueObjectInliner::inline([
-                new SwapFuncCallArguments('some_function', [1, 0]),
-]
+                new SwapFuncCallArguments('some_function', [1, 0]), ]
             ),
         ]]);
 };
@@ -12978,8 +13003,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveFuncCallRector::class)
         ->call('configure', [[
             RemoveFuncCallRector::REMOVE_FUNC_CALLS => ValueObjectInliner::inline([
-                new RemoveFuncCall('ini_get', [['y2k_compliance']]),
-]
+                new RemoveFuncCall('ini_get', [['y2k_compliance']]), ]
             ),
         ]]);
 };
@@ -13329,7 +13353,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
 
 :wrench: **configure it!**
 
@@ -13474,8 +13498,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PseudoNamespaceToNamespaceRector::class)
         ->call('configure', [[
             PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => ValueObjectInliner::inline([
-                new PseudoNamespaceToNamespace('Some_', ['Some_Class_To_Keep']),
-]
+                new PseudoNamespaceToNamespace('Some_', ['Some_Class_To_Keep']), ]
             ),
         ]]);
 };
