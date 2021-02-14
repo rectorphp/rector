@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -302,6 +303,28 @@ final class BetterNodeFinder
 
             return $this->betterStandardPrinter->areNodesEqual($node->var, $expr);
         });
+    }
+
+    public function findFirstPreviousOfNode(Node $node, callable $filter): ?Node
+    {
+        // move to previous expression
+        $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if ($previousStatement !== null) {
+            $foundNode = $this->findFirst([$previousStatement], $filter);
+            // we found what we need
+            if ($foundNode !== null) {
+                return $foundNode;
+            }
+
+            return $this->findFirstPreviousOfNode($previousStatement, $filter);
+        }
+
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Node) {
+            return $this->findFirstPreviousOfNode($parent, $filter);
+        }
+
+        return null;
     }
 
     public function findFirstPrevious(Node $node, callable $filter): ?Node

@@ -128,17 +128,17 @@ final class RemovedAndAddedFilesProcessor
 
     private function processAddedFilesWithNodes(): void
     {
-        foreach ($this->removedAndAddedFilesCollector->getAddedFilesWithNodes() as $addedFilesWithNode) {
+        foreach ($this->removedAndAddedFilesCollector->getAddedFilesWithNodes() as $addedFileWithNode) {
             $fileContent = $this->nodesWithFileDestinationPrinter->printNodesWithFileDestination(
-                $addedFilesWithNode
+                $addedFileWithNode
             );
 
             if ($this->configuration->isDryRun()) {
-                $message = sprintf('File "%s" will be added', $addedFilesWithNode->getFilePath());
+                $message = sprintf('File "%s" will be added', $addedFileWithNode->getFilePath());
                 $this->symfonyStyle->note($message);
             } else {
-                $this->smartFileSystem->dumpFile($addedFilesWithNode->getFilePath(), $fileContent);
-                $message = sprintf('File "%s" was added', $addedFilesWithNode->getFilePath());
+                $this->smartFileSystem->dumpFile($addedFileWithNode->getFilePath(), $fileContent);
+                $message = sprintf('File "%s" was added', $addedFileWithNode->getFilePath());
                 $this->symfonyStyle->note($message);
             }
         }
