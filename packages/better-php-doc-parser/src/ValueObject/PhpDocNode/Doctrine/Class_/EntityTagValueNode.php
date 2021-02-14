@@ -25,6 +25,11 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements P
         return $this->items[self::REPOSITORY_CLASS] !== null;
     }
 
+    public function getRepositoryClass(): ?string
+    {
+        return $this->items[self::REPOSITORY_CLASS] ?? null;
+    }
+
     public function getShortName(): string
     {
         return '@ORM\Entity';
