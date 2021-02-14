@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Util\StaticInstanceOf;
@@ -309,8 +310,9 @@ final class BetterNodeFinder
     public function findFirstPrevious(Node $node, callable $filter): ?Node
     {
         $currentStatement = $node instanceof Expression ? $node : $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        $previousNode     = $currentStatement->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        if ($previousNode instanceof FunctionLike) {
+        $previousNode = $currentStatement->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+
+        if ($previousNode instanceof FunctionLike || $previousNode instanceof ClassLike || $previousNode instanceof Namespace_) {
             $previousNode = $currentStatement->getAttribute(AttributeKey::PREVIOUS_NODE);
         }
 
