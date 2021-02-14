@@ -309,12 +309,7 @@ final class BetterNodeFinder
     public function findFirstPrevious(Node $node, callable $filter): ?Node
     {
         $currentStatement = $node instanceof Expression ? $node : $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-
-        $previousNode = $currentStatement->getAttribute(AttributeKey::PREVIOUS_NODE);
-        $previousStatement = $currentStatement->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        if (! $previousNode instanceof Param && $previousStatement instanceof FunctionLike) {
-            $previousNode = $currentStatement->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        }
+        $previousNode     = $currentStatement->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
 
         if ($previousNode !== null) {
             $foundNode = $this->findFirst([$previousNode], $filter);
