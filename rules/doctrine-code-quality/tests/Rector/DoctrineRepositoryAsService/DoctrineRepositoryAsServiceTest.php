@@ -11,7 +11,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Doctrine\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector
  * @see \Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector
- * @see \Rector\Doctrine\Rector\MethodCall\EntityRepositoryServiceLocatorToDIRector
  */
 final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
 {
