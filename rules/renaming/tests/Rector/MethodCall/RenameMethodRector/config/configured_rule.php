@@ -22,7 +22,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 '__invoke'
             ),
             new MethodCallRename(SkipRenamePrivateMethodToPrivateInvoke::class, 'notify', '__invoke'),
-            new MethodCallRename('*Presenter', 'run', '__invoke'),
+            new MethodCallRename('*RenameClassMethod', 'run', '__invoke'),
             new MethodCallRename(
                 \Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture\SkipSelfMethodRename::class,
                 'preventPHPStormRefactoring',
