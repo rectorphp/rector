@@ -11,7 +11,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ . '/../xml/services.xml');
 
     $services = $containerConfigurator->services();
-    $services->set(GetToConstructorInjectionRector::class)->call('configure', [[
-        GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [SymfonyController::class, GetTrait::class],
-    ]]);
+    $services->set(GetToConstructorInjectionRector::class)
+        ->call('configure', [[
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [SymfonyController::class, GetTrait::class],
+        ]]);
 };

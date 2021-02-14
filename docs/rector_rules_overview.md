@@ -1,4 +1,4 @@
-# 668 Rules Overview
+# 669 Rules Overview
 
 <br>
 
@@ -44,7 +44,7 @@
 
 - [DowngradePhp80](#downgradephp80) (12)
 
-- [EarlyReturn](#earlyreturn) (8)
+- [EarlyReturn](#earlyreturn) (9)
 
 - [Generic](#generic) (11)
 
@@ -2458,7 +2458,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
+Split multiple inline assigns to each own lines default value, to prevent undefined array issues
 
 - class: `Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`
 
@@ -5183,17 +5183,16 @@ Turns parent EntityRepository class to constructor dependency
 
 +use App\Entity\Post;
  use Doctrine\ORM\EntityRepository;
++use Doctrine\ORM\EntityManagerInterface;
 
 -final class PostRepository extends EntityRepository
 +final class PostRepository
  {
-+    /**
-+     * @var \Doctrine\ORM\EntityRepository
-+     */
-+    private $repository;
-+    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
++    private EntityRepository $repository;
++
++    public function __construct(EntityManagerInterface $entityManager)
 +    {
-+        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
++        $this->repository = $entityManager->getRepository(Post::class);
 +    }
  }
 ```
@@ -6702,6 +6701,35 @@ Split if statement, when if condition always break execution flow
          }
 +
 +        return 10;
+     }
+ }
+```
+
+<br>
+
+### ReturnAfterToEarlyOnBreakRector
+
+Change return after foreach to early return in foreach on break
+
+- class: `Rector\EarlyReturn\Rector\Foreach_\ReturnAfterToEarlyOnBreakRector`
+
+```diff
+ class SomeClass
+ {
+     public function run(array $pathConstants, string $allowedPath)
+     {
+-        $pathOK = false;
+-
+         foreach ($pathConstants as $allowedPath) {
+             if ($dirPath == $allowedPath) {
+-                $pathOK = true;
+-                break;
++                return true;
+             }
+         }
+
+-        return $pathOK;
++        return false;
      }
  }
 ```
@@ -13325,7 +13353,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
 
 :wrench: **configure it!**
 

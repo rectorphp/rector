@@ -6,7 +6,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(AddEntityIdByConditionRector::class)->call('configure', [[
-        AddEntityIdByConditionRector::DETECTED_TRAITS => [SomeTrait::class],
-    ]]);
+    $services->set(AddEntityIdByConditionRector::class)
+        ->call('configure', [[
+            AddEntityIdByConditionRector::DETECTED_TRAITS => [SomeTrait::class],
+        ]]);
 };

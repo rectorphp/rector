@@ -6,7 +6,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(RemoveTraitRector::class)->call('configure', [[
-        RemoveTraitRector::TRAITS_TO_REMOVE => [TraitToBeRemoved::class],
-    ]]);
+    $services->set(RemoveTraitRector::class)
+        ->call('configure', [[
+            RemoveTraitRector::TRAITS_TO_REMOVE => [TraitToBeRemoved::class],
+        ]]);
 };

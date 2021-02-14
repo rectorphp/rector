@@ -8,11 +8,12 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(StaticCallToFuncCallRector::class)->call('configure', [[
-        StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => ValueObjectInliner::inline([
+    $services->set(StaticCallToFuncCallRector::class)
+        ->call('configure', [[
+            StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => ValueObjectInliner::inline([
 
-            new StaticCallToFuncCall(SomeOldStaticClass::class, 'render', 'view'),
+                new StaticCallToFuncCall(SomeOldStaticClass::class, 'render', 'view'),
 
-        ]),
-    ]]);
+            ]),
+        ]]);
 };

@@ -6,7 +6,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(NewToConstructorInjectionRector::class)->call('configure', [[
-        NewToConstructorInjectionRector::TYPES_TO_CONSTRUCTOR_INJECTION => [DummyValidator::class],
-    ]]);
+    $services->set(NewToConstructorInjectionRector::class)
+        ->call('configure', [[
+            NewToConstructorInjectionRector::TYPES_TO_CONSTRUCTOR_INJECTION => [DummyValidator::class],
+        ]]);
 };

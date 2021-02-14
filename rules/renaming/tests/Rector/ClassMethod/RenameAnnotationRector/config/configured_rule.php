@@ -7,11 +7,12 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(RenameAnnotationRector::class)->call('configure', [[
-        RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => ValueObjectInliner::inline([
+    $services->set(RenameAnnotationRector::class)
+        ->call('configure', [[
+            RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => ValueObjectInliner::inline([
 
-            new RenameAnnotation('PHPUnit\Framework\TestCase', 'scenario', 'test'),
+                new RenameAnnotation('PHPUnit\Framework\TestCase', 'scenario', 'test'),
 
-        ]),
-    ]]);
+            ]),
+        ]]);
 };

@@ -6,7 +6,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(RemoveParentRector::class)->call('configure', [[
-        RemoveParentRector::PARENT_TYPES_TO_REMOVE => [ParentTypeToBeRemoved::class],
-    ]]);
+    $services->set(RemoveParentRector::class)
+        ->call('configure', [[
+            RemoveParentRector::PARENT_TYPES_TO_REMOVE => [ParentTypeToBeRemoved::class],
+        ]]);
 };

@@ -5,7 +5,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(AddTopIncludeRector::class)->call('configure', [[
-        AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-    ]]);
+    $services->set(AddTopIncludeRector::class)
+        ->call('configure', [[
+            AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
+        ]]);
 };

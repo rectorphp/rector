@@ -7,15 +7,16 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(GetAndSetToMethodCallRector::class)->call('configure', [[
-        GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
-            SomeContainer::class => [
-                'get' => 'getService',
-                'set' => 'addService',
+    $services->set(GetAndSetToMethodCallRector::class)
+        ->call('configure', [[
+            GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
+                SomeContainer::class => [
+                    'get' => 'getService',
+                    'set' => 'addService',
+                ],
+                Klarka::class => [
+                    'get' => 'get',
+                ],
             ],
-            Klarka::class => [
-                'get' => 'get',
-            ],
-        ],
-    ]]);
+        ]]);
 };

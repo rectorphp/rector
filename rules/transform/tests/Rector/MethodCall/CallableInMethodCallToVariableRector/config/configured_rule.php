@@ -8,14 +8,10 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(CallableInMethodCallToVariableRector::class)->call(
-        'configure',
-        [[
+    $services->set(CallableInMethodCallToVariableRector::class)
+        ->call('configure', [[
             CallableInMethodCallToVariableRector::CALLABLE_IN_METHOD_CALL_TO_VARIABLE => ValueObjectInliner::inline([
-
                 new CallableInMethodCallToVariable(DummyCache::class, 'save', 1),
-
             ]),
-        ]]
-    );
+        ]]);
 };

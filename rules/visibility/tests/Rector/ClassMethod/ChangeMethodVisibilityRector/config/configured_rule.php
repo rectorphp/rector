@@ -9,14 +9,15 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(ChangeMethodVisibilityRector::class)->call('configure', [[
-        ChangeMethodVisibilityRector::METHOD_VISIBILITIES => ValueObjectInliner::inline([
+    $services->set(ChangeMethodVisibilityRector::class)
+        ->call('configure', [[
+            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => ValueObjectInliner::inline([
 
-            new ChangeMethodVisibility(ParentObject::class, 'toBePublicMethod', Visibility::PUBLIC),
-            new ChangeMethodVisibility(ParentObject::class, 'toBeProtectedMethod', Visibility::PROTECTED),
-            new ChangeMethodVisibility(ParentObject::class, 'toBePrivateMethod', Visibility::PRIVATE),
-            new ChangeMethodVisibility(ParentObject::class, 'toBePublicStaticMethod', Visibility::PUBLIC),
+                new ChangeMethodVisibility(ParentObject::class, 'toBePublicMethod', Visibility::PUBLIC),
+                new ChangeMethodVisibility(ParentObject::class, 'toBeProtectedMethod', Visibility::PROTECTED),
+                new ChangeMethodVisibility(ParentObject::class, 'toBePrivateMethod', Visibility::PRIVATE),
+                new ChangeMethodVisibility(ParentObject::class, 'toBePublicStaticMethod', Visibility::PUBLIC),
 
-        ]),
-    ]]);
+            ]),
+        ]]);
 };
