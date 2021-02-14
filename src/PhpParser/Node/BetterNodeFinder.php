@@ -334,33 +334,6 @@ final class BetterNodeFinder
         return null;
     }
 
-    /*public function findFirstPrevious(Node $node, callable $filter): ?Node
-    {
-        $node = $node instanceof Expression ? $node : $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if ($node === null) {
-            return null;
-        }
-
-        $foundNode = $this->findFirst([$node], $filter);
-        // we found what we need
-        if ($foundNode !== null) {
-            return $foundNode;
-        }
-
-        // move to previous expression
-        $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        if ($previousStatement !== null) {
-            return $this->findFirstPrevious($previousStatement, $filter);
-        }
-
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent === null) {
-            return null;
-        }
-
-        return $this->findFirstPrevious($parent, $filter);
-    }*/
-
     /**
      * @param class-string<T>[] $types
      * @return T|null
