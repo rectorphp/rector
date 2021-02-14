@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\DoctrineCodeQuality\Tests\Set\DoctrineRepositoryAsService;
+namespace Rector\DoctrineCodeQuality\Tests\Set\DoctrineRepositoryAsServiceSet;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
+final class DoctrineRepositoryAsServiceSetTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

@@ -12,6 +12,9 @@ use PHPStan\Type\UnionType;
 
 final class TypeFinder
 {
+    /**
+     * @param class-string<\PHPStan\Type\Type> $desiredTypeClass
+     */
     public function find(Type $type, string $desiredTypeClass): Type
     {
         if (is_a($type, $desiredTypeClass, true)) {

@@ -57,8 +57,7 @@ final class EntityObjectTypeResolver
             return $getterReturnType;
         }
 
-        $currentRepositoryClass = $repositoryClass->getAttribute(AttributeKey::CLASS_NAME);
-        $entityType = $this->resolveFromMatchingEntityAnnotation($currentRepositoryClass);
+        $entityType = $this->resolveFromMatchingEntityAnnotation($repositoryClass);
         if ($entityType instanceof Type) {
             return $entityType;
         }
@@ -87,8 +86,10 @@ final class EntityObjectTypeResolver
         return null;
     }
 
-    private function resolveFromMatchingEntityAnnotation(string $currentRepositoryClass): ?ObjectType
+    private function resolveFromMatchingEntityAnnotation(Class_ $repositoryClass): ?ObjectType
     {
+        $repositoryClassName = $repositoryClass->getAttribute(AttributeKey::CLASS_NAME);
+
         foreach ($this->nodeRepository->getClasses() as $class) {
             if ($class->isFinal()) {
                 continue;
@@ -105,15 +106,16 @@ final class EntityObjectTypeResolver
 
             /** @var EntityTagValueNode $entityTagValueNode */
             $entityTagValueNode = $phpDocInfo->getByType(EntityTagValueNode::class);
-
-            if ($entityTagValueNode->getRepositoryClass() === $currentRepositoryClass) {
-                $className = $this->nodeNameResolver->getName($class);
-                if (! is_string($className)) {
-                    throw new ShouldNotHappenException();
-                }
-
-                return new ObjectType($className);
+            if ($entityTagValueNode->getRepositoryClass() !== $repositoryClassName) {
+                continue;
             }
+
+            $className = $this->nodeNameResolver->getName($class);
+            if (! is_string($className)) {
+                throw new ShouldNotHappenException();
+            }
+
+            return new ObjectType($className);
         }
 
         return null;
