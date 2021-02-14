@@ -311,14 +311,21 @@ final class BetterNodeFinder
         $currentStatement = $node instanceof Expression ? $node : $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         $previousNode     = $currentStatement->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
 
-        if ($previousNode !== null) {
+        if ($previousNode instanceof FunctionLike) {
+            return null;
+        }
+
+        if ($previousNode instanceof Node) {
             $foundNode = $this->findFirst([$previousNode], $filter);
-            // we found what we need
-            if ($foundNode !== null) {
+            if ($foundNode instanceof Node) {
                 return $foundNode;
             }
 
-            return $this->findFirstPrevious($previousNode, $filter);
+            $previousNode = $currentStatement->getAttribute(AttributeKey::PREVIOUS_NODE);
+            $foundNode    = $this->findFirst([$previousNode], $filter);
+            if ($foundNode instanceof Node) {
+                return $foundNode;
+            }
         }
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
