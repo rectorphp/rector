@@ -5,10 +5,11 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(FunctionCallToConstantRector::class)->call('configure', [[
-        FunctionCallToConstantRector::FUNCTIONS_TO_CONSTANTS => [
-            'php_sapi_name' => 'PHP_SAPI',
-            'pi' => 'M_PI',
-        ],
-    ]]);
+    $services->set(FunctionCallToConstantRector::class)
+        ->call('configure', [[
+            FunctionCallToConstantRector::FUNCTIONS_TO_CONSTANTS => [
+                'php_sapi_name' => 'PHP_SAPI',
+                'pi' => 'M_PI',
+            ],
+        ]]);
 };

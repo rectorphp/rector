@@ -10,7 +10,8 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(ReturnArrayClassMethodToYieldRector::class)->call(
+    $services->set(ReturnArrayClassMethodToYieldRector::class)
+        ->call(
         'configure',
         [[
             ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => ValueObjectInliner::inline([

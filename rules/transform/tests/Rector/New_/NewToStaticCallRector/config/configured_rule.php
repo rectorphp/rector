@@ -9,11 +9,12 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(NewToStaticCallRector::class)->call('configure', [[
-        NewToStaticCallRector::TYPE_TO_STATIC_CALLS => ValueObjectInliner::inline([
+    $services->set(NewToStaticCallRector::class)
+        ->call('configure', [[
+            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => ValueObjectInliner::inline([
 
-            new NewToStaticCall(FromNewClass::class, IntoStaticClass::class, 'run'),
+                new NewToStaticCall(FromNewClass::class, IntoStaticClass::class, 'run'),
 
-        ]),
-    ]]);
+            ]),
+        ]]);
 };

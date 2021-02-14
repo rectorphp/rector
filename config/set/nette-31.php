@@ -34,74 +34,76 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
-    $services->set(RenameClassRector::class)->call('configure', [[
-        RenameClassRector::OLD_TO_NEW_CLASSES => [
-            'Nette\Bridges\ApplicationLatte\Template' => 'Nette\Bridges\ApplicationLatte\DefaultTemplate',
+    $services->set(RenameClassRector::class)
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                'Nette\Bridges\ApplicationLatte\Template' => 'Nette\Bridges\ApplicationLatte\DefaultTemplate',
 
-            // https://github.com/nette/application/compare/v3.0.7...v3.1.0
-            'Nette\Application\IRouter' => 'Nette\Routing\Router',
-            'Nette\Application\IResponse' => 'Nette\Application\Response',
-            'Nette\Application\UI\IRenderable' => 'Nette\Application\UI\Renderable',
-            'Nette\Application\UI\ISignalReceiver' => 'Nette\Application\UI\SignalReceiver',
-            'Nette\Application\UI\IStatePersistent' => 'Nette\Application\UI\StatePersistent',
-            'Nette\Application\UI\ITemplate' => 'Nette\Application\UI\Template',
-            'Nette\Application\UI\ITemplateFactory' => 'Nette\Application\UI\TemplateFactory',
-            'Nette\Bridges\ApplicationLatte\ILatteFactory' => 'Nette\Bridges\ApplicationLatte\LatteFactory',
+                // https://github.com/nette/application/compare/v3.0.7...v3.1.0
+                'Nette\Application\IRouter' => 'Nette\Routing\Router',
+                'Nette\Application\IResponse' => 'Nette\Application\Response',
+                'Nette\Application\UI\IRenderable' => 'Nette\Application\UI\Renderable',
+                'Nette\Application\UI\ISignalReceiver' => 'Nette\Application\UI\SignalReceiver',
+                'Nette\Application\UI\IStatePersistent' => 'Nette\Application\UI\StatePersistent',
+                'Nette\Application\UI\ITemplate' => 'Nette\Application\UI\Template',
+                'Nette\Application\UI\ITemplateFactory' => 'Nette\Application\UI\TemplateFactory',
+                'Nette\Bridges\ApplicationLatte\ILatteFactory' => 'Nette\Bridges\ApplicationLatte\LatteFactory',
 
-            // https://github.com/nette/bootstrap/compare/v3.0.2...v3.1.0
-            'Nette\Configurator' => 'Nette\Bootstrap\Configurator',
+                // https://github.com/nette/bootstrap/compare/v3.0.2...v3.1.0
+                'Nette\Configurator' => 'Nette\Bootstrap\Configurator',
 
-            // https://github.com/nette/caching/compare/v3.0.2...v3.1.0
-            'Nette\Caching\IBulkReader' => 'Nette\Caching\BulkReader',
-            'Nette\Caching\IStorage' => 'Nette\Caching\Storage',
-            'Nette\Caching\Storages\IJournal' => 'Nette\Caching\Storages\Journal',
+                // https://github.com/nette/caching/compare/v3.0.2...v3.1.0
+                'Nette\Caching\IBulkReader' => 'Nette\Caching\BulkReader',
+                'Nette\Caching\IStorage' => 'Nette\Caching\Storage',
+                'Nette\Caching\Storages\IJournal' => 'Nette\Caching\Storages\Journal',
 
-            // https://github.com/nette/database/compare/v3.0.7...v3.1.1
-            'Nette\Database\ISupplementalDriver' => 'Nette\Database\Driver',
-            'Nette\Database\IConventions' => 'Nette\Database\Conventions',
-            'Nette\Database\Context' => 'Nette\Database\Explorer',
-            'Nette\Database\IRow' => 'Nette\Database\Row',
-            'Nette\Database\IRowContainer' => 'Nette\Database\ResultSet',
-            'Nette\Database\Table\IRow' => 'Nette\Database\Table\ActiveRow',
-            'Nette\Database\Table\IRowContainer' => 'Nette\Database\Table\Selection',
+                // https://github.com/nette/database/compare/v3.0.7...v3.1.1
+                'Nette\Database\ISupplementalDriver' => 'Nette\Database\Driver',
+                'Nette\Database\IConventions' => 'Nette\Database\Conventions',
+                'Nette\Database\Context' => 'Nette\Database\Explorer',
+                'Nette\Database\IRow' => 'Nette\Database\Row',
+                'Nette\Database\IRowContainer' => 'Nette\Database\ResultSet',
+                'Nette\Database\Table\IRow' => 'Nette\Database\Table\ActiveRow',
+                'Nette\Database\Table\IRowContainer' => 'Nette\Database\Table\Selection',
 
-            // https://github.com/nette/forms/compare/v3.0.7...v3.1.0-RC2
-            'Nette\Forms\IControl' => 'Nette\Forms\Control',
-            'Nette\Forms\IFormRenderer' => 'Nette\Forms\FormRenderer',
-            'Nette\Forms\ISubmitterControl' => 'Nette\Forms\SubmitterControl',
+                // https://github.com/nette/forms/compare/v3.0.7...v3.1.0-RC2
+                'Nette\Forms\IControl' => 'Nette\Forms\Control',
+                'Nette\Forms\IFormRenderer' => 'Nette\Forms\FormRenderer',
+                'Nette\Forms\ISubmitterControl' => 'Nette\Forms\SubmitterControl',
 
-            // https://github.com/nette/mail/compare/v3.0.1...v3.1.5
-            'Nette\Mail\IMailer' => 'Nette\Mail\Mailer',
+                // https://github.com/nette/mail/compare/v3.0.1...v3.1.5
+                'Nette\Mail\IMailer' => 'Nette\Mail\Mailer',
 
-            // https://github.com/nette/security/compare/v3.0.5...v3.1.2
-            'Nette\Security\IAuthorizator' => 'Nette\Security\Authorizator',
-            'Nette\Security\Identity' => 'Nette\Security\SimpleIdentity',
-            'Nette\Security\IResource' => 'Nette\Security\Resource',
-            'Nette\Security\IRole' => 'Nette\Security\Role',
+                // https://github.com/nette/security/compare/v3.0.5...v3.1.2
+                'Nette\Security\IAuthorizator' => 'Nette\Security\Authorizator',
+                'Nette\Security\Identity' => 'Nette\Security\SimpleIdentity',
+                'Nette\Security\IResource' => 'Nette\Security\Resource',
+                'Nette\Security\IRole' => 'Nette\Security\Role',
 
-            // https://github.com/nette/utils/compare/v3.1.4...v3.2.1
-            'Nette\Utils\IHtmlString' => 'Nette\HtmlStringable',
-            'Nette\Localization\ITranslator' => 'Nette\Localization\Translator',
+                // https://github.com/nette/utils/compare/v3.1.4...v3.2.1
+                'Nette\Utils\IHtmlString' => 'Nette\HtmlStringable',
+                'Nette\Localization\ITranslator' => 'Nette\Localization\Translator',
 
-            // https://github.com/nette/latte/compare/v2.5.5...v2.9.2
-            'Latte\ILoader' => 'Latte\Loader',
-            'Latte\IMacro' => 'Latte\Macro',
-            'Latte\Runtime\IHtmlString' => 'Latte\Runtime\HtmlStringable',
-            'Latte\Runtime\ISnippetBridge' => 'Latte\Runtime\SnippetBridge',
-        ],
-    ]]);
+                // https://github.com/nette/latte/compare/v2.5.5...v2.9.2
+                'Latte\ILoader' => 'Latte\Loader',
+                'Latte\IMacro' => 'Latte\Macro',
+                'Latte\Runtime\IHtmlString' => 'Latte\Runtime\HtmlStringable',
+                'Latte\Runtime\ISnippetBridge' => 'Latte\Runtime\SnippetBridge',
+            ],
+        ]]);
 
-    $services->set(RenameMethodRector::class)->call('configure', [[
-        RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
-            // https://github.com/nette/caching/commit/60281abf366c4ab76e9436dc1bfe2e402db18b67
-            new MethodCallRename('Nette\Caching\Cache', 'start', 'capture'),
-            // https://github.com/nette/forms/commit/faaaf8b8fd3408a274a9de7ca3f342091010ad5d
-            new MethodCallRename('Nette\Forms\Container', 'addImage', 'addImageButton'),
-            // https://github.com/nette/utils/commit/d0427c1811462dbb6c503143eabe5478b26685f7
-            new MethodCallRename('Nette\Utils\Arrays', 'searchKey', 'getKeyOffset'),
-            new MethodCallRename('Nette\Configurator', 'addParameters', 'addStaticParameters'),
-        ]),
-    ]]);
+    $services->set(RenameMethodRector::class)
+        ->call('configure', [[
+            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
+                // https://github.com/nette/caching/commit/60281abf366c4ab76e9436dc1bfe2e402db18b67
+                new MethodCallRename('Nette\Caching\Cache', 'start', 'capture'),
+                // https://github.com/nette/forms/commit/faaaf8b8fd3408a274a9de7ca3f342091010ad5d
+                new MethodCallRename('Nette\Forms\Container', 'addImage', 'addImageButton'),
+                // https://github.com/nette/utils/commit/d0427c1811462dbb6c503143eabe5478b26685f7
+                new MethodCallRename('Nette\Utils\Arrays', 'searchKey', 'getKeyOffset'),
+                new MethodCallRename('Nette\Configurator', 'addParameters', 'addStaticParameters'),
+            ]),
+        ]]);
 
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[

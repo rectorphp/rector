@@ -8,9 +8,10 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(NewArgToMethodCallRector::class)->call('configure', [[
-        NewArgToMethodCallRector::NEW_ARGS_TO_METHOD_CALLS => ValueObjectInliner::inline([
-            new NewArgToMethodCall(SomeDotenv::class, true, 'usePutenv'),
-        ]),
-    ]]);
+    $services->set(NewArgToMethodCallRector::class)
+        ->call('configure', [[
+            NewArgToMethodCallRector::NEW_ARGS_TO_METHOD_CALLS => ValueObjectInliner::inline([
+                new NewArgToMethodCall(SomeDotenv::class, true, 'usePutenv'),
+            ]),
+        ]]);
 };

@@ -5,7 +5,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(MoveServicesBySuffixToDirectoryRector::class)->call(
+    $services->set(MoveServicesBySuffixToDirectoryRector::class)
+        ->call(
         'configure',
         [[
             MoveServicesBySuffixToDirectoryRector::GROUP_NAMES_BY_SUFFIX => [

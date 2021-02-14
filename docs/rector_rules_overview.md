@@ -313,7 +313,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArrayToFluentCallRector::class)
         ->call('configure', [[
             ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => ValueObjectInliner::inline([
-                new ArrayToFluentCall('ArticlesTable', ['setForeignKey', 'setProperty']), ]
+                new ArrayToFluentCall('ArticlesTable', ['setForeignKey', 'setProperty']),
+]
             ),
         ]]);
 };
@@ -7036,7 +7037,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
             NormalToFluentRector::CALLS_TO_FLUENT => ValueObjectInliner::inline([
-                new NormalToFluent('SomeClass', ['someFunction', 'otherFunction']), ]
+                new NormalToFluent('SomeClass', ['someFunction', 'otherFunction']),
+]
             ),
         ]]);
 };
@@ -7119,7 +7121,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SwapFuncCallArgumentsRector::class)
         ->call('configure', [[
             SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => ValueObjectInliner::inline([
-                new SwapFuncCallArguments('some_function', [1, 0]), ]
+                new SwapFuncCallArguments('some_function', [1, 0]),
+]
             ),
         ]]);
 };
@@ -12975,7 +12978,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveFuncCallRector::class)
         ->call('configure', [[
             RemoveFuncCallRector::REMOVE_FUNC_CALLS => ValueObjectInliner::inline([
-                new RemoveFuncCall('ini_get', [['y2k_compliance']]), ]
+                new RemoveFuncCall('ini_get', [['y2k_compliance']]),
+]
             ),
         ]]);
 };
@@ -13470,7 +13474,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PseudoNamespaceToNamespaceRector::class)
         ->call('configure', [[
             PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => ValueObjectInliner::inline([
-                new PseudoNamespaceToNamespace('Some_', ['Some_Class_To_Keep']), ]
+                new PseudoNamespaceToNamespace('Some_', ['Some_Class_To_Keep']),
+]
             ),
         ]]);
 };

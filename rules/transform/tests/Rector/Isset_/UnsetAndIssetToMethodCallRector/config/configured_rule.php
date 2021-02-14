@@ -8,11 +8,12 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(UnsetAndIssetToMethodCallRector::class)->call('configure', [[
-        UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => ValueObjectInliner::inline([
+    $services->set(UnsetAndIssetToMethodCallRector::class)
+        ->call('configure', [[
+            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => ValueObjectInliner::inline([
 
-            new UnsetAndIssetToMethodCall(LocalContainer::class, 'hasService', 'removeService'),
+                new UnsetAndIssetToMethodCall(LocalContainer::class, 'hasService', 'removeService'),
 
-        ]),
-    ]]);
+            ]),
+        ]]);
 };

@@ -20,20 +20,22 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/laravel-array-str-functions-to-static-call.php');
     $services = $containerConfigurator->services();
     $services->set(MinutesToSecondsInCacheRector::class);
-    $services->set(AddReturnTypeDeclarationRector::class)->call('configure', [[
-        AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => ValueObjectInliner::inline([
-            new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'put', new BooleanType()),
-            new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'forever', new BooleanType()),
-            new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'put', new BooleanType()),
-            new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'putMany', new BooleanType()),
-            new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'forever', new BooleanType()),
-        ]),
-    ]]);
-    $services->set(RenamePropertyRector::class)->call('configure', [[
-        RenamePropertyRector::RENAMED_PROPERTIES => ValueObjectInliner::inline([
-            new RenameProperty('Illuminate\Routing\UrlGenerator', 'cachedSchema', 'cachedScheme'),
-        ]),
-    ]]);
+    $services->set(AddReturnTypeDeclarationRector::class)
+        ->call('configure', [[
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => ValueObjectInliner::inline([
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'put', new BooleanType()),
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'forever', new BooleanType()),
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'put', new BooleanType()),
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'putMany', new BooleanType()),
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'forever', new BooleanType()),
+            ]),
+        ]]);
+    $services->set(RenamePropertyRector::class)
+        ->call('configure', [[
+            RenamePropertyRector::RENAMED_PROPERTIES => ValueObjectInliner::inline([
+                new RenameProperty('Illuminate\Routing\UrlGenerator', 'cachedSchema', 'cachedScheme'),
+            ]),
+        ]]);
     $services->set(PropertyDeferToDeferrableProviderToRector::class);
     $services->set(MakeTaggedPassedToParameterIterableTypeRector::class);
 };

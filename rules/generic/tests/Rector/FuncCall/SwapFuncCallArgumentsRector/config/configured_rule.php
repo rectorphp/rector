@@ -7,11 +7,12 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(SwapFuncCallArgumentsRector::class)->call('configure', [[
-        SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => ValueObjectInliner::inline([
+    $services->set(SwapFuncCallArgumentsRector::class)
+        ->call('configure', [[
+            SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => ValueObjectInliner::inline([
 
-            new SwapFuncCallArguments('some_function', [1, 0]),
-        ]
-        ),
-    ]]);
+                new SwapFuncCallArguments('some_function', [1, 0]),
+            ]
+            ),
+        ]]);
 };
