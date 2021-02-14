@@ -1,4 +1,4 @@
-# 669 Rules Overview
+# 668 Rules Overview
 
 <br>
 
@@ -46,7 +46,7 @@
 
 - [EarlyReturn](#earlyreturn) (8)
 
-- [Generic](#generic) (12)
+- [Generic](#generic) (11)
 
 - [Generics](#generics) (1)
 
@@ -2458,7 +2458,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to each own lines default value, to prevent undefined array issues
+Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
 
 - class: `Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`
 
@@ -6803,49 +6803,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 +
 +        parent::__construct();
      }
- }
-```
-
-<br>
-
-### AddPropertyByParentRector
-
-Add dependency via constructor by parent class type
-
-:wrench: **configure it!**
-
-- class: `Rector\Generic\Rector\Class_\AddPropertyByParentRector`
-
-```php
-use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(AddPropertyByParentRector::class)
-        ->call('configure', [[
-            AddPropertyByParentRector::PARENT_DEPENDENCIES => [
-                'SomeParentClass' => ['SomeDependency'],
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
- final class SomeClass extends SomeParentClass
- {
-+    /**
-+     * @var SomeDependency
-+     */
-+    private $someDependency;
-+
-+    public function __construct(SomeDependency $someDependency)
-+    {
-+        $this->someDependency = $someDependency;
-+    }
  }
 ```
 
@@ -13368,7 +13325,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
 
 :wrench: **configure it!**
 
