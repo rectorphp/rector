@@ -8,9 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -311,7 +310,7 @@ final class BetterNodeFinder
     {
         $currentStatement = $node instanceof Expression ? $node : $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
 
-        $previousNode      = $currentStatement->getAttribute(AttributeKey::PREVIOUS_NODE);
+        $previousNode = $currentStatement->getAttribute(AttributeKey::PREVIOUS_NODE);
         $previousStatement = $currentStatement->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
         if (! $previousNode instanceof Param && $previousStatement instanceof FunctionLike) {
             $previousNode = $currentStatement->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
