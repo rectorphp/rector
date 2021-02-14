@@ -2,6 +2,7 @@
 
 use Nette\Utils\Html;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture\RenameClassMethodAndMethodCall;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture\SkipPrivateMethodRenameToPrivateInvoke;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture\SkipRenamePrivateMethodToPrivateInvoke;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
@@ -16,11 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
             new MethodCallRename(AbstractType::class, 'setDefaultOptions', 'configureOptions'),
             new MethodCallRename(Html::class, 'add', 'addHtml'),
-            new MethodCallRename(
-                'Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture\DemoFile',
-                'notify',
-                '__invoke'
-            ),
+            new MethodCallRename(RenameClassMethodAndMethodCall::class, 'notify', '__invoke'),
             new MethodCallRename(SkipRenamePrivateMethodToPrivateInvoke::class, 'notify', '__invoke'),
             new MethodCallRename('*RenameClassMethod', 'run', '__invoke'),
             new MethodCallRename(

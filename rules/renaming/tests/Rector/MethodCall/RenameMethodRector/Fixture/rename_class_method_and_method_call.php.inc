@@ -2,7 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
-final class DemoFile
+final class RenameClassMethodAndMethodCall
 {
     public function notify()
     {
@@ -15,7 +15,7 @@ final class Caller
 {
     public static function execute()
     {
-        $demo = new DemoFile();
+        $demo = new RenameClassMethodAndMethodCall();
         $demo->notify();
     }
 }
@@ -25,7 +25,7 @@ final class Caller
 
 namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
-final class DemoFile
+final class RenameClassMethodAndMethodCall
 {
     public function __invoke()
     {
@@ -38,7 +38,7 @@ final class Caller
 {
     public static function execute()
     {
-        $demo = new DemoFile();
+        $demo = new RenameClassMethodAndMethodCall();
         $demo->__invoke();
     }
 }
