@@ -7,13 +7,18 @@ namespace Rector\Nette\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Nette\NodeAnalyzer\ConditionalTemplateAssignReplacer;
 use Rector\Nette\NodeAnalyzer\NetteClassAnalyzer;
 use Rector\Nette\NodeAnalyzer\RenderMethodAnalyzer;
+use Rector\Nette\NodeAnalyzer\RightAssignTemplateRemover;
 use Rector\Nette\NodeAnalyzer\TemplatePropertyAssignCollector;
+use Rector\Nette\NodeAnalyzer\TemplatePropertyParametersReplacer;
 use Rector\Nette\NodeFactory\RenderParameterArrayFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -48,18 +53,32 @@ final class TemplateMagicAssignToExplicitVariableArrayRector extends AbstractRec
      */
     private $conditionalTemplateAssignReplacer;
 
+    /**
+     * @var RightAssignTemplateRemover
+     */
+    private $rightAssignTemplateRemover;
+
+    /**
+     * @var TemplatePropertyParametersReplacer
+     */
+    private $templatePropertyParametersReplacer;
+
     public function __construct(
         TemplatePropertyAssignCollector $templatePropertyAssignCollector,
         RenderMethodAnalyzer $renderMethodAnalyzer,
         NetteClassAnalyzer $netteClassAnalyzer,
         RenderParameterArrayFactory $renderParameterArrayFactory,
-        ConditionalTemplateAssignReplacer $conditionalTemplateAssignReplacer
+        ConditionalTemplateAssignReplacer $conditionalTemplateAssignReplacer,
+        RightAssignTemplateRemover $rightAssignTemplateRemover,
+        TemplatePropertyParametersReplacer $templatePropertyParametersReplacer
     ) {
         $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
         $this->renderMethodAnalyzer = $renderMethodAnalyzer;
         $this->netteClassAnalyzer = $netteClassAnalyzer;
         $this->renderParameterArrayFactory = $renderParameterArrayFactory;
         $this->conditionalTemplateAssignReplacer = $conditionalTemplateAssignReplacer;
+        $this->rightAssignTemplateRemover = $rightAssignTemplateRemover;
+        $this->templatePropertyParametersReplacer = $templatePropertyParametersReplacer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -113,30 +132,21 @@ CODE_SAMPLE
             return null;
         }
 
-        $renderMethodCall = $this->renderMethodAnalyzer->machRenderMethodCall($node);
-        if (! $renderMethodCall instanceof MethodCall) {
+        $renderMethodCalls = $this->renderMethodAnalyzer->machRenderMethodCalls($node);
+        if ($renderMethodCalls === []) {
             return null;
         }
 
-        if (! isset($renderMethodCall->args[0])) {
+        if (! $this->haveMethodCallsFirstArgument($renderMethodCalls)) {
             return null;
         }
 
-        $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectMagicTemplatePropertyCalls(
-            $node
-        );
-
-        $array = $this->renderParameterArrayFactory->createArray($magicTemplatePropertyCalls);
-        if (! $array instanceof Array_) {
-            return null;
+        // initialize $parameters variable for multiple renders
+        if (count($renderMethodCalls) > 1) {
+            return $this->refactorForMultipleRenderMethodCalls($node, $renderMethodCalls);
         }
 
-        $this->conditionalTemplateAssignReplacer->processClassMethod($node, $magicTemplatePropertyCalls);
-        $renderMethodCall->args[1] = new Arg($array);
-
-        $this->removeNodes($magicTemplatePropertyCalls->getNodesToRemove());
-
-        return $node;
+        return $this->refactorForSingleRenderMethodCall($node, $renderMethodCalls[0]);
     }
 
     private function shouldSkip(ClassMethod $classMethod): bool
@@ -146,5 +156,69 @@ CODE_SAMPLE
         }
 
         return ! $this->netteClassAnalyzer->isInComponent($classMethod);
+    }
+
+    /**
+     * @param MethodCall[] $methodCalls
+     */
+    private function haveMethodCallsFirstArgument(array $methodCalls): bool
+    {
+        foreach ($methodCalls as $methodCall) {
+            if (! isset($methodCall->args[0])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function refactorForSingleRenderMethodCall(
+        ClassMethod $classMethod,
+        MethodCall $renderMethodCall
+    ): ?ClassMethod {
+        $templateParametersAssigns = $this->templatePropertyAssignCollector->collect($classMethod);
+
+        $array = $this->renderParameterArrayFactory->createArray($templateParametersAssigns);
+        if (! $array instanceof Array_) {
+            return null;
+        }
+
+        $this->conditionalTemplateAssignReplacer->processClassMethod($templateParametersAssigns);
+        $renderMethodCall->args[1] = new Arg($array);
+
+        foreach ($templateParametersAssigns->getTemplateParameterAssigns() as $templateParameterAssign) {
+            $this->removeNode($templateParameterAssign->getAssign());
+        }
+
+        $this->rightAssignTemplateRemover->removeInClassMethod($classMethod);
+
+        return $classMethod;
+    }
+
+    /**
+     * @param MethodCall[] $renderMethodCalls
+     */
+    private function refactorForMultipleRenderMethodCalls(
+        ClassMethod $classMethod,
+        array $renderMethodCalls
+    ): ?ClassMethod {
+        $magicTemplateParametersAssigns = $this->templatePropertyAssignCollector->collect($classMethod);
+
+        if ($magicTemplateParametersAssigns->getTemplateParameterAssigns() === []) {
+            return null;
+        }
+
+        $parametersVariable = new Variable('parameters');
+        $parametersAssign = new Assign($parametersVariable, new Array_());
+        $assignExpression = new Expression($parametersAssign);
+        $classMethod->stmts = array_merge([$assignExpression], (array) $classMethod->stmts);
+
+        $this->templatePropertyParametersReplacer->replace($magicTemplateParametersAssigns, $parametersVariable);
+
+        foreach ($renderMethodCalls as $renderMethodCall) {
+            $renderMethodCall->args[1] = new Arg($parametersVariable);
+        }
+
+        return $classMethod;
     }
 }

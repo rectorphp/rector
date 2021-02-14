@@ -27,17 +27,21 @@ final class RenderMethodAnalyzer
         $this->betterNodeFinder = $betterNodeFinder;
     }
 
-    public function machRenderMethodCall(ClassMethod $classMethod): ?MethodCall
+    /**
+     * @return MethodCall[]
+     */
+    public function machRenderMethodCalls(ClassMethod $classMethod): array
     {
         /** @var MethodCall[] $methodsCalls */
         $methodsCalls = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, MethodCall::class);
 
+        $renderMethodCalls = [];
         foreach ($methodsCalls as $methodCall) {
             if ($this->nodeNameResolver->isName($methodCall->name, 'render')) {
-                return $methodCall;
+                $renderMethodCalls[] = $methodCall;
             }
         }
 
-        return null;
+        return $renderMethodCalls;
     }
 }

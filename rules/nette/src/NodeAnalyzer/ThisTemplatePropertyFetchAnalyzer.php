@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Nette\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -19,6 +20,20 @@ final class ThisTemplatePropertyFetchAnalyzer
     public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+    }
+
+    public function resolveTemplateParameterNameFromAssign(Assign $assign): ?string
+    {
+        if (! $assign->var instanceof PropertyFetch) {
+            return null;
+        }
+
+        $propertyFetch = $assign->var;
+        if (! $this->isTemplatePropertyFetch($propertyFetch->var)) {
+            return null;
+        }
+
+        return $this->nodeNameResolver->getName($propertyFetch);
     }
 
     /**
