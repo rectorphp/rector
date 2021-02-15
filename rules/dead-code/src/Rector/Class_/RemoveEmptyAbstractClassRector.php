@@ -37,6 +37,7 @@ final class RemoveEmptyAbstractClassRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof FileNode) {
+            /** @var FullyQualified[] $fullyQualifieds */
             $fullyQualifieds = $this->betterNodeFinder->findInstanceOf($node, FullyQualified::class);
             foreach ($fullyQualifieds as $fullyQualified) {
                 $parent = $fullyQualified->getAttribute(AttributeKey::PARENT_NODE);
