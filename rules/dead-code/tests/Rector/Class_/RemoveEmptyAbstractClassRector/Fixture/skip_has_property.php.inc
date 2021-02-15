@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
 
-abstract class SkipHasMethod
+abstract class SkipHasProperty
 {
-    public abstract function run();
+    protected $foo;
 }

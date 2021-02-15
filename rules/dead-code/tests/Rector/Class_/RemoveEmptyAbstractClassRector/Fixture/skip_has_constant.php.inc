@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
 
-abstract class SkipHasMethod
+abstract class SkipHasConstant
 {
-    public abstract function run();
+    protected const A_CONSTANT = 'foo';
 }
