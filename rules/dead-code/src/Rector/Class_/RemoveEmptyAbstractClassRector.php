@@ -108,16 +108,14 @@ CODE_SAMPLE
             return null;
         }
 
-        $className = $this->getName($class->namespacedName);
+        $extends = $class->extends;
         foreach ($this->fullyQualifieds as $fullyQualified) {
-            if ($fullyQualified->toString() === $className) {
+            if ($this->areNodesEqual($extends, $fullyQualified)) {
                 return null;
             }
         }
 
-        $extends = $class->extends;
         $children = $this->nodeRepository->findChildrenOfClass($this->getName($class->namespacedName));
-
         foreach ($children as $child) {
             $child->extends = $extends;
         }
