@@ -249,7 +249,7 @@ final class IfManipulator
      */
     public function collectNestedIfsWithNonBreaking(Foreach_ $foreach): array
     {
-        if (count($foreach->stmts) !== 1) {
+        if (count((array) $foreach->stmts) !== 1) {
             return [];
         }
 
@@ -305,7 +305,7 @@ final class IfManipulator
 
     public function isIfWithOnlyOneStmt(If_ $if): bool
     {
-        return count($if->stmts) === 1;
+        return count((array) $if->stmts) === 1;
     }
 
     public function isIfCondUsingAssignIdenticalVariable(Node $if, Node $assign): bool
