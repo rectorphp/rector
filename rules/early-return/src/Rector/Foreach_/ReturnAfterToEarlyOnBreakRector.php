@@ -109,7 +109,7 @@ CODE_SAMPLE
             return $this->areNodesEqual($node, $assignVariable);
         });
 
-        if ($this->shouldSkipAssign($assignVariable, $nextForeach, $variablePrevious)) {
+        if ($this->shouldSkipNextPrev($nextForeach, $variablePrevious)) {
             return null;
         }
 
@@ -123,28 +123,26 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var Assign $assignPreviousVariable */
+        $assignPreviousVariable = $variablePrevious->getAttribute(AttributeKey::PARENT_NODE);
+        $parent = $assignPreviousVariable->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Expression) {
+            return null;
+        }
+
         $this->removeNode($beforeBreak);
         $this->addNodeBeforeNode(new Return_($assign->expr), $breaks[0]);
         $this->removeNode($breaks[0]);
 
-        /** @var Assign $assignPreviousVariable */
-        $assignPreviousVariable = $variablePrevious->getAttribute(AttributeKey::PARENT_NODE);
         $nextForeach->expr = $assignPreviousVariable->expr;
         $this->removeNode($assignPreviousVariable);
 
         return $node;
     }
 
-    private function shouldSkipAssign(
-        Expr $assignVariable,
-        Return_ $nextForeach,
-        ?Expr $variablePrevious = null
-    ): bool {
-        if (! $assignVariable instanceof Variable) {
-            return true;
-        }
-
-        if (! $variablePrevious instanceof Node) {
+    private function shouldSkipNextPrev(Return_ $nextForeach, ?Expr $variablePrevious = null): bool
+    {
+        if (! $variablePrevious instanceof Expr) {
             return true;
         }
 

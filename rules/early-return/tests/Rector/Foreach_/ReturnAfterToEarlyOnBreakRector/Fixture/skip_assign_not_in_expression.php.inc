@@ -2,7 +2,7 @@
 
 namespace Rector\EarlyReturn\Tests\Rector\Foreach_\ReturnAfterToEarlyOnBreakRector\Fixture;
 
-class SkipAssignVarExpr
+class SkipAssignNotInExpression
 {
     private $pathOK = false;
 
