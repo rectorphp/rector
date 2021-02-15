@@ -17,6 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveEmptyAbstractClassRector extends AbstractRector
 {
     /**
+     * @var FullyQualified[]
+     */
+    private $fullyQualifieds = [];
+
+    /**
      * @return string[]
      */
     public function getNodeTypes(): array
@@ -29,6 +34,15 @@ final class RemoveEmptyAbstractClassRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $node->isAbstract()) {
+            $class = $node;
+            $this->fullyQualifieds[] = $this->betterNodeFinder->findFirst($node->stmts, function (Node $node) use ($class): bool {
+                return $this->areNodesEqual($node, $class);
+            });
+
+            return null;
+        }
+
         if ($this->shouldSkip($node)) {
             return null;
         }
@@ -80,10 +94,6 @@ CODE_SAMPLE
 
     private function shouldSkip(Class_ $class): bool
     {
-        if (! $class->isAbstract()) {
-            return true;
-        }
-
         if ($class->implements !== []) {
             return true;
         }
@@ -96,6 +106,13 @@ CODE_SAMPLE
     {
         if (! $class->extends instanceof FullyQualified) {
             return null;
+        }
+
+        $className = $this->getName($class->namespacedName);
+        foreach ($this->fullyQualifieds as $fullyQualified) {
+            if ($fullyQualified->toString() === $className) {
+                return null;
+            }
         }
 
         $extends = $class->extends;
