@@ -251,6 +251,8 @@ Do you use Rector to upgrade your code? Add it here:
 - [palantirnet/drupal-rector](https://github.com/palantirnet/drupal-rector) by [Palantir.net](https://github.com/palantirnet) for [Drupal](https://www.drupal.org/)
 - [sabbelasichon/typo3-rector](https://github.com/sabbelasichon/typo3-rector) for [TYPO3](https://typo3.org/)
 
+<br>
+
 ## Known Drawbacks
 
 ### How to Apply Coding Standards?
