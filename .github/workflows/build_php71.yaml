@@ -47,8 +47,10 @@ jobs:
             # Remove DEV dependencies
             -   run: composer install --no-dev
 
-            # Replace the composer.json file
-            -   run: cp ci/downgrade/composer.json.after ./composer.json
+            # Replace the composer.json & composer.json.lock file
+            -   run: |
+                    cp ci/downgrade/composer.json.after ./composer.json
+                    cp ci/downgrade/composer.lock ./composer.lock
 
             # Rector without DEV needs phpstan.neon removed
             -   run: rm phpstan.neon
