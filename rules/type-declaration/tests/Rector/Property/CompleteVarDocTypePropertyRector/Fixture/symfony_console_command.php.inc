@@ -623,7 +623,7 @@ class Command
      */
     private $applicationDefinitionMergedWithArgs = false;
     /**
-     * @var callable|null
+     * @var null|callable
      */
     private $code;
     /**

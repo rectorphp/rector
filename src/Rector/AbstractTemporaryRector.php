@@ -155,6 +155,11 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected $nodeRemover;
 
     /**
+     * @var RectorChangeCollector
+     */
+    protected $rectorChangeCollector;
+
+    /**
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
@@ -203,11 +208,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      * @var PropertyToAddCollector
      */
     private $propertyToAddCollector;
-
-    /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
 
     /**
      * @var PropertyAdder
