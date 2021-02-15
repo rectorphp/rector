@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Nette\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\FunctionLike;
@@ -14,39 +12,14 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
-use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Nette\ValueObject\AlwaysTemplateParameterAssign;
+use Rector\Nette\ValueObject\ConditionalTemplateParameterAssign;
+use Rector\Nette\ValueObject\TemplateParametersAssigns;
 use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
-use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class TemplatePropertyAssignCollector
 {
-    /**
-     * @var Expr[]
-     */
-    private $templateVariables = [];
-
-    /**
-     * @var Node[]
-     */
-    private $nodesToRemove = [];
-
-    /**
-     * @var array<string, Assign[]>
-     */
-    private $conditionalAssigns = [];
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     /**
      * @var ScopeNestingComparator
      */
@@ -72,94 +45,91 @@ final class TemplatePropertyAssignCollector
      */
     private $returnAnalyzer;
 
+    /**
+     * @var AlwaysTemplateParameterAssign[]
+     */
+    private $alwaysTemplateParameterAssigns = [];
+
+    /**
+     * @var ConditionalTemplateParameterAssign[]
+     */
+    private $conditionalTemplateParameterAssigns = [];
+
     public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver,
         ScopeNestingComparator $scopeNestingComparator,
         BetterNodeFinder $betterNodeFinder,
         ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer,
         ReturnAnalyzer $returnAnalyzer
     ) {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->scopeNestingComparator = $scopeNestingComparator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->thisTemplatePropertyFetchAnalyzer = $thisTemplatePropertyFetchAnalyzer;
         $this->returnAnalyzer = $returnAnalyzer;
     }
 
-    public function collectMagicTemplatePropertyCalls(ClassMethod $classMethod): MagicTemplatePropertyCalls
+    public function collect(ClassMethod $classMethod): TemplateParametersAssigns
     {
-        $this->templateVariables = [];
-        $this->nodesToRemove = [];
-        $this->conditionalAssigns = [];
+        $this->alwaysTemplateParameterAssigns = [];
+        $this->conditionalTemplateParameterAssigns = [];
 
         $this->lastReturn = $this->returnAnalyzer->findLastClassMethodReturn($classMethod);
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
-            (array) $classMethod->stmts,
-            function (Node $node): void {
-                if ($node instanceof Assign) {
-                    $this->collectVariableFromAssign($node);
-                }
-            }
-        );
+        /** @var Assign[] $assigns */
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
+        foreach ($assigns as $assign) {
+            $this->collectVariableFromAssign($assign);
+        }
 
-        return new MagicTemplatePropertyCalls(
-            $this->templateVariables,
-            $this->nodesToRemove,
-            $this->conditionalAssigns
+        return new TemplateParametersAssigns(
+            $this->alwaysTemplateParameterAssigns,
+            $this->conditionalTemplateParameterAssigns
         );
     }
 
     private function collectVariableFromAssign(Assign $assign): void
     {
         // $this->template = x
-        if ($assign->var instanceof PropertyFetch) {
-            $propertyFetch = $assign->var;
+        if (! $assign->var instanceof PropertyFetch) {
+            return;
+        }
 
-            if (! $this->thisTemplatePropertyFetchAnalyzer->isTemplatePropertyFetch($propertyFetch->var)) {
-                return;
-            }
+        $parameterName = $this->thisTemplatePropertyFetchAnalyzer->resolveTemplateParameterNameFromAssign($assign);
+        if ($parameterName === null) {
+            return;
+        }
 
-            $variableName = $this->nodeNameResolver->getName($propertyFetch);
+        $propertyFetch = $assign->var;
 
-            $foundParent = $this->betterNodeFinder->findParentTypes(
-                $propertyFetch->var,
-                ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [FunctionLike::class]
+        $foundParent = $this->betterNodeFinder->findParentTypes(
+            $propertyFetch->var,
+            ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [FunctionLike::class]
+        );
+
+        if ($foundParent && $this->scopeNestingComparator->isInBothIfElseBranch($foundParent, $propertyFetch)) {
+            $this->conditionalTemplateParameterAssigns[] = new ConditionalTemplateParameterAssign(
+                $assign,
+                $parameterName
             );
-
-            if ($foundParent && $this->scopeNestingComparator->isInBothIfElseBranch(
-                $foundParent,
-                $propertyFetch
-            )) {
-                $this->conditionalAssigns[$variableName][] = $assign;
-                return;
-            }
-
-            if ($foundParent instanceof If_) {
-                return;
-            }
-
-            if ($foundParent instanceof Else_) {
-                return;
-            }
-
-            // there is a return before this assign, to do not remove it and keep ti
-            if (! $this->returnAnalyzer->isBeforeLastReturn($assign, $this->lastReturn)) {
-                return;
-            }
-
-            $this->templateVariables[$variableName] = $assign->expr;
-            $this->nodesToRemove[] = $assign;
             return;
         }
 
-        // $x = $this->template
-        if (! $this->thisTemplatePropertyFetchAnalyzer->isTemplatePropertyFetch($assign->expr)) {
+        if ($foundParent instanceof If_) {
             return;
         }
 
-        $this->nodesToRemove[] = $assign;
+        if ($foundParent instanceof Else_) {
+            return;
+        }
+
+        // there is a return before this assign, to do not remove it and keep ti
+        if (! $this->returnAnalyzer->isBeforeLastReturn($assign, $this->lastReturn)) {
+            return;
+        }
+
+        $this->alwaysTemplateParameterAssigns[] = new AlwaysTemplateParameterAssign(
+            $assign,
+            $parameterName,
+            $assign->expr
+        );
     }
 }
