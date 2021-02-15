@@ -17,11 +17,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveEmptyAbstractClassRector extends AbstractRector
 {
     /**
-     * @var string[]
-     */
-    private $removedAbstractClasses = [];
-
-    /**
      * @return string[]
      */
     public function getNodeTypes(): array
@@ -66,10 +61,6 @@ final class RemoveEmptyAbstractClassRector extends AbstractRector
         $children = $this->nodeRepository->findChildrenOfClass($this->getName($class->namespacedName));
 
         foreach ($children as $child) {
-            if (in_array($child->extends->toString(), $this->removedAbstractClasses, true)) {
-                continue;
-            }
-
             $child->extends = $extends;
         }
 
