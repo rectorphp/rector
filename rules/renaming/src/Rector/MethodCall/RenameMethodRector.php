@@ -15,9 +15,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
@@ -45,14 +43,9 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
      */
     private $classManipulator;
 
-    public function __construct(
-        ClassManipulator $classManipulator,
-        NodeTypeResolver $nodeTypeResolver,
-        NodeRepository $nodeRepository
-    ) {
+    public function __construct(ClassManipulator $classManipulator)
+    {
         $this->classManipulator = $classManipulator;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeRepository = $nodeRepository;
     }
 
     public function getRuleDefinition(): RuleDefinition
