@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\EarlyReturn\Rector\Foreach_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
@@ -107,11 +109,7 @@ CODE_SAMPLE
             return $this->areNodesEqual($node, $assignVariable);
         });
 
-        if (! $variablePrevious instanceof Node) {
-            return null;
-        }
-
-        if (! $this->areNodesEqual($nextForeach->expr, $variablePrevious)) {
+        if ($this->shouldSkipAssign($assignVariable, $nextForeach, $variablePrevious)) {
             return null;
         }
 
@@ -135,5 +133,21 @@ CODE_SAMPLE
         $this->removeNode($assignPreviousVariable);
 
         return $node;
+    }
+
+    private function shouldSkipAssign(
+        Expr $assignVariable,
+        Return_ $nextForeach,
+        ?Expr $variablePrevious = null
+    ): bool {
+        if (! $assignVariable instanceof Variable) {
+            return true;
+        }
+
+        if (! $variablePrevious instanceof Node) {
+            return true;
+        }
+
+        return ! $this->areNodesEqual($nextForeach->expr, $variablePrevious);
     }
 }
