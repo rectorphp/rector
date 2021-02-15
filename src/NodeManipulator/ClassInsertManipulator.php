@@ -156,7 +156,7 @@ final class ClassInsertManipulator
 
     private function hasClassProperty(Class_ $class, string $name): bool
     {
-        return $class->getProperty($name) !== null;
+        return $class->getProperty($name) instanceof Property;
     }
 
     private function addTraitUse(Class_ $class, TraitUse $traitUse): void
