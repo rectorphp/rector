@@ -8,7 +8,7 @@ class SkipAssignVarExpr
 
     public function run(array $pathConstants, string $dirPath, string $allowedPath, bool $pathOK = null)
     {
-        $pathOK || $this->pathOK = true;
+        $pathOK !== null || $this->pathOK = true;
         foreach ($pathConstants as $allowedPath) {
             if ($dirPath == $allowedPath) {
                 $this->pathOK = true;

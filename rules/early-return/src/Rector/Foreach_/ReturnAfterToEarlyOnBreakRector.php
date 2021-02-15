@@ -141,7 +141,7 @@ CODE_SAMPLE
         ?Expr $variablePrevious = null
     ): bool {
         if (! $assignVariable instanceof Variable) {
-            return true;
+            //return true;
         }
 
         if (! $variablePrevious instanceof Node) {
