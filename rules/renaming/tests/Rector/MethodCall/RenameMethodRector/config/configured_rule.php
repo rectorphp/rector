@@ -20,6 +20,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'notify',
                     '__invoke'
                 ),
+                new MethodCallRename(
+                    'Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture\SomeSubscriber',
+                    'old',
+                    'new'
+                ),
                 new MethodCallRename('*Presenter', 'run', '__invoke'),
                 new MethodCallRename(
                     \Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture\SkipSelfMethodRename::class,
