@@ -13,13 +13,13 @@ final class TemplatePropertyParametersReplacer
 {
     public function replace(TemplateParametersAssigns $magicTemplateParametersAssigns, Variable $variable): void
     {
-        foreach ($magicTemplateParametersAssigns->getTemplateParameterAssigns() as $templateParameterAssign) {
+        foreach ($magicTemplateParametersAssigns->getTemplateParameterAssigns() as $alwaysTemplateParameterAssign) {
             $arrayDimFetch = new ArrayDimFetch(
                 $variable,
-                new String_($templateParameterAssign->getParameterName())
+                new String_($alwaysTemplateParameterAssign->getParameterName())
             );
 
-            $assign = $templateParameterAssign->getAssign();
+            $assign = $alwaysTemplateParameterAssign->getAssign();
             $assign->var = $arrayDimFetch;
         }
     }

@@ -186,8 +186,8 @@ CODE_SAMPLE
         $this->conditionalTemplateAssignReplacer->processClassMethod($templateParametersAssigns);
         $renderMethodCall->args[1] = new Arg($array);
 
-        foreach ($templateParametersAssigns->getTemplateParameterAssigns() as $templateParameterAssign) {
-            $this->removeNode($templateParameterAssign->getAssign());
+        foreach ($templateParametersAssigns->getTemplateParameterAssigns() as $alwaysTemplateParameterAssign) {
+            $this->removeNode($alwaysTemplateParameterAssign->getAssign());
         }
 
         $this->rightAssignTemplateRemover->removeInClassMethod($classMethod);
