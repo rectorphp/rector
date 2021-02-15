@@ -6,7 +6,6 @@ namespace Rector\Core\Configuration;
 
 use Jean85\PrettyVersions;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Input\InputInterface;
