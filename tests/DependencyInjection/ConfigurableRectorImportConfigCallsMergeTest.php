@@ -31,31 +31,27 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractKernelT
      * @dataProvider provideData()
      * @param array<string, string> $expectedConfiguration
      */
-    public function testMainConfigValues(
-        string $config,
-        int $expectedConfigurationCount,
-        array $expectedConfiguration
-    ): void {
+    public function testMainConfigValues(string $config, array $expectedConfiguration): void
+    {
         $this->bootKernelWithConfigs(RectorKernel::class, [$config]);
         $this->renameClassRector = $this->getService(RenameClassRector::class);
 
         $oldToNewClasses = $this->privatesAccessor->getPrivateProperty($this->renameClassRector, 'oldToNewClasses');
 
-        $this->assertCount($expectedConfigurationCount, $oldToNewClasses);
         $this->assertSame($expectedConfiguration, $oldToNewClasses);
     }
 
     public function provideData(): Iterator
     {
         yield [
-            __DIR__ . '/config/main_config_with_only_imports.php', 2, [
+            __DIR__ . '/config/main_config_with_only_imports.php', [
                 'old_2' => 'new_2',
                 'old_1' => 'new_1',
             ],
         ];
 
         yield [
-            __DIR__ . '/config/main_config_with_own_value.php', 3, [
+            __DIR__ . '/config/main_config_with_own_value.php', [
                 'old_2' => 'new_2',
                 'old_1' => 'new_1',
                 'old_3' => 'new_3',
@@ -63,7 +59,7 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractKernelT
         ];
 
         yield [
-            __DIR__ . '/config/main_config_with_override_value.php', 2, [
+            __DIR__ . '/config/main_config_with_override_value.php', [
                 'old_2' => 'new_2',
                 'old_1' => 'new_1',
             ],
