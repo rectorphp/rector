@@ -98,6 +98,7 @@ CODE_SAMPLE
         }
 
         $assignVariable = $assign->var;
+        /** @var Expr $variablePrevious */
         $variablePrevious = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $node) use (
             $assignVariable
         ): bool {
