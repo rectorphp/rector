@@ -12,7 +12,4 @@ return static function (
     $services->set(\Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector::class);
     $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector::class);
     $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector::class);
-    $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector::class);
-    $services->set(\Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector::class);
-    $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeFromTypedPropertyRector::class);
 };

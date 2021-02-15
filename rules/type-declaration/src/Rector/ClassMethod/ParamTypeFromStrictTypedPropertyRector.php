@@ -21,9 +21,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeFromTypedPropertyRector\ParamTypeFromTypedPropertyRectorTest
+ * @see \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeFromStrictTypedPropertyRector\ParamTypeFromStrictTypedPropertyRectorTest
  */
-final class ParamTypeFromTypedPropertyRector extends AbstractRector
+final class ParamTypeFromStrictTypedPropertyRector extends AbstractRector
 {
     /**
      * @var SimpleCallableNodeTraverser
@@ -114,7 +114,7 @@ CODE_SAMPLE
             }
 
             $property = $this->matchPropertyWithSingleType($node->var);
-            if ($property === null) {
+            if (! $property instanceof Property) {
                 return null;
             }
 
@@ -127,7 +127,7 @@ CODE_SAMPLE
     private function matchPropertyWithSingleType(PropertyFetch $propertyFetch): ?Property
     {
         $property = $this->nodeRepository->findPropertyByPropertyFetch($propertyFetch);
-        if ($property === null) {
+        if (! $property instanceof Property) {
             return null;
         }
 

@@ -679,6 +679,11 @@ final class SetList
     /**
      * @var string
      */
+    public const TYPE_DECLARATION_STRICT = __DIR__ . '/../../../../config/set/type-declaration-strict.php';
+
+    /**
+     * @var string
+     */
     public const UNWRAP_COMPAT = __DIR__ . '/../../../../config/set/unwrap-compat.php';
 
     /**

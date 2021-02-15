@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeFromTypedPropertyRector;
+namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeFromStrictTypedPropertyRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeFromTypedPropertyRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeFromStrictTypedPropertyRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ParamTypeFromTypedPropertyRectorTest extends AbstractRectorTestCase
+final class ParamTypeFromStrictTypedPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
      * @requires PHP 8.0
@@ -27,6 +27,6 @@ final class ParamTypeFromTypedPropertyRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return ParamTypeFromTypedPropertyRector::class;
+        return ParamTypeFromStrictTypedPropertyRector::class;
     }
 }
