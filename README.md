@@ -109,8 +109,6 @@ And modify it:
 
 ```php
 // rector.php
-
-
 use Rector\Core\Configuration\Option;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Set\ValueObject\SetList;
@@ -193,8 +191,6 @@ To work with some Symfony rules, you now need to link your container XML file
 
 ```php
 // rector.php
-
-
 use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
