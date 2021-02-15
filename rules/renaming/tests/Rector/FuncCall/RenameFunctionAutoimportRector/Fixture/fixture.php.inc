@@ -6,7 +6,7 @@ class Fixture
 {
     public function someMethod()
     {
-        view('template', []);
+        service('template', []);
     }
 }
 
@@ -20,13 +20,13 @@ function a(callable $a) {
 
 namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionAutoimportRector\Fixture;
 
-use function Laravel\Templating\render;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 class Fixture
 {
     public function someMethod()
     {
-        render('template', []);
+        service('template', []);
     }
 }
 
