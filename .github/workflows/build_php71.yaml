@@ -15,7 +15,7 @@ jobs:
             # see https://github.com/shivammathur/setup-php
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 7.4
+                    php-version: 7.1
                     coverage: none
 
             # The Symfony Polyfill libraries are needed
@@ -37,7 +37,7 @@ jobs:
 
             # Run all the tests on PHP 7.4 (because JUnit needs PHP 7.3+),
             # but using Rector downgraded to PHP 7.1
-            -   run: vendor/bin/phpunit
+            # -   run: vendor/bin/phpunit
 
             # Avoid Composer v2 platform checks (composer.json requires PHP 7.3+, but below we are running 7.1)
             -   run: composer config platform-check false
@@ -79,7 +79,7 @@ jobs:
             # If we reach here the downgrade works! Then, deploy it to its own repo
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 7.4
+                    php-version: 7.1
                     coverage: none
 
             # Copy all files for the target repo to rector-downgrade/
