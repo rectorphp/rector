@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\DependencyInjection;
 
 use Iterator;
+use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractKernelTestCase
+final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractRectorTestCase
 {
     /**
      * @var RenameClassRector
@@ -33,7 +35,11 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractKernelT
      */
     public function testMainConfigValues(string $config, array $expectedConfiguration): void
     {
-        $this->bootKernelWithConfigs(RectorKernel::class, [$config]);
+        $rectorConfigsResolver = new RectorConfigsResolver();
+
+        $configFileInfos = $rectorConfigsResolver->resolveFromConfigFileInfo(new SmartFileInfo($config));
+
+        $this->bootKernelWithConfigs(RectorKernel::class, $configFileInfos);
         $this->renameClassRector = $this->getService(RenameClassRector::class);
 
         $oldToNewClasses = $this->privatesAccessor->getPrivateProperty($this->renameClassRector, 'oldToNewClasses');
@@ -62,6 +68,17 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractKernelT
                 'old_2' => 'new_2',
                 'old_1' => 'new_1',
                 'old_3' => 'new_3',
+            ],
+        ];
+
+        yield [
+            __DIR__ . '/config/one_set.php', [
+                'PHPUnit_Framework_MockObject_Stub' => 'PHPUnit\Framework\MockObject\Stub',
+                'PHPUnit_Framework_MockObject_Stub_Return' => 'PHPUnit\Framework\MockObject\Stub\ReturnStub',
+                'PHPUnit_Framework_MockObject_Matcher_Parameters' => 'PHPUnit\Framework\MockObject\Matcher\Parameters',
+                'PHPUnit_Framework_MockObject_Matcher_Invocation' => 'PHPUnit\Framework\MockObject\Matcher\Invocation',
+                'PHPUnit_Framework_MockObject_MockObject' => 'PHPUnit\Framework\MockObject\MockObject',
+                'PHPUnit_Framework_MockObject_Invocation_Object' => 'PHPUnit\Framework\MockObject\Invocation\ObjectInvocation',
             ],
         ];
     }
