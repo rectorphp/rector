@@ -140,12 +140,12 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkipNextPrev(Return_ $nextForeach, ?Expr $variablePrevious = null): bool
+    private function shouldSkipNextPrev(Return_ $return, ?Expr $expr = null): bool
     {
-        if (! $variablePrevious instanceof Expr) {
+        if (! $expr instanceof Expr) {
             return true;
         }
 
-        return ! $this->areNodesEqual($nextForeach->expr, $variablePrevious);
+        return ! $this->areNodesEqual($return->expr, $expr);
     }
 }
