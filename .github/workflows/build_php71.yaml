@@ -44,7 +44,6 @@ jobs:
             # Regenerating the autoload files will remove vendor/composer/platform_check.php, otherwise executing bin/rector on 7.1 fails
             -   run: composer dumpautoload
 
-            # Remove DEV dependencies
             -   run: composer install
 
             # Replace the composer.json file
