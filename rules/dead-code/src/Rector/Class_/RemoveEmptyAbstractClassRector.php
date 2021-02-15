@@ -28,6 +28,11 @@ final class RemoveEmptyAbstractClassRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        $methods = $node->getMethods();
+        if ($methods !== []) {
+            return null;
+        }
+
         return $node;
     }
 
