@@ -32,6 +32,10 @@ final class RemoveEmptyAbstractClassRector extends AbstractRector
             return null;
         }
 
+        if ($node->implements !== []) {
+            return null;
+        }
+
         $stmts = $node->stmts;
         if ($stmts !== []) {
             return null;
