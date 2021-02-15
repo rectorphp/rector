@@ -45,7 +45,7 @@ jobs:
             -   run: composer dumpautoload
 
             # Remove DEV dependencies
-            -   run: composer install --no-dev
+            -   run: composer install
 
             # Replace the composer.json file
             -   run: cp ci/downgrade/composer.json.after ./composer.json
