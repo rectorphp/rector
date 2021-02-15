@@ -23,8 +23,8 @@ final class OpenSourceRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureOpenSource');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/project_open_source.php');
+        return __DIR__ . '/config/project_open_source.php';
     }
 }

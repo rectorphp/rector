@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\FixturePhp8;
+namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\FixturePhp80;
 
 use Symfony\Component\Console\Command\Command;
 

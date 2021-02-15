@@ -71,8 +71,8 @@ final class ChangedFilesDetectorTest extends AbstractRectorTestCase
         ];
     }
 
-    protected function provideConfigFileInfo(): SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config.php');
+        return __DIR__ . '/config.php';
     }
 }

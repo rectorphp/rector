@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+// @see https://github.com/phpstan/phpstan/issues/4541
+require_once 'phar://vendor/phpstan/phpstan/phpstan.phar/stubs/runtime/ReflectionUnionType.php';
+require_once 'phar://vendor/phpstan/phpstan/phpstan.phar/stubs/runtime/Attribute.php';
+
 /**
  * Configuration consts for the different rector.php config files
  */

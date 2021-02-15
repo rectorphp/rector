@@ -7,6 +7,10 @@ use Tracy\Debugger;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+// @see https://github.com/phpstan/phpstan/issues/4541#issuecomment-779434916
+require_once 'phar://vendor/phpstan/phpstan/phpstan.phar/stubs/runtime/ReflectionUnionType.php';
+require_once 'phar://vendor/phpstan/phpstan/phpstan.phar/stubs/runtime/Attribute.php';
+
 // silent deprecations, since we test them
 error_reporting(E_ALL ^ E_DEPRECATED);
 

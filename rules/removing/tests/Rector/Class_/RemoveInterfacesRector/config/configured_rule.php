@@ -6,7 +6,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(RemoveInterfacesRector::class)->call('configure', [[
-        RemoveInterfacesRector::INTERFACES_TO_REMOVE => [SomeInterface::class],
-    ]]);
+    $services->set(RemoveInterfacesRector::class)
+        ->call('configure', [[
+            RemoveInterfacesRector::INTERFACES_TO_REMOVE => [SomeInterface::class],
+        ]]);
 };

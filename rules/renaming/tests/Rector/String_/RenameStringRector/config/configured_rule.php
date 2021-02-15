@@ -5,9 +5,10 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(RenameStringRector::class)->call('configure', [[
-        RenameStringRector::STRING_CHANGES => [
-            'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
-        ],
-    ]]);
+    $services->set(RenameStringRector::class)
+        ->call('configure', [[
+            RenameStringRector::STRING_CHANGES => [
+                'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
+            ],
+        ]]);
 };

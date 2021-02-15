@@ -109,8 +109,6 @@ And modify it:
 
 ```php
 // rector.php
-
-
 use Rector\Core\Configuration\Option;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Set\ValueObject\SetList;
@@ -193,8 +191,6 @@ To work with some Symfony rules, you now need to link your container XML file
 
 ```php
 // rector.php
-
-
 use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -254,6 +250,8 @@ Do you use Rector to upgrade your code? Add it here:
 
 - [palantirnet/drupal-rector](https://github.com/palantirnet/drupal-rector) by [Palantir.net](https://github.com/palantirnet) for [Drupal](https://www.drupal.org/)
 - [sabbelasichon/typo3-rector](https://github.com/sabbelasichon/typo3-rector) for [TYPO3](https://typo3.org/)
+
+<br>
 
 ## Known Drawbacks
 

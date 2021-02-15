@@ -11,7 +11,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Doctrine\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector
  * @see \Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector
- * @see \Rector\Doctrine\Rector\MethodCall\EntityRepositoryServiceLocatorToDIRector
  */
 final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
 {
@@ -28,8 +27,8 @@ final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

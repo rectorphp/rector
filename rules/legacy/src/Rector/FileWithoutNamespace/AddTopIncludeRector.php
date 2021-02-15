@@ -31,13 +31,13 @@ final class AddTopIncludeRector extends AbstractRector implements ConfigurableRe
      * @api
      * @var string
      */
-    public const PATTERNS = '$patterns';
+    public const PATTERNS = 'patterns';
 
     /**
      * @api
      * @var string
      */
-    public const AUTOLOAD_FILE_PATH = '$autoloadFilePath';
+    public const AUTOLOAD_FILE_PATH = 'autoload_file_path';
 
     /**
      * @var string

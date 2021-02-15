@@ -21,13 +21,12 @@ class TemplateWithAssign extends Control
 
     public function render(): void
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/templates/default.latte');
+        $this->template->setFile(__DIR__ . '/templates/default.latte');
 
-        $template->items = $this->basketManager->getItems();
-        $template->discountCode = $this->basketManager->getDiscountCode();
+        $this->template->items = $this->basketManager->getItems();
+        $this->template->discountCode = $this->basketManager->getDiscountCode();
 
-        $template->render();
+        $this->template->render();
     }
 }
 

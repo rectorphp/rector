@@ -23,8 +23,8 @@ final class AutoImportedAnnotationToAttributeRectorTest extends AbstractRectorTe
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureAutoImported');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/auto_import.php');
+        return __DIR__ . '/config/auto_import.php';
     }
 }

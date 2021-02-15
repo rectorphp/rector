@@ -13,6 +13,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
@@ -36,6 +37,16 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
      * @var MethodCallRenameInterface[]
      */
     private $methodCallRenames = [];
+
+    /**
+     * @var ClassManipulator
+     */
+    private $classManipulator;
+
+    public function __construct(ClassManipulator $classManipulator)
+    {
+        $this->classManipulator = $classManipulator;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -74,6 +85,14 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->methodCallRenames as $methodCallRename) {
+            $implementsInterface = $this->classManipulator->hasParentMethodOrInterface(
+                $methodCallRename->getOldClass(),
+                $methodCallRename->getOldMethod()
+            );
+            if ($implementsInterface) {
+                continue;
+            }
+
             if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(
                 $node,
                 $methodCallRename->getOldClass()

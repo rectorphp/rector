@@ -23,8 +23,8 @@ final class PolyfillRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureWithPolyfill');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/polyfill_config.php');
+        return __DIR__ . '/config/polyfill_config.php';
     }
 }

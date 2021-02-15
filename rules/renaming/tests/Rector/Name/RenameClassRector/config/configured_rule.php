@@ -9,6 +9,8 @@ use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClassWithoutTypo;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClassWithTypo;
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\SomeFinalClass;
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\SomeNonFinalClass;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -38,6 +40,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'MyFooInterface' => 'MyBazInterface',
                 'MyBarInterface' => 'MyBazInterface',
                 \Acme\Foo\DoNotUpdateExistingTargetNamespace::class => DoNotUpdateExistingTargetNamespace::class,
+                SomeNonFinalClass::class => SomeFinalClass::class,
             ],
         ]]);
 };

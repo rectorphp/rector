@@ -146,7 +146,7 @@ final class ClassDependencyManipulator
     {
         $classMethod = $class->getMethod(MethodName::CONSTRUCT);
 
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             $classMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
 
             // keep parent constructor call

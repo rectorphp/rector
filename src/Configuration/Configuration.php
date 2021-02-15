@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Configuration;
 
 use Jean85\PrettyVersions;
-use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
-use Rector\ChangesReporting\Output\JsonOutputFormatter;
+use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Input\InputInterface;
@@ -267,10 +266,7 @@ final class Configuration
 
     public function shouldHideClutter(): bool
     {
-        if ($this->outputFormat === JsonOutputFormatter::NAME) {
-            return true;
-        }
-        return $this->outputFormat === CheckstyleOutputFormatter::NAME;
+        return $this->outputFormat !== ConsoleOutputFormatter::NAME;
     }
 
     public function shouldShowDiffs(): bool
@@ -284,11 +280,9 @@ final class Configuration
         if ($noProgressBar) {
             return false;
         }
+
         $optionOutputFormat = $input->getOption(Option::OPTION_OUTPUT_FORMAT);
-        if ($optionOutputFormat === JsonOutputFormatter::NAME) {
-            return false;
-        }
-        return $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== CheckstyleOutputFormatter::NAME;
+        return $optionOutputFormat === ConsoleOutputFormatter::NAME;
     }
 
     private function sanitizeOutputFileValue(?string $outputFileOption): ?string

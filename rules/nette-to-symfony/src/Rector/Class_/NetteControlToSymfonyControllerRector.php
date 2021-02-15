@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Rector\Class_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -14,11 +13,13 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Nette\NodeAnalyzer\NetteClassAnalyzer;
 use Rector\Nette\NodeFactory\ActionRenderFactory;
-use Rector\Nette\TemplatePropertyAssignCollector;
+use Rector\NetteToSymfony\NodeAnalyzer\ClassMethodRenderAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,21 +36,35 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NetteControlToSymfonyControllerRector extends AbstractRector
 {
     /**
-     * @var TemplatePropertyAssignCollector
-     */
-    private $templatePropertyAssignCollector;
-
-    /**
      * @var ActionRenderFactory
      */
     private $actionRenderFactory;
 
+    /**
+     * @var NetteClassAnalyzer
+     */
+    private $netteClassAnalyzer;
+
+    /**
+     * @var ClassNaming
+     */
+    private $classNaming;
+
+    /**
+     * @var ClassMethodRenderAnalyzer
+     */
+    private $classMethodRenderAnalyzer;
+
     public function __construct(
         ActionRenderFactory $actionRenderFactory,
-        TemplatePropertyAssignCollector $templatePropertyAssignCollector
+        NetteClassAnalyzer $netteClassAnalyzer,
+        ClassNaming $classNaming,
+        ClassMethodRenderAnalyzer $classMethodRenderAnalyzer
     ) {
-        $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
         $this->actionRenderFactory = $actionRenderFactory;
+        $this->netteClassAnalyzer = $netteClassAnalyzer;
+        $this->classNaming = $classNaming;
+        $this->classMethodRenderAnalyzer = $classMethodRenderAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -101,15 +116,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkipClass($node)) {
+        if (! $this->netteClassAnalyzer->isInComponent($node)) {
             return null;
         }
 
         $shortClassName = $this->nodeNameResolver->getShortName($node);
-        $shortClassName = $this->removeSuffix($shortClassName, 'Control');
-        $shortClassName .= 'Controller';
+        $shortClassName = $this->classNaming->replaceSuffix($shortClassName, 'Control', 'Controller');
 
         $node->name = new Identifier($shortClassName);
+
         $node->extends = new FullyQualified(AbstractController::class);
 
         $classMethod = $node->getMethod('render');
@@ -120,40 +135,14 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkipClass(Class_ $class): bool
-    {
-        if ($this->classNodeAnalyzer->isAnonymousClass($class)) {
-            return true;
-        }
-
-        // skip presenter
-        if ($this->isName($class, '*Presenter')) {
-            return true;
-        }
-
-        return ! $this->isObjectType($class, 'Nette\Application\UI\Control');
-    }
-
-    private function removeSuffix(string $content, string $suffix): string
-    {
-        if (! Strings::endsWith($content, $suffix)) {
-            return $content;
-        }
-
-        return Strings::substring($content, 0, -Strings::length($suffix));
-    }
-
     private function processRenderMethod(ClassMethod $classMethod): void
     {
         $this->processGetPresenterGetSessionMethodCall($classMethod);
 
         $classMethod->name = new Identifier('action');
 
-        $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectMagicTemplatePropertyCalls(
-            $classMethod
-        );
-
-        $methodCall = $this->actionRenderFactory->createThisRenderMethodCall($magicTemplatePropertyCalls);
+        $classMethodRender = $this->classMethodRenderAnalyzer->collectFromClassMethod($classMethod);
+        $methodCall = $this->actionRenderFactory->createThisRenderMethodCall($classMethodRender);
 
         // add return in the end
         $return = new Return_($methodCall);
@@ -163,7 +152,7 @@ CODE_SAMPLE
             $classMethod->returnType = new FullyQualified(Response::class);
         }
 
-        $this->removeNodes($magicTemplatePropertyCalls->getNodesToRemove());
+        $this->removeNodes($classMethodRender->getNodesToRemove());
     }
 
     private function processGetPresenterGetSessionMethodCall(ClassMethod $classMethod): void

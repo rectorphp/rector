@@ -10,7 +10,7 @@ use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
 use Rector\FileSystemRector\ValueObjectFactory\MovedFileWithNodesFactory;
-use Rector\NetteToSymfony\Analyzer\NetteControlFactoryInterfaceAnalyzer;
+use Rector\NetteToSymfony\NodeAnalyzer\NetteControlFactoryInterfaceAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 

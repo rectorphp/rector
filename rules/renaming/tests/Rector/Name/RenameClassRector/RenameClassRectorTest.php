@@ -23,17 +23,8 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @see https://github.com/rectorphp/rector/issues/1438
-     */
-    public function testClassNameDuplication(): void
+    protected function provideConfigFilePath(): string
     {
-        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/FixtureDuplication/skip_duplicated_class.php.inc');
-        $this->doTestFileInfo($fixtureFileInfo);
-    }
-
-    protected function provideConfigFileInfo(): ?SmartFileInfo
-    {
-        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

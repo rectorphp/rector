@@ -23,8 +23,8 @@ final class DoctrineTypedPropertyRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureDoctrine');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/configured_rule.php');
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

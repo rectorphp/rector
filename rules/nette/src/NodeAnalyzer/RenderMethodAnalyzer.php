@@ -4,85 +4,44 @@ declare(strict_types=1);
 
 namespace Rector\Nette\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeTraverser;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeNestingScope\ScopeNestingComparator;
-use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class RenderMethodAnalyzer
 {
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
 
     /**
-     * @var ScopeNestingComparator
+     * @var BetterNodeFinder
      */
-    private $scopeNestingComparator;
+    private $betterNodeFinder;
 
-    public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver,
-        ScopeNestingComparator $scopeNestingComparator
-    ) {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
+    {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->scopeNestingComparator = $scopeNestingComparator;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
-    public function hasConditionalTemplateAssigns(ClassMethod $classMethod): bool
+    /**
+     * @return MethodCall[]
+     */
+    public function machRenderMethodCalls(ClassMethod $classMethod): array
     {
-        $hasConditionalAssigns = false;
+        /** @var MethodCall[] $methodsCalls */
+        $methodsCalls = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, MethodCall::class);
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
-            $classMethod,
-            function (Node $node) use (&$hasConditionalAssigns): ?int {
-                if (! $node instanceof Assign) {
-                    return null;
-                }
-
-                if (! $this->isThisTemplatePropertyFetch($node->var)) {
-                    return null;
-                }
-
-                if ($this->scopeNestingComparator->isNodeConditionallyScoped($node)) {
-                    $hasConditionalAssigns = true;
-                    return NodeTraverser::STOP_TRAVERSAL;
-                }
-
-                return null;
+        $renderMethodCalls = [];
+        foreach ($methodsCalls as $methodCall) {
+            if ($this->nodeNameResolver->isName($methodCall->name, 'render')) {
+                $renderMethodCalls[] = $methodCall;
             }
-        );
-
-        return $hasConditionalAssigns;
-    }
-
-    private function isThisTemplatePropertyFetch(Expr $expr): bool
-    {
-        if (! $expr instanceof PropertyFetch) {
-            return false;
         }
 
-        if (! $expr->var instanceof PropertyFetch) {
-            return false;
-        }
-
-        $nestedPropertyFetch = $expr->var;
-        if (! $this->nodeNameResolver->isName($nestedPropertyFetch->var, 'this')) {
-            return false;
-        }
-
-        return $this->nodeNameResolver->isName($nestedPropertyFetch->name, 'template');
+        return $renderMethodCalls;
     }
 }

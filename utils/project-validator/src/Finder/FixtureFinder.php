@@ -29,7 +29,7 @@ final class FixtureFinder
         $finder = $finder->files()
             ->name('#\.php\.inc$#')
             ->notName('#empty_file\.php\.inc$#')
-            ->path('#/Fixture/#')
+            ->path('#/Fixture(Php\d+)?/#')
             ->notPath('#/blade-template/#')
             ->notPath('#/Name/RenameClassRector/#')
             ->notPath('#/Namespace_/RenameNamespaceRector/#')

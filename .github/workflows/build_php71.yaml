@@ -44,11 +44,10 @@ jobs:
             # Regenerating the autoload files will remove vendor/composer/platform_check.php, otherwise executing bin/rector on 7.1 fails
             -   run: composer dumpautoload
 
-            # Remove DEV dependencies
-            -   run: composer install --no-dev
+            -   run: composer install
 
             # Replace the composer.json file
-            -   run: cp ci/downgrade/composer.json ./composer.json
+            -   run: cp ci/downgrade/composer.json.after ./composer.json
 
             # Rector without DEV needs phpstan.neon removed
             -   run: rm phpstan.neon

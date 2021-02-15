@@ -26,8 +26,8 @@ final class DocBlockRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureDocBlock');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/import_doc_block_config.php');
+        return __DIR__ . '/config/import_doc_block_config.php';
     }
 }

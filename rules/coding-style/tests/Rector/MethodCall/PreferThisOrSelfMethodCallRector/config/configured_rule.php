@@ -8,11 +8,12 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(PreferThisOrSelfMethodCallRector::class)->call('configure', [[
-        PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
-            AbstractTestCase::class => 'self',
-            BeLocalClass::class => 'this',
-            TestCase::class => 'self',
-        ],
-    ]]);
+    $services->set(PreferThisOrSelfMethodCallRector::class)
+        ->call('configure', [[
+            PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
+                AbstractTestCase::class => 'self',
+                BeLocalClass::class => 'this',
+                TestCase::class => 'self',
+            ],
+        ]]);
 };

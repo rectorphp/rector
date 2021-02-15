@@ -7,11 +7,12 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(StaticTypeToSetterInjectionRector::class)->call('configure', [[
-        StaticTypeToSetterInjectionRector::STATIC_TYPES => [
-            GenericEntityFactory::class,
-            // with adding a parent interface to the class
-            'ParentSetterEnforcingInterface' => GenericEntityFactoryWithInterface::class,
-        ],
-    ]]);
+    $services->set(StaticTypeToSetterInjectionRector::class)
+        ->call('configure', [[
+            StaticTypeToSetterInjectionRector::STATIC_TYPES => [
+                GenericEntityFactory::class,
+                // with adding a parent interface to the class
+                'ParentSetterEnforcingInterface' => GenericEntityFactoryWithInterface::class,
+            ],
+        ]]);
 };

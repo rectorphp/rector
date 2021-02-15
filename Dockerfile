@@ -1,4 +1,4 @@
-FROM php:7.4-cli as rector
+FROM php:8.0-cli as rector
 WORKDIR /rector
 
 # Install php extensions
