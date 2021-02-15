@@ -147,7 +147,7 @@ CODE_SAMPLE
         if (! $property instanceof Property) {
             // code from /vendor
             $propertyFetchType = $this->reflectionTypeResolver->resolvePropertyFetchType($propertyFetch);
-            if ($propertyFetchType === null) {
+            if (! $propertyFetchType instanceof Type) {
                 return null;
             }
 
