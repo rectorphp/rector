@@ -94,6 +94,11 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->methodCallRenames as $methodCallRename) {
+            $implementsInterface = $this->classManipulator->hasParentMethodOrInterface($methodCallRename->getOldClass(), $methodCallRename->getOldMethod());
+            if ($implementsInterface) {
+                continue;
+            }
+
             if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(
                 $node,
                 $methodCallRename->getOldClass()
@@ -142,10 +147,6 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->shouldSkipWhenClassMethodIsPartOfInterface($node, $methodCallRename)) {
-            return true;
-        }
-
         return $this->shouldSkipForExactClassMethodForClassMethod($node, $methodCallRename->getOldClass());
     }
 
@@ -159,24 +160,6 @@ CODE_SAMPLE
         }
 
         return (bool) $classLike->getMethod($methodCallRename->getNewMethod());
-    }
-
-    private function shouldSkipWhenClassMethodIsPartOfInterface(
-        ClassMethod $node,
-        MethodCallRenameInterface $methodCallRename
-    ): bool {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof ClassLike) {
-            return false;
-        }
-
-        /** @var string|null $className */
-        $className = $classLike->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return false;
-        }
-
-        return $this->classManipulator->hasParentMethodOrInterface($className, $methodCallRename->getOldMethod());
     }
 
     private function shouldSkipForExactClassMethodForClassMethod(ClassMethod $classMethod, string $type): bool
