@@ -13,8 +13,13 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
+use Rector\DeadCode\UnusedNodeResolver\ClassUnusedPrivateClassMethodResolver;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
@@ -36,6 +41,21 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
      * @var MethodCallRenameInterface[]
      */
     private $methodCallRenames = [];
+
+    /**
+     * @var ClassManipulator
+     */
+    private $classManipulator;
+
+    public function __construct(
+        ClassManipulator $classManipulator,
+        NodeTypeResolver $nodeTypeResolver,
+        NodeRepository $nodeRepository
+    ) {
+        $this->classManipulator = $classManipulator;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->nodeRepository = $nodeRepository;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -122,6 +142,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->shouldSkipWhenClassMethodIsPartOfInterface($node, $methodCallRename)) {
+            return true;
+        }
+
         return $this->shouldSkipForExactClassMethodForClassMethod($node, $methodCallRename->getOldClass());
     }
 
@@ -135,6 +159,24 @@ CODE_SAMPLE
         }
 
         return (bool) $classLike->getMethod($methodCallRename->getNewMethod());
+    }
+
+    private function shouldSkipWhenClassMethodIsPartOfInterface(
+        ClassMethod $node,
+        MethodCallRenameInterface $methodCallRename
+    ): bool {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof ClassLike) {
+            return false;
+        }
+
+        /** @var string|null $className */
+        $className = $classLike->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            return false;
+        }
+
+        return $this->classManipulator->hasParentMethodOrInterface($className, $methodCallRename->getOldMethod());
     }
 
     private function shouldSkipForExactClassMethodForClassMethod(ClassMethod $classMethod, string $type): bool
