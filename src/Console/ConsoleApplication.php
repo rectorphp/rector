@@ -6,7 +6,7 @@ namespace Rector\Core\Console;
 
 use Composer\XdebugHandler\XdebugHandler;
 use OutOfBoundsException;
-use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
+use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Bootstrap\NoRectorsLoadedReporter;
 use Rector\Core\Configuration\Configuration;
@@ -153,7 +153,7 @@ final class ConsoleApplication extends Application
         }
 
         $outputFormat = $input->getParameterOption(['-o', '--output-format']);
-        return ! in_array($outputFormat, [JsonOutputFormatter::NAME, CheckstyleOutputFormatter::NAME], true);
+        return $outputFormat === ConsoleOutputFormatter::NAME;
     }
 
     private function removeUnusedOptions(InputDefinition $inputDefinition): void
