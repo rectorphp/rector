@@ -75,7 +75,8 @@ final class ClassInsertManipulator
 
     public function addPropertyToClass(Class_ $class, string $name, ?Type $type): void
     {
-        if ($this->hasClassProperty($class, $name)) {
+        $existingProperty = $class->getProperty($name);
+        if ($existingProperty instanceof Property) {
             return;
         }
 
@@ -85,15 +86,16 @@ final class ClassInsertManipulator
 
     public function addInjectPropertyToClass(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
-        if ($this->hasClassProperty($class, $propertyMetadata->getName())) {
+        $existingProperty = $class->getProperty($propertyMetadata->getName());
+        if ($existingProperty instanceof Property) {
             return;
         }
 
-        $propertyNode = $this->nodeFactory->createPublicInjectPropertyFromNameAndType(
+        $property = $this->nodeFactory->createPublicInjectPropertyFromNameAndType(
             $propertyMetadata->getName(),
             $propertyMetadata->getType()
         );
-        $this->addAsFirstMethod($class, $propertyNode);
+        $this->addAsFirstMethod($class, $property);
     }
 
     public function addAsFirstTrait(Class_ $class, string $traitName): void
@@ -152,11 +154,6 @@ final class ClassInsertManipulator
         }
 
         return false;
-    }
-
-    private function hasClassProperty(Class_ $class, string $name): bool
-    {
-        return $class->getProperty($name) instanceof Property;
     }
 
     private function addTraitUse(Class_ $class, TraitUse $traitUse): void
