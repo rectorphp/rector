@@ -25,6 +25,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'old',
                     'new'
                 ),
+                new MethodCallRename(
+                    'Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture\*WildcardSubscriber',
+                    'old',
+                    'new'
+                ),
                 new MethodCallRename('*Presenter', 'run', '__invoke'),
                 new MethodCallRename(
                     \Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture\SkipSelfMethodRename::class,
