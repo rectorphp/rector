@@ -12,7 +12,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class AddDefaultValueForUndefinedVariableRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP 8.0
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
