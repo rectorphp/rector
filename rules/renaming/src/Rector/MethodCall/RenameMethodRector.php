@@ -15,8 +15,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
-use Rector\DeadCode\UnusedNodeResolver\ClassUnusedPrivateClassMethodResolver;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -94,7 +92,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->methodCallRenames as $methodCallRename) {
-            $implementsInterface = $this->classManipulator->hasParentMethodOrInterface($methodCallRename->getOldClass(), $methodCallRename->getOldMethod());
+            $implementsInterface = $this->classManipulator->hasParentMethodOrInterface(
+                $methodCallRename->getOldClass(),
+                $methodCallRename->getOldMethod()
+            );
             if ($implementsInterface) {
                 continue;
             }
