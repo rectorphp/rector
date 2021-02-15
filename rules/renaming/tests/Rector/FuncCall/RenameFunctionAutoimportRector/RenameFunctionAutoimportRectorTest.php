@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\UseFunction;
+namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionAutoimportRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class UseFunctionTest extends AbstractRectorTestCase
+final class RenameFunctionAutoimportRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -20,13 +20,11 @@ final class UseFunctionTest extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        require __DIR__ . '/Source/functions.php';
-
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function provideConfigFileInfo(): ?SmartFileInfo
+    protected function provideConfigFilePath(): string
     {
-        return new SmartFileInfo(__DIR__ . '/config/use_function_config.php');
+        return __DIR__ . '/config/configured_rule.php';
     }
 }
