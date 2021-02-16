@@ -544,3 +544,9 @@ parameters:
         - '#Property PhpParser\\Node\\Param\:\:\$type \(PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\|null\) does not accept PhpParser\\Node#'
         - '#Binary operation "\." between array\|string\|false and (.*?) results in an error#'
         - '#Parameter \#3 \.\.\.\$rest of function array_uintersect expects array, Closure\(PhpParser\\Node\\Param, PhpParser\\Node\\Param\)\: int given#'
+        - '#Method Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector\:\:collectStrictReturnTypes\(\) should return array<PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\> but returns array<int, PhpParser\\Node\>#'
+
+        # stmts vs getStmts() issue
+        - '#Access to an undefined property PhpParser\\Node\\Expr\\ArrowFunction\|PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_\:\:\$stmts#'
+        - '#Parameter \#1 \$functionLike of method Rector\\TypeDeclaration\\TypeInferer\\SilentVoidResolver\:\:hasExlusiveVoid\(\) expects PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_, PhpParser\\Node\\Expr\\ArrowFunction\|PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_ given#'
+

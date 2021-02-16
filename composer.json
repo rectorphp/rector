@@ -190,6 +190,7 @@
             "rules/symfony4/tests/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source"
         ],
         "files": [
+            "rules/type-declaration/tests/Rector/ClassMethod/ReturnTypeFromStrictTypedCallRector/Source/external_bool_function.php",
             "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/AnotherClass.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Foo.php",

@@ -188,6 +188,16 @@ final class NodeRepository
         return $this->functionsByName[$name] ?? null;
     }
 
+    public function findFunctionByFuncCall(FuncCall $funcCall): ?Function_
+    {
+        $functionName = $this->nodeNameResolver->getName($funcCall);
+        if ($functionName === null) {
+            return null;
+        }
+
+        return $this->findFunction($functionName);
+    }
+
     /**
      * @return MethodCall[][]|StaticCall[][]
      */
