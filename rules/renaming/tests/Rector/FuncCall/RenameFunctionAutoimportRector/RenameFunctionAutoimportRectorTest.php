@@ -15,6 +15,7 @@ final class RenameFunctionAutoimportRectorTest extends AbstractRectorTestCase
      */
     public function test(SmartFileInfo $fileInfo): void
     {
+        $this->assertTrue(function_exists('Symfony\Component\DependencyInjection\Loader\Configurator\service'));
         $this->doTestFileInfo($fileInfo);
     }
 
