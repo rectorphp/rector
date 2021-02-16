@@ -2,19 +2,19 @@
 
 namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
 
-abstract class AbstractClassMulti
+abstract class AbstractClassMultiUpper
 {
 }
 
-abstract class SkipAbstractClassUsedMulti extends AbstractClassMulti
+abstract class SkipAbstractClassUsedMultiUpper extends AbstractClassMultiUpper
 {
 }
 
-final class AnyClass2
+final class AnyClass3
 {
 	public function process($some)
     {
-        if ($some instanceof SkipAbstractClassUsedMulti) {
+        if ($some instanceof AbstractClassMultiUpper) {
 
         }
     }
@@ -26,15 +26,15 @@ final class AnyClass2
 
 namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
 
-abstract class SkipAbstractClassUsedMulti
+abstract class AbstractClassMultiUpper
 {
 }
 
-final class AnyClass2
+final class AnyClass3
 {
 	public function process($some)
     {
-        if ($some instanceof SkipAbstractClassUsedMulti) {
+        if ($some instanceof AbstractClassMultiUpper) {
 
         }
     }

@@ -115,10 +115,6 @@ CODE_SAMPLE
 
     private function processRemove(Class_ $class): ?Class_
     {
-        if (! $class->extends instanceof FullyQualified) {
-            return null;
-        }
-
         $className = $class->namespacedName->toString();
         foreach ($this->fullyQualifieds as $fullyQualified) {
             if ($className === $fullyQualified->toString()) {
