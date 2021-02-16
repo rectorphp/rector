@@ -116,6 +116,11 @@ final class NodeRepository
      */
     private $attributes = [];
 
+    /**
+     * @var array<string, Name[]>
+     */
+    private $names = [];
+
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
@@ -175,7 +180,7 @@ final class NodeRepository
 
         if ($node instanceof Name) {
             $name = $this->nodeNameResolver->getName($node);
-            $this->attributes[$name][] = $node;
+            $this->names[$name][] = $node;
         }
     }
 
