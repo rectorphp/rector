@@ -9,10 +9,13 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\TypeDeclaration\NodeTypeAnalyzer\ParamTypeCompatibilityChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -28,9 +31,17 @@ final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
      */
     private $typeFactory;
 
-    public function __construct(TypeFactory $typeFactory)
-    {
+    /**
+     * @var ParamTypeCompatibilityChecker
+     */
+    private $paramTypeCompatibilityChecker;
+
+    public function __construct(
+        TypeFactory $typeFactory,
+        ParamTypeCompatibilityChecker $paramTypeCompatibilityChecker
+    ) {
         $this->typeFactory = $typeFactory;
+        $this->paramTypeCompatibilityChecker = $paramTypeCompatibilityChecker;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -118,19 +129,29 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall[]|StaticCall[]|ArrayCallable[] $classMethodCalls
+     * @param MethodCall[]|StaticCall[]|ArrayCallable[] $calls
      * @return Type[]
      */
-    private function getCallTypesByPosition(array $classMethodCalls): array
+    private function getCallTypesByPosition(array $calls): array
     {
         $staticTypesByArgumentPosition = [];
-        foreach ($classMethodCalls as $classMethodCall) {
-            if (! $classMethodCall instanceof StaticCall && ! $classMethodCall instanceof MethodCall) {
+        foreach ($calls as $call) {
+            if (! $call instanceof StaticCall && ! $call instanceof MethodCall) {
                 continue;
             }
 
-            foreach ($classMethodCall->args as $position => $arg) {
-                $staticTypesByArgumentPosition[$position][] = $this->getStaticType($arg->value);
+            foreach ($call->args as $position => $arg) {
+                $argValueType = $this->getStaticType($arg->value);
+                if (! $this->paramTypeCompatibilityChecker->isCompatibleWithParamStrictTyped($arg, $argValueType)) {
+                    continue;
+                }
+
+                // "self" in another object is not correct, this make it independent
+                if ($argValueType instanceof ThisType) {
+                    $argValueType = new ObjectType($argValueType->getClassName());
+                }
+
+                $staticTypesByArgumentPosition[$position][] = $argValueType;
             }
         }
 
