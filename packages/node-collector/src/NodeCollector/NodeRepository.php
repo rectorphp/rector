@@ -150,17 +150,7 @@ final class NodeRepository
 
         // array callable - [$this, 'someCall']
         if ($node instanceof Array_) {
-            $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($node);
-            if (! $arrayCallable instanceof ArrayCallable) {
-                return;
-            }
-
-            if (! $arrayCallable->isExistingMethod()) {
-                return;
-            }
-
-            $this->arrayCallablesByTypeAndMethod[$arrayCallable->getClass()][$arrayCallable->getMethod()][] = $arrayCallable;
-
+            $this->collectArray($node);
             return;
         }
 
@@ -187,6 +177,20 @@ final class NodeRepository
             $name = $this->nodeNameResolver->getName($node);
             $this->attributes[$name][] = $node;
         }
+    }
+
+    private function collectArray(Array_ $node): void
+    {
+        $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($node);
+        if (! $arrayCallable instanceof ArrayCallable) {
+            return;
+        }
+
+        if (! $arrayCallable->isExistingMethod()) {
+            return;
+        }
+
+        $this->arrayCallablesByTypeAndMethod[$arrayCallable->getClass()][$arrayCallable->getMethod()][] = $arrayCallable;
     }
 
     public function findFunction(string $name): ?Function_
