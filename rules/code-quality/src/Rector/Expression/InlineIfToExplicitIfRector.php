@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Expression;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
@@ -88,6 +89,7 @@ CODE_SAMPLE
 
     private function processExplicitIf(Expression $expression): ?Node
     {
+        /** @var BooleanAnd|BooleanOr $booleanExpr */
         $booleanExpr = $expression->expr;
 
         $leftStaticType = $this->getStaticType($booleanExpr->left);
@@ -99,9 +101,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $if = $booleanExpr instanceof BooleanAnd
-            ? new If_($booleanExpr->left)
-            : new If_($this->binaryOpManipulator->inverseNode($booleanExpr->left));
+        /** @var Expr $expr */
+        $expr = $booleanExpr instanceof BooleanAnd
+            ? $booleanExpr->left
+            : $this->binaryOpManipulator->inverseNode($booleanExpr->left);
+        $if = new If_($expr);
         $if->stmts[] = new Expression($booleanExpr->right);
 
         return $if;
