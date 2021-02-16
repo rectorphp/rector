@@ -9,6 +9,7 @@ class Fixture
         $userId = null;
 
         is_null($userId) && $userId = 5;
+        is_null($userId) || $userId = 5;
     }
 }
 
@@ -25,6 +26,9 @@ class Fixture
         $userId = null;
 
         if (is_null($userId)) {
+            $userId = 5;
+        }
+        if (!is_null($userId)) {
             $userId = 5;
         }
     }
