@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -96,8 +97,12 @@ CODE_SAMPLE
     {
         $className = $this->getName($class->namespacedName);
         $names = $this->nodeRepository->findNames($className);
-        if ($names !== []) {
-            return null;
+
+        foreach ($names as $name) {
+            $parent = $name->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $parent instanceof Class_) {
+                return null;
+            }
         }
 
         $children = $this->nodeRepository->findChildrenOfClass($this->getName($class->namespacedName));
