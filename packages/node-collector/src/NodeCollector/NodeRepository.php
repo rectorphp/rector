@@ -175,6 +175,7 @@ final class NodeRepository
 
         if ($node instanceof Name) {
             $name = $this->nodeNameResolver->getName($node);
+            $this->names[$name][] = $node;
         }
     }
 
