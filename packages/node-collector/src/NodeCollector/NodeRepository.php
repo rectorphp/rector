@@ -184,9 +184,7 @@ final class NodeRepository
         }
 
         if ($node instanceof Name) {
-            $name = property_exists($node, 'namespacedName')
-                ? $this->nodeNameResolver->getName($node->namespacedName)
-                : $this->nodeNameResolver->getName($node->name);
+            $name = $this->nodeNameResolver->getName($node);
             $this->attributes[$name][] = $node;
         }
     }
