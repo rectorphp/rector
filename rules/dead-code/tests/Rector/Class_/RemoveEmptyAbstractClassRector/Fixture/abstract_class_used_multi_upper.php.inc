@@ -6,7 +6,7 @@ abstract class AbstractClassMultiUpper
 {
 }
 
-abstract class SkipAbstractClassUsedMultiUpper extends AbstractClassMultiUpper
+abstract class AbstractClassUsedMultiUpper extends AbstractClassMultiUpper
 {
 }
 

@@ -6,7 +6,7 @@ abstract class AbstractClassMulti
 {
 }
 
-abstract class SkipAbstractClassUsedMulti extends AbstractClassMulti
+abstract class AbstractClassUsedMulti extends AbstractClassMulti
 {
 }
 
@@ -14,7 +14,7 @@ final class AnyClass2
 {
 	public function process($some)
     {
-        if ($some instanceof SkipAbstractClassUsedMulti) {
+        if ($some instanceof AbstractClassUsedMulti) {
 
         }
     }
@@ -26,7 +26,7 @@ final class AnyClass2
 
 namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
 
-abstract class SkipAbstractClassUsedMulti
+abstract class AbstractClassUsedMulti
 {
 }
 
@@ -34,7 +34,7 @@ final class AnyClass2
 {
 	public function process($some)
     {
-        if ($some instanceof SkipAbstractClassUsedMulti) {
+        if ($some instanceof AbstractClassUsedMulti) {
 
         }
     }
