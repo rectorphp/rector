@@ -140,7 +140,7 @@ final class BinaryOpManipulator
         return null;
     }
 
-    private function inverseNode(Expr $expr): Node
+    public function inverseNode(Expr $expr): Node
     {
         if ($expr instanceof BinaryOp) {
             $inversedBinaryOp = $this->assignAndBinaryMap->getInversed($expr);
