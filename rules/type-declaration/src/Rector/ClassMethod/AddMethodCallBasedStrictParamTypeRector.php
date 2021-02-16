@@ -19,9 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
  *
- * @see \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\AddMethodCallBasedParamTypeRectorTest
+ * @see \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\AddMethodCallBasedStrictParamTypeRectorTest
  */
-final class AddMethodCallBasedParamTypeRector extends AbstractRector
+final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
 {
     /**
      * @var TypeFactory
@@ -35,11 +35,9 @@ final class AddMethodCallBasedParamTypeRector extends AbstractRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition(
-            'Change param type of passed getId() to UuidInterface type declaration',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new RuleDefinition('Change param type to strict type of passed expression', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function getById($id)
@@ -60,8 +58,8 @@ class CallerClass
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+                ,
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function getById(int $id)
@@ -82,9 +80,8 @@ class CallerClass
     }
 }
 CODE_SAMPLE
-                ),
-
-            ]);
+            ),
+        ]);
     }
 
     /**
@@ -109,6 +106,9 @@ CODE_SAMPLE
             }
 
             $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($argumentStaticType);
+            if ($phpParserTypeNode === null) {
+                continue;
+            }
 
             // update parameter
             $node->params[$position]->type = $phpParserTypeNode;

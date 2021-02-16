@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeFromStrictTypedPropertyRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
@@ -18,4 +19,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ParamTypeFromStrictTypedPropertyRector::class);
     $services->set(ReturnTypeFromStrictTypedCallRector::class);
     $services->set(AddVoidReturnTypeWhereNoReturnRector::class);
+    $services->set(AddMethodCallBasedStrictParamTypeRector::class);
 };
