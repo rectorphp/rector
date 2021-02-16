@@ -6,7 +6,6 @@ namespace Rector\DeadCode\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,7 +25,7 @@ final class RemoveEmptyAbstractClassRector extends AbstractRector
     }
 
     /**
-     * @param FileNode|Class_ $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
