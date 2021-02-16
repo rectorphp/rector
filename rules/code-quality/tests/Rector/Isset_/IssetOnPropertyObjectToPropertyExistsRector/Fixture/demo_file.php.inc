@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
 
-final class DemoFile
+abstract class AbstractAdmin
 {
     private string $cachedBaseRoutePattern;
     
