@@ -521,6 +521,14 @@ final class NodeRepository
         return $this->attributes[$class] ?? [];
     }
 
+    /**
+     * @return Name[]
+     */
+    public function findNames(string $name): array
+    {
+        return $this->names[$name] ?? [];
+    }
+
     public function findClassMethodConstructorByNew(New_ $new): ?ClassMethod
     {
         $className = $this->nodeTypeResolver->resolve($new->class);
