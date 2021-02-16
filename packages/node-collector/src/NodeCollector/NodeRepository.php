@@ -116,6 +116,11 @@ final class NodeRepository
      */
     private $attributes = [];
 
+    /**
+     * @var array<string, Name[]>
+     */
+    private $names = [];
+
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
