@@ -49,11 +49,14 @@ class SomeClass
 
 class CallerClass
 {
-    public function run()
+    public function run(SomeClass $someClass)
     {
-        $building = new Building();
-        $someClass = new SomeClass();
-        $someClass->getById($building->getId());
+        $someClass->getById($this->getId());
+    }
+
+    public function getId(): int
+    {
+        return 1000;
     }
 }
 CODE_SAMPLE
@@ -61,18 +64,21 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function getById(\Ramsey\Uuid\UuidInterface $id)
+    public function getById(int $id)
     {
     }
 }
 
 class CallerClass
 {
-    public function run()
+    public function run(SomeClass $someClass)
     {
-        $building = new Building();
-        $someClass = new SomeClass();
-        $someClass->getById($building->getId());
+        $someClass->getById($this->getId());
+    }
+
+    public function getId(): int
+    {
+        return 1000;
     }
 }
 CODE_SAMPLE

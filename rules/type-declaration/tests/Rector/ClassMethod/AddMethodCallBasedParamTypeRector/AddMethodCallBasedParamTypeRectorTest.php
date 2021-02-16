@@ -24,8 +24,8 @@ final class AddMethodCallBasedParamTypeRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    protected function provideConfigFilePath(): string
     {
-        return AddMethodCallBasedParamTypeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }
