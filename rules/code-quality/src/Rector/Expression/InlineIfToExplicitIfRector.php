@@ -7,6 +7,7 @@ namespace Rector\CodeQuality\Rector\Expression;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Stmt\Expression;
@@ -97,7 +98,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $booleanExpr->right instanceof Assign) {
+        if (! $booleanExpr->right instanceof Assign && ! $booleanExpr->right instanceof AssignOp) {
             return null;
         }
 
