@@ -116,11 +116,6 @@ final class NodeRepository
      */
     private $attributes = [];
 
-    /**
-     * @var array<string, Name[]>
-     */
-    private $names = [];
-
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
@@ -180,22 +175,7 @@ final class NodeRepository
 
         if ($node instanceof Name) {
             $name = $this->nodeNameResolver->getName($node);
-            $this->names[$name][] = $node;
         }
-    }
-
-    private function collectArray(Array_ $node): void
-    {
-        $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($node);
-        if (! $arrayCallable instanceof ArrayCallable) {
-            return;
-        }
-
-        if (! $arrayCallable->isExistingMethod()) {
-            return;
-        }
-
-        $this->arrayCallablesByTypeAndMethod[$arrayCallable->getClass()][$arrayCallable->getMethod()][] = $arrayCallable;
     }
 
     public function findFunction(string $name): ?Function_
@@ -642,6 +622,20 @@ final class NodeRepository
     public function getClassConstFetches(): array
     {
         return $this->parsedNodeCollector->getClassConstFetches();
+    }
+
+    private function collectArray(Array_ $array): void
+    {
+        $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($array);
+        if (! $arrayCallable instanceof ArrayCallable) {
+            return;
+        }
+
+        if (! $arrayCallable->isExistingMethod()) {
+            return;
+        }
+
+        $this->arrayCallablesByTypeAndMethod[$arrayCallable->getClass()][$arrayCallable->getMethod()][] = $arrayCallable;
     }
 
     private function addMethod(ClassMethod $classMethod): void
