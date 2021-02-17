@@ -178,14 +178,10 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $classMethod instanceof ClassMethod) {
+        if ($newMethodName !== '__invoke') {
             return false;
         }
 
-        if (! $classMethod->isPrivate()) {
-            return false;
-        }
-
-        return $newMethodName === '__invoke';
+        return ! $classMethod->isPublic();
     }
 }
