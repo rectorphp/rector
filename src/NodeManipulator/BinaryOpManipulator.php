@@ -96,6 +96,22 @@ final class BinaryOpManipulator
         return new $inversedNodeClass($binaryOp->left, $binaryOp->right);
     }
 
+    public function inverseNode(Expr $expr): Node
+    {
+        if ($expr instanceof BinaryOp) {
+            $inversedBinaryOp = $this->assignAndBinaryMap->getInversed($expr);
+            if ($inversedBinaryOp) {
+                return new $inversedBinaryOp($expr->left, $expr->right);
+            }
+        }
+
+        if ($expr instanceof BooleanNot) {
+            return $expr->expr;
+        }
+
+        return new BooleanNot($expr);
+    }
+
     /**
      * @param string|callable $firstCondition
      */
@@ -138,21 +154,5 @@ final class BinaryOpManipulator
         }
 
         return null;
-    }
-
-    public function inverseNode(Expr $expr): Node
-    {
-        if ($expr instanceof BinaryOp) {
-            $inversedBinaryOp = $this->assignAndBinaryMap->getInversed($expr);
-            if ($inversedBinaryOp) {
-                return new $inversedBinaryOp($expr->left, $expr->right);
-            }
-        }
-
-        if ($expr instanceof BooleanNot) {
-            return $expr->expr;
-        }
-
-        return new BooleanNot($expr);
     }
 }

@@ -58,6 +58,9 @@ services:
                     - 'getDocComment'
                     - 'getComments'
                     - 'setDocComment'
+                # use NodeTypeResolver instead
+#                PHPStan\Analyser\Scope:
+#                    - 'getType'
 
     -
         class: Symplify\PHPStanRules\Rules\OnlyOneClassMethodRule
