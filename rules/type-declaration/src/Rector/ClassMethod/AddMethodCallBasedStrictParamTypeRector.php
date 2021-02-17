@@ -116,6 +116,8 @@ CODE_SAMPLE
                 continue;
             }
 
+            dump($argumentStaticType);
+
             $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($argumentStaticType);
             if ($phpParserTypeNode === null) {
                 continue;
