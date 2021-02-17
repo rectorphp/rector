@@ -38,7 +38,7 @@ use PhpParser\Node\Stmt\Nop;
 
 final class ImproveNullable
 {
-    public function getName(Node $node)
+    public function getName(\PhpParser\Node $node)
     {
         return $node;
     }

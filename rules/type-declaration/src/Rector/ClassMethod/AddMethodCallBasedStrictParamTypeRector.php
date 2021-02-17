@@ -116,8 +116,6 @@ CODE_SAMPLE
                 continue;
             }
 
-            dump($argumentStaticType);
-
             $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($argumentStaticType);
             if ($phpParserTypeNode === null) {
                 continue;
@@ -149,10 +147,7 @@ CODE_SAMPLE
                 }
 
                 // "self" in another object is not correct, this make it independent
-                if ($argValueType instanceof ThisType) {
-                    $argValueType = new ObjectType($argValueType->getClassName());
-                }
-
+                $argValueType = $this->correctSelfType($argValueType);
                 $staticTypesByArgumentPosition[$position][] = $argValueType;
             }
         }
@@ -187,5 +182,14 @@ CODE_SAMPLE
         $parameterStaticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($parameter->type);
         // already completed → skip
         return $parameterStaticType->equals($argumentStaticType);
+    }
+
+    private function correctSelfType(Type $argValueType): Type
+    {
+        if ($argValueType instanceof ThisType) {
+            return new ObjectType($argValueType->getClassName());
+        }
+
+        return $argValueType;
     }
 }

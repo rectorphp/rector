@@ -13,6 +13,7 @@ use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
@@ -238,13 +239,12 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         // the type should be compatible with all other types, e.g. A extends B, B
-        $compatibleObjectCandidate = $this->resolveCompatibleObjectCandidate($unionType);
-
-        if ($compatibleObjectCandidate === null) {
+        $compatibleObjectType = $this->resolveCompatibleObjectCandidate($unionType);
+        if (! $compatibleObjectType instanceof ObjectType) {
             return null;
         }
 
-        return new FullyQualified($compatibleObjectCandidate);
+        return new FullyQualified($compatibleObjectType->getClassName());
     }
 
     private function matchPhpParserUnionType(UnionType $unionType): ?PhpParserUnionType
@@ -273,26 +273,38 @@ final class UnionTypeMapper implements TypeMapperInterface
         return new PhpParserUnionType($phpParserUnionedTypes);
     }
 
-    private function resolveCompatibleObjectCandidate(UnionType $unionType): ?string
+    private function resolveCompatibleObjectCandidate(UnionType $unionType): ?TypeWithClassName
     {
         if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($unionType)) {
-            return 'Doctrine\Common\Collections\Collection';
+            return new ObjectType('Doctrine\Common\Collections\Collection');
         }
 
         if (! $this->unionTypeAnalyzer->hasTypeClassNameOnly($unionType)) {
             return null;
         }
 
-        /** @var TypeWithClassName $unionedType */
-        foreach ($unionType->getTypes() as $unionedType) {
-            /** @var TypeWithClassName $nestedUnionedType */
-            foreach ($unionType->getTypes() as $nestedUnionedType) {
-                if (! $this->areTypeWithClassNamesRelated($unionedType, $nestedUnionedType)) {
-                    continue 2;
-                }
-            }
+        $sharedTypeWithClassName = $this->matchTwoObjectTypes($unionType);
+        if ($sharedTypeWithClassName instanceof TypeWithClassName) {
+            return $sharedTypeWithClassName;
+        }
 
-            return $unionedType->getClassName();
+        // find least common denominator
+        $availableTypes = [];
+        foreach ($unionType->getTypes() as $unionedType) {
+            /** @var TypeWithClassName $unionedType */
+            $extendedClasses = (array) class_parents($unionedType->getClassName());
+            $implementedInterfaces = (array) class_implements($unionedType->getClassName());
+
+            $availableTypes[] = array_merge($implementedInterfaces, $extendedClasses);
+        }
+
+        /** @var string[] $sharedTypes */
+        $sharedTypes = array_intersect(...$availableTypes);
+        $sharedTypes = array_values($sharedTypes);
+
+        if ($sharedTypes !== []) {
+            $firstSharedType = $sharedTypes[0];
+            return new ObjectType($firstSharedType);
         }
 
         return null;
@@ -305,5 +317,22 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         return is_a($secondType->getClassName(), $firstType->getClassName(), true);
+    }
+
+    private function matchTwoObjectTypes(UnionType $unionType): ?TypeWithClassName
+    {
+        /** @var TypeWithClassName $unionedType */
+        foreach ($unionType->getTypes() as $unionedType) {
+            /** @var TypeWithClassName $nestedUnionedType */
+            foreach ($unionType->getTypes() as $nestedUnionedType) {
+                if (! $this->areTypeWithClassNamesRelated($unionedType, $nestedUnionedType)) {
+                    continue 2;
+                }
+            }
+
+            return $unionedType;
+        }
+
+        return null;
     }
 }
