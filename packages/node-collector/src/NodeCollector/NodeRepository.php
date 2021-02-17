@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -115,6 +116,11 @@ final class NodeRepository
      */
     private $attributes = [];
 
+    /**
+     * @var array<string, Name[]>
+     */
+    private $names = [];
+
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
@@ -149,17 +155,7 @@ final class NodeRepository
 
         // array callable - [$this, 'someCall']
         if ($node instanceof Array_) {
-            $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($node);
-            if (! $arrayCallable instanceof ArrayCallable) {
-                return;
-            }
-
-            if (! $arrayCallable->isExistingMethod()) {
-                return;
-            }
-
-            $this->arrayCallablesByTypeAndMethod[$arrayCallable->getClass()][$arrayCallable->getMethod()][] = $arrayCallable;
-
+            $this->collectArray($node);
             return;
         }
 
@@ -180,6 +176,11 @@ final class NodeRepository
         if ($node instanceof Attribute) {
             $attributeClass = $this->nodeNameResolver->getName($node->name);
             $this->attributes[$attributeClass][] = $node;
+        }
+
+        if ($node instanceof Name) {
+            $name = $this->nodeNameResolver->getName($node);
+            $this->names[$name][] = $node;
         }
     }
 
@@ -526,6 +527,14 @@ final class NodeRepository
         return $this->attributes[$class] ?? [];
     }
 
+    /**
+     * @return Name[]
+     */
+    public function findNames(string $name): array
+    {
+        return $this->names[$name] ?? [];
+    }
+
     public function findClassMethodConstructorByNew(New_ $new): ?ClassMethod
     {
         $className = $this->nodeTypeResolver->resolve($new->class);
@@ -627,6 +636,20 @@ final class NodeRepository
     public function getClassConstFetches(): array
     {
         return $this->parsedNodeCollector->getClassConstFetches();
+    }
+
+    private function collectArray(Array_ $array): void
+    {
+        $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($array);
+        if (! $arrayCallable instanceof ArrayCallable) {
+            return;
+        }
+
+        if (! $arrayCallable->isExistingMethod()) {
+            return;
+        }
+
+        $this->arrayCallablesByTypeAndMethod[$arrayCallable->getClass()][$arrayCallable->getMethod()][] = $arrayCallable;
     }
 
     private function addMethod(ClassMethod $classMethod): void
