@@ -182,8 +182,8 @@ CODE_SAMPLE
             return false;
         }
 
-        $classMethod = clone $classMethod;
-        $classMethod->name = new Identifier($newMethodName);
-        return $classMethod->isMagic();
+        $newClassMethod = clone $classMethod;
+        $newClassMethod->name = new Identifier($newMethodName);
+        return $newClassMethod->isMagic();
     }
 }
