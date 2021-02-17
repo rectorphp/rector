@@ -61,7 +61,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->removedFunctionArguments as $removedFunctionArgument) {
-            if (! $this->isName($node->name, $removedFunctionArgument->getFunction())) {
+            if ($this->getName($node->name) !== $removedFunctionArgument->getFunction()) {
                 continue;
             }
 
