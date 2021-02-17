@@ -6,6 +6,7 @@ namespace Rector\Removing\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Removing\ValueObject\RemoveFuncCallArg;
@@ -61,6 +62,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->removedFunctionArguments as $removedFunctionArgument) {
+            if ($node->name instanceof MethodCall) {
+                continue;
+            }
+
             if (! $this->isName($node->name, $removedFunctionArgument->getFunction())) {
                 continue;
             }
