@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Removing\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -66,7 +67,6 @@ CODE_SAMPLE
         }
 
         foreach ($this->removedFunctionArguments as $removedFunctionArgument) {
-
             if (! $this->isName($node->name, $removedFunctionArgument->getFunction())) {
                 continue;
             }
