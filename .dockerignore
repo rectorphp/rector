@@ -29,4 +29,5 @@ docker-compose.dist.yml
 /docs
 /rector-nested/
 /rector-scoped/
-/scoped/
+
+*.phar
