@@ -141,7 +141,11 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->shouldSkipForExactClassMethodForClassMethod($node, $methodCallRename->getOldClass());
+        return $this->shouldSkipForExactClassMethodForClassMethodOrTargetInvokePrivate(
+            $node,
+            $methodCallRename->getOldClass(),
+            $methodCallRename->getNewMethod()
+        );
     }
 
     private function shouldSkipForAlreadyExistingClassMethod(
@@ -156,8 +160,11 @@ CODE_SAMPLE
         return (bool) $classLike->getMethod($methodCallRename->getNewMethod());
     }
 
-    private function shouldSkipForExactClassMethodForClassMethod(ClassMethod $classMethod, string $type): bool
-    {
+    private function shouldSkipForExactClassMethodForClassMethodOrTargetInvokePrivate(
+        ClassMethod $classMethod,
+        string $type,
+        string $newMethodName
+    ): bool {
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
         $methodCalls = $this->nodeRepository->findMethodCallsOnClass($className);
 
@@ -166,6 +173,17 @@ CODE_SAMPLE
             return false;
         }
 
-        return $classMethod->getAttribute(AttributeKey::CLASS_NAME) === $type;
+        $isExactClassMethodForClasssMethod = $classMethod->getAttribute(AttributeKey::CLASS_NAME) === $type;
+        if ($isExactClassMethodForClasssMethod) {
+            return true;
+        }
+
+        if ($classMethod->isPublic()) {
+            return false;
+        }
+
+        $newClassMethod = clone $classMethod;
+        $newClassMethod->name = new Identifier($newMethodName);
+        return $newClassMethod->isMagic();
     }
 }
