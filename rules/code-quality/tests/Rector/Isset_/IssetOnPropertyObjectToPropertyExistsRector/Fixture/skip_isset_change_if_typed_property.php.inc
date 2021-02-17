@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
 
-abstract class AbstractAdmin
+class SkipIssetChange
 {
     private string $cachedBaseRoutePattern;
     
@@ -11,14 +11,6 @@ abstract class AbstractAdmin
         if (isset($this->cachedBaseRoutePattern)) {
             return $this->cachedBaseRoutePattern;
         }
-
-        $this->cachedBaseRoutePattern = sprintf(
-            '/%s%s',
-            $matches[1] === '' ? '' : $this->urlize($matches[1], '-') . '/',
-            $this->urlize($matches[3], '-')
-        );
-
-        return $this->cachedBaseRoutePattern;
     }
 }
 ?>
