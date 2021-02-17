@@ -178,10 +178,11 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($newMethodName !== '__invoke') {
+        if ($classMethod->isPublic()) {
             return false;
         }
 
-        return ! $classMethod->isPublic();
+        $classMethod = new ClassMethod($newMethodName);
+        return $classMethod->isMagic();
     }
 }
