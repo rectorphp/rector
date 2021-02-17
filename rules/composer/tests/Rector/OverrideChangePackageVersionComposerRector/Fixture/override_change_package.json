@@ -1,0 +1,17 @@
+{
+    "require": {
+        "nette/application": "^2.4",
+        "nette/bootstrap": "^2.4",
+        "nette/neon": "^2.4",
+        "latte/latte": "^2.4"
+    }
+}
+-----
+{
+    "require": {
+        "nette/application": "~3.0.6",
+        "nette/bootstrap": "^3.0",
+        "nette/neon": "^3.0",
+        "latte/latte": "~2.8.3"
+    }
+}
