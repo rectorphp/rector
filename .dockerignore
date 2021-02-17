@@ -1,3 +1,4 @@
+*~ 
 .DS_Store
 .idea/
 
@@ -26,3 +27,7 @@ docker-compose.dist.yml
 
 /vendor
 /docs
+/rector-nested/
+/rector-scoped/
+
+*.phar
