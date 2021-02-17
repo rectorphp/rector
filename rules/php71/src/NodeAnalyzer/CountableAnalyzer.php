@@ -51,6 +51,10 @@ final class CountableAnalyzer
             return false;
         }
 
+        if (is_a($callerObjectType->getClassName(), \PhpParser\Node::class, true)) {
+            return false;
+        }
+
         $reflectionClass = new ReflectionClass($callerObjectType->getClassName());
         $propertiesDefaults = $reflectionClass->getDefaultProperties();
 

@@ -19,6 +19,7 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RecastingRemovalRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<class-string<Node>, class-string<Type>>
      */
     private const CAST_CLASS_TO_NODE_TYPE = [
         String_::class => StringType::class,
@@ -90,6 +91,8 @@ CODE_SAMPLE
         if (! is_a($nodeType, $sameNodeType, true)) {
             return null;
         }
+
+        dump($this->print($node));
 
         return $node->expr;
     }
