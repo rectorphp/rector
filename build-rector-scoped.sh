@@ -27,7 +27,7 @@ SCOPED_DIRECTORY="rector-scoped"
 note "Starts"
 
 note "Coping root files to $NESTED_DIRECTORY directory"
-rsync -av * "$NESTED_DIRECTORY" --quiet
+rsync --exclude "$NESTED_DIRECTORY" --exclude "$SCOPED_DIRECTORY" -av * "$NESTED_DIRECTORY" --quiet
 
 
 note "Running composer update without dev"
@@ -44,7 +44,7 @@ composer config platform-check false
 note "Running scoper to $SCOPED_DIRECTORY"
 wget https://github.com/humbug/php-scoper/releases/download/0.14.0/php-scoper.phar -N --no-verbose
 
-php php-scoper.phar add-prefix bin config packages rules src templates vendor composer.json --output-dir "../$SCOPED_DIRECTORY" --config scoper.php --force --ansi --working-dir "$NESTED_DIRECTORY"
+php -d memory_limit=-1 php-scoper.phar add-prefix bin config packages rules src templates vendor composer.json --output-dir "../$SCOPED_DIRECTORY" --config scoper.php --force --ansi --working-dir "$NESTED_DIRECTORY"
 
 
 note "Dumping Composer Autoload"
