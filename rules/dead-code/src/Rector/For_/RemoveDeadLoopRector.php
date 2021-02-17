@@ -63,7 +63,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ((array) $node->stmts !== []) {
+        if ($node->stmts !== []) {
             return null;
         }
 
