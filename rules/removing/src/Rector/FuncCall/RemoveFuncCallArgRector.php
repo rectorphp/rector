@@ -61,10 +61,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->name instanceof Expr) {
+            return null;
+        }
+
         foreach ($this->removedFunctionArguments as $removedFunctionArgument) {
-            if ($node->name instanceof MethodCall) {
-                continue;
-            }
 
             if (! $this->isName($node->name, $removedFunctionArgument->getFunction())) {
                 continue;
