@@ -229,7 +229,8 @@ Or with Xdebug:
 vendor/bin/rector process src/Controller --dry-run --xdebug
 ```
 
-To assist with echo-style debugging rector provides a `rd()` helper method which is useful to pretty-print AST-nodes:
+To assist with echo-style debugging rector provides a [`print_node()` helper](tests/debug_functions.php) method 
+which is useful to pretty-print AST-nodes:
 
 ```php
 /**
@@ -237,7 +238,7 @@ To assist with echo-style debugging rector provides a `rd()` helper method which
  */
 public function refactor(Node $node): ?Node
 {
-    rd($node);
+    print_node($node);
     die;
 }
 ```
