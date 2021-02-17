@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -289,19 +290,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         // find least common denominator
-        $availableTypes = [];
-        foreach ($unionType->getTypes() as $unionedType) {
-            /** @var TypeWithClassName $unionedType */
-            $extendedClasses = (array) class_parents($unionedType->getClassName());
-            $implementedInterfaces = (array) class_implements($unionedType->getClassName());
-
-            $availableTypes[] = array_merge($implementedInterfaces, $extendedClasses);
-        }
-
-        /** @var string[] $sharedTypes */
-        $sharedTypes = array_intersect(...$availableTypes);
-        $sharedTypes = array_values($sharedTypes);
-
+        $sharedTypes = $this->resolvedSharedTypes($unionType);
         if ($sharedTypes !== []) {
             $firstSharedType = $sharedTypes[0];
             return new ObjectType($firstSharedType);
@@ -334,5 +323,33 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         return null;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolvedSharedTypes(UnionType $unionType): array
+    {
+        $availableTypes = [];
+        foreach ($unionType->getTypes() as $unionedType) {
+            /** @var TypeWithClassName $unionedType */
+            $extendedClasses = (array) class_parents($unionedType->getClassName());
+            $implementedInterfaces = (array) class_implements($unionedType->getClassName());
+            foreach ($implementedInterfaces as $key => $implementedInterface) {
+                // remove native interfaces
+                if (Strings::contains($implementedInterface, '\\')) {
+                    continue;
+                }
+
+                unset($implementedInterfaces[$key]);
+            }
+
+            $availableTypes[] = array_merge($implementedInterfaces, $extendedClasses);
+        }
+
+        /** @var string[] $sharedTypes */
+        $sharedTypes = array_intersect(...$availableTypes);
+
+        return array_values($sharedTypes);
     }
 }
