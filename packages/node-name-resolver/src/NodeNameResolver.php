@@ -97,7 +97,11 @@ final class NodeNameResolver
     public function isName($node, string $name): bool
     {
         if ($node instanceof MethodCall) {
-            return false;
+            $message = sprintf(
+                'Name called on "%s" is not possible. Use $this->getName($node->name) instead',
+                get_class($node)
+            );
+            throw new ShouldNotHappenException($message);
         }
 
         $nodes = is_array($node) ? $node : [$node];
