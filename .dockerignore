@@ -20,9 +20,12 @@ LICENSE
 *.md
 
 .dockerignore
-Dockerfile
+Dockerfile*
 docker-compose.yml
 docker-compose.dist.yml
 
 /vendor
 /docs
+/rector-nested/
+/rector-scoped/
+/scoped/
