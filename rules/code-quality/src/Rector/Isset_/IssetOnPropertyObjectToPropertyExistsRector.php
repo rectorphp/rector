@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
@@ -85,11 +86,18 @@ CODE_SAMPLE
                 continue;
             }
 
+            $property = $this->nodeRepository->findPropertyByPropertyFetch($issetVar);
+            if ($property instanceof Property && $property->type) {
+                continue;
+            }
+
+            // WTF?
             /** @var Expr $object */
             $object = $issetVar->var->getAttribute(AttributeKey::ORIGINAL_NODE);
 
             /** @var ThisType|ObjectType|null $type */
             $type = $this->getType($object);
+
             /** @var Identifier|Variable $name */
             $name = $issetVar->name;
             if ($this->isTypeNullOrNameNotIdentifier($type, $name)) {
@@ -104,11 +112,9 @@ CODE_SAMPLE
             /** @var Identifier $name */
             $property = $name->toString();
             if ($type instanceof ObjectType) {
-                /** @var string $className */
                 $className = $type->getClassName();
 
-                $isPropertyAlwaysExists = property_exists($className, $property);
-                if ($isPropertyAlwaysExists) {
+                if (property_exists($className, $property)) {
                     $newNodes[] = new NotIdentical($issetVar, $this->nodeFactory->createNull());
                     continue;
                 }

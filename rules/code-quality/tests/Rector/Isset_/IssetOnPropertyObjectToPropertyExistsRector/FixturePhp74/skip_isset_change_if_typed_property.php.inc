@@ -1,11 +1,11 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\FixturePhp74;
 
-class SkipIssetChange
+final class SkipIssetChangeIfTypedProperty
 {
     private string $cachedBaseRoutePattern;
-    
+
     public function getBaseRoutePattern(): string
     {
         if (isset($this->cachedBaseRoutePattern)) {
@@ -13,4 +13,3 @@ class SkipIssetChange
         }
     }
 }
-?>
