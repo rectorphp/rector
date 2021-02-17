@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\Rector\FuncCall;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -29,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class VersionCompareFuncCallToConstantRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, class-string<BinaryOp>>
      */
     private const OPERATOR_TO_COMPARISON = [
         '=' => Identical::class,

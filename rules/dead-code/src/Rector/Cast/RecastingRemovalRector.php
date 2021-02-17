@@ -92,8 +92,6 @@ CODE_SAMPLE
             return null;
         }
 
-        dump($this->print($node));
-
         return $node->expr;
     }
 }

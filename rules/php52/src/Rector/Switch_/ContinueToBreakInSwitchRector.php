@@ -25,11 +25,9 @@ final class ContinueToBreakInSwitchRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition(
-            'Use break instead of continue in switch statements',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new RuleDefinition('Use break instead of continue in switch statements', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
 function some_run($value)
 {
     switch ($value) {
@@ -42,8 +40,8 @@ function some_run($value)
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+                ,
+                <<<'CODE_SAMPLE'
 function some_run($value)
 {
     switch ($value) {
@@ -56,9 +54,8 @@ function some_run($value)
     }
 }
 CODE_SAMPLE
-                ),
-
-            ]);
+            ),
+        ]);
     }
 
     /**

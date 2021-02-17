@@ -28,6 +28,7 @@ use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 
 final class UnionTypeMapper implements TypeMapperInterface
@@ -58,7 +59,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     private $boolUnionTypeAnalyzer;
 
     /**
-     * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower
+     * @var UnionTypeCommonTypeNarrower
      */
     private $unionTypeCommonTypeNarrower;
 
@@ -67,7 +68,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         PhpVersionProvider $phpVersionProvider,
         UnionTypeAnalyzer $unionTypeAnalyzer,
         BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer,
-        \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower
+        UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower
     ) {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
@@ -296,10 +297,9 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         // find least common denominator
-        $sharedTypes = $this->unionTypeCommonTypeNarrower->narrowToSharedTypes($unionType);
-        if ($sharedTypes !== []) {
-            $firstSharedType = $sharedTypes[0];
-            return new ObjectType($firstSharedType);
+        $sharedObjectType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($unionType);
+        if ($sharedObjectType instanceof ObjectType) {
+            return $sharedObjectType;
         }
 
         return null;
