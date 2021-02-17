@@ -7,7 +7,7 @@ use Rector\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector
 use Rector\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector;
 use Rector\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedParamTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -22,7 +22,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeIdenticalUuidToEqualsMethodCallRector::class);
 
     # add Uuid type declarations
-    $services->set(AddMethodCallBasedParamTypeRector::class);
+    $services->set(AddMethodCallBasedStrictParamTypeRector::class);
 
     $services->set(AddArrayReturnDocTypeRector::class);
 };

@@ -577,7 +577,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
 
     protected function addConstructorDependencyToClass(
         Class_ $class,
-        ?Type $propertyType,
+        Type $propertyType,
         string $propertyName,
         int $propertyFlags = 0
     ): void {

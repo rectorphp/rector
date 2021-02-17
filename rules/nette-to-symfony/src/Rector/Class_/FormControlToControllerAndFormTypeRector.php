@@ -148,7 +148,7 @@ CODE_SAMPLE
             }
 
             $formTypeClass = $this->collectFormMethodCallsAndCreateFormTypeClass($classMethod);
-            if (! $formTypeClass instanceof \PhpParser\Node\Stmt\Class_) {
+            if (! $formTypeClass instanceof Class_) {
                 continue;
             }
 

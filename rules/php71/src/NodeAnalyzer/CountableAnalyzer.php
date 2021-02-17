@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php71\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
@@ -51,6 +52,15 @@ final class CountableAnalyzer
             return false;
         }
 
+        if (is_a($callerObjectType->getClassName(), 'PhpParser\Node\Stmt', true)) {
+            return false;
+        }
+
+        if (is_a($callerObjectType->getClassName(), Array_::class, true)) {
+            return false;
+        }
+
+        // this must be handled reflection, as PHPStan ReflectionProvider does not provide default values for properties in any way
         $reflectionClass = new ReflectionClass($callerObjectType->getClassName());
         $propertiesDefaults = $reflectionClass->getDefaultProperties();
 

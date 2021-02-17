@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector;
+namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedParamTypeRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class AddMethodCallBasedParamTypeRectorTest extends AbstractRectorTestCase
+final class AddMethodCallBasedStrictParamTypeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -24,8 +23,8 @@ final class AddMethodCallBasedParamTypeRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    protected function provideConfigFilePath(): string
     {
-        return AddMethodCallBasedParamTypeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }
