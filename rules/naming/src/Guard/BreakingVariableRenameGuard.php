@@ -160,7 +160,9 @@ final class BreakingVariableRenameGuard
             return true;
         }
 
-        return (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use ($expectedName): bool {
+        return (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use (
+            $expectedName
+        ): bool {
             if (! $node instanceof Variable) {
                 return false;
             }

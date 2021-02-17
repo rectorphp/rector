@@ -10,7 +10,7 @@ use PHPStan\Type\Type;
 interface NodeTypeResolverInterface
 {
     /**
-     * @return class-string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses(): array;
 

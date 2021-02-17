@@ -13,7 +13,9 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
@@ -592,6 +594,22 @@ final class NodeFactory
     }
 
     /**
+     * @param NotIdentical[]|BooleanAnd[] $newNodes
+     */
+    public function createReturnBooleanAnd(array $newNodes): ?Expr
+    {
+        if ($newNodes === []) {
+            return null;
+        }
+
+        if (count($newNodes) === 1) {
+            return $newNodes[0];
+        }
+
+        return $this->createBooleanAndFromNodes($newNodes);
+    }
+
+    /**
      * @param mixed $item
      * @param string|int|null $key
      */
@@ -724,5 +742,20 @@ final class NodeFactory
         }
 
         return $arrayItem;
+    }
+
+    /**
+     * @param NotIdentical[]|BooleanAnd[] $exprs
+     */
+    private function createBooleanAndFromNodes(array $exprs): BooleanAnd
+    {
+        /** @var NotIdentical|BooleanAnd $booleanAnd */
+        $booleanAnd = array_shift($exprs);
+        foreach ($exprs as $expr) {
+            $booleanAnd = new BooleanAnd($booleanAnd, $expr);
+        }
+
+        /** @var BooleanAnd $booleanAnd */
+        return $booleanAnd;
     }
 }
