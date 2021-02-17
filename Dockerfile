@@ -12,23 +12,21 @@ WORKDIR /build
 
 # Install php extensions
 RUN apt-get update && apt-get install -y \
-        git \
-        unzip \
         g++ \
-        libzip-dev \
+        git \
         libicu-dev \
-        rsync \
+        libzip-dev \
+        unzip \
         wget \
         zip \
     && pecl -q install \
         zip \
-    && docker-php-ext-configure \
-        opcache --enable-opcache \
-    && docker-php-ext-enable \
-        zip \
-        opcache \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install intl
+    && docker-php-ext-configure opcache --enable-opcache \
+    && docker-php-ext-install \
+        intl \
+        opcache \
+        zip
 
 COPY --from=composer:2.0.9 /usr/bin/composer /usr/bin/composer
 
