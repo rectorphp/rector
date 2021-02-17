@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\Identical;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -46,16 +47,16 @@ abstract class AbstractWithFunctionToNetteUtilsStringsRector extends AbstractRec
     }
 
     /**
-     * @param Identical|NotIdentical $node
+     * @param Identical|NotIdentical $binaryOp
      */
-    private function resolveContentExprAndNeedleExpr($node): ?ContentExprAndNeedleExpr
+    private function resolveContentExprAndNeedleExpr(BinaryOp $binaryOp): ?ContentExprAndNeedleExpr
     {
-        if ($node->left instanceof Variable) {
-            return $this->matchContentAndNeedleOfSubstrOfVariableLength($node->right, $node->left);
+        if ($binaryOp->left instanceof Variable) {
+            return $this->matchContentAndNeedleOfSubstrOfVariableLength($binaryOp->right, $binaryOp->left);
         }
 
-        if ($node->right instanceof Variable) {
-            return $this->matchContentAndNeedleOfSubstrOfVariableLength($node->left, $node->right);
+        if ($binaryOp->right instanceof Variable) {
+            return $this->matchContentAndNeedleOfSubstrOfVariableLength($binaryOp->left, $binaryOp->right);
         }
 
         return null;
