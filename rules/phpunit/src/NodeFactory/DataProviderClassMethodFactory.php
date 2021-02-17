@@ -46,6 +46,6 @@ final class DataProviderClassMethodFactory
 
     private function decorateClassMethodWithReturnTypeAndTag(ClassMethod $classMethod): void
     {
-        $classMethod->returnType = new FullyQualified(Iterator::class);
+        $classMethod->returnType = new FullyQualified('Iterator');
     }
 }

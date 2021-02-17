@@ -35,7 +35,7 @@ final class ActionWithFormProcessClassMethodFactory
         $classMethod = $this->nodeFactory->createPublicMethod('actionSomeForm');
 
         $requestVariable = new Variable('request');
-        $classMethod->params[] = new Param($requestVariable, null, new FullyQualified(Request::class));
+        $classMethod->params[] = new Param($requestVariable, null, new FullyQualified('Symfony\Component\HttpFoundation\Request'));
         $classMethod->returnType = new FullyQualified(Response::class);
 
         $formVariable = new Variable('form');

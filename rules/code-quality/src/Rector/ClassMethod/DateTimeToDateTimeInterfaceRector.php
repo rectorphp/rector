@@ -122,7 +122,7 @@ CODE_SAMPLE
 
     private function refactorParamTypeHint(Param $param): void
     {
-        $fullyQualified = new FullyQualified(DateTimeInterface::class);
+        $fullyQualified = new FullyQualified('DateTimeInterface');
         if ($param->type instanceof NullableType) {
             $param->type = new NullableType($fullyQualified);
             return;
