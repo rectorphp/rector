@@ -125,7 +125,7 @@ CODE_SAMPLE
 
         $node->name = new Identifier($shortClassName);
 
-        $node->extends = new FullyQualified(AbstractController::class);
+        $node->extends = new FullyQualified('Symfony\Bundle\FrameworkBundle\Controller\AbstractController');
 
         $classMethod = $node->getMethod('render');
         if ($classMethod !== null) {

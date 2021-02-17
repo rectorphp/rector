@@ -150,7 +150,7 @@ CODE_SAMPLE
     private function createPropertyArrayCollectionAssign(string $toManyPropertyName): Expression
     {
         $propertyFetch = $this->nodeFactory->createPropertyFetch('this', $toManyPropertyName);
-        $new = new New_(new FullyQualified(ArrayCollection::class));
+        $new = new New_(new FullyQualified('Doctrine\Common\Collections\ArrayCollection'));
 
         $assign = new Assign($propertyFetch, $new);
 
