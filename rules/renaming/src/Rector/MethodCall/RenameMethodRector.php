@@ -173,7 +173,8 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($classMethod->getAttribute(AttributeKey::CLASS_NAME) === $type) {
+        $isExactClassMethodForClasssMethod = $classMethod->getAttribute(AttributeKey::CLASS_NAME) === $type;
+        if ($isExactClassMethodForClasssMethod) {
             return true;
         }
 
