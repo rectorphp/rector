@@ -13,8 +13,8 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\PropertyFetchAssignManipulator;
-use Rector\Core\NodeManipulator\PropertyFetchManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
@@ -22,9 +22,9 @@ use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements ParamTypeInfererInterface
 {
     /**
-     * @var PropertyFetchManipulator
+     * @var PropertyFetchAnalyzer
      */
-    private $propertyFetchManipulator;
+    private $propertyFetchAnalyzer;
 
     /**
      * @var PropertyFetchAssignManipulator
@@ -38,10 +38,10 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
 
     public function __construct(
         PropertyFetchAssignManipulator $propertyFetchAssignManipulator,
-        PropertyFetchManipulator $propertyFetchManipulator,
+        PropertyFetchAnalyzer $propertyFetchAnalyzer,
         PhpDocInfoFactory $phpDocInfoFactory
     ) {
-        $this->propertyFetchManipulator = $propertyFetchManipulator;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
@@ -80,7 +80,7 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
             if ($node->expr === null) {
                 return null;
             }
-            $isMatch = $this->propertyFetchManipulator->isLocalPropertyOfNames($node->expr, $propertyNames);
+            $isMatch = $this->propertyFetchAnalyzer->isLocalPropertyOfNames($node->expr, $propertyNames);
             if (! $isMatch) {
                 return null;
             }

@@ -45,7 +45,7 @@ final class ClassManipulator
 
     /**
      * @param Class_|Trait_ $classLike
-     * @return Name[]
+     * @return array<string, Name>
      */
     public function getUsedTraits(ClassLike $classLike): array
     {
