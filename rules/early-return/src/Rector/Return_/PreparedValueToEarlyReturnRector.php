@@ -142,7 +142,8 @@ CODE_SAMPLE
             /** @va If_ $ifs */
             $ifs = $this->betterNodeFinder->findInstanceOf($parent->stmts, If_::class);
 
-            foreach ($ifs as $key => $if) {
+            /** Skip entirely if found skipped ifs */
+            foreach ($ifs as $if) {
                 if ($if->else instanceof Else_) {
                     return [];
                 }
