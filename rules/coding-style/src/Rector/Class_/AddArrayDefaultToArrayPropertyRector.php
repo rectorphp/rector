@@ -17,7 +17,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\Type\Type;
 use Rector\CodingStyle\TypeAnalyzer\IterableTypeAnalyzer;
-use Rector\Core\NodeManipulator\PropertyFetchManipulator;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -32,9 +32,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddArrayDefaultToArrayPropertyRector extends AbstractRector
 {
     /**
-     * @var PropertyFetchManipulator
+     * @var PropertyFetchAnalyzer
      */
-    private $propertyFetchManipulator;
+    private $propertyFetchAnalyzer;
 
     /**
      * @var IterableTypeAnalyzer
@@ -42,10 +42,10 @@ final class AddArrayDefaultToArrayPropertyRector extends AbstractRector
     private $iterableTypeAnalyzer;
 
     public function __construct(
-        PropertyFetchManipulator $propertyFetchManipulator,
+        PropertyFetchAnalyzer $propertyFetchAnalyzer,
         IterableTypeAnalyzer $iterableTypeAnalyzer
     ) {
-        $this->propertyFetchManipulator = $propertyFetchManipulator;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->iterableTypeAnalyzer = $iterableTypeAnalyzer;
     }
 
@@ -223,14 +223,14 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($this->propertyFetchManipulator->isLocalPropertyOfNames(
+            if ($this->propertyFetchAnalyzer->isLocalPropertyOfNames(
                 $node->left,
                 $propertyNames
             ) && $this->valueResolver->isNull($node->right)) {
                 $node->right = new Array_();
             }
 
-            if ($this->propertyFetchManipulator->isLocalPropertyOfNames(
+            if ($this->propertyFetchAnalyzer->isLocalPropertyOfNames(
                 $node->right,
                 $propertyNames
             ) && $this->valueResolver->isNull($node->left)) {
@@ -259,15 +259,16 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($this->propertyFetchManipulator->isLocalPropertyOfNames(
+        if ($this->propertyFetchAnalyzer->isLocalPropertyOfNames(
             $expr->left,
             $propertyNames
         ) && $this->valueResolver->isNull($expr->right)) {
             return true;
         }
-        if (! $this->propertyFetchManipulator->isLocalPropertyOfNames($expr->right, $propertyNames)) {
+        if (! $this->propertyFetchAnalyzer->isLocalPropertyOfNames($expr->right, $propertyNames)) {
             return false;
         }
+
         return $this->valueResolver->isNull($expr->left);
     }
 }

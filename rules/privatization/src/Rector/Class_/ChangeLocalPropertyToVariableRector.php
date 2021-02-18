@@ -14,8 +14,8 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeTraverser;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\ClassManipulator;
-use Rector\Core\NodeManipulator\PropertyFetchManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,9 +39,9 @@ final class ChangeLocalPropertyToVariableRector extends AbstractRector
     private $classManipulator;
 
     /**
-     * @var PropertyFetchManipulator
+     * @var PropertyFetchAnalyzer
      */
-    private $propertyFetchManipulator;
+    private $propertyFetchAnalyzer;
 
     /**
      * @var PropertyFetchWithVariableReplacer
@@ -50,11 +50,11 @@ final class ChangeLocalPropertyToVariableRector extends AbstractRector
 
     public function __construct(
         ClassManipulator $classManipulator,
-        PropertyFetchManipulator $propertyFetchManipulator,
+        PropertyFetchAnalyzer $propertyFetchAnalyzer,
         PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer
     ) {
         $this->classManipulator = $classManipulator;
-        $this->propertyFetchManipulator = $propertyFetchManipulator;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->propertyFetchWithVariableReplacer = $propertyFetchWithVariableReplacer;
     }
 
@@ -191,7 +191,7 @@ CODE_SAMPLE
             &$isIfFollowedByAssign
         ): ?int {
             if ($isPropertyReadInIf) {
-                if (! $this->propertyFetchManipulator->isLocalPropertyOfNames($node, [$privatePropertyName])) {
+                if (! $this->propertyFetchAnalyzer->isLocalPropertyOfNames($node, [$privatePropertyName])) {
                     return null;
                 }
 
@@ -231,7 +231,7 @@ CODE_SAMPLE
             $privatePropertyName,
             &$isPropertyReadInIf
         ): ?int {
-            if (! $this->propertyFetchManipulator->isLocalPropertyOfNames($node, [$privatePropertyName])) {
+            if (! $this->propertyFetchAnalyzer->isLocalPropertyOfNames($node, [$privatePropertyName])) {
                 return null;
             }
 

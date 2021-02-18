@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\Core\NodeManipulator\PropertyFetchManipulator;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
@@ -19,13 +19,13 @@ use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements ParamTypeInfererInterface
 {
     /**
-     * @var PropertyFetchManipulator
+     * @var PropertyFetchAnalyzer
      */
-    private $propertyFetchManipulator;
+    private $propertyFetchAnalyzer;
 
-    public function __construct(PropertyFetchManipulator $propertyFetchManipulator)
+    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
-        $this->propertyFetchManipulator = $propertyFetchManipulator;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
     public function inferParam(Param $param): Type
@@ -50,7 +50,7 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
                 return null;
             }
 
-            if (! $this->propertyFetchManipulator->isVariableAssignToThisPropertyFetch($node, $paramName)) {
+            if (! $this->propertyFetchAnalyzer->isVariableAssignToThisPropertyFetch($node, $paramName)) {
                 return null;
             }
 

@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
+
     $services->set(AddClosureReturnTypeRector::class);
     $services->set(ReturnTypeFromStrictTypedPropertyRector::class);
     $services->set(TypedPropertyFromStrictConstructorRector::class);

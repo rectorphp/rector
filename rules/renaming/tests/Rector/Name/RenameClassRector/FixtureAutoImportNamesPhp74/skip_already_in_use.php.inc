@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\FixtureAutoImportNames;
+namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\FixtureAutoImportNamesPhp74;
 
 use Safe\DateTimeImmutable;
 
@@ -14,5 +14,3 @@ final class DemoFile
         return $this->date;
     }
 }
-
-?>
