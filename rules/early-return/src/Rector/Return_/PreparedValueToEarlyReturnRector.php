@@ -98,7 +98,10 @@ CODE_SAMPLE
     private function getIfsBefore(Return_ $return): array
     {
         $parent = $return->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof FunctionLike || $parent instanceof If_) {
+        if (
+            ($parent instanceof FunctionLike || $parent instanceof If_)
+            && $parent->stmts[count($parent->stmts) - 1] === $return
+        ) {
             /** @va If_ $ifs */
             $ifs = $this->betterNodeFinder->findInstanceOf($parent->stmts, If_::class);
 
