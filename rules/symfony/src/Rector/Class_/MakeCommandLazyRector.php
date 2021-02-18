@@ -102,14 +102,13 @@ CODE_SAMPLE
 
     private function resolveCommandNameAndRemove(Class_ $class): ?Node
     {
-        $commandName = $this->resolveCommandNameFromConstructor($class);
         if (! $commandName instanceof Node) {
-            $commandName = $this->resolveCommandNameFromSetName($class);
+            return $this->resolveCommandNameFromSetName($class);
         }
 
         $this->removeConstructorIfHasOnlySetNameMethodCall($class);
 
-        return $commandName;
+        return $this->resolveCommandNameFromConstructor($class);
     }
 
     private function resolveCommandNameFromConstructor(Class_ $class): ?Node
