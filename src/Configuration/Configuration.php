@@ -100,8 +100,6 @@ final class Configuration
         $this->isDryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
         $this->shouldClearCache = (bool) $input->getOption(Option::OPTION_CLEAR_CACHE);
 
-        dump($this->shouldClearCache);
-
         $this->showProgressBar = $this->canShowProgressBar($input);
         $this->showDiffs = ! (bool) $input->getOption(Option::OPTION_NO_DIFFS);
         $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);

@@ -132,6 +132,11 @@ CODE_SAMPLE
             return null;
         }
 
+        // skip multiple properties
+        if (count($node->props) > 1) {
+            return null;
+        }
+
         $varType = $this->propertyTypeInferer->inferProperty($node);
         if ($varType instanceof MixedType) {
             return null;
