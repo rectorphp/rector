@@ -7565,7 +7565,7 @@ Change singleton class to normal class that can be registered as a service
 
 Change functions to static calls, so composer can autoload them
 
-- class: `Rector\Legacy\Rector\FileWithoutNamespace\FunctionToStaticMethodRector`
+- class: `Rector\Transform\Rector\FileWithoutNamespace\FunctionToStaticMethodRector`
 
 ```diff
 -function some_function()
