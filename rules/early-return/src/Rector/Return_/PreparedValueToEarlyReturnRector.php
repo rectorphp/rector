@@ -81,11 +81,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        $ifsBefore = $this->getIfsBefore($node);
+
+        if ($this->shouldSkip($ifsBefore, $node->expr)) {
             return null;
         }
-
-        $ifsBefore = $this->getIfsBefore($node);
 
         /** @var Expr $returnExpr */
         $returnExpr = $node->expr;
@@ -109,14 +109,11 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkip(Return_ $return): bool
+    /**
+     * @param If_[] $ifsBefore
+     */
+    private function shouldSkip(array $ifsBefore, ?Expr $returnExpr): bool
     {
-        $returnExpr = $return->expr;
-        if (! $returnExpr instanceof Expr) {
-            return false;
-        }
-
-        $ifsBefore = $this->getIfsBefore($return);
         if ($ifsBefore === []) {
             return true;
         }
@@ -124,8 +121,12 @@ CODE_SAMPLE
         return ! (bool) $this->getPreviousIfLinearEquals($ifsBefore[0], $returnExpr);
     }
 
-    private function getPreviousIfLinearEquals(If_ $if, Expr $expr): ?Expression
+    private function getPreviousIfLinearEquals(If_ $if, ?Expr $expr): ?Expression
     {
+        if (! $expr instanceof Expr) {
+            return null;
+        }
+
         $previous = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
         if (! $previous instanceof Expression) {
             return null;
