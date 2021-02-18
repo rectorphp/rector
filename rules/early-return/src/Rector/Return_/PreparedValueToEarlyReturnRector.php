@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\EarlyReturn\Rector\Return_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -24,17 +26,17 @@ class SomeClass
 {
     public function run()
     {
-        $class = null;
+        $var = null;
 
         if (rand(0,1)) {
-            $class = 1;
+            $var = 1;
         }
 
         if (rand(0,1)) {
-            $class = 2;
+            $var = 2;
         }
 
-        return $class;
+        return $var;
     }
 }
 CODE_SAMPLE
@@ -74,6 +76,14 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $previousIf = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $node) {
+            return $node instanceof If_ && ! $node->else instanceof Else_ && $node->elseif === [];
+        });
+
+        if (! $previousIf instanceof If_) {
+            return null;
+        }
+
         return $node;
     }
 }
