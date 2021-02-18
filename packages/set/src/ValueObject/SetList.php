@@ -99,6 +99,11 @@ final class SetList
     /**
      * @var string
      */
+    public const DEAD_CODE_STRICT = __DIR__ . '/../../../../config/set/dead-code-strict.php';
+
+    /**
+     * @var string
+     */
     public const DEAD_DOC_BLOCK = __DIR__ . '/../../../../config/set/dead-doc-block.php';
 
     /**
