@@ -77,7 +77,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $previousIf = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $node) {
-            return $node instanceof If_ && ! $node->else instanceof Else_ && $node->elseif === [];
+            return $node instanceof If_ && ! $node->else instanceof Else_ && $node->elseifs === [];
         });
 
         if (! $previousIf instanceof If_) {
