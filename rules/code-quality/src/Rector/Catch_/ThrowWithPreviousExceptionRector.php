@@ -14,11 +14,10 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\NodeTraverser;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use ReflectionClass;
-use ReflectionMethod;
-use ReflectionNamedType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Throwable;
@@ -33,6 +32,16 @@ final class ThrowWithPreviousExceptionRector extends AbstractRector
      * @var int
      */
     private const DEFAULT_EXCEPTION_ARGUMENT_POSITION = 2;
+
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -134,33 +143,32 @@ CODE_SAMPLE
 
     private function resolveExceptionArgumentPosition(Name $exceptionName): ?int
     {
-        $fullyQualifiedName = $this->getName($exceptionName);
+        $className = $this->getName($exceptionName);
 
         // is native exception?
-        if (! Strings::contains($fullyQualifiedName, '\\')) {
+        if (! Strings::contains($className, '\\')) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
 
-        // is class missing?
-        if (! class_exists($fullyQualifiedName)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
 
-        $reflectionClass = new ReflectionClass($fullyQualifiedName);
+        $reflectionClass = $this->reflectionProvider->getClass($className);
         if (! $reflectionClass->hasMethod(MethodName::CONSTRUCT)) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
 
-        /** @var ReflectionMethod $constructorReflectionMethod */
         $constructorReflectionMethod = $reflectionClass->getConstructor();
-        foreach ($constructorReflectionMethod->getParameters() as $position => $reflectionParameter) {
-            if (! $reflectionParameter->hasType()) {
+        $parametersAcceptor = $constructorReflectionMethod->getVariants()[0];
+
+        foreach ($parametersAcceptor->getParameters() as $position => $reflectionParameter) {
+            $parameterType = $reflectionParameter->getType();
+            if (! $parameterType instanceof TypeWithClassName) {
                 continue;
             }
 
-            /** @var ReflectionNamedType $reflectionNamedType */
-            $reflectionNamedType = $reflectionParameter->getType();
-            if (! is_a($reflectionNamedType->getName(), Throwable::class, true)) {
+            if (! is_a($parameterType->getClassName(), Throwable::class, true)) {
                 continue;
             }
 
