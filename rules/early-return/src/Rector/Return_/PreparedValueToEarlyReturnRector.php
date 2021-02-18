@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\EarlyReturn\Rector\Return_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
@@ -118,7 +119,11 @@ CODE_SAMPLE
                     return [];
                 }
 
-                if (! $if->stmts[0] instanceof Return_) {
+                if (! $if->stmts[0] instanceof Assign) {
+                    return [];
+                }
+
+                if (! $this->areNodesEqual($if->stmts[0]->var, $return->expr)) {
                     return [];
                 }
             }
