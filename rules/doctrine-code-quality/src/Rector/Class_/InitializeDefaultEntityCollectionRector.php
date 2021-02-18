@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\DoctrineCodeQuality\Rector\Class_;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;

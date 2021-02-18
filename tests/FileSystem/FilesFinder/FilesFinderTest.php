@@ -67,26 +67,4 @@ final class FilesFinderTest extends AbstractKernelTestCase
         sort($expectedFoundFileNames);
         $this->assertSame($expectedFoundFileNames, $foundFileNames);
     }
-
-    public function testMatchGitDiff(): void
-    {
-        $dir = sys_get_temp_dir() . '/' . mt_rand();
-        mkdir($dir);
-        chdir($dir);
-        shell_exec('git init');
-
-        $filename = $dir . '/tmp.php';
-        touch($filename);
-        touch($dir . '/tmp.yml');
-
-        shell_exec('git add --all && git commit -m "first commit"');
-
-        $this->smartFileSystem->dumpFile($filename, '<?php echo ' . mt_rand() . ';');
-        $this->smartFileSystem->dumpFile($dir . '/tmp.yml', '');
-
-        $foundFiles = $this->filesFinder->findInDirectoriesAndFiles([$dir], ['php'], true);
-        $this->assertCount(1, $foundFiles);
-
-        $this->smartFileSystem->remove($filename);
-    }
 }
