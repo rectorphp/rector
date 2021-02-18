@@ -7,7 +7,6 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\CodingStyle\ValueObject\ObjectMagicMethods;
@@ -28,11 +27,9 @@ final class RemoveUnusedPublicMethodRector extends AbstractRector implements Zer
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition(
-            'Remove unused public method',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove unused public method', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function unusedpublicMethod()
@@ -52,8 +49,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+                ,
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function execute()
@@ -68,9 +65,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
+            ),
 
-            ]);
+        ]);
     }
 
     /**
