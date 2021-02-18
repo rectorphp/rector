@@ -119,13 +119,13 @@ CODE_SAMPLE
     private function isAssignVarUsedInIfCond(array $ifsBefore, ?Expr $expr): bool
     {
         foreach ($ifsBefore as $ifBefore) {
-            $isUsedInIfCond = $this->betterNodeFinder->findFirst($ifBefore->cond, function (Node $node) use (
+            $isUsedInIfCond = (bool) $this->betterNodeFinder->findFirst($ifBefore->cond, function (Node $node) use (
                 $expr
             ): bool {
                 return $this->areNodesEqual($node, $expr);
             });
 
-            if ($isUsedInIfCond !== null) {
+            if ($isUsedInIfCond) {
                 return true;
             }
         }
