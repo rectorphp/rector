@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -120,23 +121,7 @@ final class VarTagRemover
     {
         if ($varTagValueNode->type instanceof AttributeAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
-                if (! $type instanceof AttributeAwareArrayTypeNode) {
-                    continue;
-                }
-
-                $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($type, $node);
-                if (! $staticType instanceof ArrayType) {
-                    continue;
-                }
-
-                $itemType = $staticType->getItemType();
-                if (! $itemType instanceof ObjectType) {
-                    continue;
-                }
-
-                $class = $itemType->getClassName();
-
-                if ($this->classLikeExistenceChecker->doesClassLikeExist($class)) {
+                if ($type instanceof AttributeAwareArrayTypeNode && $this->isArrayOfExistingClassNode($node, $type)) {
                     return true;
                 }
             }
@@ -157,5 +142,22 @@ final class VarTagRemover
     private function isArrayTypeNode(VarTagValueNode $varTagValueNode): bool
     {
         return $varTagValueNode->type instanceof ArrayTypeNode;
+    }
+
+    private function isArrayOfExistingClassNode(Node $node, AttributeAwareArrayTypeNode $type) : bool
+    {
+        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($type, $node);
+        if (! $staticType instanceof ArrayType) {
+            return false;
+        }
+
+        $itemType = $staticType->getItemType();
+        if (! $itemType instanceof ObjectType) {
+            return false;
+        }
+
+        $classLike = $itemType->getClassName();
+
+        return $this->classLikeExistenceChecker->doesClassLikeExist($classLike);
     }
 }
