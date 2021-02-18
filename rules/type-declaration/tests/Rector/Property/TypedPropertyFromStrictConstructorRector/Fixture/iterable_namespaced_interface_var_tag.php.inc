@@ -4,7 +4,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyFromStrictCo
 
 interface ApiInterface {}
 
-class KeepVarTagWhenIterable
+class IterableNamespacedInterfaceVarTag
 {
     /**
      * @var iterable|ApiInterface[]
@@ -24,7 +24,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyFromStrictCo
 
 interface ApiInterface {}
 
-class KeepVarTagWhenIterable
+class IterableNamespacedInterfaceVarTag
 {
     /**
      * @var iterable|ApiInterface[]
