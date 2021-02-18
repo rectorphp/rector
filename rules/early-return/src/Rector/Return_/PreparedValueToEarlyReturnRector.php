@@ -88,14 +88,12 @@ CODE_SAMPLE
 
     private function shouldSkip(Return_ $return): bool
     {
-        $ifsBefore = $this->getIfsBefore($return);
-        if ($ifsBefore === []) {
-            return true;
-        }
-
-        return false;
+        return $ifsBefore === [];
     }
 
+    /**
+     * @return Node[]
+     */
     private function getIfsBefore(Return_ $return): array
     {
         $parent = $return->getAttribute(AttributeKey::PARENT_NODE);
