@@ -121,15 +121,15 @@ CODE_SAMPLE
         return ! (bool) $this->getPreviousIfLinearEquals($ifsBefore[0], $returnExpr);
     }
 
-    private function getPreviousIfLinearEquals(If_ $if, ?Expr $expr): ?Expression
+    private function getPreviousIfLinearEquals(Node $node, ?Expr $expr): ?Expression
     {
         if (! $expr instanceof Expr) {
             return null;
         }
 
-        $previous = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
+        $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
         if (! $previous instanceof Expression) {
-            return null;
+            return $this->getPreviousIfLinearEquals($previous, $expr);
         }
 
         if (! $previous->expr instanceof Assign) {
