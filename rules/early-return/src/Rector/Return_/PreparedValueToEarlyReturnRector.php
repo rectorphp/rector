@@ -87,6 +87,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isAssignVarUsedInIfCond($ifsBefore, $node->expr)) {
+            return null;
+        }
+
         /** @var Expr $returnExpr */
         $returnExpr = $node->expr;
         /** @var Expression $previousFirstExpression */
@@ -107,6 +111,26 @@ CODE_SAMPLE
         $this->removeNode($previousFirstExpression);
 
         return $node;
+    }
+
+    /**
+     * @param If_[] $ifsBefore
+     */
+    private function isAssignVarUsedInIfCond(array $ifsBefore, Expr $variable): bool
+    {
+        foreach ($ifsBefore as $ifBefore) {
+            $isUsedInIfCond = $this->betterNodeFinder->findFirst($ifBefore->cond, function (Node $node) use (
+                $variable
+            ): bool {
+                return $this->areNodesEqual($node, $variable);
+            });
+
+            if ($isUsedInIfCond) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
