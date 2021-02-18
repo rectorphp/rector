@@ -151,6 +151,7 @@ final class VarTagRemover
             $attributeAwareArrayTypeNode,
             $node
         );
+
         if (! $staticType instanceof ArrayType) {
             return false;
         }

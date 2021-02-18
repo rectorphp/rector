@@ -14,11 +14,11 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\NodeTraverser;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use ReflectionClass;
-use ReflectionMethod;
-use ReflectionNamedType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Throwable;
@@ -33,6 +33,16 @@ final class ThrowWithPreviousExceptionRector extends AbstractRector
      * @var int
      */
     private const DEFAULT_EXCEPTION_ARGUMENT_POSITION = 2;
+
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -107,60 +117,69 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $throw->expr->class instanceof Name) {
+        $new = $throw->expr;
+        if (! $new->class instanceof Name) {
             return null;
         }
 
-        $exceptionArgumentPosition = $this->resolveExceptionArgumentPosition($throw->expr->class);
+        $exceptionArgumentPosition = $this->resolveExceptionArgumentPosition($new->class);
         if ($exceptionArgumentPosition === null) {
             return null;
         }
 
         // exception is bundled
-        if (isset($throw->expr->args[$exceptionArgumentPosition])) {
+        if (isset($new->args[$exceptionArgumentPosition])) {
             return null;
         }
 
-        if (! isset($throw->expr->args[1])) {
-            // get previous code
-            $throw->expr->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
+        if (! isset($new->args[0])) {
+            // get previous message
+            $new->args[0] = new Arg(new MethodCall($catchedThrowableVariable, 'getMessage'));
         }
 
-        $throw->expr->args[$exceptionArgumentPosition] = new Arg($catchedThrowableVariable);
+        if (! isset($new->args[1])) {
+            // get previous code
+            $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
+        }
+
+        $new->args[$exceptionArgumentPosition] = new Arg($catchedThrowableVariable);
+
+        // null the node, to fix broken format preserving printers, see https://github.com/rectorphp/rector/issues/5576
+        $new->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         // nothing more to add
-        return NodeTraverser::STOP_TRAVERSAL;
+        return NodeTraverser::DONT_TRAVERSE_CHILDREN;
     }
 
     private function resolveExceptionArgumentPosition(Name $exceptionName): ?int
     {
-        $fullyQualifiedName = $this->getName($exceptionName);
+        $className = $this->getName($exceptionName);
 
         // is native exception?
-        if (! Strings::contains($fullyQualifiedName, '\\')) {
+        if (! Strings::contains($className, '\\')) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
 
-        // is class missing?
-        if (! class_exists($fullyQualifiedName)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
 
-        $reflectionClass = new ReflectionClass($fullyQualifiedName);
-        if (! $reflectionClass->hasMethod(MethodName::CONSTRUCT)) {
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $construct = $classReflection->hasMethod(MethodName::CONSTRUCT);
+        if (! $construct) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
 
-        /** @var ReflectionMethod $constructorReflectionMethod */
-        $constructorReflectionMethod = $reflectionClass->getConstructor();
-        foreach ($constructorReflectionMethod->getParameters() as $position => $reflectionParameter) {
-            if (! $reflectionParameter->hasType()) {
+        $constructorReflectionMethod = $classReflection->getConstructor();
+        $parametersAcceptor = $constructorReflectionMethod->getVariants()[0];
+
+        foreach ($parametersAcceptor->getParameters() as $position => $parameterReflection) {
+            $parameterType = $parameterReflection->getType();
+            if (! $parameterType instanceof TypeWithClassName) {
                 continue;
             }
 
-            /** @var ReflectionNamedType $reflectionNamedType */
-            $reflectionNamedType = $reflectionParameter->getType();
-            if (! is_a($reflectionNamedType->getName(), Throwable::class, true)) {
+            if (! is_a($parameterType->getClassName(), Throwable::class, true)) {
                 continue;
             }
 
