@@ -9,7 +9,6 @@ use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class FilesFinderTest extends AbstractKernelTestCase
 {
@@ -18,16 +17,10 @@ final class FilesFinderTest extends AbstractKernelTestCase
      */
     private $filesFinder;
 
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
         $this->filesFinder = $this->getService(FilesFinder::class);
-        $this->smartFileSystem = $this->getService(SmartFileSystem::class);
     }
 
     /**
