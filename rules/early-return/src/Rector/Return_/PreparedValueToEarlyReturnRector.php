@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\EarlyReturn\Rector\Return_;
 
 use PhpParser\Node;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -76,14 +78,51 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $previousIf = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $node) {
-            return $node instanceof If_ && ! $node->else instanceof Else_ && $node->elseifs === [];
-        });
-
-        if (! $previousIf instanceof If_) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
         return $node;
+    }
+
+    private function shouldSkip(Return_ $return): bool
+    {
+        $ifsBefore = $this->getIfsBefore($return);
+        if ($ifsBefore === []) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function getIfsBefore(Return_ $return): array
+    {
+        $parent = $return->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof FunctionLike) {
+            /** @va If_ $ifs */
+            $ifs = $this->betterNodeFinder->findInstanceOf($parent->stmts, If_::class);
+
+            foreach ($ifs as $if) {
+                if ($if->else instanceof Else_) {
+                    return [];
+                }
+
+                if ($if->elseifs !== []) {
+                    return [];
+                }
+
+                if (count($if->stmts) !== 1) {
+                    return [];
+                }
+
+                if (! $if->stmts[0] instanceof Return_) {
+                    return [];
+                }
+            }
+
+            return $ifs;
+        }
+
+        return [];
     }
 }
