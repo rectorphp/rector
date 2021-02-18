@@ -156,10 +156,6 @@ CODE_SAMPLE
                 }
 
                 if (! $if->stmts[0] instanceof Expression && ! $if->stmts[0]->expr instanceof Assign) {
-                    dump(
-                    $if->stmts[0]
-                );
-                    die;
                     return [];
                 }
 
