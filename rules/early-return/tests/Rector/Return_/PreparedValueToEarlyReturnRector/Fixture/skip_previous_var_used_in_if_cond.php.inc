@@ -9,7 +9,7 @@ class SkipPreviousVarUsedInIfCond
         $var = rand(0, 1);
 
         if ($var === 1) {
-            $var = 1;
+            $var = 0;
         }
 
         return $var;
