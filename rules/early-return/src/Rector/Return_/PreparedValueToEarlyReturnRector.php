@@ -116,7 +116,7 @@ CODE_SAMPLE
     /**
      * @param If_[] $ifsBefore
      */
-    private function isAssignVarUsedInIfCond(array $ifsBefore, Expr $variable): bool
+    private function isAssignVarUsedInIfCond(array $ifsBefore, ?Expr $variable): bool
     {
         foreach ($ifsBefore as $ifBefore) {
             $isUsedInIfCond = $this->betterNodeFinder->findFirst($ifBefore->cond, function (Node $node) use (
