@@ -10,6 +10,7 @@ use Rector\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
 use Rector\EarlyReturn\Rector\If_\ChangeOrIfReturnToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
+use Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryAndToEarlyReturnRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -24,4 +25,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeOrIfReturnToEarlyReturnRector::class);
     $services->set(ChangeOrIfContinueToMultiContinueRector::class);
     $services->set(ReturnAfterToEarlyOnBreakRector::class);
+    $services->set(PreparedValueToEarlyReturnRector::class);
 };
