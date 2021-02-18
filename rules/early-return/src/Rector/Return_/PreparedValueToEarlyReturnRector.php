@@ -85,6 +85,10 @@ CODE_SAMPLE
             return null;
         }
 
+        $ifsBefore               = $this->getIfsBefore($node);
+        $previousFirstExpression = $this->getPreviousIfLinearEquals($ifsBefore[0], $node->expr);
+
+        $this->removeNode($previousFirstExpression);
         return $node;
     }
 
@@ -99,24 +103,28 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $this->isPreviousIfLinearEquals($ifsBefore[0], $return->expr);
+        return ! (bool) $this->getPreviousIfLinearEquals($ifsBefore[0], $return->expr);
     }
 
     /**
      * Only search previous var, not parent of previous
      */
-    private function isPreviousIfLinearEquals(If_ $if, Expr $expr): bool
+    private function getPreviousIfLinearEquals(If_ $if, Expr $expr): ?Expr
     {
         $previous = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
         if (! $previous instanceof Expression) {
-            return false;
+            return null;
         }
 
         if (! $previous->expr instanceof Assign) {
-            return false;
+            return null;
         }
 
-        return ! $this->areNodesEqual($previous->expr->var, $expr);
+        if ($this->areNodesEqual($previous->expr->var, $expr)) {
+            return $previous;
+        }
+
+        return null;
     }
 
     /**
