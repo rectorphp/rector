@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Ramsey\Uuid\UuidInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;

@@ -22,7 +22,6 @@ use Rector\Nette\NodeFactory\ActionRenderFactory;
 use Rector\NetteToSymfony\NodeAnalyzer\ClassMethodRenderAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;

@@ -154,13 +154,6 @@ final class ProcessCommand extends AbstractCommand
             'File with extra autoload'
         );
 
-        $this->addOption(
-            Option::MATCH_GIT_DIFF,
-            null,
-            InputOption::VALUE_NONE,
-            'Execute only on file(s) matching the git diff.'
-        );
-
         $names = $this->outputFormatterCollector->getNames();
 
         $description = sprintf('Select output format: "%s".', implode('", "', $names));
@@ -264,8 +257,7 @@ final class ProcessCommand extends AbstractCommand
     {
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
             $paths,
-            $this->configuration->getFileExtensions(),
-            $this->configuration->mustMatchGitDiff()
+            $this->configuration->getFileExtensions()
         );
 
         // filter out non-PHP php files, e.g. blade templates in Laravel

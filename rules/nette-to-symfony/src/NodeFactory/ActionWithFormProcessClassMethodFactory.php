@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ActionWithFormProcessClassMethodFactory
@@ -35,7 +34,9 @@ final class ActionWithFormProcessClassMethodFactory
         $classMethod = $this->nodeFactory->createPublicMethod('actionSomeForm');
 
         $requestVariable = new Variable('request');
-        $classMethod->params[] = new Param($requestVariable, null, new FullyQualified('Symfony\Component\HttpFoundation\Request'));
+        $classMethod->params[] = new Param($requestVariable, null, new FullyQualified(
+            'Symfony\Component\HttpFoundation\Request'
+        ));
         $classMethod->returnType = new FullyQualified(Response::class);
 
         $formVariable = new Variable('form');

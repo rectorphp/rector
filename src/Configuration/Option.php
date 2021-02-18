@@ -56,11 +56,6 @@ final class Option
     /**
      * @var string
      */
-    public const MATCH_GIT_DIFF = 'match-git-diff';
-
-    /**
-     * @var string
-     */
     public const SYMFONY_CONTAINER_XML_PATH_PARAMETER = 'symfony_container_xml_path';
 
     /**

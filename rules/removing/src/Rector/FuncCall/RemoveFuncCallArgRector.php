@@ -7,7 +7,6 @@ namespace Rector\Removing\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Removing\ValueObject\RemoveFuncCallArg;

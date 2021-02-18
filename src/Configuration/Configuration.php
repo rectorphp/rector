@@ -32,11 +32,6 @@ final class Configuration
     /**
      * @var bool
      */
-    private $mustMatchGitDiff = false;
-
-    /**
-     * @var bool
-     */
     private $shouldClearCache = false;
 
     /**
@@ -104,7 +99,6 @@ final class Configuration
     {
         $this->isDryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
         $this->shouldClearCache = (bool) $input->getOption(Option::OPTION_CLEAR_CACHE);
-        $this->mustMatchGitDiff = (bool) $input->getOption(Option::MATCH_GIT_DIFF);
         $this->showProgressBar = $this->canShowProgressBar($input);
         $this->showDiffs = ! (bool) $input->getOption(Option::OPTION_NO_DIFFS);
         $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
@@ -179,11 +173,6 @@ final class Configuration
     public function setAreAnyPhpRectorsLoaded(bool $areAnyPhpRectorsLoaded): void
     {
         $this->areAnyPhpRectorsLoaded = $areAnyPhpRectorsLoaded;
-    }
-
-    public function mustMatchGitDiff(): bool
-    {
-        return $this->mustMatchGitDiff;
     }
 
     public function getOutputFile(): ?string

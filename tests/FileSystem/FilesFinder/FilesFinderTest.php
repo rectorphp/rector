@@ -9,7 +9,6 @@ use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class FilesFinderTest extends AbstractKernelTestCase
 {
@@ -18,16 +17,10 @@ final class FilesFinderTest extends AbstractKernelTestCase
      */
     private $filesFinder;
 
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
         $this->filesFinder = $this->getService(FilesFinder::class);
-        $this->smartFileSystem = $this->getService(SmartFileSystem::class);
     }
 
     /**
@@ -66,27 +59,5 @@ final class FilesFinderTest extends AbstractKernelTestCase
         sort($foundFileNames);
         sort($expectedFoundFileNames);
         $this->assertSame($expectedFoundFileNames, $foundFileNames);
-    }
-
-    public function testMatchGitDiff(): void
-    {
-        $dir = sys_get_temp_dir() . '/' . mt_rand();
-        mkdir($dir);
-        chdir($dir);
-        shell_exec('git init');
-
-        $filename = $dir . '/tmp.php';
-        touch($filename);
-        touch($dir . '/tmp.yml');
-
-        shell_exec('git add --all && git commit -m "first commit"');
-
-        $this->smartFileSystem->dumpFile($filename, '<?php echo ' . mt_rand() . ';');
-        $this->smartFileSystem->dumpFile($dir . '/tmp.yml', '');
-
-        $foundFiles = $this->filesFinder->findInDirectoriesAndFiles([$dir], ['php'], true);
-        $this->assertCount(1, $foundFiles);
-
-        $this->smartFileSystem->remove($filename);
     }
 }

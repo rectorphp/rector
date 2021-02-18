@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
-use Iterator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Name\FullyQualified;
