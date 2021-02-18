@@ -85,10 +85,15 @@ CODE_SAMPLE
             return null;
         }
 
-        $ifsBefore               = $this->getIfsBefore($node);
+        $ifsBefore = $this->getIfsBefore($node);
         $previousFirstExpression = $this->getPreviousIfLinearEquals($ifsBefore[0], $node->expr);
 
+        foreach ($ifsBefore as $ifBefore) {
+            $ifBefore->stmts[0] = new Return_($ifBefore->stmts[0]->expr->expr);
+        }
+        $node->expr = $previousFirstExpression->expr->expr;
         $this->removeNode($previousFirstExpression);
+
         return $node;
     }
 
@@ -106,10 +111,7 @@ CODE_SAMPLE
         return ! (bool) $this->getPreviousIfLinearEquals($ifsBefore[0], $return->expr);
     }
 
-    /**
-     * Only search previous var, not parent of previous
-     */
-    private function getPreviousIfLinearEquals(If_ $if, Expr $expr): ?Expr
+    private function getPreviousIfLinearEquals(If_ $if, Expr $expr): ?Expression
     {
         $previous = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
         if (! $previous instanceof Expression) {
@@ -140,7 +142,7 @@ CODE_SAMPLE
             /** @va If_ $ifs */
             $ifs = $this->betterNodeFinder->findInstanceOf($parent->stmts, If_::class);
 
-            foreach ($ifs as $if) {
+            foreach ($ifs as $key => $if) {
                 if ($if->else instanceof Else_) {
                     return [];
                 }
@@ -153,11 +155,15 @@ CODE_SAMPLE
                     return [];
                 }
 
-                if (! $if->stmts[0] instanceof Assign) {
+                if (! $if->stmts[0] instanceof Expression && ! $if->stmts[0]->expr instanceof Assign) {
+                    dump(
+                    $if->stmts[0]
+                );
+                    die;
                     return [];
                 }
 
-                if (! $this->areNodesEqual($if->stmts[0]->var, $return->expr)) {
+                if (! $this->areNodesEqual($if->stmts[0]->expr->var, $return->expr)) {
                     return [];
                 }
             }
