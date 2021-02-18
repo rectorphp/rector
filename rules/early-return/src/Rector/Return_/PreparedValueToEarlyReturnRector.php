@@ -160,21 +160,17 @@ CODE_SAMPLE
             return [];
         }
 
-        return $this->collectIfs($parent, $return);
+        return $this->collectIfs($parent->stmts, $return);
     }
 
     /**
-     * @param FunctionLike|If_ $node
+     * @param If_[] $stmts
      * @return If_[]
      */
-    private function collectIfs(Node $node, Return_ $return): array
+    private function collectIfs(array $stmts, Return_ $return): array
     {
-        if (! (property_exists($node, 'stmts') && $node->stmts !== null)) {
-            return [];
-        }
-
         /** @va If_[] $ifs */
-        $ifs = $this->betterNodeFinder->findInstanceOf($node->stmts, If_::class);
+        $ifs = $this->betterNodeFinder->findInstanceOf($stmts, If_::class);
 
         /** Skip entirely if found skipped ifs */
         foreach ($ifs as $if) {
@@ -187,11 +183,12 @@ CODE_SAMPLE
                 return [];
             }
 
-            if (count($if->stmts) !== 1) {
+            $stmts = $if->stmts;
+            if (count($stmts) !== 1) {
                 return [];
             }
 
-            $expression = $if->stmts[0];
+            $expression = $stmts[0];
             if (! $expression instanceof Expression) {
                 return [];
             }
