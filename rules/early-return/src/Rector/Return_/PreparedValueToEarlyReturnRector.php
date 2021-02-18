@@ -87,6 +87,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isAssignVarUsedInIfCond($ifsBefore, $node->expr)) {
+            return null;
+        }
+
         /** @var Expr $returnExpr */
         $returnExpr = $node->expr;
         /** @var Expression $previousFirstExpression */
@@ -112,6 +116,26 @@ CODE_SAMPLE
     /**
      * @param If_[] $ifsBefore
      */
+    private function isAssignVarUsedInIfCond(array $ifsBefore, ?Expr $expr): bool
+    {
+        foreach ($ifsBefore as $ifBefore) {
+            $isUsedInIfCond = (bool) $this->betterNodeFinder->findFirst($ifBefore->cond, function (Node $node) use (
+                $expr
+            ): bool {
+                return $this->areNodesEqual($node, $expr);
+            });
+
+            if ($isUsedInIfCond) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param If_[] $ifsBefore
+     */
     private function shouldSkip(array $ifsBefore, ?Expr $returnExpr): bool
     {
         if ($ifsBefore === []) {
@@ -121,15 +145,19 @@ CODE_SAMPLE
         return ! (bool) $this->getPreviousIfLinearEquals($ifsBefore[0], $returnExpr);
     }
 
-    private function getPreviousIfLinearEquals(If_ $if, ?Expr $expr): ?Expression
+    private function getPreviousIfLinearEquals(?Node $node, ?Expr $expr): ?Expression
     {
+        if (! $node instanceof Node) {
+            return null;
+        }
+
         if (! $expr instanceof Expr) {
             return null;
         }
 
-        $previous = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
+        $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
         if (! $previous instanceof Expression) {
-            return null;
+            return $this->getPreviousIfLinearEquals($previous, $expr);
         }
 
         if (! $previous->expr instanceof Assign) {
