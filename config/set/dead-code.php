@@ -25,6 +25,7 @@ use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
 use Rector\DeadCode\Rector\Expression\RemoveDeadStmtRector;
 use Rector\DeadCode\Rector\Expression\SimplifyMirrorAssignRector;
 use Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector;
+use Rector\DeadCode\Rector\For_\RemoveDeadLoopRector;
 use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
 use Rector\DeadCode\Rector\Function_\RemoveUnusedFunctionRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector;
@@ -98,4 +99,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveUnusedConstructorParamRector::class);
     $services->set(RemoveDeadInstanceOfRector::class);
     $services->set(RemoveEmptyAbstractClassRector::class);
+    $services->set(RemoveDeadLoopRector::class);
 };
