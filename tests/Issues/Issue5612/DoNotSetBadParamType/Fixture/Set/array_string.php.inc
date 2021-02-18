@@ -1,12 +1,12 @@
 <?php
 
-namespace Rector\Core\Tests\Issues\Issue5612\DoNotSetBadParamType\Fixture;
+namespace Rector\Core\Tests\Issues\Issue5612\DoNotSetBadParamType\Fixture\Set;
 
-final class DemoArrayIntTest
+final class DemoArrayStringTest
 {
     public function provideThings(): array {
         return [
-            [ 1234 ],
+            [ 'I am a string' ],
         ];
     }
 
@@ -18,16 +18,16 @@ final class DemoArrayIntTest
 -----
 <?php
 
-namespace Rector\Core\Tests\Issues\Issue5612\DoNotSetBadParamType\Fixture;
+namespace Rector\Core\Tests\Issues\Issue5612\DoNotSetBadParamType\Fixture\Set;
 
-final class DemoArrayIntTest
+final class DemoArrayStringTest
 {
     /**
-     * @return int[][]
+     * @return string[][]
      */
     public function provideThings(): array {
         return [
-            [ 1234 ],
+            [ 'I am a string' ],
         ];
     }
 

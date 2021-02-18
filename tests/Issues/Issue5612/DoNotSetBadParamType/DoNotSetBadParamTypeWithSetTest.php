@@ -8,7 +8,7 @@ use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DoNotSetBadParamTypeTest extends AbstractRectorTestCase
+final class DoNotSetBadParamTypeWithSetTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -20,11 +20,11 @@ final class DoNotSetBadParamTypeTest extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture/Set');
     }
 
     protected function provideConfigFilePath(): string
     {
-        return __DIR__ . '/config/some_config.php';
+        return __DIR__ . '/config/set_config.php';
     }
 }

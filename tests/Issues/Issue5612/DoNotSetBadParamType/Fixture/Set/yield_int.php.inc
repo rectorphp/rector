@@ -1,11 +1,11 @@
 <?php
 
-namespace Rector\Core\Tests\Issues\Issue5612\DoNotSetBadParamType\Fixture;
+namespace Rector\Core\Tests\Issues\Issue5612\DoNotSetBadParamType\Fixture\Set;
 
-final class DemoYieldStringTest
+final class DemoYieldIntTest
 {
     public function provideThings(): iterable {
-        yield [ 'I am a string' ];
+        yield [ 1234 ];
     }
 
     /**
@@ -16,15 +16,15 @@ final class DemoYieldStringTest
 -----
 <?php
 
-namespace Rector\Core\Tests\Issues\Issue5612\DoNotSetBadParamType\Fixture;
+namespace Rector\Core\Tests\Issues\Issue5612\DoNotSetBadParamType\Fixture\Set;
 
-final class DemoYieldStringTest
+final class DemoYieldIntTest
 {
     /**
-     * @return string[][]
+     * @return int[][]
      */
     public function provideThings(): iterable {
-        yield [ 'I am a string' ];
+        yield [ 1234 ];
     }
 
     /**
