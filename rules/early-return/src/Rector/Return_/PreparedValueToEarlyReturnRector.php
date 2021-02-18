@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\EarlyReturn\Rector\Return_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
@@ -88,11 +90,37 @@ CODE_SAMPLE
 
     private function shouldSkip(Return_ $return): bool
     {
-        return $ifsBefore === [];
+        if (! $return->expr instanceof Expr) {
+            return false;
+        }
+
+        $ifsBefore = $this->getIfsBefore($return);
+        if ($ifsBefore === []) {
+            return true;
+        }
+
+        return ! $this->isPreviousIfLinearEquals($ifsBefore[0], $return->expr);
     }
 
     /**
-     * @return Node[]
+     * Only search previous var, not parent of previous
+     */
+    private function isPreviousIfLinearEquals(If_ $if, Expr $expr): bool
+    {
+        $previous = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if (! $previous instanceof Expression) {
+            return false;
+        }
+
+        if (! $previous->expr instanceof Assign) {
+            return false;
+        }
+
+        return ! $this->areNodesEqual($previous->expr->var, $expr);
+    }
+
+    /**
+     * @return If_[]
      */
     private function getIfsBefore(Return_ $return): array
     {
