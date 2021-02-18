@@ -86,12 +86,24 @@ CODE_SAMPLE
         }
 
         $ifsBefore = $this->getIfsBefore($node);
-        $previousFirstExpression = $this->getPreviousIfLinearEquals($ifsBefore[0], $node->expr);
+
+        /** @var Expr $returnExpr */
+        $returnExpr = $node->expr;
+        /** @var Expression $previousFirstExpression */
+        $previousFirstExpression = $this->getPreviousIfLinearEquals($ifsBefore[0], $returnExpr);
 
         foreach ($ifsBefore as $ifBefore) {
-            $ifBefore->stmts[0] = new Return_($ifBefore->stmts[0]->expr->expr);
+            /** @var Expression $expressionIf */
+            $expressionIf = $ifBefore->stmts[0];
+            /** @var Assign $assignIf */
+            $assignIf = $expressionIf->expr;
+
+            $ifBefore->stmts[0] = new Return_($assignIf->expr);
         }
-        $node->expr = $previousFirstExpression->expr->expr;
+
+        /** @var Assign $assignPrevious */
+        $assignPrevious = $previousFirstExpression->expr;
+        $node->expr = $assignPrevious->expr;
         $this->removeNode($previousFirstExpression);
 
         return $node;
@@ -99,7 +111,8 @@ CODE_SAMPLE
 
     private function shouldSkip(Return_ $return): bool
     {
-        if (! $return->expr instanceof Expr) {
+        $returnExpr = $return->expr;
+        if (! $returnExpr instanceof Expr) {
             return false;
         }
 
@@ -108,7 +121,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! (bool) $this->getPreviousIfLinearEquals($ifsBefore[0], $return->expr);
+        return ! (bool) $this->getPreviousIfLinearEquals($ifsBefore[0], $returnExpr);
     }
 
     private function getPreviousIfLinearEquals(If_ $if, Expr $expr): ?Expression
@@ -135,39 +148,64 @@ CODE_SAMPLE
     private function getIfsBefore(Return_ $return): array
     {
         $parent = $return->getAttribute(AttributeKey::PARENT_NODE);
-        if (
-            ($parent instanceof FunctionLike || $parent instanceof If_)
-            && $parent->stmts[count($parent->stmts) - 1] === $return
-        ) {
-            /** @va If_ $ifs */
-            $ifs = $this->betterNodeFinder->findInstanceOf($parent->stmts, If_::class);
-
-            /** Skip entirely if found skipped ifs */
-            foreach ($ifs as $if) {
-                if ($if->else instanceof Else_) {
-                    return [];
-                }
-
-                if ($if->elseifs !== []) {
-                    return [];
-                }
-
-                if (count($if->stmts) !== 1) {
-                    return [];
-                }
-
-                if (! $if->stmts[0] instanceof Expression && ! $if->stmts[0]->expr instanceof Assign) {
-                    return [];
-                }
-
-                if (! $this->areNodesEqual($if->stmts[0]->expr->var, $return->expr)) {
-                    return [];
-                }
-            }
-
-            return $ifs;
+        if (! $parent instanceof FunctionLike && ! $parent instanceof If_) {
+            return [];
         }
 
-        return [];
+        if (! isset($parent->stmts)) {
+            return [];
+        }
+
+        if ($parent->stmts[count($parent->stmts) - 1] !== $return) {
+            return [];
+        }
+
+        return $this->getIfs($parent, $return);
+    }
+
+    /**
+     * @param FunctionLike|If_ $parent
+     * @return If_[]
+     */
+    private function getIfs(Node $parent, Return_ $return): array
+    {
+        if (! isset($parent->stmts)) {
+            return [];
+        }
+
+        /** @va If_[] $ifs */
+        $ifs = $this->betterNodeFinder->findInstanceOf($parent->stmts, If_::class);
+
+        /** Skip entirely if found skipped ifs */
+        foreach ($ifs as $if) {
+            /** @var If_ $if */
+            if ($if->else instanceof Else_) {
+                return [];
+            }
+
+            if ($if->elseifs !== []) {
+                return [];
+            }
+
+            if (count($if->stmts) !== 1) {
+                return [];
+            }
+
+            $expression = $if->stmts[0];
+            if (! $expression instanceof Expression) {
+                return [];
+            }
+
+            if (! $expression->expr instanceof Assign) {
+                return [];
+            }
+
+            $assign = $expression->expr;
+            if (! $this->areNodesEqual($assign->var, $return->expr)) {
+                return [];
+            }
+        }
+
+        return $ifs;
     }
 }
