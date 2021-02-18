@@ -11,10 +11,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\PostRector\Rector\NameImportingPostRector
  */
-final class AutoImportNamesParameterTest extends AbstractRectorTestCase
+final class AutoImportNamesPhp74Test extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
+     * @requires PHP 7.4
      */
     public function test(SmartFileInfo $fileInfo): void
     {
@@ -23,7 +24,7 @@ final class AutoImportNamesParameterTest extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureAutoImportNames');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureAutoImportNamesPhp74');
     }
 
     protected function provideConfigFilePath(): string

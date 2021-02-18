@@ -2,19 +2,19 @@
 
 namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\FixtureAutoImportNames;
 
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\FirstNamespace\FirstOriginalClass as AliasedClass;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\SecondNamespace;
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass;
 
 final class InstanceofImport
 {
-    public function run()
+    public function run($value)
     {
-        if ()
-        $aliasedClass = new AliasedClass();
-        $secondClass = new SecondNamespace\SecondOriginalClass();
+        if ($value instanceof OldClass) {
+            return true;
+        }
+
+        return false;
     }
 }
-
 
 ?>
 -----
@@ -22,11 +22,19 @@ final class InstanceofImport
 
 namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\FixtureAutoImportNames;
 
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\SecondNamespace\SecondOriginalClass;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\FirstNamespace\FirstOriginalClass as AliasedClass;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\SecondNamespace;
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass;
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass;
 
-$aliasedClass = new AliasedClass();
-$secondClass = new SecondOriginalClass();
+final class InstanceofImport
+{
+    public function run($value)
+    {
+        if ($value instanceof NewClass) {
+            return true;
+        }
+
+        return false;
+    }
+}
 
 ?>
