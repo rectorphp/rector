@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Legacy\Tests\Rector\FileWithoutNamespace\FunctionToStaticMethodRector\Fixture;
+namespace Rector\Transform\Tests\Rector\FileWithoutNamespace\FunctionToStaticMethodRector\Fixture;
 
 function first_static_function()
 {
@@ -17,7 +17,7 @@ $value = first_static_function();
 
 declare(strict_types=1);
 
-namespace Rector\Legacy\Tests\Rector\FileWithoutNamespace\FunctionToStaticMethodRector\Fixture;
+namespace Rector\Transform\Tests\Rector\FileWithoutNamespace\FunctionToStaticMethodRector\Fixture;
 
 $value = %sStaticFunctions::firstStaticFunction();
 
