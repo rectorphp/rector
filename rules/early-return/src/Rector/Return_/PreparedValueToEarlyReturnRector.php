@@ -152,29 +152,29 @@ CODE_SAMPLE
             return [];
         }
 
-        if (! isset($parent->stmts)) {
+        if (! (property_exists($parent, 'stmts') && $parent->stmts !== null)) {
             return [];
         }
 
-        if ($parent->stmts[count($parent->stmts) - 1] !== $return) {
+        if ($parent->stmts[(is_countable($parent->stmts) ? count($parent->stmts) : 0) - 1] !== $return) {
             return [];
         }
 
-        return $this->getIfs($parent, $return);
+        return $this->collectIfs($parent, $return);
     }
 
     /**
-     * @param FunctionLike|If_ $parent
+     * @param FunctionLike|If_ $node
      * @return If_[]
      */
-    private function getIfs(Node $parent, Return_ $return): array
+    private function collectIfs(Node $node, Return_ $return): array
     {
-        if (! isset($parent->stmts)) {
+        if (! (property_exists($node, 'stmts') && $node->stmts !== null)) {
             return [];
         }
 
         /** @va If_[] $ifs */
-        $ifs = $this->betterNodeFinder->findInstanceOf($parent->stmts, If_::class);
+        $ifs = $this->betterNodeFinder->findInstanceOf($node->stmts, If_::class);
 
         /** Skip entirely if found skipped ifs */
         foreach ($ifs as $if) {
