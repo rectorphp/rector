@@ -40,8 +40,6 @@ class SomeClass
 {
     public function run($values)
     {
-        for ($i=1; $i<count($values); ++$i) {
-        }
     }
 }
 CODE_SAMPLE
