@@ -164,16 +164,17 @@ CODE_SAMPLE
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
 
-        $reflectionClass = $this->reflectionProvider->getClass($className);
-        if (! $reflectionClass->hasMethod(MethodName::CONSTRUCT)) {
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $construct = $classReflection->hasMethod(MethodName::CONSTRUCT);
+        if (! $construct) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
 
-        $constructorReflectionMethod = $reflectionClass->getConstructor();
+        $constructorReflectionMethod = $classReflection->getConstructor();
         $parametersAcceptor = $constructorReflectionMethod->getVariants()[0];
 
-        foreach ($parametersAcceptor->getParameters() as $position => $reflectionParameter) {
-            $parameterType = $reflectionParameter->getType();
+        foreach ($parametersAcceptor->getParameters() as $position => $parameterReflection) {
+            $parameterType = $parameterReflection->getType();
             if (! $parameterType instanceof TypeWithClassName) {
                 continue;
             }
