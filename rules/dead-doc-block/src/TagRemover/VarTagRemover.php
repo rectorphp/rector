@@ -10,6 +10,8 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
@@ -118,9 +120,23 @@ final class VarTagRemover
     {
         if ($varTagValueNode->type instanceof AttributeAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
-                if ($type instanceof AttributeAwareArrayTypeNode && $this->classLikeExistenceChecker->doesClassLikeExist(
-                    (string) $type->type
-                )) {
+                if (! $type instanceof AttributeAwareArrayTypeNode) {
+                    continue;
+                }
+
+                $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($type, $node);
+                if (! $staticType instanceof ArrayType) {
+                    continue;
+                }
+
+                $itemType = $staticType->getItemType();
+                if (! $itemType instanceof ObjectType) {
+                    continue;
+                }
+
+                $class = $itemType->getClassName();
+
+                if ($this->classLikeExistenceChecker->doesClassLikeExist($class)) {
                     return true;
                 }
             }
