@@ -444,15 +444,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         return $currentExpression->getAttribute(AttributeKey::NEXT_NODE);
     }
 
-    /**
-     * @param Expr[]|null[] $nodes
-     * @param mixed[] $expectedValues
-     */
-    protected function areValues(array $nodes, array $expectedValues): bool
-    {
-        return $this->valueResolver->areValues($nodes, $expectedValues);
-    }
-
     protected function isAtLeastPhpVersion(int $version): bool
     {
         return $this->phpVersionProvider->isAtLeastPhpVersion($version);
