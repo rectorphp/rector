@@ -145,8 +145,12 @@ CODE_SAMPLE
         return ! (bool) $this->getPreviousIfLinearEquals($ifsBefore[0], $returnExpr);
     }
 
-    private function getPreviousIfLinearEquals(Node $node, ?Expr $expr): ?Expression
+    private function getPreviousIfLinearEquals(?Node $node, ?Expr $expr): ?Expression
     {
+        if (! $node instanceof Node) {
+            return null;
+        }
+
         if (! $expr instanceof Expr) {
             return null;
         }
