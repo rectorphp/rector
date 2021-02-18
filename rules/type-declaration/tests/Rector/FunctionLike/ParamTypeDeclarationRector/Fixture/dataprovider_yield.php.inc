@@ -1,11 +1,11 @@
 <?php
 
-namespace Rector\Core\Tests\Issues\Issue5612\DoNotSetBadParamType\Fixture\Rule;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
 
-final class DemoYieldIntTest
+final class DemoYieldStringTest
 {
     public function provideThings(): iterable {
-        yield [ 1234 ];
+        yield [ 'I am a string' ];
     }
 
     /**

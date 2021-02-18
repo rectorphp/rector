@@ -1,12 +1,12 @@
 <?php
 
-namespace Rector\Core\Tests\Issues\Issue5612\DoNotSetBadParamType\Fixture\Rule;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
 
-final class DemoArrayIntTest
+final class DemoArrayStringTest
 {
     public function provideThings(): array {
         return [
-            [ 1234 ],
+            [ 'I am a string' ],
         ];
     }
 
