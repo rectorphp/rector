@@ -104,7 +104,7 @@ CODE_SAMPLE
     {
         $commandName = $this->resolveCommandNameFromConstructor($class);
         if (! $commandName instanceof Node) {
-            return $this->resolveCommandNameFromSetName($class);
+            $commandName = $this->resolveCommandNameFromSetName($class);
         }
 
         $this->removeConstructorIfHasOnlySetNameMethodCall($class);
