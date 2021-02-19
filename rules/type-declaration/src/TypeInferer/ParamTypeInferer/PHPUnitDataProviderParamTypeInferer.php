@@ -111,7 +111,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
                 continue;
             }
 
-            $type = $this->getTypeFromClassMethodReturn( $classMethodReturn->expr );
+            $type = $this->getTypeFromClassMethodReturn($classMethodReturn->expr);
 
             if (! $type instanceof ConstantArrayType) {
                 return $type;
@@ -135,7 +135,8 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
         return $p;
     }
 
-    private function getTypeFromClassMethodReturn( Array_ $classMethodReturnArrayNode ) : Type {
+    private function getTypeFromClassMethodReturn(Array_ $classMethodReturnArrayNode): Type
+    {
         $arrayTypes = $this->nodeTypeResolver->resolve($classMethodReturnArrayNode);
 
         // impossible to resolve
