@@ -71,14 +71,7 @@ final class ClassManipulator
 
     public function hasParentMethodOrInterface(string $class, string $method): bool
     {
-        $names = $this->nodeRepository->getStringNames();
-
-        foreach ($names as $name) {
-            if (fnmatch($class, $name, FNM_NOESCAPE)) {
-                $class = $name;
-                break;
-            }
-        }
+        $class = $this->nodeRepository->getStringName($class) ?? $class;
 
         if (! class_exists($class)) {
             return false;

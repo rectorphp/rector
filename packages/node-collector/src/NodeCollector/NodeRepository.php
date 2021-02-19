@@ -535,12 +535,15 @@ final class NodeRepository
         return $this->names[$name] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
-    public function getStringNames(): array
+    public function getStringName(string $locateName): ?string
     {
-        return array_keys($this->names);
+        foreach (array_keys($this->names) as $name) {
+            if (fnmatch($locateName, $name, FNM_NOESCAPE)) {
+                return $name;
+            }
+        }
+
+        return null;
     }
 
     public function findClassMethodConstructorByNew(New_ $new): ?ClassMethod
