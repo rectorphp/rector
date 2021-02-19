@@ -35,6 +35,7 @@ use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassLikeTypeCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
@@ -42,6 +43,7 @@ use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
+use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 
 final class NodeTypeResolver
 {
@@ -76,6 +78,16 @@ final class NodeTypeResolver
     private $classAnalyzer;
 
     /**
+     * @var ClassLikeExistenceChecker
+     */
+    private $classLikeExistenceChecker;
+
+    /**
+     * @var NodeTypeCorrector\GenericClassStringTypeCorrector
+     */
+    private $genericClassStringTypeCorrector;
+
+    /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
     public function __construct(
@@ -83,6 +95,8 @@ final class NodeTypeResolver
         ParentClassLikeTypeCorrector $parentClassLikeTypeCorrector,
         TypeUnwrapper $typeUnwrapper,
         ClassAnalyzer $classAnalyzer,
+        ClassLikeExistenceChecker $classLikeExistenceChecker,
+        GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -93,6 +107,8 @@ final class NodeTypeResolver
         $this->parentClassLikeTypeCorrector = $parentClassLikeTypeCorrector;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->classAnalyzer = $classAnalyzer;
+        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
+        $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
     }
 
     /**
@@ -194,7 +210,8 @@ final class NodeTypeResolver
         }
 
         if ($node instanceof Arg) {
-            $node = $node->value;
+            throw new ShouldNotHappenException('Arg cannot have type, use $arg->value instead');
+            // $node = $node->value;
         }
 
         if (StaticInstanceOf::isOneOf($node, [Param::class, Scalar::class])) {
@@ -475,6 +492,8 @@ final class NodeTypeResolver
 
         if ($scope instanceof Scope) {
             $arrayType = $scope->getType($expr);
+            $arrayType = $this->genericClassStringTypeCorrector->correct($arrayType);
+
             return $this->removeNonEmptyArrayFromIntersectionWithArrayType($arrayType);
         }
 

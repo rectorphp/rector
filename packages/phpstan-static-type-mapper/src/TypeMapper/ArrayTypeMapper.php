@@ -11,9 +11,11 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
+use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
@@ -23,6 +25,7 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\TypeDeclaration\TypeNormalizer;
 
 /**
@@ -46,14 +49,21 @@ final class ArrayTypeMapper implements TypeMapperInterface
     private $typeNormalizer;
 
     /**
+     * @var UnionTypeCommonTypeNarrower
+     */
+    private $unionTypeCommonTypeNarrower;
+
+    /**
      * @required
      */
     public function autowireArrayTypeMapper(
         PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
-        TypeNormalizer $typeNormalizer
+        TypeNormalizer $typeNormalizer,
+        UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower
     ): void {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->typeNormalizer = $typeNormalizer;
+        $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
     }
 
     public function getNodeClass(): string
@@ -72,19 +82,38 @@ final class ArrayTypeMapper implements TypeMapperInterface
             return $this->createUnionType($itemType);
         }
 
-        if ($itemType instanceof ArrayType) {
-            $isGenericArrayCandidate = $this->isGenericArrayCandidate($itemType);
-            if ($isGenericArrayCandidate) {
-                return $this->createGenericArrayType($type, true);
-            }
-        }
-
-        $isGenericArrayCandidate = $this->isGenericArrayCandidate($type);
-        if ($isGenericArrayCandidate) {
+        if ($itemType instanceof ArrayType && $this->isGenericArrayCandidate($itemType)) {
             return $this->createGenericArrayType($type, true);
         }
 
+        if ($this->isGenericArrayCandidate($type)) {
+            return $this->createGenericArrayType($type, true);
+        }
+
+        if ($type instanceof ConstantArrayType) {
+            if ($itemType instanceof UnionType) {
+                $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($itemType);
+                if ($narrowedItemType instanceof ObjectType) {
+                    $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
+                    return new AttributeAwareArrayTypeNode($itemTypeNode);
+                }
+
+                $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($itemType);
+                if ($narrowedItemType instanceof GenericClassStringType) {
+                    dump($narrowedItemType);
+
+                    $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
+
+                    dump($itemTypeNode);
+                    die;
+
+                    return new AttributeAwareArrayTypeNode($itemTypeNode);
+                }
+            }
+        }
+
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType);
+
         return new AttributeAwareArrayTypeNode($itemTypeNode);
     }
 
