@@ -12,14 +12,15 @@ final class DemoArrayTest
 {
     public function provideThings(): array {
         return [
-            [ 123, true, 'I am a string' ],
+            [ 123, true, 'I am a string', null ],
+            [ 123, true, 'I am a string', 999 ],
         ];
     }
 
     /**
      * @dataProvider provideThings
      */
-    public function testGetFromId( $one, $two, $three ): void {}
+    public function testGetFromId( $one, $two, $three, $four ): void {}
 }
 -----
 <?php
@@ -36,12 +37,13 @@ final class DemoArrayTest
 {
     public function provideThings(): array {
         return [
-            [ 123, true, 'I am a string' ],
+            [ 123, true, 'I am a string', null ],
+            [ 123, true, 'I am a string', 999 ],
         ];
     }
 
     /**
      * @dataProvider provideThings
      */
-    public function testGetFromId( int $one, bool $two, string $three ): void {}
+    public function testGetFromId( int $one, bool $two, string $three, $four ): void {}
 }
