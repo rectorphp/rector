@@ -55,23 +55,33 @@ final class ArrayTypeMapper implements TypeMapperInterface
     private $unionTypeCommonTypeNarrower;
 
     /**
+<<<<<<< HEAD
      * @var ClassLikeExistenceChecker
      */
     private $classLikeExistenceChecker;
 
     /**
+=======
+>>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
      * @required
      */
     public function autowireArrayTypeMapper(
         PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
         TypeNormalizer $typeNormalizer,
+<<<<<<< HEAD
         UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
         ClassLikeExistenceChecker $classLikeExistenceChecker
+=======
+        UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower
+>>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
     ): void {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->typeNormalizer = $typeNormalizer;
         $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
+<<<<<<< HEAD
         $this->classLikeExistenceChecker = $classLikeExistenceChecker;
+=======
+>>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
     }
 
     public function getNodeClass(): string
@@ -98,9 +108,32 @@ final class ArrayTypeMapper implements TypeMapperInterface
             return $this->createGenericArrayType($type, true);
         }
 
+<<<<<<< HEAD
         $narrowedTypeNode = $this->narrowConstantArrayTypeOfUnionType($type, $itemType);
         if ($narrowedTypeNode instanceof TypeNode) {
             return $narrowedTypeNode;
+=======
+        if ($type instanceof ConstantArrayType) {
+            if ($itemType instanceof UnionType) {
+                $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($itemType);
+                if ($narrowedItemType instanceof ObjectType) {
+                    $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
+                    return new AttributeAwareArrayTypeNode($itemTypeNode);
+                }
+
+                $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($itemType);
+                if ($narrowedItemType instanceof GenericClassStringType) {
+                    dump($narrowedItemType);
+
+                    $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
+
+                    dump($itemTypeNode);
+                    die;
+
+                    return new AttributeAwareArrayTypeNode($itemTypeNode);
+                }
+            }
+>>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
         }
 
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType);

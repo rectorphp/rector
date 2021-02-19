@@ -94,6 +94,7 @@ final class TypeComparator
         if ($mainType instanceof MixedType) {
             return false;
         }
+<<<<<<< HEAD
         if (! $mainType instanceof ArrayType) {
             return $mainType->isSuperTypeOf($checkedType)
                 ->yes();
@@ -103,6 +104,15 @@ final class TypeComparator
                 ->yes();
         }
         return false;
+=======
+
+        if ($mainType instanceof ArrayType && $checkedType instanceof ConstantArrayType) {
+            return false;
+        }
+
+        return $mainType->isSuperTypeOf($checkedType)
+            ->yes();
+>>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
     }
 
     private function areBothSameScalarType(Type $firstType, Type $secondType): bool

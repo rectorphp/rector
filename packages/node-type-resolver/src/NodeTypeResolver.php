@@ -43,6 +43,7 @@ use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
+use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 
 final class NodeTypeResolver
 {
@@ -77,7 +78,16 @@ final class NodeTypeResolver
     private $classAnalyzer;
 
     /**
+<<<<<<< HEAD
      * @var GenericClassStringTypeCorrector
+=======
+     * @var ClassLikeExistenceChecker
+     */
+    private $classLikeExistenceChecker;
+
+    /**
+     * @var NodeTypeCorrector\GenericClassStringTypeCorrector
+>>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
      */
     private $genericClassStringTypeCorrector;
 
@@ -89,6 +99,10 @@ final class NodeTypeResolver
         ParentClassLikeTypeCorrector $parentClassLikeTypeCorrector,
         TypeUnwrapper $typeUnwrapper,
         ClassAnalyzer $classAnalyzer,
+<<<<<<< HEAD
+=======
+        ClassLikeExistenceChecker $classLikeExistenceChecker,
+>>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
         GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
         array $nodeTypeResolvers
     ) {
@@ -100,6 +114,10 @@ final class NodeTypeResolver
         $this->parentClassLikeTypeCorrector = $parentClassLikeTypeCorrector;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->classAnalyzer = $classAnalyzer;
+<<<<<<< HEAD
+=======
+        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
+>>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
     }
 
@@ -203,6 +221,10 @@ final class NodeTypeResolver
 
         if ($node instanceof Arg) {
             throw new ShouldNotHappenException('Arg cannot have type, use $arg->value instead');
+<<<<<<< HEAD
+=======
+            // $node = $node->value;
+>>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
         }
 
         if (StaticInstanceOf::isOneOf($node, [Param::class, Scalar::class])) {

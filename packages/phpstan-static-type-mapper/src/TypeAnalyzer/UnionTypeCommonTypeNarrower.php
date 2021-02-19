@@ -51,6 +51,7 @@ final class UnionTypeCommonTypeNarrower
         $availableTypes = [];
 
         foreach ($unionType->getTypes() as $unionedType) {
+<<<<<<< HEAD
             if (! $unionedType instanceof GenericClassStringType) {
                 return null;
             }
@@ -61,6 +62,32 @@ final class UnionTypeCommonTypeNarrower
         }
 
         return $this->createGenericClassStringType($availableTypes);
+=======
+            if ($unionedType instanceof GenericClassStringType) {
+                if ($unionedType->getGenericType() instanceof TypeWithClassName) {
+                    $availableTypes[] = $this->resolveClassParentClassesAndInterfaces($unionedType->getGenericType());
+                    continue;
+                }
+            } else {
+                return null;
+            }
+        }
+
+        $sharedTypes = $this->narrowAvailableTypes($availableTypes);
+
+        if ($sharedTypes !== []) {
+            foreach (self::PRIORITY_TYPES as $winningType => $groupTypes) {
+                if (array_intersect($groupTypes, $sharedTypes) === $groupTypes) {
+                    return new GenericClassStringType(new ObjectType($winningType));
+                }
+            }
+
+            $firstSharedType = $sharedTypes[0];
+            return new GenericClassStringType(new ObjectType($firstSharedType));
+        }
+
+        return null;
+>>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
     }
 
     /**
@@ -135,6 +162,7 @@ final class UnionTypeCommonTypeNarrower
 
         return array_values($sharedTypes);
     }
+<<<<<<< HEAD
 
     /**
      * @param string[][] $availableTypes
@@ -156,4 +184,6 @@ final class UnionTypeCommonTypeNarrower
 
         return null;
     }
+=======
+>>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
 }
