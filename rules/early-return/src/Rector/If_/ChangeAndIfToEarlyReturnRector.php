@@ -7,7 +7,6 @@ namespace Rector\EarlyReturn\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Else_;
@@ -127,22 +126,28 @@ CODE_SAMPLE
 
         $ifNextReturn = $this->getIfNextReturn($node);
 
-        $conditions   = $this->getBooleanAndConditions($expr);
+        $conditions = $this->getBooleanAndConditions($expr);
 
         $ifNextReturnClone = $ifNextReturn instanceof Return_
             ? clone $ifNextReturn
             : new Return_();
 
         $isInLoop = $this->isIfInLoop($node);
-        if ($ifNextReturn instanceof Return_) {
-            $this->removeNode($ifNextReturn);
-            $ifNextReturn = $node->stmts[0];
-            $this->addNodeAfterNode($ifNextReturn, $node);
-            if ($isInLoop && property_exists($ifNextReturn, 'expr') && $ifNextReturn->expr instanceof Expr) {
-                $this->addNodeAfterNode(new Return_(), $node);
-            }
-        } else {
+        if (! $ifNextReturn instanceof Return_) {
             $this->addNodeAfterNode($node->stmts[0], $node);
+            return $this->processReplaceIfs($node, $conditions, $ifNextReturnClone);
+        }
+
+        $this->removeNode($ifNextReturn);
+        $ifNextReturn = $node->stmts[0];
+        $this->addNodeAfterNode($ifNextReturn, $node);
+
+        if (! $isInLoop) {
+            return $this->processReplaceIfs($node, $conditions, $ifNextReturnClone);
+        }
+
+        if (property_exists($ifNextReturn, 'expr') && $ifNextReturn->expr instanceof Expr) {
+            $this->addNodeAfterNode(new Return_(), $node);
         }
 
         return $this->processReplaceIfs($node, $conditions, $ifNextReturnClone);
@@ -153,7 +158,7 @@ CODE_SAMPLE
      */
     private function processReplaceIfs(If_ $node, array $conditions, Return_ $ifNextReturnClone): If_
     {
-        $ifs          = $this->createInvertedIfNodesFromConditions($node, $conditions, $ifNextReturnClone);
+        $ifs = $this->createInvertedIfNodesFromConditions($node, $conditions, $ifNextReturnClone);
         foreach ($ifs as $key => $if) {
             if ($key === 0) {
                 $this->mirrorComments($if, $node);
@@ -207,7 +212,7 @@ CODE_SAMPLE
     {
         $ifs = [];
         while (property_exists($booleanAnd, 'left')) {
-            $ifs[]      = $booleanAnd->right;
+            $ifs[] = $booleanAnd->right;
             $booleanAnd = $booleanAnd->left;
 
             if (! $booleanAnd instanceof BooleanAnd) {
@@ -232,7 +237,7 @@ CODE_SAMPLE
 
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
-            $if        = new If_($invertedCondition);
+            $if = new If_($invertedCondition);
             $if->stmts = [$isInLoop && $getIfNextReturn === null ? new Continue_() : $return];
 
             $ifs[] = $if;
