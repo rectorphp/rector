@@ -12,8 +12,9 @@ final class DemoArrayTest
 {
     public function provideThings(): array {
         return [
-            [ 123, true, 'I am a string', null ],
-            [ 123, true, 'I am a string', 999 ],
+            [ 123, true, 'I am a string', null, 'a' ],
+            [ 123, true, 'I am a string', 999, [] ],
+            [ 123, true, 'I am a string', 999, 123 ],
         ];
     }
 
@@ -37,8 +38,9 @@ final class DemoArrayTest
 {
     public function provideThings(): array {
         return [
-            [ 123, true, 'I am a string', null ],
-            [ 123, true, 'I am a string', 999 ],
+            [ 123, true, 'I am a string', null, 'a' ],
+            [ 123, true, 'I am a string', 999, [] ],
+            [ 123, true, 'I am a string', 999, 123 ],
         ];
     }
 
