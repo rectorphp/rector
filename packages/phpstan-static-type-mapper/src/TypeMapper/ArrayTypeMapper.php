@@ -56,32 +56,47 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
     /**
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 61277b534... cleanup
      * @var ClassLikeExistenceChecker
      */
     private $classLikeExistenceChecker;
 
     /**
+<<<<<<< HEAD
 =======
 >>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
+=======
+>>>>>>> 61277b534... cleanup
      * @required
      */
     public function autowireArrayTypeMapper(
         PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
         TypeNormalizer $typeNormalizer,
 <<<<<<< HEAD
+<<<<<<< HEAD
         UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
         ClassLikeExistenceChecker $classLikeExistenceChecker
 =======
         UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower
 >>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
+=======
+        UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
+        ClassLikeExistenceChecker $classLikeExistenceChecker
+>>>>>>> 61277b534... cleanup
     ): void {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->typeNormalizer = $typeNormalizer;
         $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
 <<<<<<< HEAD
+<<<<<<< HEAD
         $this->classLikeExistenceChecker = $classLikeExistenceChecker;
 =======
 >>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
+=======
+        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
+>>>>>>> 61277b534... cleanup
     }
 
     public function getNodeClass(): string
@@ -296,6 +311,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
             $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($itemType);
             if ($narrowedItemType instanceof GenericClassStringType) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 return $this->createTypeNodeFromGenericClassStringType($narrowedItemType);
 =======
                 $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
@@ -303,11 +319,15 @@ final class ArrayTypeMapper implements TypeMapperInterface
                     $itemTypeNode,
                 ]);
 >>>>>>> 79dd82dc9... misc
+=======
+                return $this->createTypeNodeFromGenericClassStringType($narrowedItemType);
+>>>>>>> 61277b534... cleanup
             }
         }
 
         return null;
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     private function createTypeNodeFromGenericClassStringType(
@@ -318,12 +338,25 @@ final class ArrayTypeMapper implements TypeMapperInterface
             $genericType->getClassName()
         )) {
             return new AttributeAwareIdentifierTypeNode($genericType->getClassName());
+=======
+
+    private function createTypeNodeFromGenericClassStringType(GenericClassStringType $genericClassStringType): TypeNode
+    {
+        $genericType = $genericClassStringType->getGenericType();
+        if ($genericType instanceof ObjectType) {
+            if (! $this->classLikeExistenceChecker->doesClassLikeExist($genericType->getClassName())) {
+                return new AttributeAwareIdentifierTypeNode($genericType->getClassName());
+            }
+>>>>>>> 61277b534... cleanup
         }
 
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericClassStringType);
 
         return new AttributeAwareGenericTypeNode(new AttributeAwareIdentifierTypeNode('array'), [$itemTypeNode]);
     }
+<<<<<<< HEAD
 =======
 >>>>>>> 79dd82dc9... misc
+=======
+>>>>>>> 61277b534... cleanup
 }

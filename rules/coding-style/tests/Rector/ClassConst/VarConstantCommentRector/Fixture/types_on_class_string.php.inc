@@ -3,10 +3,14 @@
 namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 final class TypesOnClassString
 =======
 final class TypeOnClassString
 >>>>>>> c5fc8c43b... add string vs class-string
+=======
+final class TypesOnClassString
+>>>>>>> 61277b534... cleanup
 {
     /**
      * @var string[]
@@ -24,6 +28,7 @@ final class TypeOnClassString
 namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 final class TypesOnClassString
 {
     /**
@@ -34,6 +39,12 @@ final class TypeOnClassString
     /**
      * @var class-string[]
 >>>>>>> c5fc8c43b... add string vs class-string
+=======
+final class TypesOnClassString
+{
+    /**
+     * @var array<class-string<\PhpParser\Node\Expr>>
+>>>>>>> 61277b534... cleanup
      */
     private const MODIFYING_NODES = [
         'PhpParser\Node\Expr\AssignOp',
