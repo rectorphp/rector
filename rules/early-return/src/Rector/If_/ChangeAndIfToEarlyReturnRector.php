@@ -177,6 +177,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->isNestedIfInLoop($if)) {
+            return true;
+        }
+
         return ! $this->isLastIfOrBeforeLastReturn($if);
 
         /*if ($this->isIfReturnsVoid($if)) {
@@ -188,9 +192,7 @@ CODE_SAMPLE
         }
 
 
-        if ($this->isNestedIfInLoop($if)) {
-            return true;
-        }
+
 
         */
     }
