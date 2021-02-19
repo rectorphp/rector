@@ -125,22 +125,27 @@ CODE_SAMPLE
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
 
-        $conditions = $this->getBooleanAndConditions($expr);
-        $ifs = $this->createInvertedIfNodesFromConditions($node, $conditions);
-
-        $this->mirrorComments($ifs[0], $node);
-
-        $this->addNodesAfterNode($ifs, $node);
-        $this->addNodeAfterNode($ifReturn, $node);
-
         $ifNextReturn = $this->getIfNextReturn($node);
-        if ($ifNextReturn === null && ! $this->isIfInLoop($node)) {
-            $this->removeNode($ifNextReturn);
+
+        $conditions   = $this->getBooleanAndConditions($expr);
+
+        $ifNextReturnClone = clone $ifNextReturn;
+        if ($ifNextReturn instanceof Return_) {
+            $ifNextReturn->expr = $node->stmts[0]->expr;
+        }
+
+        $ifs          = $this->createInvertedIfNodesFromConditions($node, $conditions, $ifNextReturnClone);
+
+        foreach ($ifs as $key => $if) {
+            if ($key === 0) {
+                $this->mirrorComments($if, $node);
+            }
+
+            $this->addNodeBeforeNode($if, $node);
         }
 
         $this->removeNode($node);
-
-        return null;
+        return $node;
     }
 
     private function shouldSkip(If_ $if): bool
@@ -149,7 +154,13 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isIfReturnsVoid($if)) {
+        if (! $if->cond instanceof BooleanAnd) {
+            return true;
+        }
+
+        return false;
+
+        /*if ($this->isIfReturnsVoid($if)) {
             return true;
         }
 
@@ -173,7 +184,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $this->isLastIfOrBeforeLastReturn($if);
+        return ! $this->isLastIfOrBeforeLastReturn($if);*/
     }
 
     private function getIfReturn(If_ $if): ?Stmt
@@ -188,8 +199,9 @@ CODE_SAMPLE
     {
         $ifs = [];
         while (property_exists($booleanAnd, 'left')) {
-            $ifs[] = $booleanAnd->right;
+            $ifs[]      = $booleanAnd->right;
             $booleanAnd = $booleanAnd->left;
+
             if (! $booleanAnd instanceof BooleanAnd) {
                 $ifs[] = $booleanAnd;
                 break;
@@ -204,18 +216,14 @@ CODE_SAMPLE
      * @param Expr[] $conditions
      * @return If_[]
      */
-    private function createInvertedIfNodesFromConditions(If_ $node, array $conditions): array
+    private function createInvertedIfNodesFromConditions(If_ $node, array $conditions, ?Return_ $return): array
     {
-        $isIfInLoop = $this->isIfInLoop($node);
-
         $ifs = [];
-        $return = $this->getIfNextReturn($node);
+
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
-            $if = new If_($invertedCondition);
-            $if->stmts = $isIfInLoop
-                ? [new Continue_()]
-                : [$return];
+            $if        = new If_($invertedCondition);
+            $if->stmts = [$return];
 
             $ifs[] = $if;
         }
