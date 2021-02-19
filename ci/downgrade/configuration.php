@@ -30,6 +30,7 @@ final class DowngradeRectorConfig
         // we simply skip downgrading this class
         __DIR__ . '/../../vendor/symfony/cache/Adapter/CouchbaseBucketAdapter.php',
     ];
+
     /**
      * Exclude paths when downgrading the Rector source code
      */
