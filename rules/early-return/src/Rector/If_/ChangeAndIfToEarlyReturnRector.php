@@ -162,7 +162,7 @@ CODE_SAMPLE
         }
 
         if (! $this->isFunctionLikeReturnsVoid($if)) {
-            return true;
+         //   return true;
         }
 
         if ($if->else !== null) {
