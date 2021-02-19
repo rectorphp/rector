@@ -5,7 +5,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayParamDocTypeRe
 use PHPUnit\Framework\TestCase;
 
 /**
- * Though provideData returns an array. dataProviders work take the values 2 levels deep inside this array.
+ * Though provideData returns an array. dataProviders take the values 2 levels deep inside this array.
  * This code shouldn't be altered by AddArrayParamDocTypeRector as the doc type should not be an array.
  * It would be a string.
  * See: https://phpunit.readthedocs.io/en/9.3/writing-tests-for-phpunit.html#data-providers
