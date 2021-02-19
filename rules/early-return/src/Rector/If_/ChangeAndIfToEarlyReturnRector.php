@@ -161,10 +161,6 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->isFunctionLikeReturnsVoid($if)) {
-         //   return true;
-        }
-
         if ($if->else !== null) {
             return true;
         }
@@ -260,24 +256,6 @@ CODE_SAMPLE
         }
 
         return $this->isIfReturnsVoid($parentNode);
-    }
-
-    private function isFunctionLikeReturnsVoid(If_ $if): bool
-    {
-        $functionLike = $this->betterNodeFinder->findParentType($if, FunctionLike::class);
-        if (! $functionLike instanceof FunctionLike) {
-            return true;
-        }
-
-        return ! (bool) $this->betterNodeFinder->findFirst(
-            (array) $functionLike->getStmts(),
-            function (Node $node): bool {
-                if (! $node instanceof Return_) {
-                    return false;
-                }
-                return $node->expr instanceof Expr;
-            }
-        );
     }
 
     private function isNestedIfInLoop(If_ $if): bool
