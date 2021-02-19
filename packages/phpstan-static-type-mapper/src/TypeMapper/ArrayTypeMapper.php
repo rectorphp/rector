@@ -109,6 +109,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         $narrowedTypeNode = $this->narrowConstantArrayTypeOfUnionType($type, $itemType);
         if ($narrowedTypeNode instanceof TypeNode) {
             return $narrowedTypeNode;
@@ -129,9 +130,21 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
                     dump($itemTypeNode);
                     die;
+=======
+        if ($type instanceof ConstantArrayType && $itemType instanceof UnionType) {
+            $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($itemType);
+            if ($narrowedItemType instanceof ObjectType) {
+                $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
+                return new AttributeAwareArrayTypeNode($itemTypeNode);
+            }
+>>>>>>> 157baf7db... make test pass
 
-                    return new AttributeAwareArrayTypeNode($itemTypeNode);
-                }
+            $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($itemType);
+            if ($narrowedItemType instanceof GenericClassStringType) {
+                $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
+                return new AttributeAwareGenericTypeNode(new AttributeAwareIdentifierTypeNode('array'), [
+                    $itemTypeNode,
+                ]);
             }
 >>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
         }

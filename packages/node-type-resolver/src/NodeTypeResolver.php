@@ -36,6 +36,7 @@ use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
+use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector as GenericClassStringTypeCorrectorAlias;
 use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassLikeTypeCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
@@ -43,7 +44,6 @@ use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
-use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 
 final class NodeTypeResolver
 {
@@ -79,6 +79,7 @@ final class NodeTypeResolver
 
     /**
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @var GenericClassStringTypeCorrector
 =======
      * @var ClassLikeExistenceChecker
@@ -88,6 +89,9 @@ final class NodeTypeResolver
     /**
      * @var NodeTypeCorrector\GenericClassStringTypeCorrector
 >>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
+=======
+     * @var GenericClassStringTypeCorrector
+>>>>>>> 157baf7db... make test pass
      */
     private $genericClassStringTypeCorrector;
 
@@ -100,10 +104,14 @@ final class NodeTypeResolver
         TypeUnwrapper $typeUnwrapper,
         ClassAnalyzer $classAnalyzer,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         ClassLikeExistenceChecker $classLikeExistenceChecker,
 >>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
         GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
+=======
+        GenericClassStringTypeCorrectorAlias $genericClassStringTypeCorrector,
+>>>>>>> 157baf7db... make test pass
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -115,9 +123,12 @@ final class NodeTypeResolver
         $this->typeUnwrapper = $typeUnwrapper;
         $this->classAnalyzer = $classAnalyzer;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         $this->classLikeExistenceChecker = $classLikeExistenceChecker;
 >>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
+=======
+>>>>>>> 157baf7db... make test pass
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
     }
 

@@ -62,6 +62,14 @@ final class AttributeKey
      * @var string
      */
     public const METHOD_NODE = 'methodNode';
+<<<<<<< HEAD
+=======
+
+    /**
+     * @var string
+     */
+    public const FUNCTION_NODE = 'functionNode';
+>>>>>>> 157baf7db... make test pass
 
     /**
      * @var string
