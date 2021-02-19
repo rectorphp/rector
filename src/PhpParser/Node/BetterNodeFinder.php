@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -38,25 +38,25 @@ final class BetterNodeFinder
     private $nodeNameResolver;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var TypeChecker
      */
     private $typeChecker;
 
+    /**
+     * @var NodeComparator
+     */
+    private $nodeComparator;
+
     public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
         NodeFinder $nodeFinder,
         NodeNameResolver $nodeNameResolver,
-        TypeChecker $typeChecker
+        TypeChecker $typeChecker,
+        NodeComparator $nodeComparator
     ) {
         $this->nodeFinder = $nodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->typeChecker = $typeChecker;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**
@@ -301,7 +301,7 @@ final class BetterNodeFinder
                 return false;
             }
 
-            return $this->betterStandardPrinter->areNodesEqual($node->var, $expr);
+            return $this->nodeComparator->areNodesEqual($node->var, $expr);
         });
     }
 

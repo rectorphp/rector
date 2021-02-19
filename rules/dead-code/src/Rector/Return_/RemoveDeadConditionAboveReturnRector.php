@@ -90,7 +90,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->areNodesEqual($stmt, $node)) {
+        if (! $this->nodeComparator->areNodesEqual($stmt, $node)) {
             return null;
         }
 

@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class StmtsManipulator
@@ -19,16 +19,16 @@ final class StmtsManipulator
     private $simpleCallableNodeTraverser;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeComparator $nodeComparator
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**
@@ -56,7 +56,7 @@ final class StmtsManipulator
             (array) $classMethod->stmts,
             function (Node $node) use (&$stmts) {
                 foreach ($stmts as $key => $assign) {
-                    if (! $this->betterStandardPrinter->areNodesEqual($node, $assign)) {
+                    if (! $this->nodeComparator->areNodesEqual($node, $assign)) {
                         continue;
                     }
 

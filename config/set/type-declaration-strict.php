@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeFromStrictTypedPropertyRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
@@ -13,7 +14,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(AddClosureReturnTypeRector::class);
     $services->set(ReturnTypeFromStrictTypedPropertyRector::class);
     $services->set(TypedPropertyFromStrictConstructorRector::class);
@@ -21,4 +21,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReturnTypeFromStrictTypedCallRector::class);
     $services->set(AddVoidReturnTypeWhereNoReturnRector::class);
     // $services->set(AddMethodCallBasedStrictParamTypeRector::class);
+    $services->set(ReturnTypeFromReturnNewRector::class);
 };

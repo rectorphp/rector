@@ -73,7 +73,7 @@ CODE_SAMPLE
                     return null;
                 }
 
-                if (! $this->areNodesEqual($foreachNode->valueVar, $node->args[1]->value)) {
+                if (! $this->nodeComparator->areNodesEqual($foreachNode->valueVar, $node->args[1]->value)) {
                     return null;
                 }
 

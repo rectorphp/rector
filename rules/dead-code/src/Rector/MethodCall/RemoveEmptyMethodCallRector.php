@@ -108,7 +108,7 @@ CODE_SAMPLE
             return $this->nodeFactory->createFalse();
         }
 
-        if ($parent instanceof ArrowFunction && $this->areNodesEqual($parent->expr, $node)) {
+        if ($parent instanceof ArrowFunction && $this->nodeComparator->areNodesEqual($parent->expr, $node)) {
             return $this->processArrowFunction($parent, $node);
         }
 

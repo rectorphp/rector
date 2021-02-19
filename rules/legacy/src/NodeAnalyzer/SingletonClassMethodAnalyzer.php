@@ -13,17 +13,17 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class SingletonClassMethodAnalyzer
 {
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var NodeTypeResolver
@@ -36,13 +36,13 @@ final class SingletonClassMethodAnalyzer
     private $valueResolver;
 
     public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
         NodeTypeResolver $nodeTypeResolver,
-        ValueResolver $valueResolver
+        ValueResolver $valueResolver,
+        NodeComparator $nodeComparator
     ) {
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->valueResolver = $valueResolver;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**
@@ -83,7 +83,7 @@ final class SingletonClassMethodAnalyzer
             return null;
         }
 
-        if (! $this->betterStandardPrinter->areNodesEqual($staticPropertyFetch, $stmt->var)) {
+        if (! $this->nodeComparator->areNodesEqual($staticPropertyFetch, $stmt->var)) {
             return null;
         }
 

@@ -12,7 +12,7 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 final class TraitNodeScopeCollector
 {
     /**
-     * @var Scope[]
+     * @var array<string, Scope>
      */
     private $scopeByTraitNodeHash = [];
 

@@ -5,6 +5,9 @@ use Manual\Twig\TwigFilter;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture\DuplicatedClass;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\AbstractManualExtension;
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\Contract\FirstInterface;
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\Contract\SecondInterface;
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\Contract\ThirdInterface;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClassWithoutTypo;
 use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass;
@@ -37,8 +40,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 // test duplicated class - @see https://github.com/rectorphp/rector/issues/1438
                 'Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture\SingularClass' => DuplicatedClass::class,
                 // test duplicated class - @see https://github.com/rectorphp/rector/issues/5389
-                'MyFooInterface' => 'MyBazInterface',
-                'MyBarInterface' => 'MyBazInterface',
+                FirstInterface::class => ThirdInterface::class,
+                SecondInterface::class => ThirdInterface::class,
                 \Acme\Foo\DoNotUpdateExistingTargetNamespace::class => DoNotUpdateExistingTargetNamespace::class,
                 SomeNonFinalClass::class => SomeFinalClass::class,
             ],

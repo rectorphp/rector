@@ -10,7 +10,7 @@ class BooleanAnd
     {
         $prePreviousExpression = $previousExpression->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
         if ($prePreviousExpression instanceof Expression && $prePreviousExpression->expr instanceof AssignOp) {
-            if ($this->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var)) {
+            if ($this->nodeComparator->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var)) {
                 return true;
             }
         }
@@ -38,7 +38,7 @@ class BooleanAnd
         if (!$prePreviousExpression->expr instanceof AssignOp) {
             return false;
         }
-        if ($this->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var)) {
+        if ($this->nodeComparator->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var)) {
             return true;
         }
 

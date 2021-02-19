@@ -98,9 +98,9 @@ CODE_SAMPLE
         $keyExpr = $funcCall->args[0]->value;
         $valuesExpr = $funcCall->args[1]->value;
 
-        if (! $this->areNodesEqual($arrayDimFetch->var, $valuesExpr)) {
+        if (! $this->nodeComparator->areNodesEqual($arrayDimFetch->var, $valuesExpr)) {
             return false;
         }
-        return $this->areNodesEqual($arrayDimFetch->dim, $keyExpr);
+        return $this->nodeComparator->areNodesEqual($arrayDimFetch->dim, $keyExpr);
     }
 }

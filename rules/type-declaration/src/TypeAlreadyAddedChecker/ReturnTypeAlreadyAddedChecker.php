@@ -21,7 +21,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -39,9 +39,9 @@ final class ReturnTypeAlreadyAddedChecker
     private $staticTypeMapper;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var NodeNameResolver
@@ -49,13 +49,13 @@ final class ReturnTypeAlreadyAddedChecker
     private $nodeNameResolver;
 
     public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        NodeComparator $nodeComparator
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**
@@ -71,7 +71,7 @@ final class ReturnTypeAlreadyAddedChecker
         }
 
         $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
-        if ($this->betterStandardPrinter->areNodesEqual($nodeReturnType, $returnNode)) {
+        if ($this->nodeComparator->areNodesEqual($nodeReturnType, $returnNode)) {
             return true;
         }
 
@@ -99,7 +99,7 @@ final class ReturnTypeAlreadyAddedChecker
         }
 
         $className = $functionLike->getAttribute(AttributeKey::CLASS_NAME);
-        return ltrim($this->betterStandardPrinter->printWithoutComments($returnNode), '\\') === $className;
+        return ltrim($this->nodeComparator->printWithoutComments($returnNode), '\\') === $className;
     }
 
     /**

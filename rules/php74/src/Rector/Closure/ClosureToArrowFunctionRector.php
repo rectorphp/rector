@@ -115,7 +115,7 @@ CODE_SAMPLE
             $referencedValues
         ): bool {
             foreach ($referencedValues as $referencedValue) {
-                if ($this->areNodesEqual($node, $referencedValue)) {
+                if ($this->nodeComparator->areNodesEqual($node, $referencedValue)) {
                     return true;
                 }
             }

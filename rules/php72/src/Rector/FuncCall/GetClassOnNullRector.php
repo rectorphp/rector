@@ -142,13 +142,13 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($this->areNodesEqual(
+        if ($this->nodeComparator->areNodesEqual(
             $ternary->cond->left,
             $funcCall->args[0]->value
         ) && ! $this->valueResolver->isNull($ternary->cond->right)) {
             return true;
         }
-        if (! $this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
+        if (! $this->nodeComparator->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
             return false;
         }
         return ! $this->valueResolver->isNull($ternary->cond->left);
@@ -163,13 +163,13 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($this->areNodesEqual(
+        if ($this->nodeComparator->areNodesEqual(
             $ternary->cond->left,
             $funcCall->args[0]->value
         ) && $this->valueResolver->isNull($ternary->cond->right)) {
             return true;
         }
-        if (! $this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
+        if (! $this->nodeComparator->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
             return false;
         }
         return $this->valueResolver->isNull($ternary->cond->left);

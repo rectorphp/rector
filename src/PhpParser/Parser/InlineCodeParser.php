@@ -39,14 +39,14 @@ final class InlineCodeParser
     private $parser;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,

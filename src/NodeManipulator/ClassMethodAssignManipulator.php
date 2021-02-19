@@ -23,9 +23,9 @@ use PHPStan\Reflection\ObjectTypeMethodReflection;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Type\Type;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -60,9 +60,9 @@ final class ClassMethodAssignManipulator
     private $betterNodeFinder;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var CallReflectionResolver
@@ -71,20 +71,20 @@ final class ClassMethodAssignManipulator
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
         VariableManipulator $variableManipulator,
-        CallReflectionResolver $callReflectionResolver
+        CallReflectionResolver $callReflectionResolver,
+        NodeComparator $nodeComparator
     ) {
         $this->variableManipulator = $variableManipulator;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFactory = $nodeFactory;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->callReflectionResolver = $callReflectionResolver;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**
@@ -203,12 +203,12 @@ final class ClassMethodAssignManipulator
                 continue;
             }
 
-            if ($this->betterStandardPrinter->areNodesEqual($foreach->valueVar, $variableAssign->var)) {
+            if ($this->nodeComparator->areNodesEqual($foreach->valueVar, $variableAssign->var)) {
                 unset($variableAssigns[$key]);
                 continue;
             }
 
-            if ($this->betterStandardPrinter->areNodesEqual($foreach->keyVar, $variableAssign->var)) {
+            if ($this->nodeComparator->areNodesEqual($foreach->keyVar, $variableAssign->var)) {
                 unset($variableAssigns[$key]);
             }
         }

@@ -121,7 +121,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->areNodesEqual($node->expr, $param)) {
+            if (! $this->nodeComparator->areNodesEqual($node->expr, $param)) {
                 return null;
             }
 

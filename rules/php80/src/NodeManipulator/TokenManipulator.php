@@ -19,8 +19,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ArrayType;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -41,9 +41,9 @@ final class TokenManipulator
     private $valueResolver;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var NodeNameResolver
@@ -66,19 +66,19 @@ final class TokenManipulator
     private $assignedNameExpr;
 
     public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         NodesToRemoveCollector $nodesToRemoveCollector,
-        ValueResolver $valueResolver
+        ValueResolver $valueResolver,
+        NodeComparator $nodeComparator
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->valueResolver = $valueResolver;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**
@@ -120,7 +120,7 @@ final class TokenManipulator
                 return null;
             }
 
-            if (! $this->betterStandardPrinter->areNodesEqual($node->expr, $singleTokenExpr)) {
+            if (! $this->nodeComparator->areNodesEqual($node->expr, $singleTokenExpr)) {
                 return null;
             }
 
@@ -149,7 +149,7 @@ final class TokenManipulator
                 return null;
             }
 
-            if (! $this->betterStandardPrinter->areNodesEqual($node->var, $this->assignedNameExpr)) {
+            if (! $this->nodeComparator->areNodesEqual($node->var, $this->assignedNameExpr)) {
                 return null;
             }
 
@@ -187,7 +187,7 @@ final class TokenManipulator
             $arrayDimFetch = $arrayDimFetchAndConstFetch->getArrayDimFetch();
             $constFetch = $arrayDimFetchAndConstFetch->getConstFetch();
 
-            if (! $this->betterStandardPrinter->areNodesEqual($arrayDimFetch->var, $singleTokenExpr)) {
+            if (! $this->nodeComparator->areNodesEqual($arrayDimFetch->var, $singleTokenExpr)) {
                 return null;
             }
 
@@ -223,7 +223,7 @@ final class TokenManipulator
                 return null;
             }
 
-            if (! $this->betterStandardPrinter->areNodesEqual($node->args[0]->value, $singleTokenVariable)) {
+            if (! $this->nodeComparator->areNodesEqual($node->args[0]->value, $singleTokenVariable)) {
                 return null;
             }
 
@@ -274,7 +274,7 @@ final class TokenManipulator
                 return null;
             }
 
-            if (! $this->betterStandardPrinter->areNodesEqual($possibleTokenArray->var, $singleTokenExpr)) {
+            if (! $this->nodeComparator->areNodesEqual($possibleTokenArray->var, $singleTokenExpr)) {
                 return null;
             }
 

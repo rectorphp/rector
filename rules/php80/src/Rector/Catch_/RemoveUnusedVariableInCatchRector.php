@@ -86,7 +86,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $this->areNodesEqual($node, $variable);
+            return $this->nodeComparator->areNodesEqual($node, $variable);
         });
     }
 }

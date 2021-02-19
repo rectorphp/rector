@@ -18,8 +18,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Php\TypeChecker;
@@ -43,9 +43,9 @@ final class AssignManipulator
     private $nodeNameResolver;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var BetterNodeFinder
@@ -63,17 +63,17 @@ final class AssignManipulator
     private $typeChecker;
 
     public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
+        NodeComparator $nodeComparator,
         BetterNodeFinder $betterNodeFinder,
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
         TypeChecker $typeChecker
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->typeChecker = $typeChecker;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**
@@ -96,7 +96,7 @@ final class AssignManipulator
     public function isLeftPartOfAssign(Node $node): bool
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Assign && $this->betterStandardPrinter->areNodesEqual($parent->var, $node)) {
+        if ($parent instanceof Assign && $this->nodeComparator->areNodesEqual($parent->var, $node)) {
             return true;
         }
 
@@ -126,7 +126,7 @@ final class AssignManipulator
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         while ($parentNode !== null && ! $parentNode instanceof Expression) {
-            if ($parentNode instanceof Assign && $this->betterStandardPrinter->areNodesEqual(
+            if ($parentNode instanceof Assign && $this->nodeComparator->areNodesEqual(
                 $parentNode->var,
                 $previousNode
             )) {

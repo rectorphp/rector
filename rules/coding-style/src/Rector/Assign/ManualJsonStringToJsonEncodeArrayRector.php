@@ -278,7 +278,7 @@ CODE_SAMPLE
         $nextExpressionNode = $nextExpression->expr;
         if ($nextExpressionNode instanceof ConcatAssign) {
             // is assign to same variable?
-            if (! $this->areNodesEqual($expr, $nextExpressionNode->var)) {
+            if (! $this->nodeComparator->areNodesEqual($expr, $nextExpressionNode->var)) {
                 return null;
             }
 
@@ -292,14 +292,14 @@ CODE_SAMPLE
             }
 
             // is assign to same variable?
-            if (! $this->areNodesEqual($expr, $nextExpressionNode->var)) {
+            if (! $this->nodeComparator->areNodesEqual($expr, $nextExpressionNode->var)) {
                 return null;
             }
 
             $firstConcatItem = $this->concatManipulator->getFirstConcatItem($nextExpressionNode->expr);
 
             // is the first concat the same variable
-            if (! $this->areNodesEqual($expr, $firstConcatItem)) {
+            if (! $this->nodeComparator->areNodesEqual($expr, $firstConcatItem)) {
                 return null;
             }
 

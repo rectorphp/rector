@@ -108,11 +108,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->areNodesEqual($firstAssign->expr->args[0]->value, $valueNode)) {
+        if (! $this->nodeComparator->areNodesEqual($firstAssign->expr->args[0]->value, $valueNode)) {
             return null;
         }
 
-        if (! $this->areNodesEqual($secondAssign->expr, $firstAssign->expr->args[1]->value)) {
+        if (! $this->nodeComparator->areNodesEqual($secondAssign->expr, $firstAssign->expr->args[1]->value)) {
             return null;
         }
 
@@ -153,7 +153,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->areNodesEqual($if->cond->vars[0], $ifStmt->expr->var)) {
+        if (! $this->nodeComparator->areNodesEqual($if->cond->vars[0], $ifStmt->expr->var)) {
             return true;
         }
 
@@ -166,7 +166,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return ! $this->areNodesEqual($if->cond->vars[0], $firstElseStmt->expr->var);
+        return ! $this->nodeComparator->areNodesEqual($if->cond->vars[0], $firstElseStmt->expr->var);
     }
 
     /**

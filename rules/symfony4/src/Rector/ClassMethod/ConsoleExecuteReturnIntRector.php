@@ -109,7 +109,7 @@ CODE_SAMPLE
             }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Return_ && $this->areNodesEqual(
+            if ($parentNode instanceof Return_ && $this->nodeComparator->areNodesEqual(
                 $parentNode->expr,
                 $node
             ) && $node instanceof Int_) {
@@ -127,7 +127,7 @@ CODE_SAMPLE
 
             // is there return without nesting?
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($this->areNodesEqual($parentNode, $classMethod)) {
+            if ($this->nodeComparator->areNodesEqual($parentNode, $classMethod)) {
                 $hasReturn = true;
             }
 

@@ -92,11 +92,11 @@ CODE_SAMPLE
         }
 
         // $a X $b ? . : ($a X $b ? . : .)
-        if (! $this->areNodesEqual($ternary->cond->left, $nestedTernary->cond->left)) {
+        if (! $this->nodeComparator->areNodesEqual($ternary->cond->left, $nestedTernary->cond->left)) {
             return true;
         }
         // $a X $b ? . : ($a X $b ? . : .)
-        return ! $this->areNodesEqual($ternary->cond->right, $nestedTernary->cond->right);
+        return ! $this->nodeComparator->areNodesEqual($ternary->cond->right, $nestedTernary->cond->right);
     }
 
     /**

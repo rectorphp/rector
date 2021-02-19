@@ -13,8 +13,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
@@ -33,9 +33,9 @@ final class VariableManipulator
     private $assignManipulator;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var BetterNodeFinder
@@ -61,18 +61,18 @@ final class VariableManipulator
         ArrayManipulator $arrayManipulator,
         AssignManipulator $assignManipulator,
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
-        VariableToConstantGuard $variableToConstantGuard
+        VariableToConstantGuard $variableToConstantGuard,
+        NodeComparator $nodeComparator
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->assignManipulator = $assignManipulator;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->arrayManipulator = $arrayManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->variableToConstantGuard = $variableToConstantGuard;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**
@@ -184,7 +184,7 @@ final class VariableManipulator
                 return false;
             }
 
-            return $this->betterStandardPrinter->areNodesEqual($node, $variable);
+            return $this->nodeComparator->areNodesEqual($node, $variable);
         });
     }
 }

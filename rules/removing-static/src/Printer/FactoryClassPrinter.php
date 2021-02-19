@@ -22,14 +22,14 @@ final class FactoryClassPrinter
     private $nodeNameResolver;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var SmartFileSystem
      */
     private $smartFileSystem;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,

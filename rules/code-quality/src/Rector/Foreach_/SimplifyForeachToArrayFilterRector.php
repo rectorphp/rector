@@ -78,7 +78,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->areNodesEqual($funcCallNode->args[0], $node->valueVar)) {
+        if (! $this->nodeComparator->areNodesEqual($funcCallNode->args[0], $node->valueVar)) {
             return null;
         }
 
@@ -95,7 +95,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->areNodesEqual($onlyNodeInIf->expr, $node->valueVar)) {
+        if (! $this->nodeComparator->areNodesEqual($onlyNodeInIf->expr, $node->valueVar)) {
             return null;
         }
 

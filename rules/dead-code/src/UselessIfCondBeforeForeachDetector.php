@@ -13,25 +13,25 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\MixedType;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class UselessIfCondBeforeForeachDetector
 {
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
 
-    public function __construct(BetterStandardPrinter $betterStandardPrinter, NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @var NodeComparator
+     */
+    private $nodeComparator;
+
+    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeComparator $nodeComparator)
     {
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**
@@ -52,7 +52,7 @@ final class UselessIfCondBeforeForeachDetector
         /** @var Empty_ $empty */
         $empty = $cond->expr;
 
-        if (! $this->betterStandardPrinter->areNodesEqual($empty->expr, $foreachExpr)) {
+        if (! $this->nodeComparator->areNodesEqual($empty->expr, $foreachExpr)) {
             return false;
         }
 
@@ -99,7 +99,7 @@ final class UselessIfCondBeforeForeachDetector
             return false;
         }
 
-        return $this->betterStandardPrinter->areNodesEqual($foreachExpr, $rightExpr);
+        return $this->nodeComparator->areNodesEqual($foreachExpr, $rightExpr);
     }
 
     private function isEmptyArray(Expr $expr): bool

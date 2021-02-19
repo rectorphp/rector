@@ -96,7 +96,7 @@ CODE_SAMPLE
         }
 
         // recurse nested combinations
-        while ($changedNode !== null && ! $this->areNodesEqual($previousNode, $changedNode)) {
+        while ($changedNode !== null && ! $this->nodeComparator->areNodesEqual($previousNode, $changedNode)) {
             $previousNode = $changedNode;
 
             if ($changedNode instanceof BinaryOp || $changedNode instanceof AssignOp) {

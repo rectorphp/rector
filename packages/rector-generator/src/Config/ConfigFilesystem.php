@@ -39,14 +39,14 @@ final class ConfigFilesystem
     private $addNewServiceToSymfonyPhpConfigRector;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var SmartFileSystem
      */
     private $smartFileSystem;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
 
     public function __construct(
         AddNewServiceToSymfonyPhpConfigRector $addNewServiceToSymfonyPhpConfigRector,

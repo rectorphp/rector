@@ -97,7 +97,7 @@ CODE_SAMPLE
 
     private function areSwitchStmtsEqualsAndWithBreak(Case_ $currentCase, Case_ $previousCase): bool
     {
-        if (! $this->areNodesEqual($currentCase->stmts, $previousCase->stmts)) {
+        if (! $this->nodeComparator->areNodesEqual($currentCase->stmts, $previousCase->stmts)) {
             return false;
         }
 

@@ -58,7 +58,7 @@ CODE_SAMPLE
         $isNodeUsed = (bool) $this->betterNodeFinder->findFirst($node->stmts, function (Node $node) use (
             $keyVar
         ): bool {
-            return $this->areNodesEqual($node, $keyVar);
+            return $this->nodeComparator->areNodesEqual($node, $keyVar);
         });
 
         if ($isNodeUsed) {

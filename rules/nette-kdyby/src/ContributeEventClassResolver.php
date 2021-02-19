@@ -11,7 +11,7 @@ use PhpParser\Node\Param;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NetteKdyby\ValueObject\EventAndListenerTree;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -87,20 +87,20 @@ final class ContributeEventClassResolver
     private $staticTypeMapper;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
         StaticTypeMapper $staticTypeMapper,
-        VariableNaming $variableNaming
+        VariableNaming $variableNaming,
+        NodeComparator $nodeComparator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->variableNaming = $variableNaming;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeComparator = $nodeComparator;
     }
 
     public function resolveGetterMethodByEventClassAndParam(
@@ -125,7 +125,7 @@ final class ContributeEventClassResolver
                     continue;
                 }
 
-                if ($this->betterStandardPrinter->areNodesEqual(
+                if ($this->nodeComparator->areNodesEqual(
                     $getterMethodBlueprint->getReturnTypeNode(),
                     $paramType
                 )) {

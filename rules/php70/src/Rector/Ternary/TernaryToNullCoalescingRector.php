@@ -98,7 +98,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector
             return null;
         }
 
-        if ($this->areNodesEqual($ternary->if, $issetNode->vars[0])) {
+        if ($this->nodeComparator->areNodesEqual($ternary->if, $issetNode->vars[0])) {
             return new Coalesce($ternary->if, $ternary->else);
         }
 
@@ -111,6 +111,6 @@ final class TernaryToNullCoalescingRector extends AbstractRector
             return false;
         }
 
-        return $this->areNodesEqual($firstNode, $secondNode);
+        return $this->nodeComparator->areNodesEqual($firstNode, $secondNode);
     }
 }
