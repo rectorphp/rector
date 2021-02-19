@@ -10,7 +10,10 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
+<<<<<<< HEAD
 use PHPStan\Type\ObjectType;
+=======
+>>>>>>> be417ea15... fix accidental interface removal
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;

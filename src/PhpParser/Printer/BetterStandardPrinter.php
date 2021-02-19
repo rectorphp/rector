@@ -163,6 +163,7 @@ final class BetterStandardPrinter extends Standard
 
     /**
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
      * Checks even clone nodes
      */
@@ -185,6 +186,8 @@ final class BetterStandardPrinter extends Standard
 
     /**
 >>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
+=======
+>>>>>>> be417ea15... fix accidental interface removal
      * This allows to use both spaces and tabs vs. original space-only
      */
     protected function setIndentLevel(int $level): void
@@ -456,6 +459,7 @@ final class BetterStandardPrinter extends Standard
     {
         if (count($stmts) === 1 && $stmts[0] instanceof FileWithoutNamespace) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             return $stmts[0]->stmts;
 =======
             return $this->cleanUpStmts($stmts[0]->stmts);
@@ -479,6 +483,9 @@ final class BetterStandardPrinter extends Standard
                 unset($stmts[$key]);
             }
 >>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
+=======
+            return $stmts[0]->stmts;
+>>>>>>> be417ea15... fix accidental interface removal
         }
 
         return $stmts;

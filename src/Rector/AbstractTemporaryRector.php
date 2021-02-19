@@ -160,6 +160,11 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     protected $rectorChangeCollector;
 
     /**
+     * @var NodeComparator
+     */
+    protected $nodeComparator;
+
+    /**
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
@@ -213,11 +218,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      * @var PropertyAdder
      */
     private $propertyAdder;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
 
     /**
      * @required

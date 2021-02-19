@@ -54,18 +54,27 @@ final class NodeNameResolver
 
     /**
      * @var ClassNaming
+<<<<<<< HEAD
      */
     private $classNaming;
 
     /**
      * @var BetterStandardPrinter
+=======
+>>>>>>> be417ea15... fix accidental interface removal
      */
-    private $betterStandardPrinter;
+    private $classNaming;
 
     /**
+<<<<<<< HEAD
      * @var ReflectionProvider
      */
     private $reflectionProvider;
+=======
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+>>>>>>> be417ea15... fix accidental interface removal
 
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers

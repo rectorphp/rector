@@ -70,6 +70,9 @@ final class NodeComparator
         return false;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> be417ea15... fix accidental interface removal
 
     /**
      * Checks even clone nodes
@@ -90,6 +93,9 @@ final class NodeComparator
 
         return get_class($firstNode) === get_class($secondNode);
     }
+<<<<<<< HEAD
 =======
 >>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
+=======
+>>>>>>> be417ea15... fix accidental interface removal
 }

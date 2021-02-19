@@ -32,6 +32,7 @@ final class ScopeNestingComparator
     private $doubleIfBranchExprs = [];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
@@ -49,6 +50,11 @@ final class ScopeNestingComparator
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
 >>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
+=======
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
+    {
+        $this->betterNodeFinder = $betterNodeFinder;
+>>>>>>> be417ea15... fix accidental interface removal
         $this->nodeComparator = $nodeComparator;
     }
 

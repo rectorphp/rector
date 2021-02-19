@@ -93,10 +93,18 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     private static $rectorConfigsResolver;
 
     /**
+     * @var RectorConfigsResolver
+     */
+    private static $rectorConfigsResolver;
+
+<<<<<<< HEAD
+=======
+    /**
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
 
+>>>>>>> be417ea15... fix accidental interface removal
     protected function setUp(): void
     {
         $this->initializeDependencies();

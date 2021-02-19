@@ -25,11 +25,14 @@ final class VariableUseFinder
     private $nodeNameResolver;
 
     /**
+<<<<<<< HEAD
      * @var NodeComparator
      */
     private $nodeComparator;
 
     /**
+=======
+>>>>>>> be417ea15... fix accidental interface removal
      * @var NodeComparator
      */
     private $nodeComparator;
@@ -38,17 +41,23 @@ final class VariableUseFinder
         BetterNodeFinder $betterNodeFinder,
         NodeNameResolver $nodeNameResolver,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         BetterStandardPrinter $betterStandardPrinter,
 >>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
+=======
+>>>>>>> be417ea15... fix accidental interface removal
         NodeComparator $nodeComparator
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         $this->betterStandardPrinter = $betterStandardPrinter;
 >>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
+=======
+>>>>>>> be417ea15... fix accidental interface removal
         $this->nodeComparator = $nodeComparator;
     }
 

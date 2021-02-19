@@ -15,7 +15,10 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
+<<<<<<< HEAD
 use PHPStan\Type\ObjectType;
+=======
+>>>>>>> be417ea15... fix accidental interface removal
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeCollector\NodeCollector\NodeRepository;

@@ -7,15 +7,22 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 use PhpParser\Node;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 =======
 >>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
+=======
+use PhpParser\Node\Name;
+>>>>>>> be417ea15... fix accidental interface removal
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> be417ea15... fix accidental interface removal
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 =======
@@ -161,11 +168,22 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         // change the node
 >>>>>>> ae034a769... [TypeDeclaration] Add ReturnTypeFromReturnNewRector
 =======
+=======
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
+            return null;
+        }
+
+        if ($node->returnType !== null) {
+            return null;
+        }
+
+>>>>>>> be417ea15... fix accidental interface removal
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf($node->stmts, Return_::class);
+        $returns = $this->betterNodeFinder->findInstanceOf((array) $node->stmts, Return_::class);
         if ($returns === []) {
             return null;
         }
@@ -177,15 +195,11 @@ CODE_SAMPLE
             }
 
             $new = $return->expr;
-            if (! $new->class instanceof Node\Name) {
+            if (! $new->class instanceof Name) {
                 return null;
             }
 
             $className = $this->getName($new->class);
-            if ($className === null) {
-                return null;
-            }
-
             $newTypes[] = new ObjectType($className);
         }
 

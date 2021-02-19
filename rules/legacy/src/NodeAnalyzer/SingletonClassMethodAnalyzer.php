@@ -13,7 +13,10 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+<<<<<<< HEAD
 use PHPStan\Type\ObjectType;
+=======
+>>>>>>> be417ea15... fix accidental interface removal
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;

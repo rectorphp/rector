@@ -30,6 +30,14 @@ final class CurrentAndParentClassMethodComparator
      * @var NodeComparator
      */
     private $nodeComparator;
+<<<<<<< HEAD
+=======
+
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+>>>>>>> be417ea15... fix accidental interface removal
 
     /**
      * @var MethodReflectionProvider
@@ -48,12 +56,20 @@ final class CurrentAndParentClassMethodComparator
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
+<<<<<<< HEAD
+=======
+        NodeRepository $nodeRepository,
+>>>>>>> be417ea15... fix accidental interface removal
         MethodReflectionProvider $methodReflectionProvider,
         ParameterDefaultsComparator $parameterDefaultsComparator,
         ParameterTypeComparator $parameterTypeComparator,
         NodeComparator $nodeComparator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
+<<<<<<< HEAD
+=======
+        $this->nodeRepository = $nodeRepository;
+>>>>>>> be417ea15... fix accidental interface removal
         $this->methodReflectionProvider = $methodReflectionProvider;
         $this->parameterDefaultsComparator = $parameterDefaultsComparator;
         $this->parameterTypeComparator = $parameterTypeComparator;
