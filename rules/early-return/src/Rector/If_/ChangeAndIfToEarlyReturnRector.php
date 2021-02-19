@@ -138,7 +138,7 @@ CODE_SAMPLE
             $this->removeNode($ifNextReturn);
             $ifNextReturn = $node->stmts[0];
             $this->addNodeAfterNode($ifNextReturn, $node);
-            if ($isInLoop) {
+            if ($isInLoop && $ifNextReturn->expr instanceof Expr) {
                 $this->addNodeAfterNode(new Return_(), $node);
             }
         } else {
