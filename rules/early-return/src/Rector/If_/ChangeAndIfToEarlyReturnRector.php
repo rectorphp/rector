@@ -129,12 +129,18 @@ CODE_SAMPLE
 
         $conditions   = $this->getBooleanAndConditions($expr);
 
-        $ifNextReturnClone = clone $ifNextReturn;
+        $ifNextReturnClone = $ifNextReturn instanceof Return_
+            ? clone $ifNextReturn
+            : new Return_();
 
-        if ($ifNextReturn instanceof Return_) {
-            $this->removeNode($ifNextReturn);
-            $ifNextReturn = $node->stmts[0];
-            $this->addNodeAfterNode($ifNextReturn, $node);
+        if ($ifNextReturnClone instanceof Return_) {
+            if ($ifNextReturn instanceof Return_) {
+                $this->removeNode($ifNextReturn);
+                $ifNextReturn = $node->stmts[0];
+                $this->addNodeAfterNode($ifNextReturn, $node);
+            } else {
+                $this->addNodeAfterNode($node->stmts[0], $node);
+            }
         }
 
         $ifs          = $this->createInvertedIfNodesFromConditions($node, $conditions, $ifNextReturnClone);
