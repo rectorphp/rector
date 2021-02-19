@@ -113,7 +113,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($this->shouldSkip($node)) { dump('here');die;
             return null;
         }
 
@@ -216,9 +216,15 @@ CODE_SAMPLE
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if = new If_($invertedCondition);
-            $if->stmts = $isIfInLoop && $this->getIfNextReturn($node) === null
+            if ($isIfInLoop) {
+                $if->stmts = [new Continue_()];
+            } else { dump('here');die;
+                $if->stmts = [new Return_()];
+            }
+
+            /**$if->stmts = $isIfInLoop && $this->getIfNextReturn($node) === null
                 ? [new Continue_()]
-                : [new Return_()];
+                : [new Return_()];**/
 
             $ifs[] = $if;
         }
