@@ -133,10 +133,14 @@ CODE_SAMPLE
             ? clone $ifNextReturn
             : new Return_();
 
+        $isInLoop = $this->isIfInLoop($node);
         if ($ifNextReturn instanceof Return_) {
             $this->removeNode($ifNextReturn);
             $ifNextReturn = $node->stmts[0];
             $this->addNodeAfterNode($ifNextReturn, $node);
+            if ($isInLoop) {
+                $this->addNodeAfterNode(new Return_(), $node);
+            }
         } else {
             $this->addNodeAfterNode($node->stmts[0], $node);
         }
@@ -182,19 +186,6 @@ CODE_SAMPLE
         }
 
         return ! $this->isLastIfOrBeforeLastReturn($if);
-
-        /*if ($this->isIfReturnsVoid($if)) {
-            return true;
-        }
-
-        if (! $if->cond instanceof BooleanAnd) {
-            return true;
-        }
-
-
-
-
-        */
     }
 
     private function getIfReturn(If_ $if): ?Stmt
@@ -230,11 +221,12 @@ CODE_SAMPLE
     {
         $ifs = [];
         $isInLoop = $this->isIfInLoop($if);
+        $getIfNextReturn = $this->getIfNextReturn($if);
 
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if        = new If_($invertedCondition);
-            $if->stmts = [$isInLoop ? new Continue_() : $return];
+            $if->stmts = [$isInLoop && $getIfNextReturn === null ? new Continue_() : $return];
 
             $ifs[] = $if;
         }
