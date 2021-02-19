@@ -30,7 +30,11 @@ use Twig_SimpleFunction;
 final class SimpleFunctionAndFilterRector extends AbstractRector
 {
     /**
+<<<<<<< HEAD
      * @var array<string, class-string<Twig_SimpleFilter>|class-string<Twig_SimpleFunction>>
+=======
+     * @var array<class-string, class-string>
+>>>>>>> 79dd82dc9... misc
      */
     private const OLD_TO_NEW_CLASSES = [
         'Twig_Function_Method' => 'Twig_SimpleFunction',

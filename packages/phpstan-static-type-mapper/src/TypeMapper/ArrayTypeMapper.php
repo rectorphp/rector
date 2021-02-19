@@ -110,6 +110,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         $narrowedTypeNode = $this->narrowConstantArrayTypeOfUnionType($type, $itemType);
         if ($narrowedTypeNode instanceof TypeNode) {
             return $narrowedTypeNode;
@@ -147,6 +148,11 @@ final class ArrayTypeMapper implements TypeMapperInterface
                 ]);
             }
 >>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
+=======
+        $narrowedTypeNode = $this->narrowConstantArrayTypeOfUnionType($type, $itemType);
+        if ($narrowedTypeNode instanceof TypeNode) {
+            return $narrowedTypeNode;
+>>>>>>> 79dd82dc9... misc
         }
 
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType);
@@ -289,12 +295,20 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
             $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($itemType);
             if ($narrowedItemType instanceof GenericClassStringType) {
+<<<<<<< HEAD
                 return $this->createTypeNodeFromGenericClassStringType($narrowedItemType);
+=======
+                $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
+                return new AttributeAwareGenericTypeNode(new AttributeAwareIdentifierTypeNode('array'), [
+                    $itemTypeNode,
+                ]);
+>>>>>>> 79dd82dc9... misc
             }
         }
 
         return null;
     }
+<<<<<<< HEAD
 
     private function createTypeNodeFromGenericClassStringType(
         GenericClassStringType $genericClassStringType
@@ -310,4 +324,6 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
         return new AttributeAwareGenericTypeNode(new AttributeAwareIdentifierTypeNode('array'), [$itemTypeNode]);
     }
+=======
+>>>>>>> 79dd82dc9... misc
 }

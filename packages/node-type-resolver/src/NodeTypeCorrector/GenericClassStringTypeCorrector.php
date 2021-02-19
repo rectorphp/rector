@@ -26,10 +26,13 @@ final class GenericClassStringTypeCorrector
     public function correct(Type $mainType): Type
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         // inspired from https://github.com/phpstan/phpstan-src/blob/94e3443b2d21404a821e05b901dd4b57fcbd4e7f/src/Type/Generic/TemplateTypeHelper.php#L18
         return TypeTraverser::map($mainType, function (Type $type, callable $traverse): Type {
 =======
         // @todo extract own service
+=======
+>>>>>>> 79dd82dc9... misc
         // inspired from https://github.com/phpstan/phpstan-src/blob/94e3443b2d21404a821e05b901dd4b57fcbd4e7f/src/Type/Generic/TemplateTypeHelper.php#L18
         return TypeTraverser::map($mainType, function (Type $type, callable $traverse) {
 >>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement

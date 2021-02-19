@@ -38,7 +38,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormTypeInstanceToClassConstRector extends AbstractFormAddRector
 {
     /**
+<<<<<<< HEAD
      * @var class-string<AbstractController>[]|class-string<Controller>[]
+=======
+     * @var array<class-string>
+>>>>>>> 79dd82dc9... misc
      */
     private const CONTROLLER_TYPES = [
         'Symfony\Bundle\FrameworkBundle\Controller\Controller',

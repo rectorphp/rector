@@ -36,7 +36,6 @@ use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
-use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector as GenericClassStringTypeCorrectorAlias;
 use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassLikeTypeCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
@@ -105,6 +104,7 @@ final class NodeTypeResolver
         ClassAnalyzer $classAnalyzer,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         ClassLikeExistenceChecker $classLikeExistenceChecker,
 >>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
@@ -112,6 +112,9 @@ final class NodeTypeResolver
 =======
         GenericClassStringTypeCorrectorAlias $genericClassStringTypeCorrector,
 >>>>>>> 157baf7db... make test pass
+=======
+        GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
+>>>>>>> 79dd82dc9... misc
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -233,9 +236,12 @@ final class NodeTypeResolver
         if ($node instanceof Arg) {
             throw new ShouldNotHappenException('Arg cannot have type, use $arg->value instead');
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             // $node = $node->value;
 >>>>>>> e4e29954a... [CodingStyle] Add array fixure iprovement
+=======
+>>>>>>> 79dd82dc9... misc
         }
 
         if (StaticInstanceOf::isOneOf($node, [Param::class, Scalar::class])) {

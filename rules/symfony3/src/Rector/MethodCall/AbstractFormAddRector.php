@@ -15,7 +15,11 @@ use Symfony\Component\Form\FormInterface;
 abstract class AbstractFormAddRector extends AbstractRector
 {
     /**
+<<<<<<< HEAD
      * @var class-string<FormBuilderInterface>[]|class-string<FormInterface>[]
+=======
+     * @var array<class-string>
+>>>>>>> 79dd82dc9... misc
      */
     private const FORM_TYPES = ['Symfony\Component\Form\FormBuilderInterface', 'Symfony\Component\Form\FormInterface'];
 
