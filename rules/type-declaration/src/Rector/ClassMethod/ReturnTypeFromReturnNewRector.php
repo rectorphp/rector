@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -87,7 +88,7 @@ CODE_SAMPLE
 
         $newTypes = [];
         foreach ($returns as $return) {
-            if (! $return->expr instanceof Node\Expr\New_) {
+            if (! $return->expr instanceof New_) {
                 return null;
             }
 
