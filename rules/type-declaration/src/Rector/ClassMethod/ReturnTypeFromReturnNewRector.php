@@ -6,30 +6,43 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 <<<<<<< HEAD
+<<<<<<< HEAD
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
+=======
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+<<<<<<< HEAD
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 =======
 use Rector\Core\Rector\AbstractRector;
 >>>>>>> ae034a769... [TypeDeclaration] Add ReturnTypeFromReturnNewRector
+=======
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> ae034a769... [TypeDeclaration] Add ReturnTypeFromReturnNewRector
+=======
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
  * @see \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeFromReturnNewRector\ReturnTypeFromReturnNewRectorTest
  */
 final class ReturnTypeFromReturnNewRector extends AbstractRector
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
     /**
      * @var TypeFactory
      */
@@ -40,8 +53,11 @@ final class ReturnTypeFromReturnNewRector extends AbstractRector
         $this->typeFactory = $typeFactory;
     }
 
+<<<<<<< HEAD
 =======
 >>>>>>> ae034a769... [TypeDeclaration] Add ReturnTypeFromReturnNewRector
+=======
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add return type void to function like without any return', [
@@ -56,9 +72,12 @@ final class SomeClass
 }
 CODE_SAMPLE
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> ae034a769... [TypeDeclaration] Add ReturnTypeFromReturnNewRector
+=======
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
                 ,
                 <<<'CODE_SAMPLE'
 final class SomeClass
@@ -71,10 +90,14 @@ final class SomeClass
 CODE_SAMPLE
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             ),
 =======
             )
 >>>>>>> ae034a769... [TypeDeclaration] Add ReturnTypeFromReturnNewRector
+=======
+            ),
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
         ]);
     }
 
@@ -129,16 +152,47 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
 
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod $node
+     * @param ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {
+<<<<<<< HEAD
         // change the node
 >>>>>>> ae034a769... [TypeDeclaration] Add ReturnTypeFromReturnNewRector
+=======
+        /** @var Return_[] $returns */
+        $returns = $this->betterNodeFinder->findInstanceOf($node->stmts, Return_::class);
+        if ($returns === []) {
+            return null;
+        }
+
+        $newTypes = [];
+        foreach ($returns as $return) {
+            if (! $return->expr instanceof Node\Expr\New_) {
+                return null;
+            }
+
+            $new = $return->expr;
+            if (! $new->class instanceof Node\Name) {
+                return null;
+            }
+
+            $className = $this->getName($new->class);
+            if ($className === null) {
+                return null;
+            }
+
+            $newTypes[] = new ObjectType($className);
+        }
+
+        $returnType = $this->typeFactory->createMixedPassedOrUnionType($newTypes);
+        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
+        $node->returnType = $returnTypeNode;
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
 
         return $node;
     }

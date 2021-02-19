@@ -162,6 +162,29 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Checks even clone nodes
+     */
+    public function areSameNode(Node $firstNode, Node $secondNode): bool
+    {
+        if ($firstNode === $secondNode) {
+            return true;
+        }
+
+        if ($firstNode->getStartTokenPos() !== $secondNode->getStartTokenPos()) {
+            return false;
+        }
+
+        if ($firstNode->getEndTokenPos() !== $secondNode->getEndTokenPos()) {
+            return false;
+        }
+
+        return get_class($firstNode) === get_class($secondNode);
+    }
+
+    /**
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
      * This allows to use both spaces and tabs vs. original space-only
      */
     protected function setIndentLevel(int $level): void
@@ -432,7 +455,30 @@ final class BetterStandardPrinter extends Standard
     private function resolveNewStmts(array $stmts): array
     {
         if (count($stmts) === 1 && $stmts[0] instanceof FileWithoutNamespace) {
+<<<<<<< HEAD
             return $stmts[0]->stmts;
+=======
+            return $this->cleanUpStmts($stmts[0]->stmts);
+        }
+
+        return $this->cleanUpStmts($stmts);
+    }
+
+    /**
+     * @param Node[] $stmts
+     * @return Node[]|mixed[]
+     */
+    private function cleanUpStmts(array $stmts): array
+    {
+        foreach ($stmts as $key => $stmt) {
+            if (! $stmt instanceof ClassLike && ! $stmt instanceof FunctionLike) {
+                continue;
+            }
+
+            if (isset($stmts[$key - 1]) && $this->nodeComparator->areNodesEqual($stmt, $stmts[$key - 1])) {
+                unset($stmts[$key]);
+            }
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
         }
 
         return $stmts;

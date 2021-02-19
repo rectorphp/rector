@@ -290,4 +290,47 @@ CODE_SAMPLE
 
         return false;
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * @param Stmt[] $stmts
+     */
+    private function useForeachVariableInStmts(Expr $foreachedValue, Expr $singleValue, array $stmts): void
+    {
+        if ($this->keyValueName === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->traverseNodesWithCallable($stmts, function (Node $node) use ($foreachedValue, $singleValue): ?Expr {
+            if (! $node instanceof ArrayDimFetch) {
+                return null;
+            }
+
+            // must be the same as foreach value
+            if (! $this->nodeComparator->areNodesEqual($node->var, $foreachedValue)) {
+                return null;
+            }
+
+            if ($this->forNodeAnalyzer->isArrayDimFetchPartOfAssignOrArgParentCount($node)) {
+                return null;
+            }
+
+            // is dim same as key value name, ...[$i]
+            if ($this->keyValueName === null) {
+                throw new ShouldNotHappenException();
+            }
+
+            if ($node->dim === null) {
+                return null;
+            }
+
+            if (! $this->isVariableName($node->dim, $this->keyValueName)) {
+                return null;
+            }
+
+            return $singleValue;
+        });
+    }
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
 }

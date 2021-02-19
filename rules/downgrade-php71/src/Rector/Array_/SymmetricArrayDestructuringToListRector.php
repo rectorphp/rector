@@ -46,8 +46,14 @@ final class SymmetricArrayDestructuringToListRector extends AbstractRector
         if ($parentNode instanceof Assign && $this->nodeComparator->areNodesEqual($node, $parentNode->var)) {
             return $this->processToList($node);
         }
+<<<<<<< HEAD
         if (! $parentNode instanceof Foreach_) {
             return null;
+=======
+
+        if ($parentNode instanceof Foreach_ && $this->nodeComparator->areNodesEqual($node, $parentNode->valueVar)) {
+            return $this->processToList($node);
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
         }
         if (! $this->nodeComparator->areNodesEqual($node, $parentNode->valueVar)) {
             return null;

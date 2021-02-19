@@ -166,8 +166,13 @@ CODE_SAMPLE
                 continue;
             }
 
+<<<<<<< HEAD
             if ($this->nodeComparator->areNodesEqual($parentClassMethod, $currentClassMethod)) {
                 return true;
+=======
+            if ($this->nodeComparator->areNodesEqual($classMethod, $node)) {
+                return null;
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
             }
         }
 

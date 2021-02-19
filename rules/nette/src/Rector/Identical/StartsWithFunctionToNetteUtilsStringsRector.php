@@ -86,8 +86,15 @@ CODE_SAMPLE
             $contentExprAndNeedleExpr->getNeedleExpr(),
         ]);
 
+<<<<<<< HEAD
         if ($node instanceof NotIdentical) {
             return new BooleanNot($staticCall);
+=======
+        /** @var FuncCall $strlenFuncCall */
+        $strlenFuncCall = $node->args[2]->value;
+        if ($this->nodeComparator->areNodesEqual($strlenFuncCall->args[0]->value, $variable)) {
+            return new ContentExprAndNeedleExpr($node->args[0]->value, $strlenFuncCall->args[0]->value);
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
         }
 
         return $staticCall;

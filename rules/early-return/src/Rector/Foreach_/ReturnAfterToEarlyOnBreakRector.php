@@ -109,7 +109,21 @@ CODE_SAMPLE
             return $this->nodeComparator->areNodesEqual($node, $assignVariable);
         });
 
+<<<<<<< HEAD
         if ($this->shouldSkip($nextForeach, $variablePrevious, $node, $assignVariable)) {
+=======
+        if ($this->shouldSkipNextPrev($nextForeach, $variablePrevious)) {
+            return null;
+        }
+
+        // ensure the variable only used once in foreach
+        $usedVariable = $this->betterNodeFinder->find($node->stmts, function (Node $node) use (
+            $assignVariable
+        ): bool {
+            return $this->nodeComparator->areNodesEqual($node, $assignVariable);
+        });
+        if (count($usedVariable) > 1) {
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
             return null;
         }
 
@@ -155,6 +169,7 @@ CODE_SAMPLE
             return true;
         }
 
+<<<<<<< HEAD
         if (! $this->nodeComparator->areNodesEqual($return->expr, $expr)) {
             return true;
         }
@@ -166,5 +181,8 @@ CODE_SAMPLE
             return $this->nodeComparator->areNodesEqual($node, $assignVariable);
         });
         return count($usedVariable) > 1;
+=======
+        return ! $this->nodeComparator->areNodesEqual($return->expr, $expr);
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
     }
 }

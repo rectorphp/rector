@@ -29,13 +29,26 @@ final class VariableUseFinder
      */
     private $nodeComparator;
 
+    /**
+     * @var NodeComparator
+     */
+    private $nodeComparator;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         NodeNameResolver $nodeNameResolver,
+<<<<<<< HEAD
+=======
+        BetterStandardPrinter $betterStandardPrinter,
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
         NodeComparator $nodeComparator
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
+<<<<<<< HEAD
+=======
+        $this->betterStandardPrinter = $betterStandardPrinter;
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
         $this->nodeComparator = $nodeComparator;
     }
 

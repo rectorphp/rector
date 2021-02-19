@@ -31,9 +31,24 @@ final class ScopeNestingComparator
      */
     private $doubleIfBranchExprs = [];
 
+<<<<<<< HEAD
     public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
+=======
+    /**
+     * @var NodeComparator
+     */
+    private $nodeComparator;
+
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        BetterStandardPrinter $betterStandardPrinter,
+        NodeComparator $nodeComparator
+    ) {
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->betterStandardPrinter = $betterStandardPrinter;
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
         $this->nodeComparator = $nodeComparator;
     }
 
@@ -70,8 +85,17 @@ final class ScopeNestingComparator
         if ($this->isInBothIfElseBranch($foundParent, $expr)) {
             return false;
         }
+<<<<<<< HEAD
         if (! $foundParent instanceof Else_) {
             return ! $foundParent instanceof FunctionLike;
+=======
+
+        if ($foundParent instanceof Else_ && $this->nodeComparator->areNodesEqual(
+            $expr,
+            $this->doubleIfBranchExprs
+        )) {
+            return false;
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
         }
         if (! $this->nodeComparator->areNodesEqual($expr, $this->doubleIfBranchExprs)) {
             return ! $foundParent instanceof FunctionLike;

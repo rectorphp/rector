@@ -69,6 +69,7 @@ final class NodeComparator
 
         return false;
     }
+<<<<<<< HEAD
 
     /**
      * Checks even clone nodes
@@ -89,4 +90,6 @@ final class NodeComparator
 
         return get_class($firstNode) === get_class($secondNode);
     }
+=======
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
 }

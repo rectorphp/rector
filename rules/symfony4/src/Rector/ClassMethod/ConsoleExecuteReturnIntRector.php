@@ -111,7 +111,14 @@ CODE_SAMPLE
             }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+<<<<<<< HEAD
             if ($this->isAReturnWithExprIntEquals($parentNode, $node)) {
+=======
+            if ($parentNode instanceof Return_ && $this->nodeComparator->areNodesEqual(
+                $parentNode->expr,
+                $node
+            ) && $node instanceof Int_) {
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
                 $hasReturn = true;
                 return null;
             }
@@ -130,6 +137,10 @@ CODE_SAMPLE
             }
 
             // is there return without nesting?
+<<<<<<< HEAD
+=======
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+>>>>>>> ed7f099ba... decouple NodeComparator to compare nodes
             if ($this->nodeComparator->areNodesEqual($parentNode, $classMethod)) {
                 $hasReturn = true;
             }
