@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\NodeTraverser;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -23,9 +23,9 @@ final class NextVariableUsageNodeFinder
     private $simpleCallableNodeTraverser;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var ParentScopeFinder
@@ -44,16 +44,16 @@ final class NextVariableUsageNodeFinder
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
-        ParentScopeFinder $parentScopeFinder
+        ParentScopeFinder $parentScopeFinder,
+        NodeComparator $nodeComparator
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->parentScopeFinder = $parentScopeFinder;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeComparator = $nodeComparator;
     }
 
     public function find(Assign $assign): ?Node
@@ -74,7 +74,7 @@ final class NextVariableUsageNodeFinder
             }
 
             // skip self
-            if ($this->betterStandardPrinter->areSameNode($currentNode, $expr)) {
+            if ($this->nodeComparator->areSameNode($currentNode, $expr)) {
                 return null;
             }
 

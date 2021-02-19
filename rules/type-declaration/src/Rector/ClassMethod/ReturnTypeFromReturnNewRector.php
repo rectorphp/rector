@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -69,8 +71,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
+            return null;
+        }
+
+        if ($node->returnType !== null) {
+            return null;
+        }
+
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf($node->stmts, Return_::class);
+        $returns = $this->betterNodeFinder->findInstanceOf((array) $node->stmts, Return_::class);
         if ($returns === []) {
             return null;
         }
@@ -82,15 +92,11 @@ CODE_SAMPLE
             }
 
             $new = $return->expr;
-            if (! $new->class instanceof Node\Name) {
+            if (! $new->class instanceof Name) {
                 return null;
             }
 
             $className = $this->getName($new->class);
-            if ($className === null) {
-                return null;
-            }
-
             $newTypes[] = new ObjectType($className);
         }
 

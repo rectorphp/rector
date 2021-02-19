@@ -94,14 +94,14 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     private $autoloadTestFixture = true;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var RectorConfigsResolver
      */
     private static $rectorConfigsResolver;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
 
     protected function setUp(): void
     {

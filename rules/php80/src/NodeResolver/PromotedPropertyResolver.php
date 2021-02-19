@@ -12,8 +12,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\ValueObject\PropertyPromotionCandidate;
@@ -26,9 +26,9 @@ final class PromotedPropertyResolver
     private $nodeNameResolver;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var BetterNodeFinder
@@ -37,12 +37,12 @@ final class PromotedPropertyResolver
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        BetterStandardPrinter $betterStandardPrinter,
-        BetterNodeFinder $betterNodeFinder
+        BetterNodeFinder $betterNodeFinder,
+        NodeComparator $nodeComparator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**

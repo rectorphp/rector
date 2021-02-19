@@ -69,4 +69,24 @@ final class NodeComparator
 
         return false;
     }
+
+    /**
+     * Checks even clone nodes
+     */
+    public function areSameNode(Node $firstNode, Node $secondNode): bool
+    {
+        if ($firstNode === $secondNode) {
+            return true;
+        }
+
+        if ($firstNode->getStartTokenPos() !== $secondNode->getStartTokenPos()) {
+            return false;
+        }
+
+        if ($firstNode->getEndTokenPos() !== $secondNode->getEndTokenPos()) {
+            return false;
+        }
+
+        return get_class($firstNode) === get_class($secondNode);
+    }
 }

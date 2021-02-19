@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -32,16 +33,23 @@ abstract class AbstractMatchAndRefactor
     protected $betterStandardPrinter;
 
     /**
+     * @var NodeComparator
+     */
+    protected $nodeComparator;
+
+    /**
      * @required
      */
     public function autowireAbstractMatchAndRefactor(
         NodeNameResolver $nodeNameResolver,
         ValueResolver $valueResolver,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        NodeComparator $nodeComparator
     ): void {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeComparator = $nodeComparator;
     }
 
     protected function isFuncCallName(Node $node, string $name): bool

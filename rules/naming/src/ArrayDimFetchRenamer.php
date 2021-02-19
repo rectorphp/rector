@@ -12,7 +12,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ArrayDimFetchRenamer
@@ -23,16 +23,16 @@ final class ArrayDimFetchRenamer
     private $simpleCallableNodeTraverser;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        BetterStandardPrinter $betterStandardPrinter
+        NodeComparator $nodeComparator
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**

@@ -9,8 +9,8 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
@@ -38,22 +38,22 @@ final class NodeUsageFinder
     private $scopeAwareNodeFinder;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         BetterNodeFinder $betterNodeFinder,
         NodeRepository $nodeRepository,
         ScopeAwareNodeFinder $scopeAwareNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter
+        NodeComparator $nodeComparator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeRepository = $nodeRepository;
         $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
-        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**

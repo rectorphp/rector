@@ -9,8 +9,8 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Trait_;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -28,9 +28,9 @@ final class ClassConstManipulator
     private $betterNodeFinder;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var ClassManipulator
@@ -44,16 +44,16 @@ final class ClassConstManipulator
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter,
         ClassManipulator $classManipulator,
         NodeNameResolver $nodeNameResolver,
-        NodeRepository $nodeRepository
+        NodeRepository $nodeRepository,
+        NodeComparator $nodeComparator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->classManipulator = $classManipulator;
         $this->nodeRepository = $nodeRepository;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**

@@ -13,25 +13,25 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\MixedType;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class UselessIfCondBeforeForeachDetector
 {
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
 
-    public function __construct(BetterStandardPrinter $betterStandardPrinter, NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @var NodeComparator
+     */
+    private $nodeComparator;
+
+    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeComparator $nodeComparator)
     {
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**

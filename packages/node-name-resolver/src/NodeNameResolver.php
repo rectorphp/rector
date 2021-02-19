@@ -51,14 +51,14 @@ final class NodeNameResolver
     private $currentFileInfoProvider;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var ClassNaming
      */
     private $classNaming;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
 
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers

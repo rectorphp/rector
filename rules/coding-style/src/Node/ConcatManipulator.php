@@ -7,15 +7,15 @@ namespace Rector\CodingStyle\Node;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ConcatManipulator
 {
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var SimpleCallableNodeTraverser
@@ -23,11 +23,11 @@ final class ConcatManipulator
     private $simpleCallableNodeTraverser;
 
     public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeComparator $nodeComparator
     ) {
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->nodeComparator = $nodeComparator;
     }
 
     public function getFirstConcatItem(Concat $concat): Node

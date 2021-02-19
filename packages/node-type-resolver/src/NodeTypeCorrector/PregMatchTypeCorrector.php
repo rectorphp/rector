@@ -11,8 +11,8 @@ use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -30,9 +30,9 @@ final class PregMatchTypeCorrector
     private $nodeNameResolver;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var ParentScopeFinder
@@ -41,14 +41,14 @@ final class PregMatchTypeCorrector
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
-        ParentScopeFinder $parentScopeFinder
+        ParentScopeFinder $parentScopeFinder,
+        NodeComparator $nodeComparator
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->parentScopeFinder = $parentScopeFinder;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**

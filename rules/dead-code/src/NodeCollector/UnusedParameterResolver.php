@@ -8,7 +8,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 
@@ -20,9 +20,9 @@ final class UnusedParameterResolver
     private $classMethodManipulator;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var NodeNameResolver
@@ -32,11 +32,11 @@ final class UnusedParameterResolver
     public function __construct(
         ClassMethodManipulator $classMethodManipulator,
         NodeNameResolver $nodeNameResolver,
-        BetterStandardPrinter $betterStandardPrinter
+        NodeComparator $nodeComparator
     ) {
         $this->classMethodManipulator = $classMethodManipulator;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**

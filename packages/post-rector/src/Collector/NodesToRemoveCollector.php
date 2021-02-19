@@ -15,8 +15,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\ChangesReporting\Collector\AffectedFilesCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeRemoval\BreakingRemovalGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
@@ -45,20 +45,20 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
     private $betterNodeFinder;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     public function __construct(
         AffectedFilesCollector $affectedFilesCollector,
         BreakingRemovalGuard $breakingRemovalGuard,
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter
+        NodeComparator $nodeComparator
     ) {
         $this->affectedFilesCollector = $affectedFilesCollector;
         $this->breakingRemovalGuard = $breakingRemovalGuard;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeComparator = $nodeComparator;
     }
 
     public function addNodeToRemove(Node $node): void

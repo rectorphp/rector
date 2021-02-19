@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
 
 final class ScopeNestingComparator
@@ -23,27 +22,18 @@ final class ScopeNestingComparator
     private $betterNodeFinder;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var Expr[]
      */
     private $doubleIfBranchExprs = [];
 
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter,
-        NodeComparator $nodeComparator
-    ) {
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
+    {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeComparator = $nodeComparator;
     }
 

@@ -15,8 +15,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -65,27 +65,27 @@ final class RegexPatternArgumentManipulator
     private $betterNodeFinder;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var NodeRepository
      */
     private $nodeRepository;
 
+    /**
+     * @var NodeComparator
+     */
+    private $nodeComparator;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        NodeRepository $nodeRepository
+        NodeRepository $nodeRepository,
+        NodeComparator $nodeComparator
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeRepository = $nodeRepository;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**

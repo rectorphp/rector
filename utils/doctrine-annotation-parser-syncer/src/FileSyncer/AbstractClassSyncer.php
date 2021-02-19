@@ -20,11 +20,6 @@ abstract class AbstractClassSyncer implements ClassSyncerInterface
     protected $smartFileSystem;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var FileInfoParser
      */
     private $fileInfoParser;
@@ -33,6 +28,11 @@ abstract class AbstractClassSyncer implements ClassSyncerInterface
      * @var ClassSyncerNodeTraverser
      */
     private $classSyncerNodeTraverser;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
 
     /**
      * @required

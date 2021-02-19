@@ -35,14 +35,14 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private $symfonyStyle;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var Configuration
      */
     private $configuration;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,

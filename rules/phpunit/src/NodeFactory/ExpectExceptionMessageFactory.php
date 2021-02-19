@@ -6,7 +6,7 @@ namespace Rector\PHPUnit\NodeFactory;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ExpectExceptionMessageFactory
@@ -17,9 +17,9 @@ final class ExpectExceptionMessageFactory
     private $nodeNameResolver;
 
     /**
-     * @var BetterStandardPrinter
+     * @var NodeComparator
      */
-    private $betterStandardPrinter;
+    private $nodeComparator;
 
     /**
      * @var ArgumentShiftingFactory
@@ -28,12 +28,12 @@ final class ExpectExceptionMessageFactory
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        BetterStandardPrinter $betterStandardPrinter,
-        ArgumentShiftingFactory $argumentShiftingFactory
+        ArgumentShiftingFactory $argumentShiftingFactory,
+        NodeComparator $nodeComparator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->argumentShiftingFactory = $argumentShiftingFactory;
+        $this->nodeComparator = $nodeComparator;
     }
 
     public function create(MethodCall $methodCall, Variable $exceptionVariable): ?MethodCall

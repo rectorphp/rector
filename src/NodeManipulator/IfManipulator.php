@@ -19,19 +19,14 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class IfManipulator
 {
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
     /**
      * @var StmtsManipulator
      */
@@ -57,20 +52,25 @@ final class IfManipulator
      */
     private $conditionInverter;
 
+    /**
+     * @var NodeComparator
+     */
+    private $nodeComparator;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
         StmtsManipulator $stmtsManipulator,
         ValueResolver $valueResolver,
-        ConditionInverter $conditionInverter
+        ConditionInverter $conditionInverter,
+        NodeComparator $nodeComparator
     ) {
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->stmtsManipulator = $stmtsManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->valueResolver = $valueResolver;
         $this->conditionInverter = $conditionInverter;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**

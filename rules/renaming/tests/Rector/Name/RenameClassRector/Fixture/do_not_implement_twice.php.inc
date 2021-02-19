@@ -1,9 +1,11 @@
 <?php
 
-interface MyFooInterface {};
-interface MyBarInterface {};
+namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
 
-final class DoNotImplementTwice implements \MyFooInterface, \MyBarInterface
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\Contract\FirstInterface;
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\Contract\SecondInterface;
+
+final class DoNotImplementTwice implements FirstInterface, SecondInterface
 {
 }
 
@@ -11,9 +13,12 @@ final class DoNotImplementTwice implements \MyFooInterface, \MyBarInterface
 -----
 <?php
 
-interface MyBazInterface {};
+namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
 
-final class DoNotImplementTwice implements \MyBazInterface
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\Contract\FirstInterface;
+use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\Contract\SecondInterface;
+
+final class DoNotImplementTwice implements \Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\Contract\ThirdInterface
 {
 }
 
