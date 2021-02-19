@@ -138,15 +138,22 @@ CODE_SAMPLE
             $this->removeNode($ifNextReturn);
             $ifNextReturn = $node->stmts[0];
             $this->addNodeAfterNode($ifNextReturn, $node);
-            if ($isInLoop && $ifNextReturn->expr instanceof Expr) {
+            if ($isInLoop && property_exists($ifNextReturn, 'expr') && $ifNextReturn->expr instanceof Expr) {
                 $this->addNodeAfterNode(new Return_(), $node);
             }
         } else {
             $this->addNodeAfterNode($node->stmts[0], $node);
         }
 
-        $ifs          = $this->createInvertedIfNodesFromConditions($node, $conditions, $ifNextReturnClone);
+        return $this->processReplaceIfs($node, $conditions, $ifNextReturnClone);
+    }
 
+    /**
+     * @param Expr[] $conditions
+     */
+    private function processReplaceIfs(If_ $node, array $conditions, Return_ $ifNextReturnClone): If_
+    {
+        $ifs          = $this->createInvertedIfNodesFromConditions($node, $conditions, $ifNextReturnClone);
         foreach ($ifs as $key => $if) {
             if ($key === 0) {
                 $this->mirrorComments($if, $node);
