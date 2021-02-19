@@ -134,7 +134,7 @@ CODE_SAMPLE
         $this->addNodeAfterNode($ifReturn, $node);
 
         $ifNextReturn = $this->getIfNextReturn($node);
-        if ($ifNextReturn !== null && ! $this->isIfInLoop($node)) {
+        if ($ifNextReturn === null && ! $this->isIfInLoop($node)) {
             $this->removeNode($ifNextReturn);
         }
 
@@ -209,12 +209,13 @@ CODE_SAMPLE
         $isIfInLoop = $this->isIfInLoop($node);
 
         $ifs = [];
+        $return = $this->getIfNextReturn($node);
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if = new If_($invertedCondition);
-            $if->stmts = $isIfInLoop && $this->getIfNextReturn($node) === null
+            $if->stmts = $isIfInLoop
                 ? [new Continue_()]
-                : [new Return_()];
+                : [$return];
 
             $ifs[] = $if;
         }

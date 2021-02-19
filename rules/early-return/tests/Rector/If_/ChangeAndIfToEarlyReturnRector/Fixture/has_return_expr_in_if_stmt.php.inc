@@ -9,7 +9,6 @@ class HasReturnExprInIfStmt
         if ($car->hasWheels && $car->hasFuel) {
             return true;
         }
-
         return false;
     }
 }
@@ -27,11 +26,9 @@ class HasReturnExprInIfStmt
         if (!$car->hasWheels) {
             return false;
         }
-
         if (!$car->hasFuel) {
             return false;
         }
-
         return true;
     }
 }
