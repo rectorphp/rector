@@ -119,7 +119,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
             }
 
             // nest to 1 item
-            foreach ($arrayTypes->getValueTypes() as $position => $valueType) {
+            foreach ($arrayTypes->getValueTypes()[0]->getValueTypes() as $position => $valueType) {
                 if ($position !== $parameterPosition) {
                     continue;
                 }
@@ -132,7 +132,9 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
             return new MixedType();
         }
 
-        return $this->typeFactory->createMixedPassedOrUnionType($paramOnPositionTypes);
+        $p = $this->typeFactory->createMixedPassedOrUnionType($paramOnPositionTypes);
+
+        return $p;
     }
 
     private function getFunctionLikePhpDocInfo(Param $param): PhpDocInfo
