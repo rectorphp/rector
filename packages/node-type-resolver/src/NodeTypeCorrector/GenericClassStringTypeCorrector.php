@@ -25,7 +25,6 @@ final class GenericClassStringTypeCorrector
 
     public function correct(Type $mainType): Type
     {
-        // @todo extract own service
         // inspired from https://github.com/phpstan/phpstan-src/blob/94e3443b2d21404a821e05b901dd4b57fcbd4e7f/src/Type/Generic/TemplateTypeHelper.php#L18
         return TypeTraverser::map($mainType, function (Type $type, callable $traverse) {
             if (! $type instanceof ConstantStringType) {

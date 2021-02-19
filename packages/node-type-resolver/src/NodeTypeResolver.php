@@ -36,7 +36,6 @@ use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
-use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector as GenericClassStringTypeCorrectorAlias;
 use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassLikeTypeCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
@@ -90,7 +89,7 @@ final class NodeTypeResolver
         ParentClassLikeTypeCorrector $parentClassLikeTypeCorrector,
         TypeUnwrapper $typeUnwrapper,
         ClassAnalyzer $classAnalyzer,
-        GenericClassStringTypeCorrectorAlias $genericClassStringTypeCorrector,
+        GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -204,7 +203,6 @@ final class NodeTypeResolver
 
         if ($node instanceof Arg) {
             throw new ShouldNotHappenException('Arg cannot have type, use $arg->value instead');
-            // $node = $node->value;
         }
 
         if (StaticInstanceOf::isOneOf($node, [Param::class, Scalar::class])) {
@@ -317,7 +315,7 @@ final class NodeTypeResolver
         }
 
         $defaultNodeValue = $property->props[0]->default;
-        if (! $defaultNodeValue instanceof \PhpParser\Node\Expr) {
+        if (! $defaultNodeValue instanceof Expr) {
             return false;
         }
 

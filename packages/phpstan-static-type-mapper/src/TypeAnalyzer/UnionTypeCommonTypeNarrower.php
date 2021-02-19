@@ -61,20 +61,7 @@ final class UnionTypeCommonTypeNarrower
             }
         }
 
-        $sharedTypes = $this->narrowAvailableTypes($availableTypes);
-
-        if ($sharedTypes !== []) {
-            foreach (self::PRIORITY_TYPES as $winningType => $groupTypes) {
-                if (array_intersect($groupTypes, $sharedTypes) === $groupTypes) {
-                    return new GenericClassStringType(new ObjectType($winningType));
-                }
-            }
-
-            $firstSharedType = $sharedTypes[0];
-            return new GenericClassStringType(new ObjectType($firstSharedType));
-        }
-
-        return null;
+        return $this->createGenericClassStringType($availableTypes);
     }
 
     /**
@@ -148,5 +135,26 @@ final class UnionTypeCommonTypeNarrower
         $sharedTypes = array_intersect(...$availableTypes);
 
         return array_values($sharedTypes);
+    }
+
+    /**
+     * @param string[][] $availableTypes
+     */
+    private function createGenericClassStringType(array $availableTypes): ?GenericClassStringType
+    {
+        $sharedTypes = $this->narrowAvailableTypes($availableTypes);
+
+        if ($sharedTypes !== []) {
+            foreach (self::PRIORITY_TYPES as $winningType => $groupTypes) {
+                if (array_intersect($groupTypes, $sharedTypes) === $groupTypes) {
+                    return new GenericClassStringType(new ObjectType($winningType));
+                }
+            }
+
+            $firstSharedType = $sharedTypes[0];
+            return new GenericClassStringType(new ObjectType($firstSharedType));
+        }
+
+        return null;
     }
 }

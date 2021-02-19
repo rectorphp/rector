@@ -95,7 +95,7 @@ CODE_SAMPLE
         $this->removeNode($returnThis);
 
         $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
-        if (! $classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (! $classMethod instanceof ClassMethod) {
             throw new ShouldNotHappenException();
         }
 

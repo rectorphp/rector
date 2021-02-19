@@ -183,7 +183,7 @@ CODE_SAMPLE
     private function processMethodArgument(string $class, string $method, EventInfo $eventInfo): void
     {
         $classMethodNode = $this->nodeRepository->findClassMethod($class, $method);
-        if (! $classMethodNode instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (! $classMethodNode instanceof ClassMethod) {
             return;
         }
 

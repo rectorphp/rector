@@ -90,20 +90,9 @@ final class ArrayTypeMapper implements TypeMapperInterface
             return $this->createGenericArrayType($type, true);
         }
 
-        if ($type instanceof ConstantArrayType && $itemType instanceof UnionType) {
-            $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($itemType);
-            if ($narrowedItemType instanceof ObjectType) {
-                $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
-                return new AttributeAwareArrayTypeNode($itemTypeNode);
-            }
-
-            $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($itemType);
-            if ($narrowedItemType instanceof GenericClassStringType) {
-                $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
-                return new AttributeAwareGenericTypeNode(new AttributeAwareIdentifierTypeNode('array'), [
-                    $itemTypeNode,
-                ]);
-            }
+        $narrowedTypeNode = $this->narrowConstantArrayTypeOfUnionType($type, $itemType);
+        if ($narrowedTypeNode instanceof TypeNode) {
+            return $narrowedTypeNode;
         }
 
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType);
@@ -233,5 +222,26 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
 
         return ! $arrayType->getItemType() instanceof ArrayType;
+    }
+
+    private function narrowConstantArrayTypeOfUnionType(ArrayType $arrayType, Type $itemType): ?TypeNode
+    {
+        if ($arrayType instanceof ConstantArrayType && $itemType instanceof UnionType) {
+            $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($itemType);
+            if ($narrowedItemType instanceof ObjectType) {
+                $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
+                return new AttributeAwareArrayTypeNode($itemTypeNode);
+            }
+
+            $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($itemType);
+            if ($narrowedItemType instanceof GenericClassStringType) {
+                $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
+                return new AttributeAwareGenericTypeNode(new AttributeAwareIdentifierTypeNode('array'), [
+                    $itemTypeNode,
+                ]);
+            }
+        }
+
+        return null;
     }
 }

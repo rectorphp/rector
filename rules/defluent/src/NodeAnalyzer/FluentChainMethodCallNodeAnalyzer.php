@@ -31,7 +31,7 @@ final class FluentChainMethodCallNodeAnalyzer
      * Types that look like fluent interface, but actually create a new object.
      * Should be skipped, as they return different object. Not an fluent interface!
      *
-     * @var string[]
+     * @var class-string[]
      */
     private const KNOWN_FACTORY_FLUENT_TYPES = ['PHPStan\Analyser\MutatingScope'];
 

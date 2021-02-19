@@ -36,7 +36,7 @@ final class ChangeFileLoaderInExtensionAndKernelRector extends AbstractRector im
     public const TO = 'to';
 
     /**
-     * @var array<string, string>
+     * @var array<string, class-string>
      */
     private const FILE_LOADERS_BY_TYPE = [
         'xml' => 'Symfony\Component\DependencyInjection\Loader\XmlFileLoader',

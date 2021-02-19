@@ -28,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimpleFunctionAndFilterRector extends AbstractRector
 {
     /**
-     * @var array<string, string>
+     * @var array<class-string, class-string>
      */
     private const OLD_TO_NEW_CLASSES = [
         'Twig_Function_Method' => 'Twig_SimpleFunction',

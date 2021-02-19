@@ -83,7 +83,7 @@ CODE_SAMPLE
         $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
 
         // does it already have a __construct method?
-        if (! $classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (! $classMethod instanceof ClassMethod) {
             $node->name = new Identifier(MethodName::CONSTRUCT);
         }
 

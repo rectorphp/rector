@@ -36,7 +36,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormTypeInstanceToClassConstRector extends AbstractFormAddRector
 {
     /**
-     * @var string[]
+     * @var array<class-string>
      */
     private const CONTROLLER_TYPES = [
         'Symfony\Bundle\FrameworkBundle\Controller\Controller',
@@ -145,7 +145,7 @@ CODE_SAMPLE
                 $argValue->args
             );
 
-            if (! $methodCall instanceof \PhpParser\Node\Expr\MethodCall) {
+            if (! $methodCall instanceof MethodCall) {
                 return null;
             }
         }

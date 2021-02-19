@@ -5,7 +5,6 @@ namespace Rector\Restoration\Tests\Rector\ClassMethod\InferParamFromClassMethodR
 use Hoa\Protocol\Node\Node;
 use PhpParser\Node\Expr\AssignOp\Plus;
 use PhpParser\Node\Expr\BinaryOp\Plus as BinaryPlus;
-use PhpParser\Node\Scalar\String_;
 use Rector\Restoration\Tests\Rector\ClassMethod\InferParamFromClassMethodReturnRector\Source\SomeType;
 
 class SkipAliasAlready extends SomeType

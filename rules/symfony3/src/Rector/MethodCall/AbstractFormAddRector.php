@@ -13,7 +13,7 @@ use Rector\Symfony3\FormHelper\FormTypeStringToTypeProvider;
 abstract class AbstractFormAddRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<class-string>
      */
     private const FORM_TYPES = ['Symfony\Component\Form\FormBuilderInterface', 'Symfony\Component\Form\FormInterface'];
 
