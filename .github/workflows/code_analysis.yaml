@@ -14,10 +14,6 @@ jobs:
                         run: composer validate --strict
 
                     -
-                        name: 'Show command'
-                        run: bin/rector show --ansi
-
-                    -
                         name: Validate Fixtures
                         run: bin/rector validate-fixture-suffix --ansi
 
