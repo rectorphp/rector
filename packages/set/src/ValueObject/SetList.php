@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Set\ValueObject;
 
-final class SetList
+use Rector\Set\Contract\SetListInterface;
+
+final class SetList implements SetListInterface
 {
     /**
      * @var string

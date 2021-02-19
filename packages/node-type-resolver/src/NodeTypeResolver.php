@@ -36,6 +36,7 @@ use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
+use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector as GenericClassStringTypeCorrectorAlias;
 use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassLikeTypeCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
@@ -43,7 +44,6 @@ use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
-use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 
 final class NodeTypeResolver
 {
@@ -78,12 +78,7 @@ final class NodeTypeResolver
     private $classAnalyzer;
 
     /**
-     * @var ClassLikeExistenceChecker
-     */
-    private $classLikeExistenceChecker;
-
-    /**
-     * @var NodeTypeCorrector\GenericClassStringTypeCorrector
+     * @var GenericClassStringTypeCorrector
      */
     private $genericClassStringTypeCorrector;
 
@@ -95,8 +90,7 @@ final class NodeTypeResolver
         ParentClassLikeTypeCorrector $parentClassLikeTypeCorrector,
         TypeUnwrapper $typeUnwrapper,
         ClassAnalyzer $classAnalyzer,
-        ClassLikeExistenceChecker $classLikeExistenceChecker,
-        GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
+        GenericClassStringTypeCorrectorAlias $genericClassStringTypeCorrector,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -107,7 +101,6 @@ final class NodeTypeResolver
         $this->parentClassLikeTypeCorrector = $parentClassLikeTypeCorrector;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->classAnalyzer = $classAnalyzer;
-        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
     }
 

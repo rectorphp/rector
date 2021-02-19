@@ -6,8 +6,6 @@ namespace Rector\NodeTypeResolver\Node;
 
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPStan\Analyser\Scope;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -68,12 +66,12 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const METHOD_NODE = ClassMethod::class;
+    public const METHOD_NODE = 'methodNode';
 
     /**
      * @var string
      */
-    public const FUNCTION_NODE = Function_::class;
+    public const FUNCTION_NODE = 'functionNode';
 
     /**
      * @var string

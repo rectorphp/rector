@@ -57,6 +57,7 @@ final class PHPStanStaticTypeMapper
                 continue;
             }
 
+            dump(get_class($typeMapper));
             return $typeMapper->mapToPHPStanPhpDocTypeNode($type);
         }
 

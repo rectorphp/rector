@@ -90,25 +90,19 @@ final class ArrayTypeMapper implements TypeMapperInterface
             return $this->createGenericArrayType($type, true);
         }
 
-        if ($type instanceof ConstantArrayType) {
-            if ($itemType instanceof UnionType) {
-                $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($itemType);
-                if ($narrowedItemType instanceof ObjectType) {
-                    $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
-                    return new AttributeAwareArrayTypeNode($itemTypeNode);
-                }
+        if ($type instanceof ConstantArrayType && $itemType instanceof UnionType) {
+            $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($itemType);
+            if ($narrowedItemType instanceof ObjectType) {
+                $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
+                return new AttributeAwareArrayTypeNode($itemTypeNode);
+            }
 
-                $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($itemType);
-                if ($narrowedItemType instanceof GenericClassStringType) {
-                    dump($narrowedItemType);
-
-                    $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
-
-                    dump($itemTypeNode);
-                    die;
-
-                    return new AttributeAwareArrayTypeNode($itemTypeNode);
-                }
+            $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($itemType);
+            if ($narrowedItemType instanceof GenericClassStringType) {
+                $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
+                return new AttributeAwareGenericTypeNode(new AttributeAwareIdentifierTypeNode('array'), [
+                    $itemTypeNode,
+                ]);
             }
         }
 

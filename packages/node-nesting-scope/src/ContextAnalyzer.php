@@ -20,12 +20,12 @@ final class ContextAnalyzer
 {
     /**
      * Nodes that break the scope they way up, e.g. class method
-     * @var string[]
+     * @var class-string<\PhpParser\Node>
      */
     private const BREAK_NODES = [FunctionLike::class, ClassMethod::class];
 
     /**
-     * @var string[]
+     * @var class-string<\PhpParser\Node>
      */
     private const LOOP_NODES = [For_::class, Foreach_::class, While_::class, Do_::class, Switch_::class];
 
