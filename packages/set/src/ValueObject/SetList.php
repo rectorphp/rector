@@ -89,12 +89,12 @@ final class SetList
     /**
      * @var string
      */
-    public const DEAD_CLASSES = __DIR__ . '/../../../../config/set/dead-classes.php';
+    public const DEAD_CODE = __DIR__ . '/../../../../config/set/dead-code.php';
 
     /**
      * @var string
      */
-    public const DEAD_CODE = __DIR__ . '/../../../../config/set/dead-code.php';
+    public const DEAD_CODE_STRICT = __DIR__ . '/../../../../config/set/dead-code-strict.php';
 
     /**
      * @var string

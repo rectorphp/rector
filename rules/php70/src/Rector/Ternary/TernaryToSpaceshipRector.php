@@ -104,14 +104,19 @@ CODE_SAMPLE
      */
     private function processSmallerThanTernary(Ternary $node, Ternary $nestedTernary): ?Spaceship
     {
-        if ($node->cond instanceof Smaller && $nestedTernary->cond instanceof Greater && $this->areValues(
-            [$node->if, $nestedTernary->if, $nestedTernary->else],
-            [-1, 1, 0]
-        )) {
-            return new Spaceship($node->cond->left, $node->cond->right);
+        if (! $node->cond instanceof Smaller) {
+            return null;
         }
 
-        return null;
+        if (! $nestedTernary->cond instanceof Greater) {
+            return null;
+        }
+
+        if (! $this->valueResolver->areValues([$node->if, $nestedTernary->if, $nestedTernary->else], [-1, 1, 0])) {
+            return null;
+        }
+
+        return new Spaceship($node->cond->left, $node->cond->right);
     }
 
     /**
@@ -119,13 +124,18 @@ CODE_SAMPLE
      */
     private function processGreaterThanTernary(Ternary $node, Ternary $nestedTernary): ?Spaceship
     {
-        if ($node->cond instanceof Greater && $nestedTernary->cond instanceof Smaller && $this->areValues(
-            [$node->if, $nestedTernary->if, $nestedTernary->else],
-            [-1, 1, 0]
-        )) {
-            return new Spaceship($node->cond->right, $node->cond->left);
+        if (! $node->cond instanceof Greater) {
+            return null;
         }
 
-        return null;
+        if (! $nestedTernary->cond instanceof Smaller) {
+            return null;
+        }
+
+        if (! $this->valueResolver->areValues([$node->if, $nestedTernary->if, $nestedTernary->else], [-1, 1, 0])) {
+            return null;
+        }
+
+        return new Spaceship($node->cond->right, $node->cond->left);
     }
 }
