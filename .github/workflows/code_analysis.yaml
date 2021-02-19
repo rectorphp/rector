@@ -10,6 +10,10 @@ jobs:
             matrix:
                 actions:
                     -
+                        name: 'Composer Validate'
+                        run: composer validate --strict
+
+                    -
                         name: 'Show command'
                         run: bin/rector show --ansi
 
