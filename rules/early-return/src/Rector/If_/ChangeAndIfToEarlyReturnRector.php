@@ -165,7 +165,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return false;
+        return ! $this->isLastIfOrBeforeLastReturn($if);
 
         /*if ($this->isIfReturnsVoid($if)) {
             return true;
@@ -191,7 +191,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $this->isLastIfOrBeforeLastReturn($if);*/
+        */
     }
 
     private function getIfReturn(If_ $if): ?Stmt
