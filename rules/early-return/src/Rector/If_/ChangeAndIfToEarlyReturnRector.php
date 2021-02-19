@@ -165,13 +165,13 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $this->isLastIfOrBeforeLastReturn($if);
-
-        /*if ($this->isIfReturnsVoid($if)) {
+        if ($this->isParentIfReturnsVoid($if)) {
             return true;
         }
 
-        if ($this->isParentIfReturnsVoid($if)) {
+        return ! $this->isLastIfOrBeforeLastReturn($if);
+
+        /*if ($this->isIfReturnsVoid($if)) {
             return true;
         }
 
