@@ -535,7 +535,7 @@ final class NodeRepository
         return $this->names[$name] ?? [];
     }
 
-    public function getStringName(string $locateName): ?string
+    public function getStringName(string $locateName): string
     {
         foreach (array_keys($this->names) as $name) {
             if (fnmatch($locateName, $name, FNM_NOESCAPE)) {
@@ -543,7 +543,7 @@ final class NodeRepository
             }
         }
 
-        return null;
+        return $locateName;
     }
 
     public function findClassMethodConstructorByNew(New_ $new): ?ClassMethod
