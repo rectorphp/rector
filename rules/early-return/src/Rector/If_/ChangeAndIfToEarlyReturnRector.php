@@ -226,14 +226,15 @@ CODE_SAMPLE
      * @param Expr[] $conditions
      * @return If_[]
      */
-    private function createInvertedIfNodesFromConditions(If_ $node, array $conditions, Return_ $return): array
+    private function createInvertedIfNodesFromConditions(If_ $if, array $conditions, Return_ $return): array
     {
         $ifs = [];
+        $isInLoop = $this->isIfInLoop($if);
 
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if        = new If_($invertedCondition);
-            $if->stmts = [$return];
+            $if->stmts = [$isInLoop ? new Continue_() : $return];
 
             $ifs[] = $if;
         }
