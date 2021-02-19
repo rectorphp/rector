@@ -51,13 +51,12 @@ final class UnionTypeCommonTypeNarrower
         $availableTypes = [];
 
         foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof GenericClassStringType) {
-                if ($unionedType->getGenericType() instanceof TypeWithClassName) {
-                    $availableTypes[] = $this->resolveClassParentClassesAndInterfaces($unionedType->getGenericType());
-                    continue;
-                }
-            } else {
+            if (! $unionedType instanceof GenericClassStringType) {
                 return null;
+            }
+
+            if ($unionedType->getGenericType() instanceof TypeWithClassName) {
+                $availableTypes[] = $this->resolveClassParentClassesAndInterfaces($unionedType->getGenericType());
             }
         }
 

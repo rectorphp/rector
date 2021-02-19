@@ -12,6 +12,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use PHPStan\Type\VerbosityLevel;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
@@ -28,7 +29,12 @@ final class TypeHasher
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
 
-    public function createTypeHash(Type $type): string
+    public function areTypesEqual(Type $firstType, Type $secondType): bool
+    {
+        return $this->createTypeHash($firstType) === $this->createTypeHash($secondType);
+    }
+
+    private function createTypeHash(Type $type): string
     {
         if ($type instanceof MixedType) {
             return serialize($type) . $type->isExplicitMixed();
@@ -39,7 +45,8 @@ final class TypeHasher
         }
 
         if ($type instanceof GenericObjectType) {
-            return $this->phpStanStaticTypeMapper->mapToDocString($type);
+            return $type->describe(VerbosityLevel::precise());
+            // return $this->phpStanStaticTypeMapper->mapToDocString($type);
         }
 
         if ($type instanceof TypeWithClassName) {
@@ -59,11 +66,6 @@ final class TypeHasher
         }
 
         return $this->phpStanStaticTypeMapper->mapToDocString($type);
-    }
-
-    public function areTypesEqual(Type $firstType, Type $secondType): bool
-    {
-        return $this->createTypeHash($firstType) === $this->createTypeHash($secondType);
     }
 
     private function resolveUniqueTypeWithClassNameHash(TypeWithClassName $typeWithClassName): string

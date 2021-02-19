@@ -67,6 +67,7 @@ final class TypeComparator
 
         $firstType = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($firstType);
         $secondType = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($secondType);
+
         if ($this->typeHasher->areTypesEqual($firstType, $secondType)) {
             return true;
         }
