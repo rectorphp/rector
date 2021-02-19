@@ -165,6 +165,14 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($if->else !== null) {
+            return true;
+        }
+
+        if ($if->elseifs !== []) {
+            return true;
+        }
+
         if ($this->isParentIfReturnsVoid($if)) {
             return true;
         }
@@ -179,13 +187,6 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($if->else !== null) {
-            return true;
-        }
-
-        if ($if->elseifs !== []) {
-            return true;
-        }
 
         if ($this->isNestedIfInLoop($if)) {
             return true;
@@ -223,7 +224,7 @@ CODE_SAMPLE
      * @param Expr[] $conditions
      * @return If_[]
      */
-    private function createInvertedIfNodesFromConditions(If_ $node, array $conditions, ?Return_ $return): array
+    private function createInvertedIfNodesFromConditions(If_ $node, array $conditions, Return_ $return): array
     {
         $ifs = [];
 
