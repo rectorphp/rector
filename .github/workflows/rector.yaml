@@ -55,8 +55,7 @@ jobs:
                     php-version: 7.3
                     coverage: none
 
-
-            -   run: composer install --no-progress --ansi
+            -   uses: "ramsey/composer-install@v1"
 
             ## First run Rector - here can't be --dry-run !!! it would stop the job with it and not commit anything in the future
             -   run: bin/rector process ${{ matrix.directories }} --ansi --no-progress-bar

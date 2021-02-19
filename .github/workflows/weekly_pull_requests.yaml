@@ -40,11 +40,9 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.4
-                    coverage: xdebug
+                    coverage: none
 
-
-            -
-                run: composer install --no-progress --ansi
+            -   uses: "ramsey/composer-install@v1"
 
             -
                 run: ${{ matrix.actions.run }}
