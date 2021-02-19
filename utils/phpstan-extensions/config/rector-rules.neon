@@ -135,7 +135,7 @@ services:
         class: Symplify\PHPStanRules\Rules\RequireStringArgumentInMethodCallRule
         tags: [phpstan.rules.rule]
         arguments:
-            stringArgByMethodByType:
+            stringArgPositionByMethodByType:
                 Rector\Core\Rector\AbstractRector:
                     isObjectType: [1]
 
