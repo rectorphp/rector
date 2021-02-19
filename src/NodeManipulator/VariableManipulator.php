@@ -184,7 +184,7 @@ final class VariableManipulator
                 return false;
             }
 
-            return $this->betterStandardPrinter->areNodesEqual($node, $variable);
+            return $this->nodeComparator->areNodesEqual($node, $variable);
         });
     }
 }

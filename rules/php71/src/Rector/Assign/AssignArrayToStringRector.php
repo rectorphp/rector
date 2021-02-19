@@ -144,7 +144,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            if (! $this->areNodesEqual($node->var, $expr)) {
+            if (! $this->nodeComparator->areNodesEqual($node->var, $expr)) {
                 return false;
             }
 

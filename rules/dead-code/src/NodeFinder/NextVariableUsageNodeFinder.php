@@ -78,7 +78,7 @@ final class NextVariableUsageNodeFinder
                 return null;
             }
 
-            if (! $this->betterStandardPrinter->areNodesEqual($currentNode, $expr)) {
+            if (! $this->nodeComparator->areNodesEqual($currentNode, $expr)) {
                 return null;
             }
 

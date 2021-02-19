@@ -23,7 +23,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Configuration\Option;
@@ -32,6 +31,7 @@ use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
@@ -215,6 +215,11 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
     private $propertyAdder;
 
     /**
+     * @var NodeComparator
+     */
+    private $nodeComparator;
+
+    /**
      * @required
      */
     public function autowireAbstractTemporaryRector(
@@ -228,7 +233,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
-        ClassNaming $classNaming,
         NodeTypeResolver $nodeTypeResolver,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         VisibilityManipulator $visibilityManipulator,
@@ -245,7 +249,8 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         Skipper $skipper,
         ValueResolver $valueResolver,
         NodeRepository $nodeRepository,
-        BetterNodeFinder $betterNodeFinder
+        BetterNodeFinder $betterNodeFinder,
+        NodeComparator $nodeComparator
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->propertyToAddCollector = $propertyToAddCollector;
@@ -274,6 +279,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         $this->valueResolver = $valueResolver;
         $this->nodeRepository = $nodeRepository;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeComparator = $nodeComparator;
     }
 
     /**
@@ -431,7 +437,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      */
     protected function areNodesEqual($firstNode, $secondNode): bool
     {
-        return $this->betterStandardPrinter->areNodesEqual($firstNode, $secondNode);
+        return $this->nodeComparator->areNodesEqual($firstNode, $secondNode);
     }
 
     protected function getNextExpression(Node $node): ?Node
@@ -656,7 +662,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
             return false;
         }
 
-        return ! $this->areNodesEqual($originalNode, $node);
+        return ! $this->nodeComparator->areNodesEqual($originalNode, $node);
     }
 
     private function mirrorAttributes(Node $oldNode, Node $newNode): void
@@ -702,6 +708,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         }
 
         // names are the same
-        return $this->areNodesEqual($originalNode->getAttribute(AttributeKey::ORIGINAL_NAME), $node);
+        return $this->nodeComparator->areNodesEqual($originalNode->getAttribute(AttributeKey::ORIGINAL_NAME), $node);
     }
 }

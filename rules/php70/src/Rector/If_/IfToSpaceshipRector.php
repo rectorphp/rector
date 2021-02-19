@@ -176,16 +176,16 @@ CODE_SAMPLE
 
     private function areVariablesEqual(BinaryOp $binaryOp, Expr $firstValue, Expr $secondValue): bool
     {
-        if ($this->areNodesEqual($binaryOp->left, $firstValue) && $this->areNodesEqual(
+        if ($this->nodeComparator->areNodesEqual($binaryOp->left, $firstValue) && $this->nodeComparator->areNodesEqual(
             $binaryOp->right,
             $secondValue
         )) {
             return true;
         }
-        if (! $this->areNodesEqual($binaryOp->right, $firstValue)) {
+        if (! $this->nodeComparator->areNodesEqual($binaryOp->right, $firstValue)) {
             return false;
         }
-        return $this->areNodesEqual($binaryOp->left, $secondValue);
+        return $this->nodeComparator->areNodesEqual($binaryOp->left, $secondValue);
     }
 
     private function matchOnEqual(If_ $if): void

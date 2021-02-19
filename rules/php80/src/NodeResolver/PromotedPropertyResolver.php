@@ -155,7 +155,7 @@ final class PromotedPropertyResolver
         Variable $variable
     ): ?Param {
         foreach ($classMethod->params as $param) {
-            if (! $this->betterStandardPrinter->areNodesEqual($variable, $param->var)) {
+            if (! $this->nodeComparator->areNodesEqual($variable, $param->var)) {
                 continue;
             }
 

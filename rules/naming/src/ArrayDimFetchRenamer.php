@@ -55,7 +55,7 @@ final class ArrayDimFetchRenamer
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
 
-            if (! $this->betterStandardPrinter->areNodesEqual($node, $arrayDimFetch)) {
+            if (! $this->nodeComparator->areNodesEqual($node, $arrayDimFetch)) {
                 return null;
             }
 

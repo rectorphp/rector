@@ -87,7 +87,7 @@ final class PregMatchTypeCorrector
             }
 
             // are the same variables
-            if (! $this->betterStandardPrinter->areNodesEqual($funcCallNode->args[2]->value, $node)) {
+            if (! $this->nodeComparator->areNodesEqual($funcCallNode->args[2]->value, $node)) {
                 continue;
             }
 

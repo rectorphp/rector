@@ -114,7 +114,7 @@ final class CurrentAndParentClassMethodComparator
 
             // this only compares variable name, but those can be differnt, so its kinda useless
             $param = $currentClassMethodParams[$key];
-            if (! $this->betterStandardPrinter->areNodesEqual($param->var, $arg->value)) {
+            if (! $this->nodeComparator->areNodesEqual($param->var, $arg->value)) {
                 return false;
             }
         }

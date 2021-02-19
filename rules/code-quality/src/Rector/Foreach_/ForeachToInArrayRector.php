@@ -126,7 +126,7 @@ CODE_SAMPLE
         }
 
         // cannot be "return true;" + "return true;"
-        if ($this->areNodesEqual($return, $returnToRemove)) {
+        if ($this->nodeComparator->areNodesEqual($return, $returnToRemove)) {
             return null;
         }
 
@@ -190,7 +190,7 @@ CODE_SAMPLE
             $binaryOp,
             Variable::class,
             function (Node $node, Node $otherNode) use ($expr): bool {
-                return $this->areNodesEqual($otherNode, $expr);
+                return $this->nodeComparator->areNodesEqual($otherNode, $expr);
             }
         );
     }

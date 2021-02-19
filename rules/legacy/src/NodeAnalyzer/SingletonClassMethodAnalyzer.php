@@ -83,7 +83,7 @@ final class SingletonClassMethodAnalyzer
             return null;
         }
 
-        if (! $this->betterStandardPrinter->areNodesEqual($staticPropertyFetch, $stmt->var)) {
+        if (! $this->nodeComparator->areNodesEqual($staticPropertyFetch, $stmt->var)) {
             return null;
         }
 

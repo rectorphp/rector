@@ -125,7 +125,7 @@ CODE_SAMPLE
         if ($this->isName($funcCall, 'get_class')) {
             $getClassArgumentValue = $funcCall->args[0]->value;
 
-            if ($this->areNodesEqual($expr, $getClassArgumentValue)) {
+            if ($this->nodeComparator->areNodesEqual($expr, $getClassArgumentValue)) {
                 unset($methodCall->args[1]);
 
                 return $methodCall;

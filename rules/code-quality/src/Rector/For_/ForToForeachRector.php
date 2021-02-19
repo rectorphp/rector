@@ -289,7 +289,7 @@ CODE_SAMPLE
             }
 
             // must be the same as foreach value
-            if (! $this->areNodesEqual($node->var, $foreachedValue)) {
+            if (! $this->nodeComparator->areNodesEqual($node->var, $foreachedValue)) {
                 return null;
             }
 

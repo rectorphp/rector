@@ -57,7 +57,7 @@ final class ConcatManipulator
                 return null;
             }
 
-            if (! $this->betterStandardPrinter->areNodesEqual($node->left, $firstConcatItem)) {
+            if (! $this->nodeComparator->areNodesEqual($node->left, $firstConcatItem)) {
                 return null;
             }
 

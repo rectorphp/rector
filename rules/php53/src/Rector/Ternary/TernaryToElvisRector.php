@@ -57,7 +57,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->areNodesEqual($node->cond, $node->if)) {
+        if (! $this->nodeComparator->areNodesEqual($node->cond, $node->if)) {
             return null;
         }
 

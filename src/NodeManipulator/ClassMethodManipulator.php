@@ -65,7 +65,7 @@ final class ClassMethodManipulator
         $isUsedDirectly = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
             $param
         ): bool {
-            return $this->betterStandardPrinter->areNodesEqual($node, $param->var);
+            return $this->nodeComparator->areNodesEqual($node, $param->var);
         });
 
         if ($isUsedDirectly) {

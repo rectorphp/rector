@@ -84,7 +84,7 @@ CODE_SAMPLE
         $haystack = $substrFuncCall->args[0]->value;
 
         $needle = $this->matchUnaryMinusStrlenFuncCallArgValue($substrFuncCall->args[1]->value);
-        if (! $this->areNodesEqual($needle, $comparedNeedleExpr)) {
+        if (! $this->nodeComparator->areNodesEqual($needle, $comparedNeedleExpr)) {
             return null;
         }
 
@@ -111,7 +111,7 @@ CODE_SAMPLE
         $needle = $substrCompareFuncCall->args[1]->value;
 
         $comparedNeedleExpr = $this->matchUnaryMinusStrlenFuncCallArgValue($substrCompareFuncCall->args[2]->value);
-        if (! $this->areNodesEqual($needle, $comparedNeedleExpr)) {
+        if (! $this->nodeComparator->areNodesEqual($needle, $comparedNeedleExpr)) {
             return null;
         }
 

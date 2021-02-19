@@ -76,7 +76,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->areNodesEqual($previousStatement->expr->var, $node->var)) {
+        if (! $this->nodeComparator->areNodesEqual($previousStatement->expr->var, $node->var)) {
             return null;
         }
 
@@ -115,13 +115,13 @@ CODE_SAMPLE
     private function isSelfReferencing(Assign $assign): bool
     {
         return (bool) $this->betterNodeFinder->findFirst($assign->expr, function (Node $subNode) use ($assign): bool {
-            return $this->areNodesEqual($assign->var, $subNode);
+            return $this->nodeComparator->areNodesEqual($assign->var, $subNode);
         });
     }
 
     private function areInSameClassMethod(Assign $assign, Expression $previousExpression): bool
     {
-        return $this->areNodesEqual(
+        return $this->nodeComparator->areNodesEqual(
             $assign->getAttribute(AttributeKey::METHOD_NODE),
             $previousExpression->getAttribute(AttributeKey::METHOD_NODE)
         );

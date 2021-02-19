@@ -115,6 +115,6 @@ final class CountManipulator
 
         $countedExpr = $node->args[0]->value;
 
-        return $this->betterStandardPrinter->areNodesEqual($countedExpr, $expr);
+        return $this->nodeComparator->areNodesEqual($countedExpr, $expr);
     }
 }

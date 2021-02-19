@@ -54,7 +54,7 @@ CODE_SAMPLE
             if ($node->expr instanceof Unset_) {
                 $unset = $node->expr;
 
-                if ($this->areNodesEqual($node->var, $unset->expr)) {
+                if ($this->nodeComparator->areNodesEqual($node->var, $unset->expr)) {
                     return $this->nodeFactory->createFuncCall('unset', [$node->var]);
                 }
             }

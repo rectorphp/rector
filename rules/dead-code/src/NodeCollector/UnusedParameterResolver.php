@@ -105,7 +105,7 @@ final class UnusedParameterResolver
             $parameters1,
             $parameters2,
             function (Param $firstParam, Param $secondParam): int {
-                return $this->betterStandardPrinter->areNodesEqual($firstParam, $secondParam) ? 0 : 1;
+                return $this->nodeComparator->areNodesEqual($firstParam, $secondParam) ? 0 : 1;
             }
         );
     }

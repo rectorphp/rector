@@ -38,7 +38,7 @@ final class ParamAnalyzer
                 return false;
             }
 
-            return $this->betterStandardPrinter->areNodesEqual($node, $param->var);
+            return $this->nodeComparator->areNodesEqual($node, $param->var);
         });
     }
 

@@ -52,7 +52,7 @@ final class ForeachNodeAnalyzer
             return null;
         }
 
-        if (! $this->betterStandardPrinter->areNodesEqual($foreach->valueVar, $onlyStatement->expr)) {
+        if (! $this->nodeComparator->areNodesEqual($foreach->valueVar, $onlyStatement->expr)) {
             return null;
         }
 

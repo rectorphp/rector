@@ -82,7 +82,7 @@ final class ParentGetterStmtsToExternalStmtsFactory
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($getUserStmts, function (Node $node) use (
             $userExpression
         ): ?MethodCall {
-            if (! $this->betterStandardPrinter->areNodesEqual($node, $userExpression)) {
+            if (! $this->nodeComparator->areNodesEqual($node, $userExpression)) {
                 return null;
             }
 

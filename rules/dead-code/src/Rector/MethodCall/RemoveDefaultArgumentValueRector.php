@@ -163,7 +163,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->areNodesEqual($defaultValues[$key], $arg->value)) {
+            if ($this->nodeComparator->areNodesEqual($defaultValues[$key], $arg->value)) {
                 $keysToRemove[] = $key;
             } else {
                 $keysToKeep[] = $key;

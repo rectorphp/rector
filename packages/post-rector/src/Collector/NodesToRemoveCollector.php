@@ -132,7 +132,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
             return (bool) $this->betterNodeFinder->findFirst((array) $parentNode->stmts, function (Node $variable) use (
                 $paramVariable
             ): bool {
-                if (! $this->betterStandardPrinter->areNodesEqual($variable, $paramVariable)) {
+                if (! $this->nodeComparator->areNodesEqual($variable, $paramVariable)) {
                     return false;
                 }
 

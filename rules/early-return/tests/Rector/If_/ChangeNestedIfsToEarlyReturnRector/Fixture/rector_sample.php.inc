@@ -17,8 +17,8 @@ class RectorSample
                     // $a < $b ? -1 : ( > ?  : )
                     if ($node->else->cond instanceof BinaryOp\Greater) {
                         // $a < $b ? -1 : ($a > $b ?  : )
-                        if ($this->areNodesEqual($node->cond->left, $node->else->cond->left)) {
-                            if ($this->areNodesEqual($node->cond->right, $node->else->cond->right)) {
+                        if ($this->nodeComparator->areNodesEqual($node->cond->left, $node->else->cond->left)) {
+                            if ($this->nodeComparator->areNodesEqual($node->cond->right, $node->else->cond->right)) {
                                 // $a < $b ? -1 : ($a > $b ? 1 : 0)
                                 if ($this->getValue($node->else->if) === 1) {
                                     if ($this->getValue($node->else->else) === 0) {
@@ -65,10 +65,10 @@ class RectorSample
             return null;
         }
         // $a < $b ? -1 : ($a > $b ?  : )
-        if (!$this->areNodesEqual($node->cond->left, $node->else->cond->left)) {
+        if (!$this->nodeComparator->areNodesEqual($node->cond->left, $node->else->cond->left)) {
             return null;
         }
-        if (!$this->areNodesEqual($node->cond->right, $node->else->cond->right)) {
+        if (!$this->nodeComparator->areNodesEqual($node->cond->right, $node->else->cond->right)) {
             return null;
         }
         // $a < $b ? -1 : ($a > $b ? 1 : 0)

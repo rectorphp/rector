@@ -75,7 +75,7 @@ CODE_SAMPLE
             }
         }
 
-        if ($this->areNodesEqual($originalCatches, $node->catches)) {
+        if ($this->nodeComparator->areNodesEqual($originalCatches, $node->catches)) {
             return null;
         }
 

@@ -114,7 +114,7 @@ CODE_SAMPLE
         $args[] = new Arg(new LNumber(200));
         $args[] = new Arg($this->getStatusCodeMethodCall);
         $methodCall = $this->nodeFactory->createLocalMethodCall(self::ASSERT_SAME, $args);
-        if ($this->areNodesEqual($node, $methodCall)) {
+        if ($this->nodeComparator->areNodesEqual($node, $methodCall)) {
             return $this->nodeFactory->createLocalMethodCall('assertResponseIsSuccessful');
         }
 
@@ -148,7 +148,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->areNodesEqual($methodCall->args[1]->value, $this->getStatusCodeMethodCall)) {
+        if (! $this->nodeComparator->areNodesEqual($methodCall->args[1]->value, $this->getStatusCodeMethodCall)) {
             return null;
         }
 
@@ -214,7 +214,7 @@ CODE_SAMPLE
 
         $match = $this->nodeFactory->createLocalMethodCall(self::ASSERT_SAME, $args);
 
-        if ($this->areNodesEqual($previousNode, $match)) {
+        if ($this->nodeComparator->areNodesEqual($previousNode, $match)) {
             $getResponseMethodCall = $this->nodeFactory->createMethodCall('client', 'getResponse');
             $propertyFetch = new PropertyFetch($getResponseMethodCall, 'headers');
             $clientGetLocation = $this->nodeFactory->createMethodCall(
@@ -227,7 +227,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($this->areNodesEqual($methodCall->args[1]->value, $clientGetLocation)) {
+            if ($this->nodeComparator->areNodesEqual($methodCall->args[1]->value, $clientGetLocation)) {
                 $args = [];
                 $args[] = $methodCall->args[0];
                 $args[] = $previousNode->args[0];

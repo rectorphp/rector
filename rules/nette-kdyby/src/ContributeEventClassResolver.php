@@ -125,7 +125,7 @@ final class ContributeEventClassResolver
                     continue;
                 }
 
-                if ($this->betterStandardPrinter->areNodesEqual(
+                if ($this->nodeComparator->areNodesEqual(
                     $getterMethodBlueprint->getReturnTypeNode(),
                     $paramType
                 )) {

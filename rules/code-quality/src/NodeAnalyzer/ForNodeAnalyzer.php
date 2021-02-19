@@ -117,7 +117,7 @@ final class ForNodeAnalyzer
         return (bool) $this->betterNodeFinder->findFirst(
             $for->stmts,
             function (Node $node) use ($expr): bool {
-                return $this->betterStandardPrinter->areNodesEqual($node, $expr);
+                return $this->nodeComparator->areNodesEqual($node, $expr);
             }
         );
     }

@@ -106,7 +106,7 @@ CODE_SAMPLE
         foreach ($calls as $call) {
             $classMethod = $this->betterNodeFinder->findParentType($call, ClassMethod::class);
 
-            if ($this->areNodesEqual($classMethod, $node)) {
+            if ($this->nodeComparator->areNodesEqual($classMethod, $node)) {
                 return null;
             }
         }

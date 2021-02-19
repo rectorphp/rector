@@ -80,7 +80,7 @@ final class ClassConstManipulator
 
         return $this->betterNodeFinder->find($searchInNodes, function (Node $node) use ($classConst): bool {
             // itself
-            if ($this->betterStandardPrinter->areNodesEqual($node, $classConst)) {
+            if ($this->nodeComparator->areNodesEqual($node, $classConst)) {
                 return false;
             }
 

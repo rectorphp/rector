@@ -232,7 +232,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            if (! $this->areNodesEqual($node->var, $variable)) {
+            if (! $this->nodeComparator->areNodesEqual($node->var, $variable)) {
                 return false;
             }
 

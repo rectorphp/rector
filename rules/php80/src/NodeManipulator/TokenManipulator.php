@@ -120,7 +120,7 @@ final class TokenManipulator
                 return null;
             }
 
-            if (! $this->betterStandardPrinter->areNodesEqual($node->expr, $singleTokenExpr)) {
+            if (! $this->nodeComparator->areNodesEqual($node->expr, $singleTokenExpr)) {
                 return null;
             }
 
@@ -149,7 +149,7 @@ final class TokenManipulator
                 return null;
             }
 
-            if (! $this->betterStandardPrinter->areNodesEqual($node->var, $this->assignedNameExpr)) {
+            if (! $this->nodeComparator->areNodesEqual($node->var, $this->assignedNameExpr)) {
                 return null;
             }
 
@@ -187,7 +187,7 @@ final class TokenManipulator
             $arrayDimFetch = $arrayDimFetchAndConstFetch->getArrayDimFetch();
             $constFetch = $arrayDimFetchAndConstFetch->getConstFetch();
 
-            if (! $this->betterStandardPrinter->areNodesEqual($arrayDimFetch->var, $singleTokenExpr)) {
+            if (! $this->nodeComparator->areNodesEqual($arrayDimFetch->var, $singleTokenExpr)) {
                 return null;
             }
 
@@ -223,7 +223,7 @@ final class TokenManipulator
                 return null;
             }
 
-            if (! $this->betterStandardPrinter->areNodesEqual($node->args[0]->value, $singleTokenVariable)) {
+            if (! $this->nodeComparator->areNodesEqual($node->args[0]->value, $singleTokenVariable)) {
                 return null;
             }
 
@@ -274,7 +274,7 @@ final class TokenManipulator
                 return null;
             }
 
-            if (! $this->betterStandardPrinter->areNodesEqual($possibleTokenArray->var, $singleTokenExpr)) {
+            if (! $this->nodeComparator->areNodesEqual($possibleTokenArray->var, $singleTokenExpr)) {
                 return null;
             }
 

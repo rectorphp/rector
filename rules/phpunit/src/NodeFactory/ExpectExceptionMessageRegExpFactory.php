@@ -49,7 +49,7 @@ final class ExpectExceptionMessageRegExpFactory
         }
 
         // looking for "$exception->getMessage()"
-        if (! $this->betterStandardPrinter->areNodesEqual($secondArgument->var, $exceptionVariable)) {
+        if (! $this->nodeComparator->areNodesEqual($secondArgument->var, $exceptionVariable)) {
             return null;
         }
 

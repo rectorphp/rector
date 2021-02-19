@@ -43,11 +43,11 @@ final class SymmetricArrayDestructuringToListRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Assign && $this->areNodesEqual($node, $parentNode->var)) {
+        if ($parentNode instanceof Assign && $this->nodeComparator->areNodesEqual($node, $parentNode->var)) {
             return $this->processToList($node);
         }
 
-        if ($parentNode instanceof Foreach_ && $this->areNodesEqual($node, $parentNode->valueVar)) {
+        if ($parentNode instanceof Foreach_ && $this->nodeComparator->areNodesEqual($node, $parentNode->valueVar)) {
             return $this->processToList($node);
         }
 

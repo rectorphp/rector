@@ -59,10 +59,10 @@ final class SimplifyTautologyTernaryRector extends AbstractRector
         $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $node->cond,
             function (Node $leftNode) use ($node): bool {
-                return $this->areNodesEqual($leftNode, $node->if);
+                return $this->nodeComparator->areNodesEqual($leftNode, $node->if);
             },
             function (Node $leftNode) use ($node): bool {
-                return $this->areNodesEqual($leftNode, $node->else);
+                return $this->nodeComparator->areNodesEqual($leftNode, $node->else);
             }
         );
 

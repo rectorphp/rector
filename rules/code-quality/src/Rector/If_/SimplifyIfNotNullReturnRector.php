@@ -92,7 +92,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->areNodesEqual($comparedNode, $nextNode->expr)) {
+            if (! $this->nodeComparator->areNodesEqual($comparedNode, $nextNode->expr)) {
                 return null;
             }
 

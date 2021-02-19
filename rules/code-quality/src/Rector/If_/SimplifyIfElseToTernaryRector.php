@@ -89,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->areNodesEqual($ifAssignVar, $elseAssignVar)) {
+        if (! $this->nodeComparator->areNodesEqual($ifAssignVar, $elseAssignVar)) {
             return null;
         }
 

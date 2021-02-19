@@ -193,7 +193,7 @@ final class RegexPatternArgumentManipulator
                 return null;
             }
 
-            if (! $this->betterStandardPrinter->areNodesEqual($node->var, $variable)) {
+            if (! $this->nodeComparator->areNodesEqual($node->var, $variable)) {
                 return null;
             }
 

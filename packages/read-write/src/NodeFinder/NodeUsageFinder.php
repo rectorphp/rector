@@ -104,7 +104,7 @@ final class NodeUsageFinder
                 return false;
             }
 
-            return $this->betterStandardPrinter->areNodesEqual($node, $expr);
+            return $this->nodeComparator->areNodesEqual($node, $expr);
         }, [Foreach_::class]);
     }
 }

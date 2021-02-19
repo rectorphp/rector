@@ -95,7 +95,7 @@ final class OnFormVariableMethodCallsCollector
                     return null;
                 }
 
-                if (! $this->betterStandardPrinter->areNodesEqual($node->var, $expr)) {
+                if (! $this->nodeComparator->areNodesEqual($node->var, $expr)) {
                     return null;
                 }
 

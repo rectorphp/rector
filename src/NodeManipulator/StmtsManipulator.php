@@ -56,7 +56,7 @@ final class StmtsManipulator
             (array) $classMethod->stmts,
             function (Node $node) use (&$stmts) {
                 foreach ($stmts as $key => $assign) {
-                    if (! $this->betterStandardPrinter->areNodesEqual($node, $assign)) {
+                    if (! $this->nodeComparator->areNodesEqual($node, $assign)) {
                         continue;
                     }
 

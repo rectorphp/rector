@@ -171,7 +171,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->areNodesEqual($checkedNode->var, $firstArgumentExpr)) {
+            if (! $this->nodeComparator->areNodesEqual($checkedNode->var, $firstArgumentExpr)) {
                 return null;
             }
 

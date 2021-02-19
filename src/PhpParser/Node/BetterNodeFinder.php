@@ -301,7 +301,7 @@ final class BetterNodeFinder
                 return false;
             }
 
-            return $this->betterStandardPrinter->areNodesEqual($node->var, $expr);
+            return $this->nodeComparator->areNodesEqual($node->var, $expr);
         });
     }
 

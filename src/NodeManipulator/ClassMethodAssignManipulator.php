@@ -203,12 +203,12 @@ final class ClassMethodAssignManipulator
                 continue;
             }
 
-            if ($this->betterStandardPrinter->areNodesEqual($foreach->valueVar, $variableAssign->var)) {
+            if ($this->nodeComparator->areNodesEqual($foreach->valueVar, $variableAssign->var)) {
                 unset($variableAssigns[$key]);
                 continue;
             }
 
-            if ($this->betterStandardPrinter->areNodesEqual($foreach->keyVar, $variableAssign->var)) {
+            if ($this->nodeComparator->areNodesEqual($foreach->keyVar, $variableAssign->var)) {
                 unset($variableAssigns[$key]);
             }
         }
