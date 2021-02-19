@@ -5,6 +5,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationR
 /**
  * Test case including a dataProvider using yield that is skipped and no typehint added to $id.
  * This can be compared with dataprovider_array.php.inc which has different behavior.
+ * See: https://phpunit.readthedocs.io/en/9.3/writing-tests-for-phpunit.html#data-providers
  */
 final class DemoYieldStringTest
 {
