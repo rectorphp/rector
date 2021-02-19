@@ -15,6 +15,14 @@ jobs:
                             bin/rector init-recipe --ansi
                             bin/rector generate --ansi
 
+                    -
+                        name: 'Rector List'
+                        run: bin/rector list
+
+                    -
+                        name: 'Show command'
+                        run: bin/rector show --ansi
+
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
 
@@ -26,7 +34,9 @@ jobs:
                     php-version: 7.4
                     coverage: none
 
+            # must be removed, as local config is missing dev dependencies
+            -   run: rm phpstan-for-rector.neon
 
-            -   run: composer install --no-progress --ansi
+            -   run: composer install --no-progress --ansi --no-dev
 
             -   run: ${{ matrix.actions.run }}
