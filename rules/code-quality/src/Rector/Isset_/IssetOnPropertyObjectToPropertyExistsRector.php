@@ -31,24 +31,24 @@ final class IssetOnPropertyObjectToPropertyExistsRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-private $x;
+    private $x;
 
-public function run(): void
-{
-    isset($this->x);
-}
+    public function run(): void
+    {
+        isset($this->x);
+    }
 }
 CODE_SAMPLE
 ,
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-private $x;
+    private $x;
 
-public function run(): void
-{
-    property_exists($this, 'x') && $this->x !== null;
-}
+    public function run(): void
+    {
+        property_exists($this, 'x') && $this->x !== null;
+    }
 }
 CODE_SAMPLE
             ),
