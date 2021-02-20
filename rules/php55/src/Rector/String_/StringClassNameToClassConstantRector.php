@@ -9,13 +9,14 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
+use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -31,7 +32,7 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
      * @api
      * @var string
      */
-    public const CLASSES_TO_SKIP = '$classesToSkip';
+    public const CLASSES_TO_SKIP = 'classes_to_skip';
 
     /**
      * @var string[]
@@ -51,6 +52,16 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
      * @var string[]
      */
     private $sensitiveNonExistingClasses = [];
+
+    /**
+     * @var ClassLikeExistenceChecker
+     */
+    private $classLikeExistenceChecker;
+
+    public function __construct(ClassLikeExistenceChecker $classLikeExistenceChecker)
+    {
+        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -116,15 +127,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->classLikeSensitiveExists($classLikeName)) {
-            return null;
-        }
-
-        if (StaticRectorStrings::isInArrayInsensitive($classLikeName, $this->classesToSkip)) {
-            return null;
-        }
-
-        if ($this->isPartOfIsAFuncCall($node)) {
+        if ($this->shouldSkip($classLikeName, $node)) {
             return null;
         }
 
@@ -136,16 +139,21 @@ CODE_SAMPLE
         return new ClassConstFetch($fullyQualified, 'class');
     }
 
+    /**
+     * @param array<string, string[]> $configuration
+     */
     public function configure(array $configuration): void
     {
-        if (isset($configuration[self::CLASSES_TO_SKIP])) {
-            $this->classesToSkip = $configuration[self::CLASSES_TO_SKIP];
+        if (! isset($configuration[self::CLASSES_TO_SKIP])) {
+            return;
         }
+
+        $this->classesToSkip = $configuration[self::CLASSES_TO_SKIP];
     }
 
     private function classLikeSensitiveExists(string $classLikeName): bool
     {
-        if (! ClassExistenceStaticHelper::doesClassLikeExist($classLikeName)) {
+        if (! $this->classLikeExistenceChecker->doesClassLikeExist($classLikeName)) {
             return false;
         }
 
@@ -175,11 +183,31 @@ CODE_SAMPLE
         if (! $parent instanceof Arg) {
             return false;
         }
+
         $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentParent instanceof Node) {
             return false;
         }
 
         return $this->isFuncCallName($parentParent, 'is_a');
+    }
+
+    private function shouldSkip(string $classLikeName, String_ $string): bool
+    {
+        if (! $this->classLikeSensitiveExists($classLikeName)) {
+            return true;
+        }
+
+        if (StaticRectorStrings::isInArrayInsensitive($classLikeName, $this->classesToSkip)) {
+            return true;
+        }
+
+        if ($this->isPartOfIsAFuncCall($string)) {
+            return true;
+        }
+
+        // allow class strings to be part of class const arrays, as probably on purpose
+        $parentClassConst = $this->betterNodeFinder->findParentType($string, ClassConst::class);
+        return $parentClassConst instanceof ClassConst;
     }
 }
