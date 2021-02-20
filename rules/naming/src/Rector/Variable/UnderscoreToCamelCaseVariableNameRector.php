@@ -113,9 +113,11 @@ CODE_SAMPLE
         if ($camelCaseName === 'this') {
             return null;
         }
+
         if ($camelCaseName === '') {
             return null;
         }
+
         if (is_numeric($camelCaseName[0])) {
             return null;
         }
@@ -123,6 +125,10 @@ CODE_SAMPLE
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Param) {
             return $this->renameParam($parent);
+        }
+
+        if ($this->isName($node, $camelCaseName)) {
+            return null;
         }
 
         $node->name = $camelCaseName;
@@ -142,9 +148,6 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Variable $variable */
-        $variable = $renamedParam->var;
-
-        return $variable;
+        return $renamedParam->var;
     }
 }
