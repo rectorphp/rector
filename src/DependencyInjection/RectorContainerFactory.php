@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Rector\Core\DependencyInjection;
 
 use Psr\Container\ContainerInterface;
+use Rector\Caching\Detector\ChangedFilesDetector;
+use Rector\Core\Configuration\Configuration;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\Stubs\StubLoader;
+use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use Symplify\PackageBuilder\Console\Input\StaticInputDetector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -35,6 +38,24 @@ final class RectorContainerFactory
         $rectorKernel->boot();
 
         return $rectorKernel->getContainer();
+    }
+
+    public function createFromBootstrapConfigs(BootstrapConfigs $bootstrapConfigs): ContainerInterface
+    {
+        $container = $this->createFromConfigs($bootstrapConfigs->getConfigFileInfos());
+
+        $mainConfigFileInfo = $bootstrapConfigs->getMainConfigFileInfo();
+        if ($mainConfigFileInfo !== null) {
+            /** @var ChangedFilesDetector $changedFilesDetector */
+            $changedFilesDetector = $container->get(ChangedFilesDetector::class);
+            $changedFilesDetector->setFirstResolvedConfigFileInfo($mainConfigFileInfo);
+        }
+
+        /** @var Configuration $configuration */
+        $configuration = $container->get(Configuration::class);
+        $configuration->setBootstrapConfigs($bootstrapConfigs);
+
+        return $container;
     }
 
     /**

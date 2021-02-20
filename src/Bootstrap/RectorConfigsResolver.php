@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Bootstrap;
 
+use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use Rector\Set\RectorSetProvider;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symplify\SetConfigResolver\ConfigResolver;
@@ -44,48 +45,26 @@ final class RectorConfigsResolver
             return $this->resolvedConfigFileInfos[$hash];
         }
 
-        $setFileInfos = $this->resolveSetFileInfosFromConfigFileInfos([$configFileInfo]);
+        $setFileInfos = $this->setAwareConfigResolver->resolveFromParameterSetsFromConfigFiles([$configFileInfo]);
         $configFileInfos = array_merge([$configFileInfo], $setFileInfos);
 
         $this->resolvedConfigFileInfos[$hash] = $configFileInfos;
         return $configFileInfos;
     }
 
-    /**
-     * @noRector
-     */
-    public function getFirstResolvedConfig(): ?SmartFileInfo
-    {
-        return $this->configResolver->getFirstResolvedConfigFileInfo();
-    }
-
-    /**
-     * @param SmartFileInfo[] $configFileInfos
-     * @return SmartFileInfo[]
-     */
-    public function resolveSetFileInfosFromConfigFileInfos(array $configFileInfos): array
-    {
-        return $this->setAwareConfigResolver->resolveFromParameterSetsFromConfigFiles($configFileInfos);
-    }
-
-    /**
-     * @return SmartFileInfo[]
-     */
-    public function provide(): array
+    public function provide(): BootstrapConfigs
     {
         $configFileInfos = [];
 
         $argvInput = new ArgvInput();
-        $inputOrFallbackConfigFileInfo = $this->configResolver->resolveFromInputWithFallback(
-            $argvInput,
-            ['rector.php']
-        );
+        $mainConfigFileInfo = $this->configResolver->resolveFromInputWithFallback($argvInput, ['rector.php']);
 
-        if ($inputOrFallbackConfigFileInfo !== null) {
-            $configFileInfos[] = $inputOrFallbackConfigFileInfo;
+        if ($mainConfigFileInfo !== null) {
+            $setFileInfos = $this->setAwareConfigResolver->resolveFromParameterSetsFromConfigFiles(
+                [$mainConfigFileInfo]
+            );
+            $configFileInfos = array_merge($configFileInfos, $setFileInfos);
         }
-
-        $setFileInfos = $this->resolveSetFileInfosFromConfigFileInfos($configFileInfos);
 
         if (in_array($argvInput->getFirstArgument(), ['generate', 'g', 'create', 'c'], true)) {
             // autoload rector recipe file if present, just for \Rector\RectorGenerator\Command\GenerateCommand
@@ -95,6 +74,6 @@ final class RectorConfigsResolver
             }
         }
 
-        return array_merge($configFileInfos, $setFileInfos);
+        return new BootstrapConfigs($mainConfigFileInfo, $configFileInfos);
     }
 }
