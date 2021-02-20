@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\ValueObject\MethodName;
-use Rector\Generic\Rector\ClassMethod\AddMethodParentCallRector;
+use Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector;
 
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\ValueObject\ArgumentAdder;

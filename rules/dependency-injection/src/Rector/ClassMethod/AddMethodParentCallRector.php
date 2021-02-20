@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\ClassMethod;
+namespace Rector\DependencyInjection\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
+ * @see \Rector\DependencyInjection\Tests\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
  */
 final class AddMethodParentCallRector extends AbstractRector implements ConfigurableRectorInterface
 {

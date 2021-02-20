@@ -6,7 +6,7 @@ use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\Core\ValueObject\Visibility;
 use Rector\Defluent\Rector\ClassMethod\NormalToFluentRector;
-use Rector\Generic\ValueObject\NormalToFluent;
+use Rector\Defluent\ValueObject\NormalToFluent;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;

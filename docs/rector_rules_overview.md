@@ -6814,10 +6814,10 @@ Add method parent call, in case new parent method is added
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassMethod\AddMethodParentCallRector`
+- class: `Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector`
 
 ```php
-use Rector\Generic\Rector\ClassMethod\AddMethodParentCallRector;
+use Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -6962,7 +6962,7 @@ Turns fluent interface calls to classic ones.
 
 ```php
 use Rector\Defluent\Rector\ClassMethod\NormalToFluentRector;
-use Rector\Generic\ValueObject\NormalToFluent;
+use Rector\Defluent\ValueObject\NormalToFluent;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -7000,7 +7000,7 @@ Change method that returns single value to multiple values
 
 ```php
 use Rector\Transform\Rector\ClassMethod\SingleToManyMethodRector;
-use Rector\Generic\ValueObject\SingleToManyMethod;
+use Rector\Transform\ValueObject\SingleToManyMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -7086,7 +7086,7 @@ Wrap return value of specific method
 
 ```php
 use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
-use Rector\Generic\ValueObject\WrapReturn;
+use Rector\Transform\ValueObject\WrapReturn;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
