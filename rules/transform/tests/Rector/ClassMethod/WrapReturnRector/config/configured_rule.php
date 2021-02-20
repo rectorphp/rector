@@ -1,8 +1,8 @@
 <?php
 
-use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
-use Rector\Generic\Tests\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
 use Rector\Generic\ValueObject\WrapReturn;
+use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
+use Rector\Transform\Tests\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

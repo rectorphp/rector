@@ -6958,10 +6958,10 @@ Turns fluent interface calls to classic ones.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassMethod\NormalToFluentRector`
+- class: `Rector\Defluent\Rector\ClassMethod\NormalToFluentRector`
 
 ```php
-use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
+use Rector\Defluent\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\ValueObject\NormalToFluent;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -7082,10 +7082,10 @@ Wrap return value of specific method
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassMethod\WrapReturnRector`
+- class: `Rector\Transform\Rector\ClassMethod\WrapReturnRector`
 
 ```php
-use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
+use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\ValueObject\WrapReturn;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

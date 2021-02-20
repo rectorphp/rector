@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\ClassMethod\WrapReturnRector;
+namespace Rector\Defluent\Tests\Rector\ClassMethod\NormalToFluentRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class WrapReturnRectorTest extends AbstractRectorTestCase
+final class NormalToFluentRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

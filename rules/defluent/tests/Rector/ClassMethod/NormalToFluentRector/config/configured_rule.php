@@ -1,7 +1,7 @@
 <?php
 
-use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
-use Rector\Generic\Tests\Rector\ClassMethod\NormalToFluentRector\Source\FluentInterfaceClass;
+use Rector\Defluent\Rector\ClassMethod\NormalToFluentRector;
+use Rector\Defluent\Tests\Rector\ClassMethod\NormalToFluentRector\Source\FluentInterfaceClass;
 use Rector\Generic\ValueObject\NormalToFluent;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
