@@ -148,6 +148,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $renamedParam->var instanceof Variable) {
+            return null;
+        }
+
         return $renamedParam->var;
     }
 }
