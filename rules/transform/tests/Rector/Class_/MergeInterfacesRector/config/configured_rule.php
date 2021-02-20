@@ -1,8 +1,8 @@
 <?php
 
-use Rector\Generic\Rector\Class_\MergeInterfacesRector;
-use Rector\Generic\Tests\Rector\Class_\MergeInterfacesRector\Source\SomeInterface;
-use Rector\Generic\Tests\Rector\Class_\MergeInterfacesRector\Source\SomeOldInterface;
+use Rector\Transform\Rector\Class_\MergeInterfacesRector;
+use Rector\Transform\Tests\Rector\Class_\MergeInterfacesRector\Source\SomeInterface;
+use Rector\Transform\Tests\Rector\Class_\MergeInterfacesRector\Source\SomeOldInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

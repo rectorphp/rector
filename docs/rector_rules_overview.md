@@ -7015,10 +7015,10 @@ Merges old interface to a new one, that already has its methods
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Class_\MergeInterfacesRector`
+- class: `Rector\Transform\Rector\Class_\MergeInterfacesRector`
 
 ```php
-use Rector\Generic\Rector\Class_\MergeInterfacesRector;
+use Rector\Transform\Rector\Class_\MergeInterfacesRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
