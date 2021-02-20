@@ -10,20 +10,18 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
-use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\DependencyInjection\TypeAnalyzer\JMSDITypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Symfony\ServiceMapProvider;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see https://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations#inject
@@ -33,12 +31,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class InjectAnnotationClassRector extends AbstractRector
 {
     /**
-     * @var array<string, class-string<AbstractTagValueNode>>
+     * @var array<class-string<AbstractTagValueNode>>
      */
-    private const ANNOTATION_TO_TAG_CLASS = [
-        'DI\Annotation\Inject' => PHPDIInjectTagValueNode::class,
-        'JMS\DiExtraBundle\Annotation\Inject' => JMSInjectTagValueNode::class,
-    ];
+    private const ANNOTATION_TO_TAG_CLASS = [PHPDIInjectTagValueNode::class, JMSInjectTagValueNode::class];
 
     /**
      * @var string
@@ -47,34 +42,25 @@ final class InjectAnnotationClassRector extends AbstractRector
     private const BETWEEN_PERCENT_CHARS_REGEX = '#%(.*?)%#';
 
     /**
-     * @var ErrorAndDiffCollector
-     */
-    private $errorAndDiffCollector;
-
-    /**
-     * @var ServiceMapProvider
-     */
-    private $serviceMapProvider;
-
-    /**
      * @var PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
 
-    public function __construct(
-        ServiceMapProvider $serviceMapProvider,
-        ErrorAndDiffCollector $errorAndDiffCollector,
-        PhpDocTypeChanger $phpDocTypeChanger
-    ) {
-        $this->errorAndDiffCollector = $errorAndDiffCollector;
-        $this->serviceMapProvider = $serviceMapProvider;
+    /**
+     * @var JMSDITypeResolver
+     */
+    private $jmsDITypeResolver;
+
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, JMSDITypeResolver $jmsDITypeResolver)
+    {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->jmsDITypeResolver = $jmsDITypeResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes properties with specified annotations class to constructor injection', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+            new CodeSample(
                 <<<'CODE_SAMPLE'
 use JMS\DiExtraBundle\Annotation as DI;
 
@@ -122,7 +108,7 @@ CODE_SAMPLE
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        foreach (self::ANNOTATION_TO_TAG_CLASS as $annotationClass => $tagClass) {
+        foreach (self::ANNOTATION_TO_TAG_CLASS as $tagClass) {
             $injectTagValueNode = $phpDocInfo->getByType($tagClass);
             if ($injectTagValueNode === null) {
                 continue;
@@ -147,7 +133,6 @@ CODE_SAMPLE
         }
 
         $serviceName = $phpDocTagValueNode->getServiceName();
-
         if ($serviceName === null) {
             return false;
         }
@@ -158,7 +143,7 @@ CODE_SAMPLE
     private function resolveType(Property $property, PhpDocTagValueNode $phpDocTagValueNode): Type
     {
         if ($phpDocTagValueNode instanceof JMSInjectTagValueNode) {
-            return $this->resolveJMSDIInjectType($property, $phpDocTagValueNode);
+            return $this->jmsDITypeResolver->resolve($property, $phpDocTagValueNode);
         }
 
         if ($phpDocTagValueNode instanceof PHPDIInjectTagValueNode) {
@@ -176,7 +161,6 @@ CODE_SAMPLE
         }
 
         $propertyName = $this->getName($property);
-
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
@@ -195,57 +179,5 @@ CODE_SAMPLE
         }
 
         return $property;
-    }
-
-    private function resolveJMSDIInjectType(Property $property, JMSInjectTagValueNode $jmsInjectTagValueNode): Type
-    {
-        $serviceMap = $this->serviceMapProvider->provide();
-        $serviceName = $jmsInjectTagValueNode->getServiceName();
-
-        if ($serviceName) {
-            if (class_exists($serviceName)) {
-                // single class service
-                return new ObjectType($serviceName);
-            }
-
-            // 2. service name
-            if ($serviceMap->hasService($serviceName)) {
-                $serviceType = $serviceMap->getServiceType($serviceName);
-                if ($serviceType !== null) {
-                    return $serviceType;
-                }
-            }
-        }
-
-        // 3. service is in @var annotation
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-
-        $varType = $phpDocInfo->getVarType();
-        if (! $varType instanceof MixedType) {
-            return $varType;
-        }
-
-        // the @var is missing and service name was not found → report it
-        $this->reportServiceNotFound($serviceName, $property);
-
-        return new MixedType();
-    }
-
-    private function reportServiceNotFound(?string $serviceName, Property $property): void
-    {
-        if ($serviceName !== null) {
-            return;
-        }
-
-        /** @var SmartFileInfo $fileInfo */
-        $fileInfo = $property->getAttribute(AttributeKey::FILE_INFO);
-
-        $errorMessage = sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName);
-
-        $this->errorAndDiffCollector->addErrorWithRectorClassMessageAndFileInfo(
-            self::class,
-            $errorMessage,
-            $fileInfo
-        );
     }
 }
