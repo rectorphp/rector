@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
@@ -40,7 +41,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
     /**
-     * @var array<class-string<AbstractTagValueNode>>
+     * @var array<class-string<ShortNameAwareTagInterface>>
      */
     private const INJECT_TAG_VALUE_NODE_TYPES = [PHPDIInjectTagValueNode::class, JMSInjectTagValueNode::class];
 
