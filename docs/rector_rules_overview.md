@@ -4,6 +4,8 @@
 
 ## Categories
 
+- [Arguments](#arguments) (3)
+
 - [Autodiscovery](#autodiscovery) (4)
 
 - [CakePHP](#cakephp) (6)
@@ -22,9 +24,9 @@
 
 - [DeadDocBlock](#deaddocblock) (5)
 
-- [Defluent](#defluent) (8)
+- [Defluent](#defluent) (9)
 
-- [DependencyInjection](#dependencyinjection) (4)
+- [DependencyInjection](#dependencyinjection) (5)
 
 - [Doctrine](#doctrine) (18)
 
@@ -45,8 +47,6 @@
 - [DowngradePhp80](#downgradephp80) (12)
 
 - [EarlyReturn](#earlyreturn) (10)
-
-- [Generic](#generic) (7)
 
 - [Generics](#generics) (1)
 
@@ -136,11 +136,158 @@
 
 - [SymfonyPhpConfig](#symfonyphpconfig) (1)
 
-- [Transform](#transform) (32)
+- [Transform](#transform) (34)
 
 - [TypeDeclaration](#typedeclaration) (17)
 
 - [Visibility](#visibility) (3)
+
+<br>
+
+## Arguments
+
+### ArgumentAdderRector
+
+This Rector adds new default arguments in calls of defined methods and class types.
+
+:wrench: **configure it!**
+
+- class: `Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector`
+
+```php
+use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Arguments\ValueObject\ArgumentAdder;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ArgumentAdderRector::class)
+        ->call('configure', [[
+            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ $someObject = new SomeExampleClass;
+-$someObject->someMethod();
++$someObject->someMethod(true);
+```
+
+<br>
+
+```php
+use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Arguments\ValueObject\ArgumentAdder;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ArgumentAdderRector::class)
+        ->call('configure', [[
+            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class MyCustomClass extends SomeExampleClass
+ {
+-    public function someMethod()
++    public function someMethod($value = true)
+     {
+     }
+ }
+```
+
+<br>
+
+### ArgumentDefaultValueReplacerRector
+
+Replaces defined map of arguments in defined methods and their calls.
+
+:wrench: **configure it!**
+
+- class: `Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector`
+
+```php
+use Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
+use Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ArgumentDefaultValueReplacerRector::class)
+        ->call('configure', [[
+            ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => ValueObjectInliner::inline([
+                new ArgumentDefaultValueReplacer('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', 'false'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->someMethod(SomeClass::OLD_CONSTANT);
++$someObject->someMethod(false);'
+```
+
+<br>
+
+### SwapFuncCallArgumentsRector
+
+Swap arguments in function calls
+
+:wrench: **configure it!**
+
+- class: `Rector\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector`
+
+```php
+use Rector\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector;
+use Rector\Arguments\ValueObject\SwapFuncCallArguments;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(SwapFuncCallArgumentsRector::class)
+        ->call('configure', [[
+            SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => ValueObjectInliner::inline([
+                new SwapFuncCallArguments('some_function', [1, 0]), ]
+            ),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     public function run($one, $two)
+     {
+-        return some_function($one, $two);
++        return some_function($two, $one);
+     }
+ }
+```
 
 <br>
 
@@ -4215,6 +4362,44 @@ Turns fluent interface calls to classic ones.
 
 <br>
 
+### NormalToFluentRector
+
+Turns fluent interface calls to classic ones.
+
+:wrench: **configure it!**
+
+- class: `Rector\Defluent\Rector\ClassMethod\NormalToFluentRector`
+
+```php
+use Rector\Defluent\Rector\ClassMethod\NormalToFluentRector;
+use Rector\Defluent\ValueObject\NormalToFluent;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(NormalToFluentRector::class)
+        ->call('configure', [[
+            NormalToFluentRector::CALLS_TO_FLUENT => ValueObjectInliner::inline([
+                new NormalToFluent('SomeClass', ['someFunction', 'otherFunction']), ]
+            ),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ $someObject = new SomeClass();
+-$someObject->someFunction();
+-$someObject->otherFunction();
++$someObject->someFunction()
++    ->otherFunction();
+```
+
+<br>
+
 ### ReturnFluentChainMethodCallToNormalMethodCallRector
 
 Turns fluent interface calls to classic ones.
@@ -4297,6 +4482,46 @@ Turns action injection in Controllers to constructor injection
 +    public function default()
 +    {
 +        $products = $this->productRepository->fetchAll();
+     }
+ }
+```
+
+<br>
+
+### AddMethodParentCallRector
+
+Add method parent call, in case new parent method is added
+
+:wrench: **configure it!**
+
+- class: `Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector`
+
+```php
+use Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddMethodParentCallRector::class)
+        ->call('configure', [[
+            AddMethodParentCallRector::METHODS_BY_PARENT_TYPES => [
+                'ParentClassWithNewConstructor' => '__construct',
+            ],
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SunshineCommand extends ParentClassWithNewConstructor
+ {
+     public function __construct()
+     {
+         $value = 5;
++
++        parent::__construct();
      }
  }
 ```
@@ -6800,315 +7025,6 @@ Changes Single return of && && to early returns
 +            return false;
 +        }
 +        return (bool) $somethingelse;
-     }
- }
-```
-
-<br>
-
-## Generic
-
-### AddMethodParentCallRector
-
-Add method parent call, in case new parent method is added
-
-:wrench: **configure it!**
-
-- class: `Rector\Generic\Rector\ClassMethod\AddMethodParentCallRector`
-
-```php
-use Rector\Generic\Rector\ClassMethod\AddMethodParentCallRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(AddMethodParentCallRector::class)
-        ->call('configure', [[
-            AddMethodParentCallRector::METHODS_BY_PARENT_TYPES => [
-                'ParentClassWithNewConstructor' => '__construct',
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SunshineCommand extends ParentClassWithNewConstructor
- {
-     public function __construct()
-     {
-         $value = 5;
-+
-+        parent::__construct();
-     }
- }
-```
-
-<br>
-
-### ArgumentAdderRector
-
-This Rector adds new default arguments in calls of defined methods and class types.
-
-:wrench: **configure it!**
-
-- class: `Rector\Generic\Rector\ClassMethod\ArgumentAdderRector`
-
-```php
-use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
-use Rector\Generic\ValueObject\ArgumentAdder;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ArgumentAdderRector::class)
-        ->call('configure', [[
-            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
-                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- $someObject = new SomeExampleClass;
--$someObject->someMethod();
-+$someObject->someMethod(true);
-```
-
-<br>
-
-```php
-use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
-use Rector\Generic\ValueObject\ArgumentAdder;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ArgumentAdderRector::class)
-        ->call('configure', [[
-            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
-                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- class MyCustomClass extends SomeExampleClass
- {
--    public function someMethod()
-+    public function someMethod($value = true)
-     {
-     }
- }
-```
-
-<br>
-
-### ArgumentDefaultValueReplacerRector
-
-Replaces defined map of arguments in defined methods and their calls.
-
-:wrench: **configure it!**
-
-- class: `Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector`
-
-```php
-use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
-use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ArgumentDefaultValueReplacerRector::class)
-        ->call('configure', [[
-            ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => ValueObjectInliner::inline([
-                new ArgumentDefaultValueReplacer('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', 'false'),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- $someObject = new SomeClass;
--$someObject->someMethod(SomeClass::OLD_CONSTANT);
-+$someObject->someMethod(false);'
-```
-
-<br>
-
-### NormalToFluentRector
-
-Turns fluent interface calls to classic ones.
-
-:wrench: **configure it!**
-
-- class: `Rector\Generic\Rector\ClassMethod\NormalToFluentRector`
-
-```php
-use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
-use Rector\Generic\ValueObject\NormalToFluent;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(NormalToFluentRector::class)
-        ->call('configure', [[
-            NormalToFluentRector::CALLS_TO_FLUENT => ValueObjectInliner::inline([
-                new NormalToFluent('SomeClass', ['someFunction', 'otherFunction']), ]
-            ),
-        ]]);
-};
-```
-
-↓
-
-```diff
- $someObject = new SomeClass();
--$someObject->someFunction();
--$someObject->otherFunction();
-+$someObject->someFunction()
-+    ->otherFunction();
-```
-
-<br>
-
-### SingleToManyMethodRector
-
-Change method that returns single value to multiple values
-
-:wrench: **configure it!**
-
-- class: `Rector\Generic\Rector\ClassMethod\SingleToManyMethodRector`
-
-```php
-use Rector\Generic\Rector\ClassMethod\SingleToManyMethodRector;
-use Rector\Generic\ValueObject\SingleToManyMethod;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(SingleToManyMethodRector::class)
-        ->call('configure', [[
-            SingleToManyMethodRector::SINGLES_TO_MANY_METHODS => ValueObjectInliner::inline([
-                new SingleToManyMethod('SomeClass', 'getNode', 'getNodes'),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
--    public function getNode(): string
-+    /**
-+     * @return string[]
-+     */
-+    public function getNodes(): array
-     {
--        return 'Echo_';
-+        return ['Echo_'];
-     }
- }
-```
-
-<br>
-
-### SwapFuncCallArgumentsRector
-
-Swap arguments in function calls
-
-:wrench: **configure it!**
-
-- class: `Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector`
-
-```php
-use Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector;
-use Rector\Generic\ValueObject\SwapFuncCallArguments;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(SwapFuncCallArgumentsRector::class)
-        ->call('configure', [[
-            SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => ValueObjectInliner::inline([
-                new SwapFuncCallArguments('some_function', [1, 0]), ]
-            ),
-        ]]);
-};
-```
-
-↓
-
-```diff
- final class SomeClass
- {
-     public function run($one, $two)
-     {
--        return some_function($one, $two);
-+        return some_function($two, $one);
-     }
- }
-```
-
-<br>
-
-### WrapReturnRector
-
-Wrap return value of specific method
-
-:wrench: **configure it!**
-
-- class: `Rector\Generic\Rector\ClassMethod\WrapReturnRector`
-
-```php
-use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
-use Rector\Generic\ValueObject\WrapReturn;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(WrapReturnRector::class)
-        ->call('configure', [[
-            WrapReturnRector::TYPE_METHOD_WRAPS => ValueObjectInliner::inline([new WrapReturn('SomeClass', 'getItem', true)]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- final class SomeClass
- {
-     public function getItem()
-     {
--        return 1;
-+        return [1];
      }
  }
 ```
@@ -16290,6 +16206,51 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+### SingleToManyMethodRector
+
+Change method that returns single value to multiple values
+
+:wrench: **configure it!**
+
+- class: `Rector\Transform\Rector\ClassMethod\SingleToManyMethodRector`
+
+```php
+use Rector\Transform\Rector\ClassMethod\SingleToManyMethodRector;
+use Rector\Transform\ValueObject\SingleToManyMethod;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(SingleToManyMethodRector::class)
+        ->call('configure', [[
+            SingleToManyMethodRector::SINGLES_TO_MANY_METHODS => ValueObjectInliner::inline([
+                new SingleToManyMethod('SomeClass', 'getNode', 'getNodes'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+-    public function getNode(): string
++    /**
++     * @return string[]
++     */
++    public function getNodes(): array
+     {
+-        return 'Echo_';
++        return ['Echo_'];
+     }
+ }
+```
+
+<br>
+
 ### StaticCallToFuncCallRector
 
 Turns static call to function call.
@@ -16614,6 +16575,45 @@ return static function (ContainerConfigurator $containerConfigurator): void {
      {
 -        $phpDocInfo = $node->getAttribute('php_doc_info');
 +        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+     }
+ }
+```
+
+<br>
+
+### WrapReturnRector
+
+Wrap return value of specific method
+
+:wrench: **configure it!**
+
+- class: `Rector\Transform\Rector\ClassMethod\WrapReturnRector`
+
+```php
+use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
+use Rector\Transform\ValueObject\WrapReturn;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(WrapReturnRector::class)
+        ->call('configure', [[
+            WrapReturnRector::TYPE_METHOD_WRAPS => ValueObjectInliner::inline([new WrapReturn('SomeClass', 'getItem', true)]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     public function getItem()
+     {
+-        return 1;
++        return [1];
      }
  }
 ```
