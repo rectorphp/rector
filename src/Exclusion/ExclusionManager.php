@@ -47,11 +47,13 @@ final class ExclusionManager
 
         // recurse up until a Stmt node is found since it might contain a noRector
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $node instanceof Stmt && $parentNode !== null) {
-            return $this->isNodeSkippedByRector($parentNode, $phpRector);
+        if ($node instanceof Stmt) {
+            return false;
         }
-
-        return false;
+        if ($parentNode === null) {
+            return false;
+        }
+        return $this->isNodeSkippedByRector($parentNode, $phpRector);
     }
 
     private function hasNoRectorPhpDocTagMatch(Node $node, PhpRectorInterface $phpRector): bool
