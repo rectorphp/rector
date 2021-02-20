@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
+use Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
+use Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
-use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
-use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
 use Rector\Nette\Rector\Class_\MoveFinalGetUserToCheckRequirementsClassMethodRector;
 use Rector\Nette\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector;
 use Rector\Nette\Rector\MethodCall\AddNextrasDatePickerToDateControlRector;

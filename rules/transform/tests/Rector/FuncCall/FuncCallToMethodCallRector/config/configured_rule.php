@@ -14,7 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new FuncCallToMethodCall('view', 'Namespaced\SomeRenderer', 'render'),
                 new FuncCallToMethodCall('translate', SomeTranslator::class, 'translateMethod'),
                 new FuncCallToMethodCall(
-                    'Rector\Generic\Tests\Rector\Function_\FuncCallToMethodCallRector\Source\some_view_function',
+                    'Rector\Arguments\Tests\Rector\Function_\FuncCallToMethodCallRector\Source\some_view_function',
                     'Namespaced\SomeRenderer',
                     'render'
                 ),

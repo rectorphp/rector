@@ -5,13 +5,13 @@ declare(strict_types=1);
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 
+use Rector\Arguments\NodeAnalyzer\ArgumentAddingScope;
+use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
+use Rector\Arguments\ValueObject\ArgumentAdder;
+use Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\Visibility;
-use Rector\Generic\NodeAnalyzer\ArgumentAddingScope;
-use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
-use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
-use Rector\Generic\ValueObject\ArgumentAdder;
-use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
 use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Removing\ValueObject\ArgumentRemover;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;

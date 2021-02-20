@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\ClassMethod\SingleToManyMethodRector\Fixture;
+namespace Rector\Arguments\Tests\Rector\ClassMethod\SingleToManyMethodRector\Fixture;
 
-use Rector\Generic\Tests\Rector\ClassMethod\SingleToManyMethodRector\Source\OneToManyInterface;
+use Rector\Arguments\Tests\Rector\ClassMethod\SingleToManyMethodRector\Source\OneToManyInterface;
 
 class NoReturnType implements OneToManyInterface
 {
@@ -16,9 +16,9 @@ class NoReturnType implements OneToManyInterface
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\ClassMethod\SingleToManyMethodRector\Fixture;
+namespace Rector\Arguments\Tests\Rector\ClassMethod\SingleToManyMethodRector\Fixture;
 
-use Rector\Generic\Tests\Rector\ClassMethod\SingleToManyMethodRector\Source\OneToManyInterface;
+use Rector\Arguments\Tests\Rector\ClassMethod\SingleToManyMethodRector\Source\OneToManyInterface;
 
 class NoReturnType implements OneToManyInterface
 {

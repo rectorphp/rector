@@ -3,7 +3,7 @@
 namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
 use PHPUnit_TestCase;
-use Rector\Generic\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\Source\Keep_This;
+use Rector\Arguments\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\Source\Keep_This;
 
 class SomeTestCase
 {
@@ -25,7 +25,7 @@ class SomeTestCase
 namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
 use PHPUnit\TestCase;
-use Rector\Generic\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\Source\Keep_This;
+use Rector\Arguments\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\Source\Keep_This;
 
 class SomeTestCase
 {

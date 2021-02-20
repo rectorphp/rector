@@ -114,7 +114,7 @@
             "Rector\\DowngradePhp80\\": "rules/downgrade-php80/src",
             "Rector\\FamilyTree\\": "packages/family-tree/src",
             "Rector\\FileSystemRector\\": "packages/file-system-rector/src",
-            "Rector\\Generic\\": "rules/generic/src",
+            "Rector\\Arguments\\": "rules/arguments/src",
             "Rector\\Laravel\\": "rules/laravel/src",
             "Rector\\Legacy\\": "rules/legacy/src",
             "Rector\\MockeryToProphecy\\": "rules/mockery-to-prophecy/src",
@@ -175,8 +175,7 @@
             "Rector\\Transform\\": "rules/transform/src",
             "Rector\\TypeDeclaration\\": "rules/type-declaration/src",
             "Rector\\VendorLocker\\": "packages/vendor-locker/src",
-            "Rector\\Carbon\\": "rules/carbon/src",
-            "Rector\\Generics\\": "rules/generics/src"
+            "Rector\\Carbon\\": "rules/carbon/src"
         }
     },
     "autoload-dev": {
@@ -234,7 +233,7 @@
             "Rector\\DowngradePhp73\\Tests\\": "rules/downgrade-php73/tests",
             "Rector\\DowngradePhp74\\Tests\\": "rules/downgrade-php74/tests",
             "Rector\\DowngradePhp80\\Tests\\": "rules/downgrade-php80/tests",
-            "Rector\\Generic\\Tests\\": "rules/generic/tests",
+            "Rector\\Arguments\\Tests\\": "rules/arguments/tests",
             "Rector\\Laravel\\Tests\\": "rules/laravel/tests",
             "Rector\\Legacy\\Tests\\": "rules/legacy/tests",
             "Rector\\Defluent\\Tests\\": "rules/defluent/tests",

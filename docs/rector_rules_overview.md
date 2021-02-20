@@ -6854,11 +6854,11 @@ This Rector adds new default arguments in calls of defined methods and class typ
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassMethod\ArgumentAdderRector`
+- class: `Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector`
 
 ```php
-use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
-use Rector\Generic\ValueObject\ArgumentAdder;
+use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Arguments\ValueObject\ArgumentAdder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -6885,8 +6885,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ```php
-use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
-use Rector\Generic\ValueObject\ArgumentAdder;
+use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Arguments\ValueObject\ArgumentAdder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -6922,11 +6922,11 @@ Replaces defined map of arguments in defined methods and their calls.
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector`
+- class: `Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector`
 
 ```php
-use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
-use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
+use Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
+use Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -7041,11 +7041,11 @@ Swap arguments in function calls
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector`
+- class: `Rector\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector`
 
 ```php
-use Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector;
-use Rector\Generic\ValueObject\SwapFuncCallArguments;
+use Rector\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector;
+use Rector\Arguments\ValueObject\SwapFuncCallArguments;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

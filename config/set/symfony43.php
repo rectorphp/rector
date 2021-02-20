@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Arguments\ValueObject\ArgumentAdder;
+
 use Rector\Core\ValueObject\MethodName;
 use Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector;
-
-use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
-use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
