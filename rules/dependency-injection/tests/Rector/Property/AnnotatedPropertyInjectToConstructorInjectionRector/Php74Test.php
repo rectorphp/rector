@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector;
+namespace Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector;
 
 use Iterator;
-use Rector\Generic\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector;
+use Rector\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class AnnotatedPropertyInjectToConstructorInjectionRectorTest extends AbstractRectorTestCase
+final class Php74Test extends AbstractRectorTestCase
 {
     /**
+     * @requires PHP 7.4
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
@@ -21,7 +22,7 @@ final class AnnotatedPropertyInjectToConstructorInjectionRectorTest extends Abst
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp74');
     }
 
     protected function getRectorClass(): string

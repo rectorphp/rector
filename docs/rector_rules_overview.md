@@ -6840,7 +6840,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Turns non-private properties with `@inject` to private properties and constructor injection
 
-- class: `Rector\Generic\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector`
+- class: `Rector\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector`
 
 ```diff
  /**
