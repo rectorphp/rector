@@ -250,13 +250,14 @@ final class ArrayTypeMapper implements TypeMapperInterface
         return null;
     }
 
-    private function createTypeNodeFromGenericClassStringType(GenericClassStringType $genericClassStringType): TypeNode
-    {
+    private function createTypeNodeFromGenericClassStringType(
+        GenericClassStringType $genericClassStringType
+    ): \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface {
         $genericType = $genericClassStringType->getGenericType();
-        if ($genericType instanceof ObjectType) {
-            if (! $this->classLikeExistenceChecker->doesClassLikeExist($genericType->getClassName())) {
-                return new AttributeAwareIdentifierTypeNode($genericType->getClassName());
-            }
+        if ($genericType instanceof ObjectType && ! $this->classLikeExistenceChecker->doesClassLikeExist(
+            $genericType->getClassName()
+        )) {
+            return new AttributeAwareIdentifierTypeNode($genericType->getClassName());
         }
 
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericClassStringType);
