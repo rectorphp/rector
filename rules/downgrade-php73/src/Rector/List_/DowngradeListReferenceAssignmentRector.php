@@ -278,10 +278,13 @@ CODE_SAMPLE
         if ($arrayItem->key === null) {
             return $position;
         }
-        if (! $arrayItem->key instanceof String_ && ! $arrayItem->key instanceof LNumber) {
-            return $position;
+        if ($arrayItem->key instanceof String_) {
+            return $arrayItem->key->value;
         }
-        return $arrayItem->key->value;
+        if ($arrayItem->key instanceof LNumber) {
+            return $arrayItem->key->value;
+        }
+        return $position;
     }
 
     /**
