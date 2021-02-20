@@ -1,4 +1,4 @@
-# 669 Rules Overview
+# 671 Rules Overview
 
 <br>
 
@@ -24,7 +24,7 @@
 
 - [Defluent](#defluent) (8)
 
-- [DependencyInjection](#dependencyinjection) (3)
+- [DependencyInjection](#dependencyinjection) (4)
 
 - [Doctrine](#doctrine) (18)
 
@@ -44,15 +44,15 @@
 
 - [DowngradePhp80](#downgradephp80) (12)
 
-- [EarlyReturn](#earlyreturn) (9)
+- [EarlyReturn](#earlyreturn) (10)
 
-- [Generic](#generic) (11)
+- [Generic](#generic) (7)
 
 - [Generics](#generics) (1)
 
 - [Laravel](#laravel) (11)
 
-- [Legacy](#legacy) (4)
+- [Legacy](#legacy) (1)
 
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 
@@ -136,9 +136,9 @@
 
 - [SymfonyPhpConfig](#symfonyphpconfig) (1)
 
-- [Transform](#transform) (29)
+- [Transform](#transform) (32)
 
-- [TypeDeclaration](#typedeclaration) (13)
+- [TypeDeclaration](#typedeclaration) (17)
 
 - [Visibility](#visibility) (3)
 
@@ -1024,7 +1024,7 @@ Simplify `foreach` loops into `in_array` when possible
 -}
 -
 -return false;
-+in_array("something", $items, true);
++return in_array('something', $items, true);
 ```
 
 <br>
@@ -1118,7 +1118,7 @@ Complete missing 3rd argument in case `is_a()` function in case of strings
 
 ### IssetOnPropertyObjectToPropertyExistsRector
 
-Change isset on property object to `property_exists()`
+Change isset on property object to `property_exists()` and not null check
 
 - class: `Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector`
 
@@ -1201,7 +1201,7 @@ If conditions is always true, perform the content right away
  {
      private $value;
 
-     public function __construct($value)
+     public function __construct(stdClass $value)
      {
          $this->value = $value;
      }
@@ -3172,6 +3172,25 @@ Remove dead instanceof check on type hinted variable
 
 <br>
 
+### RemoveDeadLoopRector
+
+Remove loop with no body
+
+- class: `Rector\DeadCode\Rector\For_\RemoveDeadLoopRector`
+
+```diff
+ class SomeClass
+ {
+     public function run($values)
+     {
+-        for ($i=1; $i<count($values); ++$i) {
+-        }
+     }
+ }
+```
+
+<br>
+
 ### RemoveDeadRecursiveClassMethodRector
 
 Remove unused public method that only calls itself recursively
@@ -3425,6 +3444,35 @@ Remove duplicated instanceof in one call
 
 <br>
 
+### RemoveEmptyAbstractClassRector
+
+Empty abstract class that does nothing
+
+- class: `Rector\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector`
+
+```diff
+-class SomeClass extends SomeAbstractClass
++class SomeClass extends AnotherAbstractClass
+ {
+ }
+
+-abstract class SomeAbstractClass extends AnotherAbstractClass
++abstracst clas AnotherAbstractClass
+ {
+-}
+-
+-abstract class AnotherAbstractClass
+-{
+      public function getName()
+      {
+-        return 'name';
++          return 'cowo';
+      }
+ }
+```
+
+<br>
+
 ### RemoveEmptyClassMethodRector
 
 Remove empty method calls not required by parents
@@ -3605,32 +3653,6 @@ Remove unused class constants
      public function run()
      {
      }
- }
-```
-
-<br>
-
-### RemoveUnusedClassesRector
-
-Remove unused classes without interface
-
-- class: `Rector\DeadCode\Rector\Class_\RemoveUnusedClassesRector`
-
-```diff
- interface SomeInterface
- {
- }
-
- class SomeClass implements SomeInterface
- {
-     public function run($items)
-     {
-         return null;
-     }
--}
--
--class NowhereUsedClass
--{
  }
 ```
 
@@ -3868,33 +3890,6 @@ Remove unused assigns to variables
      public function run()
      {
 -        $value = 5;
-     }
- }
-```
-
-<br>
-
-### RemoveUselessJustForSakeInterfaceRector
-
-Remove interface, that are added just for its sake, but nowhere useful
-
-- class: `Rector\DeadCode\Rector\Class_\RemoveUselessJustForSakeInterfaceRector`
-
-```diff
--class SomeClass implements OnlyHereUsedInterface
-+class SomeClass
- {
- }
-
--interface OnlyHereUsedInterface
--{
--}
--
- class SomePresenter
- {
--    public function __construct(OnlyHereUsedInterface $onlyHereUsed)
-+    public function __construct(SomeClass $onlyHereUsed)
-     {
      }
  }
 ```
@@ -4304,6 +4299,28 @@ Turns action injection in Controllers to constructor injection
 +        $products = $this->productRepository->fetchAll();
      }
  }
+```
+
+<br>
+
+### AnnotatedPropertyInjectToConstructorInjectionRector
+
+Turns properties with `@inject` to private properties and constructor injection
+
+- class: `Rector\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector`
+
+```diff
+ /**
+  * @var SomeService
+- * @inject
+  */
+-public $someService;
++private $someService;
++
++public function __construct(SomeService $someService)
++{
++    $this->someService = $someService;
++}
 ```
 
 <br>
@@ -6683,6 +6700,37 @@ Changes if || with return to early return
 
 <br>
 
+### PreparedValueToEarlyReturnRector
+
+Return early prepared value in ifs
+
+- class: `Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $var = null;
+-
+         if (rand(0,1)) {
+-            $var = 1;
++            return 1;
+         }
+
+         if (rand(0,1)) {
+-            $var = 2;
++            return 2;
+         }
+
+-        return $var;
++        return null;
+     }
+ }
+```
+
+<br>
+
 ### RemoveAlwaysElseRector
 
 Split if statement, when if condition always break execution flow
@@ -6760,42 +6808,6 @@ Changes Single return of && && to early returns
 
 ## Generic
 
-### AddInterfaceByTraitRector
-
-Add interface by used trait
-
-:wrench: **configure it!**
-
-- class: `Rector\Transform\Rector\Class_\AddInterfaceByTraitRector`
-
-```php
-use Rector\Transform\Rector\Class_\AddInterfaceByTraitRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(AddInterfaceByTraitRector::class)
-        ->call('configure', [[
-            AddInterfaceByTraitRector::INTERFACE_BY_TRAIT => [
-                'SomeTrait' => 'SomeInterface',
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
--class SomeClass
-+class SomeClass implements SomeInterface
- {
-     use SomeTrait;
- }
-```
-
-<br>
-
 ### AddMethodParentCallRector
 
 Add method parent call, in case new parent method is added
@@ -6832,28 +6844,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 +        parent::__construct();
      }
  }
-```
-
-<br>
-
-### AnnotatedPropertyInjectToConstructorInjectionRector
-
-Turns non-private properties with `@inject` to private properties and constructor injection
-
-- class: `Rector\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector`
-
-```diff
- /**
-  * @var SomeService
-- * @inject
-  */
--public $someService;
-+private $someService;
-+
-+public function __construct(SomeService $someService)
-+{
-+    $this->someService = $someService;
-+}
 ```
 
 <br>
@@ -6958,88 +6948,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  $someObject = new SomeClass;
 -$someObject->someMethod(SomeClass::OLD_CONSTANT);
 +$someObject->someMethod(false);'
-```
-
-<br>
-
-### InjectAnnotationClassRector
-
-Changes properties with specified annotations class to constructor injection
-
-:wrench: **configure it!**
-
-- class: `Rector\DependencyInjection\Rector\Property\InjectAnnotationClassRector`
-
-```php
-use Rector\DependencyInjection\Rector\Property\InjectAnnotationClassRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(InjectAnnotationClassRector::class)
-        ->call('configure', [[
-            InjectAnnotationClassRector::ANNOTATION_CLASSES => [
-                'DI\Annotation\Inject',
-                'JMS\DiExtraBundle\Annotation\Inject',
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
- use JMS\DiExtraBundle\Annotation as DI;
-
- class SomeController
- {
-     /**
--     * @DI\Inject("entity.manager")
-+     * @var EntityManager
-      */
-     private $entityManager;
-+
-+    public function __construct(EntityManager $entityManager)
-+    {
-+        $this->entityManager = entityManager;
-+    }
- }
-```
-
-<br>
-
-### MergeInterfacesRector
-
-Merges old interface to a new one, that already has its methods
-
-:wrench: **configure it!**
-
-- class: `Rector\Transform\Rector\Class_\MergeInterfacesRector`
-
-```php
-use Rector\Transform\Rector\Class_\MergeInterfacesRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(MergeInterfacesRector::class)
-        ->call('configure', [[
-            MergeInterfacesRector::OLD_TO_NEW_INTERFACES => [
-                'SomeOldInterface' => 'SomeInterface',
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
--class SomeClass implements SomeInterface, SomeOldInterface
-+class SomeClass implements SomeInterface
- {
- }
 ```
 
 <br>
@@ -7497,41 +7405,6 @@ Change static `validate()` method to `$request->validate()`
 
 ## Legacy
 
-### AddTopIncludeRector
-
-Adds an include file at the top of matching files, except class definitions
-
-:wrench: **configure it!**
-
-- class: `Rector\Legacy\Rector\FileWithoutNamespace\AddTopIncludeRector`
-
-```php
-use Rector\Legacy\Rector\FileWithoutNamespace\AddTopIncludeRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(AddTopIncludeRector::class)
-        ->call('configure', [[
-            AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-            AddTopIncludeRector::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
-        ]]);
-};
-```
-
-↓
-
-```diff
-+require_once __DIR__ . '/../autoloader.php';
-+
- if (isset($_POST['csrf'])) {
-     processPost($_POST);
- }
-```
-
-<br>
-
 ### ChangeSingletonToServiceRector
 
 Change singleton class to normal class that can be registered as a service
@@ -7557,39 +7430,6 @@ Change singleton class to normal class that can be registered as a service
 -        return static::$instance;
      }
  }
-```
-
-<br>
-
-### FunctionToStaticMethodRector
-
-Change functions to static calls, so composer can autoload them
-
-- class: `Rector\Transform\Rector\FileWithoutNamespace\FunctionToStaticMethodRector`
-
-```diff
--function some_function()
-+class SomeUtilsClass
- {
-+    public static function someFunction()
-+    {
-+    }
- }
-
--some_function('lol');
-+SomeUtilsClass::someFunction('lol');
-```
-
-<br>
-
-### RemoveIncludeRector
-
-Remove includes (include, include_once, require, require_once) from source
-
-- class: `Rector\Legacy\Rector\Include_\RemoveIncludeRector`
-
-```diff
--include 'somefile.php';
 ```
 
 <br>
@@ -7901,16 +7741,16 @@ Rename variable to match method return type
 ```diff
  class SomeClass
  {
-     public function run()
-     {
--        $a = $this->getRunner();
-+        $runner = $this->getRunner();
-     }
+ public function run()
+ {
+-    $a = $this->getRunner();
++    $runner = $this->getRunner();
+ }
 
-     public function getRunner(): Runner
-     {
-         return new Runner();
-     }
+ public function getRunner(): Runner
+ {
+     return new Runner();
+ }
  }
 ```
 
@@ -15372,6 +15212,42 @@ Make sure there is `public()`, `autowire()`, `autoconfigure()` calls on `default
 
 ## Transform
 
+### AddInterfaceByTraitRector
+
+Add interface by used trait
+
+:wrench: **configure it!**
+
+- class: `Rector\Transform\Rector\Class_\AddInterfaceByTraitRector`
+
+```php
+use Rector\Transform\Rector\Class_\AddInterfaceByTraitRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddInterfaceByTraitRector::class)
+        ->call('configure', [[
+            AddInterfaceByTraitRector::INTERFACE_BY_TRAIT => [
+                'SomeTrait' => 'SomeInterface',
+            ],
+        ]]);
+};
+```
+
+↓
+
+```diff
+-class SomeClass
++class SomeClass implements SomeInterface
+ {
+     use SomeTrait;
+ }
+```
+
+<br>
+
 ### ArgumentFuncCallToMethodCallRector
 
 Move help facade-like function calls to constructor injection
@@ -15700,6 +15576,27 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+### FunctionToStaticMethodRector
+
+Change functions to static calls, so composer can autoload them
+
+- class: `Rector\Transform\Rector\FileWithoutNamespace\FunctionToStaticMethodRector`
+
+```diff
+-function some_function()
++class SomeUtilsClass
+ {
++    public static function someFunction()
++    {
++    }
+ }
+
+-some_function('lol');
++SomeUtilsClass::someFunction('lol');
+```
+
+<br>
+
 ### GetAndSetToMethodCallRector
 
 Turns defined `__get`/`__set` to specific method calls.
@@ -15760,6 +15657,41 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  $container = new SomeContainer;
 -$someService = $container->someService;
 +$someService = $container->getService("someService");
+```
+
+<br>
+
+### MergeInterfacesRector
+
+Merges old interface to a new one, that already has its methods
+
+:wrench: **configure it!**
+
+- class: `Rector\Transform\Rector\Class_\MergeInterfacesRector`
+
+```php
+use Rector\Transform\Rector\Class_\MergeInterfacesRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(MergeInterfacesRector::class)
+        ->call('configure', [[
+            MergeInterfacesRector::OLD_TO_NEW_INTERFACES => [
+                'SomeOldInterface' => 'SomeInterface',
+            ],
+        ]]);
+};
+```
+
+↓
+
+```diff
+-class SomeClass implements SomeInterface, SomeOldInterface
++class SomeClass implements SomeInterface
+ {
+ }
 ```
 
 <br>
@@ -16763,28 +16695,31 @@ Add known return type to functions
 
 <br>
 
-### AddMethodCallBasedParamTypeRector
+### AddMethodCallBasedStrictParamTypeRector
 
-Change param type of passed `getId()` to UuidInterface type declaration
+Change param type to strict type of passed expression
 
-- class: `Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedParamTypeRector`
+- class: `Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector`
 
 ```diff
  class SomeClass
  {
 -    public function getById($id)
-+    public function getById(\Ramsey\Uuid\UuidInterface $id)
++    public function getById(int $id)
      {
      }
  }
 
  class CallerClass
  {
-     public function run()
+     public function run(SomeClass $someClass)
      {
-         $building = new Building();
-         $someClass = new SomeClass();
-         $someClass->getById($building->getId());
+         $someClass->getById($this->getId());
+     }
+
+     public function getId(): int
+     {
+         return 1000;
      }
  }
 ```
@@ -16877,6 +16812,26 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+### AddVoidReturnTypeWhereNoReturnRector
+
+Add return type void to function like without any return
+
+- class: `Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector`
+
+```diff
+ final class SomeClass
+ {
+-    public function getValues()
++    public function getValues(): void
+     {
+         $value = 1000;
+         return;
+     }
+ }
+```
+
+<br>
+
 ### CompleteVarDocTypePropertyRector
 
 Complete property `@var` annotations or correct the old ones
@@ -16961,6 +16916,27 @@ Change `@param` types to type declarations if not a BC-break
 
 <br>
 
+### ParamTypeFromStrictTypedPropertyRector
+
+Add param type from `$param` set to typed property
+
+- class: `Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeFromStrictTypedPropertyRector`
+
+```diff
+ final class SomeClass
+ {
+     private int $age;
+
+-    public function setAge($age)
++    public function setAge(int $age)
+     {
+         $this->age = $age;
+     }
+ }
+```
+
+<br>
+
 ### PropertyTypeDeclarationRector
 
 Add `@var` to properties that are missing it
@@ -16999,6 +16975,49 @@ Change `@return` types and type from static analysis to type declarations if not
 -    public function getCount()
 +    public function getCount(): int
      {
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromReturnNewRector
+
+Add return type void to function like without any return
+
+- class: `Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector`
+
+```diff
+ final class SomeClass
+ {
+-    public function action()
++    public function action(): Respose
+     {
+         return new Response();
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromStrictTypedCallRector
+
+Add return type from strict return type of call
+
+- class: `Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector`
+
+```diff
+ final class SomeClass
+ {
+-    public function getData()
++    public function getData(): int
+     {
+         return $this->getNumber();
+     }
+
+     private function getNumber(): int
+     {
+         return 1000;
      }
  }
 ```
