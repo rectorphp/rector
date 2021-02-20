@@ -133,7 +133,7 @@ CODE_SAMPLE
 
         foreach ($childrenOfClass as $childClassNode) {
             $methodOfChild = $childClassNode->getMethod($methodName);
-            if (! $methodOfChild instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            if (! $methodOfChild instanceof ClassMethod) {
                 continue;
             }
 

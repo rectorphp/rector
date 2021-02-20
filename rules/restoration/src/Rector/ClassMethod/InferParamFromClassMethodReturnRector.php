@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
@@ -130,16 +131,15 @@ CODE_SAMPLE
 
         foreach ($this->inferParamFromClassMethodReturn as $inferParamFromClassMethodReturn) {
             $returnClassMethod = $this->matchReturnClassMethod($node, $inferParamFromClassMethodReturn);
-            if (! $returnClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            if (! $returnClassMethod instanceof ClassMethod) {
                 continue;
             }
 
             $returnType = $this->returnTypeInferer->inferFunctionLike($returnClassMethod);
 
             $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-
             $paramType = $this->constantReturnToParamTypeConverter->convert($returnType);
-            if (! $paramType instanceof Type) {
+            if ($paramType instanceof MixedType) {
                 continue;
             }
 

@@ -32,11 +32,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRector
 {
     /**
-     * @var string[]
-     */
-    private const ALLOWED_PARENT_TYPES = [ClassLike::class];
-
-    /**
      * @var ExpectedNameResolver
      */
     private $expectedNameResolver;
@@ -98,42 +93,39 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition(
-            'Rename variable to match method return type',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new RuleDefinition('Rename variable to match method return type', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run()
-    {
-        $a = $this->getRunner();
-    }
+public function run()
+{
+    $a = $this->getRunner();
+}
 
-    public function getRunner(): Runner
-    {
-        return new Runner();
-    }
+public function getRunner(): Runner
+{
+    return new Runner();
+}
 }
 CODE_SAMPLE
 ,
-                    <<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run()
-    {
-        $runner = $this->getRunner();
-    }
+public function run()
+{
+    $runner = $this->getRunner();
+}
 
-    public function getRunner(): Runner
-    {
-        return new Runner();
-    }
+public function getRunner(): Runner
+{
+    return new Runner();
+}
 }
 CODE_SAMPLE
-                ),
-
-            ]);
+            ),
+        ]);
     }
 
     /**
@@ -266,7 +258,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (in_array($callStaticType->getClassName(), self::ALLOWED_PARENT_TYPES, true)) {
+        if (is_a($callStaticType->getClassName(), ClassLike::class, true)) {
             return false;
         }
 

@@ -21,9 +21,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DefinitionAliasSetPrivateToSetPublicRector extends AbstractRector
 {
     /**
-     * @var class-string[]
+     * @var class-string<Alias>[]|class-string<Definition>[]
      */
-    private const REQUIRED_CLASS_TYPES = [Definition::class, Alias::class];
+    private const REQUIRED_CLASS_TYPES = [
+        'Symfony\Component\DependencyInjection\Alias',
+        'Symfony\Component\DependencyInjection\Definition',
+    ];
 
     public function getRuleDefinition(): RuleDefinition
     {

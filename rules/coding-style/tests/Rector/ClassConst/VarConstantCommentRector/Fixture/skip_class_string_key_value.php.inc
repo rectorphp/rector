@@ -12,7 +12,7 @@ final class SkipClassStringKeyValue
      * Key = the winner
      * Array = the group of types matched
      *
-     * @var array<class-string<Node>, array<class-string<Node>>>
+     * @var array<class-string<Node>, array<class-string<Expr>>>
      */
     public const PRIORITY_TYPES = [
         BinaryOp::class => [BinaryOp::class, Expr::class],

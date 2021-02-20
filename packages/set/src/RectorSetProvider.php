@@ -7,6 +7,7 @@ namespace Rector\Set;
 use Nette\Utils\Strings;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticRectorStrings;
+use Rector\Set\Contract\SetListInterface;
 use Rector\Set\ValueObject\DowngradeSetList;
 use Rector\Set\ValueObject\SetList;
 use ReflectionClass;
@@ -24,7 +25,7 @@ final class RectorSetProvider extends AbstractSetProvider
     private const DASH_NUMBER_REGEX = '#\-(\d+)#';
 
     /**
-     * @var string[]
+     * @var array<class-string<SetListInterface>>
      */
     private const SET_LIST_CLASSES = [SetList::class, DowngradeSetList::class];
 

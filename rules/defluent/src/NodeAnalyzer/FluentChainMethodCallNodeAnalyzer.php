@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
+use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
@@ -31,7 +32,7 @@ final class FluentChainMethodCallNodeAnalyzer
      * Types that look like fluent interface, but actually create a new object.
      * Should be skipped, as they return different object. Not an fluent interface!
      *
-     * @var string[]
+     * @var class-string<MutatingScope>[]
      */
     private const KNOWN_FACTORY_FLUENT_TYPES = ['PHPStan\Analyser\MutatingScope'];
 

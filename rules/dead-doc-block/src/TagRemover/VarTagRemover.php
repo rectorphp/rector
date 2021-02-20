@@ -130,12 +130,7 @@ final class VarTagRemover
             return false;
         }
 
-        $varTypeDocString = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPhpDocString(
-            $varTagValueNode->type,
-            $node
-        );
-
-        return $varTypeDocString !== 'array';
+        return (string) $varTagValueNode->type !== 'array';
     }
 
     private function isArrayTypeNode(VarTagValueNode $varTagValueNode): bool

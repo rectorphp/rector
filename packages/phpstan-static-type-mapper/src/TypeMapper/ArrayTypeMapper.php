@@ -11,9 +11,11 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
+use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
@@ -23,7 +25,9 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\TypeDeclaration\TypeNormalizer;
+use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 
 /**
  * @see \Rector\PHPStanStaticTypeMapper\Tests\TypeMapper\ArrayTypeMapperTest
@@ -46,14 +50,28 @@ final class ArrayTypeMapper implements TypeMapperInterface
     private $typeNormalizer;
 
     /**
+     * @var UnionTypeCommonTypeNarrower
+     */
+    private $unionTypeCommonTypeNarrower;
+
+    /**
+     * @var ClassLikeExistenceChecker
+     */
+    private $classLikeExistenceChecker;
+
+    /**
      * @required
      */
     public function autowireArrayTypeMapper(
         PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
-        TypeNormalizer $typeNormalizer
+        TypeNormalizer $typeNormalizer,
+        UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
+        ClassLikeExistenceChecker $classLikeExistenceChecker
     ): void {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->typeNormalizer = $typeNormalizer;
+        $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
+        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
     }
 
     public function getNodeClass(): string
@@ -69,22 +87,24 @@ final class ArrayTypeMapper implements TypeMapperInterface
         $itemType = $type->getItemType();
 
         if ($itemType instanceof UnionType && ! $type instanceof ConstantArrayType) {
-            return $this->createUnionType($itemType);
+            return $this->createArrayTypeNodeFromUnionType($itemType);
         }
 
-        if ($itemType instanceof ArrayType) {
-            $isGenericArrayCandidate = $this->isGenericArrayCandidate($itemType);
-            if ($isGenericArrayCandidate) {
-                return $this->createGenericArrayType($type, true);
-            }
-        }
-
-        $isGenericArrayCandidate = $this->isGenericArrayCandidate($type);
-        if ($isGenericArrayCandidate) {
+        if ($itemType instanceof ArrayType && $this->isGenericArrayCandidate($itemType)) {
             return $this->createGenericArrayType($type, true);
         }
 
+        if ($this->isGenericArrayCandidate($type)) {
+            return $this->createGenericArrayType($type, true);
+        }
+
+        $narrowedTypeNode = $this->narrowConstantArrayTypeOfUnionType($type, $itemType);
+        if ($narrowedTypeNode instanceof TypeNode) {
+            return $narrowedTypeNode;
+        }
+
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType);
+
         return new AttributeAwareArrayTypeNode($itemTypeNode);
     }
 
@@ -111,7 +131,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
         return $this->phpStanStaticTypeMapper->mapToDocString($itemType, $parentType) . '[]';
     }
 
-    private function createUnionType(UnionType $unionType): ArrayTypeNode
+    private function createArrayTypeNodeFromUnionType(UnionType $unionType): ArrayTypeNode
     {
         $unionedArrayType = [];
         foreach ($unionType->getTypes() as $unionedType) {
@@ -210,5 +230,38 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
 
         return ! $arrayType->getItemType() instanceof ArrayType;
+    }
+
+    private function narrowConstantArrayTypeOfUnionType(ArrayType $arrayType, Type $itemType): ?TypeNode
+    {
+        if ($arrayType instanceof ConstantArrayType && $itemType instanceof UnionType) {
+            $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($itemType);
+            if ($narrowedItemType instanceof ObjectType) {
+                $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
+                return new AttributeAwareArrayTypeNode($itemTypeNode);
+            }
+
+            $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($itemType);
+            if ($narrowedItemType instanceof GenericClassStringType) {
+                return $this->createTypeNodeFromGenericClassStringType($narrowedItemType);
+            }
+        }
+
+        return null;
+    }
+
+    private function createTypeNodeFromGenericClassStringType(
+        GenericClassStringType $genericClassStringType
+    ): \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface {
+        $genericType = $genericClassStringType->getGenericType();
+        if ($genericType instanceof ObjectType && ! $this->classLikeExistenceChecker->doesClassLikeExist(
+            $genericType->getClassName()
+        )) {
+            return new AttributeAwareIdentifierTypeNode($genericType->getClassName());
+        }
+
+        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericClassStringType);
+
+        return new AttributeAwareGenericTypeNode(new AttributeAwareIdentifierTypeNode('array'), [$itemTypeNode]);
     }
 }

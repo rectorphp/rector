@@ -31,7 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeAndIfToEarlyReturnRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<class-string<Stmt>>
      */
     public const LOOP_TYPES = [Foreach_::class, For_::class, While_::class];
 

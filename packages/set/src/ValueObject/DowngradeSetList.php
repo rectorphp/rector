@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Set\ValueObject;
 
-final class DowngradeSetList
+use Rector\Set\Contract\SetListInterface;
+
+final class DowngradeSetList implements SetListInterface
 {
     /**
      * @var string

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
@@ -66,6 +67,7 @@ final class TypeComparator
 
         $firstType = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($firstType);
         $secondType = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($secondType);
+
         if ($this->typeHasher->areTypesEqual($firstType, $secondType)) {
             return true;
         }
@@ -90,6 +92,10 @@ final class TypeComparator
     public function isSubtype(Type $checkedType, Type $mainType): bool
     {
         if ($mainType instanceof MixedType) {
+            return false;
+        }
+
+        if ($mainType instanceof ArrayType && $checkedType instanceof ConstantArrayType) {
             return false;
         }
 
