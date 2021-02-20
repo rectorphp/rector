@@ -43,7 +43,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         $errorsArray = [
             'meta' => [
                 'version' => $this->configuration->getPrettyVersion(),
-                'config' => $this->configuration->getConfigFilePath(),
+                'config' => $this->configuration->getMainConfigFilePath(),
             ],
             'totals' => [
                 'changed_files' => $errorAndDiffCollector->getFileDiffsCount(),

@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Caching\Detector\ChangedFilesDetector;
-use Rector\Core\Bootstrap\ConfigShifter;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
@@ -38,32 +35,13 @@ $autoloadIncluder->autoloadFromCommandLine();
 $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
 $symfonyStyle = $symfonyStyleFactory->create();
 
+$rectorConfigsResolver = new RectorConfigsResolver();
+
 try {
-    $rectorConfigsResolver = new RectorConfigsResolver();
-    $configFileInfos = $rectorConfigsResolver->provide();
+    $bootstrapConfigs = $rectorConfigsResolver->provide();
 
-    // Build DI container
     $rectorContainerFactory = new RectorContainerFactory();
-
-    // shift configs as last so parameters with main config have higher priority
-    $configShifter = new ConfigShifter();
-    $firstResolvedConfig = $rectorConfigsResolver->getFirstResolvedConfig();
-    if ($firstResolvedConfig !== null) {
-        $configFileInfos = $configShifter->shiftInputConfigAsLast($configFileInfos, $firstResolvedConfig);
-    }
-
-    $container = $rectorContainerFactory->createFromConfigs($configFileInfos);
-
-    $firstResolvedConfig = $rectorConfigsResolver->getFirstResolvedConfig();
-    if ($firstResolvedConfig) {
-        /** @var Configuration $configuration */
-        $configuration = $container->get(Configuration::class);
-        $configuration->setFirstResolverConfigFileInfo($firstResolvedConfig);
-
-        /** @var ChangedFilesDetector $changedFilesDetector */
-        $changedFilesDetector = $container->get(ChangedFilesDetector::class);
-        $changedFilesDetector->setFirstResolvedConfigFileInfo($firstResolvedConfig);
-    }
+    $container = $rectorContainerFactory->createFromBootstrapConfigs($bootstrapConfigs);
 } catch (SetNotFoundException $setNotFoundException) {
     $invalidSetReporter = new InvalidSetReporter();
     $invalidSetReporter->report($setNotFoundException);

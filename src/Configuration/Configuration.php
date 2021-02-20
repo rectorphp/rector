@@ -7,6 +7,7 @@ namespace Rector\Core\Configuration;
 use Jean85\PrettyVersions;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
+use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -75,14 +76,14 @@ final class Configuration
     private $outputFile;
 
     /**
-     * @var SmartFileInfo|null
-     */
-    private $configFileInfo;
-
-    /**
      * @var bool
      */
     private $showDiffs = true;
+
+    /**
+     * @var BootstrapConfigs|null
+     */
+    private $bootstrapConfigs;
 
     public function __construct(ParameterProvider $parameterProvider)
     {
@@ -115,23 +116,6 @@ final class Configuration
         if ($commandLinePaths !== []) {
             $this->paths = $commandLinePaths;
         }
-    }
-
-    /**
-     * @api
-     */
-    public function setFirstResolverConfigFileInfo(SmartFileInfo $firstResolvedConfigFileInfo): void
-    {
-        $this->configFileInfo = $firstResolvedConfigFileInfo;
-    }
-
-    public function getConfigFilePath(): ?string
-    {
-        if ($this->configFileInfo === null) {
-            return null;
-        }
-
-        return $this->configFileInfo->getRealPath();
     }
 
     public function getPrettyVersion(): string
@@ -262,6 +246,25 @@ final class Configuration
     public function shouldShowDiffs(): bool
     {
         return $this->showDiffs;
+    }
+
+    public function setBootstrapConfigs(BootstrapConfigs $bootstrapConfigs): void
+    {
+        $this->bootstrapConfigs = $bootstrapConfigs;
+    }
+
+    public function getMainConfigFilePath(): ?string
+    {
+        if ($this->bootstrapConfigs === null) {
+            return null;
+        }
+
+        $mainConfigFileInfo = $this->bootstrapConfigs->getMainConfigFileInfo();
+        if (! $mainConfigFileInfo instanceof SmartFileInfo) {
+            return null;
+        }
+
+        return $mainConfigFileInfo->getRelativeFilePathFromCwd();
     }
 
     private function canShowProgressBar(InputInterface $input): bool
