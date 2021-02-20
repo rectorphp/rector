@@ -16,10 +16,10 @@ jobs:
                         run: |
                             composer require --dev nimut/phpunit-merger
 
-                            vendor/bin/phpunit --coverage-php build/logs/rules.cov rules
-                            vendor/bin/phpunit --coverage-php build/logs/packages.cov packages
-                            vendor/bin/phpunit --coverage-php build/logs/tests.cov tests
-                            vendor/bin/phpunit --coverage-php build/logs/utils.cov utils
+                            vendor/bin/phpunit --coverage-php build/logs/rules.cov rules --testdox
+                            vendor/bin/phpunit --coverage-php build/logs/packages.cov packages --testdox
+                            vendor/bin/phpunit --coverage-php build/logs/tests.cov tests --testdox
+                            vendor/bin/phpunit --coverage-php build/logs/utils.cov utils --testdox
 
                             vendor/bin/phpunit-merger coverage build/logs clover.xml
 
