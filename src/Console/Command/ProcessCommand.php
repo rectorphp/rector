@@ -244,7 +244,7 @@ final class ProcessCommand extends AbstractCommand
         if (! $this->configuration->isDryRun()) {
             return ShellCode::SUCCESS;
         }
-        if (! $this->errorAndDiffCollector->getFileDiffsCount()) {
+        if ($this->errorAndDiffCollector->getFileDiffsCount() === 0) {
             return ShellCode::SUCCESS;
         }
         return ShellCode::ERROR;
