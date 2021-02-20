@@ -131,7 +131,7 @@ CODE_SAMPLE
     private function createStaticCallExpression(Variable $identifierVariable, Variable $resolvedVariable): Expression
     {
         $args = [new Arg($identifierVariable), new Arg($resolvedVariable)];
-        $staticCall = new StaticCall(new FullyQualified(ResolvedConstantStaticCollector::class), 'collect', $args);
+        $staticCall = new StaticCall(new FullyQualified('Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector'), 'collect', $args);
 
         return new Expression($staticCall);
     }
