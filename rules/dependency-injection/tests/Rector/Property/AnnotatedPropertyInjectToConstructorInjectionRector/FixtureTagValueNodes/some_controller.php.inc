@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
+namespace Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTagValueNodes;
 
 use JMS\DiExtraBundle\Annotation as DI;
 
-class SomeController
+final class SomeController
 {
     /**
      * @DI\Inject("entity.manager")
@@ -21,11 +21,11 @@ class SomeController
 -----
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
+namespace Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTagValueNodes;
 
 use JMS\DiExtraBundle\Annotation as DI;
 
-class SomeController
+final class SomeController
 {
     public function __construct(private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeEntityManager $entityManager, private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $translator)
     {

@@ -6,12 +6,22 @@ namespace Rector\DependencyInjection\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
+use Rector\DependencyInjection\NodeAnalyzer\NetteInjectPropertyAnalyzer;
+use Rector\DependencyInjection\TypeAnalyzer\InjectParameterAnalyzer;
+use Rector\DependencyInjection\TypeAnalyzer\InjectTagValueNodeToServiceTypeResolver;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -23,33 +33,67 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * - https://github.com/Kdyby/Autowired/blob/master/docs/en/index.md#autowired-properties
  * - http://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations
  * - https://github.com/rectorphp/rector/issues/700#issue-370301169
+ * - https://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations#inject
  *
  * @see \Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\AnnotatedPropertyInjectToConstructorInjectionRectorTest
  */
 final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
     /**
+     * @var array<class-string<AbstractTagValueNode>>
+     */
+    private const INJECT_TAG_VALUE_NODE_TYPES = [PHPDIInjectTagValueNode::class, JMSInjectTagValueNode::class];
+
+    /**
      * @var PropertyUsageAnalyzer
      */
     private $propertyUsageAnalyzer;
 
     /**
-     * @var ClassChildAnalyzer
+     * @var PhpDocTypeChanger
      */
-    private $classChildAnalyzer;
+    private $phpDocTypeChanger;
+
+    /**
+     * @var InjectParameterAnalyzer
+     */
+    private $injectParameterAnalyzer;
+
+    /**
+     * @var InjectTagValueNodeToServiceTypeResolver
+     */
+    private $injectTagValueNodeToServiceTypeResolver;
+
+    /**
+     * @var NetteInjectPropertyAnalyzer
+     */
+    private $netteInjectPropertyAnalyzer;
+
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
 
     public function __construct(
-        ClassChildAnalyzer $classChildAnalyzer,
-        PropertyUsageAnalyzer $propertyUsageAnalyzer
+        PhpDocTypeChanger $phpDocTypeChanger,
+        InjectParameterAnalyzer $injectParameterAnalyzer,
+        InjectTagValueNodeToServiceTypeResolver $injectTagValueNodeToServiceTypeResolver,
+        PropertyUsageAnalyzer $propertyUsageAnalyzer,
+        NetteInjectPropertyAnalyzer $netteInjectPropertyAnalyzer,
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
-        $this->classChildAnalyzer = $classChildAnalyzer;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->injectParameterAnalyzer = $injectParameterAnalyzer;
+        $this->injectTagValueNodeToServiceTypeResolver = $injectTagValueNodeToServiceTypeResolver;
+        $this->netteInjectPropertyAnalyzer = $netteInjectPropertyAnalyzer;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Turns non-private properties with `@inject` to private properties and constructor injection',
+            'Turns properties with `@inject` to private properties and constructor injection',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -89,62 +133,83 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkipProperty($node)) {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $phpDocInfo->removeByType(NetteInjectTagNode::class);
-
-        if ($this->propertyUsageAnalyzer->isPropertyFetchedInChildClass($node)) {
-            $this->visibilityManipulator->makeProtected($node);
-        } else {
-            $this->visibilityManipulator->makePrivate($node);
+        if ($this->netteInjectPropertyAnalyzer->detect($node, $phpDocInfo)) {
+            return $this->refactorNetteInjectProperty($phpDocInfo, $node);
         }
 
-        $this->addPropertyToCollector($node);
+        foreach (self::INJECT_TAG_VALUE_NODE_TYPES as $tagValueNodeType) {
+            $injectTagValueNode = $phpDocInfo->getByType($tagValueNodeType);
+            if ($injectTagValueNode === null) {
+                continue;
+            }
 
-        if ($this->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
-            $this->removeNode($node);
-            return null;
+            if ($this->injectParameterAnalyzer->isParameterInject($injectTagValueNode)) {
+                return null;
+            }
+
+            $serviceType = $this->injectTagValueNodeToServiceTypeResolver->resolve(
+                $node,
+                $phpDocInfo,
+                $injectTagValueNode
+            );
+            if ($serviceType instanceof MixedType) {
+                return null;
+            }
+
+            $this->refactorPropertyWithAnnotation($node, $serviceType, $injectTagValueNode);
+
+            if ($this->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+                $this->removeNode($node);
+                return null;
+            }
+
+            return $node;
         }
 
-        return $node;
+        return null;
     }
 
-    private function shouldSkipProperty(Property $property): bool
-    {
+    private function refactorPropertyWithAnnotation(
+        Property $property,
+        Type $type,
+        AbstractTagValueNode $tagValueNode
+    ): void {
+        $propertyName = $this->getName($property);
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if (! $phpDocInfo->hasByType(NetteInjectTagNode::class)) {
-            return true;
-        }
+
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $tagValueNode);
 
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof ClassLike) {
-            return true;
-        }
-
         if (! $classLike instanceof Class_) {
-            return true;
+            throw new ShouldNotHappenException();
         }
 
-        if ($classLike->isAbstract()) {
-            return true;
+        $this->addConstructorDependencyToClass($classLike, $type, $propertyName, $property->flags);
+    }
+
+    private function refactorNetteInjectProperty(PhpDocInfo $phpDocInfo, Property $property): ?Property
+    {
+        $phpDocInfo->removeByType(NetteInjectTagNode::class);
+
+        if ($this->propertyUsageAnalyzer->isPropertyFetchedInChildClass($property)) {
+            $this->visibilityManipulator->makeProtected($property);
+        } else {
+            $this->visibilityManipulator->makePrivate($property);
         }
 
-        if ($this->classChildAnalyzer->hasChildClassConstructor($classLike)) {
-            return true;
+        $this->addPropertyToCollector($property);
+
+        if ($this->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+            $this->removeNode($property);
+            return null;
         }
 
-        if ($this->classChildAnalyzer->hasParentClassConstructor($classLike)) {
-            return true;
-        }
-
-        // it needs @var tag as well, to get the type
-        if ($phpDocInfo->getVarTagValueNode() !== null) {
-            return false;
-        }
-
-        return $property->type === null;
+        return $property;
     }
 }

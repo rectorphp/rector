@@ -119,6 +119,7 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             SensioTemplateTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template',
             SensioMethodTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method',
             SensioRouteTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route',
+
             // JMS
             JMSInjectParamsTagValueNode::class => 'JMS\DiExtraBundle\Annotation\InjectParams',
             JMSServiceValueNode::class => 'JMS\DiExtraBundle\Annotation\Service',

@@ -34,9 +34,10 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     private $tagValueNodePrinter;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver, ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
-                                TagValueNodePrinter $tagValueNodePrinter)
-    {
+        NodeNameResolver $nodeNameResolver,
+        ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
+        TagValueNodePrinter $tagValueNodePrinter
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayPartPhpDocTagPrinter = $arrayPartPhpDocTagPrinter;
         $this->tagValueNodePrinter = $tagValueNodePrinter;
