@@ -116,21 +116,14 @@ CODE_SAMPLE
             return null;
         }
 
-        $ifReturn = $this->getIfReturn($node);
-        if (! $ifReturn instanceof Stmt) {
-            return null;
-        }
-
-        if ($this->isIfStmtExprUsedInNextReturn($node)) {
+        $ifNextReturn = $this->getIfNextReturn($node);
+        if ($ifNextReturn instanceof Return_ && $this->isIfStmtExprUsedInNextReturn($node, $ifNextReturn)) {
             return null;
         }
 
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
-
-        $ifNextReturn = $this->getIfNextReturn($node);
         $conditions = $this->getBooleanAndConditions($expr);
-
         $ifNextReturnClone = $ifNextReturn instanceof Return_
             ? clone $ifNextReturn
             : new Return_();
@@ -162,11 +155,9 @@ CODE_SAMPLE
     private function processReplaceIfs(If_ $node, array $conditions, Return_ $ifNextReturnClone): If_
     {
         $ifs = $this->createInvertedIfNodesFromConditions($node, $conditions, $ifNextReturnClone);
-        foreach ($ifs as $key => $if) {
-            if ($key === 0) {
-                $this->mirrorComments($if, $node);
-            }
+        $this->mirrorComments($ifs[0], $node);
 
+        foreach ($ifs as $if) {
             $this->addNodeBeforeNode($if, $node);
         }
 
@@ -184,11 +175,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($if->else !== null) {
-            return true;
-        }
-
-        if ($if->elseifs !== []) {
+        if (! $this->ifManipulator->isIfWithoutElseAndElseIfs($if)) {
             return true;
         }
 
@@ -201,11 +188,6 @@ CODE_SAMPLE
         }
 
         return ! $this->isLastIfOrBeforeLastReturn($if);
-    }
-
-    private function getIfReturn(If_ $if): ?Stmt
-    {
-        return end($if->stmts) ?: null;
     }
 
     /**
@@ -228,13 +210,8 @@ CODE_SAMPLE
         return $ifs;
     }
 
-    private function isIfStmtExprUsedInNextReturn(If_ $if): bool
+    private function isIfStmtExprUsedInNextReturn(If_ $if, Return_ $return): bool
     {
-        $return = $this->getIfNextReturn($if);
-        if (! $return instanceof Return_) {
-            return false;
-        }
-
         if (! $return->expr instanceof Expr) {
             return false;
         }
@@ -261,14 +238,14 @@ CODE_SAMPLE
     private function createInvertedIfNodesFromConditions(If_ $if, array $conditions, Return_ $return): array
     {
         $ifs = [];
-        $isInLoop = $this->isIfInLoop($if);
-        $getIfNextReturn = $this->getIfNextReturn($if);
+        $stmt = $this->isIfInLoop($if) && ! $this->getIfNextReturn($if)
+            ? [new Continue_()]
+            : [$return];
 
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if = new If_($invertedCondition);
-            $if->stmts = [$isInLoop && ! $getIfNextReturn instanceof Return_ ? new Continue_() : $return];
-
+            $if->stmts = $stmt;
             $ifs[] = $if;
         }
 
@@ -292,24 +269,11 @@ CODE_SAMPLE
         return $parentLoop !== null;
     }
 
-    private function isIfReturnsVoid(If_ $if): bool
-    {
-        $lastStmt = $this->stmtsManipulator->getUnwrappedLastStmt($if->stmts);
-        if (! $lastStmt instanceof Return_) {
-            return false;
-        }
-        return $lastStmt->expr === null;
-    }
-
     private function isParentIfReturnsVoidOrParentIfHasNextNode(If_ $if): bool
     {
         $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof If_) {
             return false;
-        }
-
-        if ($this->isIfReturnsVoid($parentNode)) {
-            return true;
         }
 
         $nextParent = $parentNode->getAttribute(AttributeKey::NEXT_NODE);
