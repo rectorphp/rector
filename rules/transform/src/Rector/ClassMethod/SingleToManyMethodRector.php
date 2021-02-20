@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\ClassMethod;
+namespace Rector\Transform\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Generic\Tests\Rector\ClassMethod\SingleToManyMethodRector\SingleToManyMethodRectorTest
+ * @see \Rector\Transform\Tests\Rector\ClassMethod\SingleToManyMethodRector\SingleToManyMethodRectorTest
  */
 final class SingleToManyMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {

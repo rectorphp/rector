@@ -6996,10 +6996,10 @@ Change method that returns single value to multiple values
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\ClassMethod\SingleToManyMethodRector`
+- class: `Rector\Transform\Rector\ClassMethod\SingleToManyMethodRector`
 
 ```php
-use Rector\Generic\Rector\ClassMethod\SingleToManyMethodRector;
+use Rector\Transform\Rector\ClassMethod\SingleToManyMethodRector;
 use Rector\Generic\ValueObject\SingleToManyMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
