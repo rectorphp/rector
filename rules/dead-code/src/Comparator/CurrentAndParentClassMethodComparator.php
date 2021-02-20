@@ -138,7 +138,7 @@ final class CurrentAndParentClassMethodComparator
         $methodName = $this->nodeNameResolver->getName($staticCall->name);
 
         $parentClassMethod = $this->nodeRepository->findClassMethod($parentClassName, $methodName);
-        if ($parentClassMethod === null) {
+        if (! $parentClassMethod instanceof ClassMethod) {
             return $this->checkOverrideUsingReflection($classMethod, $parentClassName, $methodName);
         }
         if (! $parentClassMethod->isProtected()) {

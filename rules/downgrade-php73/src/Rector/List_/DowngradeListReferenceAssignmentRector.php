@@ -278,7 +278,7 @@ CODE_SAMPLE
         if ($arrayItem->key === null) {
             return $position;
         }
-        if (! ($arrayItem->key instanceof String_ || $arrayItem->key instanceof LNumber)) {
+        if (! $arrayItem->key instanceof String_ && ! $arrayItem->key instanceof LNumber) {
             return $position;
         }
         return $arrayItem->key->value;
