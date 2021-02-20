@@ -39,7 +39,7 @@ final class ChangeOriginalTypeToCustomRector extends AbstractRector implements C
         }
 
         $firstParam = $node->params[0];
-        $firstParam->type = new FullyQualified(ConstantPreservingDocParser::class);
+        $firstParam->type = new FullyQualified('Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser');
 
         return $node;
     }

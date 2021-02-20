@@ -37,7 +37,7 @@ final class ActionWithFormProcessClassMethodFactory
         $classMethod->params[] = new Param($requestVariable, null, new FullyQualified(
             'Symfony\Component\HttpFoundation\Request'
         ));
-        $classMethod->returnType = new FullyQualified(Response::class);
+        $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\Response');
 
         $formVariable = new Variable('form');
 

@@ -148,7 +148,7 @@ CODE_SAMPLE
         $classMethod->stmts[] = $return;
 
         if ($this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
-            $classMethod->returnType = new FullyQualified(Response::class);
+            $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\Response');
         }
 
         $this->removeNodes($classMethodRender->getNodesToRemove());

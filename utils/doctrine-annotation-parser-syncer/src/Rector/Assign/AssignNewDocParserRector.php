@@ -38,7 +38,7 @@ final class AssignNewDocParserRector extends AbstractRector implements ClassSync
             return null;
         }
 
-        $node->expr = new New_(new FullyQualified(ConstantPreservingDocParser::class));
+        $node->expr = new New_(new FullyQualified('Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser'));
 
         return $node;
     }
