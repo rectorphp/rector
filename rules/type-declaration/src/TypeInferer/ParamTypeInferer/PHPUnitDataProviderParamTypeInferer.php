@@ -130,9 +130,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
             return new MixedType();
         }
 
-        $p = $this->typeFactory->createMixedPassedOrUnionType($paramOnPositionTypes);
-
-        return $p;
+        return $this->typeFactory->createMixedPassedOrUnionType($paramOnPositionTypes);
     }
 
     private function getTypeFromClassMethodReturn(Array_ $classMethodReturnArrayNode): Type
