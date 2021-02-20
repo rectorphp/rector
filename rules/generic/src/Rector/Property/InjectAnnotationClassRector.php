@@ -13,17 +13,15 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\ServiceMapProvider;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -32,15 +30,10 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\InjectAnnotationClassRectorTest
  */
-final class InjectAnnotationClassRector extends AbstractRector implements ConfigurableRectorInterface
+final class InjectAnnotationClassRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    public const ANNOTATION_CLASSES = 'annotation_classes';
-
-    /**
-     * @var array<string, class-string<JMSInjectTagValueNode>|class-string<PHPDIInjectTagValueNode>>
+     * @var array<string, class-string<AbstractTagValueNode>>
      */
     private const ANNOTATION_TO_TAG_CLASS = [
         'DI\Annotation\Inject' => PHPDIInjectTagValueNode::class,
@@ -52,11 +45,6 @@ final class InjectAnnotationClassRector extends AbstractRector implements Config
      * @see https://regex101.com/r/pjusUN/1
      */
     private const BETWEEN_PERCENT_CHARS_REGEX = '#%(.*?)%#';
-
-    /**
-     * @var string[]
-     */
-    private $annotationClasses = [];
 
     /**
      * @var ErrorAndDiffCollector
@@ -85,45 +73,38 @@ final class InjectAnnotationClassRector extends AbstractRector implements Config
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition(
-            'Changes properties with specified annotations class to constructor injection',
-            [
-                new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes properties with specified annotations class to constructor injection', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                <<<'CODE_SAMPLE'
 use JMS\DiExtraBundle\Annotation as DI;
 
 class SomeController
 {
-    /**
-     * @DI\Inject("entity.manager")
-     */
-    private $entityManager;
+/**
+ * @DI\Inject("entity.manager")
+ */
+private $entityManager;
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+                ,
+                <<<'CODE_SAMPLE'
 use JMS\DiExtraBundle\Annotation as DI;
 
 class SomeController
 {
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
+/**
+ * @var EntityManager
+ */
+private $entityManager;
 
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = entityManager;
-    }
+public function __construct(EntityManager $entityManager)
+{
+    $this->entityManager = entityManager;
+}
 }
 CODE_SAMPLE
-                    ,
-                    [
-                        self::ANNOTATION_CLASSES => ['DI\Annotation\Inject', 'JMS\DiExtraBundle\Annotation\Inject'],
-                    ]
-                ),
-            ]
-        );
+            ),
+        ]);
     }
 
     /**
@@ -140,11 +121,8 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        foreach ($this->annotationClasses as $annotationClass) {
-            $this->ensureAnnotationClassIsSupported($annotationClass);
 
-            $tagClass = self::ANNOTATION_TO_TAG_CLASS[$annotationClass];
-
+        foreach (self::ANNOTATION_TO_TAG_CLASS as $annotationClass => $tagClass) {
             $injectTagValueNode = $phpDocInfo->getByType($tagClass);
             if ($injectTagValueNode === null) {
                 continue;
@@ -160,27 +138,6 @@ CODE_SAMPLE
         }
 
         return null;
-    }
-
-    public function configure(array $configuration): void
-    {
-        $this->annotationClasses = $configuration[self::ANNOTATION_CLASSES] ?? [];
-    }
-
-    private function ensureAnnotationClassIsSupported(string $annotationClass): void
-    {
-        if (isset(self::ANNOTATION_TO_TAG_CLASS[$annotationClass])) {
-            return;
-        }
-
-        $availableAnnotations = array_keys(self::ANNOTATION_TO_TAG_CLASS);
-        $errorMessage = sprintf(
-            'Annotation class "%s" is not implemented yet. Use one of "%s" or add custom tag for it to Rector.',
-            $annotationClass,
-            implode('", "', $availableAnnotations)
-        );
-
-        throw new NotImplementedYetException($errorMessage);
     }
 
     private function isParameterInject(PhpDocTagValueNode $phpDocTagValueNode): bool
