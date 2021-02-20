@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Class_;
+namespace Rector\Transform\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
@@ -21,7 +21,7 @@ final class AddInterfaceByTraitRector extends AbstractRector implements Configur
     /**
      * @var string
      */
-    public const INTERFACE_BY_TRAIT = '$interfaceByTrait';
+    public const INTERFACE_BY_TRAIT = 'interface_by_trait';
 
     /**
      * @var string[]

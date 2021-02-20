@@ -6766,10 +6766,10 @@ Add interface by used trait
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Class_\AddInterfaceByTraitRector`
+- class: `Rector\Transform\Rector\Class_\AddInterfaceByTraitRector`
 
 ```php
-use Rector\Generic\Rector\Class_\AddInterfaceByTraitRector;
+use Rector\Transform\Rector\Class_\AddInterfaceByTraitRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
