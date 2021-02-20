@@ -16,7 +16,7 @@ final class BootstrapConfigs
     /**
      * @var SmartFileInfo[]
      */
-    private $setConfigFileInfos;
+    private $setConfigFileInfos = [];
 
     /**
      * @param SmartFileInfo[] $setConfigFileInfos
@@ -38,11 +38,9 @@ final class BootstrapConfigs
     public function getConfigFileInfos(): array
     {
         $configFileInfos = [];
-        if ($this->mainConfigFileInfo) {
+        if ($this->mainConfigFileInfo !== null) {
             $configFileInfos[] = $this->mainConfigFileInfo;
         }
-
-        $configFileInfos = array_merge($configFileInfos, $this->setConfigFileInfos);
-        return $configFileInfos;
+        return array_merge($configFileInfos, $this->setConfigFileInfos);
     }
 }

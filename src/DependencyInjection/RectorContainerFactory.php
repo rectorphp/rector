@@ -45,7 +45,7 @@ final class RectorContainerFactory
         $container = $this->createFromConfigs($bootstrapConfigs->getConfigFileInfos());
 
         $mainConfigFileInfo = $bootstrapConfigs->getMainConfigFileInfo();
-        if ($mainConfigFileInfo) {
+        if ($mainConfigFileInfo !== null) {
             /** @var ChangedFilesDetector $changedFilesDetector */
             $changedFilesDetector = $container->get(ChangedFilesDetector::class);
             $changedFilesDetector->setFirstResolvedConfigFileInfo($mainConfigFileInfo);

@@ -29,11 +29,6 @@ final class ConsoleApplication extends Application
     private const NAME = 'Rector';
 
     /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
      * @var NoRectorsLoadedReporter
      */
     private $noRectorsLoadedReporter;
@@ -61,7 +56,6 @@ final class ConsoleApplication extends Application
         }
 
         $this->addCommands($commands);
-        $this->configuration = $configuration;
         $this->noRectorsLoadedReporter = $noRectorsLoadedReporter;
     }
 
