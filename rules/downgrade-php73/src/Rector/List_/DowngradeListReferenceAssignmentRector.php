@@ -275,9 +275,6 @@ CODE_SAMPLE
      */
     private function getArrayItemKey(ArrayItem $arrayItem, $position)
     {
-        if ($arrayItem->key === null) {
-            return $position;
-        }
         if ($arrayItem->key instanceof String_) {
             return $arrayItem->key->value;
         }
