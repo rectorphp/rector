@@ -302,12 +302,13 @@ final class TokenManipulator
         if ($identical->left instanceof ArrayDimFetch && $identical->right instanceof ConstFetch) {
             return new ArrayDimFetchAndConstFetch($identical->left, $identical->right);
         }
-
-        if ($identical->right instanceof ArrayDimFetch && $identical->left instanceof ConstFetch) {
-            return new ArrayDimFetchAndConstFetch($identical->right, $identical->left);
+        if (! $identical->right instanceof ArrayDimFetch) {
+            return null;
         }
-
-        return null;
+        if (! $identical->left instanceof ConstFetch) {
+            return null;
+        }
+        return new ArrayDimFetchAndConstFetch($identical->right, $identical->left);
     }
 
     private function createIsTConstTypeMethodCall(ArrayDimFetch $arrayDimFetch, ConstFetch $constFetch): MethodCall

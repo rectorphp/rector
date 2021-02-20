@@ -105,11 +105,15 @@ CODE_SAMPLE
     private function processVariableNum(Continue_ $continue, Variable $numVariable): Stmt
     {
         $staticType = $this->getStaticType($numVariable);
-
-        if ($staticType instanceof ConstantType && $staticType instanceof ConstantIntegerType && $staticType->getValue() <= 1) {
-            return new Break_();
+        if (! $staticType instanceof ConstantType) {
+            return $continue;
         }
-
-        return $continue;
+        if (! $staticType instanceof ConstantIntegerType) {
+            return $continue;
+        }
+        if ($staticType->getValue() > 1) {
+            return $continue;
+        }
+        return new Break_();
     }
 }

@@ -192,17 +192,25 @@ CODE_SAMPLE
     private function hasDirectAssertCall(ClassMethod $classMethod): bool
     {
         return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
-            if (! $node instanceof MethodCall && ! $node instanceof StaticCall) {
-                return false;
+            if ($node instanceof MethodCall) {
+                return $this->isNames($node->name, [
+                    // phpunit
+                    '*assert',
+                    'assert*',
+                    'expectException*',
+                    'setExpectedException*',
+                ]);
             }
-
-            return $this->isNames($node->name, [
-                // phpunit
-                '*assert',
-                'assert*',
-                'expectException*',
-                'setExpectedException*',
-            ]);
+            if ($node instanceof StaticCall) {
+                return $this->isNames($node->name, [
+                    // phpunit
+                    '*assert',
+                    'assert*',
+                    'expectException*',
+                    'setExpectedException*',
+                ]);
+            }
+            return false;
         });
     }
 

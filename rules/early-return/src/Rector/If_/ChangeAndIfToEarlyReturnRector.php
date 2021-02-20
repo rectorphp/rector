@@ -230,7 +230,7 @@ CODE_SAMPLE
 
     private function isIfStmtExprUsedInNextReturn(If_ $if): bool
     {
-        $return      = $this->getIfNextReturn($if);
+        $return = $this->getIfNextReturn($if);
         if (! $return instanceof Return_) {
             return false;
         }
@@ -239,9 +239,11 @@ CODE_SAMPLE
             return false;
         }
 
-        $ifExprs     = $this->betterNodeFinder->findInstanceOf($if->stmts, Expr::class);
+        $ifExprs = $this->betterNodeFinder->findInstanceOf($if->stmts, Expr::class);
         foreach ($ifExprs as $expr) {
-            $isExprFoundInReturn = (bool) $this->betterNodeFinder->findFirst($return->expr, function (Node $node) use ($expr): bool {
+            $isExprFoundInReturn = (bool) $this->betterNodeFinder->findFirst($return->expr, function (Node $node) use (
+                $expr
+            ): bool {
                 return $this->areNodesEqual($node, $expr);
             });
             if ($isExprFoundInReturn) {
@@ -265,7 +267,7 @@ CODE_SAMPLE
         foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if = new If_($invertedCondition);
-            $if->stmts = [$isInLoop && $getIfNextReturn === null ? new Continue_() : $return];
+            $if->stmts = [$isInLoop && ! $getIfNextReturn instanceof Return_ ? new Continue_() : $return];
 
             $ifs[] = $if;
         }

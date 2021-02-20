@@ -135,13 +135,14 @@ CODE_SAMPLE
         if ($nextNode->expr === null) {
             return true;
         }
-
         // negate + negate → skip for now
-        if ($this->valueResolver->isFalse($returnedExpr) && Strings::contains($this->print($if->cond), '!=')) {
-            return true;
+        if (! $this->valueResolver->isFalse($returnedExpr)) {
+            return ! $this->valueResolver->isTrueOrFalse($nextNode->expr);
         }
-
-        return ! $this->valueResolver->isTrueOrFalse($nextNode->expr);
+        if (! Strings::contains($this->print($if->cond), '!=')) {
+            return ! $this->valueResolver->isTrueOrFalse($nextNode->expr);
+        }
+        return true;
     }
 
     private function processReturnTrue(If_ $if, Return_ $nextReturnNode): Return_

@@ -173,12 +173,14 @@ CODE_SAMPLE
         if ($keysToRemove === []) {
             return [];
         }
-
-        if ($keysToKeep !== [] && max($keysToKeep) > max($keysToRemove)) {
-            return [];
+        if ($keysToKeep === []) {
+            /** @var int[] $keysToRemove */
+            return $keysToRemove;
         }
-
-        /** @var int[] $keysToRemove */
-        return $keysToRemove;
+        if (max($keysToKeep) <= max($keysToRemove)) {
+            /** @var int[] $keysToRemove */
+            return $keysToRemove;
+        }
+        return [];
     }
 }

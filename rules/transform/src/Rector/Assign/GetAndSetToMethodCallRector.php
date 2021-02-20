@@ -157,12 +157,13 @@ CODE_SAMPLE
 
             // setter, skip
             $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
-
-            if ($parentNode instanceof Assign && $parentNode->var === $propertyFetch) {
-                continue;
+            if (! $parentNode instanceof Assign) {
+                return $this->createMethodCallNodeFromPropertyFetchNode($propertyFetch, $transformation['get']);
             }
-
-            return $this->createMethodCallNodeFromPropertyFetchNode($propertyFetch, $transformation['get']);
+            if ($parentNode->var !== $propertyFetch) {
+                return $this->createMethodCallNodeFromPropertyFetchNode($propertyFetch, $transformation['get']);
+            }
+            continue;
         }
 
         return null;
