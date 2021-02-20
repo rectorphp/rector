@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
+use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\Definition;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DefinitionAliasSetPrivateToSetPublicRector extends AbstractRector
 {
     /**
-     * @var array<class-string>
+     * @var class-string<Alias>[]|class-string<Definition>[]
      */
     private const REQUIRED_CLASS_TYPES = [
         'Symfony\Component\DependencyInjection\Alias',

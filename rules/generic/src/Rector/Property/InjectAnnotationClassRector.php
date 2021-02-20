@@ -40,7 +40,7 @@ final class InjectAnnotationClassRector extends AbstractRector implements Config
     public const ANNOTATION_CLASSES = 'annotation_classes';
 
     /**
-     * @var array<class-string, class-string>
+     * @var array<string, class-string<JMSInjectTagValueNode>|class-string<PHPDIInjectTagValueNode>>
      */
     private const ANNOTATION_TO_TAG_CLASS = [
         'DI\Annotation\Inject' => PHPDIInjectTagValueNode::class,

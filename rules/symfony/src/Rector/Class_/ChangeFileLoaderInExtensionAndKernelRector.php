@@ -15,6 +15,9 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -36,7 +39,7 @@ final class ChangeFileLoaderInExtensionAndKernelRector extends AbstractRector im
     public const TO = 'to';
 
     /**
-     * @var array<string, class-string>
+     * @var array<string, class-string<PhpFileLoader>|class-string<XmlFileLoader>|class-string<YamlFileLoader>>
      */
     private const FILE_LOADERS_BY_TYPE = [
         'xml' => 'Symfony\Component\DependencyInjection\Loader\XmlFileLoader',

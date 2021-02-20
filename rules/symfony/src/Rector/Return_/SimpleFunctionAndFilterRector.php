@@ -19,6 +19,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Twig_SimpleFilter;
+use Twig_SimpleFunction;
 
 /**
  * Covers https://twig.symfony.com/doc/1.x/deprecated.html#function
@@ -28,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimpleFunctionAndFilterRector extends AbstractRector
 {
     /**
-     * @var array<class-string, class-string>
+     * @var array<string, class-string<Twig_SimpleFilter>|class-string<Twig_SimpleFunction>>
      */
     private const OLD_TO_NEW_CLASSES = [
         'Twig_Function_Method' => 'Twig_SimpleFunction',

@@ -9,11 +9,13 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony3\FormHelper\FormTypeStringToTypeProvider;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 
 abstract class AbstractFormAddRector extends AbstractRector
 {
     /**
-     * @var array<class-string>
+     * @var class-string<FormBuilderInterface>[]|class-string<FormInterface>[]
      */
     private const FORM_TYPES = ['Symfony\Component\Form\FormBuilderInterface', 'Symfony\Component\Form\FormInterface'];
 
