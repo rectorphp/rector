@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Class_\AddInterfaceByTraitRector\AddInterfaceByTraitRectorTest
+ * @see \Rector\Transform\Tests\Rector\Class_\AddInterfaceByTraitRector\AddInterfaceByTraitRectorTest
  */
 final class AddInterfaceByTraitRector extends AbstractRector implements ConfigurableRectorInterface
 {

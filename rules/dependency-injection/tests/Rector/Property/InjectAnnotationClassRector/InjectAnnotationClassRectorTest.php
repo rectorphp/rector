@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector;
+namespace Rector\DependencyInjection\Tests\Rector\Property\InjectAnnotationClassRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

@@ -2,7 +2,7 @@
 
 namespace Rector\Transform\Tests\Rector\Class_\AddInterfaceByTraitRector\Fixture;
 
-use Rector\Generic\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
+use Rector\Transform\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
 
 class SomeClass
 {
@@ -15,9 +15,9 @@ class SomeClass
 
 namespace Rector\Transform\Tests\Rector\Class_\AddInterfaceByTraitRector\Fixture;
 
-use Rector\Generic\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
+use Rector\Transform\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
 
-class SomeClass implements \Rector\Generic\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeInterface
+class SomeClass implements \Rector\Transform\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeInterface
 {
     use SomeTrait;
 }

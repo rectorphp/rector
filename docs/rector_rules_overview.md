@@ -6968,10 +6968,10 @@ Changes properties with specified annotations class to constructor injection
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Property\InjectAnnotationClassRector`
+- class: `Rector\DependencyInjection\Rector\Property\InjectAnnotationClassRector`
 
 ```php
-use Rector\Generic\Rector\Property\InjectAnnotationClassRector;
+use Rector\DependencyInjection\Rector\Property\InjectAnnotationClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
