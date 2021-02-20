@@ -129,7 +129,6 @@ CODE_SAMPLE
         $expr = $node->cond;
 
         $ifNextReturn = $this->getIfNextReturn($node);
-
         $conditions = $this->getBooleanAndConditions($expr);
 
         $ifNextReturnClone = $ifNextReturn instanceof Return_
@@ -193,7 +192,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isParentIfReturnsVoid($if)) {
+        if ($this->isParentIfReturnsVoidOrParentIfHasNextNode($if)) {
             return true;
         }
 
@@ -300,14 +299,19 @@ CODE_SAMPLE
         return $lastStmt->expr === null;
     }
 
-    private function isParentIfReturnsVoid(If_ $if): bool
+    private function isParentIfReturnsVoidOrParentIfHasNextNode(If_ $if): bool
     {
         $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof If_) {
             return false;
         }
 
-        return $this->isIfReturnsVoid($parentNode);
+        if ($this->isIfReturnsVoid($parentNode)) {
+            return true;
+        }
+
+        $nextParent = $parentNode->getAttribute(AttributeKey::NEXT_NODE);
+        return $nextParent instanceof Node;
     }
 
     private function isNestedIfInLoop(If_ $if): bool
