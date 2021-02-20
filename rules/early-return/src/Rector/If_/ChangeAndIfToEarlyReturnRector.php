@@ -121,6 +121,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isIfStmtExprUsedInNextReturn($node)) {
+            return null;
+        }
+
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
 
@@ -223,6 +227,30 @@ CODE_SAMPLE
 
         krsort($ifs);
         return $ifs;
+    }
+
+    private function isIfStmtExprUsedInNextReturn(If_ $if): bool
+    {
+        $return      = $this->getIfNextReturn($if);
+        if (! $return instanceof Return_) {
+            return false;
+        }
+
+        if (! $return->expr instanceof Expr) {
+            return false;
+        }
+
+        $ifExprs     = $this->betterNodeFinder->findInstanceOf($if->stmts, Expr::class);
+        foreach ($ifExprs as $expr) {
+            $isExprFoundInReturn = (bool) $this->betterNodeFinder->findFirst($return->expr, function (Node $node) use ($expr): bool {
+                return $this->areNodesEqual($node, $expr);
+            });
+            if ($isExprFoundInReturn) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
