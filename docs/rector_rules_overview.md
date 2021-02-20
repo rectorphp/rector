@@ -6766,10 +6766,10 @@ Add interface by used trait
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Class_\AddInterfaceByTraitRector`
+- class: `Rector\Transform\Rector\Class_\AddInterfaceByTraitRector`
 
 ```php
-use Rector\Generic\Rector\Class_\AddInterfaceByTraitRector;
+use Rector\Transform\Rector\Class_\AddInterfaceByTraitRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -6840,7 +6840,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Turns non-private properties with `@inject` to private properties and constructor injection
 
-- class: `Rector\Generic\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector`
+- class: `Rector\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector`
 
 ```diff
  /**
@@ -6968,10 +6968,10 @@ Changes properties with specified annotations class to constructor injection
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Property\InjectAnnotationClassRector`
+- class: `Rector\DependencyInjection\Rector\Property\InjectAnnotationClassRector`
 
 ```php
-use Rector\Generic\Rector\Property\InjectAnnotationClassRector;
+use Rector\DependencyInjection\Rector\Property\InjectAnnotationClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -7015,10 +7015,10 @@ Merges old interface to a new one, that already has its methods
 
 :wrench: **configure it!**
 
-- class: `Rector\Generic\Rector\Class_\MergeInterfacesRector`
+- class: `Rector\Transform\Rector\Class_\MergeInterfacesRector`
 
 ```php
-use Rector\Generic\Rector\Class_\MergeInterfacesRector;
+use Rector\Transform\Rector\Class_\MergeInterfacesRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

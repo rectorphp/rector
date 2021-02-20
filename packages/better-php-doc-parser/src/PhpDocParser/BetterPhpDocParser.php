@@ -140,7 +140,6 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_CLOSE_PHPDOC);
 
         $phpDocNode = new PhpDocNode(array_values($children));
-
         $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
 
         return $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
@@ -160,6 +159,7 @@ final class BetterPhpDocParser extends PhpDocParser
         }
 
         $phpDocTagValueNode = $this->parseTagValue($tokenIterator, $tag);
+
         return new PhpDocTagNode($tag, $phpDocTagValueNode);
     }
 
