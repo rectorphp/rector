@@ -13,15 +13,19 @@ final class SwitchAnalyzer
     public function hasEachCaseBreak(Switch_ $switch): bool
     {
         $totalCases = count($switch->cases);
+        if ($totalCases === 1) {
+            return false;
+        }
+
         foreach ($switch->cases as $key => $case) {
+            if ($key === $totalCases - 1) {
+                return true;
+            }
+
             foreach ($case->stmts as $caseStmt) {
                 if ($caseStmt instanceof Break_) {
                     continue 2;
                 }
-            }
-
-            if ($totalCases > 1 && $key === $totalCases - 1) {
-                return true;
             }
 
             return false;
