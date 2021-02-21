@@ -2,8 +2,6 @@
 
 namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Fixture;
 
-use DateTimeInterface;
-
 class NullableType2
 {
     private ?string $str;
@@ -19,8 +17,6 @@ class NullableType2
 <?php
 
 namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Fixture;
-
-use DateTimeInterface;
 
 class NullableType2
 {
