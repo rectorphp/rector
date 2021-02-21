@@ -12,6 +12,7 @@
         realpath(__DIR__ . '/../vendor'),          // bin/rector
         realpath(__DIR__ . '/../../../../vendor'), // vendor/rector/rector/bin/rector
         realpath(__DIR__ . '/../../vendor'),       // vendor/bin/rector , it may be a symlink of vendor/rector/rector/bin/rector
+        'vendor',
     ];
 
     $areStubsFound = static function (string $vendorPath) : bool {
