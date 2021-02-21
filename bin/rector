@@ -1,14 +1,41 @@
 #!/usr/bin/env php
 <?php
 
-// @see https://github.com/phpstan/phpstan/issues/4541#issuecomment-779434916
-if (
-    file_exists('phar://vendor/phpstan/phpstan/phpstan.phar/stubs/runtime/ReflectionUnionType.php')
-    &&
-    file_exists('phar://vendor/phpstan/phpstan/phpstan.phar/stubs/runtime/Attribute.php')
-) {
-    require_once 'phar://vendor/phpstan/phpstan/phpstan.phar/stubs/runtime/ReflectionUnionType.php';
-    require_once 'phar://vendor/phpstan/phpstan/phpstan.phar/stubs/runtime/Attribute.php';
-}
+/**
+ * @see https://github.com/phpstan/phpstan/issues/4541#issuecomment-779434916
+ *
+ * Point possible vendor locations by use the __DIR__ as start to locate
+ * @see https://github.com/rectorphp/rector/pull/5581 that may not detected in https://getrector.org/ which uses docker to run
+ */
+(static function () {
+    $vendorPaths = [
+        realpath(__DIR__ . '/../vendor'),
+        realpath(__DIR__ . '/../../vendor'),
+    ];
+
+    $areStubsFound = static function (string $vendorPath) : bool {
+        if (! file_exists("phar://$vendorPath/phpstan/phpstan/phpstan.phar/stubs/runtime/ReflectionUnionType.php")) {
+            return false;
+        }
+
+        return file_exists("phar://$vendorPath/phpstan/phpstan/phpstan.phar/stubs/runtime/Attribute.php");
+    };
+
+    foreach ($vendorPaths as $vendorPath) {
+        if (! $vendorPath) {
+            continue;
+        }
+
+        if (! $areStubsFound($vendorPath)) {
+            continue;
+        }
+
+        require_once "phar://$vendorPath/phpstan/phpstan/phpstan.phar/stubs/runtime/ReflectionUnionType.php";
+        require_once "phar://$vendorPath/phpstan/phpstan/phpstan.phar/stubs/runtime/Attribute.php";
+
+        // already loaded? stop loop
+        break;
+    }
+})();
 
 require_once __DIR__ . '/rector.php';
