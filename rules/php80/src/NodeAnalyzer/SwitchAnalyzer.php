@@ -12,16 +12,22 @@ final class SwitchAnalyzer
 {
     public function hasEachCaseBreak(Switch_ $switch): bool
     {
-        foreach ($switch->cases as $case) {
+        $totalCases = count($switch->cases);
+        foreach ($switch->cases as $key => $case) {
             foreach ($case->stmts as $caseStmt) {
                 if ($caseStmt instanceof Break_) {
-                    return true;
+                    continue 2;
                 }
             }
+
+            if ($totalCases > 1 && $key === $totalCases - 1) {
+                return true;
+            }
+
             return false;
         }
 
-        return false;
+        return true;
     }
 
     public function hasEachCaseSingleStmt(Switch_ $switch): bool
