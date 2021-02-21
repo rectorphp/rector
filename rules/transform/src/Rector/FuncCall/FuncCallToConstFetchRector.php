@@ -58,33 +58,7 @@ CODE_SAMPLE
                     ],
                 ]
             ),
-            new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        $value = pi();
-    }
-}
-CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        $value = M_PI;
-    }
-}
-CODE_SAMPLE
-                ,
-                [
-                    self::FUNCTIONS_TO_CONSTANTS => [
-                        'pi' => 'M_PI',
-                    ],
-                ]
-            ),
+
         ]);
     }
 

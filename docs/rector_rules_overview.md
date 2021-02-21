@@ -16,7 +16,7 @@
 
 - [CodeQualityStrict](#codequalitystrict) (4)
 
-- [CodingStyle](#codingstyle) (38)
+- [CodingStyle](#codingstyle) (37)
 
 - [Composer](#composer) (5)
 
@@ -136,7 +136,7 @@
 
 - [SymfonyPhpConfig](#symfonyphpconfig) (1)
 
-- [Transform](#transform) (34)
+- [Transform](#transform) (35)
 
 - [TypeDeclaration](#typedeclaration) (17)
 
@@ -2268,76 +2268,6 @@ include/require should be followed by absolute path
 
 <br>
 
-### FunctionCallToConstantRector
-
-Changes use of function calls to use constants
-
-:wrench: **configure it!**
-
-- class: `Rector\Transform\Rector\FuncCall\FunctionCallToConstantRector`
-
-```php
-use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(FuncCallToConstFetchRector::class)
-        ->call('configure', [[
-            FuncCallToConstFetchRector::FUNCTIONS_TO_CONSTANTS => [
-                'php_sapi_name' => 'PHP_SAPI',
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $value = php_sapi_name();
-+        $value = PHP_SAPI;
-     }
- }
-```
-
-<br>
-
-```php
-use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(FuncCallToConstFetchRector::class)
-        ->call('configure', [[
-            FuncCallToConstFetchRector::FUNCTIONS_TO_CONSTANTS => [
-                'pi' => 'M_PI',
-            ],
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $value = pi();
-+        $value = M_PI;
-     }
- }
-```
-
-<br>
-
 ### MakeInheritedMethodVisibilitySameAsParentRector
 
 Make method visibility same as parent one
@@ -2605,7 +2535,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
+Split multiple inline assigns to each own lines default value, to prevent undefined array issues
 
 - class: `Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`
 
@@ -13109,7 +13039,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
 
 :wrench: **configure it!**
 
@@ -15361,6 +15291,45 @@ return static function (ContainerConfigurator $containerConfigurator): void {
          $routeList = new RouteList();
 -        $routeList[] = new Route('...');
 +        $routeList->addRoute('...');
+     }
+ }
+```
+
+<br>
+
+### FuncCallToConstFetchRector
+
+Changes use of function calls to use constants
+
+:wrench: **configure it!**
+
+- class: `Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector`
+
+```php
+use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(FuncCallToConstFetchRector::class)
+        ->call('configure', [[
+            FuncCallToConstFetchRector::FUNCTIONS_TO_CONSTANTS => [
+                'php_sapi_name' => 'PHP_SAPI',
+            ],
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = php_sapi_name();
++        $value = PHP_SAPI;
      }
  }
 ```
