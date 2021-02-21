@@ -2605,7 +2605,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to each own lines default value, to prevent undefined array issues
+Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
 
 - class: `Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`
 
@@ -13109,7 +13109,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
 
 :wrench: **configure it!**
 
