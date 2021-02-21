@@ -109,6 +109,7 @@ CODE_SAMPLE
         $if = new If_($expr);
         $if->stmts[] = new Expression($booleanExpr->right);
 
+        $this->mirrorComments($if, $expression);
         return $if;
     }
 }
