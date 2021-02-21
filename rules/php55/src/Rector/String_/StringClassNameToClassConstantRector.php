@@ -189,7 +189,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isFuncCallName($parentParent, 'is_a');
+        return $this->nodeNameResolver->isFuncCallName($parentParent, 'is_a');
     }
 
     private function shouldSkip(string $classLikeName, String_ $string): bool

@@ -74,7 +74,7 @@ CODE_SAMPLE
         }
 
         $argValue = $node->args[0]->value;
-        if (! $this->isFuncCallName($argValue, 'sprintf')) {
+        if (! $this->nodeNameResolver->isFuncCallName($argValue, 'sprintf')) {
             return null;
         }
 

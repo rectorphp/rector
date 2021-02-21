@@ -128,7 +128,7 @@ CODE_SAMPLE
         }
 
         // nothing to change
-        if ($this->isStaticCallNamed($argValue, 'Carbon\Carbon', 'today')) {
+        if ($this->nodeNameResolver->isStaticCallNamed($argValue, 'Carbon\Carbon', 'today')) {
             return null;
         }
 

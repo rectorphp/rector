@@ -127,7 +127,7 @@ CODE_SAMPLE
     private function findVariableByName(Stmt $stmt, string $docVariableName): ?Node
     {
         return $this->betterNodeFinder->findFirst($stmt, function (Node $stmt) use ($docVariableName): bool {
-            return $this->isVariableName($stmt, $docVariableName);
+            return $this->nodeNameResolver->isVariableName($stmt, $docVariableName);
         });
     }
 
@@ -144,7 +144,7 @@ CODE_SAMPLE
         $assign = $stmt->expr;
 
         // the variable is on the left side = just created
-        return $this->isVariableName($assign->var, $docVariableName);
+        return $this->nodeNameResolver->isVariableName($assign->var, $docVariableName);
     }
 
     private function refactorFreshlyCreatedNode(Stmt $stmt, PhpDocInfo $phpDocInfo, Variable $variable): ?Node

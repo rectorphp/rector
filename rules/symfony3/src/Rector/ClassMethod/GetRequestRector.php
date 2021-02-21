@@ -157,7 +157,7 @@ CODE_SAMPLE
         }
 
         // must be $this->getRequest() in controller
-        if (! $this->isVariableName($node->var, 'this')) {
+        if (! $this->nodeNameResolver->isVariableName($node->var, 'this')) {
             return false;
         }
 

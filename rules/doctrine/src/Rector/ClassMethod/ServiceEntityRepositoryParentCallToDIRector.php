@@ -15,6 +15,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\NodeFactory\RepositoryNodeFactory;
 use Rector\Doctrine\Type\RepositoryTypeFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -42,12 +43,19 @@ final class ServiceEntityRepositoryParentCallToDIRector extends AbstractRector
      */
     private $repositoryTypeFactory;
 
+    /**
+     * @var PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+
     public function __construct(
         RepositoryNodeFactory $repositoryNodeFactory,
-        RepositoryTypeFactory $repositoryTypeFactory
+        RepositoryTypeFactory $repositoryTypeFactory,
+        PropertyToAddCollector $propertyToAddCollector
     ) {
         $this->repositoryNodeFactory = $repositoryNodeFactory;
         $this->repositoryTypeFactory = $repositoryTypeFactory;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -136,7 +144,7 @@ CODE_SAMPLE
         $this->addRepositoryProperty($classLike, $entityReferenceExpr);
 
         // 5. add param + add property, dependency
-        $this->addServiceConstructorDependencyToClass($classLike, 'Doctrine\ORM\EntityManagerInterface');
+        $this->propertyAdder->addServiceConstructorDependencyToClass($classLike, 'Doctrine\ORM\EntityManagerInterface');
 
         return $node;
     }
@@ -185,6 +193,6 @@ CODE_SAMPLE
     private function addRepositoryProperty(Class_ $class, Expr $entityReferenceExpr): void
     {
         $genericObjectType = $this->repositoryTypeFactory->createRepositoryPropertyType($entityReferenceExpr);
-        $this->addPropertyToClass($class, $genericObjectType, 'repository');
+        $this->propertyToAddCollector->addPropertyWithoutConstructorToClass('repository', $genericObjectType, $class);
     }
 }

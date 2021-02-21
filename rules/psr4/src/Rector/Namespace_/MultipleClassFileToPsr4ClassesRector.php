@@ -184,8 +184,12 @@ CODE_SAMPLE
         /** @var SmartFileInfo $smartFileInfo */
         $smartFileInfo = $mainNode->getAttribute(AttributeKey::FILE_INFO);
 
-        /** @var Declare_[] $declares */
-        $declares = (array) $mainNode->getAttribute(AttributeKey::DECLARES);
+        $declares = [];
+        $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [Declare_::class]);
+        if ($declare instanceof Declare_) {
+            $declares = [$declare];
+        }
+
         if ($mainNode instanceof FileWithoutNamespace) {
             $nodesToPrint = array_merge($declares, [$classLike]);
         } else {

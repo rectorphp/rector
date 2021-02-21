@@ -352,7 +352,7 @@ CODE_SAMPLE
                 $methodStmt = $methodStmt->expr;
             }
 
-            if (! $this->isStaticCallNamed($methodStmt, 'parent', MethodName::SET_UP)) {
+            if (! $this->nodeNameResolver->isStaticCallNamed($methodStmt, 'parent', MethodName::SET_UP)) {
                 continue;
             }
 

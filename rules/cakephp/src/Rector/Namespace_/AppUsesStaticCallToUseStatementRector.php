@@ -94,7 +94,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $this->isStaticCallNamed($node, 'App', 'uses');
+            return $this->nodeNameResolver->isStaticCallNamed($node, 'App', 'uses');
         });
 
         return $appUsesStaticCalls;

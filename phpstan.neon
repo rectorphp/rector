@@ -117,8 +117,6 @@ parameters:
             count: 1
             path: packages/better-php-doc-parser/src/Printer/WhitespaceDetector.php
 
-        - '#Cannot cast PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Identifier to string#'
-
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$class#'
         - '#Property PhpParser\\Node\\Stmt\\Namespace_\:\:\$stmts \(array<PhpParser\\Node\\Stmt\>\) does not accept array<PhpParser\\Node\>#'
@@ -222,14 +220,6 @@ parameters:
 
         - '#Method Rector\\NetteKdyby\\NodeFactory\\EventValueObjectClassFactory\:\:wrapClassToNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
 
-        # 3rd party code
-        -
-            message: '#Do not use static property#'
-            paths:
-                 - packages/doctrine-annotation-generated/src/DataCollector/ResolvedConstantStaticCollector.php
-                 # tracy::$maxDepth
-                 - tests/bootstrap.php
-
         - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector\:\:refactor\(\) expects PhpParser\\Node\\Expr\\AssignOp\\Div\|PhpParser\\Node\\Expr\\AssignOp\\Minus\|PhpParser\\Node\\Expr\\AssignOp\\Mul\|PhpParser\\Node\\Expr\\AssignOp\\Plus\|PhpParser\\Node\\Expr\\BinaryOp\\Div\|PhpParser\\Node\\Expr\\BinaryOp\\Minus\|PhpParser\\Node\\Expr\\BinaryOp\\Mul\|PhpParser\\Node\\Expr\\BinaryOp\\Plus, PhpParser\\Node\\Expr\\AssignOp\|PhpParser\\Node\\Expr\\BinaryOp given#'
 
         -
@@ -268,9 +258,10 @@ parameters:
             paths:
                 # merging comments
                 - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php
-                - src/Rector/AbstractTemporaryRector.php
                 - src/PhpParser/NodeTransformer.php
+                - src/Rector/AbstractTemporaryRector.php
                 # playing around with doc block format
+                - packages/comments/src/CommentRemover.php
                 - rules/coding-style/src/Rector/Assign/PHPStormVarAnnotationRector.php
                 - rules/code-quality/src/Rector/Return_/SimplifyUselessVariableRector.php
                 - rules/dead-code/src/Rector/Expression/RemoveDeadStmtRector.php
@@ -316,12 +307,6 @@ parameters:
 
         - '#Method (.*?) should return array<PhpParser\\Node\\(.*?)\> but returns array<PhpParser\\Node\>#'
         - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#'
-
-        -
-            message: '#Strict comparison using \=\=\= between PhpParser\\Node and null will always evaluate to false#'
-            paths:
-                # looping
-                -  src/PhpParser/Node/BetterNodeFinder.php
 
         # intersection
         - '#Property Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\:\:\$returnTypeInferers \(array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\ReturnTypeInfererInterface\>\) does not accept array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface\>#'
@@ -393,7 +378,6 @@ parameters:
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             paths:
                 - rules/defluent/src/ValueObject/*
-                - src/Rector/AbstractTemporaryRector.php
 
         - '#Parameter \#1 \$keyName of method Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareArrayShapeItemNode\:\:createKeyWithSpacePattern\(\) expects PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null, PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null given#'
         - '#AttributeAwarePhpDocNode#'
@@ -436,8 +420,6 @@ parameters:
                 - packages/static-type-mapper/src/ValueObject/Type/SelfObjectType.php #9
                 - rules/symfony/tests/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeEntityManager.php #7
                 - rules/symfony/tests/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeNonKernelClass.php #7
-                - rules/symfony/tests/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeTranslator.php #9
-                - rules/transform/tests/Rector/MethodCall/MethodCallToStaticCallRector/AnotherDependency.php #7
 
         # generics nullable bugs
         - '#Method (.*?) should return T of PhpParser\\Node\|null but returns PhpParser\\Node\|null#'
@@ -490,11 +472,6 @@ parameters:
             message: '#Use non\-dynamic property on static call#'
             path: packages/better-php-doc-parser/src/AnnotationReader/AnnotationReaderFactory.php #56
 
-        # todo - skip in Symplify if imlements an interface
-        -
-            message: '#There should be no empty class#'
-            path: src/Rector/AbstractRector.php
-
         - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\MultiPhpDocNodeFactory\:\:getTagValueNodeClassesToAnnotationClasses\(\) should return array<class\-string<Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode\>, class\-string<Doctrine\\ORM\\Mapping\\Annotation\>\> but returns array<string, string\>#'
         -
             message: '#Use value object over return of values#'
@@ -509,7 +486,6 @@ parameters:
         - '#Class Acme\\Bar\\DoNotUpdateExistingTargetNamespace not found#'
         - '#Class Acme\\Foo\\DoNotUpdateExistingTargetNamespace not found#'
 
-        - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer" class\. Use unique content or abstract service instead#'
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentType\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'
 
         -
@@ -518,10 +494,6 @@ parameters:
 
         - '#Class with base "SetList" name is already used in "Symplify\\EasyCodingStandard\\ValueObject\\Set\\SetList", "Rector\\Set\\ValueObject\\SetList"\. Use unique name to make classes easy to recognize#'
         - '#Class with base "PhpVersion" name is already used in "PHPStan\\Php\\PhpVersion", "Rector\\Core\\ValueObject\\PhpVersion"\. Use unique name to make classes easy to recognize#'
-
-
-        - '#Trait method "printArrayItem\(\)" should not contain any logic, but only delegate to other class call#'
-        - '#Trait method "makeKeysExplicit\(\)" should not contain any logic, but only delegate to other class call#'
 
         -
             message: '#For complex configuration use value object over array#'
@@ -536,17 +508,12 @@ parameters:
         -
             message: '#Do not use static property#'
             paths:
-                - rules/sensio/tests/Rector/ClassMethod/TemplateAnnotationToThisRenderRector/DifferentBundleNameRectorTest.php
+                - packages/doctrine-annotation-generated/src/DataCollector/ResolvedConstantStaticCollector.php
+                # tracy::$maxDepth
+                - tests/bootstrap.php
 
         # known values
         - '#Method Rector\\Testing\\Finder\\RectorsFinder\:\:findClassesInDirectoriesByName\(\) should return array<class\-string\> but returns array<int, \(int\|string\)\>#'
-        - '#Content of method "collectVariableFromAssign\(\)" is duplicated with method "collectVariableFromAssign\(\)" in "Rector\\NetteToSymfony\\NodeAnalyzer\\ClassMethodRenderAnalyzer" class\. Use unique content or abstract service instead#'
         - '#Property PhpParser\\Node\\Param\:\:\$type \(PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\|null\) does not accept PhpParser\\Node#'
-        - '#Binary operation "\." between array\|string\|false and (.*?) results in an error#'
-        - '#Parameter \#3 \.\.\.\$rest of function array_uintersect expects array, Closure\(PhpParser\\Node\\Param, PhpParser\\Node\\Param\)\: int given#'
-        - '#Method Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector\:\:collectStrictReturnTypes\(\) should return array<PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\> but returns array<int, PhpParser\\Node\>#'
         - '#Parameter \#1 \$interfaces of method Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeCommonTypeNarrower\:\:filterOutNativeInterfaces\(\) expects array<class\-string\>, array<string, string\> given#'
-
-        # stmts vs getStmts() issue
-        - '#Access to an undefined property PhpParser\\Node\\Expr\\ArrowFunction\|PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_\:\:\$stmts#'
-        - '#Parameter \#1 \$functionLike of method Rector\\TypeDeclaration\\TypeInferer\\SilentVoidResolver\:\:hasExlusiveVoid\(\) expects PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_, PhpParser\\Node\\Expr\\ArrowFunction\|PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_ given#'
+        - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer" class\. Use unique content or abstract service instead#'

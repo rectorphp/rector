@@ -16,11 +16,6 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const DECLARES = 'declares';
-
-    /**
-     * @var string
-     */
     public const VIRTUAL_NODE = 'virtual_node';
 
     /**
