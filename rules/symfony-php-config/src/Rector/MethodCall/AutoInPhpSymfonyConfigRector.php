@@ -98,7 +98,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->setAttribute(AttributeKey::IS_FRESH_NODE, true);
+        $node->setAttribute(AttributeKey::DO_NOT_CHANGE, true);
 
         $methodCall = clone $node;
         foreach ($missingMethodNames as $missingMethodName) {
@@ -110,8 +110,8 @@ CODE_SAMPLE
 
     private function shouldSkipMethodCall(MethodCall $methodCall): bool
     {
-        $isFreshNode = $methodCall->getAttribute(AttributeKey::IS_FRESH_NODE);
-        if ($isFreshNode) {
+        $doNotChange = (bool) $methodCall->getAttribute(AttributeKey::DO_NOT_CHANGE);
+        if ($doNotChange) {
             return true;
         }
 

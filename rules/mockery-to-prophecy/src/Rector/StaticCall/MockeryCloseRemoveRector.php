@@ -43,7 +43,7 @@ final class MockeryCloseRemoveRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isStaticCallNamed($node, 'Mockery', 'close')) {
+        if (! $this->nodeNameResolver->isStaticCallNamed($node, 'Mockery', 'close')) {
             return null;
         }
 

@@ -62,7 +62,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isStaticCallNamed($node, 'PHPExcel_IOFactory', 'addSearchLocation')) {
+        if (! $this->nodeNameResolver->isStaticCallNamed($node, 'PHPExcel_IOFactory', 'addSearchLocation')) {
             return null;
         }
 

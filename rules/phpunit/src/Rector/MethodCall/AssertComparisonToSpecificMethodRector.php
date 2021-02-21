@@ -172,6 +172,6 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
             return true;
         }
 
-        return $this->isVariableName($expr, 'exp*');
+        return $this->nodeNameResolver->isVariableName($expr, 'exp*');
     }
 }

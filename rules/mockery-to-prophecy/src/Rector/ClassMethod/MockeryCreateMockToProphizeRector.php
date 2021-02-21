@@ -96,7 +96,7 @@ CODE_SAMPLE
         }
 
         $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node): ?MethodCall {
-            if (! $this->isStaticCallNamed($node, 'Mockery', 'mock')) {
+            if (! $this->nodeNameResolver->isStaticCallNamed($node, 'Mockery', 'mock')) {
                 return null;
             }
 

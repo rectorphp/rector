@@ -93,7 +93,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isFuncCallName($node, 'token_get_all')) {
+        if (! $this->nodeNameResolver->isFuncCallName($node, 'token_get_all')) {
             return null;
         }
 

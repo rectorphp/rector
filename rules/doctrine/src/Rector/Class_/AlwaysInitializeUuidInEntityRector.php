@@ -166,7 +166,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            if (! $this->isStaticCallNamed($node->expr, 'Ramsey\Uuid\Uuid', 'uuid4')) {
+            if (! $this->nodeNameResolver->isStaticCallNamed($node->expr, 'Ramsey\Uuid\Uuid', 'uuid4')) {
                 return false;
             }
 

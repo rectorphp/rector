@@ -50,7 +50,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isStaticCallNamed($node, AnnotationRegistry::class, 'registerFile')) {
+        if (! $this->nodeNameResolver->isStaticCallNamed($node, AnnotationRegistry::class, 'registerFile')) {
             return null;
         }
 

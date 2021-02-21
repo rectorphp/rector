@@ -62,7 +62,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isFuncCallName($node, 'in_array')) {
+        if (! $this->nodeNameResolver->isFuncCallName($node, 'in_array')) {
             return null;
         }
 
@@ -85,7 +85,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $this->isFuncCallName($node->expr, 'array_keys');
+            return $this->nodeNameResolver->isFuncCallName($node->expr, 'array_keys');
         });
 
         if (! $previousAssignArraysKeysFuncCall instanceof Assign) {

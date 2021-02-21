@@ -71,10 +71,10 @@ CODE_SAMPLE
      */
     private function refactorSubstr(BinaryOp $binaryOp): ?FuncCall
     {
-        if ($this->isFuncCallName($binaryOp->left, 'substr')) {
+        if ($this->nodeNameResolver->isFuncCallName($binaryOp->left, 'substr')) {
             $substrFuncCall = $binaryOp->left;
             $comparedNeedleExpr = $binaryOp->right;
-        } elseif ($this->isFuncCallName($binaryOp->right, 'substr')) {
+        } elseif ($this->nodeNameResolver->isFuncCallName($binaryOp->right, 'substr')) {
             $substrFuncCall = $binaryOp->right;
             $comparedNeedleExpr = $binaryOp->left;
         } else {
@@ -93,12 +93,12 @@ CODE_SAMPLE
 
     private function refactorSubstrCompare(BinaryOp $binaryOp): ?FuncCall
     {
-        if ($this->isFuncCallName($binaryOp->left, 'substr_compare')) {
+        if ($this->nodeNameResolver->isFuncCallName($binaryOp->left, 'substr_compare')) {
             $substrCompareFuncCall = $binaryOp->left;
             if (! $this->valueResolver->isValue($binaryOp->right, 0)) {
                 return null;
             }
-        } elseif ($this->isFuncCallName($binaryOp->right, 'substr_compare')) {
+        } elseif ($this->nodeNameResolver->isFuncCallName($binaryOp->right, 'substr_compare')) {
             $substrCompareFuncCall = $binaryOp->right;
             if (! $this->valueResolver->isValue($binaryOp->left, 0)) {
                 return null;
@@ -124,7 +124,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isFuncCallName($node->expr, 'strlen')) {
+        if (! $this->nodeNameResolver->isFuncCallName($node->expr, 'strlen')) {
             return null;
         }
 

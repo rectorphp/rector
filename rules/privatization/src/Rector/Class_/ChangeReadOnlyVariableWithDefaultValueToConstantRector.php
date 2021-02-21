@@ -21,6 +21,7 @@ use Rector\Core\NodeManipulator\ClassMethodAssignManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -39,12 +40,19 @@ final class ChangeReadOnlyVariableWithDefaultValueToConstantRector extends Abstr
      */
     private $varAnnotationManipulator;
 
+    /**
+     * @var PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+
     public function __construct(
         ClassMethodAssignManipulator $classMethodAssignManipulator,
-        VarAnnotationManipulator $varAnnotationManipulator
+        VarAnnotationManipulator $varAnnotationManipulator,
+        PropertyToAddCollector $propertyToAddCollector
     ) {
         $this->classMethodAssignManipulator = $classMethodAssignManipulator;
         $this->varAnnotationManipulator = $varAnnotationManipulator;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -194,7 +202,7 @@ CODE_SAMPLE
             $classConst = $this->createPrivateClassConst($variable, $readOnlyVariableAssign->expr);
 
             // replace $variable usage in the code with constant
-            $this->addConstantToClass($class, $classConst);
+            $this->propertyToAddCollector->addConstantToClass($class, $classConst);
 
             $variableName = $this->getName($variable);
             if ($variableName === null) {
@@ -248,7 +256,7 @@ CODE_SAMPLE
             $variableName,
             $constantName
         ): ?ClassConstFetch {
-            if (! $this->isVariableName($node, $variableName)) {
+            if (! $this->nodeNameResolver->isVariableName($node, $variableName)) {
                 return null;
             }
 

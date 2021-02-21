@@ -58,7 +58,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isStaticCallNamed($node, 'ReflectionFunction', 'export')) {
+        if (! $this->nodeNameResolver->isStaticCallNamed($node, 'ReflectionFunction', 'export')) {
             return null;
         }
 

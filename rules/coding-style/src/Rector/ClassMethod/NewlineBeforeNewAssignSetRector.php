@@ -143,7 +143,7 @@ CODE_SAMPLE
     private function shouldSkipLeftVariable(Node $node): bool
     {
         // local method call
-        return $this->isVariableName($node->var, 'this');
+        return $this->nodeNameResolver->isVariableName($node->var, 'this');
     }
 
     private function isNewVariableThanBefore(?string $currentStmtVariableName): bool

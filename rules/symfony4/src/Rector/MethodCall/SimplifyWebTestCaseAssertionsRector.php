@@ -180,7 +180,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isVariableName($comparedNode->var->var, 'crawler')) {
+        if (! $this->nodeNameResolver->isVariableName($comparedNode->var->var, 'crawler')) {
             return null;
         }
 

@@ -20,6 +20,7 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use Rector\Comments\CommentRemover;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -33,7 +34,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveNonExistingVarAnnotationRector extends AbstractRector
 {
     /**
-     * @var class-string[]
+     * @var array<class-string<Node>>
      */
     private const NODES_TO_MATCH = [
         Assign::class,
@@ -55,9 +56,15 @@ final class RemoveNonExistingVarAnnotationRector extends AbstractRector
      */
     private $typeChecker;
 
-    public function __construct(TypeChecker $typeChecker)
+    /**
+     * @var CommentRemover
+     */
+    private $commentRemover;
+
+    public function __construct(TypeChecker $typeChecker, CommentRemover $commentRemover)
     {
         $this->typeChecker = $typeChecker;
+        $this->commentRemover = $commentRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -118,7 +125,7 @@ CODE_SAMPLE
 
         $comments = $node->getComments();
         if (isset($comments[1]) && $comments[1] instanceof Comment) {
-            $this->rollbackComments($node, $comments[1]);
+            $this->commentRemover->rollbackComments($node, $comments[1]);
             return $node;
         }
 

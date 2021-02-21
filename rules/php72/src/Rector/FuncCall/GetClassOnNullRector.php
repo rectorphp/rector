@@ -103,7 +103,7 @@ CODE_SAMPLE
 
     private function shouldSkip(FuncCall $funcCall): bool
     {
-        $isJustAdded = (bool) $funcCall->getAttribute(AttributeKey::JUST_ADDED);
+        $isJustAdded = (bool) $funcCall->getAttribute(AttributeKey::DO_NOT_CHANGE);
         if ($isJustAdded) {
             return true;
         }
@@ -128,7 +128,7 @@ CODE_SAMPLE
     private function createGetClassFuncCall(FuncCall $oldFuncCall): FuncCall
     {
         $funcCall = new FuncCall($oldFuncCall->name, $oldFuncCall->args);
-        $funcCall->setAttribute(AttributeKey::JUST_ADDED, true);
+        $funcCall->setAttribute(AttributeKey::DO_NOT_CHANGE, true);
 
         return $funcCall;
     }

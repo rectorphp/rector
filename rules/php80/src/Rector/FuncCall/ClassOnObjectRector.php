@@ -67,7 +67,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isFuncCallName($node, 'get_class')) {
+        if (! $this->nodeNameResolver->isFuncCallName($node, 'get_class')) {
             return null;
         }
 

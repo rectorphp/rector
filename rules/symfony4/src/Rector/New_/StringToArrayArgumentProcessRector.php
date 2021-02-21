@@ -120,7 +120,7 @@ CODE_SAMPLE
             return;
         }
 
-        if ($firstArgumentExpr instanceof FuncCall && $this->isFuncCallName($firstArgumentExpr, 'sprintf')) {
+        if ($firstArgumentExpr instanceof FuncCall && $this->isName($firstArgumentExpr, 'sprintf')) {
             $arrayNode = $this->nodeTransformer->transformSprintfToArray($firstArgumentExpr);
             if ($arrayNode !== null) {
                 $expr->args[$argumentPosition]->value = $arrayNode;
@@ -149,7 +149,7 @@ CODE_SAMPLE
             return;
         }
 
-        if (! $this->isFuncCallName($previousNodeAssign->expr, 'sprintf')) {
+        if (! $this->nodeNameResolver->isFuncCallName($previousNodeAssign->expr, 'sprintf')) {
             return;
         }
 

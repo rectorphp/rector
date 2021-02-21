@@ -147,7 +147,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $this->isVariableName($node->var, $variableName);
+            return $this->nodeNameResolver->isVariableName($node->var, $variableName);
         });
     }
 }

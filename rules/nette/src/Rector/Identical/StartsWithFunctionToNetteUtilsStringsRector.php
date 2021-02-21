@@ -61,7 +61,7 @@ CODE_SAMPLE
         Node $node,
         Variable $variable
     ): ?ContentExprAndNeedleExpr {
-        if (! $this->isFuncCallName($node, 'substr')) {
+        if (! $this->nodeNameResolver->isFuncCallName($node, 'substr')) {
             return null;
         }
 

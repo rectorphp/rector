@@ -204,7 +204,7 @@ CODE_SAMPLE
             $this->visibilityManipulator->makePrivate($property);
         }
 
-        $this->addPropertyToCollector($property);
+        $this->propertyAdder->addPropertyToCollector($property);
 
         if ($this->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
             $this->removeNode($property);
