@@ -166,12 +166,13 @@ CODE_SAMPLE
             }
             return $binaryOp->right;
         }
-
-        if ($this->valueResolver->isValue($binaryOp->right, 0) && $this->isNumberType($binaryOp->left)) {
-            return $binaryOp->left;
+        if (! $this->valueResolver->isValue($binaryOp->right, 0)) {
+            return null;
         }
-
-        return null;
+        if (! $this->isNumberType($binaryOp->left)) {
+            return null;
+        }
+        return $binaryOp->left;
     }
 
     /**
@@ -184,11 +185,12 @@ CODE_SAMPLE
         )) {
             return $binaryOp->right;
         }
-
-        if ($this->valueResolver->isValue($binaryOp->right, 1) && $this->isNumberType($binaryOp->left)) {
-            return $binaryOp->left;
+        if (! $this->valueResolver->isValue($binaryOp->right, 1)) {
+            return null;
         }
-
-        return null;
+        if (! $this->isNumberType($binaryOp->left)) {
+            return null;
+        }
+        return $binaryOp->left;
     }
 }

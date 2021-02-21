@@ -164,11 +164,13 @@ final class ValueResolver
     public function areValues(array $nodes, array $expectedValues): bool
     {
         foreach ($nodes as $i => $node) {
-            if ($node !== null && $this->isValue($node, $expectedValues[$i])) {
-                continue;
+            if ($node === null) {
+                return false;
             }
-
-            return false;
+            if (! $this->isValue($node, $expectedValues[$i])) {
+                return false;
+            }
+            continue;
         }
 
         return true;

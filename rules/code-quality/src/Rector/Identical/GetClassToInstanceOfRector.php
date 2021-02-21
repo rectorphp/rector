@@ -111,12 +111,12 @@ final class GetClassToInstanceOfRector extends AbstractRector
 
     private function isClassReference(Node $node): bool
     {
-        if ($node instanceof ClassConstFetch && $this->isName($node->name, 'class')) {
-            return true;
+        if (! $node instanceof ClassConstFetch) {
+            // might be
+            return $node instanceof String_;
         }
 
-        // might be
-        return $node instanceof String_;
+        return $this->isName($node->name, 'class');
     }
 
     private function isGetClassFuncCallNode(Node $node): bool

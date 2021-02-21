@@ -90,13 +90,15 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
         if ($type instanceof FullyQualifiedObjectType) {
             return new FullyQualified($type->getClassName());
         }
-
-        if ($type instanceof GenericObjectType && $type->getClassName() === 'object') {
-            return new Name('object');
+        if (! $type instanceof GenericObjectType) {
+            // fallback
+            return new FullyQualified($type->getClassName());
         }
-
-        // fallback
-        return new FullyQualified($type->getClassName());
+        if ($type->getClassName() !== 'object') {
+            // fallback
+            return new FullyQualified($type->getClassName());
+        }
+        return new Name('object');
     }
 
     /**

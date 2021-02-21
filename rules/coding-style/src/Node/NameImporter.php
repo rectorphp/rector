@@ -201,12 +201,13 @@ final class NameImporter
         ) && function_exists($fullName)) {
             return true;
         }
-
-        if (! $parentNode instanceof ConstFetch && ! $parentNode instanceof FuncCall) {
-            return false;
+        if ($parentNode instanceof ConstFetch) {
+            return count($name->parts) === 1;
         }
-
-        return count($name->parts) === 1;
+        if ($parentNode instanceof FuncCall) {
+            return count($name->parts) === 1;
+        }
+        return false;
     }
 
     private function isNonExistingClassLikeAndFunctionFullyQualifiedName(Name $name): bool

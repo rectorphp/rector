@@ -81,11 +81,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->expr instanceof BooleanAnd && ! $node->expr instanceof BooleanOr) {
-            return null;
+        if ($node->expr instanceof BooleanAnd) {
+            return $this->processExplicitIf($node);
         }
-
-        return $this->processExplicitIf($node);
+        if ($node->expr instanceof BooleanOr) {
+            return $this->processExplicitIf($node);
+        }
+        return null;
     }
 
     private function processExplicitIf(Expression $expression): ?Node

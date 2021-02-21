@@ -128,11 +128,13 @@ CODE_SAMPLE
 
     private function shouldSkip(Node $node): bool
     {
-        if ($node instanceof Nop && count($node->getComments()) > 1) {
-            return true;
+        if (! $node instanceof Nop) {
+            return ! $this->typeChecker->isInstanceOf($node, self::NODES_TO_MATCH);
         }
-
-        return ! $this->typeChecker->isInstanceOf($node, self::NODES_TO_MATCH);
+        if (count($node->getComments()) <= 1) {
+            return ! $this->typeChecker->isInstanceOf($node, self::NODES_TO_MATCH);
+        }
+        return true;
     }
 
     private function hasVariableName(Node $node, string $variableName): bool

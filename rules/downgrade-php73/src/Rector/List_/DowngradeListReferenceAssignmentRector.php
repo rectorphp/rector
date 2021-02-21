@@ -144,13 +144,17 @@ CODE_SAMPLE
     private function shouldRefactor(Node $node): bool
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
         // Check it follows `list(...) = $foo`
-        if ($parentNode instanceof Assign && $parentNode->var === $node && $parentNode->expr instanceof Variable) {
-            return $this->hasAnyItemByRef($node->items);
+        if (! $parentNode instanceof Assign) {
+            return false;
         }
-
-        return false;
+        if ($parentNode->var !== $node) {
+            return false;
+        }
+        if (! $parentNode->expr instanceof Variable) {
+            return false;
+        }
+        return $this->hasAnyItemByRef($node->items);
     }
 
     /**
@@ -271,7 +275,10 @@ CODE_SAMPLE
      */
     private function getArrayItemKey(ArrayItem $arrayItem, $position)
     {
-        if ($arrayItem->key !== null && ($arrayItem->key instanceof String_ || $arrayItem->key instanceof LNumber)) {
+        if ($arrayItem->key instanceof String_) {
+            return $arrayItem->key->value;
+        }
+        if ($arrayItem->key instanceof LNumber) {
             return $arrayItem->key->value;
         }
         return $position;

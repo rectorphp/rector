@@ -108,12 +108,13 @@ CODE_SAMPLE
 
         $firstValue = $node->args[0]->value;
         $firstValueStaticType = $this->getStaticType($firstValue);
-
-        if ($firstValueStaticType instanceof ConstantArrayType && ! $firstValueStaticType->getItemType() instanceof MixedType) {
-            return $this->refactorAssignArray($firstValue, $node);
+        if (! $firstValueStaticType instanceof ConstantArrayType) {
+            return null;
         }
-
-        return null;
+        if ($firstValueStaticType->getItemType() instanceof MixedType) {
+            return null;
+        }
+        return $this->refactorAssignArray($firstValue, $node);
     }
 
     private function refactorAssignedArray(Assign $assign, FuncCall $funcCall, Expr $expr): ?Expr

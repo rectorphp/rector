@@ -70,15 +70,13 @@ final class ScopeNestingComparator
         if ($this->isInBothIfElseBranch($foundParent, $expr)) {
             return false;
         }
-
-        if ($foundParent instanceof Else_ && $this->nodeComparator->areNodesEqual(
-            $expr,
-            $this->doubleIfBranchExprs
-        )) {
-            return false;
+        if (! $foundParent instanceof Else_) {
+            return ! $foundParent instanceof FunctionLike;
         }
-
-        return ! $foundParent instanceof FunctionLike;
+        if (! $this->nodeComparator->areNodesEqual($expr, $this->doubleIfBranchExprs)) {
+            return ! $foundParent instanceof FunctionLike;
+        }
+        return false;
     }
 
     public function isInBothIfElseBranch(Node $foundParentNode, Expr $seekedExpr): bool

@@ -33,11 +33,13 @@ final class ClassMethodReturnVendorLockResolver extends AbstractNodeVendorLockRe
         }
 
         $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_ && ! $classNode instanceof Interface_) {
-            return false;
+        if ($classNode instanceof Class_) {
+            return $this->isMethodVendorLockedByInterface($classNode, $methodName);
         }
-
-        return $this->isMethodVendorLockedByInterface($classNode, $methodName);
+        if ($classNode instanceof Interface_) {
+            return $this->isMethodVendorLockedByInterface($classNode, $methodName);
+        }
+        return false;
     }
 
     private function isVendorLockedByParentClass(string $parentClassName, string $methodName): bool

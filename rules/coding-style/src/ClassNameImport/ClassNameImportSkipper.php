@@ -58,9 +58,13 @@ final class ClassNameImportSkipper
         foreach ($uses as $use) {
             $useUses = $use->uses;
             foreach ($useUses as $useUse) {
-                if ($useUse->name instanceof Name && $useUse->name->getLast() === $name->getLast()) {
-                    return true;
+                if (! $useUse->name instanceof Name) {
+                    continue;
                 }
+                if ($useUse->name->getLast() !== $name->getLast()) {
+                    continue;
+                }
+                return true;
             }
         }
 
