@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Rector\FuncCall;
+namespace Rector\Transform\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
@@ -14,9 +14,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\CodingStyle\Tests\Rector\FuncCall\FunctionCallToConstantRector\FunctionCallToConstantRectorTest
+ * @see \Rector\Transform\Tests\Rector\FuncCall\FuncCallToConstFetchRector\FunctionCallToConstantRectorTest
  */
-final class FunctionCallToConstantRector extends AbstractRector implements ConfigurableRectorInterface
+final class FuncCallToConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -58,33 +58,7 @@ CODE_SAMPLE
                     ],
                 ]
             ),
-            new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        $value = pi();
-    }
-}
-CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        $value = M_PI;
-    }
-}
-CODE_SAMPLE
-                ,
-                [
-                    self::FUNCTIONS_TO_CONSTANTS => [
-                        'pi' => 'M_PI',
-                    ],
-                ]
-            ),
+
         ]);
     }
 

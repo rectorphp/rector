@@ -18,7 +18,6 @@ use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
 use Rector\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
-use Rector\CodingStyle\Rector\FuncCall\FunctionCallToConstantRector;
 use Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector;
 use Rector\CodingStyle\Rector\Function_\CamelCaseFunctionNamingToUnderscoreRector;
 use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
@@ -34,6 +33,7 @@ use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
 use Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector;
 use Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -66,9 +66,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(VersionCompareFuncCallToConstantRector::class);
     $services->set(UseMessageVariableForSprintfInSymfonyStyleRector::class);
 
-    $services->set(FunctionCallToConstantRector::class)
+    $services->set(FuncCallToConstFetchRector::class)
         ->call('configure', [[
-            FunctionCallToConstantRector::FUNCTIONS_TO_CONSTANTS => [
+            FuncCallToConstFetchRector::FUNCTIONS_TO_CONSTANTS => [
                 'php_sapi_name' => 'PHP_SAPI',
                 'pi' => 'M_PI',
             ],
