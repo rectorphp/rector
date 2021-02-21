@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\FunctionCallToConstantRector\Fixture;
+namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToConstFetchRector\Fixture;
 
 class Fixture
 {
@@ -16,7 +16,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\FunctionCallToConstantRector\Fixture;
+namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToConstFetchRector\Fixture;
 
 class Fixture
 {
