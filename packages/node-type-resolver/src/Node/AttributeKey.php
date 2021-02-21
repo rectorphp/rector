@@ -74,11 +74,6 @@ final class AttributeKey
     public const FUNCTION_NODE = 'functionNode';
 
     /**
-     * @var string
-     */
-    public const ORIGINAL_TYPE = 'originalType';
-
-    /**
      * Internal php-parser name.
      * Do not change this even if you want!
      *
@@ -219,15 +214,5 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const IS_FRESH_NODE = 'is_fresh_node';
-
-    /**
-     * @var string
-     */
     public const FUNC_ARGS_TRAILING_COMMA = 'trailing_comma';
-
-    /**
-     * @var string
-     */
-    public const JUST_ADDED = 'just_added';
 }

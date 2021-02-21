@@ -48,7 +48,6 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::IS_FIRST_LEVEL_STATEMENT,
-    \Rector\NodeTypeResolver\Node\AttributeKey::IS_FRESH_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::FILE_INFO,
 );
 
@@ -83,7 +82,6 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::IS_FIRST_LEVEL_STATEMENT,
-    \Rector\NodeTypeResolver\Node\AttributeKey::IS_FRESH_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::FILE_INFO,
 );
 

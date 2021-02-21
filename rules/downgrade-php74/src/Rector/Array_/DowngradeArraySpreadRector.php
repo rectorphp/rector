@@ -18,6 +18,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -138,8 +139,6 @@ CODE_SAMPLE
                 // Spread operator found
                 if (! $item->value instanceof Variable) {
                     // If it is a not variable, transform it to a variable
-                    // Keep the original type, will be needed later
-                    $item->setAttribute(AttributeKey::ORIGINAL_TYPE, $nodeScope->getType($item->value));
                     $item->value = $this->createVariableFromNonVariable($array, $item, $position);
                 }
                 if ($accumulatedItems !== []) {
@@ -209,7 +208,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param (ArrayItem|null)[] $items
+     * @param array<ArrayItem|null> $items
      */
     private function createArrayItem(array $items): ArrayItem
     {
@@ -222,12 +221,19 @@ CODE_SAMPLE
         /** @var Variable $variable */
         $variable = $arrayItem->value;
         $variableName = $this->getName($variable) ?? '';
+
         // If the variable is not in scope, it's one we just added.
         // Then get the type from the attribute
-        $type = $nodeScope->hasVariableType($variableName)
-            ->yes() ? $nodeScope->getVariableType($variableName) : $arrayItem->getAttribute(
-                AttributeKey::ORIGINAL_TYPE
-            );
+        if ($nodeScope->hasVariableType($variableName)->yes()) {
+            $type = $nodeScope->getVariableType($variableName);
+        } else {
+            $originalNode = $arrayItem->getAttribute(AttributeKey::ORIGINAL_NODE);
+            if ($originalNode instanceof ArrayItem) {
+                $type = $nodeScope->getType($originalNode->value);
+            } else {
+                throw new ShouldNotHappenException();
+            }
+        }
 
         $iteratorToArrayFuncCall = new FuncCall(new Name('iterator_to_array'), [new Arg($arrayItem)]);
 
