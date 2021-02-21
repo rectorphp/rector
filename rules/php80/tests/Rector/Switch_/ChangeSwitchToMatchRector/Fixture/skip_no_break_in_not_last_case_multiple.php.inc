@@ -11,6 +11,7 @@ class SkipNoBreakInNotLastCaseMultiple
         switch ($suffix) {
             case 'M':
                 $value *= 1024;
+                break;
             case 'N':
                 $value *= 1024;
             case 'K':
