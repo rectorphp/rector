@@ -14,12 +14,11 @@ final class SwitchAnalyzer
     {
         foreach ($switch->cases as $case) {
             foreach ($case->stmts as $caseStmt) {
-                if (! $caseStmt instanceof Break_) {
-                    continue;
+                if ($caseStmt instanceof Break_) {
+                    return true;
                 }
-
-                return true;
             }
+            return false;
         }
 
         return false;
