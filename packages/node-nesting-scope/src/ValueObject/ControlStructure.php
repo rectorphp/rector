@@ -52,7 +52,7 @@ final class ControlStructure
 
     /**
      * These situations happens only if condition is met
-     * @var class-string[]
+     * @var array<class-string<Node>>
      */
     public const CONDITIONAL_NODE_SCOPE_TYPES = [
         If_::class,

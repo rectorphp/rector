@@ -127,23 +127,12 @@ CODE_SAMPLE
 
     private function createStaticCallExpression(Variable $identifierVariable, Variable $resolvedVariable): Expression
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 2661ab49a... cs fixes
         $arguments = [$identifierVariable, $resolvedVariable];
         $staticCall = $this->nodeFactory->createStaticCall(
             ResolvedConstantStaticCollector::class,
             'collects',
             $arguments
         );
-<<<<<<< HEAD
-=======
-        $args = [new Arg($identifierVariable), new Arg($resolvedVariable)];
-        $staticCall = new StaticCall(new FullyQualified('Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector'), 'collect', $args);
->>>>>>> 2cb3be87c... Pass string values to FullyQualified
-=======
->>>>>>> 2661ab49a... cs fixes
 
         return new Expression($staticCall);
     }

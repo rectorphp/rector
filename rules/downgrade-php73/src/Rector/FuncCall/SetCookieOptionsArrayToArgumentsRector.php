@@ -35,7 +35,7 @@ final class SetCookieOptionsArrayToArgumentsRector extends AbstractRector
 
     /**
      * Conversion table from argument index to options name
-     * @var array<int, bool|int|string>
+     * @var array<int, int|string|bool>
      */
     private const ARGUMENT_DEFAULT_VALUES = [
         2 => 0,

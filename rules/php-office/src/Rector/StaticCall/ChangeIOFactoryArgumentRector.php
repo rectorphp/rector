@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeIOFactoryArgumentRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const OLD_TO_NEW_TYPE = [
         'CSV' => 'Csv',

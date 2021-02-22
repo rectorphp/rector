@@ -31,7 +31,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ParsedNodeCollector
 {
     /**
-     * @var class-string<Node>[]
+     * @var array<class-string<Node>>
      */
     private const COLLECTABLE_NODE_TYPES = [
         Class_::class,

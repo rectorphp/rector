@@ -36,7 +36,7 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Conf
 
     /**
      * All with pattern as 1st argument
-     * @var int[]
+     * @var array<string, int>
      */
     private const FUNCTIONS_WITH_REGEX_PATTERN = [
         'preg_match' => 0,

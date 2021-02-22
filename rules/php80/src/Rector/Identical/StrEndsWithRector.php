@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\UnaryMinus;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NetteCodeQuality\NodeAnalyzer\BinaryOpAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,6 +23,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StrEndsWithRector extends AbstractRector
 {
+    /**
+     * @var BinaryOpAnalyzer
+     */
+    private $binaryOpAnalyzer;
+
+    public function __construct(BinaryOpAnalyzer $binaryOpAnalyzer)
+    {
+        $this->binaryOpAnalyzer = $binaryOpAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change helper functions to str_ends_with()', [
@@ -93,27 +104,15 @@ CODE_SAMPLE
 
     private function refactorSubstrCompare(BinaryOp $binaryOp): ?FuncCall
     {
-        if ($binaryOp->left instanceof FuncCall && $this->nodeNameResolver->isFuncCallName(
-            $binaryOp->left,
-            'substr_compare'
-        )) {
-            $substrCompareFuncCall = $binaryOp->left;
-            if (! $this->valueResolver->isValue($binaryOp->right, 0)) {
-                return null;
-            }
-        } elseif ($binaryOp->right instanceof FuncCall && $this->nodeNameResolver->isFuncCallName(
-            $binaryOp->right,
-            'substr_compare'
-        )) {
-            $substrCompareFuncCall = $binaryOp->right;
-            if (! $this->valueResolver->isValue($binaryOp->left, 0)) {
-                return null;
-            }
-        } else {
+        $funcCallAndExpr = $this->binaryOpAnalyzer->matchFuncCallAndOtherExpr($binaryOp, 'substr_compare');
+        if ($funcCallAndExpr === null) {
             return null;
         }
 
-        if (! $substrCompareFuncCall instanceof FuncCall) {
+        $substrCompareFuncCall = $funcCallAndExpr->getFuncCall();
+        $expr = $funcCallAndExpr->getExpr();
+
+        if (! $this->valueResolver->isValue($expr, 0)) {
             return null;
         }
 

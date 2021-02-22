@@ -25,7 +25,7 @@ final class ContextAnalyzer
     private const BREAK_NODES = [FunctionLike::class, ClassMethod::class];
 
     /**
-     * @var class-string<Node>
+     * @var array<class-string<Node>>
      */
     private const LOOP_NODES = [For_::class, Foreach_::class, While_::class, Do_::class, Switch_::class];
 

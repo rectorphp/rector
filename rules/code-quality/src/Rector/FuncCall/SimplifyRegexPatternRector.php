@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyRegexPatternRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const COMPLEX_PATTERN_TO_SIMPLE = [
         '[0-9]' => '\d',
