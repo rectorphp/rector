@@ -517,3 +517,8 @@ parameters:
         - '#Property PhpParser\\Node\\Param\:\:\$type \(PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\|null\) does not accept PhpParser\\Node#'
         - '#Parameter \#1 \$interfaces of method Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeCommonTypeNarrower\:\:filterOutNativeInterfaces\(\) expects array<class\-string\>, array<string, string\> given#'
         - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer" class\. Use unique content or abstract service instead#'
+
+        -
+            message: '#"%s" in sprintf\(\) format must be quoted#'
+            paths:
+                - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php

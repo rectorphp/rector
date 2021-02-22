@@ -37,10 +37,20 @@ final class EregToPcreTransformer
      * @var string
      * @see https://regex101.com/r/htpXFg/1
      */
-    private const BOUND_REGEX = '/^(\d|[1-9]\d|1\d\d|
+    private const BOUND_REGEX = '/^(?<' . self::MINIMAL_NUMBER_PART . '>\d|[1-9]\d|1\d\d|
                                 2[0-4]\d|25[0-5])
-                               (,(\d|[1-9]\d|1\d\d|
+                               (?<comma>,(?<' . self::MAXIMAL_NUMBER_PART . '>\d|[1-9]\d|1\d\d|
                                   2[0-4]\d|25[0-5])?)?$/x';
+
+    /**
+     * @var string
+     */
+    private const MINIMAL_NUMBER_PART = 'minimal_number';
+
+    /**
+     * @var string
+     */
+    private const MAXIMAL_NUMBER_PART = 'maximal_number';
 
     /**
      * @var string
@@ -275,19 +285,20 @@ final class EregToPcreTransformer
         $bound = Strings::substring($s, $start, $length);
 
         $matches = Strings::match($bound, self::BOUND_REGEX);
-        if (! $matches) {
+        if ($matches === null) {
             throw new InvalidEregException('an invalid bound');
         }
 
-        if (isset($matches[3])) {
-            if ($matches[1] > $matches[3]) {
+        if (isset($matches[self::MAXIMAL_NUMBER_PART])) {
+            if ($matches[self::MINIMAL_NUMBER_PART] > $matches[self::MAXIMAL_NUMBER_PART]) {
                 throw new InvalidEregException('an invalid bound');
             }
-            $r[$rr] .= '{' . $matches[1] . ',' . $matches[3] . '}';
-        } elseif (isset($matches[2])) {
-            $r[$rr] .= '{' . $matches[1] . ',}';
+
+            $r[$rr] .= '{' . $matches[self::MINIMAL_NUMBER_PART] . ',' . $matches[self::MAXIMAL_NUMBER_PART] . '}';
+        } elseif (isset($matches['comma'])) {
+            $r[$rr] .= '{' . $matches[self::MINIMAL_NUMBER_PART] . ',}';
         } else {
-            $r[$rr] .= '{' . $matches[1] . '}';
+            $r[$rr] .= '{' . $matches[self::MINIMAL_NUMBER_PART] . '}';
         }
 
         return $ii + 1;

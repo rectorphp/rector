@@ -41,6 +41,12 @@ final class BetterPhpDocParser extends PhpDocParser
     private const TAG_REGEX = '#@(var|param|return|throws|property|deprecated)#';
 
     /**
+     * @see https://regex101.com/r/iCJqCv/1
+     * @var string
+     */
+    private const SPACE_REGEX = '#\s+#';
+
+    /**
      * @var PhpDocNodeFactoryInterface[]
      */
     private $phpDocNodeFactories = [];
@@ -235,12 +241,14 @@ final class BetterPhpDocParser extends PhpDocParser
             $originalContent = $this->getOriginalContentFromTokenIterator($tokenIterator);
 
             // we try to match original content without trimmed spaces
-            $currentTextPattern = '#' . preg_quote($possibleMultilineText, '#') . '#s';
-            $currentTextPattern = Strings::replace($currentTextPattern, '#(\s)+#', '\s+');
+            $currentTextPattern = '#(?<line>' . preg_quote($possibleMultilineText, '#') . ')#s';
+
+            $currentTextPattern = Strings::replace($currentTextPattern, self::SPACE_REGEX, '\s+');
+
             $match = Strings::match($originalContent, $currentTextPattern);
 
-            if (isset($match[0])) {
-                $attributeAwareNode->setAttribute(Attribute::ORIGINAL_CONTENT, $match[0]);
+            if (isset($match['line'])) {
+                $attributeAwareNode->setAttribute(Attribute::ORIGINAL_CONTENT, $match['line']);
             }
         }
 
