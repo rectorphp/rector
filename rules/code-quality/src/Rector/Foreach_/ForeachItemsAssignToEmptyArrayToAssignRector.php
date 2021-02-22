@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Foreach_;
-use Rector\CodeQuality\NodeAnalyzer\ForeachNodeAnalyzer;
+use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
@@ -26,11 +26,11 @@ final class ForeachItemsAssignToEmptyArrayToAssignRector extends AbstractRector
     private $nodeUsageFinder;
 
     /**
-     * @var ForeachNodeAnalyzer
+     * @var ForeachAnalyzer
      */
     private $foreachNodeAnalyzer;
 
-    public function __construct(NodeUsageFinder $nodeUsageFinder, ForeachNodeAnalyzer $foreachNodeAnalyzer)
+    public function __construct(NodeUsageFinder $nodeUsageFinder, ForeachAnalyzer $foreachNodeAnalyzer)
     {
         $this->nodeUsageFinder = $nodeUsageFinder;
         $this->foreachNodeAnalyzer = $foreachNodeAnalyzer;

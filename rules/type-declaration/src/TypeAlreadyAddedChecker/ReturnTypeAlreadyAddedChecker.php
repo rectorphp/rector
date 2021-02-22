@@ -25,11 +25,12 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Traversable;
 
 final class ReturnTypeAlreadyAddedChecker
 {
     /**
-     * @var string[]
+     * @var array<string|class-string<Traversable>>
      */
     private const FOREACHABLE_TYPES = ['iterable', 'Iterator', 'Traversable', 'array'];
 

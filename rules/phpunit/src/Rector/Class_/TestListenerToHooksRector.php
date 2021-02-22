@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TestListenerToHooksRector extends AbstractRector
 {
     /**
-     * @var string[][]
+     * @var array<string, array<class-string|string>>
      */
     private const LISTENER_METHOD_TO_HOOK_INTERFACES = [
         'addIncompleteTest' => ['PHPUnit\Runner\AfterIncompleteTestHook', 'executeAfterIncompleteTest'],

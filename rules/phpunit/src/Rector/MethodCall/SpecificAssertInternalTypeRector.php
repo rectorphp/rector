@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SpecificAssertInternalTypeRector extends AbstractRector
 {
     /**
-     * @var string[][]
+     * @var array<string, string[]>
      */
     private const TYPE_TO_METHOD = [
         'array' => ['assertIsArray', 'assertIsNotArray'],

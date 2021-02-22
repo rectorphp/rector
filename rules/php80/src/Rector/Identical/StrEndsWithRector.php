@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\UnaryMinus;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NetteCodeQuality\NodeAnalyzer\BinaryOpAnalyzer;
+use Rector\NetteCodeQuality\ValueObject\FuncCallAndExpr;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -105,17 +106,16 @@ CODE_SAMPLE
     private function refactorSubstrCompare(BinaryOp $binaryOp): ?FuncCall
     {
         $funcCallAndExpr = $this->binaryOpAnalyzer->matchFuncCallAndOtherExpr($binaryOp, 'substr_compare');
-        if ($funcCallAndExpr === null) {
+        if (! $funcCallAndExpr instanceof FuncCallAndExpr) {
             return null;
         }
 
-        $substrCompareFuncCall = $funcCallAndExpr->getFuncCall();
         $expr = $funcCallAndExpr->getExpr();
-
         if (! $this->valueResolver->isValue($expr, 0)) {
             return null;
         }
 
+        $substrCompareFuncCall = $funcCallAndExpr->getFuncCall();
         $haystack = $substrCompareFuncCall->args[0]->value;
         $needle = $substrCompareFuncCall->args[1]->value;
 

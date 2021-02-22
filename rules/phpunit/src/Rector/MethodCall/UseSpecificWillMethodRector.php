@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UseSpecificWillMethodRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const NESTED_METHOD_TO_RENAME_MAP = [
         'returnArgument' => 'willReturnArgument',

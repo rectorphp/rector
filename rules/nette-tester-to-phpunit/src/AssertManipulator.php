@@ -32,7 +32,8 @@ final class AssertManipulator
      * @see https://github.com/nette/tester/blob/master/src/Framework/Assert.php
      * ↓
      * @see https://github.com/sebastianbergmann/phpunit/blob/master/src/Framework/Assert.php
-     * @var string[]
+     *
+     * @var array<string, string>
      */
     private const ASSERT_METHODS_REMAP = [
         'same' => 'assertSame',

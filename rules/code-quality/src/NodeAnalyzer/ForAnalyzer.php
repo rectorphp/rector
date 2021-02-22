@@ -24,7 +24,7 @@ use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-final class ForNodeAnalyzer
+final class ForAnalyzer
 {
     /**
      * @var string
