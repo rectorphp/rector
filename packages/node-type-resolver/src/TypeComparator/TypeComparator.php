@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PHPStan;
+namespace Rector\NodeTypeResolver\TypeComparator;
 
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -16,6 +16,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\TypeDeclaration\TypeNormalizer;
@@ -94,14 +95,20 @@ final class TypeComparator
         if ($mainType instanceof MixedType) {
             return false;
         }
+
         if (! $mainType instanceof ArrayType) {
             return $mainType->isSuperTypeOf($checkedType)
                 ->yes();
         }
+
         if (! $checkedType instanceof ConstantArrayType) {
             return $mainType->isSuperTypeOf($checkedType)
                 ->yes();
         }
+
+        if ($checkedType instanceof ArrayType && $mainType instanceof ArrayType) {
+        }
+
         return false;
     }
 
