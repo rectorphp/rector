@@ -97,10 +97,6 @@ CODE_SAMPLE
 
         // skip big arrays and mixed[] constants
         if ($constType instanceof ConstantArrayType) {
-            if (count($constType->getValueTypes()) > self::ARRAY_LIMIT_TYPES) {
-                return null;
-            }
-
             $currentVarType = $phpDocInfo->getVarType();
             if ($currentVarType instanceof ArrayType && $currentVarType->getItemType() instanceof MixedType) {
                 return null;

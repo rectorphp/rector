@@ -13,6 +13,8 @@ use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NetteCodeQuality\NodeAnalyzer\BinaryOpAnalyzer;
+use Rector\NetteCodeQuality\ValueObject\FuncCallAndExpr;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -25,6 +27,16 @@ final class SubstrMinusToStringEndsWithRector extends AbstractRector
      * @var string
      */
     private const SUBSTR = 'substr';
+
+    /**
+     * @var BinaryOpAnalyzer
+     */
+    private $binaryOpAnalyzer;
+
+    public function __construct(BinaryOpAnalyzer $binaryOpAnalyzer)
+    {
+        $this->binaryOpAnalyzer = $binaryOpAnalyzer;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -59,41 +71,31 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->nodeNameResolver->isFuncCallName(
-            $node->left,
-            self::SUBSTR
-        ) && ! $this->nodeNameResolver->isFuncCallName($node->right, self::SUBSTR)) {
+        $funcCallAndExpr = $this->binaryOpAnalyzer->matchFuncCallAndOtherExpr($node, self::SUBSTR);
+        if (! $funcCallAndExpr instanceof FuncCallAndExpr) {
             return null;
         }
 
-        $substr = $this->nodeNameResolver->isFuncCallName($node->left, self::SUBSTR)
-            ? $node->left
-            : $node->right;
-
-        if (! $substr->args[1]->value instanceof UnaryMinus) {
+        $substrFuncCall = $funcCallAndExpr->getFuncCall();
+        if (! $substrFuncCall->args[1]->value instanceof UnaryMinus) {
             return null;
         }
 
         /** @var UnaryMinus $unaryMinus */
-        $unaryMinus = $substr->args[1]->value;
+        $unaryMinus = $substrFuncCall->args[1]->value;
         if (! $unaryMinus->expr instanceof LNumber) {
             return null;
         }
 
-        $string = $this->nodeNameResolver->isFuncCallName($node->left, self::SUBSTR)
-            ? $node->right
-            : $node->left;
+        $string = $funcCallAndExpr->getExpr();
 
         $wordLength = $unaryMinus->expr->value;
         if ($string instanceof String_ && strlen($string->value) !== $wordLength) {
             return null;
         }
 
-        $staticCall = $this->nodeFactory->createStaticCall(
-            Strings::class,
-            'endsWith',
-            [$substr->args[0]->value, $string]
-        );
+        $arguments = [$substrFuncCall->args[0]->value, $string];
+        $staticCall = $this->nodeFactory->createStaticCall(Strings::class, 'endsWith', $arguments);
 
         if ($node instanceof Identical) {
             return $staticCall;
