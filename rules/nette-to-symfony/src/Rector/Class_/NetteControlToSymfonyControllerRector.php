@@ -22,7 +22,6 @@ use Rector\Nette\NodeFactory\ActionRenderFactory;
 use Rector\NetteToSymfony\NodeAnalyzer\ClassMethodRenderAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Symfony\Component\HttpFoundation\Response;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -148,7 +147,7 @@ CODE_SAMPLE
         $classMethod->stmts[] = $return;
 
         if ($this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
-            $classMethod->returnType = new FullyQualified(Response::class);
+            $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\Response');
         }
 
         $this->removeNodes($classMethodRender->getNodesToRemove());

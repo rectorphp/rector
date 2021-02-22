@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -38,7 +37,7 @@ final class AssignNewDocParserRector extends AbstractRector implements ClassSync
             return null;
         }
 
-        $node->expr = new New_(new FullyQualified(ConstantPreservingDocParser::class));
+        $node->expr = new New_(new FullyQualified('Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser'));
 
         return $node;
     }

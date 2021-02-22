@@ -139,6 +139,14 @@ services:
                 Rector\Core\Rector\AbstractRector:
                     isObjectType: [1]
 
+    # this rule prevents bug in phar like these: https://github.com/rectorphp/rector/issues/5596
+    -
+        class: Symplify\PHPStanRules\Rules\RequireStringArgumentInConstructorRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            stringArgPositionsByType:
+                PhpParser\Node\Name\FullyQualified: [0]
+
     -
         class: Symplify\PHPStanRules\Rules\ClassNameRespectsParentSuffixRule
         tags: [phpstan.rules.rule]
