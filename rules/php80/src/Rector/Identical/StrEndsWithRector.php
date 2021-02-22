@@ -107,6 +107,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $substrCompareFuncCall instanceof FuncCall) {
+            return null;
+        }
+
         $haystack = $substrCompareFuncCall->args[0]->value;
         $needle = $substrCompareFuncCall->args[1]->value;
 
