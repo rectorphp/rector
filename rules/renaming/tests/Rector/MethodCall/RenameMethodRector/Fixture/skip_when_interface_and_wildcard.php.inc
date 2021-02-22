@@ -41,10 +41,12 @@ final class SomeWildcardSubscriber implements WildcardSubscriber
 
 final class SomeWildcardCaller
 {
-    public static function allow()
+    public static function allow(WildcardSubscriber $passedAsInterface)
     {
         $demo = new OtherWildcardSubscriber();
         $demo->old();
+
+        $passedAsInterface->old();
 
         OtherWildcardSubscriber::oldStatic();
     }
@@ -102,10 +104,12 @@ final class SomeWildcardSubscriber implements WildcardSubscriber
 
 final class SomeWildcardCaller
 {
-    public static function allow()
+    public static function allow(WildcardSubscriber $passedAsInterface)
     {
         $demo = new OtherWildcardSubscriber();
         $demo->new();
+
+        $passedAsInterface->old();
 
         OtherWildcardSubscriber::newStatic();
     }

@@ -170,14 +170,18 @@ CODE_SAMPLE
                     continue;
                 }
 
-                if ($this->classManipulator->hasParentMethodOrInterface($unionedType->getClassName(), $methodCallRename->getOldMethod())) {
-                    return true;
-                }
+                return $this->isInterfaceOrMethodExistsInParentOrInterface(
+                    $unionedType->getClassName(),
+                    $methodCallRename->getOldMethod()
+                );
             }
         }
 
         if ($type instanceof ObjectType) {
-            return $this->classManipulator->hasParentMethodOrInterface($type->getClassName(), $methodCallRename->getOldMethod());
+            return $this->isInterfaceOrMethodExistsInParentOrInterface(
+                $type->getClassName(),
+                $methodCallRename->getOldMethod()
+            );
         }
 
         return false;
@@ -192,9 +196,19 @@ CODE_SAMPLE
             return false;
         }
 
-        $className = $node->class->toString();
+        return $this->isInterfaceOrMethodExistsInParentOrInterface(
+            $node->class->toString(),
+            $methodCallRename->getOldMethod()
+        );
+    }
 
-        return $this->classManipulator->hasParentMethodOrInterface($className, $methodCallRename->getOldMethod());
+    private function isInterfaceOrMethodExistsInParentOrInterface(string $class, string $method) : bool
+    {
+        if (interface_exists($class)) {
+            return true;
+        }
+
+        return $this->classManipulator->hasParentMethodOrInterface($class, $method);
     }
 
     private function shouldSkipForAlreadyExistingClassMethod(
