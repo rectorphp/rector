@@ -12,6 +12,8 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -85,14 +87,6 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->methodCallRenames as $methodCallRename) {
-            $implementsInterface = $this->classManipulator->hasParentMethodOrInterface(
-                $methodCallRename->getOldClass(),
-                $methodCallRename->getOldMethod()
-            );
-            if ($implementsInterface) {
-                continue;
-            }
-
             if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(
                 $node,
                 $methodCallRename->getOldClass()
@@ -105,6 +99,14 @@ CODE_SAMPLE
             }
 
             if ($this->skipClassMethod($node, $methodCallRename)) {
+                continue;
+            }
+
+            if ($this->skipMethodCall($node, $methodCallRename)) {
+                continue;
+            }
+
+            if ($this->skipStaticCall($node, $methodCallRename)) {
                 continue;
             }
 
@@ -141,11 +143,58 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->shouldSkipWhenClassMethodIsPartOfInterface($node, $methodCallRename)) {
+            return true;
+        }
+
         return $this->shouldSkipForExactClassMethodForClassMethodOrTargetInvokePrivate(
             $node,
             $methodCallRename->getOldClass(),
             $methodCallRename->getNewMethod()
         );
+    }
+
+    /**
+     * @param MethodCall|StaticCall|ClassMethod $node
+     */
+    private function skipMethodCall(Node $node, MethodCallRenameInterface $methodCallRename): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        $type = $this->nodeTypeResolver->resolve($node->var);
+        if ($type instanceof UnionType) {
+            foreach ($type->getTypes() as $unionedType) {
+                if (! $unionedType instanceof ObjectType) {
+                    continue;
+                }
+
+                if ($this->classManipulator->hasParentMethodOrInterface($unionedType->getClassName(), $methodCallRename->getOldMethod())) {
+                    return true;
+                }
+            }
+        }
+
+        if ($type instanceof ObjectType) {
+            return $this->classManipulator->hasParentMethodOrInterface($type->getClassName(), $methodCallRename->getOldMethod());
+        }
+
+        return false;
+    }
+
+    /**
+     * @param MethodCall|StaticCall|ClassMethod $node
+     */
+    private function skipStaticCall(Node $node, MethodCallRenameInterface $methodCallRename): bool
+    {
+        if (! $node instanceof StaticCall) {
+            return false;
+        }
+
+        $className = $node->class->toString();
+
+        return $this->classManipulator->hasParentMethodOrInterface($className, $methodCallRename->getOldMethod());
     }
 
     private function shouldSkipForAlreadyExistingClassMethod(
@@ -158,6 +207,23 @@ CODE_SAMPLE
         }
 
         return (bool) $classLike->getMethod($methodCallRename->getNewMethod());
+    }
+
+    private function shouldSkipWhenClassMethodIsPartOfInterface(
+        ClassMethod $classMethod,
+        MethodCallRenameInterface $methodCallRename
+    ): bool {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof ClassLike) {
+            return false;
+        }
+
+        $className = $classLike->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            return false;
+        }
+
+        return $this->classManipulator->hasParentMethodOrInterface($className, $methodCallRename->getOldMethod());
     }
 
     private function shouldSkipForExactClassMethodForClassMethodOrTargetInvokePrivate(
