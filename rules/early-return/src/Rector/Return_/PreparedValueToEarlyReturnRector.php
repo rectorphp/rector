@@ -8,10 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -22,6 +22,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class PreparedValueToEarlyReturnRector extends AbstractRector
 {
+    /**
+     * @var IfManipulator
+     */
+    private $ifManipulator;
+
+    public function __construct(IfManipulator $ifManipulator)
+    {
+        $this->ifManipulator = $ifManipulator;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Return early prepared value in ifs', [
@@ -235,11 +245,7 @@ CODE_SAMPLE
         /** Skip entirely if found skipped ifs */
         foreach ($ifs as $if) {
             /** @var If_ $if */
-            if ($if->else instanceof Else_) {
-                return [];
-            }
-
-            if ($if->elseifs !== []) {
+            if (! $this->ifManipulator->isIfWithoutElseAndElseIfs($if)) {
                 return [];
             }
 
