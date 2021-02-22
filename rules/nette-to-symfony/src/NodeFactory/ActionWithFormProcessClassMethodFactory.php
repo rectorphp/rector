@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Symfony\Component\HttpFoundation\Response;
 
 final class ActionWithFormProcessClassMethodFactory
 {

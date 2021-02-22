@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace Rector\Utils\DoctrineAnnotationParserSyncer\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
@@ -130,8 +127,12 @@ CODE_SAMPLE
 
     private function createStaticCallExpression(Variable $identifierVariable, Variable $resolvedVariable): Expression
     {
-        $args = [new Arg($identifierVariable), new Arg($resolvedVariable)];
-        $staticCall = new StaticCall(new FullyQualified('Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector'), 'collect', $args);
+        $arguments = [$identifierVariable, $resolvedVariable];
+        $staticCall = $this->nodeFactory->createStaticCall(
+            ResolvedConstantStaticCollector::class,
+            'collects',
+            $arguments
+        );
 
         return new Expression($staticCall);
     }

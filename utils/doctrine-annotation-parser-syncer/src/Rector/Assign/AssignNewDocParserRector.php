@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
