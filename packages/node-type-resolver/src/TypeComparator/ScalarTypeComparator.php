@@ -10,6 +10,9 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\TypeComparator\ScalarTypeComparatorTest
+ */
 final class ScalarTypeComparator
 {
     public function areEqualScalar(Type $firstType, Type $secondType): bool
