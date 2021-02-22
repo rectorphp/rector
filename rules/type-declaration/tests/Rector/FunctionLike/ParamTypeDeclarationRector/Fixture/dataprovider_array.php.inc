@@ -21,7 +21,7 @@ final class DemoArrayTest
     /**
      * @dataProvider provideThings
      */
-    public function testGetFromId( $one, $two, $three, $four ): void {}
+    public function testGetFromId( $one, $two, $three, $four, $five ): void {}
 }
 -----
 <?php
@@ -47,5 +47,5 @@ final class DemoArrayTest
     /**
      * @dataProvider provideThings
      */
-    public function testGetFromId( int $one, bool $two, string $three, $four ): void {}
+    public function testGetFromId( int $one, bool $two, string $three, ?int $four, $five ): void {}
 }
