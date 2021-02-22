@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
@@ -34,21 +33,14 @@ final class ClassManipulator
      */
     private $nodesToRemoveCollector;
 
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        NodesToRemoveCollector $nodesToRemoveCollector,
-        NodeRepository $nodeRepository
+        NodesToRemoveCollector $nodesToRemoveCollector
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
-        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -71,8 +63,6 @@ final class ClassManipulator
 
     public function hasParentMethodOrInterface(string $class, string $method): bool
     {
-        $class = $this->nodeRepository->getStringName($class);
-
         if (! class_exists($class)) {
             return false;
         }
