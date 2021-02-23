@@ -1,43 +1,4 @@
 #!/usr/bin/env php
 <?php
 
-/**
- * @see https://github.com/phpstan/phpstan/issues/4541#issuecomment-779434916
- *
- * Point possible vendor locations by use the __DIR__ as start to locate
- * @see https://github.com/rectorphp/rector/pull/5581 that may not detected in https://getrector.org/ which uses docker to run
- */
-(static function () {
-    $vendorPaths = [
-        realpath(__DIR__ . '/../vendor'),          // bin/rector
-        realpath(__DIR__ . '/../../../../vendor'), // vendor/rector/rector/bin/rector
-        realpath(__DIR__ . '/../../vendor'),       // vendor/bin/rector , it may be a symlink of vendor/rector/rector/bin/rector
-        'vendor',                                  // last fallback of existing behaviour
-    ];
-
-    $areStubsFound = static function (string $vendorPath) : bool {
-        if (! file_exists("phar://$vendorPath/phpstan/phpstan/phpstan.phar/stubs/runtime/ReflectionUnionType.php")) {
-            return false;
-        }
-
-        return file_exists("phar://$vendorPath/phpstan/phpstan/phpstan.phar/stubs/runtime/Attribute.php");
-    };
-
-    foreach ($vendorPaths as $vendorPath) {
-        if (! $vendorPath) {
-            continue;
-        }
-
-        if (! $areStubsFound($vendorPath)) {
-            continue;
-        }
-
-        require_once "phar://$vendorPath/phpstan/phpstan/phpstan.phar/stubs/runtime/ReflectionUnionType.php";
-        require_once "phar://$vendorPath/phpstan/phpstan/phpstan.phar/stubs/runtime/Attribute.php";
-
-        // already loaded? stop loop
-        break;
-    }
-})();
-
 require_once __DIR__ . '/rector.php';
