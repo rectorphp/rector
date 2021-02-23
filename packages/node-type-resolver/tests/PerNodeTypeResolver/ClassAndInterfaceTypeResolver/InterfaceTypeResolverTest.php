@@ -10,7 +10,7 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\SomeInterfaceWithParentInterface;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\SomeParentInterface;
-use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\ClassAndInterfaceTypeResolver
@@ -30,7 +30,9 @@ final class InterfaceTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function dataProvider(): Iterator
     {
-        $unionType = TypeFactoryStaticHelper::createUnionObjectType(
+        $unionTypeFactory = new UnionTypeFactory();
+
+        $unionType = $unionTypeFactory->createUnionObjectType(
             [SomeInterfaceWithParentInterface::class, SomeParentInterface::class]
         );
 

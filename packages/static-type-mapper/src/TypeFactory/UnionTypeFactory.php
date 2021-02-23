@@ -10,12 +10,12 @@ use PHPStan\Type\UnionType;
 use ReflectionClass;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
-final class TypeFactoryStaticHelper
+final class UnionTypeFactory
 {
     /**
      * @param string[]|Type[] $types
      */
-    public static function createUnionObjectType(array $types): UnionType
+    public function createUnionObjectType(array $types): UnionType
     {
         $objectTypes = [];
         foreach ($types as $type) {

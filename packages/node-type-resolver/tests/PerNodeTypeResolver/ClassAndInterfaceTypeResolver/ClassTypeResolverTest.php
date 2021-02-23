@@ -15,7 +15,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResol
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\ClassWithTrait;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\ParentClass;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\SomeInterface;
-use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\ClassAndInterfaceTypeResolver
@@ -35,28 +35,30 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function dataProvider(): Iterator
     {
+        $unionTypeFactory = new UnionTypeFactory();
+
         yield [
             __DIR__ . '/Source/ClassWithParentInterface.php',
             0,
-            TypeFactoryStaticHelper::createUnionObjectType([ClassWithParentInterface::class, SomeInterface::class]),
+            $unionTypeFactory->createUnionObjectType([ClassWithParentInterface::class, SomeInterface::class]),
         ];
 
         yield [
             __DIR__ . '/Source/ClassWithParentClass.php',
             0,
-            TypeFactoryStaticHelper::createUnionObjectType([ClassWithParentClass::class, ParentClass::class]),
+            $unionTypeFactory->createUnionObjectType([ClassWithParentClass::class, ParentClass::class]),
         ];
 
         yield [
             __DIR__ . '/Source/ClassWithTrait.php',
             0,
-            TypeFactoryStaticHelper::createUnionObjectType([ClassWithTrait::class, AnotherTrait::class]),
+            $unionTypeFactory->createUnionObjectType([ClassWithTrait::class, AnotherTrait::class]),
         ];
 
         yield [
             __DIR__ . '/Source/ClassWithParentTrait.php',
             0,
-            TypeFactoryStaticHelper::createUnionObjectType(
+            $unionTypeFactory->createUnionObjectType(
                 [ClassWithParentTrait::class, ClassWithTrait::class, AnotherTrait::class]
             ),
         ];
@@ -64,7 +66,7 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
         yield [
             __DIR__ . '/Source/AnonymousClass.php',
             0,
-            TypeFactoryStaticHelper::createUnionObjectType(
+            $unionTypeFactory->createUnionObjectType(
                 [
                     'AnonymousClassdefa360846b84894d4be1b25c2ce6da9',
                     ParentClass::class,

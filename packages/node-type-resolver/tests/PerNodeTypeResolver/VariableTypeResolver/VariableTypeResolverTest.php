@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTe
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\AnotherType;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\ThisClass;
 use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
-use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\VariableTypeResolver
@@ -35,7 +35,7 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
         yield [
             __DIR__ . '/Source/ThisClass.php',
             0,
-            TypeFactoryStaticHelper::createUnionObjectType([ThisClass::class, AnotherClass::class]),
+            UnionTypeFactory::createUnionObjectType([ThisClass::class, AnotherClass::class]),
         ];
 
         $anotherTypeObjectType = new ObjectType(AnotherType::class);

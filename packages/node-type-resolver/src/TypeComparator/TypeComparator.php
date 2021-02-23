@@ -106,15 +106,15 @@ final class TypeComparator
             return false;
         }
 
-        if (! $mainType instanceof ArrayType) {
+        if (! $mainType instanceof ArrayType || ! $checkedType instanceof ArrayType) {
             return $mainType->isSuperTypeOf($checkedType)
                 ->yes();
         }
 
-        if (! $checkedType instanceof ConstantArrayType) {
-            return $mainType->isSuperTypeOf($checkedType)
-                ->yes();
-        }
+//        if (! $checkedType instanceof ConstantArrayType) {
+//            return $mainType->isSuperTypeOf($checkedType)
+//                ->yes();
+//        }
 
         return $this->arrayTypeComparator->isSubtype($checkedType, $mainType);
     }
