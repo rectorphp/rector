@@ -20,6 +20,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Throwable;
 
 final class NodeAnnotationReader
@@ -96,10 +97,7 @@ final class NodeAnnotationReader
 
     public function readPropertyAnnotation(Property $property, string $annotationClassName): ?object
     {
-        $propertyReflection = $this->createPropertyReflectionFromPropertyNode($property);
-        if (! $propertyReflection instanceof PhpPropertyReflection) {
-            return null;
-        }
+        $propertyReflection = $this->getNativePropertyReflection($property);
 
         try {
             // covers cases like https://github.com/rectorphp/rector/issues/3046
@@ -187,7 +185,7 @@ final class NodeAnnotationReader
         return null;
     }
 
-    private function createPropertyReflectionFromPropertyNode(Property $property): ?PropertyReflection
+    private function getNativePropertyReflection(Property $property): ?ReflectionProperty
     {
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
@@ -207,7 +205,12 @@ final class NodeAnnotationReader
         try {
             $classReflection = $this->reflectionProvider->getClass($className);
             $propertyScope = $property->getAttribute(AttributeKey::SCOPE);
-            return $classReflection->getProperty($propertyName, $propertyScope);
+            $propertyReflection = $classReflection->getProperty($propertyName, $propertyScope);
+
+            // @see https://github.com/phpstan/phpstan-src/commit/5fad625b7770b9c5beebb19ccc1a493839308fb4
+            $privatesAccessor = new PrivatesAccessor();
+            return $privatesAccessor->getPrivateProperty($propertyReflection, 'reflection');
+
             // return new ReflectionProperty($className, $propertyName);
         } catch (Throwable $throwable) {
             // in case of PHPUnit property or just-added property
