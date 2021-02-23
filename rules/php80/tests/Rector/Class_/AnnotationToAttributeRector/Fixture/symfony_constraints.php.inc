@@ -13,14 +13,6 @@ class SymfonyConstraints
      * @Assert\NotNull(groups={"registration"})
      */
     private $email;
-
-    /**
-     * @\Symfony\Component\Validator\Constraints\Type("string")
-     * @\Symfony\Component\Validator\Constraints\Length(max="180")
-     * @\Symfony\Component\Validator\Constraints\Email(groups={"registration"})
-     * @\Symfony\Component\Validator\Constraints\NotNull(groups={"registration"})
-     */
-    private $email2;
 }
 
 ?>
@@ -36,12 +28,6 @@ class SymfonyConstraints
     #[Assert\Email(groups: ['registration'])]
     #[Assert\NotNull(groups: ['registration'])]
     private $email;
-
-    #[\Symfony\Component\Validator\Constraints\Type('string')]
-    #[\Symfony\Component\Validator\Constraints\Length(max: '180')]
-    #[\Symfony\Component\Validator\Constraints\Email(groups: ['registration'])]
-    #[\Symfony\Component\Validator\Constraints\NotNull(groups: ['registration'])]
-    private $email2;
 }
 
 ?>
