@@ -7,7 +7,6 @@ namespace Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNam
 use Iterator;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Testing\ValueObject\InputFilePathWithExpectedFile;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -16,59 +15,30 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
     /**
      * @requires PHP 7.4
      * @dataProvider provideData()
-     * @param InputFilePathWithExpectedFile[] $extraFiles
+     * @param SmartFileInfo[] $extraFileInfos
      */
     public function test(
         SmartFileInfo $originalFileInfo,
         ?AddedFileWithContent $expectedAddedFileWithContent,
-        array $extraFiles = []
+        array $extraFileInfos = []
     ): void {
-        $this->doTestFileInfo($originalFileInfo, $extraFiles);
+        $this->doTestFileInfo($originalFileInfo, $extraFileInfos);
 
         if ($expectedAddedFileWithContent !== null) {
             $this->assertFileWithContentWasAdded($expectedAddedFileWithContent);
         } else {
             $this->assertFileWasNotChanged($this->originalTempFileInfo);
         }
-
-        $expectedAddedFilesWithContent = [];
-        foreach ($extraFiles as $extraFile) {
-            $expectedAddedFilesWithContent[] = $extraFile->getAddedFileWithContent();
-        }
-
-        $this->assertFilesWereAdded($expectedAddedFilesWithContent);
     }
 
     public function provideData(): Iterator
     {
         $smartFileSystem = new SmartFileSystem();
 
-        $extraFiles = [
-            new InputFilePathWithExpectedFile(
-                __DIR__ . '/Source/RandomInterfaceUseCase.php',
-                new AddedFileWithContent(
-                    $this->getFixtureTempDirectory() . '/Source/RandomInterfaceUseCase.php',
-                    $smartFileSystem->readFile(__DIR__ . '/Expected/ExpectedRandomInterfaceUseCase.php')
-                )
-            ),
-
-            new InputFilePathWithExpectedFile(
-                __DIR__ . '/Source/ValueObject/SameClassImplementEntity.php',
-                new AddedFileWithContent(
-                    $this->getFixtureTempDirectory() . '/Source/Entity/SameClassImplementEntity.php',
-                    $smartFileSystem->readFile(__DIR__ . '/Expected/Entity/ExpectedSameClassImplementEntity.php')
-                )
-            ),
-
-            new InputFilePathWithExpectedFile(
-                __DIR__ . '/Source/Entity/RandomInterfaceUseCaseInTheSameNamespace.php',
-                new AddedFileWithContent(
-                    $this->getFixtureTempDirectory() . '/Source/Entity/RandomInterfaceUseCaseInTheSameNamespace.php',
-                    $smartFileSystem->readFile(
-                        __DIR__ . '/Expected/Entity/RandomInterfaceUseCaseInTheSameNamespace.php'
-                    )
-                )
-            ),
+        $extraFileInfos = [
+            new SmartFileInfo(__DIR__ . '/Source/RandomInterfaceUseCase.php'),
+            new SmartFileInfo(__DIR__ . '/Source/ValueObject/SameClassImplementEntity.php'),
+            new SmartFileInfo(__DIR__ . '/Source/Entity/RandomInterfaceUseCaseInTheSameNamespace.php'),
         ];
 
         yield [
@@ -78,7 +48,7 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
                 $smartFileSystem->readFile(__DIR__ . '/Expected/ExpectedRandomInterface.php')
             ),
             // extra files
-            $extraFiles,
+            $extraFileInfos,
         ];
 
         // skip nette control factory

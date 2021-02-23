@@ -32,7 +32,7 @@ abstract class AnotherAbstractClass
      }
 }
 
-class SomeClass extends AnotherAbstractClass
+class SomeClass extends \Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture\AnotherAbstractClass
 {
 }
 

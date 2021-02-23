@@ -7,17 +7,9 @@ namespace Rector\Core\Stubs;
 final class PHPStanStubLoader
 {
     /**
-     * @var bool
-     */
-    private $areStubsLoaded = false;
-
-    /**
      * @var string[]
      */
-    private const STUBS = [
-        'ReflectionUnionType.php',
-        'Attribute.php',
-    ];
+    private const STUBS = ['ReflectionUnionType.php', 'Attribute.php'];
 
     /**
      * @var string[]
@@ -30,6 +22,11 @@ final class PHPStanStubLoader
         // 3. run outside project like in https://getrector.org/ from docker, so it look up // vendor/rector/rector/bin/rector
         __DIR__ . '/../../../../../vendor',
     ];
+
+    /**
+     * @var bool
+     */
+    private $areStubsLoaded = false;
 
     /**
      * @see https://github.com/phpstan/phpstan/issues/4541#issuecomment-779434916
@@ -50,7 +47,7 @@ final class PHPStanStubLoader
             }
 
             foreach (self::STUBS as $stub) {
-                $path     = sprintf('phar://%s/phpstan/phpstan/phpstan.phar/stubs/runtime/%s', $vendorPath, $stub);
+                $path = sprintf('phar://%s/phpstan/phpstan/phpstan.phar/stubs/runtime/%s', $vendorPath, $stub);
                 $isExists = file_exists($path);
 
                 if (! $isExists) {

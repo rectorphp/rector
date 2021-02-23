@@ -2,6 +2,6 @@
 
 namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Source;
 
-interface AnInterface
+abstract class AbstractChild extends AbstractMain
 {
 }

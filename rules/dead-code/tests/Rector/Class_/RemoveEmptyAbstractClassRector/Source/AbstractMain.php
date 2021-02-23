@@ -2,6 +2,9 @@
 
 namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Source;
 
-interface AnInterface
+abstract class AbstractMain
 {
+    public function run()
+    {
+    }
 }
