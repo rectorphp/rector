@@ -5,76 +5,26 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector;
 
 use Iterator;
-use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Testing\ValueObject\InputFilePathWithExpectedFile;
-use Symplify\SmartFileSystem\SmartFileInfo;
-use Symplify\SmartFileSystem\SmartFileSystem;
 use Rector\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ExtraFilesTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
-     * @param InputFilePathWithExpectedFile[] $extraFiles
+     * @param SmartFileInfo[] $extraFileInfos
      */
-    public function test(
-        SmartFileInfo $originalFileInfo,
-        ?AddedFileWithContent $expectedAddedFileWithContent,
-        array $extraFiles = []
-    ): void {
-        $this->doTestFileInfo($originalFileInfo, $extraFiles);
-        $this->assertFileWithContentWasAdded($expectedAddedFileWithContent);
-
-        $expectedAddedFilesWithContent = [];
-        foreach ($extraFiles as $extraFile) {
-            $expectedAddedFilesWithContent[] = $extraFile->getAddedFileWithContent();
-        }
-
-        $this->assertFilesWereAdded($expectedAddedFilesWithContent);
+    public function test(SmartFileInfo $originalFileInfo, array $extraFileInfos = []): void
+    {
+        $this->doTestFileInfo($originalFileInfo, $extraFileInfos);
     }
 
     public function provideData(): Iterator
     {
-        $smartFileSystem = new SmartFileSystem();
+        $extraFileInfos = [new SmartFileInfo(__DIR__ . '/Source/UseAbstract.php')];
 
-        $extraFiles = [
-            new InputFilePathWithExpectedFile(
-                __DIR__ . '/Source/UseAbstract.php',
-                new AddedFileWithContent(
-                    $this->getFixtureTempDirectory() . '/Source/UseAbstract.php',
-                    $smartFileSystem->readFile(__DIR__ . '/Expected/UseAbstract.php')
-                )
-            ),
-        ];
-
-        yield [
-            new SmartFileInfo(__DIR__ . '/Source/UseAbstract.php'),
-            new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/UseAbstract.php',
-                $smartFileSystem->readFile(__DIR__ . '/Expected/UseAbstract.php')
-            ),
-            $extraFiles,
-        ];
-
-        $extraFiles = [
-            new InputFilePathWithExpectedFile(
-                __DIR__ . '/Source/ExtendsAbstractChild.php',
-                new AddedFileWithContent(
-                    $this->getFixtureTempDirectory() . '/Source/ExtendsAbstractChild.php',
-                    $smartFileSystem->readFile(__DIR__ . '/Expected/ExtendsAbstractChild.php')
-                )
-            ),
-        ];
-
-        yield [
-            new SmartFileInfo(__DIR__ . '/Source/ExtendsAbstractChild.php'),
-            new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/ExtendsAbstractChild.php',
-                $smartFileSystem->readFile(__DIR__ . '/Expected/ExtendsAbstractChild.php')
-            ),
-            $extraFiles,
-        ];
+        yield [new SmartFileInfo(__DIR__ . '/FixtureExtraFiles/SkipUsedAbstractClass.php.inc'), $extraFileInfos];
     }
 
     protected function getRectorClass(): string
