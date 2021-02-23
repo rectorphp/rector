@@ -13,7 +13,7 @@ final class RouteCollectionBuilderToRoutingConfiguratorRectorTest extends Abstra
      */
     public function test(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo): void
     {
-        $this->doTestFileInfoWithoutAutoload($fileInfo);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): \Iterator

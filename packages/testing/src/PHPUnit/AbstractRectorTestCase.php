@@ -169,12 +169,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
         $nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         /** @var DynamicSourceLocatorProvider $dynamicDirectoryLocatorProvider */
         $dynamicDirectoryLocatorProvider = $this->getService(DynamicSourceLocatorProvider::class);
         $dynamicDirectoryLocatorProvider->setFileInfo($inputFileInfo);
-=======
+
         /** @var ReflectionProvider\MemoizingReflectionProvider $reflectionProvider */
         $reflectionProvider = $this->getService(ReflectionProvider::class);
 
@@ -189,16 +187,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             throw new ShouldNotHappenException();
         }
 
-//        $sourceLocator = $privatesAccessor->getPrivateProperty($classReflector, 'sourceLocator');
-//        dump($sourceLocator);
-//
-//        $privatesAccessor->setPrivateProperty($classReflector, 'sourceLocator');
-//        // new AutoloadSourceLocator()
-//        die;
->>>>>>> 039726cb8... wip memoiziing source locator
-
-=======
->>>>>>> e87434073... fixup! wip memoiziing source locator
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
 
         $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo, $extraFileInfos);
