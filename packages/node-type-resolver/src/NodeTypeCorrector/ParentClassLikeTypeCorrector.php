@@ -8,7 +8,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 
@@ -42,7 +41,7 @@ final class ParentClassLikeTypeCorrector
     public function correct(Type $type): Type
     {
         if ($type instanceof TypeWithClassName) {
-            if (! ClassExistenceStaticHelper::doesClassLikeExist($type->getClassName())) {
+            if (! $this->reflectionProvider->hasClass($type->getClassName())) {
                 return $type;
             }
 
@@ -54,7 +53,7 @@ final class ParentClassLikeTypeCorrector
 
         $allTypes = [];
         foreach ($classNames as $className) {
-            if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
+            if (! $this->reflectionProvider->hasClass($className)) {
                 continue;
             }
 

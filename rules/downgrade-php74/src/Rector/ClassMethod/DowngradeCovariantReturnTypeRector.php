@@ -12,9 +12,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -34,9 +34,15 @@ final class DowngradeCovariantReturnTypeRector extends AbstractRector
      */
     private $phpDocTypeChanger;
 
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ReflectionProvider $reflectionProvider)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -105,7 +111,7 @@ CODE_SAMPLE
         // The return type name could either be a classname, without the leading "\",
         // or one among the reserved identifiers ("static", "self", "iterable", etc)
         // To find out which is the case, check if this name exists as a class
-        $newType = ClassExistenceStaticHelper::doesClassLikeExist($parentReflectionMethodName) ? new FullyQualified(
+        $newType = $this->reflectionProvider->hasClass($parentReflectionMethodName) ? new FullyQualified(
             $parentReflectionMethodName
         ) : new Name($parentReflectionMethodName);
 

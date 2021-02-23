@@ -10,13 +10,13 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
@@ -31,6 +31,16 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
      * @var PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
+
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
 
     public function getNodeClass(): string
     {
@@ -120,7 +130,7 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
             return '\\' . $type->getClassName();
         }
 
-        if (ClassExistenceStaticHelper::doesClassLikeExist($type->getClassName())) {
+        if ($this->reflectionProvider->hasClass($type->getClassName())) {
             // FQN by default
             return '\\' . $type->describe(VerbosityLevel::typeOnly());
         }

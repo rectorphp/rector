@@ -10,9 +10,12 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
+use PHPStan\Reflection\PropertyReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\DoctrineAnnotationGenerated\PhpDocNode\ConstantReferenceIdentifierRestorer;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
 use ReflectionMethod;
@@ -41,14 +44,21 @@ final class NodeAnnotationReader
      */
     private $constantReferenceIdentifierRestorer;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         ConstantReferenceIdentifierRestorer $constantReferenceIdentifierRestorer,
         NodeNameResolver $nodeNameResolver,
-        Reader $reader
+        Reader $reader,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->reader = $reader;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->constantReferenceIdentifierRestorer = $constantReferenceIdentifierRestorer;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function readAnnotation(Node $node, string $annotationClass): ?object
@@ -87,13 +97,14 @@ final class NodeAnnotationReader
     public function readPropertyAnnotation(Property $property, string $annotationClassName): ?object
     {
         $propertyReflection = $this->createPropertyReflectionFromPropertyNode($property);
-        if (! $propertyReflection instanceof ReflectionProperty) {
+        if (! $propertyReflection instanceof PhpPropertyReflection) {
             return null;
         }
 
         try {
             // covers cases like https://github.com/rectorphp/rector/issues/3046
 
+            // @todo this will require original reflection
             /** @var object[] $propertyAnnotations */
             $propertyAnnotations = $this->reader->getPropertyAnnotations($propertyReflection);
             return $this->matchNextAnnotation($propertyAnnotations, $annotationClassName, $property);
@@ -141,14 +152,15 @@ final class NodeAnnotationReader
         return null;
     }
 
-    private function createClassReflectionFromNode(Class_ $class): ReflectionClass
+    private function createClassReflectionFromNode(Class_ $class): ClassReflection
     {
         /** @var string $className */
         $className = $this->nodeNameResolver->getName($class);
 
         // covers cases like https://github.com/rectorphp/rector/issues/3230#issuecomment-683317288
 
-        return new ReflectionClass($className);
+        return $this->reflectionProvider->getClass($className);
+//        return new ReflectionClass($className);
     }
 
     /**
@@ -175,7 +187,7 @@ final class NodeAnnotationReader
         return null;
     }
 
-    private function createPropertyReflectionFromPropertyNode(Property $property): ?ReflectionProperty
+    private function createPropertyReflectionFromPropertyNode(Property $property): ?PropertyReflection
     {
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
@@ -186,13 +198,17 @@ final class NodeAnnotationReader
             // probably fresh node
             return null;
         }
-        if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
+
+        if (! $this->reflectionProvider->hasClass($className)) {
             // probably fresh node
             return null;
         }
 
         try {
-            return new ReflectionProperty($className, $propertyName);
+            $classReflection = $this->reflectionProvider->getClass($className);
+            $propertyScope = $property->getAttribute(AttributeKey::SCOPE);
+            return $classReflection->getProperty($propertyName, $propertyScope);
+            // return new ReflectionProperty($className, $propertyName);
         } catch (Throwable $throwable) {
             // in case of PHPUnit property or just-added property
             return null;

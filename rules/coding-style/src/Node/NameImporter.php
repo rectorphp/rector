@@ -12,11 +12,11 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\PSR4\Collector\RenamedClassesCollector;
@@ -66,6 +66,11 @@ final class NameImporter
      */
     private $renamedClassesCollector;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         AliasUsesResolver $aliasUsesResolver,
         ClassNameImportSkipper $classNameImportSkipper,
@@ -73,7 +78,8 @@ final class NameImporter
         ParameterProvider $parameterProvider,
         RenamedClassesCollector $renamedClassesCollector,
         StaticTypeMapper $staticTypeMapper,
-        UseNodesToAddCollector $useNodesToAddCollector
+        UseNodesToAddCollector $useNodesToAddCollector,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->aliasUsesResolver = $aliasUsesResolver;
@@ -82,6 +88,7 @@ final class NameImporter
         $this->parameterProvider = $parameterProvider;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->renamedClassesCollector = $renamedClassesCollector;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function importName(Name $name): ?Name
@@ -225,7 +232,7 @@ final class NameImporter
         }
 
         // skip-non existing class-likes and functions
-        if (ClassExistenceStaticHelper::doesClassLikeExist($classOrFunctionName)) {
+        if ($this->reflectionProvider->hasClass($classOrFunctionName)) {
             return false;
         }
 

@@ -9,6 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType as PhpParserUnionType;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
@@ -17,7 +18,6 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadDocBlock\TagRemover\VarTagRemover;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
@@ -67,16 +67,23 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
      */
     private $varTagRemover;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         PropertyTypeInferer $propertyTypeInferer,
         VendorLockResolver $vendorLockResolver,
         DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
-        VarTagRemover $varTagRemover
+        VarTagRemover $varTagRemover,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->propertyTypeInferer = $propertyTypeInferer;
         $this->vendorLockResolver = $vendorLockResolver;
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->varTagRemover = $varTagRemover;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -204,7 +211,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return ! ClassExistenceStaticHelper::doesClassLikeExist($typeName);
+        return ! $this->reflectionProvider->hasClass($typeName);
     }
 
     private function removeDefaultValueForDoctrineCollection(Property $property, Type $propertyType): void

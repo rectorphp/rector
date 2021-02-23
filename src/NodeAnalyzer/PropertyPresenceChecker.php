@@ -6,8 +6,8 @@ namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use ReflectionClass;
 use ReflectionProperty;
@@ -24,12 +24,19 @@ final class PropertyPresenceChecker
      */
     private $nodeNameResolver;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         PromotedPropertyResolver $promotedPropertyResolver,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -42,7 +49,7 @@ final class PropertyPresenceChecker
             return false;
         }
 
-        if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return false;
         }
 

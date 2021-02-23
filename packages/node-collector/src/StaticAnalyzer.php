@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\NodeCollector;
 
 use Nette\Utils\Strings;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use ReflectionClass;
 
 final class StaticAnalyzer
@@ -16,9 +16,15 @@ final class StaticAnalyzer
      */
     private $nodeRepository;
 
-    public function __construct(NodeRepository $nodeRepository)
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(NodeRepository $nodeRepository, ReflectionProvider $reflectionProvider)
     {
         $this->nodeRepository = $nodeRepository;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function isStaticMethod(string $methodName, string $className): bool
@@ -30,7 +36,7 @@ final class StaticAnalyzer
 
         // could be static in doc type magic
         // @see https://regex101.com/r/tlvfTB/1
-        if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return false;
         }
 
