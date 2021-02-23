@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\BooleanType;
 use Rector\Core\NodeManipulator\IfManipulator;
+use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -29,9 +30,15 @@ final class ReturnBinaryAndToEarlyReturnRector extends AbstractRector
      */
     private $ifManipulator;
 
-    public function __construct(IfManipulator $ifManipulator)
+    /**
+     * @var AssignAndBinaryMap
+     */
+    private $assignAndBinaryMap;
+
+    public function __construct(IfManipulator $ifManipulator, AssignAndBinaryMap $assignAndBinaryMap)
     {
         $this->ifManipulator = $ifManipulator;
+        $this->assignAndBinaryMap = $assignAndBinaryMap;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -93,7 +100,7 @@ CODE_SAMPLE
             $this->addNodeBeforeNode($ifNegation, $node);
         }
 
-        $lastReturnExpr = $this->getLastReturnExpr($node->expr->right);
+        $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($node->expr->right);
         $this->addNodeBeforeNode(new Return_($lastReturnExpr), $node);
         $this->removeNode($node);
 
