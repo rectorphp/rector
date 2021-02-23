@@ -27,6 +27,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
@@ -80,6 +81,7 @@ final class NodeTypeResolver
      * @var GenericClassStringTypeCorrector
      */
     private $genericClassStringTypeCorrector;
+
     /**
      * @var UnionTypeFactory
      */
@@ -178,12 +180,14 @@ final class NodeTypeResolver
     public function isNullableType(Node $node): bool
     {
         $nodeType = $this->resolve($node);
-        if (! $nodeType instanceof UnionType) {
-            return false;
-        }
-
-        return $nodeType->isSuperTypeOf(new NullType())
-            ->yes();
+        return TypeCombinator::containsNull($nodeType);
+//
+//        if (! $nodeType instanceof UnionType) {
+//            return false;
+//        }
+//
+//        return $nodeType->isSuperTypeOf(new NullType())
+//            ->yes();
     }
 
     public function getNativeType(Expr $expr): Type

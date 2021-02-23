@@ -13,7 +13,6 @@ use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
-use PHPStan\Type\UnionType;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\Tests\TypeComparator\Source\SomeGenericTypeObject;
 use Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator;

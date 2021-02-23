@@ -23,8 +23,9 @@ final class ArrayTypeComparator
 
     public function isSubtype(ArrayType $checkedType, ArrayType $mainType): bool
     {
-        if (! $checkedType instanceof ConstantArrayType && ! $mainType instanceof ConstantArrayType)  {
-            return $mainType->isSuperTypeOf($checkedType)->yes();
+        if (! $checkedType instanceof ConstantArrayType && ! $mainType instanceof ConstantArrayType) {
+            return $mainType->isSuperTypeOf($checkedType)
+                ->yes();
         }
 
         // one of them is constant here
@@ -53,7 +54,8 @@ final class ArrayTypeComparator
 //        $checkedKeyType = $checkedType->getKeyType();
 //        $mainKeyType = $mainType->getKeyType();
 
-        return $mainType->isSuperTypeOf($checkedType)->yes();
+        return $mainType->isSuperTypeOf($checkedType)
+            ->yes();
 
         if (! $checkedKeyType->isSuperTypeOf($mainKeyType)->yes()) {
             return false;

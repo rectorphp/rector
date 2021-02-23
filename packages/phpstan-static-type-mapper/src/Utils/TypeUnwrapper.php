@@ -6,6 +6,7 @@ namespace Rector\PHPStanStaticTypeMapper\Utils;
 
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
@@ -27,6 +28,7 @@ final class TypeUnwrapper
      */
     public function unwrapNullableType(Type $type): Type
     {
+        return TypeCombinator::removeNull($type);
         if (! $type instanceof UnionType) {
             return $type;
         }

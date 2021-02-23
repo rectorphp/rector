@@ -31,6 +31,7 @@ final class TypeNormalizer
      * @var TypeFactory
      */
     private $typeFactory;
+
     /**
      * @var UnionTypeFactory
      */
