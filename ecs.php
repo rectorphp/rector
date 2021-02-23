@@ -12,11 +12,7 @@ use PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
 use Symplify\CodingStandard\Fixer\Commenting\RemoveCommentedCodeFixer;
-<<<<<<< HEAD
 use Symplify\CodingStandard\Fixer\LineLength\DocBlockLineLengthFixer;
-use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
-=======
->>>>>>> 30dac3175... ecs: remove already set present rules
 use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
@@ -54,18 +50,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Source/*',
         '*/Fixture/*',
         '*/Expected/*',
-<<<<<<< HEAD
+
         # generated from /vendor
         __DIR__ . '/packages/DoctrineAnnotationGenerated/ConstantPreservingDocParser.php',
         __DIR__ . '/packages/DoctrineAnnotationGenerated/ConstantPreservingAnnotationReader.php',
-=======
-
-        // generated from /vendor
-        __DIR__ . '/packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php',
-        __DIR__ . '/packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php',
-        // template files
-        __DIR__ . '/packages/rector-generator/templates',
->>>>>>> 30dac3175... ecs: remove already set present rules
 
         UnaryOperatorSpacesFixer::class,
 
@@ -80,13 +68,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // breaks on-purpose annotated variables
         ReturnAssignmentFixer::class,
 
-<<<<<<< HEAD
         PhpdocTypesFixer::class => [__DIR__ . '/rules/Php74/Rector/Double/RealToFloatTypeCastRector.php'],
-=======
-        // buggy on "Float" class
-        PhpdocTypesFixer::class => [__DIR__ . '/rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'],
 
->>>>>>> 30dac3175... ecs: remove already set present rules
+        // buggy on "Float" class
         PhpUnitStrictFixer::class => [
             __DIR__ . '/packages-tests/BetterPhpDocParser/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php',
             __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',
