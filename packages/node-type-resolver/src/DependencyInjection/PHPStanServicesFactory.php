@@ -37,7 +37,21 @@ final class PHPStanServicesFactory
 
         $existingAdditionalConfigFiles = array_filter($additionalConfigFiles, 'file_exists');
 
-        $this->container = $containerFactory->create(sys_get_temp_dir(), $existingAdditionalConfigFiles, []);
+        // this allows to statically autoload files from Rector tests
+        $analysedPathsFromConfig = [];
+        if (defined('RECTOR_REPOSITORY')) {
+            $analysedPathsFromConfig[] = sys_get_temp_dir() . '/_temp_fixture_easy_testing';
+            // just for loading Source directory
+            $analysedPathsFromConfig[] = __DIR__ . '/../../../../rules/renaming/tests/Rector/Name/RenameClassRector/Source';
+        }
+
+        $this->container = $containerFactory->create(
+            sys_get_temp_dir(),
+            $existingAdditionalConfigFiles,
+            [],
+            [],
+            $analysedPathsFromConfig
+        );
     }
 
     /**
