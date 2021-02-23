@@ -189,10 +189,6 @@ final class ClassRenamer
         $currentName = $this->nodeNameResolver->getName($classLike);
         $newClassFullyQualified = $oldToNewClasses[$currentName];
 
-        dump($this->reflectionProvider->hasClass($newClassFullyQualified));
-        dump($newClassFullyQualified);
-        die;
-
         if ($this->reflectionProvider->hasClass($newClassFullyQualified)) {
             return null;
         }

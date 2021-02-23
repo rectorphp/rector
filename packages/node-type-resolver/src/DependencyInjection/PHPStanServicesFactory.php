@@ -15,6 +15,7 @@ use PHPStan\File\FileHelper;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
+use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocator;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 /**
@@ -39,19 +40,7 @@ final class PHPStanServicesFactory
 
         $existingAdditionalConfigFiles = array_filter($additionalConfigFiles, 'file_exists');
 
-        // this allows to statically autoload files from Rector tests
-        $analysedPathsFromConfig = [];
-        if (defined('RECTOR_REPOSITORY')) {
-            $analysedPathsFromConfig[] = sys_get_temp_dir() . '/_temp_fixture_easy_testing';
-        }
-
-        $this->container = $containerFactory->create(
-            sys_get_temp_dir(),
-            $existingAdditionalConfigFiles,
-            [],
-            [],
-            $analysedPathsFromConfig
-        );
+        $this->container = $containerFactory->create(sys_get_temp_dir(), $existingAdditionalConfigFiles, []);
     }
 
     /**
@@ -116,5 +105,13 @@ final class PHPStanServicesFactory
     public function createTypeNodeResolver(): TypeNodeResolver
     {
         return $this->container->getByType(TypeNodeResolver::class);
+    }
+
+    /**
+     * @api
+     */
+    public function createDynamicSourceLocatorProvider(): DynamicSourceLocator
+    {
+        return $this->container->getByType(DynamicSourceLocator::class);
     }
 }

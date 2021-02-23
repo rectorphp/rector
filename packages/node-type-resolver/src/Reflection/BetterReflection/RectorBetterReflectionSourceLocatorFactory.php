@@ -4,10 +4,34 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\Reflection\BetterReflection;
 
+use _HumbugBoxfac515c46e83\Roave\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
+use _HumbugBoxfac515c46e83\Roave\BetterReflection\SourceLocator\Type\SourceLocator;
+use PHPStan\Reflection\BetterReflection\BetterReflectionSourceLocatorFactory;
+use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
+
 final class RectorBetterReflectionSourceLocatorFactory
 {
-    public function __construct(\Roave\BetterReflection\SourceLocator\Type\SourceLocator $sourceLocator)
+    /**
+     * @var BetterReflectionSourceLocatorFactory
+     */
+    private $betterReflectionSourceLocatorFactory;
+
+    /**
+     * @var IntermediateSourceLocator
+     */
+    private $intermediateSourceLocator;
+
+    public function __construct(
+        BetterReflectionSourceLocatorFactory $betterReflectionSourceLocatorFactory,
+        IntermediateSourceLocator $intermediateSourceLocator
+    ) {
+        $this->betterReflectionSourceLocatorFactory = $betterReflectionSourceLocatorFactory;
+        $this->intermediateSourceLocator = $intermediateSourceLocator;
+    }
+
+    public function create(): SourceLocator
     {
-        dump($sourceLocator);
+        $phpStanSourceLocator = $this->betterReflectionSourceLocatorFactory->create();
+        return new AggregateSourceLocator([$this->intermediateSourceLocator, $phpStanSourceLocator]);
     }
 }

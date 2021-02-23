@@ -5,17 +5,11 @@ parameters:
 
 services:
     - Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory
+    - Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator
+    - Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocator
 
     # basically decorates native PHPStan source locator with a dynamic source locator that is also available in Rector DI
     betterReflectionSourceLocator:
-        class: Roave\BetterReflection\SourceLocator\Type\SourceLocator
-        factory: @Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory::create
-        arguments:
-            sourceLocator: @defaultBetterReflectionSourceLocator
-        autowired: false
-
-    # see https://github.com/phpstan/phpstan-src/blob/78a9f057d7a1c73cc34af70db406b9392ce0ca3a/conf/config.neon#L1332-L1335
-    defaultBetterReflectionSourceLocator:
-        class: Roave\BetterReflection\SourceLocator\Type\SourceLocator
-        factory: @PHPStan\Reflection\BetterReflection\BetterReflectionSourceLocatorFactory::create
+        class: _HumbugBoxfac515c46e83\Roave\BetterReflection\SourceLocator\Type\SourceLocator
+        factory: ['@Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory', 'create']
         autowired: false
