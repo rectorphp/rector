@@ -130,6 +130,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $nextParent = $parent->getAttribute(AttributeKey::NEXT_NODE);
+        if ($nextParent !== $node) {
+            return null;
+        }
+
         $this->removeNode($beforeBreak);
         $this->addNodeBeforeNode(new Return_($assign->expr), $breaks[0]);
         $this->removeNode($breaks[0]);
