@@ -4,9 +4,9 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryOrToEarlyReturnRec
 
 class Fixture
 {
-    public function accept($something, $somethingelse)
+    public function accept()
     {
-        return $something || $somethingelse;
+        return $this->something() || $this->somethingElse();
     }
 }
 
@@ -18,12 +18,12 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryOrToEarlyReturnRec
 
 class Fixture
 {
-    public function accept($something, $somethingelse)
+    public function accept()
     {
-        if ($something) {
+        if ($this->something()) {
             return false;
         }
-        return (bool) $somethingelse;
+        return (bool) $this->somethingElse();
     }
 }
 
