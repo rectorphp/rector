@@ -189,6 +189,10 @@ final class ClassRenamer
         $currentName = $this->nodeNameResolver->getName($classLike);
         $newClassFullyQualified = $oldToNewClasses[$currentName];
 
+        dump($this->reflectionProvider->hasClass($newClassFullyQualified));
+        dump($newClassFullyQualified);
+        die;
+
         if ($this->reflectionProvider->hasClass($newClassFullyQualified)) {
             return null;
         }
@@ -229,13 +233,11 @@ final class ClassRenamer
             return null;
         }
 
-        /** @var string $name */
         $this->alreadyProcessedClasses[] = $name;
 
         $newName = $oldToNewClasses[$name];
         $newClassNamePart = $this->nodeNameResolver->getShortName($newName);
         $newNamespacePart = $this->classNaming->getNamespace($newName);
-
         if ($this->isClassAboutToBeDuplicated($newName)) {
             return null;
         }

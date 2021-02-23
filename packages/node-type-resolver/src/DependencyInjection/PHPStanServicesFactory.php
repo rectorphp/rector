@@ -34,6 +34,8 @@ final class PHPStanServicesFactory
 
         $additionalConfigFiles = [];
         $additionalConfigFiles[] = $parameterProvider->provideStringParameter(Option::PHPSTAN_FOR_RECTOR_PATH);
+        $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan/static-reflection.neon';
+        $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan/better-infer.neon';
 
         $existingAdditionalConfigFiles = array_filter($additionalConfigFiles, 'file_exists');
 
@@ -41,8 +43,6 @@ final class PHPStanServicesFactory
         $analysedPathsFromConfig = [];
         if (defined('RECTOR_REPOSITORY')) {
             $analysedPathsFromConfig[] = sys_get_temp_dir() . '/_temp_fixture_easy_testing';
-            // just for loading Source directory
-            $analysedPathsFromConfig[] = __DIR__ . '/../../../../rules/renaming/tests/Rector/Name/RenameClassRector/Source';
         }
 
         $this->container = $containerFactory->create(
