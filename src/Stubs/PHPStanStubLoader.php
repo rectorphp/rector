@@ -23,9 +23,12 @@ final class PHPStanStubLoader
      * @var string[]
      */
     private const VENDOR_PATHS = [
+        // 1. relative path with composer require rector/rector and run vendor/bin/rector
         'vendor',
+        // 2. relative path with composer require rector/rector with symlink run vendor/bin/rector
         __DIR__ . '/../../vendor',
-        __DIR__ . '/../../../../../vendor', // vendor/rector/rector/bin/rector
+        // 3. run outside project like in https://getrector.org/ from docker, so it look up // vendor/rector/rector/bin/rector
+        __DIR__ . '/../../../../../vendor',
     ];
 
     /**
