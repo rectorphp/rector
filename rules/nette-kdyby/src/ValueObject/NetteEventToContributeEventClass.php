@@ -7,7 +7,7 @@ namespace Rector\NetteKdyby\ValueObject;
 final class NetteEventToContributeEventClass
 {
     /**
-     * @var string[]
+     * @var array<string, class-string>
      * @see https://github.com/contributte/event-dispatcher-extra/tree/master/src/Event
      */
     public const PROPERTY_TO_EVENT_CLASS = [

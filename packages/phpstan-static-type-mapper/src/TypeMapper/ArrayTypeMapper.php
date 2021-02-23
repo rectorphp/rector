@@ -252,7 +252,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
     private function createTypeNodeFromGenericClassStringType(
         GenericClassStringType $genericClassStringType
-    ): \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface {
+    ): AttributeAwareNodeInterface {
         $genericType = $genericClassStringType->getGenericType();
         if ($genericType instanceof ObjectType && ! $this->classLikeExistenceChecker->doesClassLikeExist(
             $genericType->getClassName()

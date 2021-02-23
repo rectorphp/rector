@@ -10,7 +10,7 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\Source\AnotherTrait;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\Source\TraitWithTrait;
-use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\TraitTypeResolver
@@ -30,10 +30,12 @@ final class TraitTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function provideData(): Iterator
     {
+        $unionTypeFactory = new UnionTypeFactory();
+
         yield [
             __DIR__ . '/Source/TraitWithTrait.php',
             0,
-            TypeFactoryStaticHelper::createUnionObjectType([AnotherTrait::class, TraitWithTrait::class]),
+            $unionTypeFactory->createUnionObjectType([AnotherTrait::class, TraitWithTrait::class]),
         ];
     }
 }

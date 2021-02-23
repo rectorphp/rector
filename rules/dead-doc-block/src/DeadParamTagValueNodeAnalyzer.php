@@ -8,7 +8,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\PHPStan\TypeComparator;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 
 final class DeadParamTagValueNodeAnalyzer
 {

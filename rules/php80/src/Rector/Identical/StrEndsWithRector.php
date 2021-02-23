@@ -12,6 +12,8 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\UnaryMinus;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NetteCodeQuality\NodeAnalyzer\BinaryOpAnalyzer;
+use Rector\NetteCodeQuality\ValueObject\FuncCallAndExpr;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,6 +24,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StrEndsWithRector extends AbstractRector
 {
+    /**
+     * @var BinaryOpAnalyzer
+     */
+    private $binaryOpAnalyzer;
+
+    public function __construct(BinaryOpAnalyzer $binaryOpAnalyzer)
+    {
+        $this->binaryOpAnalyzer = $binaryOpAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change helper functions to str_ends_with()', [
@@ -71,10 +83,10 @@ CODE_SAMPLE
      */
     private function refactorSubstr(BinaryOp $binaryOp): ?FuncCall
     {
-        if ($this->nodeNameResolver->isFuncCallName($binaryOp->left, 'substr')) {
+        if ($binaryOp->left instanceof FuncCall && $this->isName($binaryOp->left, 'substr')) {
             $substrFuncCall = $binaryOp->left;
             $comparedNeedleExpr = $binaryOp->right;
-        } elseif ($this->nodeNameResolver->isFuncCallName($binaryOp->right, 'substr')) {
+        } elseif ($binaryOp->right instanceof FuncCall && $this->isName($binaryOp->right, 'substr')) {
             $substrFuncCall = $binaryOp->right;
             $comparedNeedleExpr = $binaryOp->left;
         } else {
@@ -93,20 +105,17 @@ CODE_SAMPLE
 
     private function refactorSubstrCompare(BinaryOp $binaryOp): ?FuncCall
     {
-        if ($this->nodeNameResolver->isFuncCallName($binaryOp->left, 'substr_compare')) {
-            $substrCompareFuncCall = $binaryOp->left;
-            if (! $this->valueResolver->isValue($binaryOp->right, 0)) {
-                return null;
-            }
-        } elseif ($this->nodeNameResolver->isFuncCallName($binaryOp->right, 'substr_compare')) {
-            $substrCompareFuncCall = $binaryOp->right;
-            if (! $this->valueResolver->isValue($binaryOp->left, 0)) {
-                return null;
-            }
-        } else {
+        $funcCallAndExpr = $this->binaryOpAnalyzer->matchFuncCallAndOtherExpr($binaryOp, 'substr_compare');
+        if (! $funcCallAndExpr instanceof FuncCallAndExpr) {
             return null;
         }
 
+        $expr = $funcCallAndExpr->getExpr();
+        if (! $this->valueResolver->isValue($expr, 0)) {
+            return null;
+        }
+
+        $substrCompareFuncCall = $funcCallAndExpr->getFuncCall();
         $haystack = $substrCompareFuncCall->args[0]->value;
         $needle = $substrCompareFuncCall->args[1]->value;
 

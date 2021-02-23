@@ -14,7 +14,7 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\TypeDeclaration\ValueObject\NestedArrayType;
 
 /**
@@ -32,9 +32,15 @@ final class TypeNormalizer
      */
     private $typeFactory;
 
-    public function __construct(TypeFactory $typeFactory)
+    /**
+     * @var UnionTypeFactory
+     */
+    private $unionTypeFactory;
+
+    public function __construct(TypeFactory $typeFactory, UnionTypeFactory $unionTypeFactory)
     {
         $this->typeFactory = $typeFactory;
+        $this->unionTypeFactory = $unionTypeFactory;
     }
 
     public function convertConstantArrayTypeToArrayType(ConstantArrayType $constantArrayType): ?ArrayType
@@ -126,7 +132,7 @@ final class TypeNormalizer
     {
         $nonConstantValueTypes = array_values($nonConstantValueTypes);
         if (count($nonConstantValueTypes) > 1) {
-            $nonConstantValueType = TypeFactoryStaticHelper::createUnionObjectType($nonConstantValueTypes);
+            $nonConstantValueType = $this->unionTypeFactory->createUnionObjectType($nonConstantValueTypes);
         } else {
             $nonConstantValueType = $nonConstantValueTypes[0];
         }
@@ -163,7 +169,7 @@ final class TypeNormalizer
         }
 
         if (count($unionedTypes) > 1) {
-            return TypeFactoryStaticHelper::createUnionObjectType($unionedTypes);
+            return $this->unionTypeFactory->createUnionObjectType($unionedTypes);
         }
 
         return $unionedTypes[0];

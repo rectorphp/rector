@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReplaceHttpServerVarsByServerRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const VARIABLE_RENAME_MAP = [
         'HTTP_SERVER_VARS' => '_SERVER',

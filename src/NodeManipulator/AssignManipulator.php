@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
@@ -27,7 +28,7 @@ use Symplify\PackageBuilder\Php\TypeChecker;
 final class AssignManipulator
 {
     /**
-     * @var array<class-string<Node>>
+     * @var array<class-string<Expr>>
      */
     private const MODIFYING_NODE_TYPES = [
         AssignOp::class,

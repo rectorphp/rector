@@ -18,7 +18,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class NonPhpFileClassRenamerTest extends AbstractKernelTestCase
 {
     /**
-     * @var array<string, string>
+     * @var array<string, class-string>
      */
     private const CLASS_RENAMES = [
         'Session' => 'Illuminate\Support\Facades\Session',

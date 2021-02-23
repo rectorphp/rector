@@ -18,12 +18,22 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 final class TypeFactory
 {
+    /**
+     * @var UnionTypeFactory
+     */
+    private $unionTypeFactory;
+
+    public function __construct(UnionTypeFactory $unionTypeFactory)
+    {
+        $this->unionTypeFactory = $unionTypeFactory;
+    }
+
     /**
      * @param Type[] $types
      */
@@ -58,7 +68,7 @@ final class TypeFactory
 
         if (count($allTypes) > 1) {
             // keep original order, UnionType internally overrides it → impossible to get first type back, e.g. class over interface
-            return TypeFactoryStaticHelper::createUnionObjectType($allTypes);
+            return $this->unionTypeFactory->createUnionObjectType($allTypes);
         }
 
         throw new ShouldNotHappenException();
@@ -123,7 +133,7 @@ final class TypeFactory
             return $types[0];
         }
 
-        return TypeFactoryStaticHelper::createUnionObjectType($types);
+        return $this->unionTypeFactory->createUnionObjectType($types);
     }
 
     private function removeValueFromConstantType(Type $type): Type

@@ -36,7 +36,7 @@ use Symplify\PackageBuilder\Php\TypeChecker;
 final class NonInformativeReturnTagRemover
 {
     /**
-     * @var string[][]
+     * @var array<class-string<Type>, string[]>
      */
     private const USELESS_DOC_NAMES_BY_TYPE_CLASS = [
         IterableType::class => ['iterable'],

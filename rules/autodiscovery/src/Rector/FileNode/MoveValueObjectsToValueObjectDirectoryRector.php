@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Autodiscovery\Rector\FileNode;
 
+use Controller;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -41,10 +42,10 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
      * @api
      * @var string
      */
-    public const ENABLE_VALUE_OBJECT_GUESSING = '$enableValueObjectGuessing';
+    public const ENABLE_VALUE_OBJECT_GUESSING = 'enable_value_object_guessing';
 
     /**
-     * @var string[]
+     * @var string[]|class-string<Controller>[]
      */
     private const COMMON_SERVICE_SUFFIXES = [
         'Repository', 'Command', 'Mapper', 'Controller', 'Presenter', 'Factory', 'Test', 'TestCase', 'Service',

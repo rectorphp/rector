@@ -146,7 +146,7 @@ CODE_SAMPLE
 
     private function resolveValue(Expr $expr): Expr
     {
-        if ($this->isIteratorToArrayFuncCall($expr)) {
+        if ($expr instanceof FuncCall && $this->isIteratorToArrayFuncCall($expr)) {
             /** @var FuncCall $expr */
             $expr = $expr->args[0]->value;
         }

@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTe
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\ClassThatExtendsHtml;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\Html;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\SomeChild;
-use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\PropertyTypeResolver
@@ -42,16 +42,18 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function provideData(): Iterator
     {
+        $unionTypeFactory = new UnionTypeFactory();
+
         yield [__DIR__ . '/Source/MethodParamDocBlock.php', 0, new ObjectType(Html::class)];
 
         yield [
             __DIR__ . '/Source/MethodParamDocBlock.php',
             1,
-            TypeFactoryStaticHelper::createUnionObjectType([ClassThatExtendsHtml::class, Html::class]),
+            $unionTypeFactory->createUnionObjectType([ClassThatExtendsHtml::class, Html::class]),
         ];
 
         // mimics failing test from DomainDrivenDesign set
-        $unionType = TypeFactoryStaticHelper::createUnionObjectType([SomeChild::class, new NullType()]);
+        $unionType = $unionTypeFactory->createUnionObjectType([SomeChild::class, new NullType()]);
         yield [__DIR__ . '/Source/ActionClass.php', 0, $unionType];
     }
 

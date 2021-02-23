@@ -4,40 +4,30 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanStaticTypeMapper\Utils;
 
-use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
-use Rector\StaticTypeMapper\TypeFactory\TypeFactoryStaticHelper;
+use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 
 final class TypeUnwrapper
 {
+    /**
+     * @var UnionTypeFactory
+     */
+    private $unionTypeFactory;
+
+    public function __construct(UnionTypeFactory $unionTypeFactory)
+    {
+        $this->unionTypeFactory = $unionTypeFactory;
+    }
+
     /**
      * E.g. null|ClassType → ClassType
      */
     public function unwrapNullableType(Type $type): Type
     {
-        if (! $type instanceof UnionType) {
-            return $type;
-        }
-
-        if (count($type->getTypes()) !== 2) {
-            return $type;
-        }
-
-        if (! $type->isSuperTypeOf(new NullType())->yes()) {
-            return $type;
-        }
-
-        foreach ($type->getTypes() as $unionedType) {
-            if ($unionedType instanceof NullType) {
-                continue;
-            }
-
-            return $unionedType;
-        }
-
-        return $type;
+        return TypeCombinator::removeNull($type);
     }
 
     public function unwrapFirstObjectTypeFromUnionType(Type $type): Type
@@ -72,6 +62,6 @@ final class TypeUnwrapper
             $unionedTypesWithoutNullType[] = $type;
         }
 
-        return TypeFactoryStaticHelper::createUnionObjectType($unionedTypesWithoutNullType);
+        return $this->unionTypeFactory->createUnionObjectType($unionedTypesWithoutNullType);
     }
 }

@@ -21,12 +21,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ResponseStatusCodeRector extends AbstractRector
 {
     /**
-     * @var string
+     * @var class-string
      */
     private const RESPONSE_CLASS = 'Symfony\Component\HttpFoundation\Response';
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     private const CODE_TO_CONST = [
         100 => 'HTTP_CONTINUE',

@@ -15,7 +15,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionClass;
 use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -42,16 +41,6 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
         'Error',
         'Exception',
     ];
-
-    /**
-     * @var string[]
-     */
-    private $sensitiveExistingClasses = [];
-
-    /**
-     * @var string[]
-     */
-    private $sensitiveNonExistingClasses = [];
 
     /**
      * @var ClassLikeExistenceChecker
@@ -151,32 +140,6 @@ CODE_SAMPLE
         $this->classesToSkip = $configuration[self::CLASSES_TO_SKIP];
     }
 
-    private function classLikeSensitiveExists(string $classLikeName): bool
-    {
-        if (! $this->classLikeExistenceChecker->doesClassLikeExist($classLikeName)) {
-            return false;
-        }
-
-        // already known values
-        if (in_array($classLikeName, $this->sensitiveExistingClasses, true)) {
-            return true;
-        }
-
-        if (in_array($classLikeName, $this->sensitiveNonExistingClasses, true)) {
-            return false;
-        }
-
-        $reflectionClass = new ReflectionClass($classLikeName);
-
-        if ($classLikeName !== $reflectionClass->getName()) {
-            $this->sensitiveNonExistingClasses[] = $classLikeName;
-            return false;
-        }
-
-        $this->sensitiveExistingClasses[] = $classLikeName;
-        return true;
-    }
-
     private function isPartOfIsAFuncCall(String_ $string): bool
     {
         $parent = $string->getAttribute(AttributeKey::PARENT_NODE);
@@ -194,7 +157,7 @@ CODE_SAMPLE
 
     private function shouldSkip(string $classLikeName, String_ $string): bool
     {
-        if (! $this->classLikeSensitiveExists($classLikeName)) {
+        if (! $this->classLikeExistenceChecker->doesClassLikeInsensitiveExists($classLikeName)) {
             return true;
         }
 

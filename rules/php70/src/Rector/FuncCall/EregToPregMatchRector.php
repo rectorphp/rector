@@ -32,7 +32,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class EregToPregMatchRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const OLD_NAMES_TO_NEW_ONES = [
         'ereg' => 'preg_match',

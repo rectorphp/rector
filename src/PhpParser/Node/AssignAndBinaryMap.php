@@ -43,7 +43,7 @@ use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 final class AssignAndBinaryMap
 {
     /**
-     * @var string[]
+     * @var array<class-string<BinaryOp>, class-string<BinaryOp>>
      */
     private const BINARY_OP_TO_INVERSE_CLASSES = [
         Identical::class => NotIdentical::class,
@@ -57,7 +57,7 @@ final class AssignAndBinaryMap
     ];
 
     /**
-     * @var class-string[]
+     * @var array<class-string<AssignOp>, class-string<AssignOp>>
      */
     private const ASSIGN_OP_TO_BINARY_OP_CLASSES = [
         AssignBitwiseOr::class => BitwiseOr::class,
@@ -75,7 +75,7 @@ final class AssignAndBinaryMap
     ];
 
     /**
-     * @var string[]
+     * @var array<class-string<BinaryOp>, class-string<BinaryOp>>
      */
     private $binaryOpToAssignClasses = [];
 
@@ -102,7 +102,6 @@ final class AssignAndBinaryMap
     public function getInversed(BinaryOp $binaryOp): ?string
     {
         $nodeClass = get_class($binaryOp);
-
         return self::BINARY_OP_TO_INVERSE_CLASSES[$nodeClass] ?? null;
     }
 }

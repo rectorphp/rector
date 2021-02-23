@@ -6,7 +6,7 @@ namespace Rector\DeadDocBlock;
 
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\NodeTypeResolver\PHPStan\TypeComparator;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 
 final class DeadVarTagValueNodeAnalyzer
 {

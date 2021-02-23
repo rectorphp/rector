@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Foreach_;
-use Rector\CodeQuality\NodeAnalyzer\ForeachNodeAnalyzer;
+use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
@@ -26,14 +26,14 @@ final class ForeachItemsAssignToEmptyArrayToAssignRector extends AbstractRector
     private $nodeUsageFinder;
 
     /**
-     * @var ForeachNodeAnalyzer
+     * @var ForeachAnalyzer
      */
-    private $foreachNodeAnalyzer;
+    private $foreachAnalyzer;
 
-    public function __construct(NodeUsageFinder $nodeUsageFinder, ForeachNodeAnalyzer $foreachNodeAnalyzer)
+    public function __construct(NodeUsageFinder $nodeUsageFinder, ForeachAnalyzer $foreachAnalyzer)
     {
         $this->nodeUsageFinder = $nodeUsageFinder;
-        $this->foreachNodeAnalyzer = $foreachNodeAnalyzer;
+        $this->foreachAnalyzer = $foreachAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -85,7 +85,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $assignVariable = $this->foreachNodeAnalyzer->matchAssignItemsOnlyForeachArrayVariable($node);
+        $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($node);
         if (! $assignVariable instanceof Expr) {
             return null;
         }
