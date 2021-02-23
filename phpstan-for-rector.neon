@@ -2,8 +2,14 @@
 parameters:
     inferPrivatePropertyTypeFromConstructor: true
 
+<<<<<<< HEAD
     scanDirectories:
         - stubs
+=======
+    # see https://github.com/rectorphp/rector/issues/3490#issue-634342324
+    featureToggles:
+        disableRuntimeReflectionProvider: true
+>>>>>>> 039726cb8... wip memoiziing source locator
 
 includes:
     - utils/phpstan-extensions/config/phpstan-extensions.neon
