@@ -25,7 +25,7 @@ final class PHPStanStubLoader
     private const VENDOR_PATHS = [
         'vendor',
         __DIR__ . '/../../vendor',
-        __DIR__ . '/../../../../../vendor',
+        __DIR__ . '/../../../../../vendor', // vendor/rector/rector/bin/rector
     ];
 
     /**
