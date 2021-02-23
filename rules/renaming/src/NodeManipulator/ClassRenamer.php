@@ -363,7 +363,7 @@ final class ClassRenamer
         }
 
         // is interface to class?
-        if (in_array($name, $class->implements, true) && class_exists($newName)) {
+        if (in_array($name, $class->implements, true) && $this->reflectionProvider->hasClass($newName)) {
             return false;
         }
 

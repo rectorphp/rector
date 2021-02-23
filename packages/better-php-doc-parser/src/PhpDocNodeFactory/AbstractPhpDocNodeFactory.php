@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Annotation\AnnotationItemsResolver;
 use Rector\BetterPhpDocParser\AnnotationReader\NodeAnnotationReader;
@@ -57,18 +58,25 @@ abstract class AbstractPhpDocNodeFactory
     private $objectTypeSpecifier;
 
     /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    /**
      * @required
      */
     public function autowireAbstractPhpDocNodeFactory(
         NodeAnnotationReader $nodeAnnotationReader,
         AnnotationContentResolver $annotationContentResolver,
         AnnotationItemsResolver $annotationItemsResolver,
-        ObjectTypeSpecifier $objectTypeSpecifier
+        ObjectTypeSpecifier $objectTypeSpecifier,
+        ReflectionProvider $reflectionProvider
     ): void {
         $this->nodeAnnotationReader = $nodeAnnotationReader;
         $this->annotationContentResolver = $annotationContentResolver;
         $this->annotationItemsResolver = $annotationItemsResolver;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     protected function resolveContentFromTokenIterator(TokenIterator $tokenIterator): string
@@ -79,12 +87,12 @@ abstract class AbstractPhpDocNodeFactory
     protected function resolveFqnTargetEntity(string $targetEntity, Node $node): string
     {
         $targetEntity = $this->getCleanedUpTargetEntity($targetEntity);
-        if (class_exists($targetEntity)) {
+        if ($this->reflectionProvider->hasClass($targetEntity)) {
             return $targetEntity;
         }
 
         $namespacedTargetEntity = $node->getAttribute(AttributeKey::NAMESPACE_NAME) . '\\' . $targetEntity;
-        if (class_exists($namespacedTargetEntity)) {
+        if ($this->reflectionProvider->hasClass($namespacedTargetEntity)) {
             return $namespacedTargetEntity;
         }
 

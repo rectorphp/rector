@@ -7,6 +7,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\PhpParser\Node\NodeFactory;
 
 final class PhpDocValueToNodeMapper
@@ -16,9 +17,15 @@ final class PhpDocValueToNodeMapper
      */
     private $nodeFactory;
 
-    public function __construct(NodeFactory $nodeFactory)
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(NodeFactory $nodeFactory, ReflectionProvider $reflectionProvider)
     {
         $this->nodeFactory = $nodeFactory;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function mapGenericTagValueNode(GenericTagValueNode $genericTagValueNode): Expr
@@ -30,7 +37,7 @@ final class PhpDocValueToNodeMapper
 
         $reference = ltrim($genericTagValueNode->value, '\\');
 
-        if (class_exists($reference)) {
+        if ($this->reflectionProvider->hasClass($reference)) {
             return $this->nodeFactory->createClassConstReference($reference);
         }
 

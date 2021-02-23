@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CakePHP\Naming;
 
 use Nette\Utils\Strings;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\CakePHP\ImplicitNameResolver;
 
 /**
@@ -35,9 +36,15 @@ final class CakePHPFullyQualifiedClassNameResolver
      */
     private $implicitNameResolver;
 
-    public function __construct(ImplicitNameResolver $implicitNameResolver)
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ImplicitNameResolver $implicitNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->implicitNameResolver = $implicitNameResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -63,10 +70,7 @@ final class CakePHPFullyQualifiedClassNameResolver
 
         // B. is Cake native class?
         $cakePhpVersion = 'Cake\\' . $pseudoNamespace . '\\' . $shortClass;
-        if (class_exists($cakePhpVersion)) {
-            return $cakePhpVersion;
-        }
-        if (interface_exists($cakePhpVersion)) {
+        if ($this->reflectionProvider->hasClass($cakePhpVersion)) {
             return $cakePhpVersion;
         }
 

@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use ReflectionClass;
@@ -28,12 +30,22 @@ final class CompleteMissingDependencyInNewRector extends AbstractRector implemen
      * @api
      * @var string
      */
-    public const CLASS_TO_INSTANTIATE_BY_TYPE = '$classToInstantiateByType';
+    public const CLASS_TO_INSTANTIATE_BY_TYPE = 'class_to_instantiate_by_type';
 
     /**
-     * @var string[]
+     * @var array<class-string, class-string>
      */
     private $classToInstantiateByType = [];
+
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -134,20 +146,23 @@ CODE_SAMPLE
         return $constructorMethodReflection->getNumberOfRequiredParameters() <= count($new->args);
     }
 
-    private function getNewNodeClassConstructorMethodReflection(New_ $new): ?ReflectionMethod
+    private function getNewNodeClassConstructorMethodReflection(New_ $new): ?MethodReflection
     {
         $className = $this->getName($new->class);
         if ($className === null) {
             return null;
         }
 
-        if (! class_exists($className)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return null;
         }
 
-        $reflectionClass = new ReflectionClass($className);
-
+        $reflectionClass = $this->reflectionProvider->getClass($className);
         return $reflectionClass->getConstructor();
+//
+//        $reflectionClass = new ReflectionClass($className);
+//
+//        return $reflectionClass->getConstructor();
     }
 
     private function resolveClassToInstantiateByParameterReflection(ReflectionParameter $reflectionParameter): ?string

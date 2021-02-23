@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
@@ -33,14 +34,21 @@ final class RouteInfoFactory
      */
     private $nodeRepository;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeRepository $nodeRepository,
-        ValueResolver $valueResolver
+        ValueResolver $valueResolver,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
         $this->nodeRepository = $nodeRepository;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function createFromNode(Node $node): ?RouteInfo
@@ -139,11 +147,12 @@ final class RouteInfoFactory
                 return null;
             }
 
-            if (! class_exists($presenterClass)) {
+            if (! $this->reflectionProvider->hasClass($presenterClass)) {
                 return null;
             }
 
-            if (method_exists($presenterClass, 'run')) {
+            $classReflection = $this->reflectionProvider->getClass($presenterClass);
+            if ($classReflection->hasMethod('run')) {
                 return new RouteInfo($presenterClass, 'run', $routePath, $methods);
             }
         }

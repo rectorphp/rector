@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -41,10 +42,19 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
      */
     private $staticAnalyzer;
 
-    public function __construct(ClassMethodManipulator $classMethodManipulator, StaticAnalyzer $staticAnalyzer)
-    {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(
+        ClassMethodManipulator $classMethodManipulator,
+        StaticAnalyzer $staticAnalyzer,
+        ReflectionProvider $reflectionProvider
+    ) {
         $this->classMethodManipulator = $classMethodManipulator;
         $this->staticAnalyzer = $staticAnalyzer;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -172,7 +182,7 @@ CODE_SAMPLE
 
     private function isInstantiable(string $className): bool
     {
-        if (! class_exists($className)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return false;
         }
 

@@ -27,6 +27,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -72,7 +73,7 @@ final class NodeRepository
 
     /**
      * E.g. [$this, 'someLocalMethod']
-     * @var ArrayCallable[][][]
+     * @var array<string, array<string, ArrayCallable[]>>
      */
     private $arrayCallablesByTypeAndMethod = [];
 
@@ -121,13 +122,19 @@ final class NodeRepository
      */
     private $names = [];
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
         NodeNameResolver $nodeNameResolver,
         ParsedClassConstFetchNodeCollector $parsedClassConstFetchNodeCollector,
         ParsedNodeCollector $parsedNodeCollector,
-        TypeUnwrapper $typeUnwrapper
+        TypeUnwrapper $typeUnwrapper,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
@@ -135,6 +142,7 @@ final class NodeRepository
         $this->parsedClassConstFetchNodeCollector = $parsedClassConstFetchNodeCollector;
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->typeUnwrapper = $typeUnwrapper;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -272,8 +280,7 @@ final class NodeRepository
         }
 
         $parentClass = $className;
-
-        if (! class_exists($parentClass)) {
+        if (! $this->reflectionProvider->hasClass($parentClass)) {
             return null;
         }
 

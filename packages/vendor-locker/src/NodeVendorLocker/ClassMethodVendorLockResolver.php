@@ -7,11 +7,22 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
 
 final class ClassMethodVendorLockResolver extends AbstractNodeVendorLockResolver
 {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
+
     /**
      * Checks for:
      * - interface required methods
@@ -46,7 +57,7 @@ final class ClassMethodVendorLockResolver extends AbstractNodeVendorLockResolver
         $classParents = (array) class_parents($className);
 
         foreach ($classParents as $classParent) {
-            if (! class_exists($classParent)) {
+            if (! $this->reflectionProvider->hasClass($classParent)) {
                 continue;
             }
 

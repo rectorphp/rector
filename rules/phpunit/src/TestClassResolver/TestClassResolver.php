@@ -6,6 +6,7 @@ namespace Rector\PHPUnit\TestClassResolver;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 /**
@@ -28,23 +29,29 @@ final class TestClassResolver
      */
     private $phpUnitTestCaseClassesProvider;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        PHPUnitTestCaseClassesProvider $phpUnitTestCaseClassesProvider
+        PHPUnitTestCaseClassesProvider $phpUnitTestCaseClassesProvider,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpUnitTestCaseClassesProvider = $phpUnitTestCaseClassesProvider;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function resolveFromClassName(string $className): ?string
     {
         // fallback for unit tests that only have extra "Test" suffix
-        if (class_exists($className . self::TEST)) {
+        if ($this->reflectionProvider->hasClass($className . self::TEST)) {
             return $className . self::TEST;
         }
 
         $shortClassName = $this->resolveShortClassName($className);
-
         $testShortClassName = $shortClassName . self::TEST;
 
         $phpUnitTestCaseClasses = $this->phpUnitTestCaseClassesProvider->provide();

@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\Php\BuiltinMethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\DoctrineAnnotationGenerated\PhpDocNode\ConstantReferenceIdentifierRestorer;
@@ -131,13 +132,16 @@ final class NodeAnnotationReader
         $methodReflection = $reflectionClass->getNativeMethod($methodName);
 
         // @see https://github.com/phpstan/phpstan-src/commit/5fad625b7770b9c5beebb19ccc1a493839308fb4
-        $nativeMethodReflection = $this->privatesAccessor->getPrivateProperty($methodReflection, 'reflection');
+        $builtinMethodReflection = $this->privatesAccessor->getPrivateProperty($methodReflection, 'reflection');
+        if (! $builtinMethodReflection instanceof BuiltinMethodReflection) {
+            throw new ShouldNotHappenException();
+        }
 
         try {
             // covers cases like https://github.com/rectorphp/rector/issues/3046
 
             /** @var object[] $methodAnnotations */
-            $methodAnnotations = $this->reader->getMethodAnnotations($nativeMethodReflection);
+            $methodAnnotations = $this->reader->getMethodAnnotations($builtinMethodReflection->getReflection());
             foreach ($methodAnnotations as $methodAnnotation) {
                 if (! is_a($methodAnnotation, $annotationClassName, true)) {
                     continue;

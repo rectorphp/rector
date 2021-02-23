@@ -5,18 +5,29 @@ declare(strict_types=1);
 namespace Rector\FamilyTree\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
 use ReflectionMethod;
 
 final class ClassChildAnalyzer
 {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
+
     public function hasChildClassConstructor(Class_ $class): bool
     {
         $childClasses = $this->getChildClasses($class);
 
         foreach ($childClasses as $childClass) {
-            if (! class_exists($childClass)) {
+            if (! $this->reflectionProvider->hasClass($childClass)) {
                 continue;
             }
 
