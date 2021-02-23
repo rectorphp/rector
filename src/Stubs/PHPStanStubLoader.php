@@ -20,6 +20,15 @@ final class PHPStanStubLoader
     ];
 
     /**
+     * @var string[]
+     */
+    private const VENDOR_PATHS = [
+        'vendor',
+        __DIR__ . '/../../vendor',
+        __DIR__ . '/../../../../../vendor',
+    ];
+
+    /**
      * @see https://github.com/phpstan/phpstan/issues/4541#issuecomment-779434916
      *
      * Point possible vendor locations by use the __DIR__ as start to locate
@@ -31,13 +40,8 @@ final class PHPStanStubLoader
             return;
         }
 
-        $vendorPaths = [
-            'vendor',
-            realpath(__DIR__ . '/../../vendor'),
-            realpath(__DIR__ . '/../../../../../vendor'),
-        ];
-
-        foreach ($vendorPaths as $vendorPath) {
+        foreach (self::VENDOR_PATHS as $vendorPath) {
+            $vendorPath = realpath($vendorPath);
             if (! $vendorPath) {
                 continue;
             }
