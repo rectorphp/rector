@@ -4,9 +4,9 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryOrToEarlyReturnRec
 
 class TruthyNegation
 {
-    public function accept($something, $somethingelse)
+    public function accept()
     {
-        return !$something || !$somethingelse;
+        return !$this->something() || !$this->somethingelse();
     }
 }
 
@@ -18,12 +18,12 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryOrToEarlyReturnRec
 
 class TruthyNegation
 {
-    public function accept($something, $somethingelse)
+    public function accept()
     {
-        if (!$something) {
-            return false;
+        if (!$this->something()) {
+            return true;
         }
-        return !$somethingelse;
+        return !$this->somethingelse();
     }
 }
 

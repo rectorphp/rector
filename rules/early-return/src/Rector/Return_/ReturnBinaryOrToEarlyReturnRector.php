@@ -124,21 +124,16 @@ CODE_SAMPLE
             $ifs = array_merge($ifs, $this->collectLeftBooleanOrToIfs($expr, $return, $ifs));
             $ifs[] = $this->ifManipulator->createIfExpr(
                 $expr->right,
-                new Return_($this->nodeFactory->createFalse())
+                new Return_($this->nodeFactory->createTrue())
             );
 
             $expr = $expr->right;
             if ($expr instanceof BooleanAnd) {
                 return [];
             }
-
-            $isObjectCall = $this->callAnalyzer->isObjectCall($expr);
-            if (! $isObjectCall) {
-                return [];
-            }
         }
 
-        return $ifs + [$this->ifManipulator->createIfExpr($expr, new Return_($this->nodeFactory->createFalse()))];
+        return $ifs + [$this->ifManipulator->createIfExpr($expr, new Return_($this->nodeFactory->createTrue()))];
     }
 
     /**
@@ -148,8 +143,8 @@ CODE_SAMPLE
     private function collectLeftBooleanOrToIfs(BooleanOr $BooleanOr, Return_ $return, array $ifs): array
     {
         $left = $BooleanOr->left;
-        if (! $left instanceof BooleanOr) {
-            return [$this->ifManipulator->createIfExpr($left, new Return_($this->nodeFactory->createFalse()))];
+        if (! $left instanceof BooleanOr && ! $this->callAnalyzer->isObjectCall($left)) {
+            return [$this->ifManipulator->createIfExpr($left, new Return_($this->nodeFactory->createTrue()))];
         }
 
         return $this->createMultipleIfs($left, $return, $ifs);

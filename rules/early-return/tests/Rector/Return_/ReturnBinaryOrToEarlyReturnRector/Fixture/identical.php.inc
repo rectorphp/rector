@@ -4,9 +4,9 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryOrToEarlyReturnRec
 
 class Identical
 {
-    public function accept($something, $somethingelse)
+    public function accept()
     {
-        return $something === 1 || !$somethingelse;
+        return $this->something() === 1 || !$this->somethingElse();
     }
 }
 
@@ -18,12 +18,12 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryOrToEarlyReturnRec
 
 class Identical
 {
-    public function accept($something, $somethingelse)
+    public function accept()
     {
-        if ($something === 1) {
-            return false;
+        if ($this->something() === 1) {
+            return true;
         }
-        return !$somethingelse;
+        return !$this->somethingElse();
     }
 }
 
