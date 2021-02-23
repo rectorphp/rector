@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -88,8 +89,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $stmts = $class->stmts;
-        return $stmts !== [];
+        return $class->stmts !== [];
     }
 
     private function processRemove(Class_ $class): ?Class_
@@ -99,18 +99,24 @@ CODE_SAMPLE
 
         foreach ($names as $name) {
             $parent = $name->getAttribute(AttributeKey::PARENT_NODE);
-            if (! $parent instanceof Class_) {
+            if (! $parent instanceof Class_ && ! $parent instanceof UseUse) {
                 return null;
             }
         }
 
-        $children = $this->nodeRepository->findChildrenOfClass($this->getName($class->namespacedName));
-        $extends = $class->extends;
+        $children = $this->nodeRepository->findChildrenOfClass($className);
+
         foreach ($children as $child) {
-            $child->extends = $extends;
+            if ($class->extends !== null) {
+                $parentClass = $this->getName($class->extends);
+                $child->extends = new Node\Name\FullyQualified($parentClass);
+            } else {
+                $child->extends = null;
+            }
         }
 
         $this->removeNode($class);
+
         return $class;
     }
 }

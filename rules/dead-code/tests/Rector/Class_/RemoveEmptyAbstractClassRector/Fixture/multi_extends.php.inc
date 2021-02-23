@@ -36,7 +36,7 @@ abstract class AnotherAbstractClassMulti
      }
 }
 
-class MultiExtends extends AnotherAbstractClassMulti
+class MultiExtends extends \Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture\AnotherAbstractClassMulti
 {
 }
 

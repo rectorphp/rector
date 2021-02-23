@@ -6,6 +6,5 @@ abstract class AbstractMain
 {
     public function run()
     {
-
     }
 }

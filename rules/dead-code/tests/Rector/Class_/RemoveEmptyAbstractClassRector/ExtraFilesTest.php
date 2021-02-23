@@ -23,8 +23,13 @@ final class ExtraFilesTest extends AbstractRectorTestCase
     public function provideData(): Iterator
     {
         $extraFileInfos = [new SmartFileInfo(__DIR__ . '/Source/UseAbstract.php')];
-
         yield [new SmartFileInfo(__DIR__ . '/FixtureExtraFiles/SkipUsedAbstractClass.php.inc'), $extraFileInfos];
+
+        $extraFileInfos = [
+            new SmartFileInfo(__DIR__ . '/Source/AbstractMain.php'),
+            new SmartFileInfo(__DIR__ . '/Source/AbstractChild.php'),
+        ];
+        yield [new SmartFileInfo(__DIR__ . '/FixtureExtraFiles/ExtendsAbstractChild.php.inc'), $extraFileInfos];
     }
 
     protected function getRectorClass(): string
