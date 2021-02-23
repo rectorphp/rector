@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+# https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.1.md
 use PHPStan\Type\ObjectType;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
@@ -12,6 +13,7 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Symfony5\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector;
 use Rector\Symfony5\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector;
+use Rector\Symfony5\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector;
 use Rector\Transform\Rector\New_\NewArgToMethodCallRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
 use Rector\Transform\ValueObject\NewArgToMethodCall;
@@ -21,15 +23,11 @@ use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
-# https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.1.md
-
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     // see https://github.com/symfony/symfony/pull/36243
     $services->set(LogoutHandlerToLogoutEventSubscriberRector::class);
     $services->set(LogoutSuccessHandlerToLogoutEventSubscriberRector::class);
-
     $services->set(RenameClassRector::class)
         ->call('configure', [[
             RenameClassRector::OLD_TO_NEW_CLASSES => [
@@ -39,7 +37,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'Symfony\Component\Inflector' => 'Symfony\Component\String\Inflector\InflectorInterface',
             ],
         ]]);
-
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
             RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
@@ -60,7 +57,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ),
             ]),
         ]]);
-
     $services->set(RenameFunctionRector::class)
         ->call('configure', [[
             RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
@@ -68,15 +64,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'Symfony\Component\DependencyInjection\Loader\Configuraton\ref' => 'Symfony\Component\DependencyInjection\Loader\Configuraton\service',
             ],
         ]]);
-
     // https://github.com/symfony/symfony/pull/35308
     $services->set(NewArgToMethodCallRector::class)
         ->call('configure', [[
             NewArgToMethodCallRector::NEW_ARGS_TO_METHOD_CALLS => ValueObjectInliner::inline([
-                new NewArgToMethodCall('Symfony\Component\Dotenv\Dotenv', true, 'usePutenv'),
+                new NewArgToMethodCall('Symfony\Component\Dotenv\Dotenv', \true, 'usePutenv'),
             ]),
         ]]);
-
     $services->set(RenameClassConstFetchRector::class)
         ->call('configure', [[
             RenameClassConstFetchRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
@@ -124,7 +118,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ),
             ]),
         ]]);
-
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
             // see https://github.com/symfony/symfony/pull/36943
@@ -133,11 +126,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait',
                     'configureRoutes',
                     0,
-                    new ObjectType('Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator'),
+                    new ObjectType('Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator')
                 ),
             ]),
         ]]);
-
     $services->set(StaticCallToNewRector::class)
         ->call('configure', [[
             StaticCallToNewRector::STATIC_CALLS_TO_NEWS => ValueObjectInliner::inline([
@@ -147,7 +139,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new StaticCallToNew('Symfony\Component\HttpFoundation\StreamedResponse', 'create'),
             ]),
         ]]);
-
     $services->set(RenameStringRector::class)
         ->call('configure', [[
             // @see https://github.com/symfony/symfony/pull/35858
@@ -155,4 +146,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
             ],
         ]]);
+    $services->set(RouteCollectionBuilderToRoutingConfiguratorRector::class);
 };
