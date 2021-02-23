@@ -132,24 +132,24 @@ CODE_SAMPLE
      * @param Break_[] $breaks
      */
     private function processEarlyReturn(
-        Expression $beforeBreak,
+        Expression $expression,
         Assign $assign,
         array $breaks,
-        Return_ $nextForeach,
+        Return_ $return,
         Assign $assignPreviousVariable,
-        Foreach_ $node
+        Foreach_ $foreach
     ): Foreach_ {
-        $this->removeNode($beforeBreak);
+        $this->removeNode($expression);
         $this->addNodeBeforeNode(new Return_($assign->expr), $breaks[0]);
         $this->removeNode($breaks[0]);
 
-        $nextForeach->expr = $assignPreviousVariable->expr;
+        $return->expr = $assignPreviousVariable->expr;
         $this->removeNode($assignPreviousVariable);
 
-        return $node;
+        return $foreach;
     }
 
-    private function shouldSkip(Return_ $return, ?Expr $expr = null, Foreach_ $node, Expr $assignVariable): bool
+    private function shouldSkip(Return_ $return, ?Expr $expr = null, Foreach_ $foreach, Expr $assignVariable): bool
     {
         if (! $expr instanceof Expr) {
             return true;
@@ -160,16 +160,11 @@ CODE_SAMPLE
         }
 
         // ensure the variable only used once in foreach
-        $usedVariable = $this->betterNodeFinder->find($node->stmts, function (Node $node) use (
+        $usedVariable = $this->betterNodeFinder->find($foreach->stmts, function (Node $node) use (
             $assignVariable
         ): bool {
             return $this->nodeComparator->areNodesEqual($node, $assignVariable);
         });
-
-        if (count($usedVariable) > 1) {
-            return true;
-        }
-
-        return false;
+        return count($usedVariable) > 1;
     }
 }
