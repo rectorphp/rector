@@ -24,11 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class VarConstantCommentRector extends AbstractRector
 {
     /**
-     * @var int
-     */
-    private const ARRAY_LIMIT_TYPES = 3;
-
-    /**
      * @var TypeComparator
      */
     private $typeComparator;

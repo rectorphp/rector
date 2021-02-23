@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\Helper;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EmbeddedTagValueNode;
@@ -28,7 +30,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constrain
 final class TagValueToPhpParserNodeMap
 {
     /**
-     * @var string[]
+     * @var array<class-string<PhpDocTagValueNode>, class-string<Node>>
      */
     public const MAP = [
         SymfonyRouteTagValueNode::class => ClassMethod::class,

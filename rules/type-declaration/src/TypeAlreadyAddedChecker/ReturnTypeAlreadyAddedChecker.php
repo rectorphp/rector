@@ -30,7 +30,7 @@ use Traversable;
 final class ReturnTypeAlreadyAddedChecker
 {
     /**
-     * @var array<string|class-string<Traversable>>
+     * @var string[]|class-string<Traversable>[]
      */
     private const FOREACHABLE_TYPES = ['iterable', 'Iterator', 'Traversable', 'array'];
 

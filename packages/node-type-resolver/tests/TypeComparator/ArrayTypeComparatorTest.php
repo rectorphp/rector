@@ -50,11 +50,11 @@ final class ArrayTypeComparatorTest extends AbstractKernelTestCase
         yield [$stringArrayType, $classStringKeysArrayType, false];
 
         $genericClassStringType = new GenericClassStringType(new ObjectType(SomeGenericTypeObject::class));
-        $constantUnionArrayType = new ConstantArrayType(
+        $constantArrayType = new ConstantArrayType(
             [new ConstantIntegerType(0)],
             [$unionTypeFactory->createUnionObjectType([$genericClassStringType, $genericClassStringType])]
         );
 
-        yield [$constantUnionArrayType, $stringArrayType, false];
+        yield [$constantArrayType, $stringArrayType, false];
     }
 }

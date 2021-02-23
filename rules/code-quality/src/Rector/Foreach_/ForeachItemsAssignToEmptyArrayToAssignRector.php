@@ -28,12 +28,12 @@ final class ForeachItemsAssignToEmptyArrayToAssignRector extends AbstractRector
     /**
      * @var ForeachAnalyzer
      */
-    private $foreachNodeAnalyzer;
+    private $foreachAnalyzer;
 
-    public function __construct(NodeUsageFinder $nodeUsageFinder, ForeachAnalyzer $foreachNodeAnalyzer)
+    public function __construct(NodeUsageFinder $nodeUsageFinder, ForeachAnalyzer $foreachAnalyzer)
     {
         $this->nodeUsageFinder = $nodeUsageFinder;
-        $this->foreachNodeAnalyzer = $foreachNodeAnalyzer;
+        $this->foreachAnalyzer = $foreachAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -85,7 +85,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $assignVariable = $this->foreachNodeAnalyzer->matchAssignItemsOnlyForeachArrayVariable($node);
+        $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($node);
         if (! $assignVariable instanceof Expr) {
             return null;
         }

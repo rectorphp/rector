@@ -6,19 +6,25 @@ namespace Rector\NodeTypeResolver\TypeComparator;
 
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Constant\ConstantIntegerType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\TypeComparator\ArrayTypeComparatorTest
+ */
 final class ArrayTypeComparator
 {
     /**
-     * @var GenericClassStringTypeCorrector
+     * @var UnionTypeCommonTypeNarrower
      */
-    private $genericClassStringTypeCorrector;
+    private $unionTypeCommonTypeNarrower;
 
-    public function __construct(GenericClassStringTypeCorrector $genericClassStringTypeCorrector)
+    public function __construct(UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower)
     {
-        $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
+        $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
     }
 
     public function isSubtype(ArrayType $checkedType, ArrayType $mainType): bool
@@ -28,43 +34,51 @@ final class ArrayTypeComparator
                 ->yes();
         }
 
-        // one of them is constant here
+        $checkedKeyType = $checkedType->getKeyType();
+        $mainKeyType = $mainType->getKeyType();
 
-//        $checkedKeyType = $this->genericClassStringTypeCorrector->correct($checkedType->getKeyType());
-//        $mainKeyType = $this->genericClassStringTypeCorrector->correct($mainType->getKeyType());
+        $mainKeyType = $this->narrowArrayKeysUnionType($mainKeyType);
 
-//        dump($checkedType->getKeyType());
-//        dump($mainType->getKeyType());
-
-//        dump($checkedKeyType);
-//        dump($mainKeyType);
-//        die;
-
-        if ($checkedType->getItemType() instanceof UnionType && ! $mainType->getItemType() instanceof UnionType) {
-            return false;
+        $checkedKeyType = $this->narrowArrayKeysUnionType($checkedKeyType);
+        if (! $mainKeyType instanceof MixedType && $mainKeyType->isSuperTypeOf($checkedKeyType)->yes()) {
+            return true;
         }
 
-//        dump($checkedType->getItemType());
-//        dump($mainType->getItemType());
-//        dump($mainType->getItemType()->isSuperTypeOf($checkedType->getItemType()));
-//
-//        dump($mainType->isSuperTypeOf($checkedType)->yes());
-//        die;
+        $checkedItemType = $checkedType->getItemType();
+        if ($checkedItemType instanceof UnionType) {
+            $checkedItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($checkedItemType);
+        }
 
-//        $checkedKeyType = $checkedType->getKeyType();
-//        $mainKeyType = $mainType->getKeyType();
+        $mainItemType = $mainType->getItemType();
+        if ($mainItemType instanceof UnionType) {
+            $mainItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($mainItemType);
+        }
 
-        return $mainType->isSuperTypeOf($checkedType)
+        return $checkedItemType->isSuperTypeOf($mainItemType)
             ->yes();
+    }
 
-        if (! $checkedKeyType->isSuperTypeOf($mainKeyType)->yes()) {
-            return false;
+    /**
+     * Native array order can be treated as mixed type
+     */
+    private function narrowArrayKeysUnionType(Type $type): Type
+    {
+        if (! $type instanceof UnionType) {
+            return $type;
         }
 
-        dump($mainKeyType);
-        dump($checkedKeyType);
-        die;
+        foreach ($type->getTypes() as $key => $unionedType) {
+            if (! $unionedType instanceof ConstantIntegerType) {
+                return $type;
+            }
 
-        return false;
+            if ($key === $unionedType->getValue()) {
+                continue;
+            }
+
+            return $type;
+        }
+
+        return new MixedType();
     }
 }

@@ -3,6 +3,7 @@
 namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 use PhpParser\Node\Expr\AssignOp;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 
 final class ImproveArrayType
@@ -13,6 +14,7 @@ final class ImproveArrayType
     private const MODIFYING_NODES = [
         AssignOp::class,
         String_::class,
+        LNumber::class,
     ];
 }
 
@@ -23,6 +25,7 @@ final class ImproveArrayType
 namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 use PhpParser\Node\Expr\AssignOp;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 
 final class ImproveArrayType
@@ -33,6 +36,7 @@ final class ImproveArrayType
     private const MODIFYING_NODES = [
         AssignOp::class,
         String_::class,
+        LNumber::class,
     ];
 }
 

@@ -7,11 +7,9 @@ namespace Rector\CodeQuality\Rector\For_;
 use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\CodeQuality\NodeAnalyzer\ForAnalyzer;
@@ -60,7 +58,7 @@ final class ForToForeachRector extends AbstractRector
     /**
      * @var ForAnalyzer
      */
-    private $forNodeAnalyzer;
+    private $forAnalyzer;
 
     /**
      * @var ForeachFactory
@@ -74,12 +72,12 @@ final class ForToForeachRector extends AbstractRector
 
     public function __construct(
         Inflector $inflector,
-        ForAnalyzer $forNodeAnalyzer,
+        ForAnalyzer $forAnalyzer,
         ForeachFactory $foreachFactory,
         ForeachAnalyzer $foreachAnalyzer
     ) {
         $this->inflector = $inflector;
-        $this->forNodeAnalyzer = $forNodeAnalyzer;
+        $this->forAnalyzer = $forAnalyzer;
         $this->foreachFactory = $foreachFactory;
         $this->foreachAnalyzer = $foreachAnalyzer;
     }
@@ -140,7 +138,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->forNodeAnalyzer->isLoopMatch($node->loop, $this->keyValueName)) {
+        if (! $this->forAnalyzer->isLoopMatch($node->loop, $this->keyValueName)) {
             return null;
         }
 
@@ -162,18 +160,18 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->forNodeAnalyzer->isCountValueVariableUsedInsideForStatements($node, $this->countValueVariable)) {
+        if ($this->forAnalyzer->isCountValueVariableUsedInsideForStatements($node, $this->countValueVariable)) {
             return null;
         }
 
-        if ($this->forNodeAnalyzer->isAssignmentWithArrayDimFetchAsVariableInsideForStatements(
+        if ($this->forAnalyzer->isAssignmentWithArrayDimFetchAsVariableInsideForStatements(
             $node,
             $this->keyValueName
         )) {
             return null;
         }
 
-        if ($this->forNodeAnalyzer->isArrayWithKeyValueNameUnsetted($node)) {
+        if ($this->forAnalyzer->isArrayWithKeyValueNameUnsetted($node)) {
             return null;
         }
 
@@ -188,7 +186,7 @@ CODE_SAMPLE
             $iteratedVariableSingle = 'single' . ucfirst($iteratedVariableSingle);
         }
 
-        if (! $this->forNodeAnalyzer->isValueVarUsedNext($for, $iteratedVariableSingle)) {
+        if (! $this->forAnalyzer->isValueVarUsedNext($for, $iteratedVariableSingle)) {
             return $this->createForeachFromForWithIteratedVariableSingle($for, $iteratedVariableSingle);
         }
 
@@ -196,7 +194,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->forNodeAnalyzer->isValueVarUsedNext($for, $originalVariableSingle)) {
+        if (! $this->forAnalyzer->isValueVarUsedNext($for, $originalVariableSingle)) {
             return $this->createForeachFromForWithIteratedVariableSingle($for, $originalVariableSingle);
         }
 
@@ -268,18 +266,14 @@ CODE_SAMPLE
      */
     private function isConditionMatch(array $condExprs): bool
     {
-        if ($this->forNodeAnalyzer->isCondExprOneOrKeyValueNameNotNull($condExprs, $this->keyValueName)) {
+        if ($this->forAnalyzer->isCondExprOneOrKeyValueNameNotNull($condExprs, $this->keyValueName)) {
             return false;
         }
 
         /** @var string $keyValueName */
         $keyValueName = $this->keyValueName;
         if ($this->countValueName !== null) {
-            return $this->forNodeAnalyzer->isCondExprSmallerOrGreater(
-                $condExprs,
-                $keyValueName,
-                $this->countValueName
-            );
+            return $this->forAnalyzer->isCondExprSmallerOrGreater($condExprs, $keyValueName, $this->countValueName);
         }
 
         if (! $condExprs[0] instanceof BinaryOp) {
@@ -296,40 +290,4 @@ CODE_SAMPLE
 
         return false;
     }
-
-//    /**
-//     * @param Stmt[] $stmts
-//     */
-//    private function useForeachVariableInStmts(Expr $foreachedValue, Expr $singleValue, array $stmts): void
-//    {
-//        if ($this->keyValueName === null) {
-//            throw new ShouldNotHappenException();
-//        }
-//
-//        $this->traverseNodesWithCallable($stmts, function (Node $node) use ($foreachedValue, $singleValue): ?Expr {
-//            if (! $node instanceof ArrayDimFetch) {
-//                return null;
-//            }
-//
-//            // must be the same as foreach value
-//            if (! $this->nodeComparator->areNodesEqual($node->var, $foreachedValue)) {
-//                return null;
-//            }
-//
-//            if ($this->forNodeAnalyzer->isArrayDimFetchPartOfAssignOrArgParentCount($node)) {
-//                return null;
-//            }
-//
-//            // is dim same as key value name, ...[$i]
-//            if ($node->dim === null) {
-//                return null;
-//            }
-//
-//            if (! $this->nodeNameResolver->isVariableName($node->dim, $this->keyValueName)) {
-//                return null;
-//            }
-//
-//            return $singleValue;
-//        });
-//    }
 }

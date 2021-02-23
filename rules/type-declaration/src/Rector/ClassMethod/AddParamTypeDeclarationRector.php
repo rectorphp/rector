@@ -38,7 +38,7 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
     private $parameterTypehints = [];
 
     /**
-     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
+     * @var TypeComparator
      */
     private $typeComparator;
 

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\NetteCodeQuality\ValueObject;
 
+use Nette\Forms\Controls\BaseControl;
+
 final class NetteFormMethodNameToControlType
 {
     /**
-     * @var string[]
+     * @var array<string, class-string<BaseControl>>
      */
     public const METHOD_NAME_TO_CONTROL_TYPE = [
         'addText' => 'Nette\Forms\Controls\TextInput',

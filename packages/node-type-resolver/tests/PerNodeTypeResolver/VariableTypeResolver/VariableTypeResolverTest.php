@@ -32,10 +32,12 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function provideData(): Iterator
     {
+        $unionTypeFactory = new UnionTypeFactory();
+
         yield [
             __DIR__ . '/Source/ThisClass.php',
             0,
-            UnionTypeFactory::createUnionObjectType([ThisClass::class, AnotherClass::class]),
+            $unionTypeFactory->createUnionObjectType([ThisClass::class, AnotherClass::class]),
         ];
 
         $anotherTypeObjectType = new ObjectType(AnotherType::class);

@@ -41,7 +41,7 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
      * @api
      * @var string
      */
-    public const ENABLE_VALUE_OBJECT_GUESSING = '$enableValueObjectGuessing';
+    public const ENABLE_VALUE_OBJECT_GUESSING = 'enable_value_object_guessing';
 
     /**
      * @var string[]

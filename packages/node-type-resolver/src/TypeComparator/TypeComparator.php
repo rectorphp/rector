@@ -7,7 +7,6 @@ namespace Rector\NodeTypeResolver\TypeComparator;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -55,7 +54,7 @@ final class TypeComparator
         StaticTypeMapper $staticTypeMapper,
         NodeTypeResolver $nodeTypeResolver,
         ArrayTypeComparator $arrayTypeComparator,
-        \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator
+        ScalarTypeComparator $scalarTypeComparator
     ) {
         $this->typeHasher = $typeHasher;
         $this->typeNormalizer = $typeNormalizer;
@@ -106,15 +105,15 @@ final class TypeComparator
             return false;
         }
 
-        if (! $mainType instanceof ArrayType || ! $checkedType instanceof ArrayType) {
+        if (! $mainType instanceof ArrayType) {
             return $mainType->isSuperTypeOf($checkedType)
                 ->yes();
         }
 
-//        if (! $checkedType instanceof ConstantArrayType) {
-//            return $mainType->isSuperTypeOf($checkedType)
-//                ->yes();
-//        }
+        if (! $checkedType instanceof ArrayType) {
+            return $mainType->isSuperTypeOf($checkedType)
+                ->yes();
+        }
 
         return $this->arrayTypeComparator->isSubtype($checkedType, $mainType);
     }

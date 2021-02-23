@@ -181,13 +181,6 @@ final class NodeTypeResolver
     {
         $nodeType = $this->resolve($node);
         return TypeCombinator::containsNull($nodeType);
-//
-//        if (! $nodeType instanceof UnionType) {
-//            return false;
-//        }
-//
-//        return $nodeType->isSuperTypeOf(new NullType())
-//            ->yes();
     }
 
     public function getNativeType(Expr $expr): Type

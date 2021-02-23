@@ -25,7 +25,7 @@ use PhpParser\Node\Stmt\While_;
 final class ControlStructure
 {
     /**
-     * @var array<class-string<Node>>
+     * @var array<class-string<FunctionLike>>
      */
     public const RETURN_ISOLATING_SCOPE_NODE_TYPES = [
         Function_::class,

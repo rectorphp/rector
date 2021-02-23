@@ -5,6 +5,7 @@ namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fi
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 
 final class KeepClassStringKey
 {
@@ -14,5 +15,6 @@ final class KeepClassStringKey
     private const TAGS_TYPES_TO_NAMES = [
         ReturnTagValueNode::class => '@return',
         ParamTagValueNode::class => '@param',
+        VarTagValueNode::class => '@var',
     ];
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanStaticTypeMapper\Utils;
 
-use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
@@ -29,27 +28,6 @@ final class TypeUnwrapper
     public function unwrapNullableType(Type $type): Type
     {
         return TypeCombinator::removeNull($type);
-        if (! $type instanceof UnionType) {
-            return $type;
-        }
-
-        if (count($type->getTypes()) !== 2) {
-            return $type;
-        }
-
-        if (! $type->isSuperTypeOf(new NullType())->yes()) {
-            return $type;
-        }
-
-        foreach ($type->getTypes() as $unionedType) {
-            if ($unionedType instanceof NullType) {
-                continue;
-            }
-
-            return $unionedType;
-        }
-
-        return $type;
     }
 
     public function unwrapFirstObjectTypeFromUnionType(Type $type): Type

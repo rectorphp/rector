@@ -30,8 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://3v4l.org/Bndc9
  *
- * @see \Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\CountOnN
- * ullRectorTest
+ * @see \Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\CountOnNullRectorTest
  */
 final class CountOnNullRector extends AbstractRector
 {

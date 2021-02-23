@@ -30,10 +30,12 @@ final class TraitTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function provideData(): Iterator
     {
+        $unionTypeFactory = new UnionTypeFactory();
+
         yield [
             __DIR__ . '/Source/TraitWithTrait.php',
             0,
-            UnionTypeFactory::createUnionObjectType([AnotherTrait::class, TraitWithTrait::class]),
+            $unionTypeFactory->createUnionObjectType([AnotherTrait::class, TraitWithTrait::class]),
         ];
     }
 }

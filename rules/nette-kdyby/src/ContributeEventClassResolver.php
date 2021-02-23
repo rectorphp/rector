@@ -20,7 +20,7 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ContributeEventClassResolver
 {
     /**
-     * @var array<class-string, array<class-string, string>>
+     * @var array<string, array<string, string>>
      */
     private const CONTRIBUTTE_EVENT_GETTER_METHODS_WITH_TYPE = [
         // application

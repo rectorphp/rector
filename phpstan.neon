@@ -524,3 +524,5 @@ parameters:
         -
              message: '#Constant type should be "class\-string", but is "string"#'
              path: rules/symfony/src/Rector/BinaryOp/ResponseStatusCodeRector.php
+
+        - '#Property Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap\:\:\$binaryOpToAssignClasses \(array<class\-string<PhpParser\\Node\\Expr\\BinaryOp\>, class\-string<PhpParser\\Node\\Expr\\BinaryOp\>\>\) does not accept array#'
