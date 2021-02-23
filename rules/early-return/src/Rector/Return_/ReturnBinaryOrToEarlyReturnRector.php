@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
@@ -31,10 +32,16 @@ final class ReturnBinaryOrToEarlyReturnRector extends AbstractRector
      */
     private $assignAndBinaryMap;
 
-    public function __construct(IfManipulator $ifManipulator, AssignAndBinaryMap $assignAndBinaryMap)
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    public function __construct(IfManipulator $ifManipulator, AssignAndBinaryMap $assignAndBinaryMap, CallAnalyzer $callAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;
         $this->assignAndBinaryMap = $assignAndBinaryMap;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
