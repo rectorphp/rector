@@ -47,11 +47,14 @@ final class PHPStanStubLoader
             }
 
             foreach (self::STUBS as $stub) {
-                if (! file_exists(sprintf('phar://%s/phpstan/phpstan/phpstan.phar/stubs/runtime/%s', $vendorPath, $stub))) {
+                $path     = sprintf('phar://%s/phpstan/phpstan/phpstan.phar/stubs/runtime/%s', $vendorPath, $stub);
+                $isExists = file_exists($path);
+
+                if (! $isExists) {
                     continue 2;
                 }
 
-                require_once sprintf('phar://%s/phpstan/phpstan/phpstan.phar/stubs/runtime/%s', $vendorPath, $stub);
+                require_once $path;
             }
 
             $this->areStubsLoaded = true;
