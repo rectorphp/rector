@@ -109,17 +109,7 @@ CODE_SAMPLE
             return $this->nodeComparator->areNodesEqual($node, $assignVariable);
         });
 
-        if ($this->shouldSkipNextPrev($nextForeach, $variablePrevious)) {
-            return null;
-        }
-
-        // ensure the variable only used once in foreach
-        $usedVariable = $this->betterNodeFinder->find($node->stmts, function (Node $node) use (
-            $assignVariable
-        ): bool {
-            return $this->nodeComparator->areNodesEqual($node, $assignVariable);
-        });
-        if (count($usedVariable) > 1) {
+        if ($this->shouldSkip($nextForeach, $variablePrevious, $node, $assignVariable)) {
             return null;
         }
 
@@ -130,22 +120,51 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removeNode($beforeBreak);
+        $nextParent = $parent->getAttribute(AttributeKey::NEXT_NODE);
+        if ($nextParent !== $node) {
+            return null;
+        }
+
+        return $this->processEarlyReturn($beforeBreak, $assign, $breaks, $nextForeach, $assignPreviousVariable, $node);
+    }
+
+    /**
+     * @param Break_[] $breaks
+     */
+    private function processEarlyReturn(
+        Expression $expression,
+        Assign $assign,
+        array $breaks,
+        Return_ $return,
+        Assign $assignPreviousVariable,
+        Foreach_ $foreach
+    ): Foreach_ {
+        $this->removeNode($expression);
         $this->addNodeBeforeNode(new Return_($assign->expr), $breaks[0]);
         $this->removeNode($breaks[0]);
 
-        $nextForeach->expr = $assignPreviousVariable->expr;
+        $return->expr = $assignPreviousVariable->expr;
         $this->removeNode($assignPreviousVariable);
 
-        return $node;
+        return $foreach;
     }
 
-    private function shouldSkipNextPrev(Return_ $return, ?Expr $expr = null): bool
+    private function shouldSkip(Return_ $return, ?Expr $expr = null, Foreach_ $foreach, Expr $assignVariable): bool
     {
         if (! $expr instanceof Expr) {
             return true;
         }
 
-        return ! $this->nodeComparator->areNodesEqual($return->expr, $expr);
+        if (! $this->nodeComparator->areNodesEqual($return->expr, $expr)) {
+            return true;
+        }
+
+        // ensure the variable only used once in foreach
+        $usedVariable = $this->betterNodeFinder->find($foreach->stmts, function (Node $node) use (
+            $assignVariable
+        ): bool {
+            return $this->nodeComparator->areNodesEqual($node, $assignVariable);
+        });
+        return count($usedVariable) > 1;
     }
 }
