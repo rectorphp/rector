@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\Rector\AbstractRector;
@@ -99,9 +100,13 @@ CODE_SAMPLE
 
         foreach ($names as $name) {
             $parent = $name->getAttribute(AttributeKey::PARENT_NODE);
-            if (! $parent instanceof Class_ && ! $parent instanceof UseUse) {
-                return null;
+            if ($parent instanceof Class_) {
+                continue;
             }
+            if ($parent instanceof UseUse) {
+                continue;
+            }
+            return null;
         }
 
         $children = $this->nodeRepository->findChildrenOfClass($className);
@@ -109,7 +114,7 @@ CODE_SAMPLE
         foreach ($children as $child) {
             if ($class->extends !== null) {
                 $parentClass = $this->getName($class->extends);
-                $child->extends = new Node\Name\FullyQualified($parentClass);
+                $child->extends = new FullyQualified($parentClass);
             } else {
                 $child->extends = null;
             }
