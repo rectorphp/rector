@@ -17,6 +17,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\DoctrineAnnotationGenerated\PhpDocNode\ConstantReferenceIdentifierRestorer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use ReflectionMethod;
 use ReflectionProperty;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Throwable;
@@ -104,7 +105,7 @@ final class NodeAnnotationReader
     public function readPropertyAnnotation(Property $property, string $annotationClassName): ?object
     {
         $propertyReflection = $this->getNativePropertyReflection($property);
-        if ($propertyReflection === null) {
+        if (! $propertyReflection instanceof ReflectionProperty) {
             throw new ShouldNotHappenException();
         }
 
@@ -128,20 +129,14 @@ final class NodeAnnotationReader
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
-        $reflectionClass = $this->reflectionProvider->getClass($className);
-        $methodReflection = $reflectionClass->getNativeMethod($methodName);
-
-        // @see https://github.com/phpstan/phpstan-src/commit/5fad625b7770b9c5beebb19ccc1a493839308fb4
-        $builtinMethodReflection = $this->privatesAccessor->getPrivateProperty($methodReflection, 'reflection');
-        if (! $builtinMethodReflection instanceof BuiltinMethodReflection) {
-            throw new ShouldNotHappenException();
-        }
+        $nativeMethodReflection = $this->resolveNativeClassMethodReflection($className, $methodName);
 
         try {
             // covers cases like https://github.com/rectorphp/rector/issues/3046
 
             /** @var object[] $methodAnnotations */
-            $methodAnnotations = $this->reader->getMethodAnnotations($builtinMethodReflection->getReflection());
+            $methodAnnotations = $this->reader->getMethodAnnotations($nativeMethodReflection);
+
             foreach ($methodAnnotations as $methodAnnotation) {
                 if (! is_a($methodAnnotation, $annotationClassName, true)) {
                     continue;
@@ -226,5 +221,28 @@ final class NodeAnnotationReader
             // in case of PHPUnit property or just-added property
             return null;
         }
+    }
+
+    private function resolveNativeClassMethodReflection(string $className, string $methodName): ReflectionMethod
+    {
+        if (! $this->reflectionProvider->hasClass($className)) {
+            throw new ShouldNotHappenException();
+        }
+
+        $reflectionClass = $this->reflectionProvider->getClass($className);
+        $methodReflection = $reflectionClass->getNativeMethod($methodName);
+
+        // @see https://github.com/phpstan/phpstan-src/commit/5fad625b7770b9c5beebb19ccc1a493839308fb4
+        $builtinMethodReflection = $this->privatesAccessor->getPrivateProperty($methodReflection, 'reflection');
+        if (! $builtinMethodReflection instanceof BuiltinMethodReflection) {
+            throw new ShouldNotHappenException();
+        }
+
+        $nativeMethodReflection = $builtinMethodReflection->getReflection();
+        if (! $nativeMethodReflection instanceof ReflectionMethod) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $nativeMethodReflection;
     }
 }
