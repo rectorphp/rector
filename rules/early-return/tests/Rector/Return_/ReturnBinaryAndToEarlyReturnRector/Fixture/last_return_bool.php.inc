@@ -4,14 +4,14 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRe
 
 class LastReturnBool
 {
-    public function accept($something)
+    public function accept()
     {
-        return $something && $this->getSomethingElse();
+        return $this->something() && $this->getSomethingElse();
     }
 
-    public function accept2($something, $somethingelse)
+    public function accept2()
     {
-        return $something && $somethingelse === 'something else';
+        return $this->something() && $this->somethingelse() === 'something else';
     }
 
     private function getSomethingElse(): bool
@@ -28,20 +28,20 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRe
 
 class LastReturnBool
 {
-    public function accept($something)
+    public function accept()
     {
-        if (!$something) {
+        if (!$this->something()) {
             return false;
         }
         return $this->getSomethingElse();
     }
 
-    public function accept2($something, $somethingelse)
+    public function accept2()
     {
-        if (!$something) {
+        if (!$this->something()) {
             return false;
         }
-        return $somethingelse === 'something else';
+        return $this->somethingelse() === 'something else';
     }
 
     private function getSomethingElse(): bool

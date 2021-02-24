@@ -2,11 +2,11 @@
 
 namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\Fixture;
 
-class Fixture
+class MultipleBinaryOr
 {
     public function accept()
     {
-        return $this->something() && $this->somethingElse();
+        return $this->something() && $this->somethingelse() && $this->anotherelse() && $this->last();
     }
 }
 
@@ -16,14 +16,20 @@ class Fixture
 
 namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\Fixture;
 
-class Fixture
+class MultipleBinaryOr
 {
     public function accept()
     {
         if (!$this->something()) {
             return false;
         }
-        return (bool) $this->somethingElse();
+        if (!$this->somethingelse()) {
+            return false;
+        }
+        if (!$this->anotherelse()) {
+            return false;
+        }
+        return (bool) $this->last();
     }
 }
 

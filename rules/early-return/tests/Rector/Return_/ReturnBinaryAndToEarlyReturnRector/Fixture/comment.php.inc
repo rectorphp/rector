@@ -4,16 +4,16 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRe
 
 class Comment
 {
-    public function accept($something, $somethingelse, $anotherelse, $last)
+    public function accept()
     {
         // a comment
-        if ($a) {
+        if (rand(0, 1)) {
             // another comment
-            return $something && $somethingelse && $anotherelse && $last;
+            return $this->something() && $this->somethingElse();
         }
 
         // another next comment
-        return $a;
+        return 1;
     }
 }
 
@@ -25,25 +25,19 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRe
 
 class Comment
 {
-    public function accept($something, $somethingelse, $anotherelse, $last)
+    public function accept()
     {
         // a comment
-        if ($a) {
+        if (rand(0, 1)) {
             // another comment
-            if (!$something) {
+            if (!$this->something()) {
                 return false;
             }
-            if (!$somethingelse) {
-                return false;
-            }
-            if (!$anotherelse) {
-                return false;
-            }
-            return (bool) $last;
+            return (bool) $this->somethingElse();
         }
 
         // another next comment
-        return $a;
+        return 1;
     }
 }
 

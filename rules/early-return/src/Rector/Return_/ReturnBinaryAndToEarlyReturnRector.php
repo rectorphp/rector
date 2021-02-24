@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
@@ -30,10 +31,16 @@ final class ReturnBinaryAndToEarlyReturnRector extends AbstractRector
      */
     private $assignAndBinaryMap;
 
-    public function __construct(IfManipulator $ifManipulator, AssignAndBinaryMap $assignAndBinaryMap)
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    public function __construct(IfManipulator $ifManipulator, AssignAndBinaryMap $assignAndBinaryMap, CallAnalyzer $callAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;
         $this->assignAndBinaryMap = $assignAndBinaryMap;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -87,9 +94,10 @@ CODE_SAMPLE
         $left = $node->expr->left;
         $ifNegations = $this->createMultipleIfsNegation($left, $node, []);
 
-        foreach ($ifNegations as $key => $ifNegation) {
-            if ($key === 0) {
-                $this->mirrorComments($ifNegation, $node);
+        $this->mirrorComments($ifNegations[0], $node);
+        foreach ($ifNegations as $ifNegation) {
+            if (! $this->callAnalyzer->isObjectCall($ifNegation->cond)) {
+                return null;
             }
 
             $this->addNodeBeforeNode($ifNegation, $node);

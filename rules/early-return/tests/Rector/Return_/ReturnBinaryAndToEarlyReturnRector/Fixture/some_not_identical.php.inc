@@ -4,9 +4,9 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRe
 
 final class SomeNotIdentical
 {
-    public function accept($something, $somethingelse)
+    public function accept()
     {
-        return $something !== 1 && !$somethingelse;
+        return $this->something() !== 1 && !$this->somethingelse();
     }
 }
 
@@ -18,12 +18,12 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRe
 
 final class SomeNotIdentical
 {
-    public function accept($something, $somethingelse)
+    public function accept()
     {
-        if ($something === 1) {
+        if ($this->something() === 1) {
             return false;
         }
-        return !$somethingelse;
+        return !$this->somethingelse();
     }
 }
 
