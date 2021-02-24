@@ -18,18 +18,12 @@ use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\VoidType;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class AnonymousFunctionFactory
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     /**
      * @var NodeFactory
      */
@@ -46,12 +40,10 @@ final class AnonymousFunctionFactory
     private $staticTypeMapper;
 
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
         NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
         StaticTypeMapper $staticTypeMapper
     ) {
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->staticTypeMapper = $staticTypeMapper;

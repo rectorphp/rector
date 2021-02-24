@@ -61,7 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isStaticType($node->cond, BooleanType::class)) {
+        if (! $this->nodeTypeResolver->isStaticType($node->cond, BooleanType::class)) {
             return null;
         }
 

@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
-use ReflectionClass;
 use ReflectionProperty;
 
 final class PropertyPresenceChecker
@@ -83,17 +82,20 @@ final class PropertyPresenceChecker
      */
     private function getParentClassPublicAndProtectedPropertyReflections(string $className): array
     {
-        /** @var string[] $parentClassNames */
-        $parentClassNames = (array) class_parents($className);
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return [];
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
 
         $propertyReflections = [];
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            $nativeReflectionClass = $parentClassReflection->getNativeReflection();
 
-        foreach ($parentClassNames as $parentClassName) {
-            $parentClassReflection = new ReflectionClass($parentClassName);
-
-            $currentPropertyReflections = $parentClassReflection->getProperties(
+            $currentPropertyReflections = $nativeReflectionClass->getProperties(
                 ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED
             );
+
             $propertyReflections = array_merge($propertyReflections, $currentPropertyReflections);
         }
 

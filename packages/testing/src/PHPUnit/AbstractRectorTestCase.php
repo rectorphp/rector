@@ -183,7 +183,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         /** @var DynamicSourceLocator $dynamicDirectoryLocatorProvider */
         $dynamicDirectoryLocatorProvider = $this->getService(DynamicSourceLocator::class);
-        $dynamicDirectoryLocatorProvider->addFileInfo($inputFileInfo);
+        $dynamicDirectoryLocatorProvider->setFileInfo($inputFileInfo);
 
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
 

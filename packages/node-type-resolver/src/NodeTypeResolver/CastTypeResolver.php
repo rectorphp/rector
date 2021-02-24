@@ -26,7 +26,7 @@ final class CastTypeResolver implements NodeTypeResolverInterface
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses(): array
     {

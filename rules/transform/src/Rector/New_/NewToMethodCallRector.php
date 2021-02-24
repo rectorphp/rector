@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Transform\Rector\New_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -12,11 +11,11 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Transform\ValueObject\NewToMethodCall;
-use ReflectionClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -35,6 +34,16 @@ final class NewToMethodCallRector extends AbstractRector implements Configurable
      * @var NewToMethodCall[]
      */
     private $newsToMethodCalls = [];
+
+    /**
+     * @var ClassNaming
+     */
+    private $classNaming;
+
+    public function __construct(ClassNaming $classNaming)
+    {
+        $this->classNaming = $classNaming;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -99,8 +108,17 @@ CODE_SAMPLE
             $propertyName = $this->getExistingFactoryPropertyName($classNode, $serviceObjectType);
 
             if ($propertyName === null) {
+<<<<<<< HEAD
                 $propertyName = $this->getFactoryPropertyName($serviceObjectType->getClassName());
                 $this->addConstructorDependencyToClass($classNode, $serviceObjectType, $propertyName);
+=======
+                $propertyName = $this->classNaming->getShortName($serviceType);
+                $propertyName = lcfirst($propertyName);
+
+                $factoryObjectType = new ObjectType($serviceType);
+
+                $this->addConstructorDependencyToClass($classNode, $factoryObjectType, $propertyName);
+>>>>>>> 58a7c670c... phsptan: avoid ClassReflection
             }
 
             $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
@@ -132,13 +150,5 @@ CODE_SAMPLE
         }
 
         return null;
-    }
-
-    private function getFactoryPropertyName(string $factoryFullQualifiedName): string
-    {
-        $reflectionClass = new ReflectionClass($factoryFullQualifiedName);
-        $shortName = $reflectionClass->getShortName();
-
-        return Strings::firstLower($shortName);
     }
 }

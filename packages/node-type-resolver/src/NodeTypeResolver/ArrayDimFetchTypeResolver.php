@@ -27,7 +27,7 @@ final class ArrayDimFetchTypeResolver implements NodeTypeResolverInterface
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses(): array
     {

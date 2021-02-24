@@ -67,7 +67,7 @@ final class NodeRepository
     private $funcCallsByName = [];
 
     /**
-     * @var array<string, array<array<MethodCall|StaticCall>>>
+     * @var array<class-string, array<array<MethodCall|StaticCall>>>
      */
     private $callsByTypeAndMethod = [];
 
@@ -208,7 +208,7 @@ final class NodeRepository
     }
 
     /**
-     * @return MethodCall[][]|StaticCall[][]
+     * @return array<string, MethodCall[]|StaticCall[]>
      */
     public function findMethodCallsOnClass(string $className): array
     {
@@ -279,14 +279,15 @@ final class NodeRepository
             return $this->classMethodsByType[$className][$methodName];
         }
 
-        $parentClass = $className;
-        if (! $this->reflectionProvider->hasClass($parentClass)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return null;
         }
 
-        while ($parentClass = get_parent_class($parentClass)) {
-            if (isset($this->classMethodsByType[$parentClass][$methodName])) {
-                return $this->classMethodsByType[$parentClass][$methodName];
+        $classReflection = $this->reflectionProvider->getClass($className);
+
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if (isset($this->classMethodsByType[$parentClassReflection->getName()][$methodName])) {
+                return $this->classMethodsByType[$parentClassReflection->getName()][$methodName];
             }
         }
 
@@ -652,7 +653,16 @@ final class NodeRepository
             return;
         }
 
-        if (! $arrayCallable->isExistingMethod()) {
+        if (! $this->reflectionProvider->hasClass($arrayCallable->getClass())) {
+            return;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($arrayCallable->getClass());
+        if (! $classReflection->isClass()) {
+            return;
+        }
+
+        if (! $classReflection->hasMethod($arrayCallable->getMethod())) {
             return;
         }
 
@@ -662,6 +672,7 @@ final class NodeRepository
     private function addMethod(ClassMethod $classMethod): void
     {
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+
         // anonymous
         if ($className === null) {
             return;
@@ -754,7 +765,6 @@ final class NodeRepository
         if ($node instanceof MethodCall && $node->var instanceof Variable && $node->var->name === 'this') {
             /** @var string|null $className */
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-
             if ($className) {
                 return new ObjectType($className);
             }

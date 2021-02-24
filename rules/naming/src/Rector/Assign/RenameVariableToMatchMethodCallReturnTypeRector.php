@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassLike;
-use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
@@ -254,7 +254,7 @@ CODE_SAMPLE
         $callStaticType = $this->getStaticType($expr);
         $callStaticType = $this->typeUnwrapper->unwrapNullableType($callStaticType);
 
-        if (! $callStaticType instanceof TypeWithClassName) {
+        if (! $callStaticType instanceof ObjectType) {
             return false;
         }
 
@@ -262,6 +262,11 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->familyRelationsAnalyzer->isParentClass($callStaticType->getClassName());
+        $classReflection = $callStaticType->getClassReflection();
+        if ($classReflection === null) {
+            return false;
+        }
+
+        return $classReflection->getAncestors() !== [];
     }
 }

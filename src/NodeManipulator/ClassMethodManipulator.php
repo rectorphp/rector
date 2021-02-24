@@ -11,7 +11,12 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+<<<<<<< HEAD
 use PHPStan\Type\ObjectType;
+=======
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+>>>>>>> 58a7c670c... phsptan: avoid ClassReflection
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -109,29 +114,28 @@ final class ClassMethodManipulator
     public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod, ?string $methodName = null): bool
     {
         $methodName = $methodName ?? $this->nodeNameResolver->getName($classMethod->name);
-
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if (! is_string($class)) {
+        if ($methodName === null) {
             return false;
         }
 
-        if (! class_exists($class)) {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
             return false;
         }
 
-        if (! is_string($methodName)) {
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
             return false;
         }
 
-        if ($this->isMethodInParent($class, $methodName)) {
-            return true;
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if ($parentClassReflection->hasMethod($methodName)) {
+                return true;
+            }
         }
 
-        $implementedInterfaces = (array) class_implements($class);
-
-        foreach ($implementedInterfaces as $implementedInterface) {
-            /** @var string $implementedInterface */
-            if (method_exists($implementedInterface, $methodName)) {
+        foreach ($classReflection->getInterfaces() as $interfaceReflection) {
+            if ($interfaceReflection->hasMethod($methodName)) {
                 return true;
             }
         }
@@ -188,18 +192,6 @@ final class ClassMethodManipulator
         foreach ($classMethod->params as $param) {
             /** @var Param $param */
             if ($param->flags !== 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function isMethodInParent(string $class, string $method): bool
-    {
-        foreach ((array) class_parents($class) as $parentClass) {
-            /** @var string $parentClass */
-            if (method_exists($parentClass, $method)) {
                 return true;
             }
         }

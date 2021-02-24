@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanStaticTypeMapper\TypeAnalyzer;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Stmt;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 
@@ -79,9 +78,15 @@ final class UnionTypeCommonTypeNarrower
                 return $unionType;
             }
 
-            if ($unionedType->getGenericType() instanceof TypeWithClassName) {
-                $availableTypes[] = $this->resolveClassParentClassesAndInterfaces($unionedType->getGenericType());
+            $genericClassStrings = [];
+            if ($unionedType->getGenericType() instanceof ObjectType) {
+                $parentClassReflections = $this->resolveClassParentClassesAndInterfaces($unionedType->getGenericType());
+                foreach ($parentClassReflections as $classReflection) {
+                    $genericClassStrings[] = $classReflection->getName();
+                }
             }
+
+            $availableTypes[] = $genericClassStrings;
         }
 
         $genericClassStringType = $this->createGenericClassStringType($availableTypes);
@@ -100,57 +105,44 @@ final class UnionTypeCommonTypeNarrower
         $availableTypes = [];
 
         foreach ($unionType->getTypes() as $unionedType) {
-            if (! $unionedType instanceof TypeWithClassName) {
+            if (! $unionedType instanceof ObjectType) {
                 return [];
             }
 
-            $availableTypes[] = $this->resolveClassParentClassesAndInterfaces($unionedType);
+            $typeClassReflections = $this->resolveClassParentClassesAndInterfaces($unionedType);
+            $typeClassNames = [];
+            foreach ($typeClassReflections as $classReflection) {
+                $typeClassNames[] = $classReflection->getName();
+            }
+
+            $availableTypes[] = $typeClassNames;
         }
 
         return $this->narrowAvailableTypes($availableTypes);
     }
 
     /**
-     * @return string[]
+     * @return ClassReflection[]
      */
-    private function resolveClassParentClassesAndInterfaces(TypeWithClassName $typeWithClassName): array
+    private function resolveClassParentClassesAndInterfaces(ObjectType $objectType): array
     {
-        $parentClasses = class_parents($typeWithClassName->getClassName());
-        if ($parentClasses === false) {
-            $parentClasses = [];
+        $classReflection = $objectType->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return [];
         }
-
-        $implementedInterfaces = class_implements($typeWithClassName->getClassName());
-        if ($implementedInterfaces === false) {
-            $implementedInterfaces = [];
-        }
-
-        $implementedInterfaces = $this->filterOutNativeInterfaces($implementedInterfaces);
 
         // put earliest interfaces first
-        $implementedInterfaces = array_reverse($implementedInterfaces);
+        $implementedInterfaceClassReflections = array_reverse($classReflection->getInterfaces());
 
-        $classParentClassesAndInterfaces = array_merge($implementedInterfaces, $parentClasses);
+        /** @var ClassReflection[] $parentClassAndInterfaceReflections */
+        $parentClassAndInterfaceReflections = array_merge(
+            $implementedInterfaceClassReflections,
+            $classReflection->getParents()
+        );
 
-        return array_unique($classParentClassesAndInterfaces);
-    }
-
-    /**
-     * @param class-string[] $interfaces
-     * @return class-string[]
-     */
-    private function filterOutNativeInterfaces(array $interfaces): array
-    {
-        foreach ($interfaces as $key => $implementedInterface) {
-            // remove native interfaces
-            if (Strings::contains($implementedInterface, '\\')) {
-                continue;
-            }
-
-            unset($interfaces[$key]);
-        }
-
-        return $interfaces;
+        return array_filter($parentClassAndInterfaceReflections, function (ClassReflection $classReflection): bool {
+            return ! $classReflection->isBuiltin();
+        });
     }
 
     /**

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Privatization\Reflection;
 
-use ReflectionClass;
+use PHPStan\Reflection\ReflectionProvider;
 
 final class ClassConstantsResolver
 {
@@ -14,7 +14,17 @@ final class ClassConstantsResolver
     private $cachedConstantNamesToValues = [];
 
     /**
-     * @return array<string, string>
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
+
+    /**
+     * @return array<string, mixed>
      */
     public function getClassConstantNamesToValues(string $classWithConstants): array
     {
@@ -22,9 +32,14 @@ final class ClassConstantsResolver
             return $this->cachedConstantNamesToValues[$classWithConstants];
         }
 
-        $reflectionClass = new ReflectionClass($classWithConstants);
-        $constantNamesToValues = $reflectionClass->getConstants();
+        if (! $this->reflectionProvider->hasClass($classWithConstants)) {
+            return [];
+        }
 
+        $classReflection = $this->reflectionProvider->getClass($classWithConstants);
+        $nativeClassReflection = $classReflection->getNativeReflection();
+
+        $constantNamesToValues = $nativeClassReflection->getConstants();
         $this->cachedConstantNamesToValues = $constantNamesToValues;
 
         return $constantNamesToValues;

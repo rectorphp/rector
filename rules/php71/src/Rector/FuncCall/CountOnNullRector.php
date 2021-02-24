@@ -109,7 +109,7 @@ CODE_SAMPLE
             return $this->castToArray($countedNode, $node);
         }
 
-        if ($this->nodeTypeResolver->isNullableType($countedNode) || $this->isStaticType(
+        if ($this->nodeTypeResolver->isNullableType($countedNode) || $this->nodeTypeResolver->isStaticType(
             $countedNode,
             NullType::class
         )) {

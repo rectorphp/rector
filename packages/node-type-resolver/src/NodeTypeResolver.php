@@ -155,6 +155,15 @@ final class NodeTypeResolver
     public function resolve(Node $node): Type
     {
         $type = $this->resolveFirstType($node);
+
+        if ($type instanceof IntersectionType) {
+            foreach ($type->getTypes() as $intersectionedType) {
+                if ($intersectionedType instanceof TypeWithClassName) {
+                    return $this->parentClassLikeTypeCorrector->correct($intersectionedType);
+                }
+            }
+        }
+
         if (! $type instanceof TypeWithClassName) {
             return $type;
         }

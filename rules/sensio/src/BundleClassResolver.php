@@ -8,10 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Parser\Parser;
 use Rector\NodeNameResolver\NodeNameResolver;
-use ReflectionClass;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class BundleClassResolver
@@ -31,22 +31,29 @@ final class BundleClassResolver
      */
     private $nodeNameResolver;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         NodeNameResolver $nodeNameResolver,
-        Parser $parser
+        Parser $parser,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->parser = $parser;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function resolveShortBundleClassFromControllerClass(string $class): ?string
     {
-        // resolve bundle from existing ones
-        $reflectionClass = new ReflectionClass($class);
+        $classReflection = $this->reflectionProvider->getClass($class);
 
-        $fileName = $reflectionClass->getFileName();
+        // resolve bundle from existing ones
+        $fileName = $classReflection->getFileName();
         if (! $fileName) {
             return null;
         }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Rector;
 
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -297,6 +296,7 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
 
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? clone $node;
         $originalNodeWithAttributes = clone $node;
+
         $node = $this->refactor($node);
 
         // nothing to change → continue
@@ -353,16 +353,15 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         return $this->nodeTypeResolver->isNumberType($node);
     }
 
-    protected function isStaticType(Node $node, string $staticTypeClass): bool
-    {
-        return $this->nodeTypeResolver->isStaticType($node, $staticTypeClass);
-    }
-
     protected function getStaticType(Node $node): Type
     {
         return $this->nodeTypeResolver->getStaticType($node);
     }
 
+    /**
+     * @deprecated
+     * Use getStaticType() instead, as single method to get types
+     */
     protected function getObjectType(Node $node): Type
     {
         return $this->nodeTypeResolver->resolve($node);

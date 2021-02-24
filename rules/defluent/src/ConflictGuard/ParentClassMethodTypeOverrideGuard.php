@@ -5,20 +5,15 @@ declare(strict_types=1);
 namespace Rector\Defluent\ConflictGuard;
 
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ParentClassMethodTypeOverrideGuard
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     /**
      * @var NodeRepository
      */
@@ -29,12 +24,8 @@ final class ParentClassMethodTypeOverrideGuard
      */
     private $nodeNameResolver;
 
-    public function __construct(
-        ReflectionProvider $reflectionProvider,
-        NodeRepository $nodeRepository,
-        NodeNameResolver $nodeNameResolver
-    ) {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(NodeRepository $nodeRepository, NodeNameResolver $nodeNameResolver)
+    {
         $this->nodeRepository = $nodeRepository;
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -59,25 +50,21 @@ final class ParentClassMethodTypeOverrideGuard
 
     private function getParentClassMethod(ClassMethod $classMethod): ?MethodReflection
     {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
-        $parentClassName = $classMethod->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName === null) {
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
             return null;
         }
 
-        if (! $this->reflectionProvider->hasClass($parentClassName)) {
-            return null;
-        }
-
-        $parentClassReflection = $this->reflectionProvider->getClass($parentClassName);
-
-        /** @var ClassReflection[] $parentClassesReflections */
-        $parentClassesReflections = array_merge([$parentClassReflection], $parentClassReflection->getParents());
-
-        foreach ($parentClassesReflections as $parentClassesReflection) {
-            if (! $parentClassesReflection->hasMethod($methodName)) {
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if (! $parentClassReflection->hasMethod($methodName)) {
                 continue;
             }
 

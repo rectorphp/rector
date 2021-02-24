@@ -34,11 +34,6 @@ final class ArrayCallable
         return $this->method;
     }
 
-    public function isExistingMethod(): bool
-    {
-        return method_exists($this->class, $this->method);
-    }
-
     public function getReflectionMethod(): ReflectionMethod
     {
         return new ReflectionMethod($this->class, $this->method);

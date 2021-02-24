@@ -20,10 +20,8 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -72,19 +70,13 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
      */
     private $parser;
 
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         StaticTypeMapper $staticTypeMapper,
         TraitNodeScopeCollector $traitNodeScopeCollector,
         SmartFileSystem $smartFileSystem,
         BetterNodeFinder $betterNodeFinder,
-        Parser $parser,
-        NodeRepository $nodeRepository
+        Parser $parser
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -92,7 +84,6 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
         $this->betterNodeFinder = $betterNodeFinder;
         $this->smartFileSystem = $smartFileSystem;
         $this->parser = $parser;
-        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -104,7 +95,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses(): array
     {
@@ -153,12 +144,12 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
     private function getVendorPropertyFetchType(PropertyFetch $propertyFetch): Type
     {
         $varObjectType = $this->nodeTypeResolver->resolve($propertyFetch->var);
-        if (! $varObjectType instanceof TypeWithClassName) {
+        if (! $varObjectType instanceof ObjectType) {
             return new MixedType();
         }
 
-        $class = $this->nodeRepository->findClass($varObjectType->getClassName());
-        if ($class !== null) {
+        $classReflection = $varObjectType->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
             return new MixedType();
         }
 
@@ -168,7 +159,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        if (! property_exists($varObjectType->getClassName(), $propertyName)) {
+        if (! $classReflection->hasProperty($propertyName)) {
             return new MixedType();
         }
 

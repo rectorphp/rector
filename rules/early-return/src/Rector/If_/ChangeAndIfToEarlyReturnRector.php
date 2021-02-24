@@ -6,11 +6,13 @@ namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
@@ -132,7 +134,11 @@ CODE_SAMPLE
             return $this->processReplaceIfs($node, $conditions, $ifNextReturnClone);
         }
 
-        if (property_exists($ifNextReturn, 'expr') && $ifNextReturn->expr instanceof Expr) {
+        if (! $ifNextReturn instanceof Expression) {
+            return null;
+        }
+
+        if ($ifNextReturn->expr instanceof Expr) {
             $this->addNodeAfterNode(new Return_(), $node);
         }
 
@@ -186,7 +192,7 @@ CODE_SAMPLE
     private function getBooleanAndConditions(BooleanAnd $booleanAnd): array
     {
         $ifs = [];
-        while (property_exists($booleanAnd, 'left')) {
+        while ($booleanAnd instanceof BinaryOp) {
             $ifs[] = $booleanAnd->right;
             $booleanAnd = $booleanAnd->left;
 

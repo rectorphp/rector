@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider;
 
-use _HumbugBoxfac515c46e83\Roave\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
-use _HumbugBoxfac515c46e83\Roave\BetterReflection\SourceLocator\Type\SourceLocator;
+use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
+use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -30,6 +30,11 @@ final class DynamicSourceLocator
     public function addFileInfo(SmartFileInfo $fileInfo): void
     {
         $this->fileInfos[] = $fileInfo;
+    }
+
+    public function setFileInfo(SmartFileInfo $fileInfo): void
+    {
+        $this->fileInfos = [$fileInfo];
     }
 
     public function provide(): SourceLocator

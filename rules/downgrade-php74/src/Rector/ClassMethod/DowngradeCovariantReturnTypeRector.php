@@ -163,11 +163,7 @@ CODE_SAMPLE
             return new MixedType();
         }
 
-        if ($returnTypeNode instanceof NullableType) {
-            $bareReturnType = $returnTypeNode->type;
-        } else {
-            $bareReturnType = $returnTypeNode;
-        }
+        $bareReturnType = $returnTypeNode instanceof NullableType ? $returnTypeNode->type : $returnTypeNode;
 
         $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($bareReturnType);
         $methodName = $this->getName($classMethod);

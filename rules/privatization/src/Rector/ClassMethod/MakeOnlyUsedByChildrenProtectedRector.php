@@ -13,7 +13,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
-use ReflectionClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -158,17 +157,17 @@ CODE_SAMPLE
 
     private function isOverriddenInChildClass(string $className, string $methodName): bool
     {
-        $childrenClassNames = $this->familyRelationsAnalyzer->getChildrenOfClass($className);
-        foreach ($childrenClassNames as $childrenClassName) {
-            $reflectionClass = new ReflectionClass($childrenClassName);
-            $isMethodExists = method_exists($childrenClassName, $methodName);
-            if (! $isMethodExists) {
+        $childrenClassReflection = $this->familyRelationsAnalyzer->getChildrenOfClass($className);
+
+        foreach ($childrenClassReflection as $childClassReflection) {
+            if (! $childClassReflection->hasMethod($methodName)) {
                 continue;
             }
 
-            $isMethodInChildrenClass = $reflectionClass->getMethod($methodName)
-                ->class === $childrenClassName;
-            if ($isMethodInChildrenClass) {
+            $methodReflection = $childClassReflection->getNativeMethod($methodName);
+            $methodDeclaringClass = $methodReflection->getDeclaringClass();
+
+            if ($methodDeclaringClass->getName() === $childClassReflection->getName()) {
                 return true;
             }
         }

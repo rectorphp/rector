@@ -13,6 +13,8 @@ use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -24,6 +26,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class IssetOnPropertyObjectToPropertyExistsRector extends AbstractRector
 {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change isset on property object to property_exists() and not null check', [
@@ -86,12 +98,17 @@ CODE_SAMPLE
             }
 
             $propertyFetchVarType = $this->getObjectType($issetVar->var);
-            if ($propertyFetchVarType instanceof TypeWithClassName && property_exists(
-                $propertyFetchVarType->getClassName(),
-                $propertyFetchName
-            )) {
+            if ($propertyFetchVarType instanceof TypeWithClassName) {
+                if (! $this->reflectionProvider->hasClass($propertyFetchVarType->getClassName())) {
+                    continue;
+                }
+
+                $classReflection = $this->reflectionProvider->getClass($propertyFetchVarType->getClassName());
+                if (! $classReflection->hasProperty($propertyFetchName)) {
+                    continue;
+                }
+
                 $newNodes[] = $this->createNotIdenticalToNull($issetVar);
-                continue;
             }
 
             $newNodes[] = $this->replaceToPropertyExistsWithNullCheck($issetVar->var, $propertyFetchName, $issetVar);

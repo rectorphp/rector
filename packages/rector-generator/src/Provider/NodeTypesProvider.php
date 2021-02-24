@@ -29,8 +29,7 @@ final class NodeTypesProvider
     public function provide(): array
     {
         $finder = new Finder();
-        $finder = $finder
-            ->files()
+        $finder = $finder->files()
             ->in(self::PHP_PARSER_NODES_PATH);
 
         $fileInfos = iterator_to_array($finder->getIterator());
@@ -44,6 +43,7 @@ final class NodeTypesProvider
             if ($reflectionClass->isAbstract()) {
                 continue;
             }
+
             if ($reflectionClass->isInterface()) {
                 continue;
             }

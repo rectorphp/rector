@@ -6,6 +6,7 @@ namespace Rector\NodeCollector\NodeCollector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
@@ -13,7 +14,6 @@ use PHPStan\Type\UnionType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use ReflectionClass;
 
 final class ParsedClassConstFetchNodeCollector
 {
@@ -32,9 +32,15 @@ final class ParsedClassConstFetchNodeCollector
      */
     private $nodeTypeResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -137,14 +143,16 @@ final class ParsedClassConstFetchNodeCollector
      */
     private function getConstantsDefinedInClass(string $className): array
     {
-        $reflectionClass = new ReflectionClass($className);
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return [];
+        }
 
-        $constants = $reflectionClass->getConstants();
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $nativeClassReflection = $classReflection->getNativeReflection();
+        $constants = $nativeClassReflection->getConstants();
 
         $currentClassConstants = array_keys($constants);
-        $parentClassReflection = $reflectionClass->getParentClass();
-
-        if (! $parentClassReflection) {
+        if ($classReflection->getParentClass() !== false) {
             return $currentClassConstants;
         }
 

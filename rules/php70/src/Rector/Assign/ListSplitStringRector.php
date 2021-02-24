@@ -45,7 +45,7 @@ final class ListSplitStringRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isStaticType($node->expr, StringType::class)) {
+        if (! $this->nodeTypeResolver->isStaticType($node->expr, StringType::class)) {
             return null;
         }
 

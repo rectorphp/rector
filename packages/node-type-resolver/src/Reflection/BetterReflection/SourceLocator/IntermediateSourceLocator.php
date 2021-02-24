@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator;
 
-use _HumbugBoxfac515c46e83\Roave\BetterReflection\Identifier\Identifier;
-use _HumbugBoxfac515c46e83\Roave\BetterReflection\Identifier\IdentifierType;
-use _HumbugBoxfac515c46e83\Roave\BetterReflection\Reflection\Reflection;
-use _HumbugBoxfac515c46e83\Roave\BetterReflection\Reflector\Reflector;
-use _HumbugBoxfac515c46e83\Roave\BetterReflection\SourceLocator\Type\SourceLocator;
+use PHPStan\BetterReflection\Identifier\Identifier;
+use PHPStan\BetterReflection\Identifier\IdentifierType;
+use PHPStan\BetterReflection\Reflection\Reflection;
+use PHPStan\BetterReflection\Reflector\Reflector;
+use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocator;
 
 final class IntermediateSourceLocator implements SourceLocator

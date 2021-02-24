@@ -125,7 +125,6 @@ CODE_SAMPLE
 
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($node);
         $classMethodsToCheck = $this->collectClassMethodsToCheck($propertyFetches);
-
         $vendorLockedClassMethodNames = $this->getVendorLockedClassMethodNames($classMethodsToCheck);
 
         $this->complexNodeRemover->removePropertyAndUsages($node, $vendorLockedClassMethodNames);
@@ -201,7 +200,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod[] $methodsToCheck
+     * @param array<string, ClassMethod> $methodsToCheck
      * @return string[]
      */
     private function getVendorLockedClassMethodNames(array $methodsToCheck): array

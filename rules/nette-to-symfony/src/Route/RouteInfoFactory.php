@@ -187,17 +187,22 @@ final class RouteInfoFactory
             return null;
         }
 
-        $methodName = null;
-        if (method_exists($controllerClass, 'render' . ucfirst($method))) {
-            $methodName = 'render' . ucfirst($method);
-        } elseif (method_exists($controllerClass, 'action' . ucfirst($method))) {
-            $methodName = 'action' . ucfirst($method);
-        }
-
-        if ($methodName === null) {
+        if (! $this->reflectionProvider->hasClass($controllerClass)) {
             return null;
         }
 
-        return new RouteInfo($controllerClass, $methodName, $routePath, []);
+        $controllerClassReflection = $this->reflectionProvider->getClass($controllerClass);
+
+        $renderMethodName = 'render' . ucfirst($method);
+        if ($controllerClassReflection->hasMethod($renderMethodName)) {
+            return new RouteInfo($controllerClass, $renderMethodName, $routePath, []);
+        }
+
+        $actionMethodName = 'action' . ucfirst($method);
+        if ($controllerClassReflection->hasMethod($actionMethodName)) {
+            return new RouteInfo($controllerClass, $actionMethodName, $routePath, []);
+        }
+
+        return null;
     }
 }

@@ -24,9 +24,7 @@ final class MultilineSpaceFormatPreserver
 
     public function resolveCurrentPhpDocNodeText(Node $node): ?string
     {
-        if ($node instanceof PhpDocTagNode &&
-            property_exists($node->value, 'description')
-        ) {
+        if ($node instanceof PhpDocTagNode && property_exists($node->value, 'description')) {
             return $node->value->description;
         }
 

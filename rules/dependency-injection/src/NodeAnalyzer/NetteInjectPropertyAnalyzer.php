@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\DependencyInjection\NodeAnalyzer;
 
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagNode;
+use Rector\Core\ValueObject\MethodName;
 use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -29,20 +31,26 @@ final class NetteInjectPropertyAnalyzer
             return false;
         }
 
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        /** @var Scope $scope */
+        $scope = $property->getAttribute(AttributeKey::SCOPE);
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
             return false;
         }
 
-        if ($classLike->isAbstract()) {
+        if ($classReflection->isAbstract()) {
             return false;
         }
 
-        if ($this->classChildAnalyzer->hasChildClassConstructor($classLike)) {
+        if ($classReflection->isAnonymous()) {
             return false;
         }
 
-        if ($this->classChildAnalyzer->hasParentClassConstructor($classLike)) {
+        if ($this->classChildAnalyzer->hasChildClassMethod($classReflection, MethodName::CONSTRUCT)) {
+            return false;
+        }
+
+        if ($this->classChildAnalyzer->hasParentClassMethod($classReflection, MethodName::CONSTRUCT)) {
             return false;
         }
 

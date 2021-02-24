@@ -92,7 +92,7 @@ CODE_SAMPLE
         }
 
         //when second argument is string: do nothing
-        if ($this->isStaticType($node->args[1]->value, StringType::class)) {
+        if ($this->nodeTypeResolver->isStaticType($node->args[1]->value, StringType::class)) {
             return null;
         }
         //when less then 5 arguments given: do nothing

@@ -6,12 +6,12 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
-use ReflectionClass;
 
 /**
  * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\TraitTypeResolverTest
@@ -19,7 +19,17 @@ use ReflectionClass;
 final class TraitTypeResolver implements NodeTypeResolverInterface
 {
     /**
-     * @return string[]
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
+
+    /**
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses(): array
     {
@@ -31,12 +41,17 @@ final class TraitTypeResolver implements NodeTypeResolverInterface
      */
     public function resolve(Node $traitNode): Type
     {
-        $reflectionClass = new ReflectionClass((string) $traitNode->namespacedName);
+        $traitName = (string) $traitNode->namespacedName;
+        if (! $this->reflectionProvider->hasClass($traitName)) {
+            return new MixedType();
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($traitName);
 
         $types = [];
-        $types[] = new ObjectType($reflectionClass->getName());
+        $types[] = new ObjectType($traitName);
 
-        foreach ($reflectionClass->getTraits() as $usedTraitReflection) {
+        foreach ($classReflection->getTraits() as $usedTraitReflection) {
             $types[] = new ObjectType($usedTraitReflection->getName());
         }
 

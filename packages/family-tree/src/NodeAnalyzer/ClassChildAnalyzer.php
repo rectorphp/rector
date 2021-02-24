@@ -4,99 +4,54 @@ declare(strict_types=1);
 
 namespace Rector\FamilyTree\NodeAnalyzer;
 
-use PhpParser\Node\Stmt\Class_;
-use PHPStan\Reflection\ReflectionProvider;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionClass;
-use ReflectionMethod;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\Php\PhpMethodReflection;
 
 final class ClassChildAnalyzer
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function hasChildClassMethod(ClassReflection $classReflection, string $methodName): bool
     {
-        $this->reflectionProvider = $reflectionProvider;
-    }
-
-    public function hasChildClassConstructor(Class_ $class): bool
-    {
-        $childClasses = $this->getChildClasses($class);
-
-        foreach ($childClasses as $childClass) {
-            if (! $this->reflectionProvider->hasClass($childClass)) {
+        foreach ($classReflection->getAncestors() as $childClassReflection) {
+            if ($classReflection === $childClassReflection) {
                 continue;
             }
 
-            $reflectionClass = new ReflectionClass($childClass);
-            $constructorReflectionMethod = $reflectionClass->getConstructor();
-            if (! $constructorReflectionMethod instanceof ReflectionMethod) {
+            if (! $childClassReflection->hasMethod($methodName)) {
                 continue;
             }
 
-            if ($constructorReflectionMethod->class !== $childClass) {
+            $constructorReflectionMethod = $childClassReflection->getNativeMethod($methodName);
+            if (! $constructorReflectionMethod instanceof PhpMethodReflection) {
                 continue;
             }
 
-            return true;
+            $methodDeclaringClassReflection = $constructorReflectionMethod->getDeclaringClass();
+            if ($methodDeclaringClassReflection->getName() === $childClassReflection->getName()) {
+                return true;
+            }
         }
 
         return false;
     }
 
-    public function hasParentClassConstructor(Class_ $class): bool
+    public function hasParentClassMethod(ClassReflection $classReflection, string $methodName): bool
     {
-        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return false;
-        }
-
-        /** @var string[] $classParents */
-        $classParents = (array) class_parents($className);
-
-        foreach ($classParents as $classParent) {
-            $parentReflectionClass = new ReflectionClass($classParent);
-            $constructMethodReflection = $parentReflectionClass->getConstructor();
-            if (! $constructMethodReflection instanceof ReflectionMethod) {
+        foreach ($classReflection->getParents() as $parentClassReflections) {
+            if (! $parentClassReflections->hasMethod($methodName)) {
                 continue;
             }
 
-            if ($constructMethodReflection->class !== $classParent) {
+            $constructMethodReflection = $parentClassReflections->getNativeMethod($methodName);
+            if (! $constructMethodReflection instanceof PhpMethodReflection) {
                 continue;
             }
 
-            return true;
+            $methodDeclaringMethodClass = $constructMethodReflection->getDeclaringClass();
+            if ($methodDeclaringMethodClass->getName() === $parentClassReflections->getName()) {
+                return true;
+            }
         }
 
         return false;
-    }
-
-    /**
-     * @return class-string[]
-     */
-    private function getChildClasses(Class_ $class): array
-    {
-        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return [];
-        }
-
-        $childClasses = [];
-        foreach (get_declared_classes() as $declaredClass) {
-            if (! is_a($declaredClass, $className, true)) {
-                continue;
-            }
-
-            if ($declaredClass === $className) {
-                continue;
-            }
-
-            $childClasses[] = $declaredClass;
-        }
-
-        return $childClasses;
     }
 }

@@ -10,6 +10,6 @@ services:
 
     # basically decorates native PHPStan source locator with a dynamic source locator that is also available in Rector DI
     betterReflectionSourceLocator:
-        class: _HumbugBoxfac515c46e83\Roave\BetterReflection\SourceLocator\Type\SourceLocator
+        class: PHPStan\BetterReflection\SourceLocator\Type\SourceLocator
         factory: ['@Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory', 'create']
         autowired: false

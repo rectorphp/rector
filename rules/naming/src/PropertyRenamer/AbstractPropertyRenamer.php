@@ -23,11 +23,6 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 abstract class AbstractPropertyRenamer implements RenamerInterface
 {
     /**
-     * @var RenameGuardInterface
-     */
-    protected $propertyRenameGuard;
-
-    /**
      * @var ConflictingGuardInterface
      */
     protected $conflictingPropertyNameGuard;
@@ -35,7 +30,7 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
     /**
      * @var PropertyFetchRenamer
      */
-    protected $propertyFetchRenamer;
+    private $propertyFetchRenamer;
 
     /**
      * @var NotPrivatePropertyGuard
@@ -51,6 +46,11 @@ abstract class AbstractPropertyRenamer implements RenamerInterface
      * @var DateTimeAtNamingConventionGuard
      */
     private $dateTimeAtNamingConventionGuard;
+
+    /**
+     * @var RenameGuardInterface
+     */
+    private $propertyRenameGuard;
 
     /**
      * @var HasMagicGetSetGuard

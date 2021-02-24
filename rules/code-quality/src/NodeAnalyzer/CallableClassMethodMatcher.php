@@ -15,7 +15,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -33,11 +32,6 @@ final class CallableClassMethodMatcher
     private $nodeTypeResolver;
 
     /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -50,13 +44,11 @@ final class CallableClassMethodMatcher
     public function __construct(
         ValueResolver $valueResolver,
         NodeTypeResolver $nodeTypeResolver,
-        NodeRepository $nodeRepository,
         NodeNameResolver $nodeNameResolver,
         ReflectionProvider $reflectionProvider
     ) {
         $this->valueResolver = $valueResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeRepository = $nodeRepository;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
     }

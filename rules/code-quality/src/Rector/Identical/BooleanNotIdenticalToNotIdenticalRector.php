@@ -78,11 +78,11 @@ CODE_SAMPLE
 
         if ($node->expr instanceof Identical) {
             $identical = $node->expr;
-            if (! $this->isStaticType($identical->left, BooleanType::class)) {
+            if (! $this->nodeTypeResolver->isStaticType($identical->left, BooleanType::class)) {
                 return null;
             }
 
-            if (! $this->isStaticType($identical->right, BooleanType::class)) {
+            if (! $this->nodeTypeResolver->isStaticType($identical->right, BooleanType::class)) {
                 return null;
             }
 
@@ -94,11 +94,11 @@ CODE_SAMPLE
 
     private function processIdentical(Identical $identical): ?NotIdentical
     {
-        if (! $this->isStaticType($identical->left, BooleanType::class)) {
+        if (! $this->nodeTypeResolver->isStaticType($identical->left, BooleanType::class)) {
             return null;
         }
 
-        if (! $this->isStaticType($identical->right, BooleanType::class)) {
+        if (! $this->nodeTypeResolver->isStaticType($identical->right, BooleanType::class)) {
             return null;
         }
 

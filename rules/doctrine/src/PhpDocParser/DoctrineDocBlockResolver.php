@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -17,7 +18,6 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\IdTagVal
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionClass;
 
 final class DoctrineDocBlockResolver
 {
@@ -123,11 +123,16 @@ final class DoctrineDocBlockResolver
             return $this->isDoctrineEntityClass($classNode);
         }
 
-        $reflectionClass = new ReflectionClass($class);
+        $classReflection = $this->reflectionProvider->getClass($class);
+        $resolvedPhpDocBlock = $classReflection->getResolvedPhpDoc();
+        if (! $resolvedPhpDocBlock instanceof ResolvedPhpDocBlock) {
+            return false;
+        }
 
         // dummy check of 3rd party code without running it
-        $docCommentContent = (string) $reflectionClass->getDocComment();
-
-        return (bool) Strings::match($docCommentContent, self::ORM_ENTITY_EMBEDDABLE_SHORT_ANNOTATION_REGEX);
+        return (bool) Strings::match(
+            $resolvedPhpDocBlock->getPhpDocString(),
+            self::ORM_ENTITY_EMBEDDABLE_SHORT_ANNOTATION_REGEX
+        );
     }
 }

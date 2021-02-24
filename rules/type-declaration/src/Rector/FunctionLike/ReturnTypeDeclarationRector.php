@@ -79,11 +79,11 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
         bool $overrideExistingReturnTypes = true
     ) {
         $this->returnTypeInferer = $returnTypeInferer;
-        $this->overrideExistingReturnTypes = $overrideExistingReturnTypes;
         $this->returnTypeAlreadyAddedChecker = $returnTypeAlreadyAddedChecker;
         $this->nonInformativeReturnTagRemover = $nonInformativeReturnTagRemover;
         $this->childReturnPopulator = $childReturnPopulator;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
+        $this->overrideExistingReturnTypes = $overrideExistingReturnTypes;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -157,7 +157,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->shouldSkipInferredReturnNode($node, $inferredReturnNode)) {
+        if ($this->shouldSkipInferredReturnNode($node)) {
             return null;
         }
 
@@ -201,7 +201,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    private function shouldSkipInferredReturnNode(FunctionLike $functionLike, Node $inferredReturnNode): bool
+    private function shouldSkipInferredReturnNode(FunctionLike $functionLike): bool
     {
         // already overridden by previous populateChild() method run
         if ($functionLike->returnType === null) {

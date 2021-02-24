@@ -4,49 +4,59 @@ declare(strict_types=1);
 
 namespace Rector\VendorLocker\NodeVendorLocker;
 
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Interface_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockResolver
 {
     public function isVendorLocked(ClassMethod $classMethod, int $paramPosition): bool
     {
-        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
             return false;
         }
 
-        if (! $this->hasParentClassChildrenClassesOrImplementsInterface($classNode)) {
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
             return false;
         }
 
-        /** @var string $methodName */
+        if (! $this->hasParentClassChildrenClassesOrImplementsInterface($classReflection)) {
+            return false;
+        }
+
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
-        /** @var string|null $parentClassName */
-        $parentClassName = $classMethod->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName !== null) {
-            $vendorLock = $this->isParentClassVendorLocking($paramPosition, $parentClassName, $methodName);
+        if ($classReflection->getParentClass() !== false) {
+            $vendorLock = $this->isParentClassVendorLocking(
+                $classReflection->getParentClass(),
+                $paramPosition,
+                $methodName
+            );
             if ($vendorLock !== null) {
                 return $vendorLock;
             }
         }
 
-        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode instanceof Class_) {
-            return $this->isMethodVendorLockedByInterface($classNode, $methodName);
+        if ($classReflection->isClass()) {
+            return $this->isMethodVendorLockedByInterface($classReflection, $methodName);
         }
-        if ($classNode instanceof Interface_) {
-            return $this->isMethodVendorLockedByInterface($classNode, $methodName);
+
+        if ($classReflection->isInterface()) {
+            return $this->isMethodVendorLockedByInterface($classReflection, $methodName);
         }
+
         return false;
     }
 
-    private function isParentClassVendorLocking(int $paramPosition, string $parentClassName, string $methodName): ?bool
-    {
-        $parentClass = $this->nodeRepository->findClass($parentClassName);
+    private function isParentClassVendorLocking(
+        ClassReflection $parentClassReflection,
+        int $paramPosition,
+        string $methodName
+    ): ?bool {
+        $parentClass = $this->nodeRepository->findClass($parentClassReflection->getName());
         if ($parentClass !== null) {
             $parentClassMethod = $parentClass->getMethod($methodName);
             // parent class method in local scope → it's ok
@@ -58,7 +68,8 @@ final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockRes
                 return $parentClassMethod->params[$paramPosition]->type === null;
             }
         }
-        if (method_exists($parentClassName, $methodName)) {
+
+        if ($parentClassReflection->hasMethod($methodName)) {
             // parent class method in external scope → it's not ok
             // if not, look for it's parent parent
             return true;

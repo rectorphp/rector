@@ -32,14 +32,14 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     protected $tagValueNodeConfiguration;
 
     /**
-     * @var ArrayPartPhpDocTagPrinter
-     */
-    protected $arrayPartPhpDocTagPrinter;
-
-    /**
      * @var TagValueNodePrinter
      */
     protected $tagValueNodePrinter;
+
+    /**
+     * @var ArrayPartPhpDocTagPrinter
+     */
+    private $arrayPartPhpDocTagPrinter;
 
     /**
      * @param array<string, mixed> $items
