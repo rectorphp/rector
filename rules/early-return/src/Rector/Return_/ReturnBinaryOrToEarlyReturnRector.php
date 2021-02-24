@@ -99,9 +99,10 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($ifs as $key => $if) {
-            if ($key === 0) {
-                $this->mirrorComments($if, $node);
+        $this->mirrorComments($ifs[0], $node);
+        foreach ($ifs as $if) {
+            if (! $this->callAnalyzer->isObjectCall($if->cond)) {
+                return null;
             }
 
             $this->addNodeBeforeNode($if, $node);
@@ -147,7 +148,7 @@ CODE_SAMPLE
     private function collectLeftBooleanOrToIfs(BooleanOr $BooleanOr, Return_ $return, array $ifs): array
     {
         $left = $BooleanOr->left;
-        if (! $left instanceof BooleanOr && ! $this->callAnalyzer->isObjectCall($left)) {
+        if (! $left instanceof BooleanOr) {
             return [$this->ifManipulator->createIfExpr($left, new Return_($this->nodeFactory->createTrue()))];
         }
 
