@@ -37,8 +37,11 @@ final class ReturnBinaryOrToEarlyReturnRector extends AbstractRector
      */
     private $callAnalyzer;
 
-    public function __construct(IfManipulator $ifManipulator, AssignAndBinaryMap $assignAndBinaryMap, CallAnalyzer $callAnalyzer)
-    {
+    public function __construct(
+        IfManipulator $ifManipulator,
+        AssignAndBinaryMap $assignAndBinaryMap,
+        CallAnalyzer $callAnalyzer
+    ) {
         $this->ifManipulator = $ifManipulator;
         $this->assignAndBinaryMap = $assignAndBinaryMap;
         $this->callAnalyzer = $callAnalyzer;
@@ -132,10 +135,13 @@ CODE_SAMPLE
             if ($expr instanceof BooleanAnd) {
                 return [];
             }
-
-            if ($expr instanceof BooleanOr && ! $this->callAnalyzer->isObjectCall($expr->left)) {
-                return [];
+            if (! $expr instanceof BooleanOr) {
+                continue;
             }
+            if ($this->callAnalyzer->isObjectCall($expr->left)) {
+                continue;
+            }
+            return [];
         }
 
         return $ifs + [$this->ifManipulator->createIfExpr($expr, new Return_($this->nodeFactory->createTrue()))];
