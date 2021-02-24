@@ -138,9 +138,6 @@ CODE_SAMPLE
             if (! $expr instanceof BooleanOr) {
                 continue;
             }
-            if ($this->callAnalyzer->isObjectCall($expr->left)) {
-                continue;
-            }
             return [];
         }
 
