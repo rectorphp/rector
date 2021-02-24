@@ -39,9 +39,6 @@ interface TwoLevelInterfaceB extends TwoLevelInterfaceA
 
 interface TwoLevelInterfaceC extends TwoLevelInterfaceB
 {
-    /**
-     * @return \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\TwoLevelInterfaceChildType
-     */
     public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\TwoLevelInterfaceParentType;
 }
 

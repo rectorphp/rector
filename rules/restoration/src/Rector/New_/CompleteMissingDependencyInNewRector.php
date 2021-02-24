@@ -12,7 +12,6 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionType;
@@ -159,10 +158,6 @@ CODE_SAMPLE
 
         $reflectionClass = $this->reflectionProvider->getClass($className);
         return $reflectionClass->getConstructor();
-//
-//        $reflectionClass = new ReflectionClass($className);
-//
-//        return $reflectionClass->getConstructor();
     }
 
     private function resolveClassToInstantiateByParameterReflection(ReflectionParameter $reflectionParameter): ?string

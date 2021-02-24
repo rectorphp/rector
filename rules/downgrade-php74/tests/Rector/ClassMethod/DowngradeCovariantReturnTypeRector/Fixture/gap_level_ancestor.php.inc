@@ -46,9 +46,6 @@ class GapLevelB extends GapLevelA
 
 class GapLevelC extends GapLevelB
 {
-    /**
-     * @return \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\GapLevelChildType
-     */
     public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\GapLevelParentType
     { /* … */ }
 }
