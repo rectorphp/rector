@@ -56,13 +56,15 @@ class ChildType extends ParentType {}
 class A
 {
     public function covariantReturnTypes(): ParentType
-    { /* … */ }
+    {
+    }
 }
 
 class B extends A
 {
     public function covariantReturnTypes(): ChildType
-    { /* … */ }
+    {
+    }
 }
 CODE_SAMPLE
                 ,
@@ -73,7 +75,8 @@ class ChildType extends ParentType {}
 class A
 {
     public function covariantReturnTypes(): ParentType
-    { /* … */ }
+    {
+    }
 }
 
 class B extends A
@@ -82,7 +85,8 @@ class B extends A
      * @return ChildType
      */
     public function covariantReturnTypes(): ParentType
-    { /* … */ }
+    {
+    }
 }
 CODE_SAMPLE
             ),
@@ -102,7 +106,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->shouldRefactor($node)) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -128,9 +132,9 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldRefactor(ClassMethod $classMethod): bool
+    private function shouldSkip(ClassMethod $classMethod): bool
     {
-        return $this->getDifferentReturnTypeNameFromAncestorClass($classMethod) !== null;
+        return $this->getDifferentReturnTypeNameFromAncestorClass($classMethod) === null;
     }
 
     private function getDifferentReturnTypeNameFromAncestorClass(ClassMethod $classMethod): ?string
@@ -169,7 +173,6 @@ CODE_SAMPLE
         );
 
         $parentClassesNames = $classReflection->getParentClassesNames();
-
         $parentClassLikes = array_merge($parentClassesNames, $interfaceName);
 
         foreach ($parentClassLikes as $parentClassLike) {

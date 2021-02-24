@@ -229,8 +229,8 @@ final class NodeAnnotationReader
             throw new ShouldNotHappenException();
         }
 
-        $reflectionClass = $this->reflectionProvider->getClass($className);
-        $methodReflection = $reflectionClass->getNativeMethod($methodName);
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $methodReflection = $classReflection->getNativeMethod($methodName);
 
         // @see https://github.com/phpstan/phpstan-src/commit/5fad625b7770b9c5beebb19ccc1a493839308fb4
         $builtinMethodReflection = $this->privatesAccessor->getPrivateProperty($methodReflection, 'reflection');

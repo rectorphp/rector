@@ -11,9 +11,8 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\Php\PhpMethodReflection;
 use Rector\CodeQuality\NodeAnalyzer\CallableClassMethodMatcher;
 use Rector\CodeQuality\NodeFactory\AnonymousFunctionFactory;
 use Rector\Core\Rector\AbstractRector;
@@ -133,12 +132,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $classMethod = $this->callableClassMethodMatcher->match($objectVariable, $methodName);
-        if (! $classMethod instanceof ClassMethod) {
+        $phpMethodReflection = $this->callableClassMethodMatcher->match($objectVariable, $methodName);
+        if (! $phpMethodReflection instanceof PhpMethodReflection) {
             return null;
         }
 
-        return $this->anonymousFunctionFactory->create($classMethod, $objectVariable);
+        return $this->anonymousFunctionFactory->create($phpMethodReflection, $objectVariable);
     }
 
     private function shouldSkipArray(Array_ $array): bool
