@@ -68,7 +68,7 @@ class SomeClass
     public function accept()
     {
         if ($this->something()) {
-            return false;
+            return true;
         }
         return (bool) $this->somethingElse();
     }
