@@ -50,9 +50,9 @@ final class ReturnBinaryAndToEarlyReturnRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function accept($something, $somethingelse)
+    public function accept()
     {
-        return $something && $somethingelse;
+        return $this->something() && $this->somethingelse();
     }
 }
 CODE_SAMPLE
@@ -61,12 +61,12 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function accept($something, $somethingelse)
+    public function accept()
     {
-        if (!$something) {
+        if (!$this->something()) {
             return false;
         }
-        return (bool) $somethingelse;
+        return (bool) $this->somethingelse();
     }
 }
 CODE_SAMPLE
