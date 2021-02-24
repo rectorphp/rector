@@ -2,7 +2,7 @@
 
 namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\Fixture;
 
-class MultipleBinaryOr
+class MultipleBinaryAnd
 {
     public function accept()
     {
@@ -16,7 +16,7 @@ class MultipleBinaryOr
 
 namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\Fixture;
 
-class MultipleBinaryOr
+class MultipleBinaryAnd
 {
     public function accept()
     {
