@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector\Fixture;
 
-class ClassConstant
+class SkipClassConstant
 {
     private const A_CONSTANTS = [];
 
