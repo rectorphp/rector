@@ -103,8 +103,13 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->valueVar = new Variable($singularValueVarName);
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (
+        return $this->processRename($node, $valueVarName, $singularValueVarName);
+    }
+
+    private function processRename(Foreach_ $foreach, string $valueVarName, string $singularValueVarName): Foreach_
+    {
+        $foreach->valueVar = new Variable($singularValueVarName);
+        $this->traverseNodesWithCallable($foreach->stmts, function (Node $node) use (
             $singularValueVarName,
             $valueVarName
         ): ?Variable {
@@ -118,7 +123,7 @@ CODE_SAMPLE
             return new Variable($singularValueVarName);
         });
 
-        return $node;
+        return $foreach;
     }
 
     private function shouldSkip(
