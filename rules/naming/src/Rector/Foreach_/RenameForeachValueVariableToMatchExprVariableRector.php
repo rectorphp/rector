@@ -87,10 +87,11 @@ CODE_SAMPLE
     {
         /** @var string $exprName */
         $exprName             = $this->getName($node->expr);
-        $singularValueVarName = $this->inflector->singularize($exprName);
+        $keyVarName           = $node->keyVar === null ? '' : $this->getName($node->keyVar);
         $valueVarName         = $this->getName($node->valueVar);
+        $singularValueVarName = $this->inflector->singularize($exprName);
 
-        if ($singularValueVarName === $valueVarName) {
+        if ($this->shouldSkip($exprName, $keyVarName, $valueVarName, $singularValueVarName)) {
             return null;
         }
 
@@ -110,5 +111,18 @@ CODE_SAMPLE
         });
 
         return $node;
+    }
+
+    private function shouldSkip(string $exprName, ?string $keyVarName, string $valueVarName, string $singularValueVarName): bool
+    {
+        if ($singularValueVarName === $valueVarName) {
+            return true;
+        }
+
+        if ($keyVarName === $singularValueVarName) {
+            return true;
+        }
+
+        return false;
     }
 }
