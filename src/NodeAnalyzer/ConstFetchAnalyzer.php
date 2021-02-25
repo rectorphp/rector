@@ -15,7 +15,10 @@ final class ConstFetchAnalyzer
 {
     public function isTrueOrFalse(Node $node): bool
     {
-        return $this->isTrue($node) || $this->isFalse($node);
+        if ($this->isTrue($node)) {
+            return true;
+        }
+        return $this->isFalse($node);
     }
 
     public function isFalse(Node $node): bool
