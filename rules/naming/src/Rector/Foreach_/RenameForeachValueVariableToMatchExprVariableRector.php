@@ -7,7 +7,6 @@ namespace Rector\Naming\Rector\Foreach_;
 use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -86,7 +85,7 @@ CODE_SAMPLE
         $valueVarName = $this->getName($node->valueVar);
         $singularValueVarName = $this->inflector->singularize($exprName);
 
-        if ($this->shouldSkip($keyVarName, $valueVarName, $singularValueVarName, (array) $node->stmts)) {
+        if ($this->shouldSkip($keyVarName, $valueVarName, $singularValueVarName, $node->stmts)) {
             return null;
         }
 
@@ -102,9 +101,7 @@ CODE_SAMPLE
             if (! $this->isName($node, $valueVarName)) {
                 return null;
             }
-
-            $node = new Variable($singularValueVarName);
-            return $node;
+            return new Variable($singularValueVarName);
         });
 
         return $node;
@@ -123,7 +120,9 @@ CODE_SAMPLE
             return true;
         }
 
-        $isUsedInStmts = (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $node) use ($singularValueVarName): bool {
+        $isUsedInStmts = (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $node) use (
+            $singularValueVarName
+        ): bool {
             if (! $node instanceof Variable) {
                 return false;
             }
