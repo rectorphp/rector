@@ -4,9 +4,9 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRe
 
 class MultipleBinaryAnd
 {
-    public function accept($something, $somethingelse, $anotherelse, $last)
+    public function accept()
     {
-        return $something && $somethingelse && $anotherelse && $last;
+        return $this->something() && $this->somethingelse() && $this->anotherelse() && $this->last();
     }
 }
 
@@ -18,18 +18,18 @@ namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRe
 
 class MultipleBinaryAnd
 {
-    public function accept($something, $somethingelse, $anotherelse, $last)
+    public function accept()
     {
-        if (!$something) {
+        if (!$this->something()) {
             return false;
         }
-        if (!$somethingelse) {
+        if (!$this->somethingelse()) {
             return false;
         }
-        if (!$anotherelse) {
+        if (!$this->anotherelse()) {
             return false;
         }
-        return (bool) $last;
+        return (bool) $this->last();
     }
 }
 

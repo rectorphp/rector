@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Node;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\AssignOp\BitwiseAnd as AssignBitwiseAnd;
 use PhpParser\Node\Expr\AssignOp\BitwiseOr as AssignBitwiseOr;
@@ -39,6 +40,11 @@ use PhpParser\Node\Expr\BinaryOp\ShiftLeft;
 use PhpParser\Node\Expr\BinaryOp\ShiftRight;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Cast\Bool_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Type\BooleanType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class AssignAndBinaryMap
 {
@@ -103,5 +109,28 @@ final class AssignAndBinaryMap
     {
         $nodeClass = get_class($binaryOp);
         return self::BINARY_OP_TO_INVERSE_CLASSES[$nodeClass] ?? null;
+    }
+
+    public function getTruthyExpr(Expr $expr): Expr
+    {
+        if ($expr instanceof Bool_) {
+            return $expr;
+        }
+
+        if ($expr instanceof BooleanNot) {
+            return $expr;
+        }
+
+        $scope = $expr->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return new Bool_($expr);
+        }
+
+        $type = $scope->getType($expr);
+        if ($type instanceof BooleanType) {
+            return $expr;
+        }
+
+        return new Bool_($expr);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\Fixture;
+namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryOrToEarlyReturnRector\Fixture;
 
 class Comment
 {
@@ -9,7 +9,7 @@ class Comment
         // a comment
         if (rand(0, 1)) {
             // another comment
-            return $this->something() && $this->somethingElse();
+            return $this->something() || $this->somethingElse();
         }
 
         // another next comment
@@ -21,7 +21,7 @@ class Comment
 -----
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\Fixture;
+namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryOrToEarlyReturnRector\Fixture;
 
 class Comment
 {
@@ -30,8 +30,8 @@ class Comment
         // a comment
         if (rand(0, 1)) {
             // another comment
-            if (!$this->something()) {
-                return false;
+            if ($this->something()) {
+                return true;
             }
             return (bool) $this->somethingElse();
         }

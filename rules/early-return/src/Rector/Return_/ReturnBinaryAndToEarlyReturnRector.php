@@ -7,15 +7,12 @@ namespace Rector\EarlyReturn\Rector\Return_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\Analyser\Scope;
-use PHPStan\Type\BooleanType;
+use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
+use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -29,21 +26,33 @@ final class ReturnBinaryAndToEarlyReturnRector extends AbstractRector
      */
     private $ifManipulator;
 
-    public function __construct(IfManipulator $ifManipulator)
+    /**
+     * @var AssignAndBinaryMap
+     */
+    private $assignAndBinaryMap;
+
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    public function __construct(IfManipulator $ifManipulator, AssignAndBinaryMap $assignAndBinaryMap, CallAnalyzer $callAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;
+        $this->assignAndBinaryMap = $assignAndBinaryMap;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes Single return of && && to early returns', [
+        return new RuleDefinition('Changes Single return of && to early returns', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function accept($something, $somethingelse)
+    public function accept()
     {
-        return $something && $somethingelse;
+        return $this->something() && $this->somethingelse();
     }
 }
 CODE_SAMPLE
@@ -52,12 +61,12 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function accept($something, $somethingelse)
+    public function accept()
     {
-        if (!$something) {
+        if (!$this->something()) {
             return false;
         }
-        return (bool) $somethingelse;
+        return (bool) $this->somethingelse();
     }
 }
 CODE_SAMPLE
@@ -85,15 +94,16 @@ CODE_SAMPLE
         $left = $node->expr->left;
         $ifNegations = $this->createMultipleIfsNegation($left, $node, []);
 
-        foreach ($ifNegations as $key => $ifNegation) {
-            if ($key === 0) {
-                $this->mirrorComments($ifNegation, $node);
+        $this->mirrorComments($ifNegations[0], $node);
+        foreach ($ifNegations as $ifNegation) {
+            if (! $this->callAnalyzer->isObjectCall($ifNegation->cond)) {
+                return null;
             }
 
             $this->addNodeBeforeNode($ifNegation, $node);
         }
 
-        $lastReturnExpr = $this->getLastReturnExpr($node->expr->right);
+        $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($node->expr->right);
         $this->addNodeBeforeNode(new Return_($lastReturnExpr), $node);
         $this->removeNode($node);
 
@@ -118,29 +128,6 @@ CODE_SAMPLE
         return $ifNegations + [
             $this->ifManipulator->createIfNegation($expr, new Return_($this->nodeFactory->createFalse())),
         ];
-    }
-
-    private function getLastReturnExpr(Expr $expr): Expr
-    {
-        if ($expr instanceof Bool_) {
-            return $expr;
-        }
-
-        if ($expr instanceof BooleanNot) {
-            return $expr;
-        }
-
-        $scope = $expr->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return new Bool_($expr);
-        }
-
-        $type = $scope->getType($expr);
-        if ($type instanceof BooleanType) {
-            return $expr;
-        }
-
-        return new Bool_($expr);
     }
 
     /**
