@@ -7,6 +7,7 @@ namespace Rector\Naming\Rector\Foreach_;
 use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Rector\AbstractRector;
@@ -95,7 +96,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->valueVar = new Variable($singularValueVarName);
+        $node->valueVar->name = new Identifier($singularValueVarName);
         $this->traverseNodesWithCallable($node->stmts, function (Node $node) use ($singularValueVarName, $valueVarName): ?Variable {
             if (! $node instanceof Variable) {
                 return null;
@@ -106,7 +107,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $node = new Variable($singularValueVarName);
+            $node->name = new Identifier($singularValueVarName);
             return $node;
         });
 
