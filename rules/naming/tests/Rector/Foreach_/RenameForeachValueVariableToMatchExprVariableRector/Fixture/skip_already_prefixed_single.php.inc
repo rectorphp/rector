@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector\Fixture;
 
-class SkipExprUsedInStmt
+class SkipAlreadyPrefixedSingle
 {
     public function run()
     {

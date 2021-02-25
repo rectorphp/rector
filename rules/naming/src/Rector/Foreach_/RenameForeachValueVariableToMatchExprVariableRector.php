@@ -96,7 +96,7 @@ CODE_SAMPLE
 
         $singularValueVarName = $this->inflector->singularize($exprName);
         $singularValueVarName = $singularValueVarName === $exprName
-            ? 'single' . ucfirst($singularValueVarName)
+            ? 'single' . ucfirst(ltrim($singularValueVarName, 'single'))
             : $singularValueVarName;
 
         if ($this->shouldSkip($keyVarName, $valueVarName, $singularValueVarName, $node)) {
@@ -131,17 +131,11 @@ CODE_SAMPLE
             return true;
         }
 
-        $expr = $foreach->expr;
         $isUsedInStmts = (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (Node $node) use (
-            $singularValueVarName,
-            $expr
+            $singularValueVarName
         ): bool {
             if (! $node instanceof Variable) {
                 return false;
-            }
-
-            if ($this->areNodesEqual($expr, $node)) {
-                return true;
             }
 
             return $this->isName($node, $singularValueVarName);
