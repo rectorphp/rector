@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Rector\Foreach_;
 
+use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
+use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -15,6 +18,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RenameForeachValueVariableToMatchExprVariableRector extends AbstractRector
 {
+    /**
+     * @var Inflector
+     */
+    private $inflector;
+
+    /**
+     * @var ForeachAnalyzer
+     */
+    private $foreachAnalyzer;
+
+    public function __construct(Inflector $inflector, ForeachAnalyzer $foreachAnalyzer)
+    {
+        $this->inflector       = $inflector;
+        $this->foreachAnalyzer = $foreachAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -26,8 +45,9 @@ class SomeClass
 {
     public function run()
     {
+        $array = [];
         foreach ($variables as $foo) {
-
+            $array[] = $property;
         }
     }
 }
@@ -39,8 +59,9 @@ class SomeClass
 {
     public function run()
     {
+        $array = [];
         foreach ($variables as $variable) {
-
+            $array[] = $variable;
         }
     }
 }
@@ -64,6 +85,29 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $exprName               = $this->getName($node->expr);
+        $originalVariableSingle = $this->inflector->singularize($exprName);
+        $valueVarName           = $this->getName($node->valueVar);
+
+        if ($originalVariableSingle === $valueVarName) {
+            return null;
+        }
+
+        $node->valueVar = new Variable($originalVariableSingle);
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use ($originalVariableSingle, $valueVarName): ?Variable {
+            if (! $node instanceof Variable) {
+                return null;
+            }
+
+            $nodeName = $this->getName($node);
+            if ($nodeName !== $valueVarName) {
+                return null;
+            }
+
+            $node = new Variable($originalVariableSingle);
+            return $node;
+        });
+
         return $node;
     }
 }
