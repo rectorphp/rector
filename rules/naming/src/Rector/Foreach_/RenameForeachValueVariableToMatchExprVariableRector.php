@@ -81,15 +81,16 @@ CODE_SAMPLE
     {
         /** @var string $exprName */
         $exprName = $this->getName($node->expr);
-        $keyVarName = $node->keyVar === null ? '' : $this->getName($node->keyVar);
+        $keyVarName = $node->keyVar === null ? '' : (string) $this->getName($node->keyVar);
+        /** @var string $valueVarName */
         $valueVarName = $this->getName($node->valueVar);
         $singularValueVarName = $this->inflector->singularize($exprName);
 
-        if ($this->shouldSkip($exprName, $keyVarName, $valueVarName, $singularValueVarName)) {
+        if ($this->shouldSkip($keyVarName, $valueVarName, $singularValueVarName)) {
             return null;
         }
 
-        $node->valueVar->name = new Identifier($singularValueVarName);
+        $node->valueVar = new Variable($singularValueVarName);
         $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (
             $singularValueVarName,
             $valueVarName
@@ -103,7 +104,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $node->name = new Identifier($singularValueVarName);
+            $node = new Variable($singularValueVarName);
             return $node;
         });
 
@@ -111,8 +112,7 @@ CODE_SAMPLE
     }
 
     private function shouldSkip(
-        string $exprName,
-        ?string $keyVarName,
+        string $keyVarName,
         string $valueVarName,
         string $singularValueVarName
     ): bool {
