@@ -99,7 +99,10 @@ final class ClassMethodManipulator
         if ($classMethod->isPrivate()) {
             return true;
         }
-        return ! $classLike->isFinal() && $classMethod->isProtected();
+        if ($classLike->isFinal()) {
+            return false;
+        }
+        return $classMethod->isProtected();
     }
 
     public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod, ?string $methodName = null): bool
