@@ -86,16 +86,16 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         /** @var string $exprName */
-        $exprName               = $this->getName($node->expr);
-        $originalVariableSingle = $this->inflector->singularize($exprName);
-        $valueVarName           = $this->getName($node->valueVar);
+        $exprName             = $this->getName($node->expr);
+        $singularValueVarName = $this->inflector->singularize($exprName);
+        $valueVarName         = $this->getName($node->valueVar);
 
-        if ($originalVariableSingle === $valueVarName) {
+        if ($singularValueVarName === $valueVarName) {
             return null;
         }
 
-        $node->valueVar = new Variable($originalVariableSingle);
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use ($originalVariableSingle, $valueVarName): ?Variable {
+        $node->valueVar = new Variable($singularValueVarName);
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use ($singularValueVarName, $valueVarName): ?Variable {
             if (! $node instanceof Variable) {
                 return null;
             }
@@ -105,7 +105,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $node = new Variable($originalVariableSingle);
+            $node = new Variable($singularValueVarName);
             return $node;
         });
 
