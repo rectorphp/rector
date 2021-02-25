@@ -86,7 +86,7 @@ CODE_SAMPLE
         $valueVarName = $this->getName($node->valueVar);
         $singularValueVarName = $this->inflector->singularize($exprName);
 
-        if ($this->shouldSkip($keyVarName, $valueVarName, $singularValueVarName)) {
+        if ($this->shouldSkip($keyVarName, $valueVarName, $singularValueVarName, (array) $node->stmts)) {
             return null;
         }
 
@@ -99,8 +99,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $nodeName = $this->getName($node);
-            if ($nodeName !== $valueVarName) {
+            if (! $this->isName($node, $valueVarName)) {
                 return null;
             }
 
@@ -111,14 +110,31 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param Node[] $stmts
+     */
     private function shouldSkip(
         string $keyVarName,
         string $valueVarName,
-        string $singularValueVarName
+        string $singularValueVarName,
+        array $stmts
     ): bool {
         if ($singularValueVarName === $valueVarName) {
             return true;
         }
+
+        $isUsedInStmts = (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $node) use ($singularValueVarName): bool {
+            if (! $node instanceof Variable) {
+                return false;
+            }
+
+            return $this->isName($node, $singularValueVarName);
+        });
+
+        if ($isUsedInStmts) {
+            return true;
+        }
+
         return $keyVarName === $singularValueVarName;
     }
 }
