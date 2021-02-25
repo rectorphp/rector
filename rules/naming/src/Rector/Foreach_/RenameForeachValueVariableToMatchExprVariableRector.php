@@ -78,8 +78,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var string $exprName */
         $exprName = $this->getName($node->expr);
+        if ($exprName === null) {
+            return null;
+        }
+
         $keyVarName = $node->keyVar === null ? '' : (string) $this->getName($node->keyVar);
         /** @var string $valueVarName */
         $valueVarName = $this->getName($node->valueVar);
