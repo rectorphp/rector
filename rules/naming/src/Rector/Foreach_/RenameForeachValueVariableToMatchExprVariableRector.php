@@ -87,6 +87,9 @@ CODE_SAMPLE
         /** @var string $valueVarName */
         $valueVarName = $this->getName($node->valueVar);
         $singularValueVarName = $this->inflector->singularize($exprName);
+        $singularValueVarName = $singularValueVarName === $exprName
+            ? 'single' . ucfirst($singularValueVarName)
+            : $singularValueVarName;
 
         if ($this->shouldSkip($keyVarName, $valueVarName, $singularValueVarName, $node->stmts)) {
             return null;
