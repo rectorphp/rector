@@ -237,7 +237,10 @@ final class NodeTypeResolver
 
     public function isNumberType(Node $node): bool
     {
-        return $this->isStaticType($node, IntegerType::class) || $this->isStaticType($node, FloatType::class);
+        if ($this->isStaticType($node, IntegerType::class)) {
+            return true;
+        }
+        return $this->isStaticType($node, FloatType::class);
     }
 
     public function isStaticType(Node $node, string $staticTypeClass): bool
