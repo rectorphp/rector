@@ -6,6 +6,7 @@ namespace Rector\Naming\Rector\Foreach_;
 
 use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
@@ -78,7 +79,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $exprName = $this->getName($node->expr);
+        $exprName = $node->expr instanceof ClassConstFetch
+            ? $this->getName($node->expr->class)
+            : $this->getName($node->expr);
+
         if ($exprName === null) {
             return null;
         }
