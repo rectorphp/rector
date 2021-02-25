@@ -9,6 +9,7 @@ final class DemoFile
      */
     public function run(iterable $foo)
     {
+        yield from $foo;
     }
 }
 ?>
