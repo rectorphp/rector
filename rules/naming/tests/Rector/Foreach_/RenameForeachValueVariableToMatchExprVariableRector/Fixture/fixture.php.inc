@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector\Fixture;
 
-class Variables
+class Fixture
 {
     public function run()
     {
@@ -19,7 +19,7 @@ class Variables
 
 namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector\Fixture;
 
-class Variables
+class Fixture
 {
     public function run()
     {
