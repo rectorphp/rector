@@ -120,13 +120,13 @@ CODE_SAMPLE
         string $keyVarName,
         string $valueVarName,
         string $singularValueVarName,
-        Foreach_ $node
+        Foreach_ $foreach
     ): bool {
         if ($singularValueVarName === $valueVarName) {
             return true;
         }
 
-        $isUsedInStmts = (bool) $this->betterNodeFinder->findFirst($node->stmts, function (Node $node) use (
+        $isUsedInStmts = (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (Node $node) use (
             $singularValueVarName
         ): bool {
             if (! $node instanceof Variable) {
@@ -140,7 +140,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $isUsedInNextForeach = (bool) $this->betterNodeFinder->findFirstNext($node, function (Node $node) use (
+        $isUsedInNextForeach = (bool) $this->betterNodeFinder->findFirstNext($foreach, function (Node $node) use (
             $singularValueVarName
         ): bool {
             if (! $node instanceof Variable) {
