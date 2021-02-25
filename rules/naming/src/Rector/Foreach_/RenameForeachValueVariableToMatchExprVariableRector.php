@@ -131,11 +131,17 @@ CODE_SAMPLE
             return true;
         }
 
+        $expr = $foreach->expr;
         $isUsedInStmts = (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (Node $node) use (
-            $singularValueVarName
+            $singularValueVarName,
+            $expr
         ): bool {
             if (! $node instanceof Variable) {
                 return false;
+            }
+
+            if ($this->areNodesEqual($expr, $node)) {
+                return true;
             }
 
             return $this->isName($node, $singularValueVarName);
