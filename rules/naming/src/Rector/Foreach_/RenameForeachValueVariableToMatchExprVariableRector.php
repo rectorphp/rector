@@ -9,7 +9,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Foreach_;
-use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -24,15 +23,9 @@ final class RenameForeachValueVariableToMatchExprVariableRector extends Abstract
      */
     private $inflector;
 
-    /**
-     * @var ForeachAnalyzer
-     */
-    private $foreachAnalyzer;
-
-    public function __construct(Inflector $inflector, ForeachAnalyzer $foreachAnalyzer)
+    public function __construct(Inflector $inflector)
     {
-        $this->inflector       = $inflector;
-        $this->foreachAnalyzer = $foreachAnalyzer;
+        $this->inflector = $inflector;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -87,9 +80,9 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         /** @var string $exprName */
-        $exprName             = $this->getName($node->expr);
-        $keyVarName           = $node->keyVar === null ? '' : $this->getName($node->keyVar);
-        $valueVarName         = $this->getName($node->valueVar);
+        $exprName = $this->getName($node->expr);
+        $keyVarName = $node->keyVar === null ? '' : $this->getName($node->keyVar);
+        $valueVarName = $this->getName($node->valueVar);
         $singularValueVarName = $this->inflector->singularize($exprName);
 
         if ($this->shouldSkip($exprName, $keyVarName, $valueVarName, $singularValueVarName)) {
@@ -97,7 +90,10 @@ CODE_SAMPLE
         }
 
         $node->valueVar->name = new Identifier($singularValueVarName);
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use ($singularValueVarName, $valueVarName): ?Variable {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (
+            $singularValueVarName,
+            $valueVarName
+        ): ?Variable {
             if (! $node instanceof Variable) {
                 return null;
             }
@@ -114,16 +110,15 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkip(string $exprName, ?string $keyVarName, string $valueVarName, string $singularValueVarName): bool
-    {
+    private function shouldSkip(
+        string $exprName,
+        ?string $keyVarName,
+        string $valueVarName,
+        string $singularValueVarName
+    ): bool {
         if ($singularValueVarName === $valueVarName) {
             return true;
         }
-
-        if ($keyVarName === $singularValueVarName) {
-            return true;
-        }
-
-        return false;
+        return $keyVarName === $singularValueVarName;
     }
 }
