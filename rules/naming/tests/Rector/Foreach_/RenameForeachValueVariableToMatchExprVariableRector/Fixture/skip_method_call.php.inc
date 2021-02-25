@@ -4,8 +4,6 @@ namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchE
 
 class SkipMethodCall
 {
-    private const A_CONSTANTS = [];
-
     public function run()
     {
         $array = [];

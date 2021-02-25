@@ -6,7 +6,6 @@ namespace Rector\Naming\Rector\Foreach_;
 
 use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
