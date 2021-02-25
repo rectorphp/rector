@@ -64,6 +64,7 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 
 - [Explore 660+ Rector Rules](/docs/rector_rules_overview.md)
 - [How Does Rector Work?](/docs/how_it_works.md)
+- [Current Limitations](/docs/limitations.md)
 - [PHP Parser Nodes](https://github.com/rectorphp/php-parser-nodes-docs/blob/master/docs/nodes_overview.md)
 
 ### Advanced
@@ -81,14 +82,19 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 
 ## Install
 
+The currently recommended way of installing Rector is as a Composer `dev` dependency:
+
 ```bash
 composer require rector/rector --dev
 ```
 
-- Having conflicts during `composer require`? → Use the [Rector Prefixed](https://github.com/rectorphp/rector-prefixed)
-- Using a different PHP version than Rector supports? → Use the [Docker image](/docs/how_to_run_rector_in_docker.md)
+If that does not work for you
+* due to version conflicts,
+* minimum PHP requirements,
+* does not give you a suitably recent version of Rector or
+* you do not want to install tools like Rector as Composer dependencies,
 
-<br>
+please make sure to review the [current limitations and installation alternatives](/docs/limitations.md).
 
 ## Running Rector
 

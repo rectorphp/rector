@@ -3,6 +3,8 @@
 You can run Rector on your project using Docker.
 To make sure you are running latest version, use `docker pull rector/rector`.
 
+In case of problems, please make sure to review the [current limitations and installation alternatives](/docs/limitations.md).
+
 *Note that Rector inside Docker expects your application in `/project` directory - it is mounted via volume from the current directory (`$pwd`).*
 
 ```bash
