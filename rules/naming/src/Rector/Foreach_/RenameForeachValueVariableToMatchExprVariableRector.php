@@ -85,6 +85,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        /** @var string $exprName */
         $exprName               = $this->getName($node->expr);
         $originalVariableSingle = $this->inflector->singularize($exprName);
         $valueVarName           = $this->getName($node->valueVar);
