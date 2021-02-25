@@ -48,8 +48,8 @@ final class LivingCodeManipulator
     public function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
     {
         $livinExprs = $this->keepLivingCodeFromExpr($expr);
-        foreach ($livinExprs as $expr) {
-            $this->nodesToAddCollector->addNodeBeforeNode(new Expression($expr), $addBeforeThisNode);
+        foreach ($livinExprs as $livinExpr) {
+            $this->nodesToAddCollector->addNodeBeforeNode(new Expression($livinExpr), $addBeforeThisNode);
         }
     }
 
@@ -159,8 +159,8 @@ final class LivingCodeManipulator
     private function processIsset(Isset_ $isset): array
     {
         $livingExprs = [];
-        foreach ($isset->vars as $expr) {
-            $livingExprs = array_merge($livingExprs, $this->keepLivingCodeFromExpr($expr));
+        foreach ($isset->vars as $var) {
+            $livingExprs = array_merge($livingExprs, $this->keepLivingCodeFromExpr($var));
         }
 
         return $livingExprs;

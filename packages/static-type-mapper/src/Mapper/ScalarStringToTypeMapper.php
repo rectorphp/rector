@@ -42,8 +42,8 @@ final class ScalarStringToTypeMapper
     {
         $loweredScalarName = Strings::lower($scalarName);
 
-        foreach (self::SCALAR_NAME_BY_TYPE as $objectType => $scalarNames) {
-            if (! in_array($loweredScalarName, $scalarNames, true)) {
+        foreach (self::SCALAR_NAME_BY_TYPE as $objectType => $singleSelf::SCALAR_NAME_BY_TYPE) {
+            if (! in_array($loweredScalarName, $singleSelf::SCALAR_NAME_BY_TYPE, true)) {
                 continue;
             }
 

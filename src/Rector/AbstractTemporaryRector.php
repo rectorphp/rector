@@ -473,8 +473,8 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
      */
     protected function appendArgs(array $newArgs, array $appendingArgs): array
     {
-        foreach ($appendingArgs as $oldArgument) {
-            $newArgs[] = new Arg($oldArgument->value);
+        foreach ($appendingArgs as $appendingArg) {
+            $newArgs[] = new Arg($appendingArg->value);
         }
 
         return $newArgs;

@@ -207,8 +207,8 @@ final class ClassMethodManipulator
     private function resolveName(ClassMethod $classMethod, array $possibleNames): string
     {
         foreach ($possibleNames as $possibleName) {
-            foreach ($classMethod->params as $paramNode) {
-                if ($this->nodeNameResolver->isName($paramNode, $possibleName)) {
+            foreach ($classMethod->params as $param) {
+                if ($this->nodeNameResolver->isName($param, $possibleName)) {
                     continue 2;
                 }
             }

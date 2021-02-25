@@ -176,27 +176,27 @@ CODE_SAMPLE
         foreach ($assignedVariableNames as $assignedVariableName) {
             $previousNode = null;
 
-            foreach ($nodesByTypeAndPosition as $nodeByTypeAndPosition) {
-                $variableNode = $nodeByTypeAndPosition->getVariableNode();
+            foreach ($nodesByTypeAndPosition as $singleNodesByTypeAndPosition) {
+                $variableNode = $singleNodesByTypeAndPosition->getVariableNode();
                 $comments = $variableNode->getAttribute(AttributeKey::COMMENTS);
 
                 if ($comments !== null) {
                     continue;
                 }
 
-                if (! $nodeByTypeAndPosition->isName($assignedVariableName)) {
+                if (! $singleNodesByTypeAndPosition->isName($assignedVariableName)) {
                     continue;
                 }
 
-                if ($this->isAssignNodeUsed($previousNode, $nodeByTypeAndPosition)) {
+                if ($this->isAssignNodeUsed($previousNode, $singleNodesByTypeAndPosition)) {
                     // continue
                     // instant override → remove
-                } elseif ($this->shouldRemoveAssignNode($previousNode, $nodeByTypeAndPosition)) {
+                } elseif ($this->shouldRemoveAssignNode($previousNode, $singleNodesByTypeAndPosition)) {
                     /** @var VariableNodeUse $previousNode */
                     $nodesToRemove[] = $previousNode->getParentNode();
                 }
 
-                $previousNode = $nodeByTypeAndPosition;
+                $previousNode = $singleNodesByTypeAndPosition;
             }
         }
 

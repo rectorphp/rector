@@ -132,12 +132,12 @@ final class ListeningMethodsCollector
         );
 
         $classMethods = [];
-        foreach ($eventClassesAndClassMethods as $eventClassAndClassMethod) {
-            if ($eventClassAndClassMethod->getEventClass() !== $eventClassName) {
+        foreach ($eventClassesAndClassMethods as $eventClassesAndClassMethod) {
+            if ($eventClassesAndClassMethod->getEventClass() !== $eventClassName) {
                 continue;
             }
 
-            $classMethods[] = $eventClassAndClassMethod->getClassMethod();
+            $classMethods[] = $eventClassesAndClassMethod->getClassMethod();
         }
 
         return $classMethods;

@@ -37,8 +37,8 @@ final class PropertyFetchWithVariableReplacer
      */
     public function replacePropertyFetchesByVariable(Class_ $class, array $methodsByPropertyName): void
     {
-        foreach ($methodsByPropertyName as $propertyName => $methodNames) {
-            $methodName = $methodNames[0];
+        foreach ($methodsByPropertyName as $propertyName => $singleMethodsByPropertyName) {
+            $methodName = $singleMethodsByPropertyName[0];
             $classMethod = $class->getMethod($methodName);
             if (! $classMethod instanceof ClassMethod) {
                 continue;

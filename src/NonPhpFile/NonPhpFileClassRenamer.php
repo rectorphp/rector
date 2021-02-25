@@ -32,7 +32,7 @@ final class NonPhpFileClassRenamer
     {
         $classRenames = $this->addDoubleSlahed($classRenames);
 
-        foreach ($classRenames as $oldClass => $newClass) {
+        foreach ($classRenames as $oldClass => $classRename) {
             // the old class is without slashes, it can make mess as similar to a word in the text, so we have to be more strict about it
             if (! Strings::contains($oldClass, '\\')) {
                 $oldClassRegex = self::STANDALONE_CLASS_PREFIX_REGEX . preg_quote(
@@ -44,9 +44,9 @@ final class NonPhpFileClassRenamer
             }
 
             $newContent = Strings::replace($newContent, $oldClassRegex, function (array $match) use (
-                $newClass
+                $classRename
             ): string {
-                return ($match['extra_space'] ?? '') . $newClass;
+                return ($match['extra_space'] ?? '') . $classRename;
             });
         }
 
@@ -61,14 +61,14 @@ final class NonPhpFileClassRenamer
      */
     private function addDoubleSlahed(array $classRenames): array
     {
-        foreach ($classRenames as $oldClass => $newClass) {
+        foreach ($classRenames as $oldClass => $classRename) {
             // to prevent no slash override
             if (! Strings::contains($oldClass, '\\')) {
                 continue;
             }
 
             $doubleSlashOldClass = str_replace('\\', '\\\\', $oldClass);
-            $doubleSlashNewClass = str_replace('\\', '\\\\', $newClass);
+            $doubleSlashNewClass = str_replace('\\', '\\\\', $classRename);
 
             $classRenames[$doubleSlashOldClass] = $doubleSlashNewClass;
         }

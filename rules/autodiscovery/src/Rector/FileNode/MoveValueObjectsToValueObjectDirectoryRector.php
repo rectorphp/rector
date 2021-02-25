@@ -220,8 +220,8 @@ CODE_SAMPLE
 
     private function isKnownServiceType(string $className): bool
     {
-        foreach (self::COMMON_SERVICE_SUFFIXES as $commonServiceSuffix) {
-            if (Strings::endsWith($className, $commonServiceSuffix)) {
+        foreach (self::COMMON_SERVICE_SUFFIXES as $self::COMMON_SERVICE_SUFFIX) {
+            if (Strings::endsWith($className, $self::COMMON_SERVICE_SUFFIX)) {
                 return true;
             }
         }

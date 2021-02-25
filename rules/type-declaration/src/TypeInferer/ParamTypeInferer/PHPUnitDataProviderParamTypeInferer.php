@@ -112,12 +112,12 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
     {
         $paramOnPositionTypes = [];
 
-        foreach ($returns as $classMethodReturn) {
-            if (! $classMethodReturn->expr instanceof Array_) {
+        foreach ($returns as $return) {
+            if (! $return->expr instanceof Array_) {
                 continue;
             }
 
-            $type = $this->getTypeFromClassMethodReturn($classMethodReturn->expr);
+            $type = $this->getTypeFromClassMethodReturn($return->expr);
 
             if (! $type instanceof ConstantArrayType) {
                 return $type;
@@ -166,12 +166,12 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
     {
         $paramOnPositionTypes = [];
 
-        foreach ($yields as $classMethodYield) {
-            if (! $classMethodYield->value instanceof Array_) {
+        foreach ($yields as $yield) {
+            if (! $yield->value instanceof Array_) {
                 continue;
             }
 
-            $type = $this->getTypeFromClassMethodYield($classMethodYield->value);
+            $type = $this->getTypeFromClassMethodYield($yield->value);
 
             if (! $type instanceof ConstantArrayType) {
                 return $type;

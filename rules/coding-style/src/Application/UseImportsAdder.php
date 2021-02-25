@@ -98,8 +98,8 @@ final class UseImportsAdder
     private function diffFullyQualifiedObjectTypes(array $mainTypes, array $typesToRemove): array
     {
         foreach ($mainTypes as $key => $mainType) {
-            foreach ($typesToRemove as $typeToRemove) {
-                if ($mainType->equals($typeToRemove)) {
+            foreach ($typesToRemove as $singleTypesToRemove) {
+                if ($mainType->equals($singleTypesToRemove)) {
                     unset($mainTypes[$key]);
                 }
             }

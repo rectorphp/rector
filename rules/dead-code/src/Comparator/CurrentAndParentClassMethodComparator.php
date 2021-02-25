@@ -107,14 +107,14 @@ final class CurrentAndParentClassMethodComparator
             return true;
         }
 
-        foreach ($parentStaticCallArgs as $key => $arg) {
+        foreach ($parentStaticCallArgs as $key => $parentStaticCallArg) {
             if (! isset($currentClassMethodParams[$key])) {
                 return false;
             }
 
             // this only compares variable name, but those can be differnt, so its kinda useless
             $param = $currentClassMethodParams[$key];
-            if (! $this->nodeComparator->areNodesEqual($param->var, $arg->value)) {
+            if (! $this->nodeComparator->areNodesEqual($param->var, $parentStaticCallArg->value)) {
                 return false;
             }
         }

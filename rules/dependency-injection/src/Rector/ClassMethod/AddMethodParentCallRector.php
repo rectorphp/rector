@@ -88,7 +88,7 @@ CODE_SAMPLE
         /** @var string $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
-        foreach ($this->methodsByParentTypes as $type => $method) {
+        foreach ($this->methodsByParentTypes as $type => $methodsByParentType) {
             if (! $this->isObjectType($classLike, $type)) {
                 continue;
             }
@@ -98,11 +98,11 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->shouldSkipMethod($node, $method)) {
+            if ($this->shouldSkipMethod($node, $methodsByParentType)) {
                 continue;
             }
 
-            $node->stmts[] = $this->createParentStaticCall($method);
+            $node->stmts[] = $this->createParentStaticCall($methodsByParentType);
 
             return $node;
         }

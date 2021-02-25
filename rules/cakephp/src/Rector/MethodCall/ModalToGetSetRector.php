@@ -101,16 +101,16 @@ CODE_SAMPLE
 
     private function matchTypeAndMethodName(MethodCall $methodCall): ?ModalToGetSet
     {
-        foreach ($this->unprefixedMethodsToGetSet as $unprefixedMethodToGetSet) {
-            if (! $this->isObjectType($methodCall->var, $unprefixedMethodToGetSet->getType())) {
+        foreach ($this->unprefixedMethodsToGetSet as $singleUnprefixedMethodsToGetSet) {
+            if (! $this->isObjectType($methodCall->var, $singleUnprefixedMethodsToGetSet->getType())) {
                 continue;
             }
 
-            if (! $this->isName($methodCall->name, $unprefixedMethodToGetSet->getUnprefixedMethod())) {
+            if (! $this->isName($methodCall->name, $singleUnprefixedMethodsToGetSet->getUnprefixedMethod())) {
                 continue;
             }
 
-            return $unprefixedMethodToGetSet;
+            return $singleUnprefixedMethodsToGetSet;
         }
 
         return null;

@@ -119,12 +119,12 @@ CODE_SAMPLE
      */
     private function processWithCall(Node $node): Node
     {
-        foreach ($node->args as $i => $argNode) {
-            if (! $argNode->value instanceof MethodCall) {
+        foreach ($node->args as $i => $arg) {
+            if (! $arg->value instanceof MethodCall) {
                 continue;
             }
 
-            $methodCall = $argNode->value;
+            $methodCall = $arg->value;
             if (! $this->isName($methodCall->name, 'equalTo')) {
                 continue;
             }
@@ -147,12 +147,12 @@ CODE_SAMPLE
 
         $nestedMethodCall = $node->args[0]->value;
 
-        foreach (self::NESTED_METHOD_TO_RENAME_MAP as $oldMethodName => $newParentMethodName) {
+        foreach (self::NESTED_METHOD_TO_RENAME_MAP as $oldMethodName => $singleSelf::NESTED_METHOD_TO_RENAME_MAP) {
             if (! $this->isName($nestedMethodCall->name, $oldMethodName)) {
                 continue;
             }
 
-            $node->name = new Identifier($newParentMethodName);
+            $node->name = new Identifier($singleSelf::NESTED_METHOD_TO_RENAME_MAP);
 
             // move args up
             $node->args = $nestedMethodCall->args;

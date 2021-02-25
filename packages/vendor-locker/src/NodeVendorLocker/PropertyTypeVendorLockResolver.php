@@ -80,14 +80,14 @@ final class PropertyTypeVendorLockResolver extends AbstractNodeVendorLockResolve
 
         $childrenClassNames = $this->getChildrenClassesByClass($classLike);
 
-        foreach ($childrenClassNames as $childClassName) {
-            if (! property_exists($childClassName, $propertyName)) {
+        foreach ($childrenClassNames as $childrenClassName) {
+            if (! property_exists($childrenClassName, $propertyName)) {
                 continue;
             }
 
             // ensure the property is not in the parent class
-            $reflectionProperty = new ReflectionProperty($childClassName, $propertyName);
-            if ($reflectionProperty->class !== $childClassName) {
+            $reflectionProperty = new ReflectionProperty($childrenClassName, $propertyName);
+            if ($reflectionProperty->class !== $childrenClassName) {
                 continue;
             }
 

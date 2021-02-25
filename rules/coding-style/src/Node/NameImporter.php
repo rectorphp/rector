@@ -165,8 +165,8 @@ final class NameImporter
         $this->addUseImport($name, $fullyQualifiedObjectType);
 
         // possibly aliased
-        foreach ($this->aliasedUses as $aliasUse) {
-            if ($fullyQualifiedObjectType->getClassName() === $aliasUse) {
+        foreach ($this->aliasedUses as $aliasedus) {
+            if ($fullyQualifiedObjectType->getClassName() === $aliasedus) {
                 return null;
             }
         }

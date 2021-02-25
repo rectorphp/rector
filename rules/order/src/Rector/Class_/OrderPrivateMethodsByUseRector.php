@@ -178,17 +178,17 @@ CODE_SAMPLE
     {
         $privateClassMethods = [];
 
-        foreach ($classLike->stmts as $key => $classStmt) {
-            if (! $classStmt instanceof ClassMethod) {
+        foreach ($classLike->stmts as $key => $stmt) {
+            if (! $stmt instanceof ClassMethod) {
                 continue;
             }
 
-            if (! $classStmt->isPrivate()) {
+            if (! $stmt->isPrivate()) {
                 continue;
             }
 
             /** @var string $classMethodName */
-            $classMethodName = $this->getName($classStmt);
+            $classMethodName = $this->getName($stmt);
             $privateClassMethods[$key] = $classMethodName;
         }
 

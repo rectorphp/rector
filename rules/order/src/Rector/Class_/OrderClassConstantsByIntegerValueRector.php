@@ -90,21 +90,21 @@ CODE_SAMPLE
     private function resolveClassConstByPosition(Class_ $class): array
     {
         $classConstConstsByValue = [];
-        foreach ($class->stmts as $key => $classStmt) {
-            if (! $classStmt instanceof ClassConst) {
+        foreach ($class->stmts as $key => $stmt) {
+            if (! $stmt instanceof ClassConst) {
                 continue;
             }
 
-            if (count($classStmt->consts) !== 1) {
+            if (count($stmt->consts) !== 1) {
                 continue;
             }
 
-            $classConstConst = $classStmt->consts[0];
+            $classConstConst = $stmt->consts[0];
             if (! $classConstConst->value instanceof LNumber) {
                 continue;
             }
 
-            $classConstConstsByValue[$key] = $classStmt;
+            $classConstConstsByValue[$key] = $stmt;
         }
 
         return $classConstConstsByValue;
@@ -117,16 +117,16 @@ CODE_SAMPLE
     private function resolveClassConstConstByUniqueValue(array $numericClassConstsByKey): array
     {
         $classConstConstsByValue = [];
-        foreach ($numericClassConstsByKey as $position => $numericClassConst) {
-            $constantValue = $this->valueResolver->getValue($numericClassConst->consts[0]->value);
+        foreach ($numericClassConstsByKey as $position => $singleNumericClassConstsByKey) {
+            $constantValue = $this->valueResolver->getValue($singleNumericClassConstsByKey->consts[0]->value);
             $classConstConstsByValue[$position] = $constantValue;
         }
 
         $arrayCountValue = array_count_values($classConstConstsByValue);
 
         // work only with unique constants
-        foreach ($classConstConstsByValue as $position => $constantValue) {
-            if ($arrayCountValue[$constantValue] > 1) {
+        foreach ($classConstConstsByValue as $position => $singleClassConstConstsByValue) {
+            if ($arrayCountValue[$singleClassConstConstsByValue] > 1) {
                 unset($classConstConstsByValue[$position]);
             }
         }

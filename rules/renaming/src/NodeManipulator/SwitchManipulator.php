@@ -15,8 +15,8 @@ final class SwitchManipulator
      */
     public function removeBreakNodes(array $stmts): array
     {
-        foreach ($stmts as $key => $node) {
-            if ($node instanceof Break_) {
+        foreach ($stmts as $key => $stmt) {
+            if ($stmt instanceof Break_) {
                 unset($stmts[$key]);
             }
         }

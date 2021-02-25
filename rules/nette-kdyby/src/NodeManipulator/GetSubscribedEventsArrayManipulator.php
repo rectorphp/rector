@@ -42,7 +42,7 @@ final class GetSubscribedEventsArrayManipulator
                 return null;
             }
 
-            foreach (NetteEventToContributeEventClass::PROPERTY_TO_EVENT_CLASS as $netteEventProperty => $contributeEventClass) {
+            foreach (NetteEventToContributeEventClass::PROPERTY_TO_EVENT_CLASS as $netteEventProperty => $singleRector\NetteKdyby\ValueObject\NetteEventToContributeEventClass::PROPERTY_TO_EVENT_CLASS) {
                 if ($node->key === null) {
                     continue;
                 }
@@ -51,7 +51,7 @@ final class GetSubscribedEventsArrayManipulator
                     continue;
                 }
 
-                $node->key = new ClassConstFetch(new FullyQualified($contributeEventClass), 'class');
+                $node->key = new ClassConstFetch(new FullyQualified($singleRector\NetteKdyby\ValueObject\NetteEventToContributeEventClass::PROPERTY_TO_EVENT_CLASS), 'class');
             }
 
             return $node;

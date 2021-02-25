@@ -36,8 +36,11 @@ final class ReturnBinaryAndToEarlyReturnRector extends AbstractRector
      */
     private $callAnalyzer;
 
-    public function __construct(IfManipulator $ifManipulator, AssignAndBinaryMap $assignAndBinaryMap, CallAnalyzer $callAnalyzer)
-    {
+    public function __construct(
+        IfManipulator $ifManipulator,
+        AssignAndBinaryMap $assignAndBinaryMap,
+        CallAnalyzer $callAnalyzer
+    ) {
         $this->ifManipulator = $ifManipulator;
         $this->assignAndBinaryMap = $assignAndBinaryMap;
         $this->callAnalyzer = $callAnalyzer;

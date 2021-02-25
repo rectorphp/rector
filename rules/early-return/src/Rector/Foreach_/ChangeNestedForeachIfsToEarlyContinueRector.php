@@ -120,21 +120,21 @@ CODE_SAMPLE
         // clear
         $foreach->stmts = [];
 
-        foreach ($nestedIfsWithOnlyReturn as $key => $nestedIfWithOnlyReturn) {
+        foreach ($nestedIfsWithOnlyReturn as $key => $singleNestedIfsWithOnlyReturn) {
             // last item → the return node
             if ($nestedIfsWithOnlyReturnCount === $key + 1) {
-                $finalReturn = clone $nestedIfWithOnlyReturn;
+                $finalReturn = clone $singleNestedIfsWithOnlyReturn;
 
-                $this->addInvertedIfStmtWithContinue($nestedIfWithOnlyReturn, $foreach);
+                $this->addInvertedIfStmtWithContinue($singleNestedIfsWithOnlyReturn, $foreach);
 
                 // should skip for weak inversion
-                if ($this->isBooleanOrWithWeakComparison($nestedIfWithOnlyReturn->cond)) {
+                if ($this->isBooleanOrWithWeakComparison($singleNestedIfsWithOnlyReturn->cond)) {
                     continue;
                 }
 
                 $foreach->stmts = array_merge($foreach->stmts, $finalReturn->stmts);
             } else {
-                $this->addInvertedIfStmtWithContinue($nestedIfWithOnlyReturn, $foreach);
+                $this->addInvertedIfStmtWithContinue($singleNestedIfsWithOnlyReturn, $foreach);
             }
         }
 

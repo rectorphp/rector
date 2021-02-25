@@ -165,8 +165,8 @@ final class ClassManipulator
     public function replaceTrait(Class_ $class, string $oldTrait, string $newTrait): void
     {
         foreach ($class->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $key => $traitTrait) {
-                if (! $this->nodeNameResolver->isName($traitTrait, $oldTrait)) {
+            foreach ($traitUse->traits as $key => $trait) {
+                if (! $this->nodeNameResolver->isName($trait, $oldTrait)) {
                     continue;
                 }
 

@@ -84,12 +84,12 @@ CODE_SAMPLE
                 return null;
             }
 
-            foreach ($nestedArrayItem->items as $nestedArrayItemItem) {
-                if ($nestedArrayItemItem === null) {
+            foreach ($nestedArrayItem->items as $item) {
+                if ($item === null) {
                     continue;
                 }
 
-                $array->items[] = new ArrayItem($nestedArrayItemItem->value, $nestedArrayItemItem->key);
+                $array->items[] = new ArrayItem($item->value, $item->key);
             }
         }
 

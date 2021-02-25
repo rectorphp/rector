@@ -102,12 +102,12 @@ CODE_SAMPLE
         $classMethodCalls = $this->nodeRepository->findCallsByClassMethod($node);
         $classParameterTypes = $this->getCallTypesByPosition($classMethodCalls);
 
-        foreach ($classParameterTypes as $position => $argumentStaticType) {
-            if ($this->shouldSkipArgumentStaticType($node, $argumentStaticType, $position)) {
+        foreach ($classParameterTypes as $position => $classParameterType) {
+            if ($this->shouldSkipArgumentStaticType($node, $classParameterType, $position)) {
                 continue;
             }
 
-            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($argumentStaticType);
+            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($classParameterType);
             if ($phpParserTypeNode === null) {
                 continue;
             }
@@ -143,8 +143,10 @@ CODE_SAMPLE
 
         // unite to single type
         $staticTypeByArgumentPosition = [];
-        foreach ($staticTypesByArgumentPosition as $position => $staticTypes) {
-            $staticTypeByArgumentPosition[$position] = $this->typeFactory->createMixedPassedOrUnionType($staticTypes);
+        foreach ($staticTypesByArgumentPosition as $position => $singleStaticTypesByArgumentPosition) {
+            $staticTypeByArgumentPosition[$position] = $this->typeFactory->createMixedPassedOrUnionType(
+                $singleStaticTypesByArgumentPosition
+            );
         }
 
         return $staticTypeByArgumentPosition;

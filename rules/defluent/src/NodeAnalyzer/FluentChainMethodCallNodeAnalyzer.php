@@ -99,8 +99,8 @@ final class FluentChainMethodCallNodeAnalyzer
         }
 
         if ($calleeStaticType instanceof TypeWithClassName) {
-            foreach (self::KNOWN_FACTORY_FLUENT_TYPES as $knownFactoryFluentTypes) {
-                if (is_a($calleeStaticType->getClassName(), $knownFactoryFluentTypes, true)) {
+            foreach (self::KNOWN_FACTORY_FLUENT_TYPES as $self::KNOWN_FACTORY_FLUENT_TYPE) {
+                if (is_a($calleeStaticType->getClassName(), $self::KNOWN_FACTORY_FLUENT_TYPE, true)) {
                     return false;
                 }
             }

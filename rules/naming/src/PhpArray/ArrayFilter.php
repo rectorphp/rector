@@ -17,9 +17,9 @@ final class ArrayFilter
 
         $duplicatedValues = [];
 
-        foreach ($valueToCount as $value => $count) {
+        foreach ($valueToCount as $value => $singleValueToCount) {
             /** @var int $count */
-            if ($count < 2) {
+            if ($singleValueToCount < 2) {
                 continue;
             }
 

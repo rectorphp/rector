@@ -39,8 +39,8 @@ final class FunctionSupportResolver
 
     public function isFunctionSupported(string $desiredFunction): bool
     {
-        foreach (self::FUNCTIONS_BY_VERSION as $version => $functions) {
-            if (! in_array($desiredFunction, $functions, true)) {
+        foreach (self::FUNCTIONS_BY_VERSION as $version => $singleSelf::FUNCTIONS_BY_VERSION) {
+            if (! in_array($desiredFunction, $singleSelf::FUNCTIONS_BY_VERSION, true)) {
                 continue;
             }
 

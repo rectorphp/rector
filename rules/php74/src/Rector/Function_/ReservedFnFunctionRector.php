@@ -87,15 +87,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->reservedNamesToNewOnes as $reservedName => $newName) {
+        foreach ($this->reservedNamesToNewOnes as $reservedName => $reservedNamesToNewOne) {
             if (! $this->isName($node->name, $reservedName)) {
                 continue;
             }
 
             if ($node instanceof FuncCall) {
-                $node->name = new Name($newName);
+                $node->name = new Name($reservedNamesToNewOne);
             } else {
-                $node->name = new Identifier($newName);
+                $node->name = new Identifier($reservedNamesToNewOne);
             }
 
             return $node;

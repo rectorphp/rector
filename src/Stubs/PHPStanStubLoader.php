@@ -40,14 +40,14 @@ final class PHPStanStubLoader
             return;
         }
 
-        foreach (self::VENDOR_PATHS as $vendorPath) {
-            $vendorPath = realpath($vendorPath);
-            if (! $vendorPath) {
+        foreach (self::VENDOR_PATHS as $self::VENDOR_PATH) {
+            $self::VENDOR_PATH = realpath($self::VENDOR_PATH);
+            if (! $self::VENDOR_PATH) {
                 continue;
             }
 
-            foreach (self::STUBS as $stub) {
-                $path = sprintf('phar://%s/phpstan/phpstan/phpstan.phar/stubs/runtime/%s', $vendorPath, $stub);
+            foreach (self::STUBS as $self::STUB) {
+                $path = sprintf('phar://%s/phpstan/phpstan/phpstan.phar/stubs/runtime/%s', $self::VENDOR_PATH, $self::STUB);
                 $isExists = file_exists($path);
 
                 if (! $isExists) {

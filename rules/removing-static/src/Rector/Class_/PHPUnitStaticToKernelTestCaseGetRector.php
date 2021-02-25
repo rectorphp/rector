@@ -194,8 +194,8 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->staticClassTypes as $type) {
-            $objectType = new ObjectType($type);
+        foreach ($this->staticClassTypes as $staticClassType) {
+            $objectType = new ObjectType($staticClassType);
             if (! $this->isObjectType($staticCall->class, $objectType)) {
                 continue;
             }
@@ -218,9 +218,9 @@ CODE_SAMPLE
         $class = $this->addNewPropertiesToClass($class, $newPropertyTypes);
 
         $parentSetUpStaticCallExpression = $this->setUpFactory->createParentStaticCall();
-        foreach ($newPropertyTypes as $type) {
+        foreach ($newPropertyTypes as $newPropertyType) {
             // container fetch assign
-            $assign = $this->createContainerGetTypeToPropertyAssign($type);
+            $assign = $this->createContainerGetTypeToPropertyAssign($newPropertyType);
 
             $setupClassMethod = $class->getMethod(MethodName::SET_UP);
 
@@ -253,8 +253,8 @@ CODE_SAMPLE
                 return;
             }
 
-            foreach ($this->staticClassTypes as $type) {
-                $objectType = new ObjectType($type);
+            foreach ($this->staticClassTypes as $staticClassType) {
+                $objectType = new ObjectType($staticClassType);
                 if (! $this->isObjectType($node->class, $objectType)) {
                     continue;
                 }
@@ -287,8 +287,8 @@ CODE_SAMPLE
     private function addNewPropertiesToClass(Class_ $class, array $newProperties): Class_
     {
         $properties = [];
-        foreach ($newProperties as $objectType) {
-            $properties[] = $this->createPropertyFromType($objectType);
+        foreach ($newProperties as $newProperty) {
+            $properties[] = $this->createPropertyFromType($newProperty);
         }
 
         // add property to the start of the class

@@ -225,16 +225,16 @@ final class NodeRepository
     {
         $classMethods = [];
 
-        foreach ($this->classMethodsByType as $className => $classMethodByMethodName) {
+        foreach ($this->classMethodsByType as $className => $singleClassMethodsByType) {
             if (! is_a($className, $desiredType, true)) {
                 continue;
             }
 
-            if (! isset($classMethodByMethodName[$desiredMethodName])) {
+            if (! isset($singleClassMethodsByType[$desiredMethodName])) {
                 continue;
             }
 
-            $classMethods[] = $classMethodByMethodName[$desiredMethodName];
+            $classMethods[] = $singleClassMethodsByType[$desiredMethodName];
         }
 
         return $classMethods;
@@ -381,8 +381,8 @@ final class NodeRepository
     {
         $classConstantFetchByClassAndName = $this->parsedClassConstFetchNodeCollector->getClassConstantFetchByClassAndName();
 
-        foreach ($classConstantFetchByClassAndName as $className => $classesByConstantName) {
-            if (! isset($classesByConstantName[$desiredConstantName])) {
+        foreach ($classConstantFetchByClassAndName as $className => $singleClassConstantFetchByClassAndName) {
+            if (! isset($singleClassConstantFetchByClassAndName[$desiredConstantName])) {
                 continue;
             }
 
@@ -395,7 +395,7 @@ final class NodeRepository
                 continue;
             }
 
-            return $classesByConstantName[$desiredConstantName];
+            return $singleClassConstantFetchByClassAndName[$desiredConstantName];
         }
 
         return [];
@@ -537,9 +537,9 @@ final class NodeRepository
 
     public function getStringName(string $locateName): string
     {
-        foreach (array_keys($this->names) as $name) {
-            if (fnmatch($locateName, $name, FNM_NOESCAPE)) {
-                return $name;
+        foreach (array_keys($this->names) as $array_key) {
+            if (fnmatch($locateName, $array_key, FNM_NOESCAPE)) {
+                return $array_key;
             }
         }
 

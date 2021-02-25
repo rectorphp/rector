@@ -74,12 +74,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->oldToNewConstants as $oldConstant => $newConstant) {
+        foreach ($this->oldToNewConstants as $oldConstant => $oldToNewConstant) {
             if (! $this->isName($node, $oldConstant)) {
                 continue;
             }
 
-            $node->name = new Name($newConstant);
+            $node->name = new Name($oldToNewConstant);
             break;
         }
 

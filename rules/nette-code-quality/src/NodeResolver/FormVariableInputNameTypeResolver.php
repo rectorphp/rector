@@ -31,12 +31,12 @@ final class FormVariableInputNameTypeResolver
             throw new ShouldNotHappenException($message);
         }
 
-        foreach (NetteFormMethodNameToControlType::METHOD_NAME_TO_CONTROL_TYPE as $methodName => $controlType) {
+        foreach (NetteFormMethodNameToControlType::METHOD_NAME_TO_CONTROL_TYPE as $methodName => $singleRector\NetteCodeQuality\ValueObject\NetteFormMethodNameToControlType::METHOD_NAME_TO_CONTROL_TYPE) {
             if ($methodName !== $formAddMethodName) {
                 continue;
             }
 
-            return $controlType;
+            return $singleRector\NetteCodeQuality\ValueObject\NetteFormMethodNameToControlType::METHOD_NAME_TO_CONTROL_TYPE;
         }
 
         throw new NotImplementedYetException($formAddMethodName);

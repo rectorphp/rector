@@ -112,8 +112,8 @@ CODE_SAMPLE
         $privatePropertyNames = $this->classManipulator->getPrivatePropertyNames($node);
         $propertyUsageByMethods = $this->collectPropertyFetchByMethods($node, $privatePropertyNames);
 
-        foreach ($propertyUsageByMethods as $propertyName => $methodNames) {
-            if (count($methodNames) === 1) {
+        foreach ($propertyUsageByMethods as $propertyName => $propertyUsageByMethod) {
+            if (count($propertyUsageByMethod) === 1) {
                 continue;
             }
 

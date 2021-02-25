@@ -127,17 +127,17 @@ final class ObjectTypeSpecifier
         }
 
         foreach ($uses as $use) {
-            foreach ($use->uses as $useUse) {
-                if ($useUse->alias !== null) {
+            foreach ($use->uses as $use) {
+                if ($use->alias !== null) {
                     continue;
                 }
 
-                $partialNamespaceObjectType = $this->matchPartialNamespaceObjectType($objectType, $useUse);
+                $partialNamespaceObjectType = $this->matchPartialNamespaceObjectType($objectType, $use);
                 if ($partialNamespaceObjectType !== null) {
                     return $partialNamespaceObjectType;
                 }
 
-                $partialNamespaceObjectType = $this->matchClassWithLastUseImportPart($objectType, $useUse);
+                $partialNamespaceObjectType = $this->matchClassWithLastUseImportPart($objectType, $use);
                 if ($partialNamespaceObjectType instanceof FullyQualifiedObjectType) {
                     return $partialNamespaceObjectType->getShortNameType();
                 }

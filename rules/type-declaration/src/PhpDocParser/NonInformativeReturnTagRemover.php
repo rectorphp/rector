@@ -101,12 +101,12 @@ final class NonInformativeReturnTagRemover
         AttributeAwareReturnTagValueNode $attributeAwareReturnTagValueNode,
         PhpDocInfo $phpDocInfo
     ): void {
-        foreach (self::USELESS_DOC_NAMES_BY_TYPE_CLASS as $typeClass => $uselessDocNames) {
+        foreach (self::USELESS_DOC_NAMES_BY_TYPE_CLASS as $typeClass => $singleSelf::USELESS_DOC_NAMES_BY_TYPE_CLASS) {
             if (! is_a($returnType, $typeClass, true)) {
                 continue;
             }
 
-            if (! $this->isIdentifierWithValues($attributeAwareReturnTagValueNode->type, $uselessDocNames)) {
+            if (! $this->isIdentifierWithValues($attributeAwareReturnTagValueNode->type, $singleSelf::USELESS_DOC_NAMES_BY_TYPE_CLASS)) {
                 continue;
             }
 
@@ -230,12 +230,12 @@ final class NonInformativeReturnTagRemover
             return null;
         }
 
-        foreach ($attributeAwareReturnTagValueNode->type->types as $unionedReturnTagValueNode) {
-            if ($this->isIdentifierWithValues($unionedReturnTagValueNode, ['null'])) {
+        foreach ($attributeAwareReturnTagValueNode->type->types as $type) {
+            if ($this->isIdentifierWithValues($type, ['null'])) {
                 continue;
             }
 
-            return $unionedReturnTagValueNode;
+            return $type;
         }
 
         return null;

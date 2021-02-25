@@ -73,8 +73,8 @@ final class NameRenamer
      */
     private function renameTraitUse(string $lastName, TraitUse $traitUse, Node $usedNameNode): void
     {
-        foreach ($traitUse->traits as $key => $traitName) {
-            if (! $this->nodeNameResolver->areNamesEqual($traitName, $usedNameNode)) {
+        foreach ($traitUse->traits as $key => $trait) {
+            if (! $this->nodeNameResolver->areNamesEqual($trait, $usedNameNode)) {
                 continue;
             }
 
@@ -95,8 +95,8 @@ final class NameRenamer
             $class->extends = new Name($lastName);
         }
 
-        foreach ($class->implements as $key => $implementNode) {
-            if ($this->nodeNameResolver->areNamesEqual($implementNode, $usedNameNode)) {
+        foreach ($class->implements as $key => $implement) {
+            if ($this->nodeNameResolver->areNamesEqual($implement, $usedNameNode)) {
                 $class->implements[$key] = new Name($lastName);
             }
         }
@@ -147,8 +147,8 @@ final class NameRenamer
      */
     private function renameInterface(string $lastName, Interface_ $interface, Node $usedNameNode): void
     {
-        foreach ($interface->extends as $key => $extendInterfaceName) {
-            if (! $this->nodeNameResolver->areNamesEqual($extendInterfaceName, $usedNameNode)) {
+        foreach ($interface->extends as $key => $extend) {
+            if (! $this->nodeNameResolver->areNamesEqual($extend, $usedNameNode)) {
                 continue;
             }
 

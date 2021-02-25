@@ -73,12 +73,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->methodCallToPropertyFetchCollection as $methodName => $propertyName) {
+        foreach ($this->methodCallToPropertyFetchCollection as $methodName => $singleMethodCallToPropertyFetchCollection) {
             if (! $this->isName($node->name, $methodName)) {
                 continue;
             }
 
-            return $this->nodeFactory->createPropertyFetch('this', $propertyName);
+            return $this->nodeFactory->createPropertyFetch('this', $singleMethodCallToPropertyFetchCollection);
         }
 
         return null;

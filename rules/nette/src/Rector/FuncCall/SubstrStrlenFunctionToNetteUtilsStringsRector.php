@@ -66,12 +66,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach (self::FUNCTION_TO_STATIC_METHOD as $function => $staticMethod) {
+        foreach (self::FUNCTION_TO_STATIC_METHOD as $function => $singleSelf::FUNCTION_TO_STATIC_METHOD) {
             if (! $this->isName($node, $function)) {
                 continue;
             }
 
-            return $this->nodeFactory->createStaticCall('Nette\Utils\Strings', $staticMethod, $node->args);
+            return $this->nodeFactory->createStaticCall('Nette\Utils\Strings', $singleSelf::FUNCTION_TO_STATIC_METHOD, $node->args);
         }
 
         return null;

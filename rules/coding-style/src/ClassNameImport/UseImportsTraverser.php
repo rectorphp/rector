@@ -62,9 +62,9 @@ final class UseImportsTraverser
                     return null;
                 }
 
-                foreach ($node->uses as $useUse) {
-                    $name = $this->nodeNameResolver->getName($useUse);
-                    $callable($useUse, $name);
+                foreach ($node->uses as $use) {
+                    $name = $this->nodeNameResolver->getName($use);
+                    $callable($use, $name);
                 }
             }
 
@@ -84,13 +84,13 @@ final class UseImportsTraverser
 
         $prefixName = $groupUse->prefix->toString();
 
-        foreach ($groupUse->uses as $useUse) {
-            if ($useUse->type !== $desiredType) {
+        foreach ($groupUse->uses as $use) {
+            if ($use->type !== $desiredType) {
                 continue;
             }
 
-            $name = $prefixName . '\\' . $this->nodeNameResolver->getName($useUse);
-            $callable($useUse, $name);
+            $name = $prefixName . '\\' . $this->nodeNameResolver->getName($use);
+            $callable($use, $name);
         }
     }
 }

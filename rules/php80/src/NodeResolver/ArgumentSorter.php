@@ -19,13 +19,13 @@ final class ArgumentSorter
         $oldToNewPositions = array_keys($expectedOrderedParams);
 
         $newArgs = [];
-        foreach (array_keys($args) as $position) {
-            $newPosition = $oldToNewPositions[$position] ?? null;
+        foreach (array_keys($args) as $array_key) {
+            $newPosition = $oldToNewPositions[$array_key] ?? null;
             if ($newPosition === null) {
                 continue;
             }
 
-            $newArgs[$position] = $args[$newPosition];
+            $newArgs[$array_key] = $args[$newPosition];
         }
 
         return $newArgs;

@@ -133,16 +133,16 @@ CODE_SAMPLE
         }
 
         /** @var Expression $methodStmt */
-        foreach ($classMethod->stmts as $methodStmt) {
-            if ($methodStmt instanceof Expression) {
-                $methodStmt = $methodStmt->expr;
+        foreach ($classMethod->stmts as $stmt) {
+            if ($stmt instanceof Expression) {
+                $stmt = $stmt->expr;
             }
 
-            if (! $methodStmt instanceof StaticCall) {
+            if (! $stmt instanceof StaticCall) {
                 continue;
             }
 
-            $this->processParentPhp4ConstructCall($methodStmt);
+            $this->processParentPhp4ConstructCall($stmt);
         }
     }
 

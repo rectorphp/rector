@@ -37,13 +37,13 @@ final class MatchersManipulator
         }
 
         $keys = [];
-        foreach ($return->expr->items as $arrayItem) {
-            if ($arrayItem === null) {
+        foreach ($return->expr->items as $item) {
+            if ($item === null) {
                 continue;
             }
 
-            if ($arrayItem->key instanceof String_) {
-                $keys[] = $arrayItem->key->value;
+            if ($item->key instanceof String_) {
+                $keys[] = $item->key->value;
             }
         }
 

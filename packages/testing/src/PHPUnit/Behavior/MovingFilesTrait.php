@@ -48,17 +48,17 @@ trait MovingFilesTrait
         sort($addedFilePathsWithContents);
         sort($addedFileWithContents);
 
-        foreach ($addedFilePathsWithContents as $key => $addedFilePathWithContent) {
+        foreach ($addedFilePathsWithContents as $key => $addedFilePathsWithContent) {
             $expectedFilePathWithContent = $addedFileWithContents[$key];
 
             $this->assertSame(
                 $expectedFilePathWithContent->getFilePath(),
-                $addedFilePathWithContent->getFilePath()
+                $addedFilePathsWithContent->getFilePath()
             );
 
             $this->assertSame(
                 $expectedFilePathWithContent->getFileContent(),
-                $addedFilePathWithContent->getFileContent()
+                $addedFilePathsWithContent->getFileContent()
             );
         }
     }

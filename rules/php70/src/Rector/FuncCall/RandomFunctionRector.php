@@ -54,12 +54,12 @@ final class RandomFunctionRector extends AbstractRector
             return null;
         }
 
-        foreach (self::OLD_TO_NEW_FUNCTION_NAMES as $oldFunctionName => $newFunctionName) {
+        foreach (self::OLD_TO_NEW_FUNCTION_NAMES as $oldFunctionName => $self::OLD_TO_NEW_FUNCTION_NAME) {
             if ($this->isName($node, $oldFunctionName)) {
-                $node->name = new Name($newFunctionName);
+                $node->name = new Name($self::OLD_TO_NEW_FUNCTION_NAME);
 
                 // special case: random_int(); → random_int(0, getrandmax());
-                if ($newFunctionName === 'random_int' && $node->args === []) {
+                if ($self::OLD_TO_NEW_FUNCTION_NAME === 'random_int' && $node->args === []) {
                     $node->args[0] = new Arg(new LNumber(0));
                     $node->args[1] = new Arg($this->nodeFactory->createFuncCall('mt_getrandmax'));
                 }

@@ -53,8 +53,8 @@ final class ConfigureOptionsNodeFactory
     private function createArgs(array $namesToArgs): array
     {
         $array = new Array_();
-        foreach (array_keys($namesToArgs) as $optionName) {
-            $array->items[] = new ArrayItem($this->createNull(), new String_($optionName));
+        foreach (array_keys($namesToArgs) as $array_key) {
+            $array->items[] = new ArrayItem($this->createNull(), new String_($array_key));
         }
 
         return [new Arg($array)];

@@ -95,12 +95,12 @@ final class OnLogoutClassMethodFactory
 
         $assignStmts = [];
         foreach ($params as $param) {
-            foreach (self::PARAMETER_TO_GETTER_NAMES as $parameterName => $getterName) {
+            foreach (self::PARAMETER_TO_GETTER_NAMES as $parameterName => $self::PARAMETER_TO_GETTER_NAME) {
                 if (! $this->nodeNameResolver->isName($param, $parameterName)) {
                     continue;
                 }
 
-                $assign = new Assign($param->var, new MethodCall($logoutEventVariable, $getterName));
+                $assign = new Assign($param->var, new MethodCall($logoutEventVariable, $self::PARAMETER_TO_GETTER_NAME));
                 $assignStmts[] = new Expression($assign);
             }
         }

@@ -148,9 +148,9 @@ CODE_SAMPLE
         // Remove the types in:
         // - all ancestors + their descendant classes
         // - all implemented interfaces + their implementing classes
-        foreach ($ancestorAndInterfaces as $ancestorClassOrInterface) {
+        foreach ($ancestorAndInterfaces as $ancestorAndInterface) {
             /** @var string $parentClassName */
-            $parentClassName = $ancestorClassOrInterface->getAttribute(AttributeKey::CLASS_NAME);
+            $parentClassName = $ancestorAndInterface->getAttribute(AttributeKey::CLASS_NAME);
             $classMethod = $this->nodeRepository->findClassMethod($parentClassName, $methodName);
             /**
              * If it doesn't find the method, it's because the method
@@ -166,7 +166,7 @@ CODE_SAMPLE
             if (! $classMethod instanceof ClassMethod) {
                 continue;
             }
-            $this->removeParamTypeFromMethod($ancestorClassOrInterface, $position, $classMethod);
+            $this->removeParamTypeFromMethod($ancestorAndInterface, $position, $classMethod);
             $this->removeParamTypeFromMethodForChildren($parentClassName, $methodName, $position);
         }
     }
@@ -271,8 +271,8 @@ CODE_SAMPLE
         int $position
     ): void {
         $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($parentClassName);
-        foreach ($childrenClassLikes as $childClassLike) {
-            $childClassName = $childClassLike->getAttribute(AttributeKey::CLASS_NAME);
+        foreach ($childrenClassLikes as $childrenClassLike) {
+            $childClassName = $childrenClassLike->getAttribute(AttributeKey::CLASS_NAME);
             if ($childClassName === null) {
                 continue;
             }
@@ -280,7 +280,7 @@ CODE_SAMPLE
             if (! $childClassMethod instanceof ClassMethod) {
                 continue;
             }
-            $this->removeParamTypeFromMethod($childClassLike, $position, $childClassMethod);
+            $this->removeParamTypeFromMethod($childrenClassLike, $position, $childClassMethod);
         }
     }
 
@@ -293,11 +293,11 @@ CODE_SAMPLE
         $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
 
         $parentReflectionMethodParams = $parentReflectionMethod->getParameters();
-        foreach ($parentReflectionMethodParams as $reflectionParameter) {
-            if ($reflectionParameter->name !== $paramName) {
+        foreach ($parentReflectionMethodParams as $parentReflectionMethodParam) {
+            if ($parentReflectionMethodParam->name !== $paramName) {
                 continue;
             }
-            if ($reflectionParameter->getType() === null) {
+            if ($parentReflectionMethodParam->getType() === null) {
                 continue;
             }
             return true;

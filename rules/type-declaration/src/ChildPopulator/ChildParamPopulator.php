@@ -63,16 +63,16 @@ final class ChildParamPopulator extends AbstractChildPopulator
         $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($className);
 
         // update their methods as well
-        foreach ($childrenClassLikes as $childClassLike) {
-            if ($childClassLike instanceof Class_) {
-                $usedTraits = $this->nodeRepository->findUsedTraitsInClass($childClassLike);
+        foreach ($childrenClassLikes as $childrenClassLike) {
+            if ($childrenClassLike instanceof Class_) {
+                $usedTraits = $this->nodeRepository->findUsedTraitsInClass($childrenClassLike);
 
-                foreach ($usedTraits as $trait) {
-                    $this->addParamTypeToMethod($trait, $position, $functionLike, $paramType);
+                foreach ($usedTraits as $usedTrait) {
+                    $this->addParamTypeToMethod($usedTrait, $position, $functionLike, $paramType);
                 }
             }
 
-            $this->addParamTypeToMethod($childClassLike, $position, $functionLike, $paramType);
+            $this->addParamTypeToMethod($childrenClassLike, $position, $functionLike, $paramType);
         }
     }
 

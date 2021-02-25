@@ -74,8 +74,8 @@ final class PropertyAddingPostRector extends NodeVisitorAbstract implements Post
     {
         $constants = $this->propertyToAddCollector->getConstantsByClass($class);
 
-        foreach ($constants as $constantName => $nodeConst) {
-            $this->classInsertManipulator->addConstantToClass($class, $constantName, $nodeConst);
+        foreach ($constants as $constantName => $constant) {
+            $this->classInsertManipulator->addConstantToClass($class, $constantName, $constant);
         }
     }
 
@@ -85,11 +85,11 @@ final class PropertyAddingPostRector extends NodeVisitorAbstract implements Post
 
         $isNetteInjectPreferred = $this->netteInjectDetector->isNetteInjectPreferred($class);
 
-        foreach ($propertiesMetadatas as $propertyMetadata) {
+        foreach ($propertiesMetadatas as $propertiesMetadata) {
             if (! $isNetteInjectPreferred) {
-                $this->classDependencyManipulator->addConstructorDependency($class, $propertyMetadata);
+                $this->classDependencyManipulator->addConstructorDependency($class, $propertiesMetadata);
             } else {
-                $this->classDependencyManipulator->addInjectProperty($class, $propertyMetadata);
+                $this->classDependencyManipulator->addInjectProperty($class, $propertiesMetadata);
             }
         }
     }
@@ -100,8 +100,12 @@ final class PropertyAddingPostRector extends NodeVisitorAbstract implements Post
             $class
         );
 
-        foreach ($propertiesWithoutConstructor as $propertyName => $propertyType) {
-            $this->classInsertManipulator->addPropertyToClass($class, $propertyName, $propertyType);
+        foreach ($propertiesWithoutConstructor as $propertyName => $singlePropertiesWithoutConstructor) {
+            $this->classInsertManipulator->addPropertyToClass(
+                $class,
+                $propertyName,
+                $singlePropertiesWithoutConstructor
+            );
         }
     }
 }

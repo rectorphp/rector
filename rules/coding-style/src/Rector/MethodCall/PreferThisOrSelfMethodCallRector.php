@@ -98,12 +98,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->typeToPreference as $type => $preference) {
+        foreach ($this->typeToPreference as $type => $singleTypeToPreference) {
             if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $type)) {
                 continue;
             }
 
-            if ($preference === self::PREFER_SELF) {
+            if ($singleTypeToPreference === self::PREFER_SELF) {
                 return $this->processToSelf($node);
             }
 
@@ -121,8 +121,8 @@ CODE_SAMPLE
         $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? [];
         Assert::allString($typeToPreference);
 
-        foreach ($typeToPreference as $preference) {
-            $this->ensurePreferenceIsValid($preference);
+        foreach ($typeToPreference as $singleTypeToPreference) {
+            $this->ensurePreferenceIsValid($singleTypeToPreference);
         }
 
         $this->typeToPreference = $typeToPreference;

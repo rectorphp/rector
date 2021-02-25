@@ -116,17 +116,17 @@ CODE_SAMPLE
             return $this->refactorFuncCall($node);
         }
 
-        foreach (self::STATIC_METHODS_WITH_REGEX_PATTERN as $type => $methodsToPositions) {
+        foreach (self::STATIC_METHODS_WITH_REGEX_PATTERN as $type => $singleSelf::STATIC_METHODS_WITH_REGEX_PATTERN) {
             if (! $this->isObjectType($node->class, $type)) {
                 continue;
             }
 
-            foreach ($methodsToPositions as $method => $position) {
+            foreach ($singleSelf::STATIC_METHODS_WITH_REGEX_PATTERN as $method => $singleSingleSelf::STATIC_METHODS_WITH_REGEX_PATTERN) {
                 if (! $this->isName($node->name, $method)) {
                     continue;
                 }
 
-                $this->refactorArgument($node->args[$position]);
+                $this->refactorArgument($node->args[$singleSingleSelf::STATIC_METHODS_WITH_REGEX_PATTERN]);
 
                 return $node;
             }
@@ -142,12 +142,12 @@ CODE_SAMPLE
 
     private function refactorFuncCall(FuncCall $funcCall): ?FuncCall
     {
-        foreach (self::FUNCTIONS_WITH_REGEX_PATTERN as $function => $position) {
+        foreach (self::FUNCTIONS_WITH_REGEX_PATTERN as $function => $singleSelf::FUNCTIONS_WITH_REGEX_PATTERN) {
             if (! $this->isName($funcCall, $function)) {
                 continue;
             }
 
-            $this->refactorArgument($funcCall->args[$position]);
+            $this->refactorArgument($funcCall->args[$singleSelf::FUNCTIONS_WITH_REGEX_PATTERN]);
 
             return $funcCall;
         }

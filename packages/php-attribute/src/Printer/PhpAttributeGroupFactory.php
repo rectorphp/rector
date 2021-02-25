@@ -86,15 +86,15 @@ final class PhpAttributeGroupFactory
         }
 
         if ($this->isArrayArguments($items)) {
-            foreach ($items as $key => $value) {
+            foreach ($items as $key => $item) {
                 $argumentName = new Identifier($key);
-                $value = BuilderHelpers::normalizeValue($value);
-                $args[] = new Arg($value, false, false, [], $argumentName);
+                $item = BuilderHelpers::normalizeValue($item);
+                $args[] = new Arg($item, false, false, [], $argumentName);
             }
         } else {
-            foreach ($items as $value) {
-                $value = BuilderHelpers::normalizeValue($value);
-                $args[] = new Arg($value);
+            foreach ($items as $item) {
+                $item = BuilderHelpers::normalizeValue($item);
+                $args[] = new Arg($item);
             }
         }
 
@@ -124,8 +124,8 @@ final class PhpAttributeGroupFactory
      */
     private function isArrayArguments(array $items): bool
     {
-        foreach (array_keys($items) as $key) {
-            if (! is_int($key)) {
+        foreach (array_keys($items) as $array_key) {
+            if (! is_int($array_key)) {
                 return true;
             }
         }

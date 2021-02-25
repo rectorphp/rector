@@ -64,18 +64,18 @@ final class NodeByTypeAndPositionCollector
             );
         }
 
-        foreach ($assignedVariablesUse as $assignedVariableUse) {
+        foreach ($assignedVariablesUse as $singleAssignedVariablesUse) {
             /** @var int $startTokenPos */
-            $startTokenPos = $assignedVariableUse->getAttribute(AttributeKey::START_TOKEN_POSITION);
+            $startTokenPos = $singleAssignedVariablesUse->getAttribute(AttributeKey::START_TOKEN_POSITION);
 
             /** @var string $variableName */
-            $variableName = $this->nodeNameResolver->getName($assignedVariableUse);
+            $variableName = $this->nodeNameResolver->getName($singleAssignedVariablesUse);
 
             $nodesByTypeAndPosition[] = new VariableNodeUse(
                 $startTokenPos,
                 $variableName,
                 VariableNodeUse::TYPE_USE,
-                $assignedVariableUse
+                $singleAssignedVariablesUse
             );
         }
 

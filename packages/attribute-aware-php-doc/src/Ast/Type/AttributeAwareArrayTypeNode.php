@@ -53,8 +53,8 @@ final class AttributeAwareArrayTypeNode extends ArrayTypeNode implements Attribu
         $typeAsString = (string) $arrayTypeNode;
 
         $singleTypesAsString = explode('|', $typeAsString);
-        foreach ($singleTypesAsString as $key => $singleTypeAsString) {
-            $singleTypesAsString[$key] = $singleTypeAsString . '[]';
+        foreach ($singleTypesAsString as $key => $singleSingleTypesAsString) {
+            $singleTypesAsString[$key] = $singleSingleTypesAsString . '[]';
         }
 
         return implode('|', $singleTypesAsString);
@@ -68,8 +68,8 @@ final class AttributeAwareArrayTypeNode extends ArrayTypeNode implements Attribu
             return $attributeAwareUnionTypeNode . '[]';
         }
 
-        foreach ($attributeAwareUnionTypeNode->types as $unionedType) {
-            $unionedTypes[] = $unionedType . '[]';
+        foreach ($attributeAwareUnionTypeNode->types as $type) {
+            $unionedTypes[] = $type . '[]';
         }
 
         return implode('|', $unionedTypes);

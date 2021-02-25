@@ -136,7 +136,7 @@ CODE_SAMPLE
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $assign->var;
 
-        foreach ($this->typeToMethodCalls as $type => $transformation) {
+        foreach ($this->typeToMethodCalls as $type => $typeToMethodCall) {
             $objectType = new ObjectType($type);
             if ($this->shouldSkipPropertyFetch($propertyFetchNode, $objectType)) {
                 continue;
@@ -145,7 +145,7 @@ CODE_SAMPLE
             return $this->createMethodCallNodeFromAssignNode(
                 $propertyFetchNode,
                 $assign->expr,
-                $transformation['set']
+                $typeToMethodCall['set']
             );
         }
 
@@ -154,7 +154,7 @@ CODE_SAMPLE
 
     private function processPropertyFetch(PropertyFetch $propertyFetch): ?MethodCall
     {
-        foreach ($this->typeToMethodCalls as $type => $transformation) {
+        foreach ($this->typeToMethodCalls as $type => $typeToMethodCall) {
             $objectType = new ObjectType($type);
             if ($this->shouldSkipPropertyFetch($propertyFetch, $objectType)) {
                 continue;
@@ -163,10 +163,10 @@ CODE_SAMPLE
             // setter, skip
             $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
             if (! $parentNode instanceof Assign) {
-                return $this->createMethodCallNodeFromPropertyFetchNode($propertyFetch, $transformation[self::GET]);
+                return $this->createMethodCallNodeFromPropertyFetchNode($propertyFetch, $typeToMethodCall[self::GET]);
             }
             if ($parentNode->var !== $propertyFetch) {
-                return $this->createMethodCallNodeFromPropertyFetchNode($propertyFetch, $transformation[self::GET]);
+                return $this->createMethodCallNodeFromPropertyFetchNode($propertyFetch, $typeToMethodCall[self::GET]);
             }
             continue;
         }

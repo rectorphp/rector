@@ -38,8 +38,8 @@ final class AddPackageToRequireComposerRector implements CoreComposerRectorInter
 
     public function refactor(ComposerJson $composerJson): void
     {
-        foreach ($this->packagesAndVersions as $packageAndVersion) {
-            $composerJson->addRequiredPackage($packageAndVersion->getPackageName(), $packageAndVersion->getVersion());
+        foreach ($this->packagesAndVersions as $packagesAndVersion) {
+            $composerJson->addRequiredPackage($packagesAndVersion->getPackageName(), $packagesAndVersion->getVersion());
         }
     }
 

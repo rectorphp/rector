@@ -48,8 +48,8 @@ final class ClassConstantFetchValueFactory
         }
 
         $constantNamesToValues = $this->classConstantsResolver->getClassConstantNamesToValues($classWithConstants);
-        foreach ($constantNamesToValues as $constantName => $constantValue) {
-            if ($constantValue !== $value) {
+        foreach ($constantNamesToValues as $constantName => $constantNamesToValue) {
+            if ($constantNamesToValue !== $value) {
                 continue;
             }
 

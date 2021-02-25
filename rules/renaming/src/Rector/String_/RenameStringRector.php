@@ -74,12 +74,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->stringChanges as $oldValue => $newValue) {
+        foreach ($this->stringChanges as $oldValue => $stringChange) {
             if (! $this->valueResolver->isValue($node, $oldValue)) {
                 continue;
             }
 
-            return new String_($newValue);
+            return new String_($stringChange);
         }
 
         return null;

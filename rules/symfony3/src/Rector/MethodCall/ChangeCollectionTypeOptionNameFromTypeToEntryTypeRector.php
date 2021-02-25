@@ -105,21 +105,21 @@ CODE_SAMPLE
 
     private function refactorOptionsArray(Array_ $optionsArray): void
     {
-        foreach ($optionsArray->items as $arrayItem) {
-            if ($arrayItem === null) {
+        foreach ($optionsArray->items as $item) {
+            if ($item === null) {
                 continue;
             }
 
-            if ($arrayItem->key === null) {
+            if ($item->key === null) {
                 continue;
             }
 
-            foreach (self::OLD_TO_NEW_OPTION_NAME as $oldName => $newName) {
-                if (! $this->valueResolver->isValue($arrayItem->key, $oldName)) {
+            foreach (self::OLD_TO_NEW_OPTION_NAME as $oldName => $singleSelf::OLD_TO_NEW_OPTION_NAME) {
+                if (! $this->valueResolver->isValue($item->key, $oldName)) {
                     continue;
                 }
 
-                $arrayItem->key = new String_($newName);
+                $item->key = new String_($singleSelf::OLD_TO_NEW_OPTION_NAME);
             }
         }
     }

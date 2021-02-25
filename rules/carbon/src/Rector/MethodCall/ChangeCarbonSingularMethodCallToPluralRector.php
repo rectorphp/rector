@@ -91,12 +91,12 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach (self::SINGULAR_TO_PLURAL_NAMES as $singularName => $pluralName) {
+        foreach (self::SINGULAR_TO_PLURAL_NAMES as $singularName => $self::SINGULAR_TO_PLURAL_NAME) {
             if (! $this->isName($node->name, $singularName)) {
                 continue;
             }
 
-            $node->name = new Identifier($pluralName);
+            $node->name = new Identifier($self::SINGULAR_TO_PLURAL_NAME);
             return $node;
         }
 

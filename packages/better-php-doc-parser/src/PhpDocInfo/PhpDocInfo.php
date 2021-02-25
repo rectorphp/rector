@@ -282,20 +282,20 @@ final class PhpDocInfo
     {
         $this->ensureTypeIsTagValueNode($type, __METHOD__);
 
-        foreach ($this->phpDocNode->children as $phpDocChildNode) {
-            if (is_a($phpDocChildNode, $type, true)) {
-                return $phpDocChildNode;
+        foreach ($this->phpDocNode->children as $child) {
+            if (is_a($child, $type, true)) {
+                return $child;
             }
 
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+            if (! $child instanceof PhpDocTagNode) {
                 continue;
             }
 
-            if (! is_a($phpDocChildNode->value, $type, true)) {
+            if (! is_a($child->value, $type, true)) {
                 continue;
             }
 
-            return $phpDocChildNode->value;
+            return $child->value;
         }
 
         return null;
@@ -312,26 +312,26 @@ final class PhpDocInfo
 
         $foundTagsValueNodes = [];
 
-        foreach ($this->phpDocNode->children as $phpDocChildNode) {
-            if (is_a($phpDocChildNode, $type, true)) {
-                $foundTagsValueNodes[] = $phpDocChildNode;
+        foreach ($this->phpDocNode->children as $child) {
+            if (is_a($child, $type, true)) {
+                $foundTagsValueNodes[] = $child;
                 continue;
             }
 
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+            if (! $child instanceof PhpDocTagNode) {
                 continue;
             }
 
             if ($type === PhpDocTagNode::class) {
-                $foundTagsValueNodes[] = $phpDocChildNode;
+                $foundTagsValueNodes[] = $child;
                 continue;
             }
 
-            if (! is_a($phpDocChildNode->value, $type, true)) {
+            if (! is_a($child->value, $type, true)) {
                 continue;
             }
 
-            $foundTagsValueNodes[] = $phpDocChildNode->value;
+            $foundTagsValueNodes[] = $child->value;
         }
 
         return $foundTagsValueNodes;
@@ -341,17 +341,17 @@ final class PhpDocInfo
     {
         $this->ensureTypeIsTagValueNode($type, __METHOD__);
 
-        foreach ($this->phpDocNode->children as $key => $phpDocChildNode) {
-            if (is_a($phpDocChildNode, $type, true)) {
+        foreach ($this->phpDocNode->children as $key => $child) {
+            if (is_a($child, $type, true)) {
                 unset($this->phpDocNode->children[$key]);
                 $this->markAsChanged();
             }
 
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+            if (! $child instanceof PhpDocTagNode) {
                 continue;
             }
 
-            if (! is_a($phpDocChildNode->value, $type, true)) {
+            if (! is_a($child->value, $type, true)) {
                 continue;
             }
 
@@ -521,9 +521,9 @@ final class PhpDocInfo
 
     private function resolveNameForPhpDocTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): string
     {
-        foreach (self::TAGS_TYPES_TO_NAMES as $tagValueNodeType => $name) {
+        foreach (self::TAGS_TYPES_TO_NAMES as $tagValueNodeType => $self::TAGS_TYPES_TO_NAME) {
             if ($phpDocTagValueNode instanceof $tagValueNodeType) {
-                return $name;
+                return $self::TAGS_TYPES_TO_NAME;
             }
         }
 

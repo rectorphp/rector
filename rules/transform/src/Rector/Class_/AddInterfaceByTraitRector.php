@@ -87,12 +87,12 @@ CODE_SAMPLE
 
         $implementedInterfaceNames = $this->classManipulator->getImplementedInterfaceNames($node);
 
-        foreach (array_keys($usedTraitNames) as $traitName) {
-            if (! isset($this->interfaceByTrait[$traitName])) {
+        foreach (array_keys($usedTraitNames) as $array_key) {
+            if (! isset($this->interfaceByTrait[$array_key])) {
                 continue;
             }
 
-            $interfaceNameToAdd = $this->interfaceByTrait[$traitName];
+            $interfaceNameToAdd = $this->interfaceByTrait[$array_key];
 
             if (in_array($interfaceNameToAdd, $implementedInterfaceNames, true)) {
                 continue;

@@ -75,18 +75,18 @@ CODE_SAMPLE
         /** @var Variable $propertyNode */
         $propertyNode = $propertyFetchNode->var;
 
-        foreach ($this->propertyAssignsToMethodCalls as $propertyAssignToMethodCall) {
-            if (! $this->isObjectType($propertyFetchNode->var, $propertyAssignToMethodCall->getClass())) {
+        foreach ($this->propertyAssignsToMethodCalls as $propertyAssignsToMethodCall) {
+            if (! $this->isObjectType($propertyFetchNode->var, $propertyAssignsToMethodCall->getClass())) {
                 continue;
             }
 
-            if (! $this->isName($propertyFetchNode, $propertyAssignToMethodCall->getOldPropertyName())) {
+            if (! $this->isName($propertyFetchNode, $propertyAssignsToMethodCall->getOldPropertyName())) {
                 continue;
             }
 
             return $this->nodeFactory->createMethodCall(
                 $propertyNode,
-                $propertyAssignToMethodCall->getNewMethodName(),
+                $propertyAssignsToMethodCall->getNewMethodName(),
                 [$node->expr]
             );
         }

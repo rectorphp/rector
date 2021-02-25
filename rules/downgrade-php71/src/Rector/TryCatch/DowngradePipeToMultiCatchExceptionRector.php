@@ -66,12 +66,12 @@ CODE_SAMPLE
 
             $types = $catch->types;
             $node->catches[$key]->types = [$catch->types[0]];
-            foreach ($types as $keyCatchType => $catchType) {
+            foreach ($types as $keyCatchType => $type) {
                 if ($keyCatchType === 0) {
                     continue;
                 }
 
-                $this->addNodeAfterNode(new Catch_([$catchType], $catch->var, $catch->stmts), $node->catches[$key]);
+                $this->addNodeAfterNode(new Catch_([$type], $catch->var, $catch->stmts), $node->catches[$key]);
             }
         }
 

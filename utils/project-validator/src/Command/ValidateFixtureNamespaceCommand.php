@@ -84,9 +84,9 @@ final class ValidateFixtureNamespaceCommand extends Command
         $fixtureFileInfos = $this->fixtureFinder->findFixtureFileInfos();
         $incorrectNamespaceFiles = [];
 
-        foreach ($fixtureFileInfos as $fixtureFile) {
+        foreach ($fixtureFileInfos as $fixtureFileInfo) {
             // 1. geting expected namespace ...
-            $paths = explode('/tests/', (string) $fixtureFile);
+            $paths = explode('/tests/', (string) $fixtureFileInfo);
             if (count($paths) > 2) {
                 continue;
             }
@@ -99,7 +99,7 @@ final class ValidateFixtureNamespaceCommand extends Command
             }
 
             // 2. reading file contents
-            $fileContent = $this->smartFileSystem->readFile((string) $fixtureFile);
+            $fileContent = $this->smartFileSystem->readFile((string) $fixtureFileInfo);
             $matchAll = Strings::matchAll($fileContent, self::NAMESPACE_REGEX);
 
             if ($this->namespaceMatcher->isFoundCorrectNamespace($matchAll, $expectedNamespace)) {
@@ -107,11 +107,11 @@ final class ValidateFixtureNamespaceCommand extends Command
             }
 
             // 3. collect files with incorrect namespace
-            $incorrectNamespaceFiles[] = (string) $fixtureFile;
+            $incorrectNamespaceFiles[] = (string) $fixtureFileInfo;
             $incorrectNamespace = $this->getIncorrectNamespace($matchAll, $expectedNamespace);
 
             if ($optionFix) {
-                $this->fixNamespace((string) $fixtureFile, $incorrectNamespace, $fileContent, $expectedNamespace);
+                $this->fixNamespace((string) $fixtureFileInfo, $incorrectNamespace, $fileContent, $expectedNamespace);
             }
         }
 

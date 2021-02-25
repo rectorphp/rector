@@ -170,12 +170,12 @@ CODE_SAMPLE
             return $this->refactorClass($node);
         }
 
-        foreach ($this->typesToServices as $type) {
-            if (! $this->isObjectType($node->class, $type)) {
+        foreach ($this->typesToServices as $typesToService) {
+            if (! $this->isObjectType($node->class, $typesToService)) {
                 continue;
             }
 
-            $objectType = new FullyQualifiedObjectType($type);
+            $objectType = new FullyQualifiedObjectType($typesToService);
 
             // is this object created via new somewhere else? use factory!
             $variableName = $this->propertyNaming->fqnToVariableName($objectType);
@@ -199,13 +199,16 @@ CODE_SAMPLE
             $this->typesToServices
         );
 
-        foreach ($staticTypesInClass as $staticType) {
-            $variableName = $this->propertyNaming->fqnToVariableName($staticType);
-            $this->addConstructorDependencyToClass($class, $staticType, $variableName);
+        foreach ($staticTypesInClass as $singleStaticTypesInClass) {
+            $variableName = $this->propertyNaming->fqnToVariableName($singleStaticTypesInClass);
+            $this->addConstructorDependencyToClass($class, $singleStaticTypesInClass, $variableName);
 
             // is this an object? create factory for it next to this :)
             if ($this->uniqueObjectOrServiceDetector->isUniqueObject()) {
-                $factoryClass = $this->uniqueObjectFactoryFactory->createFactoryClass($class, $staticType);
+                $factoryClass = $this->uniqueObjectFactoryFactory->createFactoryClass(
+                    $class,
+                    $singleStaticTypesInClass
+                );
 
                 $this->factoryClassPrinter->printFactoryForClass($factoryClass, $class);
             }

@@ -87,8 +87,8 @@ CODE_SAMPLE
                 $newArguments[$newPosition] = $node->args[$oldPosition];
             }
 
-            foreach ($newArguments as $newPosition => $argument) {
-                $node->args[$newPosition] = $argument;
+            foreach ($newArguments as $newPosition => $newArgument) {
+                $node->args[$newPosition] = $newArgument;
             }
         }
 

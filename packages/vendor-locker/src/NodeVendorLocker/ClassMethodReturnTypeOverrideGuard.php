@@ -122,12 +122,12 @@ final class ClassMethodReturnTypeOverrideGuard
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
-        foreach (self::CHAOTIC_CLASS_METHOD_NAMES as $chaoticClass => $chaoticMethodNames) {
+        foreach (self::CHAOTIC_CLASS_METHOD_NAMES as $chaoticClass => $self::CHAOTIC_CLASS_METHOD_NAME) {
             if (! is_a($className, $chaoticClass, true)) {
                 continue;
             }
 
-            return in_array($methodName, $chaoticMethodNames, true);
+            return in_array($methodName, $self::CHAOTIC_CLASS_METHOD_NAME, true);
         }
 
         return false;

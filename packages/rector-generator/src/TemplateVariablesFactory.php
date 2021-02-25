@@ -159,7 +159,7 @@ final class TemplateVariablesFactory
     private function createRuleConfiguration(string $rectorClass, array $configuration): string
     {
         $arrayItems = [];
-        foreach ($configuration as $constantName => $variableConfiguration) {
+        foreach ($configuration as $constantName => $singleConfiguration) {
             $constantName = strtoupper($constantName);
 
             if ($rectorClass === self::SELF) {
@@ -169,13 +169,13 @@ final class TemplateVariablesFactory
             }
             $classConstFetch = new ClassConstFetch($class, $constantName);
 
-            if (is_array($variableConfiguration)) {
-                $variableConfiguration = $this->nodeFactory->createArray($variableConfiguration);
+            if (is_array($singleConfiguration)) {
+                $singleConfiguration = $this->nodeFactory->createArray($singleConfiguration);
             } else {
-                $variableConfiguration = BuilderHelpers::normalizeValue($variableConfiguration);
+                $singleConfiguration = BuilderHelpers::normalizeValue($singleConfiguration);
             }
 
-            $arrayItems[] = new ArrayItem($variableConfiguration, $classConstFetch);
+            $arrayItems[] = new ArrayItem($singleConfiguration, $classConstFetch);
         }
 
         $array = new Array_($arrayItems);

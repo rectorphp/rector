@@ -124,16 +124,16 @@ CODE_SAMPLE
 
     private function isSuccessfulRemovalCascadeValidationOption(MethodCall $methodCall, Array_ $optionsArrayNode): bool
     {
-        foreach ($optionsArrayNode->items as $key => $arrayItem) {
-            if ($arrayItem === null) {
+        foreach ($optionsArrayNode->items as $key => $item) {
+            if ($item === null) {
                 continue;
             }
 
-            if (! $this->arrayManipulator->hasKeyName($arrayItem, 'cascade_validation')) {
+            if (! $this->arrayManipulator->hasKeyName($item, 'cascade_validation')) {
                 continue;
             }
 
-            if (! $this->valueResolver->isTrue($arrayItem->value)) {
+            if (! $this->valueResolver->isTrue($item->value)) {
                 continue;
             }
 

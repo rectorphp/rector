@@ -107,14 +107,14 @@ CODE_SAMPLE
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        foreach (self::ANNOTATION_TO_METHOD as $annotationName => $methodName) {
+        foreach (self::ANNOTATION_TO_METHOD as $annotationName => $singleSelf::ANNOTATION_TO_METHOD) {
             if (! $phpDocInfo->hasByName($annotationName)) {
                 continue;
             }
 
             $methodCallExpressions = $this->expectExceptionMethodCallFactory->createFromTagValueNodes(
                 $phpDocInfo->getTagsByName($annotationName),
-                $methodName,
+                $singleSelf::ANNOTATION_TO_METHOD,
             );
             $node->stmts = array_merge($methodCallExpressions, (array) $node->stmts);
 

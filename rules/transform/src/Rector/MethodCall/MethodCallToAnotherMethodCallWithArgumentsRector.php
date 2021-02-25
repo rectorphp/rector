@@ -66,17 +66,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->methodCallRenamesWithAddedArguments as $methodCallRenamedWithAddedArgument) {
-            if (! $this->isObjectType($node, $methodCallRenamedWithAddedArgument->getType())) {
+        foreach ($this->methodCallRenamesWithAddedArguments as $methodCallRenamesWithAddedArgument) {
+            if (! $this->isObjectType($node, $methodCallRenamesWithAddedArgument->getType())) {
                 continue;
             }
 
-            if (! $this->isName($node->name, $methodCallRenamedWithAddedArgument->getOldMethod())) {
+            if (! $this->isName($node->name, $methodCallRenamesWithAddedArgument->getOldMethod())) {
                 continue;
             }
 
-            $node->name = new Identifier($methodCallRenamedWithAddedArgument->getNewMethod());
-            $node->args = $this->nodeFactory->createArgs($methodCallRenamedWithAddedArgument->getNewArguments());
+            $node->name = new Identifier($methodCallRenamesWithAddedArgument->getNewMethod());
+            $node->args = $this->nodeFactory->createArgs($methodCallRenamesWithAddedArgument->getNewArguments());
 
             return $node;
         }

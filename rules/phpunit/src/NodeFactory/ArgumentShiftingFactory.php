@@ -12,13 +12,13 @@ final class ArgumentShiftingFactory
     public function createFromMethodCall(MethodCall $methodCall, string $methodName): MethodCall
     {
         $methodCall->name = new Identifier($methodName);
-        foreach (array_keys($methodCall->args) as $i) {
+        foreach (array_keys($methodCall->args) as $array_key) {
             // keep first arg
-            if ($i === 0) {
+            if ($array_key === 0) {
                 continue;
             }
 
-            unset($methodCall->args[$i]);
+            unset($methodCall->args[$array_key]);
         }
 
         return $methodCall;

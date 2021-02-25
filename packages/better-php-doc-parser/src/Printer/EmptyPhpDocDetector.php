@@ -15,9 +15,9 @@ final class EmptyPhpDocDetector
             return true;
         }
 
-        foreach ($phpDocNode->children as $phpDocChildNode) {
-            if ($phpDocChildNode instanceof PhpDocTextNode) {
-                if ($phpDocChildNode->text !== '') {
+        foreach ($phpDocNode->children as $child) {
+            if ($child instanceof PhpDocTextNode) {
+                if ($child->text !== '') {
                     return false;
                 }
             } else {

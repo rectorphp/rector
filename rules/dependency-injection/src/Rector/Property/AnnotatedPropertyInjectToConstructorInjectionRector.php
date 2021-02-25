@@ -143,8 +143,8 @@ CODE_SAMPLE
             return $this->refactorNetteInjectProperty($phpDocInfo, $node);
         }
 
-        foreach (self::INJECT_TAG_VALUE_NODE_TYPES as $tagValueNodeType) {
-            $injectTagValueNode = $phpDocInfo->getByType($tagValueNodeType);
+        foreach (self::INJECT_TAG_VALUE_NODE_TYPES as $self::INJECT_TAG_VALUE_NODE_TYPE) {
+            $injectTagValueNode = $phpDocInfo->getByType($self::INJECT_TAG_VALUE_NODE_TYPE);
             if ($injectTagValueNode === null) {
                 continue;
             }

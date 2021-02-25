@@ -117,12 +117,12 @@ CODE_SAMPLE
         $nestedIfsWithOnlyReturnCount = count($nestedIfsWithOnlyReturn);
 
         /** @var int $key */
-        foreach ($nestedIfsWithOnlyReturn as $key => $nestedIfWithOnlyReturn) {
+        foreach ($nestedIfsWithOnlyReturn as $key => $singleNestedIfsWithOnlyReturn) {
             // last item → the return node
             if ($nestedIfsWithOnlyReturnCount === $key + 1) {
-                $this->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
+                $this->addNodeAfterNode($singleNestedIfsWithOnlyReturn, $if);
             } else {
-                $this->addStandaloneIfsWithReturn($nestedIfWithOnlyReturn, $if, $nextReturn);
+                $this->addStandaloneIfsWithReturn($singleNestedIfsWithOnlyReturn, $if, $nextReturn);
             }
         }
     }

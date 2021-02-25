@@ -33,14 +33,14 @@ final class EventReferenceFactory
         }
 
         // is string a that could be caught in constant, e.g. KernelEvents?
-        foreach ($eventNamesToClassConstants as $eventNameToClassConstant) {
-            if ($eventNameToClassConstant->getEventName() !== $eventName) {
+        foreach ($eventNamesToClassConstants as $eventNamesToClassConstant) {
+            if ($eventNamesToClassConstant->getEventName() !== $eventName) {
                 continue;
             }
 
             return $this->nodeFactory->createClassConstFetch(
-                $eventNameToClassConstant->getEventClass(),
-                $eventNameToClassConstant->getEventConstant()
+                $eventNamesToClassConstant->getEventClass(),
+                $eventNamesToClassConstant->getEventConstant()
             );
         }
 

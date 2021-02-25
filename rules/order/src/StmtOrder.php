@@ -30,9 +30,9 @@ final class StmtOrder
     public function createOldToNewKeys(array $desiredStmtOrder, array $currentStmtOrder): array
     {
         $newKeys = [];
-        foreach ($desiredStmtOrder as $desiredClassMethod) {
-            foreach ($currentStmtOrder as $currentKey => $classMethodName) {
-                if ($classMethodName === $desiredClassMethod) {
+        foreach ($desiredStmtOrder as $singleDesiredStmtOrder) {
+            foreach ($currentStmtOrder as $currentKey => $singleCurrentStmtOrder) {
+                if ($singleCurrentStmtOrder === $singleDesiredStmtOrder) {
                     $newKeys[] = $currentKey;
                 }
             }
@@ -85,12 +85,12 @@ final class StmtOrder
     public function getStmtsOfTypeOrder(ClassLike $classLike, string $type): array
     {
         $stmtsByPosition = [];
-        foreach ($classLike->stmts as $position => $classStmt) {
-            if (! is_a($classStmt, $type)) {
+        foreach ($classLike->stmts as $position => $stmt) {
+            if (! is_a($stmt, $type)) {
                 continue;
             }
 
-            $name = $this->nodeNameResolver->getName($classStmt);
+            $name = $this->nodeNameResolver->getName($stmt);
             if ($name === null) {
                 continue;
             }

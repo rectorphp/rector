@@ -131,12 +131,12 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach (self::ADD_METHOD_TO_FORM_TYPE as $method => $classType) {
+        foreach (self::ADD_METHOD_TO_FORM_TYPE as $method => $singleSelf::ADD_METHOD_TO_FORM_TYPE) {
             if (! $this->isName($node->name, $method)) {
                 continue;
             }
 
-            $this->processAddMethod($node, $method, $classType);
+            $this->processAddMethod($node, $method, $singleSelf::ADD_METHOD_TO_FORM_TYPE);
         }
 
         return $node;

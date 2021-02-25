@@ -83,12 +83,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->newsToMethodCalls as $newToMethodCall) {
-            if (! $this->isObjectType($node, $newToMethodCall->getNewType())) {
+        foreach ($this->newsToMethodCalls as $newsToMethodCall) {
+            if (! $this->isObjectType($node, $newsToMethodCall->getNewType())) {
                 continue;
             }
 
-            $serviceType = $newToMethodCall->getServiceType();
+            $serviceType = $newsToMethodCall->getServiceType();
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
             if ($className === $serviceType) {
                 continue;
@@ -108,7 +108,7 @@ CODE_SAMPLE
 
             $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
-            return new MethodCall($propertyFetch, $newToMethodCall->getServiceMethod(), $node->args);
+            return new MethodCall($propertyFetch, $newsToMethodCall->getServiceMethod(), $node->args);
         }
 
         return $node;

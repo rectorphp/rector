@@ -17,9 +17,9 @@ final class NamespaceMatcher
         krsort($oldToNewNamespace);
 
         /** @var string $oldNamespace */
-        foreach ($oldToNewNamespace as $oldNamespace => $newNamespace) {
+        foreach ($oldToNewNamespace as $oldNamespace => $singleOldToNewNamespace) {
             if (Strings::startsWith($name, $oldNamespace)) {
-                return new RenamedNamespace($name, $oldNamespace, $newNamespace);
+                return new RenamedNamespace($name, $oldNamespace, $singleOldToNewNamespace);
             }
         }
 

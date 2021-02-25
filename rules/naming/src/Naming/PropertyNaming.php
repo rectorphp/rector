@@ -129,8 +129,8 @@ final class PropertyNaming
 
         $className = $this->nodeTypeResolver->getFullyQualifiedClassName($type);
 
-        foreach (self::EXCLUDED_CLASSES as $excludedClass) {
-            if (Strings::match($className, $excludedClass)) {
+        foreach (self::EXCLUDED_CLASSES as $self::EXCLUDED_CLASS) {
+            if (Strings::match($className, $self::EXCLUDED_CLASS)) {
                 return null;
             }
         }

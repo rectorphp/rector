@@ -34,12 +34,12 @@ final class PhpDocClassRenamer
             return;
         }
 
-        foreach ($oldToNewClasses as $oldClass => $newClass) {
+        foreach ($oldToNewClasses as $oldClass => $oldToNewClass) {
             if (! $assertChoiceTagValueNode->isCallbackClass($oldClass)) {
                 continue;
             }
 
-            $assertChoiceTagValueNode->changeCallbackClass($newClass);
+            $assertChoiceTagValueNode->changeCallbackClass($oldToNewClass);
             $phpDocInfo->markAsChanged();
             break;
         }
@@ -55,12 +55,12 @@ final class PhpDocClassRenamer
             return;
         }
 
-        foreach ($oldToNewClasses as $oldClass => $newClass) {
+        foreach ($oldToNewClasses as $oldClass => $oldToNewClass) {
             if ($doctrineRelationTagValueNode->getFullyQualifiedTargetEntity() !== $oldClass) {
                 continue;
             }
 
-            $doctrineRelationTagValueNode->changeTargetEntity($newClass);
+            $doctrineRelationTagValueNode->changeTargetEntity($oldToNewClass);
             $phpDocInfo->markAsChanged();
             break;
         }
@@ -76,8 +76,8 @@ final class PhpDocClassRenamer
             return;
         }
 
-        foreach ($oldToNewClasses as $oldClass => $newClass) {
-            $hasReplaced = $serializerTypeTagValueNode->replaceName($oldClass, $newClass);
+        foreach ($oldToNewClasses as $oldClass => $oldToNewClass) {
+            $hasReplaced = $serializerTypeTagValueNode->replaceName($oldClass, $oldToNewClass);
             if ($hasReplaced) {
                 $phpDocInfo->markAsChanged();
             }

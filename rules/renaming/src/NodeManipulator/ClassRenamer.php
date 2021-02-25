@@ -123,9 +123,9 @@ final class ClassRenamer
             return;
         }
 
-        foreach ($oldToNewClasses as $oldClass => $newClass) {
+        foreach ($oldToNewClasses as $oldClass => $oldToNewClass) {
             $oldClassType = new ObjectType($oldClass);
-            $newClassType = new FullyQualifiedObjectType($newClass);
+            $newClassType = new FullyQualifiedObjectType($oldToNewClass);
 
             $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldClassType, $newClassType, $node);
         }
@@ -312,18 +312,18 @@ final class ClassRenamer
         }
 
         $classLike->implements = array_unique($classLike->implements);
-        foreach ($classLike->implements as $key => $implementName) {
-            if (! $implementName instanceof Name) {
+        foreach ($classLike->implements as $key => $implement) {
+            if (! $implement instanceof Name) {
                 continue;
             }
-            $virtualNode = $implementName->getAttribute(AttributeKey::VIRTUAL_NODE);
+            $virtualNode = $implement->getAttribute(AttributeKey::VIRTUAL_NODE);
 
             if (! $virtualNode) {
                 continue;
             }
 
             $namespaceName = $classLike->getAttribute(AttributeKey::NAMESPACE_NAME);
-            $fullyQualifiedName = $namespaceName . '\\' . $implementName->toString();
+            $fullyQualifiedName = $namespaceName . '\\' . $implement->toString();
             $newName = $oldToNewClasses[$fullyQualifiedName] ?? null;
             if ($newName === null) {
                 continue;

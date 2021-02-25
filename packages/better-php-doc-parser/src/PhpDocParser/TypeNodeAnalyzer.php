@@ -30,8 +30,8 @@ final class TypeNodeAnalyzer
             return false;
         }
 
-        foreach ($typeNode->types as $subType) {
-            if ($this->containsArrayType($subType)) {
+        foreach ($typeNode->types as $type) {
+            if ($this->containsArrayType($type)) {
                 return true;
             }
         }
@@ -45,8 +45,8 @@ final class TypeNodeAnalyzer
             return false;
         }
 
-        foreach ($typeNode->types as $subType) {
-            if ($subType instanceof NullableTypeNode) {
+        foreach ($typeNode->types as $type) {
+            if ($type instanceof NullableTypeNode) {
                 return false;
             }
         }

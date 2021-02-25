@@ -90,8 +90,8 @@ CODE_SAMPLE
             $instanceOfsByClass[$variableClassKey][] = $instanceOf;
         }
 
-        foreach ($instanceOfsByClass as $variableClassKey => $instanceOfs) {
-            if (count($instanceOfs) < 2) {
+        foreach ($instanceOfsByClass as $variableClassKey => $singleInstanceOfsByClass) {
+            if (count($singleInstanceOfsByClass) < 2) {
                 unset($instanceOfsByClass[$variableClassKey]);
             }
         }

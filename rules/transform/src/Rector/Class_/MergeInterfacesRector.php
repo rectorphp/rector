@@ -97,8 +97,8 @@ CODE_SAMPLE
     private function makeImplementsUnique(Class_ $class): void
     {
         $alreadyAddedNames = [];
-        foreach ($class->implements as $key => $name) {
-            $fqnName = $this->getName($name);
+        foreach ($class->implements as $key => $implement) {
+            $fqnName = $this->getName($implement);
             if (in_array($fqnName, $alreadyAddedNames, true)) {
                 $this->nodeRemover->removeImplements($class, $key);
                 continue;

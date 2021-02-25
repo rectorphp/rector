@@ -45,12 +45,12 @@ final class ComposerAutoloadedDirectoryProvider
         $composerJson = $this->loadComposerJsonArray();
         $autoloadDirectories = [];
 
-        foreach (self::AUTOLOAD_SECTIONS as $autoloadSection) {
-            if (! isset($composerJson[$autoloadSection])) {
+        foreach (self::AUTOLOAD_SECTIONS as $self::AUTOLOAD_SECTION) {
+            if (! isset($composerJson[$self::AUTOLOAD_SECTION])) {
                 continue;
             }
 
-            $sectionDirectories = $this->collectDirectoriesFromAutoload($composerJson[$autoloadSection]);
+            $sectionDirectories = $this->collectDirectoriesFromAutoload($composerJson[$self::AUTOLOAD_SECTION]);
             $autoloadDirectories[] = $sectionDirectories;
         }
 
@@ -89,15 +89,15 @@ final class ComposerAutoloadedDirectoryProvider
             /** @var string[] $classmap */
             $classmap = $composerJsonAutoload['classmap'];
 
-            foreach ($classmap as $fileOrDirectory) {
-                $fileOrDirectory = getcwd() . '/' . $fileOrDirectory;
+            foreach ($classmap as $singleClassmap) {
+                $singleClassmap = getcwd() . '/' . $singleClassmap;
 
                 // skip file, we look only for directories
-                if (file_exists($fileOrDirectory)) {
+                if (file_exists($singleClassmap)) {
                     continue;
                 }
 
-                $autoloadDirectories[] = $fileOrDirectory;
+                $autoloadDirectories[] = $singleClassmap;
             }
         }
 

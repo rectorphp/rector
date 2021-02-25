@@ -123,8 +123,8 @@ CODE_SAMPLE
         }
 
         $genericTypeNodeCount = 0;
-        foreach ($typeNode->type->types as $unionedTypeNode) {
-            if ($unionedTypeNode instanceof GenericTypeNode) {
+        foreach ($typeNode->type->types as $type) {
+            if ($type instanceof GenericTypeNode) {
                 ++$genericTypeNodeCount;
             }
         }

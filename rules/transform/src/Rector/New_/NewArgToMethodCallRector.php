@@ -76,8 +76,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->newArgsToMethodCalls as $newArgToMethodCall) {
-            if (! $this->isObjectType($node->class, $newArgToMethodCall->getType())) {
+        foreach ($this->newArgsToMethodCalls as $newArgsToMethodCall) {
+            if (! $this->isObjectType($node->class, $newArgsToMethodCall->getType())) {
                 continue;
             }
 
@@ -86,7 +86,7 @@ CODE_SAMPLE
             }
 
             $firstArgValue = $node->args[0]->value;
-            if (! $this->valueResolver->isValue($firstArgValue, $newArgToMethodCall->getValue())) {
+            if (! $this->valueResolver->isValue($firstArgValue, $newArgsToMethodCall->getValue())) {
                 continue;
             }
 

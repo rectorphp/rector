@@ -109,16 +109,16 @@ final class RegexPatternArgumentManipulator
      */
     private function processFuncCall(FuncCall $funcCall): array
     {
-        foreach (self::FUNCTIONS_WITH_PATTERNS_TO_ARGUMENT_POSITION as $functionName => $argumentPosition) {
+        foreach (self::FUNCTIONS_WITH_PATTERNS_TO_ARGUMENT_POSITION as $functionName => $singleSelf::FUNCTIONS_WITH_PATTERNS_TO_ARGUMENT_POSITION) {
             if (! $this->nodeNameResolver->isName($funcCall, $functionName)) {
                 continue;
             }
 
-            if (! isset($funcCall->args[$argumentPosition])) {
+            if (! isset($funcCall->args[$singleSelf::FUNCTIONS_WITH_PATTERNS_TO_ARGUMENT_POSITION])) {
                 return [];
             }
 
-            return $this->resolveArgumentValues($funcCall->args[$argumentPosition]->value);
+            return $this->resolveArgumentValues($funcCall->args[$singleSelf::FUNCTIONS_WITH_PATTERNS_TO_ARGUMENT_POSITION]->value);
         }
 
         return [];
@@ -129,21 +129,21 @@ final class RegexPatternArgumentManipulator
      */
     private function processStaticCall(StaticCall $staticCall): array
     {
-        foreach (self::STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION as $type => $methodNamesToArgumentPosition) {
+        foreach (self::STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION as $type => $singleSelf::STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION) {
             if (! $this->nodeTypeResolver->isObjectType($staticCall->class, $type)) {
                 continue;
             }
 
-            foreach ($methodNamesToArgumentPosition as $methodName => $argumentPosition) {
+            foreach ($singleSelf::STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION as $methodName => $singleSingleSelf::STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION) {
                 if (! $this->nodeNameResolver->isName($staticCall->name, $methodName)) {
                     continue;
                 }
 
-                if (! isset($staticCall->args[$argumentPosition])) {
+                if (! isset($staticCall->args[$singleSingleSelf::STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION])) {
                     return [];
                 }
 
-                return $this->resolveArgumentValues($staticCall->args[$argumentPosition]->value);
+                return $this->resolveArgumentValues($staticCall->args[$singleSingleSelf::STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION]->value);
             }
         }
 

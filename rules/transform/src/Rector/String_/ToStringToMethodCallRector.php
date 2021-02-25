@@ -81,12 +81,12 @@ CODE_SAMPLE
 
     private function processStringNode(String_ $string): ?Node
     {
-        foreach ($this->methodNamesByType as $type => $methodName) {
+        foreach ($this->methodNamesByType as $type => $singleMethodNamesByType) {
             if (! $this->isObjectType($string, $type)) {
                 continue;
             }
 
-            return $this->nodeFactory->createMethodCall($string->expr, $methodName);
+            return $this->nodeFactory->createMethodCall($string->expr, $singleMethodNamesByType);
         }
 
         return null;
@@ -94,7 +94,7 @@ CODE_SAMPLE
 
     private function processMethodCall(MethodCall $methodCall): ?Node
     {
-        foreach ($this->methodNamesByType as $type => $methodName) {
+        foreach ($this->methodNamesByType as $type => $singleMethodNamesByType) {
             if (! $this->isObjectType($methodCall, $type)) {
                 continue;
             }
@@ -103,7 +103,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $methodCall->name = new Identifier($methodName);
+            $methodCall->name = new Identifier($singleMethodNamesByType);
 
             return $methodCall;
         }

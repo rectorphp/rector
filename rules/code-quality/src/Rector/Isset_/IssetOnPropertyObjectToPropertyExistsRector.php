@@ -70,31 +70,31 @@ CODE_SAMPLE
     {
         $newNodes = [];
 
-        foreach ($node->vars as $issetVar) {
-            if (! $issetVar instanceof PropertyFetch) {
+        foreach ($node->vars as $var) {
+            if (! $var instanceof PropertyFetch) {
                 continue;
             }
 
-            $property = $this->nodeRepository->findPropertyByPropertyFetch($issetVar);
+            $property = $this->nodeRepository->findPropertyByPropertyFetch($var);
             if ($property instanceof Property && $property->type) {
                 continue;
             }
 
-            $propertyFetchName = $this->getName($issetVar->name);
+            $propertyFetchName = $this->getName($var->name);
             if ($propertyFetchName === null) {
                 continue;
             }
 
-            $propertyFetchVarType = $this->getObjectType($issetVar->var);
+            $propertyFetchVarType = $this->getObjectType($var->var);
             if ($propertyFetchVarType instanceof TypeWithClassName && property_exists(
                 $propertyFetchVarType->getClassName(),
                 $propertyFetchName
             )) {
-                $newNodes[] = $this->createNotIdenticalToNull($issetVar);
+                $newNodes[] = $this->createNotIdenticalToNull($var);
                 continue;
             }
 
-            $newNodes[] = $this->replaceToPropertyExistsWithNullCheck($issetVar->var, $propertyFetchName, $issetVar);
+            $newNodes[] = $this->replaceToPropertyExistsWithNullCheck($var->var, $propertyFetchName, $var);
         }
 
         return $this->nodeFactory->createReturnBooleanAnd($newNodes);

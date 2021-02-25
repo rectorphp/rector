@@ -12,16 +12,16 @@ final class FamilyRelationsAnalyzer
     public function getChildrenOfClass(string $parentClass): array
     {
         $childrenClasses = [];
-        foreach (get_declared_classes() as $declaredClass) {
-            if ($declaredClass === $parentClass) {
+        foreach (get_declared_classes() as $get_declared_class) {
+            if ($get_declared_class === $parentClass) {
                 continue;
             }
 
-            if (! is_a($declaredClass, $parentClass, true)) {
+            if (! is_a($get_declared_class, $parentClass, true)) {
                 continue;
             }
 
-            $childrenClasses[] = $declaredClass;
+            $childrenClasses[] = $get_declared_class;
         }
 
         return $childrenClasses;
@@ -29,12 +29,12 @@ final class FamilyRelationsAnalyzer
 
     public function isParentClass(string $class): bool
     {
-        foreach (get_declared_classes() as $declaredClass) {
-            if ($declaredClass === $class) {
+        foreach (get_declared_classes() as $get_declared_class) {
+            if ($get_declared_class === $class) {
                 continue;
             }
 
-            if (! is_a($declaredClass, $class, true)) {
+            if (! is_a($get_declared_class, $class, true)) {
                 continue;
             }
 

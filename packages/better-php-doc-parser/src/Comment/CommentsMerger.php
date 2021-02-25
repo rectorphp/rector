@@ -69,8 +69,8 @@ final class CommentsMerger
         }
 
         $commentContent = '';
-        foreach ($childrenComments as $comment) {
-            $commentContent .= $comment->getText() . PHP_EOL;
+        foreach ($childrenComments as $childrenComment) {
+            $commentContent .= $childrenComment->getText() . PHP_EOL;
         }
 
         $newNode->setAttribute(AttributeKey::COMMENTS, [new Comment($commentContent)]);

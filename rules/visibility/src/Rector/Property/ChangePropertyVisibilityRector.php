@@ -89,17 +89,17 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->propertyToVisibilityByClass as $type => $propertyToVisibility) {
+        foreach ($this->propertyToVisibilityByClass as $type => $singlePropertyToVisibilityByClass) {
             if (! $this->isObjectType($classLike, $type)) {
                 continue;
             }
 
-            foreach ($propertyToVisibility as $property => $visibility) {
+            foreach ($singlePropertyToVisibilityByClass as $property => $singleSinglePropertyToVisibilityByClass) {
                 if (! $this->isName($node, $property)) {
                     continue;
                 }
 
-                $this->visibilityManipulator->changeNodeVisibility($node, $visibility);
+                $this->visibilityManipulator->changeNodeVisibility($node, $singleSinglePropertyToVisibilityByClass);
 
                 return $node;
             }

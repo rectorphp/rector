@@ -74,14 +74,14 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->stringsToClassConstants as $stringToClassConstant) {
-            if (! $this->valueResolver->isValue($node, $stringToClassConstant->getString())) {
+        foreach ($this->stringsToClassConstants as $stringsToClassConstant) {
+            if (! $this->valueResolver->isValue($node, $stringsToClassConstant->getString())) {
                 continue;
             }
 
             return $this->nodeFactory->createClassConstFetch(
-                $stringToClassConstant->getClass(),
-                $stringToClassConstant->getConstant()
+                $stringsToClassConstant->getClass(),
+                $stringsToClassConstant->getConstant()
             );
         }
 

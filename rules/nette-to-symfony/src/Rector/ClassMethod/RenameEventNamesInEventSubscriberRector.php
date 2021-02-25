@@ -122,27 +122,27 @@ CODE_SAMPLE
             return;
         }
 
-        foreach ($return->expr->items as $arrayItem) {
-            if ($arrayItem === null) {
+        foreach ($return->expr->items as $item) {
+            if ($item === null) {
                 continue;
             }
 
-            $eventInfo = $this->matchStringKeys($arrayItem);
+            $eventInfo = $this->matchStringKeys($item);
             if (! $eventInfo instanceof EventInfo) {
-                $eventInfo = $this->matchClassConstKeys($arrayItem);
+                $eventInfo = $this->matchClassConstKeys($item);
             }
 
             if (! $eventInfo instanceof EventInfo) {
                 continue;
             }
 
-            $arrayItem->key = new ClassConstFetch(new FullyQualified(
+            $item->key = new ClassConstFetch(new FullyQualified(
                 $eventInfo->getClass()
             ), $eventInfo->getConstant());
 
             // method name
             $className = (string) $return->getAttribute(AttributeKey::CLASS_NAME);
-            $methodName = (string) $this->valueResolver->getValue($arrayItem->value);
+            $methodName = (string) $this->valueResolver->getValue($item->value);
             $this->processMethodArgument($className, $methodName, $eventInfo);
         }
     }
@@ -153,10 +153,10 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->symfonyClassConstWithAliases as $symfonyClassConst) {
-            foreach ($symfonyClassConst->getOldStringAliases() as $netteStringName) {
+        foreach ($this->symfonyClassConstWithAliases as $symfonyClassConstWithAlias) {
+            foreach ($symfonyClassConstWithAlias->getOldStringAliases() as $netteStringName) {
                 if ($this->valueResolver->isValue($arrayItem->key, $netteStringName)) {
-                    return $symfonyClassConst;
+                    return $symfonyClassConstWithAlias;
                 }
             }
         }
@@ -170,10 +170,10 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->symfonyClassConstWithAliases as $symfonyClassConst) {
-            $isMatch = $this->resolveClassConstAliasMatch($arrayItem, $symfonyClassConst);
+        foreach ($this->symfonyClassConstWithAliases as $symfonyClassConstWithAlias) {
+            $isMatch = $this->resolveClassConstAliasMatch($arrayItem, $symfonyClassConstWithAlias);
             if ($isMatch) {
-                return $symfonyClassConst;
+                return $symfonyClassConstWithAlias;
             }
         }
 

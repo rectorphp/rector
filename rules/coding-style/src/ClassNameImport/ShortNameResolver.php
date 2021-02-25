@@ -191,8 +191,8 @@ final class ShortNameResolver
         ): void {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-            foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
-                $shortTagName = $this->resolveShortTagNameFromPhpDocChildNode($phpDocChildNode);
+            foreach ($phpDocInfo->getPhpDocNode()->children as $child) {
+                $shortTagName = $this->resolveShortTagNameFromPhpDocChildNode($child);
                 if ($shortTagName === null) {
                     continue;
                 }

@@ -112,13 +112,13 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($ifsBefore as $ifBefore) {
+        foreach ($ifsBefore as $singleIfsBefore) {
             /** @var Expression $expressionIf */
-            $expressionIf = $ifBefore->stmts[0];
+            $expressionIf = $singleIfsBefore->stmts[0];
             /** @var Assign $assignIf */
             $assignIf = $expressionIf->expr;
 
-            $ifBefore->stmts[0] = new Return_($assignIf->expr);
+            $singleIfsBefore->stmts[0] = new Return_($assignIf->expr);
         }
 
         /** @var Assign $assignPrevious */
@@ -134,8 +134,8 @@ CODE_SAMPLE
      */
     private function isAssignVarUsedInIfCond(array $ifsBefore, ?Expr $expr): bool
     {
-        foreach ($ifsBefore as $ifBefore) {
-            $isUsedInIfCond = (bool) $this->betterNodeFinder->findFirst($ifBefore->cond, function (Node $node) use (
+        foreach ($ifsBefore as $singleIfsBefore) {
+            $isUsedInIfCond = (bool) $this->betterNodeFinder->findFirst($singleIfsBefore->cond, function (Node $node) use (
                 $expr
             ): bool {
                 return $this->nodeComparator->areNodesEqual($node, $expr);
@@ -154,9 +154,9 @@ CODE_SAMPLE
      */
     private function isPreviousVarUsedInAssignExpr(array $ifsBefore, Expr $expr): bool
     {
-        foreach ($ifsBefore as $ifBefore) {
+        foreach ($ifsBefore as $singleIfsBefore) {
             /** @var Expression $expression */
-            $expression = $ifBefore->stmts[0];
+            $expression = $singleIfsBefore->stmts[0];
             /** @var Assign $assign */
             $assign = $expression->expr;
 

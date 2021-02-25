@@ -133,20 +133,20 @@ CODE_SAMPLE
 
         $contextOptionValue = null;
 
-        foreach ($contextOptions->items as $index => $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
+        foreach ($contextOptions->items as $index => $item) {
+            if (! $item instanceof ArrayItem) {
                 continue;
             }
 
-            if (! $arrayItem->key instanceof String_) {
+            if (! $item->key instanceof String_) {
                 continue;
             }
 
-            if ($arrayItem->key->value !== self::OLD_OPTION_NAME) {
+            if ($item->key->value !== self::OLD_OPTION_NAME) {
                 continue;
             }
 
-            $contextOptionValue = $this->valueResolver->isTrue($arrayItem->value);
+            $contextOptionValue = $this->valueResolver->isTrue($item->value);
             unset($contextOptions->items[$index]);
         }
 

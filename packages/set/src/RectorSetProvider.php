@@ -36,8 +36,8 @@ final class RectorSetProvider extends AbstractSetProvider
 
     public function __construct()
     {
-        foreach (self::SET_LIST_CLASSES as $setListClass) {
-            $setListReflectionClass = new ReflectionClass($setListClass);
+        foreach (self::SET_LIST_CLASSES as $self::SET_LIST_CLASS) {
+            $setListReflectionClass = new ReflectionClass($self::SET_LIST_CLASS);
             $this->hydrateSetsFromConstants($setListReflectionClass);
         }
     }

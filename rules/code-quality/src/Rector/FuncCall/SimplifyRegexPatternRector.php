@@ -88,11 +88,11 @@ CODE_SAMPLE
         }
 
         foreach ($patterns as $pattern) {
-            foreach (self::COMPLEX_PATTERN_TO_SIMPLE as $complexPattern => $simple) {
+            foreach (self::COMPLEX_PATTERN_TO_SIMPLE as $complexPattern => $singleSelf::COMPLEX_PATTERN_TO_SIMPLE) {
                 $pattern->value = Strings::replace(
                     $pattern->value,
                     '#' . preg_quote($complexPattern, '#') . '#',
-                    $simple
+                    $singleSelf::COMPLEX_PATTERN_TO_SIMPLE
                 );
             }
         }

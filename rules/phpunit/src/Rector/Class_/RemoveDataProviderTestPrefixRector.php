@@ -118,14 +118,14 @@ CODE_SAMPLE
                 continue;
             }
 
-            foreach ($phpunitDataProviderTagValueNodes as $dataProviderTagValueNode) {
-                $oldMethodName = $dataProviderTagValueNode->getMethodName();
+            foreach ($phpunitDataProviderTagValueNodes as $phpunitDataProviderTagValueNode) {
+                $oldMethodName = $phpunitDataProviderTagValueNode->getMethodName();
                 if (! Strings::startsWith($oldMethodName, 'test')) {
                     continue;
                 }
 
                 $newMethodName = $this->createNewMethodName($oldMethodName);
-                $dataProviderTagValueNode->changeMethodName($newMethodName);
+                $phpunitDataProviderTagValueNode->changeMethodName($newMethodName);
                 $phpDocInfo->markAsChanged();
 
                 $this->providerMethodNamesToNewNames[$oldMethodName] = $newMethodName;
@@ -136,12 +136,12 @@ CODE_SAMPLE
     private function renameProviderMethods(Class_ $class): void
     {
         foreach ($class->getMethods() as $classMethod) {
-            foreach ($this->providerMethodNamesToNewNames as $oldName => $newName) {
+            foreach ($this->providerMethodNamesToNewNames as $oldName => $providerMethodNamesToNewName) {
                 if (! $this->isName($classMethod, $oldName)) {
                     continue;
                 }
 
-                $classMethod->name = new Identifier($newName);
+                $classMethod->name = new Identifier($providerMethodNamesToNewName);
             }
         }
     }

@@ -47,8 +47,8 @@ final class UnionTypeNodeMapper implements PhpParserNodeMapperInterface
     public function mapToPHPStan(Node $node): Type
     {
         $types = [];
-        foreach ($node->types as $unionedType) {
-            $types[] = $this->phpParserNodeMapper->mapToPHPStanType($unionedType);
+        foreach ($node->types as $type) {
+            $types[] = $this->phpParserNodeMapper->mapToPHPStanType($type);
         }
 
         return $this->typeFactory->createMixedPassedOrUnionType($types);

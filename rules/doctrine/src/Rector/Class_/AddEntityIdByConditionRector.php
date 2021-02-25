@@ -142,9 +142,9 @@ CODE_SAMPLE
     {
         $usedTraits = $this->classManipulator->getUsedTraits($class);
 
-        foreach (array_keys($usedTraits) as $traitName) {
+        foreach (array_keys($usedTraits) as $array_key) {
             foreach ($this->detectedTraits as $detectedTrait) {
-                if ($traitName === $detectedTrait) {
+                if ($array_key === $detectedTrait) {
                     return true;
                 }
             }

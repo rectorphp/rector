@@ -266,9 +266,9 @@ CODE_SAMPLE
         $namespace = new Namespace_($namespace->name);
         $class = $this->translationClassNodeFactory->create($classShortName);
 
-        foreach ($translatedPropertyToPhpDocInfos as $translatedPropertyName => $translatedPhpDocInfo) {
+        foreach ($translatedPropertyToPhpDocInfos as $translatedPropertyName => $translatedPropertyToPhpDocInfo) {
             $property = $this->nodeFactory->createPrivateProperty($translatedPropertyName);
-            $property->setAttribute(AttributeKey::PHP_DOC_INFO, $translatedPhpDocInfo);
+            $property->setAttribute(AttributeKey::PHP_DOC_INFO, $translatedPropertyToPhpDocInfo);
 
             $class->stmts[] = $property;
         }

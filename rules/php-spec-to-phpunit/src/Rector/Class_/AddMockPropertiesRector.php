@@ -58,13 +58,13 @@ final class AddMockPropertiesRector extends AbstractPhpSpecToPHPUnitRector
         /** @var string $class */
         $class = $node->getAttribute(AttributeKey::CLASS_NAME);
 
-        foreach ($classMocks as $name => $methods) {
-            if ((is_countable($methods) ? count($methods) : 0) <= 1) {
+        foreach ($classMocks as $name => $classMock) {
+            if ((is_countable($classMock) ? count($classMock) : 0) <= 1) {
                 continue;
             }
 
             // non-ctor used mocks are probably local only
-            if (! in_array('let', $methods, true)) {
+            if (! in_array('let', $classMock, true)) {
                 continue;
             }
 

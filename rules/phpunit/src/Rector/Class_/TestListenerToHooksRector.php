@@ -152,7 +152,7 @@ CODE_SAMPLE
 
     private function processClassMethod(Class_ $class, ClassMethod $classMethod): void
     {
-        foreach (self::LISTENER_METHOD_TO_HOOK_INTERFACES as $methodName => $hookClassAndMethod) {
+        foreach (self::LISTENER_METHOD_TO_HOOK_INTERFACES as $methodName => $self::LISTENER_METHOD_TO_HOOK_INTERFACE) {
             /** @var string $methodName */
             if (! $this->isName($classMethod, $methodName)) {
                 continue;
@@ -162,8 +162,8 @@ CODE_SAMPLE
             if ($classMethod->stmts === [] || $classMethod->stmts === null) {
                 $this->removeNode($classMethod);
             } else {
-                $class->implements[] = new FullyQualified($hookClassAndMethod[0]);
-                $classMethod->name = new Identifier($hookClassAndMethod[1]);
+                $class->implements[] = new FullyQualified($self::LISTENER_METHOD_TO_HOOK_INTERFACE[0]);
+                $classMethod->name = new Identifier($self::LISTENER_METHOD_TO_HOOK_INTERFACE[1]);
             }
         }
     }

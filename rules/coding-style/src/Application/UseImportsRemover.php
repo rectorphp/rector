@@ -58,8 +58,8 @@ final class UseImportsRemover
     private function removeUseFromUse(array $removedShortUses, Use_ $use): void
     {
         foreach ($use->uses as $usesKey => $useUse) {
-            foreach ($removedShortUses as $removedShortUse) {
-                if ($useUse->name->getLast() !== $removedShortUse) {
+            foreach ($removedShortUses as $removedShortus) {
+                if ($useUse->name->getLast() !== $removedShortus) {
                     continue;
                 }
 

@@ -66,16 +66,16 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($optionsArray->items as $arrayItemNode) {
-            if ($arrayItemNode === null) {
+        foreach ($optionsArray->items as $item) {
+            if ($item === null) {
                 continue;
             }
 
-            if (! $arrayItemNode->key instanceof String_) {
+            if (! $item->key instanceof String_) {
                 continue;
             }
 
-            $this->processStringKey($arrayItemNode->key);
+            $this->processStringKey($item->key);
         }
 
         return $node;

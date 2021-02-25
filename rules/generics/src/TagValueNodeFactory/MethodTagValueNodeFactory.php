@@ -100,25 +100,17 @@ final class MethodTagValueNodeFactory
     private function resolveUnionTypeNode(UnionTypeNode $unionTypeNode, TemplateTypeMap $templateTypeMap): UnionTypeNode
     {
         $resolvedTypes = [];
-        foreach ($unionTypeNode->types as $unionedTypeNode) {
-            if ($unionedTypeNode instanceof ArrayTypeNode) {
-                if (! $unionedTypeNode->type instanceof IdentifierTypeNode) {
+        foreach ($unionTypeNode->types as $type) {
+            if ($type instanceof ArrayTypeNode) {
+                if (! $type->type instanceof IdentifierTypeNode) {
                     throw new ShouldNotHappenException();
                 }
 
-                $resolvedType = $this->resolveIdentifierTypeNode(
-                    $unionedTypeNode->type,
-                    $templateTypeMap,
-                    $unionedTypeNode
-                );
+                $resolvedType = $this->resolveIdentifierTypeNode($type->type, $templateTypeMap, $type);
 
                 $resolvedTypes[] = new ArrayTypeNode($resolvedType);
-            } elseif ($unionedTypeNode instanceof IdentifierTypeNode) {
-                $resolvedTypes[] = $this->resolveIdentifierTypeNode(
-                    $unionedTypeNode,
-                    $templateTypeMap,
-                    $unionedTypeNode
-                );
+            } elseif ($type instanceof IdentifierTypeNode) {
+                $resolvedTypes[] = $this->resolveIdentifierTypeNode($type, $templateTypeMap, $type);
             }
         }
 

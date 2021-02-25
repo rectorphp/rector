@@ -107,8 +107,8 @@ final class SilentVoidResolver
     {
         $casesWithReturn = 0;
         foreach ($switch->cases as $case) {
-            foreach ($case->stmts as $caseStmt) {
-                if (! $caseStmt instanceof Return_) {
+            foreach ($case->stmts as $stmt) {
+                if (! $stmt instanceof Return_) {
                     continue;
                 }
 

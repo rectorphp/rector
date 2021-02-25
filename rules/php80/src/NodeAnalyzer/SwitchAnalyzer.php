@@ -22,8 +22,8 @@ final class SwitchAnalyzer
                 return true;
             }
 
-            foreach ($case->stmts as $caseStmt) {
-                if ($caseStmt instanceof Break_) {
+            foreach ($case->stmts as $stmt) {
+                if ($stmt instanceof Break_) {
                     continue 2;
                 }
             }

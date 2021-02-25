@@ -141,15 +141,15 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
 
         $fileUseImportTypes = $this->useImportTypesInFilePath[$filePath] ?? [];
 
-        foreach ($fileUseImportTypes as $useImportType) {
-            if ($fullyQualifiedObjectType->equals($useImportType)) {
+        foreach ($fileUseImportTypes as $fileUseImportType) {
+            if ($fullyQualifiedObjectType->equals($fileUseImportType)) {
                 return true;
             }
         }
 
         $functionImports = $this->functionUseImportTypesInFilePath[$filePath] ?? [];
-        foreach ($functionImports as $useImportType) {
-            if ($fullyQualifiedObjectType->equals($useImportType)) {
+        foreach ($functionImports as $functionImport) {
+            if ($fullyQualifiedObjectType->equals($functionImport)) {
                 return true;
             }
         }

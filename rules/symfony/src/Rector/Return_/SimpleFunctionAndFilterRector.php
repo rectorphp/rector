@@ -133,7 +133,7 @@ CODE_SAMPLE
 
     private function processArrayItem(ArrayItem $arrayItem, Type $newNodeType): ArrayItem
     {
-        foreach (self::OLD_TO_NEW_CLASSES as $oldClass => $newClass) {
+        foreach (self::OLD_TO_NEW_CLASSES as $oldClass => $self::OLD_TO_NEW_CLASS) {
             $oldClassObjectType = new ObjectType($oldClass);
             if (! $oldClassObjectType->equals($newNodeType)) {
                 continue;
@@ -151,7 +151,7 @@ CODE_SAMPLE
             $filterName = $this->valueResolver->getValue($arrayItem->key);
 
             $arrayItem->key = null;
-            $arrayItem->value->class = new FullyQualified($newClass);
+            $arrayItem->value->class = new FullyQualified($self::OLD_TO_NEW_CLASS);
 
             $oldArguments = $arrayItem->value->args;
 

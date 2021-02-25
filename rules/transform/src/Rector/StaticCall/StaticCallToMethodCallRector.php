@@ -108,21 +108,21 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->staticCallsToMethodCalls as $staticCallToMethodCall) {
-            if (! $staticCallToMethodCall->isStaticCallMatch($node)) {
+        foreach ($this->staticCallsToMethodCalls as $staticCallsToMethodCall) {
+            if (! $staticCallsToMethodCall->isStaticCallMatch($node)) {
                 continue;
             }
 
             if ($classMethod->isStatic()) {
-                return $this->refactorToInstanceCall($node, $staticCallToMethodCall);
+                return $this->refactorToInstanceCall($node, $staticCallsToMethodCall);
             }
 
-            $expr = $this->matchTypeProvidingExpr($classLike, $classMethod, $staticCallToMethodCall->getClassType());
+            $expr = $this->matchTypeProvidingExpr($classLike, $classMethod, $staticCallsToMethodCall->getClassType());
 
-            if ($staticCallToMethodCall->getMethodName() === '*') {
+            if ($staticCallsToMethodCall->getMethodName() === '*') {
                 $methodName = $this->getName($node->name);
             } else {
-                $methodName = $staticCallToMethodCall->getMethodName();
+                $methodName = $staticCallsToMethodCall->getMethodName();
             }
 
             if (! is_string($methodName)) {

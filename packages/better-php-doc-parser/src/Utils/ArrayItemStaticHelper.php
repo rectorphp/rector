@@ -59,17 +59,17 @@ final class ArrayItemStaticHelper
     public static function filterAndSortVisibleItems(array $contentItems, array $orderedVisibleItems): array
     {
         // 1. remove unused items
-        foreach (array_keys($contentItems) as $key) {
+        foreach (array_keys($contentItems) as $array_key) {
             // generic key
-            if (is_int($key)) {
+            if (is_int($array_key)) {
                 continue;
             }
 
-            if (in_array($key, $orderedVisibleItems, true)) {
+            if (in_array($array_key, $orderedVisibleItems, true)) {
                 continue;
             }
 
-            unset($contentItems[$key]);
+            unset($contentItems[$array_key]);
         }
 
         return self::sortItemsByOrderedListOfKeys($contentItems, $orderedVisibleItems);

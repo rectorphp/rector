@@ -224,8 +224,8 @@ CODE_SAMPLE
 
     private function hasUseAlias(Use_ $use): bool
     {
-        foreach ($use->uses as $useUse) {
-            if ($useUse->alias !== null) {
+        foreach ($use->uses as $use) {
+            if ($use->alias !== null) {
                 return true;
             }
         }

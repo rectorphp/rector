@@ -34,13 +34,13 @@ final class MissingPropertiesFactory
     public function create(array $fetchedLocalPropertyNameToTypes, array $propertyNamesToComplete): array
     {
         $newProperties = [];
-        foreach ($fetchedLocalPropertyNameToTypes as $propertyName => $propertyType) {
+        foreach ($fetchedLocalPropertyNameToTypes as $propertyName => $fetchedLocalPropertyNameToType) {
             if (! in_array($propertyName, $propertyNamesToComplete, true)) {
                 continue;
             }
 
             $property = $this->nodeFactory->createPublicProperty($propertyName);
-            $this->propertyTypeDecorator->decorateProperty($property, $propertyType);
+            $this->propertyTypeDecorator->decorateProperty($property, $fetchedLocalPropertyNameToType);
 
             $newProperties[] = $property;
         }

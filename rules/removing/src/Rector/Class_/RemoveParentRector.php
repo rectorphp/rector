@@ -67,9 +67,9 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->parentClassesToRemove as $parentClassToRemove) {
+        foreach ($this->parentClassesToRemove as $singleParentClassesToRemove) {
             $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-            if ($parentClassName !== $parentClassToRemove) {
+            if ($parentClassName !== $singleParentClassesToRemove) {
                 continue;
             }
 

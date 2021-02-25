@@ -81,17 +81,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($node->vars as $arrayDimFetchNode) {
-            if (! $arrayDimFetchNode instanceof ArrayDimFetch) {
+        foreach ($node->vars as $var) {
+            if (! $var instanceof ArrayDimFetch) {
                 continue;
             }
 
             foreach ($this->issetUnsetToMethodCalls as $issetUnsetToMethodCall) {
-                if (! $this->isObjectType($arrayDimFetchNode, $issetUnsetToMethodCall->getType())) {
+                if (! $this->isObjectType($var, $issetUnsetToMethodCall->getType())) {
                     continue;
                 }
 
-                $newNode = $this->processArrayDimFetchNode($node, $arrayDimFetchNode, $issetUnsetToMethodCall);
+                $newNode = $this->processArrayDimFetchNode($node, $var, $issetUnsetToMethodCall);
                 if ($newNode !== null) {
                     return $newNode;
                 }

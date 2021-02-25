@@ -70,12 +70,12 @@ CODE_SAMPLE
                 continue;
             }
 
-            foreach (array_keys($node->args) as $position) {
-                if ($removedFunctionArgument->getArgumentPosition() !== $position) {
+            foreach (array_keys($node->args) as $array_key) {
+                if ($removedFunctionArgument->getArgumentPosition() !== $array_key) {
                     continue;
                 }
 
-                $this->nodeRemover->removeArg($node, $position);
+                $this->nodeRemover->removeArg($node, $array_key);
             }
         }
 

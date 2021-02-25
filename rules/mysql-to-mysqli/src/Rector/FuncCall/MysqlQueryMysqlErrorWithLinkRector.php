@@ -126,7 +126,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach (self::FUNCTION_RENAME_MAP as $oldFunction => $newFunction) {
+        foreach (self::FUNCTION_RENAME_MAP as $oldFunction => $singleSelf::FUNCTION_RENAME_MAP) {
             if (! $this->isName($node, $oldFunction)) {
                 continue;
             }
@@ -146,7 +146,7 @@ CODE_SAMPLE
                 $node->args = array_merge([new Arg($connectionVariable)], $node->args);
             }
 
-            $node->name = new Name($newFunction);
+            $node->name = new Name($singleSelf::FUNCTION_RENAME_MAP);
 
             return $node;
         }

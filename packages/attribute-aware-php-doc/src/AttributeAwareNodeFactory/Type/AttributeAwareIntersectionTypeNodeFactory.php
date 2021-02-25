@@ -34,8 +34,8 @@ final class AttributeAwareIntersectionTypeNodeFactory implements AttributeNodeAw
      */
     public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
-        foreach ($node->types as $key => $intersectionedType) {
-            $node->types[$key] = $this->attributeAwareNodeFactory->createFromNode($intersectionedType, $docContent);
+        foreach ($node->types as $key => $type) {
+            $node->types[$key] = $this->attributeAwareNodeFactory->createFromNode($type, $docContent);
         }
 
         return new AttributeAwareIntersectionTypeNode($node->types);

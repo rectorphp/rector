@@ -41,9 +41,9 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
     {
         foreach ($this->getDirectoriesByTagValueNodes() as $tagValueNode => $directory) {
             $filesInDirectory = $this->findFilesFromDirectory($directory);
-            foreach ($filesInDirectory as $fileInfos) {
-                foreach ($fileInfos as $fileInfo) {
-                    yield [$fileInfo, $tagValueNode];
+            foreach ($filesInDirectory as $singleFilesInDirectory) {
+                foreach ($singleFilesInDirectory as $singleSingleFilesInDirectory) {
+                    yield [$singleSingleFilesInDirectory, $tagValueNode];
                 }
             }
         }

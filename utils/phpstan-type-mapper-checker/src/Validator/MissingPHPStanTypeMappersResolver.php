@@ -38,14 +38,14 @@ final class MissingPHPStanTypeMappersResolver
         $supportedTypeClasses = $this->supportedTypeMappersDataProvider->provide();
 
         $unsupportedTypeClasses = [];
-        foreach ($typeClasses as $phpStanTypeClass) {
-            foreach ($supportedTypeClasses as $supportedPHPStanTypeClass) {
-                if (is_a($phpStanTypeClass, $supportedPHPStanTypeClass, true)) {
+        foreach ($typeClasses as $typeClass) {
+            foreach ($supportedTypeClasses as $supportedTypeClass) {
+                if (is_a($typeClass, $supportedTypeClass, true)) {
                     continue 2;
                 }
             }
 
-            $unsupportedTypeClasses[] = $phpStanTypeClass;
+            $unsupportedTypeClasses[] = $typeClass;
         }
 
         $typesToRemove = [NonexistentParentClassType::class, ParserNodeTypeToPHPStanType::class];

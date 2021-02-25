@@ -78,15 +78,15 @@ final class ServiceMapProvider
         /** @var ServiceDefinition[] $aliases */
         $aliases = [];
 
-        foreach ($xml->services->service as $def) {
+        foreach ($xml->services->service as $singleService) {
             /** @var SimpleXMLElement $attrs */
-            $attrs = $def->attributes();
+            $attrs = $singleService->attributes();
             if (! (property_exists($attrs, 'id') && $attrs->id !== null)) {
                 continue;
             }
 
-            $def = $this->convertXmlToArray($def);
-            $tags = $this->createTagFromXmlElement($def);
+            $singleService = $this->convertXmlToArray($singleService);
+            $tags = $this->createTagFromXmlElement($singleService);
 
             $service = $this->createServiceFromXmlAndTagsData($attrs, $tags);
             if ($service->getAlias() !== null) {
@@ -110,11 +110,11 @@ final class ServiceMapProvider
 
         $data = $this->unWrapAttributes($data);
 
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                $data = $this->convertedNestedArrayOrXml($value, $data, $key);
-            } elseif ($value instanceof SimpleXMLElement) {
-                $data[$key] = $this->convertXmlToArray($value);
+        foreach ($data as $key => $singleData) {
+            if (is_array($singleData)) {
+                $data = $this->convertedNestedArrayOrXml($singleData, $data, $key);
+            } elseif ($singleData instanceof SimpleXMLElement) {
+                $data[$key] = $this->convertXmlToArray($singleData);
             }
         }
 
@@ -215,11 +215,11 @@ final class ServiceMapProvider
      */
     private function convertedNestedArrayOrXml(array $value, array $data, $key): array
     {
-        foreach ($value as $subKey => $subValue) {
-            if ($subValue instanceof SimpleXMLElement) {
-                $data[$key][$subKey] = $this->convertXmlToArray($subValue);
-            } elseif (is_array($subValue)) {
-                $data[$key][$subKey] = $this->unWrapAttributes($subValue);
+        foreach ($value as $subKey => $singleValue) {
+            if ($singleValue instanceof SimpleXMLElement) {
+                $data[$key][$subKey] = $this->convertXmlToArray($singleValue);
+            } elseif (is_array($singleValue)) {
+                $data[$key][$subKey] = $this->unWrapAttributes($singleValue);
             }
         }
 
@@ -233,13 +233,13 @@ final class ServiceMapProvider
     private function createTagsFromData(array $tagsData): array
     {
         $tagValueObjects = [];
-        foreach ($tagsData as $key => $tag) {
-            if (is_string($tag)) {
-                $tagValueObjects[$key] = new Tag($tag);
+        foreach ($tagsData as $key => $tagsDatum) {
+            if (is_string($tagsDatum)) {
+                $tagValueObjects[$key] = new Tag($tagsDatum);
                 continue;
             }
 
-            $data = $tag;
+            $data = $tagsDatum;
             $name = $data['name'] ?? '';
 
             if ($name === 'kernel.event_listener') {

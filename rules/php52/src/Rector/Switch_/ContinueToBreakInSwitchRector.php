@@ -72,12 +72,12 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($node->cases as $case) {
-            foreach ($case->stmts as $key => $caseStmt) {
-                if (! $caseStmt instanceof Continue_) {
+            foreach ($case->stmts as $key => $stmt) {
+                if (! $stmt instanceof Continue_) {
                     continue;
                 }
 
-                $case->stmts[$key] = $this->processContinueStatement($caseStmt);
+                $case->stmts[$key] = $this->processContinueStatement($stmt);
             }
         }
 

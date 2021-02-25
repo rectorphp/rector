@@ -51,12 +51,12 @@ final class ReplaceHttpServerVarsByServerRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        foreach (self::VARIABLE_RENAME_MAP as $oldName => $newName) {
+        foreach (self::VARIABLE_RENAME_MAP as $oldName => $singleSelf::VARIABLE_RENAME_MAP) {
             if (! $this->isName($node, $oldName)) {
                 continue;
             }
 
-            $node->name = $newName;
+            $node->name = $singleSelf::VARIABLE_RENAME_MAP;
             return $node;
         }
 

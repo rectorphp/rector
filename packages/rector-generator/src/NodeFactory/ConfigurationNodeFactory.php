@@ -63,8 +63,8 @@ final class ConfigurationNodeFactory
         $this->lowerPhpVersion();
 
         $properties = [];
-        foreach (array_keys($ruleConfiguration) as $constantName) {
-            $propertyName = StaticRectorStrings::uppercaseUnderscoreToCamelCase($constantName);
+        foreach (array_keys($ruleConfiguration) as $array_key) {
+            $propertyName = StaticRectorStrings::uppercaseUnderscoreToCamelCase($array_key);
             $type = new ArrayType(new MixedType(), new MixedType());
 
             $property = $this->nodeFactory->createPrivatePropertyFromNameAndType($propertyName, $type);
@@ -83,10 +83,10 @@ final class ConfigurationNodeFactory
     {
         $classConsts = [];
 
-        foreach (array_keys($ruleConfiguration) as $constantName) {
-            $constantName = strtoupper($constantName);
-            $constantValue = strtolower($constantName);
-            $classConst = $this->nodeFactory->createPublicClassConst($constantName, $constantValue);
+        foreach (array_keys($ruleConfiguration) as $array_key) {
+            $array_key = strtoupper($array_key);
+            $constantValue = strtolower($array_key);
+            $classConst = $this->nodeFactory->createPublicClassConst($array_key, $constantValue);
             $classConsts[] = $classConst;
         }
 
@@ -109,10 +109,10 @@ final class ConfigurationNodeFactory
         $classMethod->params[] = $configurationParam;
 
         $assigns = [];
-        foreach (array_keys($ruleConfiguration) as $constantName) {
-            $coalesce = $this->createConstantInConfigurationCoalesce($constantName, $configurationVariable);
+        foreach (array_keys($ruleConfiguration) as $array_key) {
+            $coalesce = $this->createConstantInConfigurationCoalesce($array_key, $configurationVariable);
 
-            $propertyName = StaticRectorStrings::uppercaseUnderscoreToCamelCase($constantName);
+            $propertyName = StaticRectorStrings::uppercaseUnderscoreToCamelCase($array_key);
             $assign = $this->nodeFactory->createPropertyAssignmentWithExpr($propertyName, $coalesce);
             $assigns[] = new Expression($assign);
         }

@@ -55,10 +55,10 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($arrayItemsWithDuplicatedKey as $arrayItems) {
+        foreach ($arrayItemsWithDuplicatedKey as $singleArrayItemsWithDuplicatedKey) {
             // keep last item
-            array_pop($arrayItems);
-            $this->removeNodes($arrayItems);
+            array_pop($singleArrayItemsWithDuplicatedKey);
+            $this->removeNodes($singleArrayItemsWithDuplicatedKey);
         }
 
         return $node;
@@ -71,17 +71,17 @@ CODE_SAMPLE
     {
         $arrayItemsByKeys = [];
 
-        foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
+        foreach ($array->items as $item) {
+            if (! $item instanceof ArrayItem) {
                 continue;
             }
 
-            if ($arrayItem->key === null) {
+            if ($item->key === null) {
                 continue;
             }
 
-            $keyValue = $this->print($arrayItem->key);
-            $arrayItemsByKeys[$keyValue][] = $arrayItem;
+            $keyValue = $this->print($item->key);
+            $arrayItemsByKeys[$keyValue][] = $item;
         }
 
         return $this->filterItemsWithSameKey($arrayItemsByKeys);

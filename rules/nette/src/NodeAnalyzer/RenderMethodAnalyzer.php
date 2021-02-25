@@ -36,9 +36,9 @@ final class RenderMethodAnalyzer
         $methodsCalls = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, MethodCall::class);
 
         $renderMethodCalls = [];
-        foreach ($methodsCalls as $methodCall) {
-            if ($this->nodeNameResolver->isName($methodCall->name, 'render')) {
-                $renderMethodCalls[] = $methodCall;
+        foreach ($methodsCalls as $methodsCall) {
+            if ($this->nodeNameResolver->isName($methodsCall->name, 'render')) {
+                $renderMethodCalls[] = $methodsCall;
             }
         }
 

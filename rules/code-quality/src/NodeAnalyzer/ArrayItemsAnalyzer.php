@@ -13,8 +13,8 @@ final class ArrayItemsAnalyzer
 {
     public function hasArrayExclusiveDefinedVariableNames(Array_ $array, Scope $scope): bool
     {
-        foreach ($array->items as $arrayItem) {
-            $variableName = $this->resolveStringValue($arrayItem);
+        foreach ($array->items as $item) {
+            $variableName = $this->resolveStringValue($item);
             if ($variableName === null) {
                 continue;
             }
@@ -30,8 +30,8 @@ final class ArrayItemsAnalyzer
 
     public function hasArrayExclusiveUndefinedVariableNames(Array_ $array, Scope $scope): bool
     {
-        foreach ($array->items as $arrayItem) {
-            $variableName = $this->resolveStringValue($arrayItem);
+        foreach ($array->items as $item) {
+            $variableName = $this->resolveStringValue($item);
             if ($variableName === null) {
                 continue;
             }

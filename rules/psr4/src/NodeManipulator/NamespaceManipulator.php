@@ -10,8 +10,8 @@ final class NamespaceManipulator
 {
     public function removeClassLikes(Namespace_ $namespace): Namespace_
     {
-        foreach ($namespace->stmts as $key => $namespaceStatement) {
-            if (! $namespaceStatement instanceof ClassLike) {
+        foreach ($namespace->stmts as $key => $stmt) {
+            if (! $stmt instanceof ClassLike) {
                 continue;
             }
 

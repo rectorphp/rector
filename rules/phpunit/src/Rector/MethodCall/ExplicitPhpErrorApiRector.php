@@ -102,8 +102,8 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach (self::REPLACEMENTS as $class => $method) {
-            $newNode = $this->replaceExceptionWith($node, $class, $method);
+        foreach (self::REPLACEMENTS as $class => $self::REPLACEMENT) {
+            $newNode = $this->replaceExceptionWith($node, $class, $self::REPLACEMENT);
             if ($newNode !== null) {
                 return $newNode;
             }

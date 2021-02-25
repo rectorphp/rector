@@ -34,8 +34,8 @@ final class AttributeAwareUnionTypeNodeFactory implements AttributeNodeAwareFact
      */
     public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
-        foreach ($node->types as $key => $unionedType) {
-            $node->types[$key] = $this->attributeAwareNodeFactory->createFromNode($unionedType, $docContent);
+        foreach ($node->types as $key => $type) {
+            $node->types[$key] = $this->attributeAwareNodeFactory->createFromNode($type, $docContent);
         }
 
         return new AttributeAwareUnionTypeNode($node->types, $docContent);

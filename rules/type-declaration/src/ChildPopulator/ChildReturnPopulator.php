@@ -48,13 +48,13 @@ final class ChildReturnPopulator extends AbstractChildPopulator
         }
 
         // update their methods as well
-        foreach ($childrenClassLikes as $childClassLike) {
-            $usedTraits = $this->nodeRepository->findUsedTraitsInClass($childClassLike);
-            foreach ($usedTraits as $trait) {
-                $this->addReturnTypeToChildMethod($trait, $classMethod, $returnType);
+        foreach ($childrenClassLikes as $childrenClassLike) {
+            $usedTraits = $this->nodeRepository->findUsedTraitsInClass($childrenClassLike);
+            foreach ($usedTraits as $usedTrait) {
+                $this->addReturnTypeToChildMethod($usedTrait, $classMethod, $returnType);
             }
 
-            $this->addReturnTypeToChildMethod($childClassLike, $classMethod, $returnType);
+            $this->addReturnTypeToChildMethod($childrenClassLike, $classMethod, $returnType);
         }
     }
 

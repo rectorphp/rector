@@ -13,22 +13,22 @@ final class ArrayCompacter
 {
     public function compactStringToVariableArray(Array_ $array): void
     {
-        foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
+        foreach ($array->items as $item) {
+            if (! $item instanceof ArrayItem) {
                 continue;
             }
 
-            if ($arrayItem->key !== null) {
+            if ($item->key !== null) {
                 continue;
             }
 
-            if (! $arrayItem->value instanceof String_) {
+            if (! $item->value instanceof String_) {
                 continue;
             }
 
-            $variableName = $arrayItem->value->value;
-            $arrayItem->key = new String_($variableName);
-            $arrayItem->value = new Variable($variableName);
+            $variableName = $item->value->value;
+            $item->key = new String_($variableName);
+            $item->value = new Variable($variableName);
         }
     }
 }

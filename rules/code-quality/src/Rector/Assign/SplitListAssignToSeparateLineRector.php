@@ -108,8 +108,8 @@ CODE_SAMPLE
     private function createStandaloneAssigns(Node $node, Array_ $rightArray): array
     {
         $standaloneAssigns = [];
-        foreach ($node->items as $key => $leftArrayItem) {
-            if ($leftArrayItem === null) {
+        foreach ($node->items as $key => $item) {
+            if ($item === null) {
                 continue;
             }
 
@@ -119,7 +119,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $standaloneAssigns[] = new Assign($leftArrayItem->value, $rightArrayItem);
+            $standaloneAssigns[] = new Assign($item->value, $rightArrayItem);
         }
 
         return $standaloneAssigns;
@@ -142,8 +142,8 @@ CODE_SAMPLE
     private function getArrayItemsHash(Node $node): string
     {
         $arrayItemsHashes = [];
-        foreach ($node->items as $arrayItem) {
-            $arrayItemsHashes[] = $this->nodeComparator->printWithoutComments($arrayItem);
+        foreach ($node->items as $item) {
+            $arrayItemsHashes[] = $this->nodeComparator->printWithoutComments($item);
         }
 
         sort($arrayItemsHashes);

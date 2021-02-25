@@ -27,8 +27,8 @@ final class SupportedTypeMappersDataProvider
     public function provide(): array
     {
         $supportedPHPStanTypeClasses = [];
-        foreach ($this->typeMappers as $typeMappers) {
-            $supportedPHPStanTypeClasses[] = $typeMappers->getNodeClass();
+        foreach ($this->typeMappers as $typeMapper) {
+            $supportedPHPStanTypeClasses[] = $typeMapper->getNodeClass();
         }
 
         return $supportedPHPStanTypeClasses;

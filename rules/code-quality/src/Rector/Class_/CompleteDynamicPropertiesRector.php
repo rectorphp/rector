@@ -163,13 +163,13 @@ CODE_SAMPLE
         $missingPropertyNames = [];
 
         // remove other properties that are accessible from this scope
-        foreach ($propertiesToComplete as $propertyToComplete) {
+        foreach ($propertiesToComplete as $singlePropertiesToComplete) {
             /** @var string $propertyToComplete */
-            if (property_exists($className, $propertyToComplete)) {
+            if (property_exists($className, $singlePropertiesToComplete)) {
                 continue;
             }
 
-            $missingPropertyNames[] = $propertyToComplete;
+            $missingPropertyNames[] = $singlePropertiesToComplete;
         }
 
         return $missingPropertyNames;

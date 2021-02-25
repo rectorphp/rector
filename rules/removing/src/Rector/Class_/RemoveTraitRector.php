@@ -110,8 +110,8 @@ CODE_SAMPLE
     private function removeTraits(array $usedTraits): void
     {
         foreach ($usedTraits as $usedTrait) {
-            foreach ($this->traitsToRemove as $traitToRemove) {
-                if (! $this->isName($usedTrait, $traitToRemove)) {
+            foreach ($this->traitsToRemove as $singleTraitsToRemove) {
+                if (! $this->isName($usedTrait, $singleTraitsToRemove)) {
                     continue;
                 }
 

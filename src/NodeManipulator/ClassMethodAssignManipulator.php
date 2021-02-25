@@ -142,18 +142,18 @@ final class ClassMethodAssignManipulator
                 return null;
             }
 
-            foreach ($node->var->items as $arrayItem) {
+            foreach ($node->var->items as $item) {
                 // empty item
-                if ($arrayItem === null) {
+                if ($item === null) {
                     continue;
                 }
 
-                if (! $arrayItem->value instanceof Variable) {
+                if (! $item->value instanceof Variable) {
                     continue;
                 }
 
                 /** @var string $variableName */
-                $variableName = $this->nodeNameResolver->getName($arrayItem->value);
+                $variableName = $this->nodeNameResolver->getName($item->value);
                 $arrayDestructionCreatedVariables[] = $variableName;
             }
         });
@@ -218,8 +218,8 @@ final class ClassMethodAssignManipulator
 
     private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
     {
-        foreach ($classMethod->params as $constructorParameter) {
-            if ($this->nodeNameResolver->isName($constructorParameter->var, $name)) {
+        foreach ($classMethod->params as $param) {
+            if ($this->nodeNameResolver->isName($param->var, $name)) {
                 return true;
             }
         }

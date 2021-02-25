@@ -154,14 +154,14 @@ CODE_SAMPLE
                 return null;
             }
 
-            foreach ($functionsToStaticCalls as $functionToStaticCall) {
-                if (! $this->isName($node, $functionToStaticCall->getFunction())) {
+            foreach ($functionsToStaticCalls as $functionsToStaticCall) {
+                if (! $this->isName($node, $functionsToStaticCall->getFunction())) {
                     continue;
                 }
 
                 $staticCall = $this->nodeFactory->createStaticCall(
-                    $functionToStaticCall->getClass(),
-                    $functionToStaticCall->getMethod()
+                    $functionsToStaticCall->getClass(),
+                    $functionsToStaticCall->getMethod()
                 );
                 $staticCall->args = $node->args;
 

@@ -94,13 +94,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->methodsByType as $type => $methods) {
+        foreach ($this->methodsByType as $type => $singleMethodsByType) {
             if (! $this->isObjectType($node, $type)) {
                 continue;
             }
 
-            foreach ($methods as $method) {
-                if (! $this->isName($node, $method)) {
+            foreach ($singleMethodsByType as $singleSingleMethodsByType) {
+                if (! $this->isName($node, $singleSingleMethodsByType)) {
                     continue;
                 }
 
@@ -138,13 +138,13 @@ CODE_SAMPLE
             return [];
         }
 
-        foreach ($classMethod->stmts as $statement) {
-            if (! $statement instanceof Expression) {
+        foreach ($classMethod->stmts as $stmt) {
+            if (! $stmt instanceof Expression) {
                 continue;
             }
 
-            if ($statement->expr instanceof Yield_) {
-                $yieldNodes[] = $statement->expr;
+            if ($stmt->expr instanceof Yield_) {
+                $yieldNodes[] = $stmt->expr;
             }
         }
 

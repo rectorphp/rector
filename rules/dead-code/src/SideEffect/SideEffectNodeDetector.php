@@ -50,8 +50,8 @@ final class SideEffectNodeDetector
             return false;
         }
 
-        foreach (self::SIDE_EFFECT_NODE_TYPES as $sideEffectNodeType) {
-            if (is_a($expr, $sideEffectNodeType, true)) {
+        foreach (self::SIDE_EFFECT_NODE_TYPES as $self::SIDE_EFFECT_NODE_TYPE) {
+            if (is_a($expr, $self::SIDE_EFFECT_NODE_TYPE, true)) {
                 return false;
             }
         }

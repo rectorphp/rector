@@ -92,8 +92,8 @@ CODE_SAMPLE
             return;
         }
 
-        foreach ($traitUse->traits as $singleTraitUse) {
-            $separatedTraitUse = new TraitUse([$singleTraitUse]);
+        foreach ($traitUse->traits as $trait) {
+            $separatedTraitUse = new TraitUse([$trait]);
             $this->addNodeAfterNode($separatedTraitUse, $traitUse);
         }
 

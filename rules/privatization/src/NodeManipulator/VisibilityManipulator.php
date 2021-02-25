@@ -153,8 +153,8 @@ final class VisibilityManipulator
 
     private function ensureIsClassMethodOrProperty(Node $node, string $location): void
     {
-        foreach (self::ALLOWED_NODE_TYPES as $allowedNodeType) {
-            if (is_a($node, $allowedNodeType, true)) {
+        foreach (self::ALLOWED_NODE_TYPES as $self::ALLOWED_NODE_TYPE) {
+            if (is_a($node, $self::ALLOWED_NODE_TYPE, true)) {
                 return;
             }
         }

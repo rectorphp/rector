@@ -280,12 +280,12 @@ final class AssertManipulator
 
     private function renameAssertMethod(StaticCall $staticCall): void
     {
-        foreach (self::ASSERT_METHODS_REMAP as $oldMethod => $newMethod) {
+        foreach (self::ASSERT_METHODS_REMAP as $oldMethod => $singleSelf::ASSERT_METHODS_REMAP) {
             if (! $this->nodeNameResolver->isName($staticCall->name, $oldMethod)) {
                 continue;
             }
 
-            $staticCall->name = new Identifier($newMethod);
+            $staticCall->name = new Identifier($singleSelf::ASSERT_METHODS_REMAP);
         }
     }
 

@@ -57,12 +57,12 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->oldFunctionToNewFunction as $oldFunction => $newFunction) {
+        foreach ($this->oldFunctionToNewFunction as $oldFunction => $singleOldFunctionToNewFunction) {
             if (! $this->isName($node, $oldFunction)) {
                 continue;
             }
 
-            $node->name = $this->createName($newFunction);
+            $node->name = $this->createName($singleOldFunctionToNewFunction);
         }
 
         return $node;

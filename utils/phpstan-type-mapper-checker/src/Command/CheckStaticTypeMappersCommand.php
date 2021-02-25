@@ -48,12 +48,12 @@ final class CheckStaticTypeMappersCommand extends AbstractCommand
             return ShellCode::SUCCESS;
         }
 
-        foreach ($missingTypeNodeClasses as $missingDocTypeNodeClass) {
+        foreach ($missingTypeNodeClasses as $missingTypeNodeClass) {
             $errorMessage = sprintf(
                 'Add new class to "%s" that implements "%s" for "%s" type',
                 'packages/phpstan-static-type-mapper/src/TypeMapper',
                 TypeMapperInterface::class,
-                $missingDocTypeNodeClass
+                $missingTypeNodeClass
             );
             $this->symfonyStyle->error($errorMessage);
         }

@@ -101,20 +101,20 @@ CODE_SAMPLE
         /** @var Array_ $parametersArrayNode */
         $parametersArrayNode = $node->args[1]->value;
 
-        foreach ($parametersArrayNode->items as $arrayItem) {
-            if ($arrayItem === null) {
+        foreach ($parametersArrayNode->items as $item) {
+            if ($item === null) {
                 continue;
             }
 
-            if (! $arrayItem->key instanceof String_) {
+            if (! $item->key instanceof String_) {
                 continue;
             }
 
-            if (Strings::match($arrayItem->key->value, self::BETWEEN_PERCENT_CHARS_REGEX)) {
+            if (Strings::match($item->key->value, self::BETWEEN_PERCENT_CHARS_REGEX)) {
                 continue;
             }
 
-            $arrayItem->key = new String_('%' . $arrayItem->key->value . '%');
+            $item->key = new String_('%' . $item->key->value . '%');
         }
 
         return $node;

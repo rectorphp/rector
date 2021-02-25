@@ -56,16 +56,16 @@ final class PropertyVisibilityVendorLockResolver extends AbstractNodeVendorLockR
 
     private function hasChildProperty(string $desiredClassName, string $propertyName): bool
     {
-        foreach (get_declared_classes() as $className) {
-            if ($className === $desiredClassName) {
+        foreach (get_declared_classes() as $get_declared_class) {
+            if ($get_declared_class === $desiredClassName) {
                 continue;
             }
 
-            if (! is_a($className, $desiredClassName, true)) {
+            if (! is_a($get_declared_class, $desiredClassName, true)) {
                 continue;
             }
 
-            if (property_exists($className, $propertyName)) {
+            if (property_exists($get_declared_class, $propertyName)) {
                 return true;
             }
         }

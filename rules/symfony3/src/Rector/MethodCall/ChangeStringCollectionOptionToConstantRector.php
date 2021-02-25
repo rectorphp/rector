@@ -101,29 +101,29 @@ CODE_SAMPLE
 
     private function processChangeToConstant(Array_ $optionsArray, MethodCall $methodCall): ?Node
     {
-        foreach ($optionsArray->items as $optionsArrayItem) {
-            if ($optionsArrayItem === null) {
+        foreach ($optionsArray->items as $item) {
+            if ($item === null) {
                 continue;
             }
-            if ($optionsArrayItem->key === null) {
+            if ($item->key === null) {
                 continue;
             }
-            if (! $this->valueResolver->isValues($optionsArrayItem->key, ['type', 'entry_type'])) {
+            if (! $this->valueResolver->isValues($item->key, ['type', 'entry_type'])) {
                 continue;
             }
 
             // already ::class reference
-            if (! $optionsArrayItem->value instanceof String_) {
+            if (! $item->value instanceof String_) {
                 return null;
             }
 
-            $stringValue = $optionsArrayItem->value->value;
+            $stringValue = $item->value->value;
             $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($stringValue);
             if ($formClass === null) {
                 return null;
             }
 
-            $optionsArrayItem->value = $this->nodeFactory->createClassConstReference($formClass);
+            $item->value = $this->nodeFactory->createClassConstReference($formClass);
         }
 
         return $methodCall;

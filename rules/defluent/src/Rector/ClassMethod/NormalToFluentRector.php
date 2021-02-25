@@ -162,12 +162,12 @@ CODE_SAMPLE
         $i = 0;
         $fluentMethodCallIndex = null;
         $methodCallsToAdd = [];
-        foreach ($this->collectedMethodCalls as $statementIndex => $methodCall) {
+        foreach ($this->collectedMethodCalls as $statementIndex => $collectedMethodCall) {
             if ($i === 0) {
                 // first method call, add it
                 $fluentMethodCallIndex = $statementIndex;
             } else {
-                $methodCallsToAdd[] = $methodCall;
+                $methodCallsToAdd[] = $collectedMethodCall;
                 // next method calls, unset them
                 unset($classMethod->stmts[$statementIndex]);
             }
@@ -186,25 +186,25 @@ CODE_SAMPLE
         // they are added in reversed direction
         $methodCallsToAdd = array_reverse($methodCallsToAdd);
 
-        foreach ($methodCallsToAdd as $methodCallToAdd) {
+        foreach ($methodCallsToAdd as $singleMethodCallsToAdd) {
             // make var a parent method call
             $fluentMethodCall->var = new MethodCall(
                 $fluentMethodCall->var,
-                $methodCallToAdd->name,
-                $methodCallToAdd->args
+                $singleMethodCallsToAdd->name,
+                $singleMethodCallsToAdd->args
             );
         }
     }
 
     private function matchMethodCall(MethodCall $methodCall): ?string
     {
-        foreach ($this->callsToFluent as $callToFluent) {
-            if (! $this->isObjectType($methodCall, $callToFluent->getClass())) {
+        foreach ($this->callsToFluent as $singleCallsToFluent) {
+            if (! $this->isObjectType($methodCall, $singleCallsToFluent->getClass())) {
                 continue;
             }
 
-            if ($this->isNames($methodCall->name, $callToFluent->getMethodNames())) {
-                return $callToFluent->getClass();
+            if ($this->isNames($methodCall->name, $singleCallsToFluent->getMethodNames())) {
+                return $singleCallsToFluent->getClass();
             }
         }
 

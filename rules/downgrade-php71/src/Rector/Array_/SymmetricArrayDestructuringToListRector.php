@@ -58,12 +58,12 @@ final class SymmetricArrayDestructuringToListRector extends AbstractRector
     private function processToList(Array_ $array): FuncCall
     {
         $args = [];
-        foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
+        foreach ($array->items as $item) {
+            if (! $item instanceof ArrayItem) {
                 continue;
             }
 
-            $args[] = new Arg($arrayItem->value);
+            $args[] = new Arg($item->value);
         }
 
         return new FuncCall(new Name('list'), $args);

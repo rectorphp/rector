@@ -87,11 +87,11 @@ CODE_SAMPLE
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        foreach ($this->annotationsToRemove as $annotationToRemove) {
-            $this->phpDocTagRemover->removeByName($phpDocInfo, $annotationToRemove);
+        foreach ($this->annotationsToRemove as $singleAnnotationsToRemove) {
+            $this->phpDocTagRemover->removeByName($phpDocInfo, $singleAnnotationsToRemove);
 
-            if (is_a($annotationToRemove, PhpDocTagValueNode::class, true)) {
-                $phpDocInfo->removeByType($annotationToRemove);
+            if (is_a($singleAnnotationsToRemove, PhpDocTagValueNode::class, true)) {
+                $phpDocInfo->removeByType($singleAnnotationsToRemove);
             }
         }
 

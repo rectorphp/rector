@@ -107,8 +107,8 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($keysToRemove as $keyToRemove) {
-            $this->nodeRemover->removeArg($node, $keyToRemove);
+        foreach ($keysToRemove as $singleKeysToRemove) {
+            $this->nodeRemover->removeArg($node, $singleKeysToRemove);
         }
 
         return $node;

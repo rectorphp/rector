@@ -45,10 +45,10 @@ final class RouteNameClassFactory
             $namespaceName .= '\\ValueObject\\Routing';
         }
 
-        foreach ($constantNamesAndValues as $constantNameAndValue) {
+        foreach ($constantNamesAndValues as $constantNamesAndValue) {
             $classConst = $this->nodeFactory->createPublicClassConst(
-                $constantNameAndValue->getName(),
-                $constantNameAndValue->getValue()
+                $constantNamesAndValue->getName(),
+                $constantNamesAndValue->getValue()
             );
             $classBuilder->addStmt($classConst);
         }

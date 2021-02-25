@@ -49,8 +49,8 @@ final class UnionTypeMapper implements PhpDocTypeMapperInterface
     public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope): Type
     {
         $unionedTypes = [];
-        foreach ($typeNode->types as $unionedTypeNode) {
-            $unionedTypes[] = $this->phpDocTypeMapper->mapToPHPStanType($unionedTypeNode, $node, $nameScope);
+        foreach ($typeNode->types as $type) {
+            $unionedTypes[] = $this->phpDocTypeMapper->mapToPHPStanType($type, $node, $nameScope);
         }
 
         // to prevent missing class error, e.g. in tests

@@ -14,12 +14,12 @@ final class PhpDocTagRemover
     {
         $attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
 
-        foreach ($attributeAwarePhpDocNode->children as $key => $phpDocChildNode) {
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+        foreach ($attributeAwarePhpDocNode->children as $key => $child) {
+            if (! $child instanceof PhpDocTagNode) {
                 continue;
             }
 
-            if (! $this->areAnnotationNamesEqual($name, $phpDocChildNode->name)) {
+            if (! $this->areAnnotationNamesEqual($name, $child->name)) {
                 continue;
             }
 
@@ -33,18 +33,18 @@ final class PhpDocTagRemover
     {
         $attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
 
-        foreach ($attributeAwarePhpDocNode->children as $key => $phpDocChildNode) {
-            if ($phpDocChildNode === $desiredNode) {
+        foreach ($attributeAwarePhpDocNode->children as $key => $child) {
+            if ($child === $desiredNode) {
                 unset($attributeAwarePhpDocNode->children[$key]);
                 $phpDocInfo->markAsChanged();
                 continue;
             }
 
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+            if (! $child instanceof PhpDocTagNode) {
                 continue;
             }
 
-            if ($phpDocChildNode->value !== $desiredNode) {
+            if ($child->value !== $desiredNode) {
                 continue;
             }
 

@@ -66,17 +66,17 @@ final class ExistingClassesProvider
         $robotLoader = new RobotLoader();
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/rector_restore');
 
-        foreach ($directories as $path) {
-            $robotLoader->addDirectory(getcwd() . '/' . $path);
+        foreach ($directories as $directory) {
+            $robotLoader->addDirectory(getcwd() . '/' . $directory);
         }
 
         $classNames = [];
-        foreach (array_keys($robotLoader->getIndexedClasses()) as $className) {
-            if (! is_string($className)) {
+        foreach (array_keys($robotLoader->getIndexedClasses()) as $array_key) {
+            if (! is_string($array_key)) {
                 continue;
             }
 
-            $classNames[] = $className;
+            $classNames[] = $array_key;
         }
 
         return $classNames;

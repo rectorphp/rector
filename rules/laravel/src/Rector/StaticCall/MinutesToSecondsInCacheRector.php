@@ -113,22 +113,22 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->typeToTimeMethodsAndPositions as $typeToTimeMethodAndPosition) {
-            if (! $this->isObjectType($node, $typeToTimeMethodAndPosition->getType())) {
+        foreach ($this->typeToTimeMethodsAndPositions as $typeToTimeMethodsAndPosition) {
+            if (! $this->isObjectType($node, $typeToTimeMethodsAndPosition->getType())) {
                 continue;
             }
 
-            if (! $this->isName($node->name, $typeToTimeMethodAndPosition->getMethodName())) {
+            if (! $this->isName($node->name, $typeToTimeMethodsAndPosition->getMethodName())) {
                 continue;
             }
 
-            if (! isset($node->args[$typeToTimeMethodAndPosition->getPosition()])) {
+            if (! isset($node->args[$typeToTimeMethodsAndPosition->getPosition()])) {
                 continue;
             }
 
-            $argValue = $node->args[$typeToTimeMethodAndPosition->getPosition()]->value;
+            $argValue = $node->args[$typeToTimeMethodsAndPosition->getPosition()]->value;
 
-            return $this->processArgumentOnPosition($node, $argValue, $typeToTimeMethodAndPosition->getPosition());
+            return $this->processArgumentOnPosition($node, $argValue, $typeToTimeMethodsAndPosition->getPosition());
         }
 
         return $node;

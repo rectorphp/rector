@@ -644,17 +644,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach (self::METHOD_NAMES_BY_TYPE_WITH_VALUE as $type => $defaultValuesByMethodName) {
+        foreach (self::METHOD_NAMES_BY_TYPE_WITH_VALUE as $type => $singleSelf::METHOD_NAMES_BY_TYPE_WITH_VALUE) {
             if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $type)) {
                 continue;
             }
 
-            foreach ($defaultValuesByMethodName as $methodName => $defaultValuesByPosition) {
+            foreach ($singleSelf::METHOD_NAMES_BY_TYPE_WITH_VALUE as $methodName => $singleSingleSelf::METHOD_NAMES_BY_TYPE_WITH_VALUE) {
                 if (! $this->isName($node->name, $methodName)) {
                     continue;
                 }
 
-                $this->refactorArgs($node, $defaultValuesByPosition);
+                $this->refactorArgs($node, $singleSingleSelf::METHOD_NAMES_BY_TYPE_WITH_VALUE);
             }
         }
 
@@ -667,18 +667,18 @@ CODE_SAMPLE
      */
     private function refactorArgs(Node $node, array $defaultValuesByPosition): void
     {
-        foreach ($defaultValuesByPosition as $position => $defaultValue) {
+        foreach ($defaultValuesByPosition as $position => $singleDefaultValuesByPosition) {
             // value is already set
             if (isset($node->args[$position])) {
                 continue;
             }
 
-            if (is_string($defaultValue) && Strings::contains($defaultValue, '::')) {
-                [$className, $constant] = explode('::', $defaultValue);
+            if (is_string($singleDefaultValuesByPosition) && Strings::contains($singleDefaultValuesByPosition, '::')) {
+                [$className, $constant] = explode('::', $singleDefaultValuesByPosition);
                 $classConstant = $this->nodeFactory->createClassConstFetch($className, $constant);
                 $arg = new Arg($classConstant);
             } else {
-                $arg = $this->nodeFactory->createArg($defaultValue);
+                $arg = $this->nodeFactory->createArg($singleDefaultValuesByPosition);
             }
 
             $node->args[$position] = $arg;

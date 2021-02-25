@@ -115,15 +115,15 @@ CODE_SAMPLE
         /** @var Array_ $optionsArray */
         $optionsArray = $funcCall->args[2]->value;
         /** @var ArrayItem|null $arrayItem */
-        foreach ($optionsArray->items as $arrayItem) {
-            if ($arrayItem === null) {
+        foreach ($optionsArray->items as $item) {
+            if ($item === null) {
                 continue;
             }
 
             /** @var Arg $value */
-            $value = $arrayItem->value;
+            $value = $item->value;
             /** @var String_ $key */
-            $key = $arrayItem->key;
+            $key = $item->key;
             $name = $key->value;
 
             if (! $this->isMappableArrayKey($name)) {

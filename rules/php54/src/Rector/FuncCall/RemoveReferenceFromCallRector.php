@@ -55,9 +55,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($node->args as $nodeArg) {
-            if ($nodeArg->byRef) {
-                $nodeArg->byRef = false;
+        foreach ($node->args as $arg) {
+            if ($arg->byRef) {
+                $arg->byRef = false;
             }
         }
 

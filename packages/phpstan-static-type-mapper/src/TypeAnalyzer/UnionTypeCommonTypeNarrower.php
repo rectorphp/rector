@@ -50,8 +50,8 @@ final class UnionTypeCommonTypeNarrower
         $sharedTypes = $this->narrowToSharedTypes($unionType);
 
         if ($sharedTypes !== []) {
-            foreach (self::PRIORITY_TYPES as $winningType => $groupTypes) {
-                if (array_intersect($groupTypes, $sharedTypes) === $groupTypes) {
+            foreach (self::PRIORITY_TYPES as $winningType => $self::PRIORITY_TYPE) {
+                if (array_intersect($self::PRIORITY_TYPE, $sharedTypes) === $self::PRIORITY_TYPE) {
                     return new ObjectType($winningType);
                 }
             }
@@ -141,9 +141,9 @@ final class UnionTypeCommonTypeNarrower
      */
     private function filterOutNativeInterfaces(array $interfaces): array
     {
-        foreach ($interfaces as $key => $implementedInterface) {
+        foreach ($interfaces as $key => $interface) {
             // remove native interfaces
-            if (Strings::contains($implementedInterface, '\\')) {
+            if (Strings::contains($interface, '\\')) {
                 continue;
             }
 
@@ -173,8 +173,8 @@ final class UnionTypeCommonTypeNarrower
         $sharedTypes = $this->narrowAvailableTypes($availableTypes);
 
         if ($sharedTypes !== []) {
-            foreach (self::PRIORITY_TYPES as $winningType => $groupTypes) {
-                if (array_intersect($groupTypes, $sharedTypes) === $groupTypes) {
+            foreach (self::PRIORITY_TYPES as $winningType => $self::PRIORITY_TYPE) {
+                if (array_intersect($self::PRIORITY_TYPE, $sharedTypes) === $self::PRIORITY_TYPE) {
                     return new GenericClassStringType(new ObjectType($winningType));
                 }
             }

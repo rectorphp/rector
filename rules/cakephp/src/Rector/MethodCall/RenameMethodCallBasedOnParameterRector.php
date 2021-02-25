@@ -102,20 +102,20 @@ CODE_SAMPLE
 
         $firstArgValue = $methodCall->args[0]->value;
 
-        foreach ($this->callsWithParamRenames as $callWithParamRename) {
-            if (! $this->isObjectType($methodCall, $callWithParamRename->getOldClass())) {
+        foreach ($this->callsWithParamRenames as $callsWithParamRename) {
+            if (! $this->isObjectType($methodCall, $callsWithParamRename->getOldClass())) {
                 continue;
             }
 
-            if (! $this->isName($methodCall->name, $callWithParamRename->getOldMethod())) {
+            if (! $this->isName($methodCall->name, $callsWithParamRename->getOldMethod())) {
                 continue;
             }
 
-            if (! $this->valueResolver->isValue($firstArgValue, $callWithParamRename->getParameterName())) {
+            if (! $this->valueResolver->isValue($firstArgValue, $callsWithParamRename->getParameterName())) {
                 continue;
             }
 
-            return $callWithParamRename;
+            return $callsWithParamRename;
         }
 
         return null;

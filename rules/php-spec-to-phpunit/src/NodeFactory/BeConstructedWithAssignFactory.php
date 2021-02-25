@@ -76,12 +76,12 @@ final class BeConstructedWithAssignFactory
 
         /** @var Array_ $array */
         $array = $methodCall->args[1]->value;
-        foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
+        foreach ($array->items as $item) {
+            if (! $item instanceof ArrayItem) {
                 continue;
             }
 
-            $staticCall->args[] = new Arg($arrayItem->value);
+            $staticCall->args[] = new Arg($item->value);
         }
     }
 }

@@ -110,12 +110,12 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $hasChanged = false;
-        foreach ($this->methodsToYields as $methodToYield) {
-            if (! $this->isObjectType($node, $methodToYield->getType())) {
+        foreach ($this->methodsToYields as $methodsToYield) {
+            if (! $this->isObjectType($node, $methodsToYield->getType())) {
                 continue;
             }
 
-            if (! $this->isName($node, $methodToYield->getMethod())) {
+            if (! $this->isName($node, $methodsToYield->getMethod())) {
                 continue;
             }
 
@@ -153,13 +153,13 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($classMethod->stmts as $statement) {
-            if ($statement instanceof Return_) {
-                if (! $statement->expr instanceof Array_) {
+        foreach ($classMethod->stmts as $stmt) {
+            if ($stmt instanceof Return_) {
+                if (! $stmt->expr instanceof Array_) {
                     continue;
                 }
 
-                return $statement->expr;
+                return $stmt->expr;
             }
         }
 

@@ -97,12 +97,12 @@ CODE_SAMPLE
 
     private function refactorArrayForeachValue(Array_ $array, Foreach_ $foreach): Array_
     {
-        foreach ($array->items as $key => $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
+        foreach ($array->items as $key => $item) {
+            if (! $item instanceof ArrayItem) {
                 continue;
             }
 
-            $value = $arrayItem->value;
+            $value = $item->value;
             if (! $value instanceof Variable) {
                 return $array;
             }

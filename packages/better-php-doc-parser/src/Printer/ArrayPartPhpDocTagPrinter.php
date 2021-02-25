@@ -105,15 +105,15 @@ final class ArrayPartPhpDocTagPrinter
      */
     private function quoteKeys(array $item, string $key, string $json, string $originalContent): string
     {
-        foreach (array_keys($item) as $itemKey) {
+        foreach (array_keys($item) as $array_key) {
             // @see https://regex101.com/r/V7nq5D/1
-            $quotedKeyPattern = '#' . $key . '={(.*?)?\"' . $itemKey . '\"(=|:)(.*?)?}#';
+            $quotedKeyPattern = '#' . $key . '={(.*?)?\"' . $array_key . '\"(=|:)(.*?)?}#';
             $isKeyQuoted = (bool) Strings::match($originalContent, $quotedKeyPattern);
             if (! $isKeyQuoted) {
                 continue;
             }
 
-            $json = Strings::replace($json, '#([^\"])' . $itemKey . '([^\"])#', '$1"' . $itemKey . '"$2');
+            $json = Strings::replace($json, '#([^\"])' . $array_key . '([^\"])#', '$1"' . $array_key . '"$2');
         }
 
         return $json;

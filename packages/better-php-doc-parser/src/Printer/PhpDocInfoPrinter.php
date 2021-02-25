@@ -190,8 +190,8 @@ final class PhpDocInfoPrinter
         // node output
         $nodeCount = count($attributeAwarePhpDocNode->children);
 
-        foreach ($attributeAwarePhpDocNode->children as $key => $phpDocChildNode) {
-            $output .= $this->printNode($phpDocChildNode, null, $key + 1, $nodeCount);
+        foreach ($attributeAwarePhpDocNode->children as $key => $child) {
+            $output .= $this->printNode($child, null, $key + 1, $nodeCount);
         }
 
         $output = $this->printEnd($output);

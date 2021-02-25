@@ -74,20 +74,20 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->renameClassConstFetches as $classConstantRename) {
-            if (! $this->isObjectType($node, $classConstantRename->getOldClass())) {
+        foreach ($this->renameClassConstFetches as $renameClassConstFetch) {
+            if (! $this->isObjectType($node, $renameClassConstFetch->getOldClass())) {
                 continue;
             }
 
-            if (! $this->isName($node->name, $classConstantRename->getOldConstant())) {
+            if (! $this->isName($node->name, $renameClassConstFetch->getOldConstant())) {
                 continue;
             }
 
-            if ($classConstantRename instanceof RenameClassAndConstFetch) {
-                return $this->createClassAndConstFetch($classConstantRename);
+            if ($renameClassConstFetch instanceof RenameClassAndConstFetch) {
+                return $this->createClassAndConstFetch($renameClassConstFetch);
             }
 
-            $node->name = new Identifier($classConstantRename->getNewConstant());
+            $node->name = new Identifier($renameClassConstFetch->getNewConstant());
 
             return $node;
         }

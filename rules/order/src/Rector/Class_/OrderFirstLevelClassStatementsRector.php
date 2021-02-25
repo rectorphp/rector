@@ -95,9 +95,9 @@ CODE_SAMPLE
 
     private function resolveClassElementRank(Stmt $stmt): int
     {
-        foreach (self::TYPE_TO_RANK as $type => $rank) {
+        foreach (self::TYPE_TO_RANK as $type => $singleSelf::TYPE_TO_RANK) {
             if (is_a($stmt, $type, true)) {
-                return $rank;
+                return $singleSelf::TYPE_TO_RANK;
             }
         }
 

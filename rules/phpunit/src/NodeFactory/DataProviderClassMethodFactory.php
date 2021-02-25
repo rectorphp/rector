@@ -28,12 +28,12 @@ final class DataProviderClassMethodFactory
                 continue;
             }
 
-            foreach ($value->items as $arrayItem) {
-                if (! $arrayItem instanceof ArrayItem) {
+            foreach ($value->items as $item) {
+                if (! $item instanceof ArrayItem) {
                     continue;
                 }
 
-                $returnStatement = new Yield_(new Array_([new ArrayItem($arrayItem->value)]));
+                $returnStatement = new Yield_(new Array_([new ArrayItem($item->value)]));
                 $classMethod->stmts[] = new Expression($returnStatement);
             }
         }

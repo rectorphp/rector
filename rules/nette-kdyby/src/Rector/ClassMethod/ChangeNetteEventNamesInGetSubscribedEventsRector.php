@@ -159,18 +159,18 @@ CODE_SAMPLE
 
     private function refactorArrayWithEventTable(Array_ $array): void
     {
-        foreach ($array->items as $arrayItem) {
-            if ($arrayItem === null) {
+        foreach ($array->items as $item) {
+            if ($item === null) {
                 continue;
             }
 
-            if ($arrayItem->key !== null) {
+            if ($item->key !== null) {
                 continue;
             }
 
-            $methodName = $this->resolveMethodNameFromKdybyEventName($arrayItem->value);
-            $arrayItem->key = $arrayItem->value;
-            $arrayItem->value = new String_($methodName);
+            $methodName = $this->resolveMethodNameFromKdybyEventName($item->value);
+            $item->key = $item->value;
+            $item->value = new String_($methodName);
         }
     }
 

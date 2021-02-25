@@ -75,12 +75,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->staticCallsToNews as $staticCallToNew) {
-            if (! $this->isName($node->class, $staticCallToNew->getClass())) {
+        foreach ($this->staticCallsToNews as $singleStaticCallsToNews) {
+            if (! $this->isName($node->class, $singleStaticCallsToNews->getClass())) {
                 continue;
             }
 
-            if (! $this->isName($node->name, $staticCallToNew->getMethod())) {
+            if (! $this->isName($node->name, $singleStaticCallsToNews->getMethod())) {
                 continue;
             }
 

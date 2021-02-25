@@ -65,12 +65,12 @@ final class ClassAnnotationMatcher
     private function matchFullAnnotationClassWithUses(string $tag, array $uses): ?string
     {
         foreach ($uses as $use) {
-            foreach ($use->uses as $useUse) {
-                if (! $this->isUseMatchingName($tag, $useUse)) {
+            foreach ($use->uses as $use) {
+                if (! $this->isUseMatchingName($tag, $use)) {
                     continue;
                 }
 
-                return $this->resolveName($tag, $useUse);
+                return $this->resolveName($tag, $use);
             }
         }
 

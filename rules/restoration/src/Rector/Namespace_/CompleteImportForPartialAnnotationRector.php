@@ -86,13 +86,13 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->useImportsToRestore as $useImportToRestore) {
-            $annotationToSeek = '#\*\s+\@' . $useImportToRestore->getAlias() . '#';
+        foreach ($this->useImportsToRestore as $singleUseImportsToRestore) {
+            $annotationToSeek = '#\*\s+\@' . $singleUseImportsToRestore->getAlias() . '#';
             if (! Strings::match($this->print($class), $annotationToSeek)) {
                 continue;
             }
 
-            $node = $this->addImportToNamespaceIfMissing($node, $useImportToRestore);
+            $node = $this->addImportToNamespaceIfMissing($node, $singleUseImportsToRestore);
         }
 
         return $node;

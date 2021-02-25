@@ -35,8 +35,8 @@ final class AliasClassNameImportSkipVoter implements ClassNameImportSkipVoterInt
     {
         $aliasedUses = $this->aliasUsesResolver->resolveForNode($node);
 
-        foreach ($aliasedUses as $aliasedUse) {
-            $aliasedUseLowered = strtolower($aliasedUse);
+        foreach ($aliasedUses as $aliasedus) {
+            $aliasedUseLowered = strtolower($aliasedus);
 
             // its aliased, we cannot just rename it
             if (Strings::endsWith($aliasedUseLowered, '\\' . $fullyQualifiedObjectType->getShortNameLowered())) {

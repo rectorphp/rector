@@ -57,19 +57,19 @@ final class UseManipulator
         /** @var Name[] $namedNodes */
         $namedNodes = $this->betterNodeFinder->findInstanceOf($node, Name::class);
 
-        foreach ($namedNodes as $nameNode) {
+        foreach ($namedNodes as $namedNode) {
             /** node name before becoming FQN - attribute from @see NameResolver */
-            $originalName = $nameNode->getAttribute(AttributeKey::ORIGINAL_NAME);
+            $originalName = $namedNode->getAttribute(AttributeKey::ORIGINAL_NAME);
             if (! $originalName instanceof Name) {
                 continue;
             }
 
-            $parentNode = $nameNode->getAttribute(AttributeKey::PARENT_NODE);
+            $parentNode = $namedNode->getAttribute(AttributeKey::PARENT_NODE);
             if (! $parentNode instanceof Node) {
                 throw new ShouldNotHappenException();
             }
 
-            $this->resolvedNodeNames[$originalName->toString()][] = new NameAndParent($nameNode, $parentNode);
+            $this->resolvedNodeNames[$originalName->toString()][] = new NameAndParent($namedNode, $parentNode);
         }
     }
 

@@ -175,8 +175,8 @@ CODE_SAMPLE
     private function processAddTypeAssert(ClassMethod $classMethod, array $toBeProcessedTypes): ClassMethod
     {
         $assertStatements = [];
-        foreach ($toBeProcessedTypes as $variableName => $requiredType) {
-            $classConstFetches = $this->classConstFetchFactory->createFromType($requiredType);
+        foreach ($toBeProcessedTypes as $variableName => $toBeProcessedType) {
+            $classConstFetches = $this->classConstFetchFactory->createFromType($toBeProcessedType);
 
             $arguments = [new Variable($variableName)];
 

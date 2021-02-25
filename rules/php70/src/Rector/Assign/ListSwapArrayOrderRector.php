@@ -50,13 +50,13 @@ final class ListSwapArrayOrderRector extends AbstractRector
         }
 
         $printedVariables = [];
-        foreach ($node->var->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
+        foreach ($node->var->items as $item) {
+            if (! $item instanceof ArrayItem) {
                 continue;
             }
 
-            if ($arrayItem->value instanceof ArrayDimFetch && $arrayItem->value->dim === null) {
-                $printedVariables[] = $this->print($arrayItem->value->var);
+            if ($item->value instanceof ArrayDimFetch && $item->value->dim === null) {
+                $printedVariables[] = $this->print($item->value->var);
             } else {
                 return null;
             }

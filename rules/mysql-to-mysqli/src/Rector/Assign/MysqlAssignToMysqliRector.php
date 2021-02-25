@@ -174,7 +174,7 @@ CODE_SAMPLE
 
     private function processFieldToFieldDirect(Assign $assign, FuncCall $funcCall): ?Assign
     {
-        foreach (self::FIELD_TO_FIELD_DIRECT as $funcName => $property) {
+        foreach (self::FIELD_TO_FIELD_DIRECT as $funcName => $singleSelf::FIELD_TO_FIELD_DIRECT) {
             if ($this->isName($funcCall, $funcName)) {
                 $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
                 if ($parentNode instanceof PropertyFetch) {
@@ -185,7 +185,7 @@ CODE_SAMPLE
                 }
 
                 $funcCall->name = new Name('mysqli_fetch_field_direct');
-                $assign->expr = new PropertyFetch($funcCall, $property);
+                $assign->expr = new PropertyFetch($funcCall, $singleSelf::FIELD_TO_FIELD_DIRECT);
 
                 return $assign;
             }

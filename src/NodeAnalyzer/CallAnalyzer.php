@@ -36,8 +36,8 @@ final class CallAnalyzer
             return $isObjectCallLeft || $isObjectCallRight;
         }
 
-        foreach (self::OBJECT_CALLS as $objectCall) {
-            if (is_a($node, $objectCall, true)) {
+        foreach (self::OBJECT_CALLS as $self::OBJECT_CALL) {
+            if (is_a($node, $self::OBJECT_CALL, true)) {
                 return true;
             }
         }

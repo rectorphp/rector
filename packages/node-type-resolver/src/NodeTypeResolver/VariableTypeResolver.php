@@ -140,8 +140,8 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
 
     private function resolveFromParentNodes(Variable $variable): ?Scope
     {
-        foreach (self::PARENT_NODE_ATTRIBUTES as $parentNodeAttribute) {
-            $parentNode = $variable->getAttribute($parentNodeAttribute);
+        foreach (self::PARENT_NODE_ATTRIBUTES as $self::PARENT_NODE_ATTRIBUTE) {
+            $parentNode = $variable->getAttribute($self::PARENT_NODE_ATTRIBUTE);
             if (! $parentNode instanceof Node) {
                 continue;
             }

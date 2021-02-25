@@ -40,10 +40,10 @@ final class PSR4NamespaceMatcher implements PSR4AutoloadNamespaceMatcherInterfac
 
         $psr4Autoloads = $this->psr4AutoloadPathsProvider->provide();
 
-        foreach ($psr4Autoloads as $namespace => $path) {
+        foreach ($psr4Autoloads as $namespace => $psr4Autoload) {
             // remove extra slash
             /** @var string[] $paths */
-            $paths = is_array($path) ? $path : [$path];
+            $paths = is_array($psr4Autoload) ? $psr4Autoload : [$psr4Autoload];
 
             foreach ($paths as $singlePath) {
                 $singlePath = rtrim($singlePath, '/');

@@ -91,13 +91,13 @@ final class NodeTransformer
     {
         $yieldNodes = [];
 
-        foreach ($array->items as $arrayItem) {
-            if ($arrayItem === null) {
+        foreach ($array->items as $item) {
+            if ($item === null) {
                 continue;
             }
 
-            $expressionNode = new Expression(new Yield_($arrayItem->value, $arrayItem->key));
-            $arrayItemComments = $arrayItem->getComments();
+            $expressionNode = new Expression(new Yield_($item->value, $item->key));
+            $arrayItemComments = $item->getComments();
             if ($arrayItemComments !== []) {
                 $expressionNode->setAttribute(AttributeKey::COMMENTS, $arrayItemComments);
             }

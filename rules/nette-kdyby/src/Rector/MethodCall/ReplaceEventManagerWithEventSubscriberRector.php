@@ -181,12 +181,12 @@ CODE_SAMPLE
             if (! $array instanceof Array_) {
                 return [];
             }
-            foreach ($array->items as $arrayItem) {
-                if (! $arrayItem instanceof ArrayItem) {
+            foreach ($array->items as $item) {
+                if (! $item instanceof ArrayItem) {
                     continue;
                 }
 
-                $args[] = new Arg($arrayItem->value);
+                $args[] = new Arg($item->value);
             }
         }
 

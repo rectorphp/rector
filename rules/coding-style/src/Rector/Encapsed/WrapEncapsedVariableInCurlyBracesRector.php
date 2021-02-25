@@ -54,15 +54,15 @@ CODE_SAMPLE
         $startTokenPos = $node->getStartTokenPos();
         $hasVariableBeenWrapped = false;
 
-        foreach ($node->parts as $index => $nodePart) {
-            if ($nodePart instanceof Variable) {
-                $previousNode = $nodePart->getAttribute(AttributeKey::PREVIOUS_NODE);
+        foreach ($node->parts as $index => $part) {
+            if ($part instanceof Variable) {
+                $previousNode = $part->getAttribute(AttributeKey::PREVIOUS_NODE);
                 $previousNodeEndTokenPosition = $previousNode instanceof Node ? $previousNode->getEndTokenPos() : $startTokenPos;
 
-                if ($previousNodeEndTokenPosition + 1 === $nodePart->getStartTokenPos()) {
+                if ($previousNodeEndTokenPosition + 1 === $part->getStartTokenPos()) {
                     $hasVariableBeenWrapped = true;
 
-                    $node->parts[$index] = new Variable($nodePart->name);
+                    $node->parts[$index] = new Variable($part->name);
                 }
             }
         }

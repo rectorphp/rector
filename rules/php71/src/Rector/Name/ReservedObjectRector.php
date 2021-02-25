@@ -85,12 +85,12 @@ CODE_SAMPLE
 
     private function processIdentifier(Identifier $identifier): Identifier
     {
-        foreach ($this->reservedKeywordsToReplacements as $reservedKeyword => $replacement) {
+        foreach ($this->reservedKeywordsToReplacements as $reservedKeyword => $reservedKeywordsToReplacement) {
             if (! $this->isName($identifier, $reservedKeyword)) {
                 continue;
             }
 
-            $identifier->name = $replacement;
+            $identifier->name = $reservedKeywordsToReplacement;
 
             return $identifier;
         }
@@ -108,9 +108,9 @@ CODE_SAMPLE
         }
 
         // process lass part
-        foreach ($this->reservedKeywordsToReplacements as $reservedKeyword => $replacement) {
+        foreach ($this->reservedKeywordsToReplacements as $reservedKeyword => $reservedKeywordsToReplacement) {
             if (strtolower($name->getLast()) === strtolower($reservedKeyword)) {
-                $name->parts[count($name->parts) - 1] = $replacement;
+                $name->parts[count($name->parts) - 1] = $reservedKeywordsToReplacement;
 
                 // invoke override
                 $name->setAttribute(AttributeKey::ORIGINAL_NODE, null);

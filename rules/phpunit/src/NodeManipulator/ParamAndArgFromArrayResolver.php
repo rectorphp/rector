@@ -46,12 +46,12 @@ final class ParamAndArgFromArrayResolver
 
     private function isNestedArray(Array_ $array): bool
     {
-        foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
+        foreach ($array->items as $item) {
+            if (! $item instanceof ArrayItem) {
                 continue;
             }
 
-            if ($arrayItem->value instanceof Array_) {
+            if ($item->value instanceof Array_) {
                 return true;
             }
         }
@@ -67,24 +67,24 @@ final class ParamAndArgFromArrayResolver
         $paramAndArgs = [];
         $i = 1;
 
-        foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
+        foreach ($array->items as $item) {
+            if (! $item instanceof ArrayItem) {
                 continue;
             }
 
-            $nestedArray = $arrayItem->value;
+            $nestedArray = $item->value;
             if (! $nestedArray instanceof Array_) {
                 continue;
             }
 
-            foreach ($nestedArray->items as $nestedArrayItem) {
-                if (! $nestedArrayItem instanceof ArrayItem) {
+            foreach ($nestedArray->items as $item) {
+                if (! $item instanceof ArrayItem) {
                     continue;
                 }
 
                 $variable = new Variable($variableName . ($i === 1 ? '' : $i));
 
-                $itemsStaticType = $this->nodeTypeResolver->getStaticType($nestedArrayItem->value);
+                $itemsStaticType = $this->nodeTypeResolver->getStaticType($item->value);
                 $paramAndArgs[] = new ParamAndArg($variable, $itemsStaticType);
                 ++$i;
             }
@@ -96,12 +96,12 @@ final class ParamAndArgFromArrayResolver
     {
         $staticTypes = [];
         if (! $isNestedArray) {
-            foreach ($array->items as $arrayItem) {
-                if (! $arrayItem instanceof ArrayItem) {
+            foreach ($array->items as $item) {
+                if (! $item instanceof ArrayItem) {
                     continue;
                 }
 
-                $staticTypes[] = $this->nodeTypeResolver->getStaticType($arrayItem->value);
+                $staticTypes[] = $this->nodeTypeResolver->getStaticType($item->value);
             }
         }
 
@@ -119,8 +119,8 @@ final class ParamAndArgFromArrayResolver
         $i = 1;
         $paramAndArgs = [];
 
-        foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
+        foreach ($array->items as $item) {
+            if (! $item instanceof ArrayItem) {
                 continue;
             }
 
@@ -129,7 +129,7 @@ final class ParamAndArgFromArrayResolver
             $paramAndArgs[] = new ParamAndArg($variable, $itemsStaticType);
             ++$i;
 
-            if (! $arrayItem->value instanceof Array_) {
+            if (! $item->value instanceof Array_) {
                 break;
             }
         }

@@ -158,9 +158,9 @@ final class ClassInsertManipulator
 
     private function addTraitUse(Class_ $class, TraitUse $traitUse): void
     {
-        foreach (self::BEFORE_TRAIT_TYPES as $type) {
-            foreach ($class->stmts as $key => $classStmt) {
-                if (! $classStmt instanceof $type) {
+        foreach (self::BEFORE_TRAIT_TYPES as $self::BEFORE_TRAIT_TYPE) {
+            foreach ($class->stmts as $key => $stmt) {
+                if (! $stmt instanceof $self::BEFORE_TRAIT_TYPE) {
                     continue;
                 }
 

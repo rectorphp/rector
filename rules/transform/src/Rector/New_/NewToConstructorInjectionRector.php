@@ -128,16 +128,16 @@ CODE_SAMPLE
 
     private function refactorMethodCall(MethodCall $methodCall): ?MethodCall
     {
-        foreach ($this->typesToConstructorInjection as $typeToConstructorInjection) {
+        foreach ($this->typesToConstructorInjection as $singleTypesToConstructorInjection) {
             if (! $methodCall->var instanceof Variable) {
                 continue;
             }
 
-            if (! $this->isObjectType($methodCall->var, $typeToConstructorInjection)) {
+            if (! $this->isObjectType($methodCall->var, $singleTypesToConstructorInjection)) {
                 continue;
             }
 
-            $methodCall->var = $this->propertyFetchFactory->createFromType($typeToConstructorInjection);
+            $methodCall->var = $this->propertyFetchFactory->createFromType($singleTypesToConstructorInjection);
             return $methodCall;
         }
 
@@ -150,8 +150,8 @@ CODE_SAMPLE
             return;
         }
 
-        foreach ($this->typesToConstructorInjection as $typesToConstructorInjection) {
-            if (! $this->isObjectType($assign->expr, $typesToConstructorInjection)) {
+        foreach ($this->typesToConstructorInjection as $singleTypesToConstructorInjection) {
+            if (! $this->isObjectType($assign->expr, $singleTypesToConstructorInjection)) {
                 continue;
             }
 
@@ -161,8 +161,8 @@ CODE_SAMPLE
 
     private function refactorNew(New_ $new): void
     {
-        foreach ($this->typesToConstructorInjection as $typeToConstructorInjection) {
-            if (! $this->isObjectType($new->class, $typeToConstructorInjection)) {
+        foreach ($this->typesToConstructorInjection as $singleTypesToConstructorInjection) {
+            if (! $this->isObjectType($new->class, $singleTypesToConstructorInjection)) {
                 continue;
             }
 
@@ -171,7 +171,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $objectType = new ObjectType($typeToConstructorInjection);
+            $objectType = new ObjectType($singleTypesToConstructorInjection);
             $expectedPropertyName = $this->propertyNaming->getExpectedNameFromType($objectType);
             if (! $expectedPropertyName instanceof ExpectedName) {
                 continue;

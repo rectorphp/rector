@@ -43,8 +43,8 @@ final class TemplateParametersAssigns implements ParameterArrayInterface
     public function getConditionalVariableNames(): array
     {
         $conditionalVariableNames = [];
-        foreach ($this->conditionalTemplateParameterAssign as $conditionalTemplateParameterAssign) {
-            $conditionalVariableNames[] = $conditionalTemplateParameterAssign->getParameterName();
+        foreach ($this->conditionalTemplateParameterAssign as $singleConditionalTemplateParameterAssign) {
+            $conditionalVariableNames[] = $singleConditionalTemplateParameterAssign->getParameterName();
         }
 
         return array_unique($conditionalVariableNames);

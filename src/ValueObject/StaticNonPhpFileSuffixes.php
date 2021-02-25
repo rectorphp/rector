@@ -14,8 +14,8 @@ final class StaticNonPhpFileSuffixes
     public static function getSuffixRegexPattern(): string
     {
         $quotedSuffixes = [];
-        foreach (self::SUFFIXES as $suffix) {
-            $quotedSuffixes[] = preg_quote($suffix, '#');
+        foreach (self::SUFFIXES as $self::SUFFIX) {
+            $quotedSuffixes[] = preg_quote($self::SUFFIX, '#');
         }
 
         return '#\.(' . implode('|', $quotedSuffixes) . ')$#i';

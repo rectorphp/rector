@@ -87,16 +87,16 @@ CODE_SAMPLE
         }
 
         $array = $propertyProperty->default;
-        foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
+        foreach ($array->items as $item) {
+            if (! $item instanceof ArrayItem) {
                 continue;
             }
 
-            if (! $arrayItem->value instanceof String_) {
+            if (! $item->value instanceof String_) {
                 continue;
             }
 
-            $this->renameFixtureName($arrayItem->value);
+            $this->renameFixtureName($item->value);
         }
     }
 

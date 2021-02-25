@@ -74,12 +74,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->functionToNew as $function => $new) {
+        foreach ($this->functionToNew as $function => $singleFunctionToNew) {
             if (! $this->isName($node, $function)) {
                 continue;
             }
 
-            return new New_(new FullyQualified($new), $node->args);
+            return new New_(new FullyQualified($singleFunctionToNew), $node->args);
         }
 
         return null;
