@@ -79,7 +79,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! ($node->expr instanceof Variable || $node->expr instanceof PropertyFetch)) {
+        if (! $node->expr instanceof Variable && ! $node->expr instanceof PropertyFetch) {
             return null;
         }
 
