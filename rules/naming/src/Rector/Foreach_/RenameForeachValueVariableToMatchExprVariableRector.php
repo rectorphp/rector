@@ -84,8 +84,11 @@ CODE_SAMPLE
         }
 
         $keyVarName = $node->keyVar === null ? '' : (string) $this->getName($node->keyVar);
-        /** @var string $valueVarName */
         $valueVarName = $this->getName($node->valueVar);
+        if ($valueVarName === null) {
+            return null;
+        }
+
         $singularValueVarName = $this->inflector->singularize($exprName);
         $singularValueVarName = $singularValueVarName === $exprName
             ? 'single' . ucfirst($singularValueVarName)
