@@ -204,7 +204,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $isFoundNext = (bool) $this->betterNodeFinder->findFirstNext($use, function (Node $node) use ($name): bool {
+        return (bool) $this->betterNodeFinder->findFirstNext($use, function (Node $node) use ($name): bool {
             if (! $node instanceof ClassConstFetch) {
                 return false;
             }
@@ -215,12 +215,6 @@ CODE_SAMPLE
 
             return $node->class->toString() === $name->toString();
         });
-
-        if ($isFoundNext) {
-            return true;
-        }
-
-        return false;
     }
 
     private function refactorAliasName(string $aliasName, string $lastName, UseUse $useUse): void
