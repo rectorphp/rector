@@ -11,6 +11,9 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
@@ -262,6 +265,15 @@ final class NodeTypeResolver
      */
     public function isObjectTypeOrNullableObjectType(Node $node, $desiredType): bool
     {
+        if ($node instanceof Param && $node->type instanceof NullableType) {
+            /** @var Name|Identifier $node */
+            $node = $node->type->type;
+        }
+
+        if ($node instanceof Param && ! $node->type instanceof Name) {
+            return false;
+        }
+
         if ($this->isObjectType($node, $desiredType)) {
             return true;
         }
