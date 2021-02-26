@@ -163,9 +163,8 @@ final class MethodReflectionProvider
      */
     public function getParameterReflectionsFromMethodReflection(MethodReflection $methodReflection): array
     {
-        $methodReflectionVariant = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
-
-        return $methodReflectionVariant->getParameters();
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        return $parametersAcceptor->getParameters();
     }
 
     /**

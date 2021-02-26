@@ -11,12 +11,9 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-<<<<<<< HEAD
-use PHPStan\Type\ObjectType;
-=======
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
->>>>>>> 58a7c670c... phsptan: avoid ClassReflection
+use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;

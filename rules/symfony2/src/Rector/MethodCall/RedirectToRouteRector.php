@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -44,9 +43,10 @@ final class RedirectToRouteRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName !== Controller::class) {
+        if ($parentClassName !== 'Symfony\Bundle\FrameworkBundle\Controller\Controller') {
             return null;
         }
+
         if (! $this->isName($node->name, 'redirect')) {
             return null;
         }

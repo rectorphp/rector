@@ -7,7 +7,6 @@ namespace Rector\Doctrine\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
-use Ramsey\Uuid\UuidInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -106,6 +105,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isName($classMethod->returnType, UuidInterface::class);
+        return $this->isName($classMethod->returnType, 'Ramsey\Uuid\UuidInterface');
     }
 }

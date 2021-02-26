@@ -108,17 +108,10 @@ CODE_SAMPLE
             $propertyName = $this->getExistingFactoryPropertyName($classNode, $serviceObjectType);
 
             if ($propertyName === null) {
-<<<<<<< HEAD
-                $propertyName = $this->getFactoryPropertyName($serviceObjectType->getClassName());
-                $this->addConstructorDependencyToClass($classNode, $serviceObjectType, $propertyName);
-=======
-                $propertyName = $this->classNaming->getShortName($serviceType);
+                $propertyName = $this->classNaming->getShortName($serviceObjectType->getClassName());
                 $propertyName = lcfirst($propertyName);
 
-                $factoryObjectType = new ObjectType($serviceType);
-
-                $this->addConstructorDependencyToClass($classNode, $factoryObjectType, $propertyName);
->>>>>>> 58a7c670c... phsptan: avoid ClassReflection
+                $this->addConstructorDependencyToClass($classNode, $serviceObjectType, $propertyName);
             }
 
             $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);

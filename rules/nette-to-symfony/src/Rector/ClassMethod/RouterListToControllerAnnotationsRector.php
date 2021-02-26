@@ -70,11 +70,11 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $symfonyRouteTagValueNodeFactory;
 
     /**
-<<<<<<< HEAD
      * @var ObjectType[]
      */
     private $routerObjectTypes = [];
-=======
+
+    /**
      * @var ReflectionProvider
      */
     private $reflectionProvider;
@@ -83,7 +83,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      * @var PrivatesCaller
      */
     private $privatesCaller;
->>>>>>> 58a7c670c... phsptan: avoid ClassReflection
 
     public function __construct(
         ExplicitRouteAnnotationDecorator $explicitRouteAnnotationDecorator,
@@ -97,16 +96,14 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
         $this->returnTypeInferer = $returnTypeInferer;
         $this->explicitRouteAnnotationDecorator = $explicitRouteAnnotationDecorator;
         $this->symfonyRouteTagValueNodeFactory = $symfonyRouteTagValueNodeFactory;
-<<<<<<< HEAD
 
         $this->routerObjectTypes = [
             new ObjectType('Nette\Application\IRouter'),
             new ObjectType('Nette\Routing\Router'),
         ];
-=======
+
         $this->reflectionProvider = $reflectionProvider;
         $this->privatesCaller = $privatesCaller;
->>>>>>> 58a7c670c... phsptan: avoid ClassReflection
     }
 
     public function getRuleDefinition(): RuleDefinition

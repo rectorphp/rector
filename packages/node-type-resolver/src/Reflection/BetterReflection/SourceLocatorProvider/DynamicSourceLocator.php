@@ -27,14 +27,17 @@ final class DynamicSourceLocator
         $this->fileNodesFetcher = $fileNodesFetcher;
     }
 
-    public function addFileInfo(SmartFileInfo $fileInfo): void
-    {
-        $this->fileInfos[] = $fileInfo;
-    }
-
     public function setFileInfo(SmartFileInfo $fileInfo): void
     {
         $this->fileInfos = [$fileInfo];
+    }
+
+    /**
+     * @param SmartFileInfo[] $fileInfos
+     */
+    public function addFileInfos(array $fileInfos): void
+    {
+        $this->fileInfos = array_merge($this->fileInfos, $fileInfos);
     }
 
     public function provide(): SourceLocator

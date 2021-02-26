@@ -130,13 +130,21 @@ CODE_SAMPLE
             // update constant value
             $classConst->consts[0]->value = $this->createUuidStringNode();
 
-            $node->args[0]->value = $this->nodeFactory->createStaticCall(Uuid::class, 'fromString', [$argumentValue]);
+            $node->args[0]->value = $this->nodeFactory->createStaticCall(
+                'Ramsey\Uuid\Uuid',
+                'fromString',
+                [$argumentValue]
+            );
 
             return $node;
         }
 
         // C. set uuid from string with generated string
-        $value = $this->nodeFactory->createStaticCall(Uuid::class, 'fromString', [$this->createUuidStringNode()]);
+        $value = $this->nodeFactory->createStaticCall(
+            'Ramsey\Uuid\Uuid',
+            'fromString',
+            [$this->createUuidStringNode()]
+        );
         $node->args[0]->value = $value;
 
         return $node;
@@ -218,6 +226,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $argumentStaticType->getClassName() === Uuid::class;
+        return $argumentStaticType->getClassName() === 'Ramsey\Uuid\Uuid';
     }
 }

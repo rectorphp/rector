@@ -6,7 +6,6 @@ namespace Rector\Doctrine\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
-use Ramsey\Uuid\UuidInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
@@ -103,7 +102,7 @@ CODE_SAMPLE
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        $fullyQualifiedObjectType = new FullyQualifiedObjectType(UuidInterface::class);
+        $fullyQualifiedObjectType = new FullyQualifiedObjectType('Ramsey\Uuid\UuidInterface');
 
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $fullyQualifiedObjectType);
 

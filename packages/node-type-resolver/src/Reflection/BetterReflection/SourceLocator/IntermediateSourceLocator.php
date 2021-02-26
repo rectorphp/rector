@@ -27,9 +27,9 @@ final class IntermediateSourceLocator implements SourceLocator
     {
         $sourceLocator = $this->dynamicSourceLocator->provide();
 
-        $locatedIdentifier = $sourceLocator->locateIdentifier($reflector, $identifier);
-        if ($locatedIdentifier instanceof Reflection) {
-            return $locatedIdentifier;
+        $reflection = $sourceLocator->locateIdentifier($reflector, $identifier);
+        if ($reflection instanceof Reflection) {
+            return $reflection;
         }
 
         return null;

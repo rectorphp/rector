@@ -13,7 +13,6 @@ use Rector\SymfonyCodeQuality\ConstantNameAndValueResolver;
 use Rector\SymfonyCodeQuality\NodeFactory\RouteNameClassFactory;
 use Rector\SymfonyCodeQuality\ValueObject\ClassName;
 use Rector\SymfonyCodeQuality\ValueObject\ConstantNameAndValue;
-use Symfony\Component\Routing\Annotation\Route;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ExtraFileCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -122,7 +121,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node->name, Route::class)) {
+        if (! $this->isName($node->name, 'Symfony\Component\Routing\Annotation\Route')) {
             return null;
         }
 
@@ -158,7 +157,7 @@ CODE_SAMPLE
             return;
         }
 
-        $routeAttributes = $this->nodeRepository->findAttributes(Route::class);
+        $routeAttributes = $this->nodeRepository->findAttributes('Symfony\Component\Routing\Annotation\Route');
         $constantNameAndValues = $this->constantNameAndValueResolver->resolveFromAttributes($routeAttributes, 'ROUTE_');
 
         $namespace = $this->routeNameClassFactory->create($constantNameAndValues, self::ROUTE_NAME_FILE_LOCATION);

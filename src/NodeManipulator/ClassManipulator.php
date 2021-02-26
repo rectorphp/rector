@@ -12,14 +12,11 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-<<<<<<< HEAD
-use PHPStan\Type\ObjectType;
-=======
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
->>>>>>> 58a7c670c... phsptan: avoid ClassReflection
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 final class ClassManipulator
@@ -34,11 +31,6 @@ final class ClassManipulator
      */
     private $nodesToRemoveCollector;
 
-<<<<<<< HEAD
-    public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        NodesToRemoveCollector $nodesToRemoveCollector
-=======
     /**
      * @var NodeRepository
      */
@@ -49,21 +41,23 @@ final class ClassManipulator
      */
     private $reflectionProvider;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         NodesToRemoveCollector $nodesToRemoveCollector,
         NodeRepository $nodeRepository,
         ReflectionProvider $reflectionProvider
->>>>>>> 58a7c670c... phsptan: avoid ClassReflection
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
-<<<<<<< HEAD
-=======
         $this->nodeRepository = $nodeRepository;
         $this->reflectionProvider = $reflectionProvider;
->>>>>>> 58a7c670c... phsptan: avoid ClassReflection
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**
@@ -84,26 +78,8 @@ final class ClassManipulator
         return $usedTraits;
     }
 
-<<<<<<< HEAD
-    public function hasParentMethodOrInterface(ObjectType $objectType, string $method): bool
-    {
-        if (! class_exists($objectType->getClassName())) {
-            return false;
-        }
-
-        $class = $objectType->getClassName();
-
-        $parentClass = $class;
-        while ($parentClass = get_parent_class($parentClass)) {
-            if (method_exists($parentClass, $method)) {
-                return true;
-            }
-        }
-=======
     public function hasParentMethodOrInterface(string $class, string $methodName): bool
     {
-        $class = $this->nodeRepository->getStringName($class);
-
         if (! $this->reflectionProvider->hasClass($class)) {
             return false;
         }
@@ -112,8 +88,6 @@ final class ClassManipulator
 
         /** @var ClassReflection[] $parentClassReflections */
         $parentClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
->>>>>>> 58a7c670c... phsptan: avoid ClassReflection
-
         foreach ($parentClassReflections as $parentClassReflection) {
             if ($parentClassReflection->hasMethod($methodName)) {
                 return true;

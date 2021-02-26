@@ -79,7 +79,7 @@ final class EntityUuidNodeFactory
     public function createUuidPropertyDefaultValueAssign(string $uuidVariableName): Expression
     {
         $thisUuidPropertyFetch = new PropertyFetch(new Variable('this'), $uuidVariableName);
-        $uuid4StaticCall = $this->nodeFactory->createStaticCall(Uuid::class, 'uuid4');
+        $uuid4StaticCall = $this->nodeFactory->createStaticCall('Ramsey\Uuid\Uuid', 'uuid4');
 
         $assign = new Assign($thisUuidPropertyFetch, $uuid4StaticCall);
 

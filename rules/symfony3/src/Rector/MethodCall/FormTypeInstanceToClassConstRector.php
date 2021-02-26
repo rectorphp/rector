@@ -15,11 +15,8 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-<<<<<<< HEAD
-use PHPStan\Type\ObjectType;
-=======
 use PHPStan\Reflection\ReflectionProvider;
->>>>>>> 58a7c670c... phsptan: avoid ClassReflection
+use PHPStan\Type\ObjectType;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Symfony3\NodeFactory\BuilderFormNodeFactory;
 use Rector\Symfony3\NodeFactory\ConfigureOptionsNodeFactory;
@@ -67,15 +64,12 @@ final class FormTypeInstanceToClassConstRector extends AbstractFormAddRector
     ) {
         $this->builderFormNodeFactory = $builderFormNodeFactory;
         $this->configureOptionsNodeFactory = $configureOptionsNodeFactory;
-<<<<<<< HEAD
+        $this->reflectionProvider = $reflectionProvider;
 
         $this->controllerObjectTypes = [
             new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller'),
             new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\AbstractController'),
         ];
-=======
-        $this->reflectionProvider = $reflectionProvider;
->>>>>>> 58a7c670c... phsptan: avoid ClassReflection
     }
 
     public function getRuleDefinition(): RuleDefinition

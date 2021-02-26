@@ -7,11 +7,8 @@ namespace Rector\Php70\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
-<<<<<<< HEAD
-use PHPStan\Type\ObjectType;
-=======
 use PHPStan\Reflection\Php\PhpMethodReflection;
->>>>>>> 58a7c670c... phsptan: avoid ClassReflection
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\Reflection\MethodReflectionProvider;
 use Rector\NodeCollector\StaticAnalyzer;
