@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\Use_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Naming\NameRenamer;
@@ -140,7 +140,7 @@ CODE_SAMPLE
 
             /** @var string $aliasName */
             $aliasName = $this->getName($use->alias);
-            if ($this->shouldSkip($lastName, $aliasName)) {
+            if ($this->shouldSkip($node, $use->name, $lastName, $aliasName)) {
                 continue;
             }
 
@@ -188,7 +188,7 @@ CODE_SAMPLE
         }, $values);
     }
 
-    private function shouldSkip(string $lastName, string $aliasName): bool
+    private function shouldSkip(Use_ $use, Name $name, string $lastName, string $aliasName): bool
     {
         // PHP is case insensitive
         $loweredLastName = strtolower($lastName);
@@ -200,7 +200,21 @@ CODE_SAMPLE
         }
 
         // part of some @Doc annotation
-        return in_array($loweredAliasName, $this->resolvedDocPossibleAliases, true);
+        if (in_array($loweredAliasName, $this->resolvedDocPossibleAliases, true)) {
+            return true;
+        }
+
+        return (bool) $this->betterNodeFinder->findFirstNext($use, function (Node $node) use ($name): bool {
+            if (! $node instanceof ClassConstFetch) {
+                return false;
+            }
+
+            if (! $node->class instanceof Name) {
+                return false;
+            }
+
+            return $node->class->toString() === $name->toString();
+        });
     }
 
     private function refactorAliasName(string $aliasName, string $lastName, UseUse $useUse): void
