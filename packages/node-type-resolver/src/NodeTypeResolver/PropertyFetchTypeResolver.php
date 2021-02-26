@@ -5,30 +5,19 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Property;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Nop;
-use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\Node\VarLikeIdentifier;
-use PhpParser\Parser;
 use PHPStan\Analyser\Scope;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
-use Rector\StaticTypeMapper\StaticTypeMapper;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver\PropertyFetchTypeResolverTest
@@ -46,44 +35,23 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
     private $nodeNameResolver;
 
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @var TraitNodeScopeCollector
      */
     private $traitNodeScopeCollector;
 
     /**
-     * @var SmartFileSystem
+     * @var ReflectionProvider
      */
-    private $smartFileSystem;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var Parser
-     */
-    private $parser;
+    private $reflectionProvider;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        StaticTypeMapper $staticTypeMapper,
         TraitNodeScopeCollector $traitNodeScopeCollector,
-        SmartFileSystem $smartFileSystem,
-        BetterNodeFinder $betterNodeFinder,
-        Parser $parser
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->smartFileSystem = $smartFileSystem;
-        $this->parser = $parser;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -143,79 +111,29 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
 
     private function getVendorPropertyFetchType(PropertyFetch $propertyFetch): Type
     {
-        $varObjectType = $this->nodeTypeResolver->resolve($propertyFetch->var);
-        if (! $varObjectType instanceof ObjectType) {
-            return new MixedType();
-        }
-
-        $classReflection = $varObjectType->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return new MixedType();
-        }
-
         // 3rd party code
         $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
         if ($propertyName === null) {
             return new MixedType();
         }
 
+        $varType = $this->nodeTypeResolver->resolve($propertyFetch->var);
+        if (! $varType instanceof ObjectType) {
+            return new MixedType();
+        }
+
+        if (! $this->reflectionProvider->hasClass($varType->getClassName())) {
+            return new MixedType();
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($varType->getClassName());
         if (! $classReflection->hasProperty($propertyName)) {
             return new MixedType();
         }
 
-        $phpDocInfo = $propertyFetch->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo && $varObjectType instanceof ObjectType) {
-            return $this->getPropertyPropertyResolution($varObjectType, $propertyName);
-        }
+        $propertyFetchScope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
+        $propertyReflection = $classReflection->getProperty($propertyName, $propertyFetchScope);
 
-        return $this->getTypeFromPhpDocInfo($phpDocInfo);
-    }
-
-    private function getPropertyPropertyResolution(ObjectType $varObjectType, string $propertyName): Type
-    {
-        $classReflection = $varObjectType->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return $varObjectType;
-        }
-
-        if ($classReflection->isBuiltIn()) {
-            return $varObjectType;
-        }
-
-        $nodes = $this->parser->parse($this->smartFileSystem->readFile((string) $classReflection->getFileName()));
-        $propertyProperty = $this->betterNodeFinder->findFirst($nodes, function (Node $node) use (
-            $propertyName
-        ): bool {
-            if (! $node instanceof PropertyProperty) {
-                return false;
-            }
-
-            if (! $node->name instanceof VarLikeIdentifier) {
-                return false;
-            }
-
-            return $node->name->toString() === $propertyName;
-        });
-
-        if ($propertyProperty instanceof PropertyProperty) {
-            return $this->nodeTypeResolver->resolve($propertyProperty);
-        }
-
-        return new MixedType();
-    }
-
-    private function getTypeFromPhpDocInfo(PhpDocInfo $phpDocInfo): Type
-    {
-        $tagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (! $tagValueNode instanceof VarTagValueNode) {
-            return new MixedType();
-        }
-
-        $typeNode = $tagValueNode->type;
-        if (! $typeNode instanceof TypeNode) {
-            return new MixedType();
-        }
-
-        return $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, new Nop());
+        return $propertyReflection->getReadableType();
     }
 }

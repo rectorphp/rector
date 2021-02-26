@@ -14,7 +14,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
-use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocator;
+use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
@@ -52,7 +52,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(TypeNodeResolver::class)
         ->factory([service(PHPStanServicesFactory::class), 'createTypeNodeResolver']);
 
-    $services->set(DynamicSourceLocator::class)
+    $services->set(DynamicSourceLocatorProvider::class)
         ->factory([service(PHPStanServicesFactory::class), 'createDynamicSourceLocatorProvider']);
 
     $services->set(NodeConnectingVisitor::class);

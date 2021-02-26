@@ -61,11 +61,8 @@ final class ClassMethodVisibilityVendorLockResolver extends AbstractNodeVendorLo
 
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
-        foreach ($classReflection->getAncestors() as $childClassReflection) {
-            if ($childClassReflection === $classReflection) {
-                continue;
-            }
-
+        $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
+        foreach ($childrenClassReflections as $childClassReflection) {
             if ($childClassReflection->hasMethod($methodName)) {
                 return true;
             }

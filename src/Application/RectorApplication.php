@@ -12,7 +12,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\PostRunnerInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocator;
+use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -93,7 +93,7 @@ final class RectorApplication
     private $privatesAccessor;
 
     /**
-     * @var DynamicSourceLocator
+     * @var DynamicSourceLocatorProvider
      */
     private $dynamicSourceLocator;
 
@@ -109,7 +109,7 @@ final class RectorApplication
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         SymfonyStyle $symfonyStyle,
         PrivatesAccessor $privatesAccessor,
-        DynamicSourceLocator $dynamicSourceLocator,
+        DynamicSourceLocatorProvider $dynamicSourceLocator,
         array $postRunners
     ) {
         $this->symfonyStyle = $symfonyStyle;

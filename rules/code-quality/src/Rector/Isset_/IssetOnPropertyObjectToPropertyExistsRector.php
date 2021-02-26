@@ -86,10 +86,10 @@ CODE_SAMPLE
                 continue;
             }
 
-            $property = $this->nodeRepository->findPropertyByPropertyFetch($issetVar);
-            if ($property instanceof Property && $property->type) {
-                continue;
-            }
+//            $property = $this->nodeRepository->findPropertyByPropertyFetch($issetVar);
+//            if ($property instanceof Property && $property->type) {
+//                continue;
+//            }
 
             $propertyFetchName = $this->getName($issetVar->name);
             if ($propertyFetchName === null) {
@@ -104,13 +104,21 @@ CODE_SAMPLE
 
                 $classReflection = $this->reflectionProvider->getClass($propertyFetchVarType->getClassName());
                 if (! $classReflection->hasProperty($propertyFetchName)) {
-                    continue;
+                    $newNodes[] = $this->replaceToPropertyExistsWithNullCheck(
+                        $issetVar->var,
+                        $propertyFetchName,
+                        $issetVar
+                    );
+                } else {
+                    $newNodes[] = $this->createNotIdenticalToNull($issetVar);
                 }
-
-                $newNodes[] = $this->createNotIdenticalToNull($issetVar);
+            } else {
+                $newNodes[] = $this->replaceToPropertyExistsWithNullCheck(
+                    $issetVar->var,
+                    $propertyFetchName,
+                    $issetVar
+                );
             }
-
-            $newNodes[] = $this->replaceToPropertyExistsWithNullCheck($issetVar->var, $propertyFetchName, $issetVar);
         }
 
         return $this->nodeFactory->createReturnBooleanAnd($newNodes);

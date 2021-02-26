@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
+use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\LocaleTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\TranslatableTagValueNode;
@@ -166,7 +167,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->classManipulator->hasInterface($node, 'Gedmo\Translatable\Translatable')) {
+        if (! $this->classManipulator->hasInterface($node, new ObjectType('Gedmo\Translatable\Translatable'))) {
             return null;
         }
 

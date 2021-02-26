@@ -54,6 +54,11 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
      */
     private $paramFinder;
 
+    /**
+     * @var ObjectType
+     */
+    private $controlObjectType;
+
     public function __construct(
         ParamFinder $paramFinder,
         StaticCallAnalyzer $staticCallAnalyzer,
@@ -62,6 +67,8 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
         $this->staticCallAnalyzer = $staticCallAnalyzer;
         $this->methodReflectionProvider = $methodReflectionProvider;
         $this->paramFinder = $paramFinder;
+
+        $this->controlObjectType = new ObjectType('Nette\Application\UI\Presenter');
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -206,7 +213,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isObjectType($classLike, new ObjectType('Nette\Application\UI\Control'));
+        return $this->isObjectType($classLike, $this->controlObjectType);
     }
 
     private function removeClassMethodParams(ClassMethod $classMethod): ClassMethod

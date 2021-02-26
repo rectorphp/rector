@@ -211,9 +211,11 @@ final class NameImporter
         if ($parentNode instanceof ConstFetch) {
             return count($name->parts) === 1;
         }
+
         if ($parentNode instanceof FuncCall) {
             return count($name->parts) === 1;
         }
+
         return false;
     }
 
@@ -236,7 +238,8 @@ final class NameImporter
             return false;
         }
 
-        return ! function_exists($classOrFunctionName);
+        $parent = $name->getAttribute(AttributeKey::PARENT_NODE);
+        return ! $parent instanceof FuncCall;
     }
 
     private function addUseImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): void

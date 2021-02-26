@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -34,7 +33,6 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
@@ -144,7 +142,6 @@ final class NodeTypeResolver
 
         // this should also work with ObjectType and UnionType with ObjectType
         // use PHPStan types here
-
         if ($resolvedType->equals($requiredObjectType)) {
             return true;
         }
@@ -196,24 +193,24 @@ final class NodeTypeResolver
      */
     public function getStaticType(Node $node): Type
     {
-        if ($this->isArrayExpr($node)) {
-            /** @var Expr $node */
-            return $this->resolveArrayType($node);
-        }
-
-        if ($node instanceof Arg) {
-            throw new ShouldNotHappenException('Arg cannot have type, use $arg->value instead');
-        }
-
-        if (StaticInstanceOf::isOneOf($node, [Param::class, Scalar::class])) {
+        if ($node instanceof Param) {
             return $this->resolve($node);
         }
 
-        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $node instanceof Expr) {
             return new MixedType();
         }
-        if (! $nodeScope instanceof Scope) {
+
+        if ($this->arrayTypeAnalyzer->isArrayType($node)) {
+            return $this->resolveArrayType($node);
+        }
+
+        if ($node instanceof Scalar) {
+            return $this->resolve($node);
+        }
+
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
             return new MixedType();
         }
 
@@ -224,7 +221,7 @@ final class NodeTypeResolver
             }
         }
 
-        $staticType = $nodeScope->getType($node);
+        $staticType = $scope->getType($node);
         if (! $staticType instanceof ObjectType) {
             return $staticType;
         }
@@ -237,9 +234,13 @@ final class NodeTypeResolver
         if ($this->isStaticType($node, IntegerType::class)) {
             return true;
         }
+
         return $this->isStaticType($node, FloatType::class);
     }
 
+    /**
+     * @param class-string<Type> $staticTypeClass
+     */
     public function isStaticType(Node $node, string $staticTypeClass): bool
     {
         if (! is_a($staticTypeClass, Type::class, true)) {
@@ -398,7 +399,9 @@ final class NodeTypeResolver
                 continue;
             }
 
-            return true;
+            if ($unionedType->equals($requiredObjectType)) {
+                return true;
+            }
         }
 
         return false;
@@ -439,14 +442,6 @@ final class NodeTypeResolver
         }
 
         return $this->resolveFirstType($node->var);
-    }
-
-    private function isArrayExpr(Node $node): bool
-    {
-        if (! $node instanceof Expr) {
-            return false;
-        }
-        return $this->arrayTypeAnalyzer->isArrayType($node);
     }
 
     private function resolveArrayType(Expr $expr): Type

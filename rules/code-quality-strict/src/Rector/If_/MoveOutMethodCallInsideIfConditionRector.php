@@ -89,28 +89,15 @@ CODE_SAMPLE
 
     private function shouldSkipMethodCall(MethodCall $methodCall): bool
     {
-        $methodCallVar = $methodCall->var;
-
-        $scope = $methodCallVar->getAttribute(Scope::class);
-        if ($scope === null) {
-            return true;
-        }
-
-        $type = $scope->getType($methodCallVar);
+        $variableType = $this->getStaticType($methodCall->var);
 
         // From PropertyFetch → skip
-        if ($type instanceof ThisType) {
+        if ($variableType instanceof ThisType) {
             return true;
         }
 
-        // Is Boolean return → skip
-        $scope = $methodCall->getAttribute(Scope::class);
-        if ($scope === null) {
-            return true;
-        }
-
-        $type = $scope->getType($methodCall);
-        if ($type instanceof BooleanType) {
+        $methodCallReturnType = $this->getStaticType($methodCall);
+        if ($methodCallReturnType instanceof BooleanType) {
             return true;
         }
 

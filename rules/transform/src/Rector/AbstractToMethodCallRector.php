@@ -12,10 +12,10 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\Transform\NodeFactory\PropertyFetchFactory;
 use Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
 
@@ -53,43 +53,38 @@ abstract class AbstractToMethodCallRector extends AbstractRector implements Conf
      * @param ClassMethod|Function_ $functionLike
      * @return MethodCall|PropertyFetch|Variable
      */
-    protected function matchTypeProvidingExpr(Class_ $class, FunctionLike $functionLike, string $type): Expr
+    protected function matchTypeProvidingExpr(Class_ $class, FunctionLike $functionLike, ObjectType $objectType): Expr
     {
         $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass(
             $class,
             $functionLike,
-            $type
+            $objectType
         );
         if ($expr !== null) {
             if ($expr instanceof Variable) {
-                $this->addClassMethodParamForVariable($expr, $type, $functionLike);
+                $this->addClassMethodParamForVariable($expr, $objectType, $functionLike);
             }
 
             return $expr;
         }
 
-        $this->addPropertyTypeToClass($type, $class);
-        return $this->propertyFetchFactory->createFromType($type);
+        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
+        $this->addConstructorDependencyToClass($class, $objectType, $propertyName);
+        return $this->propertyFetchFactory->createFromType($objectType);
     }
 
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    private function addClassMethodParamForVariable(Variable $variable, string $type, FunctionLike $functionLike): void
-    {
+    private function addClassMethodParamForVariable(
+        Variable $variable,
+        ObjectType $objectType,
+        FunctionLike $functionLike
+    ): void {
         /** @var string $variableName */
         $variableName = $this->getName($variable);
 
         // add variable to __construct as dependency
-        $param = $this->nodeFactory->createParamFromNameAndType($variableName, new FullyQualifiedObjectType($type));
-
-        $functionLike->params[] = $param;
-    }
-
-    private function addPropertyTypeToClass(string $type, Class_ $class): void
-    {
-        $fullyQualifiedObjectType = new FullyQualifiedObjectType($type);
-        $propertyName = $this->propertyNaming->fqnToVariableName($fullyQualifiedObjectType);
-        $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $propertyName);
+        $functionLike->params[] = $this->nodeFactory->createParamFromNameAndType($variableName, $objectType);
     }
 }

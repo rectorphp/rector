@@ -2,15 +2,15 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Fixture;
 
-class StaticPropertyWithDefaultNull
+final class StaticPropertyWithDefaultNull
 {
-    protected static $cacheFile = null;
-    protected static $cacheFiles = null;
+    private $cacheFile = null;
+    private $cacheFiles = null;
 
     /**
      * @return string
      */
-    public static function coreCache($file = '')
+    public function coreCache($file = '')
     {
         return $file;
     }
@@ -18,10 +18,10 @@ class StaticPropertyWithDefaultNull
     /**
      * Register rex_autoload in spl autoloader.
      */
-    public static function register()
+    public function register()
     {
-        self::$cacheFile = self::coreCache();
-        self::$cacheFiles[] = self::coreCache();
+        $this->cacheFile = $this->coreCache();
+        $this->cacheFiles[] = $this->coreCache();
     }
 }
 
@@ -31,21 +31,21 @@ class StaticPropertyWithDefaultNull
 
 namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Fixture;
 
-class StaticPropertyWithDefaultNull
+final class StaticPropertyWithDefaultNull
 {
     /**
      * @var null|string
      */
-    protected static $cacheFile = null;
+    private $cacheFile = null;
     /**
      * @var null|string[]
      */
-    protected static $cacheFiles = null;
+    private $cacheFiles = null;
 
     /**
      * @return string
      */
-    public static function coreCache($file = '')
+    public function coreCache($file = '')
     {
         return $file;
     }
@@ -53,10 +53,10 @@ class StaticPropertyWithDefaultNull
     /**
      * Register rex_autoload in spl autoloader.
      */
-    public static function register()
+    public function register()
     {
-        self::$cacheFile = self::coreCache();
-        self::$cacheFiles[] = self::coreCache();
+        $this->cacheFile = $this->coreCache();
+        $this->cacheFiles[] = $this->coreCache();
     }
 }
 

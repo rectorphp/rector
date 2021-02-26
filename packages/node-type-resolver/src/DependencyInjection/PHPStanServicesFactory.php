@@ -15,7 +15,7 @@ use PHPStan\File\FileHelper;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
-use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocator;
+use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 /**
@@ -110,8 +110,8 @@ final class PHPStanServicesFactory
     /**
      * @api
      */
-    public function createDynamicSourceLocatorProvider(): DynamicSourceLocator
+    public function createDynamicSourceLocatorProvider(): DynamicSourceLocatorProvider
     {
-        return $this->container->getByType(DynamicSourceLocator::class);
+        return $this->container->getByType(DynamicSourceLocatorProvider::class);
     }
 }

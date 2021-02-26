@@ -6,6 +6,7 @@ namespace Rector\SymfonyCodeQuality\Rector\Attribute;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\SymfonyCodeQuality\ConstantNameAndValueMatcher;
@@ -121,7 +122,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node->name, 'Symfony\Component\Routing\Annotation\Route')) {
+        if (! $this->isName($node->name, SymfonyRouteTagValueNode::CLASS_NAME)) {
             return null;
         }
 
@@ -157,7 +158,7 @@ CODE_SAMPLE
             return;
         }
 
-        $routeAttributes = $this->nodeRepository->findAttributes('Symfony\Component\Routing\Annotation\Route');
+        $routeAttributes = $this->nodeRepository->findAttributes(SymfonyRouteTagValueNode::CLASS_NAME);
         $constantNameAndValues = $this->constantNameAndValueResolver->resolveFromAttributes($routeAttributes, 'ROUTE_');
 
         $namespace = $this->routeNameClassFactory->create($constantNameAndValues, self::ROUTE_NAME_FILE_LOCATION);

@@ -8,9 +8,10 @@ use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator;
+use Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DynamicSourceLocator
+final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterface
 {
     /**
      * @var SmartFileInfo[]

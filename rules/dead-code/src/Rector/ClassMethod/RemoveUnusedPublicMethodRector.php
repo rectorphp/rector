@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
-use Rector\CodingStyle\ValueObject\ObjectMagicMethods;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -117,7 +116,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isNames($classMethod, ObjectMagicMethods::METHOD_NAMES)) {
+        if ($classMethod->isMagic()) {
             return true;
         }
 

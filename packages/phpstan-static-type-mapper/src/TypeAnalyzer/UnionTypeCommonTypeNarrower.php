@@ -8,7 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Stmt;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\ObjectType;
@@ -28,10 +30,7 @@ final class UnionTypeCommonTypeNarrower
         BinaryOp::class => [BinaryOp::class, Expr::class],
         Expr::class => [Node::class, Expr::class],
         Stmt::class => [Node::class, Stmt::class],
-        'PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode' => [
-            'PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode',
-            'PHPStan\PhpDocParser\Ast\Node',
-        ],
+        PhpDocTagValueNode::class => [PhpDocTagValueNode::class, \PHPStan\PhpDocParser\Ast\Node::class],
     ];
 
     /**
@@ -39,9 +38,17 @@ final class UnionTypeCommonTypeNarrower
      */
     private $genericClassStringTypeCorrector;
 
-    public function __construct(GenericClassStringTypeCorrector $genericClassStringTypeCorrector)
-    {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(
+        GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
+        ReflectionProvider $reflectionProvider
+    ) {
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function narrowToSharedObjectType(UnionType $unionType): ?ObjectType
@@ -126,10 +133,11 @@ final class UnionTypeCommonTypeNarrower
      */
     private function resolveClassParentClassesAndInterfaces(ObjectType $objectType): array
     {
-        $classReflection = $objectType->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
+        if (! $this->reflectionProvider->hasClass($objectType->getClassName())) {
             return [];
         }
+
+        $classReflection = $this->reflectionProvider->getClass($objectType->getClassName());
 
         // put earliest interfaces first
         $implementedInterfaceClassReflections = array_reverse($classReflection->getInterfaces());
@@ -140,9 +148,7 @@ final class UnionTypeCommonTypeNarrower
             $classReflection->getParents()
         );
 
-        return array_filter($parentClassAndInterfaceReflections, function (ClassReflection $classReflection): bool {
-            return ! $classReflection->isBuiltin();
-        });
+        return $this->filterOutNativeClassReflections($parentClassAndInterfaceReflections);
     }
 
     /**
@@ -176,5 +182,16 @@ final class UnionTypeCommonTypeNarrower
         }
 
         return null;
+    }
+
+    /**
+     * @param ClassReflection[] $classReflections
+     * @return ClassReflection[]
+     */
+    private function filterOutNativeClassReflections(array $classReflections): array
+    {
+        return array_filter($classReflections, function (ClassReflection $classReflection): bool {
+            return ! $classReflection->isBuiltin();
+        });
     }
 }

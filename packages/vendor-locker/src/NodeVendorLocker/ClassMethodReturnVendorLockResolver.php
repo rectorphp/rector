@@ -28,7 +28,6 @@ final class ClassMethodReturnVendorLockResolver extends AbstractNodeVendorLockRe
             return false;
         }
 
-        /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
         if ($this->isVendorLockedByParentClass($classReflection, $methodName)) {
             return true;

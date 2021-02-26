@@ -28,7 +28,7 @@ final class NewToConstructorInjectionRector extends AbstractRector implements Co
     /**
      * @var string
      */
-    public const TYPES_TO_CONSTRUCTOR_INJECTION = 'TYPES_TO_CONSTRUCTOR_INJECTION';
+    public const TYPES_TO_CONSTRUCTOR_INJECTION = 'types_to_constructor_injection';
 
     /**
      * @var ObjectType[]
@@ -143,9 +143,11 @@ CODE_SAMPLE
                 continue;
             }
 
-            $methodCall->var = $this->propertyFetchFactory->createFromType(
-                $constructorInjectionObjectType->getClassName()
-            );
+            if (! $this->nodeTypeResolver->isObjectType($methodCall->var, $constructorInjectionObjectType)) {
+                continue;
+            }
+
+            $methodCall->var = $this->propertyFetchFactory->createFromType($constructorInjectionObjectType);
             return $methodCall;
         }
 

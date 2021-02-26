@@ -11,9 +11,10 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassLike;
-use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Matcher\VariableAndCallAssignMatcher;
 use Rector\Naming\Naming\ExpectedNameResolver;
@@ -66,6 +67,16 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
      */
     private $typeUnwrapper;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    /**
+     * @var FamilyRelationsAnalyzer
+     */
+    private $familyRelationsAnalyzer;
+
     public function __construct(
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
         ExpectedNameResolver $expectedNameResolver,
@@ -73,7 +84,9 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
         VarTagValueNodeRenamer $varTagValueNodeRenamer,
         VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
         VariableRenamer $variableRenamer,
-        TypeUnwrapper $typeUnwrapper
+        TypeUnwrapper $typeUnwrapper,
+        ReflectionProvider $reflectionProvider,
+        FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->variableRenamer = $variableRenamer;
@@ -82,6 +95,8 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
         $this->namingConventionAnalyzer = $namingConventionAnalyzer;
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
         $this->typeUnwrapper = $typeUnwrapper;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -256,11 +271,13 @@ CODE_SAMPLE
             return false;
         }
 
-        $classReflection = $callStaticType->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
+        if (! $this->reflectionProvider->hasClass($callStaticType->getClassName())) {
             return false;
         }
 
-        return count($classReflection->getAncestors()) !== 1;
+        $classReflection = $this->reflectionProvider->getClass($callStaticType->getClassName());
+        $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
+
+        return $childrenClassReflections !== [];
     }
 }

@@ -117,7 +117,11 @@ CODE_SAMPLE
                 return $this->refactorToInstanceCall($node, $staticCallToMethodCall);
             }
 
-            $expr = $this->matchTypeProvidingExpr($classLike, $classMethod, $staticCallToMethodCall->getClassType());
+            $expr = $this->matchTypeProvidingExpr(
+                $classLike,
+                $classMethod,
+                $staticCallToMethodCall->getClassObjectType()
+            );
 
             if ($staticCallToMethodCall->getMethodName() === '*') {
                 $methodName = $this->getName($node->name);

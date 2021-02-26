@@ -574,3 +574,9 @@ parameters:
             message: '#Function "get_declared_classes\(\)" cannot be used/left in the code#'
             paths:
                 - rules/restoration/src/ClassMap/ExistingClassesProvider.php
+
+        # false positives
+        -
+             message: '#Empty array passed to foreach#'
+             paths:
+                 - rules/transform/src/Rector/New_/NewToConstructorInjectionRector.php

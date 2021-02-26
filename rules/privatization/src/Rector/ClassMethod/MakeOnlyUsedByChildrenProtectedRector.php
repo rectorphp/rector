@@ -8,7 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -100,6 +103,16 @@ CODE_SAMPLE
             return null;
         }
 
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            throw new ShouldNotHappenException();
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if ($classReflection === null) {
+            throw new ShouldNotHappenException();
+        }
+
         $externalCalls = $this->classMethodExternalCallNodeAnalyzer->getExternalCalls($node);
         if ($externalCalls === []) {
             return null;
@@ -120,7 +133,7 @@ CODE_SAMPLE
         }
 
         $methodName = $this->getName($node);
-        if ($this->isOverriddenInChildClass($className, $methodName)) {
+        if ($this->isOverriddenInChildClass($classReflection, $methodName)) {
             return null;
         }
 
@@ -155,9 +168,9 @@ CODE_SAMPLE
         return ! $classMethod->isPublic();
     }
 
-    private function isOverriddenInChildClass(string $className, string $methodName): bool
+    private function isOverriddenInChildClass(ClassReflection $classReflection, string $methodName): bool
     {
-        $childrenClassReflection = $this->familyRelationsAnalyzer->getChildrenOfClass($className);
+        $childrenClassReflection = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
 
         foreach ($childrenClassReflection as $childClassReflection) {
             if (! $childClassReflection->hasMethod($methodName)) {

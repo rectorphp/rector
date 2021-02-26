@@ -14,16 +14,10 @@ class SkipRespectChildrenReturnTypeParentMixed
     }
 }
 
-class RespectChildrenReturnTypeMixed extends SkipRespectChildrenReturnTypeParentMixed {
-    public function run() : Babax {
-        if (rand(0,1)) {
-            return new Babax();
-        }
-
-        throw new \Exception('test');
+final class RespectChildrenReturnTypeMixed extends SkipRespectChildrenReturnTypeParentMixed
+{
+    public function run() : string
+    {
+        return 'hey';
     }
 }
-
-class Babax {
-}
-?>

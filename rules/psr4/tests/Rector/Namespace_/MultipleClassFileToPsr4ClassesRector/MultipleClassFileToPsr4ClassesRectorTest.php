@@ -43,7 +43,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
                 $smartFileSystem->readFile(__DIR__ . '/Expected/UnknownImageFileException.php')
             ),
         ];
-        yield [new SmartFileInfo(__DIR__ . '/Source/nette-exceptions.php.inc'), $filePathsWithContents];
+        yield [new SmartFileInfo(__DIR__ . '/Fixture/nette-exceptions.php.inc'), $filePathsWithContents];
 
         $filePathsWithContents = [
             new AddedFileWithContent(
@@ -55,7 +55,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
                 $smartFileSystem->readFile(__DIR__ . '/Expected/JustTwoExceptionWithoutNamespace.php')
             ),
         ];
-        yield [new SmartFileInfo(__DIR__ . '/Source/without-namespace.php'), $filePathsWithContents];
+
+        yield [new SmartFileInfo(__DIR__ . '/Fixture/without-namespace.php.inc'), $filePathsWithContents];
 
         $filePathsWithContents = [
             new AddedFileWithContent(
@@ -72,11 +73,11 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
             ),
         ];
 
-        yield [new SmartFileInfo(__DIR__ . '/Source/ClassTraitAndInterface.php.inc'), $filePathsWithContents];
+        yield [new SmartFileInfo(__DIR__ . '/Fixture/class_trait_and_interface.php.inc'), $filePathsWithContents];
 
         // keep original class
         yield [
-            new SmartFileInfo(__DIR__ . '/Source/SomeClass.php'),
+            new SmartFileInfo(__DIR__ . '/Fixture/some_class.php.inc'),
             // extra files
             [
                 new AddedFileWithContent(

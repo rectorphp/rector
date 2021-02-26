@@ -151,10 +151,7 @@ CODE_SAMPLE
 
     private function isKernelOrExtensionClass(Class_ $class): bool
     {
-        if ($this->isObjectType(
-            $class,
-            new ObjectType('Symfony\Component\HttpKernel\DependencyInjection\Extension')
-        )) {
+        if ($this->isObjectType($class, new ObjectType('Symfony\Component\HttpKernel\DependencyInjection\Extension'))) {
             return true;
         }
 

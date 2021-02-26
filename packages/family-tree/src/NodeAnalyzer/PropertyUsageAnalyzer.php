@@ -7,6 +7,8 @@ namespace Rector\FamilyTree\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\Scope;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
@@ -54,14 +56,23 @@ final class PropertyUsageAnalyzer
             return false;
         }
 
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike instanceof Class_ && $classLike->isFinal()) {
+        $scope = $property->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return false;
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if ($classReflection === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        if ($classReflection->isClass() && $classReflection->isFinal()) {
             return false;
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
 
-        $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClass($className);
+        $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
 
         foreach ($childrenClassReflections as $childClassReflection) {
             $childClass = $this->nodeRepository->findClass($childClassReflection->getName());

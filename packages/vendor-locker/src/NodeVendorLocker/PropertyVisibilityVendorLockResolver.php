@@ -46,7 +46,8 @@ final class PropertyVisibilityVendorLockResolver extends AbstractNodeVendorLockR
 
         $propertyName = $this->nodeNameResolver->getName($property);
 
-        foreach ($classReflection->getAncestors() as $childClassReflection) {
+        $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
+        foreach ($childrenClassReflections as $childClassReflection) {
             if ($childClassReflection === $classReflection) {
                 continue;
             }

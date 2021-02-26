@@ -77,7 +77,9 @@ final class ObjectTypeSpecifier
         }
 
         $className = $objectType->getClassName();
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+
         foreach ($uses as $use) {
             foreach ($use->uses as $useUse) {
                 if ($useUse->alias === null) {
@@ -92,7 +94,7 @@ final class ObjectTypeSpecifier
                     $alias,
                     $className,
                     $useName,
-                    $parentNode,
+                    $parent,
                     $fullyQualifiedName
                 );
                 if ($processAliasedObject instanceof AliasedObjectType) {

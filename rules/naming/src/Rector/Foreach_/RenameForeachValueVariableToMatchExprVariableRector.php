@@ -30,40 +30,36 @@ final class RenameForeachValueVariableToMatchExprVariableRector extends Abstract
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition(
-            'Renames value variable name in foreach loop to match expression variable',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new RuleDefinition('Renames value variable name in foreach loop to match expression variable', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run()
-    {
-        $array = [];
-        foreach ($variables as $foo) {
-            $array[] = $property;
-        }
+public function run()
+{
+    $array = [];
+    foreach ($variables as $foo) {
+        $array[] = $property;
     }
+}
 }
 CODE_SAMPLE
 
-                    ,
-                    <<<'CODE_SAMPLE'
+                ,
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run()
-    {
-        $array = [];
-        foreach ($variables as $variable) {
-            $array[] = $variable;
-        }
+public function run()
+{
+    $array = [];
+    foreach ($variables as $variable) {
+        $array[] = $variable;
     }
 }
+}
 CODE_SAMPLE
-
-                ),
-
-            ]);
+            ),
+        ]);
     }
 
     /**

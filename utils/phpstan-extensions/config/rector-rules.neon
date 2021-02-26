@@ -61,6 +61,7 @@ services:
                 # relies on internal broker service that breaks sometimes; use RefletionProvider service instead
                 PHPStan\Type\ObjectType:
                     - 'getClassReflection'
+                    - 'getAncestors'
                 # use NodeTypeResolver instead
 #                PHPStan\Analyser\Scope:
 #                    - 'getType'

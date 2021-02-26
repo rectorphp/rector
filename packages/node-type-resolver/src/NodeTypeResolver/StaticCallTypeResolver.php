@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -27,9 +28,15 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -65,10 +72,11 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
             return $classType;
         }
 
-        $classReflection = $classType->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
+        if (! $this->reflectionProvider->hasClass($classType->getClassName())) {
             return $classType;
         }
+
+        $classReflection = $this->reflectionProvider->getClass($classType->getClassName());
 
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
@@ -77,6 +85,7 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
 
         /** @var ClassReflection[] $currentAndParentClassReflections */
         $currentAndParentClassReflections = array_merge([$classReflection], $classReflection->getParents());
+
         foreach ($currentAndParentClassReflections as $currentAndParentClassReflection) {
             if (! $currentAndParentClassReflection->hasMethod($methodName)) {
                 continue;

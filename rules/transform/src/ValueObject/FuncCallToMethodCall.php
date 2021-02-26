@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Transform\ValueObject;
 
+use PHPStan\Type\ObjectType;
+
 final class FuncCallToMethodCall
 {
     /**
@@ -33,9 +35,9 @@ final class FuncCallToMethodCall
         return $this->oldFuncName;
     }
 
-    public function getNewClassName(): string
+    public function getNewObjectType(): ObjectType
     {
-        return $this->newClassName;
+        return new ObjectType($this->newClassName);
     }
 
     public function getNewMethodName(): string

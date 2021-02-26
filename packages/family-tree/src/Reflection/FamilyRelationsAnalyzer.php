@@ -6,10 +6,8 @@ namespace Rector\FamilyTree\Reflection;
 
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
-/**
- * @deprecated Use ReflectionProvider instead
- */
 final class FamilyRelationsAnalyzer
 {
     /**
@@ -17,25 +15,33 @@ final class FamilyRelationsAnalyzer
      */
     private $reflectionProvider;
 
-    public function __construct(ReflectionProvider $reflectionProvider)
+    /**
+     * @var PrivatesAccessor
+     */
+    private $privatesAccessor;
+
+    public function __construct(ReflectionProvider $reflectionProvider, PrivatesAccessor $privatesAccessor)
     {
         $this->reflectionProvider = $reflectionProvider;
+        $this->privatesAccessor = $privatesAccessor;
     }
 
     /**
      * @return ClassReflection[]
      */
-    public function getChildrenOfClass(string $className): array
+    public function getChildrenOfClassReflection(ClassReflection $desiredClassReflection): array
     {
-        $classReflection = $this->reflectionProvider->getClass($className);
+        /** @var ClassReflection[] $classReflections */
+        $classReflections = $this->privatesAccessor->getPrivateProperty($this->reflectionProvider, 'classes');
 
         $childrenClassReflections = [];
-        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
-            if ($ancestorClassReflection === $classReflection) {
+
+        foreach ($classReflections as $classReflection) {
+            if (! $classReflection->isSubclassOf($desiredClassReflection->getName())) {
                 continue;
             }
 
-            $childrenClassReflections[] = $ancestorClassReflection;
+            $childrenClassReflections[] = $classReflection;
         }
 
         return $childrenClassReflections;

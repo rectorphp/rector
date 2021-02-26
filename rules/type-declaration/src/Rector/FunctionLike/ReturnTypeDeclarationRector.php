@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
@@ -122,7 +123,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof ClassMethod && $this->shouldSkip($node)) {
+        if ($this->shouldSkipClassLike($node)) {
+            return null;
+        }
+
+        if ($node instanceof ClassMethod && $this->shouldSkipClassMethod($node)) {
             return null;
         }
 
@@ -177,7 +182,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkip(ClassMethod $classMethod): bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return true;
@@ -207,6 +212,7 @@ CODE_SAMPLE
         if ($functionLike->returnType === null) {
             return false;
         }
+
         return (bool) $functionLike->returnType->getAttribute(AttributeKey::DO_NOT_CHANGE);
     }
 
@@ -219,14 +225,13 @@ CODE_SAMPLE
             return false;
         }
 
-        $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
-
         if ($functionLike instanceof ClassMethod && $this->vendorLockResolver->isReturnChangeVendorLockedIn(
             $functionLike
         )) {
             return true;
         }
 
+        $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
         if ($this->isCurrentObjectTypeSubType($currentType, $inferedType)) {
             return true;
         }
@@ -286,5 +291,15 @@ CODE_SAMPLE
 
         return $inferedType->isSubTypeOf($currentType)
             ->yes();
+    }
+
+    private function shouldSkipClassLike(FunctionLike $functionLike): bool
+    {
+        if (! $functionLike instanceof ClassMethod) {
+            return false;
+        }
+
+        $classLike = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
+        return ! $classLike instanceof Class_;
     }
 }

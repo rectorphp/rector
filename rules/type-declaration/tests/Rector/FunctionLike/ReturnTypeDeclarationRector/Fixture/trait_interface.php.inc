@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
 
-trait TraitWithInterfaceImplementation
+trait SkipTraitWithInterfaceImplementation
 {
     public function getCount($items)
     {
@@ -21,34 +21,5 @@ interface SomeInterface
 
 class SomeClassWithInterfaceAndTrait implements SomeInterface
 {
-    use TraitWithInterfaceImplementation;
+    use SkipTraitWithInterfaceImplementation;
 }
-
-?>
------
-<?php
-
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
-
-trait TraitWithInterfaceImplementation
-{
-    public function getCount($items): int
-    {
-        return 5;
-    }
-}
-
-interface SomeInterface
-{
-    /**
-     * @param array $items
-     */
-    public function getCount($items): int;
-}
-
-class SomeClassWithInterfaceAndTrait implements SomeInterface
-{
-    use TraitWithInterfaceImplementation;
-}
-
-?>

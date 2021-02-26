@@ -40,22 +40,28 @@ final class AnnotationToAttributeRector extends AbstractRector
         return new RuleDefinition('Change annotation to attribute', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-use Doctrine\ORM\Attributes as ORM;
+use Symfony\Component\Routing\Annotation\Route;
 
-/**
-  * @ORM\Entity
-  */
-class SomeClass
+class SymfonyRoute
 {
+    /**
+     * @Route("/path", name="action")
+     */
+    public function action()
+    {
+    }
 }
 CODE_SAMPLE
 ,
                 <<<'CODE_SAMPLE'
-use Doctrine\ORM\Attributes as ORM;
+use Symfony\Component\Routing\Annotation\Route;
 
-#[ORM\Entity]
-class SomeClass
+class SymfonyRoute
 {
+    #[Route(path: '/path', name: 'action')]
+    public function action()
+    {
+    }
 }
 CODE_SAMPLE
             ),

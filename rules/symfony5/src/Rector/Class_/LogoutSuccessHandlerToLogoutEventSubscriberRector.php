@@ -152,7 +152,10 @@ CODE_SAMPLE
             'Symfony\Component\Security\Http\Event\LogoutEvent'
         );
 
-        $eventReferencesToMethodNames = [new EventReferenceToMethodNameWithPriority($classConstFetch, 'onLogout', 64)];
+        $eventReferencesToMethodNames = [
+            new EventReferenceToMethodNameWithPriority($classConstFetch, 'onLogout', 64),
+        ];
+
         $getSubscribedEventsClassMethod = $this->getSubscribedEventsClassMethodFactory->create(
             $eventReferencesToMethodNames
         );

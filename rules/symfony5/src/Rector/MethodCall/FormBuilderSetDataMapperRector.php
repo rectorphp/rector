@@ -20,6 +20,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FormBuilderSetDataMapperRector extends AbstractRector
 {
+    /**
+     * @var ObjectType
+     */
+    private $dataMapperObjectType;
+
+    public function __construct()
+    {
+        $this->dataMapperObjectType = new ObjectType('Symfony\Component\Form\Extension\Core\DataMapper\DataMapper');
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -77,10 +87,7 @@ CODE_SAMPLE
         }
 
         $argumentValue = $node->args[0]->value;
-        if ($this->isObjectType(
-            $argumentValue,
-            new ObjectType('Symfony\Component\Form\Extension\Core\DataMapper\DataMapper')
-        )) {
+        if ($this->isObjectType($argumentValue, $this->dataMapperObjectType)) {
             return null;
         }
 
@@ -88,9 +95,9 @@ CODE_SAMPLE
             'Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor'
         ));
 
-        $newArgumentValue = new New_(new FullyQualified(
-            'Symfony\Component\Form\Extension\Core\DataMapper\DataMapper'
-        ), [new Arg($propertyPathAccessor)]);
+        $newArgumentValue = new New_(new FullyQualified($this->dataMapperObjectType->getClassName()), [
+            new Arg($propertyPathAccessor),
+        ]);
         $node->args[0]->value = $newArgumentValue;
 
         return $node;

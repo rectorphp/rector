@@ -63,6 +63,11 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector implemen
      */
     private $staticTypesInClassResolver;
 
+    /**
+     * @var array|mixed
+     */
+    private $typesToServices;
+
     public function __construct(PropertyNaming $propertyNaming, StaticTypesInClassResolver $staticTypesInClassResolver)
     {
         $this->propertyNaming = $propertyNaming;
@@ -176,7 +181,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, mixed> $configuration
+     * @param array<string, mixed[]> $configuration
      */
     public function configure(array $configuration): void
     {

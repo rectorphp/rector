@@ -20,7 +20,7 @@ use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
-use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocator;
+use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Application\EnabledRectorClassProvider;
 use Rector\Testing\Configuration\AllRectorConfigFactory;
 use Rector\Testing\Contract\RunnableInterface;
@@ -89,11 +89,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     private static $runnableRectorFactory;
 
     /**
-     * @var bool
-     */
-    private $autoloadTestFixture = true;
-
-    /**
      * @var RectorConfigsResolver
      */
     private static $rectorConfigsResolver;
@@ -155,13 +150,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return StaticFixtureFinder::yieldDirectory($directory, $suffix);
     }
 
-    protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
-    {
-        $this->autoloadTestFixture = false;
-        $this->doTestFileInfo($fileInfo);
-        $this->autoloadTestFixture = true;
-    }
-
     /**
      * @param SmartFileInfo[] $extraFileInfos
      */
@@ -171,7 +159,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
             $fixtureFileInfo,
-            $this->autoloadTestFixture
+            false
         );
 
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
@@ -181,8 +169,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
         $nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
 
-        /** @var DynamicSourceLocator $dynamicDirectoryLocatorProvider */
-        $dynamicDirectoryLocatorProvider = $this->getService(DynamicSourceLocator::class);
+        /** @var DynamicSourceLocatorProvider $dynamicDirectoryLocatorProvider */
+        $dynamicDirectoryLocatorProvider = $this->getService(DynamicSourceLocatorProvider::class);
         $dynamicDirectoryLocatorProvider->setFileInfo($inputFileInfo);
 
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();

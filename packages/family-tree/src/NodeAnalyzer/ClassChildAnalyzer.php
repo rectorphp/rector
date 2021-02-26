@@ -6,16 +6,25 @@ namespace Rector\FamilyTree\NodeAnalyzer;
 
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 
 final class ClassChildAnalyzer
 {
+    /**
+     * @var FamilyRelationsAnalyzer
+     */
+    private $familyRelationsAnalyzer;
+
+    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    {
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
+    }
+
     public function hasChildClassMethod(ClassReflection $classReflection, string $methodName): bool
     {
-        foreach ($classReflection->getAncestors() as $childClassReflection) {
-            if ($classReflection === $childClassReflection) {
-                continue;
-            }
+        $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
 
+        foreach ($childrenClassReflections as $childClassReflection) {
             if (! $childClassReflection->hasMethod($methodName)) {
                 continue;
             }

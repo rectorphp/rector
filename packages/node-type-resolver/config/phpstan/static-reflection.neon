@@ -6,7 +6,7 @@ parameters:
 services:
     - Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory
     - Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator
-    - Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocator
+    - Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
 
     # basically decorates native PHPStan source locator with a dynamic source locator that is also available in Rector DI
     betterReflectionSourceLocator:

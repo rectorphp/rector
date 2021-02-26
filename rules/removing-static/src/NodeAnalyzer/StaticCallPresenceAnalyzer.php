@@ -53,8 +53,7 @@ final class StaticCallPresenceAnalyzer
                 continue;
             }
 
-            $hasStaticCall = $this->hasMethodStaticCallOnType($classMethod, $objectType);
-            if ($hasStaticCall) {
+            if ($this->hasMethodStaticCallOnType($classMethod, $objectType)) {
                 return true;
             }
         }

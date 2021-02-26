@@ -171,11 +171,7 @@ CODE_SAMPLE
             return;
         }
 
-        $constructClassMethod->params[] = new Param(
-            new Variable($propertyExpectedName),
-            null,
-            new FullyQualified($objectType->getClassName())
-        );
+        $constructClassMethod->params[] = $this->createParam($propertyExpectedName, $objectType);
     }
 
     private function isTypeAlreadyInParamMethod(ClassMethod $classMethod, ObjectType $objectType): bool
@@ -191,5 +187,10 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function createParam(string $propertyName, ObjectType $objectType): Param
+    {
+        return new Param(new Variable($propertyName), null, new FullyQualified($objectType->getClassName()));
     }
 }

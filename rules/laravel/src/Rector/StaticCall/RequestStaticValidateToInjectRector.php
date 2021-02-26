@@ -25,19 +25,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RequestStaticValidateToInjectRector extends AbstractRector
 {
     /**
-     * @var ObjectType[]
-     */
-    private $requestObjectTypes = [];
-
-    /**
      * @var ClassMethodManipulator
      */
     private $classMethodManipulator;
 
+    /**
+     * @var ObjectType[]
+     */
+    private $requestObjectTypes = [];
+
     public function __construct(ClassMethodManipulator $classMethodManipulator)
     {
         $this->classMethodManipulator = $classMethodManipulator;
-
         $this->requestObjectTypes = [new ObjectType('Illuminate\Http\Request'), new ObjectType('Request')];
     }
 
@@ -94,7 +93,7 @@ CODE_SAMPLE
 
         $requestName = $this->classMethodManipulator->addMethodParameterIfMissing(
             $node,
-            'Illuminate\Http\Request',
+            new ObjectType('Illuminate\Http\Request'),
             ['request', 'httpRequest']
         );
 

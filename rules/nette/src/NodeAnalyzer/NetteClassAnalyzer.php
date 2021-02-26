@@ -38,6 +38,10 @@ final class NetteClassAnalyzer
             return false;
         }
 
+        if (! $this->nodeTypeResolver->isObjectType($class, new ObjectType('Nette\Application\UI\Control'))) {
+            return false;
+        }
+
         return ! $this->nodeTypeResolver->isObjectType($class, new ObjectType('Nette\Application\UI\Presenter'));
     }
 }

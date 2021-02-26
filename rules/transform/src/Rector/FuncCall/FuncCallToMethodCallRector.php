@@ -108,7 +108,7 @@ CODE_SAMPLE
             $expr = $this->matchTypeProvidingExpr(
                 $classLike,
                 $classMethod,
-                $funcNameToMethodCallName->getNewClassName()
+                $funcNameToMethodCallName->getNewObjectType()
             );
             return $this->nodeFactory->createMethodCall(
                 $expr,
