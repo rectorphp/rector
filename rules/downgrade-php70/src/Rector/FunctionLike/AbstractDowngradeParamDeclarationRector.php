@@ -34,7 +34,7 @@ abstract class AbstractDowngradeParamDeclarationRector extends AbstractRector im
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<\PhpParser\Node>>
      */
     public function getNodeTypes(): array
     {

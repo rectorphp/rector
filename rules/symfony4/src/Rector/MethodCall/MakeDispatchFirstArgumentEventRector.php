@@ -66,7 +66,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<\PhpParser\Node>>
      */
     public function getNodeTypes(): array
     {

@@ -32,7 +32,7 @@ final class __Name__ extends AbstractRector implements ConfigurableRectorInterfa
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<\PhpParser\Node>>
      */
     public function getNodeTypes(): array
     {

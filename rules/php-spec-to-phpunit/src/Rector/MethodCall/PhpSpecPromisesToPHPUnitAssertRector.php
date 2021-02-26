@@ -137,7 +137,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<\PhpParser\Node>>
      */
     public function getNodeTypes(): array
     {

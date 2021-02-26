@@ -63,7 +63,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<\PhpParser\Node>>
      */
     public function getNodeTypes(): array
     {

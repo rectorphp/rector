@@ -83,7 +83,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRe
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<\PhpParser\Node>>
      */
     public function getNodeTypes(): array
     {

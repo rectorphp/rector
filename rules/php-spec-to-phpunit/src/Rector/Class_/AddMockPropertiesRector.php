@@ -37,7 +37,7 @@ final class AddMockPropertiesRector extends AbstractPhpSpecToPHPUnitRector
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<\PhpParser\Node>>
      */
     public function getNodeTypes(): array
     {
