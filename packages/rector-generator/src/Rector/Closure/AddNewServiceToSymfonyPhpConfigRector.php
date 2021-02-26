@@ -42,7 +42,7 @@ final class AddNewServiceToSymfonyPhpConfigRector extends AbstractRector impleme
     }
 
     /**
-     * @return array<class-string<\PhpParser\Node>>
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
