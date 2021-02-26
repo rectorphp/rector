@@ -9,4 +9,3 @@ final class SkipInvoke
 }
 
 (new SkipInvoke())();
-?>
