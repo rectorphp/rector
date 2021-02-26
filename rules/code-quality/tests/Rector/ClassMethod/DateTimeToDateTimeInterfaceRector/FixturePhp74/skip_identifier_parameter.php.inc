@@ -1,11 +1,11 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector\FixturePhp74;
 
 /**
  * @see https://github.com/rectorphp/rector/issues/5673
  */
-class SkipArrowFunction
+class SkipIdentifierParameter
 {
     public static function generateThing(string $name): string
     {
