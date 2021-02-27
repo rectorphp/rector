@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\MethodCallManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -89,7 +90,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('Symfony\Component\Form\Form'))) {
+        if (! $this->isObjectType($methodCall->var, new ObjectType('Symfony\Component\Form\Form'))) {
             return true;
         }
 

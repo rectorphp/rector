@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeManipulator\SetUpClassMethodNodeManipulator;
@@ -98,7 +99,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, new \PHPStan\Type\ObjectType('Illuminate\Foundation\Testing\TestCase'))) {
+        if (! $this->isObjectType($node, new ObjectType('Illuminate\Foundation\Testing\TestCase'))) {
             return null;
         }
 

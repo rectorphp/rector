@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,7 +80,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Nette\Http\Request'))) {
+        if (! $this->isObjectType($node->var, new ObjectType('Nette\Http\Request'))) {
             return null;
         }
 

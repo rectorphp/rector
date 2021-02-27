@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\ResourceType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
@@ -156,7 +157,7 @@ CODE_SAMPLE
 
     private function isProbablyMysql(Expr $expr): bool
     {
-        if ($this->isObjectType($expr, new \PHPStan\Type\ObjectType('mysqli'))) {
+        if ($this->isObjectType($expr, new ObjectType('mysqli'))) {
             return true;
         }
 
@@ -184,7 +185,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            return $this->isObjectType($node->expr, new \PHPStan\Type\ObjectType('mysqli'));
+            return $this->isObjectType($node->expr, new ObjectType('mysqli'));
         });
 
         if (! $connectionAssign instanceof Assign) {

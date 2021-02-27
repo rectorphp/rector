@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
@@ -73,14 +74,11 @@ CODE_SAMPLE
     {
         $expr = $node instanceof New_ ? $node->class : $node->var;
 
-        if ($this->isObjectType($expr, new \PHPStan\Type\ObjectType('Symfony\Component\Process\Process'))) {
+        if ($this->isObjectType($expr, new ObjectType('Symfony\Component\Process\Process'))) {
             return $this->processArgumentPosition($node, 0);
         }
 
-        if ($this->isObjectType(
-            $expr,
-            new \PHPStan\Type\ObjectType('Symfony\Component\Console\Helper\ProcessHelper')
-        )) {
+        if ($this->isObjectType($expr, new ObjectType('Symfony\Component\Console\Helper\ProcessHelper'))) {
             return $this->processArgumentPosition($node, 1);
         }
 

@@ -6,6 +6,7 @@ namespace Rector\NetteKdyby\Rector\ClassMethod;
 
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -18,7 +19,7 @@ abstract class AbstractKdybyEventSubscriberRector extends AbstractRector
             return true;
         }
 
-        if (! $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Kdyby\Events\Subscriber'))) {
+        if (! $this->isObjectType($classLike, new ObjectType('Kdyby\Events\Subscriber'))) {
             return true;
         }
 

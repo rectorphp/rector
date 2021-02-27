@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -65,10 +66,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType(
-            $node,
-            new \PHPStan\Type\ObjectType('Symfony\Component\Console\Style\SymfonyStyle')
-        )) {
+        if (! $this->isObjectType($node, new ObjectType('Symfony\Component\Console\Style\SymfonyStyle'))) {
             return null;
         }
 

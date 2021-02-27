@@ -7,6 +7,7 @@ namespace Rector\Nette\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -91,7 +92,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, new \PHPStan\Type\ObjectType('Nette\Application\UI\Presenter'))) {
+        if (! $this->isObjectType($node, new ObjectType('Nette\Application\UI\Presenter'))) {
             return null;
         }
 

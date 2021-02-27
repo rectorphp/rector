@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -65,7 +66,7 @@ final class ParentGetterStmtsToExternalStmtsFactory
 
             if (! $this->nodeTypeResolver->isObjectType(
                 $getUserStmt->expr,
-                new \PHPStan\Type\ObjectType('Nette\Security\User')
+                new ObjectType('Nette\Security\User')
             )) {
                 continue;
             }

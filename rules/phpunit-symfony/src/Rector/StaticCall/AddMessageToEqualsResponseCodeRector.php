@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -110,10 +111,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isObjectType(
-            $expr->class,
-            new \PHPStan\Type\ObjectType('Symfony\Component\HttpFoundation\Response')
-        );
+        return $this->isObjectType($expr->class, new ObjectType('Symfony\Component\HttpFoundation\Response'));
     }
 
     /**

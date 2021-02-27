@@ -9,6 +9,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony3\FormHelper\FormTypeStringToTypeProvider;
@@ -134,14 +135,11 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Symfony\Component\Form\AbstractType'))) {
+        if ($this->isObjectType($classLike, new ObjectType('Symfony\Component\Form\AbstractType'))) {
             return $this->isName($classMethod->name, 'getParent');
         }
 
-        if ($this->isObjectType(
-            $classMethod,
-            new \PHPStan\Type\ObjectType('Symfony\Component\Form\AbstractTypeExtension')
-        )) {
+        if ($this->isObjectType($classMethod, new ObjectType('Symfony\Component\Form\AbstractTypeExtension'))) {
             return $this->isName($classMethod->name, 'getExtendedType');
         }
 

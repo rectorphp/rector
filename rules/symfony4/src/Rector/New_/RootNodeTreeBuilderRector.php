@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -61,7 +62,7 @@ CODE_SAMPLE
     {
         if (! $this->isObjectType(
             $node->class,
-            new \PHPStan\Type\ObjectType('Symfony\Component\Config\Definition\Builder\TreeBuilder')
+            new ObjectType('Symfony\Component\Config\Definition\Builder\TreeBuilder')
         )) {
             return null;
         }
@@ -105,7 +106,7 @@ CODE_SAMPLE
 
             if (! $this->isObjectType(
                 $node->var,
-                new \PHPStan\Type\ObjectType('Symfony\Component\Config\Definition\Builder\TreeBuilder')
+                new ObjectType('Symfony\Component\Config\Definition\Builder\TreeBuilder')
             )) {
                 return false;
             }

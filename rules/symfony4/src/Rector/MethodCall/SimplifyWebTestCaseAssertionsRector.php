@@ -12,6 +12,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -139,10 +140,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isObjectType(
-            $classLike,
-            new \PHPStan\Type\ObjectType('Symfony\Bundle\FrameworkBundle\Test\WebTestCase')
-        );
+        return $this->isObjectType($classLike, new ObjectType('Symfony\Bundle\FrameworkBundle\Test\WebTestCase'));
     }
 
     private function processAssertResponseStatusCodeSame(MethodCall $methodCall): ?MethodCall

@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
+use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -71,7 +72,7 @@ final class OnFormVariableMethodCallsCollector
 
                 if (! $this->nodeTypeResolver->isObjectType(
                     $node->expr,
-                    new \PHPStan\Type\ObjectType('Nette\Application\UI\Form')
+                    new ObjectType('Nette\Application\UI\Form')
                 )) {
                     return null;
                 }

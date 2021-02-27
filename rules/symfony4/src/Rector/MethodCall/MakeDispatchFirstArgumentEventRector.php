@@ -99,7 +99,7 @@ CODE_SAMPLE
     {
         if (! $this->isObjectType(
             $methodCall->var,
-            new \PHPStan\Type\ObjectType('Symfony\Contracts\EventDispatcher\EventDispatcherInterface')
+            new ObjectType('Symfony\Contracts\EventDispatcher\EventDispatcherInterface')
         )) {
             return true;
         }

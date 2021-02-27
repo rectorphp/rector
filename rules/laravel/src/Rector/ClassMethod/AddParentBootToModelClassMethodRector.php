@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -89,7 +90,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Illuminate\Database\Eloquent\Model'))) {
+        if (! $this->isObjectType($classLike, new ObjectType('Illuminate\Database\Eloquent\Model'))) {
             return null;
         }
 

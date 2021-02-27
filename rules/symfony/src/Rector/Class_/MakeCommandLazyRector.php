@@ -12,6 +12,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -81,7 +82,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, new \PHPStan\Type\ObjectType('Symfony\Component\Console\Command\Command'))) {
+        if (! $this->isObjectType($node, new ObjectType('Symfony\Component\Console\Command\Command'))) {
             return null;
         }
 
@@ -120,10 +121,7 @@ CODE_SAMPLE
             if (! $node instanceof StaticCall) {
                 return null;
             }
-            if (! $this->isObjectType(
-                $node->class,
-                new \PHPStan\Type\ObjectType('Symfony\Component\Console\Command\Command')
-            )) {
+            if (! $this->isObjectType($node->class, new ObjectType('Symfony\Component\Console\Command\Command'))) {
                 return null;
             }
 
@@ -146,10 +144,7 @@ CODE_SAMPLE
             if (! $node instanceof MethodCall) {
                 return null;
             }
-            if (! $this->isObjectType(
-                $node->var,
-                new \PHPStan\Type\ObjectType('Symfony\Component\Console\Command\Command')
-            )) {
+            if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Console\Command\Command'))) {
                 return null;
             }
 

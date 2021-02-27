@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -102,7 +103,7 @@ CODE_SAMPLE
 
             if ($node->expr instanceof Variable && $this->isObjectType(
                 $node->expr,
-                new \PHPStan\Type\ObjectType('ReflectionType')
+                new ObjectType('ReflectionType')
             )) {
                 return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
             }
@@ -183,7 +184,7 @@ CODE_SAMPLE
 
     private function isReflectionParameterGetTypeMethodCall(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('ReflectionParameter'))) {
+        if (! $this->isObjectType($methodCall->var, new ObjectType('ReflectionParameter'))) {
             return false;
         }
 
@@ -203,7 +204,7 @@ CODE_SAMPLE
 
     private function isReflectionFunctionAbstractGetReturnTypeMethodCall(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('ReflectionFunctionAbstract'))) {
+        if (! $this->isObjectType($methodCall->var, new ObjectType('ReflectionFunctionAbstract'))) {
             return false;
         }
 

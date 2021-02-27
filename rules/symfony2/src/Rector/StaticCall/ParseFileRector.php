@@ -10,6 +10,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -65,7 +66,7 @@ final class ParseFileRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isObjectType($node->class, new \PHPStan\Type\ObjectType('Symfony\Component\Yaml\Yaml'))) {
+        if (! $this->isObjectType($node->class, new ObjectType('Symfony\Component\Yaml\Yaml'))) {
             return null;
         }
 

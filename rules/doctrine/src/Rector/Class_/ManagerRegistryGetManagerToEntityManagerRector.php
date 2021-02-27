@@ -13,6 +13,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -220,10 +221,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->isObjectType(
-                $class,
-                new \PHPStan\Type\ObjectType('Doctrine\Common\Persistence\ObjectManager')
-            )) {
+            if (! $this->isObjectType($class, new ObjectType('Doctrine\Common\Persistence\ObjectManager'))) {
                 return null;
             }
 
@@ -268,7 +266,7 @@ CODE_SAMPLE
 
         if (! $this->isObjectType(
             $assign->expr->var,
-            new \PHPStan\Type\ObjectType('Doctrine\Common\Persistence\ManagerRegistry')
+            new ObjectType('Doctrine\Common\Persistence\ManagerRegistry')
         )) {
             return false;
         }

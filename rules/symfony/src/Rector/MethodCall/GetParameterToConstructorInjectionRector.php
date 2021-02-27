@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
@@ -83,7 +84,7 @@ CODE_SAMPLE
     {
         if (! $this->isObjectType(
             $node->var,
-            new \PHPStan\Type\ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller')
+            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller')
         )) {
             return null;
         }
