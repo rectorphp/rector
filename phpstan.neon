@@ -580,3 +580,11 @@ parameters:
              message: '#Empty array passed to foreach#'
              paths:
                  - rules/transform/src/Rector/New_/NewToConstructorInjectionRector.php
+
+        - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\Isset_\\IssetOnPropertyObjectToPropertyExistsRector\:\:refactor\(\)" is \d+, keep it under 9#'
+
+        # needed for native reflection parameter reference
+        -
+            message: '#Instead of "ReflectionFunction" class/interface use "PHPStan\\Reflection\\FunctionReflection"#'
+            paths:
+                - packages/read-write/src/Guard/VariableToConstantGuard.php

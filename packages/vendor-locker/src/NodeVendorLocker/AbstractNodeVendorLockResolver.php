@@ -43,17 +43,17 @@ abstract class AbstractNodeVendorLockResolver
     {
         if ($classReflection->isClass()) {
             // has at least interface
-            if (count($classReflection->getInterfaces()) > 0) {
+            if ($classReflection->getInterfaces() !== []) {
                 return true;
             }
 
             // has at least one parent class
-            if (count($classReflection->getParents()) > 0) {
+            if ($classReflection->getParents() !== []) {
                 return true;
             }
 
             $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
-            return count($childrenClassReflections) > 0;
+            return $childrenClassReflections !== [];
         }
 
         if ($classReflection->isInterface()) {

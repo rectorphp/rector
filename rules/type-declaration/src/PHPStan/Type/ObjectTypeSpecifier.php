@@ -43,7 +43,6 @@ final class ObjectTypeSpecifier
         }
 
         $aliasedObjectType = $this->matchAliasedObjectType($node, $objectType);
-
         if ($aliasedObjectType !== null) {
             return $aliasedObjectType;
         }

@@ -86,10 +86,10 @@ CODE_SAMPLE
                 continue;
             }
 
-//            $property = $this->nodeRepository->findPropertyByPropertyFetch($issetVar);
-//            if ($property instanceof Property && $property->type) {
-//                continue;
-//            }
+            $property = $this->nodeRepository->findPropertyByPropertyFetch($issetVar);
+            if ($property instanceof Property && $property->type) {
+                continue;
+            }
 
             $propertyFetchName = $this->getName($issetVar->name);
             if ($propertyFetchName === null) {

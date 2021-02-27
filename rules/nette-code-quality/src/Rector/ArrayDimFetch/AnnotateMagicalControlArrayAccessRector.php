@@ -160,8 +160,6 @@ CODE_SAMPLE
             throw new ShouldNotHappenException($controlName);
         }
 
-        $controlType = $controlTypes[$controlName];
-
-        return new ObjectType($controlType);
+        return new ObjectType($controlTypes[$controlName]);
     }
 }

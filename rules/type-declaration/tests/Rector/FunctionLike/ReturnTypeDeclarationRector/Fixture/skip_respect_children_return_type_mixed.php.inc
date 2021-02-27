@@ -16,7 +16,7 @@ class SkipRespectChildrenReturnTypeParentMixed
 
 final class RespectChildrenReturnTypeMixed extends SkipRespectChildrenReturnTypeParentMixed
 {
-    public function run() : string
+    public function run(): string
     {
         return 'hey';
     }

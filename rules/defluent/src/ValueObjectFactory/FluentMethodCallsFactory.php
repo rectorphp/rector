@@ -42,6 +42,7 @@ final class FluentMethodCallsFactory
         }
 
         $rootMethodCall = $this->resolveRootMethodCall($chainMethodCalls);
+
         return new FluentMethodCalls($rootMethodCall, $chainMethodCalls, $lastMethodCall);
     }
 

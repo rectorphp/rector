@@ -80,12 +80,11 @@ CODE_SAMPLE
 
         // is argument string?
         $needleArgNode = $node->args[1]->value;
-
         if ($this->nodeTypeAnalyzer->isStringTypeExpr($needleArgNode)) {
             return null;
         }
 
-        if ($node->args[1]->value instanceof String_) {
+        if ($needleArgNode instanceof String_) {
             return null;
         }
 

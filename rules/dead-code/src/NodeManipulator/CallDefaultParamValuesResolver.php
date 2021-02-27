@@ -11,12 +11,15 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionFunction;
+use ReflectionParameter;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class CallDefaultParamValuesResolver
 {
@@ -30,10 +33,26 @@ final class CallDefaultParamValuesResolver
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeRepository $nodeRepository, NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    /**
+     * @var PrivatesAccessor
+     */
+    private $privatesAccessor;
+
+    public function __construct(
+        NodeRepository $nodeRepository,
+        NodeNameResolver $nodeNameResolver,
+        ReflectionProvider $reflectionProvider,
+        PrivatesAccessor $privatesAccessor
+    ) {
         $this->nodeRepository = $nodeRepository;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->privatesAccessor = $privatesAccessor;
     }
 
     /**
@@ -89,29 +108,39 @@ final class CallDefaultParamValuesResolver
      */
     private function resolveFromFunctionName(string $functionName): array
     {
-        $functionNode = $this->nodeRepository->findFunction($functionName);
-        if ($functionNode !== null) {
-            return $this->resolveFromFunctionLike($functionNode);
+        $function = $this->nodeRepository->findFunction($functionName);
+        if ($function instanceof Function_) {
+            return $this->resolveFromFunctionLike($function);
         }
 
         // non existing function
-        if (! function_exists($functionName)) {
+        $functionNameNode = new Name($functionName);
+        if (! $this->reflectionProvider->hasFunction($functionNameNode, null)) {
             return [];
         }
 
-        $reflectionFunction = new ReflectionFunction($functionName);
-        if ($reflectionFunction->isUserDefined()) {
-            $defaultValues = [];
-
-            foreach ($reflectionFunction->getParameters() as $key => $reflectionParameter) {
-                if ($reflectionParameter->isDefaultValueAvailable()) {
-                    $defaultValues[$key] = BuilderHelpers::normalizeValue($reflectionParameter->getDefaultValue());
-                }
-            }
-
-            return $defaultValues;
+        $functionReflection = $this->reflectionProvider->getFunction($functionNameNode, null);
+        if ($functionReflection->isBuiltin()) {
+            return [];
         }
 
-        return [];
+        $defaultValues = [];
+
+        $parametersAcceptor = $functionReflection->getVariants()[0];
+
+        foreach ($parametersAcceptor->getParameters() as $key => $reflectionParameter) {
+            /** @var ReflectionParameter $nativeReflectionParameter */
+            $nativeReflectionParameter = $this->privatesAccessor->getPrivateProperty(
+                $reflectionParameter,
+                'reflection'
+            );
+            if (! $nativeReflectionParameter->isDefaultValueAvailable()) {
+                continue;
+            }
+
+            $defaultValues[$key] = BuilderHelpers::normalizeValue($nativeReflectionParameter->getDefaultValue());
+        }
+
+        return $defaultValues;
     }
 }

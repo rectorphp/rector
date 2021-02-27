@@ -18,7 +18,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ParsedClassConstFetchNodeCollector
 {
     /**
-     * @var string[][][]
+     * @var array<string, array<string, class-string[]>>
      */
     private $classConstantFetchByClassAndName = [];
 
@@ -76,6 +76,7 @@ final class ParsedClassConstFetchNodeCollector
         }
 
         // current class
+        /** @var string $classOfUse */
         $classOfUse = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         $this->classConstantFetchByClassAndName[$className][$constantName][] = $classOfUse;
@@ -86,7 +87,7 @@ final class ParsedClassConstFetchNodeCollector
     }
 
     /**
-     * @return string[][][]
+     * @return array<string, array<string, class-string[]>>
      */
     public function getClassConstantFetchByClassAndName(): array
     {

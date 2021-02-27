@@ -6,8 +6,12 @@ namespace Rector\Privatization\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\Interface_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\ApiPhpDocTagNode;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -100,12 +104,23 @@ CODE_SAMPLE
         /** @var string $class */
         $class = $node->getAttribute(AttributeKey::CLASS_NAME);
 
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if ($classReflection === null) {
+            throw new ShouldNotHappenException();
+        }
+
         // Remember when we have already processed this constant recursively
         $node->setAttribute(self::HAS_NEW_ACCESS_LEVEL, true);
-        $nodeRepositoryFindInterface = $this->nodeRepository->findInterface($class);
+
+        $interface = $this->nodeRepository->findInterface($class);
 
         // 0. constants declared in interfaces have to be public
-        if ($nodeRepositoryFindInterface !== null) {
+        if ($interface instanceof Interface_) {
             $this->visibilityManipulator->makePublic($node);
             return $node;
         }
@@ -121,15 +136,21 @@ CODE_SAMPLE
             return $node;
         }
 
-        $directUseClasses = $this->nodeRepository->findDirectClassConstantFetches($class, $constant);
-        $indirectUseClasses = $this->nodeRepository->findIndirectClassConstantFetches($class, $constant);
+        $directUsingClassReflections = $this->nodeRepository->findDirectClassConstantFetches(
+            $classReflection,
+            $constant
+        );
+        $indirectUsingClassReflections = $this->nodeRepository->findIndirectClassConstantFetches(
+            $classReflection,
+            $constant
+        );
 
         $this->changeConstantVisibility(
             $node,
-            $directUseClasses,
-            $indirectUseClasses,
+            $directUsingClassReflections,
+            $indirectUsingClassReflections,
             $parentClassConstantVisibility,
-            $class
+            $classReflection
         );
 
         return $node;
@@ -189,62 +210,53 @@ CODE_SAMPLE
     }
 
     /**
-     * @param string[] $directUseClasses
-     * @param string[] $indirectUseClasses
+     * @param ClassReflection[] $directUsingClassReflections
+     * @param ClassReflection[] $indirectUsingClassReflections
      */
     private function changeConstantVisibility(
         ClassConst $classConst,
-        array $directUseClasses,
-        array $indirectUseClasses,
+        array $directUsingClassReflections,
+        array $indirectUsingClassReflections,
         ?ConstantVisibility $constantVisibility,
-        string $class
+        ClassReflection $classReflection
     ): void {
         // 1. is actually never used
-        if ($directUseClasses === []) {
-            if ($indirectUseClasses !== [] && $constantVisibility !== null) {
-                $this->makePrivateOrWeaker($classConst, $constantVisibility);
+        if ($directUsingClassReflections === []) {
+            if ($indirectUsingClassReflections !== [] && $constantVisibility !== null) {
+                $this->visibilityManipulator->makeClassConstPrivateOrWeaker($classConst, $constantVisibility);
             }
 
             return;
         }
 
         // 2. is only local use? → private
-        if ($directUseClasses === [$class]) {
-            if ($indirectUseClasses === []) {
-                $this->makePrivateOrWeaker($classConst, $constantVisibility);
+        if ($directUsingClassReflections === [$classReflection]) {
+            if ($indirectUsingClassReflections === []) {
+                $this->visibilityManipulator->makeClassConstPrivateOrWeaker($classConst, $constantVisibility);
             }
 
             return;
         }
 
+        $usingClassReflections = array_merge($indirectUsingClassReflections, $directUsingClassReflections);
+
         // 3. used by children → protected
-        if ($this->isUsedByChildrenOnly($directUseClasses, $class)) {
+        if ($this->isUsedByChildrenOnly($usingClassReflections, $classReflection)) {
             $this->visibilityManipulator->makeProtected($classConst);
         } else {
             $this->visibilityManipulator->makePublic($classConst);
         }
     }
 
-    private function makePrivateOrWeaker(ClassConst $classConst, ?ConstantVisibility $parentConstantVisibility): void
-    {
-        if ($parentConstantVisibility !== null && $parentConstantVisibility->isProtected()) {
-            $this->visibilityManipulator->makeProtected($classConst);
-        } elseif ($parentConstantVisibility !== null && $parentConstantVisibility->isPrivate() && ! $parentConstantVisibility->isProtected()) {
-            $this->visibilityManipulator->makePrivate($classConst);
-        } elseif ($parentConstantVisibility === null) {
-            $this->visibilityManipulator->makePrivate($classConst);
-        }
-    }
-
     /**
-     * @param string[] $useClasses
+     * @param ClassReflection[] $constantUsingClassReflections
      */
-    private function isUsedByChildrenOnly(array $useClasses, string $class): bool
+    private function isUsedByChildrenOnly(array $constantUsingClassReflections, ClassReflection $classReflection): bool
     {
         $isChild = false;
 
-        foreach ($useClasses as $useClass) {
-            if (is_a($useClass, $class, true)) {
+        foreach ($constantUsingClassReflections as $constantUsingObjectType) {
+            if ($constantUsingObjectType->isSubclassOf($classReflection->getName())) {
                 $isChild = true;
             } else {
                 // not a child, must be public

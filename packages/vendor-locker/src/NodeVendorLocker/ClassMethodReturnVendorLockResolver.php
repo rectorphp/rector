@@ -7,6 +7,7 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Type\MixedType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -49,8 +50,12 @@ final class ClassMethodReturnVendorLockResolver extends AbstractNodeVendorLockRe
 
             $parentClassMethodReflection = $parentClassReflections->getNativeMethod($methodName);
             $parametersAcceptor = $parentClassMethodReflection->getVariants()[0];
+            if (! $parametersAcceptor instanceof FunctionVariantWithPhpDocs) {
+                continue;
+            }
 
-            return ! $parametersAcceptor->getReturnType() instanceof MixedType;
+            // here we count only on strict types, not on docs
+            return ! $parametersAcceptor->getNativeReturnType() instanceof MixedType;
         }
 
         return false;

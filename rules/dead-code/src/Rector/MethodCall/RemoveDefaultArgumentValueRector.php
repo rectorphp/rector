@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeManipulator\CallDefaultParamValuesResolver;
-use ReflectionFunction;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,18 +26,24 @@ final class RemoveDefaultArgumentValueRector extends AbstractRector
      */
     private $callDefaultParamValuesResolver;
 
-    public function __construct(CallDefaultParamValuesResolver $callDefaultParamValuesResolver)
-    {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(
+        CallDefaultParamValuesResolver $callDefaultParamValuesResolver,
+        ReflectionProvider $reflectionProvider
+    ) {
         $this->callDefaultParamValuesResolver = $callDefaultParamValuesResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition(
-            'Remove argument value, if it is the same as default value',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove argument value, if it is the same as default value', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -79,8 +85,7 @@ class SomeClass
 }
 CODE_SAMPLE
                 ),
-
-            ]);
+        ]);
     }
 
     /**
@@ -136,14 +141,15 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! function_exists($functionName)) {
+        $functionNameNode = new Name($functionName);
+        if (! $this->reflectionProvider->hasFunction($functionNameNode, null)) {
             return false;
         }
 
-        $reflectionFunction = new ReflectionFunction($functionName);
+        $reflectionFunction = $this->reflectionProvider->getFunction($functionNameNode, null);
 
         // skip native functions, hard to analyze without stubs (stubs would make working with IDE non-practical)
-        return $reflectionFunction->isInternal();
+        return $reflectionFunction->isBuiltin();
     }
 
     /**

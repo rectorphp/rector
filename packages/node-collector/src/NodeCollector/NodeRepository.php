@@ -26,6 +26,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
@@ -374,36 +375,46 @@ final class NodeRepository
     }
 
     /**
-     * @return string[]
+     * @return ClassReflection[]
      */
-    public function findDirectClassConstantFetches(string $desiredClassName, string $desiredConstantName): array
+    public function findDirectClassConstantFetches(ClassReflection $classReflection, string $desiredConstantName): array
     {
         $classConstantFetchByClassAndName = $this->parsedClassConstFetchNodeCollector->getClassConstantFetchByClassAndName();
-        return $classConstantFetchByClassAndName[$desiredClassName][$desiredConstantName] ?? [];
+        $classTypes = $classConstantFetchByClassAndName[$classReflection->getName()][$desiredConstantName] ?? [];
+
+        return $this->resolveClassReflectionsFromClassTypes($classTypes);
     }
 
     /**
-     * @return string[]
+     * @return ClassReflection[]
      */
-    public function findIndirectClassConstantFetches(string $desiredClassName, string $desiredConstantName): array
-    {
+    public function findIndirectClassConstantFetches(
+        ClassReflection $classReflection,
+        string $desiredConstantName
+    ): array {
         $classConstantFetchByClassAndName = $this->parsedClassConstFetchNodeCollector->getClassConstantFetchByClassAndName();
 
         foreach ($classConstantFetchByClassAndName as $className => $classesByConstantName) {
+            if (! $this->reflectionProvider->hasClass($className)) {
+                return [];
+            }
+
+            $currentClassReflection = $this->reflectionProvider->getClass($className);
             if (! isset($classesByConstantName[$desiredConstantName])) {
                 continue;
             }
 
+            if (! $classReflection->isSubclassOf($currentClassReflection->getName()) &&
+                ! $currentClassReflection->isSubclassOf($classReflection->getName())) {
+                continue;
+            }
+
             // include child usages and parent usages
-            if (! is_a($className, $desiredClassName, true) && ! is_a($desiredClassName, $className, true)) {
+            if ($currentClassReflection->getName() === $classReflection->getName()) {
                 continue;
             }
 
-            if ($desiredClassName === $className) {
-                continue;
-            }
-
-            return $classesByConstantName[$desiredConstantName];
+            return $this->resolveClassReflectionsFromClassTypes($classesByConstantName[$desiredConstantName]);
         }
 
         return [];
@@ -722,10 +733,20 @@ final class NodeRepository
             return false;
         }
 
-        if (! is_a($currentClassName, $desiredClass, true)) {
+        if (! $this->reflectionProvider->hasClass($desiredClass)) {
             return false;
         }
 
+        if (! $this->reflectionProvider->hasClass($currentClassName)) {
+            return false;
+        }
+
+        $desiredClassReflection = $this->reflectionProvider->getClass($desiredClass);
+        $currentClassReflection = $this->reflectionProvider->getClass($currentClassName);
+
+        if (! $currentClassReflection->isSubclassOf($desiredClassReflection->getName())) {
+            return false;
+        }
         return $currentClassName !== $desiredClass;
     }
 
@@ -797,5 +818,23 @@ final class NodeRepository
                 $this->callsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
             }
         }
+    }
+
+    /**
+     * @param class-string[] $classTypes
+     * @return ClassReflection[]
+     */
+    private function resolveClassReflectionsFromClassTypes(array $classTypes): array
+    {
+        $classReflections = [];
+        foreach ($classTypes as $classType) {
+            if (! $this->reflectionProvider->hasClass($classType)) {
+                continue;
+            }
+
+            $classReflections[] = $this->reflectionProvider->getClass($classType);
+        }
+
+        return $classReflections;
     }
 }

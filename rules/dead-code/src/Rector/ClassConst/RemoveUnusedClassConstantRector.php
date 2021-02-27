@@ -7,6 +7,9 @@ namespace Rector\DeadCode\Rector\ClassConst;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\ShouldNotHappenException;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\ApiPhpDocTagNode;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\NodeManipulator\ClassConstManipulator;
@@ -74,12 +77,15 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var string|null $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NAME);
-        if ($class === null) {
-            return null;
+        /** @var Scope $scope */
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            throw new ShouldNotHappenException();
         }
-        $nodeRepositoryFindInterface = $this->nodeRepository->findInterface($class);
+
+        $nodeRepositoryFindInterface = $this->nodeRepository->findInterface($classReflection->getName());
 
         // 0. constants declared in interfaces have to be public
         if ($nodeRepositoryFindInterface !== null) {
@@ -90,13 +96,18 @@ CODE_SAMPLE
         /** @var string $constant */
         $constant = $this->getName($node);
 
-        $directUseClasses = $this->nodeRepository->findDirectClassConstantFetches($class, $constant);
-        if ($directUseClasses !== []) {
-            return null;
-        }
+        $directUsingClassReflections = $this->nodeRepository->findDirectClassConstantFetches(
+            $classReflection,
+            $constant
+        );
 
-        $indirectUseClasses = $this->nodeRepository->findIndirectClassConstantFetches($class, $constant);
-        if ($indirectUseClasses !== []) {
+        $indirectUsingClassReflections = $this->nodeRepository->findIndirectClassConstantFetches(
+            $classReflection,
+            $constant
+        );
+
+        $usingClassReflections = array_merge($directUsingClassReflections, $indirectUsingClassReflections);
+        if ($usingClassReflections !== []) {
             return null;
         }
 
@@ -125,6 +136,7 @@ CODE_SAMPLE
         }
 
         $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
+
         if ($classLike instanceof ClassLike) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classLike);
             return $phpDocInfo->hasByType(ApiPhpDocTagNode::class);

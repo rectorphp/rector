@@ -70,7 +70,12 @@ final class NetteInjectDetector
             return false;
         }
 
-        if (! is_a($className, 'Nette\Application\IPresenter', true)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return false;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
+        if (! $classReflection->isSubclassOf('Nette\Application\IPresenter')) {
             return false;
         }
 

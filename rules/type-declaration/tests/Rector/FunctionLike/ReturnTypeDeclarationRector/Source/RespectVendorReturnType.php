@@ -1,5 +1,5 @@
 <?php
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\vendor;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source;
 
 class RespectVendorReturnType
 {

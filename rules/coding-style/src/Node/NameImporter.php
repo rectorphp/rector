@@ -205,7 +205,7 @@ final class NameImporter
         if ($autoImportNames && ! $parentNode instanceof Node && ! Strings::contains(
             $fullName,
             '\\'
-        ) && function_exists($fullName)) {
+        ) && $this->reflectionProvider->hasFunction(new Name($fullName), null)) {
             return true;
         }
         if ($parentNode instanceof ConstFetch) {

@@ -59,11 +59,12 @@ final class ClassMethodReflectionFactory
         }
 
         $classReflection = $this->reflectionProvider->getClass($class);
-        $nativeClassReflection = $classReflection->getNativeReflection();
-        if (! $nativeClassReflection->hasMethod($method)) {
+
+        $reflectionClass = $classReflection->getNativeReflection();
+        if (! $reflectionClass->hasMethod($method)) {
             return null;
         }
 
-        return $nativeClassReflection->getMethod($method);
+        return $reflectionClass->getMethod($method);
     }
 }

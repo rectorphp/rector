@@ -26,12 +26,12 @@ final class ControlDimFetchAnalyzer
 
     public function matchNameOnFormOrControlVariable(Node $node): ?string
     {
-        return $this->matchNameOnVariableTypes($node, [new ObjectType('Nette\Application\UI\Form')]);
+        return $this->matchNameOnVariableType($node, new ObjectType('Nette\Application\UI\Form'));
     }
 
     public function matchNameOnControlVariable(Node $node): ?string
     {
-        return $this->matchNameOnVariableTypes($node, [new ObjectType('Nette\Application\UI\Control')]);
+        return $this->matchNameOnVariableType($node, new ObjectType('Nette\Application\UI\Control'));
     }
 
     public function matchName(Node $node): ?string
@@ -51,10 +51,7 @@ final class ControlDimFetchAnalyzer
         return $node->dim->value;
     }
 
-    /**
-     * @param ObjectType[] $objectTypes
-     */
-    private function matchNameOnVariableTypes(Node $node, array $objectTypes): ?string
+    private function matchNameOnVariableType(Node $node, ObjectType $objectType): ?string
     {
         $matchedName = $this->matchName($node);
         if ($matchedName === null) {
@@ -62,7 +59,7 @@ final class ControlDimFetchAnalyzer
         }
 
         /** @var Assign $node */
-        if (! $this->isVariableTypes($node->var, $objectTypes)) {
+        if (! $this->isVariableTypes($node->var, [$objectType])) {
             return null;
         }
 

@@ -6,6 +6,8 @@ namespace Rector\Php71\Rector\BooleanOr;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Name;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php71\IsArrayAndDualCheckToAble;
@@ -22,9 +24,17 @@ final class IsIterableRector extends AbstractRector
      */
     private $isArrayAndDualCheckToAble;
 
-    public function __construct(IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble)
-    {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(
+        IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble,
+        ReflectionProvider $reflectionProvider
+    ) {
         $this->isArrayAndDualCheckToAble = $isArrayAndDualCheckToAble;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -56,7 +66,7 @@ final class IsIterableRector extends AbstractRector
 
     private function shouldSkip(): bool
     {
-        if (function_exists('is_iterable')) {
+        if ($this->reflectionProvider->hasFunction(new Name('is_iterable'), null)) {
             return false;
         }
 

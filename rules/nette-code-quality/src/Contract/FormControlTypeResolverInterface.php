@@ -9,7 +9,7 @@ use PhpParser\Node;
 interface FormControlTypeResolverInterface
 {
     /**
-     * @return array<string, string>
+     * @return array<string, class-string>
      */
     public function resolve(Node $node): array;
 }

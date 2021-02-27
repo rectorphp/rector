@@ -5,16 +5,16 @@ namespace Rector\Nette\Tests\Rector\ClassMethod\RemoveParentAndNameFromComponent
 use Nette\Application\UI\Control;
 use Nette\ComponentModel\IContainer;
 
-class DoNotRemoveFutureUseName extends Control
+final class DoNotRemoveFutureUseName extends Control
 {
-    private $name;
+    private $customName;
 
     private $value;
 
     public function __construct(IContainer $parent = null, $name = null, int $value)
     {
         parent::__construct($parent, $name);
-        $this->name = $name;
+        $this->customName = $name;
         $this->value = $value;
     }
 }
@@ -28,15 +28,15 @@ namespace Rector\Nette\Tests\Rector\ClassMethod\RemoveParentAndNameFromComponent
 use Nette\Application\UI\Control;
 use Nette\ComponentModel\IContainer;
 
-class DoNotRemoveFutureUseName extends Control
+final class DoNotRemoveFutureUseName extends Control
 {
-    private $name;
+    private $customName;
 
     private $value;
 
     public function __construct($name = null, int $value)
     {
-        $this->name = $name;
+        $this->customName = $name;
         $this->value = $value;
     }
 }

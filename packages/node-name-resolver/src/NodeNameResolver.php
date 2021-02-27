@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Contract\Rector\RectorInterface;
@@ -62,6 +63,11 @@ final class NodeNameResolver
     private $betterStandardPrinter;
 
     /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
     public function __construct(
@@ -69,6 +75,7 @@ final class NodeNameResolver
         BetterStandardPrinter $betterStandardPrinter,
         CurrentFileInfoProvider $currentFileInfoProvider,
         ClassNaming $classNaming,
+        ReflectionProvider $reflectionProvider,
         array $nodeNameResolvers = []
     ) {
         $this->regexPatternDetector = $regexPatternDetector;
@@ -76,6 +83,7 @@ final class NodeNameResolver
         $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->classNaming = $classNaming;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -331,17 +339,17 @@ final class NodeNameResolver
     }
 
     /**
-     * @param string[] $desiredClassNames
+     * @param ObjectType[] $desiredObjectTypes
      */
-    public function isInClassNames(Node $node, array $desiredClassNames): bool
+    public function isInClassNames(Node $node, array $desiredObjectTypes): bool
     {
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classNode === null) {
             return false;
         }
 
-        foreach ($desiredClassNames as $desiredClassName) {
-            if (is_a($className, $desiredClassName, true)) {
+        foreach ($desiredObjectTypes as $desiredObjectType) {
+            if ($this->isInClassNamed($classNode, $desiredObjectType)) {
                 return true;
             }
         }
@@ -356,7 +364,16 @@ final class NodeNameResolver
             return false;
         }
 
-        return is_a($className, $objectType->getClassName(), true);
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return false;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
+        if ($classReflection->getName() === $objectType->getClassName()) {
+            return true;
+        }
+
+        return $classReflection->isSubclassOf($objectType->getClassName());
     }
 
     /**

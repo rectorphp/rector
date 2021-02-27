@@ -31,7 +31,6 @@ final class SameClassMethodCallAnalyzer
         $classOfClassMethod = [];
         foreach ($chainMethodCalls as $chainMethodCall) {
             $classMethod = $this->nodeRepository->findClassMethodByMethodCall($chainMethodCall);
-
             if ($classMethod instanceof ClassMethod) {
                 $classOfClassMethod[] = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
             } else {

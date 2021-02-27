@@ -290,6 +290,9 @@ final class IfManipulator
         return $ifs;
     }
 
+    /**
+     * @param class-string<Node> $className
+     */
     public function isIfWithOnly(Node $node, string $className): bool
     {
         if (! $node instanceof If_) {
@@ -402,6 +405,9 @@ final class IfManipulator
         return $this->hasOnlyStmtOfType($if, If_::class);
     }
 
+    /**
+     * @param class-string<Node> $desiredType
+     */
     private function hasOnlyStmtOfType(If_ $if, string $desiredType): bool
     {
         $stmts = $if->stmts;

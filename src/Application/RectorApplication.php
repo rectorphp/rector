@@ -95,7 +95,7 @@ final class RectorApplication
     /**
      * @var DynamicSourceLocatorProvider
      */
-    private $dynamicSourceLocator;
+    private $dynamicSourceLocatorProvider;
 
     /**
      * @param PostRunnerInterface[] $postRunners
@@ -109,7 +109,7 @@ final class RectorApplication
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         SymfonyStyle $symfonyStyle,
         PrivatesAccessor $privatesAccessor,
-        DynamicSourceLocatorProvider $dynamicSourceLocator,
+        DynamicSourceLocatorProvider $dynamicSourceLocatorProvider,
         array $postRunners
     ) {
         $this->symfonyStyle = $symfonyStyle;
@@ -121,7 +121,7 @@ final class RectorApplication
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->privatesAccessor = $privatesAccessor;
         $this->postRunners = $postRunners;
-        $this->dynamicSourceLocator = $dynamicSourceLocator;
+        $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;
     }
 
     /**
@@ -196,7 +196,7 @@ final class RectorApplication
         }
 
         $this->nodeScopeResolver->setAnalysedFiles($filePaths);
-        $this->dynamicSourceLocator->addFileInfos($fileInfos);
+        $this->dynamicSourceLocatorProvider->addFileInfos($fileInfos);
     }
 
     /**

@@ -185,6 +185,7 @@ services:
                 PhpParser\Builder\Property: Rector\Core\PhpParser\Builder\PropertyBuilder
                 PhpParser\Builder\TraitUse: Rector\Core\PhpParser\Builder\TraitUseBuilder
                 ReflectionClass: PHPStan\Reflection\ClassReflection
+                ReflectionFunction: PHPStan\Reflection\FunctionReflection
 
     -
         class: Symplify\PHPStanRules\Rules\ForbiddenFuncCallRule
@@ -208,7 +209,9 @@ services:
                 - 'interface_exists'
                 - 'method_exists'
                 - 'property_exists'
+                - 'function_exists'
                 - class_parents
                 - class_implements
                 - get_parent_class
                 - get_declared_classes
+#                - is_a

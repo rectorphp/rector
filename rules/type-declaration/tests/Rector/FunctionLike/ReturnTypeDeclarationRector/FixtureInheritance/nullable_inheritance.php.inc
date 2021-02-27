@@ -1,44 +1,50 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\NullableInheritance;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\FixtureInheritance;
 
-class Foo
+use Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\SomeFoo;
+
+class A
 {
-}
-
-class A {
-    /** @return null|Foo */
-    public function test($value) {
+    /**
+     * @return null|SomeFoo
+     */
+    public function test($value)
+    {
         return $value;
     }
 }
 
-class B extends A {
-    /** @return Foo */
-    public function test($value) {
+class B extends A
+{
+    public function test($value)
+    {
         return $value;
     }
 }
+
 ?>
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\NullableInheritance;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\FixtureInheritance;
 
-class Foo
+use Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\SomeFoo;
+
+class A
 {
-}
-
-class A {
-    public function test($value): ?\Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\NullableInheritance\Foo {
+    public function test($value): ?\Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\SomeFoo
+    {
         return $value;
     }
 }
 
-class B extends A {
-    /** @return Foo */
-    public function test($value): ?\Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\NullableInheritance\Foo {
+class B extends A
+{
+    public function test($value): ?\Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\SomeFoo
+    {
         return $value;
     }
 }
+
 ?>

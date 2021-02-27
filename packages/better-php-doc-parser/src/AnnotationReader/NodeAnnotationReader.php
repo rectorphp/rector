@@ -96,8 +96,8 @@ final class NodeAnnotationReader
 
     public function readPropertyAnnotation(Property $property, string $annotationClassName): ?object
     {
-        $propertyReflection = $this->getNativePropertyReflection($property);
-        if (! $propertyReflection instanceof ReflectionProperty) {
+        $reflectionProperty = $this->getNativePropertyReflection($property);
+        if (! $reflectionProperty instanceof ReflectionProperty) {
             throw new ShouldNotHappenException();
         }
 
@@ -105,7 +105,7 @@ final class NodeAnnotationReader
             // covers cases like https://github.com/rectorphp/rector/issues/3046
 
             /** @var object[] $propertyAnnotations */
-            $propertyAnnotations = $this->reader->getPropertyAnnotations($propertyReflection);
+            $propertyAnnotations = $this->reader->getPropertyAnnotations($reflectionProperty);
             return $this->matchNextAnnotation($propertyAnnotations, $annotationClassName, $property);
         } catch (AnnotationException $annotationException) {
             // unable to load
@@ -121,13 +121,13 @@ final class NodeAnnotationReader
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
-        $nativeMethodReflection = $this->resolveNativeClassMethodReflection($className, $methodName);
+        $methodReflection = $this->resolveNativeClassMethodReflection($className, $methodName);
 
         try {
             // covers cases like https://github.com/rectorphp/rector/issues/3046
 
             /** @var object[] $methodAnnotations */
-            $methodAnnotations = $this->reader->getMethodAnnotations($nativeMethodReflection);
+            $methodAnnotations = $this->reader->getMethodAnnotations($methodReflection);
 
             foreach ($methodAnnotations as $methodAnnotation) {
                 if (! is_a($methodAnnotation, $annotationClassName, true)) {
