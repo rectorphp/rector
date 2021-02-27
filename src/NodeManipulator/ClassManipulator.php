@@ -71,8 +71,6 @@ final class ClassManipulator
 
     public function hasParentMethodOrInterface(string $class, string $method): bool
     {
-        $class = $this->nodeRepository->getStringName($class);
-
         if (! class_exists($class)) {
             return false;
         }
@@ -121,19 +119,6 @@ final class ClassManipulator
         });
 
         return $this->nodeNameResolver->getNames($publicMethods);
-    }
-
-    public function findPropertyByType(Class_ $class, string $serviceType): ?Property
-    {
-        foreach ($class->getProperties() as $property) {
-            if (! $this->nodeTypeResolver->isObjectType($property, $serviceType)) {
-                continue;
-            }
-
-            return $property;
-        }
-
-        return null;
     }
 
     /**
