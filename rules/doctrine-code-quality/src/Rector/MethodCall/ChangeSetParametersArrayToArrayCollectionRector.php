@@ -132,10 +132,10 @@ CODE_SAMPLE
         }
 
         //one of the cases when we are in the repo and it's extended from EntityRepository
-        if (! $this->isObjectType($classLike, 'Doctrine\ORM\EntityRepository')) {
+        if (! $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Doctrine\ORM\EntityRepository'))) {
             return true;
         }
-        if (! $this->isObjectType($methodCall->var, 'Doctrine\ORM\EntityRepository')) {
+        if (! $this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('Doctrine\ORM\EntityRepository'))) {
             return true;
         }
 

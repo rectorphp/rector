@@ -234,7 +234,10 @@ CODE_SAMPLE
         }
 
         // update parent clsas if not already
-        if (! $this->isObjectType($class, 'Symfony\Bundle\FrameworkBundle\Test\KernelTestCase')) {
+        if (! $this->isObjectType(
+            $class,
+            new \PHPStan\Type\ObjectType('Symfony\Bundle\FrameworkBundle\Test\KernelTestCase')
+        )) {
             $class->extends = new FullyQualified('Symfony\Bundle\FrameworkBundle\Test\KernelTestCase');
         }
 

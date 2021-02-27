@@ -105,7 +105,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $this->isObjectType($classMethod, 'Symfony\Component\Form\AbstractType')) {
+        if (! $this->isObjectType($classMethod, new \PHPStan\Type\ObjectType('Symfony\Component\Form\AbstractType'))) {
             return false;
         }
 

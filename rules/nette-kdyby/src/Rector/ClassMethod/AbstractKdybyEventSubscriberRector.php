@@ -18,7 +18,7 @@ abstract class AbstractKdybyEventSubscriberRector extends AbstractRector
             return true;
         }
 
-        if (! $this->isObjectType($classLike, 'Kdyby\Events\Subscriber')) {
+        if (! $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Kdyby\Events\Subscriber'))) {
             return true;
         }
 

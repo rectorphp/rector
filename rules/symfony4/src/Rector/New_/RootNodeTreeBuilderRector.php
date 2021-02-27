@@ -59,7 +59,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->class, 'Symfony\Component\Config\Definition\Builder\TreeBuilder')) {
+        if (! $this->isObjectType(
+            $node->class,
+            new \PHPStan\Type\ObjectType('Symfony\Component\Config\Definition\Builder\TreeBuilder')
+        )) {
             return null;
         }
 
@@ -100,7 +103,10 @@ CODE_SAMPLE
                 return false;
             }
 
-            if (! $this->isObjectType($node->var, 'Symfony\Component\Config\Definition\Builder\TreeBuilder')) {
+            if (! $this->isObjectType(
+                $node->var,
+                new \PHPStan\Type\ObjectType('Symfony\Component\Config\Definition\Builder\TreeBuilder')
+            )) {
                 return false;
             }
 

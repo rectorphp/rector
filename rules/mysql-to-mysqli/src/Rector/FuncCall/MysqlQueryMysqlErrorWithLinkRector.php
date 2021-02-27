@@ -156,7 +156,7 @@ CODE_SAMPLE
 
     private function isProbablyMysql(Expr $expr): bool
     {
-        if ($this->isObjectType($expr, 'mysqli')) {
+        if ($this->isObjectType($expr, new \PHPStan\Type\ObjectType('mysqli'))) {
             return true;
         }
 
@@ -184,7 +184,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            return $this->isObjectType($node->expr, 'mysqli');
+            return $this->isObjectType($node->expr, new \PHPStan\Type\ObjectType('mysqli'));
         });
 
         if (! $connectionAssign instanceof Assign) {

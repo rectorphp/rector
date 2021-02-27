@@ -51,7 +51,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, 'Nette\Forms\Form')) {
+        if (! $this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Nette\Forms\Form'))) {
             return null;
         }
 

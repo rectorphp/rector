@@ -84,7 +84,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($node->var, 'Doctrine\ORM\EntityRepository')) {
+        if (! $this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Doctrine\ORM\EntityRepository'))) {
             return null;
         }
 
@@ -104,6 +104,6 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $this->isObjectType($classLike, 'Doctrine\ORM\EntityRepository');
+        return ! $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Doctrine\ORM\EntityRepository'));
     }
 }

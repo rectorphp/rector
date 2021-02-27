@@ -94,7 +94,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($classLike, 'Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
+        if (! $this->isObjectType(
+            $classLike,
+            new \PHPStan\Type\ObjectType('Symfony\Component\EventDispatcher\EventSubscriberInterface')
+        )) {
             return null;
         }
 

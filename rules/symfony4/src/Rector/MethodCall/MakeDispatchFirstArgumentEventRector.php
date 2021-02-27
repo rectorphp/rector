@@ -97,7 +97,10 @@ CODE_SAMPLE
 
     private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectType($methodCall->var, 'Symfony\Contracts\EventDispatcher\EventDispatcherInterface')) {
+        if (! $this->isObjectType(
+            $methodCall->var,
+            new \PHPStan\Type\ObjectType('Symfony\Contracts\EventDispatcher\EventDispatcherInterface')
+        )) {
             return true;
         }
 

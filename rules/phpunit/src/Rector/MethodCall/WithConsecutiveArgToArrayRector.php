@@ -108,7 +108,10 @@ CODE_SAMPLE
         }
 
         // is a mock?
-        if (! $this->isObjectType($node, 'PHPUnit\Framework\MockObject\Builder\InvocationMocker')) {
+        if (! $this->isObjectType(
+            $node,
+            new \PHPStan\Type\ObjectType('PHPUnit\Framework\MockObject\Builder\InvocationMocker')
+        )) {
             return null;
         }
 

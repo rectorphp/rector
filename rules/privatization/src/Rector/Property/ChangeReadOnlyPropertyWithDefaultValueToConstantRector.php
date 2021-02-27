@@ -148,6 +148,6 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->isObjectType($classLike, 'PHP_CodeSniffer\Sniffs\Sniff');
+        return $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('PHP_CodeSniffer\Sniffs\Sniff'));
     }
 }

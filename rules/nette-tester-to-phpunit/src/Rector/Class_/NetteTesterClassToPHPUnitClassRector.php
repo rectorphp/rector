@@ -84,7 +84,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($node, 'Tester\TestCase')) {
+        if (! $this->isObjectType($node, new \PHPStan\Type\ObjectType('Tester\TestCase'))) {
             return null;
         }
 

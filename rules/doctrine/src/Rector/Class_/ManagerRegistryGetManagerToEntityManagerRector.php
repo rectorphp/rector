@@ -220,7 +220,10 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->isObjectType($class, 'Doctrine\Common\Persistence\ObjectManager')) {
+            if (! $this->isObjectType(
+                $class,
+                new \PHPStan\Type\ObjectType('Doctrine\Common\Persistence\ObjectManager')
+            )) {
                 return null;
             }
 
@@ -263,7 +266,10 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $this->isObjectType($assign->expr->var, 'Doctrine\Common\Persistence\ManagerRegistry')) {
+        if (! $this->isObjectType(
+            $assign->expr->var,
+            new \PHPStan\Type\ObjectType('Doctrine\Common\Persistence\ManagerRegistry')
+        )) {
             return false;
         }
         return $this->isName($assign->expr->name, self::GET_MANAGER);

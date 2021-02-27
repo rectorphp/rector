@@ -63,7 +63,10 @@ final class ParentGetterStmtsToExternalStmtsFactory
                 continue;
             }
 
-            if (! $this->nodeTypeResolver->isObjectType($getUserStmt->expr, 'Nette\Security\User')) {
+            if (! $this->nodeTypeResolver->isObjectType(
+                $getUserStmt->expr,
+                new \PHPStan\Type\ObjectType('Nette\Security\User')
+            )) {
                 continue;
             }
 

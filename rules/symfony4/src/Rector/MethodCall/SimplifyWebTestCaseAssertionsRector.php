@@ -139,7 +139,10 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isObjectType($classLike, 'Symfony\Bundle\FrameworkBundle\Test\WebTestCase');
+        return $this->isObjectType(
+            $classLike,
+            new \PHPStan\Type\ObjectType('Symfony\Bundle\FrameworkBundle\Test\WebTestCase')
+        );
     }
 
     private function processAssertResponseStatusCodeSame(MethodCall $methodCall): ?MethodCall

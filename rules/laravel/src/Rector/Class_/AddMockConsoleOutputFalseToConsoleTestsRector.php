@@ -98,7 +98,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, 'Illuminate\Foundation\Testing\TestCase')) {
+        if (! $this->isObjectType($node, new \PHPStan\Type\ObjectType('Illuminate\Foundation\Testing\TestCase'))) {
             return null;
         }
 

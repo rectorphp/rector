@@ -109,7 +109,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($property, 'DateTime')) {
+        if (! $this->isObjectType($property, new \PHPStan\Type\ObjectType('DateTime'))) {
             return null;
         }
 

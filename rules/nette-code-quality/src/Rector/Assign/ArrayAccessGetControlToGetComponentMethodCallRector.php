@@ -87,6 +87,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isObjectType($assign->expr, 'Nette\Application\UI\Presenter');
+        return $this->isObjectType($assign->expr, new \PHPStan\Type\ObjectType('Nette\Application\UI\Presenter'));
     }
 }

@@ -120,6 +120,9 @@ CODE_SAMPLE
         }
 
         // skip rector rules, as they decided if function exists in that particular projects
-        return $this->isObjectType($classLike, 'Rector\Core\Contract\Rector\RectorInterface');
+        return $this->isObjectType(
+            $classLike,
+            new \PHPStan\Type\ObjectType('Rector\Core\Contract\Rector\RectorInterface')
+        );
     }
 }

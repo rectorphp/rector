@@ -150,11 +150,14 @@ CODE_SAMPLE
 
     private function isKernelOrExtensionClass(Class_ $class): bool
     {
-        if ($this->isObjectType($class, 'Symfony\Component\HttpKernel\DependencyInjection\Extension')) {
+        if ($this->isObjectType(
+            $class,
+            new \PHPStan\Type\ObjectType('Symfony\Component\HttpKernel\DependencyInjection\Extension')
+        )) {
             return true;
         }
 
-        return $this->isObjectType($class, 'Symfony\Component\HttpKernel\Kernel');
+        return $this->isObjectType($class, new \PHPStan\Type\ObjectType('Symfony\Component\HttpKernel\Kernel'));
     }
 
     private function validateConfiguration(string $from, string $to): void
@@ -180,7 +183,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($node->var, 'Symfony\Component\Config\Loader\LoaderInterface')) {
+        if (! $this->isObjectType(
+            $node->var,
+            new \PHPStan\Type\ObjectType('Symfony\Component\Config\Loader\LoaderInterface')
+        )) {
             return null;
         }
 

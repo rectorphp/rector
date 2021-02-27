@@ -33,10 +33,16 @@ final class NetteClassAnalyzer
             return false;
         }
 
-        if (! $this->nodeTypeResolver->isObjectType($class, 'Nette\Application\UI\Control')) {
+        if (! $this->nodeTypeResolver->isObjectType(
+            $class,
+            new \PHPStan\Type\ObjectType('Nette\Application\UI\Control')
+        )) {
             return false;
         }
 
-        return ! $this->nodeTypeResolver->isObjectType($class, 'Nette\Application\UI\Presenter');
+        return ! $this->nodeTypeResolver->isObjectType(
+            $class,
+            new \PHPStan\Type\ObjectType('Nette\Application\UI\Presenter')
+        );
     }
 }

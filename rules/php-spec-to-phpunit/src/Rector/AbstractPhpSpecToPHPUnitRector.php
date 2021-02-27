@@ -68,6 +68,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isObjectType($classLike, 'PhpSpec\ObjectBehavior');
+        return $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('PhpSpec\ObjectBehavior'));
     }
 }

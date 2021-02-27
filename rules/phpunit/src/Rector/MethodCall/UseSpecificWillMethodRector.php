@@ -98,7 +98,10 @@ CODE_SAMPLE
         }
 
         $callerNode = $node instanceof StaticCall ? $node->class : $node->var;
-        if (! $this->isObjectType($callerNode, 'PHPUnit\Framework\MockObject\Builder\InvocationMocker')) {
+        if (! $this->isObjectType(
+            $callerNode,
+            new \PHPStan\Type\ObjectType('PHPUnit\Framework\MockObject\Builder\InvocationMocker')
+        )) {
             return null;
         }
 

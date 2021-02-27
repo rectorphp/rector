@@ -65,7 +65,7 @@ final class ParseFileRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isObjectType($node->class, 'Symfony\Component\Yaml\Yaml')) {
+        if (! $this->isObjectType($node->class, new \PHPStan\Type\ObjectType('Symfony\Component\Yaml\Yaml'))) {
             return null;
         }
 

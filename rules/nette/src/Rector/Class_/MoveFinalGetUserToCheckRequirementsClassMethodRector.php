@@ -91,7 +91,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, 'Nette\Application\UI\Presenter')) {
+        if (! $this->isObjectType($node, new \PHPStan\Type\ObjectType('Nette\Application\UI\Presenter'))) {
             return null;
         }
 

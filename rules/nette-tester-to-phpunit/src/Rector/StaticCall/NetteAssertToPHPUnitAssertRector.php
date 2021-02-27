@@ -64,7 +64,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, 'Tester\Assert')) {
+        if (! $this->isObjectType($node, new \PHPStan\Type\ObjectType('Tester\Assert'))) {
             return null;
         }
 

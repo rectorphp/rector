@@ -25,7 +25,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'old',
                     'new'
                 ),
-                new MethodCallRename('*Presenter', 'run', '__invoke'),
                 new MethodCallRename(SkipSelfMethodRename::class, 'preventPHPStormRefactoring', 'gone'),
                 // with array key
                 new MethodCallRenameWithArrayKey('Nette\Utils\Html', 'addToArray', 'addToHtmlArray', 'hey'),

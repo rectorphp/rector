@@ -81,7 +81,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, 'Symfony\Bundle\FrameworkBundle\Controller\Controller')) {
+        if (! $this->isObjectType(
+            $node->var,
+            new \PHPStan\Type\ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller')
+        )) {
             return null;
         }
 

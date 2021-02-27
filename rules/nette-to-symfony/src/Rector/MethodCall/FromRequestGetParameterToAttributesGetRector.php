@@ -67,7 +67,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, 'Nette\Application\Request')) {
+        if (! $this->isObjectType($node, new \PHPStan\Type\ObjectType('Nette\Application\Request'))) {
             return null;
         }
 

@@ -178,7 +178,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isObjectType($class, 'PHPUnit\Framework\TestCase')) {
+        if ($this->isObjectType($class, new \PHPStan\Type\ObjectType('PHPUnit\Framework\TestCase'))) {
             return true;
         }
 

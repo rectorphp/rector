@@ -60,7 +60,10 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends AbstractRector
         }
 
         $methodCall = $node->expr;
-        if (! $this->isObjectType($methodCall->var, 'Illuminate\Contracts\Foundation\Application')) {
+        if (! $this->isObjectType(
+            $methodCall->var,
+            new \PHPStan\Type\ObjectType('Illuminate\Contracts\Foundation\Application')
+        )) {
             return null;
         }
 

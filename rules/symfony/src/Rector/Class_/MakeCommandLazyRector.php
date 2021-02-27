@@ -81,7 +81,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, 'Symfony\Component\Console\Command\Command')) {
+        if (! $this->isObjectType($node, new \PHPStan\Type\ObjectType('Symfony\Component\Console\Command\Command'))) {
             return null;
         }
 
@@ -120,7 +120,10 @@ CODE_SAMPLE
             if (! $node instanceof StaticCall) {
                 return null;
             }
-            if (! $this->isObjectType($node->class, 'Symfony\Component\Console\Command\Command')) {
+            if (! $this->isObjectType(
+                $node->class,
+                new \PHPStan\Type\ObjectType('Symfony\Component\Console\Command\Command')
+            )) {
                 return null;
             }
 
@@ -143,7 +146,10 @@ CODE_SAMPLE
             if (! $node instanceof MethodCall) {
                 return null;
             }
-            if (! $this->isObjectType($node->var, 'Symfony\Component\Console\Command\Command')) {
+            if (! $this->isObjectType(
+                $node->var,
+                new \PHPStan\Type\ObjectType('Symfony\Component\Console\Command\Command')
+            )) {
                 return null;
             }
 

@@ -123,7 +123,7 @@ CODE_SAMPLE
         }
 
         $argValue = $methodCall->args[2]->value;
-        if (! $this->isObjectType($argValue, 'DateTimeInterface')) {
+        if (! $this->isObjectType($argValue, new \PHPStan\Type\ObjectType('DateTimeInterface'))) {
             return null;
         }
 

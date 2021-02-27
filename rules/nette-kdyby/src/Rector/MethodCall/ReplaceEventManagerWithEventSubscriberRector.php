@@ -158,7 +158,7 @@ CODE_SAMPLE
 
     private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectType($methodCall->var, 'Kdyby\Events\EventManager')) {
+        if (! $this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('Kdyby\Events\EventManager'))) {
             return true;
         }
 

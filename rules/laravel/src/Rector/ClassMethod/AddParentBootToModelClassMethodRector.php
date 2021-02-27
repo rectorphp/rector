@@ -89,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($classLike, 'Illuminate\Database\Eloquent\Model')) {
+        if (! $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Illuminate\Database\Eloquent\Model'))) {
             return null;
         }
 

@@ -82,7 +82,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, 'Symfony\Component\Translation\TranslatorInterface')) {
+        if (! $this->isObjectType(
+            $node->var,
+            new \PHPStan\Type\ObjectType('Symfony\Component\Translation\TranslatorInterface')
+        )) {
             return null;
         }
 

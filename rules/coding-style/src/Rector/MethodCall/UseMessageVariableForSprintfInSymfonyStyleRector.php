@@ -65,7 +65,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, 'Symfony\Component\Console\Style\SymfonyStyle')) {
+        if (! $this->isObjectType(
+            $node,
+            new \PHPStan\Type\ObjectType('Symfony\Component\Console\Style\SymfonyStyle')
+        )) {
             return null;
         }
 

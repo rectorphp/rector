@@ -76,7 +76,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($classLike, 'Symfony\Component\Console\Command\Command')) {
+        if (! $this->isObjectType(
+            $classLike,
+            new \PHPStan\Type\ObjectType('Symfony\Component\Console\Command\Command')
+        )) {
             return null;
         }
 

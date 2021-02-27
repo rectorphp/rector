@@ -133,7 +133,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, 'PHPUnit\Framework\TestListener')) {
+        if (! $this->isObjectType($node, new \PHPStan\Type\ObjectType('PHPUnit\Framework\TestListener'))) {
             return null;
         }
 

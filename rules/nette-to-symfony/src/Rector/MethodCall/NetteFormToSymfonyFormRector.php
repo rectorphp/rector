@@ -118,7 +118,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($classLike, 'Nette\Application\IPresenter')) {
+        if (! $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Nette\Application\IPresenter'))) {
             return null;
         }
 
@@ -127,7 +127,7 @@ CODE_SAMPLE
         }
 
         /** @var MethodCall $node */
-        if (! $this->isObjectType($node->var, 'Nette\Application\UI\Form')) {
+        if (! $this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Nette\Application\UI\Form'))) {
             return null;
         }
 

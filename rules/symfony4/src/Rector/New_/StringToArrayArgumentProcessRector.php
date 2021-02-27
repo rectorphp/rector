@@ -73,11 +73,14 @@ CODE_SAMPLE
     {
         $expr = $node instanceof New_ ? $node->class : $node->var;
 
-        if ($this->isObjectType($expr, 'Symfony\Component\Process\Process')) {
+        if ($this->isObjectType($expr, new \PHPStan\Type\ObjectType('Symfony\Component\Process\Process'))) {
             return $this->processArgumentPosition($node, 0);
         }
 
-        if ($this->isObjectType($expr, 'Symfony\Component\Console\Helper\ProcessHelper')) {
+        if ($this->isObjectType(
+            $expr,
+            new \PHPStan\Type\ObjectType('Symfony\Component\Console\Helper\ProcessHelper')
+        )) {
             return $this->processArgumentPosition($node, 1);
         }
 

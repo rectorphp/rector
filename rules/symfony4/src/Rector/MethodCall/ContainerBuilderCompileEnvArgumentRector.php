@@ -52,7 +52,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, 'Symfony\Component\DependencyInjection\ContainerBuilder')) {
+        if (! $this->isObjectType(
+            $node,
+            new \PHPStan\Type\ObjectType('Symfony\Component\DependencyInjection\ContainerBuilder')
+        )) {
             return null;
         }
 

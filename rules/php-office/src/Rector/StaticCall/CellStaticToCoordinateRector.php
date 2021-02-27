@@ -79,7 +79,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->class, 'PHPExcel_Cell')) {
+        if (! $this->isObjectType($node->class, new \PHPStan\Type\ObjectType('PHPExcel_Cell'))) {
             return null;
         }
 

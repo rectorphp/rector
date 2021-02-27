@@ -108,7 +108,10 @@ CODE_SAMPLE
 
     private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectType($methodCall->var, 'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor')) {
+        if (! $this->isObjectType(
+            $methodCall->var,
+            new \PHPStan\Type\ObjectType('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor')
+        )) {
             return true;
         }
 

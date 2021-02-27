@@ -110,7 +110,10 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isObjectType($expr->class, 'Symfony\Component\HttpFoundation\Response');
+        return $this->isObjectType(
+            $expr->class,
+            new \PHPStan\Type\ObjectType('Symfony\Component\HttpFoundation\Response')
+        );
     }
 
     /**
