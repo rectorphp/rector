@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -31,6 +32,11 @@ final class TestsNodeAnalyzer
      */
     private $phpDocInfoFactory;
 
+    /**
+     * @var ObjectType[]
+     */
+    private $testCaseObjectTypes = [];
+
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         NodeNameResolver $nodeNameResolver,
@@ -39,6 +45,11 @@ final class TestsNodeAnalyzer
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+
+        $this->testCaseObjectTypes = [
+            new ObjectType('PHPUnit\Framework\TestCase'),
+            new ObjectType('PHPUnit_Framework_TestCase'),
+        ];
     }
 
     public function isInTestClass(Node $node): bool
@@ -48,10 +59,7 @@ final class TestsNodeAnalyzer
             return false;
         }
 
-        return $this->nodeTypeResolver->isObjectTypes(
-            $classLike,
-            ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase']
-        );
+        return $this->nodeTypeResolver->isObjectTypes($classLike, $this->testCaseObjectTypes);
     }
 
     public function isTestClassMethod(ClassMethod $classMethod): bool

@@ -15,12 +15,12 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Symfony3\NodeFactory\BuilderFormNodeFactory;
 use Rector\Symfony3\NodeFactory\ConfigureOptionsNodeFactory;
 use ReflectionClass;
 use ReflectionMethod;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -38,12 +38,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormTypeInstanceToClassConstRector extends AbstractFormAddRector
 {
     /**
-     * @var class-string<AbstractController>[]|class-string<Controller>[]
+     * @var ObjectType[]
      */
-    private const CONTROLLER_TYPES = [
-        'Symfony\Bundle\FrameworkBundle\Controller\Controller',
-        'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
-    ];
+    private $controllerObjectTypes = [];
 
     /**
      * @var BuilderFormNodeFactory
@@ -61,6 +58,11 @@ final class FormTypeInstanceToClassConstRector extends AbstractFormAddRector
     ) {
         $this->builderFormNodeFactory = $builderFormNodeFactory;
         $this->configureOptionsNodeFactory = $configureOptionsNodeFactory;
+
+        $this->controllerObjectTypes = [
+            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller'),
+            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\AbstractController'),
+        ];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -106,7 +108,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isObjectTypes($node->var, self::CONTROLLER_TYPES) && $this->isName($node->name, 'createForm')) {
+        if ($this->isObjectTypes($node->var, $this->controllerObjectTypes) && $this->isName(
+            $node->name,
+            'createForm'
+        )) {
             return $this->processNewInstance($node, 0, 2);
         }
 

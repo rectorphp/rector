@@ -7,6 +7,7 @@ namespace Rector\Php70\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\Reflection\MethodReflectionProvider;
 use Rector\NodeCollector\StaticAnalyzer;
@@ -98,7 +99,7 @@ CODE_SAMPLE
         }
 
         // skip PHPUnit calls, as they accept both self:: and $this-> formats
-        if ($this->isObjectType($node->var, 'PHPUnit\Framework\TestCase')) {
+        if ($this->isObjectType($node->var, new ObjectType('PHPUnit\Framework\TestCase'))) {
             return null;
         }
 

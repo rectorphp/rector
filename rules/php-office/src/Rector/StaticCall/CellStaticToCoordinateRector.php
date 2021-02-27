@@ -7,6 +7,7 @@ namespace Rector\PHPOffice\Rector\StaticCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -79,7 +80,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->class, 'PHPExcel_Cell')) {
+        if (! $this->isObjectType($node->class, new ObjectType('PHPExcel_Cell'))) {
             return null;
         }
 

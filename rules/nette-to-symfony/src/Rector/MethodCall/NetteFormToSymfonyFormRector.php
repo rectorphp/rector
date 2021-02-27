@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassLike;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -118,7 +119,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($classLike, 'Nette\Application\IPresenter')) {
+        if (! $this->isObjectType($classLike, new ObjectType('Nette\Application\IPresenter'))) {
             return null;
         }
 
@@ -127,7 +128,7 @@ CODE_SAMPLE
         }
 
         /** @var MethodCall $node */
-        if (! $this->isObjectType($node->var, 'Nette\Application\UI\Form')) {
+        if (! $this->isObjectType($node->var, new ObjectType('Nette\Application\UI\Form'))) {
             return null;
         }
 

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
+use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -148,6 +149,6 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->isObjectType($classLike, 'PHP_CodeSniffer\Sniffs\Sniff');
+        return $this->isObjectType($classLike, new ObjectType('PHP_CodeSniffer\Sniffs\Sniff'));
     }
 }

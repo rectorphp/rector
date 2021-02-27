@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -98,7 +99,10 @@ CODE_SAMPLE
         }
 
         $callerNode = $node instanceof StaticCall ? $node->class : $node->var;
-        if (! $this->isObjectType($callerNode, 'PHPUnit\Framework\MockObject\Builder\InvocationMocker')) {
+        if (! $this->isObjectType(
+            $callerNode,
+            new ObjectType('PHPUnit\Framework\MockObject\Builder\InvocationMocker')
+        )) {
             return null;
         }
 

@@ -4,15 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Doctrine\Rector\MethodCall;
 
-use Doctrine\Common\Persistence\ManagerRegistry as DeprecatedManagerRegistry;
-use Doctrine\Common\Persistence\ObjectManager as DeprecatedObjectManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\ObjectManager;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -30,20 +26,25 @@ final class EntityAliasToClassConstantReferenceRector extends AbstractRector imp
     public const ALIASES_TO_NAMESPACES = 'aliases_to_namespaces';
 
     /**
-     * @var string[]
+     * @var ObjectType[]
      */
-    private const ALLOWED_OBJECT_TYPES = [
-        EntityManagerInterface::class,
-        ObjectManager::class,
-        DeprecatedObjectManager::class,
-        ManagerRegistry::class,
-        DeprecatedManagerRegistry::class,
-    ];
+    private $doctrineManagerRegistryObjectTypes = [];
 
     /**
      * @var string[]
      */
     private $aliasesToNamespaces = [];
+
+    public function __construct()
+    {
+        $this->doctrineManagerRegistryObjectTypes = [
+            new ObjectType('Doctrine\ORM\EntityManagerInterface'),
+            new ObjectType('Doctrine\Persistence\ObjectManager'),
+            new ObjectType('Doctrine\Common\Persistence\ObjectManager'),
+            new ObjectType('Doctrine\Persistence\ManagerRegistry'),
+            new ObjectType('Doctrine\Common\Persistence\ManagerRegistry'),
+        ];
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -81,7 +82,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectTypes($node->var, self::ALLOWED_OBJECT_TYPES)) {
+        if (! $this->isObjectTypes($node->var, $this->doctrineManagerRegistryObjectTypes)) {
             return null;
         }
 

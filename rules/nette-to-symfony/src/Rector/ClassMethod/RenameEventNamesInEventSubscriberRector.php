@@ -15,6 +15,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NetteToSymfony\Event\EventInfosFactory;
 use Rector\NetteToSymfony\ValueObject\EventInfo;
@@ -94,7 +95,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($classLike, 'Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
+        if (! $this->isObjectType(
+            $classLike,
+            new ObjectType('Symfony\Component\EventDispatcher\EventSubscriberInterface')
+        )) {
             return null;
         }
 

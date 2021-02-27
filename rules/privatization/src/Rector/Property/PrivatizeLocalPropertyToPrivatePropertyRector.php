@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\ObjectType;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SymfonyRequiredTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\ApiPhpDocTagNode;
@@ -39,9 +40,19 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
      */
     private $propertyVisibilityVendorLockResolver;
 
+    /**
+     * @var ObjectType[]
+     */
+    private $excludedObjectTypes = [];
+
     public function __construct(PropertyVisibilityVendorLockResolver $propertyVisibilityVendorLockResolver)
     {
         $this->propertyVisibilityVendorLockResolver = $propertyVisibilityVendorLockResolver;
+
+        $this->excludedObjectTypes = [
+            new ObjectType('PHPUnit\Framework\TestCase'),
+            new ObjectType('PHP_CodeSniffer\Sniffs\Sniff'),
+        ];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -151,12 +162,14 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isObjectTypes($classLike, ['PHPUnit\Framework\TestCase', 'PHP_CodeSniffer\Sniffs\Sniff'])) {
+        if ($this->isObjectTypes($classLike, $this->excludedObjectTypes)) {
             return true;
         }
+
         if (! $classLike->isAbstract()) {
             return false;
         }
+
         return $this->isOpenSourceProjectType();
     }
 

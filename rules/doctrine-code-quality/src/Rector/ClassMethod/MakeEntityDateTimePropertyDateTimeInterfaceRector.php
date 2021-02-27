@@ -7,6 +7,7 @@ namespace Rector\DoctrineCodeQuality\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DoctrineCodeQuality\NodeAnalyzer\SetterClassMethodAnalyzer;
 use Rector\DoctrineCodeQuality\NodeManipulator\PropertyTypeManipulator;
@@ -109,7 +110,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($property, 'DateTime')) {
+        if (! $this->isObjectType($property, new ObjectType('DateTime'))) {
             return null;
         }
 

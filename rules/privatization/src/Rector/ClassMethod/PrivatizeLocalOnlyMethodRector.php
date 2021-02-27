@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SymfonyRequiredTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\ApiPhpDocTagNode;
@@ -178,7 +179,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isObjectType($class, 'PHPUnit\Framework\TestCase')) {
+        if ($this->isObjectType($class, new ObjectType('PHPUnit\Framework\TestCase'))) {
             return true;
         }
 

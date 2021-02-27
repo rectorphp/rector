@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
@@ -81,7 +82,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, 'Symfony\Bundle\FrameworkBundle\Controller\Controller')) {
+        if (! $this->isObjectType(
+            $node->var,
+            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller')
+        )) {
             return null;
         }
 

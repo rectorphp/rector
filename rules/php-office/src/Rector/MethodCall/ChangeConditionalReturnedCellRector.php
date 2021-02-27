@@ -7,6 +7,7 @@ namespace Rector\PHPOffice\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPOffice\ValueObject\ConditionalSetValue;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -92,7 +93,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, 'PHPExcel_Worksheet')) {
+        if (! $this->isObjectType($node->var, new ObjectType('PHPExcel_Worksheet'))) {
             return null;
         }
 

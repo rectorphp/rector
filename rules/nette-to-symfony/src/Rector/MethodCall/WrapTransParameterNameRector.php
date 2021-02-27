@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -82,7 +83,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, 'Symfony\Component\Translation\TranslatorInterface')) {
+        if (! $this->isObjectType(
+            $node->var,
+            new ObjectType('Symfony\Component\Translation\TranslatorInterface')
+        )) {
             return null;
         }
 

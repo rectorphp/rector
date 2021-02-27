@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -59,7 +60,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->class, 'Symfony\Component\Config\Definition\Builder\TreeBuilder')) {
+        if (! $this->isObjectType(
+            $node->class,
+            new ObjectType('Symfony\Component\Config\Definition\Builder\TreeBuilder')
+        )) {
             return null;
         }
 
@@ -100,7 +104,10 @@ CODE_SAMPLE
                 return false;
             }
 
-            if (! $this->isObjectType($node->var, 'Symfony\Component\Config\Definition\Builder\TreeBuilder')) {
+            if (! $this->isObjectType(
+                $node->var,
+                new ObjectType('Symfony\Component\Config\Definition\Builder\TreeBuilder')
+            )) {
                 return false;
             }
 

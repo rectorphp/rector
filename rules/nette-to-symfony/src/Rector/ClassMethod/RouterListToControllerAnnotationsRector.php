@@ -66,6 +66,11 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      */
     private $symfonyRouteTagValueNodeFactory;
 
+    /**
+     * @var ObjectType[]
+     */
+    private $routerObjectTypes = [];
+
     public function __construct(
         ExplicitRouteAnnotationDecorator $explicitRouteAnnotationDecorator,
         ReturnTypeInferer $returnTypeInferer,
@@ -76,6 +81,11 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
         $this->returnTypeInferer = $returnTypeInferer;
         $this->explicitRouteAnnotationDecorator = $explicitRouteAnnotationDecorator;
         $this->symfonyRouteTagValueNodeFactory = $symfonyRouteTagValueNodeFactory;
+
+        $this->routerObjectTypes = [
+            new ObjectType('Nette\Application\IRouter'),
+            new ObjectType('Nette\Routing\Router'),
+        ];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -210,7 +220,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            if ($this->isObjectTypes($node->expr, ['Nette\Application\IRouter', 'Nette\Routing\Router'])) {
+            if ($this->isObjectTypes($node->expr, $this->routerObjectTypes)) {
                 return true;
             }
 
