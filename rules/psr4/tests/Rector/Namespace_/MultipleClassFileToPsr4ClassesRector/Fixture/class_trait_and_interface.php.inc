@@ -2,13 +2,14 @@
 
 namespace Rector\PSR4\Tests\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector\Fixture;
 
+final class ClassTraitAndInterface
+{
+}
+
 interface MyInterface
 {
 }
 
-final class MyClass
-{
-}
 
 trait MyTrait
 {

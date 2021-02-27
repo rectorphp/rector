@@ -43,12 +43,12 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
                 $smartFileSystem->readFile(__DIR__ . '/Expected/UnknownImageFileException.php')
             ),
         ];
-        yield [new SmartFileInfo(__DIR__ . '/Fixture/nette-exceptions.php.inc'), $filePathsWithContents];
+        yield [new SmartFileInfo(__DIR__ . '/Fixture/nette_exceptions.php.inc'), $filePathsWithContents];
 
         $filePathsWithContents = [
             new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/JustOneExceptionWithoutNamespace.php',
-                $smartFileSystem->readFile(__DIR__ . '/Expected/JustOneExceptionWithoutNamespace.php')
+                $this->getFixtureTempDirectory() . '/SkipWithoutNamespace.php',
+                $smartFileSystem->readFile(__DIR__ . '/Expected/SkipWithoutNamespace.php')
             ),
             new AddedFileWithContent(
                 $this->getFixtureTempDirectory() . '/JustTwoExceptionWithoutNamespace.php',
@@ -56,7 +56,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
             ),
         ];
 
-        yield [new SmartFileInfo(__DIR__ . '/Fixture/without-namespace.php.inc'), $filePathsWithContents];
+        yield [new SmartFileInfo(__DIR__ . '/Fixture/skip_without_namespace.php.inc'), $filePathsWithContents];
 
         $filePathsWithContents = [
             new AddedFileWithContent(
@@ -64,8 +64,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
                 $smartFileSystem->readFile(__DIR__ . '/Expected/MyTrait.php')
             ),
             new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/MyClass.php',
-                $smartFileSystem->readFile(__DIR__ . '/Expected/MyClass.php')
+                $this->getFixtureTempDirectory() . '/ClassTraitAndInterface.php',
+                $smartFileSystem->readFile(__DIR__ . '/Expected/ClassTraitAndInterface.php')
             ),
             new AddedFileWithContent(
                 $this->getFixtureTempDirectory() . '/MyInterface.php',

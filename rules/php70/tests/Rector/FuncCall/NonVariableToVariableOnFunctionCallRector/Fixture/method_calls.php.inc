@@ -2,29 +2,17 @@
 
 namespace Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
 
-class Child
+use Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Source\VariousCallsClass;
+
+final class MethodCalls
 {
-    public function bar(&$bar) {}
-}
-
-class AClass
-{
-    public static function staticMethod(&$bar) {}
-
-    public function baz(&$bar) {}
-
-    public function child(): Child
+    public function run()
     {
-        return new Child();
+        VariousCallsClass::staticMethod(bar());
+        $aClass = new VariousCallsClass();
+        $aClass->baz(baz());
+        $aClass->child()->bar(bar());
     }
-}
-
-function methodCalls()
-{
-    AClass::staticMethod(bar());
-    $aClass = new AClass();
-    $aClass->baz(baz());
-    $aClass->child()->bar(bar());
 }
 
 ?>
@@ -33,32 +21,20 @@ function methodCalls()
 
 namespace Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
 
-class Child
+use Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Source\VariousCallsClass;
+
+final class MethodCalls
 {
-    public function bar(&$bar) {}
-}
-
-class AClass
-{
-    public static function staticMethod(&$bar) {}
-
-    public function baz(&$bar) {}
-
-    public function child(): Child
+    public function run()
     {
-        return new Child();
+        $bar = bar();
+        VariousCallsClass::staticMethod($bar);
+        $aClass = new VariousCallsClass();
+        $baz = baz();
+        $aClass->baz($baz);
+        $bar2 = bar();
+        $aClass->child()->bar($bar2);
     }
-}
-
-function methodCalls()
-{
-    $bar = bar();
-    AClass::staticMethod($bar);
-    $aClass = new AClass();
-    $baz = baz();
-    $aClass->baz($baz);
-    $bar2 = bar();
-    $aClass->child()->bar($bar2);
 }
 
 ?>

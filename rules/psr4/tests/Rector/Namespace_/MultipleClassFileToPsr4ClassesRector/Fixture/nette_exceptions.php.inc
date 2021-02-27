@@ -7,7 +7,7 @@ declare(strict_types=1);
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-namespace NettePostfixedToUniqueAutoload\Utils;
+namespace Rector\PSR4\Tests\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector\Fixture;
 
 /**
  * The exception that indicates invalid image file.
@@ -42,7 +42,7 @@ declare(strict_types=1);
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 
-namespace NettePostfixedToUniqueAutoload\Utils;
+namespace Rector\PSR4\Tests\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector\Fixture;
 
 
 ?>

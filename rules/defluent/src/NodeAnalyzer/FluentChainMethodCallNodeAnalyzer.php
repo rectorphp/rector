@@ -16,7 +16,6 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\Defluent\Reflection\MethodCallToClassMethodParser;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -101,7 +100,7 @@ final class FluentChainMethodCallNodeAnalyzer
 
         if ($calleeStaticType instanceof ObjectType) {
             foreach (self::KNOWN_FACTORY_FLUENT_TYPES as $knownFactoryFluentType) {
-                if ($calleeStaticType->isInstanceOf($knownFactoryFluentType)) {
+                if ($calleeStaticType->isInstanceOf($knownFactoryFluentType)->yes()) {
                     return false;
                 }
             }

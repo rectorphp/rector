@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
@@ -15,7 +16,6 @@ use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use ReflectionMethod;
 
 final class ClassMethodExternalCallNodeAnalyzer
 {
@@ -39,16 +39,23 @@ final class ClassMethodExternalCallNodeAnalyzer
      */
     private $nodeRepository;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         EventSubscriberMethodNamesResolver $eventSubscriberMethodNamesResolver,
         NodeRepository $nodeRepository,
         NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->eventSubscriberMethodNamesResolver = $eventSubscriberMethodNamesResolver;
         $this->nodeRepository = $nodeRepository;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function hasExternalCall(ClassMethod $classMethod): bool
@@ -98,9 +105,16 @@ final class ClassMethodExternalCallNodeAnalyzer
                 return $methodCalls;
             }
 
-            /** @var string $methodName */
+            if (! $this->reflectionProvider->hasClass($callerType->getClassName())) {
+                return $methodCalls;
+            }
+
             $methodName = $this->nodeNameResolver->getName($classMethod);
-            $reflectionMethod = new ReflectionMethod($nodeClassName, $methodName);
+
+            $classReflection = $this->reflectionProvider->getClass($callerType->getClassName());
+            $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
+            $reflectionMethod = $classReflection->getMethod($methodName, $scope);
+
             // parent class name, must be at least protected
             $reflectionClass = $reflectionMethod->getDeclaringClass();
             if ($reflectionClass->getName() !== $nodeClassName) {

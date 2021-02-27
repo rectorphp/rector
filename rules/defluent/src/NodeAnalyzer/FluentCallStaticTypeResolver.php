@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Defluent\NodeAnalyzer;
 
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Reflection\ReflectionProvider;
 
 final class FluentCallStaticTypeResolver
 {
@@ -13,9 +14,15 @@ final class FluentCallStaticTypeResolver
      */
     private $exprStringTypeResolver;
 
-    public function __construct(ExprStringTypeResolver $exprStringTypeResolver)
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ExprStringTypeResolver $exprStringTypeResolver, ReflectionProvider $reflectionProvider)
     {
         $this->exprStringTypeResolver = $exprStringTypeResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -58,8 +65,8 @@ final class FluentCallStaticTypeResolver
     /**
      * If a child class is with the parent class in the list, count them as 1
      *
-     * @param string[] $types
-     * @return string[]
+     * @param class-string[] $types
+     * @return class-string[]
      */
     private function filterOutAlreadyPresentParentClasses(array $types): array
     {
@@ -71,7 +78,12 @@ final class FluentCallStaticTypeResolver
                     continue;
                 }
 
-                if (is_a($type, $secondType, true)) {
+                if (! $this->reflectionProvider->hasClass($type)) {
+                    continue;
+                }
+
+                $firstClassReflection = $this->reflectionProvider->getClass($type);
+                if ($firstClassReflection->isSubclassOf($secondType)) {
                     unset($types[$key]);
                     continue 2;
                 }

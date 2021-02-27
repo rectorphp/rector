@@ -569,6 +569,7 @@ parameters:
         - '#Parameter \#1 \$node of method Rector\\NetteKdyby\\Naming\\VariableNaming\:\:resolveFromMethodCall\(\) expects PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\NullsafeMethodCall\|PhpParser\\Node\\Expr\\StaticCall, PhpParser\\Node given#'
         - '#Parameter \#1 \$stmts of method Rector\\EarlyReturn\\Rector\\Return_\\PreparedValueToEarlyReturnRector\:\:collectIfs\(\) expects array<PhpParser\\Node\\Stmt\\If_\>, array<PhpParser\\Node\\Stmt\> given#'
         - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\If_\:\:\$stmts#'
+        - '#Method Rector\\NetteKdyby\\DataProvider\\EventAndListenerTreeProvider\:\:getListeningClassMethodsInEventSubscriberByClass\(\) should return array<class\-string, array<PhpParser\\Node\\Stmt\\ClassMethod\>\> but returns array<string, array<PhpParser\\Node\\Stmt\\ClassMethod\>\>#'
 
         -
             message: '#Function "get_declared_classes\(\)" cannot be used/left in the code#'
@@ -580,6 +581,10 @@ parameters:
              message: '#Empty array passed to foreach#'
              paths:
                  - rules/transform/src/Rector/New_/NewToConstructorInjectionRector.php
+        -
+            message: '#Parameter \#1 \$types of method Rector\\Defluent\\NodeAnalyzer\\FluentCallStaticTypeResolver\:\:filterOutAlreadyPresentParentClasses\(\) expects array<class\-string\>, array<int, string\> given#'
+            paths:
+                - rules/defluent/src/NodeAnalyzer/FluentCallStaticTypeResolver.php
 
         - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\Isset_\\IssetOnPropertyObjectToPropertyExistsRector\:\:refactor\(\)" is \d+, keep it under 9#'
 
@@ -588,3 +593,7 @@ parameters:
             message: '#Instead of "ReflectionFunction" class/interface use "PHPStan\\Reflection\\FunctionReflection"#'
             paths:
                 - packages/read-write/src/Guard/VariableToConstantGuard.php
+
+        - '#Cognitive complexity for "Rector\\NetteCodeQuality\\FormControlTypeResolver\\MagicNetteFactoryInterfaceFormControlTypeResolver\:\:resolve\(\)" is 11, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\NetteCodeQuality\\FormControlTypeResolver\\MagicNetteFactoryInterfaceFormControlTypeResolver\:\:resolve\(\)" is 12, keep it under 9#'
+

@@ -22,7 +22,7 @@ final class EventAndListenerTree
     private $eventFileLocation;
 
     /**
-     * @var ClassMethod[][]
+     * @var array<class-string, ClassMethod[]>
      */
     private $listenerMethodsByEventSubscriberClass = [];
 
@@ -52,7 +52,7 @@ final class EventAndListenerTree
     private $onMagicProperty;
 
     /**
-     * @param ClassMethod[][] $listenerMethodsByEventSubscriberClass
+     * @param array<class-string, ClassMethod[]> $listenerMethodsByEventSubscriberClass
      * @param GetterMethodBlueprint[] $getterMethodsBlueprints
      */
     public function __construct(

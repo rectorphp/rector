@@ -105,10 +105,6 @@ final class FluentMethodCallSkipper
     public function shouldSkipMethodCalls(AssignAndRootExpr $assignAndRootExpr, array $fluentMethodCalls): bool
     {
         $calleeUniqueTypes = $this->fluentCallStaticTypeResolver->resolveCalleeUniqueTypes($fluentMethodCalls);
-
-        dump($calleeUniqueTypes);
-        die;
-
         if (! $this->sameClassMethodCallAnalyzer->isCorrectTypeCount($calleeUniqueTypes, $assignAndRootExpr)) {
             return true;
         }

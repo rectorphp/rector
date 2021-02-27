@@ -51,6 +51,7 @@ final class FixtureFinder
             ->notPath('#keep_annotated\.php\.inc$#')
             ->notPath('#double_same_variable\.php\.inc$#')
             ->notName('#_\.php\.inc$#')
+            ->notName('#Fixture/without_namespace.php.inc$#')
             ->in(__DIR__ . '/../../../../tests')
             ->in(__DIR__ . '/../../../../packages')
             ->in(__DIR__ . '/../../../../rules');

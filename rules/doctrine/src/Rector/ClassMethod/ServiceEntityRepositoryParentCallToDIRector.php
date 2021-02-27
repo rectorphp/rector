@@ -9,7 +9,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -152,10 +151,16 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var Scope $scope */
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if ($scope === null) {
+            // fresh node?
+            return true;
+        }
+
         $classReflection = $scope->getClassReflection();
+
         if ($classReflection === null) {
+            // possibly trait/interface
             return true;
         }
 

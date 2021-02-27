@@ -13,7 +13,6 @@ use Rector\Defluent\Rector\Return_\DefluentReturnMethodCallRector;
 use Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd;
 use Rector\Defluent\ValueObject\FluentCallsKind;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -72,9 +71,6 @@ CODE_SAMPLE
             $node,
             FluentCallsKind::NORMAL
         );
-
-        dump($assignAndRootExprAndNodesToAdd);
-        die;
 
         if (! $assignAndRootExprAndNodesToAdd instanceof AssignAndRootExprAndNodesToAdd) {
             return null;

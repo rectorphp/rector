@@ -166,7 +166,7 @@ CODE_SAMPLE
         $parentReflectionMethodParams = $reflectionMethod->getParameters();
 
         foreach ($parentReflectionMethodParams as $reflectionParameter) {
-            if ($reflectionParameter->name === $paramName) {
+            if ($reflectionParameter->getName() === $paramName) {
                 /**
                  * Getting a ReflectionNamedType works from PHP 7.1 onwards
                  * @see https://www.php.net/manual/en/reflectionparameter.gettype.php#125334

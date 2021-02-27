@@ -97,6 +97,7 @@ final class VariableToConstantGuard
         }
 
         $referencePositions = [];
+        /** @var int $position */
         foreach ($nativeFunctionReflection->getParameters() as $position => $reflectionParameter) {
             if (! $reflectionParameter->isPassedByReference()) {
                 continue;

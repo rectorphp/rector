@@ -137,7 +137,6 @@ CODE_SAMPLE
 
         // Obtain the list of the ancestors classes and implemented interfaces
         // with a different signature
-
         /** @var ClassLike[] $ancestorAndInterfaces */
         $ancestorAndInterfaces = array_merge(
             $this->getClassesWithDifferentSignature($classReflection, $methodName, $paramName),
@@ -290,7 +289,7 @@ CODE_SAMPLE
         $reflectionMethodReflection = $nativeClassReflection->getMethod($methodName);
 
         foreach ($reflectionMethodReflection->getParameters() as $reflectionParameter) {
-            if ($reflectionParameter->name !== $paramName) {
+            if ($reflectionParameter->getName() !== $paramName) {
                 continue;
             }
 

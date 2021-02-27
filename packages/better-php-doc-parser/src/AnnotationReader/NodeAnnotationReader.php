@@ -121,13 +121,13 @@ final class NodeAnnotationReader
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
-        $methodReflection = $this->resolveNativeClassMethodReflection($className, $methodName);
+        $reflectionMethod = $this->resolveNativeClassMethodReflection($className, $methodName);
 
         try {
             // covers cases like https://github.com/rectorphp/rector/issues/3046
 
             /** @var object[] $methodAnnotations */
-            $methodAnnotations = $this->reader->getMethodAnnotations($methodReflection);
+            $methodAnnotations = $this->reader->getMethodAnnotations($reflectionMethod);
 
             foreach ($methodAnnotations as $methodAnnotation) {
                 if (! is_a($methodAnnotation, $annotationClassName, true)) {

@@ -2,17 +2,14 @@
 
 namespace Rector\DowngradePhp72\Tests\Rector\ClassMethod\DowngradeParameterTypeWideningRector\Fixture;
 
-interface NothingHappensInterface
+interface SkipNothingHappens
 {
     public function test(array $input);
 }
 
-class SkipNothingHappens implements NothingHappensInterface
+final class SkipNothingHappensClass implements SkipNothingHappens
 {
     public function test(array $input)
     {
-        /* ... */
     }
 }
-
-?>

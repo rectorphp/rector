@@ -149,8 +149,9 @@ final class ParsedClassConstFetchNodeCollector
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
-        $nativeClassReflection = $classReflection->getNativeReflection();
-        $constants = $nativeClassReflection->getConstants();
+        $reflectionClass = $classReflection->getNativeReflection();
+
+        $constants = $reflectionClass->getConstants();
 
         $currentClassConstants = array_keys($constants);
         if ($classReflection->getParentClass() !== false) {

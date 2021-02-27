@@ -53,7 +53,7 @@ use ReflectionMethod;
 final class NodeRepository
 {
     /**
-     * @var array<string, ClassMethod[]>
+     * @var array<class-string, ClassMethod[]>
      */
     private $classMethodsByType = [];
 
@@ -235,7 +235,12 @@ final class NodeRepository
         $classMethods = [];
 
         foreach ($this->classMethodsByType as $className => $classMethodByMethodName) {
-            if (! is_a($className, $desiredType, true)) {
+            if (! $this->reflectionProvider->hasClass($className)) {
+                continue;
+            }
+
+            $classReflection = $this->reflectionProvider->getClass($className);
+            if (! $classReflection->isSubclassOf($desiredType)) {
                 continue;
             }
 
@@ -285,7 +290,6 @@ final class NodeRepository
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
-
         foreach ($classReflection->getParents() as $parentClassReflection) {
             if (isset($this->classMethodsByType[$parentClassReflection->getName()][$methodName])) {
                 return $this->classMethodsByType[$parentClassReflection->getName()][$methodName];
@@ -657,6 +661,17 @@ final class NodeRepository
         return $this->parsedNodeCollector->getClassConstFetches();
     }
 
+    public function resolveCallerClassName(MethodCall $methodCall): ?string
+    {
+        $callerType = $this->nodeTypeResolver->getStaticType($methodCall->var);
+        $callerObjectType = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($callerType);
+        if (! $callerObjectType instanceof TypeWithClassName) {
+            return null;
+        }
+
+        return $callerObjectType->getClassName();
+    }
+
     private function collectArray(Array_ $array): void
     {
         $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($array);
@@ -768,17 +783,6 @@ final class NodeRepository
         }
 
         return $implementerInterfaces;
-    }
-
-    private function resolveCallerClassName(MethodCall $methodCall): ?string
-    {
-        $callerType = $this->nodeTypeResolver->getStaticType($methodCall->var);
-        $callerObjectType = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($callerType);
-        if (! $callerObjectType instanceof TypeWithClassName) {
-            return null;
-        }
-
-        return $callerObjectType->getClassName();
     }
 
     private function resolveNodeClassTypes(Node $node): Type

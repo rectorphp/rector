@@ -87,6 +87,11 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
             return new StaticType($className);
         }
 
+        if ($this->reflectionProvider->hasClass($className)) {
+            $classReflection = $this->reflectionProvider->getClass($className);
+            return new ThisType($classReflection);
+        }
+
         return new ThisType($className);
     }
 

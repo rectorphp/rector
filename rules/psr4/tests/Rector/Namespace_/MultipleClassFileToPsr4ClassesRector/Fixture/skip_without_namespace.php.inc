@@ -1,6 +1,6 @@
 <?php
 
-final class JustOneExceptionWithoutNamespace
+final class SkipWithoutNamespace
 {
 }
 
