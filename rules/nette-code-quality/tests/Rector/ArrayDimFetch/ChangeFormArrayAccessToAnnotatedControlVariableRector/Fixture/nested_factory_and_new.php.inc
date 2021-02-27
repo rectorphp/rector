@@ -3,6 +3,7 @@
 namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector\Fixture;
 
 use Nette\Application\UI\Form;
+use Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector\Source\FormWithTitleLocal;
 
 class NestedFactoryAndNew
 {
@@ -23,14 +24,6 @@ class NestedFactoryAndNew
     }
 }
 
-class FormWithTitleLocal extends Form
-{
-    public function __construct()
-    {
-        $this->addText('title');
-    }
-}
-
 ?>
 -----
 <?php
@@ -38,6 +31,7 @@ class FormWithTitleLocal extends Form
 namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector\Fixture;
 
 use Nette\Application\UI\Form;
+use Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector\Source\FormWithTitleLocal;
 
 class NestedFactoryAndNew
 {
@@ -59,14 +53,6 @@ class NestedFactoryAndNew
         $form->addText('another_title');
 
         return $form;
-    }
-}
-
-class FormWithTitleLocal extends Form
-{
-    public function __construct()
-    {
-        $this->addText('title');
     }
 }
 
