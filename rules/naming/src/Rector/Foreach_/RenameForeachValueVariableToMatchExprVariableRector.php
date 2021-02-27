@@ -6,6 +6,7 @@ namespace Rector\Naming\Rector\Foreach_;
 
 use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
@@ -78,6 +79,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $node->expr instanceof Variable && ! $node->expr instanceof PropertyFetch) {
+            return null;
+        }
+
         $exprName = $this->getName($node->expr);
         if ($exprName === null) {
             return null;
@@ -91,15 +96,20 @@ CODE_SAMPLE
 
         $singularValueVarName = $this->inflector->singularize($exprName);
         $singularValueVarName = $singularValueVarName === $exprName
-            ? 'single' . ucfirst($singularValueVarName)
+            ? 'single' . ucfirst(ltrim($singularValueVarName, 'single'))
             : $singularValueVarName;
 
         if ($this->shouldSkip($keyVarName, $valueVarName, $singularValueVarName, $node)) {
             return null;
         }
 
-        $node->valueVar = new Variable($singularValueVarName);
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (
+        return $this->processRename($node, $valueVarName, $singularValueVarName);
+    }
+
+    private function processRename(Foreach_ $foreach, string $valueVarName, string $singularValueVarName): Foreach_
+    {
+        $foreach->valueVar = new Variable($singularValueVarName);
+        $this->traverseNodesWithCallable($foreach->stmts, function (Node $node) use (
             $singularValueVarName,
             $valueVarName
         ): ?Variable {
@@ -113,7 +123,7 @@ CODE_SAMPLE
             return new Variable($singularValueVarName);
         });
 
-        return $node;
+        return $foreach;
     }
 
     private function shouldSkip(
