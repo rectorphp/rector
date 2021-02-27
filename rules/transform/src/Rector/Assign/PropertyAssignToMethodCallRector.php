@@ -76,7 +76,7 @@ CODE_SAMPLE
         $propertyNode = $propertyFetchNode->var;
 
         foreach ($this->propertyAssignsToMethodCalls as $propertyAssignToMethodCall) {
-            if (! $this->isObjectType($propertyFetchNode->var, $propertyAssignToMethodCall->getClass())) {
+            if (! $this->isObjectType($propertyFetchNode->var, $propertyAssignToMethodCall->getObjectType())) {
                 continue;
             }
 

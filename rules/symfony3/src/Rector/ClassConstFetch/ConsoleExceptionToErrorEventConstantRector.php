@@ -7,6 +7,7 @@ namespace Rector\Symfony3\Rector\ClassConstFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -21,9 +22,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
 {
     /**
-     * @var string
+     * @var ObjectType
      */
-    private const CONSOLE_EVENTS_CLASS = 'Symfony\Component\Console\ConsoleEvents';
+    private $consoleEventsObjectType;
+
+    public function __construct()
+    {
+        $this->consoleEventsObjectType = new ObjectType('Symfony\Component\Console\ConsoleEvents');
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -53,17 +59,20 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof ClassConstFetch && (
-            $this->isObjectType($node, self::CONSOLE_EVENTS_CLASS) &&
+            $this->isObjectType($node, $this->consoleEventsObjectType) &&
             $this->isName($node->name, 'EXCEPTION'))
         ) {
-            return $this->nodeFactory->createClassConstFetch(self::CONSOLE_EVENTS_CLASS, 'ERROR');
+            return $this->nodeFactory->createClassConstFetch($this->consoleEventsObjectType->getClassName(), 'ERROR');
         }
+
         if (! $node instanceof String_) {
             return null;
         }
+
         if ($node->value !== 'console.exception') {
             return null;
         }
-        return $this->nodeFactory->createClassConstFetch(self::CONSOLE_EVENTS_CLASS, 'ERROR');
+
+        return $this->nodeFactory->createClassConstFetch($this->consoleEventsObjectType->getClassName(), 'ERROR');
     }
 }

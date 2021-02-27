@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -82,7 +83,7 @@ CODE_SAMPLE
     private function processStringNode(String_ $string): ?Node
     {
         foreach ($this->methodNamesByType as $type => $methodName) {
-            if (! $this->isObjectType($string, $type)) {
+            if (! $this->isObjectType($string, new ObjectType($type))) {
                 continue;
             }
 
@@ -95,7 +96,7 @@ CODE_SAMPLE
     private function processMethodCall(MethodCall $methodCall): ?Node
     {
         foreach ($this->methodNamesByType as $type => $methodName) {
-            if (! $this->isObjectType($methodCall, $type)) {
+            if (! $this->isObjectType($methodCall, new ObjectType($type))) {
                 continue;
             }
 

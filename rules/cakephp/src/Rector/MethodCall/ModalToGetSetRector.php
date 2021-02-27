@@ -102,7 +102,7 @@ CODE_SAMPLE
     private function matchTypeAndMethodName(MethodCall $methodCall): ?ModalToGetSet
     {
         foreach ($this->unprefixedMethodsToGetSet as $unprefixedMethodToGetSet) {
-            if (! $this->isObjectType($methodCall->var, $unprefixedMethodToGetSet->getType())) {
+            if (! $this->isObjectType($methodCall->var, $unprefixedMethodToGetSet->getObjectType())) {
                 continue;
             }
 

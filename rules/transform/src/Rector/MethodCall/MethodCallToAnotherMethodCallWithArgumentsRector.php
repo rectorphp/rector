@@ -67,7 +67,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->methodCallRenamesWithAddedArguments as $methodCallRenamedWithAddedArgument) {
-            if (! $this->isObjectType($node, $methodCallRenamedWithAddedArgument->getType())) {
+            if (! $this->isObjectType($node, $methodCallRenamedWithAddedArgument->getObjectType())) {
                 continue;
             }
 

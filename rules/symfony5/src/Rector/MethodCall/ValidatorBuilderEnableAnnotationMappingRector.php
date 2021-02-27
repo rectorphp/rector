@@ -6,6 +6,7 @@ namespace Rector\Symfony5\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -16,16 +17,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ValidatorBuilderEnableAnnotationMappingRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const REQUIRED_TYPE = 'Symfony\Component\Validator\ValidatorBuilder';
-
-    /**
-     * @var string
-     */
-    private const ARG_OLD_TYPE = 'Doctrine\Common\Annotations\Reader';
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -74,7 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, self::REQUIRED_TYPE)) {
+        if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Validator\ValidatorBuilder'))) {
             return null;
         }
 
@@ -86,7 +77,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($node->args[0]->value, self::ARG_OLD_TYPE)) {
+        if (! $this->isObjectType($node->args[0]->value, new ObjectType('Doctrine\Common\Annotations\Reader'))) {
             return null;
         }
 

@@ -132,7 +132,7 @@ CODE_SAMPLE
     ): ?Arg {
         if (! $this->isOnClassMethodCall(
             $methodCall,
-            $replaceStringWithClassConstant->getClass(),
+            $replaceStringWithClassConstant->getObjectType(),
             $replaceStringWithClassConstant->getMethod()
         )) {
             return null;

@@ -2,6 +2,8 @@
 
 namespace Rector\Transform\ValueObject;
 
+use PHPStan\Type\ObjectType;
+
 final class DimFetchAssignToMethodCall
 {
     /**
@@ -26,14 +28,14 @@ final class DimFetchAssignToMethodCall
         $this->addMethod = $addMethod;
     }
 
-    public function getListClass(): string
+    public function getListObjectType(): ObjectType
     {
-        return $this->listClass;
+        return new ObjectType($this->listClass);
     }
 
-    public function getItemClass(): string
+    public function getItemObjectType(): ObjectType
     {
-        return $this->itemClass;
+        return new ObjectType($this->itemClass);
     }
 
     public function getAddMethod(): string

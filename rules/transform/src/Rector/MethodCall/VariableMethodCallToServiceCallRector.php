@@ -110,7 +110,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->isObjectType($node->var, $variableMethodCallsToServiceCalls->getVariableType())) {
+            if (! $this->isObjectType($node->var, $variableMethodCallsToServiceCalls->getVariableObjectType())) {
                 continue;
             }
 

@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
@@ -34,7 +35,7 @@ final class LogIdentifierAndResolverValueInConstantClassMethodRector extends Abs
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->nodeNameResolver->isInClassNamed($node, 'Doctrine\Common\Annotations\DocParser')) {
+        if (! $this->nodeNameResolver->isInClassNamed($node, new ObjectType('Doctrine\Common\Annotations\DocParser'))) {
             return null;
         }
 

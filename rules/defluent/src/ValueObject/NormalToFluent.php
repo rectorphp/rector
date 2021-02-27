@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Defluent\ValueObject;
 
+use PHPStan\Type\ObjectType;
+
 final class NormalToFluent
 {
     /**
@@ -25,9 +27,9 @@ final class NormalToFluent
         $this->methodNames = $methodNames;
     }
 
-    public function getClass(): string
+    public function getObjectType(): ObjectType
     {
-        return $this->class;
+        return new ObjectType($this->class);
     }
 
     /**

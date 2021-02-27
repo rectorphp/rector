@@ -182,7 +182,7 @@ CODE_SAMPLE
 
     private function processClass(Class_ $class): ?Class_
     {
-        if ($this->isObjectType($class, PHPUnitClass::TEST_CASE)) {
+        if ($this->isObjectType($class, new ObjectType(PHPUnitClass::TEST_CASE))) {
             return $this->processPHPUnitClass($class);
         }
 

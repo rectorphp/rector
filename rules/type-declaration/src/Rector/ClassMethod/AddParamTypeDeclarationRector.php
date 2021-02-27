@@ -99,7 +99,7 @@ CODE_SAMPLE
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         foreach ($this->parameterTypehints as $parameterTypehint) {
-            if (! $this->isObjectType($classLike, $parameterTypehint->getClassName())) {
+            if (! $this->isObjectType($classLike, $parameterTypehint->getObjectType())) {
                 continue;
             }
 

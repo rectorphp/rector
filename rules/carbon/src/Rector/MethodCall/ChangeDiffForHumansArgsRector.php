@@ -6,6 +6,7 @@ namespace Rector\Carbon\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -70,7 +71,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isOnClassMethodCall($node, 'Carbon\Carbon', 'diffForHumans')) {
+        if (! $this->isOnClassMethodCall($node, new ObjectType('Carbon\Carbon'), 'diffForHumans')) {
             return null;
         }
 

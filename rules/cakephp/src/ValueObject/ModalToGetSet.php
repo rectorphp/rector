@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\CakePHP\ValueObject;
 
+use PHPStan\Type\ObjectType;
+
 final class ModalToGetSet
 {
     /**
@@ -52,9 +54,9 @@ final class ModalToGetSet
         $this->firstArgumentType = $firstArgumentType;
     }
 
-    public function getType(): string
+    public function getObjectType(): ObjectType
     {
-        return $this->type;
+        return new ObjectType($this->type);
     }
 
     public function getUnprefixedMethod(): string

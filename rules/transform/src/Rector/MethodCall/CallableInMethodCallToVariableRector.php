@@ -95,7 +95,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->callableInMethodCallToVariable as $callableInMethodCallToVariable) {
-            if (! $this->isObjectType($node->var, $callableInMethodCallToVariable->getClassType())) {
+            if (! $this->isObjectType($node->var, $callableInMethodCallToVariable->getObjectType())) {
                 continue;
             }
 

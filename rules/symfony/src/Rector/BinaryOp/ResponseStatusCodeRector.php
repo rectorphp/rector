@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\LNumber;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,11 +21,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ResponseStatusCodeRector extends AbstractRector
 {
-    /**
-     * @var class-string
-     */
-    private const RESPONSE_CLASS = 'Symfony\Component\HttpFoundation\Response';
-
     /**
      * @var array<int, string>
      */
@@ -94,6 +90,16 @@ final class ResponseStatusCodeRector extends AbstractRector
         511 => 'HTTP_NETWORK_AUTHENTICATION_REQUIRED',
     ];
 
+    /**
+     * @var ObjectType
+     */
+    private $responseObjectType;
+
+    public function __construct()
+    {
+        $this->responseObjectType = new ObjectType('Symfony\Component\HttpFoundation\Response');
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns status code numbers to constants', [
@@ -149,7 +155,7 @@ CODE_SAMPLE
 
     private function processMethodCall(MethodCall $methodCall): ?MethodCall
     {
-        if (! $this->isObjectType($methodCall->var, self::RESPONSE_CLASS)) {
+        if (! $this->isObjectType($methodCall->var, $this->responseObjectType)) {
             return null;
         }
 
@@ -168,7 +174,7 @@ CODE_SAMPLE
         }
 
         $classConstFetch = $this->nodeFactory->createClassConstFetch(
-            self::RESPONSE_CLASS,
+            $this->responseObjectType->getClassName(),
             self::CODE_TO_CONST[$statusCode->value]
         );
         $methodCall->args[0] = new Arg($classConstFetch);
@@ -203,7 +209,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $this->isObjectType($node->var, self::RESPONSE_CLASS)) {
+        if (! $this->isObjectType($node->var, $this->responseObjectType)) {
             return false;
         }
 
@@ -219,6 +225,9 @@ CODE_SAMPLE
             return $lNumber;
         }
 
-        return $this->nodeFactory->createClassConstFetch(self::RESPONSE_CLASS, self::CODE_TO_CONST[$lNumber->value]);
+        return $this->nodeFactory->createClassConstFetch(
+            $this->responseObjectType->getClassName(),
+            self::CODE_TO_CONST[$lNumber->value]
+        );
     }
 }

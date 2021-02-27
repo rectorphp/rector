@@ -343,12 +343,9 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         return $this->nodeNameResolver->getName($node);
     }
 
-    /**
-     * @param ObjectType|string $type
-     */
-    protected function isObjectType(Node $node, $type): bool
+    protected function isObjectType(Node $node, ObjectType $objectType): bool
     {
-        return $this->nodeTypeResolver->isObjectType($node, $type);
+        return $this->nodeTypeResolver->isObjectType($node, $objectType);
     }
 
     protected function isNumberType(Node $node): bool
@@ -439,13 +436,13 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         }
     }
 
-    protected function isOnClassMethodCall(Node $node, string $type, string $methodName): bool
+    protected function isOnClassMethodCall(Node $node, ObjectType $objectType, string $methodName): bool
     {
         if (! $node instanceof MethodCall) {
             return false;
         }
 
-        if (! $this->isObjectType($node->var, $type)) {
+        if (! $this->isObjectType($node->var, $objectType)) {
             return false;
         }
 

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Utils\DoctrineAnnotationParserSyncer\Rector\ClassMethod;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
@@ -29,7 +29,10 @@ final class ChangeOriginalTypeToCustomRector extends AbstractRector implements C
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->nodeNameResolver->isInClassNamed($node, AnnotationReader::class)) {
+        if (! $this->nodeNameResolver->isInClassNamed(
+            $node,
+            new ObjectType('Doctrine\Common\Annotations\AnnotationReader')
+        )) {
             return null;
         }
 

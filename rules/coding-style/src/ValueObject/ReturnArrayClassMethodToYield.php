@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\ValueObject;
 
+use PHPStan\Type\ObjectType;
+
 final class ReturnArrayClassMethodToYield
 {
     /**
@@ -22,9 +24,9 @@ final class ReturnArrayClassMethodToYield
         $this->method = $method;
     }
 
-    public function getType(): string
+    public function getObjectType(): ObjectType
     {
-        return $this->type;
+        return new ObjectType($this->type);
     }
 
     public function getMethod(): string

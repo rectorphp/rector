@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Type\ObjectType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 
@@ -53,11 +54,13 @@ final class ClassManipulator
         return $usedTraits;
     }
 
-    public function hasParentMethodOrInterface(string $class, string $method): bool
+    public function hasParentMethodOrInterface(ObjectType $objectType, string $method): bool
     {
-        if (! class_exists($class)) {
+        if (! class_exists($objectType->getClassName())) {
             return false;
         }
+
+        $class = $objectType->getClassName();
 
         $parentClass = $class;
         while ($parentClass = get_parent_class($parentClass)) {

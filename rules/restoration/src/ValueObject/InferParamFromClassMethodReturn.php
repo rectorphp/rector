@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Restoration\ValueObject;
 
+use PHPStan\Type\ObjectType;
+
 final class InferParamFromClassMethodReturn
 {
     /**
@@ -28,9 +30,9 @@ final class InferParamFromClassMethodReturn
         $this->returnMethod = $returnMethod;
     }
 
-    public function getClass(): string
+    public function getObjectType(): ObjectType
     {
-        return $this->class;
+        return new ObjectType($this->class);
     }
 
     public function getParamMethod(): string

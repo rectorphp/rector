@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -30,21 +31,21 @@ final class StaticCallPresenceAnalyzer
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    public function hasMethodStaticCallOnType(ClassMethod $classMethod, string $type): bool
+    public function hasMethodStaticCallOnType(ClassMethod $classMethod, ObjectType $objectType): bool
     {
         return (bool) $this->betterNodeFinder->findFirst(
             (array) $classMethod->stmts,
-            function (Node $node) use ($type): bool {
+            function (Node $node) use ($objectType): bool {
                 if (! $node instanceof StaticCall) {
                     return false;
                 }
 
-                return $this->nodeTypeResolver->isObjectType($node->class, $type);
+                return $this->nodeTypeResolver->isObjectType($node->class, $objectType);
             }
         );
     }
 
-    public function hasClassAnyMethodWithStaticCallOnType(Class_ $class, string $type): bool
+    public function hasClassAnyMethodWithStaticCallOnType(Class_ $class, ObjectType $objectType): bool
     {
         foreach ($class->getMethods() as $classMethod) {
             // handled else where
@@ -52,7 +53,7 @@ final class StaticCallPresenceAnalyzer
                 continue;
             }
 
-            $hasStaticCall = $this->hasMethodStaticCallOnType($classMethod, $type);
+            $hasStaticCall = $this->hasMethodStaticCallOnType($classMethod, $objectType);
             if ($hasStaticCall) {
                 return true;
             }

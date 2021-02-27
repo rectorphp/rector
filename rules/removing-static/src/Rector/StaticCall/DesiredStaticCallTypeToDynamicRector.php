@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -24,9 +25,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DesiredStaticCallTypeToDynamicRector extends AbstractRector
 {
     /**
-     * @var class-string[]
+     * @var ObjectType[]
      */
-    private $classTypes = [];
+    private $staticObjectTypes = [];
 
     /**
      * @var PropertyNaming
@@ -35,7 +36,10 @@ final class DesiredStaticCallTypeToDynamicRector extends AbstractRector
 
     public function __construct(PropertyNaming $propertyNaming, ParameterProvider $parameterProvider)
     {
-        $this->classTypes = $parameterProvider->provideArrayParameter(Option::TYPES_TO_REMOVE_STATIC_FROM);
+        $typesToRemoveStaticFrom = $parameterProvider->provideArrayParameter(Option::TYPES_TO_REMOVE_STATIC_FROM);
+        foreach ($typesToRemoveStaticFrom as $typeToRemoveStaticFrom) {
+            $this->staticObjectTypes[] = new ObjectType($typeToRemoveStaticFrom);
+        }
 
         $this->propertyNaming = $propertyNaming;
     }
@@ -80,7 +84,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->classTypes as $classType) {
+        foreach ($this->staticObjectTypes as $classType) {
             if (! $this->isObjectType($node->class, $classType)) {
                 continue;
             }

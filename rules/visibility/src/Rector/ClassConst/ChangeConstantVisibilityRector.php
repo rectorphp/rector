@@ -87,7 +87,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->classConstantVisibilityChanges as $classConstantVisibilityChange) {
-            if (! $this->isObjectType($node, $classConstantVisibilityChange->getClass())) {
+            if (! $this->isObjectType($node, $classConstantVisibilityChange->getObjectType())) {
                 continue;
             }
 

@@ -76,7 +76,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->parentCallToProperties as $parentCallToProperty) {
-            if (! $this->isObjectType($node->var, $parentCallToProperty->getClass())) {
+            if (! $this->isObjectType($node->var, $parentCallToProperty->getObjectType())) {
                 continue;
             }
 

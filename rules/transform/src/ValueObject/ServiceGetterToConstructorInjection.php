@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Transform\ValueObject;
 
+use PHPStan\Type\ObjectType;
+
 final class ServiceGetterToConstructorInjection
 {
     /**
@@ -28,9 +30,9 @@ final class ServiceGetterToConstructorInjection
         $this->serviceType = $serviceType;
     }
 
-    public function getOldType(): string
+    public function getOldObjectType(): ObjectType
     {
-        return $this->oldType;
+        return new ObjectType($this->oldType);
     }
 
     public function getOldMethod(): string

@@ -76,7 +76,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->typeMethodWraps as $typeMethodWrap) {
-            if (! $this->isObjectType($node, $typeMethodWrap->getType())) {
+            if (! $this->isObjectType($node, $typeMethodWrap->getObjectType())) {
                 continue;
             }
 

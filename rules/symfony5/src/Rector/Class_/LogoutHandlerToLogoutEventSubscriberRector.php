@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony5\NodeFactory\OnLogoutClassMethodFactory;
 use Rector\SymfonyCodeQuality\NodeFactory\GetSubscribedEventsClassMethodFactory;
@@ -23,11 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const LOGOUT_HANDLER_TYPE = 'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface';
-
-    /**
      * @var OnLogoutClassMethodFactory
      */
     private $onLogoutClassMethodFactory;
@@ -37,12 +33,21 @@ final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector
      */
     private $getSubscribedEventsClassMethodFactory;
 
+    /**
+     * @var ObjectType
+     */
+    private $logoutHandlerObjectType;
+
     public function __construct(
         OnLogoutClassMethodFactory $onLogoutClassMethodFactory,
         GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory
     ) {
         $this->onLogoutClassMethodFactory = $onLogoutClassMethodFactory;
         $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
+
+        $this->logoutHandlerObjectType = new ObjectType(
+            'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface'
+        );
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -105,7 +110,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, self::LOGOUT_HANDLER_TYPE)) {
+        if (! $this->isObjectType($node, $this->logoutHandlerObjectType)) {
             return null;
         }
 
@@ -139,7 +144,7 @@ CODE_SAMPLE
         $class->implements[] = new FullyQualified('Symfony\Component\EventDispatcher\EventSubscriberInterface');
 
         foreach ($class->implements as $key => $implement) {
-            if (! $this->isName($implement, self::LOGOUT_HANDLER_TYPE)) {
+            if (! $this->isName($implement, $this->logoutHandlerObjectType->getClassName())) {
                 continue;
             }
 
