@@ -73,7 +73,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->typeToStaticCalls as $typeToStaticCall) {
-            if (! $this->isObjectType($node->class, $typeToStaticCall->getType())) {
+            if (! $this->isObjectType($node->class, $typeToStaticCall->getObjectType())) {
                 continue;
             }
 

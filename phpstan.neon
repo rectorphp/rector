@@ -526,3 +526,5 @@ parameters:
              path: rules/symfony/src/Rector/BinaryOp/ResponseStatusCodeRector.php
 
         - '#Property Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap\:\:\$binaryOpToAssignClasses \(array<class\-string<PhpParser\\Node\\Expr\\BinaryOp\>, class\-string<PhpParser\\Node\\Expr\\BinaryOp\>\>\) does not accept array#'
+        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\RemovingStatic\\Rector\\Class_\\NewUniqueObjectToEntityFactoryRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\RemovingStatic\\Rector\\Class_\\PassFactoryToUniqueObjectRector" class\. Use unique content or abstract service instead#'

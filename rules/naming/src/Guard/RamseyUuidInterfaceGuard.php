@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Guard;
 
-use Ramsey\Uuid\UuidInterface;
+use PHPStan\Type\ObjectType;
 use Rector\Naming\Contract\Guard\ConflictingGuardInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\PropertyRename;
@@ -27,6 +27,9 @@ final class RamseyUuidInterfaceGuard implements ConflictingGuardInterface
      */
     public function check(RenameValueObjectInterface $renameValueObject): bool
     {
-        return $this->nodeTypeResolver->isObjectType($renameValueObject->getProperty(), UuidInterface::class);
+        return $this->nodeTypeResolver->isObjectType(
+            $renameValueObject->getProperty(),
+            new ObjectType('Ramsey\Uuid\UuidInterface')
+        );
     }
 }

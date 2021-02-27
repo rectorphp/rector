@@ -14,6 +14,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator;
@@ -144,7 +145,7 @@ CODE_SAMPLE
 
     private function isGetComponentMethodCallOrArrayDimFetchOnControl(Expr $expr): bool
     {
-        if ($this->isOnClassMethodCall($expr, 'Nette\Application\UI\Control', 'getComponent')) {
+        if ($this->isOnClassMethodCall($expr, new ObjectType('Nette\Application\UI\Control'), 'getComponent')) {
             return true;
         }
 

@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
@@ -130,7 +131,7 @@ final class RegexPatternArgumentManipulator
     private function processStaticCall(StaticCall $staticCall): array
     {
         foreach (self::STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION as $type => $methodNamesToArgumentPosition) {
-            if (! $this->nodeTypeResolver->isObjectType($staticCall->class, $type)) {
+            if (! $this->nodeTypeResolver->isObjectType($staticCall->class, new ObjectType($type))) {
                 continue;
             }
 

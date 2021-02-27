@@ -170,7 +170,10 @@ CODE_SAMPLE
         ClassMethod $classMethod,
         InferParamFromClassMethodReturn $inferParamFromClassMethodReturn
     ): ?ClassMethod {
-        if (! $this->nodeNameResolver->isInClassNamed($classMethod, $inferParamFromClassMethodReturn->getClass())) {
+        if (! $this->nodeNameResolver->isInClassNamed(
+            $classMethod,
+            $inferParamFromClassMethodReturn->getObjectType()
+        )) {
             return null;
         }
 

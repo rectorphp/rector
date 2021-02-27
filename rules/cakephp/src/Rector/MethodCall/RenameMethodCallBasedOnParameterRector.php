@@ -103,7 +103,7 @@ CODE_SAMPLE
         $firstArgValue = $methodCall->args[0]->value;
 
         foreach ($this->callsWithParamRenames as $callWithParamRename) {
-            if (! $this->isObjectType($methodCall, $callWithParamRename->getOldClass())) {
+            if (! $this->isObjectType($methodCall, $callWithParamRename->getOldObjectType())) {
                 continue;
             }
 

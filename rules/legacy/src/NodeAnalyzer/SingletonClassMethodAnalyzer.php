@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -95,7 +96,7 @@ final class SingletonClassMethodAnalyzer
         $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
 
         // the "self" class is created
-        if (! $this->nodeTypeResolver->isObjectType($stmt->expr->class, $class)) {
+        if (! $this->nodeTypeResolver->isObjectType($stmt->expr->class, new ObjectType($class))) {
             return null;
         }
 

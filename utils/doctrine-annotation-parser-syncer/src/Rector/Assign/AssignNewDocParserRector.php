@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Utils\DoctrineAnnotationParserSyncer\Rector\Assign;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -29,7 +29,10 @@ final class AssignNewDocParserRector extends AbstractRector implements ClassSync
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->nodeNameResolver->isInClassNamed($node, AnnotationReader::class)) {
+        if (! $this->nodeNameResolver->isInClassNamed(
+            $node,
+            new ObjectType('Doctrine\Common\Annotations\AnnotationReader')
+        )) {
             return null;
         }
 

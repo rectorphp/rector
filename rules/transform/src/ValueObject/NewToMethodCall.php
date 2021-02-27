@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Transform\ValueObject;
 
+use PHPStan\Type\ObjectType;
+
 final class NewToMethodCall
 {
     /**
@@ -28,14 +30,14 @@ final class NewToMethodCall
         $this->serviceMethod = $serviceMethod;
     }
 
-    public function getNewType(): string
+    public function getNewObjectType(): ObjectType
     {
-        return $this->newType;
+        return new ObjectType($this->newType);
     }
 
-    public function getServiceType(): string
+    public function getServiceObjectType(): ObjectType
     {
-        return $this->serviceType;
+        return new ObjectType($this->serviceType);
     }
 
     public function getServiceMethod(): string

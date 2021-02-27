@@ -220,7 +220,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            if ($this->isObjectTypes($node->expr, $this->routerObjectTypes)) {
+            if ($this->nodeTypeResolver->isObjectTypes($node->expr, $this->routerObjectTypes)) {
                 return true;
             }
 

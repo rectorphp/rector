@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,21 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FormBuilderSetDataMapperRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const REQUIRED_TYPE = 'Symfony\Component\Form\FormConfigBuilderInterface';
-
-    /**
-     * @var string
-     */
-    private const ARG_CORRECT_TYPE = 'Symfony\Component\Form\Extension\Core\DataMapper\DataMapper';
-
-    /**
-     * @var string
-     */
-    private const ARG_MAPPER_TYPE = 'Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor';
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -82,7 +68,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, self::REQUIRED_TYPE)) {
+        if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Form\FormConfigBuilderInterface'))) {
             return null;
         }
 
@@ -91,12 +77,20 @@ CODE_SAMPLE
         }
 
         $argumentValue = $node->args[0]->value;
-        if ($this->isObjectType($argumentValue, self::ARG_CORRECT_TYPE)) {
+        if ($this->isObjectType(
+            $argumentValue,
+            new ObjectType('Symfony\Component\Form\Extension\Core\DataMapper\DataMapper')
+        )) {
             return null;
         }
 
-        $propertyPathAccessor = new New_(new FullyQualified(self::ARG_MAPPER_TYPE));
-        $newArgumentValue = new New_(new FullyQualified(self::ARG_CORRECT_TYPE), [new Arg($propertyPathAccessor)]);
+        $propertyPathAccessor = new New_(new FullyQualified(
+            'Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor'
+        ));
+
+        $newArgumentValue = new New_(new FullyQualified(
+            'Symfony\Component\Form\Extension\Core\DataMapper\DataMapper'
+        ), [new Arg($propertyPathAccessor)]);
         $node->args[0]->value = $newArgumentValue;
 
         return $node;

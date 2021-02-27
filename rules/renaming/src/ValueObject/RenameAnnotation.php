@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Renaming\ValueObject;
 
+use PHPStan\Type\ObjectType;
+
 final class RenameAnnotation
 {
     /**
@@ -28,9 +30,9 @@ final class RenameAnnotation
         $this->newAnnotation = $newAnnotation;
     }
 
-    public function getType(): string
+    public function getObjectType(): ObjectType
     {
-        return $this->type;
+        return new ObjectType($this->type);
     }
 
     public function getOldAnnotation(): string

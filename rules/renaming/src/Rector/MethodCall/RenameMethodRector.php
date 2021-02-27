@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -86,7 +87,7 @@ CODE_SAMPLE
     {
         foreach ($this->methodCallRenames as $methodCallRename) {
             $implementsInterface = $this->classManipulator->hasParentMethodOrInterface(
-                $methodCallRename->getOldClass(),
+                $methodCallRename->getOldObjectType(),
                 $methodCallRename->getOldMethod()
             );
             if ($implementsInterface) {
@@ -95,7 +96,7 @@ CODE_SAMPLE
 
             if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(
                 $node,
-                $methodCallRename->getOldClass()
+                $methodCallRename->getOldObjectType()
             )) {
                 continue;
             }
@@ -143,7 +144,7 @@ CODE_SAMPLE
 
         return $this->shouldSkipForExactClassMethodForClassMethodOrTargetInvokePrivate(
             $node,
-            $methodCallRename->getOldClass(),
+            $methodCallRename->getOldObjectType(),
             $methodCallRename->getNewMethod()
         );
     }
@@ -162,7 +163,7 @@ CODE_SAMPLE
 
     private function shouldSkipForExactClassMethodForClassMethodOrTargetInvokePrivate(
         ClassMethod $classMethod,
-        string $type,
+        ObjectType $objectType,
         string $newMethodName
     ): bool {
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
@@ -173,8 +174,8 @@ CODE_SAMPLE
             return false;
         }
 
-        $isExactClassMethodForClasssMethod = $classMethod->getAttribute(AttributeKey::CLASS_NAME) === $type;
-        if ($isExactClassMethodForClasssMethod) {
+        $classMethodClass = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        if ($classMethodClass === $objectType) {
             return true;
         }
 
@@ -184,6 +185,7 @@ CODE_SAMPLE
 
         $newClassMethod = clone $classMethod;
         $newClassMethod->name = new Identifier($newMethodName);
+
         return $newClassMethod->isMagic();
     }
 }

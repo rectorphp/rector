@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -89,7 +90,7 @@ CODE_SAMPLE
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         foreach ($this->methodsByParentTypes as $type => $method) {
-            if (! $this->isObjectType($classLike, $type)) {
+            if (! $this->isObjectType($classLike, new ObjectType($type))) {
                 continue;
             }
 

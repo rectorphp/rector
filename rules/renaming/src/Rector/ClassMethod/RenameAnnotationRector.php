@@ -103,7 +103,7 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         foreach ($this->renamedAnnotations as $renamedAnnotationInType) {
-            if (! $this->isObjectType($classLike, $renamedAnnotationInType->getType())) {
+            if (! $this->isObjectType($classLike, $renamedAnnotationInType->getObjectType())) {
                 continue;
             }
 

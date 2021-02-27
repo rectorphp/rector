@@ -82,7 +82,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectTypes($node->var, $this->doctrineManagerRegistryObjectTypes)) {
+        if (! $this->nodeTypeResolver->isObjectTypes($node->var, $this->doctrineManagerRegistryObjectTypes)) {
             return null;
         }
 

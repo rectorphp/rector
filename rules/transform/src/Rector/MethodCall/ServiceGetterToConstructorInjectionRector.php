@@ -148,7 +148,7 @@ CODE_SAMPLE
         }
 
         foreach ($this->methodCallToServices as $methodCallToService) {
-            if (! $this->isObjectType($node->var, $methodCallToService->getOldType())) {
+            if (! $this->isObjectType($node->var, $methodCallToService->getOldObjectType())) {
                 continue;
             }
 

@@ -24,9 +24,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DesiredStaticPropertyFetchTypeToDynamicRector extends AbstractRector
 {
     /**
-     * @var class-string[]
+     * @var ObjectType[]
      */
-    private $classTypes = [];
+    private $staticObjectTypes = [];
 
     /**
      * @var PropertyNaming
@@ -35,7 +35,10 @@ final class DesiredStaticPropertyFetchTypeToDynamicRector extends AbstractRector
 
     public function __construct(PropertyNaming $propertyNaming, ParameterProvider $parameterProvider)
     {
-        $this->classTypes = $parameterProvider->provideArrayParameter(Option::TYPES_TO_REMOVE_STATIC_FROM);
+        $typesToRemoveStaticFrom = $parameterProvider->provideArrayParameter(Option::TYPES_TO_REMOVE_STATIC_FROM);
+        foreach ($typesToRemoveStaticFrom as $typeToRemoveStaticFrom) {
+            $this->staticObjectTypes[] = new ObjectType($typeToRemoveStaticFrom);
+        }
 
         $this->propertyNaming = $propertyNaming;
     }
@@ -81,8 +84,8 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // A. remove local fetch
-        foreach ($this->classTypes as $classType) {
-            if (! $this->nodeNameResolver->isInClassNamed($node, $classType)) {
+        foreach ($this->staticObjectTypes as $staticObjectType) {
+            if (! $this->nodeNameResolver->isInClassNamed($node, $staticObjectType)) {
                 continue;
             }
 
@@ -90,16 +93,16 @@ CODE_SAMPLE
         }
 
         // B. external property fetch
-        foreach ($this->classTypes as $classType) {
-            if (! $this->isObjectType($node->class, $classType)) {
+        foreach ($this->staticObjectTypes as $staticObjectType) {
+            if (! $this->isObjectType($node->class, $staticObjectType)) {
                 continue;
             }
 
-            $propertyName = $this->propertyNaming->fqnToVariableName($classType);
+            $propertyName = $this->propertyNaming->fqnToVariableName($staticObjectType);
 
             /** @var Class_ $class */
             $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-            $this->addConstructorDependencyToClass($class, new ObjectType($classType), $propertyName);
+            $this->addConstructorDependencyToClass($class, $staticObjectType, $propertyName);
 
             $objectPropertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
             return new PropertyFetch($objectPropertyFetch, $node->name);

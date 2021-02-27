@@ -122,7 +122,7 @@ CODE_SAMPLE
     private function shouldSkip(Node $node): bool
     {
         if ($node instanceof StaticCall) {
-            return ! $this->isObjectTypes($node, $this->requestObjectTypes);
+            return ! $this->nodeTypeResolver->isObjectTypes($node, $this->requestObjectTypes);
         }
 
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);

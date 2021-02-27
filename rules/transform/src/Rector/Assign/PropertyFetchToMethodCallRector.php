@@ -159,7 +159,7 @@ CODE_SAMPLE
     private function matchPropertyFetchCandidate(PropertyFetch $propertyFetch): ?PropertyFetchToMethodCall
     {
         foreach ($this->propertiesToMethodCalls as $propertyToMethodCall) {
-            if (! $this->isObjectType($propertyFetch->var, $propertyToMethodCall->getOldType())) {
+            if (! $this->isObjectType($propertyFetch->var, $propertyToMethodCall->getOldObjectType())) {
                 continue;
             }
 

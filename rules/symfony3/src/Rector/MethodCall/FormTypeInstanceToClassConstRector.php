@@ -108,7 +108,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isObjectTypes($node->var, $this->controllerObjectTypes) && $this->isName(
+        if ($this->nodeTypeResolver->isObjectTypes($node->var, $this->controllerObjectTypes) && $this->isName(
             $node->name,
             'createForm'
         )) {

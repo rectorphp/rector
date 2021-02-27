@@ -1,7 +1,6 @@
 <?php
 
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
-use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture\SkipSelfMethodRename;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
@@ -25,7 +24,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'old',
                     'new'
                 ),
-                new MethodCallRename(SkipSelfMethodRename::class, 'preventPHPStormRefactoring', 'gone'),
                 // with array key
                 new MethodCallRenameWithArrayKey('Nette\Utils\Html', 'addToArray', 'addToHtmlArray', 'hey'),
             ]),

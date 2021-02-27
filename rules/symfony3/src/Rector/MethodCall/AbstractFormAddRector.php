@@ -38,7 +38,7 @@ abstract class AbstractFormAddRector extends AbstractRector
 
     protected function isFormAddMethodCall(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectTypes($methodCall->var, $this->formObjectTypes)) {
+        if (! $this->nodeTypeResolver->isObjectTypes($methodCall->var, $this->formObjectTypes)) {
             return false;
         }
 

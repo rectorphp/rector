@@ -84,26 +84,23 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->newsToMethodCalls as $newToMethodCall) {
-            if (! $this->isObjectType($node, $newToMethodCall->getNewType())) {
+            if (! $this->isObjectType($node, $newToMethodCall->getNewObjectType())) {
                 continue;
             }
 
-            $serviceType = $newToMethodCall->getServiceType();
+            $serviceObjectType = $newToMethodCall->getServiceObjectType();
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-            if ($className === $serviceType) {
+            if ($className === $serviceObjectType->getClassName()) {
                 continue;
             }
 
             /** @var Class_ $classNode */
             $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-            $propertyName = $this->getExistingFactoryPropertyName($classNode, $serviceType);
+            $propertyName = $this->getExistingFactoryPropertyName($classNode, $serviceObjectType);
 
             if ($propertyName === null) {
-                $propertyName = $this->getFactoryPropertyName($serviceType);
-
-                $factoryObjectType = new ObjectType($serviceType);
-
-                $this->addConstructorDependencyToClass($classNode, $factoryObjectType, $propertyName);
+                $propertyName = $this->getFactoryPropertyName($serviceObjectType->getClassName());
+                $this->addConstructorDependencyToClass($classNode, $serviceObjectType, $propertyName);
             }
 
             $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
@@ -124,10 +121,10 @@ CODE_SAMPLE
         $this->newsToMethodCalls = $newsToMethodCalls;
     }
 
-    private function getExistingFactoryPropertyName(Class_ $class, string $factoryClass): ?string
+    private function getExistingFactoryPropertyName(Class_ $class, ObjectType $factoryObjectType): ?string
     {
         foreach ($class->getProperties() as $property) {
-            if (! $this->isObjectType($property, $factoryClass)) {
+            if (! $this->isObjectType($property, $factoryObjectType)) {
                 continue;
             }
 

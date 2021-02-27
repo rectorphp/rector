@@ -81,7 +81,7 @@ CODE_SAMPLE
         foreach ($this->replacedArguments as $replacedArgument) {
             if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(
                 $node,
-                $replacedArgument->getClass()
+                $replacedArgument->getObjectType()
             )) {
                 continue;
             }

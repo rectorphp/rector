@@ -77,7 +77,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->newArgsToMethodCalls as $newArgToMethodCall) {
-            if (! $this->isObjectType($node->class, $newArgToMethodCall->getType())) {
+            if (! $this->isObjectType($node->class, $newArgToMethodCall->getObjectType())) {
                 continue;
             }
 

@@ -132,8 +132,9 @@ CODE_SAMPLE
         // collect on registry method calls, so we know if the manager registry is needed
         $registryCalledMethods = $this->methodCallNameOnTypeResolver->resolve(
             $node,
-            'Doctrine\Common\Persistence\ManagerRegistry'
+            new ObjectType('Doctrine\Common\Persistence\ManagerRegistry')
         );
+
         if (! in_array(self::GET_MANAGER, $registryCalledMethods, true)) {
             return null;
         }

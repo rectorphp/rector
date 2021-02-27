@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Transform\ValueObject;
 
+use PHPStan\Type\ObjectType;
+
 final class ParentClassToTraits
 {
     /**
@@ -25,9 +27,9 @@ final class ParentClassToTraits
         $this->traitNames = $traitNames;
     }
 
-    public function getParentType(): string
+    public function getParentObjectType(): ObjectType
     {
-        return $this->parentType;
+        return new ObjectType($this->parentType);
     }
 
     /**

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
@@ -143,18 +144,18 @@ CODE_SAMPLE
             return false;
         }
 
-        $firstMethodCallMatch = $this->matchMethodCall($firstExpression->expr);
-        if ($firstMethodCallMatch === null) {
+        $firstMethodCallMatchObjectType = $this->matchMethodCall($firstExpression->expr);
+        if (! $firstMethodCallMatchObjectType instanceof ObjectType) {
             return false;
         }
 
-        $secondMethodCallMatch = $this->matchMethodCall($secondExpression->expr);
-        if ($secondMethodCallMatch === null) {
+        $secondMethodCallMatchObjectType = $this->matchMethodCall($secondExpression->expr);
+        if (! $secondMethodCallMatchObjectType instanceof ObjectType) {
             return false;
         }
 
         // is the same type
-        return $firstMethodCallMatch === $secondMethodCallMatch;
+        return $firstMethodCallMatchObjectType->equals($secondMethodCallMatchObjectType);
     }
 
     private function fluentizeCollectedMethodCalls(ClassMethod $classMethod): void
@@ -196,15 +197,15 @@ CODE_SAMPLE
         }
     }
 
-    private function matchMethodCall(MethodCall $methodCall): ?string
+    private function matchMethodCall(MethodCall $methodCall): ?ObjectType
     {
         foreach ($this->callsToFluent as $callToFluent) {
-            if (! $this->isObjectType($methodCall, $callToFluent->getClass())) {
+            if (! $this->isObjectType($methodCall, $callToFluent->getObjectType())) {
                 continue;
             }
 
             if ($this->isNames($methodCall->name, $callToFluent->getMethodNames())) {
-                return $callToFluent->getClass();
+                return $callToFluent->getObjectType();
             }
         }
 
