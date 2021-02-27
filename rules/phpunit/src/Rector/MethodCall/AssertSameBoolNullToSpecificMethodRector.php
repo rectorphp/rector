@@ -69,7 +69,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
     }
 
     /**
-     * @return array<class-string<\PhpParser\Node>>
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {

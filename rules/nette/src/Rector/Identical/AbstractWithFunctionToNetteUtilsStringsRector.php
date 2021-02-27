@@ -17,7 +17,7 @@ use Rector\Nette\ValueObject\ContentExprAndNeedleExpr;
 abstract class AbstractWithFunctionToNetteUtilsStringsRector extends AbstractRector implements WithFunctionToNetteUtilsStringsRectorInterface
 {
     /**
-     * @return array<class-string<\PhpParser\Node>>
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {

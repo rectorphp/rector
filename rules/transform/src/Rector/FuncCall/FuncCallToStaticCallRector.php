@@ -44,7 +44,7 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
     }
 
     /**
-     * @return array<class-string<\PhpParser\Node>>
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {

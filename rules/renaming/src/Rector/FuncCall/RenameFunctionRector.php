@@ -45,7 +45,7 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
     }
 
     /**
-     * @return array<class-string<\PhpParser\Node>>
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
