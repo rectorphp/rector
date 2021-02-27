@@ -110,7 +110,7 @@ CODE_SAMPLE
         }
 
         $classReflection = $scope->getClassReflection();
-        if ($classReflection === null) {
+        if (! $classReflection instanceof ClassReflection) {
             throw new ShouldNotHappenException();
         }
 
@@ -197,15 +197,15 @@ CODE_SAMPLE
             // If the constant isn't declared in the parent, it might be declared in the parent's parent
         }
 
-        $parentClassConstantReflection = $this->parentConstantReflectionResolver->resolve($class, $constant);
-        if (! $parentClassConstantReflection instanceof ReflectionClassConstant) {
+        $reflectionClassConstant = $this->parentConstantReflectionResolver->resolve($class, $constant);
+        if (! $reflectionClassConstant instanceof ReflectionClassConstant) {
             return null;
         }
 
         return new ConstantVisibility(
-            $parentClassConstantReflection->isPublic(),
-            $parentClassConstantReflection->isProtected(),
-            $parentClassConstantReflection->isPrivate()
+            $reflectionClassConstant->isPublic(),
+            $reflectionClassConstant->isProtected(),
+            $reflectionClassConstant->isPrivate()
         );
     }
 

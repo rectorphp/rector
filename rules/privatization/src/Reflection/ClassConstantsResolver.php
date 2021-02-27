@@ -37,9 +37,9 @@ final class ClassConstantsResolver
         }
 
         $classReflection = $this->reflectionProvider->getClass($classWithConstants);
-        $nativeClassReflection = $classReflection->getNativeReflection();
+        $reflectionClass = $classReflection->getNativeReflection();
 
-        $constantNamesToValues = $nativeClassReflection->getConstants();
+        $constantNamesToValues = $reflectionClass->getConstants();
         $this->cachedConstantNamesToValues = $constantNamesToValues;
 
         return $constantNamesToValues;

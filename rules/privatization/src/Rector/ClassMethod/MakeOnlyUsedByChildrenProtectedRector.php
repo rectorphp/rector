@@ -109,7 +109,7 @@ CODE_SAMPLE
         }
 
         $classReflection = $scope->getClassReflection();
-        if ($classReflection === null) {
+        if (! $classReflection instanceof ClassReflection) {
             throw new ShouldNotHappenException();
         }
 
