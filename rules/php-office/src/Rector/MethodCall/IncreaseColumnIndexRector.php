@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\For_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -23,6 +24,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class IncreaseColumnIndexRector extends AbstractRector
 {
+    /**
+     * @var ObjectType[]
+     */
+    private $worksheetObjectTypes = [];
+
+    public function __construct()
+    {
+        $this->worksheetObjectTypes = [
+            new ObjectType('PHPExcel_Worksheet'),
+            new ObjectType('PHPExcel_Worksheet_PageSetup'),
+        ];
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -68,7 +82,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectTypes($node->var, ['PHPExcel_Worksheet', 'PHPExcel_Worksheet_PageSetup'])) {
+        if (! $this->isObjectTypes($node->var, $this->worksheetObjectTypes)) {
             return null;
         }
 

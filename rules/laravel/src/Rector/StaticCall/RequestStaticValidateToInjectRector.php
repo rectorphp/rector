@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -24,9 +25,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RequestStaticValidateToInjectRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var ObjectType[]
      */
-    private const REQUEST_TYPES = ['Illuminate\Http\Request', 'Request'];
+    private $requestObjectTypes = [];
 
     /**
      * @var ClassMethodManipulator
@@ -36,6 +37,8 @@ final class RequestStaticValidateToInjectRector extends AbstractRector
     public function __construct(ClassMethodManipulator $classMethodManipulator)
     {
         $this->classMethodManipulator = $classMethodManipulator;
+
+        $this->requestObjectTypes = [new ObjectType('Illuminate\Http\Request'), new ObjectType('Request')];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -119,7 +122,7 @@ CODE_SAMPLE
     private function shouldSkip(Node $node): bool
     {
         if ($node instanceof StaticCall) {
-            return ! $this->isObjectTypes($node, self::REQUEST_TYPES);
+            return ! $this->isObjectTypes($node, $this->requestObjectTypes);
         }
 
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
