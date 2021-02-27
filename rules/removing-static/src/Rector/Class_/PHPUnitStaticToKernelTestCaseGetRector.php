@@ -159,7 +159,7 @@ CODE_SAMPLE
         $this->newPropertyObjectTypes = [];
 
         if ($node instanceof Class_) {
-            if ($this->isObjectTypes($node, $this->staticObjectTypes)) {
+            if ($this->nodeTypeResolver->isObjectTypes($node, $this->staticObjectTypes)) {
                 return null;
             }
 

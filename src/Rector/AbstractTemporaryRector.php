@@ -351,14 +351,6 @@ abstract class AbstractTemporaryRector extends NodeVisitorAbstract implements Ph
         return $this->nodeTypeResolver->isObjectType($node, $type);
     }
 
-    /**
-     * @param ObjectType[] $requiredTypes
-     */
-    protected function isObjectTypes(Node $node, array $requiredTypes): bool
-    {
-        return $this->nodeTypeResolver->isObjectTypes($node, $requiredTypes);
-    }
-
     protected function isNumberType(Node $node): bool
     {
         return $this->nodeTypeResolver->isNumberType($node);

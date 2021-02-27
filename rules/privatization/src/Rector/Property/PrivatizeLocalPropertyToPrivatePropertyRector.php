@@ -162,7 +162,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isObjectTypes($classLike, $this->excludedObjectTypes)) {
+        if ($this->nodeTypeResolver->isObjectTypes($classLike, $this->excludedObjectTypes)) {
             return true;
         }
 

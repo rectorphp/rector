@@ -124,7 +124,7 @@ final class NodeTypeResolver
     }
 
     /**
-     * @param string[]|ObjectType[] $requiredTypes
+     * @param ObjectType[] $requiredTypes
      */
     public function isObjectTypes(Node $node, array $requiredTypes): bool
     {
@@ -138,7 +138,7 @@ final class NodeTypeResolver
     }
 
     /**
-     * @param ObjectType|string|mixed $requiredType
+     * @param ObjectType|string $requiredType
      */
     public function isObjectType(Node $node, $requiredType): bool
     {
