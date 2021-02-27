@@ -13,7 +13,7 @@ interface PhpRectorInterface extends NodeVisitor, RectorInterface
      * List of nodes this class checks, classes that implements \PhpParser\Node
      * See beautiful map of all nodes https://github.com/rectorphp/rector/blob/master/docs/nodes_overview.md
      *
-     * @return class-string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array;
 

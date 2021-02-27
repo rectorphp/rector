@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ThisType;
 use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeReturnTypeDeclarationRector;
@@ -46,7 +47,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {

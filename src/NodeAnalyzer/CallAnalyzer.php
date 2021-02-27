@@ -17,11 +17,7 @@ final class CallAnalyzer
     /**
      * @var array<class-string<Expr>>
      */
-    private const OBJECT_CALLS = [
-        MethodCall::class,
-        NullsafeMethodCall::class,
-        StaticCall::class
-    ];
+    private const OBJECT_CALLS = [MethodCall::class, NullsafeMethodCall::class, StaticCall::class];
 
     public function isObjectCall(Node $node): bool
     {
@@ -30,7 +26,7 @@ final class CallAnalyzer
         }
 
         if ($node instanceof BinaryOp) {
-            $isObjectCallLeft  = $this->isObjectCall($node->left);
+            $isObjectCallLeft = $this->isObjectCall($node->left);
             $isObjectCallRight = $this->isObjectCall($node->right);
 
             return $isObjectCallLeft || $isObjectCallRight;

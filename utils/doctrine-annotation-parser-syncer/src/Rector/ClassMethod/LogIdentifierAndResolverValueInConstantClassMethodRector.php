@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class LogIdentifierAndResolverValueInConstantClassMethodRector extends AbstractRector implements ClassSyncerRectorInterface
 {
     /**
-     * @return string[]
+     * @return array<class-string<\PhpParser\Node>>
      */
     public function getNodeTypes(): array
     {

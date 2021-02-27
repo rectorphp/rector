@@ -27,7 +27,7 @@ final class __Name__ extends AbstractRector
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<\PhpParser\Node>>
      */
     public function getNodeTypes(): array
     {

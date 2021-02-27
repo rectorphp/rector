@@ -26,7 +26,7 @@ abstract class AbstractDowngradeTypedPropertyRector extends AbstractRector imple
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {

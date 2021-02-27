@@ -33,7 +33,7 @@ abstract class AbstractDowngradeReturnDeclarationRector extends AbstractRector i
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {

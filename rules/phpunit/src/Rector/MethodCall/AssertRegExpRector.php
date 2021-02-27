@@ -71,7 +71,7 @@ final class AssertRegExpRector extends AbstractRector
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
