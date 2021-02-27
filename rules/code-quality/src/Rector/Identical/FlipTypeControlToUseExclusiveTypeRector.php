@@ -184,9 +184,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $tagValueNode = $phpDocInfo->getVarTagValueNode();
-        if ($tagValueNode instanceof VarTagValueNode) {
-            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $tagValueNode);
+        $varTagValueNode = $phpDocInfo->getVarTagValueNode();
+        if ($varTagValueNode instanceof VarTagValueNode) {
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $varTagValueNode);
         }
 
         return new BooleanNot(new Instanceof_($expr, new FullyQualified($type->getClassName())));

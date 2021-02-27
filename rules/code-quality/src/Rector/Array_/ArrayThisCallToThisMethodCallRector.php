@@ -128,10 +128,10 @@ CODE_SAMPLE
 
         $nativeReflectionClass = $classReflection->getNativeReflection();
 
-        $methodReflection = $nativeReflectionClass->getMethod($arrayCallable->getMethod());
-        $this->privatizeClassMethod($methodReflection);
+        $reflectionMethod = $nativeReflectionClass->getMethod($arrayCallable->getMethod());
+        $this->privatizeClassMethod($reflectionMethod);
 
-        if ($methodReflection->getNumberOfParameters() > 0) {
+        if ($reflectionMethod->getNumberOfParameters() > 0) {
             $classMethod = $this->nodeRepository->findClassMethod(
                 $arrayCallable->getClass(),
                 $arrayCallable->getMethod()
