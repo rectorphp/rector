@@ -10,6 +10,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Throw_;
@@ -142,7 +143,13 @@ CODE_SAMPLE
             $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
         }
 
-        $new->args[$exceptionArgumentPosition] = new Arg($catchedThrowableVariable);
+        $arg1 = $new->args[1];
+        if ($arg1->name instanceof Identifier && $arg1->name->toString() === 'previous') {
+            $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
+            $new->args[$exceptionArgumentPosition] = $arg1;
+        } else {
+            $new->args[$exceptionArgumentPosition] = new Arg($catchedThrowableVariable);
+        }
 
         // null the node, to fix broken format preserving printers, see https://github.com/rectorphp/rector/issues/5576
         $new->setAttribute(AttributeKey::ORIGINAL_NODE, null);
