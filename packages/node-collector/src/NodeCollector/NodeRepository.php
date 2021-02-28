@@ -44,6 +44,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use ReflectionMethod;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 
 /**
  * @rector-doc
@@ -840,5 +843,25 @@ final class NodeRepository
         }
 
         return $classReflections;
+    }
+
+    /**
+     * @return Expr[]
+     */
+    public function findBooleanAndConditions(BooleanAnd $booleanAnd): array
+    {
+        $conditions = [];
+        while ($booleanAnd instanceof BinaryOp) {
+            $conditions[] = $booleanAnd->right;
+            $booleanAnd = $booleanAnd->left;
+
+            if (! $booleanAnd instanceof BooleanAnd) {
+                $conditions[] = $booleanAnd;
+                break;
+            }
+        }
+
+        krsort($conditions);
+        return $conditions;
     }
 }

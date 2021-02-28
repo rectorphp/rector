@@ -21,7 +21,6 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\EarlyReturn\NodeTransformer\BooleanAndCollector;
 use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -47,16 +46,10 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
      */
     private $conditionInverter;
 
-    /**
-     * @var BooleanAndCollector
-     */
-    private $booleanAndCollector;
-
-    public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator, BooleanAndCollector $booleanAndCollector)
+    public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator)
     {
         $this->ifManipulator = $ifManipulator;
         $this->conditionInverter = $conditionInverter;
-        $this->booleanAndCollector = $booleanAndCollector;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -123,7 +116,7 @@ CODE_SAMPLE
 
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
-        $conditions = $this->booleanAndCollector->getBooleanAndConditions($expr);
+        $conditions = $this->nodeRepository->findBooleanAndConditions($expr);
         $ifNextReturnClone = $ifNextReturn instanceof Return_
             ? clone $ifNextReturn
             : new Return_();
