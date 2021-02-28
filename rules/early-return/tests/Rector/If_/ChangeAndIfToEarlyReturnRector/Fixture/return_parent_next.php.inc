@@ -2,7 +2,7 @@
 
 namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class rex_var_link extends rex_var
+class ReturnParentNext extends rex_var
 {
     protected function getOutput()
     {
@@ -31,7 +31,7 @@ abstract class rex_var {
 
 namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class rex_var_link extends rex_var
+class ReturnParentNext extends rex_var
 {
     protected function getOutput()
     {
@@ -48,7 +48,8 @@ class rex_var_link extends rex_var
                 return $value;
             }
             $value = rex_getUrl($value);
-         }
+            return $value;
+        }
         return $value;
     }
 }

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Else_;
@@ -239,7 +240,12 @@ CODE_SAMPLE
             ? [new Continue_()]
             : [$return];
 
-        foreach ($conditions as $condition) {
+        $getNextReturnExpr = $this->getNextReturnExpr($if);
+        if ($getNextReturnExpr instanceof Return_) {
+            $return->expr = $getNextReturnExpr->expr;
+        }
+
+        foreach ($conditions as $key => $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if = new If_($invertedCondition);
             $if->stmts = $stmt;
@@ -257,6 +263,18 @@ CODE_SAMPLE
         }
 
         return $nextNode;
+    }
+
+    private function getNextReturnExpr(If_ $if): ?Return_
+    {
+        $hasClosureParent = (bool) $this->betterNodeFinder->findParentType($if, Closure::class);
+        if ($hasClosureParent) {
+            return null;
+        }
+
+        return $this->betterNodeFinder->findFirstNext($if, function (Node $node) : bool {
+            return $node instanceof Return_ && $node->expr instanceof Expr;
+        });
     }
 
     private function isIfInLoop(If_ $if): bool
