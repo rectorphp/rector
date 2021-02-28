@@ -142,7 +142,13 @@ CODE_SAMPLE
             $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
         }
 
-        $new->args[$exceptionArgumentPosition] = new Arg($catchedThrowableVariable);
+        if (isset($new->args[1]->name)) {
+            $arg1 = clone $new->args[1];
+            $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
+            $new->args[$exceptionArgumentPosition] = $arg1;
+        } else {
+            $new->args[$exceptionArgumentPosition] = new Arg($catchedThrowableVariable);
+        }
 
         // null the node, to fix broken format preserving printers, see https://github.com/rectorphp/rector/issues/5576
         $new->setAttribute(AttributeKey::ORIGINAL_NODE, null);

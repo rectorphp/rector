@@ -8,8 +8,8 @@ class NamedArgument
     {
 		try {
             $this->run();
-        }catch(\Throwable $e) {
-            throw new LogicException('Some exception', previous: $e);
+        }catch(\Throwable $throwable) {
+            throw new LogicException('Some exception', previous: $throwable);
         }
     }
 }
