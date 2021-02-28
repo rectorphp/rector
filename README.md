@@ -64,7 +64,7 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 
 - [Explore 660+ Rector Rules](/docs/rector_rules_overview.md)
 - [How Does Rector Work?](/docs/how_it_works.md)
-- [PHP Parser Nodes](https://github.com/rectorphp/php-parser-nodes-docs/blob/master/docs/nodes_overview.md)
+- [PHP Parser Nodes](https://github.com/rectorphp/php-parser-nodes-docs/)
 
 ### Advanced
 
