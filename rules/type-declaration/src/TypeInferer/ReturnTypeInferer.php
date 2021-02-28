@@ -8,9 +8,10 @@ use PhpParser\Node\FunctionLike;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
+use Rector\TypeDeclaration\Sorter\TypeInfererSorter;
 use Rector\TypeDeclaration\TypeNormalizer;
 
-final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
+final class ReturnTypeInferer
 {
     /**
      * @var ReturnTypeInfererInterface[]
@@ -25,9 +26,12 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
     /**
      * @param ReturnTypeInfererInterface[] $returnTypeInferers
      */
-    public function __construct(array $returnTypeInferers, TypeNormalizer $typeNormalizer)
-    {
-        $this->returnTypeInferers = $this->sortTypeInferersByPriority($returnTypeInferers);
+    public function __construct(
+        array $returnTypeInferers,
+        TypeNormalizer $typeNormalizer,
+        TypeInfererSorter $typeInfererSorter
+    ) {
+        $this->returnTypeInferers = $typeInfererSorter->sort($returnTypeInferers);
         $this->typeNormalizer = $typeNormalizer;
     }
 

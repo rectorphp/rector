@@ -13,10 +13,11 @@ use PHPStan\Type\VoidType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\Sorter\TypeInfererSorter;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\VarDocPropertyTypeInferer;
 
-final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
+final class PropertyTypeInferer
 {
     /**
      * @var PropertyTypeInfererInterface[]
@@ -47,13 +48,14 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
      * @param PropertyTypeInfererInterface[] $propertyTypeInferers
      */
     public function __construct(
-        array $propertyTypeInferers,
+        TypeInfererSorter $typeInfererSorter,
         DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer,
         VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
         TypeFactory $typeFactory,
-        DoctrineTypeAnalyzer $doctrineTypeAnalyzer
+        DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        array $propertyTypeInferers
     ) {
-        $this->propertyTypeInferers = $this->sortTypeInferersByPriority($propertyTypeInferers);
+        $this->propertyTypeInferers = $typeInfererSorter->sort($propertyTypeInferers);
         $this->defaultValuePropertyTypeInferer = $defaultValuePropertyTypeInferer;
         $this->typeFactory = $typeFactory;
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;

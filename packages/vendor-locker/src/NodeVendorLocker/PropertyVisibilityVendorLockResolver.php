@@ -8,10 +8,28 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-final class PropertyVisibilityVendorLockResolver extends AbstractNodeVendorLockResolver
+final class PropertyVisibilityVendorLockResolver
 {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    /**
+     * @var FamilyRelationsAnalyzer
+     */
+    private $familyRelationsAnalyzer;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    {
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
+    }
+
     /**
      * Checks for:
      * - child classes required properties

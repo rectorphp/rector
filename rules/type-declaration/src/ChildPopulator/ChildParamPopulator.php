@@ -14,9 +14,10 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\TypeDeclaration\NodeTypeAnalyzer\ChildTypeResolver;
 use Rector\TypeDeclaration\ValueObject\NewType;
 
-final class ChildParamPopulator extends AbstractChildPopulator
+final class ChildParamPopulator
 {
     /**
      * @var NodeNameResolver
@@ -33,14 +34,21 @@ final class ChildParamPopulator extends AbstractChildPopulator
      */
     private $nodeRepository;
 
+    /**
+     * @var ChildTypeResolver
+     */
+    private $childTypeResolver;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         RectorChangeCollector $rectorChangeCollector,
-        NodeRepository $nodeRepository
+        NodeRepository $nodeRepository,
+        ChildTypeResolver $childTypeResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->rectorChangeCollector = $rectorChangeCollector;
         $this->nodeRepository = $nodeRepository;
+        $this->childTypeResolver = $childTypeResolver;
     }
 
     /**
@@ -100,7 +108,7 @@ final class ChildParamPopulator extends AbstractChildPopulator
             return;
         }
 
-        $resolvedChildType = $this->resolveChildTypeNode($paramType);
+        $resolvedChildType = $this->childTypeResolver->resolveChildTypeNode($paramType);
         if ($resolvedChildType === null) {
             return;
         }

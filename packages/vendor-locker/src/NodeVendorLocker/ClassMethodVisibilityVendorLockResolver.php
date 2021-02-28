@@ -7,6 +7,8 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
 
@@ -14,8 +16,24 @@ use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
  * @deprecated
  * Merge with @see ClassMethodVisibilityGuard
  */
-final class ClassMethodVisibilityVendorLockResolver extends AbstractNodeVendorLockResolver
+final class ClassMethodVisibilityVendorLockResolver
 {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    /**
+     * @var FamilyRelationsAnalyzer
+     */
+    private $familyRelationsAnalyzer;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    {
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
+    }
+
     /**
      * Checks for:
      * - interface required methods

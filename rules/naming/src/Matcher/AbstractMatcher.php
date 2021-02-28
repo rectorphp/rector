@@ -66,7 +66,7 @@ abstract class AbstractMatcher implements MatcherInterface
      * @param Assign|Foreach_ $node
      * @return FuncCall|StaticCall|MethodCall|null
      */
-    protected function matchCall(Node $node): ?Node
+    private function matchCall(Node $node): ?Node
     {
         if ($node->expr instanceof MethodCall) {
             return $node->expr;
@@ -86,7 +86,7 @@ abstract class AbstractMatcher implements MatcherInterface
     /**
      * @return ClassMethod|Function_|Closure|null
      */
-    protected function getFunctionLike(Node $node): ?FunctionLike
+    private function getFunctionLike(Node $node): ?FunctionLike
     {
         return $node->getAttribute(AttributeKey::CLOSURE_NODE) ??
             $node->getAttribute(AttributeKey::METHOD_NODE) ??

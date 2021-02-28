@@ -11,8 +11,9 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\TypeDeclaration\NodeTypeAnalyzer\ChildTypeResolver;
 
-final class ChildReturnPopulator extends AbstractChildPopulator
+final class ChildReturnPopulator
 {
     /**
      * @var NodeNameResolver
@@ -24,10 +25,19 @@ final class ChildReturnPopulator extends AbstractChildPopulator
      */
     private $nodeRepository;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
-    {
+    /**
+     * @var ChildTypeResolver
+     */
+    private $childTypeResolver;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        NodeRepository $nodeRepository,
+        ChildTypeResolver $childTypeResolver
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeRepository = $nodeRepository;
+        $this->childTypeResolver = $childTypeResolver;
     }
 
     /**
@@ -68,7 +78,7 @@ final class ChildReturnPopulator extends AbstractChildPopulator
             return;
         }
 
-        $resolvedChildTypeNode = $this->resolveChildTypeNode($returnType);
+        $resolvedChildTypeNode = $this->childTypeResolver->resolveChildTypeNode($returnType);
         if ($resolvedChildTypeNode === null) {
             return;
         }
