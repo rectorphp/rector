@@ -1,14 +1,20 @@
 services:
-#    -
-#        class: Symplify\PHPStanRules\Rules\NoInheritanceRule
-#        tags: [phpstan.rules.rule]
-#        arguments:
-#            allowedParentTypes:
-#                - Rector\Core\Rector\AbstractRector
-#                - Rector\Utils\DoctrineAnnotationParserSyncer\FileSyncer\AbstractClassSyncer
-#                - PhpParser\NodeAbstract
-#                # resolve later
-#                - Rector\Naming\Matcher\AbstractMatcher
+    -
+        class: Symplify\PHPStanRules\Rules\NoInheritanceRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            allowedParentTypes:
+                - Rector\Core\Rector\AbstractRector
+                - Rector\Utils\DoctrineAnnotationParserSyncer\FileSyncer\AbstractClassSyncer
+                - PhpParser\NodeAbstract
+                - PHPStan\Type\BooleanType
+                - PHPStan\Type\ObjectType
+                - PHPStan\Type\StaticType
+                # resolve later
+                - Rector\Naming\Matcher\AbstractMatcher
+                # value objects
+                - Rector\Defluent\ValueObject\AbstractRootExpr
+                - Symplify\SetConfigResolver\Provider\AbstractSetProvider
 
     -
         class: Symplify\PHPStanRules\Rules\ServiceAndValueObjectHaveSameStartsRule
