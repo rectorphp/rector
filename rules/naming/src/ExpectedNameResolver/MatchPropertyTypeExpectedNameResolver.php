@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Naming\ExpectedNameResolver;
 
-use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
+use Rector\NodeNameResolver\NodeNameResolver;
 
-final class MatchPropertyTypeExpectedNameResolver extends AbstractExpectedNameResolver
+final class MatchPropertyTypeExpectedNameResolver
 {
     /**
      * @var PropertyNaming
@@ -22,21 +22,33 @@ final class MatchPropertyTypeExpectedNameResolver extends AbstractExpectedNameRe
      */
     private $phpDocInfoFactory;
 
-    public function __construct(PropertyNaming $propertyNaming, PhpDocInfoFactory $phpDocInfoFactory)
-    {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(
+        PropertyNaming $propertyNaming,
+        PhpDocInfoFactory $phpDocInfoFactory,
+        NodeNameResolver $nodeNameResolver
+    ) {
         $this->propertyNaming = $propertyNaming;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    /**
-     * @param Property $node
-     */
-    public function resolve(Node $node): ?string
+    public function resolve(Property $property): ?string
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $expectedName = $this->propertyNaming->getExpectedNameFromType($phpDocInfo->getVarType());
         if (! $expectedName instanceof ExpectedName) {
+            return null;
+        }
+
+        // skip if already has suffix
+        $currentName = $this->nodeNameResolver->getName($property);
+        if ($this->nodeNameResolver->endsWith($currentName, $expectedName->getName())) {
             return null;
         }
 

@@ -4,19 +4,28 @@ declare(strict_types=1);
 
 namespace Rector\Naming\RenameGuard;
 
-use Rector\Naming\Contract\Guard\ConflictingGuardInterface;
-use Rector\Naming\Contract\RenameGuard\RenameGuardInterface;
+use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
 
-final class PropertyRenameGuard implements RenameGuardInterface
+final class PropertyRenameGuard
 {
     /**
-     * @param ConflictingGuardInterface[] $guards
+     * @var ConflictingNameGuardInterface[]
      */
-    public function shouldSkip(RenameValueObjectInterface $renameValueObject, array $guards): bool
+    private $conflictingNameGuards = [];
+
+    /**
+     * @param ConflictingNameGuardInterface[] $conflictingNameGuards
+     */
+    public function __construct(array $conflictingNameGuards)
     {
-        foreach ($guards as $guard) {
-            if ($guard->check($renameValueObject)) {
+        $this->conflictingNameGuards = $conflictingNameGuards;
+    }
+
+    public function shouldSkip(RenameValueObjectInterface $renameValueObject): bool
+    {
+        foreach ($this->conflictingNameGuards as $conflictingNameGuard) {
+            if ($conflictingNameGuard->isConflicting($renameValueObject)) {
                 return true;
             }
         }

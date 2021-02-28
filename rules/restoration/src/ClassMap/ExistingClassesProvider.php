@@ -64,7 +64,7 @@ final class ExistingClassesProvider
     private function findClassesInDirectories(array $directories): array
     {
         $robotLoader = new RobotLoader();
-        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/rector_restore');
+        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/rector');
 
         foreach ($directories as $path) {
             $robotLoader->addDirectory(getcwd() . '/' . $path);

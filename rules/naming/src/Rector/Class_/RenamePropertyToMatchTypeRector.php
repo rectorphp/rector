@@ -137,10 +137,12 @@ CODE_SAMPLE
     private function refactorClassProperties(ClassLike $classLike): void
     {
         foreach ($classLike->getProperties() as $property) {
-            $propertyRename = $this->propertyRenameFactory->create(
-                $property,
-                $this->matchPropertyTypeExpectedNameResolver
-            );
+            $expectedPropertyName = $this->matchPropertyTypeExpectedNameResolver->resolve($property);
+            if ($expectedPropertyName === null) {
+                continue;
+            }
+
+            $propertyRename = $this->propertyRenameFactory->createFromExpectedName($property, $expectedPropertyName);
             if (! $propertyRename instanceof PropertyRename) {
                 continue;
             }

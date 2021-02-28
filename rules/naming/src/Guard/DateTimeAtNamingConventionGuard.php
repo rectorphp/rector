@@ -7,13 +7,13 @@ namespace Rector\Naming\Guard;
 use DateTimeInterface;
 use Nette\Utils\Strings;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Naming\Contract\Guard\ConflictingGuardInterface;
+use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
-final class DateTimeAtNamingConventionGuard implements ConflictingGuardInterface
+final class DateTimeAtNamingConventionGuard implements ConflictingNameGuardInterface
 {
     /**
      * @var string
@@ -40,7 +40,7 @@ final class DateTimeAtNamingConventionGuard implements ConflictingGuardInterface
     /**
      * @param PropertyRename $renameValueObject
      */
-    public function check(RenameValueObjectInterface $renameValueObject): bool
+    public function isConflicting(RenameValueObjectInterface $renameValueObject): bool
     {
         return $this->isDateTimeAtNamingConvention($renameValueObject);
     }

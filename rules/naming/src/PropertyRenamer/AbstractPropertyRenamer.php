@@ -4,108 +4,52 @@ declare(strict_types=1);
 
 namespace Rector\Naming\PropertyRenamer;
 
-use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
-use Rector\Naming\Contract\Guard\ConflictingGuardInterface;
-use Rector\Naming\Contract\RenameGuard\RenameGuardInterface;
-use Rector\Naming\Contract\RenamerInterface;
-use Rector\Naming\Contract\RenameValueObjectInterface;
-use Rector\Naming\Guard\DateTimeAtNamingConventionGuard;
-use Rector\Naming\Guard\HasMagicGetSetGuard;
-use Rector\Naming\Guard\NotPrivatePropertyGuard;
-use Rector\Naming\Guard\RamseyUuidInterfaceGuard;
 use Rector\Naming\RenameGuard\PropertyRenameGuard;
 use Rector\Naming\ValueObject\PropertyRename;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
-abstract class AbstractPropertyRenamer implements RenamerInterface
+abstract class AbstractPropertyRenamer
 {
-    /**
-     * @var ConflictingGuardInterface
-     */
-    protected $conflictingPropertyNameGuard;
-
     /**
      * @var PropertyFetchRenamer
      */
     private $propertyFetchRenamer;
 
     /**
-     * @var NotPrivatePropertyGuard
-     */
-    private $notPrivatePropertyGuard;
-
-    /**
-     * @var RamseyUuidInterfaceGuard
-     */
-    private $ramseyUuidInterfaceGuard;
-
-    /**
-     * @var DateTimeAtNamingConventionGuard
-     */
-    private $dateTimeAtNamingConventionGuard;
-
-    /**
-     * @var RenameGuardInterface
+     * @var PropertyRenameGuard
      */
     private $propertyRenameGuard;
-
-    /**
-     * @var HasMagicGetSetGuard
-     */
-    private $hasMagicGetSetGuard;
 
     /**
      * @required
      */
     public function autowireAbstractPropertyRenamer(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver,
-        NotPrivatePropertyGuard $notPrivatePropertyGuard,
-        RamseyUuidInterfaceGuard $ramseyUuidInterfaceGuard,
-        DateTimeAtNamingConventionGuard $dateTimeAtNamingConventionGuard,
         PropertyRenameGuard $propertyRenameGuard,
-        HasMagicGetSetGuard $hasMagicGetSetGuard,
         PropertyFetchRenamer $propertyFetchRenamer
     ): void {
-        $this->notPrivatePropertyGuard = $notPrivatePropertyGuard;
-        $this->ramseyUuidInterfaceGuard = $ramseyUuidInterfaceGuard;
-        $this->dateTimeAtNamingConventionGuard = $dateTimeAtNamingConventionGuard;
         $this->propertyRenameGuard = $propertyRenameGuard;
-        $this->hasMagicGetSetGuard = $hasMagicGetSetGuard;
         $this->propertyFetchRenamer = $propertyFetchRenamer;
     }
 
-    /**
-     * @param PropertyRename $renameValueObject
-     * @return Property|null
-     */
-    public function rename(RenameValueObjectInterface $renameValueObject): ?Node
+    public function rename(PropertyRename $propertyRename): ?Property
     {
-        if (! $this->areNamesDifferent($renameValueObject)) {
+        if (! $this->areNamesDifferent($propertyRename)) {
             return null;
         }
 
-        if ($this->propertyRenameGuard->shouldSkip($renameValueObject, [
-            $this->notPrivatePropertyGuard,
-            $this->conflictingPropertyNameGuard,
-            $this->ramseyUuidInterfaceGuard,
-            $this->dateTimeAtNamingConventionGuard,
-            $this->hasMagicGetSetGuard,
-        ])) {
+        if ($this->propertyRenameGuard->shouldSkip($propertyRename)) {
             return null;
         }
 
-        $onlyPropertyProperty = $renameValueObject->getPropertyProperty();
-        $onlyPropertyProperty->name = new VarLikeIdentifier($renameValueObject->getExpectedName());
-        $this->renamePropertyFetchesInClass($renameValueObject);
+        $onlyPropertyProperty = $propertyRename->getPropertyProperty();
+        $onlyPropertyProperty->name = new VarLikeIdentifier($propertyRename->getExpectedName());
+        $this->renamePropertyFetchesInClass($propertyRename);
 
-        return $renameValueObject->getProperty();
+        return $propertyRename->getProperty();
     }
 
-    protected function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
+    private function renamePropertyFetchesInClass(PropertyRename $propertyRename): void
     {
         $this->propertyFetchRenamer->renamePropertyFetchesInClass(
             $propertyRename->getClassLike(),

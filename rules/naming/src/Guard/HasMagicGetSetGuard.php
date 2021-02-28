@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\Naming\Guard;
 
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Naming\Contract\Guard\ConflictingGuardInterface;
+use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\PropertyRename;
 
-final class HasMagicGetSetGuard implements ConflictingGuardInterface
+final class HasMagicGetSetGuard implements ConflictingNameGuardInterface
 {
     /**
      * @var ReflectionProvider
@@ -24,7 +24,7 @@ final class HasMagicGetSetGuard implements ConflictingGuardInterface
     /**
      * @param PropertyRename $renameValueObject
      */
-    public function check(RenameValueObjectInterface $renameValueObject): bool
+    public function isConflicting(RenameValueObjectInterface $renameValueObject): bool
     {
         if (! $this->reflectionProvider->hasClass($renameValueObject->getClassLikeName())) {
             return false;

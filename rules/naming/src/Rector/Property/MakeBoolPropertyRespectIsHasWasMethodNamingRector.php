@@ -47,39 +47,34 @@ final class MakeBoolPropertyRespectIsHasWasMethodNamingRector extends AbstractRe
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition(
-            'Renames property to respect is/has/was method naming',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new RuleDefinition('Renames property to respect is/has/was method naming', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
-    private $full = false;
+private $full = false;
 
-    public function isFull()
-    {
-        return $this->full;
-    }
+public function isFull()
+{
+    return $this->full;
+}
 }
 CODE_SAMPLE
-
-                    ,
-                    <<<'CODE_SAMPLE'
+                ,
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
-    private $isFull = false;
+private $isFull = false;
 
-    public function isFull()
-    {
-        return $this->isFull;
-    }
+public function isFull()
+{
+    return $this->isFull;
+}
 
 }
 CODE_SAMPLE
-
-                ),
-
-            ]);
+            ),
+        ]);
     }
 
     /**
@@ -99,7 +94,15 @@ CODE_SAMPLE
             return null;
         }
 
-        $propertyRename = $this->propertyRenameFactory->create($node, $this->boolPropertyExpectedNameResolver);
+        $expectedBoolName = $this->boolPropertyExpectedNameResolver->resolve($node);
+        if ($expectedBoolName === null) {
+            return null;
+        }
+
+//        dump($expectedBoolName);
+//        die;
+
+        $propertyRename = $this->propertyRenameFactory->createFromExpectedName($node, $expectedBoolName);
         if (! $propertyRename instanceof PropertyRename) {
             return null;
         }
