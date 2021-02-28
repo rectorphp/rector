@@ -9,10 +9,38 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Type\MixedType;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VendorLocker\Reflection\ClassReflectionAncestorAnalyzer;
+use Rector\VendorLocker\Reflection\MethodReflectionContractAnalyzer;
 
-final class ClassMethodReturnVendorLockResolver extends AbstractNodeVendorLockResolver
+final class ClassMethodReturnVendorLockResolver
 {
+    /**
+     * @var ClassReflectionAncestorAnalyzer
+     */
+    private $classReflectionAncestorAnalyzer;
+
+    /**
+     * @var MethodReflectionContractAnalyzer
+     */
+    private $methodReflectionContractAnalyzer;
+
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(
+        ClassReflectionAncestorAnalyzer $classReflectionAncestorAnalyzer,
+        MethodReflectionContractAnalyzer $methodReflectionContractAnalyzer,
+        NodeNameResolver $nodeNameResolver
+    ) {
+        $this->classReflectionAncestorAnalyzer = $classReflectionAncestorAnalyzer;
+        $this->methodReflectionContractAnalyzer = $methodReflectionContractAnalyzer;
+        $this->nodeNameResolver = $nodeNameResolver;
+    }
+
     public function isVendorLocked(ClassMethod $classMethod): bool
     {
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
@@ -25,7 +53,7 @@ final class ClassMethodReturnVendorLockResolver extends AbstractNodeVendorLockRe
             return false;
         }
 
-        if (! $this->hasParentClassChildrenClassesOrImplementsInterface($classReflection)) {
+        if (! $this->classReflectionAncestorAnalyzer->hasAncestors($classReflection)) {
             return false;
         }
 
@@ -38,7 +66,7 @@ final class ClassMethodReturnVendorLockResolver extends AbstractNodeVendorLockRe
             return false;
         }
 
-        return $this->isMethodVendorLockedByInterface($classReflection, $methodName);
+        return $this->methodReflectionContractAnalyzer->hasInterfaceContract($classReflection, $methodName);
     }
 
     private function isVendorLockedByParentClass(ClassReflection $classReflection, string $methodName): bool

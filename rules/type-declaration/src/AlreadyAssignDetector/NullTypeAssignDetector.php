@@ -6,16 +6,19 @@ namespace Rector\TypeDeclaration\AlreadyAssignDetector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeTraverser;
 use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
+use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 /**
  * Should add extra null type
  */
-final class NullTypeAssignDetector extends AbstractAssignDetector
+final class NullTypeAssignDetector
 {
     /**
      * @var ScopeNestingComparator
@@ -32,14 +35,28 @@ final class NullTypeAssignDetector extends AbstractAssignDetector
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var PropertyAssignMatcher
+     */
+    private $propertyAssignMatcher;
+
+    /**
+     * @var SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+
     public function __construct(
         ScopeNestingComparator $scopeNestingComparator,
         DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        PropertyAssignMatcher $propertyAssignMatcher,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
         $this->scopeNestingComparator = $scopeNestingComparator;
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->propertyAssignMatcher = $propertyAssignMatcher;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     public function detect(ClassLike $classLike, string $propertyName): ?bool
@@ -70,5 +87,14 @@ final class NullTypeAssignDetector extends AbstractAssignDetector
         });
 
         return $needsNullType;
+    }
+
+    private function matchAssignExprToPropertyName(Node $node, string $propertyName): ?Expr
+    {
+        if (! $node instanceof Assign) {
+            return null;
+        }
+
+        return $this->propertyAssignMatcher->matchPropertyAssignExpr($node, $propertyName);
     }
 }

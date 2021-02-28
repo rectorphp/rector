@@ -22,13 +22,17 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
-use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
-final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
+final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterface
 {
     /**
      * @var ClassMethodPropertyFetchManipulator
@@ -40,12 +44,47 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
      */
     private $reflectionProvider;
 
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    /**
+     * @var SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator,
-        ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider,
+        NodeNameResolver $nodeNameResolver,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        TypeFactory $typeFactory,
+        StaticTypeMapper $staticTypeMapper,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->classMethodPropertyFetchManipulator = $classMethodPropertyFetchManipulator;
         $this->reflectionProvider = $reflectionProvider;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->typeFactory = $typeFactory;
+        $this->staticTypeMapper = $staticTypeMapper;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function inferProperty(Property $property): Type

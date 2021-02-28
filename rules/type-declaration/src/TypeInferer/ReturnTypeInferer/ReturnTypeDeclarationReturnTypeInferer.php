@@ -7,20 +7,28 @@ namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use PhpParser\Node\FunctionLike;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
-use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
-final class ReturnTypeDeclarationReturnTypeInferer extends AbstractTypeInferer implements ReturnTypeInfererInterface
+final class ReturnTypeDeclarationReturnTypeInferer implements ReturnTypeInfererInterface
 {
     /**
      * @var FunctionLikeReturnTypeResolver
      */
     private $functionLikeReturnTypeResolver;
 
-    public function __construct(FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver)
-    {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(
+        FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
+        NodeNameResolver $nodeNameResolver
+    ) {
         $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function inferFunctionLike(FunctionLike $functionLike): Type

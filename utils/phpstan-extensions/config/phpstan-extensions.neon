@@ -1,4 +1,6 @@
 services:
+    - Rector\PHPStanExtensions\TypeResolver\MethodCallTypeResolver
+
     # $nodeFinder->findInstanceOf()
     # $nodeFinder->findFirstInstanceOf()
     -
@@ -15,7 +17,7 @@ services:
         class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
 
-    # $nameResolverTrait->getName() => in some cases always string
+    # $rector->getName() => in some cases always string
     -
-        class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverTraitReturnTypeExtension
+        class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverReturnTypeAbstractRectorExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]

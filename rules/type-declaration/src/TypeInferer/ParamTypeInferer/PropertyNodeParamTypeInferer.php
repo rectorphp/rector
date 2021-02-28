@@ -12,20 +12,52 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
-use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
-final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements ParamTypeInfererInterface
+final class PropertyNodeParamTypeInferer implements ParamTypeInfererInterface
 {
     /**
      * @var PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
 
-    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer)
-    {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    /**
+     * @var SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    public function __construct(
+        PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        NodeNameResolver $nodeNameResolver,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        NodeTypeResolver $nodeTypeResolver,
+        TypeFactory $typeFactory
+    ) {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->typeFactory = $typeFactory;
     }
 
     public function inferParam(Param $param): Type
@@ -54,7 +86,6 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
                 return null;
             }
 
-            /** @var Type|null $staticType */
             $staticType = $this->nodeTypeResolver->getStaticType($node->var);
 
             if ($staticType !== null) {

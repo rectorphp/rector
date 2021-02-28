@@ -15,11 +15,12 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\PropertyFetchAssignManipulator;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
-use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
-final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements ParamTypeInfererInterface
+final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
 {
     /**
      * @var PropertyFetchAnalyzer
@@ -36,14 +37,28 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
      */
     private $phpDocInfoFactory;
 
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    /**
+     * @var SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+
     public function __construct(
         PropertyFetchAssignManipulator $propertyFetchAssignManipulator,
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        PhpDocInfoFactory $phpDocInfoFactory
+        PhpDocInfoFactory $phpDocInfoFactory,
+        NodeNameResolver $nodeNameResolver,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     public function inferParam(Param $param): Type

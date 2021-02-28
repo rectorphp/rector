@@ -8,10 +8,30 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VendorLocker\Reflection\MethodReflectionContractAnalyzer;
 
-final class ClassMethodVendorLockResolver extends AbstractNodeVendorLockResolver
+final class ClassMethodVendorLockResolver
 {
+    /**
+     * @var MethodReflectionContractAnalyzer
+     */
+    private $methodReflectionContractAnalyzer;
+
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(
+        MethodReflectionContractAnalyzer $methodReflectionContractAnalyzer,
+        NodeNameResolver $nodeNameResolver
+    ) {
+        $this->methodReflectionContractAnalyzer = $methodReflectionContractAnalyzer;
+        $this->nodeNameResolver = $nodeNameResolver;
+    }
+
     /**
      * Checks for:
      * - interface required methods
@@ -32,7 +52,7 @@ final class ClassMethodVendorLockResolver extends AbstractNodeVendorLockResolver
             return false;
         }
 
-        if ($this->isMethodVendorLockedByInterface($classReflection, $classMethodName)) {
+        if ($this->methodReflectionContractAnalyzer->hasInterfaceContract($classReflection, $classMethodName)) {
             return true;
         }
 

@@ -13,12 +13,15 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\NullTypeAssignDetector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\PropertyDefaultAssignDetector;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
-final class AssignToPropertyTypeInferer extends AbstractTypeInferer
+final class AssignToPropertyTypeInferer
 {
     /**
      * @var ConstructorAssignDetector
@@ -40,16 +43,37 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
      */
     private $nullTypeAssignDetector;
 
+    /**
+     * @var SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         ConstructorAssignDetector $constructorAssignDetector,
         PropertyAssignMatcher $propertyAssignMatcher,
         PropertyDefaultAssignDetector $propertyDefaultAssignDetector,
-        NullTypeAssignDetector $nullTypeAssignDetector
+        NullTypeAssignDetector $nullTypeAssignDetector,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        TypeFactory $typeFactory,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->propertyAssignMatcher = $propertyAssignMatcher;
         $this->propertyDefaultAssignDetector = $propertyDefaultAssignDetector;
         $this->nullTypeAssignDetector = $nullTypeAssignDetector;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->typeFactory = $typeFactory;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function inferPropertyInClassLike(string $propertyName, ClassLike $classLike): Type

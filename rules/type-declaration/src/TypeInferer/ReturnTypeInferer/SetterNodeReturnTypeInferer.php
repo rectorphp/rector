@@ -10,11 +10,11 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\NodeManipulator\FunctionLikeManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
-use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 
-final class SetterNodeReturnTypeInferer extends AbstractTypeInferer implements ReturnTypeInfererInterface
+final class SetterNodeReturnTypeInferer implements ReturnTypeInfererInterface
 {
     /**
      * @var FunctionLikeManipulator
@@ -26,12 +26,19 @@ final class SetterNodeReturnTypeInferer extends AbstractTypeInferer implements R
      */
     private $assignToPropertyTypeInferer;
 
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
     public function __construct(
         AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
-        FunctionLikeManipulator $functionLikeManipulator
+        FunctionLikeManipulator $functionLikeManipulator,
+        TypeFactory $typeFactory
     ) {
         $this->functionLikeManipulator = $functionLikeManipulator;
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
+        $this->typeFactory = $typeFactory;
     }
 
     public function inferFunctionLike(FunctionLike $functionLike): Type

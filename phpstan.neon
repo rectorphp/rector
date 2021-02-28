@@ -596,4 +596,4 @@ parameters:
 
         - '#Cognitive complexity for "Rector\\NetteCodeQuality\\FormControlTypeResolver\\MagicNetteFactoryInterfaceFormControlTypeResolver\:\:resolve\(\)" is 11, keep it under 9#'
         - '#Cognitive complexity for "Rector\\NetteCodeQuality\\FormControlTypeResolver\\MagicNetteFactoryInterfaceFormControlTypeResolver\:\:resolve\(\)" is 12, keep it under 9#'
-
+        - '#Content of method "matchAssignExprToPropertyName\(\)" is duplicated with method "matchAssignExprToPropertyName\(\)" in "Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector" class\. Use unique content or abstract service instead#'

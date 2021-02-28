@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStanExtensions\ReturnTypeExtension;
+namespace Rector\PHPStanExtensions\TypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Const_ as NodeConst;
@@ -18,18 +18,11 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 
-/**
- * @see \Rector\NodeNameResolver\NodeNameResolver::getName()
- * @see \Rector\Core\Rector\AbstractRector\NameResolverTrait::getName()
- *
- * These returns always strings for nodes with required names, e.g. for @see ClassMethod
- */
-abstract class AbstractResolvedNameReturnTypeExtension implements DynamicMethodReturnTypeExtension
+final class MethodCallTypeResolver
 {
     /**
      * @var class-string<Node>
@@ -46,7 +39,7 @@ abstract class AbstractResolvedNameReturnTypeExtension implements DynamicMethodR
         Name::class,
     ];
 
-    public function getTypeFromMethodCall(
+    public function resolveFromMethodCall(
         MethodReflection $methodReflection,
         MethodCall $methodCall,
         Scope $scope

@@ -9,11 +9,47 @@ use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
+use Rector\Php80\NodeFactory\StrStartsWithFuncCallFactory;
 use Rector\Php80\ValueObject\StrStartsWith;
 
-final class SubstrMatchAndRefactor extends AbstractMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
+final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    /**
+     * @var ValueResolver
+     */
+    private $valueResolver;
+
+    /**
+     * @var NodeComparator
+     */
+    private $nodeComparator;
+
+    /**
+     * @var StrStartsWithFuncCallFactory
+     */
+    private $strStartsWithFuncCallFactory;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        ValueResolver $valueResolver,
+        NodeComparator $nodeComparator,
+        StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory
+    ) {
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->valueResolver = $valueResolver;
+        $this->nodeComparator = $nodeComparator;
+        $this->strStartsWithFuncCallFactory = $strStartsWithFuncCallFactory;
+    }
+
     /**
      * @param Identical|NotIdentical $binaryOp
      */
@@ -21,7 +57,7 @@ final class SubstrMatchAndRefactor extends AbstractMatchAndRefactor implements S
     {
         $isPositive = $binaryOp instanceof Identical;
 
-        if ($this->isFuncCallName($binaryOp->left, 'substr')) {
+        if ($binaryOp->left instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->left, 'substr')) {
             /** @var FuncCall $funcCall */
             $funcCall = $binaryOp->left;
             $haystack = $funcCall->args[0]->value;
@@ -29,7 +65,7 @@ final class SubstrMatchAndRefactor extends AbstractMatchAndRefactor implements S
             return new StrStartsWith($funcCall, $haystack, $binaryOp->right, $isPositive);
         }
 
-        if ($this->isFuncCallName($binaryOp->right, 'substr')) {
+        if ($binaryOp->right instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->right, 'substr')) {
             /** @var FuncCall $funcCall */
             $funcCall = $binaryOp->right;
             $haystack = $funcCall->args[0]->value;
@@ -47,7 +83,12 @@ final class SubstrMatchAndRefactor extends AbstractMatchAndRefactor implements S
             return null;
         }
 
-        if (! $this->isFuncCallName($substrFuncCall->args[2]->value, 'strlen')) {
+        $secondFuncCallArgValue = $substrFuncCall->args[2]->value;
+        if (! $secondFuncCallArgValue instanceof FuncCall) {
+            return null;
+        }
+
+        if (! $this->nodeNameResolver->isName($secondFuncCallArgValue, 'strlen')) {
             return null;
         }
 
@@ -60,6 +101,6 @@ final class SubstrMatchAndRefactor extends AbstractMatchAndRefactor implements S
             return null;
         }
 
-        return $this->createStrStartsWith($strStartsWith);
+        return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
     }
 }

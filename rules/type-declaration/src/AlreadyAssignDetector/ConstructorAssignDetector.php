@@ -11,9 +11,29 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeTraverser;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
-final class ConstructorAssignDetector extends AbstractAssignDetector
+final class ConstructorAssignDetector
 {
+    /**
+     * @var PropertyAssignMatcher
+     */
+    private $propertyAssignMatcher;
+
+    /**
+     * @var SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+
+    public function __construct(
+        PropertyAssignMatcher $propertyAssignMatcher,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+    ) {
+        $this->propertyAssignMatcher = $propertyAssignMatcher;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+    }
+
     public function isPropertyAssigned(ClassLike $classLike, string $propertyName): bool
     {
         $isAssignedInConstructor = false;
@@ -47,5 +67,14 @@ final class ConstructorAssignDetector extends AbstractAssignDetector
         });
 
         return $isAssignedInConstructor;
+    }
+
+    private function matchAssignExprToPropertyName(Node $node, string $propertyName): ?Expr
+    {
+        if (! $node instanceof Assign) {
+            return null;
+        }
+
+        return $this->propertyAssignMatcher->matchPropertyAssignExpr($node, $propertyName);
     }
 }

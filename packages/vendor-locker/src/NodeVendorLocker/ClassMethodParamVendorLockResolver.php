@@ -7,10 +7,46 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VendorLocker\Reflection\ClassReflectionAncestorAnalyzer;
+use Rector\VendorLocker\Reflection\MethodReflectionContractAnalyzer;
 
-final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockResolver
+final class ClassMethodParamVendorLockResolver
 {
+    /**
+     * @var ClassReflectionAncestorAnalyzer
+     */
+    private $classReflectionAncestorAnalyzer;
+
+    /**
+     * @var MethodReflectionContractAnalyzer
+     */
+    private $methodReflectionContractAnalyzer;
+
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
+    public function __construct(
+        ClassReflectionAncestorAnalyzer $classReflectionAncestorAnalyzer,
+        MethodReflectionContractAnalyzer $methodReflectionContractAnalyzer,
+        NodeNameResolver $nodeNameResolver,
+        NodeRepository $nodeRepository
+    ) {
+        $this->classReflectionAncestorAnalyzer = $classReflectionAncestorAnalyzer;
+        $this->methodReflectionContractAnalyzer = $methodReflectionContractAnalyzer;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeRepository = $nodeRepository;
+    }
+
     public function isVendorLocked(ClassMethod $classMethod, int $paramPosition): bool
     {
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
@@ -23,7 +59,7 @@ final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockRes
             return false;
         }
 
-        if (! $this->hasParentClassChildrenClassesOrImplementsInterface($classReflection)) {
+        if (! $this->classReflectionAncestorAnalyzer->hasAncestors($classReflection)) {
             return false;
         }
 
@@ -41,11 +77,11 @@ final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockRes
         }
 
         if ($classReflection->isClass()) {
-            return $this->isMethodVendorLockedByInterface($classReflection, $methodName);
+            return $this->methodReflectionContractAnalyzer->hasInterfaceContract($classReflection, $methodName);
         }
 
         if ($classReflection->isInterface()) {
-            return $this->isMethodVendorLockedByInterface($classReflection, $methodName);
+            return $this->methodReflectionContractAnalyzer->hasInterfaceContract($classReflection, $methodName);
         }
 
         return false;

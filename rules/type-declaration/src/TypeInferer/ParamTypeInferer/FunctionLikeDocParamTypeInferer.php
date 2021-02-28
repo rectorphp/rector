@@ -12,14 +12,18 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
-use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
-final class FunctionLikeDocParamTypeInferer extends AbstractTypeInferer implements ParamTypeInfererInterface
+final class FunctionLikeDocParamTypeInferer implements ParamTypeInfererInterface
 {
     /**
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
+
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
 
     public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory)
     {
