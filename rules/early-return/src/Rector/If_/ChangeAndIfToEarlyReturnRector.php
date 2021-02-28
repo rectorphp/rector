@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\EarlyReturn\NodeTransformer\BooleanAndCollector;
 use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -46,10 +47,16 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
      */
     private $conditionInverter;
 
-    public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator)
+    /**
+     * @var BooleanAndCollector
+     */
+    private $booleanAndCollector;
+
+    public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator, BooleanAndCollector $booleanAndCollector)
     {
         $this->ifManipulator = $ifManipulator;
         $this->conditionInverter = $conditionInverter;
+        $this->booleanAndCollector = $booleanAndCollector;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -116,7 +123,7 @@ CODE_SAMPLE
 
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
-        $conditions = $this->getBooleanAndConditions($expr);
+        $conditions = $this->booleanAndCollector->getBooleanAndConditions($expr);
         $ifNextReturnClone = $ifNextReturn instanceof Return_
             ? clone $ifNextReturn
             : new Return_();
@@ -186,26 +193,6 @@ CODE_SAMPLE
         }
 
         return ! $this->isLastIfOrBeforeLastReturn($if);
-    }
-
-    /**
-     * @return Expr[]
-     */
-    private function getBooleanAndConditions(BooleanAnd $booleanAnd): array
-    {
-        $ifs = [];
-        while ($booleanAnd instanceof BinaryOp) {
-            $ifs[] = $booleanAnd->right;
-            $booleanAnd = $booleanAnd->left;
-
-            if (! $booleanAnd instanceof BooleanAnd) {
-                $ifs[] = $booleanAnd;
-                break;
-            }
-        }
-
-        krsort($ifs);
-        return $ifs;
     }
 
     private function isIfStmtExprUsedInNextReturn(If_ $if, Return_ $return): bool
