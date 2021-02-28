@@ -158,6 +158,11 @@ CODE_SAMPLE
         }
 
         $this->removeNode($node);
+
+        if (! $node->stmts[count($node->stmts) - 1] instanceof Return_ && $ifNextReturnClone->expr instanceof Expr) {
+            $this->addNodeAfterNode($ifNextReturnClone, $node);
+        }
+
         return $node;
     }
 
