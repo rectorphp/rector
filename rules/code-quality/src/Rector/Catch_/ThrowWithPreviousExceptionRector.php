@@ -144,7 +144,7 @@ CODE_SAMPLE
         }
 
         $arg1 = $new->args[1];
-        if (isset($arg1->name) && $arg1->name instanceof Identifier && $arg1->name->toString() === 'previous') {
+        if ($arg1->name instanceof Identifier && $arg1->name->toString() === 'previous') {
             $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
             $new->args[$exceptionArgumentPosition] = $arg1;
         } else {
