@@ -1,5 +1,12 @@
 services:
     -
+        class: Symplify\PHPStanRules\Rules\NoInheritanceRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            allowedParentTypes:
+                - Rector\Core\Rector\AbstractRector
+
+    -
         class: Symplify\PHPStanRules\Rules\ServiceAndValueObjectHaveSameStartsRule
         tags: [phpstan.rules.rule]
         arguments:
