@@ -28,10 +28,10 @@ final class YieldClassMethodToArrayClassMethodRector extends AbstractRector impl
     /**
      * @var string
      */
-    public const METHODS_BY_TYPE = '$methodsByType';
+    public const METHODS_BY_TYPE = 'methods_by_type';
 
     /**
-     * @var string[][]
+     * @var array<class-string, string[]>
      */
     private $methodsByType = [];
 
@@ -41,7 +41,7 @@ final class YieldClassMethodToArrayClassMethodRector extends AbstractRector impl
     private $nodeTransformer;
 
     /**
-     * @param string[][] $methodsByType
+     * @param array<class-string, string[]> $methodsByType
      */
     public function __construct(NodeTransformer $nodeTransformer, array $methodsByType = [])
     {

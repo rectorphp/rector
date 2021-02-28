@@ -69,6 +69,7 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
             if ($type instanceof VoidType) {
                 continue;
             }
+
             if ($type instanceof MixedType) {
                 continue;
             }
@@ -84,12 +85,10 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
         }
 
         // default value type must be added to each resolved type if set
-        // @todo include in one of inferrers above
         $propertyDefaultValue = $property->props[0]->default;
 
         if ($propertyDefaultValue !== null) {
             $defaultValueType = $this->defaultValuePropertyTypeInferer->inferProperty($property);
-
             if ($this->shouldUnionWithDefaultValue($defaultValueType, $resolvedType)) {
                 return $this->unionWithDefaultValueType($defaultValueType, $resolvedType);
             }

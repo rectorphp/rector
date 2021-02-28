@@ -2,9 +2,9 @@
 
 namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector\Fixture;
 
-use Nette\Application\UI\Form;
+use Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector\Source\SomeFormFactory;
 
-class FormBuilderInExternalClass
+final class FormBuilderInExternalClass
 {
     /**
      * @var SomeFormFactory
@@ -23,26 +23,15 @@ class FormBuilderInExternalClass
     }
 }
 
-class SomeFormFactory
-{
-    public function createForm(): Form
-    {
-        $form = new Form();
-        $form->addSelect('items');
-
-        return $form;
-    }
-}
-
 ?>
 -----
 <?php
 
 namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector\Fixture;
 
-use Nette\Application\UI\Form;
+use Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector\Source\SomeFormFactory;
 
-class FormBuilderInExternalClass
+final class FormBuilderInExternalClass
 {
     /**
      * @var SomeFormFactory
@@ -60,17 +49,6 @@ class FormBuilderInExternalClass
         /** @var \Nette\Forms\Controls\SelectBox $itemsControl */
         $itemsControl = $form['items'];
         $itemsControl->value = 'hey@hi.hello';
-    }
-}
-
-class SomeFormFactory
-{
-    public function createForm(): Form
-    {
-        $form = new Form();
-        $form->addSelect('items');
-
-        return $form;
     }
 }
 

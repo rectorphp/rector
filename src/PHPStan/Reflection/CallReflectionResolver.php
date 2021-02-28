@@ -15,8 +15,8 @@ use PHPStan\Broker\FunctionNotFoundException;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptor;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverRegistry;
@@ -102,23 +102,7 @@ final class CallReflectionResolver
             return null;
         }
 
-        $variants = $reflection->getVariants();
-        $nbVariants = count($variants);
-
-        if ($nbVariants === 0) {
-            return null;
-        }
-
-        if ($nbVariants === 1) {
-            return ParametersAcceptorSelector::selectSingle($variants);
-        }
-
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return null;
-        }
-
-        return ParametersAcceptorSelector::selectFromArgs($scope, $node->args, $variants);
+        return $reflection->getVariants()[0];
     }
 
     private function matchConstructorMethodInUnionType(UnionType $unionType, Scope $scope): ?MethodReflection
@@ -169,15 +153,24 @@ final class CallReflectionResolver
             return null;
         }
 
-        $classType = $this->nodeTypeResolver->resolve($node instanceof MethodCall ? $node->var : $node->class);
         $methodName = $this->nodeNameResolver->getName($node->name);
         if ($methodName === null) {
             return null;
         }
-        if (! $classType->hasMethod($methodName)->yes()) {
-            return null;
+
+        $classType = $this->nodeTypeResolver->resolve($node instanceof MethodCall ? $node->var : $node->class);
+
+        if ($classType instanceof ObjectType) {
+            if (! $this->reflectionProvider->hasClass($classType->getClassName())) {
+                return null;
+            }
+
+            $classReflection = $this->reflectionProvider->getClass($classType->getClassName());
+            if ($classReflection->hasMethod($methodName)) {
+                return $classReflection->getMethod($methodName, $scope);
+            }
         }
 
-        return $classType->getMethod($methodName, $scope);
+        return null;
     }
 }

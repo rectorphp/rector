@@ -7,15 +7,16 @@ namespace Rector\NetteCodeQuality\FormControlTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Interface_;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\Parser\FunctionLikeParser;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NetteCodeQuality\Contract\FormControlTypeResolverInterface;
 use Rector\NetteCodeQuality\Contract\MethodNamesByInputNamesResolverAwareInterface;
 use Rector\NetteCodeQuality\NodeResolver\MethodNamesByInputNamesResolver;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormControlTypeResolverInterface, MethodNamesByInputNamesResolverAwareInterface
@@ -40,14 +41,28 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormCon
      */
     private $nodeRepository;
 
+    /**
+     * @var FunctionLikeParser
+     */
+    private $functionLikeParser;
+
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         NodeRepository $nodeRepository,
         NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        FunctionLikeParser $functionLikeParser,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeRepository = $nodeRepository;
+        $this->functionLikeParser = $functionLikeParser;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -64,15 +79,21 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormCon
             return [];
         }
 
-        $classMethod = $this->nodeRepository->findClassMethodByMethodCall($node);
-        if (! $classMethod instanceof ClassMethod) {
+        $methodName = $this->nodeNameResolver->getName($node->name);
+        if ($methodName === null) {
             return [];
         }
 
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        $classMethod = $this->nodeRepository->findClassMethodByMethodCall($node);
+        if (! $classMethod instanceof ClassMethod) {
+            $classMethod = $this->resolveReflectionClassMethod($node, $methodName);
+            if (! $classMethod instanceof ClassMethod) {
+                return [];
+            }
+        }
 
-        // magic interface handled esle where
-        if (! $classLike instanceof Interface_) {
+        $classReflection = $this->resolveClassReflectionByMethodCall($node);
+        if ($classReflection === null) {
             return [];
         }
 
@@ -87,6 +108,16 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormCon
         );
 
         if (! $constructorClassMethod instanceof ClassMethod) {
+            $constructorClassMethod = $this->resolveReflectionClassMethodFromClassNameAndMethod(
+                $returnedType->getClassName(),
+                MethodName::CONSTRUCT
+            );
+            if (! $classMethod instanceof ClassMethod) {
+                return [];
+            }
+        }
+
+        if (! $constructorClassMethod instanceof ClassMethod) {
             return [];
         }
 
@@ -96,5 +127,44 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormCon
     public function setResolver(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver): void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
+    }
+
+    private function resolveReflectionClassMethod(MethodCall $methodCall, string $methodName): ?ClassMethod
+    {
+        $classReflection = $this->resolveClassReflectionByMethodCall($methodCall);
+        if ($classReflection === null) {
+            return null;
+        }
+
+        $methodReflection = $classReflection->getNativeMethod($methodName);
+
+        return $this->functionLikeParser->parseMethodReflection($methodReflection);
+    }
+
+    private function resolveReflectionClassMethodFromClassNameAndMethod(
+        string $className,
+        string $methodName
+    ): ?ClassMethod {
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return null;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $methodReflection = $classReflection->getNativeMethod($methodName);
+        return $this->functionLikeParser->parseMethodReflection($methodReflection);
+    }
+
+    private function resolveClassReflectionByMethodCall(MethodCall $methodCall): ?ClassReflection
+    {
+        $callerClassName = $this->nodeRepository->resolveCallerClassName($methodCall);
+        if ($callerClassName === null) {
+            return null;
+        }
+
+        if (! $this->reflectionProvider->hasClass($callerClassName)) {
+            return null;
+        }
+
+        return $this->reflectionProvider->getClass($callerClassName);
     }
 }

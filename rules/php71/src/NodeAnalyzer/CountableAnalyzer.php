@@ -7,11 +7,12 @@ namespace Rector\Php71\NodeAnalyzer;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Stmt;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use ReflectionClass;
 
 final class CountableAnalyzer
 {
@@ -25,10 +26,19 @@ final class CountableAnalyzer
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(
+        NodeTypeResolver $nodeTypeResolver,
+        NodeNameResolver $nodeNameResolver,
+        ReflectionProvider $reflectionProvider
+    ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function isCastableArrayType(Expr $expr): bool
@@ -52,7 +62,7 @@ final class CountableAnalyzer
             return false;
         }
 
-        if (is_a($callerObjectType->getClassName(), 'PhpParser\Node\Stmt', true)) {
+        if (is_a($callerObjectType->getClassName(), Stmt::class, true)) {
             return false;
         }
 
@@ -61,8 +71,10 @@ final class CountableAnalyzer
         }
 
         // this must be handled reflection, as PHPStan ReflectionProvider does not provide default values for properties in any way
-        $reflectionClass = new ReflectionClass($callerObjectType->getClassName());
-        $propertiesDefaults = $reflectionClass->getDefaultProperties();
+
+        $reflectionClass = $this->reflectionProvider->getClass($callerObjectType->getClassName());
+        $nativeReflectionClass = $reflectionClass->getNativeReflection();
+        $propertiesDefaults = $nativeReflectionClass->getDefaultProperties();
 
         if (! array_key_exists($propertyName, $propertiesDefaults)) {
             return false;

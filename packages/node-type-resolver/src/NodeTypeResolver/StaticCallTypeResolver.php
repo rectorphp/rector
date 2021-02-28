@@ -7,8 +7,10 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeUtils;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -26,9 +28,15 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -40,7 +48,7 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses(): array
     {
@@ -60,15 +68,26 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
             return $classType;
         }
 
-        $classNames = TypeUtils::getDirectClassNames($classType);
+        if (! $classType instanceof ObjectType) {
+            return $classType;
+        }
+
+        if (! $this->reflectionProvider->hasClass($classType->getClassName())) {
+            return $classType;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($classType->getClassName());
 
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             return $classType;
         }
 
-        foreach ($classNames as $className) {
-            if (! method_exists($className, $methodName)) {
+        /** @var ClassReflection[] $currentAndParentClassReflections */
+        $currentAndParentClassReflections = array_merge([$classReflection], $classReflection->getParents());
+
+        foreach ($currentAndParentClassReflections as $currentAndParentClassReflection) {
+            if (! $currentAndParentClassReflection->hasMethod($methodName)) {
                 continue;
             }
 

@@ -18,6 +18,7 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\ValueObject\MethodName;
@@ -64,8 +65,11 @@ final class TypeProvidingExprFromClassResolver
      * @param ClassMethod|Function_ $functionLike
      * @return MethodCall|PropertyFetch|Variable|null
      */
-    public function resolveTypeProvidingExprFromClass(Class_ $class, FunctionLike $functionLike, string $type): ?Expr
-    {
+    public function resolveTypeProvidingExprFromClass(
+        Class_ $class,
+        FunctionLike $functionLike,
+        ObjectType $objectType
+    ): ?Expr {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             return null;
@@ -73,7 +77,7 @@ final class TypeProvidingExprFromClassResolver
 
         // A. match a method
         $classReflection = $this->reflectionProvider->getClass($className);
-        $methodCallProvidingType = $this->resolveMethodCallProvidingType($classReflection, $type);
+        $methodCallProvidingType = $this->resolveMethodCallProvidingType($classReflection, $objectType);
         if ($methodCallProvidingType !== null) {
             return $methodCallProvidingType;
         }
@@ -84,22 +88,24 @@ final class TypeProvidingExprFromClassResolver
             return null;
         }
 
-        $propertyFetch = $this->resolvePropertyFetchProvidingType($classReflection, $scope, $type);
+        $propertyFetch = $this->resolvePropertyFetchProvidingType($classReflection, $scope, $objectType);
         if ($propertyFetch !== null) {
             return $propertyFetch;
         }
 
         // C. param in constructor?
-        return $this->resolveConstructorParamProvidingType($functionLike, $type);
+        return $this->resolveConstructorParamProvidingType($functionLike, $objectType);
     }
 
-    private function resolveMethodCallProvidingType(ClassReflection $classReflection, string $type): ?MethodCall
-    {
+    private function resolveMethodCallProvidingType(
+        ClassReflection $classReflection,
+        ObjectType $objectType
+    ): ?MethodCall {
         foreach ($classReflection->getNativeMethods() as $methodReflection) {
             $functionVariant = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
             $returnType = $functionVariant->getReturnType();
 
-            if (! $this->isMatchingType($returnType, $type)) {
+            if (! $this->isMatchingType($returnType, $objectType)) {
                 continue;
             }
 
@@ -113,7 +119,7 @@ final class TypeProvidingExprFromClassResolver
     private function resolvePropertyFetchProvidingType(
         ClassReflection $classReflection,
         Scope $scope,
-        string $type
+        ObjectType $objectType
     ): ?PropertyFetch {
         $nativeReflection = $classReflection->getNativeReflection();
 
@@ -122,7 +128,7 @@ final class TypeProvidingExprFromClassResolver
             $phpPropertyReflection = $classReflection->getProperty($reflectionProperty->getName(), $scope);
 
             $readableType = $phpPropertyReflection->getReadableType();
-            if (! $this->isMatchingType($readableType, $type)) {
+            if (! $this->isMatchingType($readableType, $objectType)) {
                 continue;
             }
 
@@ -132,7 +138,7 @@ final class TypeProvidingExprFromClassResolver
         return null;
     }
 
-    private function resolveConstructorParamProvidingType(FunctionLike $functionLike, string $type): ?Variable
+    private function resolveConstructorParamProvidingType(FunctionLike $functionLike, ObjectType $objectType): ?Variable
     {
         if (! $functionLike instanceof ClassMethod) {
             return null;
@@ -142,11 +148,11 @@ final class TypeProvidingExprFromClassResolver
             return null;
         }
 
-        $variableName = $this->propertyNaming->fqnToVariableName($type);
+        $variableName = $this->propertyNaming->fqnToVariableName($objectType);
         return new Variable($variableName);
     }
 
-    private function isMatchingType(Type $readableType, string $type): bool
+    private function isMatchingType(Type $readableType, ObjectType $objectType): bool
     {
         if ($readableType instanceof MixedType) {
             return false;
@@ -158,6 +164,6 @@ final class TypeProvidingExprFromClassResolver
             return false;
         }
 
-        return $readableType->getClassName() === $type;
+        return $readableType->equals($objectType);
     }
 }

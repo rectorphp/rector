@@ -81,7 +81,7 @@ CODE_SAMPLE
         }
 
         $valueArgument = $node->args[1]->value;
-        if (! $this->isStaticType($valueArgument, StringType::class)) {
+        if (! $this->nodeTypeResolver->isStaticType($valueArgument, StringType::class)) {
             return null;
         }
 

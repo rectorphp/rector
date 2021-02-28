@@ -7,8 +7,8 @@ namespace Rector\Restoration\Rector\ClassConstFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -17,6 +17,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MissingClassConstantReferenceToStringRector extends AbstractRector
 {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Convert missing class reference to string', [
@@ -66,7 +76,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (ClassExistenceStaticHelper::doesClassLikeExist($referencedClass)) {
+        if ($this->reflectionProvider->hasClass($referencedClass)) {
             return null;
         }
 

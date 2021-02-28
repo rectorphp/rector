@@ -103,8 +103,10 @@ CODE_SAMPLE
 
         /** @var Expr $returnExpr */
         $returnExpr = $node->expr;
+
         /** @var Expression $previousFirstExpression */
         $previousFirstExpression = $this->getPreviousIfLinearEquals($ifsBefore[0], $returnExpr);
+
         /** @var Assign $previousAssign */
         $previousAssign = $previousFirstExpression->expr;
 
@@ -222,11 +224,12 @@ CODE_SAMPLE
             return [];
         }
 
-        if (! (property_exists($parent, 'stmts') && $parent->stmts !== null)) {
+        if ($parent->stmts === []) {
             return [];
         }
 
-        if ($parent->stmts[(is_countable($parent->stmts) ? count($parent->stmts) : 0) - 1] !== $return) {
+        $firstItemPosition = array_key_last($parent->stmts);
+        if ($parent->stmts[$firstItemPosition] !== $return) {
             return [];
         }
 

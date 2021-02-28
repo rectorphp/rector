@@ -74,9 +74,11 @@ abstract class AbstractFormAddRector extends AbstractRector
         if (! $typeValue instanceof ClassConstFetch) {
             return $this->valueResolver->isValue($typeValue, 'collection');
         }
+
         if (! $this->isName($typeValue->class, 'Symfony\Component\Form\Extension\Core\Type\CollectionType')) {
             return $this->valueResolver->isValue($typeValue, 'collection');
         }
+
         return true;
     }
 }

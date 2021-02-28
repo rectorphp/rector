@@ -17,7 +17,6 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -138,7 +137,6 @@ CODE_SAMPLE
 
         // Obtain the list of the ancestors classes and implemented interfaces
         // with a different signature
-
         /** @var ClassLike[] $ancestorAndInterfaces */
         $ancestorAndInterfaces = array_merge(
             $this->getClassesWithDifferentSignature($classReflection, $methodName, $paramName),
@@ -181,16 +179,16 @@ CODE_SAMPLE
         string $paramName
     ): array {
         // 1. All ancestor classes with different signature
-        $ancestorClassNames = array_filter(
-            $classReflection->getParentClassesNames(),
-            function (string $ancestorClassName) use ($methodName, $paramName): bool {
-                return $this->hasMethodWithTypedParam($ancestorClassName, $methodName, $paramName);
+        $ancestorClassReflections = array_filter(
+            $classReflection->getParents(),
+            function (ClassReflection $classReflection) use ($methodName, $paramName): bool {
+                return $this->hasMethodWithTypedParam($classReflection, $methodName, $paramName);
             }
         );
 
         $classes = [];
-        foreach ($ancestorClassNames as $ancestorClassName) {
-            $class = $this->nodeRepository->findClass($ancestorClassName);
+        foreach ($ancestorClassReflections as $ancestorClassReflection) {
+            $class = $this->nodeRepository->findClass($ancestorClassReflection->getName());
             if (! $class instanceof Class_) {
                 continue;
             }
@@ -210,22 +208,16 @@ CODE_SAMPLE
         string $methodName,
         string $paramName
     ): array {
-        $interfaceClassNames = array_map(
-            function (ClassReflection $interfaceReflection): string {
-                return $interfaceReflection->getName();
-            },
-            $classReflection->getInterfaces()
-        );
-        $refactorableInterfaceClassNames = array_filter(
-            $interfaceClassNames,
-            function (string $interfaceClassName) use ($methodName, $paramName): bool {
-                return $this->hasMethodWithTypedParam($interfaceClassName, $methodName, $paramName);
+        $interfaceClassReflections = array_filter(
+            $classReflection->getInterfaces(),
+            function (ClassReflection $interfaceReflection) use ($methodName, $paramName): bool {
+                return $this->hasMethodWithTypedParam($interfaceReflection, $methodName, $paramName);
             }
         );
 
         $interfaces = [];
-        foreach ($refactorableInterfaceClassNames as $refactorableInterfaceClassName) {
-            $interface = $this->nodeRepository->findInterface($refactorableInterfaceClassName);
+        foreach ($interfaceClassReflections as $interfaceClassReflection) {
+            $interface = $this->nodeRepository->findInterface($interfaceClassReflection->getName());
             if (! $interface instanceof Interface_) {
                 continue;
             }
@@ -284,23 +276,26 @@ CODE_SAMPLE
         }
     }
 
-    private function hasMethodWithTypedParam(string $parentClassName, string $methodName, string $paramName): bool
-    {
-        if (! method_exists($parentClassName, $methodName)) {
+    private function hasMethodWithTypedParam(
+        ClassReflection $classReflection,
+        string $methodName,
+        string $paramName
+    ): bool {
+        if (! $classReflection->hasMethod($methodName)) {
             return false;
         }
 
-        $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
+        $nativeClassReflection = $classReflection->getNativeReflection();
+        $reflectionMethodReflection = $nativeClassReflection->getMethod($methodName);
 
-        $parentReflectionMethodParams = $parentReflectionMethod->getParameters();
-        foreach ($parentReflectionMethodParams as $reflectionParameter) {
-            if ($reflectionParameter->name !== $paramName) {
+        foreach ($reflectionMethodReflection->getParameters() as $reflectionParameter) {
+            if ($reflectionParameter->getName() !== $paramName) {
                 continue;
             }
-            if ($reflectionParameter->getType() === null) {
-                continue;
+
+            if ($reflectionParameter->getType() !== null) {
+                return true;
             }
-            return true;
         }
 
         return false;

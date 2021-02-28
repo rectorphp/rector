@@ -136,6 +136,7 @@ CODE_SAMPLE
         if (! $this->isObjectType($classLike, new ObjectType('Doctrine\ORM\EntityRepository'))) {
             return true;
         }
+
         if (! $this->isObjectType($methodCall->var, new ObjectType('Doctrine\ORM\EntityRepository'))) {
             return true;
         }

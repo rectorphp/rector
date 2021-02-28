@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
@@ -35,14 +36,21 @@ final class AnnotationToAttributeConverter
      */
     private $phpDocTagRemover;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         PhpAttributeGroupFactory $phpAttributeGroupFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
-        PhpDocTagRemover $phpDocTagRemover
+        PhpDocTagRemover $phpDocTagRemover,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocTagRemover = $phpDocTagRemover;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -96,7 +104,7 @@ final class AnnotationToAttributeConverter
         return array_filter(
             $phpAttributableTagNodes,
             function (PhpAttributableTagNodeInterface $phpAttributableTagNode): bool {
-                return class_exists($phpAttributableTagNode->getAttributeClassName());
+                return $this->reflectionProvider->hasClass($phpAttributableTagNode->getAttributeClassName());
             }
         );
     }

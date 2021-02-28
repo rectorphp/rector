@@ -113,14 +113,15 @@ CODE_SAMPLE
         // If it is the NullableType, extract the name from its inner type
         /** @var Node $paramType */
         $paramType = $param->type;
-        $isNullableType = $param->type instanceof NullableType;
-        if ($isNullableType) {
+
+        if ($param->type instanceof NullableType) {
             /** @var NullableType $nullableType */
             $nullableType = $paramType;
             $paramTypeName = $this->getName($nullableType->type);
         } else {
             $paramTypeName = $this->getName($paramType);
         }
+
         if ($paramTypeName === null) {
             return null;
         }
@@ -128,29 +129,26 @@ CODE_SAMPLE
         /** @var string $methodName */
         $methodName = $this->getName($functionLike);
 
-        // Either Ancestor classes or implemented interfaces
-        $interfaceNames = array_map(
-            function (ClassReflection $interfaceReflection): string {
-                return $interfaceReflection->getName();
-            },
-            $classReflection->getInterfaces()
-        );
+        // parent classes or implemented interfaces
+        /** @var ClassReflection[] $parentClassReflections */
+        $parentClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
 
-        $parentClassesNames = $classReflection->getParentClassesNames();
-        $parentClassLikes = array_merge($parentClassesNames, $interfaceNames);
-
-        foreach ($parentClassLikes as $parentClassLike) {
-            if (! method_exists($parentClassLike, $methodName)) {
+        foreach ($parentClassReflections as $parentClassReflection) {
+            if (! $parentClassReflection->hasMethod($methodName)) {
                 continue;
             }
 
+            $nativeClassReflection = $parentClassReflection->getNativeReflection();
+
             // Find the param we're looking for
-            $parentReflectionMethod = new ReflectionMethod($parentClassLike, $methodName);
+            $parentReflectionMethod = $nativeClassReflection->getMethod($methodName);
+
             $differentAncestorParamTypeName = $this->getDifferentParamTypeFromReflectionMethod(
                 $parentReflectionMethod,
                 $paramName,
                 $paramTypeName
             );
+
             if ($differentAncestorParamTypeName !== null) {
                 return $differentAncestorParamTypeName;
             }
@@ -160,19 +158,21 @@ CODE_SAMPLE
     }
 
     private function getDifferentParamTypeFromReflectionMethod(
-        ReflectionMethod $parentReflectionMethod,
+        ReflectionMethod $reflectionMethod,
         string $paramName,
         string $paramTypeName
     ): ?string {
         /** @var ReflectionParameter[] $parentReflectionMethodParams */
-        $parentReflectionMethodParams = $parentReflectionMethod->getParameters();
+        $parentReflectionMethodParams = $reflectionMethod->getParameters();
+
         foreach ($parentReflectionMethodParams as $reflectionParameter) {
-            if ($reflectionParameter->name === $paramName) {
+            if ($reflectionParameter->getName() === $paramName) {
                 /**
                  * Getting a ReflectionNamedType works from PHP 7.1 onwards
                  * @see https://www.php.net/manual/en/reflectionparameter.gettype.php#125334
                  */
                 $reflectionParamType = $reflectionParameter->getType();
+
                 /**
                  * If the type is null, we don't have enough information
                  * to check if they are different. Then do nothing
@@ -180,6 +180,7 @@ CODE_SAMPLE
                 if (! $reflectionParamType instanceof ReflectionNamedType) {
                     continue;
                 }
+
                 if ($reflectionParamType->getName() !== $paramTypeName) {
                     // We found it: a different param type in some ancestor
                     return $reflectionParamType->getName();

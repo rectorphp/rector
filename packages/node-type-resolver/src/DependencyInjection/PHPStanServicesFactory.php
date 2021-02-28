@@ -15,6 +15,7 @@ use PHPStan\File\FileHelper;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
+use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 /**
@@ -34,6 +35,8 @@ final class PHPStanServicesFactory
 
         $additionalConfigFiles = [];
         $additionalConfigFiles[] = $parameterProvider->provideStringParameter(Option::PHPSTAN_FOR_RECTOR_PATH);
+        $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan/static-reflection.neon';
+        $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan/better-infer.neon';
 
         $existingAdditionalConfigFiles = array_filter($additionalConfigFiles, 'file_exists');
 
@@ -102,5 +105,13 @@ final class PHPStanServicesFactory
     public function createTypeNodeResolver(): TypeNodeResolver
     {
         return $this->container->getByType(TypeNodeResolver::class);
+    }
+
+    /**
+     * @api
+     */
+    public function createDynamicSourceLocatorProvider(): DynamicSourceLocatorProvider
+    {
+        return $this->container->getByType(DynamicSourceLocatorProvider::class);
     }
 }

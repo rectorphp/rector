@@ -11,21 +11,19 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use PHPStan\Reflection\FunctionVariantWithPhpDocs;
+use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Reflection\Php\PhpMethodReflection;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\VoidType;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class AnonymousFunctionFactory
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     /**
      * @var NodeFactory
      */
@@ -36,40 +34,47 @@ final class AnonymousFunctionFactory
      */
     private $nodeNameResolver;
 
+    /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
         NodeFactory $nodeFactory,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        StaticTypeMapper $staticTypeMapper
     ) {
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     /**
      * @param Variable|PropertyFetch $node
      */
-    public function create(ClassMethod $classMethod, Node $node): Closure
+    public function create(PhpMethodReflection $phpMethodReflection, Node $node): Closure
     {
-        /** @var Return_[] $classMethodReturns */
-        $classMethodReturns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Return_::class);
+        /** @var FunctionVariantWithPhpDocs $functionVariantWithPhpDoc */
+        $functionVariantWithPhpDoc = $phpMethodReflection->getVariants()[0];
 
         $anonymousFunction = new Closure();
-        $newParams = $this->copyParams($classMethod->params);
+        $newParams = $this->createParams($functionVariantWithPhpDoc->getParameters());
 
         $anonymousFunction->params = $newParams;
 
-        $innerMethodCall = new MethodCall($node, $classMethod->name);
+        $innerMethodCall = new MethodCall($node, $phpMethodReflection->getName());
         $innerMethodCall->args = $this->nodeFactory->createArgsFromParams($newParams);
 
-        if ($classMethod->returnType !== null) {
-            $newReturnType = $classMethod->returnType;
-            $newReturnType->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $anonymousFunction->returnType = $newReturnType;
+        if (! $functionVariantWithPhpDoc->getReturnType() instanceof MixedType) {
+            $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
+                $functionVariantWithPhpDoc->getReturnType()
+            );
+            $anonymousFunction->returnType = $returnType;
         }
 
         // does method return something?
-        if ($this->hasClassMethodReturn($classMethodReturns)) {
+
+        if (! $functionVariantWithPhpDoc->getReturnType() instanceof VoidType) {
             $anonymousFunction->stmts[] = new Return_($innerMethodCall);
         } else {
             $anonymousFunction->stmts[] = new Expression($innerMethodCall);
@@ -83,32 +88,23 @@ final class AnonymousFunctionFactory
     }
 
     /**
-     * @param Param[] $params
+     * @param ParameterReflection[] $parameterReflections
      * @return Param[]
      */
-    private function copyParams(array $params): array
+    private function createParams(array $parameterReflections): array
     {
-        $newParams = [];
-        foreach ($params as $param) {
-            $newParam = clone $param;
-            $newParam->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $newParam->var->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $newParams[] = $newParam;
-        }
+        $params = [];
+        foreach ($parameterReflections as $parameterReflection) {
+            $param = new Param(new Variable($parameterReflection->getName()));
 
-        return $newParams;
-    }
-
-    /**
-     * @param Return_[] $nodes
-     */
-    private function hasClassMethodReturn(array $nodes): bool
-    {
-        foreach ($nodes as $node) {
-            if ($node->expr !== null) {
-                return true;
+            if (! $parameterReflection->getType() instanceof MixedType) {
+                $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType());
+                $param->type = $paramType;
             }
+
+            $params[] = $param;
         }
-        return false;
+
+        return $params;
     }
 }

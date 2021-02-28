@@ -2,21 +2,15 @@
 
 namespace Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
-class SkipIfConditionMethodCallReturnBool
-{
-    public function run($arg)
-    {
-        $obj = new self();
+use Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Source\ClassMethodWithCall;
 
-        if ($obj->condition($arg)) {
+final class SkipIfConditionMethodCallReturnBool
+{
+    public function run(ClassMethodWithCall $classMethodWithCall, $arg)
+    {
+        if ($classMethodWithCall->condition($arg)) {
 
         }
     }
-
-    public function condition($arg): bool
-    {
-
-    }
 }
 
-?>

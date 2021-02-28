@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Rector\Privatization\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
@@ -69,12 +70,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
             return null;
         }
 
-        if (! $classLike->isFinal()) {
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        if (! $classReflection->isFinal()) {
             return null;
         }
 
@@ -82,11 +88,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($node)) {
+        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($node, $classReflection)) {
             return null;
         }
 
-        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByTrait($node)) {
+        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByTrait($node, $classReflection)) {
             return null;
         }
 

@@ -92,12 +92,14 @@ CODE_SAMPLE
         /** @var string $methodName */
         $methodName = $this->getName($node->name);
 
-        foreach ($classReflection->getParentClassesNames() as $parentClassName) {
-            if (! method_exists($parentClassName, $methodName)) {
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if (! $parentClassReflection->hasMethod($methodName)) {
                 continue;
             }
 
-            $parentReflectionMethod = new ReflectionMethod($parentClassName, $methodName);
+            $nativeClassReflection = $parentClassReflection->getNativeReflection();
+
+            $parentReflectionMethod = $nativeClassReflection->getMethod($methodName);
             if ($this->isClassMethodCompatibleWithParentReflectionMethod($node, $parentReflectionMethod)) {
                 return null;
             }

@@ -9,9 +9,10 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
@@ -54,6 +55,11 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
      */
     private $paramFinder;
 
+    /**
+     * @var ObjectType
+     */
+    private $controlObjectType;
+
     public function __construct(
         ParamFinder $paramFinder,
         StaticCallAnalyzer $staticCallAnalyzer,
@@ -62,6 +68,8 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
         $this->staticCallAnalyzer = $staticCallAnalyzer;
         $this->methodReflectionProvider = $methodReflectionProvider;
         $this->paramFinder = $paramFinder;
+
+        $this->controlObjectType = new ObjectType('Nette\Application\UI\Control');
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -197,16 +205,22 @@ CODE_SAMPLE
 
     private function isInsideNetteComponentClass(Node $node): bool
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
             return false;
         }
 
-        if ($this->isObjectType($classLike, new ObjectType('Nette\Application\UI\Presenter'))) {
+        $classReflection = $scope->getClassReflection();
+        if ($classReflection === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        // presenter is not a component
+        if ($classReflection->isSubclassOf('Nette\Application\UI\Presenter')) {
             return false;
         }
 
-        return $this->isObjectType($classLike, new ObjectType('Nette\Application\UI\Control'));
+        return $classReflection->isSubclassOf($this->controlObjectType->getClassName());
     }
 
     private function removeClassMethodParams(ClassMethod $classMethod): ClassMethod

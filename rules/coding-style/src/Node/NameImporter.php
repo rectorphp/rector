@@ -12,11 +12,11 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\PSR4\Collector\RenamedClassesCollector;
@@ -66,6 +66,11 @@ final class NameImporter
      */
     private $renamedClassesCollector;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         AliasUsesResolver $aliasUsesResolver,
         ClassNameImportSkipper $classNameImportSkipper,
@@ -73,7 +78,8 @@ final class NameImporter
         ParameterProvider $parameterProvider,
         RenamedClassesCollector $renamedClassesCollector,
         StaticTypeMapper $staticTypeMapper,
-        UseNodesToAddCollector $useNodesToAddCollector
+        UseNodesToAddCollector $useNodesToAddCollector,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->aliasUsesResolver = $aliasUsesResolver;
@@ -82,6 +88,7 @@ final class NameImporter
         $this->parameterProvider = $parameterProvider;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->renamedClassesCollector = $renamedClassesCollector;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function importName(Name $name): ?Name
@@ -198,15 +205,17 @@ final class NameImporter
         if ($autoImportNames && ! $parentNode instanceof Node && ! Strings::contains(
             $fullName,
             '\\'
-        ) && function_exists($fullName)) {
+        ) && $this->reflectionProvider->hasFunction(new Name($fullName), null)) {
             return true;
         }
         if ($parentNode instanceof ConstFetch) {
             return count($name->parts) === 1;
         }
+
         if ($parentNode instanceof FuncCall) {
             return count($name->parts) === 1;
         }
+
         return false;
     }
 
@@ -225,11 +234,12 @@ final class NameImporter
         }
 
         // skip-non existing class-likes and functions
-        if (ClassExistenceStaticHelper::doesClassLikeExist($classOrFunctionName)) {
+        if ($this->reflectionProvider->hasClass($classOrFunctionName)) {
             return false;
         }
 
-        return ! function_exists($classOrFunctionName);
+        $parent = $name->getAttribute(AttributeKey::PARENT_NODE);
+        return ! $parent instanceof FuncCall;
     }
 
     private function addUseImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): void

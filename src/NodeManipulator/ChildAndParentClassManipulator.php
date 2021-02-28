@@ -7,6 +7,7 @@ namespace Rector\Core\NodeManipulator;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
@@ -36,16 +37,23 @@ final class ChildAndParentClassManipulator
      */
     private $promotedPropertyParamCleaner;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
         NodeRepository $nodeRepository,
-        PromotedPropertyParamCleaner $promotedPropertyParamCleaner
+        PromotedPropertyParamCleaner $promotedPropertyParamCleaner,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeRepository = $nodeRepository;
         $this->promotedPropertyParamCleaner = $promotedPropertyParamCleaner;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -53,21 +61,30 @@ final class ChildAndParentClassManipulator
      */
     public function completeParentConstructor(Class_ $class, ClassMethod $classMethod): void
     {
-        /** @var string|null $parentClassName */
-        $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName === null) {
+        $className = $this->nodeNameResolver->getName($class);
+        if ($className === null) {
+            return;
+        }
+
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $parentClassReflection = $classReflection->getParentClass();
+        if ($parentClassReflection === false) {
             return;
         }
 
         // not in analyzed scope, nothing we can do
-        $parentClassNode = $this->nodeRepository->findClass($parentClassName);
-        if ($parentClassNode !== null) {
+        $parentClassNode = $this->nodeRepository->findClass($parentClassReflection->getName());
+        if ($parentClassNode instanceof Class_) {
             $this->completeParentConstructorBasedOnParentNode($parentClassNode, $classMethod);
             return;
         }
 
         // complete parent call for __construct()
-        if ($parentClassName !== '' && method_exists($parentClassName, MethodName::CONSTRUCT)) {
+        if ($parentClassReflection->hasMethod(MethodName::CONSTRUCT)) {
             $staticCall = $this->nodeFactory->createParentConstructWithParams([]);
             $classMethod->stmts[] = new Expression($staticCall);
         }

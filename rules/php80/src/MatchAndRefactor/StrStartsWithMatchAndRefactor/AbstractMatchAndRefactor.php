@@ -11,26 +11,15 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\ValueObject\StrStartsWith;
 
 abstract class AbstractMatchAndRefactor
 {
     /**
-     * @var NodeNameResolver
-     */
-    protected $nodeNameResolver;
-
-    /**
      * @var ValueResolver
      */
     protected $valueResolver;
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    protected $betterStandardPrinter;
 
     /**
      * @var NodeComparator
@@ -38,17 +27,20 @@ abstract class AbstractMatchAndRefactor
     protected $nodeComparator;
 
     /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    /**
      * @required
      */
     public function autowireAbstractMatchAndRefactor(
         NodeNameResolver $nodeNameResolver,
         ValueResolver $valueResolver,
-        BetterStandardPrinter $betterStandardPrinter,
         NodeComparator $nodeComparator
     ): void {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeComparator = $nodeComparator;
     }
 

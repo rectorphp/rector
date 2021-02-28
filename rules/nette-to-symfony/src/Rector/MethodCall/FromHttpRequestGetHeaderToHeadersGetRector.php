@@ -12,7 +12,6 @@ use PhpParser\Node\Identifier;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Symfony\Component\HttpFoundation\Request;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -90,7 +89,7 @@ CODE_SAMPLE
 
         $requestName = $this->classMethodManipulator->addMethodParameterIfMissing(
             $node,
-            Request::class,
+            new ObjectType('Symfony\Component\HttpFoundation\Request'),
             ['request', 'symfonyRequest']
         );
 

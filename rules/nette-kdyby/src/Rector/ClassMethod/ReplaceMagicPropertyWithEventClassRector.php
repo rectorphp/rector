@@ -117,6 +117,9 @@ CODE_SAMPLE
         $this->replaceEventPropertyReferenceWithEventClassReference($node);
 
         $eventAndListenerTrees = $this->eventAndListenerTreeProvider->provide();
+        if ($eventAndListenerTrees === []) {
+            return null;
+        }
 
         /** @var string $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
@@ -153,6 +156,7 @@ CODE_SAMPLE
             $eventClassName = $this->eventClassNaming->createEventClassNameFromClassPropertyReference(
                 $eventPropertyReferenceName
             );
+
             $node->key = $this->nodeFactory->createClassConstReference($eventClassName);
         });
     }

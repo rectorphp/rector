@@ -179,7 +179,7 @@ CODE_SAMPLE
         $hasDirectAssertCall = $this->hasDirectAssertCall($classMethod);
         if ($hasDirectAssertCall) {
             $this->containsAssertCallByClassMethod[$cacheHash] = $hasDirectAssertCall;
-            return $hasDirectAssertCall;
+            return true;
         }
 
         // B. look for nested calls

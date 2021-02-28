@@ -2,6 +2,8 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Fixture;
 
+use Rector\CodeQuality\Tests\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Source\SortingClass;
+
 class AnotherClass
 {
     /**
@@ -24,29 +26,13 @@ class AnotherClass
     }
 }
 
-final class SortingClass
-{
-    public function publicSort($a, $b)
-    {
-        return $a <=> $b;
-    }
-
-    protected function protectedSort($a, $b)
-    {
-        return $a <=> $b;
-    }
-
-    private function privateSort($a, $b)
-    {
-        return $a <=> $b;
-    }
-}
-
 ?>
 -----
 <?php
 
 namespace Rector\CodeQuality\Tests\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Fixture;
+
+use Rector\CodeQuality\Tests\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Source\SortingClass;
 
 class AnotherClass
 {
@@ -71,24 +57,6 @@ class AnotherClass
         usort($values, function ($a, $b) use ($sortingClass) {
             return $sortingClass->publicSort($a, $b);
         });
-    }
-}
-
-final class SortingClass
-{
-    public function publicSort($a, $b)
-    {
-        return $a <=> $b;
-    }
-
-    protected function protectedSort($a, $b)
-    {
-        return $a <=> $b;
-    }
-
-    private function privateSort($a, $b)
-    {
-        return $a <=> $b;
     }
 }
 

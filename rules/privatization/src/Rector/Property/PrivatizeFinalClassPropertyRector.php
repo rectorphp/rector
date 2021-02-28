@@ -7,6 +7,8 @@ namespace Rector\Privatization\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -93,31 +95,20 @@ CODE_SAMPLE
             return false;
         }
 
-        $parentClasses = $this->getParentClasses($class);
+        /** @var Scope $scope */
+        $scope = $property->getAttribute(AttributeKey::SCOPE);
+
+        /** @var ClassReflection $classReflection */
+        $classReflection = $scope->getClassReflection();
+
         $propertyName = $this->getName($property);
 
-        foreach ($parentClasses as $parentClass) {
-            if (property_exists($parentClass, $propertyName)) {
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if ($parentClassReflection->hasProperty($propertyName)) {
                 return true;
             }
         }
 
         return false;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getParentClasses(Class_ $class): array
-    {
-        /** @var string $className */
-        $className = $this->getName($class);
-
-        $classParents = class_parents($className);
-        if ($classParents === false) {
-            return [];
-        }
-
-        return $classParents;
     }
 }

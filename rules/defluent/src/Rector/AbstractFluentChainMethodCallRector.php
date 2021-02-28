@@ -33,19 +33,19 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
     protected $nonFluentChainMethodCallFactory;
 
     /**
+     * @var FluentMethodCallSkipper
+     */
+    protected $fluentMethodCallSkipper;
+
+    /**
      * @var FluentChainMethodCallRootExtractor
      */
-    protected $fluentChainMethodCallRootExtractor;
+    private $fluentChainMethodCallRootExtractor;
 
     /**
      * @var SameClassMethodCallAnalyzer
      */
-    protected $sameClassMethodCallAnalyzer;
-
-    /**
-     * @var FluentMethodCallSkipper
-     */
-    protected $fluentMethodCallSkipper;
+    private $sameClassMethodCallAnalyzer;
 
     /**
      * @required

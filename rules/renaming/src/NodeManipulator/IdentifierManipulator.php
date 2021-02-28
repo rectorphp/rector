@@ -40,14 +40,9 @@ final class IdentifierManipulator
      */
     public function renameNodeWithMap(Node $node, array $renameMethodMap): void
     {
-        Assert::isAnyOf(
-            $node,
-            [ClassConstFetch::class,
-                MethodCall::class,
-                PropertyFetch::class,
-                StaticCall::class,
-                ClassMethod::class,
-            ]);
+        Assert::isAnyOf($node, [
+            ClassConstFetch::class, MethodCall::class, PropertyFetch::class, StaticCall::class, ClassMethod::class,
+        ]);
 
         $oldNodeMethodName = $this->resolveOldMethodName($node);
         if ($oldNodeMethodName === null) {
@@ -81,16 +76,15 @@ final class IdentifierManipulator
         $node->name = new Identifier($newName);
     }
 
+    /**
+     * @param ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node
+     */
     private function resolveOldMethodName(Node $node): ?string
     {
-        if (! property_exists($node, 'name')) {
-            return $this->nodeNameResolver->getName($node);
-        }
-
         if (StaticInstanceOf::isOneOf($node, [StaticCall::class, MethodCall::class])) {
             return $this->nodeNameResolver->getName($node->name);
         }
 
-        return null;
+        return $this->nodeNameResolver->getName($node);
     }
 }

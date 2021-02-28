@@ -28,10 +28,7 @@ class SelfA
 
 class SelfB extends SelfA
 {
-    /**
-     * @return \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\SelfB
-     */
-    public function covariantReturnTypes(): self
+    public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\SelfA
     { /* … */ }
 }
 

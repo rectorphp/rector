@@ -23,16 +23,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @sponsor Thanks https://www.luzanky.cz/ for sponsoring this rule
  *
  * @see https://tomasvotruba.com/blog/2017/10/16/how-to-use-repository-with-doctrine-as-service-in-symfony/
+ * @see https://getrector.org/blog/2021/02/08/how-to-instantly-decouple-symfony-doctrine-repository-inheritance-to-clean-composition
  *
  * @see \Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector\ServiceEntityRepositoryParentCallToDIRectorTest
  */
 final class ServiceEntityRepositoryParentCallToDIRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const SERVICE_ENTITY_REPOSITORY_CLASS = 'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository';
-
     /**
      * @var RepositoryNodeFactory
      */
@@ -155,13 +151,20 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var string|null $parentClassName */
-        $parentClassName = $classMethod->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName === null) {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if ($scope === null) {
+            // fresh node?
             return true;
         }
 
-        return $parentClassName !== self::SERVICE_ENTITY_REPOSITORY_CLASS;
+        $classReflection = $scope->getClassReflection();
+
+        if ($classReflection === null) {
+            // possibly trait/interface
+            return true;
+        }
+
+        return ! $classReflection->isSubclassOf('Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository');
     }
 
     private function removeParentConstructAndCollectEntityReference(ClassMethod $classMethod): Expr

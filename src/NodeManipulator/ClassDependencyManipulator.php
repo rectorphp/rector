@@ -7,11 +7,11 @@ namespace Rector\Core\NodeManipulator;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
 use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
 use Rector\Core\Php\PhpVersionProvider;
@@ -64,6 +64,11 @@ final class ClassDependencyManipulator
      */
     private $nodeNameResolver;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         ChildAndParentClassManipulator $childAndParentClassManipulator,
         ClassInsertManipulator $classInsertManipulator,
@@ -72,7 +77,8 @@ final class ClassDependencyManipulator
         StmtsManipulator $stmtsManipulator,
         PhpVersionProvider $phpVersionProvider,
         PropertyPresenceChecker $propertyPresenceChecker,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->classMethodAssignManipulator = $classMethodAssignManipulator;
         $this->nodeFactory = $nodeFactory;
@@ -82,6 +88,7 @@ final class ClassDependencyManipulator
         $this->phpVersionProvider = $phpVersionProvider;
         $this->propertyPresenceChecker = $propertyPresenceChecker;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function addConstructorDependency(Class_ $class, PropertyMetadata $propertyMetadata): void
@@ -203,7 +210,17 @@ final class ClassDependencyManipulator
             return false;
         }
 
-        return method_exists($parentClassName, $methodName);
+        if (! $this->reflectionProvider->hasClass($parentClassName)) {
+            return false;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($parentClassName);
+        $parentClassReflection = $classReflection->getParentClass();
+        if ($parentClassReflection === false) {
+            return false;
+        }
+
+        return $parentClassReflection->hasMethod($methodName);
     }
 
     private function createParentClassMethodCall(string $methodName): Expression

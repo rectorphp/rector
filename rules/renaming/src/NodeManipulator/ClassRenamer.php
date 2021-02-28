@@ -14,6 +14,8 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -21,11 +23,9 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocClassRenamer;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use ReflectionClass;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ClassRenamer
@@ -70,6 +70,11 @@ final class ClassRenamer
      */
     private $docBlockClassRenamer;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
@@ -77,7 +82,8 @@ final class ClassRenamer
         NodeNameResolver $nodeNameResolver,
         PhpDocClassRenamer $phpDocClassRenamer,
         PhpDocInfoFactory $phpDocInfoFactory,
-        DocBlockClassRenamer $docBlockClassRenamer
+        DocBlockClassRenamer $docBlockClassRenamer,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -86,6 +92,7 @@ final class ClassRenamer
         $this->betterNodeFinder = $betterNodeFinder;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -180,16 +187,16 @@ final class ClassRenamer
         }
 
         $currentName = $this->nodeNameResolver->getName($classLike);
-        $newClassFqn = $oldToNewClasses[$currentName];
+        $newClassFullyQualified = $oldToNewClasses[$currentName];
 
-        if (ClassExistenceStaticHelper::doesClassLikeExist($newClassFqn)) {
+        if ($this->reflectionProvider->hasClass($newClassFullyQualified)) {
             return null;
         }
 
-        $newNamespace = $this->classNaming->getNamespace($newClassFqn);
+        $newNamespace = $this->classNaming->getNamespace($newClassFullyQualified);
         // Renaming to class without namespace (example MyNamespace\DateTime -> DateTimeImmutable)
         if (! $newNamespace) {
-            $classLike->name = new Identifier($newClassFqn);
+            $classLike->name = new Identifier($newClassFullyQualified);
 
             return $classLike;
         }
@@ -222,13 +229,11 @@ final class ClassRenamer
             return null;
         }
 
-        /** @var string $name */
         $this->alreadyProcessedClasses[] = $name;
 
         $newName = $oldToNewClasses[$name];
         $newClassNamePart = $this->nodeNameResolver->getShortName($newName);
         $newNamespacePart = $this->classNaming->getNamespace($newName);
-
         if ($this->isClassAboutToBeDuplicated($newName)) {
             return null;
         }
@@ -262,21 +267,27 @@ final class ClassRenamer
      * - implements SomeInterface
      * - implements SomeClass
      */
-    private function isClassToInterfaceValidChange(Name $name, string $newName): bool
+    private function isClassToInterfaceValidChange(Name $name, string $newClassName): bool
     {
+        if (! $this->reflectionProvider->hasClass($newClassName)) {
+            return true;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($newClassName);
+
         // ensure new is not with interface
         $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof New_ && interface_exists($newName)) {
+        if ($parentNode instanceof New_ && $classReflection->isInterface()) {
             return false;
         }
 
         if ($parentNode instanceof Class_) {
-            return $this->isValidClassNameChange($name, $newName, $parentNode);
+            return $this->isValidClassNameChange($name, $parentNode, $classReflection);
         }
 
         // prevent to change to import, that already exists
         if ($parentNode instanceof UseUse) {
-            return $this->isValidUseImportChange($newName, $parentNode);
+            return $this->isValidUseImportChange($newClassName, $parentNode);
         }
 
         return true;
@@ -335,7 +346,7 @@ final class ClassRenamer
 
     private function isClassAboutToBeDuplicated(string $newName): bool
     {
-        return ClassExistenceStaticHelper::doesClassLikeExist($newName);
+        return $this->reflectionProvider->hasClass($newName);
     }
 
     private function changeNameToFullyQualifiedName(ClassLike $classLike): void
@@ -350,27 +361,21 @@ final class ClassRenamer
         });
     }
 
-    private function isValidClassNameChange(Name $name, string $newName, Class_ $class): bool
+    private function isValidClassNameChange(Name $name, Class_ $class, ClassReflection $classReflection): bool
     {
-        // is class to interface?
-        if ($class->extends === $name && interface_exists($newName)) {
-            return false;
-        }
+        if ($class->extends === $name) {
+            // is class to interface?
+            if ($classReflection->isInterface()) {
+                return false;
+            }
 
-        // is interface to class?
-        if (in_array($name, $class->implements, true) && class_exists($newName)) {
-            return false;
-        }
-
-        if ($class->extends === $name && class_exists($newName)) {
-            // is final class?
-            $reflectionClass = new ReflectionClass($newName);
-            if ($reflectionClass->isFinal()) {
+            if ($classReflection->isFinalByKeyword()) {
                 return false;
             }
         }
 
-        return true;
+        // is interface to class?
+        return ! (in_array($name, $class->implements, true) && $classReflection->isClass());
     }
 
     private function isValidUseImportChange(string $newName, UseUse $useUse): bool

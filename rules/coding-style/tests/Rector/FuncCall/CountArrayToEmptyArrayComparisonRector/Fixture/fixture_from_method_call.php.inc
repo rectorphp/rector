@@ -2,15 +2,14 @@
 
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class FixtureFromMethodCall
+final class FixtureFromMethodCall
 {
     public function run()
     {
-        $self = new self();
-        count($self->getData()) === 0;
-        0 === count($self->getData());
-        count($self->getData()) > 0;
-        0 < count($self->getData());
+        count($this->getData()) === 0;
+        0 === count($this->getData());
+        count($this->getData()) > 0;
+        0 < count($this->getData());
     }
 
     public function getData(): array
@@ -25,15 +24,14 @@ class FixtureFromMethodCall
 
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
-class FixtureFromMethodCall
+final class FixtureFromMethodCall
 {
     public function run()
     {
-        $self = new self();
-        $self->getData() === [];
-        [] === $self->getData();
-        $self->getData() !== [];
-        [] !== $self->getData();
+        $this->getData() === [];
+        [] === $this->getData();
+        $this->getData() !== [];
+        [] !== $this->getData();
     }
 
     public function getData(): array

@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,6 +19,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SplitStringClassConstantToClassConstFetchRector extends AbstractRector
 {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -78,7 +89,7 @@ CODE_SAMPLE
         // a possible constant reference
         [$possibleClass, $secondPart] = explode('::', $node->value);
 
-        if (! class_exists($possibleClass)) {
+        if (! $this->reflectionProvider->hasClass($possibleClass)) {
             return null;
         }
 

@@ -4,88 +4,63 @@ declare(strict_types=1);
 
 namespace Rector\FamilyTree\NodeAnalyzer;
 
-use PhpParser\Node\Stmt\Class_;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionClass;
-use ReflectionMethod;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\Php\PhpMethodReflection;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 
 final class ClassChildAnalyzer
 {
-    public function hasChildClassConstructor(Class_ $class): bool
-    {
-        $childClasses = $this->getChildClasses($class);
-
-        foreach ($childClasses as $childClass) {
-            if (! class_exists($childClass)) {
-                continue;
-            }
-
-            $reflectionClass = new ReflectionClass($childClass);
-            $constructorReflectionMethod = $reflectionClass->getConstructor();
-            if (! $constructorReflectionMethod instanceof ReflectionMethod) {
-                continue;
-            }
-
-            if ($constructorReflectionMethod->class !== $childClass) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public function hasParentClassConstructor(Class_ $class): bool
-    {
-        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return false;
-        }
-
-        /** @var string[] $classParents */
-        $classParents = (array) class_parents($className);
-
-        foreach ($classParents as $classParent) {
-            $parentReflectionClass = new ReflectionClass($classParent);
-            $constructMethodReflection = $parentReflectionClass->getConstructor();
-            if (! $constructMethodReflection instanceof ReflectionMethod) {
-                continue;
-            }
-
-            if ($constructMethodReflection->class !== $classParent) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
     /**
-     * @return class-string[]
+     * @var FamilyRelationsAnalyzer
      */
-    private function getChildClasses(Class_ $class): array
+    private $familyRelationsAnalyzer;
+
+    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
-        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return [];
-        }
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
+    }
 
-        $childClasses = [];
-        foreach (get_declared_classes() as $declaredClass) {
-            if (! is_a($declaredClass, $className, true)) {
+    public function hasChildClassMethod(ClassReflection $classReflection, string $methodName): bool
+    {
+        $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
+
+        foreach ($childrenClassReflections as $childClassReflection) {
+            if (! $childClassReflection->hasMethod($methodName)) {
                 continue;
             }
 
-            if ($declaredClass === $className) {
+            $constructorReflectionMethod = $childClassReflection->getNativeMethod($methodName);
+            if (! $constructorReflectionMethod instanceof PhpMethodReflection) {
                 continue;
             }
 
-            $childClasses[] = $declaredClass;
+            $methodDeclaringClassReflection = $constructorReflectionMethod->getDeclaringClass();
+            if ($methodDeclaringClassReflection->getName() === $childClassReflection->getName()) {
+                return true;
+            }
         }
 
-        return $childClasses;
+        return false;
+    }
+
+    public function hasParentClassMethod(ClassReflection $classReflection, string $methodName): bool
+    {
+        foreach ($classReflection->getParents() as $parentClassReflections) {
+            if (! $parentClassReflections->hasMethod($methodName)) {
+                continue;
+            }
+
+            $constructMethodReflection = $parentClassReflections->getNativeMethod($methodName);
+            if (! $constructMethodReflection instanceof PhpMethodReflection) {
+                continue;
+            }
+
+            $methodDeclaringMethodClass = $constructMethodReflection->getDeclaringClass();
+            if ($methodDeclaringMethodClass->getName() === $parentClassReflections->getName()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

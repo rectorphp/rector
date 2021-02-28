@@ -280,13 +280,13 @@ final class ClassMethodAssignManipulator
 
     private function findParentForeach(Assign $assign): ?Foreach_
     {
-        /** @var Foreach_|FunctionLike|null $foreach */
-        $foreach = $this->betterNodeFinder->findFirstPreviousOfTypes($assign, [Foreach_::class, FunctionLike::class]);
-        if (! $foreach instanceof Foreach_) {
+        /** @var Foreach_|FunctionLike|null $foundNode */
+        $foundNode = $this->betterNodeFinder->findFirstPreviousOfTypes($assign, [Foreach_::class, FunctionLike::class]);
+        if (! $foundNode instanceof Foreach_) {
             return null;
         }
 
-        return $foreach;
+        return $foundNode;
     }
 
     private function isExplicitlyReferenced(Node $node): bool

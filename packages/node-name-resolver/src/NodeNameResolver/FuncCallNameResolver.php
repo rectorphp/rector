@@ -9,11 +9,22 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class FuncCallNameResolver implements NodeNameResolverInterface
 {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
+
     public function getNode(): string
     {
         return FuncCall::class;
@@ -39,7 +50,8 @@ final class FuncCallNameResolver implements NodeNameResolverInterface
         $namespaceName = $functionName->getAttribute(AttributeKey::NAMESPACED_NAME);
         if ($namespaceName instanceof FullyQualified) {
             $functionFqnName = $namespaceName->toString();
-            if (function_exists($functionFqnName)) {
+
+            if ($this->reflectionProvider->hasFunction($namespaceName, null)) {
                 return $functionFqnName;
             }
         }

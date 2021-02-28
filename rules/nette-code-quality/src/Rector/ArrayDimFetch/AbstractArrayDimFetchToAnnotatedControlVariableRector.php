@@ -36,7 +36,7 @@ abstract class AbstractArrayDimFetchToAnnotatedControlVariableRector extends Abs
     /**
      * @var VarAnnotationManipulator
      */
-    protected $varAnnotationManipulator;
+    private $varAnnotationManipulator;
 
     /**
      * @var string[]

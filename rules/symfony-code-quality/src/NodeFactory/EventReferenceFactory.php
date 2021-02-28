@@ -7,6 +7,7 @@ namespace Rector\SymfonyCodeQuality\NodeFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\SymfonyCodeQuality\ValueObject\EventNameToClassAndConstant;
 
@@ -17,9 +18,15 @@ final class EventReferenceFactory
      */
     private $nodeFactory;
 
-    public function __construct(NodeFactory $nodeFactory)
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(NodeFactory $nodeFactory, ReflectionProvider $reflectionProvider)
     {
         $this->nodeFactory = $nodeFactory;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -28,7 +35,7 @@ final class EventReferenceFactory
      */
     public function createEventName(string $eventName, array $eventNamesToClassConstants): Node
     {
-        if (class_exists($eventName)) {
+        if ($this->reflectionProvider->hasClass($eventName)) {
             return $this->nodeFactory->createClassConstReference($eventName);
         }
 

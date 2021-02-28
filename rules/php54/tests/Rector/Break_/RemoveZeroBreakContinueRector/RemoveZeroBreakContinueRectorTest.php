@@ -17,7 +17,7 @@ final class RemoveZeroBreakContinueRectorTest extends AbstractRectorTestCase
     public function test(SmartFileInfo $fileInfo): void
     {
         // to prevent loading PHP 5.4+ invalid code
-        $this->doTestFileInfoWithoutAutoload($fileInfo);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator

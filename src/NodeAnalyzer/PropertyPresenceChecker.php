@@ -6,10 +6,9 @@ namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
-use ReflectionClass;
 use ReflectionProperty;
 
 final class PropertyPresenceChecker
@@ -24,12 +23,19 @@ final class PropertyPresenceChecker
      */
     private $nodeNameResolver;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         PromotedPropertyResolver $promotedPropertyResolver,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -42,7 +48,7 @@ final class PropertyPresenceChecker
             return false;
         }
 
-        if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return false;
         }
 
@@ -76,17 +82,20 @@ final class PropertyPresenceChecker
      */
     private function getParentClassPublicAndProtectedPropertyReflections(string $className): array
     {
-        /** @var string[] $parentClassNames */
-        $parentClassNames = (array) class_parents($className);
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return [];
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
 
         $propertyReflections = [];
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            $nativeReflectionClass = $parentClassReflection->getNativeReflection();
 
-        foreach ($parentClassNames as $parentClassName) {
-            $parentClassReflection = new ReflectionClass($parentClassName);
-
-            $currentPropertyReflections = $parentClassReflection->getProperties(
+            $currentPropertyReflections = $nativeReflectionClass->getProperties(
                 ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED
             );
+
             $propertyReflections = array_merge($propertyReflections, $currentPropertyReflections);
         }
 

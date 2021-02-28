@@ -8,8 +8,8 @@ use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchR
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
-use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector;
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Rector\Set\ValueObject\SetList;
@@ -74,8 +74,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SKIP, [
         StringClassNameToClassConstantRector::class,
         SplitStringClassConstantToClassConstFetchRector::class,
-        // false positives on constants used in rector.php
-        RemoveUnusedClassConstantRector::class,
+
+        PrivatizeLocalPropertyToPrivatePropertyRector::class => [
+            __DIR__ . '/src/Rector/AbstractTemporaryRector.php',
+        ],
 
         // test paths
         '*/Fixture/*',

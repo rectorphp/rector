@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use Rector\CodingStyle\ValueObject\ObjectMagicMethods;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
@@ -83,7 +82,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isNames($node, ObjectMagicMethods::METHOD_NAMES)) {
+        if ($node instanceof ClassMethod && $node->isMagic()) {
             return null;
         }
 

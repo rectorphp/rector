@@ -92,12 +92,12 @@ final class UseAddingPostRector extends NodeVisitorAbstract implements PostRecto
         $this->useNodesToAddCollector->clear($smartFileInfo);
 
         // A. has namespace? add under it
-        $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
-        if ($namespace instanceof Namespace_) {
+        $foundNode = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
+        if ($foundNode instanceof Namespace_) {
             // first clean
-            $this->useImportsRemover->removeImportsFromNamespace($namespace, $removedShortUses);
+            $this->useImportsRemover->removeImportsFromNamespace($foundNode, $removedShortUses);
             // then add, to prevent adding + removing false positive of same short use
-            $this->useImportsAdder->addImportsToNamespace($namespace, $useImportTypes, $functionUseImportTypes);
+            $this->useImportsAdder->addImportsToNamespace($foundNode, $useImportTypes, $functionUseImportTypes);
 
             return $nodes;
         }

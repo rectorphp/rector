@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -19,6 +20,16 @@ final class ClassAnnotationMatcher
      * @var array<string, string>
      */
     private $fullyQualifiedNameByHash = [];
+
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
 
     public function resolveTagFullyQualifiedName(string $tag, Node $node): string
     {
@@ -48,7 +59,7 @@ final class ClassAnnotationMatcher
             $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
             if ($namespace !== null) {
                 $namespacedTag = $namespace . '\\' . $tag;
-                if (class_exists($namespacedTag)) {
+                if ($this->reflectionProvider->hasClass($namespacedTag)) {
                     return $namespacedTag;
                 }
             }

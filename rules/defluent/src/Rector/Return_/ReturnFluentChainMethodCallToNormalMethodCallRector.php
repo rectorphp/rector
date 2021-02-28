@@ -51,25 +51,24 @@ final class ReturnFluentChainMethodCallToNormalMethodCallRector extends Abstract
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition(
-            'Turns fluent interface calls to classic ones.',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns fluent interface calls to classic ones.', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
 $someClass = new SomeClass();
+
 return $someClass->someFunction()
-            ->otherFunction();
+        ->otherFunction();
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+                ,
+                <<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 $someClass->someFunction();
 $someClass->otherFunction();
+
 return $someClass;
 CODE_SAMPLE
-                ),
-
-            ]);
+            ),
+        ]);
     }
 
     /**

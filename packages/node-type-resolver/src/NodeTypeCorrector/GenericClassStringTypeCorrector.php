@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\NodeTypeCorrector;
 
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
-use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 
 final class GenericClassStringTypeCorrector
 {
     /**
-     * @var ClassLikeExistenceChecker
+     * @var ReflectionProvider
      */
-    private $classLikeExistenceChecker;
+    private $reflectionProvider;
 
-    public function __construct(ClassLikeExistenceChecker $classLikeExistenceChecker)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
-        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function correct(Type $mainType): Type
@@ -31,7 +31,7 @@ final class GenericClassStringTypeCorrector
                 return $traverse($type);
             }
 
-            if (! $this->classLikeExistenceChecker->doesClassLikeExist($type->getValue())) {
+            if (! $this->reflectionProvider->hasClass($type->getValue())) {
                 return $traverse($type);
             }
 

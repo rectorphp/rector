@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
@@ -32,9 +33,17 @@ final class ArrayThisCallToThisMethodCallRector extends AbstractRector
      */
     private $arrayCallableMethodReferenceAnalyzer;
 
-    public function __construct(ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer)
-    {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(
+        ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
+        ReflectionProvider $reflectionProvider
+    ) {
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -94,6 +103,7 @@ CODE_SAMPLE
         if (! $arrayCallable instanceof ArrayCallable) {
             return null;
         }
+
         if ($this->isAssignedToNetteMagicOnProperty($node)) {
             return null;
         }
@@ -107,12 +117,18 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $arrayCallable->isExistingMethod()) {
+        if (! $this->reflectionProvider->hasClass($arrayCallable->getClass())) {
             return null;
         }
 
-        $reflectionMethod = $arrayCallable->getReflectionMethod();
+        $classReflection = $this->reflectionProvider->getClass($arrayCallable->getClass());
+        if (! $classReflection->hasMethod($arrayCallable->getMethod())) {
+            return null;
+        }
 
+        $nativeReflectionClass = $classReflection->getNativeReflection();
+
+        $reflectionMethod = $nativeReflectionClass->getMethod($arrayCallable->getMethod());
         $this->privatizeClassMethod($reflectionMethod);
 
         if ($reflectionMethod->getNumberOfParameters() > 0) {

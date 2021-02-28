@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
-use Rector\CodingStyle\ValueObject\ObjectMagicMethods;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -83,15 +82,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isOpenSourceProjectType()) {
-            return null;
-        }
-
-        if (! $node->isPublic()) {
-            return null;
-        }
-
-        if ($this->isNames($node, ObjectMagicMethods::METHOD_NAMES)) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -113,5 +104,26 @@ CODE_SAMPLE
 
         $this->removeNode($node);
         return $node;
+    }
+
+    private function shouldSkip(ClassMethod $classMethod): bool
+    {
+        if ($this->isOpenSourceProjectType()) {
+            return true;
+        }
+
+        if (! $classMethod->isPublic()) {
+            return true;
+        }
+
+        if ($classMethod->isMagic()) {
+            return true;
+        }
+
+        if ($this->isNames($classMethod, ['test'])) {
+            return true;
+        }
+
+        return false;
     }
 }

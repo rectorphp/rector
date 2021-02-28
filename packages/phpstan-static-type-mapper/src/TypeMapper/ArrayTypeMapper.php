@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
@@ -27,7 +28,6 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\TypeDeclaration\TypeNormalizer;
-use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 
 /**
  * @see \Rector\PHPStanStaticTypeMapper\Tests\TypeMapper\ArrayTypeMapperTest
@@ -55,23 +55,24 @@ final class ArrayTypeMapper implements TypeMapperInterface
     private $unionTypeCommonTypeNarrower;
 
     /**
-     * @var ClassLikeExistenceChecker
+     * @var ReflectionProvider
      */
-    private $classLikeExistenceChecker;
+    private $reflectionProvider;
 
     /**
+     * To avoid circular dependency
      * @required
      */
     public function autowireArrayTypeMapper(
         PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
         TypeNormalizer $typeNormalizer,
         UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
-        ClassLikeExistenceChecker $classLikeExistenceChecker
+        ReflectionProvider $reflectionProvider
     ): void {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->typeNormalizer = $typeNormalizer;
         $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
-        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getNodeClass(): string
@@ -254,9 +255,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
         GenericClassStringType $genericClassStringType
     ): AttributeAwareNodeInterface {
         $genericType = $genericClassStringType->getGenericType();
-        if ($genericType instanceof ObjectType && ! $this->classLikeExistenceChecker->doesClassLikeExist(
-            $genericType->getClassName()
-        )) {
+        if ($genericType instanceof ObjectType && ! $this->reflectionProvider->hasClass($genericType->getClassName())) {
             return new AttributeAwareIdentifierTypeNode($genericType->getClassName());
         }
 

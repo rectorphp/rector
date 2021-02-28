@@ -144,11 +144,11 @@ CODE_SAMPLE
             return $this->resolveString($isNegated, $expr);
         }
 
-        if ($this->isStaticType($expr, IntegerType::class)) {
+        if ($this->nodeTypeResolver->isStaticType($expr, IntegerType::class)) {
             return $this->resolveInteger($isNegated, $expr);
         }
 
-        if ($this->isStaticType($expr, FloatType::class)) {
+        if ($this->nodeTypeResolver->isStaticType($expr, FloatType::class)) {
             return $this->resolveFloat($isNegated, $expr);
         }
 

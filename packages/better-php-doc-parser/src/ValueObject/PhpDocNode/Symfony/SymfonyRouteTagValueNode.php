@@ -9,7 +9,6 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
@@ -19,7 +18,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     /**
      * @var string
      */
-    public const CLASS_NAME = Route::class;
+    public const CLASS_NAME = 'Symfony\Component\Routing\Annotation\Route';
 
     /**
      * @var string

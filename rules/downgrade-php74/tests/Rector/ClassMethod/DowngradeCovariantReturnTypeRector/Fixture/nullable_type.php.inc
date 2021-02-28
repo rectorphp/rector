@@ -34,9 +34,6 @@ class NullableA
 
 class NullableB extends NullableA
 {
-    /**
-     * @return \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\NullableChildType|null
-     */
     public function covariantReturnTypes(): ?\Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\NullableParentType
     { /* … */ }
 }

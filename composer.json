@@ -37,7 +37,7 @@
         "nette/utils": "^3.2",
         "nikic/php-parser": "^4.10.4",
         "phpstan/phpdoc-parser": "^0.4.9",
-        "phpstan/phpstan": "^0.12.76",
+        "phpstan/phpstan": "^0.12.79",
         "phpstan/phpstan-phpunit": "^0.12.17",
         "psr/simple-cache": "^1.0",
         "sebastian/diff": "^4.0.4",
@@ -186,12 +186,11 @@
             "rules/autodiscovery/tests/Rector/FileNode/MoveServicesBySuffixToDirectoryRector/Expected",
             "rules/cakephp/tests/Rector/FileWithoutNamespace/ImplicitShortClassNameUseStatementRector/Source",
             "rules/cakephp/tests/Rector/Namespace_/AppUsesStaticCallToUseStatementRector/Source",
-            "rules/psr4/tests/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector/Source",
             "rules/renaming/tests/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Source",
             "rules/symfony4/tests/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source"
         ],
         "files": [
-            "rules/type-declaration/tests/Rector/ClassMethod/ReturnTypeFromStrictTypedCallRector/Source/external_bool_function.php",
+            "vendor/nette/forms/src/Forms/Controls/SubmitButton.php",
             "rules/restoration/tests/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/AnotherClass.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Foo.php",

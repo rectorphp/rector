@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
@@ -86,18 +87,25 @@ final class PropertyNaming
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         TypeUnwrapper $typeUnwrapper,
         RectorNamingInflector $rectorNamingInflector,
         BetterNodeFinder $betterNodeFinder,
         NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->typeUnwrapper = $typeUnwrapper;
         $this->rectorNamingInflector = $rectorNamingInflector;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getExpectedNameFromMethodName(string $methodName): ?ExpectedName
@@ -278,7 +286,7 @@ final class PropertyNaming
     private function removeInterfaceSuffixPrefix(string $className, string $shortName): string
     {
         // remove interface prefix/suffix
-        if (! interface_exists($className)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return $shortName;
         }
 

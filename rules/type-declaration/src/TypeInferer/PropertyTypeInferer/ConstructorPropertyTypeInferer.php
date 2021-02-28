@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
@@ -34,9 +35,17 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
      */
     private $classMethodPropertyFetchManipulator;
 
-    public function __construct(ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator)
-    {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(
+        ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator,
+        ReflectionProvider $reflectionProvider
+    ) {
         $this->classMethodPropertyFetchManipulator = $classMethodPropertyFetchManipulator;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function inferProperty(Property $property): Type
@@ -180,7 +189,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         if (! Strings::endsWith($fullyQualifiedName, '\\' . $originalName->toString())) {
             $className = $originalName->toString();
 
-            if (class_exists($className)) {
+            if ($this->reflectionProvider->hasClass($className)) {
                 return new FullyQualifiedObjectType($className);
             }
 

@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -81,18 +79,26 @@ CODE_SAMPLE
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        /** @var Class_|Interface_|Trait_|null $classLike */
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return true;
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
             return true;
         }
 
         // unreliable to detect trait, interface doesn't make sense
-        if (StaticInstanceOf::isOneOf($classLike, [Trait_::class, Interface_::class])) {
+        if ($classReflection->isTrait()) {
             return true;
         }
 
-        if ($this->classNodeAnalyzer->isAnonymousClass($classLike)) {
+        if ($classReflection->isInterface()) {
+            return true;
+        }
+
+        if ($classReflection->isAnonymous()) {
             return true;
         }
 
@@ -102,6 +108,6 @@ CODE_SAMPLE
         }
 
         // skip magic methods - @see https://www.php.net/manual/en/language.oop5.magic.php
-        return $this->isName($classMethod, '__*');
+        return $classMethod->isMagic();
     }
 }

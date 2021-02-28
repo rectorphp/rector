@@ -11,7 +11,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassLike;
-use PHPStan\Type\TypeWithClassName;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
@@ -47,11 +48,6 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
     private $breakingVariableRenameGuard;
 
     /**
-     * @var FamilyRelationsAnalyzer
-     */
-    private $familyRelationsAnalyzer;
-
-    /**
      * @var VariableAndCallAssignMatcher
      */
     private $variableAndCallAssignMatcher;
@@ -71,24 +67,36 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
      */
     private $typeUnwrapper;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    /**
+     * @var FamilyRelationsAnalyzer
+     */
+    private $familyRelationsAnalyzer;
+
     public function __construct(
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
         ExpectedNameResolver $expectedNameResolver,
-        FamilyRelationsAnalyzer $familyRelationsAnalyzer,
         NamingConventionAnalyzer $namingConventionAnalyzer,
         VarTagValueNodeRenamer $varTagValueNodeRenamer,
         VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
         VariableRenamer $variableRenamer,
-        TypeUnwrapper $typeUnwrapper
+        TypeUnwrapper $typeUnwrapper,
+        ReflectionProvider $reflectionProvider,
+        FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->variableRenamer = $variableRenamer;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
-        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->variableAndCallAssignMatcher = $variableAndCallAssignMatcher;
         $this->namingConventionAnalyzer = $namingConventionAnalyzer;
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
         $this->typeUnwrapper = $typeUnwrapper;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -174,6 +182,7 @@ CODE_SAMPLE
     private function isMultipleCall(Node $callNode): bool
     {
         $parentNode = $callNode->getAttribute(AttributeKey::PARENT_NODE);
+
         while ($parentNode) {
             $usedNodes = $this->betterNodeFinder->find($parentNode, function (Node $node) use ($callNode): bool {
                 if (get_class($callNode) !== get_class($node)) {
@@ -254,7 +263,7 @@ CODE_SAMPLE
         $callStaticType = $this->getStaticType($expr);
         $callStaticType = $this->typeUnwrapper->unwrapNullableType($callStaticType);
 
-        if (! $callStaticType instanceof TypeWithClassName) {
+        if (! $callStaticType instanceof ObjectType) {
             return false;
         }
 
@@ -262,6 +271,13 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->familyRelationsAnalyzer->isParentClass($callStaticType->getClassName());
+        if (! $this->reflectionProvider->hasClass($callStaticType->getClassName())) {
+            return false;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($callStaticType->getClassName());
+        $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
+
+        return $childrenClassReflections !== [];
     }
 }

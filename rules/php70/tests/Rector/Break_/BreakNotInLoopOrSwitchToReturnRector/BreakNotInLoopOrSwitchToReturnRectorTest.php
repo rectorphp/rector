@@ -16,7 +16,7 @@ final class BreakNotInLoopOrSwitchToReturnRectorTest extends AbstractRectorTestC
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        $this->doTestFileInfoWithoutAutoload($fileInfo);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator

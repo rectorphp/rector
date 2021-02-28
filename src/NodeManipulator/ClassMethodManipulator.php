@@ -11,6 +11,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -109,29 +111,28 @@ final class ClassMethodManipulator
     public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod, ?string $methodName = null): bool
     {
         $methodName = $methodName ?? $this->nodeNameResolver->getName($classMethod->name);
-
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if (! is_string($class)) {
+        if ($methodName === null) {
             return false;
         }
 
-        if (! class_exists($class)) {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
             return false;
         }
 
-        if (! is_string($methodName)) {
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
             return false;
         }
 
-        if ($this->isMethodInParent($class, $methodName)) {
-            return true;
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if ($parentClassReflection->hasMethod($methodName)) {
+                return true;
+            }
         }
 
-        $implementedInterfaces = (array) class_implements($class);
-
-        foreach ($implementedInterfaces as $implementedInterface) {
-            /** @var string $implementedInterface */
-            if (method_exists($implementedInterface, $methodName)) {
+        foreach ($classReflection->getInterfaces() as $interfaceReflection) {
+            if ($interfaceReflection->hasMethod($methodName)) {
                 return true;
             }
         }
@@ -156,7 +157,7 @@ final class ClassMethodManipulator
     /**
      * @param string[] $possibleNames
      */
-    public function addMethodParameterIfMissing(Node $node, string $type, array $possibleNames): string
+    public function addMethodParameterIfMissing(Node $node, ObjectType $objectType, array $possibleNames): string
     {
         $classMethodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
         if (! $classMethodNode instanceof ClassMethod) {
@@ -165,7 +166,7 @@ final class ClassMethodManipulator
         }
 
         foreach ($classMethodNode->params as $paramNode) {
-            if (! $this->nodeTypeResolver->isObjectType($paramNode, new ObjectType($type))) {
+            if (! $this->nodeTypeResolver->isObjectType($paramNode, $objectType)) {
                 continue;
             }
 
@@ -178,7 +179,9 @@ final class ClassMethodManipulator
         }
 
         $paramName = $this->resolveName($classMethodNode, $possibleNames);
-        $classMethodNode->params[] = new Param(new Variable($paramName), null, new FullyQualified($type));
+        $classMethodNode->params[] = new Param(new Variable($paramName), null, new FullyQualified(
+            $objectType->getClassName()
+        ));
 
         return $paramName;
     }
@@ -188,18 +191,6 @@ final class ClassMethodManipulator
         foreach ($classMethod->params as $param) {
             /** @var Param $param */
             if ($param->flags !== 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function isMethodInParent(string $class, string $method): bool
-    {
-        foreach ((array) class_parents($class) as $parentClass) {
-            /** @var string $parentClass */
-            if (method_exists($parentClass, $method)) {
                 return true;
             }
         }

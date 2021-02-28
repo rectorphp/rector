@@ -4,43 +4,46 @@ declare(strict_types=1);
 
 namespace Rector\FamilyTree\Reflection;
 
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+
 final class FamilyRelationsAnalyzer
 {
     /**
-     * @return class-string[]
+     * @var ReflectionProvider
      */
-    public function getChildrenOfClass(string $parentClass): array
+    private $reflectionProvider;
+
+    /**
+     * @var PrivatesAccessor
+     */
+    private $privatesAccessor;
+
+    public function __construct(ReflectionProvider $reflectionProvider, PrivatesAccessor $privatesAccessor)
     {
-        $childrenClasses = [];
-        foreach (get_declared_classes() as $declaredClass) {
-            if ($declaredClass === $parentClass) {
-                continue;
-            }
-
-            if (! is_a($declaredClass, $parentClass, true)) {
-                continue;
-            }
-
-            $childrenClasses[] = $declaredClass;
-        }
-
-        return $childrenClasses;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->privatesAccessor = $privatesAccessor;
     }
 
-    public function isParentClass(string $class): bool
+    /**
+     * @return ClassReflection[]
+     */
+    public function getChildrenOfClassReflection(ClassReflection $desiredClassReflection): array
     {
-        foreach (get_declared_classes() as $declaredClass) {
-            if ($declaredClass === $class) {
+        /** @var ClassReflection[] $classReflections */
+        $classReflections = $this->privatesAccessor->getPrivateProperty($this->reflectionProvider, 'classes');
+
+        $childrenClassReflections = [];
+
+        foreach ($classReflections as $classReflection) {
+            if (! $classReflection->isSubclassOf($desiredClassReflection->getName())) {
                 continue;
             }
 
-            if (! is_a($declaredClass, $class, true)) {
-                continue;
-            }
-
-            return true;
+            $childrenClassReflections[] = $classReflection;
         }
 
-        return false;
+        return $childrenClassReflections;
     }
 }

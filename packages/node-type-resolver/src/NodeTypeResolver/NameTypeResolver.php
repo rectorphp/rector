@@ -7,6 +7,7 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -20,7 +21,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NameTypeResolver implements NodeTypeResolverInterface
 {
     /**
-     * @return string[]
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
+
+    /**
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses(): array
     {
@@ -45,22 +56,31 @@ final class NameTypeResolver implements NodeTypeResolverInterface
      */
     private function resolveParent(Name $name): Type
     {
-        /** @var string|null $parentClassName */
-        $parentClassName = $name->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-
-        // missing parent class, probably unused parent:: call
-        if ($parentClassName === null) {
+        $className = $name->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
             return new MixedType();
         }
 
-        $type = new ObjectType($parentClassName);
-
-        $parentParentClass = get_parent_class($parentClassName);
-        if ($parentParentClass) {
-            $type = new UnionType([$type, new ObjectType($parentParentClass)]);
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return new MixedType();
         }
 
-        return $type;
+        $classReflection = $this->reflectionProvider->getClass($className);
+
+        $parentClassObjectTypes = [];
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            $parentClassObjectTypes[] = new ObjectType($parentClassReflection->getName());
+        }
+
+        if ($parentClassObjectTypes === []) {
+            return new MixedType();
+        }
+
+        if (count($parentClassObjectTypes) === 1) {
+            return $parentClassObjectTypes[0];
+        }
+
+        return new UnionType($parentClassObjectTypes);
     }
 
     private function resolveFullyQualifiedName(Name $name): string

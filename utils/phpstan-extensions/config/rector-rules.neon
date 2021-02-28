@@ -58,6 +58,10 @@ services:
                     - 'getDocComment'
                     - 'getComments'
                     - 'setDocComment'
+                # relies on internal broker service that breaks sometimes; use RefletionProvider service instead
+                PHPStan\Type\ObjectType:
+                    - 'getClassReflection'
+                    - 'getAncestors'
                 # use NodeTypeResolver instead
 #                PHPStan\Analyser\Scope:
 #                    - 'getType'
@@ -180,3 +184,34 @@ services:
                 PhpParser\Builder\Param: Rector\Core\PhpParser\Builder\ParamBuilder
                 PhpParser\Builder\Property: Rector\Core\PhpParser\Builder\PropertyBuilder
                 PhpParser\Builder\TraitUse: Rector\Core\PhpParser\Builder\TraitUseBuilder
+                ReflectionClass: PHPStan\Reflection\ClassReflection
+                ReflectionFunction: PHPStan\Reflection\FunctionReflection
+
+    -
+        class: Symplify\PHPStanRules\Rules\ForbiddenFuncCallRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            forbiddenFunctions:
+                - 'd'
+                - 'dd'
+                - 'dump'
+                - 'var_dump'
+                - 'curl_*'
+                - 'extract'
+                - 'compact'
+                - 'spl_autoload_register'
+                - 'spl_autoload_unregister'
+                - array_walk
+                # creates messy nested logic
+                - array_filter
+                # there are handled in ReflectionProvider->has*()
+                - 'class_exists'
+                - 'interface_exists'
+                - 'method_exists'
+                - 'property_exists'
+                - 'function_exists'
+                - class_parents
+                - class_implements
+                - get_parent_class
+                - get_declared_classes
+#                - is_a

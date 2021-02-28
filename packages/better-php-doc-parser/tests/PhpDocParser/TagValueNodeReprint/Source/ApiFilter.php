@@ -14,8 +14,5 @@ class ApiFilter
 {
     public function __construct($options = [])
     {
-        if(! class_exists($options['value'])) {
-            throw new ShouldNotHappenException();
-        }
     }
 }

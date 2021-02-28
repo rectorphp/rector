@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -20,8 +21,6 @@ use Rector\Core\NodeAnalyzer\ConstFetchAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use ReflectionClass;
-use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -50,20 +49,20 @@ final class ValueResolver
     private $constFetchAnalyzer;
 
     /**
-     * @var ClassLikeExistenceChecker
+     * @var ReflectionProvider
      */
-    private $classLikeExistenceChecker;
+    private $reflectionProvider;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         ConstFetchAnalyzer $constFetchAnalyzer,
-        ClassLikeExistenceChecker $classLikeExistenceChecker
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->constFetchAnalyzer = $constFetchAnalyzer;
-        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -292,11 +291,12 @@ final class ValueResolver
             return constant($classConstantReference);
         }
 
-        if ($this->classLikeExistenceChecker->doesClassLikeExist($class)) {
-            $reflectionClass = new ReflectionClass($class);
-            $reflectionClassHasConstant = $reflectionClass->hasConstant($constant);
-            if ($reflectionClassHasConstant) {
-                return $reflectionClass->getConstant($constant);
+        if ($this->reflectionProvider->hasClass($class)) {
+            $classReflection = $this->reflectionProvider->getClass($class);
+
+            if ($classReflection->hasConstant($constant)) {
+                $constantReflection = $classReflection->getConstant($constant);
+                return $constantReflection->getValue();
             }
         }
 

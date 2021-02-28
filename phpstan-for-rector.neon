@@ -2,6 +2,9 @@
 parameters:
     inferPrivatePropertyTypeFromConstructor: true
 
+    scanDirectories:
+        - stubs
+
 includes:
     - utils/phpstan-extensions/config/phpstan-extensions.neon
     - vendor/phpstan/phpstan-nette/extension.neon

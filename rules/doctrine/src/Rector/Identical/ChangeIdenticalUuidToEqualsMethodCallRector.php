@@ -8,8 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PHPStan\Type\ObjectType;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\Php71\ValueObject\TwoNodeMatch;
@@ -86,7 +84,7 @@ CODE_SAMPLE
         $entityMethodCall = $twoNodeMatch->getFirstExpr();
         $comparedVariable = $twoNodeMatch->getSecondExpr();
 
-        $staticCall = $this->nodeFactory->createStaticCall(Uuid::class, 'fromString', [$comparedVariable]);
+        $staticCall = $this->nodeFactory->createStaticCall('Ramsey\Uuid\Uuid', 'fromString', [$comparedVariable]);
 
         return $this->nodeFactory->createMethodCall($entityMethodCall, 'equals', [$staticCall]);
     }
@@ -119,6 +117,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $comparedValueObjectType->getClassName() === UuidInterface::class;
+        return $comparedValueObjectType->getClassName() === 'Ramsey\Uuid\UuidInterface';
     }
 }

@@ -11,7 +11,9 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory;
 use Rector\Core\Rector\AbstractRector;
@@ -20,7 +22,6 @@ use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NetteToSymfony\Routing\ExplicitRouteAnnotationDecorator;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
-use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -37,14 +38,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      * @see https://regex101.com/r/qVlXk2/2
      */
     private const ACTION_RENDER_NAME_MATCHING_REGEX = '#^(action|render)(?<short_action_name>.*?$)#sm';
-
-    /**
-     * Package "nette/application" is required for DEV, might not exist for PROD.
-     * So access the class throgh the string
-     *
-     * @var string
-     */
-    private const ROUTE_LIST_CLASS = 'Nette\Application\Routers\RouteList';
 
     /**
      * @var RouteInfoFactory
@@ -71,21 +64,35 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      */
     private $routerObjectTypes = [];
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    /**
+     * @var ObjectType
+     */
+    private $routeListObjectType;
+
     public function __construct(
         ExplicitRouteAnnotationDecorator $explicitRouteAnnotationDecorator,
         ReturnTypeInferer $returnTypeInferer,
         RouteInfoFactory $routeInfoFactory,
-        SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory
+        SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->routeInfoFactory = $routeInfoFactory;
         $this->returnTypeInferer = $returnTypeInferer;
         $this->explicitRouteAnnotationDecorator = $explicitRouteAnnotationDecorator;
         $this->symfonyRouteTagValueNodeFactory = $symfonyRouteTagValueNodeFactory;
+        $this->reflectionProvider = $reflectionProvider;
 
         $this->routerObjectTypes = [
             new ObjectType('Nette\Application\IRouter'),
             new ObjectType('Nette\Routing\Router'),
         ];
+
+        $this->routeListObjectType = new ObjectType('Nette\Application\Routers\RouteList');
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -159,16 +166,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->stmts === null) {
-            return null;
-        }
         if ($node->stmts === []) {
             return null;
         }
-        $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
 
-        $routeListObjectType = new ObjectType(self::ROUTE_LIST_CLASS);
-        if (! $inferedReturnType->isSuperTypeOf($routeListObjectType)->yes()) {
+        $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
+        if (! $inferedReturnType->isSuperTypeOf($this->routeListObjectType)->yes()) {
             return null;
         }
 
@@ -244,7 +247,7 @@ CODE_SAMPLE
         // collect annotations and target controllers
         foreach ($assignNodes as $assignNode) {
             $routeNameToControllerMethod = $this->routeInfoFactory->createFromNode($assignNode->expr);
-            if (! $routeNameToControllerMethod instanceof \Rector\NetteToSymfony\ValueObject\RouteInfo) {
+            if (! $routeNameToControllerMethod instanceof RouteInfo) {
                 continue;
             }
 
@@ -307,17 +310,25 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! method_exists($className, $methodName)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return false;
         }
 
-        $reflectionMethod = new ReflectionMethod($className, $methodName);
-        if ($reflectionMethod->getReturnType() === null) {
+        $classReflection = $this->reflectionProvider->getClass($className);
+        if (! $classReflection->hasMethod($methodName)) {
             return false;
         }
 
-        $staticCallReturnType = (string) $reflectionMethod->getReturnType();
-        return is_a($staticCallReturnType, 'Nette\Application\IRouter', true);
+        $reflectionMethod = $classReflection->getNativeMethod($methodName);
+        $parametersAcceptor = $reflectionMethod->getVariants()[0];
+
+        $returnType = $parametersAcceptor->getReturnType();
+
+        if ($returnType instanceof TypeWithClassName) {
+            return is_a($returnType->getClassName(), 'Nette\Application\IRouter', true);
+        }
+
+        return false;
     }
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool

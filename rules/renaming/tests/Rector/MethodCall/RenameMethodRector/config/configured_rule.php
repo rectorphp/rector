@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
 use Rector\Renaming\ValueObject\MethodCallRename;

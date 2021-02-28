@@ -100,7 +100,7 @@ CODE_SAMPLE
         }
 
         // type analyzer
-        if ($this->isStaticType($firstArgument, StringType::class)) {
+        if ($this->nodeTypeResolver->isStaticType($firstArgument, StringType::class)) {
             $this->processStringType($node, $argumentPosition, $firstArgument);
         }
 

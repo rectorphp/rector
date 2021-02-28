@@ -7,6 +7,7 @@ namespace Rector\PostRector\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\NodeVisitorAbstract;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\CodingStyle\Node\NameImporter;
@@ -48,13 +49,19 @@ final class NameImportingPostRector extends NodeVisitorAbstract implements PostR
      */
     private $nodeNameResolver;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         ParameterProvider $parameterProvider,
         NameImporter $nameImporter,
         DocBlockNameImporter $docBlockNameImporter,
         ClassNameImportSkipper $classNameImportSkipper,
         PhpDocInfoFactory $phpDocInfoFactory,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->parameterProvider = $parameterProvider;
         $this->nameImporter = $nameImporter;
@@ -62,6 +69,7 @@ final class NameImportingPostRector extends NodeVisitorAbstract implements PostR
         $this->classNameImportSkipper = $classNameImportSkipper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function enterNode(Node $node): ?Node
@@ -102,15 +110,19 @@ final class NameImportingPostRector extends NodeVisitorAbstract implements PostR
         if (! is_callable($importName)) {
             return $this->nameImporter->importName($name);
         }
+
         if (substr_count($name->toCodeString(), '\\') <= 1) {
             return $this->nameImporter->importName($name);
         }
+
         if (! $this->classNameImportSkipper->isFoundInUse($name)) {
             return $this->nameImporter->importName($name);
         }
-        if (function_exists($name->getLast())) {
+
+        if ($this->reflectionProvider->hasFunction(new Name($name->getLast()), null)) {
             return $this->nameImporter->importName($name);
         }
+
         return null;
     }
 }

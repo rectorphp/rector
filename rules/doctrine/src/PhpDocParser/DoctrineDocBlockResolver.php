@@ -8,6 +8,8 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDoc\ResolvedPhpDocBlock;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EmbeddableTagValueNode;
@@ -15,9 +17,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagVa
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionClass;
 
 final class DoctrineDocBlockResolver
 {
@@ -37,10 +37,19 @@ final class DoctrineDocBlockResolver
      */
     private $nodeRepository;
 
-    public function __construct(NodeRepository $nodeRepository, PhpDocInfoFactory $phpDocInfoFactory)
-    {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(
+        NodeRepository $nodeRepository,
+        PhpDocInfoFactory $phpDocInfoFactory,
+        ReflectionProvider $reflectionProvider
+    ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeRepository = $nodeRepository;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -105,7 +114,7 @@ final class DoctrineDocBlockResolver
 
     private function isStringClassEntity(string $class): bool
     {
-        if (! ClassExistenceStaticHelper::doesClassLikeExist($class)) {
+        if (! $this->reflectionProvider->hasClass($class)) {
             return false;
         }
 
@@ -114,11 +123,16 @@ final class DoctrineDocBlockResolver
             return $this->isDoctrineEntityClass($classNode);
         }
 
-        $reflectionClass = new ReflectionClass($class);
+        $classReflection = $this->reflectionProvider->getClass($class);
+        $resolvedPhpDocBlock = $classReflection->getResolvedPhpDoc();
+        if (! $resolvedPhpDocBlock instanceof ResolvedPhpDocBlock) {
+            return false;
+        }
 
         // dummy check of 3rd party code without running it
-        $docCommentContent = (string) $reflectionClass->getDocComment();
-
-        return (bool) Strings::match($docCommentContent, self::ORM_ENTITY_EMBEDDABLE_SHORT_ANNOTATION_REGEX);
+        return (bool) Strings::match(
+            $resolvedPhpDocBlock->getPhpDocString(),
+            self::ORM_ENTITY_EMBEDDABLE_SHORT_ANNOTATION_REGEX
+        );
     }
 }

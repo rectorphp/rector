@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionType;
@@ -28,12 +28,22 @@ final class CompleteMissingDependencyInNewRector extends AbstractRector implemen
      * @api
      * @var string
      */
-    public const CLASS_TO_INSTANTIATE_BY_TYPE = '$classToInstantiateByType';
+    public const CLASS_TO_INSTANTIATE_BY_TYPE = 'class_to_instantiate_by_type';
 
     /**
-     * @var string[]
+     * @var array<class-string, class-string>
      */
     private $classToInstantiateByType = [];
+
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -141,13 +151,13 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! class_exists($className)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return null;
         }
 
-        $reflectionClass = new ReflectionClass($className);
-
-        return $reflectionClass->getConstructor();
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $nativeClassReflection = $classReflection->getNativeReflection();
+        return $nativeClassReflection->getConstructor();
     }
 
     private function resolveClassToInstantiateByParameterReflection(ReflectionParameter $reflectionParameter): ?string

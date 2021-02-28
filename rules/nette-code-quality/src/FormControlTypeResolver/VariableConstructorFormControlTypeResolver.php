@@ -7,6 +7,7 @@ namespace Rector\NetteCodeQuality\FormControlTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NetteCodeQuality\Contract\FormControlTypeResolverInterface;
@@ -38,14 +39,21 @@ final class VariableConstructorFormControlTypeResolver implements FormControlTyp
      */
     private $nodeRepository;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         NodeNameResolver $nodeNameResolver,
-        NodeRepository $nodeRepository
+        NodeRepository $nodeRepository,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeRepository = $nodeRepository;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -67,7 +75,9 @@ final class VariableConstructorFormControlTypeResolver implements FormControlTyp
             return [];
         }
 
-        if (! is_a($formType->getClassName(), 'Nette\Application\UI\Form', true)) {
+        $formClassReflection = $this->reflectionProvider->getClass($formType->getClassName());
+
+        if (! $formClassReflection->isSubclassOf('Nette\Application\UI\Form')) {
             return [];
         }
 

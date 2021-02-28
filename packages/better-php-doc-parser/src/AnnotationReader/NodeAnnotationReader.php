@@ -10,11 +10,13 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
+use PHPStan\Reflection\ReflectionProvider;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\DoctrineAnnotationGenerated\PhpDocNode\ConstantReferenceIdentifierRestorer;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
 use Throwable;
@@ -41,14 +43,21 @@ final class NodeAnnotationReader
      */
     private $constantReferenceIdentifierRestorer;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         ConstantReferenceIdentifierRestorer $constantReferenceIdentifierRestorer,
         NodeNameResolver $nodeNameResolver,
-        Reader $reader
+        Reader $reader,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->reader = $reader;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->constantReferenceIdentifierRestorer = $constantReferenceIdentifierRestorer;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function readAnnotation(Node $node, string $annotationClass): ?object
@@ -71,12 +80,13 @@ final class NodeAnnotationReader
     public function readClassAnnotation(Class_ $class, string $annotationClassName): ?object
     {
         $classReflection = $this->createClassReflectionFromNode($class);
+        $nativeClassReflection = $classReflection->getNativeReflection();
 
         try {
             // covers cases like https://github.com/rectorphp/rector/issues/3046
 
             /** @var object[] $classAnnotations */
-            $classAnnotations = $this->reader->getClassAnnotations($classReflection);
+            $classAnnotations = $this->reader->getClassAnnotations($nativeClassReflection);
             return $this->matchNextAnnotation($classAnnotations, $annotationClassName, $class);
         } catch (AnnotationException $annotationException) {
             // unable to load
@@ -86,16 +96,16 @@ final class NodeAnnotationReader
 
     public function readPropertyAnnotation(Property $property, string $annotationClassName): ?object
     {
-        $propertyReflection = $this->createPropertyReflectionFromPropertyNode($property);
-        if (! $propertyReflection instanceof ReflectionProperty) {
-            return null;
+        $reflectionProperty = $this->getNativePropertyReflection($property);
+        if (! $reflectionProperty instanceof ReflectionProperty) {
+            throw new ShouldNotHappenException();
         }
 
         try {
             // covers cases like https://github.com/rectorphp/rector/issues/3046
 
             /** @var object[] $propertyAnnotations */
-            $propertyAnnotations = $this->reader->getPropertyAnnotations($propertyReflection);
+            $propertyAnnotations = $this->reader->getPropertyAnnotations($reflectionProperty);
             return $this->matchNextAnnotation($propertyAnnotations, $annotationClassName, $property);
         } catch (AnnotationException $annotationException) {
             // unable to load
@@ -111,13 +121,14 @@ final class NodeAnnotationReader
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
-        $reflectionMethod = new ReflectionMethod($className, $methodName);
+        $reflectionMethod = $this->resolveNativeClassMethodReflection($className, $methodName);
 
         try {
             // covers cases like https://github.com/rectorphp/rector/issues/3046
 
             /** @var object[] $methodAnnotations */
             $methodAnnotations = $this->reader->getMethodAnnotations($reflectionMethod);
+
             foreach ($methodAnnotations as $methodAnnotation) {
                 if (! is_a($methodAnnotation, $annotationClassName, true)) {
                     continue;
@@ -141,14 +152,13 @@ final class NodeAnnotationReader
         return null;
     }
 
-    private function createClassReflectionFromNode(Class_ $class): ReflectionClass
+    private function createClassReflectionFromNode(Class_ $class): ClassReflection
     {
         /** @var string $className */
         $className = $this->nodeNameResolver->getName($class);
 
         // covers cases like https://github.com/rectorphp/rector/issues/3230#issuecomment-683317288
-
-        return new ReflectionClass($className);
+        return $this->reflectionProvider->getClass($className);
     }
 
     /**
@@ -175,7 +185,7 @@ final class NodeAnnotationReader
         return null;
     }
 
-    private function createPropertyReflectionFromPropertyNode(Property $property): ?ReflectionProperty
+    private function getNativePropertyReflection(Property $property): ?ReflectionProperty
     {
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
@@ -186,16 +196,35 @@ final class NodeAnnotationReader
             // probably fresh node
             return null;
         }
-        if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
+
+        if (! $this->reflectionProvider->hasClass($className)) {
             // probably fresh node
             return null;
         }
 
         try {
-            return new ReflectionProperty($className, $propertyName);
+            $classReflection = $this->reflectionProvider->getClass($className);
+            $scope = $property->getAttribute(AttributeKey::SCOPE);
+
+            $propertyReflection = $classReflection->getProperty($propertyName, $scope);
+            if ($propertyReflection instanceof PhpPropertyReflection) {
+                return $propertyReflection->getNativeReflection();
+            }
         } catch (Throwable $throwable) {
             // in case of PHPUnit property or just-added property
             return null;
         }
+    }
+
+    private function resolveNativeClassMethodReflection(string $className, string $methodName): ReflectionMethod
+    {
+        if (! $this->reflectionProvider->hasClass($className)) {
+            throw new ShouldNotHappenException();
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $reflectionClass = $classReflection->getNativeReflection();
+
+        return $reflectionClass->getMethod($methodName);
     }
 }

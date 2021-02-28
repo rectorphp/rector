@@ -12,6 +12,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
@@ -28,12 +30,19 @@ final class ClassManipulator
      */
     private $nodesToRemoveCollector;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
+        ReflectionProvider $reflectionProvider,
         NodesToRemoveCollector $nodesToRemoveCollector
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -54,25 +63,18 @@ final class ClassManipulator
         return $usedTraits;
     }
 
-    public function hasParentMethodOrInterface(ObjectType $objectType, string $method): bool
+    public function hasParentMethodOrInterface(ObjectType $objectType, string $methodName): bool
     {
-        if (! class_exists($objectType->getClassName())) {
+        if (! $this->reflectionProvider->hasClass($objectType->getClassName())) {
             return false;
         }
 
-        $class = $objectType->getClassName();
+        $classReflection = $this->reflectionProvider->getClass($objectType->getClassName());
 
-        $parentClass = $class;
-        while ($parentClass = get_parent_class($parentClass)) {
-            if (method_exists($parentClass, $method)) {
-                return true;
-            }
-        }
-
-        $implementedInterfaces = (array) class_implements($class);
-        foreach ($implementedInterfaces as $implementedInterface) {
-            /** @var string $implementedInterface */
-            if (method_exists($implementedInterface, $method)) {
+        /** @var ClassReflection[] $parentClassReflections */
+        $parentClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        foreach ($parentClassReflections as $parentClassReflection) {
+            if ($parentClassReflection->hasMethod($methodName)) {
                 return true;
             }
         }
@@ -116,9 +118,9 @@ final class ClassManipulator
         return $this->nodeNameResolver->getNames($class->implements);
     }
 
-    public function hasInterface(Class_ $class, string $desiredInterface): bool
+    public function hasInterface(Class_ $class, ObjectType $interfaceObjectType): bool
     {
-        return $this->nodeNameResolver->isName($class->implements, $desiredInterface);
+        return $this->nodeNameResolver->isName($class->implements, $interfaceObjectType->getClassName());
     }
 
     public function hasTrait(Class_ $class, string $desiredTrait): bool

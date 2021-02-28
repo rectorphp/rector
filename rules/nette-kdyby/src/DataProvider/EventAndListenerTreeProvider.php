@@ -128,8 +128,6 @@ final class EventAndListenerTreeProvider
 
             $dispatchMethodCall = $this->dispatchMethodCallFactory->createFromEventClassName($eventClassName);
 
-            $listeningClassMethodsByClass = $this->getListeningClassMethodsInEventSubscriberByClass($eventClassName);
-
             // getter names by variable name and type
             $getterMethodsBlueprints = $this->resolveGetterMethodBlueprint($eventClassInNamespace);
 
@@ -140,7 +138,7 @@ final class EventAndListenerTreeProvider
                 $eventFileLocation,
                 $eventClassInNamespace,
                 $dispatchMethodCall,
-                $listeningClassMethodsByClass,
+                $this->getListeningClassMethodsInEventSubscriberByClass($eventClassName),
                 $getterMethodsBlueprints
             );
 
@@ -160,7 +158,7 @@ final class EventAndListenerTreeProvider
     }
 
     /**
-     * @return ClassMethod[][]
+     * @return array<class-string, ClassMethod[]>
      */
     private function getListeningClassMethodsInEventSubscriberByClass(string $eventClassName): array
     {

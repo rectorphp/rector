@@ -35,7 +35,7 @@ final class ClassAndInterfaceTypeResolver implements NodeTypeResolverInterface
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses(): array
     {

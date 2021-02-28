@@ -11,12 +11,12 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\StaticAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionClass;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -41,10 +41,19 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
      */
     private $staticAnalyzer;
 
-    public function __construct(ClassMethodManipulator $classMethodManipulator, StaticAnalyzer $staticAnalyzer)
-    {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(
+        ClassMethodManipulator $classMethodManipulator,
+        StaticAnalyzer $staticAnalyzer,
+        ReflectionProvider $reflectionProvider
+    ) {
         $this->classMethodManipulator = $classMethodManipulator;
         $this->staticAnalyzer = $staticAnalyzer;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -172,22 +181,23 @@ CODE_SAMPLE
 
     private function isInstantiable(string $className): bool
     {
-        if (! class_exists($className)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return false;
         }
 
-        $reflectionClass = new ReflectionClass($className);
-        $classConstructorReflection = $reflectionClass->getConstructor();
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $nativeClassReflection = $classReflection->getNativeReflection();
 
-        if (! $classConstructorReflection instanceof ReflectionMethod) {
+        $constructorMethodReflection = $nativeClassReflection->getConstructor();
+        if (! $constructorMethodReflection instanceof ReflectionMethod) {
             return true;
         }
 
-        if (! $classConstructorReflection->isPublic()) {
+        if (! $constructorMethodReflection->isPublic()) {
             return false;
         }
 
         // required parameters in constructor, nothing we can do
-        return ! (bool) $classConstructorReflection->getNumberOfRequiredParameters();
+        return ! (bool) $constructorMethodReflection->getNumberOfRequiredParameters();
     }
 }

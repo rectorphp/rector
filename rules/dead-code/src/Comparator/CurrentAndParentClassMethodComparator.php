@@ -9,12 +9,12 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator;
 use Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeCollector\Reflection\MethodReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -30,11 +30,6 @@ final class CurrentAndParentClassMethodComparator
      * @var NodeComparator
      */
     private $nodeComparator;
-
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
 
     /**
      * @var MethodReflectionProvider
@@ -53,14 +48,12 @@ final class CurrentAndParentClassMethodComparator
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        NodeRepository $nodeRepository,
         MethodReflectionProvider $methodReflectionProvider,
         ParameterDefaultsComparator $parameterDefaultsComparator,
         ParameterTypeComparator $parameterTypeComparator,
         NodeComparator $nodeComparator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeRepository = $nodeRepository;
         $this->methodReflectionProvider = $methodReflectionProvider;
         $this->parameterDefaultsComparator = $parameterDefaultsComparator;
         $this->parameterTypeComparator = $parameterTypeComparator;
@@ -126,46 +119,54 @@ final class CurrentAndParentClassMethodComparator
         ClassMethod $classMethod,
         StaticCall $staticCall
     ): bool {
-        /** @var string $className */
-        $className = $staticCall->getAttribute(AttributeKey::CLASS_NAME);
-
-        $parentClassName = get_parent_class($className);
-        if (! $parentClassName) {
-            throw new ShouldNotHappenException();
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return false;
         }
 
-        /** @var string $methodName */
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
         $methodName = $this->nodeNameResolver->getName($staticCall->name);
+        if ($methodName === null) {
+            return false;
+        }
 
-        $parentClassMethod = $this->nodeRepository->findClassMethod($parentClassName, $methodName);
-        if (! $parentClassMethod instanceof ClassMethod) {
-            return $this->checkOverrideUsingReflection($classMethod, $parentClassName, $methodName);
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if (! $parentClassReflection->hasMethod($methodName)) {
+                continue;
+            }
+
+            $nativeParentClassReflection = $parentClassReflection->getNativeReflection();
+            $nativeParentClassMethodReflection = $nativeParentClassReflection->getMethod($methodName);
+
+            if (! $nativeParentClassMethodReflection->isProtected()) {
+                return $this->checkOverrideUsingReflection($classMethod, $parentClassReflection, $methodName);
+            }
+
+            if (! $nativeParentClassMethodReflection->isPublic()) {
+                return $this->checkOverrideUsingReflection($classMethod, $parentClassReflection, $methodName);
+            }
+
+            return true;
         }
-        if (! $parentClassMethod->isProtected()) {
-            return $this->checkOverrideUsingReflection($classMethod, $parentClassName, $methodName);
-        }
-        if (! $classMethod->isPublic()) {
-            return $this->checkOverrideUsingReflection($classMethod, $parentClassName, $methodName);
-        }
-        return true;
+
+        return false;
     }
 
     private function checkOverrideUsingReflection(
         ClassMethod $classMethod,
-        string $parentClassName,
+        ClassReflection $classReflection,
         string $methodName
     ): bool {
-        // @todo use phpstan reflecoitn
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             throw new ShouldNotHappenException();
         }
 
-        $parentMethodReflection = $this->methodReflectionProvider->provideByClassAndMethodName(
-            $parentClassName,
-            $methodName,
-            $scope
-        );
+        $parentMethodReflection = $classReflection->getMethod($methodName, $scope);
 
         // 3rd party code
         if ($parentMethodReflection !== null) {

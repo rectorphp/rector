@@ -49,7 +49,7 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
     private const SELF = 'self';
 
     /**
-     * @var array<string, string>
+     * @var array<class-string, string>
      */
     private $typeToPreference = [];
 
@@ -79,7 +79,7 @@ CODE_SAMPLE
                 ,
                 [
                     self::TYPE_TO_PREFERENCE => [
-                        '\PHPUnit\Framework\TestCase' => self::PREFER_SELF,
+                        'PHPUnit\Framework\TestCase' => self::PREFER_SELF,
                     ],
                 ]
             ),

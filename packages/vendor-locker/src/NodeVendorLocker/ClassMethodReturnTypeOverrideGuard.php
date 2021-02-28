@@ -6,17 +6,20 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+//use PHPStan\Analyser\Scope;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\NodeVisitor;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -24,10 +27,10 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ClassMethodReturnTypeOverrideGuard
 {
     /**
-     * @var array<string, array<string>>
+     * @var array<class-string, array<string>>
      */
     private const CHAOTIC_CLASS_METHOD_NAMES = [
-        NodeVisitor::class => ['enterNode', 'leaveNode', 'beforeTraverse', 'afterTraverse'],
+        'PhpParser\NodeVisitor' => ['enterNode', 'leaveNode', 'beforeTraverse', 'afterTraverse'],
     ];
 
     /**
@@ -41,9 +44,14 @@ final class ClassMethodReturnTypeOverrideGuard
     private $nodeTypeResolver;
 
     /**
-     * @var NodeRepository
+     * @var ReflectionProvider
      */
-    private $nodeRepository;
+    private $reflectionProvider;
+
+    /**
+     * @var FamilyRelationsAnalyzer
+     */
+    private $familyRelationsAnalyzer;
 
     /**
      * @var BetterNodeFinder
@@ -53,19 +61,21 @@ final class ClassMethodReturnTypeOverrideGuard
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        NodeRepository $nodeRepository,
+        ReflectionProvider $reflectionProvider,
+        FamilyRelationsAnalyzer $familyRelationsAnalyzer,
         BetterNodeFinder $betterNodeFinder
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeRepository = $nodeRepository;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         // 1. skip magic methods
-        if ($this->nodeNameResolver->isName($classMethod->name, '__*')) {
+        if ($classMethod->isMagic()) {
             return true;
         }
 
@@ -74,24 +84,22 @@ final class ClassMethodReturnTypeOverrideGuard
             return true;
         }
 
-        // 3. skip has children and current has no return
-        $class = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
-        $hasChildren = $class instanceof Class_ && $this->nodeRepository->hasClassChildren($class);
-        if (! $hasChildren) {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
             return false;
         }
 
-        $hasReturn = (bool) $this->betterNodeFinder->findFirst(
-            (array) $classMethod->stmts,
-            function (Node $node): bool {
-                if (! $node instanceof Return_) {
-                    return false;
-                }
-                return $node->expr instanceof Expr;
-            }
-        );
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            throw new ShouldNotHappenException();
+        }
 
-        if ($hasReturn) {
+        $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
+        if ($childrenClassReflections === []) {
+            return false;
+        }
+
+        if ($this->hasClassMethodExprReturn($classMethod)) {
             return false;
         }
 
@@ -119,15 +127,27 @@ final class ClassMethodReturnTypeOverrideGuard
             return false;
         }
 
-        /** @var string $methodName */
-        $methodName = $this->nodeNameResolver->getName($classMethod);
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return false;
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
 
         foreach (self::CHAOTIC_CLASS_METHOD_NAMES as $chaoticClass => $chaoticMethodNames) {
-            if (! is_a($className, $chaoticClass, true)) {
+            if (! $this->reflectionProvider->hasClass($chaoticClass)) {
                 continue;
             }
 
-            return in_array($methodName, $chaoticMethodNames, true);
+            $chaoticClassReflection = $this->reflectionProvider->getClass($chaoticClass);
+            if (! $classReflection->isSubclassOf($chaoticClassReflection->getName())) {
+                continue;
+            }
+
+            return $this->nodeNameResolver->isNames($classMethod, $chaoticMethodNames);
         }
 
         return false;
@@ -171,5 +191,16 @@ final class ClassMethodReturnTypeOverrideGuard
         }
 
         return $isMatchingClassTypes;
+    }
+
+    private function hasClassMethodExprReturn(ClassMethod $classMethod): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($classMethod->getStmts(), function (Node $node): bool {
+            if (! $node instanceof Return_) {
+                return false;
+            }
+
+            return $node->expr instanceof Expr;
+        });
     }
 }

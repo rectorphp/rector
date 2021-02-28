@@ -227,7 +227,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isName($classMethod, '__*')) {
+        if ($classMethod->isMagic()) {
             return true;
         }
 

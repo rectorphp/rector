@@ -31,7 +31,7 @@ final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInter
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses(): array
     {

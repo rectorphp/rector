@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Rector\NodeCollector;
 
 use Nette\Utils\Strings;
+use PHPStan\PhpDoc\ResolvedPhpDocBlock;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
-use ReflectionClass;
 
 final class StaticAnalyzer
 {
@@ -16,9 +17,15 @@ final class StaticAnalyzer
      */
     private $nodeRepository;
 
-    public function __construct(NodeRepository $nodeRepository)
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(NodeRepository $nodeRepository, ReflectionProvider $reflectionProvider)
     {
         $this->nodeRepository = $nodeRepository;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function isStaticMethod(string $methodName, string $className): bool
@@ -30,29 +37,33 @@ final class StaticAnalyzer
 
         // could be static in doc type magic
         // @see https://regex101.com/r/tlvfTB/1
-        if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return false;
         }
 
-        $reflectionClass = new ReflectionClass($className);
-        if ($this->hasStaticAnnotation($methodName, $reflectionClass)) {
+        $classReflection = $this->reflectionProvider->getClass($className);
+        if ($this->hasStaticAnnotation($methodName, $classReflection)) {
             return true;
         }
 
         // probably magic method → we don't know
-        if (! method_exists($className, $methodName)) {
+        if (! $classReflection->hasMethod($methodName)) {
             return false;
         }
 
-        $methodReflection = $reflectionClass->getMethod($methodName);
-
+        $methodReflection = $classReflection->getNativeMethod($methodName);
         return $methodReflection->isStatic();
     }
 
-    private function hasStaticAnnotation(string $methodName, ReflectionClass $reflectionClass): bool
+    private function hasStaticAnnotation(string $methodName, ClassReflection $classReflection): bool
     {
+        $resolvedPhpDocBlock = $classReflection->getResolvedPhpDoc();
+        if (! $resolvedPhpDocBlock instanceof ResolvedPhpDocBlock) {
+            return false;
+        }
+
         return (bool) Strings::match(
-            (string) $reflectionClass->getDocComment(),
+            $resolvedPhpDocBlock->getPhpDocString(),
             '#@method\s*static\s*(.*?)\b' . $methodName . '\b#'
         );
     }

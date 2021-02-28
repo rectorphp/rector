@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -23,6 +24,16 @@ final class UseClassKeywordForClassNameResolutionRector extends AbstractRector
      * @see https://regex101.com/r/Vv41Qr/1/
      */
     private const CLASS_BEFORE_STATIC_ACCESS_REGEX = '#(?<class_name>[\\\\a-zA-Z0-9_\\x80-\\xff]*)::#';
+
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -83,7 +94,7 @@ CODE_SAMPLE
         $classNames = [];
 
         foreach ($matches['class_name'] as $matchedClassName) {
-            if (! class_exists($matchedClassName)) {
+            if (! $this->reflectionProvider->hasClass($matchedClassName)) {
                 continue;
             }
 
@@ -119,7 +130,7 @@ CODE_SAMPLE
     {
         $exprsToConcat = [];
         foreach ($parts as $part) {
-            if (class_exists($part)) {
+            if ($this->reflectionProvider->hasClass($part)) {
                 $exprsToConcat[] = new ClassConstFetch(new FullyQualified(ltrim($part, '\\')), 'class');
             } else {
                 $exprsToConcat[] = new String_($part);

@@ -4,35 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\Utils\DoctrineAnnotationParserSyncer\Rector\StaticCall;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\Annotations\DocParser;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
-use Rector\Core\Rector\AbstractRector;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractTemporaryRector;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-final class RemoveAnnotationRegistryRegisterFileRector extends AbstractRector implements ClassSyncerRectorInterface
+final class RemoveAnnotationRegistryRegisterFileRector extends AbstractTemporaryRector implements ClassSyncerRectorInterface
 {
-    public function getRuleDefinition(): RuleDefinition
-    {
-        return new RuleDefinition(
-            'Remove AnnotationRegistry::registerFile() that is now covered by composer autoload',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
-AnnotationRegistry::registerFile()
-CODE_SAMPLE
-,
-                    <<<'CODE_SAMPLE'
-CODE_SAMPLE
-                ),
-            ]
-        );
-    }
-
     /**
      * @return array<class-string<\PhpParser\Node>>
      */
@@ -46,7 +26,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->nodeNameResolver->isInClassNames($node, [DocParser::class, AnnotationReader::class])) {
+        $desiredObjectTypes = [
+            new ObjectType('Doctrine\Common\Annotations\DocParser'),
+            new ObjectType('Doctrine\Common\Annotations\AnnotationReader'),
+        ];
+
+        if (! $this->nodeNameResolver->isInClassNames($node, $desiredObjectTypes)) {
             return null;
         }
 

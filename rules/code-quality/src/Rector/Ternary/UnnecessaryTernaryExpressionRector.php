@@ -97,7 +97,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
     private function processNonBinaryCondition(Expr $ifExpression, Expr $elseExpression, Expr $condition): ?Node
     {
         if ($this->valueResolver->isTrue($ifExpression) && $this->valueResolver->isFalse($elseExpression)) {
-            if ($this->isStaticType($condition, BooleanType::class)) {
+            if ($this->nodeTypeResolver->isStaticType($condition, BooleanType::class)) {
                 return $condition;
             }
 
@@ -105,7 +105,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         }
 
         if ($this->valueResolver->isFalse($ifExpression) && $this->valueResolver->isTrue($elseExpression)) {
-            if ($this->isStaticType($condition, BooleanType::class)) {
+            if ($this->nodeTypeResolver->isStaticType($condition, BooleanType::class)) {
                 return new BooleanNot($condition);
             }
 
