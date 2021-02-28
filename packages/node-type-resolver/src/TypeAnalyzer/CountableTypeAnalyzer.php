@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\TypeAnalyzer;
 
-use Countable;
 use PhpParser\Node;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
@@ -55,7 +54,7 @@ final class CountableTypeAnalyzer
     private function isCountableObjectType(Type $type): bool
     {
         $countableObjectTypes = [
-            new ObjectType(Countable::class),
+            new ObjectType('Countable'),
             new ObjectType('SimpleXMLElement'),
             new ObjectType('ResourceBundle'),
         ];

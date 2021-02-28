@@ -8,16 +8,24 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Naming\Guard\PropertyConflictingNameGuard\BoolPropertyConflictingNameGuard;
 use Rector\Naming\ValueObject\PropertyRename;
 
-final class BoolPropertyRenamer extends AbstractPropertyRenamer
+final class BoolPropertyRenamer
 {
     /**
      * @var BoolPropertyConflictingNameGuard
      */
     private $boolPropertyConflictingNameGuard;
 
-    public function __construct(BoolPropertyConflictingNameGuard $boolPropertyConflictingNameGuard)
-    {
+    /**
+     * @var PropertyRenamer
+     */
+    private $propertyRenamer;
+
+    public function __construct(
+        BoolPropertyConflictingNameGuard $boolPropertyConflictingNameGuard,
+        PropertyRenamer $propertyRenamer
+    ) {
         $this->boolPropertyConflictingNameGuard = $boolPropertyConflictingNameGuard;
+        $this->propertyRenamer = $propertyRenamer;
     }
 
     public function rename(PropertyRename $propertyRename): ?Property
@@ -26,6 +34,6 @@ final class BoolPropertyRenamer extends AbstractPropertyRenamer
             return null;
         }
 
-        return parent::rename($propertyRename);
+        return $this->propertyRenamer->rename($propertyRename);
     }
 }

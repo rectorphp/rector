@@ -14,7 +14,6 @@ services:
                 - PHPStan\PhpDocParser\Parser\PhpDocParser
                 # resolve later
                 - Rector\Naming\Matcher\AbstractMatcher
-                - Rector\Naming\PropertyRenamer\AbstractPropertyRenamer
                 - Rector\ReadWrite\ReadNodeAnalyzer\AbstractReadNodeAnalyzer
                 # value objects
                 - Rector\Defluent\ValueObject\AbstractRootExpr
@@ -171,6 +170,7 @@ services:
         arguments:
             stringArgPositionsByType:
                 PhpParser\Node\Name\FullyQualified: [0]
+                PHPStan\Type\ObjectType: [0]
 
     -
         class: Symplify\PHPStanRules\Rules\ClassNameRespectsParentSuffixRule
@@ -223,8 +223,6 @@ services:
                 - 'spl_autoload_register'
                 - 'spl_autoload_unregister'
                 - array_walk
-                # creates messy nested logic
-                - array_filter
                 # there are handled in ReflectionProvider->has*()
                 - 'class_exists'
                 - 'interface_exists'

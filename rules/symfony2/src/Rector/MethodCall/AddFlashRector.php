@@ -10,7 +10,6 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symfony\Component\HttpFoundation\Request;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -79,7 +78,7 @@ CODE_SAMPLE
 
         if (! $this->fluentChainMethodCallNodeAnalyzer->isTypeAndChainCalls(
             $node,
-            new ObjectType(Request::class),
+            new ObjectType('Symfony\Component\HttpFoundation\Request'),
             ['getSession', 'getFlashBag', 'add']
         )
         ) {

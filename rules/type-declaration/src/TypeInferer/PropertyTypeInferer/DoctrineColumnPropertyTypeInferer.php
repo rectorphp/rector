@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use DateTimeInterface;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
@@ -73,11 +72,11 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
             'varbinary' => new StringType(),
             'set' => new StringType(),
             // date time objects
-            'date' => new ObjectType(DateTimeInterface::class),
-            'datetime' => new ObjectType(DateTimeInterface::class),
-            'timestamp' => new ObjectType(DateTimeInterface::class),
-            'time' => new ObjectType(DateTimeInterface::class),
-            'year' => new ObjectType(DateTimeInterface::class),
+            'date' => new ObjectType('DateTimeInterface'),
+            'datetime' => new ObjectType('DateTimeInterface'),
+            'timestamp' => new ObjectType('DateTimeInterface'),
+            'time' => new ObjectType('DateTimeInterface'),
+            'year' => new ObjectType('DateTimeInterface'),
         ];
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
