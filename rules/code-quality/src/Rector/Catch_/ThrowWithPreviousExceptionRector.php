@@ -143,7 +143,7 @@ CODE_SAMPLE
         }
 
         if (isset($new->args[1]->name)) {
-            $arg1 = clone $new->args[1];
+            $arg1 = $new->args[1];
             $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
             $new->args[$exceptionArgumentPosition] = $arg1;
         } else {
