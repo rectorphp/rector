@@ -94,16 +94,16 @@ CODE_SAMPLE
             return null;
         }
 
-        $propertyRename = $this->propertyRenameFactory->create($node, $this->underscoreCamelCaseExpectedNameResolver);
+        $expectedPropertyName = $this->underscoreCamelCaseExpectedNameResolver->resolve($node);
+        if ($expectedPropertyName === null) {
+            return null;
+        }
+
+        $propertyRename = $this->propertyRenameFactory->createFromExpectedName($node, $expectedPropertyName);
         if (! $propertyRename instanceof PropertyRename) {
             return null;
         }
-        $property = $this->underscoreCamelCasePropertyRenamer->rename($propertyRename);
 
-        if (! $property instanceof Property) {
-            return null;
-        }
-
-        return $node;
+        return $this->underscoreCamelCasePropertyRenamer->rename($propertyRename);
     }
 }

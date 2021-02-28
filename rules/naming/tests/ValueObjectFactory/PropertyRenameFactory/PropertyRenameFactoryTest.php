@@ -58,10 +58,12 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
     {
         $property = $this->getPropertyFromFileInfo($fileInfoWithProperty);
 
-        $actualPropertyRename = $this->propertyRenameFactory->create(
-            $property,
-            $this->matchPropertyTypeExpectedNameResolver
-        );
+        $expectedPropertyName = $this->matchPropertyTypeExpectedNameResolver->resolve($property);
+        if ($expectedPropertyName === null) {
+            return;
+        }
+
+        $actualPropertyRename = $this->propertyRenameFactory->createFromExpectedName($property, $expectedPropertyName);
         $this->assertNotNull($actualPropertyRename);
 
         /** @var PropertyRename $actualPropertyRename */

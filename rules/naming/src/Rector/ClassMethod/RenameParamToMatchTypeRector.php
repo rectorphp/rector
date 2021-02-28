@@ -119,7 +119,12 @@ CODE_SAMPLE
                 continue;
             }
 
-            $paramRename = $this->paramRenameFactory->create($param, $this->matchParamTypeExpectedNameResolver);
+            $expectedName = $this->matchParamTypeExpectedNameResolver->resolve($param);
+            if ($expectedName === null) {
+                continue;
+            }
+
+            $paramRename = $this->paramRenameFactory->createFromResolvedExpectedName($param, $expectedName);
             if (! $paramRename instanceof ParamRename) {
                 continue;
             }

@@ -10,8 +10,12 @@ services:
                 - PHPStan\Type\BooleanType
                 - PHPStan\Type\ObjectType
                 - PHPStan\Type\StaticType
+                - Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory
+                - PHPStan\PhpDocParser\Parser\PhpDocParser
                 # resolve later
                 - Rector\Naming\Matcher\AbstractMatcher
+                - Rector\Naming\PropertyRenamer\AbstractPropertyRenamer
+                - Rector\ReadWrite\ReadNodeAnalyzer\AbstractReadNodeAnalyzer
                 # value objects
                 - Rector\Defluent\ValueObject\AbstractRootExpr
                 - Symplify\SetConfigResolver\Provider\AbstractSetProvider

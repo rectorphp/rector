@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Rector\Naming\Guard;
 
 use PHPStan\Type\ObjectType;
-use Rector\Naming\Contract\Guard\ConflictingGuardInterface;
+use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
-final class RamseyUuidInterfaceGuard implements ConflictingGuardInterface
+final class RamseyUuidInterfaceGuard implements ConflictingNameGuardInterface
 {
     /**
      * @var NodeTypeResolver
@@ -25,7 +25,7 @@ final class RamseyUuidInterfaceGuard implements ConflictingGuardInterface
     /**
      * @param PropertyRename $renameValueObject
      */
-    public function check(RenameValueObjectInterface $renameValueObject): bool
+    public function isConflicting(RenameValueObjectInterface $renameValueObject): bool
     {
         return $this->nodeTypeResolver->isObjectType(
             $renameValueObject->getProperty(),

@@ -138,7 +138,12 @@ CODE_SAMPLE
 
     private function renameParam(Param $param): ?Variable
     {
-        $paramRename = $this->paramRenameFactory->create($param, $this->underscoreCamelCaseExpectedNameResolver);
+        $resolvedExpectedName = $this->underscoreCamelCaseExpectedNameResolver->resolve($param);
+        if ($resolvedExpectedName === null) {
+            return null;
+        }
+
+        $paramRename = $this->paramRenameFactory->createFromResolvedExpectedName($param, $resolvedExpectedName);
         if (! $paramRename instanceof ParamRename) {
             return null;
         }

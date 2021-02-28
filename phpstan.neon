@@ -597,3 +597,12 @@ parameters:
         - '#Cognitive complexity for "Rector\\NetteCodeQuality\\FormControlTypeResolver\\MagicNetteFactoryInterfaceFormControlTypeResolver\:\:resolve\(\)" is 11, keep it under 9#'
         - '#Cognitive complexity for "Rector\\NetteCodeQuality\\FormControlTypeResolver\\MagicNetteFactoryInterfaceFormControlTypeResolver\:\:resolve\(\)" is 12, keep it under 9#'
         - '#Content of method "matchAssignExprToPropertyName\(\)" is duplicated with method "matchAssignExprToPropertyName\(\)" in "Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector" class\. Use unique content or abstract service instead#'
+        # make more tolerand, e.g. at least 2-3 lines
+        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\AbstractPropertyConflictingNameGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\MatchPropertyTypeConflictingNameGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\UnderscoreCamelCaseConflictingNameGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\UnderscoreCamelCaseConflictingNameGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\UnderscoreCamelCaseConflictingNameGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\BoolPropertyConflictingNameGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\BoolPropertyConflictingNameGuard" class\. Use unique content or abstract service instead#'
+

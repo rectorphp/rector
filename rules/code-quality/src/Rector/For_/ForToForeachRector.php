@@ -48,7 +48,7 @@ final class ForToForeachRector extends AbstractRector
     /**
      * @var Expr|null
      */
-    private $countValueVariable;
+    private $countValueVariableExpr;
 
     /**
      * @var Expr|null
@@ -160,7 +160,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->forAnalyzer->isCountValueVariableUsedInsideForStatements($node, $this->countValueVariable)) {
+        if ($this->forAnalyzer->isCountValueVariableUsedInsideForStatements($node, $this->countValueVariableExpr)) {
             return null;
         }
 
@@ -228,7 +228,7 @@ CODE_SAMPLE
     private function reset(): void
     {
         $this->keyValueName = null;
-        $this->countValueVariable = null;
+        $this->countValueVariableExpr = null;
         $this->countValueName = null;
         $this->iteratedExpr = null;
     }
@@ -254,7 +254,7 @@ CODE_SAMPLE
             $funcCall = $initExpr->expr;
 
             if ($this->nodeNameResolver->isFuncCallName($funcCall, self::COUNT)) {
-                $this->countValueVariable = $initExpr->var;
+                $this->countValueVariableExpr = $initExpr->var;
                 $this->countValueName = $this->getName($initExpr->var);
                 $this->iteratedExpr = $funcCall->args[0]->value;
             }
