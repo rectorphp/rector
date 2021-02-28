@@ -6,8 +6,8 @@ namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Else_;
@@ -115,7 +115,7 @@ CODE_SAMPLE
 
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
-        $conditions = $this->getBooleanAndConditions($expr);
+        $conditions = $this->nodeRepository->findBooleanAndConditions($expr);
         $ifNextReturnClone = $ifNextReturn instanceof Return_
             ? clone $ifNextReturn
             : new Return_();
@@ -187,26 +187,6 @@ CODE_SAMPLE
         return ! $this->isLastIfOrBeforeLastReturn($if);
     }
 
-    /**
-     * @return Expr[]
-     */
-    private function getBooleanAndConditions(BooleanAnd $booleanAnd): array
-    {
-        $ifs = [];
-        while ($booleanAnd instanceof BinaryOp) {
-            $ifs[] = $booleanAnd->right;
-            $booleanAnd = $booleanAnd->left;
-
-            if (! $booleanAnd instanceof BooleanAnd) {
-                $ifs[] = $booleanAnd;
-                break;
-            }
-        }
-
-        krsort($ifs);
-        return $ifs;
-    }
-
     private function isIfStmtExprUsedInNextReturn(If_ $if, Return_ $return): bool
     {
         if (! $return->expr instanceof Expr) {
@@ -239,7 +219,12 @@ CODE_SAMPLE
             ? [new Continue_()]
             : [$return];
 
-        foreach ($conditions as $condition) {
+        $getNextReturnExpr = $this->getNextReturnExpr($if);
+        if ($getNextReturnExpr instanceof Return_) {
+            $return->expr = $getNextReturnExpr->expr;
+        }
+
+        foreach ($conditions as $key => $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if = new If_($invertedCondition);
             $if->stmts = $stmt;
@@ -257,6 +242,18 @@ CODE_SAMPLE
         }
 
         return $nextNode;
+    }
+
+    private function getNextReturnExpr(If_ $if): ?Return_
+    {
+        $hasClosureParent = (bool) $this->betterNodeFinder->findParentType($if, Closure::class);
+        if ($hasClosureParent) {
+            return null;
+        }
+
+        return $this->betterNodeFinder->findFirstNext($if, function (Node $node): bool {
+            return $node instanceof Return_ && $node->expr instanceof Expr;
+        });
     }
 
     private function isIfInLoop(If_ $if): bool
