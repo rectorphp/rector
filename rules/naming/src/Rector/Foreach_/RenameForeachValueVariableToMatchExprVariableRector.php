@@ -84,18 +84,30 @@ CODE_SAMPLE
             return null;
         }
 
-        $keyVarName = $node->keyVar === null ? '' : (string) $this->getName($node->keyVar);
+        if ($node->keyVar instanceof Node) {
+            return null;
+        }
+
         $valueVarName = $this->getName($node->valueVar);
         if ($valueVarName === null) {
             return null;
         }
 
+        if (strpos($valueVarName, 'single') === 0) {
+            return null;
+        }
+
         $singularValueVarName = $this->inflector->singularize($exprName);
         $singularValueVarName = $singularValueVarName === $exprName
-            ? 'single' . ucfirst(ltrim($singularValueVarName, 'single'))
+            ? 'single' . ucfirst($singularValueVarName)
             : $singularValueVarName;
 
-        if ($this->shouldSkip($keyVarName, $valueVarName, $singularValueVarName, $node)) {
+        $length = strlen($singularValueVarName);
+        if ($length >= 40) {
+            return null;
+        }
+
+        if ($this->shouldSkip($valueVarName, $singularValueVarName, $node)) {
             return null;
         }
 
@@ -123,7 +135,6 @@ CODE_SAMPLE
     }
 
     private function shouldSkip(
-        string $keyVarName,
         string $valueVarName,
         string $singularValueVarName,
         Foreach_ $foreach
@@ -146,7 +157,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $isUsedInNextForeach = (bool) $this->betterNodeFinder->findFirstNext($foreach, function (Node $node) use (
+        return (bool) $this->betterNodeFinder->findFirstNext($foreach, function (Node $node) use (
             $singularValueVarName
         ): bool {
             if (! $node instanceof Variable) {
@@ -155,11 +166,5 @@ CODE_SAMPLE
 
             return $this->isName($node, $singularValueVarName);
         });
-
-        if ($isUsedInNextForeach) {
-            return true;
-        }
-
-        return $keyVarName === $singularValueVarName;
     }
 }
