@@ -6,7 +6,6 @@ namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt;
@@ -252,7 +251,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->betterNodeFinder->findFirstNext($if, function (Node $node) : bool {
+        return $this->betterNodeFinder->findFirstNext($if, function (Node $node): bool {
             return $node instanceof Return_ && $node->expr instanceof Expr;
         });
     }

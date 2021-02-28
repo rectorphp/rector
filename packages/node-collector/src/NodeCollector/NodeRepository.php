@@ -8,7 +8,10 @@ use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -44,9 +47,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use ReflectionMethod;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 
 /**
  * @rector-doc
@@ -675,6 +675,26 @@ final class NodeRepository
         return $callerObjectType->getClassName();
     }
 
+    /**
+     * @return Expr[]
+     */
+    public function findBooleanAndConditions(BooleanAnd $booleanAnd): array
+    {
+        $conditions = [];
+        while ($booleanAnd instanceof BinaryOp) {
+            $conditions[] = $booleanAnd->right;
+            $booleanAnd = $booleanAnd->left;
+
+            if (! $booleanAnd instanceof BooleanAnd) {
+                $conditions[] = $booleanAnd;
+                break;
+            }
+        }
+
+        krsort($conditions);
+        return $conditions;
+    }
+
     private function collectArray(Array_ $array): void
     {
         $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($array);
@@ -843,25 +863,5 @@ final class NodeRepository
         }
 
         return $classReflections;
-    }
-
-    /**
-     * @return Expr[]
-     */
-    public function findBooleanAndConditions(BooleanAnd $booleanAnd): array
-    {
-        $conditions = [];
-        while ($booleanAnd instanceof BinaryOp) {
-            $conditions[] = $booleanAnd->right;
-            $booleanAnd = $booleanAnd->left;
-
-            if (! $booleanAnd instanceof BooleanAnd) {
-                $conditions[] = $booleanAnd;
-                break;
-            }
-        }
-
-        krsort($conditions);
-        return $conditions;
     }
 }
