@@ -21,19 +21,43 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
-use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
-final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements ReturnTypeInfererInterface
+final class YieldNodesReturnTypeInferer implements ReturnTypeInfererInterface
 {
     /**
      * @var PhpVersionProvider
      */
     private $phpVersionProvider;
 
-    public function __construct(PhpVersionProvider $phpVersionProvider)
-    {
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
+     * @var SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+
+    public function __construct(
+        PhpVersionProvider $phpVersionProvider,
+        NodeTypeResolver $nodeTypeResolver,
+        TypeFactory $typeFactory,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+    ) {
         $this->phpVersionProvider = $phpVersionProvider;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->typeFactory = $typeFactory;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     /**

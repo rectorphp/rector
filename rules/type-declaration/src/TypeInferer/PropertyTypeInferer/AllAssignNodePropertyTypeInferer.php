@@ -8,21 +8,29 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
-use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 
-final class AllAssignNodePropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
+final class AllAssignNodePropertyTypeInferer implements PropertyTypeInfererInterface
 {
     /**
      * @var AssignToPropertyTypeInferer
      */
     private $assignToPropertyTypeInferer;
 
-    public function __construct(AssignToPropertyTypeInferer $assignToPropertyTypeInferer)
-    {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(
+        AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
+        NodeNameResolver $nodeNameResolver
+    ) {
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function inferProperty(Property $property): Type

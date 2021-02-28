@@ -14,8 +14,3 @@ services:
     -
         class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-
-    # $nameResolverTrait->getName() => in some cases always string
-    -
-        class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverTraitReturnTypeExtension
-        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]

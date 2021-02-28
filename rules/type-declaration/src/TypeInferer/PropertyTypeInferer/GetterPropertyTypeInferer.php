@@ -9,15 +9,15 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer;
-use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTagReturnTypeInferer;
 
-final class GetterPropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
+final class GetterPropertyTypeInferer implements PropertyTypeInfererInterface
 {
     /**
      * @var ReturnedNodesReturnTypeInferer
@@ -39,16 +39,23 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
      */
     private $classMethodAndPropertyAnalyzer;
 
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
     public function __construct(
         ReturnTagReturnTypeInferer $returnTagReturnTypeInferer,
         ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer,
         FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
-        ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer
+        ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->returnedNodesReturnTypeInferer = $returnedNodesReturnTypeInferer;
         $this->returnTagReturnTypeInferer = $returnTagReturnTypeInferer;
         $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
         $this->classMethodAndPropertyAnalyzer = $classMethodAndPropertyAnalyzer;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function inferProperty(Property $property): Type

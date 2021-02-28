@@ -11,9 +11,8 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
-use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
-final class ReturnTagReturnTypeInferer extends AbstractTypeInferer implements ReturnTypeInfererInterface
+final class ReturnTagReturnTypeInferer implements ReturnTypeInfererInterface
 {
     /**
      * @var PhpDocInfoFactory

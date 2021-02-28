@@ -20,11 +20,13 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
-use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
-final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implements ReturnTypeInfererInterface
+final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
 {
     /**
      * @var Type[]
@@ -36,9 +38,31 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
      */
     private $silentVoidResolver;
 
-    public function __construct(SilentVoidResolver $silentVoidResolver)
-    {
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
+     * @var SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    public function __construct(
+        SilentVoidResolver $silentVoidResolver,
+        NodeTypeResolver $nodeTypeResolver,
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        TypeFactory $typeFactory
+    ) {
         $this->silentVoidResolver = $silentVoidResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->typeFactory = $typeFactory;
     }
 
     /**

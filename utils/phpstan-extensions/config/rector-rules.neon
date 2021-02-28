@@ -5,6 +5,8 @@ services:
         arguments:
             allowedParentTypes:
                 - Rector\Core\Rector\AbstractRector
+                - Rector\Utils\DoctrineAnnotationParserSyncer\FileSyncer\AbstractClassSyncer
+                - PhpParser\NodeAbstract
 
     -
         class: Symplify\PHPStanRules\Rules\ServiceAndValueObjectHaveSameStartsRule

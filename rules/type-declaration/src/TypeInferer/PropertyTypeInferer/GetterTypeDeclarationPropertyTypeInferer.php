@@ -9,13 +9,13 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer;
-use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
-final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
+final class GetterTypeDeclarationPropertyTypeInferer implements PropertyTypeInfererInterface
 {
     /**
      * @var FunctionLikeReturnTypeResolver
@@ -27,11 +27,19 @@ final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer
      */
     private $classMethodAndPropertyAnalyzer;
 
-    public function __construct(FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
-        ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(
+        FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
+        ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
         $this->classMethodAndPropertyAnalyzer = $classMethodAndPropertyAnalyzer;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function inferProperty(Property $property): Type
