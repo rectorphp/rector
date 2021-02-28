@@ -159,7 +159,7 @@ CODE_SAMPLE
 
         $this->removeNode($node);
 
-        if (! $node->stmts[count($node->stmts) - 1] instanceof Return_ && $ifNextReturnClone->expr instanceof Expr) {
+        if (! $node->stmts[0] instanceof Return_ && $ifNextReturnClone->expr instanceof Expr) {
             $this->addNodeAfterNode($ifNextReturnClone, $node);
         }
 
@@ -172,11 +172,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $if->cond instanceof BooleanAnd) {
-            return true;
-        }
-
-        if (! $this->ifManipulator->isIfWithoutElseAndElseIfs($if)) {
+        if (! $if->cond instanceof BooleanAnd || ! $this->ifManipulator->isIfWithoutElseAndElseIfs($if)) {
             return true;
         }
 
