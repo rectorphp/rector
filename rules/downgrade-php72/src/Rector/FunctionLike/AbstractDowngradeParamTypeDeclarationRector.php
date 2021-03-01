@@ -22,7 +22,7 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractDowng
         $this->typeUnwrapper = $typeUnwrapper;
     }
 
-    public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool
+    public function isNullableParam(Param $param, FunctionLike $functionLike): bool
     {
         if ($param->variadic) {
             return false;

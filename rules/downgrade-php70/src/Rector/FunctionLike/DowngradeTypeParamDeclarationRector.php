@@ -52,7 +52,7 @@ CODE_SAMPLE
     /**
      * Only accepted types before PHP 7.0 are `array` and `callable`
      */
-    public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool
+    public function isNullableParam(Param $param, FunctionLike $functionLike): bool
     {
         if ($param->type === null) {
             return false;

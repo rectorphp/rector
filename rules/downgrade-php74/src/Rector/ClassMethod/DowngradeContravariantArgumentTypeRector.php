@@ -71,7 +71,7 @@ CODE_SAMPLE
         ]);
     }
 
-    public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool
+    public function isNullableParam(Param $param, FunctionLike $functionLike): bool
     {
         if ($param->variadic) {
             return false;

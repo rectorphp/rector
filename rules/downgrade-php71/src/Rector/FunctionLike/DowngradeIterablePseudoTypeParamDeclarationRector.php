@@ -49,14 +49,16 @@ CODE_SAMPLE
         );
     }
 
-    public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool
+    public function isNullableParam(Param $param, FunctionLike $functionLike): bool
     {
         if ($param->type === null) {
             return false;
         }
+
         if (! $param->type instanceof Identifier) {
             return false;
         }
+
         return $param->type->toString() === 'iterable';
     }
 }

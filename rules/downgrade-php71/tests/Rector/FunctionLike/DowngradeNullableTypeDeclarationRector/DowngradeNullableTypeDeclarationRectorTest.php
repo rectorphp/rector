@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector;
+namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector;
 
 use Iterator;
-use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector;
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradeNullableTypeReturnDeclarationRectorTest extends AbstractRectorTestCase
+final class DowngradeNullableTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class DowngradeNullableTypeReturnDeclarationRectorTest extends AbstractRec
 
     protected function getRectorClass(): string
     {
-        return DowngradeNullableTypeReturnDeclarationRector::class;
+        return DowngradeNullableTypeDeclarationRector::class;
     }
 }

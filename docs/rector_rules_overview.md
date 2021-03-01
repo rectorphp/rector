@@ -5886,11 +5886,11 @@ Downgrade negative string offset to `strlen`
 
 <br>
 
-### DowngradeNullableTypeParamDeclarationRector
+### DowngradeNullableTypeDeclarationRector
 
 Remove the nullable type params, add `@param` tags instead
 
-- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeNullableTypeParamDeclarationRector.php)
+- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeNullableTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -5908,11 +5908,11 @@ Remove the nullable type params, add `@param` tags instead
 
 <br>
 
-### DowngradeNullableTypeReturnDeclarationRector
+### DowngradeNullableTypeDeclarationRector
 
 Remove returning nullable types, add a `@return` tag instead
 
-- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeNullableTypeReturnDeclarationRector.php)
+- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeNullableTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
