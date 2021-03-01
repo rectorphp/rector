@@ -10,10 +10,8 @@ use Rector\DowngradePhp80\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClas
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector;
-use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeStaticTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector;
-use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector;
 use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector;
 use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -22,8 +20,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(DowngradeUnionTypeTypedPropertyRector::class);
     $services->set(DowngradeUnionTypeDeclarationRector::class);
-    $services->set(DowngradeUnionTypeParamDeclarationRector::class);
-    $services->set(DowngradeMixedTypeDeclarationRector::class);
     $services->set(DowngradeMixedTypeDeclarationRector::class);
     $services->set(DowngradeStaticTypeDeclarationRector::class);
 

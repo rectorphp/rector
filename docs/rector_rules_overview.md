@@ -6043,11 +6043,11 @@ Remove argument type declarations in the parent and in all child classes, whenev
 
 <br>
 
-### DowngradeReturnObjectTypeDeclarationRector
+### DowngradeObjectTypeDeclarationRector
 
 Remove "object" return type, add a `"@return` object" tag instead
 
-- class: [`Rector\DowngradePhp72\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector`](/rules/downgrade-php72/src/Rector/FunctionLike/DowngradeReturnObjectTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp72\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector`](/rules/downgrade-php72/src/Rector/FunctionLike/DowngradeObjectTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
