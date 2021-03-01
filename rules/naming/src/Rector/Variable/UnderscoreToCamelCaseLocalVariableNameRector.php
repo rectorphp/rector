@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
@@ -106,13 +107,67 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isFoundInPreviousNode($node)) {
+        if ($this->isUsedNextPreviousAssignVar($node, $camelCaseName)) {
             return null;
         }
 
         $node->name = $camelCaseName;
 
         return $node;
+    }
+
+    private function isUsedNextPreviousAssignVar(Variable $variable, string $camelCaseName): bool
+    {
+        $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Assign) {
+            return false;
+        }
+
+        if ($parent->var !== $variable) {
+            return false;
+        }
+
+        $variableMethodNode = $variable->getAttribute(AttributeKey::METHOD_NODE);
+        if (! $variableMethodNode instanceof Node) {
+            return false;
+        }
+
+        $usedInNext = (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
+            $variableMethodNode,
+            $camelCaseName
+        ): bool {
+            return $this->hasEqualVariable($node, $variableMethodNode, $camelCaseName);
+        });
+
+        if ($usedInNext) {
+            return true;
+        }
+
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use (
+            $variableMethodNode,
+            $camelCaseName
+        ): bool {
+            return $this->hasEqualVariable($node, $variableMethodNode, $camelCaseName);
+        });
+    }
+
+    private function hasEqualVariable(Node $node, ?Node $variableMethodNode, string $camelCaseName): bool
+    {
+        if (! $node instanceof Variable) {
+            return false;
+        }
+
+        $methodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
+        if ($variableMethodNode !== $methodNode) {
+            return false;
+        }
+
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Assign) {
+            return false;
+        }
+
+        return $this->isName($parent->var, $camelCaseName);
     }
 
     private function isReserved(string $string): bool
@@ -150,14 +205,5 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    private function isFoundInPreviousNode(Variable $variable): bool
-    {
-        $previousNode = $variable->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if (! $previousNode instanceof Expr) {
-            return false;
-        }
-        return $this->isFoundInParentNode($variable);
     }
 }
