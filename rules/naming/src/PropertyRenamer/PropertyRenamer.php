@@ -31,7 +31,7 @@ final class PropertyRenamer
 
     public function rename(PropertyRename $propertyRename): ?Property
     {
-        if (! $propertyRename->isAlreadyExpectedName()) {
+        if ($propertyRename->isAlreadyExpectedName()) {
             return null;
         }
 

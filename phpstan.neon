@@ -505,11 +505,6 @@ parameters:
             paths:
                 - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php
 
-        # @todo bug, solve in Symplify
-        -
-             message: '#Constant type should be "class\-string", but is "string"#'
-             path: rules/symfony/src/Rector/BinaryOp/ResponseStatusCodeRector.php
-
         - '#Property Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap\:\:\$binaryOpToAssignClasses \(array<class\-string<PhpParser\\Node\\Expr\\BinaryOp\>, class\-string<PhpParser\\Node\\Expr\\BinaryOp\>\>\) does not accept array#'
         - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\RemovingStatic\\Rector\\Class_\\PassFactoryToUniqueObjectRector" class\. Use unique content or abstract service instead#'
 
@@ -602,3 +597,5 @@ parameters:
                 - packages/node-type-resolver/tests
 
         - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\AddPackageToRequireComposerRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\MatchPropertyTypeConflictingNameGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\BoolPropertyConflictingNameGuard" class\. Use unique content or abstract service instead#'

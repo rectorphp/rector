@@ -206,7 +206,15 @@ final class NodeNameResolver
             return false;
         }
 
+        if ($node->var instanceof MethodCall) {
+            return false;
+        }
+
         if (! $this->isName($node->var, 'this')) {
+            return false;
+        }
+
+        if ($node->name instanceof Expr) {
             return false;
         }
 

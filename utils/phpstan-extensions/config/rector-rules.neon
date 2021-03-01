@@ -14,7 +14,6 @@ services:
                 - PHPStan\PhpDocParser\Parser\PhpDocParser
                 # resolve later
                 - Rector\Naming\Matcher\AbstractMatcher
-                - Rector\ReadWrite\ReadNodeAnalyzer\AbstractReadNodeAnalyzer
                 # value objects
                 - Rector\Defluent\ValueObject\AbstractRootExpr
                 - Symplify\SetConfigResolver\Provider\AbstractSetProvider
