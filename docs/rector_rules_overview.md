@@ -1,4 +1,4 @@
-# 673 Rules Overview
+# 667 Rules Overview
 
 <br>
 
@@ -34,17 +34,17 @@
 
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 
-- [DowngradePhp70](#downgradephp70) (2)
+- [DowngradePhp70](#downgradephp70) (1)
 
-- [DowngradePhp71](#downgradephp71) (9)
+- [DowngradePhp71](#downgradephp71) (7)
 
-- [DowngradePhp72](#downgradephp72) (3)
+- [DowngradePhp72](#downgradephp72) (2)
 
 - [DowngradePhp73](#downgradephp73) (4)
 
 - [DowngradePhp74](#downgradephp74) (11)
 
-- [DowngradePhp80](#downgradephp80) (12)
+- [DowngradePhp80](#downgradephp80) (10)
 
 - [EarlyReturn](#earlyreturn) (11)
 
@@ -2535,7 +2535,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
+Split multiple inline assigns to each own lines default value, to prevent undefined array issues
 
 - class: [`Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`](/rules/coding-style/src/Rector/Assign/SplitDoubleAssignRector.php)
 
@@ -4337,10 +4337,11 @@ Turns fluent interface calls to classic ones.
 
 ```diff
  $someClass = new SomeClass();
--return $someClass->someFunction()
--            ->otherFunction();
 +$someClass->someFunction();
 +$someClass->otherFunction();
+
+-return $someClass->someFunction()
+-        ->otherFunction();
 +return $someClass;
 ```
 
@@ -5759,44 +5760,22 @@ Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 
 ## DowngradePhp70
 
-### DowngradeTypeParamDeclarationRector
+### DowngradeTypeDeclarationRector
 
-Remove the type params, add `@param` tags instead
+Remove the type params and return type, add `@param` and `@return` tags instead
 
-- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeParamDeclarationRector`](/rules/downgrade-php70/src/Rector/FunctionLike/DowngradeTypeParamDeclarationRector.php)
+- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeDeclarationRector`](/rules/downgrade-php70/src/Rector/FunctionLike/DowngradeTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
  {
--    public function run(string $input)
+-    public function run(string $input): string
 +    /**
 +     * @param string $input
++     * @return string
 +     */
 +    public function run($input)
      {
-         // do something
-     }
- }
-```
-
-<br>
-
-### DowngradeTypeReturnDeclarationRector
-
-Remove returning types, add a `@return` tag instead
-
-- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeReturnDeclarationRector`](/rules/downgrade-php70/src/Rector/FunctionLike/DowngradeTypeReturnDeclarationRector.php)
-
-```diff
- class SomeClass
- {
--    public function getResponse(): string
-+    /**
-+     * @return string
-+     */
-+    public function getResponse()
-     {
-         return 'Hello world';
      }
  }
 ```
@@ -5825,42 +5804,21 @@ Downgrade class constant visibility
 
 <br>
 
-### DowngradeIterablePseudoTypeParamDeclarationRector
+### DowngradeIterablePseudoTypeDeclarationRector
 
-Remove the iterable pseudo type params, add `@param` tags instead
+Remove the iterable pseudo type params and returns, add `@param` and `@return` tags instead
 
-- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeParamDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeIterablePseudoTypeParamDeclarationRector.php)
+- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeIterablePseudoTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
  {
--    public function run(iterable $iterator)
+-    public function run(iterable $iterator): iterable
 +    /**
 +     * @param mixed[]|\Traversable $iterator
-+     */
-+    public function run($iterator)
-     {
-         // do something
-     }
- }
-```
-
-<br>
-
-### DowngradeIterablePseudoTypeReturnDeclarationRector
-
-Remove returning iterable pseud type, add a `@return` tag instead
-
-- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeIterablePseudoTypeReturnDeclarationRector.php)
-
-```diff
- class SomeClass
- {
--    public function run(): iterable
-+    /**
 +     * @return mixed[]|\Traversable
 +     */
-+    public function run()
++    public function run($iterator)
      {
          // do something
      }
@@ -5886,47 +5844,22 @@ Downgrade negative string offset to `strlen`
 
 <br>
 
-### DowngradeNullableTypeParamDeclarationRector
+### DowngradeNullableTypeDeclarationRector
 
 Remove the nullable type params, add `@param` tags instead
 
-- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeNullableTypeParamDeclarationRector.php)
+- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeNullableTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
  {
--    public function run(?string $input)
+-    public function run(?string $input): ?string
 +    /**
 +     * @param string|null $input
++     * @return string|null $input
 +     */
 +    public function run($input)
      {
-         // do something
-     }
- }
-```
-
-<br>
-
-### DowngradeNullableTypeReturnDeclarationRector
-
-Remove returning nullable types, add a `@return` tag instead
-
-- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeNullableTypeReturnDeclarationRector.php)
-
-```diff
- class SomeClass
- {
--    public function getResponseOrNothing(bool $flag): ?string
-+    /**
-+     * @return string|null
-+     */
-+    public function getResponseOrNothing(bool $flag)
-     {
-         if ($flag) {
-             return 'Hello world';
-         }
-         return null;
      }
  }
 ```
@@ -5953,11 +5886,11 @@ Downgrade single one | separated to multi catch exception
 
 <br>
 
-### DowngradeVoidTypeReturnDeclarationRector
+### DowngradeVoidTypeDeclarationRector
 
 Remove "void" return type, add a `"@return` void" tag instead
 
-- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeVoidTypeReturnDeclarationRector.php)
+- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeVoidTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -5989,18 +5922,19 @@ Downgrade Symmetric array destructuring to `list()` function
 
 ## DowngradePhp72
 
-### DowngradeParamObjectTypeDeclarationRector
+### DowngradeObjectTypeDeclarationRector
 
-Remove the 'PHPStan\Type\ObjectWithoutClassType' param type, add a `@param` tag instead
+Remove the "object" param and return type, add a `@param` and `@return` tags instead
 
-- class: [`Rector\DowngradePhp72\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector`](/rules/downgrade-php72/src/Rector/FunctionLike/DowngradeParamObjectTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp72\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector`](/rules/downgrade-php72/src/Rector/FunctionLike/DowngradeObjectTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
  {
--    public function someFunction(object $someObject)
+-    public function someFunction(object $someObject): object
 +    /**
 +     * @param object $someObject
++     * @return object
 +     */
 +    public function someFunction($someObject)
      {
@@ -6038,28 +5972,6 @@ Remove argument type declarations in the parent and in all child classes, whenev
 +     * @param array $input
 +     */
 +    public function test($input);
- }
-```
-
-<br>
-
-### DowngradeReturnObjectTypeDeclarationRector
-
-Remove "object" return type, add a `"@return` object" tag instead
-
-- class: [`Rector\DowngradePhp72\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector`](/rules/downgrade-php72/src/Rector/FunctionLike/DowngradeReturnObjectTypeDeclarationRector.php)
-
-```diff
- class SomeClass
- {
--    public function getSomeObject(): object
-+    /**
-+     * @return object
-+     */
-+    public function getSomeObject()
-     {
-         return new SomeObject();
-     }
  }
 ```
 
@@ -6238,7 +6150,9 @@ Remove contravariant argument type declarations
  class A
  {
      public function contraVariantArguments(ChildType $type)
-     { /* … */ }
+-    {
+-    }
++    { }
  }
 
  class B extends A
@@ -6248,7 +6162,8 @@ Remove contravariant argument type declarations
 +     * @param ParentType $type
 +     */
 +    public function contraVariantArguments($type)
-     { /* … */ }
+     {
+     }
  }
 ```
 
@@ -6267,7 +6182,8 @@ Make method return same type as parent
  class A
  {
      public function covariantReturnTypes(): ParentType
-     { /* … */ }
+     {
+     }
  }
 
  class B extends A
@@ -6277,7 +6193,8 @@ Make method return same type as parent
 +     * @return ChildType
 +     */
 +    public function covariantReturnTypes(): ParentType
-     { /* … */ }
+     {
+     }
  }
 ```
 
@@ -6333,14 +6250,14 @@ Remove "_" as thousands separator in numbers
 
 <br>
 
-### DowngradeReturnSelfTypeDeclarationRector
+### DowngradeSelfTypeDeclarationRector
 
 Remove "self" return type, add a `"@return` self" tag instead
 
-- class: [`Rector\DowngradePhp74\Rector\ClassMethod\DowngradeReturnSelfTypeDeclarationRector`](/rules/downgrade-php74/src/Rector/ClassMethod/DowngradeReturnSelfTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp74\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector`](/rules/downgrade-php74/src/Rector/ClassMethod/DowngradeSelfTypeDeclarationRector.php)
 
 ```diff
- class A
+ class SomeClass
  {
 -    public function foo(): self
 +    public function foo()
@@ -6456,6 +6373,28 @@ Downgrade `match()` to `switch()`
 
 <br>
 
+### DowngradeMixedTypeDeclarationRector
+
+Remove the "mixed" param and return type, add a `@param` and `@return` tag instead
+
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeMixedTypeDeclarationRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public function someFunction(mixed $anything): mixed
++    /**
++     * @param mixed $anything
++     * @return mixed
++     */
++    public function someFunction($anything)
+     {
+     }
+ }
+```
+
+<br>
+
 ### DowngradeNonCapturingCatchesRector
 
 Downgrade catch () without variable to one
@@ -6494,27 +6433,6 @@ Change nullsafe operator to ternary operator rector
 
 <br>
 
-### DowngradeParamMixedTypeDeclarationRector
-
-Remove the 'PHPStan\Type\MixedType' param type, add a `@param` tag instead
-
-- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeParamMixedTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeParamMixedTypeDeclarationRector.php)
-
-```diff
- class SomeClass
- {
--    public function someFunction(mixed $anything)
-+    /**
-+     * @param mixed $anything
-+     */
-+    public function someFunction($anything)
-     {
-     }
- }
-```
-
-<br>
-
 ### DowngradePropertyPromotionRector
 
 Change constructor property promotion to property asssign
@@ -6536,36 +6454,11 @@ Change constructor property promotion to property asssign
 
 <br>
 
-### DowngradeReturnMixedTypeDeclarationRector
+### DowngradeStaticTypeDeclarationRector
 
-Remove "mixed" return type, add a `"@return` mixed" tag instead
+Remove "static" return and param type, add a `"@param` `$this"` and `"@return` `$this"` tag instead
 
-- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeReturnMixedTypeDeclarationRector.php)
-
-```diff
- class SomeClass
- {
--    public function getAnything(bool $flag): mixed
-+    /**
-+     * @return mixed
-+     */
-+    public function getAnything(bool $flag)
-     {
-         if ($flag) {
-             return 1;
-         }
-         return 'Hello world'
-     }
- }
-```
-
-<br>
-
-### DowngradeReturnStaticTypeDeclarationRector
-
-Remove "static" return type, add a `"@return` `$this"` tag instead
-
-- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeReturnStaticTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeStaticTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeStaticTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -6613,47 +6506,23 @@ Remove trailing commas in param or use list
 
 <br>
 
-### DowngradeUnionTypeParamDeclarationRector
+### DowngradeUnionTypeDeclarationRector
 
-Remove the union type params, add `@param` tags instead
+Remove the union type params and returns, add `@param/@return` tags instead
 
-- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeUnionTypeParamDeclarationRector.php)
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeUnionTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
  {
--    public function echoInput(string|int $input)
+-    public function echoInput(string|int $input): int|bool
 +    /**
 +     * @param string|int $input
++     * @return int|bool
 +     */
 +    public function echoInput($input)
      {
          echo $input;
-     }
- }
-```
-
-<br>
-
-### DowngradeUnionTypeReturnDeclarationRector
-
-Remove returning union types, add a `@return` tag instead
-
-- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeUnionTypeReturnDeclarationRector.php)
-
-```diff
- class SomeClass
- {
--    public function getSomeObject(bool $flag): string|int
-+    /**
-+     * @return string|int
-+     */
-+    public function getSomeObject(bool $flag)
-     {
-         if ($flag) {
-             return 1;
-         }
-         return 'Hello world';
      }
  }
 ```
@@ -7468,14 +7337,14 @@ Renames property to respect is/has/was method naming
 ```diff
  class SomeClass
  {
--    private $full = false;
-+    private $isFull = false;
+-private $full = false;
++private $isFull = false;
 
-     public function isFull()
-     {
--        return $this->full;
-+        return $this->isFull;
-     }
+ public function isFull()
+ {
+-    return $this->full;
++    return $this->isFull;
+ }
 +
  }
 ```
@@ -7539,15 +7408,15 @@ Renames value variable name in foreach loop to match expression variable
 ```diff
  class SomeClass
  {
-     public function run()
-     {
-         $array = [];
--        foreach ($variables as $foo) {
--            $array[] = $property;
-+        foreach ($variables as $variable) {
-+            $array[] = $variable;
-         }
+ public function run()
+ {
+     $array = [];
+-    foreach ($variables as $foo) {
+-        $array[] = $property;
++    foreach ($variables as $variable) {
++        $array[] = $variable;
      }
+ }
  }
 ```
 
@@ -11678,14 +11547,17 @@ Change annotation to attribute
 - class: [`Rector\Php80\Rector\Class_\AnnotationToAttributeRector`](/rules/php80/src/Rector/Class_/AnnotationToAttributeRector.php)
 
 ```diff
- use Doctrine\ORM\Attributes as ORM;
+ use Symfony\Component\Routing\Annotation\Route;
 
--/**
--  * @ORM\Entity
--  */
-+#[ORM\Entity]
- class SomeClass
+ class SymfonyRoute
  {
+-    /**
+-     * @Route("/path", name="action")
+-     */
++    #[Route(path: '/path', name: 'action')]
+     public function action()
+     {
+     }
  }
 ```
 
@@ -13077,7 +12949,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
 
 :wrench: **configure it!**
 

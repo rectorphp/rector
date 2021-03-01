@@ -12,5 +12,5 @@ interface DowngradeParamDeclarationRectorInterface
     /**
      * Indicate if the parameter must be removed
      */
-    public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool;
+    public function isNullableParam(Param $param, FunctionLike $functionLike): bool;
 }

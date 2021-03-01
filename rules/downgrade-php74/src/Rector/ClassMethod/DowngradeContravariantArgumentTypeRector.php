@@ -8,11 +8,14 @@ use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use Rector\DowngradePhp70\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -25,8 +28,26 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\DowngradeContravariantArgumentTypeRectorTest
  */
-final class DowngradeContravariantArgumentTypeRector extends AbstractDowngradeParamDeclarationRector
+final class DowngradeContravariantArgumentTypeRector extends AbstractRector
 {
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
+    {
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    }
+
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class, Function_::class];
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove contravariant argument type declarations', [
@@ -38,13 +59,15 @@ class ChildType extends ParentType {}
 class A
 {
     public function contraVariantArguments(ChildType $type)
-    { /* … */ }
+    {
+    }
 }
 
 class B extends A
 {
     public function contraVariantArguments(ParentType $type)
-    { /* … */ }
+    {
+    }
 }
 CODE_SAMPLE
                 ,
@@ -55,7 +78,7 @@ class ChildType extends ParentType {}
 class A
 {
     public function contraVariantArguments(ChildType $type)
-    { /* … */ }
+    { }
 }
 
 class B extends A
@@ -64,14 +87,15 @@ class B extends A
      * @param ParentType $type
      */
     public function contraVariantArguments($type)
-    { /* … */ }
+    {
+    }
 }
 CODE_SAMPLE
             ),
         ]);
     }
 
-    public function shouldRemoveParamDeclaration(Param $param, FunctionLike $functionLike): bool
+    public function isNullableParam(Param $param, FunctionLike $functionLike): bool
     {
         if ($param->variadic) {
             return false;
@@ -93,6 +117,22 @@ CODE_SAMPLE
 
         // Check if the type is different from the one declared in some ancestor
         return $this->getDifferentParamTypeFromAncestorClass($param, $functionLike) !== null;
+    }
+
+    /**
+     * @param ClassMethod|Function_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($node->params === []) {
+            return null;
+        }
+
+        foreach ($node->params as $param) {
+            $this->refactorParam($param, $node);
+        }
+
+        return null;
     }
 
     private function getDifferentParamTypeFromAncestorClass(Param $param, FunctionLike $functionLike): ?string
@@ -189,5 +229,34 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     */
+    private function refactorParam(Param $param, FunctionLike $functionLike): void
+    {
+        if (! $this->isNullableParam($param, $functionLike)) {
+            return;
+        }
+
+        $this->decorateWithDocBlock($functionLike, $param);
+        $param->type = null;
+    }
+
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     */
+    private function decorateWithDocBlock(FunctionLike $functionLike, Param $param): void
+    {
+        if ($param->type === null) {
+            return;
+        }
+
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        $paramName = $this->getName($param->var) ?? '';
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
+        $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
     }
 }

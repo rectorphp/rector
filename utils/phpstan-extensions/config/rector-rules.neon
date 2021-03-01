@@ -4,7 +4,6 @@ services:
         tags: [phpstan.rules.rule]
         arguments:
             allowedParentTypes:
-                - Rector\Core\Rector\AbstractRector
                 - Rector\Utils\DoctrineAnnotationParserSyncer\FileSyncer\AbstractClassSyncer
                 - PhpParser\NodeAbstract
                 - PHPStan\Type\BooleanType
@@ -15,6 +14,23 @@ services:
                 # value objects
                 - Rector\Defluent\ValueObject\AbstractRootExpr
                 - Symplify\SetConfigResolver\Provider\AbstractSetProvider
+            allowedDirectParentTypes:
+                - Rector\Core\Rector\AbstractRector
+                - Rector\Core\Rector\AbstractTemporaryRector
+                - Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector
+                # solve later
+                - Rector\Nette\Rector\FuncCall\AbstractPregToNetteUtilsStringsRector
+                - Rector\Nette\Rector\Identical\AbstractWithFunctionToNetteUtilsStringsRector
+                - Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector
+                - Rector\Php72\Rector\FuncCall\AbstractConvertToAnonymousFunctionRector
+                - Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector
+                - Rector\Transform\Rector\AbstractToMethodCallRector
+                - Rector\Symfony3\Rector\MethodCall\AbstractFormAddRector
+                - Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRector
+                - Rector\NetteCodeQuality\Rector\ArrayDimFetch\AbstractArrayDimFetchToAnnotatedControlVariableRector
+                - Rector\DowngradePhp74\Rector\Property\AbstractDowngradeTypedPropertyRector
+                - Rector\Defluent\Rector\AbstractFluentChainMethodCallRector
+                - Rector\NetteKdyby\Rector\ClassMethod\AbstractKdybyEventSubscriberRector
 
     -
         class: Symplify\PHPStanRules\Rules\ServiceAndValueObjectHaveSameStartsRule
