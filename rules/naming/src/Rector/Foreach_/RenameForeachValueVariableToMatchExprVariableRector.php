@@ -107,11 +107,6 @@ CODE_SAMPLE
             ? 'single' . ucfirst($singularValueVarName)
             : $singularValueVarName;
 
-        $length = strlen($singularValueVarName);
-        if ($length >= 40) {
-            return null;
-        }
-
         if ($this->shouldSkip($valueVarName, $singularValueVarName, $node)) {
             return null;
         }
@@ -151,6 +146,11 @@ CODE_SAMPLE
 
     private function shouldSkip(string $valueVarName, string $singularValueVarName, Foreach_ $foreach): bool
     {
+        $length = strlen($singularValueVarName);
+        if ($length >= 40) {
+            return true;
+        }
+
         if ($singularValueVarName === $valueVarName) {
             return true;
         }
