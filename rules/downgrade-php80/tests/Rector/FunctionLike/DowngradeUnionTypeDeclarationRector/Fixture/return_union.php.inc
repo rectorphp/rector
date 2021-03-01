@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector\Fixture;
 
-final class ParamUnion
+final class ReturnUnion
 {
     public function run(): int|string
     {
@@ -20,7 +20,7 @@ final class ParamUnion
 
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector\Fixture;
 
-final class ParamUnion
+final class ReturnUnion
 {
     /**
      * @return int|string

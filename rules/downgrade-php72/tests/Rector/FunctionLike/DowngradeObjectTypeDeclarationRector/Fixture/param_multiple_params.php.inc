@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector\Fixture;
 
-class MultipleParams
+class ParamMultipleParams
 {
     public function someFunction(object $someObject, string $someOtherVar)
     {
@@ -15,7 +15,7 @@ class MultipleParams
 
 namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector\Fixture;
 
-class MultipleParams
+class ParamMultipleParams
 {
     /**
      * @param object $someObject

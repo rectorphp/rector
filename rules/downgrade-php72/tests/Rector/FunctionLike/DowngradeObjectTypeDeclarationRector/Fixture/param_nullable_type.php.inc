@@ -2,7 +2,7 @@
 
 namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector\Fixture;
 
-class NullableType
+class ParamNullableType
 {
     public function someFunction(?object $someObject)
     {
@@ -15,7 +15,7 @@ class NullableType
 
 namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector\Fixture;
 
-class NullableType
+class ParamNullableType
 {
     /**
      * @param object|null $someObject
