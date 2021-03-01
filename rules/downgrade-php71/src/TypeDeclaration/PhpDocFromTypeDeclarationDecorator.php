@@ -10,9 +10,11 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class PhpDocFromTypeDeclarationDecorator
@@ -37,16 +39,23 @@ final class PhpDocFromTypeDeclarationDecorator
      */
     private $phpDocTypeChanger;
 
+    /**
+     * @var TypeUnwrapper
+     */
+    private $typeUnwrapper;
+
     public function __construct(
         StaticTypeMapper $staticTypeMapper,
         PhpDocInfoFactory $phpDocInfoFactory,
         NodeNameResolver $nodeNameResolver,
-        PhpDocTypeChanger $phpDocTypeChanger
+        PhpDocTypeChanger $phpDocTypeChanger,
+        TypeUnwrapper $typeUnwrapper
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->typeUnwrapper = $typeUnwrapper;
     }
 
     /**
@@ -133,6 +142,12 @@ final class PhpDocFromTypeDeclarationDecorator
 
         if (is_a($requireTypeNodeClass, Type::class, true)) {
             $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
+
+            // cover nullable union types
+            if ($returnType instanceof UnionType) {
+                $returnType = $this->typeUnwrapper->unwrapNullableType($returnType);
+            }
+
             if (! is_a($returnType, $requireTypeNodeClass, true)) {
                 return false;
             }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeReturnDeclarationRector\Fixture;
+namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeDeclarationRector\Fixture;
 
 class ReturnArrayTypeOnClassMethod
 {
@@ -14,7 +14,7 @@ class ReturnArrayTypeOnClassMethod
 -----
 <?php
 
-namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeReturnDeclarationRector\Fixture;
+namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeDeclarationRector\Fixture;
 
 class ReturnArrayTypeOnClassMethod
 {

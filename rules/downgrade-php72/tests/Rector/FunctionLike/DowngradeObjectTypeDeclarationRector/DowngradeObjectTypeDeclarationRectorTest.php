@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
+namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector;
 
 use Iterator;
-use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
+use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradeParamObjectTypeDeclarationRectorTest extends AbstractRectorTestCase
+final class DowngradeObjectTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @requires PHP 7.2
@@ -27,6 +27,6 @@ final class DowngradeParamObjectTypeDeclarationRectorTest extends AbstractRector
 
     protected function getRectorClass(): string
     {
-        return DowngradeParamObjectTypeDeclarationRector::class;
+        return DowngradeObjectTypeDeclarationRector::class;
     }
 }

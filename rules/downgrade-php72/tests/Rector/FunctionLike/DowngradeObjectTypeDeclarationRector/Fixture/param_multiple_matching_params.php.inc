@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector\Fixture;
+namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector\Fixture;
 
 class MultipleMatchingParams
 {
@@ -13,7 +13,7 @@ class MultipleMatchingParams
 -----
 <?php
 
-namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector\Fixture;
+namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector\Fixture;
 
 class MultipleMatchingParams
 {

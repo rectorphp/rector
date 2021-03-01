@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector\Fixture;
+namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector\Fixture;
 
 class DocblockExists {
     /**
@@ -15,7 +15,7 @@ class DocblockExists {
 -----
 <?php
 
-namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector\Fixture;
+namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector\Fixture;
 
 class DocblockExists {
     /**

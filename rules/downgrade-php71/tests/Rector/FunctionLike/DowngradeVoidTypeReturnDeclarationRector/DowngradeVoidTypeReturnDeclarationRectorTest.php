@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector;
+namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector;
 
 use Iterator;
-use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector;
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradeVoidTypeReturnDeclarationRectorTest extends AbstractRectorTestCase
+final class DowngradeVoidTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class DowngradeVoidTypeReturnDeclarationRectorTest extends AbstractRectorT
 
     protected function getRectorClass(): string
     {
-        return DowngradeVoidTypeReturnDeclarationRector::class;
+        return DowngradeVoidTypeDeclarationRector::class;
     }
 }

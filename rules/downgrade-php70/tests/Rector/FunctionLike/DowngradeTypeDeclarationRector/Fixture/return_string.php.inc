@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeReturnDeclarationRector\Fixture;
+namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeDeclarationRector\Fixture;
 
-class Fixture
+final class ReturnString
 {
     public function run(): string
     {
@@ -14,9 +14,9 @@ class Fixture
 -----
 <?php
 
-namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeReturnDeclarationRector\Fixture;
+namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeDeclarationRector\Fixture;
 
-class Fixture
+final class ReturnString
 {
     /**
      * @return string

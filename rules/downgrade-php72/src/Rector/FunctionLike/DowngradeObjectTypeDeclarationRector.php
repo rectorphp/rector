@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp71\Rector\FunctionLike;
+namespace Rector\DowngradePhp72\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PHPStan\Type\VoidType;
+use PHPStan\Type\ObjectWithoutClassType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector\DowngradeVoidTypeDeclarationRectorTest
+ * @see \Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector\DowngradeObjectTypeDeclarationRectorTest
  */
-final class DowngradeVoidTypeDeclarationRector extends AbstractRector
+final class DowngradeObjectTypeDeclarationRector extends AbstractRector
 {
     /**
      * @var PhpDocFromTypeDeclarationDecorator
@@ -36,16 +36,34 @@ final class DowngradeVoidTypeDeclarationRector extends AbstractRector
         return [Function_::class, ClassMethod::class];
     }
 
+    /**
+     * @param Function_|ClassMethod $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        foreach ($node->params as $param) {
+            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType(
+                $param,
+                $node,
+                ObjectWithoutClassType::class
+            );
+        }
+
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, ObjectWithoutClassType::class);
+
+        return $node;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Remove "void" return type, add a "@return void" tag instead',
+            'Remove the "object" param and return type, add a @param and @return tags instead',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run(): void
+    public function someFunction(object $someObject): object
     {
     }
 }
@@ -55,9 +73,10 @@ CODE_SAMPLE
 class SomeClass
 {
     /**
-     * @return void
+     * @param object $someObject
+     * @return object
      */
-    public function run()
+    public function someFunction($someObject)
     {
     }
 }
@@ -65,15 +84,5 @@ CODE_SAMPLE
                 ),
             ]
         );
-    }
-
-    /**
-     * @param ClassMethod|Function_ $node
-     */
-    public function refactor(Node $node): ?Node
-    {
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, VoidType::class);
-
-        return $node;
     }
 }

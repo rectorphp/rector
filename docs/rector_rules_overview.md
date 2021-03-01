@@ -5781,11 +5781,11 @@ Remove the type params, add `@param` tags instead
 
 <br>
 
-### DowngradeTypeReturnDeclarationRector
+### DowngradeTypeDeclarationRector
 
 Remove returning types, add a `@return` tag instead
 
-- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeReturnDeclarationRector`](/rules/downgrade-php70/src/Rector/FunctionLike/DowngradeTypeReturnDeclarationRector.php)
+- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeDeclarationRector`](/rules/downgrade-php70/src/Rector/FunctionLike/DowngradeTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -5953,11 +5953,11 @@ Downgrade single one | separated to multi catch exception
 
 <br>
 
-### DowngradeVoidTypeReturnDeclarationRector
+### DowngradeVoidTypeDeclarationRector
 
 Remove "void" return type, add a `"@return` void" tag instead
 
-- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeVoidTypeReturnDeclarationRector.php)
+- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeVoidTypeDeclarationRector.php)
 
 ```diff
  class SomeClass

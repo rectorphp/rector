@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector\Fixture;
+namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector\Fixture;
 
 class Fixture
 {
@@ -14,7 +14,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector\Fixture;
+namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector\Fixture;
 
 class Fixture
 {
