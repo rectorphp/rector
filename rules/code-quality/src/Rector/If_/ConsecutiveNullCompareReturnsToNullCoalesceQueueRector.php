@@ -156,8 +156,8 @@ CODE_SAMPLE
         $right = array_shift($coalescingNodes);
 
         $coalesceNode = new Coalesce($left, $right);
-        foreach ($coalescingNodes as $nextCoalescingNode) {
-            $coalesceNode = new Coalesce($coalesceNode, $nextCoalescingNode);
+        foreach ($coalescingNodes as $coalescingNode) {
+            $coalesceNode = new Coalesce($coalesceNode, $coalescingNode);
         }
 
         return new Return_($coalesceNode);
