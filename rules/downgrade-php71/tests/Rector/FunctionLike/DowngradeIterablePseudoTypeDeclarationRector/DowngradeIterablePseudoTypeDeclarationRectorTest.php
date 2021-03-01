@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector;
+namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeIterablePseudoTypeDeclarationRector;
 
 use Iterator;
-use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector;
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeDeclarationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradeIterablePseudoTypeReturnDeclarationRectorTest extends AbstractRectorTestCase
+final class DowngradeIterablePseudoTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class DowngradeIterablePseudoTypeReturnDeclarationRectorTest extends Abstr
 
     protected function getRectorClass(): string
     {
-        return DowngradeIterablePseudoTypeReturnDeclarationRector::class;
+        return DowngradeIterablePseudoTypeDeclarationRector::class;
     }
 }

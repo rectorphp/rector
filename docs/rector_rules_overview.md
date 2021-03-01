@@ -5847,11 +5847,11 @@ Remove the iterable pseudo type params, add `@param` tags instead
 
 <br>
 
-### DowngradeIterablePseudoTypeReturnDeclarationRector
+### DowngradeIterablePseudoTypeDeclarationRector
 
 Remove returning iterable pseud type, add a `@return` tag instead
 
-- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeReturnDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeIterablePseudoTypeReturnDeclarationRector.php)
+- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeIterablePseudoTypeDeclarationRector.php)
 
 ```diff
  class SomeClass

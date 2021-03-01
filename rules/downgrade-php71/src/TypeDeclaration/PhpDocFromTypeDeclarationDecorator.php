@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp71\TypeDeclaration;
 
+use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -50,30 +51,6 @@ final class PhpDocFromTypeDeclarationDecorator
 
     /**
      * @param ClassMethod|Function_ $functionLike
-     * @param array<class-string<Type>> $allowedTypes
-     */
-    public function decorateParam(Param $param, FunctionLike $functionLike, array $allowedTypes = [])
-    {
-        if ($param->type === null) {
-            return;
-        }
-
-        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-        foreach ($allowedTypes as $allowedType) {
-            if (is_a($type, $allowedType, true)) {
-                return;
-            }
-        }
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
-        $paramName = $this->nodeNameResolver->getName($param);
-        $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
-
-        $param->type = null;
-    }
-
-    /**
-     * @param ClassMethod|Function_ $functionLike
      */
     public function decorateReturn(FunctionLike $functionLike): void
     {
@@ -90,7 +67,45 @@ final class PhpDocFromTypeDeclarationDecorator
 
     /**
      * @param ClassMethod|Function_ $functionLike
-     * @param class-string<\PhpParser\Node> $requireTypeNode
+     * @param array<class-string<Type>> $excludedTypes
+     */
+    public function decorateParam(Param $param, FunctionLike $functionLike, array $excludedTypes = [])
+    {
+        if ($param->type === null) {
+            return;
+        }
+
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        foreach ($excludedTypes as $excludedType) {
+            if (is_a($type, $excludedType, true)) {
+                return;
+            }
+        }
+
+        $this->moveParamTypeToParamDoc($functionLike, $param, $type);
+    }
+
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     * @param class-string<Node|Type> $requireTypeNode
+     */
+    public function decorateParamWithSpecificType(Param $param, FunctionLike $functionLike, string $requireTypeNode)
+    {
+        if ($param->type === null) {
+            return;
+        }
+
+        if (! $this->isTypeMatch($param->type, $requireTypeNode)) {
+            return;
+        }
+
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        $this->moveParamTypeToParamDoc($functionLike, $param, $type);
+    }
+
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     * @param class-string<Node|Type> $requireTypeNode
      */
     public function decorateReturnWithSpecificType(FunctionLike $functionLike, string $requireTypeNode): void
     {
@@ -98,10 +113,40 @@ final class PhpDocFromTypeDeclarationDecorator
             return;
         }
 
-        if (! is_a($functionLike->returnType, $requireTypeNode, true)) {
+        if (! $this->isTypeMatch($functionLike->returnType, $requireTypeNode)) {
             return;
         }
 
         $this->decorateReturn($functionLike);
+    }
+
+    /**
+     * @param class-string<Node|Type> $requireTypeNodeClass
+     */
+    private function isTypeMatch(Node $typeNode, string $requireTypeNodeClass): bool
+    {
+        if (is_a($requireTypeNodeClass, Node::class, true)) {
+            if (! is_a($typeNode, $requireTypeNodeClass, true)) {
+                return false;
+            }
+        }
+
+        if (is_a($requireTypeNodeClass, Type::class, true)) {
+            $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
+            if (! is_a($returnType, $requireTypeNodeClass, true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function moveParamTypeToParamDoc($functionLike, Param $param, Type $type): void
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
+        $paramName = $this->nodeNameResolver->getName($param);
+        $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
+
+        $param->type = null;
     }
 }

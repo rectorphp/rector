@@ -7,16 +7,16 @@ namespace Rector\DowngradePhp71\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PHPStan\Type\VoidType;
+use PHPStan\Type\IterableType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector\DowngradeVoidTypeReturnDeclarationRectorTest
+ * @see \Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeIterablePseudoTypeDeclarationRector\DowngradeIterablePseudoTypeDeclarationRectorTest
  */
-final class DowngradeVoidTypeReturnDeclarationRector extends AbstractRector
+final class DowngradeIterablePseudoTypeDeclarationRector extends AbstractRector
 {
     /**
      * @var PhpDocFromTypeDeclarationDecorator
@@ -39,14 +39,15 @@ final class DowngradeVoidTypeReturnDeclarationRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Remove "void" return type, add a "@return void" tag instead',
+            'Remove the iterable pseudo type params and returns, add @param and @return tags instead',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run(): void
+    public function run(iterable $iterator): iterable
     {
+        // do something
     }
 }
 CODE_SAMPLE
@@ -55,10 +56,12 @@ CODE_SAMPLE
 class SomeClass
 {
     /**
-     * @return void
+     * @param mixed[]|\Traversable $iterator
+     * @return mixed[]|\Traversable
      */
-    public function run()
+    public function run($iterator)
     {
+        // do something
     }
 }
 CODE_SAMPLE
@@ -68,11 +71,19 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod|Function_ $node
+     * @param Function_|ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, VoidType::class);
+        foreach ($node->params as $param) {
+            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType(
+                $param,
+                $node,
+                IterableType::class
+            );
+        }
+
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, IterableType::class);
 
         return $node;
     }
