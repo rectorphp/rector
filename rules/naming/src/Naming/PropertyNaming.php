@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -314,8 +313,7 @@ final class PropertyNaming
 
         $classMethods = $this->betterNodeFinder->findInstanceOf($classLike, ClassMethod::class);
         return array_filter($classMethods, function (ClassMethod $classMethod): bool {
-            $classMethodName = $this->nodeNameResolver->getName($classMethod);
-            return Strings::match($classMethodName, self::PREFIXED_CLASS_METHODS_REGEX) !== null;
+            return $this->isBoolishMethodName($classMethod);
         });
     }
 
@@ -327,28 +325,10 @@ final class PropertyNaming
         array $prefixedClassMethods,
         Property $property
     ): array {
-        $currentName = $this->nodeNameResolver->getName($property);
+        $classMethodName = $this->nodeNameResolver->getName($property);
 
-        return array_filter($prefixedClassMethods, function (ClassMethod $classMethod) use ($currentName): bool {
-            if ((array) $classMethod->stmts === []) {
-                return false;
-            }
-
-            $return = $classMethod->stmts[0];
-            if (! $return instanceof Return_) {
-                return false;
-            }
-
-            $node = $return->expr;
-            if (! $node instanceof Expr) {
-                return false;
-            }
-
-            if ($node instanceof MethodCall) {
-                return false;
-            }
-
-            return $this->nodeNameResolver->isName($node, $currentName);
+        return array_filter($prefixedClassMethods, function (ClassMethod $classMethod) use ($classMethodName): bool {
+            return $this->doesClassMethodMatchReturnPropertyFetch($classMethod, $classMethodName);
         });
     }
 
@@ -374,5 +354,28 @@ final class PropertyNaming
         }
 
         return ctype_digit($char);
+    }
+
+    private function isBoolishMethodName(ClassMethod $classMethod): bool
+    {
+        $classMethodName = $this->nodeNameResolver->getName($classMethod);
+        return (bool) Strings::match($classMethodName, self::PREFIXED_CLASS_METHODS_REGEX);
+    }
+
+    private function doesClassMethodMatchReturnPropertyFetch(
+        ClassMethod $classMethod,
+        string $currentClassMethodName
+    ): bool {
+        $possibleReturn = $classMethod->stmts[0] ?? null;
+        if (! $possibleReturn instanceof Return_) {
+            return false;
+        }
+
+        $node = $possibleReturn->expr;
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isName($node->name, $currentClassMethodName);
     }
 }

@@ -111,25 +111,24 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $variableAndCallAssign = $this->varValueAndCallForeachMatcher->match($node);
-
-        if (! $variableAndCallAssign instanceof VariableAndCallForeach) {
+        $variableAndCallForeach = $this->varValueAndCallForeachMatcher->match($node);
+        if (! $variableAndCallForeach instanceof VariableAndCallForeach) {
             return null;
         }
 
-        $expectedName = $this->expectedNameResolver->resolveForForeach($variableAndCallAssign->getCall());
+        $expectedName = $this->expectedNameResolver->resolveForForeach($variableAndCallForeach->getCall());
         if ($expectedName === null) {
             return null;
         }
-        if ($this->isName($variableAndCallAssign->getVariable(), $expectedName)) {
+        if ($this->isName($variableAndCallForeach->getVariable(), $expectedName)) {
             return null;
         }
 
-        if ($this->shouldSkip($variableAndCallAssign, $expectedName)) {
+        if ($this->shouldSkip($variableAndCallForeach, $expectedName)) {
             return null;
         }
 
-        $this->renameVariable($variableAndCallAssign, $expectedName);
+        $this->renameVariable($variableAndCallForeach, $expectedName);
 
         return $node;
     }

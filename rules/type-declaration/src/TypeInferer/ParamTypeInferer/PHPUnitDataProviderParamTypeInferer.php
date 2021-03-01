@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
@@ -23,7 +24,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
-use PhpParser\Node\Expr\ArrayItem;
 
 final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInterface
 {
@@ -113,17 +113,17 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
     {
         $paramOnPositionTypes = [];
 
-        if(! $returns[0]->expr instanceof Array_ ) {
+        if (! $returns[0]->expr instanceof Array_) {
             throw new ShouldNotHappenException();
         }
 
         foreach ($returns[0]->expr->items as $singleDataProvidedSet) {
-            if(! $singleDataProvidedSet instanceof ArrayItem || ! $singleDataProvidedSet->value instanceof Array_) {
+            if (! $singleDataProvidedSet instanceof ArrayItem || ! $singleDataProvidedSet->value instanceof Array_) {
                 throw new ShouldNotHappenException();
             }
 
-            foreach($singleDataProvidedSet->value->items as $position => $singleDataProvidedSetItem ) {
-                if( $position !== $parameterPosition || ! $singleDataProvidedSetItem instanceof ArrayItem ) {
+            foreach ($singleDataProvidedSet->value->items as $position => $singleDataProvidedSetItem) {
+                if ($position !== $parameterPosition || ! $singleDataProvidedSetItem instanceof ArrayItem) {
                     continue;
                 }
 

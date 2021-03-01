@@ -4,31 +4,65 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Matcher;
 
-use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\Function_;
+use Rector\Naming\ValueObject\VariableAndCallForeach;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
-final class ForeachMatcher extends AbstractMatcher
+final class ForeachMatcher
 {
     /**
-     * @param Foreach_ $node
+     * @var NodeNameResolver
      */
-    public function getVariableName(Node $node): ?string
+    private $nodeNameResolver;
+
+    /**
+     * @var CallMatcher
+     */
+    private $callMatcher;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, CallMatcher $callMatcher)
     {
-        if (! $node->valueVar instanceof Variable) {
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->callMatcher = $callMatcher;
+    }
+
+    public function match(Foreach_ $foreach): ?VariableAndCallForeach
+    {
+        $call = $this->callMatcher->matchCall($foreach);
+        if ($call === null) {
             return null;
         }
 
-        return $this->nodeNameResolver->getName($node->valueVar);
+        if (! $foreach->valueVar instanceof Variable) {
+            return null;
+        }
+
+        $functionLike = $this->getFunctionLike($foreach);
+        if ($functionLike === null) {
+            return null;
+        }
+
+        $variableName = $this->nodeNameResolver->getName($foreach->valueVar);
+        if ($variableName === null) {
+            return null;
+        }
+
+        return new VariableAndCallForeach($foreach->valueVar, $call, $variableName, $functionLike);
     }
 
     /**
-     * @param Foreach_ $node
+     * @return ClassMethod|Function_|Closure|null
      */
-    public function getVariable(Node $node): Variable
+    private function getFunctionLike(Foreach_ $foreach): ?FunctionLike
     {
-        /** @var Variable $variable */
-        $variable = $node->valueVar;
-        return $variable;
+        return $foreach->getAttribute(AttributeKey::CLOSURE_NODE) ??
+            $foreach->getAttribute(AttributeKey::METHOD_NODE) ??
+            $foreach->getAttribute(AttributeKey::FUNCTION_NODE);
     }
 }

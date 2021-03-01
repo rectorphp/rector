@@ -8,7 +8,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
@@ -99,15 +98,20 @@ final class ClassManipulator
      */
     public function getPublicMethodNames(Class_ $class): array
     {
-        $publicMethods = array_filter($class->getMethods(), function (ClassMethod $classMethod): bool {
+        $publicMethodNames = [];
+        foreach ($class->getMethods() as $classMethod) {
             if ($classMethod->isAbstract()) {
-                return false;
+                continue;
             }
 
-            return $classMethod->isPublic();
-        });
+            if ($classMethod->isAbstract()) {
+                continue;
+            }
 
-        return $this->nodeNameResolver->getNames($publicMethods);
+            $publicMethodNames[] = $this->nodeNameResolver->getName($classMethod);
+        }
+
+        return $publicMethodNames;
     }
 
     /**

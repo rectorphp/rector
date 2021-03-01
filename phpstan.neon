@@ -596,6 +596,12 @@ parameters:
             paths:
                 - packages/node-type-resolver/tests
 
-        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\AddPackageToRequireComposerRector" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\MatchPropertyTypeConflictingNameGuard" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\BoolPropertyConflictingNameGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\AddPackageToRequireComposerRector" class\. Use unique content or service instead#'
+        - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer" class\. Use unique content or service instead#'
+
+        - '#PHPDoc tag @return with type PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_\|Rector\\Naming\\Matcher\\Closure\|null is not subtype of native type PhpParser\\Node\\FunctionLike\|null#'
+
+        -
+            message: '#Do not use "array_filter" function with complex content, make it more readable with extracted method or single\-line statement#'
+            paths:
+                - src/Application/ActiveRectorsProvider.php

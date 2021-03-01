@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector\Fixture;
 
-class PropertyFetch
+final class SomePropertyFetch
 {
     public function run()
     {
@@ -19,7 +19,7 @@ class PropertyFetch
 
 namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector\Fixture;
 
-class PropertyFetch
+final class SomePropertyFetch
 {
     public function run()
     {
