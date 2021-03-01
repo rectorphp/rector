@@ -107,11 +107,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isFoundInPreviousNode($node)) {
-            return null;
-        }
-
-        if ($this->isUsedNextOrPreviousAssignVar($node, $camelCaseName)) {
+        if ($this->isUsedNextPreviousAssignVar($node, $camelCaseName)) {
             return null;
         }
 
@@ -120,29 +116,48 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isUsedNextOrPreviousAssignVar(Variable $variable, string $camelCaseName): bool
+    private function isUsedNextPreviousAssignVar(Variable $variable, string $camelCaseName): bool
     {
-        $variableMethodNode = $variable->getAttribute(AttributeKey::METHOD_NAME);
-        $hasNext = (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use ($variableMethodNode, $camelCaseName): bool {
+        $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Assign) {
+            return false;
+        }
+
+        if ($parent->var !== $variable) {
+            return false;
+        }
+
+        $variableMethodNode = $variable->getAttribute(AttributeKey::METHOD_NODE);
+        if (! $variableMethodNode instanceof Node) {
+            return false;
+        }
+
+        $usedInNext = (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
+            $variableMethodNode,
+            $camelCaseName
+        ): bool {
             return $this->hasEqualVariable($node, $variableMethodNode, $camelCaseName);
         });
 
-        if ($hasNext) {
+        if ($usedInNext) {
             return true;
         }
 
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use ($variableMethodNode, $camelCaseName): bool {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use (
+            $variableMethodNode,
+            $camelCaseName
+        ): bool {
             return $this->hasEqualVariable($node, $variableMethodNode, $camelCaseName);
         });
     }
 
-    private function hasEqualVariable(Node $node, ?string $variableMethodNode, string $camelCaseName): bool
+    private function hasEqualVariable(Node $node, ?Node $variableMethodNode, string $camelCaseName): bool
     {
         if (! $node instanceof Variable) {
             return false;
         }
 
-        $methodNode = $node->getAttribute(AttributeKey::METHOD_NAME);
+        $methodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
         if ($variableMethodNode !== $methodNode) {
             return false;
         }
@@ -190,14 +205,5 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    private function isFoundInPreviousNode(Variable $variable): bool
-    {
-        $previousNode = $variable->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if (! $previousNode instanceof Expr) {
-            return false;
-        }
-        return $this->isFoundInParentNode($variable);
     }
 }
