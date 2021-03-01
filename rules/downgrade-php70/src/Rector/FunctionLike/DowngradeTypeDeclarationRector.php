@@ -10,8 +10,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\CallableType;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -21,13 +21,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeTypeDeclarationRector extends AbstractRector
 {
     /**
-     * @var PhpDocTypeChanger
+     * @var PhpDocFromTypeDeclarationDecorator
      */
-    private $phpDocTypeChanger;
+    private $phpDocFromTypeDeclarationDecorator;
 
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
     {
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
     }
 
     /**
@@ -76,7 +76,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $this->refactorParams($node);
-        $this->refactorReturn($node);
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturn($node);
 
         return $node;
     }
@@ -87,41 +87,11 @@ CODE_SAMPLE
     private function refactorParams(FunctionLike $functionLike): void
     {
         foreach ($functionLike->params as $param) {
-            if ($param->type === null) {
-                continue;
-            }
-
-            // only 2 allowed types
-            $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-            if (is_a($type, ArrayType::class, true)) {
-                continue;
-            }
-
-            if (is_a($type, CallableType::class, true)) {
-                continue;
-            }
-
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
-            $paramName = $this->nodeNameResolver->getName($param);
-            $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
-
-            $param->type = null;
+            $this->phpDocFromTypeDeclarationDecorator->decorateParam(
+                $param,
+                $functionLike,
+                [ArrayType::class, CallableType::class]
+            );
         }
-    }
-
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
-    private function refactorReturn(FunctionLike $functionLike): void
-    {
-        if ($functionLike->returnType === null) {
-            return;
-        }
-
-        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
-        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
-
-        $functionLike->returnType = null;
     }
 }
