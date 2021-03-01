@@ -25,11 +25,6 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class PHPStanServicesFactory
 {
     /**
-     * @var mixed[]
-     */
-    private const ANALYSED_PATHS_FROM_CONFIG = [];
-
-    /**
      * @var Container
      */
     private $container;
