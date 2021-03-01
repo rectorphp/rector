@@ -172,12 +172,12 @@ CODE_SAMPLE
         }
 
         $assignsWithUniqueName = [];
-        foreach ($assignsByName as $assigns) {
-            if (count($assigns) > 1) {
+        foreach ($assignsByName as $singleAssignsByName) {
+            if ((is_countable($singleAssignsByName) ? count($singleAssignsByName) : 0) > 1) {
                 continue;
             }
 
-            $assignsWithUniqueName = array_merge($assignsWithUniqueName, $assigns);
+            $assignsWithUniqueName = array_merge($assignsWithUniqueName, $singleAssignsByName);
         }
 
         return $assignsWithUniqueName;

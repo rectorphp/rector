@@ -193,12 +193,15 @@ CODE_SAMPLE
      */
     private function addClassConsts(array $stringsToReplace, Class_ $class): void
     {
-        foreach ($stringsToReplace as $stringToReplace) {
-            $constantName = $this->createConstName($stringToReplace);
+        foreach ($stringsToReplace as $singleStringsToReplace) {
+            $constantName = $this->createConstName($singleStringsToReplace);
 
-            $classConst = $this->nodeFactory->createPrivateClassConst($constantName, new String_($stringToReplace));
+            $classConst = $this->nodeFactory->createPrivateClassConst(
+                $constantName,
+                new String_($singleStringsToReplace)
+            );
 
-            $this->classInsertManipulator->addConstantToClass($class, $stringToReplace, $classConst);
+            $this->classInsertManipulator->addConstantToClass($class, $singleStringsToReplace, $classConst);
         }
     }
 

@@ -254,8 +254,8 @@ CODE_SAMPLE
     {
         $isChild = false;
 
-        foreach ($constantUsingClassReflections as $constantUsingObjectType) {
-            if ($constantUsingObjectType->isSubclassOf($classReflection->getName())) {
+        foreach ($constantUsingClassReflections as $constantUsingClassReflection) {
+            if ($constantUsingClassReflection->isSubclassOf($classReflection->getName())) {
                 $isChild = true;
             } else {
                 // not a child, must be public

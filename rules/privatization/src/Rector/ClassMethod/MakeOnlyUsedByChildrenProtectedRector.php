@@ -120,8 +120,8 @@ CODE_SAMPLE
         /** @var string $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
-        foreach ($externalCalls as $call) {
-            $class = $call->getAttribute(AttributeKey::CLASS_NODE);
+        foreach ($externalCalls as $externalCall) {
+            $class = $externalCall->getAttribute(AttributeKey::CLASS_NODE);
             if (! $class instanceof Class_) {
                 return null;
             }
@@ -171,15 +171,16 @@ CODE_SAMPLE
     {
         $childrenClassReflection = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
 
-        foreach ($childrenClassReflection as $childClassReflection) {
-            if (! $childClassReflection->hasMethod($methodName)) {
+        foreach ($childrenClassReflection as $singleChildrenClassReflection) {
+            $singleChildrenClassReflectionHasMethod = $singleChildrenClassReflection->hasMethod($methodName);
+            if (! $singleChildrenClassReflectionHasMethod) {
                 continue;
             }
 
-            $methodReflection = $childClassReflection->getNativeMethod($methodName);
+            $methodReflection = $singleChildrenClassReflection->getNativeMethod($methodName);
             $methodDeclaringClass = $methodReflection->getDeclaringClass();
 
-            if ($methodDeclaringClass->getName() === $childClassReflection->getName()) {
+            if ($methodDeclaringClass->getName() === $singleChildrenClassReflection->getName()) {
                 return true;
             }
         }
