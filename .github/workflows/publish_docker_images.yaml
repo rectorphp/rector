@@ -36,6 +36,7 @@ jobs:
 
                   docker buildx create --name builder-php${{ matrix.php-version }} --use
                   docker buildx build \
+                        --progress plain \
                         --cache-from=$GITHUB_REPOSITORY:build-cache-php${{ matrix.php-version }} \
                         --cache-to=type=registry,ref=$GITHUB_REPOSITORY:build-cache-php${{ matrix.php-version }},mode=max,push=true \
                         --target rector \
@@ -44,6 +45,7 @@ jobs:
                         --build-arg PHP_VERSION=${{ matrix.php-version }} .
 
                   docker buildx build \
+                        --progress plain \
                         --cache-from=$GITHUB_REPOSITORY:build-cache-php${{ matrix.php-version }} \
                         --cache-to=type=registry,ref=$GITHUB_REPOSITORY:build-cache-php${{ matrix.php-version }},mode=max,push=true \
                         --target rector-secured \
