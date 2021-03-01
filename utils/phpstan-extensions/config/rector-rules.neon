@@ -55,6 +55,13 @@ services:
 #                - PhpParser\Node
 
     -
+        class: Symplify\PHPStanRules\Rules\ForbiddenComplexFuncCallRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            forbiddenComplexFunctions:
+                - array-filter
+
+    -
         class: Symplify\PHPStanRules\Rules\IfNewTypeThenImplementInterfaceRule
         tags: [phpstan.rules.rule]
         arguments:
