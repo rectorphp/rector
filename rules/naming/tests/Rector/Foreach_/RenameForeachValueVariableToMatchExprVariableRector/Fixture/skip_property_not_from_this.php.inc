@@ -2,17 +2,12 @@
 
 namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector\Fixture;
 
-class AClass
-{
-    public $vars = [];
-}
-
 class SkipPropertyNotFromThis
 {
-    public function run(AClass $aClass)
+    public function run()
     {
         $array = [];
-        foreach ($aClass->vars as $property) {
+        foreach ($object->vars as $property) {
             $array[] = $property;
         }
     }
