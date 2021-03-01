@@ -4,9 +4,6 @@ services:
         tags: [phpstan.rules.rule]
         arguments:
             allowedParentTypes:
-                # skip AbstractDowngradeRectorp
-                #- Rector\Core\Rector\AbstractRector
-
                 - Rector\Utils\DoctrineAnnotationParserSyncer\FileSyncer\AbstractClassSyncer
                 - PhpParser\NodeAbstract
                 - PHPStan\Type\BooleanType
@@ -17,6 +14,9 @@ services:
                 # value objects
                 - Rector\Defluent\ValueObject\AbstractRootExpr
                 - Symplify\SetConfigResolver\Provider\AbstractSetProvider
+            allowedDirectParentTypes:
+                - Rector\Core\Rector\AbstractRector
+                - Rector\Core\Rector\AbstractTemporaryRector
 
     -
         class: Symplify\PHPStanRules\Rules\ServiceAndValueObjectHaveSameStartsRule
