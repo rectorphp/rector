@@ -4,7 +4,9 @@ services:
         tags: [phpstan.rules.rule]
         arguments:
             allowedParentTypes:
-                - Rector\Core\Rector\AbstractRector
+                # skip AbstractDowngradeRectorp
+                #- Rector\Core\Rector\AbstractRector
+
                 - Rector\Utils\DoctrineAnnotationParserSyncer\FileSyncer\AbstractClassSyncer
                 - PhpParser\NodeAbstract
                 - PHPStan\Type\BooleanType
