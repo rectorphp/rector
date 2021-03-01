@@ -23,26 +23,26 @@ use Traversable;
  */
 abstract class AbstractDowngradeParamDeclarationRector extends AbstractRector implements DowngradeParamDeclarationRectorInterface
 {
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
+//    /**
+//     * @var PhpDocTypeChanger
+//     */
+//    private $phpDocTypeChanger;
+//
+//    /**
+//     * @required
+//     */
+//    public function autowireAbstractDowngradeParamDeclarationRector(PhpDocTypeChanger $phpDocTypeChanger): void
+//    {
+//        $this->phpDocTypeChanger = $phpDocTypeChanger;
+//    }
 
-    /**
-     * @required
-     */
-    public function autowireAbstractDowngradeParamDeclarationRector(PhpDocTypeChanger $phpDocTypeChanger): void
-    {
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-    }
-
-    /**
-     * @return array<class-string<Node>>
-     */
-    public function getNodeTypes(): array
-    {
-        return [Function_::class, ClassMethod::class];
-    }
+//    /**
+//     * @return array<class-string<Node>>
+//     */
+//    public function getNodeTypes(): array
+//    {
+//        return [Function_::class, ClassMethod::class];
+//    }
 
     /**
      * @param ClassMethod|Function_ $node

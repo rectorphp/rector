@@ -5759,11 +5759,11 @@ Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 
 ## DowngradePhp70
 
-### DowngradeTypeParamDeclarationRector
+### DowngradeTypeDeclarationRector
 
 Remove the type params, add `@param` tags instead
 
-- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeParamDeclarationRector`](/rules/downgrade-php70/src/Rector/FunctionLike/DowngradeTypeParamDeclarationRector.php)
+- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeDeclarationRector`](/rules/downgrade-php70/src/Rector/FunctionLike/DowngradeTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
