@@ -10,10 +10,10 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
+use PHPStan\Type\ThisType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PHPStan\Type\ThisType;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector\RenameForeachValueVariableToMatchExprVariableRectorTest
@@ -86,7 +86,10 @@ CODE_SAMPLE
         }
 
         $exprName = $this->getName($node->expr);
-        if ($exprName === null || $node->keyVar instanceof Node) {
+        if ($exprName === null) {
+            return null;
+        }
+        if ($node->keyVar instanceof Node) {
             return null;
         }
 
@@ -146,11 +149,8 @@ CODE_SAMPLE
         return $foreach;
     }
 
-    private function shouldSkip(
-        string $valueVarName,
-        string $singularValueVarName,
-        Foreach_ $foreach
-    ): bool {
+    private function shouldSkip(string $valueVarName, string $singularValueVarName, Foreach_ $foreach): bool
+    {
         if ($singularValueVarName === $valueVarName) {
             return true;
         }
