@@ -330,16 +330,11 @@ final class PropertyNaming
         $currentName = $this->nodeNameResolver->getName($property);
 
         return array_filter($prefixedClassMethods, function (ClassMethod $classMethod) use ($currentName): bool {
-            $stmts = $classMethod->stmts;
-            if ($stmts === null) {
+            if ((array) $classMethod->stmts === []) {
                 return false;
             }
 
-            if (! array_key_exists(0, $stmts)) {
-                return false;
-            }
-
-            $return = $stmts[0];
+            $return = $classMethod->stmts[0];
             if (! $return instanceof Return_) {
                 return false;
             }

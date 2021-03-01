@@ -18,7 +18,6 @@ use Rector\NetteKdyby\DataProvider\EventAndListenerTreeProvider;
 use Rector\NetteKdyby\ValueObject\EventAndListenerTree;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -129,7 +128,7 @@ CODE_SAMPLE
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
         $this->addConstructorDependencyToClass(
             $classLike,
-            new FullyQualifiedObjectType(EventDispatcherInterface::class),
+            new FullyQualifiedObjectType('Symfony\Contracts\EventDispatcher\EventDispatcherInterface'),
             'eventDispatcher'
         );
 

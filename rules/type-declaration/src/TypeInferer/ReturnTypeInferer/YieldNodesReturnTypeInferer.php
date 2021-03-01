@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
-use Iterator;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
@@ -86,7 +85,7 @@ final class YieldNodesReturnTypeInferer implements ReturnTypeInfererInterface
             // @see https://www.php.net/manual/en/language.types.iterable.php
             $types[] = new IterableType(new MixedType(), new MixedType());
         } else {
-            $types[] = new ObjectType(Iterator::class);
+            $types[] = new ObjectType('Iterator');
         }
 
         return $this->typeFactory->createMixedPassedOrUnionType($types);

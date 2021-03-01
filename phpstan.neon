@@ -99,8 +99,6 @@ parameters:
         # broken
         - '#Parameter \#2 \$name of method Rector\\NodeNameResolver\\NodeNameResolver\:\:isName\(\) expects string, string\|null given#'
 
-        - '#Parameter \#1 \$funcCall of method Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\AbstractMatchAndRefactor\:\:createStrStartsWithValueObjectFromFuncCall\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node\\Expr given#'
-
         # mostly strings in tests
         - '#Method Rector\\Naming\\Naming\\PropertyNaming\:\:resolveShortClassName\(\) should return string but returns string\|null#'
 
@@ -232,7 +230,6 @@ parameters:
                 - packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfo.php # 108
                 - rules/coding-style/src/Rector/ClassMethod/YieldClassMethodToArrayClassMethodRector.php # 47
                 - rules/php70/src/EregToPcreTransformer.php # 66
-                - rules/type-declaration/src/Rector/FunctionLike/ReturnTypeDeclarationRector.php # 82
 
         # trait in trait call
         - '#Parameter \#1 \$expr of class PhpParser\\Node\\Stmt\\Expression constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt given#'
@@ -437,8 +434,6 @@ parameters:
             paths:
                 - rules/removing-static/tests/Rector/Property/DesiredPropertyClassMethodTypeToDynamicRector/config/some_config.php
 
-        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\AddPackageToRequireComposerRector" class\. Use unique content or abstract service instead#'
-
         # buggy phpstan clas-string
         - '#Method (.*?) should return class\-string but returns string#'
 
@@ -504,20 +499,13 @@ parameters:
         # known values
         - '#Method Rector\\Testing\\Finder\\RectorsFinder\:\:findClassesInDirectoriesByName\(\) should return array<class\-string\> but returns array<int, \(int\|string\)\>#'
         - '#Property PhpParser\\Node\\Param\:\:\$type \(PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\|null\) does not accept PhpParser\\Node#'
-        - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer" class\. Use unique content or abstract service instead#'
 
         -
             message: '#"%s" in sprintf\(\) format must be quoted#'
             paths:
                 - packages/attribute-aware-php-doc/src/Ast/PhpDoc/AttributeAwareParamTagValueNode.php
 
-        # @todo bug, solve in Symplify
-        -
-             message: '#Constant type should be "class\-string", but is "string"#'
-             path: rules/symfony/src/Rector/BinaryOp/ResponseStatusCodeRector.php
-
         - '#Property Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap\:\:\$binaryOpToAssignClasses \(array<class\-string<PhpParser\\Node\\Expr\\BinaryOp\>, class\-string<PhpParser\\Node\\Expr\\BinaryOp\>\>\) does not accept array#'
-        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\RemovingStatic\\Rector\\Class_\\NewUniqueObjectToEntityFactoryRector" class\. Use unique content or abstract service instead#'
         - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\RemovingStatic\\Rector\\Class_\\PassFactoryToUniqueObjectRector" class\. Use unique content or abstract service instead#'
 
         -
@@ -558,9 +546,6 @@ parameters:
 
         - '#Method Rector\\TypeDeclaration\\PhpParserTypeAnalyzer\:\:unwrapNullableAndToString\(\) should return string but returns string\|null#'
 
-        # @todo resolve in next PR!!! (Feb 2021)
-        - '#Function "array_filter\(\)" cannot be used/left in the code#'
-        - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\Isset_\\IssetOnPropertyObjectToPropertyExistsRector\:\:refactor\(\)" is 11, keep it under 9#'
         - '#Cognitive complexity for "Rector\\DeadCode\\UnusedNodeResolver\\ClassUnusedPrivateClassMethodResolver\:\:filterOutParentAbstractMethods\(\)" is 10, keep it under 9#'
 
         # known types
@@ -576,11 +561,6 @@ parameters:
             paths:
                 - rules/restoration/src/ClassMap/ExistingClassesProvider.php
 
-        # false positives
-        -
-             message: '#Empty array passed to foreach#'
-             paths:
-                 - rules/transform/src/Rector/New_/NewToConstructorInjectionRector.php
         -
             message: '#Parameter \#1 \$types of method Rector\\Defluent\\NodeAnalyzer\\FluentCallStaticTypeResolver\:\:filterOutAlreadyPresentParentClasses\(\) expects array<class\-string\>, array<int, string\> given#'
             paths:
@@ -594,15 +574,28 @@ parameters:
             paths:
                 - packages/read-write/src/Guard/VariableToConstantGuard.php
 
-        - '#Cognitive complexity for "Rector\\NetteCodeQuality\\FormControlTypeResolver\\MagicNetteFactoryInterfaceFormControlTypeResolver\:\:resolve\(\)" is 11, keep it under 9#'
         - '#Cognitive complexity for "Rector\\NetteCodeQuality\\FormControlTypeResolver\\MagicNetteFactoryInterfaceFormControlTypeResolver\:\:resolve\(\)" is 12, keep it under 9#'
         - '#Content of method "matchAssignExprToPropertyName\(\)" is duplicated with method "matchAssignExprToPropertyName\(\)" in "Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector" class\. Use unique content or abstract service instead#'
-        # make more tolerand, e.g. at least 2-3 lines
-        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\AbstractPropertyConflictingNameGuard" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\MatchPropertyTypeConflictingNameGuard" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\UnderscoreCamelCaseConflictingNameGuard" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\UnderscoreCamelCaseConflictingNameGuard" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\UnderscoreCamelCaseConflictingNameGuard" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\BoolPropertyConflictingNameGuard" class\. Use unique content or abstract service instead#'
-        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\BoolPropertyConflictingNameGuard" class\. Use unique content or abstract service instead#'
 
+        # make more tolerand, e.g. at least 2-3 lines
+        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\UnderscoreCamelCaseConflictingNameGuard" class\. Use unique content or abstract service instead#'
+
+
+        -
+            message: '#Offset 0 does not exist on array<PhpParser\\Node\\Stmt\>\|null#'
+            paths:
+                - rules/naming/src/Naming/PropertyNaming.php
+
+        -
+            message: '#Parameter \#1 \$value of function count expects array\|Countable, array<PhpParser\\Node\\Stmt\>\|null given#'
+            paths:
+                -  rules/naming/src/Naming/PropertyNaming.php
+
+        -
+            message: '#Use quoted string in constructor "new PHPStan\\Type\\ObjectType\(\)" argument on position 0 instead of "\:\:class\. It prevent scoping of the class in building prefixed package#'
+            paths:
+                - packages/node-type-resolver/tests
+
+        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\AddPackageToRequireComposerRector" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\MatchPropertyTypeConflictingNameGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\BoolPropertyConflictingNameGuard" class\. Use unique content or abstract service instead#'

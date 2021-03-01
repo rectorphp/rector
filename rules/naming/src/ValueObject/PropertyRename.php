@@ -77,6 +77,11 @@ final class PropertyRename implements RenamePropertyValueObjectInterface
         return $this->currentName;
     }
 
+    public function isAlreadyExpectedName(): bool
+    {
+        return $this->currentName === $this->expectedName;
+    }
+
     public function getClassLike(): ClassLike
     {
         return $this->classLike;

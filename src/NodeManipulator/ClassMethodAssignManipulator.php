@@ -186,7 +186,6 @@ final class ClassMethodAssignManipulator
     {
         return array_filter($readOnlyVariableAssigns, function (Assign $assign): bool {
             $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
-
             return ! $parentNode instanceof Assign;
         });
     }

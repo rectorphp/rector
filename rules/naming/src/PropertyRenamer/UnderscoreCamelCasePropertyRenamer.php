@@ -8,16 +8,24 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Naming\Guard\PropertyConflictingNameGuard\UnderscoreCamelCaseConflictingNameGuard;
 use Rector\Naming\ValueObject\PropertyRename;
 
-final class UnderscoreCamelCasePropertyRenamer extends AbstractPropertyRenamer
+final class UnderscoreCamelCasePropertyRenamer
 {
     /**
      * @var UnderscoreCamelCaseConflictingNameGuard
      */
     private $underscoreCamelCaseConflictingNameGuard;
 
-    public function __construct(UnderscoreCamelCaseConflictingNameGuard $underscoreCamelCaseConflictingNameGuard)
-    {
+    /**
+     * @var PropertyRenamer
+     */
+    private $propertyRenamer;
+
+    public function __construct(
+        UnderscoreCamelCaseConflictingNameGuard $underscoreCamelCaseConflictingNameGuard,
+        PropertyRenamer $propertyRenamer
+    ) {
         $this->underscoreCamelCaseConflictingNameGuard = $underscoreCamelCaseConflictingNameGuard;
+        $this->propertyRenamer = $propertyRenamer;
     }
 
     public function rename(PropertyRename $propertyRename): ?Property
@@ -26,6 +34,6 @@ final class UnderscoreCamelCasePropertyRenamer extends AbstractPropertyRenamer
             return null;
         }
 
-        return parent::rename($propertyRename);
+        return $this->propertyRenamer->rename($propertyRename);
     }
 }

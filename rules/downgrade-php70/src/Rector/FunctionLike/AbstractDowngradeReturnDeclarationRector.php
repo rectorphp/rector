@@ -15,7 +15,6 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp70\Contract\Rector\DowngradeReturnDeclarationRectorInterface;
-use Traversable;
 
 abstract class AbstractDowngradeReturnDeclarationRector extends AbstractRector implements DowngradeReturnDeclarationRectorInterface
 {
@@ -68,7 +67,7 @@ abstract class AbstractDowngradeReturnDeclarationRector extends AbstractRector i
 
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
         if ($type instanceof IterableType) {
-            $type = new UnionType([$type, new IntersectionType([new ObjectType(Traversable::class)])]);
+            $type = new UnionType([$type, new IntersectionType([new ObjectType('Traversable')])]);
         }
 
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);

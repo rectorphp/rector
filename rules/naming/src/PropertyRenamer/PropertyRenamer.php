@@ -9,7 +9,7 @@ use PhpParser\Node\VarLikeIdentifier;
 use Rector\Naming\RenameGuard\PropertyRenameGuard;
 use Rector\Naming\ValueObject\PropertyRename;
 
-abstract class AbstractPropertyRenamer
+final class PropertyRenamer
 {
     /**
      * @var PropertyFetchRenamer
@@ -21,20 +21,17 @@ abstract class AbstractPropertyRenamer
      */
     private $propertyRenameGuard;
 
-    /**
-     * @required
-     */
-    public function autowireAbstractPropertyRenamer(
+    public function __construct(
         PropertyRenameGuard $propertyRenameGuard,
         PropertyFetchRenamer $propertyFetchRenamer
-    ): void {
+    ) {
         $this->propertyRenameGuard = $propertyRenameGuard;
         $this->propertyFetchRenamer = $propertyFetchRenamer;
     }
 
     public function rename(PropertyRename $propertyRename): ?Property
     {
-        if (! $this->areNamesDifferent($propertyRename)) {
+        if ($propertyRename->isAlreadyExpectedName()) {
             return null;
         }
 
@@ -56,10 +53,5 @@ abstract class AbstractPropertyRenamer
             $propertyRename->getCurrentName(),
             $propertyRename->getExpectedName()
         );
-    }
-
-    private function areNamesDifferent(PropertyRename $propertyRename): bool
-    {
-        return $propertyRename->getCurrentName() !== $propertyRename->getExpectedName();
     }
 }

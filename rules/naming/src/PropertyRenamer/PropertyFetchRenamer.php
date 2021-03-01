@@ -39,10 +39,10 @@ final class PropertyFetchRenamer
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             $classLike,
             function (Node $node) use ($currentName, $expectedName): ?Node {
-                if ($this->nodeNameResolver->isLocalPropertyFetchNamed(
-                        $node,
-                        $currentName
-                    ) && $node instanceof PropertyFetch) {
+                if ($node instanceof PropertyFetch && $this->nodeNameResolver->isLocalPropertyFetchNamed(
+                    $node,
+                    $currentName
+                )) {
                     $node->name = new Identifier($expectedName);
                     return $node;
                 }
