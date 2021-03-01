@@ -4,6 +4,7 @@ on:
         # Publish `master` as Docker `latest` image.
         branches:
             - master
+            - experimental-scoped
 
         # Publish `v1.2.3` tags as releases.
         tags:
