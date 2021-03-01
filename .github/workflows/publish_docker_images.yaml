@@ -21,7 +21,6 @@ jobs:
             - name: Log into container registries
               run: |
                   echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-                  echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
             - name: Build images
               run: |
@@ -36,8 +35,8 @@ jobs:
 
                   docker buildx create --name builder-php${{ matrix.php-version }} --use
                   docker buildx build \
-                        --cache-from=ghcr.io/$GITHUB_REPOSITORY:build-cache-php${{ matrix.php-version }} \
-                        --cache-to=type=registry,ref=ghcr.io/$GITHUB_REPOSITORY:build-cache-php${{ matrix.php-version }},mode=max,push=true \
+                        --cache-from=$GITHUB_REPOSITORY:build-cache-php${{ matrix.php-version }} \
+                        --cache-to=type=registry,ref=$GITHUB_REPOSITORY:build-cache-php${{ matrix.php-version }},mode=max,push=true \
                         --target rector \
                         --push \
                         --tag $GITHUB_REPOSITORY:$VERSION-php${{ matrix.php-version }} \
