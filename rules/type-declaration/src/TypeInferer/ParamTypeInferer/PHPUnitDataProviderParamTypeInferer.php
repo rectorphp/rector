@@ -23,6 +23,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
+use PhpParser\Node\Expr\ArrayItem;
 
 final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInterface
 {
@@ -112,23 +113,21 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
     {
         $paramOnPositionTypes = [];
 
-        foreach ($returns as $classMethodReturn) {
-            if (! $classMethodReturn->expr instanceof Array_) {
-                continue;
+        if(! $returns[0]->expr instanceof Array_ ) {
+            throw new ShouldNotHappenException();
+        }
+
+        foreach ($returns[0]->expr->items as $singleDataProvidedSet) {
+            if(! $singleDataProvidedSet instanceof ArrayItem || ! $singleDataProvidedSet->value instanceof Array_) {
+                throw new ShouldNotHappenException();
             }
 
-            $type = $this->getTypeFromClassMethodReturn($classMethodReturn->expr);
-
-            if (! $type instanceof ConstantArrayType) {
-                return $type;
-            }
-
-            foreach ($type->getValueTypes() as $position => $valueType) {
-                if ($position !== $parameterPosition) {
+            foreach($singleDataProvidedSet->value->items as $position => $singleDataProvidedSetItem ) {
+                if( $position !== $parameterPosition || ! $singleDataProvidedSetItem instanceof ArrayItem ) {
                     continue;
                 }
 
-                $paramOnPositionTypes[] = $valueType;
+                $paramOnPositionTypes[] = $this->nodeTypeResolver->resolve($singleDataProvidedSetItem->value);
             }
         }
 
@@ -137,26 +136,6 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
         }
 
         return $this->typeFactory->createMixedPassedOrUnionType($paramOnPositionTypes);
-    }
-
-    private function getTypeFromClassMethodReturn(Array_ $classMethodReturnArrayNode): Type
-    {
-        $arrayTypes = $this->nodeTypeResolver->resolve($classMethodReturnArrayNode);
-
-        // impossible to resolve
-        if (! $arrayTypes instanceof ConstantArrayType) {
-            return new MixedType();
-        }
-
-        // nest to 1 item
-        $arrayTypes = $arrayTypes->getValueTypes()[0];
-
-        // impossible to resolve
-        if (! $arrayTypes instanceof ConstantArrayType) {
-            return new MixedType();
-        }
-
-        return $arrayTypes;
     }
 
     /**
