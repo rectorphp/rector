@@ -25,6 +25,11 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class PHPStanServicesFactory
 {
     /**
+     * @var mixed[]
+     */
+    private const ANALYSED_PATHS_FROM_CONFIG = [];
+
+    /**
      * @var Container
      */
     private $container;
@@ -39,8 +44,6 @@ final class PHPStanServicesFactory
         $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan/better-infer.neon';
 
         $existingAdditionalConfigFiles = array_filter($additionalConfigFiles, 'file_exists');
-
-        $analysedPathsFromConfig = [];
         $this->container = $containerFactory->create(sys_get_temp_dir(), $existingAdditionalConfigFiles, []);
     }
 
