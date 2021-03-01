@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Type\ThisType;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector\RenameForeachValueVariableToMatchExprVariableRectorTest
@@ -77,6 +78,13 @@ CODE_SAMPLE
     {
         if (! $node->expr instanceof Variable && ! $node->expr instanceof PropertyFetch) {
             return null;
+        }
+
+        if ($node->expr instanceof PropertyFetch) {
+            $variableType = $this->getStaticType($node->expr->var);
+            if (! $variableType instanceof ThisType) {
+                return null;
+            }
         }
 
         $exprName = $this->getName($node->expr);
