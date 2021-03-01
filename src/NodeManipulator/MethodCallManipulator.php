@@ -51,8 +51,8 @@ final class MethodCallManipulator
         $methodCallsOnVariable = $this->findMethodCallsOnVariable($variable);
 
         $methodCallNamesOnVariable = [];
-        foreach ($methodCallsOnVariable as $methodCallOnVariable) {
-            $methodName = $this->nodeNameResolver->getName($methodCallOnVariable->name);
+        foreach ($methodCallsOnVariable as $singleMethodCallsOnVariable) {
+            $methodName = $this->nodeNameResolver->getName($singleMethodCallsOnVariable->name);
             if ($methodName === null) {
                 continue;
             }

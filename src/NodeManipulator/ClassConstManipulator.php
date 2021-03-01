@@ -69,13 +69,13 @@ final class ClassConstManipulator
         $searchInNodes = [$classLike];
 
         $usedTraitNames = $this->classManipulator->getUsedTraits($classLike);
-        foreach ($usedTraitNames as $name) {
-            $name = $this->nodeRepository->findTrait((string) $name);
-            if (! $name instanceof Trait_) {
+        foreach ($usedTraitNames as $usedTraitName) {
+            $trait = $this->nodeRepository->findTrait((string) $trait);
+            if (! $trait instanceof Trait_) {
                 continue;
             }
 
-            $searchInNodes[] = $name;
+            $searchInNodes[] = $trait;
         }
 
         return $this->betterNodeFinder->find($searchInNodes, function (Node $node) use ($classConst): bool {

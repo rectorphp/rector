@@ -28,8 +28,8 @@ final class StaticRectorStrings
      */
     public static function isInArrayInsensitive(string $checkedItem, array $array): bool
     {
-        foreach ($array as $item) {
-            if (Strings::lower($item) === Strings::lower($checkedItem)) {
+        foreach ($array as $singleArray) {
+            if (Strings::lower($singleArray) === Strings::lower($checkedItem)) {
                 return true;
             }
         }
@@ -79,9 +79,9 @@ final class StaticRectorStrings
      */
     public static function removePrefixes(string $value, array $prefixesToRemove): string
     {
-        foreach ($prefixesToRemove as $prefixToRemove) {
-            if (Strings::startsWith($value, $prefixToRemove)) {
-                $value = Strings::substring($value, Strings::length($prefixToRemove));
+        foreach ($prefixesToRemove as $singlePrefixesToRemove) {
+            if (Strings::startsWith($value, $singlePrefixesToRemove)) {
+                $value = Strings::substring($value, Strings::length($singlePrefixesToRemove));
             }
         }
 
@@ -93,9 +93,9 @@ final class StaticRectorStrings
      */
     public static function removeSuffixes(string $value, array $suffixesToRemove): string
     {
-        foreach ($suffixesToRemove as $prefixToRemove) {
-            if (Strings::endsWith($value, $prefixToRemove)) {
-                $value = Strings::substring($value, 0, -Strings::length($prefixToRemove));
+        foreach ($suffixesToRemove as $singleSuffixesToRemove) {
+            if (Strings::endsWith($value, $singleSuffixesToRemove)) {
+                $value = Strings::substring($value, 0, -Strings::length($singleSuffixesToRemove));
             }
         }
 
