@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -25,9 +26,17 @@ final class DowngradeNullableTypeDeclarationRector extends AbstractRector
      */
     private $phpDocTypeChanger;
 
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
-    {
+    /**
+     * @var PhpDocFromTypeDeclarationDecorator
+     */
+    private $phpDocFromTypeDeclarationDecorator;
+
+    public function __construct(
+        PhpDocTypeChanger $phpDocTypeChanger,
+        PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator
+    ) {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
     }
 
     /**
@@ -76,7 +85,7 @@ CODE_SAMPLE
             $this->refactorParamType($param, $node);
         }
 
-        $this->refactorReturnType($node);
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, NullableType::class);
 
         return $node;
     }
@@ -123,21 +132,5 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
 
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
-    }
-
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
-    private function refactorReturnType(FunctionLike $functionLike): void
-    {
-        if (! $functionLike->returnType instanceof NullableType) {
-            return;
-        }
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
-        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
-        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
-
-        $functionLike->returnType = null;
     }
 }

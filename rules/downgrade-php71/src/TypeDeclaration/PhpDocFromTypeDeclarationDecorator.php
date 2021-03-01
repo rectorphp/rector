@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
@@ -56,7 +55,7 @@ final class PhpDocFromTypeDeclarationDecorator
     public function decorateParam(Param $param, FunctionLike $functionLike, array $allowedTypes = [])
     {
         if ($param->type === null) {
-            return ;
+            return;
         }
 
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
@@ -87,5 +86,22 @@ final class PhpDocFromTypeDeclarationDecorator
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
 
         $functionLike->returnType = null;
+    }
+
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     * @param class-string<\PhpParser\Node> $requireTypeNode
+     */
+    public function decorateReturnWithSpecificType(FunctionLike $functionLike, string $requireTypeNode): void
+    {
+        if ($functionLike->returnType === null) {
+            return;
+        }
+
+        if (! is_a($functionLike->returnType, $requireTypeNode, true)) {
+            return;
+        }
+
+        $this->decorateReturn($functionLike);
     }
 }
