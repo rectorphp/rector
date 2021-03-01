@@ -7,15 +7,34 @@ namespace Rector\DowngradePhp74\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ThisType;
-use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeReturnTypeDeclarationRector;
+use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeReturnSelfTypeDeclarationRector\DowngradeReturnSelfTypeDeclarationRectorTest
  */
-final class DowngradeReturnSelfTypeDeclarationRector extends AbstractDowngradeReturnTypeDeclarationRector
+final class DowngradeReturnSelfTypeDeclarationRector extends AbstractRector
 {
+    /**
+     * @var PhpDocFromTypeDeclarationDecorator
+     */
+    private $phpDocFromTypeDeclarationDecorator;
+
+    public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
+    {
+        $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
+    }
+
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class];
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -23,7 +42,7 @@ final class DowngradeReturnSelfTypeDeclarationRector extends AbstractDowngradeRe
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-class A
+class SomeClass
 {
     public function foo(): self
     {
@@ -33,7 +52,7 @@ class A
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-class A
+class SomeClass
 {
     public function foo()
     {
@@ -47,15 +66,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @return array<class-string<Node>>
+     * @param ClassMethod $node
      */
-    public function getNodeTypes(): array
+    public function refactor(Node $node): ?Node
     {
-        return [ClassMethod::class];
-    }
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, ThisType::class);
 
-    public function getTypeToRemove(): string
-    {
-        return ThisType::class;
+        return $node;
     }
 }
