@@ -325,20 +325,10 @@ final class PropertyNaming
         array $prefixedClassMethods,
         Property $property
     ): array {
-        $currentName = $this->nodeNameResolver->getName($property);
+        $classMethodName = $this->nodeNameResolver->getName($property);
 
-        return array_filter($prefixedClassMethods, function (ClassMethod $classMethod) use ($currentName): bool {
-            $possibleReturn = $classMethod->stmts[0] ?? null;
-            if (! $possibleReturn instanceof Return_) {
-                return false;
-            }
-
-            $node = $possibleReturn->expr;
-            if (! $node instanceof PropertyFetch) {
-                return false;
-            }
-
-            return $this->nodeNameResolver->isName($node->name, $currentName);
+        return array_filter($prefixedClassMethods, function (ClassMethod $classMethod) use ($classMethodName): bool {
+            return $this->doesClassMethodMatchReturnPropertyFetch($classMethod, $classMethodName);
         });
     }
 
@@ -370,5 +360,22 @@ final class PropertyNaming
     {
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
         return (bool) Strings::match($classMethodName, self::PREFIXED_CLASS_METHODS_REGEX);
+    }
+
+    private function doesClassMethodMatchReturnPropertyFetch(
+        ClassMethod $classMethod,
+        string $currentClassMethodName
+    ): bool {
+        $possibleReturn = $classMethod->stmts[0] ?? null;
+        if (! $possibleReturn instanceof Return_) {
+            return false;
+        }
+
+        $node = $possibleReturn->expr;
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isName($node->name, $currentClassMethodName);
     }
 }

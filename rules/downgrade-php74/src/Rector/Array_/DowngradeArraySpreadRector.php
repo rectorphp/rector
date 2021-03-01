@@ -106,12 +106,17 @@ CODE_SAMPLE
     private function shouldRefactor(Array_ $array): bool
     {
         // Check that any item in the array is the spread
-        return array_filter($array->items, function (?ArrayItem $item): bool {
-            if ($item === null) {
-                return false;
+        foreach ($array->items as $item) {
+            if (! $item instanceof ArrayItem) {
+                continue;
             }
-            return $item->unpack;
-        }) !== [];
+
+            if ($item->unpack) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function refactorNode(Array_ $array): Node

@@ -49,7 +49,7 @@ final class VariableAndCallAssignMatcher
         }
 
         $functionLike = $this->getFunctionLike($assign);
-        if ($functionLike === null) {
+        if (! $functionLike instanceof FunctionLike) {
             return null;
         }
 

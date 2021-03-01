@@ -58,6 +58,7 @@ services:
         arguments:
             forbiddenComplexFunctions:
                 - array_filter
+            maximumStmtCount: 3
 
     -
         class: Symplify\PHPStanRules\Rules\IfNewTypeThenImplementInterfaceRule
