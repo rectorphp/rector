@@ -6,6 +6,7 @@ namespace Rector\Naming\Rector\Foreach_;
 
 use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
@@ -80,19 +81,12 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->expr instanceof PropertyFetch) {
-            $variableType = $this->getStaticType($node->expr->var);
-            if (! $variableType instanceof ThisType) {
-                return null;
-            }
-        }
-
-        $exprName = $this->getName($node->expr);
-        if ($exprName === null) {
+        if ($this->isNotThisTypePropertyFetch($node->expr)) {
             return null;
         }
 
-        if ($node->keyVar instanceof Node) {
+        $exprName = $this->getName($node->expr);
+        if ($exprName === null || $node->keyVar instanceof Node) {
             return null;
         }
 
@@ -120,6 +114,16 @@ CODE_SAMPLE
         }
 
         return $this->processRename($node, $valueVarName, $singularValueVarName);
+    }
+
+    private function isNotThisTypePropertyFetch(Expr $expr): bool
+    {
+        if ($expr instanceof PropertyFetch) {
+            $variableType = $this->getStaticType($expr->var);
+            return ! $variableType instanceof ThisType;
+        }
+
+        return false;
     }
 
     private function processRename(Foreach_ $foreach, string $valueVarName, string $singularValueVarName): Foreach_
