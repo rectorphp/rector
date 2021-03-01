@@ -12,8 +12,6 @@ services:
                 - PHPStan\Type\StaticType
                 - Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory
                 - PHPStan\PhpDocParser\Parser\PhpDocParser
-                # resolve later
-                - Rector\Naming\Matcher\AbstractMatcher
                 # value objects
                 - Rector\Defluent\ValueObject\AbstractRootExpr
                 - Symplify\SetConfigResolver\Provider\AbstractSetProvider
@@ -59,7 +57,7 @@ services:
         tags: [phpstan.rules.rule]
         arguments:
             forbiddenComplexFunctions:
-                - array-filter
+                - array_filter
 
     -
         class: Symplify\PHPStanRules\Rules\IfNewTypeThenImplementInterfaceRule

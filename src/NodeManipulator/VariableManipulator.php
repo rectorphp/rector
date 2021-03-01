@@ -123,10 +123,7 @@ final class VariableManipulator
     public function filterOutChangedVariables(array $assignsOfArrayToVariable, ClassMethod $classMethod): array
     {
         return array_filter($assignsOfArrayToVariable, function (Assign $assign) use ($classMethod): bool {
-            /** @var Variable $variable */
-            $variable = $assign->var;
-
-            return $this->isReadOnlyVariable($classMethod, $variable, $assign);
+            return $this->isReadOnlyVariable($classMethod, $assign);
         });
     }
 
@@ -145,8 +142,13 @@ final class VariableManipulator
      * Inspiration
      * @see \Rector\Core\NodeManipulator\PropertyManipulator::isReadOnlyProperty()
      */
-    private function isReadOnlyVariable(ClassMethod $classMethod, Variable $variable, Assign $assign): bool
+    private function isReadOnlyVariable(ClassMethod $classMethod, Assign $assign): bool
     {
+        if (! $assign->var instanceof Variable) {
+            return false;
+        }
+
+        $variable = $assign->var;
         $variableUsages = $this->collectVariableUsages($classMethod, $variable, $assign);
 
         foreach ($variableUsages as $variableUsage) {

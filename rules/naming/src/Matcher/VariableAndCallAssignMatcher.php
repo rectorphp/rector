@@ -4,31 +4,65 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Matcher;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use Rector\Naming\ValueObject\VariableAndCallAssign;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
-final class VariableAndCallAssignMatcher extends AbstractMatcher
+final class VariableAndCallAssignMatcher
 {
     /**
-     * @param Assign $node
+     * @var CallMatcher
      */
-    public function getVariableName(Node $node): ?string
+    private $callMatcher;
+
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(CallMatcher $callMatcher, NodeNameResolver $nodeNameResolver)
     {
-        if (! $node->var instanceof Variable) {
+        $this->callMatcher = $callMatcher;
+        $this->nodeNameResolver = $nodeNameResolver;
+    }
+
+    public function match(Assign $assign): ?VariableAndCallAssign
+    {
+        $call = $this->callMatcher->matchCall($assign);
+        if ($call === null) {
             return null;
         }
 
-        return $this->nodeNameResolver->getName($node->var);
+        if (! $assign->var instanceof Variable) {
+            return null;
+        }
+
+        $variableName = $this->nodeNameResolver->getName($assign->var);
+        if ($variableName === null) {
+            return null;
+        }
+
+        $functionLike = $this->getFunctionLike($assign);
+        if ($functionLike === null) {
+            return null;
+        }
+
+        return new VariableAndCallAssign($assign->var, $call, $assign, $variableName, $functionLike);
     }
 
     /**
-     * @param Assign $node
+     * @return ClassMethod|Function_|Closure|null
      */
-    public function getVariable(Node $node): Variable
+    private function getFunctionLike(Assign $assign): ?FunctionLike
     {
-        /** @var Variable $variable */
-        $variable = $node->var;
-        return $variable;
+        return $assign->getAttribute(AttributeKey::CLOSURE_NODE) ??
+            $assign->getAttribute(AttributeKey::METHOD_NODE) ??
+            $assign->getAttribute(AttributeKey::FUNCTION_NODE);
     }
 }
