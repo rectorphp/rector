@@ -40,5 +40,12 @@ jobs:
                         --target rector \
                         --push \
                         --tag $GITHUB_REPOSITORY:$VERSION-php${{ matrix.php-version }} \
-                        --tag $GITHUB_REPOSITORY:latest-php${{ matrix.php-version }} \
+                        --build-arg PHP_VERSION=${{ matrix.php-version }} .
+
+                  docker buildx build \
+                        --cache-from=$GITHUB_REPOSITORY:build-cache-php${{ matrix.php-version }} \
+                        --cache-to=type=registry,ref=$GITHUB_REPOSITORY:build-cache-php${{ matrix.php-version }},mode=max,push=true \
+                        --target rector-secured \
+                        --push \
+                        --tag $GITHUB_REPOSITORY:$VERSION-php${{ matrix.php-version }}-secured \
                         --build-arg PHP_VERSION=${{ matrix.php-version }} .
