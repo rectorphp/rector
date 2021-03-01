@@ -18,6 +18,9 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp70\Contract\Rector\DowngradeParamDeclarationRectorInterface;
 use Traversable;
 
+/**
+ * @deprecated Should be removed too
+ */
 abstract class AbstractDowngradeParamDeclarationRector extends AbstractRector implements DowngradeParamDeclarationRectorInterface
 {
     /**
