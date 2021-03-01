@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector;
+namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeStaticTypeDeclarationRector;
 
 use Iterator;
-use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector;
+use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeStaticTypeDeclarationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradeReturnMixedTypeDeclarationRectorTest extends AbstractRectorTestCase
+final class DowngradeStaticTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @requires PHP 8.0
@@ -27,6 +27,6 @@ final class DowngradeReturnMixedTypeDeclarationRectorTest extends AbstractRector
 
     protected function getRectorClass(): string
     {
-        return DowngradeReturnMixedTypeDeclarationRector::class;
+        return DowngradeStaticTypeDeclarationRector::class;
     }
 }

@@ -1,10 +1,11 @@
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector\Fixture;
+namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector\Fixture;
 
-class DocblockExists {
+class DocblockTagExists {
     /**
      * This property is the best one
+     * @return mixed
      */
     public function getAnything(): mixed
     {
@@ -20,9 +21,9 @@ class DocblockExists {
 -----
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector\Fixture;
+namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector\Fixture;
 
-class DocblockExists {
+class DocblockTagExists {
     /**
      * This property is the best one
      * @return mixed

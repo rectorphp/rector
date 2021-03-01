@@ -1,12 +1,12 @@
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector\Fixture;
+namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector\Fixture;
 
 class DocblockExists {
     /**
      * This property is the best one
      */
-    public function getAnything(): static
+    public function getAnything(): mixed
     {
         if (mt_rand()) {
             return 1;
@@ -20,12 +20,12 @@ class DocblockExists {
 -----
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector\Fixture;
+namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector\Fixture;
 
 class DocblockExists {
     /**
      * This property is the best one
-     * @return $this
+     * @return mixed
      */
     public function getAnything()
     {

@@ -6494,11 +6494,11 @@ Change nullsafe operator to ternary operator rector
 
 <br>
 
-### DowngradeParamMixedTypeDeclarationRector
+### DowngradeMixedTypeDeclarationRector
 
 Remove the 'PHPStan\Type\MixedType' param type, add a `@param` tag instead
 
-- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeParamMixedTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeParamMixedTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeMixedTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -6536,11 +6536,11 @@ Change constructor property promotion to property asssign
 
 <br>
 
-### DowngradeReturnMixedTypeDeclarationRector
+### DowngradeMixedTypeDeclarationRector
 
 Remove "mixed" return type, add a `"@return` mixed" tag instead
 
-- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeReturnMixedTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeMixedTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -6561,11 +6561,11 @@ Remove "mixed" return type, add a `"@return` mixed" tag instead
 
 <br>
 
-### DowngradeReturnStaticTypeDeclarationRector
+### DowngradeStaticTypeDeclarationRector
 
 Remove "static" return type, add a `"@return` `$this"` tag instead
 
-- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeReturnStaticTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeStaticTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeStaticTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
