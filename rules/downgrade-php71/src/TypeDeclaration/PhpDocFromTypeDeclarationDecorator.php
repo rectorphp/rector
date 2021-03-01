@@ -78,7 +78,7 @@ final class PhpDocFromTypeDeclarationDecorator
      * @param ClassMethod|Function_ $functionLike
      * @param array<class-string<Type>> $excludedTypes
      */
-    public function decorateParam(Param $param, FunctionLike $functionLike, array $excludedTypes = [])
+    public function decorateParam(Param $param, FunctionLike $functionLike, array $excludedTypes = []): void
     {
         if ($param->type === null) {
             return;
@@ -98,8 +98,11 @@ final class PhpDocFromTypeDeclarationDecorator
      * @param ClassMethod|Function_ $functionLike
      * @param class-string<Node|Type> $requireTypeNode
      */
-    public function decorateParamWithSpecificType(Param $param, FunctionLike $functionLike, string $requireTypeNode)
-    {
+    public function decorateParamWithSpecificType(
+        Param $param,
+        FunctionLike $functionLike,
+        string $requireTypeNode
+    ): void {
         if ($param->type === null) {
             return;
         }
@@ -156,7 +159,10 @@ final class PhpDocFromTypeDeclarationDecorator
         return true;
     }
 
-    private function moveParamTypeToParamDoc($functionLike, Param $param, Type $type): void
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     */
+    private function moveParamTypeToParamDoc(FunctionLike $functionLike, Param $param, Type $type): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $paramName = $this->nodeNameResolver->getName($param);

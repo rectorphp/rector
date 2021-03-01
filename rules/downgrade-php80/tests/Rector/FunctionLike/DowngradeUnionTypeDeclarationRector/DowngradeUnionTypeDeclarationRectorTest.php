@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector;
+namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector;
 
 use Iterator;
-use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector;
+use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradeUnionTypeReturnDeclarationRectorTest extends AbstractRectorTestCase
+final class DowngradeUnionTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -27,6 +27,6 @@ final class DowngradeUnionTypeReturnDeclarationRectorTest extends AbstractRector
 
     protected function getRectorClass(): string
     {
-        return DowngradeUnionTypeReturnDeclarationRector::class;
+        return DowngradeUnionTypeDeclarationRector::class;
     }
 }

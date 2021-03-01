@@ -6635,11 +6635,11 @@ Remove the union type params, add `@param` tags instead
 
 <br>
 
-### DowngradeUnionTypeReturnDeclarationRector
+### DowngradeUnionTypeDeclarationRector
 
 Remove returning union types, add a `@return` tag instead
 
-- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeUnionTypeReturnDeclarationRector.php)
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeUnionTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
