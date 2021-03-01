@@ -166,20 +166,20 @@ final class NodeAnnotationReader
      */
     private function matchNextAnnotation(array $annotations, string $annotationClassName, Node $node): ?object
     {
-        foreach ($annotations as $annotatoin) {
-            if (! is_a($annotatoin, $annotationClassName, true)) {
+        foreach ($annotations as $annotation) {
+            if (! is_a($annotation, $annotationClassName, true)) {
                 continue;
             }
 
-            $objectHash = md5(spl_object_hash($node) . serialize($annotatoin));
+            $objectHash = md5(spl_object_hash($node) . serialize($annotation));
             if (in_array($objectHash, $this->alreadyProvidedAnnotations, true)) {
                 continue;
             }
 
             $this->alreadyProvidedAnnotations[] = $objectHash;
-            $this->constantReferenceIdentifierRestorer->restoreObject($annotatoin);
+            $this->constantReferenceIdentifierRestorer->restoreObject($annotation);
 
-            return $annotatoin;
+            return $annotation;
         }
 
         return null;

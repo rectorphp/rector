@@ -113,11 +113,11 @@ CODE_SAMPLE
 
         $isNetteInjectPreferred = $this->netteInjectDetector->isNetteInjectPreferred($class);
 
-        foreach ($propertiesMetadatas as $propertyMetadata) {
+        foreach ($propertiesMetadatas as $propertiesMetadata) {
             if (! $isNetteInjectPreferred) {
-                $this->classDependencyManipulator->addConstructorDependency($class, $propertyMetadata);
+                $this->classDependencyManipulator->addConstructorDependency($class, $propertiesMetadata);
             } else {
-                $this->classDependencyManipulator->addInjectProperty($class, $propertyMetadata);
+                $this->classDependencyManipulator->addInjectProperty($class, $propertiesMetadata);
             }
         }
     }

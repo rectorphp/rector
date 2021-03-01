@@ -345,8 +345,9 @@ final class NodeTypeResolver
      */
     public function isSameObjectTypes(ObjectType $objectType, array $desiredTypes): bool
     {
-        foreach ($desiredTypes as $abstractClassConstructorParamType) {
-            if ($abstractClassConstructorParamType->equals($objectType)) {
+        foreach ($desiredTypes as $desiredType) {
+            $desiredTypeEquals = $desiredType->equals($objectType);
+            if ($desiredTypeEquals) {
                 return true;
             }
         }

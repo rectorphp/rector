@@ -193,23 +193,26 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         }
 
         $addedFilesWithNodes = $this->removedAndAddedFilesCollector->getAddedFilesWithNodes();
-        foreach ($addedFilesWithNodes as $addedFileWithNodes) {
-            if (! Strings::endsWith($addedFileWithNodes->getFilePath(), $expectedExtraFileName)) {
+        foreach ($addedFilesWithNodes as $addedFilesWithNode) {
+            if (! Strings::endsWith($addedFilesWithNode->getFilePath(), $expectedExtraFileName)) {
                 continue;
             }
 
-            $printedFileContent = $this->betterStandardPrinter->prettyPrintFile($addedFileWithNodes->getNodes());
+            $printedFileContent = $this->betterStandardPrinter->prettyPrintFile($addedFilesWithNode->getNodes());
             $this->assertStringEqualsFile($expectedExtraContentFilePath, $printedFileContent);
             return;
         }
 
         $movedFilesWithContent = $this->removedAndAddedFilesCollector->getMovedFileWithContent();
-        foreach ($movedFilesWithContent as $movedFileWithContent) {
-            if (! Strings::endsWith($movedFileWithContent->getNewPathname(), $expectedExtraFileName)) {
+        foreach ($movedFilesWithContent as $singleMovedFilesWithContent) {
+            if (! Strings::endsWith($singleMovedFilesWithContent->getNewPathname(), $expectedExtraFileName)) {
                 continue;
             }
 
-            $this->assertStringEqualsFile($expectedExtraContentFilePath, $movedFileWithContent->getFileContent());
+            $this->assertStringEqualsFile(
+                $expectedExtraContentFilePath,
+                $singleMovedFilesWithContent->getFileContent()
+            );
             return;
         }
 
@@ -272,16 +275,16 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
                 $fileInfosToProcess = array_merge([$originalFileInfo], $extraFileInfos);
 
                 // life-cycle trio :)
-                foreach ($fileInfosToProcess as $fileInfoToProcess) {
-                    $this->fileProcessor->parseFileInfoToLocalCache($fileInfoToProcess);
+                foreach ($fileInfosToProcess as $singleFileInfosToProcess) {
+                    $this->fileProcessor->parseFileInfoToLocalCache($singleFileInfosToProcess);
                 }
 
-                foreach ($fileInfosToProcess as $fileInfoToProcess) {
-                    $this->fileProcessor->refactor($fileInfoToProcess);
+                foreach ($fileInfosToProcess as $singleFileInfosToProcess) {
+                    $this->fileProcessor->refactor($singleFileInfosToProcess);
                 }
 
-                foreach ($fileInfosToProcess as $fileInfoToProcess) {
-                    $this->fileProcessor->postFileRefactor($fileInfoToProcess);
+                foreach ($fileInfosToProcess as $singleFileInfosToProcess) {
+                    $this->fileProcessor->postFileRefactor($singleFileInfosToProcess);
                 }
             }
 

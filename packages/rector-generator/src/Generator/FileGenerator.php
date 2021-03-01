@@ -57,9 +57,9 @@ final class FileGenerator
     ): array {
         $generatedFilePaths = [];
 
-        foreach ($templateFileInfos as $fileInfo) {
+        foreach ($templateFileInfos as $templateFileInfo) {
             $generatedFilePaths[] = $this->generateFileInfoWithTemplateVariables(
-                $fileInfo,
+                $templateFileInfo,
                 $templateVariables,
                 $rectorRecipe,
                 $destinationDirectory

@@ -92,9 +92,9 @@ final class PhpAttributeGroupFactory
                 $args[] = new Arg($value, false, false, [], $argumentName);
             }
         } else {
-            foreach ($items as $value) {
-                $value = BuilderHelpers::normalizeValue($value);
-                $args[] = new Arg($value);
+            foreach ($items as $item) {
+                $item = BuilderHelpers::normalizeValue($item);
+                $args[] = new Arg($item);
             }
         }
 

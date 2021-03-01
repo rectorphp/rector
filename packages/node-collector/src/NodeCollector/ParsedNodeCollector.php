@@ -210,12 +210,12 @@ final class ParsedNodeCollector
     {
         $newsByClass = [];
 
-        foreach ($this->news as $new) {
-            if (! $this->nodeNameResolver->isName($new->class, $className)) {
+        foreach ($this->news as $singleNews) {
+            if (! $this->nodeNameResolver->isName($singleNews->class, $className)) {
                 continue;
             }
 
-            $newsByClass[] = $new;
+            $newsByClass[] = $singleNews;
         }
 
         return $newsByClass;

@@ -45,8 +45,8 @@ final class DependencyResolver
         $fileInfos = $this->configuration->getFileInfos();
 
         $analysedFileAbsolutesPaths = [];
-        foreach ($fileInfos as $analysedFile) {
-            $analysedFileAbsolutesPaths[] = $analysedFile->getRealPath();
+        foreach ($fileInfos as $fileInfo) {
+            $analysedFileAbsolutesPaths[] = $fileInfo->getRealPath();
         }
 
         $dependencyFiles = [];
