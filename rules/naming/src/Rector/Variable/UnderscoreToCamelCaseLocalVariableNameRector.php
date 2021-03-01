@@ -162,7 +162,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $parent = $node->getAttribute(Attributekey::PARENT_NODE);
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parent instanceof Assign) {
             return false;
         }
