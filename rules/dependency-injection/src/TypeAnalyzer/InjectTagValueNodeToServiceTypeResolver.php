@@ -19,9 +19,9 @@ final class InjectTagValueNodeToServiceTypeResolver
      */
     private $jmsdiTypeResolver;
 
-    public function __construct(JMSDITypeResolver $jmsDITypeResolver)
+    public function __construct(JMSDITypeResolver $jmsdiTypeResolver)
     {
-        $this->jmsdiTypeResolver = $jmsDITypeResolver;
+        $this->jmsdiTypeResolver = $jmsdiTypeResolver;
     }
 
     public function resolve(Property $property, PhpDocInfo $phpDocInfo, PhpDocTagValueNode $phpDocTagValueNode): Type

@@ -119,6 +119,7 @@ CODE_SAMPLE
         if ($classMethod->isMagic()) {
             return true;
         }
-        return $this->isNames($classMethod, ['test']);
+
+        return $this->isNames($classMethod, ['test', 'test*']);
     }
 }
