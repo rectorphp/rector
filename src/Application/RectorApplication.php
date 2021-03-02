@@ -13,11 +13,10 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\PostRunnerInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\PhpFilesFinder;
-use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
+use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use Symplify\SmartFileSystem\FileSystemFilter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 
@@ -95,19 +94,14 @@ final class RectorApplication
     private $privatesAccessor;
 
     /**
-     * @var DynamicSourceLocatorProvider
-     */
-    private $dynamicSourceLocatorProvider;
-
-    /**
-     * @var FileSystemFilter
-     */
-    private $fileSystemFilter;
-
-    /**
      * @var PhpFilesFinder
      */
     private $phpFilesFinder;
+
+    /**
+     * @var DynamicSourceLocatorDecorator
+     */
+    private $dynamicSourceLocatorDecorator;
 
     /**
      * @param PostRunnerInterface[] $postRunners
@@ -121,9 +115,8 @@ final class RectorApplication
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         SymfonyStyle $symfonyStyle,
         PrivatesAccessor $privatesAccessor,
-        DynamicSourceLocatorProvider $dynamicSourceLocatorProvider,
-        FileSystemFilter $fileSystemFilter,
         PhpFilesFinder $phpFilesFinder,
+        DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator,
         array $postRunners
     ) {
         $this->symfonyStyle = $symfonyStyle;
@@ -134,10 +127,9 @@ final class RectorApplication
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->privatesAccessor = $privatesAccessor;
-        $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;
         $this->postRunners = $postRunners;
-        $this->fileSystemFilter = $fileSystemFilter;
         $this->phpFilesFinder = $phpFilesFinder;
+        $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
     }
 
     /**
@@ -156,11 +148,8 @@ final class RectorApplication
         // PHPStan has to know about all files!
         $this->configurePHPStanNodeScopeResolver($phpFileInfos);
 
-        $files = $this->fileSystemFilter->filterFiles($paths);
-        $directories = $this->fileSystemFilter->filterDirectories($paths);
-
-        // add files and directories to static locator
-        $this->addFilesAndDirectoriesToSourceLocator($files, $directories);
+        // 0. add files and directories to static locator
+        $this->dynamicSourceLocatorDecorator->addPaths($paths);
 
         // 1. parse files to nodes
         $this->parseFileInfosToNodes($phpFileInfos);
@@ -312,29 +301,6 @@ final class RectorApplication
             $this->symfonyStyle->writeln($message);
         } elseif ($this->configuration->shouldShowProgressBar()) {
             $this->symfonyStyle->progressAdvance();
-        }
-    }
-
-    /**
-     * @see https://phpstan.org/blog/zero-config-analysis-with-static-reflection
-     * @see https://github.com/rectorphp/rector/issues/3490
-     *
-     * @param string[] $files
-     * @param string[] $directories
-     */
-    private function addFilesAndDirectoriesToSourceLocator(array $files, array $directories): void
-    {
-        $this->dynamicSourceLocatorProvider->addFiles($files);
-
-        foreach ($directories as $directory) {
-            $filesInfosInDirectory = $this->phpFilesFinder->findInPaths([$directory]);
-
-            $filesInDirectory = [];
-            foreach ($filesInfosInDirectory as $fileInfosInDirectory) {
-                $filesInDirectory[] = $fileInfosInDirectory->getRealPath();
-            }
-
-            $this->dynamicSourceLocatorProvider->addFilesByDirectory($directory, $filesInDirectory);
         }
     }
 }

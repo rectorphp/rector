@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Rector\Caching\Application\CachedFileInfoFilterAndReporter;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
@@ -86,11 +85,6 @@ final class ProcessCommand extends AbstractCommand
     private $symfonyStyle;
 
     /**
-     * @var CachedFileInfoFilterAndReporter
-     */
-    private $cachedFileInfoFilterAndReporter;
-
-    /**
      * @var ComposerProcessor
      */
     private $composerProcessor;
@@ -113,7 +107,6 @@ final class ProcessCommand extends AbstractCommand
         RectorNodeTraverser $rectorNodeTraverser,
         StubLoader $stubLoader,
         SymfonyStyle $symfonyStyle,
-        CachedFileInfoFilterAndReporter $cachedFileInfoFilterAndReporter,
         ComposerProcessor $composerProcessor,
         PhpFilesFinder $phpFilesFinder
     ) {
@@ -129,7 +122,6 @@ final class ProcessCommand extends AbstractCommand
         $this->nonPhpFileProcessor = $nonPhpFileProcessor;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->symfonyStyle = $symfonyStyle;
-        $this->cachedFileInfoFilterAndReporter = $cachedFileInfoFilterAndReporter;
         $this->composerProcessor = $composerProcessor;
         $this->phpFilesFinder = $phpFilesFinder;
 
@@ -207,7 +199,7 @@ final class ProcessCommand extends AbstractCommand
 
         $phpFileInfos = $this->phpFilesFinder->findInPaths($paths);
 
-        $this->additionalAutoloader->autoloadWithInputAndSource($input, $paths);
+        $this->additionalAutoloader->autoloadWithInputAndSource($input);
 
         if ($this->configuration->isCacheDebug()) {
             $message = sprintf('[cache] %d files after cache filter', count($phpFileInfos));
