@@ -114,12 +114,12 @@ final class CallDefaultParamValuesResolver
         }
 
         // non existing function
-        $functionNameNode = new Name($functionName);
-        if (! $this->reflectionProvider->hasFunction($functionNameNode, null)) {
+        $name = new Name($functionName);
+        if (! $this->reflectionProvider->hasFunction($name, null)) {
             return [];
         }
 
-        $functionReflection = $this->reflectionProvider->getFunction($functionNameNode, null);
+        $functionReflection = $this->reflectionProvider->getFunction($name, null);
         if ($functionReflection->isBuiltin()) {
             return [];
         }
@@ -128,10 +128,10 @@ final class CallDefaultParamValuesResolver
 
         $parametersAcceptor = $functionReflection->getVariants()[0];
 
-        foreach ($parametersAcceptor->getParameters() as $key => $reflectionParameter) {
+        foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
             /** @var ReflectionParameter $nativeReflectionParameter */
             $nativeReflectionParameter = $this->privatesAccessor->getPrivateProperty(
-                $reflectionParameter,
+                $parameterReflection,
                 'reflection'
             );
             if (! $nativeReflectionParameter->isDefaultValueAvailable()) {

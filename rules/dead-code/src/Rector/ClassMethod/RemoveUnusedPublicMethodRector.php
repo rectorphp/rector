@@ -7,10 +7,14 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\NodeAnalyzer\DataProviderMethodNamesResolver;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -20,9 +24,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPublicMethodRector extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
+     * @var DataProviderMethodNamesResolver
+     */
+    private $dataProviderMethodNamesResolver;
+
+    /**
      * @var MethodCall[]|StaticCall[]|ArrayCallable[]
      */
     private $calls = [];
+
+    /**
+     * @var ClassMethodReturnVendorLockResolver
+     */
+    private $classMethodReturnVendorLockResolver;
+
+    public function __construct(
+        DataProviderMethodNamesResolver $dataProviderMethodNamesResolver,
+        ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver
+    ) {
+        $this->dataProviderMethodNamesResolver = $dataProviderMethodNamesResolver;
+        $this->classMethodReturnVendorLockResolver = $classMethodReturnVendorLockResolver;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -92,14 +114,8 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var MethodCall[] $calls */
-        $calls = $this->calls;
-        foreach ($calls as $call) {
-            $classMethod = $this->betterNodeFinder->findParentType($call, ClassMethod::class);
-
-            if ($this->nodeComparator->areNodesEqual($classMethod, $node)) {
-                return null;
-            }
+        if ($this->isRecursionCallClassMethod($node)) {
+            return null;
         }
 
         $this->removeNode($node);
@@ -108,6 +124,11 @@ CODE_SAMPLE
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof Class_) {
+            return true;
+        }
+
         if ($this->isOpenSourceProjectType()) {
             return true;
         }
@@ -116,12 +137,38 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->classMethodReturnVendorLockResolver->isVendorLocked($classMethod)) {
+            return true;
+        }
+
         if ($classMethod->isMagic()) {
             return true;
         }
 
-        if ($this->isNames($classMethod, ['test'])) {
+        if ($this->isNames($classMethod, ['test', 'test*'])) {
             return true;
+        }
+
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+
+        $phpunitDataProviderMethodNames = $this->dataProviderMethodNamesResolver->resolveFromClass($class);
+        return $this->isNames($classMethod, $phpunitDataProviderMethodNames);
+    }
+
+    private function isRecursionCallClassMethod(ClassMethod $currentClassMethod): bool
+    {
+        /** @var MethodCall[] $calls */
+        $calls = $this->calls;
+
+        foreach ($calls as $call) {
+            $parentClassMethod = $call->getAttribute(AttributeKey::METHOD_NODE);
+            if (! $parentClassMethod) {
+                continue;
+            }
+
+            if ($this->nodeComparator->areNodesEqual($parentClassMethod, $currentClassMethod)) {
+                return true;
+            }
         }
 
         return false;

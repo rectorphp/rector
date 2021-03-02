@@ -10,7 +10,7 @@
 #
 # https://help.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token#permissions-for-the-github_token
 ####
-name: Rector CI
+name: Rector
 
 on:
     pull_request: null
@@ -22,10 +22,14 @@ jobs:
             matrix:
                 directories:
                     #- rules
-                    - rules/naming
-                    - rules/privatization
-                    - rules/code-quality
-                    - rules/php74
+                    - rules/arguments rules/autodiscovery rules/cakephp rules/carbon rules/code-quality rules/code-quality-strict rules/coding-style rules/composer rules/dead-code rules/dead-doc-block rules/defluent rules/dependency-injection rules/doctrine rules/doctrine-code-quality rules/doctrine-gedmo-to-knplabs rules/downgrade-php70  rules/downgrade-php71 rules/downgrade-php72 rules/downgrade-php73
+
+                    - rules/downgrade-php74 rules/downgrade-php80 rules/early-return rules/generics rules/laravel rules/legacy rules/mockery-to-prophecy rules/mockista-to-mockery rules/mysql-to-mysqli rules/naming rules/nette rules/nette-code-quality rules/nette-kdyby
+
+                    - rules/nette-tester-to-phpunit rules/nette-to-symfony rules/nette-utils-code-quality rules/order rules/php-office rules/php-spec-to-phpunit rules/php52 rules/php53 rules/php54 rules/php55 rules/php56 rules/php70 rules/php71 rules/php72 rules/php73 rules/php74 rules/php80 rules/phpunit rules/phpunit-symfony rules/privatization rules/psr4 rules/removing rules/removing-static rules/renaming rules/restoration rules/sensio rules/symfony rules/symfony-code-quality rules/symfony-php-config rules/symfony2
+
+                    - rules/symfony3 rules/symfony4 rules/symfony5 rules/transform rules/type-declaration rules/visibility
+
                     - packages
                     - src
                     - tests

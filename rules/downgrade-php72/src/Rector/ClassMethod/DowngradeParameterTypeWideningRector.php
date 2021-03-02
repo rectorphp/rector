@@ -285,8 +285,8 @@ CODE_SAMPLE
             return false;
         }
 
-        $nativeClassReflection = $classReflection->getNativeReflection();
-        $reflectionMethodReflection = $nativeClassReflection->getMethod($methodName);
+        $reflectionClass = $classReflection->getNativeReflection();
+        $reflectionMethodReflection = $reflectionClass->getMethod($methodName);
 
         foreach ($reflectionMethodReflection->getParameters() as $reflectionParameter) {
             if ($reflectionParameter->getName() !== $paramName) {

@@ -63,9 +63,10 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
             }
 
             $node->name = $this->createName($newFunction);
+            return $node;
         }
 
-        return $node;
+        return null;
     }
 
     /**

@@ -97,12 +97,12 @@ final class CallTypeAnalyzer
         }
 
         $methodReflection = $classReflection->getMethod($methodName, $scope);
-        $functionVariant = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
 
         $parameterTypes = [];
 
         /** @var ParameterReflection $parameterReflection */
-        foreach ($functionVariant->getParameters() as $parameterReflection) {
+        foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
             $parameterTypes[] = $parameterReflection->getType();
         }
 

@@ -17,17 +17,17 @@ final class InjectTagValueNodeToServiceTypeResolver
     /**
      * @var JMSDITypeResolver
      */
-    private $jmsDITypeResolver;
+    private $jmsdiTypeResolver;
 
-    public function __construct(JMSDITypeResolver $jmsDITypeResolver)
+    public function __construct(JMSDITypeResolver $jmsdiTypeResolver)
     {
-        $this->jmsDITypeResolver = $jmsDITypeResolver;
+        $this->jmsdiTypeResolver = $jmsdiTypeResolver;
     }
 
     public function resolve(Property $property, PhpDocInfo $phpDocInfo, PhpDocTagValueNode $phpDocTagValueNode): Type
     {
         if ($phpDocTagValueNode instanceof JMSInjectTagValueNode) {
-            return $this->jmsDITypeResolver->resolve($property, $phpDocTagValueNode);
+            return $this->jmsdiTypeResolver->resolve($property, $phpDocTagValueNode);
         }
 
         if ($phpDocTagValueNode instanceof PHPDIInjectTagValueNode) {

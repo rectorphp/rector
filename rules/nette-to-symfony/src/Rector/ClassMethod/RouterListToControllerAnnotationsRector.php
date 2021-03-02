@@ -319,8 +319,8 @@ CODE_SAMPLE
             return false;
         }
 
-        $reflectionMethod = $classReflection->getNativeMethod($methodName);
-        $parametersAcceptor = $reflectionMethod->getVariants()[0];
+        $methodReflection = $classReflection->getNativeMethod($methodName);
+        $parametersAcceptor = $methodReflection->getVariants()[0];
 
         $returnType = $parametersAcceptor->getReturnType();
 

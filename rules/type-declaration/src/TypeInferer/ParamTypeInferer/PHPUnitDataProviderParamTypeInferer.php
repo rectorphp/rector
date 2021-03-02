@@ -111,26 +111,13 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
      */
     private function resolveReturnStaticArrayTypeByParameterPosition(array $returns, int $parameterPosition): Type
     {
-        $paramOnPositionTypes = [];
+        $firstReturnedExpr = $returns[0]->expr;
 
-        if (! $returns[0]->expr instanceof Array_) {
+        if (! $firstReturnedExpr instanceof Array_) {
             throw new ShouldNotHappenException();
         }
 
-        foreach ($returns[0]->expr->items as $singleDataProvidedSet) {
-            if (! $singleDataProvidedSet instanceof ArrayItem || ! $singleDataProvidedSet->value instanceof Array_) {
-                throw new ShouldNotHappenException();
-            }
-
-            foreach ($singleDataProvidedSet->value->items as $position => $singleDataProvidedSetItem) {
-                if ($position !== $parameterPosition || ! $singleDataProvidedSetItem instanceof ArrayItem) {
-                    continue;
-                }
-
-                $paramOnPositionTypes[] = $this->nodeTypeResolver->resolve($singleDataProvidedSetItem->value);
-            }
-        }
-
+        $paramOnPositionTypes = $this->resolveParamOnPositionTypes($firstReturnedExpr, $parameterPosition);
         if ($paramOnPositionTypes === []) {
             return new MixedType();
         }
@@ -192,5 +179,32 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
         }
 
         return $this->phpDocInfoFactory->createFromNodeOrEmpty($parent);
+    }
+
+    /**
+     * @return Type[]
+     */
+    private function resolveParamOnPositionTypes(Array_ $array, int $parameterPosition): array
+    {
+        $paramOnPositionTypes = [];
+
+        foreach ($array->items as $singleDataProvidedSet) {
+            if (! $singleDataProvidedSet instanceof ArrayItem || ! $singleDataProvidedSet->value instanceof Array_) {
+                throw new ShouldNotHappenException();
+            }
+
+            foreach ($singleDataProvidedSet->value->items as $position => $singleDataProvidedSetItem) {
+                if ($position !== $parameterPosition) {
+                    continue;
+                }
+                if (! $singleDataProvidedSetItem instanceof ArrayItem) {
+                    continue;
+                }
+
+                $paramOnPositionTypes[] = $this->nodeTypeResolver->resolve($singleDataProvidedSetItem->value);
+            }
+        }
+
+        return $paramOnPositionTypes;
     }
 }

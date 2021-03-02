@@ -156,18 +156,18 @@ CODE_SAMPLE
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
-        $nativeClassReflection = $classReflection->getNativeReflection();
-        return $nativeClassReflection->getConstructor();
+        $reflectionClass = $classReflection->getNativeReflection();
+        return $reflectionClass->getConstructor();
     }
 
     private function resolveClassToInstantiateByParameterReflection(ReflectionParameter $reflectionParameter): ?string
     {
-        $parameterType = $reflectionParameter->getType();
-        if (! $parameterType instanceof ReflectionType) {
+        $reflectionType = $reflectionParameter->getType();
+        if (! $reflectionType instanceof ReflectionType) {
             return null;
         }
 
-        $requiredType = (string) $parameterType;
+        $requiredType = (string) $reflectionType;
 
         return $this->classToInstantiateByType[$requiredType] ?? null;
     }

@@ -163,8 +163,8 @@ final class ClassUnusedPrivateClassMethodResolver
             return false;
         }
 
-        $nativeClassReflection = $classReflection->getNativeReflection();
-        $reflectionMethod = $nativeClassReflection->getMethod($method);
+        $reflectionClass = $classReflection->getNativeReflection();
+        $reflectionMethod = $reflectionClass->getMethod($method);
 
         return $reflectionMethod->isAbstract();
     }

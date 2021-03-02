@@ -32,16 +32,16 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
     /**
      * @var StrStartsWithFuncCallFactory
      */
-    private $startsWithFuncCallFactory;
+    private $strStartsWithFuncCallFactory;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         ValueResolver $valueResolver,
-        StrStartsWithFuncCallFactory $startsWithFuncCallFactory
+        StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
-        $this->startsWithFuncCallFactory = $startsWithFuncCallFactory;
+        $this->strStartsWithFuncCallFactory = $strStartsWithFuncCallFactory;
     }
 
     /**
@@ -88,6 +88,6 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         $strposFuncCall = $strStartsWith->getFuncCall();
         $strposFuncCall->name = new Name('str_starts_with');
 
-        return $this->startsWithFuncCallFactory->createStrStartsWith($strStartsWith);
+        return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
     }
 }

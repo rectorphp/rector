@@ -137,10 +137,8 @@ final class PhpDocFromTypeDeclarationDecorator
      */
     private function isTypeMatch(Node $typeNode, string $requireTypeNodeClass): bool
     {
-        if (is_a($requireTypeNodeClass, Node::class, true)) {
-            if (! is_a($typeNode, $requireTypeNodeClass, true)) {
-                return false;
-            }
+        if (is_a($requireTypeNodeClass, Node::class, true) && ! is_a($typeNode, $requireTypeNodeClass, true)) {
+            return false;
         }
 
         if (is_a($requireTypeNodeClass, Type::class, true)) {

@@ -37,9 +37,9 @@ final class PHPUnitTypeDeclarationDecorator
         }
 
         $classReflection = $this->reflectionProvider->getClass('PHPUnit\Framework\TestCase');
-        $nativeClassReflection = $classReflection->getNativeReflection();
+        $reflectionClass = $classReflection->getNativeReflection();
 
-        $reflectionMethod = $nativeClassReflection->getMethod(MethodName::SET_UP);
+        $reflectionMethod = $reflectionClass->getMethod(MethodName::SET_UP);
         if (! $reflectionMethod->hasReturnType()) {
             return;
         }
