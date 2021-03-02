@@ -108,15 +108,14 @@ final class RemoveExtraParametersRector extends AbstractRector
             return true;
         }
 
-        $parametersAcceptor = $reflection->getVariants()[0];
-
-        // can be any number of arguments → nothing to limit here
-        if ($parametersAcceptor->isVariadic()) {
-            return true;
+        foreach ($reflection->getVariants() as $parametersAcceptor) {
+            // can be any number of arguments → nothing to limit here
+            if ($parametersAcceptor->isVariadic()) {
+                return true;
+            }
         }
 
-        $maximumAllowedParameterCount = $this->resolveMaximumAllowedParameterCount($reflection);
-        return $maximumAllowedParameterCount >= count($node->args);
+        return false;
     }
 
     /**
