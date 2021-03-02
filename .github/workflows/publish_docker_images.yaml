@@ -24,14 +24,32 @@ jobs:
 
             - name: Build images
               run: |
-                  # Strip git ref prefix from version
-                  VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+                  DOCKER_TAGS=""
 
-                  # Strip "v" prefix from tag name
-                  [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+                  # Pull tag and branch from github.ref, which is either refs/heads/... or refs/tags/...
+                  TAG=$(echo "${{ github.ref }}" | sed -e '/refs\/tags\//!d; s,refs/.*/v\?\(.*\),\1,')
+                  BRANCH=$(echo "${{ github.ref }}" | sed -e '/refs\/heads\//!d; s,refs/.*/\(.*\),\1,')
 
-                  # Use Docker `latest` tag convention
-                  [ "$VERSION" == "master" ] && VERSION=latest
+                  if [ "master" == "$BRANCH" ]; then
+                      DOCKER_TAGS="$DOCKER_TAGS php${{ matrix.php-version }}"
+                      if [ "8.0" == "${{ matrix.php-version }}" ]; then
+                          DOCKER_TAGS="$DOCKER_TAGS latest"
+                      fi
+                  fi
+
+                  if [ ! -z "$TAG" ]; then
+                      DOCKER_TAGS="$DOCKER_TAGS $TAG-php${{ matrix.php-version }}"
+                      if [ "8.0" ==  "${{ matrix.php-version }}" ]; then
+                          DOCKER_TAGS="$DOCKER_TAGS $TAG"
+                      fi
+                  fi
+
+                  echo "Image will be tagged with: $DOCKER_TAGS"
+
+                  DOCKER_TAG_ARG=""
+                  for ARG in $DOCKER_TAGS; do
+                      DOCKER_TAG_ARG="$DOCKER_TAG_ARG --tag rector/rector:$ARG"
+                  done
 
                   docker buildx create --name builder-php${{ matrix.php-version }} --use
                   docker buildx build \
@@ -40,16 +58,5 @@ jobs:
                         --cache-to=type=registry,ref=rector/rector:build-cache-php${{ matrix.php-version }},mode=max,push=true \
                         --target rector \
                         --push \
-                        --tag rector/rector:$VERSION-php${{ matrix.php-version }} \
+                        $DOCKER_TAG_ARG \
                         --build-arg PHP_VERSION=${{ matrix.php-version }} .
-
-                  # todo: this is workaround, remove later after realize how docker buildx build to local registry as well
-                  docker pull rector/rector:$VERSION-php${{ matrix.php-version }}
-
-                  # For master build create php version tag etc: rector/rector:php8.0
-                  [ "$VERSION" == "latest" ] && docker tag rector/rector:$VERSION-php${{ matrix.php-version }} rector/rector:php${{ matrix.php-version }}
-
-                  # For php 8.0 create ref tag etc: rector/rector:0.9.31
-                  [ "${{ matrix.php-version }}" == "8.0" ] && docker tag rector/rector:$VERSION-php${{ matrix.php-version }} rector/rector:$VERSION
-
-                  docker push rector/rector -a || true
