@@ -25,7 +25,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
     $services->set(InferParamFromClassMethodReturnRector::class)
         ->call('configure', [[
-            InferParamFromClassMethodReturnRector::PARAM_FROM_CLASS_METHOD_RETURNS => $configuration,
+            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => $configuration,
         ]]);
 
     $services->set(PreferThisOrSelfMethodCallRector::class)
