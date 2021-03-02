@@ -37,10 +37,17 @@ final class ConditionEvaluator
     private function evaluateVersionCompareCondition(VersionCompareCondition $versionCompareCondition)
     {
         $compareSign = $versionCompareCondition->getCompareSign();
+        if ($compareSign !== null) {
+            return version_compare(
+                (string) $versionCompareCondition->getFirstVersion(),
+                (string) $versionCompareCondition->getSecondVersion(),
+                $compareSign
+            );
+        }
+
         return version_compare(
             (string) $versionCompareCondition->getFirstVersion(),
-            (string) $versionCompareCondition->getSecondVersion(),
-            $compareSign
+            (string) $versionCompareCondition->getSecondVersion()
         );
     }
 
