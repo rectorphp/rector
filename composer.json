@@ -290,7 +290,6 @@
             "Rector\\Transform\\Tests\\": "rules/transform/tests",
             "Rector\\TypeDeclaration\\Tests\\": "rules/type-declaration/tests",
             "Rector\\Utils\\DoctrineAnnotationParserSyncer\\": "utils/doctrine-annotation-parser-syncer/src",
-            "Rector\\Utils\\PHPStanTypeMapperChecker\\": "utils/phpstan-type-mapper-checker/src",
             "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src",
             "Rector\\Carbon\\Tests\\": "rules/carbon/tests",
             "Rector\\Generics\\Tests\\": "rules/generics/tests"
