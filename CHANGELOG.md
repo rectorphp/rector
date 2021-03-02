@@ -1,4 +1,3 @@
-
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -11,6 +10,71 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 <!-- changelog-linker -->
 
 ## Unreleased
+
+## [0.9.31] - 2021-02-22
+
+### Changed
+
+- [#5643] [CodeQuality] Mirror comment on InlineIfToExplicitIfRector, Thanks to [@samsonasik]
+- [#5650] [EarlyReturn] Skip PreparedValueToEarlyReturnRector on previous var used in Assign Expr in if stmt, Thanks to [@samsonasik]
+- [#5627] [EarlyReturn] Handle ChangeAndIfToEarlyReturnRector has Return expr in if stmt fixture, Thanks to [@samsonasik]
+- [#5645] [Php80] Skip ChangeSwitchToMatchRector on missed break, Thanks to [@samsonasik]
+- [#5644] [Php80] Handle Nullable Type on ClassPropertyAssignToConstructorPromotionRector, Thanks to [@samsonasik]
+- [#5642] [Transform] Move FunctionCallToConstantRector to FuncCallToConstFetchRector
+- [#5648] cleanup unneeded AbstractTemporaryRector methods
+- [#5641] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
+- [#5640] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+
+## [0.9.30] - 2021-02-21
+
+- [#5639] [CodingStyle] Skip double generic class string
+
+### Added
+
+- [#5705] [DX] Add forbidden parent classes
+- [#5598] [DeadCode] Add Extra files test for RemoveEmptyAbstractClassRector, Thanks to [@samsonasik]
+- [#5661] [EarlyReturn] Add ReturnBinaryOrToEarlyReturnRector, Thanks to [@samsonasik]
+- [#5669] [Meta] Add Monorepo Builder, Thanks to [@samsonasik]
+- [#5672] [Naming] Add RenameForeachValueVariableToMatchExprVariableRector, Thanks to [@samsonasik]
+- [#5700] [Rector-CI] Update EndBug/add-and-commit to v7.0.0, Thanks to [@samsonasik]
+- [#5625] [TypeDeclaration] Add types when dataProviders that yield are used, Thanks to [@addshore]
+
+### Changed
+
+- [#5649] [Bin] Handle possible PHPStan Stubs runtime locations, Thanks to [@samsonasik]
+- [#5699] [CodeQuality] Handle Named Argument in ThrowWithPreviousExceptionRector, Thanks to [@samsonasik]
+- [#5691] [CodingStyle] Skip RemoveUnusedAliasRector on used in ClassConstFetch, Thanks to [@samsonasik]
+- [#5694] [DX] Narrow wobly strings to strict ObjectType()  [#2]
+- [#5693] [DX] Narrow wobly strings to strict ObjectType()
+- [#5677] [DeadDocBlock] Skip RemoveUselessParamTagRector on Generic Type, Thanks to [@samsonasik]
+- [#5675] [DeadDocBlock] Skip RemoveUselessReturnTagRector on Generic Type, Thanks to [@samsonasik]
+- [#5711] [EarlyReturn] Handle Return Parent next if on ChangeAndIfToEarlyReturnRector, Thanks to [@samsonasik]
+- [#5706] [EarlyReturn] Handle Always return on ChangeAndIfToEarlyReturnRector, Thanks to [@samsonasik]
+- [#5679] [EarlyReturn] Register ReturnBinaryOrToEarlyReturnRector to early-return config set, Thanks to [@samsonasik]
+- [#5660] [EarlyReturn] Skip ReturnAfterToEarlyOnBreakRector on non-linear previous assignment before foreach, Thanks to [@samsonasik]
+- [#5718] [Naming] Handle UnderscoreToCamelCaseLocalVariableNameRector in used in next and previous assign variable, Thanks to [@samsonasik]
+- [#5682] [Naming] Various Improve RenameForeachValueVariableToMatchExprVariableRector, Thanks to [@samsonasik]
+- [#5686] [NodeTypeResolver] Handle object type or nullable object type from Parameter as Identifier, Thanks to [@samsonasik]
+- [#5671] [Privatization] Skip PrivatizeLocalOnlyMethodRector on use of SymfonyRouteTagValueNode, Thanks to [@samsonasik]
+- [#5692] use getNodeTypes() with class-string generic type
+- [#5665] Make use of static reflection from PHPStan
+- [#5662] update monorepo-builder syntax
+- [#5656] use RequireStringArgumentInConstructorRule
+- [#5655] Bump to Symplify 9.2.1
+- [#5698] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
+- [#5657] [static] Improve types
+
+### Fixed
+
+- [#5659] [TypeDeclaration] Fixes for array dataProviders with multiple types, Thanks to [@addshore]
+- [#5695] Fix url to nodes-overview, Thanks to [@staabm]
+
+### Removed
+
+- [#5709] [DX] Removing more parent abstract circular classes
+- [#5717] [Downgrade] Remove excessive abstract class inheritance, use single service
+- [#5714] Removing parent classes
+- [#5713] remove unmatched errors + require string in object types to avoid prefixing of generics objects
 
 ### Added
 
@@ -6998,3 +7062,50 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#5523]: https://github.com/rectorphp/rector/pull/5523
 [@mpdude]: https://github.com/mpdude
 [@addshore]: https://github.com/addshore
+[#5718]: https://github.com/rectorphp/rector/pull/5718
+[#5717]: https://github.com/rectorphp/rector/pull/5717
+[#5714]: https://github.com/rectorphp/rector/pull/5714
+[#5713]: https://github.com/rectorphp/rector/pull/5713
+[#5711]: https://github.com/rectorphp/rector/pull/5711
+[#5709]: https://github.com/rectorphp/rector/pull/5709
+[#5706]: https://github.com/rectorphp/rector/pull/5706
+[#5705]: https://github.com/rectorphp/rector/pull/5705
+[#5700]: https://github.com/rectorphp/rector/pull/5700
+[#5699]: https://github.com/rectorphp/rector/pull/5699
+[#5698]: https://github.com/rectorphp/rector/pull/5698
+[#5695]: https://github.com/rectorphp/rector/pull/5695
+[#5694]: https://github.com/rectorphp/rector/pull/5694
+[#5693]: https://github.com/rectorphp/rector/pull/5693
+[#5692]: https://github.com/rectorphp/rector/pull/5692
+[#5691]: https://github.com/rectorphp/rector/pull/5691
+[#5686]: https://github.com/rectorphp/rector/pull/5686
+[#5682]: https://github.com/rectorphp/rector/pull/5682
+[#5679]: https://github.com/rectorphp/rector/pull/5679
+[#5677]: https://github.com/rectorphp/rector/pull/5677
+[#5675]: https://github.com/rectorphp/rector/pull/5675
+[#5672]: https://github.com/rectorphp/rector/pull/5672
+[#5671]: https://github.com/rectorphp/rector/pull/5671
+[#5669]: https://github.com/rectorphp/rector/pull/5669
+[#5665]: https://github.com/rectorphp/rector/pull/5665
+[#5662]: https://github.com/rectorphp/rector/pull/5662
+[#5661]: https://github.com/rectorphp/rector/pull/5661
+[#5660]: https://github.com/rectorphp/rector/pull/5660
+[#5659]: https://github.com/rectorphp/rector/pull/5659
+[#5657]: https://github.com/rectorphp/rector/pull/5657
+[#5656]: https://github.com/rectorphp/rector/pull/5656
+[#5655]: https://github.com/rectorphp/rector/pull/5655
+[#5650]: https://github.com/rectorphp/rector/pull/5650
+[#5649]: https://github.com/rectorphp/rector/pull/5649
+[#5648]: https://github.com/rectorphp/rector/pull/5648
+[#5645]: https://github.com/rectorphp/rector/pull/5645
+[#5644]: https://github.com/rectorphp/rector/pull/5644
+[#5643]: https://github.com/rectorphp/rector/pull/5643
+[#5642]: https://github.com/rectorphp/rector/pull/5642
+[#5641]: https://github.com/rectorphp/rector/pull/5641
+[#5640]: https://github.com/rectorphp/rector/pull/5640
+[#5639]: https://github.com/rectorphp/rector/pull/5639
+[#5627]: https://github.com/rectorphp/rector/pull/5627
+[#5625]: https://github.com/rectorphp/rector/pull/5625
+[#5598]: https://github.com/rectorphp/rector/pull/5598
+[0.9.31]: https://github.com/rectorphp/rector/compare/0.9.30...0.9.31
+[0.9.30]: https://github.com/rectorphp/rector/compare/0.8.29...0.9.30
