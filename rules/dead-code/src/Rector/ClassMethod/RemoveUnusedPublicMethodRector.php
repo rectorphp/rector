@@ -7,9 +7,11 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\NodeAnalyzer\DataProviderMethodNamesResolver;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -21,9 +23,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPublicMethodRector extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
+     * @var DataProviderMethodNamesResolver
+     */
+    private $dataProviderMethodNamesResolver;
+
+    /**
      * @var MethodCall[]|StaticCall[]|ArrayCallable[]
      */
     private $calls = [];
+
+    public function __construct(DataProviderMethodNamesResolver $dataProviderMethodNamesResolver)
+    {
+        $this->dataProviderMethodNamesResolver = $dataProviderMethodNamesResolver;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -103,6 +115,11 @@ CODE_SAMPLE
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof Class_) {
+            return true;
+        }
+
         if ($this->isOpenSourceProjectType()) {
             return true;
         }
@@ -115,7 +132,14 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->isNames($classMethod, ['test', 'test*']);
+        if ($this->isNames($classMethod, ['test', 'test*'])) {
+            return true;
+        }
+
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+
+        $phpunitDataProviderMethodNames = $this->dataProviderMethodNamesResolver->resolveFromClass($class);
+        return $this->isNames($classMethod, $phpunitDataProviderMethodNames);
     }
 
     private function isRecursionCallClassMethod(ClassMethod $currentClassMethod): bool

@@ -604,3 +604,5 @@ parameters:
             message: '#Do not use "array_filter" function with complex content, make it more readable with extracted method or single\-line statement#'
             paths:
                 - src/Application/ActiveRectorsProvider.php
+
+        - '#Content of method "getIfNextReturn\(\)" is duplicated with method "getIfNextReturn\(\)" in "Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory" class\. Use unique content or service instead#'

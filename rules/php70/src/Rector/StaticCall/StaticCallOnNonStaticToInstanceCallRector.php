@@ -188,16 +188,16 @@ CODE_SAMPLE
         $classReflection = $this->reflectionProvider->getClass($className);
         $reflectionClass = $classReflection->getNativeReflection();
 
-        $constructorMethodReflection = $reflectionClass->getConstructor();
-        if (! $constructorMethodReflection instanceof ReflectionMethod) {
+        $reflectionMethod = $reflectionClass->getConstructor();
+        if (! $reflectionMethod instanceof ReflectionMethod) {
             return true;
         }
 
-        if (! $constructorMethodReflection->isPublic()) {
+        if (! $reflectionMethod->isPublic()) {
             return false;
         }
 
         // required parameters in constructor, nothing we can do
-        return ! (bool) $constructorMethodReflection->getNumberOfRequiredParameters();
+        return ! (bool) $reflectionMethod->getNumberOfRequiredParameters();
     }
 }
