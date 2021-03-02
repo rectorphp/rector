@@ -171,8 +171,10 @@ CODE_SAMPLE
         if (! $this->ifManipulator->isIfWithOnlyOneStmt($if)) {
             return true;
         }
-
-        if (! $if->cond instanceof BooleanAnd || ! $this->ifManipulator->isIfWithoutElseAndElseIfs($if)) {
+        if (! $if->cond instanceof BooleanAnd) {
+            return true;
+        }
+        if (! $this->ifManipulator->isIfWithoutElseAndElseIfs($if)) {
             return true;
         }
 
@@ -224,7 +226,7 @@ CODE_SAMPLE
             $return->expr = $getNextReturnExpr->expr;
         }
 
-        foreach ($conditions as $key => $condition) {
+        foreach ($conditions as $condition) {
             $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
             $if = new If_($invertedCondition);
             $if->stmts = $stmt;
@@ -244,7 +246,7 @@ CODE_SAMPLE
         return $nextNode;
     }
 
-    private function getNextReturnExpr(If_ $if): ?Return_
+    private function getNextReturnExpr(If_ $if): ?Node
     {
         $hasClosureParent = (bool) $this->betterNodeFinder->findParentType($if, Closure::class);
         if ($hasClosureParent) {

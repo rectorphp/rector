@@ -141,12 +141,12 @@ CODE_SAMPLE
             return false;
         }
 
-        $functionNameNode = new Name($functionName);
-        if (! $this->reflectionProvider->hasFunction($functionNameNode, null)) {
+        $name = new Name($functionName);
+        if (! $this->reflectionProvider->hasFunction($name, null)) {
             return false;
         }
 
-        $reflectionFunction = $this->reflectionProvider->getFunction($functionNameNode, null);
+        $reflectionFunction = $this->reflectionProvider->getFunction($name, null);
 
         // skip native functions, hard to analyze without stubs (stubs would make working with IDE non-practical)
         return $reflectionFunction->isBuiltin();

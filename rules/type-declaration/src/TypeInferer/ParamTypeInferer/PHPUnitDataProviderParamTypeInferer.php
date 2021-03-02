@@ -123,10 +123,12 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
             }
 
             foreach ($singleDataProvidedSet->value->items as $position => $singleDataProvidedSetItem) {
-                if ($position !== $parameterPosition || ! $singleDataProvidedSetItem instanceof ArrayItem) {
+                if ($position !== $parameterPosition) {
                     continue;
                 }
-
+                if (! $singleDataProvidedSetItem instanceof ArrayItem) {
+                    continue;
+                }
                 $paramOnPositionTypes[] = $this->nodeTypeResolver->resolve($singleDataProvidedSetItem->value);
             }
         }

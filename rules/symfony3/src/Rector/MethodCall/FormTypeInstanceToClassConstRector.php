@@ -263,9 +263,9 @@ CODE_SAMPLE
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
-        $nativeClassReflection = $classReflection->getNativeReflection();
+        $reflectionClass = $classReflection->getNativeReflection();
 
-        $constructorReflectionMethod = $nativeClassReflection->getConstructor();
+        $constructorReflectionMethod = $reflectionClass->getConstructor();
         if (! $constructorReflectionMethod instanceof ReflectionMethod) {
             return [];
         }
