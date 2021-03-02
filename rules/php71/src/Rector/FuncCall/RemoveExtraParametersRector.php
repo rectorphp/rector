@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Reflection\Type\UnionTypeMethodReflection;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
@@ -108,14 +109,7 @@ final class RemoveExtraParametersRector extends AbstractRector
             return true;
         }
 
-        foreach ($reflection->getVariants() as $parametersAcceptor) {
-            // can be any number of arguments → nothing to limit here
-            if ($parametersAcceptor->isVariadic()) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->hasVariadicParameters($reflection->getVariants());
     }
 
     /**
@@ -129,5 +123,20 @@ final class RemoveExtraParametersRector extends AbstractRector
         }
 
         return (int) max($parameterCounts);
+    }
+
+    /**
+     * @param ParametersAcceptor[] $parameterAcceptors
+     */
+    private function hasVariadicParameters(array $parameterAcceptors): bool
+    {
+        foreach ($parameterAcceptors as $parametersAcceptor) {
+            // can be any number of arguments → nothing to limit here
+            if ($parametersAcceptor->isVariadic()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
