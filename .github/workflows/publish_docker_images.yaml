@@ -4,7 +4,6 @@ on:
         # Publish `master` as Docker `latest` image.
         branches:
             - master
-            - experimental-scoped
 
         # Publish `v1.2.3` tags as releases.
         tags:
@@ -43,6 +42,16 @@ jobs:
                         --push \
                         --tag rector/rector:$VERSION-php${{ matrix.php-version }} \
                         --build-arg PHP_VERSION=${{ matrix.php-version }} .
+
+            - name: Extra tagging images
+              run: |
+                  # For master build create php version tag etc: rector/rector:php8.0
+                  [ "$VERSION" == "latest" ] && docker tag rector/rector:$VERSION-php${{ matrix.php-version }} rector/rector:php${{ matrix.php-version }}
+
+                  # For php 8.0 create ref tag etc: rector/rector:0.9.31
+                  [ "${{ matrix.php-version }}" == "8.0" ] && docker tag rector/rector:$VERSION-php${{ matrix.php-version }} rector/rector:$VERSION
+
+                  docker push rector/rector -a
 
             - name: Build Rector "secured"
               if: matrix.php-version == '8.0'
