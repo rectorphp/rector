@@ -43,6 +43,9 @@ jobs:
                         --tag rector/rector:$VERSION-php${{ matrix.php-version }} \
                         --build-arg PHP_VERSION=${{ matrix.php-version }} .
 
+                  # todo: this is workaround, remove later after realize how docker buildx build to local registry as well
+                  docker pull rector/rector:$VERSION-php${{ matrix.php-version }}
+
                   # For master build create php version tag etc: rector/rector:php8.0
                   [ "$VERSION" == "latest" ] && docker tag rector/rector:$VERSION-php${{ matrix.php-version }} rector/rector:php${{ matrix.php-version }}
 
