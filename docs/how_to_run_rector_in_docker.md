@@ -17,6 +17,24 @@ docker run --rm -v $(pwd):/project rector/rector:latest process src \
     --dry-run
 ```
 
+## Multiple PHP versions supported
+
+You should always use image with PHP version closest to your project's.
+
+Rector Docker images supports PHP versions 7.3, 7.4, 8.0.
+
+```
+## Using with specific tagged version of Rector
+rector/rector:0.9.32-php7.3
+rector/rector:0.9.32-php7.4
+rector/rector:0.9.32-php8.0
+
+## Using latest release
+rector/rector:php7.3    # same as rector/rector:latest-php7.3
+rector/rector:php7.4    # same as rector/rector:latest-php7.4
+rector/rector:php8.0    # same as rector/rector:latest-php8.0
+```
+
 ## Permissions issues
 
 If you run into issues with `permission denied` or running Rector in docker keeps changing owner of your project files, running container as current user `--user $(id -u):$(id -g)` should solve it for you:
