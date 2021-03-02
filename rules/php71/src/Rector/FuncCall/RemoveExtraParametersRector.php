@@ -10,7 +10,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
-use PHPStan\Reflection\ParametersAcceptor;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Type\UnionTypeMethodReflection;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
@@ -65,16 +66,14 @@ final class RemoveExtraParametersRector extends AbstractRector
             return null;
         }
 
-        /** @var ParametersAcceptor $parametersAcceptor */
-        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor(
-            $functionLikeReflection,
-            $node
-        );
+        if ($functionLikeReflection === null) {
+            return null;
+        }
 
-        $numberOfParameters = count($parametersAcceptor->getParameters());
+        $maximumAllowedParameterCount = $this->resolveMaximumAllowedParameterCount($functionLikeReflection);
+
         $numberOfArguments = count($node->args);
-
-        for ($i = $numberOfParameters; $i <= $numberOfArguments; ++$i) {
+        for ($i = $maximumAllowedParameterCount; $i <= $numberOfArguments; ++$i) {
             unset($node->args[$i]);
         }
 
@@ -100,20 +99,36 @@ final class RemoveExtraParametersRector extends AbstractRector
             }
         }
 
-        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor(
-            $this->callReflectionResolver->resolveCall($node),
-            $node
-        );
-
-        if (! $parametersAcceptor instanceof ParametersAcceptor) {
+        $reflection = $this->callReflectionResolver->resolveCall($node);
+        if ($reflection === null) {
             return true;
         }
+
+        if ($reflection->getVariants() === []) {
+            return true;
+        }
+
+        $parametersAcceptor = $reflection->getVariants()[0];
 
         // can be any number of arguments → nothing to limit here
         if ($parametersAcceptor->isVariadic()) {
             return true;
         }
 
-        return count($parametersAcceptor->getParameters()) >= count($node->args);
+        $maximumAllowedParameterCount = $this->resolveMaximumAllowedParameterCount($reflection);
+        return $maximumAllowedParameterCount >= count($node->args);
+    }
+
+    /**
+     * @param MethodReflection|FunctionReflection $reflection
+     */
+    private function resolveMaximumAllowedParameterCount(object $reflection): int
+    {
+        $parameterCounts = [0];
+        foreach ($reflection->getVariants() as $parametersAcceptor) {
+            $parameterCounts[] = count($parametersAcceptor->getParameters());
+        }
+
+        return (int) max($parameterCounts);
     }
 }
