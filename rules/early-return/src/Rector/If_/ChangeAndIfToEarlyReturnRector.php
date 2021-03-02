@@ -7,9 +7,7 @@ namespace Rector\EarlyReturn\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Expression;
@@ -20,7 +18,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
+use Rector\EarlyReturn\NodeFactory\InvertedIfFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -33,7 +31,7 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
     /**
      * @var array<class-string<Stmt>>
      */
-    public const LOOP_TYPES = [Foreach_::class, For_::class, While_::class];
+    private const LOOP_TYPES = [Foreach_::class, For_::class, While_::class];
 
     /**
      * @var IfManipulator
@@ -41,14 +39,14 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
     private $ifManipulator;
 
     /**
-     * @var ConditionInverter
+     * @var InvertedIfFactory
      */
-    private $conditionInverter;
+    private $invertedIfFactory;
 
-    public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator)
+    public function __construct(IfManipulator $ifManipulator, InvertedIfFactory $invertedIfFactory)
     {
         $this->ifManipulator = $ifManipulator;
-        $this->conditionInverter = $conditionInverter;
+        $this->invertedIfFactory = $invertedIfFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -150,7 +148,7 @@ CODE_SAMPLE
      */
     private function processReplaceIfs(If_ $node, array $conditions, Return_ $ifNextReturnClone): If_
     {
-        $ifs = $this->createInvertedIfNodesFromConditions($node, $conditions, $ifNextReturnClone);
+        $ifs = $this->invertedIfFactory->createFromConditions($node, $conditions, $ifNextReturnClone);
         $this->mirrorComments($ifs[0], $node);
 
         foreach ($ifs as $if) {
@@ -210,32 +208,6 @@ CODE_SAMPLE
         return false;
     }
 
-    /**
-     * @param Expr[] $conditions
-     * @return If_[]
-     */
-    private function createInvertedIfNodesFromConditions(If_ $if, array $conditions, Return_ $return): array
-    {
-        $ifs = [];
-        $stmt = $this->isIfInLoop($if) && ! $this->getIfNextReturn($if)
-            ? [new Continue_()]
-            : [$return];
-
-        $getNextReturnExpr = $this->getNextReturnExpr($if);
-        if ($getNextReturnExpr instanceof Return_) {
-            $return->expr = $getNextReturnExpr->expr;
-        }
-
-        foreach ($conditions as $condition) {
-            $invertedCondition = $this->conditionInverter->createInvertedCondition($condition);
-            $if = new If_($invertedCondition);
-            $if->stmts = $stmt;
-            $ifs[] = $if;
-        }
-
-        return $ifs;
-    }
-
     private function getIfNextReturn(If_ $if): ?Return_
     {
         $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
@@ -244,18 +216,6 @@ CODE_SAMPLE
         }
 
         return $nextNode;
-    }
-
-    private function getNextReturnExpr(If_ $if): ?Node
-    {
-        $hasClosureParent = (bool) $this->betterNodeFinder->findParentType($if, Closure::class);
-        if ($hasClosureParent) {
-            return null;
-        }
-
-        return $this->betterNodeFinder->findFirstNext($if, function (Node $node): bool {
-            return $node instanceof Return_ && $node->expr instanceof Expr;
-        });
     }
 
     private function isIfInLoop(If_ $if): bool
