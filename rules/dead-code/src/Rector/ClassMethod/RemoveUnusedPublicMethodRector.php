@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -92,14 +93,8 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var MethodCall[] $calls */
-        $calls = $this->calls;
-        foreach ($calls as $call) {
-            $classMethod = $this->betterNodeFinder->findParentType($call, ClassMethod::class);
-
-            if ($this->nodeComparator->areNodesEqual($classMethod, $node)) {
-                return null;
-            }
+        if ($this->isRecursionCallClassMethod($node)) {
+            return null;
         }
 
         $this->removeNode($node);
@@ -121,5 +116,24 @@ CODE_SAMPLE
         }
 
         return $this->isNames($classMethod, ['test', 'test*']);
+    }
+
+    private function isRecursionCallClassMethod(ClassMethod $currentClassMethod): bool
+    {
+        /** @var MethodCall[] $calls */
+        $calls = $this->calls;
+
+        foreach ($calls as $call) {
+            $parentClassMethod = $call->getAttribute(AttributeKey::METHOD_NODE);
+            if (! $parentClassMethod) {
+                continue;
+            }
+
+            if ($this->nodeComparator->areNodesEqual($parentClassMethod, $currentClassMethod)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
