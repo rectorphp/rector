@@ -14,6 +14,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\DataProviderMethodNamesResolver;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -32,9 +33,17 @@ final class RemoveUnusedPublicMethodRector extends AbstractRector implements Zer
      */
     private $calls = [];
 
-    public function __construct(DataProviderMethodNamesResolver $dataProviderMethodNamesResolver)
-    {
+    /**
+     * @var ClassMethodReturnVendorLockResolver
+     */
+    private $classMethodReturnVendorLockResolver;
+
+    public function __construct(
+        DataProviderMethodNamesResolver $dataProviderMethodNamesResolver,
+        ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver
+    ) {
         $this->dataProviderMethodNamesResolver = $dataProviderMethodNamesResolver;
+        $this->classMethodReturnVendorLockResolver = $classMethodReturnVendorLockResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -125,6 +134,10 @@ CODE_SAMPLE
         }
 
         if (! $classMethod->isPublic()) {
+            return true;
+        }
+
+        if ($this->classMethodReturnVendorLockResolver->isVendorLocked($classMethod)) {
             return true;
         }
 

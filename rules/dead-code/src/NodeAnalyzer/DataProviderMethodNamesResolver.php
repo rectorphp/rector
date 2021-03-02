@@ -70,7 +70,6 @@ final class DataProviderMethodNamesResolver
         foreach ($class->getMethods() as $classMethod) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
-            /** @var PHPUnitDataProviderTagValueNode[] $phpunitDataProviderTagValueNodes */
             $foundPHPUnitDataProviderTagValueNodes = $phpDocInfo->findAllByType(PHPUnitDataProviderTagValueNode::class);
             $phpunitDataProviderTagValueNodes = array_merge(
                 $phpunitDataProviderTagValueNodes,
