@@ -178,16 +178,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo, $extraFileInfos);
         $this->originalTempFileInfo = $inputFileInfo;
 
-        // runnable?
-        if (! file_exists($inputFileInfo->getPathname())) {
-            return;
-        }
-
-        if (! Strings::contains($inputFileInfo->getContents(), RunnableInterface::class)) {
-            return;
-        }
-
-        $this->assertOriginalAndFixedFileResultEquals($inputFileInfo, $expectedFileInfo);
+        $this->processRunnableTest($inputFileInfo, $expectedFileInfo);
     }
 
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
@@ -344,5 +335,19 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $stubLoader->loadStubs();
 
         self::$isInitialized = true;
+    }
+
+    private function processRunnableTest(SmartFileInfo $inputFileInfo, SmartFileInfo $expectedFileInfo): void
+    {
+        // runnable?
+        if (! file_exists($inputFileInfo->getPathname())) {
+            return;
+        }
+
+        if (! Strings::contains($inputFileInfo->getContents(), RunnableInterface::class)) {
+            return;
+        }
+
+        $this->assertOriginalAndFixedFileResultEquals($inputFileInfo, $expectedFileInfo);
     }
 }

@@ -12,7 +12,8 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\PostRunnerInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
+use Rector\Core\FileSystem\PhpFilesFinder;
+use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -93,9 +94,14 @@ final class RectorApplication
     private $privatesAccessor;
 
     /**
-     * @var DynamicSourceLocatorProvider
+     * @var PhpFilesFinder
      */
-    private $dynamicSourceLocatorProvider;
+    private $phpFilesFinder;
+
+    /**
+     * @var DynamicSourceLocatorDecorator
+     */
+    private $dynamicSourceLocatorDecorator;
 
     /**
      * @param PostRunnerInterface[] $postRunners
@@ -109,7 +115,8 @@ final class RectorApplication
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         SymfonyStyle $symfonyStyle,
         PrivatesAccessor $privatesAccessor,
-        DynamicSourceLocatorProvider $dynamicSourceLocatorProvider,
+        PhpFilesFinder $phpFilesFinder,
+        DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator,
         array $postRunners
     ) {
         $this->symfonyStyle = $symfonyStyle;
@@ -121,14 +128,16 @@ final class RectorApplication
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->privatesAccessor = $privatesAccessor;
         $this->postRunners = $postRunners;
-        $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;
+        $this->phpFilesFinder = $phpFilesFinder;
+        $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
     }
 
     /**
-     * @param SmartFileInfo[] $phpFileInfos
+     * @param string[] $paths
      */
-    public function runOnFileInfos(array $phpFileInfos): void
+    public function runOnPaths(array $paths): void
     {
+        $phpFileInfos = $this->phpFilesFinder->findInPaths($paths);
         $fileCount = count($phpFileInfos);
         if ($fileCount === 0) {
             return;
@@ -138,6 +147,9 @@ final class RectorApplication
 
         // PHPStan has to know about all files!
         $this->configurePHPStanNodeScopeResolver($phpFileInfos);
+
+        // 0. add files and directories to static locator
+        $this->dynamicSourceLocatorDecorator->addPaths($paths);
 
         // 1. parse files to nodes
         $this->parseFileInfosToNodes($phpFileInfos);
@@ -196,7 +208,6 @@ final class RectorApplication
         }
 
         $this->nodeScopeResolver->setAnalysedFiles($filePaths);
-        $this->dynamicSourceLocatorProvider->addFileInfos($fileInfos);
     }
 
     /**

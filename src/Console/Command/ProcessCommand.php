@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Nette\Utils\Strings;
-use Rector\Caching\Application\CachedFileInfoFilterAndReporter;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
@@ -16,6 +14,7 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\FileSystem\FilesFinder;
+use Rector\Core\FileSystem\PhpFilesFinder;
 use Rector\Core\Guard\RectorGuard;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
@@ -27,7 +26,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ProcessCommand extends AbstractCommand
 {
@@ -87,21 +85,21 @@ final class ProcessCommand extends AbstractCommand
     private $symfonyStyle;
 
     /**
-     * @var CachedFileInfoFilterAndReporter
-     */
-    private $cachedFileInfoFilterAndReporter;
-
-    /**
      * @var ComposerProcessor
      */
     private $composerProcessor;
+
+    /**
+     * @var PhpFilesFinder
+     */
+    private $phpFilesFinder;
 
     public function __construct(
         AdditionalAutoloader $additionalAutoloader,
         ChangedFilesDetector $changedFilesDetector,
         Configuration $configuration,
         ErrorAndDiffCollector $errorAndDiffCollector,
-        FilesFinder $phpFilesFinder,
+        FilesFinder $filesFinder,
         NonPhpFileProcessor $nonPhpFileProcessor,
         OutputFormatterCollector $outputFormatterCollector,
         RectorApplication $rectorApplication,
@@ -109,10 +107,10 @@ final class ProcessCommand extends AbstractCommand
         RectorNodeTraverser $rectorNodeTraverser,
         StubLoader $stubLoader,
         SymfonyStyle $symfonyStyle,
-        CachedFileInfoFilterAndReporter $cachedFileInfoFilterAndReporter,
-        ComposerProcessor $composerProcessor
+        ComposerProcessor $composerProcessor,
+        PhpFilesFinder $phpFilesFinder
     ) {
-        $this->filesFinder = $phpFilesFinder;
+        $this->filesFinder = $filesFinder;
         $this->additionalAutoloader = $additionalAutoloader;
         $this->rectorGuard = $rectorGuard;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
@@ -124,16 +122,14 @@ final class ProcessCommand extends AbstractCommand
         $this->nonPhpFileProcessor = $nonPhpFileProcessor;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->symfonyStyle = $symfonyStyle;
-        $this->cachedFileInfoFilterAndReporter = $cachedFileInfoFilterAndReporter;
         $this->composerProcessor = $composerProcessor;
+        $this->phpFilesFinder = $phpFilesFinder;
 
         parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this->setAliases(['rectify']);
-
         $this->setDescription('Upgrade or refactor source code with provided rectors');
         $this->addArgument(
             Option::SOURCE,
@@ -201,9 +197,9 @@ final class ProcessCommand extends AbstractCommand
 
         $paths = $this->configuration->getPaths();
 
-        $phpFileInfos = $this->findPhpFileInfos($paths);
+        $phpFileInfos = $this->phpFilesFinder->findInPaths($paths);
 
-        $this->additionalAutoloader->autoloadWithInputAndSource($input, $paths);
+        $this->additionalAutoloader->autoloadWithInputAndSource($input);
 
         if ($this->configuration->isCacheDebug()) {
             $message = sprintf('[cache] %d files after cache filter', count($phpFileInfos));
@@ -212,7 +208,7 @@ final class ProcessCommand extends AbstractCommand
         }
 
         $this->configuration->setFileInfos($phpFileInfos);
-        $this->rectorApplication->runOnFileInfos($phpFileInfos);
+        $this->rectorApplication->runOnPaths($paths);
 
         // must run after PHP rectors, because they might change class names, and these class names must be changed in configs
         $nonPhpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
@@ -248,25 +244,6 @@ final class ProcessCommand extends AbstractCommand
             return ShellCode::SUCCESS;
         }
         return ShellCode::ERROR;
-    }
-
-    /**
-     * @param string[] $paths
-     * @return SmartFileInfo[]
-     */
-    private function findPhpFileInfos(array $paths): array
-    {
-        $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
-            $paths,
-            $this->configuration->getFileExtensions()
-        );
-
-        // filter out non-PHP php files, e.g. blade templates in Laravel
-        $phpFileInfos = array_filter($phpFileInfos, function (SmartFileInfo $smartFileInfo): bool {
-            return ! Strings::endsWith($smartFileInfo->getPathname(), '.blade.php');
-        });
-
-        return $this->cachedFileInfoFilterAndReporter->filterFileInfos($phpFileInfos);
     }
 
     private function reportZeroCacheRectorsCondition(): void
