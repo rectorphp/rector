@@ -43,8 +43,6 @@ jobs:
                         --tag rector/rector:$VERSION-php${{ matrix.php-version }} \
                         --build-arg PHP_VERSION=${{ matrix.php-version }} .
 
-            - name: Extra tagging images
-              run: |
                   # For master build create php version tag etc: rector/rector:php8.0
                   [ "$VERSION" == "latest" ] && docker tag rector/rector:$VERSION-php${{ matrix.php-version }} rector/rector:php${{ matrix.php-version }}
 
