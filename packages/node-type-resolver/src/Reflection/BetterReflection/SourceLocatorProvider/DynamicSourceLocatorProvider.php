@@ -7,6 +7,7 @@ namespace Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvi
 use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher;
+use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocator;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator;
 use Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -14,9 +15,14 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterface
 {
     /**
-     * @var SmartFileInfo[]
+     * @var string[]
      */
-    private $fileInfos = [];
+    private $files = [];
+
+    /**
+     * @var array<string, string[]>
+     */
+    private $filesByDirectory = [];
 
     /**
      * @var FileNodesFetcher
@@ -30,24 +36,36 @@ final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterfa
 
     public function setFileInfo(SmartFileInfo $fileInfo): void
     {
-        $this->fileInfos = [$fileInfo];
+        $this->files = [$fileInfo->getRealPath()];
     }
 
     /**
-     * @param SmartFileInfo[] $fileInfos
+     * @param string[] $files
      */
-    public function addFileInfos(array $fileInfos): void
+    public function addFiles(array $files): void
     {
-        $this->fileInfos = array_merge($this->fileInfos, $fileInfos);
+        $this->files = array_merge($this->files, $files);
     }
 
     public function provide(): SourceLocator
     {
         $sourceLocators = [];
-        foreach ($this->fileInfos as $fileInfo) {
-            $sourceLocators[] = new OptimizedSingleFileSourceLocator($this->fileNodesFetcher, $fileInfo->getRealPath());
+        foreach ($this->files as $file) {
+            $sourceLocators[] = new OptimizedSingleFileSourceLocator($this->fileNodesFetcher, $file);
+        }
+
+        foreach ($this->filesByDirectory as $files) {
+            $sourceLocators[] = new OptimizedDirectorySourceLocator($this->fileNodesFetcher, $files);
         }
 
         return new AggregateSourceLocator($sourceLocators);
+    }
+
+    /**
+     * @param string[] $files
+     */
+    public function addFilesByDirectory(string $directory, array $files): void
+    {
+        $this->filesByDirectory[$directory] = $files;
     }
 }

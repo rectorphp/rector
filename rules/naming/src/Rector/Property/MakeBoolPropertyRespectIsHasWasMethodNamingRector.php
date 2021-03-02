@@ -99,9 +99,6 @@ CODE_SAMPLE
             return null;
         }
 
-//        dump($expectedBoolName);
-//        die;
-
         $propertyRename = $this->propertyRenameFactory->createFromExpectedName($node, $expectedBoolName);
         if (! $propertyRename instanceof PropertyRename) {
             return null;

@@ -58,8 +58,10 @@ final class AdditionalAutoloader
         $autoloadFiles = $this->fileSystemFilter->filterFiles($this->autoloadPaths);
 
         $this->autoloadFileFromInput($input);
-        $this->autoloadDirectories($autoloadDirectories);
-        $this->autoloadFiles($autoloadFiles);
+
+        // note: should be handled by static reflection
+        // $this->autoloadDirectories($autoloadDirectories);
+        // $this->autoloadFiles($autoloadFiles);
 
         // the scanned file needs to be autoloaded
         $directories = $this->fileSystemFilter->filterDirectories($source);
