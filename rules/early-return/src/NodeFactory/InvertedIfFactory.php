@@ -7,24 +7,16 @@ namespace Rector\EarlyReturn\NodeFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Continue_;
-use PhpParser\Node\Stmt\For_;
-use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\While_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
+use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class InvertedIfFactory
 {
-    /**
-     * @var array<class-string<Stmt>>
-     */
-    private const LOOP_TYPES = [Foreach_::class, For_::class, While_::class];
-
     /**
      * @var BetterNodeFinder
      */
@@ -35,10 +27,19 @@ final class InvertedIfFactory
      */
     private $conditionInverter;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, ConditionInverter $conditionInverter)
-    {
+    /**
+     * @var ContextAnalyzer
+     */
+    private $contextAnalyzer;
+
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        ConditionInverter $conditionInverter,
+        ContextAnalyzer $contextAnalyzer
+    ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->conditionInverter = $conditionInverter;
+        $this->contextAnalyzer = $contextAnalyzer;
     }
 
     /**
@@ -48,7 +49,7 @@ final class InvertedIfFactory
     public function createFromConditions(If_ $if, array $conditions, Return_ $return): array
     {
         $ifs = [];
-        $stmt = $this->isIfInLoop($if) && ! $this->getIfNextReturn($if)
+        $stmt = $this->contextAnalyzer->isInLoop($if) && ! $this->getIfNextReturn($if)
             ? [new Continue_()]
             : [$return];
 
@@ -65,12 +66,6 @@ final class InvertedIfFactory
         }
 
         return $ifs;
-    }
-
-    private function isIfInLoop(If_ $if): bool
-    {
-        $parentLoop = $this->betterNodeFinder->findParentTypes($if, self::LOOP_TYPES);
-        return $parentLoop !== null;
     }
 
     private function getNextReturnExpr(If_ $if): ?Node

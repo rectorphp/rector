@@ -7,18 +7,15 @@ namespace Rector\EarlyReturn\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\For_;
-use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\While_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\EarlyReturn\NodeFactory\InvertedIfFactory;
+use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,11 +26,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeAndIfToEarlyReturnRector extends AbstractRector
 {
     /**
-     * @var array<class-string<Stmt>>
-     */
-    private const LOOP_TYPES = [Foreach_::class, For_::class, While_::class];
-
-    /**
      * @var IfManipulator
      */
     private $ifManipulator;
@@ -43,10 +35,17 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
      */
     private $invertedIfFactory;
 
-    public function __construct(IfManipulator $ifManipulator, InvertedIfFactory $invertedIfFactory)
+    /**
+     * @var ContextAnalyzer
+     */
+    private $contextAnalyzer;
+
+    public function __construct(IfManipulator $ifManipulator, InvertedIfFactory $invertedIfFactory,
+    ContextAnalyzer $contextAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;
         $this->invertedIfFactory = $invertedIfFactory;
+        $this->contextAnalyzer = $contextAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -118,7 +117,8 @@ CODE_SAMPLE
             ? clone $ifNextReturn
             : new Return_();
 
-        $isInLoop = $this->isIfInLoop($node);
+        $isInLoop = $this->contextAnalyzer->isInLoop($node);
+
         if (! $ifNextReturn instanceof Return_) {
             $this->addNodeAfterNode($node->stmts[0], $node);
             return $this->processReplaceIfs($node, $conditions, $ifNextReturnClone);
@@ -218,13 +218,6 @@ CODE_SAMPLE
         return $nextNode;
     }
 
-    private function isIfInLoop(If_ $if): bool
-    {
-        $parentLoop = $this->betterNodeFinder->findParentTypes($if, self::LOOP_TYPES);
-
-        return $parentLoop !== null;
-    }
-
     private function isParentIfReturnsVoidOrParentIfHasNextNode(If_ $if): bool
     {
         $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
@@ -238,7 +231,7 @@ CODE_SAMPLE
 
     private function isNestedIfInLoop(If_ $if): bool
     {
-        if (! $this->isIfInLoop($if)) {
+        if (! $this->contextAnalyzer->isInLoop($if)) {
             return false;
         }
         return (bool) $this->betterNodeFinder->findParentTypes($if, [If_::class, Else_::class, ElseIf_::class]);
