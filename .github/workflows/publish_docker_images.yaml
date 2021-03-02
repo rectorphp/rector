@@ -44,11 +44,13 @@ jobs:
                         --tag $GITHUB_REPOSITORY:$VERSION-php${{ matrix.php-version }} \
                         --build-arg PHP_VERSION=${{ matrix.php-version }} .
 
+            - name: Build Rector "secured"
+              if: matrix.php-version == '8.0'
+              run: |
                   docker buildx build \
                         --progress plain \
                         --cache-from=$GITHUB_REPOSITORY:build-cache-php${{ matrix.php-version }} \
-                        --cache-to=type=registry,ref=$GITHUB_REPOSITORY:build-cache-php${{ matrix.php-version }},mode=max,push=true \
                         --target rector-secured \
                         --push \
-                        --tag $GITHUB_REPOSITORY:$VERSION-php${{ matrix.php-version }}-secured \
+                        --tag $GITHUB_REPOSITORY:secured \
                         --build-arg PHP_VERSION=${{ matrix.php-version }} .
