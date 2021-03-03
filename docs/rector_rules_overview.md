@@ -1,4 +1,4 @@
-# 667 Rules Overview
+# 672 Rules Overview
 
 <br>
 
@@ -56,8 +56,6 @@
 
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 
-- [MockistaToMockery](#mockistatomockery) (2)
-
 - [MysqlToMysqli](#mysqltomysqli) (4)
 
 - [Naming](#naming) (12)
@@ -107,6 +105,8 @@
 - [Php80](#php80) (16)
 
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
+
+- [PostRector](#postrector) (7)
 
 - [Privatization](#privatization) (15)
 
@@ -7204,54 +7204,6 @@ Changes mockery mock creation to Prophesize
 
 <br>
 
-## MockistaToMockery
-
-### MockeryTearDownRector
-
-Add `Mockery::close()` in `tearDown()` method if not yet
-
-- class: [`Rector\MockistaToMockery\Rector\Class_\MockeryTearDownRector`](/rules/mockista-to-mockery/src/Rector/Class_/MockeryTearDownRector.php)
-
-```diff
- use PHPUnit\Framework\TestCase;
-
- class SomeTest extends TestCase
- {
-+    protected function tearDown(): void
-+    {
-+        Mockery::close();
-+    }
-     public function test()
-     {
-         $mockUser = mock(User::class);
-     }
- }
-```
-
-<br>
-
-### MockistaMockToMockeryMockRector
-
-Change functions to static calls, so composer can autoload them
-
-- class: [`Rector\MockistaToMockery\Rector\ClassMethod\MockistaMockToMockeryMockRector`](/rules/mockista-to-mockery/src/Rector/ClassMethod/MockistaMockToMockeryMockRector.php)
-
-```diff
- class SomeTest
- {
-     public function run()
-     {
--        $mockUser = mock(User::class);
--        $mockUser->getId()->once->andReturn(1);
--        $mockUser->freeze();
-+        $mockUser = Mockery::mock(User::class);
-+        $mockUser->expects()->getId()->once()->andReturn(1);
-     }
- }
-```
-
-<br>
-
 ## MysqlToMysqli
 
 ### MysqlAssignToMysqliRector
@@ -7691,14 +7643,16 @@ Use `Nette\Utils\Strings::endsWith()` over bare string-functions
 - class: [`Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector`](/rules/nette/src/Rector/Identical/EndsWithFunctionToNetteUtilsStringsRector.php)
 
 ```diff
++use Nette\Utils\Strings;
++
  class SomeClass
  {
      public function end($needle)
      {
          $content = 'Hi, my name is Tom';
-
+-
 -        $yes = substr($content, -strlen($needle)) === $needle;
-+        $yes = \Nette\Utils\Strings::endsWith($content, $needle);
++        $yes = Strings::endsWith($content, $needle);
      }
  }
 ```
@@ -7948,15 +7902,16 @@ Use `Nette\Utils\Strings::startsWith()` over bare string-functions
 - class: [`Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector`](/rules/nette/src/Rector/Identical/StartsWithFunctionToNetteUtilsStringsRector.php)
 
 ```diff
++use Nette\Utils\Strings;
++
  class SomeClass
  {
-     public function start($needle)
-     {
-         $content = 'Hi, my name is Tom';
-
--        $yes = substr($content, 0, strlen($needle)) === $needle;
-+        $yes = \Nette\Utils\Strings::startsWith($content, $needle);
-     }
+ public function start($needle)
+ {
+     $content = 'Hi, my name is Tom';
+-    $yes = substr($content, 0, strlen($needle)) === $needle;
++    $yes = Strings::startsWith($content, $needle);
+ }
  }
 ```
 
@@ -12104,6 +12059,142 @@ Rename "*Spec.php" file to "*Test.php" file
 ```diff
 -// tests/SomeSpec.php
 +// tests/SomeTest.php
+```
+
+<br>
+
+## PostRector
+
+### ClassRenamingPostRector
+
+Rename references for classes that were renamed during Rector run
+
+- class: [`Rector\PostRector\Rector\ClassRenamingPostRector`](/packages/post-rector/src/Rector/ClassRenamingPostRector.php)
+
+```diff
+-function (OriginalClass $someClass)
++function (RenamedClass $someClass)
+ {
+ }
+```
+
+<br>
+
+### NameImportingPostRector
+
+Imports fully qualified names
+
+- class: [`Rector\PostRector\Rector\NameImportingPostRector`](/packages/post-rector/src/Rector/NameImportingPostRector.php)
+
+```diff
++use App\AnotherClass;
++
+ class SomeClass
+ {
+-    public function run(App\AnotherClass $anotherClass)
++    public function run(AnotherClass $anotherClass)
+     {
+     }
+ }
+```
+
+<br>
+
+### NodeAddingPostRector
+
+Add nodes on weird positions
+
+- class: [`Rector\PostRector\Rector\NodeAddingPostRector`](/packages/post-rector/src/Rector/NodeAddingPostRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        return 1;
++        if ($value) {
++            return 1;
++        }
+     }
+ }
+```
+
+<br>
+
+### NodeRemovingPostRector
+
+Remove nodes from weird positions
+
+- class: [`Rector\PostRector\Rector\NodeRemovingPostRector`](/packages/post-rector/src/Rector/NodeRemovingPostRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        if ($value) {
+-            return 1;
+-        }
++        return 1;
+     }
+ }
+```
+
+<br>
+
+### NodeToReplacePostRector
+
+Replaces nodes on weird positions
+
+- class: [`Rector\PostRector\Rector\NodeToReplacePostRector`](/packages/post-rector/src/Rector/NodeToReplacePostRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        return 1;
++        return $value;
+     }
+ }
+```
+
+<br>
+
+### PropertyAddingPostRector
+
+Add dependency properties
+
+- class: [`Rector\PostRector\Rector\PropertyAddingPostRector`](/packages/post-rector/src/Rector/PropertyAddingPostRector.php)
+
+```diff
+ class SomeClass
+ {
++    private $value;
+     public function run()
+     {
+         return $this->value;
+     }
+ }
+```
+
+<br>
+
+### UseAddingPostRector
+
+Add unique use imports collected during Rector run
+
+- class: [`Rector\PostRector\Rector\UseAddingPostRector`](/packages/post-rector/src/Rector/UseAddingPostRector.php)
+
+```diff
++use App\AnotherClass;
++
+ class SomeClass
+ {
+     public function run(AnotherClass $anotherClass)
+     {
+     }
+ }
 ```
 
 <br>
