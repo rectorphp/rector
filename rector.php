@@ -75,9 +75,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         StringClassNameToClassConstantRector::class,
         SplitStringClassConstantToClassConstFetchRector::class,
 
-        PrivatizeLocalPropertyToPrivatePropertyRector::class => [
-            __DIR__ . '/src/Rector/AbstractTemporaryRector.php',
-        ],
+        PrivatizeLocalPropertyToPrivatePropertyRector::class => [__DIR__ . '/src/Rector/AbstractRector.php'],
 
         // test paths
         '*/Fixture/*',

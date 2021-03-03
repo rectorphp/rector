@@ -119,7 +119,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($this->isNumberType($node->var)) {
+            if ($this->nodeTypeResolver->isNumberType($node->var)) {
                 return $node->var;
             }
         }
@@ -129,7 +129,7 @@ CODE_SAMPLE
             if (! $this->valueResolver->isValue($node->expr, 1)) {
                 return null;
             }
-            if ($this->isNumberType($node->var)) {
+            if ($this->nodeTypeResolver->isNumberType($node->var)) {
                 return $node->var;
             }
         }
@@ -159,7 +159,9 @@ CODE_SAMPLE
      */
     private function processBinaryPlusAndMinus(BinaryOp $binaryOp): ?Expr
     {
-        if ($this->valueResolver->isValue($binaryOp->left, 0) && $this->isNumberType($binaryOp->right)) {
+        if ($this->valueResolver->isValue($binaryOp->left, 0) && $this->nodeTypeResolver->isNumberType(
+            $binaryOp->right
+        )) {
             if ($binaryOp instanceof Minus) {
                 return new UnaryMinus($binaryOp->right);
             }
@@ -168,7 +170,7 @@ CODE_SAMPLE
         if (! $this->valueResolver->isValue($binaryOp->right, 0)) {
             return null;
         }
-        if (! $this->isNumberType($binaryOp->left)) {
+        if (! $this->nodeTypeResolver->isNumberType($binaryOp->left)) {
             return null;
         }
         return $binaryOp->left;
@@ -179,7 +181,10 @@ CODE_SAMPLE
      */
     private function processBinaryMulAndDiv(BinaryOp $binaryOp): ?Expr
     {
-        if ($binaryOp instanceof Mul && $this->valueResolver->isValue($binaryOp->left, 1) && $this->isNumberType(
+        if ($binaryOp instanceof Mul && $this->valueResolver->isValue(
+            $binaryOp->left,
+            1
+        ) && $this->nodeTypeResolver->isNumberType(
             $binaryOp->right
         )) {
             return $binaryOp->right;
@@ -187,7 +192,7 @@ CODE_SAMPLE
         if (! $this->valueResolver->isValue($binaryOp->right, 1)) {
             return null;
         }
-        if (! $this->isNumberType($binaryOp->left)) {
+        if (! $this->nodeTypeResolver->isNumberType($binaryOp->left)) {
             return null;
         }
         return $binaryOp->left;
