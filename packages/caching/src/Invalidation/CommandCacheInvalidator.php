@@ -21,9 +21,17 @@ final class CommandCacheInvalidator
      */
     private $application;
 
-    public function __construct(ChangedFilesDetector $changedFilesDetector, Application $application)
+    public function __construct(ChangedFilesDetector $changedFilesDetector)
     {
         $this->changedFilesDetector = $changedFilesDetector;
+    }
+
+    /**
+     * To avoid circular reference
+     * @required
+     */
+    public function autowireCommandCacheInvalidator(Application $application): void
+    {
         $this->application = $application;
     }
 
