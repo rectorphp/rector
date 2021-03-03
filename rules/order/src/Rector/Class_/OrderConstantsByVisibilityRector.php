@@ -88,7 +88,7 @@ CODE_SAMPLE
 
         $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($classConstsInDesiredOrder, $currentClassConstsOrder);
 
-        if (! $this->hasOrderChanged($oldToNewKeys)) {
+        if (! $this->orderChangeAnalyzer->hasOrderChanged($oldToNewKeys)) {
             return null;
         }
 

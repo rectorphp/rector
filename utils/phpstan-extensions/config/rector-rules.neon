@@ -23,7 +23,6 @@ services:
                 - Rector\Nette\Rector\Identical\AbstractWithFunctionToNetteUtilsStringsRector
                 - Rector\Php72\Rector\FuncCall\AbstractConvertToAnonymousFunctionRector
                 - Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector
-                - Rector\Transform\Rector\AbstractToMethodCallRector
                 - Rector\Symfony3\Rector\MethodCall\AbstractFormAddRector
                 - Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRector
                 - Rector\NetteCodeQuality\Rector\ArrayDimFetch\AbstractArrayDimFetchToAnnotatedControlVariableRector

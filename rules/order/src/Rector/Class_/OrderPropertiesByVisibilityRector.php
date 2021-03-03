@@ -90,7 +90,7 @@ CODE_SAMPLE
         $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($propertiesInDesiredOrder, $currentPropertiesOrder);
 
         // nothing to re-order
-        if (! $this->hasOrderChanged($oldToNewKeys)) {
+        if (! $this->orderChangeAnalyzer->hasOrderChanged($oldToNewKeys)) {
             return null;
         }
 

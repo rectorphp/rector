@@ -102,7 +102,7 @@ CODE_SAMPLE
         asort($sortedClassConstConstsByValue);
 
         $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($sortedClassConstConstsByValue, $classConstConstsByValue);
-        if (! $this->hasOrderChanged($oldToNewKeys)) {
+        if (! $this->orderChangeAnalyzer->hasOrderChanged($oldToNewKeys)) {
             return null;
         }
 
