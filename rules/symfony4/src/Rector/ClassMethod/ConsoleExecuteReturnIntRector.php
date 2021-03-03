@@ -119,7 +119,11 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($node->expr instanceof Int_ || ($node->expr instanceof Ternary && $node->expr->if instanceof LNumber && $node->expr->else instanceof LNumber)) {
+            if ($node->expr instanceof Int_) {
+                return null;
+            }
+
+            if ($node->expr instanceof Ternary && $node->expr->if instanceof LNumber && $node->expr->else instanceof LNumber) {
                 $hasReturn = true;
                 return null;
             }
@@ -134,6 +138,11 @@ CODE_SAMPLE
             return null;
         });
 
+        $this->processReturn0ToMethod($hasReturn, $classMethod);
+    }
+
+    private function processReturn0ToMethod(bool $hasReturn, ClassMethod $classMethod): void
+    {
         if ($hasReturn) {
             return;
         }
@@ -143,10 +152,15 @@ CODE_SAMPLE
 
     private function isAReturnWithExprIntEquals(?Node $parentNode, Node $node): bool
     {
-        return $parentNode instanceof Return_ && $this->nodeComparator->areNodesEqual(
-            $parentNode->expr,
-            $node
-        ) && $node instanceof Int_;
+        if (! $parentNode instanceof Return_) {
+            return false;
+        }
+
+        if (! $this->nodeComparator->areNodesEqual($parentNode->expr, $node)) {
+            return false;
+        }
+
+        return $node instanceof Int_;
     }
 
     private function setReturnTo0InsteadOfNull(Return_ $return): void
