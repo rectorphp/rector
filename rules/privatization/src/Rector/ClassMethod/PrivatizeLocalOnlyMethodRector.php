@@ -238,12 +238,11 @@ CODE_SAMPLE
             return true;
         }
 
-        $hasSymfonyRoutePhpDoc = $phpDocInfo->hasByType(SymfonyRouteTagValueNode::class);
-        if ($hasSymfonyRoutePhpDoc) {
+        if ($this->hasSymfonyRouteAttrGroup($classMethod)) {
             return true;
         }
 
-        return $this->hasSymfonyRouteAttrGroup($classMethod);
+        return $phpDocInfo->hasByType(SymfonyRouteTagValueNode::class);
     }
 
     private function hasSymfonyRouteAttrGroup(ClassMethod $classMethod): bool
