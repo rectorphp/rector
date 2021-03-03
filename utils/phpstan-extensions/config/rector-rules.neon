@@ -18,8 +18,6 @@ services:
                 - Rector\Core\Rector\AbstractRector
                 - Rector\Core\Rector\AbstractTemporaryRector
                 - Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector
-                # solve later
-                - Rector\DowngradePhp74\Rector\Property\AbstractDowngradeTypedPropertyRector
 
     -
         class: Symplify\PHPStanRules\Rules\ServiceAndValueObjectHaveSameStartsRule
@@ -243,4 +241,3 @@ services:
                 - class_implements
                 - get_parent_class
                 - get_declared_classes
-#                - is_a

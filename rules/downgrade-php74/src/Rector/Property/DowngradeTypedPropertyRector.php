@@ -6,14 +6,34 @@ namespace Rector\DowngradePhp74\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
  */
-final class DowngradeTypedPropertyRector extends AbstractDowngradeTypedPropertyRector
+final class DowngradeTypedPropertyRector extends AbstractRector
 {
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
+    {
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    }
+
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Property::class];
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes property type definition from type definitions to `@var` annotations.', [
@@ -39,15 +59,28 @@ CODE_SAMPLE
     }
 
     /**
-     * @return array<class-string<Node>>
+     * @param Property $node
      */
-    public function getNodeTypes(): array
+    public function refactor(Node $node): ?Node
     {
-        return [Property::class];
+        if ($node->type === null) {
+            return null;
+        }
+
+        $this->decoratePropertyWithDocBlock($node, $node->type);
+        $node->type = null;
+
+        return $node;
     }
 
-    public function shouldRemoveProperty(Property $property): bool
+    private function decoratePropertyWithDocBlock(Property $property, Node $typeNode): void
     {
-        return true;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        if ($phpDocInfo->getVarTagValueNode() !== null) {
+            return;
+        }
+
+        $newType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $newType);
     }
 }
