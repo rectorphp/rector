@@ -24,11 +24,11 @@ final class StartsWithFunctionToNetteUtilsStringsRector extends AbstractRector
     /**
      * @var StrlenStartsWithResolver
      */
-    private $contentExprAndNeedleExprResolver;
+    private $strlenStartsWithResolver;
 
-    public function __construct(StrlenStartsWithResolver $contentExprAndNeedleExprResolver)
+    public function __construct(StrlenStartsWithResolver $strlenStartsWithResolver)
     {
-        $this->contentExprAndNeedleExprResolver = $contentExprAndNeedleExprResolver;
+        $this->strlenStartsWithResolver = $strlenStartsWithResolver;
     }
 
     /**
@@ -75,9 +75,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $contentExprAndNeedleExpr = $this->contentExprAndNeedleExprResolver->resolveBinaryOpForFunction(
-            $node, 'substr'
-        );
+        $contentExprAndNeedleExpr = $this->strlenStartsWithResolver->resolveBinaryOpForFunction($node, 'substr');
 
         if (! $contentExprAndNeedleExpr instanceof ContentExprAndNeedleExpr) {
             return null;
