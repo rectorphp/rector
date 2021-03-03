@@ -14,7 +14,7 @@ use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
-final class ClassAnalyzer
+final class ValueObjectClassAnalyzer
 {
     /**
      * @var bool[]

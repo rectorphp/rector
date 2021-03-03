@@ -164,7 +164,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->areNamesEqual($onlyPropertyProperty, $node->expr->name)) {
+            if (! $this->nodeNameResolver->areNamesEqual($onlyPropertyProperty, $node->expr->name)) {
                 return null;
             }
 

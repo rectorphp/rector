@@ -204,7 +204,7 @@ CODE_SAMPLE
         $params = $classMethodOrFunction->getParams();
 
         foreach ($params as $param) {
-            if ($this->areNamesEqual($param->var, $variable)) {
+            if ($this->nodeNameResolver->areNamesEqual($param->var, $variable)) {
                 return true;
             }
         }

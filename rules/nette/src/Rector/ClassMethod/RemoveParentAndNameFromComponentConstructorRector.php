@@ -246,7 +246,7 @@ CODE_SAMPLE
     private function shouldRemoveEmptyCall(StaticCall $staticCall): bool
     {
         foreach ($staticCall->args as $arg) {
-            if ($this->isNodeRemoved($arg)) {
+            if ($this->nodesToRemoveCollector->isNodeRemoved($arg)) {
                 continue;
             }
 

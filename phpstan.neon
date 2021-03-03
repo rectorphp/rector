@@ -7,10 +7,11 @@ includes:
 
     # see https://github.com/symplify/coding-standard
     # - vendor/symplify/phpstan-rules/config/configurable-rules.neon
-    - vendor/symplify/phpstan-rules/config/static-rules.neon
+
     - vendor/symplify/phpstan-rules/config/services/services.neon
     - vendor/symplify/phpstan-rules/packages/cognitive-complexity/config/cognitive-complexity-services.neon
 
+    - vendor/symplify/phpstan-rules/config/static-rules.neon
     - vendor/symplify/phpstan-rules/config/array-rules.neon
     - vendor/symplify/phpstan-rules/config/code-complexity-rules.neon
     - vendor/symplify/phpstan-rules/config/doctrine-rules.neon
@@ -615,7 +616,4 @@ parameters:
             paths:
                 - src/Console/Command/ProcessCommand.php
 
-        -
-             message: '#Class cognitive complexity is 31, keep it under 30#'
-             paths:
-                 - src/Rector/AbstractRector.php
+        - '#Content of method "getNextExpression\(\)" is duplicated with method "getNextExpression\(\)" in "Rector\\CodingStyle\\Rector\\Assign\\ManualJsonStringToJsonEncodeArrayRector" class\. Use unique content or service instead#'

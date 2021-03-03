@@ -127,7 +127,7 @@ CODE_SAMPLE
 
     private function shouldSkip(Class_ $class): bool
     {
-        if ($this->classNodeAnalyzer->isAnonymousClass($class)) {
+        if ($this->classAnalyzer->isAnonymousClass($class)) {
             return true;
         }
 
