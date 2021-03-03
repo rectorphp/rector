@@ -21,7 +21,6 @@ services:
                 # solve later
                 - Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector
                 - Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRector
-                - Rector\NetteCodeQuality\Rector\ArrayDimFetch\AbstractArrayDimFetchToAnnotatedControlVariableRector
                 - Rector\DowngradePhp74\Rector\Property\AbstractDowngradeTypedPropertyRector
                 - Rector\Defluent\Rector\AbstractFluentChainMethodCallRector
 

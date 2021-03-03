@@ -11,6 +11,11 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NetteCodeQuality\Naming\NetteControlNaming;
+use Rector\NetteCodeQuality\NodeAnalyzer\ArrayDimFetchAnalyzer;
+use Rector\NetteCodeQuality\NodeAnalyzer\AssignAnalyzer;
+use Rector\NetteCodeQuality\NodeAnalyzer\ControlDimFetchAnalyzer;
 use Rector\NetteCodeQuality\NodeResolver\FormVariableInputNameTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Php\TypeChecker;
@@ -22,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector\ChangeFormArrayAccessToAnnotatedControlVariableRectorTest
  */
-final class ChangeFormArrayAccessToAnnotatedControlVariableRector extends AbstractArrayDimFetchToAnnotatedControlVariableRector
+final class ChangeFormArrayAccessToAnnotatedControlVariableRector extends AbstractRector
 {
     /**
      * @var FormVariableInputNameTypeResolver
@@ -34,12 +39,48 @@ final class ChangeFormArrayAccessToAnnotatedControlVariableRector extends Abstra
      */
     private $typeChecker;
 
+    /**
+     * @var ArrayDimFetchAnalyzer
+     */
+    private $arrayDimFetchAnalyzer;
+
+    /**
+     * @var NetteControlNaming
+     */
+    private $netteControlNaming;
+
+    /**
+     * @var AssignAnalyzer
+     */
+    private $assignAnalyzer;
+
+    /**
+     * @var ControlDimFetchAnalyzer
+     */
+    private $controlDimFetchAnalyzer;
+
     public function __construct(
         FormVariableInputNameTypeResolver $formVariableInputNameTypeResolver,
-        TypeChecker $typeChecker
+        TypeChecker $typeChecker,
+        ArrayDimFetchAnalyzer $arrayDimFetchAnalyzer,
+        NetteControlNaming $netteControlNaming,
+        AssignAnalyzer $assignAnalyzer,
+        ControlDimFetchAnalyzer $controlDimFetchAnalyzer
     ) {
         $this->formVariableInputNameTypeResolver = $formVariableInputNameTypeResolver;
         $this->typeChecker = $typeChecker;
+        $this->arrayDimFetchAnalyzer = $arrayDimFetchAnalyzer;
+        $this->netteControlNaming = $netteControlNaming;
+        $this->assignAnalyzer = $assignAnalyzer;
+        $this->controlDimFetchAnalyzer = $controlDimFetchAnalyzer;
+    }
+
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [ArrayDimFetch::class];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -84,19 +125,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @return array<class-string<Node>>
-     */
-    public function getNodeTypes(): array
-    {
-        return [ArrayDimFetch::class];
-    }
-
-    /**
      * @param ArrayDimFetch $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isBeingAssignedOrInitialized($node)) {
+        if ($this->arrayDimFetchAnalyzer->isBeingAssignedOrInitialized($node)) {
             return null;
         }
 
@@ -123,7 +156,7 @@ CODE_SAMPLE
 
         $controlVariableName = $this->netteControlNaming->createVariableName($inputName);
         $controlObjectType = new ObjectType($controlType);
-        $this->addAssignExpressionForFirstCase($controlVariableName, $node, $controlObjectType);
+        $this->assignAnalyzer->addAssignExpressionForFirstCase($controlVariableName, $node, $controlObjectType);
 
         return new Variable($controlVariableName);
     }
