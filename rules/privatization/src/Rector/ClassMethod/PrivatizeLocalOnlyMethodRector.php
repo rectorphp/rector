@@ -6,6 +6,7 @@ namespace Rector\Privatization\Rector\ClassMethod;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
@@ -20,6 +21,7 @@ use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodVisibilityVendorLockResolver;
+use Symfony\Component\Routing\Annotation\Route;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -236,6 +238,28 @@ CODE_SAMPLE
             return true;
         }
 
-        return $phpDocInfo->hasByType(SymfonyRouteTagValueNode::class);
+        $hasSymfonyRoutePhpDoc = $phpDocInfo->hasByType(SymfonyRouteTagValueNode::class);
+        if ($hasSymfonyRoutePhpDoc) {
+            return true;
+        }
+
+        return $this->hasSymfonyRouteAttrGroup($classMethod);
+    }
+
+    private function hasSymfonyRouteAttrGroup(ClassMethod $classMethod): bool
+    {
+        foreach ($classMethod->attrGroups as $attrGroup) {
+            if ($attrGroup->attrs === []) {
+                continue;
+            }
+
+            foreach ($attrGroup->attrs as $attr) {
+                if ($attr->name instanceof Name && $attr->name->toString() === Route::class) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

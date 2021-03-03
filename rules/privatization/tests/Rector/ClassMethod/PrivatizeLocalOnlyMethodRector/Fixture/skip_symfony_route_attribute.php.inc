@@ -4,7 +4,7 @@ namespace Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethod
 
 use Symfony\Component\Routing\Annotation\Route;
 
-final class FrontController
+final class SkipSymfonyRouteAttribute
 {
     #[Route(path: '', name: 'homepage')]
     public function homeAction() : Response
