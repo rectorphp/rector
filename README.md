@@ -166,10 +166,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // is your PHP version different from the one your refactor to? [default: your PHP version], uses PHP_VERSION_ID format
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_72);
 
-    // auto import fully qualified class names? [default: false]
+    // whether Rector can leave FQCN or automatically add them to use statements and remove from code occurences [default: false]
+    // e.g. 
+    // private \My\Namespace\MyService $field;
+    // vs
+    // use My\Namespace\MyService;
+    // ...
+    // private MyService $field;
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
 
-    // skip root namespace classes, like \DateTime or \Exception [default: true]
+    // whether to add use statements for root namespace classes, like \DateTime or \Exception [default: true]
     $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
 
     // skip classes used in PHP DocBlocks, like in /** @var \Some\Class */ [default: true]
