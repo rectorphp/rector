@@ -218,7 +218,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         }
 
         return sprintf(
-            'Rector changed %d file%s %s.',
+            '%d file%s %s by Rector.',
             $changeCount,
             $changeCount > 1 ? 's' : '',
             $this->configuration->isDryRun() ? 'would have changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed'
