@@ -2,16 +2,16 @@
 
 namespace Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\Fixture;
 
-use Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\Source\ArrayStore;
+use Illuminate\Contracts\Cache\Store;
 
 class SomeClass
 {
     /**
-     * @var ArrayStore
+     * @var Store
      */
     private $arrayStore;
 
-    public function __construct(ArrayStore $arrayStore)
+    public function __construct(Store $arrayStore)
     {
         $this->arrayStore = $arrayStore;
     }
@@ -33,16 +33,16 @@ class SomeClass
 
 namespace Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\Fixture;
 
-use Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\Source\ArrayStore;
+use Illuminate\Contracts\Cache\Store;
 
 class SomeClass
 {
     /**
-     * @var ArrayStore
+     * @var Store
      */
     private $arrayStore;
 
-    public function __construct(ArrayStore $arrayStore)
+    public function __construct(Store $arrayStore)
     {
         $this->arrayStore = $arrayStore;
     }
