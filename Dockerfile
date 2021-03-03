@@ -69,8 +69,3 @@ RUN chmod +x /rector/bin/rector
 RUN mkdir -p /tmp/opcache \
     && /rector/bin/rector list \
     && chmod 777 -R /tmp
-
-## Used for getrector.org/demo
-FROM rector as rector-secured
-
-COPY .docker/php/security.ini /usr/local/etc/php/conf.d/security.ini

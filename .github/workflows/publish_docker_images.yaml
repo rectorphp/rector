@@ -53,14 +53,3 @@ jobs:
                   [ "${{ matrix.php-version }}" == "8.0" ] && docker tag rector/rector:$VERSION-php${{ matrix.php-version }} rector/rector:$VERSION
 
                   docker push rector/rector -a || true
-
-            - name: Build Rector "secured"
-              if: matrix.php-version == '8.0'
-              run: |
-                  docker buildx build \
-                        --progress plain \
-                        --cache-from=rector/rector:build-cache-php${{ matrix.php-version }} \
-                        --target rector-secured \
-                        --push \
-                        --tag rector/rector:secured \
-                        --build-arg PHP_VERSION=${{ matrix.php-version }} .
