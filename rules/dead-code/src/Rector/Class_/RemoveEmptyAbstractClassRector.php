@@ -75,8 +75,7 @@ abstracst clas AnotherAbstractClass
      }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

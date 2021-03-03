@@ -14,7 +14,7 @@ final class FormAddMethodCallAnalyzer
     /**
      * @var ObjectType[]
      */
-    private $formObjectTypes;
+    private $formObjectTypes = [];
 
     /**
      * @var NodeTypeResolver

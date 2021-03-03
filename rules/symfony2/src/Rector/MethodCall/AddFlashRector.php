@@ -53,8 +53,7 @@ class SomeController extends Controller
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

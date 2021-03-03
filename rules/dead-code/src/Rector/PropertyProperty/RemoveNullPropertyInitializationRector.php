@@ -39,8 +39,7 @@ class SunshineCommand extends ParentClassWithNewConstructor
     private $myVar;
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

@@ -40,8 +40,7 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
                 new CodeSample(
                     'Symfony\Component\Console\ConsoleEvents::EXCEPTION',
                     'Symfony\Component\Console\ConsoleEvents::ERROR'
-                ),
-
+            ),
             ]);
     }
 

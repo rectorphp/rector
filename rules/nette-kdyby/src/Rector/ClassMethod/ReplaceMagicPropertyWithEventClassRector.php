@@ -101,8 +101,7 @@ final class ActionLogEventSubscriber implements Subscriber
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 
@@ -119,7 +118,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->getSubscribedEventsClassMethodAnalyzer->detect($node)) {
+        if (! $this->getSubscribedEventsClassMethodAnalyzer->detect($node)) {
             return null;
         }
 

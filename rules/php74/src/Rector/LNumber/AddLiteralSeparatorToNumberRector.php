@@ -84,8 +84,7 @@ CODE_SAMPLE
                     , [
                         self::LIMIT_VALUE => 1000000,
                     ]
-                ),
-
+            ),
             ]);
     }
 

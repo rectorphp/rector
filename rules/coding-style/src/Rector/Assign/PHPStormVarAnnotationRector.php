@@ -55,8 +55,7 @@ CODE_SAMPLE
 /** @var \Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
 $config = 5;
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

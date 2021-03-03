@@ -81,8 +81,7 @@ class ChildClass extends AbstractSomeClass
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

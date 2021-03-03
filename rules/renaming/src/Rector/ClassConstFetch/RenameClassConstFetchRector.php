@@ -56,8 +56,7 @@ $value = DifferentClass::NEW_CONSTANT;
 CODE_SAMPLE
                     ,
                     $configuration
-                ),
-
+            ),
             ]);
     }
 

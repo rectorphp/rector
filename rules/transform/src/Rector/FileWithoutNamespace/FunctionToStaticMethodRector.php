@@ -75,8 +75,7 @@ class SomeUtilsClass
 
 SomeUtilsClass::someFunction('lol');
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

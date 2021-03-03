@@ -38,8 +38,7 @@ CODE_SAMPLE
 !fread($handle, $length);
 !fwrite($fp, '1');
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

@@ -69,8 +69,7 @@ class SetId
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

@@ -34,8 +34,7 @@ $form = new Nette\Forms\Form();
 $form->addMultiUpload('...', '...');
 CODE_SAMPLE
 
-                ),
-
+            ),
             ]);
     }
 

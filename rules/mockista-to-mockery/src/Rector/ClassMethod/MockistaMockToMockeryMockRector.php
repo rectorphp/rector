@@ -88,8 +88,7 @@ class SomeTest
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

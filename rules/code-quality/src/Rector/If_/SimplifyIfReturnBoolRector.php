@@ -55,8 +55,7 @@ return false;
 CODE_SAMPLE
                     ,
                     'return strpos($docToken->getContent(), "\n") === false;'
-                ),
-
+            ),
             ]);
     }
 

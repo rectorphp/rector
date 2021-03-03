@@ -60,8 +60,7 @@ CODE_SAMPLE
 $builder = new FormBuilder;
 $builder->add("...", ["scale" => "...", "inherit_data" => "..."];
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

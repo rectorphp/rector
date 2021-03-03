@@ -87,8 +87,7 @@ class User
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

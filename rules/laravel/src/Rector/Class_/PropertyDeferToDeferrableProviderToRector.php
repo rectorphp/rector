@@ -46,8 +46,7 @@ final class SomeServiceProvider extends ServiceProvider implements DeferrablePro
 {
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

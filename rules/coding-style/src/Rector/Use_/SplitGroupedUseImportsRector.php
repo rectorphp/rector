@@ -43,8 +43,7 @@ class SomeClass
     use AnotherTrait;
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

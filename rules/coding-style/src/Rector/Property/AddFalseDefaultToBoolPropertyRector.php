@@ -41,8 +41,7 @@ class SomeClass
     private $isDisabled = false;
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

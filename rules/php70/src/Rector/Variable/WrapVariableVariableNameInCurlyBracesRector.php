@@ -36,8 +36,7 @@ function run($foo)
     global ${$foo->bar};
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

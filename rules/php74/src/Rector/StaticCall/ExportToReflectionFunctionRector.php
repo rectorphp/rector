@@ -36,8 +36,7 @@ CODE_SAMPLE
 $reflectionFunction = new ReflectionFunction('foo');
 $reflectionFunctionAsString = (string) new ReflectionFunction('foo');
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

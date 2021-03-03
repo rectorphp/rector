@@ -42,8 +42,7 @@ $treeBuilder = new TreeBuilder('acme_root');
 $rootNode = $treeBuilder->getRootNode();
 $rootNode->someCall();
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

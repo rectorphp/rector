@@ -47,8 +47,7 @@ CODE_SAMPLE
 $newNode = 'something ;
 return $newNode;
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

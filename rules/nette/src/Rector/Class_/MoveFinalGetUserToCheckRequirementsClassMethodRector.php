@@ -74,8 +74,7 @@ class SomeControl extends Presenter
 }
 CODE_SAMPLE
 
-                ),
-
+            ),
             ]);
     }
 

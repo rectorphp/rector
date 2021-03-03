@@ -92,8 +92,7 @@ class AddUuidInit
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

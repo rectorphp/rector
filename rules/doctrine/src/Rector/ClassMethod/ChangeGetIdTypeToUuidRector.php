@@ -64,8 +64,7 @@ class GetId
     }
 }
 CODE_SAMPLE
-                        ),
-
+                    ),
             ]);
     }
 

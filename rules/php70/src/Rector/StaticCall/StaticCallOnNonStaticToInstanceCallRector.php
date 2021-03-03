@@ -95,8 +95,7 @@ class Another
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

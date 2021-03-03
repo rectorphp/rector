@@ -56,8 +56,7 @@ final class SomeClass extends CompilerExtension
 }
 CODE_SAMPLE
 
-                ),
-
+            ),
             ]);
     }
 

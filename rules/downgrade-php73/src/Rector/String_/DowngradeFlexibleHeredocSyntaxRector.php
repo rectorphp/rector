@@ -43,8 +43,7 @@ FROM `table`
 WHERE `column` = true;
 SQL;
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

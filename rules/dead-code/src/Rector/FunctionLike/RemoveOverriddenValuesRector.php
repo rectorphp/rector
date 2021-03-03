@@ -75,8 +75,7 @@ final class SomeController
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

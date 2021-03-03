@@ -96,8 +96,7 @@ class SomePresenter extends UI\Presenter
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 
