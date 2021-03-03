@@ -254,9 +254,13 @@ CODE_SAMPLE
             }
 
             foreach ($attrGroup->attrs as $attr) {
-                if ($attr->name instanceof Name && $attr->name->toString() === Route::class) {
-                    return true;
+                if (! $attr->name instanceof Name) {
+                    continue;
                 }
+                if ($attr->name->toString() !== Route::class) {
+                    continue;
+                }
+                return true;
             }
         }
 
