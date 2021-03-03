@@ -11,17 +11,16 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -31,16 +30,24 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\CreateFunctionToAnonymousFunctionRectorTest
  */
-final class CreateFunctionToAnonymousFunctionRector extends AbstractConvertToAnonymousFunctionRector
+final class CreateFunctionToAnonymousFunctionRector extends AbstractRector
 {
     /**
      * @var InlineCodeParser
      */
     private $inlineCodeParser;
 
-    public function __construct(InlineCodeParser $inlineCodeParser)
-    {
+    /**
+     * @var AnonymousFunctionFactory
+     */
+    private $anonymousFunctionFactory;
+
+    public function __construct(
+        InlineCodeParser $inlineCodeParser,
+        AnonymousFunctionFactory $anonymousFunctionFactory
+    ) {
         $this->inlineCodeParser = $inlineCodeParser;
+        $this->anonymousFunctionFactory = $anonymousFunctionFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -70,8 +77,7 @@ class ClassWithCreateFunction
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 
@@ -85,42 +91,25 @@ CODE_SAMPLE
 
     /**
      * @param FuncCall $node
+     * @return FuncCall|null
      */
-    public function shouldSkip(Node $node): bool
+    public function refactor(Node $node): ?Node
     {
-        return ! $this->isName($node, 'create_function');
-    }
+        if (! $this->isName($node, 'create_function')) {
+            return null;
+        }
 
-    /**
-     * @param FuncCall $node
-     * @return Param[]
-     */
-    public function getParameters(Node $node): array
-    {
-        return $this->parseStringToParameters($node->args[0]->value);
-    }
+        $params = $this->createParamsFromString($node->args[0]->value);
+        $stmts = $this->parseStringToBody($node->args[1]->value);
+        $returnType = null;
 
-    /**
-     * @return Identifier|Name|NullableType|UnionType|null
-     */
-    public function getReturnType(Node $node): ?Node
-    {
-        return null;
-    }
-
-    /**
-     * @param FuncCall $node
-     * @return Stmt[]
-     */
-    public function getBody(Node $node): array
-    {
-        return $this->parseStringToBody($node->args[1]->value);
+        return $this->anonymousFunctionFactory->create($params, $stmts, $returnType);
     }
 
     /**
      * @return Param[]
      */
-    private function parseStringToParameters(Expr $expr): array
+    private function createParamsFromString(Expr $expr): array
     {
         $content = $this->inlineCodeParser->stringify($expr);
         $content = '<?php $value = function(' . $content . ') {};';
@@ -159,7 +148,6 @@ CODE_SAMPLE
     private function createEval(Expr $expr): Expression
     {
         $evalFuncCall = new FuncCall(new Name('eval'), [new Arg($expr)]);
-
         return new Expression($evalFuncCall);
     }
 }

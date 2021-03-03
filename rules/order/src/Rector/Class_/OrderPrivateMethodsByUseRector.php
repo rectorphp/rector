@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Order\StmtOrder;
-use Rector\Order\StmtVisibilitySorter;
 use Rector\Order\ValueObject\SortedClassMethodsAndOriginalClassMethods;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,28 +28,13 @@ final class OrderPrivateMethodsByUseRector extends AbstractRector
     private const MAX_ATTEMPTS = 5;
 
     /**
-     * @var \Rector\Order\Order\OrderChangeAnalyzer
-     */
-    private $orderChangeAnalyzer;
-
-    /**
      * @var StmtOrder
      */
     private $stmtOrder;
 
-    /**
-     * @var StmtVisibilitySorter
-     */
-    private $stmtVisibilitySorter;
-
-    public function __construct(
-        \Rector\Order\Order\OrderChangeAnalyzer $orderChangeAnalyzer,
-        StmtOrder $stmtOrder,
-        StmtVisibilitySorter $stmtVisibilitySorter
-    ) {
-        $this->orderChangeAnalyzer = $orderChangeAnalyzer;
+    public function __construct(StmtOrder $stmtOrder)
+    {
         $this->stmtOrder = $stmtOrder;
-        $this->stmtVisibilitySorter = $stmtVisibilitySorter;
     }
 
     public function getRuleDefinition(): RuleDefinition
