@@ -9,9 +9,6 @@ use Rector\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @backupGlobals disabled
- */
 final class Php8Test extends AbstractRectorTestCase
 {
     /**
@@ -28,8 +25,8 @@ final class Php8Test extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp8');
     }
 
-    protected function getRectorClass(): string
+    protected function provideConfigFilePath(): string
     {
-        return PrivatizeLocalOnlyMethodRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }
