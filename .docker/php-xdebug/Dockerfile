@@ -2,9 +2,9 @@
 ##   Docker image used for debugging Rector   ##
 ################################################
 
-ARG RECTOR_IMAGE="rector"
+ARG PHP_VERSION=8.0
 
-FROM rector/${RECTOR_IMAGE}:latest
+FROM rector/rector:php${PHP_VERSION}
 
 RUN pecl install xdebug
 
