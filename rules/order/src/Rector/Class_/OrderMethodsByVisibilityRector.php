@@ -9,15 +9,17 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Trait_;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector;
+use Rector\Order\StmtOrder;
+use Rector\Order\StmtVisibilitySorter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Order\Tests\Rector\Class_\OrderMethodsByVisibilityRector\OrderMethodsByVisibilityRectorTest
  */
-final class OrderMethodsByVisibilityRector extends AbstractConstantPropertyMethodOrderRector
+final class OrderMethodsByVisibilityRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -44,6 +46,31 @@ final class OrderMethodsByVisibilityRector extends AbstractConstantPropertyMetho
         MethodName::SET_UP,
         MethodName::TEAR_DOWN,
     ];
+
+    /**
+     * @var \Rector\Order\Order\OrderChangeAnalyzer
+     */
+    private $orderChangeAnalyzer;
+
+    /**
+     * @var StmtOrder
+     */
+    private $stmtOrder;
+
+    /**
+     * @var StmtVisibilitySorter
+     */
+    private $stmtVisibilitySorter;
+
+    public function __construct(
+        \Rector\Order\Order\OrderChangeAnalyzer $orderChangeAnalyzer,
+        StmtOrder $stmtOrder,
+        StmtVisibilitySorter $stmtVisibilitySorter
+    ) {
+        $this->orderChangeAnalyzer = $orderChangeAnalyzer;
+        $this->stmtOrder = $stmtOrder;
+        $this->stmtVisibilitySorter = $stmtVisibilitySorter;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -91,7 +118,7 @@ CODE_SAMPLE
         $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($methodsInDesiredOrder, $currentMethodsOrder);
 
         // nothing to re-order
-        if (! $this->hasOrderChanged($oldToNewKeys)) {
+        if (! $this->orderChangeAnalyzer->hasOrderChanged($oldToNewKeys)) {
             return null;
         }
 

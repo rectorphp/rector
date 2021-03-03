@@ -21,7 +21,6 @@ services:
                 # solve later
                 - Rector\Nette\Rector\FuncCall\AbstractPregToNetteUtilsStringsRector
                 - Rector\Nette\Rector\Identical\AbstractWithFunctionToNetteUtilsStringsRector
-                - Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector
                 - Rector\Php72\Rector\FuncCall\AbstractConvertToAnonymousFunctionRector
                 - Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector
                 - Rector\Transform\Rector\AbstractToMethodCallRector

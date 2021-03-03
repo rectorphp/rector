@@ -8,15 +8,42 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Order\StmtOrder;
+use Rector\Order\StmtVisibilitySorter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Order\Tests\Rector\Class_\OrderPropertiesByVisibilityRector\OrderPropertiesByVisibilityRectorTest
  */
-final class OrderPropertiesByVisibilityRector extends AbstractConstantPropertyMethodOrderRector
+final class OrderPropertiesByVisibilityRector extends AbstractRector
 {
+    /**
+     * @var \Rector\Order\Order\OrderChangeAnalyzer
+     */
+    private $orderChangeAnalyzer;
+
+    /**
+     * @var StmtOrder
+     */
+    private $stmtOrder;
+
+    /**
+     * @var StmtVisibilitySorter
+     */
+    private $stmtVisibilitySorter;
+
+    public function __construct(
+        \Rector\Order\Order\OrderChangeAnalyzer $orderChangeAnalyzer,
+        StmtOrder $stmtOrder,
+        StmtVisibilitySorter $stmtVisibilitySorter
+    ) {
+        $this->orderChangeAnalyzer = $orderChangeAnalyzer;
+        $this->stmtOrder = $stmtOrder;
+        $this->stmtVisibilitySorter = $stmtVisibilitySorter;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Orders properties by visibility', [
