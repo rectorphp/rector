@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\Identical;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Nette\NodeAnalyzer\StrlenStartsWithResolver;
 use Rector\Nette\ValueObject\ContentExprAndNeedleExpr;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -16,77 +19,79 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Nette\Tests\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector\StartsWithFunctionToNetteUtilsStringsRectorTest
  */
-final class StartsWithFunctionToNetteUtilsStringsRector extends AbstractWithFunctionToNetteUtilsStringsRector
+final class StartsWithFunctionToNetteUtilsStringsRector extends AbstractRector
 {
+    /**
+     * @var StrlenStartsWithResolver
+     */
+    private $contentExprAndNeedleExprResolver;
+
+    public function __construct(StrlenStartsWithResolver $contentExprAndNeedleExprResolver)
+    {
+        $this->contentExprAndNeedleExprResolver = $contentExprAndNeedleExprResolver;
+    }
+
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Identical::class, NotIdentical::class];
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition(
-            'Use Nette\Utils\Strings::startsWith() over bare string-functions',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new RuleDefinition('Use Nette\Utils\Strings::startsWith() over bare string-functions', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function start($needle)
-    {
-        $content = 'Hi, my name is Tom';
-
-        $yes = substr($content, 0, strlen($needle)) === $needle;
-    }
+public function start($needle)
+{
+    $content = 'Hi, my name is Tom';
+    $yes = substr($content, 0, strlen($needle)) === $needle;
+}
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
+use Nette\Utils\Strings;
+
 class SomeClass
 {
-    public function start($needle)
-    {
-        $content = 'Hi, my name is Tom';
-
-        $yes = \Nette\Utils\Strings::startsWith($content, $needle);
-    }
+public function start($needle)
+{
+    $content = 'Hi, my name is Tom';
+    $yes = Strings::startsWith($content, $needle);
+}
 }
 CODE_SAMPLE
             ),
-            ]);
+        ]);
     }
 
-    public function getMethodName(): string
+    /**
+     * @param Identical|NotIdentical $node
+     */
+    public function refactor(Node $node): ?Node
     {
-        return 'startsWith';
-    }
+        $contentExprAndNeedleExpr = $this->contentExprAndNeedleExprResolver->resolveBinaryOpForFunction(
+            $node, 'substr'
+        );
 
-    public function matchContentAndNeedleOfSubstrOfVariableLength(
-        Node $node,
-        Variable $variable
-    ): ?ContentExprAndNeedleExpr {
-        if (! $this->nodeNameResolver->isFuncCallName($node, 'substr')) {
+        if (! $contentExprAndNeedleExpr instanceof ContentExprAndNeedleExpr) {
             return null;
         }
 
-        /** @var FuncCall $node */
-        if (! $this->valueResolver->isValue($node->args[1]->value, 0)) {
-            return null;
+        $staticCall = $this->nodeFactory->createStaticCall('Nette\Utils\Strings', 'startsWith', [
+            $contentExprAndNeedleExpr->getContentExpr(),
+            $contentExprAndNeedleExpr->getNeedleExpr(),
+        ]);
+
+        if ($node instanceof NotIdentical) {
+            return new BooleanNot($staticCall);
         }
 
-        if (! isset($node->args[2])) {
-            return null;
-        }
-
-        if (! $node->args[2]->value instanceof FuncCall) {
-            return null;
-        }
-
-        if (! $this->isName($node->args[2]->value, 'strlen')) {
-            return null;
-        }
-
-        /** @var FuncCall $strlenFuncCall */
-        $strlenFuncCall = $node->args[2]->value;
-        if ($this->nodeComparator->areNodesEqual($strlenFuncCall->args[0]->value, $variable)) {
-            return new ContentExprAndNeedleExpr($node->args[0]->value, $strlenFuncCall->args[0]->value);
-        }
-
-        return null;
+        return $staticCall;
     }
 }

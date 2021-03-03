@@ -20,7 +20,6 @@ services:
                 - Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector
                 # solve later
                 - Rector\Nette\Rector\FuncCall\AbstractPregToNetteUtilsStringsRector
-                - Rector\Nette\Rector\Identical\AbstractWithFunctionToNetteUtilsStringsRector
                 - Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector
                 - Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRector
                 - Rector\NetteCodeQuality\Rector\ArrayDimFetch\AbstractArrayDimFetchToAnnotatedControlVariableRector
