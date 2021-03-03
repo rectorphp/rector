@@ -37,8 +37,7 @@ if (($f = false) || true) {
     return $f;
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

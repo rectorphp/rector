@@ -91,8 +91,7 @@ class SomeClass implements BlameableInterface
     use BlameableTrait;
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

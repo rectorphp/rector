@@ -121,8 +121,7 @@ class SomeClass implements TreeNodeInterface
     use TreeNodeTrait;
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

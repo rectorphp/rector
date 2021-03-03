@@ -55,8 +55,7 @@ CODE_SAMPLE
 // current PHP: 7.2
 return 'is PHP 7.2+';
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

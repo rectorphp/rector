@@ -76,8 +76,7 @@ class SomeClass extends PHPUnit\Framework\TestCase
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

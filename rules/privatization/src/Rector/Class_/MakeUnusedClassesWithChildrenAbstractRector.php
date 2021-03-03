@@ -40,8 +40,7 @@ abstract class PossibleAbstractClass
 {
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

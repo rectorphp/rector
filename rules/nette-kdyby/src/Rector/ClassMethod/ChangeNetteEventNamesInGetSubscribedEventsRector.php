@@ -12,6 +12,8 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NetteKdyby\NodeAnalyzer\GetSubscribedEventsClassMethodAnalyzer;
 use Rector\NetteKdyby\NodeManipulator\GetSubscribedEventsArrayManipulator;
 use Rector\NetteKdyby\NodeManipulator\ListeningClassMethodArgumentManipulator;
 use Rector\NetteKdyby\NodeResolver\ListeningMethodsCollector;
@@ -23,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\NetteKdyby\Tests\Rector\ClassMethod\ChangeNetteEventNamesInGetSubscribedEventsRector\ChangeNetteEventNamesInGetSubscribedEventsRectorTest
  */
-final class ChangeNetteEventNamesInGetSubscribedEventsRector extends AbstractKdybyEventSubscriberRector
+final class ChangeNetteEventNamesInGetSubscribedEventsRector extends AbstractRector
 {
     /**
      * @var GetSubscribedEventsArrayManipulator
@@ -40,14 +42,21 @@ final class ChangeNetteEventNamesInGetSubscribedEventsRector extends AbstractKdy
      */
     private $listeningMethodsCollector;
 
+    /**
+     * @var GetSubscribedEventsClassMethodAnalyzer
+     */
+    private $getSubscribedEventsClassMethodAnalyzer;
+
     public function __construct(
         GetSubscribedEventsArrayManipulator $getSubscribedEventsArrayManipulator,
         ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator,
-        ListeningMethodsCollector $listeningMethodsCollector
+        ListeningMethodsCollector $listeningMethodsCollector,
+        GetSubscribedEventsClassMethodAnalyzer $getSubscribedEventsClassMethodAnalyzer
     ) {
         $this->getSubscribedEventsArrayManipulator = $getSubscribedEventsArrayManipulator;
         $this->listeningClassMethodArgumentManipulator = $listeningClassMethodArgumentManipulator;
         $this->listeningMethodsCollector = $listeningMethodsCollector;
+        $this->getSubscribedEventsClassMethodAnalyzer = $getSubscribedEventsClassMethodAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -100,8 +109,7 @@ class GetApplesSubscriber implements Subscriber
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 
@@ -118,7 +126,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkipClassMethod($node)) {
+        if (! $this->getSubscribedEventsClassMethodAnalyzer->detect($node)) {
             return null;
         }
 

@@ -8,6 +8,11 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Symfony3\FormHelper\FormTypeStringToTypeProvider;
+use Rector\Symfony3\NodeAnalyzer\FormAddMethodCallAnalyzer;
+use Rector\Symfony3\NodeAnalyzer\FormCollectionAnalyzer;
+use Rector\Symfony3\NodeAnalyzer\FormOptionsArrayMatcher;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,8 +23,40 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony3\Tests\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector\ChangeStringCollectionOptionToConstantRectorTest
  */
-final class ChangeStringCollectionOptionToConstantRector extends AbstractFormAddRector
+final class ChangeStringCollectionOptionToConstantRector extends AbstractRector
 {
+    /**
+     * @var FormAddMethodCallAnalyzer
+     */
+    private $formAddMethodCallAnalyzer;
+
+    /**
+     * @var FormOptionsArrayMatcher
+     */
+    private $formOptionsArrayMatcher;
+
+    /**
+     * @var FormTypeStringToTypeProvider
+     */
+    private $formTypeStringToTypeProvider;
+
+    /**
+     * @var FormCollectionAnalyzer
+     */
+    private $formCollectionAnalyzer;
+
+    public function __construct(
+        FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        FormOptionsArrayMatcher $formOptionsArrayMatcher,
+        FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
+        FormCollectionAnalyzer $formCollectionAnalyzer
+    ) {
+        $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
+        $this->formOptionsArrayMatcher = $formOptionsArrayMatcher;
+        $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
+        $this->formCollectionAnalyzer = $formCollectionAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -65,8 +102,7 @@ class TaskType extends AbstractType
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 
@@ -83,15 +119,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isFormAddMethodCall($node)) {
+        if (! $this->formAddMethodCallAnalyzer->matches($node)) {
             return null;
         }
 
-        if (! $this->isCollectionType($node)) {
+        if (! $this->formCollectionAnalyzer->isCollectionType($node)) {
             return null;
         }
 
-        $optionsArray = $this->matchOptionsArray($node);
+        $optionsArray = $this->formOptionsArrayMatcher->match($node);
         if (! $optionsArray instanceof Array_) {
             return null;
         }

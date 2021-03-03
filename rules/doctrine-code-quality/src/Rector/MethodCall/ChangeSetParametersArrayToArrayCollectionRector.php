@@ -120,8 +120,7 @@ class SomeRepository extends EntityRepository
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

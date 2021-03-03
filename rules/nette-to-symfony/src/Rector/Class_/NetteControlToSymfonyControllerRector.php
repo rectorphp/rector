@@ -96,8 +96,7 @@ class SomeController extends AbstractController
      }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

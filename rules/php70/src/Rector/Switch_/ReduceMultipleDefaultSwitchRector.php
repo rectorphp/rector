@@ -45,8 +45,7 @@ switch ($expr) {
          break;
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

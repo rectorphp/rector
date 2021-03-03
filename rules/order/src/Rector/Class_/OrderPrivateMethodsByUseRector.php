@@ -11,7 +11,8 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Order\StmtOrder;
 use Rector\Order\ValueObject\SortedClassMethodsAndOriginalClassMethods;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,12 +20,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector\OrderPrivateMethodsByUseRectorTest
  */
-final class OrderPrivateMethodsByUseRector extends AbstractConstantPropertyMethodOrderRector
+final class OrderPrivateMethodsByUseRector extends AbstractRector
 {
     /**
      * @var int
      */
     private const MAX_ATTEMPTS = 5;
+
+    /**
+     * @var StmtOrder
+     */
+    private $stmtOrder;
+
+    public function __construct(StmtOrder $stmtOrder)
+    {
+        $this->stmtOrder = $stmtOrder;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -69,8 +80,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

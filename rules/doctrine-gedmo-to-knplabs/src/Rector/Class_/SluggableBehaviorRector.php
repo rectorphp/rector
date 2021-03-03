@@ -89,8 +89,7 @@ class SomeClass implements SluggableInterface
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

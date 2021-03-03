@@ -62,8 +62,7 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 return $this->oldToNewFunctions[$currentFunction] ?? null;
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

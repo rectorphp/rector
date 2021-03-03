@@ -8,8 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Transform\Rector\AbstractToMethodCallRector;
+use Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer;
 use Rector\Transform\ValueObject\FuncCallToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,7 +20,7 @@ use Webmozart\Assert\Assert;
 /**
  * @see \Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\FuncCallToMethodCallRectorTest
  */
-final class FuncCallToMethodCallRector extends AbstractToMethodCallRector
+final class FuncCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -29,6 +31,16 @@ final class FuncCallToMethodCallRector extends AbstractToMethodCallRector
      * @var FuncCallToMethodCall[]
      */
     private $funcNameToMethodCallNames = [];
+
+    /**
+     * @var FuncCallStaticCallToMethodCallAnalyzer
+     */
+    private $funcCallStaticCallToMethodCallAnalyzer;
+
+    public function __construct(FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer)
+    {
+        $this->funcCallStaticCallToMethodCallAnalyzer = $funcCallStaticCallToMethodCallAnalyzer;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -105,7 +117,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $expr = $this->matchTypeProvidingExpr(
+            $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr(
                 $classLike,
                 $classMethod,
                 $funcNameToMethodCallName->getNewObjectType()
@@ -120,10 +132,14 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, mixed> $configuration
+     */
     public function configure(array $configuration): void
     {
         $funcCallsToClassMethodCalls = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? [];
         Assert::allIsInstanceOf($funcCallsToClassMethodCalls, FuncCallToMethodCall::class);
+
         $this->funcNameToMethodCallNames = $funcCallsToClassMethodCalls;
     }
 }

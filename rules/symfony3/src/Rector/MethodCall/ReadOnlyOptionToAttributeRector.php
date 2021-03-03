@@ -10,22 +10,40 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\NodeManipulator\ArrayManipulator;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Symfony3\NodeAnalyzer\FormAddMethodCallAnalyzer;
+use Rector\Symfony3\NodeAnalyzer\FormOptionsArrayMatcher;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony3\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector\ReadOnlyOptionToAttributeRectorTest
  */
-final class ReadOnlyOptionToAttributeRector extends AbstractFormAddRector
+final class ReadOnlyOptionToAttributeRector extends AbstractRector
 {
     /**
      * @var ArrayManipulator
      */
     private $arrayManipulator;
 
-    public function __construct(ArrayManipulator $arrayManipulator)
-    {
+    /**
+     * @var FormAddMethodCallAnalyzer
+     */
+    private $formAddMethodCallAnalyzer;
+
+    /**
+     * @var FormOptionsArrayMatcher
+     */
+    private $formOptionsArrayMatcher;
+
+    public function __construct(
+        ArrayManipulator $arrayManipulator,
+        FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        FormOptionsArrayMatcher $formOptionsArrayMatcher
+    ) {
         $this->arrayManipulator = $arrayManipulator;
+        $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
+        $this->formOptionsArrayMatcher = $formOptionsArrayMatcher;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -51,8 +69,7 @@ function buildForm(FormBuilderInterface $builder, array $options)
     $builder->add('cuid', TextType::class, ['attr' => ['read_only' => true]]);
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 
@@ -69,14 +86,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isFormAddMethodCall($node)) {
+        if (! $this->formAddMethodCallAnalyzer->matches($node)) {
             return null;
         }
 
-        $optionsArray = $this->matchOptionsArray($node);
-        if (! $optionsArray instanceof Array_) {
-            return null;
-        }
+        $optionsArray = $this->formOptionsArrayMatcher->match($node);
         if (! $optionsArray instanceof Array_) {
             return null;
         }

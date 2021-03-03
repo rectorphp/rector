@@ -3,7 +3,7 @@
 # This bash script downgrades the code to the selected PHP version
 #
 # Usage from within a GitHub workflow:
-# .github/workflows/scripts/downgrade_packages.sh $target_php_version
+# build/downgrade/downgrade_packages.sh $target_php_version
 # where $target_php_version is one of the following values:
 # - 7.0
 # - 7.1
@@ -15,7 +15,7 @@
 # - 8.0
 #
 # Eg: To downgrade to PHP 7.1, execute:
-# .github/workflows/scripts/downgrade_packages.sh 7.1
+# build/downgrade/downgrade_packages.sh 7.1
 ########################################################################
 
 # show errors
@@ -204,7 +204,7 @@ then
     config=ci/downgrade/rector-downgrade-rector
     config="${config}-${rector_config}.php"
     note "Running rector_config ${rector_config} for main package ${rootPackage} on path(s) ${path_to_downgrade}"
-    bin/rector process $path_to_downgrade --config=$config --ansi --no-diffs
+    bin/rector process $path_to_downgrade --config=$config --ansi --no-diffs --debug
 
     #Downgrade all the dependencies then
     packages_to_downgrade=$(join_by " " ${dependency_packages[@]})
@@ -212,7 +212,7 @@ then
     config=ci/downgrade/rector-downgrade-dependency
     config="${config}-${rector_config}.php"
     note "Running rector_config ${rector_config} for dependency packages ${packages_to_downgrade} on paths ${paths_to_downgrade}"
-    bin/rector process $paths_to_downgrade --config=$config --ansi --no-diffs
+    bin/rector process $paths_to_downgrade --config=$config --ansi --no-diffs --debug
 
     # Success
     exit 0
@@ -316,7 +316,7 @@ do
         note "Running rector_config ${rector_config} for package ${package_to_downgrade} on path(s) ${path_to_downgrade}"
 
         # Execute the downgrade
-        bin/rector process $path_to_downgrade --config=$config --ansi
+        bin/rector process $path_to_downgrade --config=$config --ansi --debug
 
         # If Rector fails, already exit
         if [ "$?" -gt 0 ]; then
@@ -355,7 +355,7 @@ do
                 paths_to_downgrade=$(join_by " " ${circular_paths_to_downgrade_for_rectorconfig[@]})
                 note "Running rector_config ${rector_config} for packages ${circular_packages_to_downgrade_for_rectorconfig[@]}"
                 config="ci/downgrade/rector-downgrade-dependency-${rector_config}.php"
-                bin/rector process $paths_to_downgrade --config=$config --ansi
+                bin/rector process $paths_to_downgrade --config=$config --ansi --debug
 
                 # If Rector fails, already exit
                 if [ "$?" -gt 0 ]; then

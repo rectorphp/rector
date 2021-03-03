@@ -41,8 +41,7 @@ function some_camel_case_function()
 
 some_camel_case_function();
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

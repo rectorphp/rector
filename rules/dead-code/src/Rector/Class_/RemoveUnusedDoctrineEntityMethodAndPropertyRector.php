@@ -100,8 +100,7 @@ class UserEntity
 {
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

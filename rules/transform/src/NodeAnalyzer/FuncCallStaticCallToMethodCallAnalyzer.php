@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Rector;
+namespace Rector\Transform\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,23 +13,34 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\PostRector\DependencyInjection\PropertyAdder;
 use Rector\Transform\NodeFactory\PropertyFetchFactory;
 use Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
 
-abstract class AbstractToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class FuncCallStaticCallToMethodCallAnalyzer
 {
+    /**
+     * @var TypeProvidingExprFromClassResolver
+     */
+    private $typeProvidingExprFromClassResolver;
+
     /**
      * @var PropertyNaming
      */
     private $propertyNaming;
 
     /**
-     * @var TypeProvidingExprFromClassResolver
+     * @var NodeNameResolver
      */
-    private $typeProvidingExprFromClassResolver;
+    private $nodeNameResolver;
+
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
 
     /**
      * @var PropertyFetchFactory
@@ -37,23 +48,31 @@ abstract class AbstractToMethodCallRector extends AbstractRector implements Conf
     private $propertyFetchFactory;
 
     /**
-     * @required
+     * @var PropertyAdder
      */
-    public function autowireAbstractToMethodCallRector(
-        PropertyNaming $propertyNaming,
+    private $propertyAdder;
+
+    public function __construct(
         TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver,
-        PropertyFetchFactory $propertyFetchFactory
-    ): void {
-        $this->propertyNaming = $propertyNaming;
+        PropertyNaming $propertyNaming,
+        NodeNameResolver $nodeNameResolver,
+        NodeFactory $nodeFactory,
+        PropertyFetchFactory $propertyFetchFactory,
+        PropertyAdder $propertyAdder
+    ) {
         $this->typeProvidingExprFromClassResolver = $typeProvidingExprFromClassResolver;
+        $this->propertyNaming = $propertyNaming;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeFactory = $nodeFactory;
         $this->propertyFetchFactory = $propertyFetchFactory;
+        $this->propertyAdder = $propertyAdder;
     }
 
     /**
      * @param ClassMethod|Function_ $functionLike
      * @return MethodCall|PropertyFetch|Variable
      */
-    protected function matchTypeProvidingExpr(Class_ $class, FunctionLike $functionLike, ObjectType $objectType): Expr
+    public function matchTypeProvidingExpr(Class_ $class, FunctionLike $functionLike, ObjectType $objectType): Expr
     {
         $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass(
             $class,
@@ -69,7 +88,7 @@ abstract class AbstractToMethodCallRector extends AbstractRector implements Conf
         }
 
         $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-        $this->addConstructorDependencyToClass($class, $objectType, $propertyName);
+        $this->propertyAdder->addConstructorDependencyToClass($class, $objectType, $propertyName);
         return $this->propertyFetchFactory->createFromType($objectType);
     }
 
@@ -82,7 +101,7 @@ abstract class AbstractToMethodCallRector extends AbstractRector implements Conf
         FunctionLike $functionLike
     ): void {
         /** @var string $variableName */
-        $variableName = $this->getName($variable);
+        $variableName = $this->nodeNameResolver->getName($variable);
 
         // add variable to __construct as dependency
         $functionLike->params[] = $this->nodeFactory->createParamFromNameAndType($variableName, $objectType);

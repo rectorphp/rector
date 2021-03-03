@@ -114,8 +114,7 @@ final class BeforeListHook implements \PHPUnit\Runner\BeforeTestHook, \PHPUnit\R
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

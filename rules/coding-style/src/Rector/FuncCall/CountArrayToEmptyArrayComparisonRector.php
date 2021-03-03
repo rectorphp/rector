@@ -45,8 +45,7 @@ $array === [];
 $array !== [];
 $array === [];
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

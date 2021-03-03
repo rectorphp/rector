@@ -72,8 +72,7 @@ final class SomeClass implements EventSubscriberInterface
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

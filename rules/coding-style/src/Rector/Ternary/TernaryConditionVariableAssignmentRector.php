@@ -37,8 +37,7 @@ function ternary($value)
     $a = $value ? 1 : 0;
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

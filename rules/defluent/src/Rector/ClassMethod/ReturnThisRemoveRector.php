@@ -65,8 +65,7 @@ class SomeExampleClass
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

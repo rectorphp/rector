@@ -33,8 +33,7 @@ CODE_SAMPLE
 $var= "Satya's here!";
 addslashes($var);
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

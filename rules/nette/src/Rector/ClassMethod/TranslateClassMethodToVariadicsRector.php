@@ -63,8 +63,7 @@ final class SomeClass implements ITranslator
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

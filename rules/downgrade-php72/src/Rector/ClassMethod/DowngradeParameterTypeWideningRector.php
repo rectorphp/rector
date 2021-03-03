@@ -82,8 +82,7 @@ class C implements A
     public function test($input);
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

@@ -106,8 +106,7 @@ class CustomRepository
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

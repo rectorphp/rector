@@ -42,8 +42,7 @@ class SomeClass
     public ?string $name = null;
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 

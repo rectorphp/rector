@@ -79,8 +79,7 @@ class ClassWithConstantUsedOnlyHere
     }
 }
 CODE_SAMPLE
-                ),
-
+            ),
             ]);
     }
 
