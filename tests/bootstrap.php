@@ -14,7 +14,6 @@ error_reporting(E_ALL ^ E_DEPRECATED);
 // performance boost
 gc_disable();
 
-// load stubs
 $stubLoader = new StubLoader();
 $stubLoader->loadStubs();
 

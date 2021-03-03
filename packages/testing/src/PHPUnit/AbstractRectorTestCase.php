@@ -18,7 +18,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\Core\Stubs\StubLoader;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Application\EnabledRectorClassProvider;
@@ -329,11 +328,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         self::$smartFileSystem = new SmartFileSystem();
         self::$fixtureGuard = new FixtureGuard();
         self::$rectorConfigsResolver = new RectorConfigsResolver();
-
-        // load stubs
-        $stubLoader = new StubLoader();
-        $stubLoader->loadStubs();
-
         self::$isInitialized = true;
     }
 

@@ -9,7 +9,6 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\Stubs\PHPStanStubLoader;
-use Rector\Core\Stubs\StubLoader;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use Symfony\Component\DependencyInjection\Container;
 use Symplify\PackageBuilder\Console\Input\StaticInputDetector;
@@ -34,9 +33,6 @@ final class RectorContainerFactory
             $configFilePaths = $this->unpackRealPathsFromFileInfos($configFileInfos);
             $rectorKernel->setConfigs($configFilePaths);
         }
-
-        $stubLoader = new StubLoader();
-        $stubLoader->loadStubs();
 
         $phpStanStubLoader = new PHPStanStubLoader();
         $phpStanStubLoader->loadStubs();

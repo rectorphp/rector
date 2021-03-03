@@ -193,7 +193,6 @@ final class ProcessCommand extends AbstractCommand
         $this->configuration->setAreAnyPhpRectorsLoaded((bool) $this->rectorNodeTraverser->getPhpRectorCount());
 
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
-        $this->stubLoader->loadStubs();
 
         $paths = $this->configuration->getPaths();
 
