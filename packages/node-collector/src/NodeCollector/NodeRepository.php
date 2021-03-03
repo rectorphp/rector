@@ -375,10 +375,8 @@ final class NodeRepository
             throw new ShouldNotHappenException();
         }
 
-        /** @var string $method */
-        $method = $classMethod->getAttribute(AttributeKey::METHOD_NAME);
-
-        return $this->findCallsByClassAndMethod($class, $method);
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        return $this->findCallsByClassAndMethod($class, $methodName);
     }
 
     /**
