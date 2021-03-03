@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Nette\Tests\Rector\Class_\ExtractTemplateClassForPresenterRector;
 
+use Iterator;
+use Rector\Nette\Rector\Class_\ExtractTemplateClassForPresenterRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ExtractTemplateClassForPresenterRectorTest extends AbstractRectorTestCase
 {
@@ -12,7 +15,7 @@ final class ExtractTemplateClassForPresenterRectorTest extends AbstractRectorTes
      * @dataProvider provideData()
      */
     public function test(
-        \Symplify\SmartFileSystem\SmartFileInfo $fileInfo,
+        SmartFileInfo $fileInfo,
         string $expectedExtraFileName,
         string $expectedExtraContentFilePath
     ): void {
@@ -20,10 +23,10 @@ final class ExtractTemplateClassForPresenterRectorTest extends AbstractRectorTes
         $this->doTestExtraFile($expectedExtraFileName, $expectedExtraContentFilePath);
     }
 
-    public function provideData(): \Iterator
+    public function provideData(): Iterator
     {
         yield [
-            new \Symplify\SmartFileSystem\SmartFileInfo(__DIR__ . '/Fixture/some_class.php.inc'),
+            new SmartFileInfo(__DIR__ . '/Fixture/some_class.php.inc'),
             'RouteName.php',
             __DIR__ . '/Source/extra_file.php',
         ];
@@ -31,6 +34,6 @@ final class ExtractTemplateClassForPresenterRectorTest extends AbstractRectorTes
 
     protected function getRectorClass(): string
     {
-        return \Rector\Nette\Rector\Class_\ExtractTemplateClassForPresenterRector::class;
+        return ExtractTemplateClassForPresenterRector::class;
     }
 }

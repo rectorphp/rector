@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -57,11 +58,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
 
     /**
-     * @param \PhpParser\Node\Stmt\Class_ $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {

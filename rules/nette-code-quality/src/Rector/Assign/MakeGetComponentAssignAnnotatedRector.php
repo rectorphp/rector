@@ -144,15 +144,13 @@ CODE_SAMPLE
 
     private function isGetComponentMethodCallOrArrayDimFetchOnControl(Expr $expr): bool
     {
-        if ($expr instanceof MethodCall && $this->isOnClassMethodCall(
-            $expr,
-            new ObjectType('Nette\Application\UI\Control'),
-            'getComponent'
-        )) {
-            return true;
+        if (! $expr instanceof MethodCall) {
+            return $this->isArrayDimFetchStringOnControlVariable($expr);
         }
-
-        return $this->isArrayDimFetchStringOnControlVariable($expr);
+        if (! $this->isOnClassMethodCall($expr, new ObjectType('Nette\Application\UI\Control'), 'getComponent')) {
+            return $this->isArrayDimFetchStringOnControlVariable($expr);
+        }
+        return true;
     }
 
     private function resolveControlType(Assign $assign): Type
