@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteCodeQuality\Rector\ArrayDimFetch;
+namespace Rector\NetteCodeQuality\NodeAnalyzer;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
@@ -12,31 +11,16 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator;
-use Rector\Core\Rector\AbstractRector;
-use Rector\NetteCodeQuality\Naming\NetteControlNaming;
 use Rector\NetteCodeQuality\NodeAdding\FunctionLikeFirstLevelStatementResolver;
-use Rector\NetteCodeQuality\NodeAnalyzer\ControlDimFetchAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\NodesToAddCollector;
 
-/**
- * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
- */
-abstract class AbstractArrayDimFetchToAnnotatedControlVariableRector extends AbstractRector
+final class AssignAnalyzer
 {
     /**
-     * @var ControlDimFetchAnalyzer
+     * @var FunctionLikeFirstLevelStatementResolver
      */
-    protected $controlDimFetchAnalyzer;
-
-    /**
-     * @var NetteControlNaming
-     */
-    protected $netteControlNaming;
-
-    /**
-     * @var VarAnnotationManipulator
-     */
-    private $varAnnotationManipulator;
+    private $functionLikeFirstLevelStatementResolver;
 
     /**
      * @var string[]
@@ -44,34 +28,26 @@ abstract class AbstractArrayDimFetchToAnnotatedControlVariableRector extends Abs
     private $alreadyInitializedAssignsClassMethodObjectHashes = [];
 
     /**
-     * @var FunctionLikeFirstLevelStatementResolver
+     * @var NodesToAddCollector
      */
-    private $functionLikeFirstLevelStatementResolver;
+    private $nodesToAddCollector;
 
     /**
-     * @required
+     * @var VarAnnotationManipulator
      */
-    public function autowireAbstractArrayDimFetchToAnnotatedControlVariableRector(
-        VarAnnotationManipulator $varAnnotationManipulator,
-        ControlDimFetchAnalyzer $controlDimFetchAnalyzer,
-        NetteControlNaming $netteControlNaming,
-        FunctionLikeFirstLevelStatementResolver $functionLikeFirstLevelStatementResolver
-    ): void {
-        $this->controlDimFetchAnalyzer = $controlDimFetchAnalyzer;
-        $this->netteControlNaming = $netteControlNaming;
-        $this->varAnnotationManipulator = $varAnnotationManipulator;
+    private $varAnnotationManipulator;
+
+    public function __construct(
+        FunctionLikeFirstLevelStatementResolver $functionLikeFirstLevelStatementResolver,
+        NodesToAddCollector $nodesToAddCollector,
+        VarAnnotationManipulator $varAnnotationManipulator
+    ) {
         $this->functionLikeFirstLevelStatementResolver = $functionLikeFirstLevelStatementResolver;
+        $this->nodesToAddCollector = $nodesToAddCollector;
+        $this->varAnnotationManipulator = $varAnnotationManipulator;
     }
 
-    /**
-     * @return array<class-string<Node>>
-     */
-    public function getNodeTypes(): array
-    {
-        return [ArrayDimFetch::class];
-    }
-
-    protected function addAssignExpressionForFirstCase(
+    public function addAssignExpressionForFirstCase(
         string $variableName,
         ArrayDimFetch $arrayDimFetch,
         ObjectType $controlObjectType
@@ -83,21 +59,7 @@ abstract class AbstractArrayDimFetchToAnnotatedControlVariableRector extends Abs
         $assignExpression = $this->createAnnotatedAssignExpression($variableName, $arrayDimFetch, $controlObjectType);
 
         $currentStatement = $this->functionLikeFirstLevelStatementResolver->resolveFirstLevelStatement($arrayDimFetch);
-        $this->addNodeBeforeNode($assignExpression, $currentStatement);
-    }
-
-    protected function isBeingAssignedOrInitialized(ArrayDimFetch $arrayDimFetch): bool
-    {
-        $parent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Assign) {
-            return false;
-        }
-
-        if ($parent->var === $arrayDimFetch) {
-            return true;
-        }
-
-        return $parent->expr === $arrayDimFetch;
+        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $currentStatement);
     }
 
     private function shouldSkipForAlreadyAddedInCurrentClassMethod(
