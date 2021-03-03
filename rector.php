@@ -14,6 +14,7 @@ use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Rector\Set\ValueObject\SetList;
 use Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector;
+use Rector\Transform\Rector\Class_\NativeTestCaseRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -23,6 +24,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $configuration = ValueObjectInliner::inline([
         new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
     ]);
+
+    $services->set(NativeTestCaseRector::class);
+
     $services->set(InferParamFromClassMethodReturnRector::class)
         ->call('configure', [[
             InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => $configuration,
