@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Type\MixedType;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadDocBlock\TagRemover\ParamTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -19,13 +20,19 @@ use Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Rector\TypeDeclaration\ValueObject\NewType;
+use Rector\VendorLocker\VendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
+ * @see https://wiki.php.net/rfc/scalar_type_hints_v5
+ * @see https://github.com/nikic/TypeUtil
+ * @see https://github.com/nette/type-fixer
+ * @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/3258
+ *
  * @see \Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\ParamTypeDeclarationRectorTest
  */
-final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
+final class ParamTypeDeclarationRector extends AbstractRector
 {
     /**
      * @var ParamTypeInferer
@@ -47,7 +54,13 @@ final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
      */
     private $paramTagRemover;
 
+    /**
+     * @var VendorLockResolver
+     */
+    private $vendorLockResolver;
+
     public function __construct(
+        VendorLockResolver $vendorLockResolver,
         ChildParamPopulator $childParamPopulator,
         ParamTypeInferer $paramTypeInferer,
         TraitTypeAnalyzer $traitTypeAnalyzer,
@@ -57,6 +70,15 @@ final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
         $this->childParamPopulator = $childParamPopulator;
         $this->traitTypeAnalyzer = $traitTypeAnalyzer;
         $this->paramTagRemover = $paramTagRemover;
+        $this->vendorLockResolver = $vendorLockResolver;
+    }
+
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Function_::class, ClassMethod::class];
     }
 
     public function getRuleDefinition(): RuleDefinition

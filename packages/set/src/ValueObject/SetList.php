@@ -67,7 +67,7 @@ final class SetList implements SetListInterface
      * @var string
      */
     public const CAKEPHP_42 = __DIR__ . '/../../../../config/set/cakephp42.php';
-    
+
     /**
      * @var string
      */
