@@ -17,7 +17,11 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Symfony3\NodeAnalyzer\FormAddMethodCallAnalyzer;
+use Rector\Symfony3\NodeAnalyzer\FormCollectionAnalyzer;
+use Rector\Symfony3\NodeAnalyzer\FormOptionsArrayMatcher;
 use Rector\Symfony3\NodeFactory\BuilderFormNodeFactory;
 use Rector\Symfony3\NodeFactory\ConfigureOptionsNodeFactory;
 use ReflectionMethod;
@@ -34,7 +38,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\FormTypeInstanceToClassConstRectorTest
  */
-final class FormTypeInstanceToClassConstRector extends AbstractFormAddRector
+final class FormTypeInstanceToClassConstRector extends AbstractRector
 {
     /**
      * @var ObjectType[]
@@ -56,19 +60,40 @@ final class FormTypeInstanceToClassConstRector extends AbstractFormAddRector
      */
     private $reflectionProvider;
 
+    /**
+     * @var FormAddMethodCallAnalyzer
+     */
+    private $formAddMethodCallAnalyzer;
+
+    /**
+     * @var FormOptionsArrayMatcher
+     */
+    private $formOptionsArrayMatcher;
+
+    /**
+     * @var FormCollectionAnalyzer
+     */
+    private $formCollectionAnalyzer;
+
     public function __construct(
         BuilderFormNodeFactory $builderFormNodeFactory,
         ConfigureOptionsNodeFactory $configureOptionsNodeFactory,
-        ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider,
+        FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        FormOptionsArrayMatcher $formOptionsArrayMatcher,
+        FormCollectionAnalyzer $formCollectionAnalyzer
     ) {
         $this->builderFormNodeFactory = $builderFormNodeFactory;
         $this->configureOptionsNodeFactory = $configureOptionsNodeFactory;
         $this->reflectionProvider = $reflectionProvider;
+        $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
+        $this->formOptionsArrayMatcher = $formOptionsArrayMatcher;
 
         $this->controllerObjectTypes = [
             new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller'),
             new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\AbstractController'),
         ];
+        $this->formCollectionAnalyzer = $formCollectionAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -121,12 +146,12 @@ CODE_SAMPLE
             return $this->processNewInstance($node, 0, 2);
         }
 
-        if (! $this->isFormAddMethodCall($node)) {
+        if (! $this->formAddMethodCallAnalyzer->matches($node)) {
             return null;
         }
 
         // special case for collections
-        if ($this->isCollectionType($node)) {
+        if ($this->formCollectionAnalyzer->isCollectionType($node)) {
             $this->refactorCollectionOptions($node);
         }
 
@@ -172,7 +197,7 @@ CODE_SAMPLE
 
     private function refactorCollectionOptions(MethodCall $methodCall): void
     {
-        $optionsArray = $this->matchOptionsArray($methodCall);
+        $optionsArray = $this->formOptionsArrayMatcher->match($methodCall);
         if (! $optionsArray instanceof Array_) {
             return;
         }

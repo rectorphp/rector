@@ -7,6 +7,9 @@ namespace Rector\Symfony3\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Symfony3\FormHelper\FormTypeStringToTypeProvider;
+use Rector\Symfony3\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -15,12 +18,30 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony3\Tests\Rector\MethodCall\StringFormTypeToClassRector\StringFormTypeToClassRectorTest
  */
-final class StringFormTypeToClassRector extends AbstractFormAddRector
+final class StringFormTypeToClassRector extends AbstractRector
 {
     /**
      * @var string
      */
     private const DESCRIPTION = 'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony. To enable custom types, add link to your container XML dump in "$parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, ...);"';
+
+    /**
+     * @var FormAddMethodCallAnalyzer
+     */
+    private $formAddMethodCallAnalyzer;
+
+    /**
+     * @var FormTypeStringToTypeProvider
+     */
+    private $formTypeStringToTypeProvider;
+
+    public function __construct(
+        FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        FormTypeStringToTypeProvider $formTypeStringToTypeProvider
+    ) {
+        $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
+        $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -52,7 +73,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isFormAddMethodCall($node)) {
+        if (! $this->formAddMethodCallAnalyzer->matches($node)) {
             return null;
         }
 

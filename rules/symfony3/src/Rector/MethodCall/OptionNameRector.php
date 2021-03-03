@@ -8,13 +8,16 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Symfony3\NodeAnalyzer\FormAddMethodCallAnalyzer;
+use Rector\Symfony3\NodeAnalyzer\FormOptionsArrayMatcher;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony3\Tests\Rector\MethodCall\OptionNameRector\OptionNameRectorTest
  */
-final class OptionNameRector extends AbstractFormAddRector
+final class OptionNameRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -23,6 +26,24 @@ final class OptionNameRector extends AbstractFormAddRector
         'precision' => 'scale',
         'virtual' => 'inherit_data',
     ];
+
+    /**
+     * @var FormAddMethodCallAnalyzer
+     */
+    private $formAddMethodCallAnalyzer;
+
+    /**
+     * @var FormOptionsArrayMatcher
+     */
+    private $formOptionsArrayMatcher;
+
+    public function __construct(
+        FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        FormOptionsArrayMatcher $formOptionsArrayMatcher
+    ) {
+        $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
+        $this->formOptionsArrayMatcher = $formOptionsArrayMatcher;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -57,11 +78,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isFormAddMethodCall($node)) {
+        if (! $this->formAddMethodCallAnalyzer->matches($node)) {
             return null;
         }
 
-        $optionsArray = $this->matchOptionsArray($node);
+        $optionsArray = $this->formOptionsArrayMatcher->match($node);
         if (! $optionsArray instanceof Array_) {
             return null;
         }
