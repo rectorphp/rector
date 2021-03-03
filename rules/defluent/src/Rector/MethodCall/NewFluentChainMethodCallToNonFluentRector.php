@@ -8,10 +8,13 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher;
+use Rector\Defluent\Skipper\FluentMethodCallSkipper;
 use Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd;
 use Rector\Defluent\ValueObject\FluentCallsKind;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Symfony\NodeAnalyzer\FluentNodeRemover;
 use Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -23,16 +26,38 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see \Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\FluentChainMethodCallToNormalMethodCallRectorTest
  * @see \Rector\Defluent\Tests\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector\NewFluentChainMethodCallToNonFluentRectorTest
  */
-final class NewFluentChainMethodCallToNonFluentRector extends AbstractFluentChainMethodCallRector
+final class NewFluentChainMethodCallToNonFluentRector extends AbstractRector
 {
     /**
      * @var TypeChecker
      */
     private $typeChecker;
 
-    public function __construct(TypeChecker $typeChecker)
-    {
+    /**
+     * @var FluentNodeRemover
+     */
+    private $fluentNodeRemover;
+
+    /**
+     * @var AssignAndRootExprAndNodesToAddMatcher
+     */
+    private $assignAndRootExprAndNodesToAddMatcher;
+
+    /**
+     * @var FluentMethodCallSkipper
+     */
+    private $fluentMethodCallSkipper;
+
+    public function __construct(
+        TypeChecker $typeChecker,
+        FluentNodeRemover $fluentNodeRemover,
+        AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher,
+        FluentMethodCallSkipper $fluentMethodCallSkipper
+    ) {
         $this->typeChecker = $typeChecker;
+        $this->fluentNodeRemover = $fluentNodeRemover;
+        $this->assignAndRootExprAndNodesToAddMatcher = $assignAndRootExprAndNodesToAddMatcher;
+        $this->fluentMethodCallSkipper = $fluentMethodCallSkipper;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -74,11 +99,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->shouldSkipMethodCall($node)) {
+        if ($this->fluentMethodCallSkipper->shouldSkipRootMethodCall($node)) {
             return null;
         }
 
-        $assignAndRootExprAndNodesToAdd = $this->createStandaloneNodesToAddFromChainMethodCalls(
+        $assignAndRootExprAndNodesToAdd = $this->assignAndRootExprAndNodesToAddMatcher->match(
             $node,
             FluentCallsKind::NORMAL
         );
@@ -86,7 +111,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removeCurrentNode($node);
+        $this->fluentNodeRemover->removeCurrentNode($node);
         $this->addNodesAfterNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
 
         return null;

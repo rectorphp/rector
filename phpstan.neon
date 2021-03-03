@@ -606,3 +606,5 @@ parameters:
                 - src/Application/ActiveRectorsProvider.php
 
         - '#Content of method "getIfNextReturn\(\)" is duplicated with method "getIfNextReturn\(\)" in "Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory" class\. Use unique content or service instead#'
+        - '#Content of method "matchReturnMethodCall\(\)" is duplicated with method "matchReturnMethodCall\(\)" in "Rector\\Defluent\\Rector\\Return_\\ReturnFluentChainMethodCallToNormalMethodCallRector" class\. Use unique content or service instead#'
+        - '#Content of method "matchReturnMethodCall\(\)" is duplicated with method "matchReturnMethodCall\(\)" in "Rector\\Defluent\\Rector\\Return_\\ReturnNewFluentChainMethodCallToNonFluentRector" class\. Use unique content or service instead#'
