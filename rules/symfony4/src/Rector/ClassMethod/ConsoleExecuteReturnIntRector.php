@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony4\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Ternary;
@@ -123,13 +124,9 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($node->expr instanceof Ternary) {
-                $ifType = $this->getStaticType($node->expr->if);
-                $elseType = $this->getStaticType($node->expr->else);
-                if ($ifType instanceof IntegerType && $elseType instanceof IntegerType) {
-                    $hasReturn = true;
-                    return null;
-                }
+            if ($node->expr instanceof Ternary && $this->isIntegerTernaryIfElse($node->expr)) {
+                $hasReturn = true;
+                return null;
             }
 
             // is there return without nesting?
@@ -143,6 +140,18 @@ CODE_SAMPLE
         });
 
         $this->processReturn0ToMethod($hasReturn, $classMethod);
+    }
+
+    private function isIntegerTernaryIfElse(Ternary $ternary): bool
+    {
+        /** @var Expr $if */
+        $if = $ternary->if;
+        /** @var Expr $else */
+        $else = $ternary->else;
+        $ifType = $this->getStaticType($if);
+        $elseType = $this->getStaticType($else);
+
+        return $ifType instanceof IntegerType && $elseType instanceof IntegerType;
     }
 
     private function processReturn0ToMethod(bool $hasReturn, ClassMethod $classMethod): void
