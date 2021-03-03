@@ -40,9 +40,9 @@ final class AnonymousFunctionFactory
     /**
      * @param Param[] $params
      * @param Stmt[] $stmts
-     * @param Identifier|Name|NullableType|UnionType|null $returnType
+     * @param Identifier|Name|NullableType|UnionType|null $node
      */
-    public function create(array $params, array $stmts, ?Node $returnType): Closure
+    public function create(array $params, array $stmts, ?Node $node): Closure
     {
         $useVariables = $this->createUseVariablesFromParams($stmts, $params);
 
@@ -53,8 +53,8 @@ final class AnonymousFunctionFactory
             $anonymousFunctionNode->uses[] = new ClosureUse($useVariable);
         }
 
-        if ($returnType instanceof Node) {
-            $anonymousFunctionNode->returnType = $returnType;
+        if ($node instanceof Node) {
+            $anonymousFunctionNode->returnType = $node;
         }
 
         $anonymousFunctionNode->stmts = $stmts;
