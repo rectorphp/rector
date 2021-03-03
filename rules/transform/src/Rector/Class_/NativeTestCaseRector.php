@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Transform\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
@@ -15,15 +14,10 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Transform\Tests\Rector\Class_\CommunityTestCaseRector\CommunityTestCaseRectorTest
+ * @see \Rector\Transform\Tests\Rector\Class_\NativeTestCaseRector\NativeTestCaseRectorTest
  */
-final class CommunityTestCaseRector extends AbstractRector
+final class NativeTestCaseRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const ABSTRACT_COMMUNITY_TEST_CLASS = 'Rector\Testing\PHPUnit\AbstractCommunityRectorTestCase';
-
     /**
      * @var ProvideConfigFilePathClassMethodFactory
      */
@@ -92,10 +86,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isNames(
-            $node->extends,
-            [self::ABSTRACT_COMMUNITY_TEST_CLASS, 'Rector\Testing\PHPUnit\AbstractRectorTestCase']
-        )) {
+        if (! $this->isName($node->extends, 'Rector\Testing\PHPUnit\AbstractRectorTestCase')) {
             return null;
         }
 
@@ -103,8 +94,6 @@ CODE_SAMPLE
         if (! $getRectorClassMethod instanceof ClassMethod) {
             return null;
         }
-
-        $node->extends = new FullyQualified(self::ABSTRACT_COMMUNITY_TEST_CLASS);
 
         $this->removeNode($getRectorClassMethod);
         $node->stmts[] = $this->provideConfigFilePathClassMethodFactory->create();
