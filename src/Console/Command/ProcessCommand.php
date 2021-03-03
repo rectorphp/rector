@@ -13,12 +13,15 @@ use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\FileSystem\PhpFilesFinder;
 use Rector\Core\Guard\RectorGuard;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -26,7 +29,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
 
-final class ProcessCommand extends AbstractCommand
+final class ProcessCommand extends Command
 {
     /**
      * @var FilesFinder
@@ -88,6 +91,11 @@ final class ProcessCommand extends AbstractCommand
      */
     private $phpFilesFinder;
 
+    /**
+     * @var ChangedFilesDetector
+     */
+    private $changedFilesDetector;
+
     public function __construct(
         AdditionalAutoloader $additionalAutoloader,
         ChangedFilesDetector $changedFilesDetector,
@@ -123,11 +131,13 @@ final class ProcessCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setDescription('Upgrade or refactor source code with provided rectors');
+
         $this->addArgument(
             Option::SOURCE,
             InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
             'Files or directories to be upgraded.'
         );
+
         $this->addOption(
             Option::OPTION_DRY_RUN,
             'n',
@@ -235,6 +245,29 @@ final class ProcessCommand extends AbstractCommand
             return ShellCode::SUCCESS;
         }
         return ShellCode::ERROR;
+    }
+
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        $application = $this->getApplication();
+        if (! $application instanceof Application) {
+            throw new ShouldNotHappenException();
+        }
+
+        $optionDebug = (bool) $input->getOption(Option::OPTION_DEBUG);
+        if ($optionDebug) {
+            $application->setCatchExceptions(false);
+
+            // clear cache
+            $this->changedFilesDetector->clear();
+            return;
+        }
+
+        // clear cache
+        $optionClearCache = (bool) $input->getOption(Option::OPTION_CLEAR_CACHE);
+        if ($optionClearCache) {
+            $this->changedFilesDetector->clear();
+        }
     }
 
     private function reportZeroCacheRectorsCondition(): void
