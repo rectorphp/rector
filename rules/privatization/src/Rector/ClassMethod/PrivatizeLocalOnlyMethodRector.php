@@ -249,18 +249,10 @@ CODE_SAMPLE
     private function hasSymfonyRouteAttrGroup(ClassMethod $classMethod): bool
     {
         foreach ($classMethod->attrGroups as $attrGroup) {
-            if ($attrGroup->attrs === []) {
-                continue;
-            }
-
             foreach ($attrGroup->attrs as $attr) {
-                if (! $attr->name instanceof Name) {
-                    continue;
+                if ($attr->name->toString() === Route::class) {
+                    return true;
                 }
-                if ($attr->name->toString() !== Route::class) {
-                    continue;
-                }
-                return true;
             }
         }
 
