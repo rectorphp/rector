@@ -8,8 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
-use Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRector;
+use Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,16 +19,24 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\ContextGetByTypeToConstructorInjectionRectorTest
  */
-final class ContextGetByTypeToConstructorInjectionRector extends AbstractToConstructorInjectionRector
+final class ContextGetByTypeToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @var TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
 
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
-    {
+    /**
+     * @var DependencyInjectionMethodCallAnalyzer
+     */
+    private $dependencyInjectionMethodCallAnalyzer;
+
+    public function __construct(
+        TestsNodeAnalyzer $testsNodeAnalyzer,
+        DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer
+    ) {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->dependencyInjectionMethodCallAnalyzer = $dependencyInjectionMethodCallAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -103,6 +112,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->processMethodCallNode($node);
+        return $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($node);
     }
 }

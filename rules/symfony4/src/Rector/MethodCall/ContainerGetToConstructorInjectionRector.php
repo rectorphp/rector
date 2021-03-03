@@ -8,8 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRector;
+use Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -17,13 +18,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#console
  * @see \Rector\Symfony4\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\ContainerGetToConstructorInjectionRectorTest
  */
-final class ContainerGetToConstructorInjectionRector extends AbstractToConstructorInjectionRector implements ConfigurableRectorInterface
+final class ContainerGetToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @api
      * @var string
      */
-    public const CONTAINER_AWARE_PARENT_TYPES = '$containerAwareParentTypes';
+    public const CONTAINER_AWARE_PARENT_TYPES = 'container_aware_parent_types';
 
     /**
      * @var string[]
@@ -32,6 +33,16 @@ final class ContainerGetToConstructorInjectionRector extends AbstractToConstruct
         'Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand',
         'Symfony\Bundle\FrameworkBundle\Controller\Controller',
     ];
+
+    /**
+     * @var DependencyInjectionMethodCallAnalyzer
+     */
+    private $dependencyInjectionMethodCallAnalyzer;
+
+    public function __construct(DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer)
+    {
+        $this->dependencyInjectionMethodCallAnalyzer = $dependencyInjectionMethodCallAnalyzer;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -109,7 +120,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->processMethodCallNode($node);
+        return $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($node);
     }
 
     public function configure(array $configuration): void
