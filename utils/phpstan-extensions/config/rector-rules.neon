@@ -23,12 +23,10 @@ services:
                 - Rector\Nette\Rector\Identical\AbstractWithFunctionToNetteUtilsStringsRector
                 - Rector\Php72\Rector\FuncCall\AbstractConvertToAnonymousFunctionRector
                 - Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector
-                - Rector\Symfony3\Rector\MethodCall\AbstractFormAddRector
                 - Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRector
                 - Rector\NetteCodeQuality\Rector\ArrayDimFetch\AbstractArrayDimFetchToAnnotatedControlVariableRector
                 - Rector\DowngradePhp74\Rector\Property\AbstractDowngradeTypedPropertyRector
                 - Rector\Defluent\Rector\AbstractFluentChainMethodCallRector
-                - Rector\NetteKdyby\Rector\ClassMethod\AbstractKdybyEventSubscriberRector
 
     -
         class: Symplify\PHPStanRules\Rules\ServiceAndValueObjectHaveSameStartsRule

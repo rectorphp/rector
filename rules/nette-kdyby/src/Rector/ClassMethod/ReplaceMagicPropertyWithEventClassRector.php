@@ -9,8 +9,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Rector\AbstractRector;
 use Rector\NetteKdyby\DataProvider\EventAndListenerTreeProvider;
 use Rector\NetteKdyby\Naming\EventClassNaming;
+use Rector\NetteKdyby\NodeAnalyzer\GetSubscribedEventsClassMethodAnalyzer;
 use Rector\NetteKdyby\NodeManipulator\ListeningClassMethodArgumentManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -21,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicPropertyWithEventClassRector\ReplaceMagicPropertyWithEventClassRectorTest
  */
-final class ReplaceMagicPropertyWithEventClassRector extends AbstractKdybyEventSubscriberRector
+final class ReplaceMagicPropertyWithEventClassRector extends AbstractRector
 {
     /**
      * @var EventClassNaming
@@ -38,14 +40,21 @@ final class ReplaceMagicPropertyWithEventClassRector extends AbstractKdybyEventS
      */
     private $eventAndListenerTreeProvider;
 
+    /**
+     * @var GetSubscribedEventsClassMethodAnalyzer
+     */
+    private $getSubscribedEventsClassMethodAnalyzer;
+
     public function __construct(
         EventAndListenerTreeProvider $eventAndListenerTreeProvider,
         EventClassNaming $eventClassNaming,
-        ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator
+        ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator,
+        GetSubscribedEventsClassMethodAnalyzer $getSubscribedEventsClassMethodAnalyzer
     ) {
         $this->eventClassNaming = $eventClassNaming;
         $this->listeningClassMethodArgumentManipulator = $listeningClassMethodArgumentManipulator;
         $this->eventAndListenerTreeProvider = $eventAndListenerTreeProvider;
+        $this->getSubscribedEventsClassMethodAnalyzer = $getSubscribedEventsClassMethodAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -110,7 +119,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkipClassMethod($node)) {
+        if ($this->getSubscribedEventsClassMethodAnalyzer->detect($node)) {
             return null;
         }
 
