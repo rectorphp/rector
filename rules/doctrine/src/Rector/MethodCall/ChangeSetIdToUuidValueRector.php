@@ -211,8 +211,8 @@ CODE_SAMPLE
 
     private function createUuidStringNode(): String_
     {
-        $uuidValue = Uuid::v4();
-        return new String_((string) $uuidValue);
+        $uuidV4 = Uuid::v4();
+        return new String_((string) $uuidV4);
     }
 
     private function isUuidType(Expr $expr): bool
