@@ -4,15 +4,42 @@ declare(strict_types=1);
 
 namespace Rector\Utils\DoctrineAnnotationParserSyncer\Rector\StaticCall;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Rector\AbstractTemporaryRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-final class RemoveAnnotationRegistryRegisterFileRector extends AbstractTemporaryRector implements ClassSyncerRectorInterface
+final class RemoveAnnotationRegistryRegisterFileRector extends AbstractRector implements ClassSyncerRectorInterface
 {
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Remove registerFile() static calls from AnnotationParser', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+class AnnotationParser
+{
+    public function run()
+    {
+        Doctrine\Common\Annotations\AnnotationRegistry::registerFile('...');
+    }
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+class AnnotationParser
+{
+    public function run()
+    {
+    }
+}
+CODE_SAMPLE
+            ),
+        ]);
+    }
+
     /**
      * @return array<class-string<\PhpParser\Node>>
      */
@@ -35,7 +62,11 @@ final class RemoveAnnotationRegistryRegisterFileRector extends AbstractTemporary
             return null;
         }
 
-        if (! $this->nodeNameResolver->isStaticCallNamed($node, AnnotationRegistry::class, 'registerFile')) {
+        if (! $this->nodeNameResolver->isStaticCallNamed(
+            $node,
+            'Doctrine\Common\Annotations\AnnotationRegistry',
+            'registerFile'
+        )) {
             return null;
         }
 

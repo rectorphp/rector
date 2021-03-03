@@ -11,6 +11,7 @@ services:
                 - PHPStan\Type\StaticType
                 - Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory
                 - PHPStan\PhpDocParser\Parser\PhpDocParser
+                - Rector\PostRector\Rector\AbstractPostRector
                 # value objects
                 - Rector\Defluent\ValueObject\AbstractRootExpr
                 - Symplify\SetConfigResolver\Provider\AbstractSetProvider

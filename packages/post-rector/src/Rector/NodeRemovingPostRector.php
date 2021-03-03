@@ -8,14 +8,14 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitorAbstract;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
-use Rector\PostRector\Contract\Rector\PostRectorInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-final class NodeRemovingPostRector extends NodeVisitorAbstract implements PostRectorInterface
+final class NodeRemovingPostRector extends AbstractPostRector
 {
     /**
      * @var NodesToRemoveCollector
@@ -105,6 +105,35 @@ final class NodeRemovingPostRector extends NodeVisitorAbstract implements PostRe
         }
 
         return $node;
+    }
+
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Remove nodes from weird positions', [
+            new CodeSample(
+                    <<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function run($value)
+    {
+        if ($value) {
+            return 1;
+        }
+    }
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function run($value)
+    {
+        return 1;
+    }
+}
+CODE_SAMPLE
+                ), ]
+        );
     }
 
     private function isChainMethodCallNodeToBeRemoved(

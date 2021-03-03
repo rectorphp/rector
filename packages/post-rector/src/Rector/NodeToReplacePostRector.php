@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
-use PhpParser\NodeVisitorAbstract;
 use Rector\PostRector\Collector\NodesToReplaceCollector;
-use Rector\PostRector\Contract\Rector\PostRectorInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-final class NodeToReplacePostRector extends NodeVisitorAbstract implements PostRectorInterface
+final class NodeToReplacePostRector extends AbstractPostRector
 {
     /**
      * @var NodesToReplaceCollector
@@ -35,5 +35,32 @@ final class NodeToReplacePostRector extends NodeVisitorAbstract implements PostR
         }
 
         return null;
+    }
+
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Replaces nodes on weird positions', [
+            new CodeSample(
+                    <<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function run($value)
+    {
+        return 1;
+    }
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function run($value)
+    {
+        return $value;
+    }
+}
+CODE_SAMPLE
+            ), ]
+        );
     }
 }

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
-use PhpParser\NodeVisitorAbstract;
 use Rector\PostRector\Collector\NodesToAddCollector;
-use Rector\PostRector\Contract\Rector\PostRectorInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * This class collects all to-be-added expresssions (= 1 line in code)
@@ -20,7 +20,7 @@ use Rector\PostRector\Contract\Rector\PostRectorInterface;
  * - $this->someCall();
  * - $value = this->someNewCall(); // added expression
  */
-final class NodeAddingPostRector extends NodeVisitorAbstract implements PostRectorInterface
+final class NodeAddingPostRector extends AbstractPostRector
 {
     /**
      * @var NodesToAddCollector
@@ -61,5 +61,34 @@ final class NodeAddingPostRector extends NodeVisitorAbstract implements PostRect
         }
 
         return $newNodes;
+    }
+
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Add nodes on weird positions', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function run($value)
+    {
+        return 1;
+    }
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function run($value)
+    {
+        if ($value) {
+            return 1;
+        }
+    }
+}
+CODE_SAMPLE
+            ), ]
+        );
     }
 }
