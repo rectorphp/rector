@@ -126,6 +126,11 @@ CODE_SAMPLE
                 return null;
             }
 
+            if ($node->expr instanceof Ternary && $node->expr->if instanceof LNumber && $node->expr->else instanceof LNumber) {
+                $hasReturn = true;
+                return null;
+            }
+
             // is there return without nesting?
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($this->nodeComparator->areNodesEqual($parentNode, $classMethod)) {
