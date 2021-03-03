@@ -7,7 +7,6 @@ namespace Rector\Transform\Tests\Rector\Class_\CommunityTestCaseRector;
 use Iterator;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\Class_\CommunityTestCaseRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -35,8 +34,8 @@ final class CommunityTestCaseRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return CommunityTestCaseRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

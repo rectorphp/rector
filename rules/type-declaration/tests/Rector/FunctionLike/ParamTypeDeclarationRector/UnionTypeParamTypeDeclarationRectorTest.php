@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationR
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UnionTypeParamTypeDeclarationRectorTest extends AbstractRectorTestCase
@@ -24,8 +23,8 @@ final class UnionTypeParamTypeDeclarationRectorTest extends AbstractRectorTestCa
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureUnionType');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ParamTypeDeclarationRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

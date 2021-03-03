@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DoctrineCodeQuality\Tests\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector;
 
 use Iterator;
-use Rector\DoctrineCodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ImproveDoctrineCollectionDocTypeInEntityRectorTest extends AbstractR
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ImproveDoctrineCollectionDocTypeInEntityRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Laravel\Tests\Rector\New_\MakeTaggedPassedToParameterIterableTypeRector;
 
 use Iterator;
-use Rector\Laravel\Rector\New_\MakeTaggedPassedToParameterIterableTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class MakeTaggedPassedToParameterIterableTypeRectorTest extends AbstractRe
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return MakeTaggedPassedToParameterIterableTypeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

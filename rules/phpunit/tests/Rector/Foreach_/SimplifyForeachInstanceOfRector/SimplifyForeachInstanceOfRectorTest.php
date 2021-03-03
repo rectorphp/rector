@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\Foreach_\SimplifyForeachInstanceOfRector;
 
 use Iterator;
-use Rector\PHPUnit\Rector\Foreach_\SimplifyForeachInstanceOfRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class SimplifyForeachInstanceOfRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SimplifyForeachInstanceOfRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

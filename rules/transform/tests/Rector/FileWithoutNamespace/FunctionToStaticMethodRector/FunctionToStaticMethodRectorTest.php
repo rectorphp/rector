@@ -6,7 +6,6 @@ namespace Rector\Transform\Tests\Rector\FileWithoutNamespace\FunctionToStaticMet
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\FileWithoutNamespace\FunctionToStaticMethodRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FunctionToStaticMethodRectorTest extends AbstractRectorTestCase
@@ -25,8 +24,8 @@ final class FunctionToStaticMethodRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return FunctionToStaticMethodRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

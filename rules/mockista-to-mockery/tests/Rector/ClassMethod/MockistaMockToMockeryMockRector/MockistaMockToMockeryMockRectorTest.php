@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\MockistaToMockery\Tests\Rector\ClassMethod\MockistaMockToMockeryMockRector;
 
 use Iterator;
-use Rector\MockistaToMockery\Rector\ClassMethod\MockistaMockToMockeryMockRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class MockistaMockToMockeryMockRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return MockistaMockToMockeryMockRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

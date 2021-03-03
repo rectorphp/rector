@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony4\Tests\Rector\New_\RootNodeTreeBuilderRector;
 
 use Iterator;
-use Rector\Symfony4\Rector\New_\RootNodeTreeBuilderRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RootNodeTreeBuilderRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RootNodeTreeBuilderRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

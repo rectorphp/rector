@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector\Source;
 
+use Ramsey\Uuid\UuidInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,7 +14,7 @@ class Building
 {
     private $id;
 
-    public function getId(): \Ramsey\Uuid\UuidInterface
+    public function getId(): UuidInterface
     {
         return $this->id;
     }

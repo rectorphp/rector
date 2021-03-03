@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Tests\Rector\Catch_\DowngradeNonCapturingCatchesRector;
 
 use Iterator;
-use Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -25,8 +24,8 @@ final class DowngradeNonCapturingCatchesRectorTest extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return DowngradeNonCapturingCatchesRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

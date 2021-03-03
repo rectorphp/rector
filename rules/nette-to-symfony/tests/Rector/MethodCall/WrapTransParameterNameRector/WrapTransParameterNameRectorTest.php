@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRector;
 
 use Iterator;
-use Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class WrapTransParameterNameRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return WrapTransParameterNameRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

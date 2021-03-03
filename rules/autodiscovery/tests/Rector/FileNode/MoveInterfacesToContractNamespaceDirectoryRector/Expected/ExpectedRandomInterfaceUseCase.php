@@ -8,9 +8,9 @@ use Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNamespace
 
 class RandomInterfaceUseCase
 {
-    public \Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector\Source\Contract\RandomInterface $random;
+    public RandomInterface $random;
 
-    public function create(): \Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector\Source\Contract\RandomInterface
+    public function create(): RandomInterface
     {
     }
 }

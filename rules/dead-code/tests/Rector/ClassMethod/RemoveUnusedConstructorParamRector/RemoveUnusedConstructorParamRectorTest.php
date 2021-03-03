@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
 
 use Iterator;
-use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RemoveUnusedConstructorParamRectorTest extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveUnusedConstructorParamRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

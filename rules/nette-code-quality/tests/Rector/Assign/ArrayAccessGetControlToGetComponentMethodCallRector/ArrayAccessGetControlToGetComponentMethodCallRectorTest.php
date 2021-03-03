@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NetteCodeQuality\Tests\Rector\Assign\ArrayAccessGetControlToGetComponentMethodCallRector;
 
 use Iterator;
-use Rector\NetteCodeQuality\Rector\Assign\ArrayAccessGetControlToGetComponentMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ArrayAccessGetControlToGetComponentMethodCallRectorTest extends Abst
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ArrayAccessGetControlToGetComponentMethodCallRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

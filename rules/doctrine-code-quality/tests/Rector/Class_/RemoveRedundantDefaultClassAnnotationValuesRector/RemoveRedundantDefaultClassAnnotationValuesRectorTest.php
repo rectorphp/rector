@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DoctrineCodeQuality\Tests\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector;
 
 use Iterator;
-use Rector\DoctrineCodeQuality\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RemoveRedundantDefaultClassAnnotationValuesRectorTest extends Abstra
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveRedundantDefaultClassAnnotationValuesRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php71\Tests\Rector\ClassConst\PublicConstantVisibilityRector;
 
 use Iterator;
-use Rector\Php71\Rector\ClassConst\PublicConstantVisibilityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class PublicConstantVisibilityRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return PublicConstantVisibilityRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
 
 use Iterator;
-use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class UnwrapFutureCompatibleIfPhpVersionRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return UnwrapFutureCompatibleIfPhpVersionRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

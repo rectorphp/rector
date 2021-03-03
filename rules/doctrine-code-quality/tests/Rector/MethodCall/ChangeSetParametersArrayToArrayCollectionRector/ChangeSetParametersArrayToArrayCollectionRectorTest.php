@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DoctrineCodeQuality\Tests\Rector\MethodCall\ChangeSetParametersArrayToArrayCollectionRector;
 
 use Iterator;
-use Rector\DoctrineCodeQuality\Rector\MethodCall\ChangeSetParametersArrayToArrayCollectionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ChangeSetParametersArrayToArrayCollectionRectorTest extends Abstract
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ChangeSetParametersArrayToArrayCollectionRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

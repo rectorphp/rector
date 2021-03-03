@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony3\Tests\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
 
 use Iterator;
-use Rector\Symfony3\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RemoveDefaultGetBlockPrefixRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveDefaultGetBlockPrefixRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

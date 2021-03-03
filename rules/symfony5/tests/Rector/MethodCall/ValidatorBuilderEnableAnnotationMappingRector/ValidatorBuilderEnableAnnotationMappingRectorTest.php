@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony5\Tests\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRector;
 
 use Iterator;
-use Rector\Symfony5\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ValidatorBuilderEnableAnnotationMappingRectorTest extends AbstractRe
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ValidatorBuilderEnableAnnotationMappingRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

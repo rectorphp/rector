@@ -16,7 +16,6 @@ use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Testing\Application\EnabledRectorClassProvider;
 
 final class RectorNodeTraverser extends NodeTraverser
 {
@@ -24,11 +23,6 @@ final class RectorNodeTraverser extends NodeTraverser
      * @var PhpRectorInterface[]
      */
     private $allPhpRectors = [];
-
-    /**
-     * @var EnabledRectorClassProvider
-     */
-    private $enabledRectorClassProvider;
 
     /**
      * @var NodeFinder
@@ -51,7 +45,6 @@ final class RectorNodeTraverser extends NodeTraverser
     private $areNodeVisitorsPrepared = false;
 
     public function __construct(
-        EnabledRectorClassProvider $enabledRectorClassProvider,
         Configuration $configuration,
         ActiveRectorsProvider $activeRectorsProvider,
         NodeFinder $nodeFinder,
@@ -61,7 +54,6 @@ final class RectorNodeTraverser extends NodeTraverser
         $phpRectors = $activeRectorsProvider->provideByType(PhpRectorInterface::class);
 
         $this->allPhpRectors = $phpRectors;
-        $this->enabledRectorClassProvider = $enabledRectorClassProvider;
         $this->nodeFinder = $nodeFinder;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->configuration = $configuration;
@@ -73,10 +65,6 @@ final class RectorNodeTraverser extends NodeTraverser
     public function traverseFileNode(FileNode $fileNode): array
     {
         $this->prepareNodeVisitors();
-
-        if ($this->enabledRectorClassProvider->isConfigured()) {
-            $this->activateEnabledRectorOnly();
-        }
 
         if (! $this->hasFileNodeRectorsEnabled()) {
             return [];
@@ -97,10 +85,6 @@ final class RectorNodeTraverser extends NodeTraverser
     public function traverse(array $nodes): array
     {
         $this->prepareNodeVisitors();
-
-        if ($this->enabledRectorClassProvider->isConfigured()) {
-            $this->activateEnabledRectorOnly();
-        }
 
         $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
         if (! $hasNamespace && $nodes !== []) {
@@ -137,24 +121,6 @@ final class RectorNodeTraverser extends NodeTraverser
         });
 
         return count($zeroCacheRectors);
-    }
-
-    /**
-     * Mostly used for testing
-     */
-    private function activateEnabledRectorOnly(): void
-    {
-        $this->visitors = [];
-
-        $enabledRectorClass = $this->enabledRectorClassProvider->getEnabledRectorClass();
-        foreach ($this->allPhpRectors as $phpRector) {
-            if (! is_a($phpRector, $enabledRectorClass, true)) {
-                continue;
-            }
-
-            $this->addVisitor($phpRector);
-            break;
-        }
     }
 
     private function hasFileNodeRectorsEnabled(): bool

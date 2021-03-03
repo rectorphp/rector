@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeStaticTypeDeclarationRector;
 
 use Iterator;
-use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeStaticTypeDeclarationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -25,8 +24,8 @@ final class DowngradeStaticTypeDeclarationRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return DowngradeStaticTypeDeclarationRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

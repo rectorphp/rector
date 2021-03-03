@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Naming\Tests\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector;
 
 use Iterator;
-use Rector\Naming\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class MakeGetterClassMethodNameStartWithGetRectorTest extends AbstractRect
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return MakeGetterClassMethodNameStartWithGetRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

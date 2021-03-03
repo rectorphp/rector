@@ -2,6 +2,9 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Source;
 
+use Countable;
+use IteratorAggregate;
+use ArrayAccess;
 use ArrayIterator;
 use Closure;
 use Doctrine\Common\Collections\Expr\ClosureExpressionVisitor;
@@ -24,7 +27,7 @@ use function reset;
 use function spl_object_hash;
 use function uasort;
 
-class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
+class Collection implements Countable, IteratorAggregate, ArrayAccess
 {
     /**
      * {@inheritDoc}

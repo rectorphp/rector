@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php55\Tests\Rector\FuncCall\PregReplaceEModifierRector;
 
 use Iterator;
-use Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class PregReplaceEModifierRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return PregReplaceEModifierRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Nette\Tests\Rector\NotIdentical\StrposToStringsContainsRector;
 
 use Iterator;
-use Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class StrposToStringsContainsRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return StrposToStringsContainsRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

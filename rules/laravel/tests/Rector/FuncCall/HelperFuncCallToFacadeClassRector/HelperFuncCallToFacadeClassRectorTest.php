@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Laravel\Tests\Rector\FuncCall\HelperFuncCallToFacadeClassRector;
 
 use Iterator;
-use Rector\Laravel\Rector\FuncCall\HelperFuncCallToFacadeClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class HelperFuncCallToFacadeClassRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return HelperFuncCallToFacadeClassRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

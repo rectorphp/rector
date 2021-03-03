@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertComparisonToSpecificMethodRector;
 
 use Iterator;
-use Rector\PHPUnit\Rector\MethodCall\AssertComparisonToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class AssertComparisonToSpecificMethodRectorTest extends AbstractRectorTes
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return AssertComparisonToSpecificMethodRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

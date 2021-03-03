@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony4\Tests\Rector\MethodCall\ProcessBuilderGetProcessRector;
 
 use Iterator;
-use Rector\Symfony4\Rector\MethodCall\ProcessBuilderGetProcessRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ProcessBuilderGetProcessRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ProcessBuilderGetProcessRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

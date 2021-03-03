@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Tests\Rector\Assign\SplitListAssignToSeparateLineRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class SplitListAssignToSeparateLineRectorTest extends AbstractRectorTestCa
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SplitListAssignToSeparateLineRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

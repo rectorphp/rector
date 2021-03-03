@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\BinaryOp\ResponseStatusCodeRector;
 
 use Iterator;
-use Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ResponseStatusCodeRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ResponseStatusCodeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

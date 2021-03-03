@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedPrivateConstantRector;
 
 use Iterator;
-use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RemoveUnusedPrivateConstantRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveUnusedPrivateConstantRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

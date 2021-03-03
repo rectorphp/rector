@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Defluent\Tests\Rector\ClassMethod\ReturnThisRemoveRector;
 
 use Iterator;
-use Rector\Defluent\Rector\ClassMethod\ReturnThisRemoveRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ReturnThisRemoveRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

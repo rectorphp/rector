@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php52\Tests\Rector\Property\VarToPublicPropertyRector;
 
 use Iterator;
-use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class VarToPublicPropertyRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return VarToPublicPropertyRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

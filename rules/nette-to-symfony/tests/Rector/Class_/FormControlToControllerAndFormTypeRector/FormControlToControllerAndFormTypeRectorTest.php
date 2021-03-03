@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NetteToSymfony\Tests\Rector\Class_\FormControlToControllerAndFormTypeRector;
 
 use Iterator;
-use Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -32,8 +31,8 @@ final class FormControlToControllerAndFormTypeRectorTest extends AbstractRectorT
         ];
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return FormControlToControllerAndFormTypeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

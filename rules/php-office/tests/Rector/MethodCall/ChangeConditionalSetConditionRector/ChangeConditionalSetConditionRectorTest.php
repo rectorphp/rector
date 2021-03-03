@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\ChangeConditionalSetConditionRector;
 
 use Iterator;
-use Rector\PHPOffice\Rector\MethodCall\ChangeConditionalSetConditionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ChangeConditionalSetConditionRectorTest extends AbstractRectorTestCa
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ChangeConditionalSetConditionRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

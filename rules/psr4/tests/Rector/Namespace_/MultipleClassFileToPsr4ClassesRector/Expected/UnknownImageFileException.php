@@ -10,6 +10,6 @@ namespace NettePostfixedToUniqueAutoload\Utils;
 /**
  * The exception that indicates invalid image file.
  */
-class UnknownImageFileException extends \NettePostfixedToUniqueAutoload\Utils\RegexpException
+class UnknownImageFileException extends RegexpException
 {
 }

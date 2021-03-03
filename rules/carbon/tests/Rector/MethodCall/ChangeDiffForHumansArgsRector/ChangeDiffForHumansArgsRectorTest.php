@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Carbon\Tests\Rector\MethodCall\ChangeDiffForHumansArgsRector;
 
 use Iterator;
-use Rector\Carbon\Rector\MethodCall\ChangeDiffForHumansArgsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ChangeDiffForHumansArgsRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ChangeDiffForHumansArgsRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

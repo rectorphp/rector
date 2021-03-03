@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\SymfonyCodeQuality\Tests\Rector\Attribute\ExtractAttributeRouteNameConstantsRector;
 
 use Iterator;
-use Rector\SymfonyCodeQuality\Rector\Attribute\ExtractAttributeRouteNameConstantsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -35,8 +34,8 @@ final class ExtractAttributeRouteNameConstantsRectorTest extends AbstractRectorT
         ];
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ExtractAttributeRouteNameConstantsRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

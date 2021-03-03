@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Privatization\Tests\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
 
 use Iterator;
-use Rector\Privatization\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class MakeUnusedClassesWithChildrenAbstractRectorTest extends AbstractRect
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return MakeUnusedClassesWithChildrenAbstractRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

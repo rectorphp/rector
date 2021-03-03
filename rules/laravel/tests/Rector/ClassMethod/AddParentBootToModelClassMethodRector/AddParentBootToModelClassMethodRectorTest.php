@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Laravel\Tests\Rector\ClassMethod\AddParentBootToModelClassMethodRector;
 
 use Iterator;
-use Rector\Laravel\Rector\ClassMethod\AddParentBootToModelClassMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class AddParentBootToModelClassMethodRectorTest extends AbstractRectorTest
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return AddParentBootToModelClassMethodRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

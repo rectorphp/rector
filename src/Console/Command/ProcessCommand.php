@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Console\Command;
 
 use Rector\Caching\Detector\ChangedFilesDetector;
+use Rector\Caching\Invalidation\CommandCacheInvalidator;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Composer\Processor\ComposerProcessor;
@@ -88,6 +89,11 @@ final class ProcessCommand extends AbstractCommand
      */
     private $phpFilesFinder;
 
+    /**
+     * @var CommandCacheInvalidator
+     */
+    private $commandCacheInvalidator;
+
     public function __construct(
         AdditionalAutoloader $additionalAutoloader,
         ChangedFilesDetector $changedFilesDetector,
@@ -101,7 +107,8 @@ final class ProcessCommand extends AbstractCommand
         RectorNodeTraverser $rectorNodeTraverser,
         SymfonyStyle $symfonyStyle,
         ComposerProcessor $composerProcessor,
-        PhpFilesFinder $phpFilesFinder
+        PhpFilesFinder $phpFilesFinder,
+        CommandCacheInvalidator $commandCacheInvalidator
     ) {
         $this->filesFinder = $filesFinder;
         $this->additionalAutoloader = $additionalAutoloader;
@@ -116,6 +123,7 @@ final class ProcessCommand extends AbstractCommand
         $this->symfonyStyle = $symfonyStyle;
         $this->composerProcessor = $composerProcessor;
         $this->phpFilesFinder = $phpFilesFinder;
+        $this->commandCacheInvalidator = $commandCacheInvalidator;
 
         parent::__construct();
     }

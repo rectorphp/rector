@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Tests\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class SimplifyEmptyArrayCheckRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SimplifyEmptyArrayCheckRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

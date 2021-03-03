@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Tests\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class SplitStringClassConstantToClassConstFetchRectorTest extends Abstract
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SplitStringClassConstantToClassConstFetchRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

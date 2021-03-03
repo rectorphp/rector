@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -29,8 +28,8 @@ final class SimplifyUselessVariableRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SimplifyUselessVariableRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

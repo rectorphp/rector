@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Tests\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class DateTimeToDateTimeInterfaceRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return DateTimeToDateTimeInterfaceRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

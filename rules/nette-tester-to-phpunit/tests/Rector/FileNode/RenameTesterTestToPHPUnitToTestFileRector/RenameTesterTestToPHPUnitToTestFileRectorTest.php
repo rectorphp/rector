@@ -6,7 +6,6 @@ namespace Rector\NetteTesterToPHPUnit\Tests\Rector\FileNode\RenameTesterTestToPH
 
 use Iterator;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use Rector\NetteTesterToPHPUnit\Rector\FileNode\RenameTesterTestToPHPUnitToTestFileRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -35,8 +34,8 @@ final class RenameTesterTestToPHPUnitToTestFileRectorTest extends AbstractRector
         ];
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RenameTesterTestToPHPUnitToTestFileRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

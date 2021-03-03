@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\If_\RemoveDeadInstanceOfRector;
 
 use Iterator;
-use Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RemoveDeadInstanceOfRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveDeadInstanceOfRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

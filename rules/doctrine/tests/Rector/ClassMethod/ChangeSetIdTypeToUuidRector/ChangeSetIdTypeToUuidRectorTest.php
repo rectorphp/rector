@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeSetIdTypeToUuidRector;
 
 use Iterator;
-use Rector\Doctrine\Rector\ClassMethod\ChangeSetIdTypeToUuidRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ChangeSetIdTypeToUuidRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ChangeSetIdTypeToUuidRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\PHPUnit\Tests\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector\Source;
 
+use Throwable;
 final class Denormalizer
 {
     /**
@@ -20,7 +21,7 @@ final class Denormalizer
     {
         try {
             return $this->denormalizer->denormalize($data, $type);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             return null;
         }
     }

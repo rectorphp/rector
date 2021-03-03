@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Order\Tests\Rector\Class_\OrderFirstLevelClassStatementsRector;
 
 use Iterator;
-use Rector\Order\Rector\Class_\OrderFirstLevelClassStatementsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class OrderFirstLevelClassStatementsRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return OrderFirstLevelClassStatementsRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

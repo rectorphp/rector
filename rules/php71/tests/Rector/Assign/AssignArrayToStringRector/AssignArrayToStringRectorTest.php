@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector;
 
 use Iterator;
-use Rector\Php71\Rector\Assign\AssignArrayToStringRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class AssignArrayToStringRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return AssignArrayToStringRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

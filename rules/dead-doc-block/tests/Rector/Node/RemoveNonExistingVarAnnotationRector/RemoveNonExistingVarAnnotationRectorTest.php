@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DeadDocBlock\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector;
 
 use Iterator;
-use Rector\DeadDocBlock\Rector\Node\RemoveNonExistingVarAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RemoveNonExistingVarAnnotationRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveNonExistingVarAnnotationRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Tests\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector;
 
 use Iterator;
-use Rector\DowngradePhp74\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -25,8 +24,8 @@ final class DowngradeStripTagsCallWithArrayRectorTest extends AbstractRectorTest
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return DowngradeStripTagsCallWithArrayRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

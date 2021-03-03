@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertResourceToClosedResourceRector;
 
 use Iterator;
-use Rector\PHPUnit\Rector\MethodCall\AssertResourceToClosedResourceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class AssertResourceToClosedResourceRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return AssertResourceToClosedResourceRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

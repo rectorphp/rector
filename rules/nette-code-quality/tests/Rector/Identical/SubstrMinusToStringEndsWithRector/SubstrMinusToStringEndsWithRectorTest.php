@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NetteCodeQuality\Tests\Rector\Identical\SubstrMinusToStringEndsWithRector;
 
 use Iterator;
-use Rector\NetteCodeQuality\Rector\Identical\SubstrMinusToStringEndsWithRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class SubstrMinusToStringEndsWithRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SubstrMinusToStringEndsWithRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

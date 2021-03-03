@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony2\Tests\Rector\MethodCall\AddFlashRector;
 
 use Iterator;
-use Rector\Symfony2\Rector\MethodCall\AddFlashRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class AddFlashRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return AddFlashRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

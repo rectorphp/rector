@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector;
 
 use Iterator;
-use Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -25,8 +24,8 @@ final class DowngradeCovariantReturnTypeRectorTest extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return DowngradeCovariantReturnTypeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

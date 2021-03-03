@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodeQualityStrict\Tests\Rector\ClassMethod\ParamTypeToAssertTypeRector;
 
 use Iterator;
-use Rector\CodeQualityStrict\Rector\ClassMethod\ParamTypeToAssertTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ParamTypeToAssertTypeRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ParamTypeToAssertTypeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

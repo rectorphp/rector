@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Nette\Tests\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector;
 
 use Iterator;
-use Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class SubstrStrlenFunctionToNetteUtilsStringsRectorTest extends AbstractRe
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SubstrStrlenFunctionToNetteUtilsStringsRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

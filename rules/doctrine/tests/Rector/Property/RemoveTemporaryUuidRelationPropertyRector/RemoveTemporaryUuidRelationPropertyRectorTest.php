@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Tests\Rector\Property\RemoveTemporaryUuidRelationPropertyRector;
 
 use Iterator;
-use Rector\Doctrine\Rector\Property\RemoveTemporaryUuidRelationPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RemoveTemporaryUuidRelationPropertyRectorTest extends AbstractRector
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveTemporaryUuidRelationPropertyRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

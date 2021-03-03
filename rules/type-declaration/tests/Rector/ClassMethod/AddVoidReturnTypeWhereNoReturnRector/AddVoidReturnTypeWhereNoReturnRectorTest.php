@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddVoidReturnTypeWhere
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddVoidReturnTypeWhereNoReturnRectorTest extends AbstractRectorTestCase
@@ -24,8 +23,8 @@ final class AddVoidReturnTypeWhereNoReturnRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return AddVoidReturnTypeWhereNoReturnRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php70\Tests\Rector\Ternary\TernaryToNullCoalescingRector;
 
 use Iterator;
-use Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -29,8 +28,8 @@ final class TernaryToNullCoalescingRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return TernaryToNullCoalescingRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

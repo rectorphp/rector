@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\StrictArraySearchRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class StrictArraySearchRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return StrictArraySearchRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

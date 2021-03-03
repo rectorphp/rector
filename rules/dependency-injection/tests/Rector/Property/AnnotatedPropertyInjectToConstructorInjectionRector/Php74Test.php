@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector;
 
 use Iterator;
-use Rector\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -25,8 +24,8 @@ final class Php74Test extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp74');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return AnnotatedPropertyInjectToConstructorInjectionRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector;
 
-use Rector\NetteKdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -17,8 +16,8 @@ final class ReplaceEventManagerWithEventSubscriberRectorTest extends AbstractRec
         $this->doTestExtraFile('Event/SomeClassCopyEvent.php', __DIR__ . '/Source/ExpectedSomeClassCopyEvent.php');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ReplaceEventManagerWithEventSubscriberRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

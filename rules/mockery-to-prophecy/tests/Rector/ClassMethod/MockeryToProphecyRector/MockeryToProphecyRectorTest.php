@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\MockeryToProphecy\Tests\Rector\ClassMethod\MockeryToProphecyRector;
 
 use Iterator;
-use Rector\MockeryToProphecy\Rector\ClassMethod\MockeryCreateMockToProphizeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class MockeryToProphecyRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return MockeryCreateMockToProphizeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

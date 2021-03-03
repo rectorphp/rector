@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeR
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddArrayReturnDocTypeRectorTest extends AbstractRectorTestCase
@@ -24,8 +23,8 @@ final class AddArrayReturnDocTypeRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return AddArrayReturnDocTypeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

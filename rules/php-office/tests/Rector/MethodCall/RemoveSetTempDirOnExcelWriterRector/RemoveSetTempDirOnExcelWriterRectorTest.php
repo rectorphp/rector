@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\RemoveSetTempDirOnExcelWriterRector;
 
 use Iterator;
-use Rector\PHPOffice\Rector\MethodCall\RemoveSetTempDirOnExcelWriterRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RemoveSetTempDirOnExcelWriterRectorTest extends AbstractRectorTestCa
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveSetTempDirOnExcelWriterRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

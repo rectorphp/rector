@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Restoration\Tests\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector;
 
 use Iterator;
-use Rector\Restoration\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -26,8 +25,8 @@ final class UpdateFileNameByClassNameFileSystemRectorTest extends AbstractRector
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return UpdateFileNameByClassNameFileSystemRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

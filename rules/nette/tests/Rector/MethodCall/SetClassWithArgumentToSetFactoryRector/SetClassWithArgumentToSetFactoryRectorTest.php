@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Nette\Tests\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
 
 use Iterator;
-use Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class SetClassWithArgumentToSetFactoryRectorTest extends AbstractRectorTes
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SetClassWithArgumentToSetFactoryRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }
