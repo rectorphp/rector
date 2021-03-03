@@ -9,6 +9,9 @@ use Rector\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @backupGlobals disabled
+ */
 final class Php8Test extends AbstractRectorTestCase
 {
     /**
