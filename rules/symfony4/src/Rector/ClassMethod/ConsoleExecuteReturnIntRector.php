@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony4\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Ternary;
@@ -110,10 +111,7 @@ CODE_SAMPLE
             }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Return_ && $this->nodeComparator->areNodesEqual(
-                $parentNode->expr,
-                $node
-            ) && $node instanceof Int_) {
+            if ($this->isAReturnWithExprIntEquals($parentNode, $node)) {
                 $hasReturn = true;
                 return null;
             }
@@ -126,8 +124,12 @@ CODE_SAMPLE
                 return null;
             }
 
+            if ($node->expr instanceof Ternary && $this->isIntegerTernaryIfElse($node->expr)) {
+                $hasReturn = true;
+                return null;
+            }
+
             // is there return without nesting?
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($this->nodeComparator->areNodesEqual($parentNode, $classMethod)) {
                 $hasReturn = true;
             }
@@ -137,11 +139,41 @@ CODE_SAMPLE
             return null;
         });
 
+        $this->processReturn0ToMethod($hasReturn, $classMethod);
+    }
+
+    private function isIntegerTernaryIfElse(Ternary $ternary): bool
+    {
+        /** @var Expr $if */
+        $if = $ternary->if;
+        /** @var Expr $else */
+        $else = $ternary->else;
+        $ifType = $this->getStaticType($if);
+        $elseType = $this->getStaticType($else);
+
+        return $ifType instanceof IntegerType && $elseType instanceof IntegerType;
+    }
+
+    private function processReturn0ToMethod(bool $hasReturn, ClassMethod $classMethod): void
+    {
         if ($hasReturn) {
             return;
         }
 
         $classMethod->stmts[] = new Return_(new LNumber(0));
+    }
+
+    private function isAReturnWithExprIntEquals(?Node $parentNode, Node $node): bool
+    {
+        if (! $parentNode instanceof Return_) {
+            return false;
+        }
+
+        if (! $this->nodeComparator->areNodesEqual($parentNode->expr, $node)) {
+            return false;
+        }
+
+        return $node instanceof Int_;
     }
 
     private function setReturnTo0InsteadOfNull(Return_ $return): void
