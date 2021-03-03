@@ -608,3 +608,4 @@ parameters:
         - '#Content of method "getIfNextReturn\(\)" is duplicated with method "getIfNextReturn\(\)" in "Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory" class\. Use unique content or service instead#'
         - '#Content of method "matchReturnMethodCall\(\)" is duplicated with method "matchReturnMethodCall\(\)" in "Rector\\Defluent\\Rector\\Return_\\ReturnFluentChainMethodCallToNormalMethodCallRector" class\. Use unique content or service instead#'
         - '#Content of method "matchReturnMethodCall\(\)" is duplicated with method "matchReturnMethodCall\(\)" in "Rector\\Defluent\\Rector\\Return_\\ReturnNewFluentChainMethodCallToNonFluentRector" class\. Use unique content or service instead#'
+        - '#Content of method "decoratePropertyWithDocBlock\(\)" is duplicated with method "decoratePropertyWithDocBlock\(\)" in "Rector\\DowngradePhp74\\Rector\\Property\\DowngradeTypedPropertyRector" class\. Use unique content or service instead#'
