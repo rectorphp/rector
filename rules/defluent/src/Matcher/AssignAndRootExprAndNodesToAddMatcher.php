@@ -2,15 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Defluent\Rector;
+namespace Rector\Defluent\Matcher;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallRootExtractor;
 use Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer;
@@ -18,24 +12,23 @@ use Rector\Defluent\NodeFactory\NonFluentChainMethodCallFactory;
 use Rector\Defluent\Skipper\FluentMethodCallSkipper;
 use Rector\Defluent\ValueObject\AssignAndRootExpr;
 use Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
-abstract class AbstractFluentChainMethodCallRector extends AbstractRector
+final class AssignAndRootExprAndNodesToAddMatcher
 {
     /**
      * @var FluentChainMethodCallNodeAnalyzer
      */
-    protected $fluentChainMethodCallNodeAnalyzer;
+    private $fluentChainMethodCallNodeAnalyzer;
 
     /**
      * @var NonFluentChainMethodCallFactory
      */
-    protected $nonFluentChainMethodCallFactory;
+    private $nonFluentChainMethodCallFactory;
 
     /**
      * @var FluentMethodCallSkipper
      */
-    protected $fluentMethodCallSkipper;
+    private $fluentMethodCallSkipper;
 
     /**
      * @var FluentChainMethodCallRootExtractor
@@ -47,16 +40,13 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
      */
     private $sameClassMethodCallAnalyzer;
 
-    /**
-     * @required
-     */
-    public function autowireAbstractFluentChainMethodCallRector(
+    public function __construct(
         FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
         FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor,
         NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory,
         SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer,
         FluentMethodCallSkipper $fluentMethodCallSkipper
-    ): void {
+    ) {
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
         $this->fluentChainMethodCallRootExtractor = $fluentChainMethodCallRootExtractor;
         $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
@@ -64,10 +54,8 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
         $this->fluentMethodCallSkipper = $fluentMethodCallSkipper;
     }
 
-    protected function createStandaloneNodesToAddFromChainMethodCalls(
-        MethodCall $methodCall,
-        string $kind
-    ): ?AssignAndRootExprAndNodesToAdd {
+    public function match(MethodCall $methodCall, string $kind): ?AssignAndRootExprAndNodesToAdd
+    {
         $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
         if (! $this->sameClassMethodCallAnalyzer->haveSingleClass($chainMethodCalls)) {
             return null;
@@ -93,57 +81,5 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractRector
         );
 
         return new AssignAndRootExprAndNodesToAdd($assignAndRootExpr, $nodesToAdd);
-    }
-
-    /**
-     * @param MethodCall|Return_ $node
-     */
-    protected function removeCurrentNode(Node $node): void
-    {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Assign) {
-            $this->removeNode($parent);
-            return;
-        }
-
-        // part of method call
-        if ($parent instanceof Arg) {
-            $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentParent instanceof MethodCall) {
-                $this->removeNode($parentParent);
-            }
-
-            return;
-        }
-
-        $this->removeNode($node);
-    }
-
-    protected function shouldSkipMethodCall(MethodCall $methodCall): bool
-    {
-        return $this->fluentMethodCallSkipper->shouldSkipRootMethodCall($methodCall);
-    }
-
-    protected function matchReturnMethodCall(Return_ $return): ?MethodCall
-    {
-        if ($return->expr === null) {
-            return null;
-        }
-
-        if (! $return->expr instanceof MethodCall) {
-            return null;
-        }
-
-        return $return->expr;
-    }
-
-    protected function shouldSkipMethodCallIncludingNew(MethodCall $methodCall): bool
-    {
-        if ($this->shouldSkipMethodCall($methodCall)) {
-            return true;
-        }
-
-        $chainRootExpr = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($methodCall);
-        return $chainRootExpr instanceof New_;
     }
 }

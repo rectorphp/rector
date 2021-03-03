@@ -9,9 +9,12 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\Defluent\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer;
+use Rector\Defluent\NodeFactory\NonFluentChainMethodCallFactory;
 use Rector\Defluent\NodeFactory\VariableFromNewFactory;
-use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
+use Rector\Defluent\Skipper\FluentMethodCallSkipper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -20,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Defluent\Tests\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector\MethodCallOnSetterMethodCallToStandaloneAssignRectorTest
  */
-final class MethodCallOnSetterMethodCallToStandaloneAssignRector extends AbstractFluentChainMethodCallRector
+final class MethodCallOnSetterMethodCallToStandaloneAssignRector extends AbstractRector
 {
     /**
      * @var NewFluentChainMethodCallNodeAnalyzer
@@ -32,12 +35,33 @@ final class MethodCallOnSetterMethodCallToStandaloneAssignRector extends Abstrac
      */
     private $variableFromNewFactory;
 
+    /**
+     * @var NonFluentChainMethodCallFactory
+     */
+    private $nonFluentChainMethodCallFactory;
+
+    /**
+     * @var FluentMethodCallSkipper
+     */
+    private $fluentMethodCallSkipper;
+
+    /**
+     * @var FluentChainMethodCallNodeAnalyzer
+     */
+    private $fluentChainMethodCallNodeAnalyzer;
+
     public function __construct(
         NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer,
-        VariableFromNewFactory $variableFromNewFactory
+        VariableFromNewFactory $variableFromNewFactory,
+        NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory,
+        FluentMethodCallSkipper $fluentMethodCallSkipper,
+        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
     ) {
         $this->newFluentChainMethodCallNodeAnalyzer = $newFluentChainMethodCallNodeAnalyzer;
         $this->variableFromNewFactory = $variableFromNewFactory;
+        $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
+        $this->fluentMethodCallSkipper = $fluentMethodCallSkipper;
+        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -93,7 +117,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkipMethodCall($node)) {
+        if ($this->fluentMethodCallSkipper->shouldSkipRootMethodCall($node)) {
             return null;
         }
 

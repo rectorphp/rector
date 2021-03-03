@@ -8,10 +8,13 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher;
+use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\Defluent\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer;
 use Rector\Defluent\NodeFactory\FluentMethodCallAsArgFactory;
+use Rector\Defluent\NodeFactory\NonFluentChainMethodCallFactory;
 use Rector\Defluent\NodeFactory\VariableFromNewFactory;
-use Rector\Defluent\Rector\AbstractFluentChainMethodCallRector;
 use Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd;
 use Rector\Defluent\ValueObject\FluentCallsKind;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -23,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Defluent\Tests\Rector\MethodCall\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest
  */
-final class InArgFluentChainMethodCallToStandaloneMethodCallRector extends AbstractFluentChainMethodCallRector
+final class InArgFluentChainMethodCallToStandaloneMethodCallRector extends AbstractRector
 {
     /**
      * @var NewFluentChainMethodCallNodeAnalyzer
@@ -40,14 +43,35 @@ final class InArgFluentChainMethodCallToStandaloneMethodCallRector extends Abstr
      */
     private $fluentMethodCallAsArgFactory;
 
+    /**
+     * @var AssignAndRootExprAndNodesToAddMatcher
+     */
+    private $assignAndRootExprAndNodesToAddMatcher;
+
+    /**
+     * @var FluentChainMethodCallNodeAnalyzer
+     */
+    private $fluentChainMethodCallNodeAnalyzer;
+
+    /**
+     * @var NonFluentChainMethodCallFactory
+     */
+    private $nonFluentChainMethodCallFactory;
+
     public function __construct(
         NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer,
         VariableFromNewFactory $variableFromNewFactory,
-        FluentMethodCallAsArgFactory $fluentMethodCallAsArgFactory
+        FluentMethodCallAsArgFactory $fluentMethodCallAsArgFactory,
+        AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher,
+        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
+        NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory
     ) {
         $this->newFluentChainMethodCallNodeAnalyzer = $newFluentChainMethodCallNodeAnalyzer;
         $this->variableFromNewFactory = $variableFromNewFactory;
         $this->fluentMethodCallAsArgFactory = $fluentMethodCallAsArgFactory;
+        $this->assignAndRootExprAndNodesToAddMatcher = $assignAndRootExprAndNodesToAddMatcher;
+        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
+        $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -122,9 +146,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $assignAndRootExprAndNodesToAdd = $this->createStandaloneNodesToAddFromChainMethodCalls(
-            $node,
-            FluentCallsKind::IN_ARGS
+        $assignAndRootExprAndNodesToAdd = $this->assignAndRootExprAndNodesToAddMatcher->match(
+            $node, FluentCallsKind::IN_ARGS
         );
 
         if (! $assignAndRootExprAndNodesToAdd instanceof AssignAndRootExprAndNodesToAdd) {
