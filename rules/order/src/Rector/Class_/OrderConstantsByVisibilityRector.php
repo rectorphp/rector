@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Order\Order\OrderChangeAnalyzer;
 use Rector\Order\StmtOrder;
 use Rector\Order\StmtVisibilitySorter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -19,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class OrderConstantsByVisibilityRector extends AbstractRector
 {
     /**
-     * @var \Rector\Order\Order\OrderChangeAnalyzer
+     * @var OrderChangeAnalyzer
      */
     private $orderChangeAnalyzer;
 
@@ -34,7 +35,7 @@ final class OrderConstantsByVisibilityRector extends AbstractRector
     private $stmtVisibilitySorter;
 
     public function __construct(
-        \Rector\Order\Order\OrderChangeAnalyzer $orderChangeAnalyzer,
+        OrderChangeAnalyzer $orderChangeAnalyzer,
         StmtOrder $stmtOrder,
         StmtVisibilitySorter $stmtVisibilitySorter
     ) {

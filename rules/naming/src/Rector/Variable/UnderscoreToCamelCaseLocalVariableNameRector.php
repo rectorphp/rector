@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
@@ -115,9 +116,14 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isUsedNextPreviousAssignVar(Variable $variable, string $camelCaseName): bool
+    private function isUsedNextPreviousAssignVar(Node $variable, string $camelCaseName): bool
     {
         $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
+
+        if ($parent instanceof ArrayDimFetch) {
+            return $this->isUsedNextPreviousAssignVar($parent, $camelCaseName);
+        }
+
         if (! $parent instanceof Assign) {
             return false;
         }
