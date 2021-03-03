@@ -119,7 +119,7 @@ CODE_SAMPLE
     private function refactorPropertyFetch(Expr $propertyFetchExpr): bool
     {
         foreach ($this->emptyStringProperties as $emptyStringProperty) {
-            if (! $this->areNamesEqual($emptyStringProperty, $propertyFetchExpr)) {
+            if (! $this->nodeNameResolver->areNamesEqual($emptyStringProperty, $propertyFetchExpr)) {
                 continue;
             }
 

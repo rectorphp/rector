@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Autodiscovery\Rector\FileNode;
 
-use Controller;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Autodiscovery\Analyzer\ClassAnalyzer;
+use Rector\Autodiscovery\Analyzer\ValueObjectClassAnalyzer;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
@@ -45,7 +44,7 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
     public const ENABLE_VALUE_OBJECT_GUESSING = 'enable_value_object_guessing';
 
     /**
-     * @var string[]|class-string<Controller>[]
+     * @var string[]
      */
     private const COMMON_SERVICE_SUFFIXES = [
         'Repository', 'Command', 'Mapper', 'Controller', 'Presenter', 'Factory', 'Test', 'TestCase', 'Service',
@@ -67,19 +66,21 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
     private $suffixes = [];
 
     /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
-    /**
      * @var MovedFileWithNodesFactory
      */
     private $movedFileWithNodesFactory;
 
-    public function __construct(ClassAnalyzer $classAnalyzer, MovedFileWithNodesFactory $movedFileWithNodesFactory)
-    {
-        $this->classAnalyzer = $classAnalyzer;
+    /**
+     * @var ValueObjectClassAnalyzer
+     */
+    private $valueObjectClassAnalyzer;
+
+    public function __construct(
+        MovedFileWithNodesFactory $movedFileWithNodesFactory,
+        ValueObjectClassAnalyzer $valueObjectClassAnalyzer
+    ) {
         $this->movedFileWithNodesFactory = $movedFileWithNodesFactory;
+        $this->valueObjectClassAnalyzer = $valueObjectClassAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -201,17 +202,19 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->classAnalyzer->isValueObjectClass($class);
+        return $this->valueObjectClassAnalyzer->isValueObjectClass($class);
     }
 
     private function isSuffixMatch(Class_ $class): bool
     {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className !== null) {
-            foreach ($this->suffixes as $suffix) {
-                if (Strings::endsWith($className, $suffix)) {
-                    return true;
-                }
+        if ($className === null) {
+            return false;
+        }
+
+        foreach ($this->suffixes as $suffix) {
+            if (Strings::endsWith($className, $suffix)) {
+                return true;
             }
         }
 

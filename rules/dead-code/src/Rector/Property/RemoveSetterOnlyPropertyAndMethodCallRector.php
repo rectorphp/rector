@@ -219,7 +219,7 @@ CODE_SAMPLE
     private function hasMethodSomeStmtsLeft(ClassMethod $classMethod): bool
     {
         foreach ((array) $classMethod->stmts as $stmt) {
-            if (! $this->isNodeRemoved($stmt)) {
+            if (! $this->nodesToRemoveCollector->isNodeRemoved($stmt)) {
                 return false;
             }
         }

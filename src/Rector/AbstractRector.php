@@ -139,7 +139,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     /**
      * @var ClassAnalyzer
      */
-    protected $classNodeAnalyzer;
+    protected $classAnalyzer;
 
     /**
      * @var NodeRemover
@@ -160,6 +160,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var PropertyAdder
      */
     protected $propertyAdder;
+
+    /**
+     * @var NodesToRemoveCollector
+     */
+    protected $nodesToRemoveCollector;
 
     /**
      * @var SimpleCallableNodeTraverser
@@ -195,11 +200,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var string|null
      */
     private $previousAppliedClass;
-
-    /**
-     * @var NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
 
     /**
      * @var NodesToAddCollector
@@ -256,7 +256,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
         $this->currentRectorProvider = $currentRectorProvider;
-        $this->classNodeAnalyzer = $classAnalyzer;
+        $this->classAnalyzer = $classAnalyzer;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->skipper = $skipper;
         $this->valueResolver = $valueResolver;
@@ -326,11 +326,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected function isName(Node $node, string $name): bool
     {
         return $this->nodeNameResolver->isName($node, $name);
-    }
-
-    protected function areNamesEqual(Node $firstNode, Node $secondNode): bool
-    {
-        return $this->nodeNameResolver->areNamesEqual($firstNode, $secondNode);
     }
 
     /**
@@ -412,17 +407,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
     }
 
-    protected function isOnClassMethodCall(Node $node, ObjectType $objectType, string $methodName): bool
+    protected function isOnClassMethodCall(MethodCall $methodCall, ObjectType $objectType, string $methodName): bool
     {
-        if (! $node instanceof MethodCall) {
+        if (! $this->isObjectType($methodCall->var, $objectType)) {
             return false;
         }
 
-        if (! $this->isObjectType($node->var, $objectType)) {
-            return false;
-        }
-
-        return $this->isName($node->name, $methodName);
+        return $this->isName($methodCall->name, $methodName);
     }
 
     protected function isOpenSourceProjectType(): bool
@@ -502,11 +493,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->nodeRemover->removeNodeFromStatements($nodeWithStatements, $nodeToRemove);
     }
 
-    protected function isNodeRemoved(Node $node): bool
-    {
-        return $this->nodesToRemoveCollector->isNodeRemoved($node);
-    }
-
     /**
      * @param Node[] $nodes
      */
@@ -528,7 +514,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     private function shouldSkipCurrentNode(Node $node): bool
     {
-        if ($this->isNodeRemoved($node)) {
+        if ($this->nodesToRemoveCollector->isNodeRemoved($node)) {
             return true;
         }
 
