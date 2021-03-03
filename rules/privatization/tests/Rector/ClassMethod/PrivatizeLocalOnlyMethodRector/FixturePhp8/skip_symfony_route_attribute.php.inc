@@ -6,8 +6,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class SkipSymfonyRouteAttribute
 {
-    #[Route(path: '', name: 'symfonyrouteattribute')]
-    public function symfonyrouteattributeAction() : Response
+    #[Route(path: '', name: 'asymfonypageexample')]
+    public function asymfonypageexampleAction() : Response
     {
     }
 }
