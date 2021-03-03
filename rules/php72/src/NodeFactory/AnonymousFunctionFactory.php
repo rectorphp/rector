@@ -40,9 +40,21 @@ final class AnonymousFunctionFactory
     /**
      * @param Param[] $params
      * @param Stmt[] $stmts
+<<<<<<< HEAD
      * @param Identifier|Name|NullableType|UnionType|null $returnTypeNode
      */
     public function create(array $params, array $stmts, ?Node $returnTypeNode): Closure
+=======
+<<<<<<< HEAD
+     * @param Identifier|Name|NullableType|UnionType|null $node
+     */
+    public function create(array $params, array $stmts, ?Node $node): Closure
+=======
+     * @param Identifier|Name|NullableType|UnionType|null $returnTypeNode
+     */
+    public function create(array $params, array $stmts, ?Node $returnTypeNode): Closure
+>>>>>>> f1ddf17a7... [Nette] Remove AbstractWithFunctionToNetteUtilsStringsRector
+>>>>>>> cc550fbad... [Nette] Remove AbstractWithFunctionToNetteUtilsStringsRector
     {
         $useVariables = $this->createUseVariablesFromParams($stmts, $params);
 
@@ -53,8 +65,18 @@ final class AnonymousFunctionFactory
             $anonymousFunctionNode->uses[] = new ClosureUse($useVariable);
         }
 
+<<<<<<< HEAD
         if ($returnTypeNode instanceof Node) {
             $anonymousFunctionNode->returnType = $returnTypeNode;
+=======
+<<<<<<< HEAD
+        if ($node instanceof Node) {
+            $anonymousFunctionNode->returnType = $node;
+=======
+        if ($returnTypeNode instanceof Node) {
+            $anonymousFunctionNode->returnType = $returnTypeNode;
+>>>>>>> f1ddf17a7... [Nette] Remove AbstractWithFunctionToNetteUtilsStringsRector
+>>>>>>> cc550fbad... [Nette] Remove AbstractWithFunctionToNetteUtilsStringsRector
         }
 
         $anonymousFunctionNode->stmts = $stmts;

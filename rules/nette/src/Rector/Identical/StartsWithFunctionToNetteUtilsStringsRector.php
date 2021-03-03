@@ -24,11 +24,19 @@ final class StartsWithFunctionToNetteUtilsStringsRector extends AbstractRector
     /**
      * @var StrlenStartsWithResolver
      */
+<<<<<<< HEAD
     private $strlenStartsWithResolver;
 
     public function __construct(StrlenStartsWithResolver $strlenStartsWithResolver)
     {
         $this->strlenStartsWithResolver = $strlenStartsWithResolver;
+=======
+    private $contentExprAndNeedleExprResolver;
+
+    public function __construct(StrlenStartsWithResolver $contentExprAndNeedleExprResolver)
+    {
+        $this->contentExprAndNeedleExprResolver = $contentExprAndNeedleExprResolver;
+>>>>>>> cc550fbad... [Nette] Remove AbstractWithFunctionToNetteUtilsStringsRector
     }
 
     /**
@@ -75,7 +83,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+<<<<<<< HEAD
         $contentExprAndNeedleExpr = $this->strlenStartsWithResolver->resolveBinaryOpForFunction($node, 'substr');
+=======
+        $contentExprAndNeedleExpr = $this->contentExprAndNeedleExprResolver->resolveBinaryOpForFunction(
+            $node, 'substr'
+        );
+>>>>>>> cc550fbad... [Nette] Remove AbstractWithFunctionToNetteUtilsStringsRector
 
         if (! $contentExprAndNeedleExpr instanceof ContentExprAndNeedleExpr) {
             return null;
