@@ -39,7 +39,7 @@ final class StubLoader
         ];
 
         // @see https://github.com/rectorphp/rector/issues/1899
-        $stubDirectories = array_filter($stubDirectories, function (string $stubDirectory) {
+        $stubDirectories = array_filter($stubDirectories, function (string $stubDirectory): bool {
             return file_exists($stubDirectory);
         });
 

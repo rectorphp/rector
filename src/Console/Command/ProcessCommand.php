@@ -18,7 +18,6 @@ use Rector\Core\FileSystem\PhpFilesFinder;
 use Rector\Core\Guard\RectorGuard;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
-use Rector\Core\Stubs\StubLoader;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -70,11 +69,6 @@ final class ProcessCommand extends AbstractCommand
     private $rectorNodeTraverser;
 
     /**
-     * @var StubLoader
-     */
-    private $stubLoader;
-
-    /**
      * @var NonPhpFileProcessor
      */
     private $nonPhpFileProcessor;
@@ -105,7 +99,6 @@ final class ProcessCommand extends AbstractCommand
         RectorApplication $rectorApplication,
         RectorGuard $rectorGuard,
         RectorNodeTraverser $rectorNodeTraverser,
-        StubLoader $stubLoader,
         SymfonyStyle $symfonyStyle,
         ComposerProcessor $composerProcessor,
         PhpFilesFinder $phpFilesFinder
@@ -118,7 +111,6 @@ final class ProcessCommand extends AbstractCommand
         $this->rectorApplication = $rectorApplication;
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->stubLoader = $stubLoader;
         $this->nonPhpFileProcessor = $nonPhpFileProcessor;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->symfonyStyle = $symfonyStyle;
