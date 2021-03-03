@@ -10,6 +10,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Rector\AbstractTemporaryRector;
 use Rector\PHPStanExtensions\TypeResolver\MethodCallTypeResolver;
 
@@ -32,7 +33,7 @@ final class NameResolverReturnTypeAbstractRectorExtension implements DynamicMeth
 
     public function getClass(): string
     {
-        return AbstractTemporaryRector::class;
+        return AbstractRector::class;
     }
 
     public function isMethodSupported(MethodReflection $methodReflection): bool

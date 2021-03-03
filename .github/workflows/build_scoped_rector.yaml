@@ -26,7 +26,7 @@ jobs:
                     COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
             # 1. prepare dependencies
-            -   run: sh build-rector-scoped.sh
+            -   run: sh build/build-rector-scoped.sh
 
             # 2. publish it to remote repository
             -

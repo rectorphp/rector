@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
-use PhpParser\NodeVisitorAbstract;
-use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-final class ClassRenamingPostRector extends NodeVisitorAbstract implements PostRectorInterface
+final class ClassRenamingPostRector extends AbstractPostRector
 {
     /**
      * @var RenamedClassesCollector
@@ -42,5 +42,24 @@ final class ClassRenamingPostRector extends NodeVisitorAbstract implements PostR
         }
 
         return $this->classRenamer->renameNode($node, $oldToNewClasses);
+    }
+
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Rename references for classes that were renamed during Rector run', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+function (OriginalClass $someClass)
+{
+}
+CODE_SAMPLE
+            ,
+                <<<'CODE_SAMPLE'
+function (RenamedClass $someClass)
+{
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 }

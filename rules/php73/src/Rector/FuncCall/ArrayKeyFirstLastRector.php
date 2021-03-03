@@ -7,9 +7,11 @@ namespace Rector\Php73\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Expression;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -146,5 +148,15 @@ CODE_SAMPLE
         }
 
         return ! $this->reflectionProvider->hasFunction(new Name(self::ARRAY_KEY_LAST), null);
+    }
+
+    private function getNextExpression(FuncCall $funcCall): ?Node
+    {
+        $currentExpression = $funcCall->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if (! $currentExpression instanceof Expression) {
+            return null;
+        }
+
+        return $currentExpression->getAttribute(AttributeKey::NEXT_NODE);
     }
 }

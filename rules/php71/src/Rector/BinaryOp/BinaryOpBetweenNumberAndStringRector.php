@@ -76,13 +76,17 @@ CODE_SAMPLE
         if ($node instanceof Coalesce) {
             return null;
         }
-        if ($this->isStringOrStaticNonNumbericString($node->left) && $this->isNumberType($node->right)) {
+        if ($this->isStringOrStaticNonNumbericString($node->left) && $this->nodeTypeResolver->isNumberType(
+            $node->right
+        )) {
             $node->left = new LNumber(0);
 
             return $node;
         }
 
-        if ($this->isStringOrStaticNonNumbericString($node->right) && $this->isNumberType($node->left)) {
+        if ($this->isStringOrStaticNonNumbericString($node->right) && $this->nodeTypeResolver->isNumberType(
+            $node->left
+        )) {
             $node->right = new LNumber(0);
 
             return $node;

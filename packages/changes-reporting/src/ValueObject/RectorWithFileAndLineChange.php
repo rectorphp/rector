@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\ChangesReporting\ValueObject;
 
-use Rector\Core\Contract\Rector\CoreRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 
 final class RectorWithFileAndLineChange
@@ -33,12 +32,8 @@ final class RectorWithFileAndLineChange
 
     public function getRectorDefinitionsDescription(): string
     {
-        if ($this->rector instanceof CoreRectorInterface) {
-            $ruleDefinition = $this->rector->getRuleDefinition();
-            return $ruleDefinition->getDescription();
-        }
-
-        return '';
+        $ruleDefinition = $this->rector->getRuleDefinition();
+        return $ruleDefinition->getDescription();
     }
 
     public function getRectorClass(): string

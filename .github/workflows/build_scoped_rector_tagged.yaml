@@ -27,7 +27,7 @@ jobs:
                     COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
             # 1. prepare dependencies
-            -   run: sh build-rector-scoped.sh
+            -   run: sh build/build-rector-scoped.sh
 
             # 2. get tag - see https://github.com/WyriHaximus/github-action-get-previous-tag
             -

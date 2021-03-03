@@ -145,7 +145,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isNumberType($argExpr)) {
+        if (! $this->nodeTypeResolver->isNumberType($argExpr)) {
             return null;
         }
 

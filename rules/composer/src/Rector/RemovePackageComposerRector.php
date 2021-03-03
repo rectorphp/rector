@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Composer\Rector;
 
-use Rector\Composer\Contract\Rector\CoreComposerRectorInterface;
+use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Composer\Tests\Rector\RemovePackageComposerRector\RemovePackageComposerRectorTest
  */
-final class RemovePackageComposerRector implements CoreComposerRectorInterface
+final class RemovePackageComposerRector implements ComposerRectorInterface
 {
     /**
      * @var string

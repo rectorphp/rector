@@ -253,7 +253,7 @@ parameters:
                 # merging comments
                 - packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php
                 - src/PhpParser/NodeTransformer.php
-                - src/Rector/AbstractTemporaryRector.php
+                - src/Rector/AbstractRector.php
                 # playing around with doc block format
                 - packages/comments/src/CommentRemover.php
                 - rules/coding-style/src/Rector/Assign/PHPStormVarAnnotationRector.php
@@ -370,6 +370,7 @@ parameters:
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             paths:
                 - rules/defluent/src/ValueObject/*
+                - src/Rector/AbstractRector.php
 
         - '#Parameter \#1 \$keyName of method Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareArrayShapeItemNode\:\:createKeyWithSpacePattern\(\) expects PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null, PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null given#'
         - '#AttributeAwarePhpDocNode#'
@@ -440,7 +441,7 @@ parameters:
         -
             message: '#\$this as argument is not allowed\. Refactor method to service composition#'
             paths:
-                - src/Rector/AbstractTemporaryRector.php
+                - src/Rector/AbstractRector.php
                 # setter to avoid circular dependency in nested collector
                 - rules/nette-code-quality/src/NodeResolver/MethodNamesByInputNamesResolver.php
                 - packages/static-type-mapper/src/StaticTypeMapper.php
@@ -613,3 +614,8 @@ parameters:
             message: '#Argument and options "debug" got confused#'
             paths:
                 - src/Console/Command/ProcessCommand.php
+
+        -
+             message: '#Class cognitive complexity is 31, keep it under 30#'
+             paths:
+                 - src/Rector/AbstractRector.php
