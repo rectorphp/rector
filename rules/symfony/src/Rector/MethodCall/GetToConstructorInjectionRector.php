@@ -8,13 +8,15 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\GetToConstructorInjectionRectorTest
  */
-final class GetToConstructorInjectionRector extends AbstractToConstructorInjectionRector implements ConfigurableRectorInterface
+final class GetToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -26,12 +28,19 @@ final class GetToConstructorInjectionRector extends AbstractToConstructorInjecti
      */
     private $getMethodAwareObjectTypes = [];
 
-    public function __construct()
+    /**
+     * @var DependencyInjectionMethodCallAnalyzer
+     */
+    private $dependencyInjectionMethodCallAnalyzer;
+
+    public function __construct(DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer)
     {
-        $this->getMethodAwareObjectTypes[] = new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller');
-        $this->getMethodAwareObjectTypes[] = new ObjectType(
-            'Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait'
-        );
+        $this->getMethodAwareObjectTypes = [
+            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller'),
+            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait'),
+        ];
+
+        $this->dependencyInjectionMethodCallAnalyzer = $dependencyInjectionMethodCallAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -95,7 +104,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->processMethodCallNode($node);
+        return $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($node);
     }
 
     /**
@@ -104,6 +113,7 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $getMethodAwareTypes = $configuration[self::GET_METHOD_AWARE_TYPES] ?? [];
+
         foreach ($getMethodAwareTypes as $getMethodAwareType) {
             $this->getMethodAwareObjectTypes[] = new ObjectType($getMethodAwareType);
         }
