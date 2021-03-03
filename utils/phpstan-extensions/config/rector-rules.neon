@@ -19,9 +19,7 @@ services:
                 - Rector\Core\Rector\AbstractTemporaryRector
                 - Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector
                 # solve later
-                - Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector
                 - Rector\DowngradePhp74\Rector\Property\AbstractDowngradeTypedPropertyRector
-                - Rector\Defluent\Rector\AbstractFluentChainMethodCallRector
 
     -
         class: Symplify\PHPStanRules\Rules\ServiceAndValueObjectHaveSameStartsRule
