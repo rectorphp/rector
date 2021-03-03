@@ -198,7 +198,7 @@ CODE_SAMPLE
             $isExprFoundInReturn = (bool) $this->betterNodeFinder->findFirst($return->expr, function (Node $node) use (
                 $expr
             ): bool {
-                return $this->areNodesEqual($node, $expr);
+                return $this->nodeComparator->areNodesEqual($node, $expr);
             });
             if ($isExprFoundInReturn) {
                 return true;

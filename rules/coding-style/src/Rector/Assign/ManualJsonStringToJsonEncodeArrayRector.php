@@ -311,4 +311,14 @@ CODE_SAMPLE
 
         return null;
     }
+
+    private function getNextExpression(Node $node): ?Node
+    {
+        $currentExpression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if (! $currentExpression instanceof Expression) {
+            return null;
+        }
+
+        return $currentExpression->getAttribute(AttributeKey::NEXT_NODE);
+    }
 }

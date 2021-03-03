@@ -381,27 +381,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return $this->betterStandardPrinter->print($node);
     }
 
-    /**
-     * Removes all comments from both nodes
-     *
-     * @param Node|Node[]|null $firstNode
-     * @param Node|Node[]|null $secondNode
-     */
-    protected function areNodesEqual($firstNode, $secondNode): bool
-    {
-        return $this->nodeComparator->areNodesEqual($firstNode, $secondNode);
-    }
-
-    protected function getNextExpression(Node $node): ?Node
-    {
-        $currentExpression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if (! $currentExpression instanceof Expression) {
-            return null;
-        }
-
-        return $currentExpression->getAttribute(AttributeKey::NEXT_NODE);
-    }
-
     protected function isAtLeastPhpVersion(int $version): bool
     {
         return $this->phpVersionProvider->isAtLeastPhpVersion($version);

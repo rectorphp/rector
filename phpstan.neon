@@ -614,3 +614,8 @@ parameters:
             message: '#Argument and options "debug" got confused#'
             paths:
                 - src/Console/Command/ProcessCommand.php
+
+        -
+             message: '#Class cognitive complexity is 31, keep it under 30#'
+             paths:
+                 - src/Rector/AbstractRector.php

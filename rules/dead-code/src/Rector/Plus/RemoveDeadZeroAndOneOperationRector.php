@@ -184,9 +184,7 @@ CODE_SAMPLE
         if ($binaryOp instanceof Mul && $this->valueResolver->isValue(
             $binaryOp->left,
             1
-        ) && $this->nodeTypeResolver->isNumberType(
-            $binaryOp->right
-        )) {
+        ) && $this->nodeTypeResolver->isNumberType($binaryOp->right)) {
             return $binaryOp->right;
         }
         if (! $this->valueResolver->isValue($binaryOp->right, 1)) {
