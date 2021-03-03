@@ -6,7 +6,6 @@ namespace Rector\Privatization\Rector\ClassMethod;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
@@ -14,14 +13,12 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SymfonyRequiredTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\ApiPhpDocTagNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodVisibilityVendorLockResolver;
-use Symfony\Component\Routing\Annotation\Route;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -238,23 +235,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->hasSymfonyRouteAttrGroup($classMethod)) {
-            return true;
-        }
-
-        return $phpDocInfo->hasByType(SymfonyRouteTagValueNode::class);
-    }
-
-    private function hasSymfonyRouteAttrGroup(ClassMethod $classMethod): bool
-    {
-        foreach ($classMethod->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $attr) {
-                if ($attr->name->toString() === Route::class) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        $name = $this->getName($classMethod);
+        return Strings::endsWith($name, 'Action');
     }
 }
