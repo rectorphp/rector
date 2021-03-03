@@ -8,6 +8,8 @@ Builds image with `rector-blackfire` tag.
 docker build . --tag rector-blackfire --file .docker/php-blackfire/Dockerfile
 ```
 
+You can use `--build-arg PHP_VERSION=7.4` to build with specific PHP version. Supported versions are: 7.3, 7.4, 8.0
+
 
 ### Prepare
 

@@ -2,7 +2,9 @@
 ##   Docker image used for profiling Rector   ##
 ################################################
 
-FROM rector/rector:latest
+ARG PHP_VERSION=8.0
+
+FROM rector/rector:php${PHP_VERSION}
 
 # Install php extensions
 RUN apt-get update && apt-get install -y \

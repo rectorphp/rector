@@ -8,6 +8,8 @@ Builds image with `rector-xdebug` tag.
 docker build . --tag rector-xdebug --file .docker/php-xdebug/Dockerfile
 ```
 
+You can use `--build-arg PHP_VERSION=7.4` to build with specific PHP version. Supported versions are: 7.3, 7.4, 8.0
+
 ### Usage
 
 Get into container (change ip address):
