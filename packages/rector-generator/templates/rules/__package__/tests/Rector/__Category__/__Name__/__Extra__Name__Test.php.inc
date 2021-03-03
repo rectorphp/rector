@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\__Package__\Tests\Rector\__Category__\__Name__;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class __Name__Test extends AbstractRectorTestCase
 {
@@ -22,8 +23,8 @@ final class __Name__Test extends AbstractRectorTestCase
         yield [new \Symplify\SmartFileSystem\SmartFileInfo(__DIR__ . '/Fixture/some_class.php.inc'), '__ExtraFileName__', __DIR__ . '/Source/extra_file.php'];
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return \Rector\__Package__\Rector\__Category__\__Name__::class;
+        return __DIR__ . '/configured_rule.php';
     }
 }

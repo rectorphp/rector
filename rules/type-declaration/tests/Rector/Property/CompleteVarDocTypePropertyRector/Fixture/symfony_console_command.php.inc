@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Command
+final class SymfonyCommand
 {
     /**
      * @var string|null The default command name
@@ -384,7 +384,7 @@ class Command
     /**
      * @param bool $hidden Whether or not the command should be hidden from the list of commands
      *
-     * @return Command The current instance
+     * @return SymfonyCommand The current instance
      */
     public function setHidden($hidden)
     {
@@ -576,7 +576,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Command
+final class SymfonyCommand
 {
     /**
      * @var string|null The default command name
@@ -983,7 +983,7 @@ class Command
     /**
      * @param bool $hidden Whether or not the command should be hidden from the list of commands
      *
-     * @return Command The current instance
+     * @return SymfonyCommand The current instance
      */
     public function setHidden($hidden)
     {

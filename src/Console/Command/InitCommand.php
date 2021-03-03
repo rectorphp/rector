@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Console\Command;
 
 use Rector\RectorGenerator\TemplateInitializer;
-use Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Fixture\Command;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\ShellCode;
