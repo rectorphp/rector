@@ -8,11 +8,6 @@ Builds image with `rector-xdebug` tag.
 docker build . --tag rector-xdebug --file .docker/php-xdebug/Dockerfile
 ```
 
-To build image with secured rector inside, use `--build-arg RECTOR_IMAGE="rector-secured"`:
-```shell
-docker build . --tag rector-secured-xdebug --build-arg RECTOR_IMAGE=rector-secured --file .docker/php-xdebug/Dockerfile
-```
-
 ### Usage
 
 Get into container (change ip address):
