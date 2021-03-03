@@ -20,6 +20,7 @@ use Rector\Core\Guard\RectorGuard;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -27,7 +28,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
 
-final class ProcessCommand extends AbstractCommand
+final class ProcessCommand extends Command
 {
     /**
      * @var FilesFinder
@@ -93,6 +94,11 @@ final class ProcessCommand extends AbstractCommand
      * @var CommandCacheInvalidator
      */
     private $commandCacheInvalidator;
+
+    /**
+     * @var ChangedFilesDetector
+     */
+    private $changedFilesDetector;
 
     public function __construct(
         AdditionalAutoloader $additionalAutoloader,
@@ -189,6 +195,8 @@ final class ProcessCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->configuration->resolveFromInput($input);
+        $this->commandCacheInvalidator->invalidateIfInput($input);
+
         $this->configuration->validateConfigParameters();
         $this->configuration->setAreAnyPhpRectorsLoaded((bool) $this->rectorNodeTraverser->getPhpRectorCount());
 

@@ -24,7 +24,7 @@ final class PropertyTypeParamTypeDeclarationRectorTest extends AbstractRectorTes
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePropertyType');
     }
 
-    protected function provideConfigFilePath(): string
+    public function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/typed_properties.php';
     }

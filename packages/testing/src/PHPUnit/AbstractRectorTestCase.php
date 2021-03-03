@@ -113,16 +113,16 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->removedAndAddedFilesCollector->reset();
     }
 
-    /**
-     * @return class-string<RectorInterface>
-     */
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
         // can be implemented
         return '';
     }
 
-    protected function provideConfigFilePath(): string
+    /**
+     * @return class-string<RectorInterface>
+     */
+    protected function getRectorClass(): string
     {
         // can be implemented
         return '';

@@ -27,7 +27,7 @@ final class CommandCacheInvalidator
         $this->application = $application;
     }
 
-    private function initialize(InputInterface $input): void
+    public function invalidateIfInput(InputInterface $input): void
     {
         $optionDebug = (bool) $input->getOption(Option::OPTION_DEBUG);
         if ($optionDebug) {

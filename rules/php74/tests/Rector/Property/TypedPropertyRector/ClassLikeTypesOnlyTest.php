@@ -23,7 +23,7 @@ final class ClassLikeTypesOnlyTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureClassLikeTypeOnly');
     }
 
-    protected function provideConfigFilePath(): string
+    public function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/class_types_only.php';
     }

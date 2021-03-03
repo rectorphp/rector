@@ -6,6 +6,7 @@ namespace Rector\Core\Console\Command;
 
 use Rector\Core\Application\ActiveRectorsProvider;
 use Rector\Core\Configuration\Option;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -13,7 +14,7 @@ use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ShowCommand extends AbstractCommand
+final class ShowCommand extends Command
 {
     /**
      * @var SymfonyStyle

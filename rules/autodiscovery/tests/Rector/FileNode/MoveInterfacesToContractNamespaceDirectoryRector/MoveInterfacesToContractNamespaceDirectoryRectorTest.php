@@ -76,7 +76,7 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
         yield [new SmartFileInfo(__DIR__ . '/Source/Contract/Foo/KeepThisSomeInterface.php'), null];
     }
 
-    protected function provideConfigFilePath(): string
+    public function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/some_config.php';
     }
