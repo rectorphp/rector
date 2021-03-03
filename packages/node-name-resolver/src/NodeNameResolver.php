@@ -392,6 +392,15 @@ final class NodeNameResolver
         return $this->classNaming->getShortName($name);
     }
 
+    /**
+     * @param array<string, string> $renameMap
+     */
+    public function matchNameFromMap(Node $node, array $renameMap): ?string
+    {
+        $name = $this->getName($node);
+        return $renameMap[$name] ?? null;
+    }
+
     private function isCallOrIdentifier(Node $node): bool
     {
         return StaticInstanceOf::isOneOf($node, [MethodCall::class, StaticCall::class, Identifier::class]);

@@ -6,7 +6,6 @@ namespace Rector\Privatization\Rector\ClassMethod;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;

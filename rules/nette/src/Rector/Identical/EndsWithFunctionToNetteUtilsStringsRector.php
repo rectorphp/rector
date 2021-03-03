@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\Identical;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\UnaryMinus;
-use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Nette\NodeAnalyzer\StrlenEndsWithResolver;
 use Rector\Nette\ValueObject\ContentExprAndNeedleExpr;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -16,8 +18,26 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/nette/utils/blob/master/src/Utils/Strings.php
  * @see \Rector\Nette\Tests\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector\EndsWithFunctionToNetteUtilsStringsRectorTest
  */
-final class EndsWithFunctionToNetteUtilsStringsRector extends AbstractWithFunctionToNetteUtilsStringsRector
+final class EndsWithFunctionToNetteUtilsStringsRector extends AbstractRector
 {
+    /**
+     * @var StrlenEndsWithResolver
+     */
+    private $strlenEndsWithResolver;
+
+    public function __construct(StrlenEndsWithResolver $strlenEndsWithResolver)
+    {
+        $this->strlenEndsWithResolver = $strlenEndsWithResolver;
+    }
+
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Identical::class, NotIdentical::class];
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -37,13 +57,14 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
+use Nette\Utils\Strings;
+
 class SomeClass
 {
     public function end($needle)
     {
         $content = 'Hi, my name is Tom';
-
-        $yes = \Nette\Utils\Strings::endsWith($content, $needle);
+        $yes = Strings::endsWith($content, $needle);
     }
 }
 CODE_SAMPLE
@@ -51,38 +72,25 @@ CODE_SAMPLE
             ]);
     }
 
-    public function getMethodName(): string
+    /**
+     * @param Identical|NotIdentical $node
+     */
+    public function refactor(Node $node): ?Node
     {
-        return 'endsWith';
-    }
-
-    public function matchContentAndNeedleOfSubstrOfVariableLength(
-        Node $node,
-        Variable $variable
-    ): ?ContentExprAndNeedleExpr {
-        if (! $this->nodeNameResolver->isFuncCallName($node, 'substr')) {
+        $contentExprAndNeedleExpr = $this->strlenEndsWithResolver->resolveBinaryOpForFunction($node);
+        if (! $contentExprAndNeedleExpr instanceof ContentExprAndNeedleExpr) {
             return null;
         }
 
-        /** @var FuncCall $node */
-        if (! $node->args[1]->value instanceof UnaryMinus) {
-            return null;
+        $staticCall = $this->nodeFactory->createStaticCall('Nette\Utils\Strings', 'endsWith', [
+            $contentExprAndNeedleExpr->getContentExpr(),
+            $contentExprAndNeedleExpr->getNeedleExpr(),
+        ]);
+
+        if ($node instanceof NotIdentical) {
+            return new BooleanNot($staticCall);
         }
 
-        /** @var UnaryMinus $unaryMinus */
-        $unaryMinus = $node->args[1]->value;
-
-        if (! $this->nodeNameResolver->isFuncCallName($unaryMinus->expr, 'strlen')) {
-            return null;
-        }
-
-        /** @var FuncCall $strlenFuncCall */
-        $strlenFuncCall = $unaryMinus->expr;
-
-        if ($this->nodeComparator->areNodesEqual($strlenFuncCall->args[0]->value, $variable)) {
-            return new ContentExprAndNeedleExpr($node->args[0]->value, $strlenFuncCall->args[0]->value);
-        }
-
-        return null;
+        return $staticCall;
     }
 }
