@@ -2,20 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionAutoimportRector;
+namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionAutoImportRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class RenameFunctionAutoimportRectorTest extends AbstractRectorTestCase
+final class RenameFunctionAutoImportRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        $this->assertTrue(function_exists('Symfony\Component\DependencyInjection\Loader\Configurator\service'));
         $this->doTestFileInfo($fileInfo);
     }
 

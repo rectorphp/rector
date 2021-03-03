@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionAutoimportRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionAutoImportRector\Fixture;
 
 class Fixture
 {
@@ -10,15 +10,11 @@ class Fixture
     }
 }
 
-function a(callable $a) {
-    $a();
-}
-
 ?>
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionAutoimportRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionAutoImportRector\Fixture;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
@@ -28,10 +24,6 @@ class Fixture
     {
         service('template', []);
     }
-}
-
-function a(callable $a) {
-    $a();
 }
 
 ?>
