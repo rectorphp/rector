@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\FuncCall;
 
 use Nette\Utils\Strings;
+use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -17,6 +18,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Nette\Tests\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector\PregFunctionToNetteUtilsStringsRectorTest
  */
-final class PregFunctionToNetteUtilsStringsRector extends AbstractPregToNetteUtilsStringsRector
+final class PregFunctionToNetteUtilsStringsRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -76,6 +79,26 @@ CODE_SAMPLE
             ]);
     }
 
+    /**
+     * @param FuncCall|Identical $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($node instanceof Identical) {
+            return $this->refactorIdentical($node);
+        }
+
+        return $this->refactorFuncCall($node);
+    }
+
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [FuncCall::class, Identical::class];
+    }
+
     public function refactorIdentical(Identical $identical): ?Bool_
     {
         $parentNode = $identical->getAttribute(AttributeKey::PARENT_NODE);
@@ -102,7 +125,7 @@ CODE_SAMPLE
      */
     public function refactorFuncCall(FuncCall $funcCall): ?Expr
     {
-        $methodName = $this->matchFuncCallRenameToMethod($funcCall, self::FUNCTION_NAME_TO_METHOD_NAME);
+        $methodName = $this->nodeNameResolver->matchNameFromMap($funcCall, self::FUNCTION_NAME_TO_METHOD_NAME);
         if ($methodName === null) {
             return null;
         }
@@ -132,6 +155,18 @@ CODE_SAMPLE
         }
 
         return $matchStaticCall;
+    }
+
+    /**
+     * @param Expr $expr
+     */
+    private function createBoolCast(?Node $node, Node $expr): Bool_
+    {
+        if ($node instanceof Return_ && $expr instanceof Assign) {
+            $expr = $expr->expr;
+        }
+
+        return new Bool_($expr);
     }
 
     private function createMatchStaticCall(FuncCall $funcCall, string $methodName): StaticCall

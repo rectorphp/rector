@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Rector\Nette\Rector\FuncCall;
 
-use Nette\Utils\Strings;
+use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\Cast\Bool_;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Nette\NodeAnalyzer\PregMatchAllAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Nette\Tests\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector\PregMatchFunctionToNetteUtilsStringsRectorTest
  */
-final class PregMatchFunctionToNetteUtilsStringsRector extends AbstractPregToNetteUtilsStringsRector
+final class PregMatchFunctionToNetteUtilsStringsRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -34,6 +34,16 @@ final class PregMatchFunctionToNetteUtilsStringsRector extends AbstractPregToNet
         'preg_match' => 'match',
         'preg_match_all' => 'matchAll',
     ];
+
+    /**
+     * @var PregMatchAllAnalyzer
+     */
+    private $pregMatchAllAnalyzer;
+
+    public function __construct(PregMatchAllAnalyzer $pregMatchAllAnalyzer)
+    {
+        $this->pregMatchAllAnalyzer = $pregMatchAllAnalyzer;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -68,6 +78,26 @@ CODE_SAMPLE
             ]);
     }
 
+    /**
+     * @param FuncCall|Identical $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($node instanceof Identical) {
+            return $this->refactorIdentical($node);
+        }
+
+        return $this->refactorFuncCall($node);
+    }
+
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [FuncCall::class, Identical::class];
+    }
+
     public function refactorIdentical(Identical $identical): ?Bool_
     {
         $parentNode = $identical->getAttribute(AttributeKey::PARENT_NODE);
@@ -94,7 +124,7 @@ CODE_SAMPLE
      */
     public function refactorFuncCall(FuncCall $funcCall): ?Expr
     {
-        $methodName = $this->matchFuncCallRenameToMethod($funcCall, self::FUNCTION_NAME_TO_METHOD_NAME);
+        $methodName = $this->nodeNameResolver->matchNameFromMap($funcCall, self::FUNCTION_NAME_TO_METHOD_NAME);
         if ($methodName === null) {
             return null;
         }
@@ -120,38 +150,25 @@ CODE_SAMPLE
         return $matchStaticCall;
     }
 
+    /**
+     * @param Expr $expr
+     */
+    private function createBoolCast(?Node $node, Node $expr): Bool_
+    {
+        if ($node instanceof Return_ && $expr instanceof Assign) {
+            $expr = $expr->expr;
+        }
+
+        return new Bool_($expr);
+    }
+
     private function createMatchStaticCall(FuncCall $funcCall, string $methodName): StaticCall
     {
         $args = [];
         $args[] = $funcCall->args[1];
         $args[] = $funcCall->args[0];
 
-        $args = $this->compensateMatchAllEnforcedFlag($methodName, $funcCall, $args);
-
+        $args = $this->pregMatchAllAnalyzer->compensateEnforcedFlag($methodName, $funcCall, $args);
         return $this->nodeFactory->createStaticCall('Nette\Utils\Strings', $methodName, $args);
-    }
-
-    /**
-     * Compensate enforced flag https://github.com/nette/utils/blob/e3dd1853f56ee9a68bfbb2e011691283c2ed420d/src/Utils/Strings.php#L487
-     * See https://stackoverflow.com/a/61424319/1348344
-     *
-     * @param Arg[] $args
-     * @return Arg[]
-     */
-    private function compensateMatchAllEnforcedFlag(string $methodName, FuncCall $funcCall, array $args): array
-    {
-        if ($methodName !== 'matchAll') {
-            return $args;
-        }
-
-        if (count($funcCall->args) !== 3) {
-            return $args;
-        }
-
-        $constFetch = new ConstFetch(new Name('PREG_SET_ORDER'));
-        $minus = new Minus($constFetch, new LNumber(1));
-        $args[] = new Arg($minus);
-
-        return $args;
     }
 }

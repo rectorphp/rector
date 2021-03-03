@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector;
 
 use Iterator;
-use Rector\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
