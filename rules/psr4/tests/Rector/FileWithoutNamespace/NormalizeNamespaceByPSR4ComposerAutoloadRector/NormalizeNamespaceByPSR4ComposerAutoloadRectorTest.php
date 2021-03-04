@@ -23,7 +23,7 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRectorTest extends AbstractR
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function provideConfigFilePath(): string
+    public function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/normalize_namespace_without_namespace_config.php';
     }

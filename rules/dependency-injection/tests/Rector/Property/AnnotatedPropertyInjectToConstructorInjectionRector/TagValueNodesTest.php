@@ -23,7 +23,7 @@ final class TagValueNodesTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureTagValueNodes');
     }
 
-    protected function provideConfigFilePath(): string
+    public function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/configured_rule.php';
     }
