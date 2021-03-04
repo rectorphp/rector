@@ -54,8 +54,8 @@ final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterfa
             $sourceLocators[] = new OptimizedSingleFileSourceLocator($this->fileNodesFetcher, $file);
         }
 
-        foreach ($this->filesByDirectory as $fileByDirectory) {
-            $sourceLocators[] = new OptimizedDirectorySourceLocator($this->fileNodesFetcher, $fileByDirectory);
+        foreach ($this->filesByDirectory as $file) {
+            $sourceLocators[] = new OptimizedDirectorySourceLocator($this->fileNodesFetcher, $file);
         }
 
         return new AggregateSourceLocator($sourceLocators);
