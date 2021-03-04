@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Naming\ExpectedNameResolver;
 
 use Doctrine\Inflector\Inflector;
+use Nette\Utils\Strings;
 use PhpParser\Node;
 
 final class InflectorSingularResolver
@@ -13,6 +14,12 @@ final class InflectorSingularResolver
      * @var Inflector
      */
     private $inflector;
+
+    /**
+     * @var string
+     * @see https://regex101.com/r/lbQaGC/1
+     */
+    private const CAMELCASE_REGEX = '#(?<camelcase>([a-z]+|[A-Z]{1,}[a-z]+))#ms';
 
     public function __construct(Inflector $inflector)
     {
@@ -25,7 +32,16 @@ final class InflectorSingularResolver
             return $currentName;
         }
 
-        $singularValueVarName = $this->inflector->singularize($currentName);
+        $camelCases = Strings::match($currentName, self::CAMELCASE_REGEX);
+        $singularValueVarName   = '';
+        foreach ($camelCases as $camelCase) {
+            //$singularValueVarName .= $this->inflector->singularize($camelCase);
+            //dump($camelCase);
+        }
+
+        dump($camelCases);
+
+        $singularValueVarName = $this->inflector->singularize($camelCase);
         $singularValueVarName = $singularValueVarName === $currentName
             ? 'single' . ucfirst($singularValueVarName)
             : $singularValueVarName;
