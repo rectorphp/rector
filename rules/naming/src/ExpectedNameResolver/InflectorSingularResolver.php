@@ -21,10 +21,19 @@ final class InflectorSingularResolver
 
     public function resolve(string $currentName): string
     {
+        if (strpos($currentName, 'single') === 0) {
+            return $currentName;
+        }
+
         $singularValueVarName = $this->inflector->singularize($currentName);
         $singularValueVarName = $singularValueVarName === $currentName
             ? 'single' . ucfirst($singularValueVarName)
             : $singularValueVarName;
+
+        $length = strlen($singularValueVarName);
+        if ($length >= 40) {
+            return $currentName;
+        }
 
         return $singularValueVarName;
     }
