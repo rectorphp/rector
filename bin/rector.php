@@ -78,7 +78,7 @@ final class AutoloadIncluder
      */
     public function autoloadProjectAutoloaderFile(): void
     {
-        $this->loadIfExistsAndNotLoadedYet(__DIR__ . '/../../autoload.php');
+        $this->loadIfExistsAndNotLoadedYet(__DIR__ . '/../../../autoload.php');
     }
 
     public function autoloadFromCommandLine(): void
