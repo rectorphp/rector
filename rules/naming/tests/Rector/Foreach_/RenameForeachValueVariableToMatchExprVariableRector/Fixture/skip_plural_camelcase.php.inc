@@ -2,7 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector\Fixture;
 
-class SkipPluralCamelCase
+class SkipPluralCamelcase
 {
     public function run(array $filesInDirectory)
     {
