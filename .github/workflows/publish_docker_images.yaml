@@ -12,9 +12,6 @@ on:
 jobs:
     publish_images:
         runs-on: ubuntu-20.04
-        strategy:
-            matrix:
-                php-version: ['7.3', '7.4', '8.0']
         steps:
             - name: Checkout
               uses: actions/checkout@v2
@@ -37,17 +34,11 @@ jobs:
                   BRANCH=$(echo "${{ github.ref }}" | sed -e '/refs\/heads\//!d; s,refs/.*/\(.*\),\1,')
 
                   if [ "master" == "$BRANCH" ]; then
-                      DOCKER_TAGS="$DOCKER_TAGS php${{ matrix.php-version }}"
-                      if [ "8.0" == "${{ matrix.php-version }}" ]; then
-                          DOCKER_TAGS="$DOCKER_TAGS latest"
-                      fi
+                      DOCKER_TAGS="$DOCKER_TAGS latest"
                   fi
 
                   if [ ! -z "$TAG" ]; then
-                      DOCKER_TAGS="$DOCKER_TAGS $TAG-php${{ matrix.php-version }}"
-                      if [ "8.0" ==  "${{ matrix.php-version }}" ]; then
-                          DOCKER_TAGS="$DOCKER_TAGS $TAG"
-                      fi
+                      DOCKER_TAGS="$DOCKER_TAGS $TAG"
                   fi
 
                   echo "Image will be tagged with: $DOCKER_TAGS"
@@ -57,13 +48,13 @@ jobs:
                       DOCKER_TAG_ARG="$DOCKER_TAG_ARG --tag rector/rector:$ARG"
                   done
 
-                  docker buildx create --name builder-php${{ matrix.php-version }} --use
+                  docker buildx create --name builder --use
                   docker buildx build \
                         --progress plain \
-                        --cache-from=rector/rector:build-cache-php${{ matrix.php-version }} \
-                        --cache-to=type=registry,ref=rector/rector:build-cache-php${{ matrix.php-version }},mode=max,push=true \
+                        --cache-from=rector/rector:build-cache \
+                        --cache-to=type=registry,ref=rector/rector:build-cache,mode=max,push=true \
                         --target rector \
                         --push \
                         $DOCKER_TAG_ARG \
                         --platform linux/amd64,linux/arm64 \
-                        --build-arg PHP_VERSION=${{ matrix.php-version }} .
+                        --build-arg .
