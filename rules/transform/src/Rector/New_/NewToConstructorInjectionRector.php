@@ -127,8 +127,8 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $typesToConstructorInjections = $configuration[self::TYPES_TO_CONSTRUCTOR_INJECTION] ?? [];
-        foreach ($typesToConstructorInjections as $typesToConstructorInjection) {
-            $this->constructorInjectionObjectTypes[] = new ObjectType($typesToConstructorInjection);
+        foreach ($typesToConstructorInjections as $typeToConstructorInjection) {
+            $this->constructorInjectionObjectTypes[] = new ObjectType($typeToConstructorInjection);
         }
     }
 

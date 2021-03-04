@@ -92,12 +92,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->newsToMethodCalls as $newToMethodCall) {
-            if (! $this->isObjectType($node, $newToMethodCall->getNewObjectType())) {
+        foreach ($this->newsToMethodCalls as $newsToMethodCall) {
+            if (! $this->isObjectType($node, $newsToMethodCall->getNewObjectType())) {
                 continue;
             }
 
-            $serviceObjectType = $newToMethodCall->getServiceObjectType();
+            $serviceObjectType = $newsToMethodCall->getServiceObjectType();
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
             if ($className === $serviceObjectType->getClassName()) {
                 continue;
@@ -106,23 +106,26 @@ CODE_SAMPLE
             /** @var Class_ $classNode */
             $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
 
-            $propertyName = $this->getExistingFactoryPropertyName($classNode, $newToMethodCall->getServiceObjectType());
+            $propertyName = $this->getExistingFactoryPropertyName(
+                $classNode,
+                $newsToMethodCall->getServiceObjectType()
+            );
 
             if ($propertyName === null) {
-                $serviceObjectType = $newToMethodCall->getServiceObjectType();
+                $serviceObjectType = $newsToMethodCall->getServiceObjectType();
                 $propertyName = $this->classNaming->getShortName($serviceObjectType->getClassName());
                 $propertyName = lcfirst($propertyName);
 
                 $this->addConstructorDependencyToClass(
                     $classNode,
-                    $newToMethodCall->getServiceObjectType(),
+                    $newsToMethodCall->getServiceObjectType(),
                     $propertyName
                 );
             }
 
             $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
-            return new MethodCall($propertyFetch, $newToMethodCall->getServiceMethod(), $node->args);
+            return new MethodCall($propertyFetch, $newsToMethodCall->getServiceMethod(), $node->args);
         }
 
         return $node;
