@@ -26,4 +26,9 @@ final class __Name__Test extends AbstractRectorTestCase
     {
         return \Rector\__Package__\Rector\__Category__\__Name__::class;
     }
+
+    public function provideConfigFilePath(): string
+    {
+        return __DIR__ . '/config/configured_rule.php';
+    }
 }
