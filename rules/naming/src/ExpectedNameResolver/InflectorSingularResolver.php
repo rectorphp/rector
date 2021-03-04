@@ -29,6 +29,11 @@ final class InflectorSingularResolver
     private const BY_MIDDLE_REGEX = '#(?<by>By[A-Z][a-z]+)#';
 
     /**
+     * @var string
+     */
+    private const SINGLE = 'single';
+
+    /**
      * @var Inflector
      */
     private $inflector;
@@ -50,7 +55,7 @@ final class InflectorSingularResolver
             return self::SINGULAR_VERB[$currentName];
         }
 
-        if (strpos($currentName, 'single') === 0) {
+        if (strpos($currentName, (string) self::SINGLE) === 0) {
             return $currentName;
         }
 
@@ -61,14 +66,16 @@ final class InflectorSingularResolver
         }
 
         $singularValueVarName = $singularValueVarName === $currentName
-            ? 'single' . ucfirst($singularValueVarName)
+            ? self::SINGLE . ucfirst($singularValueVarName)
             : $singularValueVarName;
 
         $length = strlen($singularValueVarName);
-        if (strpos($singularValueVarName, 'single') === 0 && $length >= 40) {
-            return $currentName;
+        if (strpos($singularValueVarName, (string) self::SINGLE) !== 0) {
+            return $singularValueVarName;
         }
-
-        return $singularValueVarName;
+        if ($length < 40) {
+            return $singularValueVarName;
+        }
+        return $currentName;
     }
 }
