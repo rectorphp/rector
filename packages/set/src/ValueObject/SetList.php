@@ -616,6 +616,11 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
+    public const SYMFONY_51 = __DIR__ . '/../../../../config/set/symfony51.php';
+
+    /**
+     * @var string
+     */
     public const SYMFONY_50_TYPES = __DIR__ . '/../../../../config/set/symfony50-types.php';
 
     /**
