@@ -65,7 +65,7 @@ final class InflectorSingularResolver
             : $singularValueVarName;
 
         $length = strlen($singularValueVarName);
-        if ($length >= 40) {
+        if (strpos($currentName, 'single') === 0 && $length >= 40) {
             return $currentName;
         }
 
