@@ -53,7 +53,7 @@ final class RectorNodeTraverser extends NodeTraverser
         Configuration $configuration,
         ActiveRectorsProvider $activeRectorsProvider,
         NodeFinder $nodeFinder,
-        CurrentFileInfoProvider $currentFileInfoProvider,
+        CurrentFileInfoProvider $currentFileInfoProvider
     ) {
         $this->nodeFinder = $nodeFinder;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
