@@ -37,15 +37,15 @@ final class ActiveRectorsProvider
         $this->rectors = $rectors;
     }
 
-    /**
-     * @return RectorInterface[]
-     */
-    public function provideByType(string $type): array
-    {
-        return array_filter($this->rectors, function (RectorInterface $rector) use ($type): bool {
-            return is_a($rector, $type, true);
-        });
-    }
+//    /**
+//     * @return RectorInterface[]
+//     */
+//    public function provideByType(string $type): array
+//    {
+//        return array_filter($this->rectors, function (RectorInterface $rector) use ($type): bool {
+//            return is_a($rector, $type, true);
+//        });
+//    }
 
     /**
      * @return RectorInterface[]

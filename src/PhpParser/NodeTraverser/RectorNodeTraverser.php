@@ -16,19 +16,13 @@ use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Testing\Application\EnabledRectorClassProvider;
 
 final class RectorNodeTraverser extends NodeTraverser
 {
     /**
      * @var PhpRectorInterface[]
      */
-    private $allPhpRectors = [];
-
-    /**
-     * @var EnabledRectorClassProvider
-     */
-    private $enabledRectorClassProvider;
+    private $phpRectors = [];
 
     /**
      * @var NodeFinder
@@ -50,21 +44,21 @@ final class RectorNodeTraverser extends NodeTraverser
      */
     private $areNodeVisitorsPrepared = false;
 
+    /**
+     * @var ActiveRectorsProvider
+     */
+    private $activeRectorsProvider;
+
     public function __construct(
-        EnabledRectorClassProvider $enabledRectorClassProvider,
         Configuration $configuration,
         ActiveRectorsProvider $activeRectorsProvider,
         NodeFinder $nodeFinder,
-        CurrentFileInfoProvider $currentFileInfoProvider
+        CurrentFileInfoProvider $currentFileInfoProvider,
     ) {
-        /** @var PhpRectorInterface[] $phpRectors */
-        $phpRectors = $activeRectorsProvider->provideByType(PhpRectorInterface::class);
-
-        $this->allPhpRectors = $phpRectors;
-        $this->enabledRectorClassProvider = $enabledRectorClassProvider;
         $this->nodeFinder = $nodeFinder;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->configuration = $configuration;
+        $this->activeRectorsProvider = $activeRectorsProvider;
     }
 
     /**
@@ -73,10 +67,6 @@ final class RectorNodeTraverser extends NodeTraverser
     public function traverseFileNode(FileNode $fileNode): array
     {
         $this->prepareNodeVisitors();
-
-        if ($this->enabledRectorClassProvider->isConfigured()) {
-            $this->activateEnabledRectorOnly();
-        }
 
         if (! $this->hasFileNodeRectorsEnabled()) {
             return [];
@@ -97,10 +87,6 @@ final class RectorNodeTraverser extends NodeTraverser
     public function traverse(array $nodes): array
     {
         $this->prepareNodeVisitors();
-
-        if ($this->enabledRectorClassProvider->isConfigured()) {
-            $this->activateEnabledRectorOnly();
-        }
 
         $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
         if (! $hasNamespace && $nodes !== []) {
@@ -132,29 +118,11 @@ final class RectorNodeTraverser extends NodeTraverser
     {
         $this->prepareNodeVisitors();
 
-        $zeroCacheRectors = array_filter($this->allPhpRectors, function (PhpRectorInterface $phpRector): bool {
+        $zeroCacheRectors = array_filter($this->phpRectors, function (PhpRectorInterface $phpRector): bool {
             return $phpRector instanceof ZeroCacheRectorInterface;
         });
 
         return count($zeroCacheRectors);
-    }
-
-    /**
-     * Mostly used for testing
-     */
-    private function activateEnabledRectorOnly(): void
-    {
-        $this->visitors = [];
-
-        $enabledRectorClass = $this->enabledRectorClassProvider->getEnabledRectorClass();
-        foreach ($this->allPhpRectors as $phpRector) {
-            if (! is_a($phpRector, $enabledRectorClass, true)) {
-                continue;
-            }
-
-            $this->addVisitor($phpRector);
-            break;
-        }
     }
 
     private function hasFileNodeRectorsEnabled(): bool
@@ -184,12 +152,16 @@ final class RectorNodeTraverser extends NodeTraverser
             return;
         }
 
-        foreach ($this->allPhpRectors as $phpRector) {
-            if ($this->configuration->isCacheEnabled() && ! $this->configuration->shouldClearCache() && $phpRector instanceof ZeroCacheRectorInterface) {
+        foreach ($this->activeRectorsProvider->provide() as $rector) {
+            if (! $rector instanceof PhpRectorInterface) {
                 continue;
             }
 
-            $this->addVisitor($phpRector);
+            if ($this->configuration->isCacheEnabled() && ! $this->configuration->shouldClearCache() && $rector instanceof ZeroCacheRectorInterface) {
+                continue;
+            }
+
+            $this->addVisitor($rector);
         }
 
         $this->areNodeVisitorsPrepared = true;

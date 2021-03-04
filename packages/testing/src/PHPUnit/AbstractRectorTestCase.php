@@ -20,7 +20,6 @@ use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use Rector\Testing\Application\EnabledRectorClassProvider;
 use Rector\Testing\Configuration\AllRectorConfigFactory;
 use Rector\Testing\Contract\RunnableInterface;
 use Rector\Testing\Guard\FixtureGuard;
@@ -101,24 +100,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     {
         $this->initializeDependencies();
 
-        if ($this->provideConfigFilePath() !== '') {
-            $configFileInfo = new SmartFileInfo($this->provideConfigFilePath());
-            $configFileInfos = self::$rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
+        $configFileInfo = new SmartFileInfo($this->provideConfigFilePath());
+        $configFileInfos = self::$rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
 
-            $this->bootKernelWithConfigsAndStaticCache(RectorKernel::class, $configFileInfos);
-
-            /** @var EnabledRectorClassProvider $enabledRectorsProvider */
-            $enabledRectorsProvider = $this->getService(EnabledRectorClassProvider::class);
-            $enabledRectorsProvider->reset();
-        } else {
-            // prepare container with all rectors
-            // cache only rector tests - defined in phpunit.xml
-            $this->createRectorRepositoryContainer();
-
-            /** @var EnabledRectorClassProvider $enabledRectorsProvider */
-            $enabledRectorsProvider = $this->getService(EnabledRectorClassProvider::class);
-            $enabledRectorsProvider->setEnabledRectorClass($this->getRectorClass());
-        }
+        $this->bootKernelWithConfigsAndStaticCache(RectorKernel::class, $configFileInfos);
 
         $this->fileProcessor = $this->getService(FileProcessor::class);
         $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);

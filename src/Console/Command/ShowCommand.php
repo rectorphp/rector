@@ -59,7 +59,6 @@ final class ShowCommand extends Command
     private function reportLoadedRectors(): void
     {
         $activeRectors = $this->activeRectorsProvider->provide();
-
         $rectorCount = count($activeRectors);
 
         if ($rectorCount > 0) {
