@@ -20,7 +20,6 @@ use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use Rector\Testing\Configuration\AllRectorConfigFactory;
 use Rector\Testing\Contract\RunnableInterface;
 use Rector\Testing\Guard\FixtureGuard;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
@@ -216,21 +215,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $inputResult = $inputRunnable->run();
         $expectedResult = $expectedRunnable->run();
         $this->assertSame($expectedResult, $inputResult);
-    }
-
-    private function createRectorRepositoryContainer(): void
-    {
-        if (self::$allRectorContainer === null) {
-            $allRectorConfigFactory = new AllRectorConfigFactory();
-            $configFilePath = $allRectorConfigFactory->create();
-            $this->bootKernelWithConfigs(RectorKernel::class, [$configFilePath]);
-
-            self::$allRectorContainer = self::$container;
-            return;
-        }
-
-        // load from cache
-        self::$container = self::$allRectorContainer;
     }
 
     /**
