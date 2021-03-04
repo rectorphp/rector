@@ -27,7 +27,7 @@ $autoloadIncluder = new AutoloadIncluder();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 
 $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-autoload.php');
-$autoloadIncluder->loadIfExistsAndNotLoadedYet(getcwd() . '/vendor/autoload.php');
+$autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/autoload.php');
 
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadFromCommandLine();
