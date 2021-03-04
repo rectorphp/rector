@@ -4,10 +4,10 @@ namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchE
 
 class SkipPluralCamelCase
 {
-    public function run(array $filesInfosInDirectory)
+    public function run(array $filesInDirectory)
     {
-        foreach ($filesInfosInDirectory as $fileInfosInDirectory) {
-            echo $fileInfosInDirectory;
+        foreach ($filesInDirectory as $fileInDirectory) {
+            echo $fileInDirectory;
         }
     }
 }

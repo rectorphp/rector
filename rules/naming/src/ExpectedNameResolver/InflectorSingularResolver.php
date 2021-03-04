@@ -19,7 +19,7 @@ final class InflectorSingularResolver
      * @var string
      * @see https://regex101.com/r/lbQaGC/1
      */
-    private const CAMELCASE_REGEX = '#(?<camelcase>([a-z]+|[A-Z]{1,}[a-z]+))#ms';
+    private const CAMELCASE_REGEX = '#(?<camelcase>([a-z]+|[A-Z]{1,}[a-z]+))#';
 
     public function __construct(Inflector $inflector)
     {
@@ -32,16 +32,12 @@ final class InflectorSingularResolver
             return $currentName;
         }
 
-        $camelCases = Strings::match($currentName, self::CAMELCASE_REGEX);
-        $singularValueVarName   = '';
+        $camelCases = Strings::matchAll($currentName, self::CAMELCASE_REGEX);
+        $singularValueVarName = '';
         foreach ($camelCases as $camelCase) {
-            //$singularValueVarName .= $this->inflector->singularize($camelCase);
-            //dump($camelCase);
+            $singularValueVarName .= $this->inflector->singularize($camelCase['camelcase']);
         }
 
-        dump($camelCases);
-
-        $singularValueVarName = $this->inflector->singularize($camelCase);
         $singularValueVarName = $singularValueVarName === $currentName
             ? 'single' . ucfirst($singularValueVarName)
             : $singularValueVarName;
