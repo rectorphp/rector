@@ -22,7 +22,7 @@ final class RectorNodeTraverser extends NodeTraverser
     /**
      * @var PhpRectorInterface[]
      */
-    private $phpRectors = [];
+    private const PHP_RECTORS = [];
 
     /**
      * @var NodeFinder
@@ -118,7 +118,7 @@ final class RectorNodeTraverser extends NodeTraverser
     {
         $this->prepareNodeVisitors();
 
-        $zeroCacheRectors = array_filter($this->phpRectors, function (PhpRectorInterface $phpRector): bool {
+        $zeroCacheRectors = array_filter(self::PHP_RECTORS, function (PhpRectorInterface $phpRector): bool {
             return $phpRector instanceof ZeroCacheRectorInterface;
         });
 
