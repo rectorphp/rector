@@ -42,7 +42,7 @@ final class InflectorSingularResolver
     {
         $matchBy = Strings::match($currentName, self::BY_MIDDLE_REGEX);
         if ($matchBy) {
-            $newName = substr($currentName, 0, - strlen($matchBy['by']));
+            $newName = Strings::substring($currentName, 0, - strlen($matchBy['by']));
             return $this->resolve($newName);
         }
 
