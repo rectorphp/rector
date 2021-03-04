@@ -70,20 +70,20 @@ CODE_SAMPLE
 
         $catchKeysByContent = $this->collectCatchKeysByContent($node);
         /** @var Catch_[] $catches */
-        foreach ($catchKeysByContent as $catches) {
+        foreach ($catchKeysByContent as $catchKeyByContent) {
             // no duplicates
-            if (count($catches) < 2) {
+            if ((is_countable($catchKeyByContent) ? count($catchKeyByContent) : 0) < 2) {
                 continue;
             }
 
-            $collectedTypes = $this->collectTypesFromCatchedByIds($node, $catches);
+            $collectedTypes = $this->collectTypesFromCatchedByIds($node, $catchKeyByContent);
 
             /** @var Catch_ $firstCatch */
-            $firstCatch = array_shift($catches);
+            $firstCatch = array_shift($catchKeyByContent);
             $firstCatch->types = $collectedTypes;
 
-            foreach ($catches as $catch) {
-                $this->removeNode($catch);
+            foreach ($catchKeyByContent as $singleCatchKeyByContent) {
+                $this->removeNode($singleCatchKeyByContent);
             }
         }
 

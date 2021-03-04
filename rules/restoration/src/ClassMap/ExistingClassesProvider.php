@@ -66,8 +66,8 @@ final class ExistingClassesProvider
         $robotLoader = new RobotLoader();
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/rector');
 
-        foreach ($directories as $path) {
-            $robotLoader->addDirectory(getcwd() . '/' . $path);
+        foreach ($directories as $directory) {
+            $robotLoader->addDirectory(getcwd() . '/' . $directory);
         }
 
         $classNames = [];

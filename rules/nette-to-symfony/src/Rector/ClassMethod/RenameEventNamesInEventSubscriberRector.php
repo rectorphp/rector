@@ -156,10 +156,10 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->symfonyClassConstWithAliases as $symfonyClassConst) {
-            foreach ($symfonyClassConst->getOldStringAliases() as $netteStringName) {
+        foreach ($this->symfonyClassConstWithAliases as $symfonyClassConstWithAlias) {
+            foreach ($symfonyClassConstWithAlias->getOldStringAliases() as $netteStringName) {
                 if ($this->valueResolver->isValue($arrayItem->key, $netteStringName)) {
-                    return $symfonyClassConst;
+                    return $symfonyClassConstWithAlias;
                 }
             }
         }
@@ -173,10 +173,10 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->symfonyClassConstWithAliases as $symfonyClassConst) {
-            $isMatch = $this->resolveClassConstAliasMatch($arrayItem, $symfonyClassConst);
+        foreach ($this->symfonyClassConstWithAliases as $symfonyClassConstWithAlias) {
+            $isMatch = $this->resolveClassConstAliasMatch($arrayItem, $symfonyClassConstWithAlias);
             if ($isMatch) {
-                return $symfonyClassConst;
+                return $symfonyClassConstWithAlias;
             }
         }
 

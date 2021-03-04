@@ -130,9 +130,9 @@ final class RemoveExtraParametersRector extends AbstractRector
      */
     private function hasVariadicParameters(array $parameterAcceptors): bool
     {
-        foreach ($parameterAcceptors as $parametersAcceptor) {
+        foreach ($parameterAcceptors as $parameterAcceptor) {
             // can be any number of arguments → nothing to limit here
-            if ($parametersAcceptor->isVariadic()) {
+            if ($parameterAcceptor->isVariadic()) {
                 return true;
             }
         }

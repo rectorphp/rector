@@ -171,16 +171,16 @@ CODE_SAMPLE
     {
         $childrenClassReflection = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
 
-        foreach ($childrenClassReflection as $singleChildrenClassReflection) {
-            $singleChildrenClassReflectionHasMethod = $singleChildrenClassReflection->hasMethod($methodName);
+        foreach ($childrenClassReflection as $childClassReflection) {
+            $singleChildrenClassReflectionHasMethod = $childClassReflection->hasMethod($methodName);
             if (! $singleChildrenClassReflectionHasMethod) {
                 continue;
             }
 
-            $methodReflection = $singleChildrenClassReflection->getNativeMethod($methodName);
+            $methodReflection = $childClassReflection->getNativeMethod($methodName);
             $methodDeclaringClass = $methodReflection->getDeclaringClass();
 
-            if ($methodDeclaringClass->getName() === $singleChildrenClassReflection->getName()) {
+            if ($methodDeclaringClass->getName() === $childClassReflection->getName()) {
                 return true;
             }
         }

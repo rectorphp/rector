@@ -30,9 +30,9 @@ final class StmtOrder
     public function createOldToNewKeys(array $desiredStmtOrder, array $currentStmtOrder): array
     {
         $newKeys = [];
-        foreach ($desiredStmtOrder as $desiredClassMethod) {
+        foreach ($desiredStmtOrder as $singleDesiredStmtOrder) {
             foreach ($currentStmtOrder as $currentKey => $classMethodName) {
-                if ($classMethodName === $desiredClassMethod) {
+                if ($classMethodName === $singleDesiredStmtOrder) {
                     $newKeys[] = $currentKey;
                 }
             }

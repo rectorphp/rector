@@ -117,14 +117,14 @@ CODE_SAMPLE
                 continue;
             }
 
-            foreach ($phpunitDataProviderTagValueNodes as $dataProviderTagValueNode) {
-                $oldMethodName = $dataProviderTagValueNode->getMethodName();
+            foreach ($phpunitDataProviderTagValueNodes as $phpunitDataProviderTagValueNode) {
+                $oldMethodName = $phpunitDataProviderTagValueNode->getMethodName();
                 if (! Strings::startsWith($oldMethodName, 'test')) {
                     continue;
                 }
 
                 $newMethodName = $this->createNewMethodName($oldMethodName);
-                $dataProviderTagValueNode->changeMethodName($newMethodName);
+                $phpunitDataProviderTagValueNode->changeMethodName($newMethodName);
                 $phpDocInfo->markAsChanged();
 
                 $this->providerMethodNamesToNewNames[$oldMethodName] = $newMethodName;

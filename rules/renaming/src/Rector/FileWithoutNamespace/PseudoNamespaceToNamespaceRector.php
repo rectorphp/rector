@@ -147,8 +147,8 @@ CODE_SAMPLE
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
             // replace on @var/@param/@return/@throws
-            foreach ($this->pseudoNamespacesToNamespaces as $namespacePrefixWithExcludedClasses) {
-                $this->phpDocTypeRenamer->changeUnderscoreType($phpDocInfo, $node, $namespacePrefixWithExcludedClasses);
+            foreach ($this->pseudoNamespacesToNamespaces as $pseudoNamespaceToNamespace) {
+                $this->phpDocTypeRenamer->changeUnderscoreType($phpDocInfo, $node, $pseudoNamespaceToNamespace);
             }
             if ($node instanceof Name) {
                 return $this->processNameOrIdentifier($node);
@@ -174,12 +174,12 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->pseudoNamespacesToNamespaces as $pseudoNamespacesToNamespace) {
-            if (! $this->isName($node, $pseudoNamespacesToNamespace->getNamespacePrefix() . '*')) {
+        foreach ($this->pseudoNamespacesToNamespaces as $pseudoNamespaceToNamespace) {
+            if (! $this->isName($node, $pseudoNamespaceToNamespace->getNamespacePrefix() . '*')) {
                 continue;
             }
 
-            $excludedClasses = $pseudoNamespacesToNamespace->getExcludedClasses();
+            $excludedClasses = $pseudoNamespaceToNamespace->getExcludedClasses();
             if (is_array($excludedClasses) && $this->isNames($node, $excludedClasses)) {
                 return null;
             }

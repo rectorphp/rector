@@ -166,13 +166,13 @@ CODE_SAMPLE
         $assignsByName = $this->collectAssignsByName($assigns);
         $assignsWithUniqueName = [];
         /** @var Assign[] $singleAssignsByName */
-        foreach ($assignsByName as $singleAssignsByName) {
-            $count = count($singleAssignsByName);
+        foreach ($assignsByName as $assignByName) {
+            $count = is_countable($assignByName) ? count($assignByName) : 0;
             if ($count > 1) {
                 continue;
             }
 
-            $assignsWithUniqueName = array_merge($assignsWithUniqueName, $singleAssignsByName);
+            $assignsWithUniqueName = array_merge($assignsWithUniqueName, $assignByName);
         }
 
         return $assignsWithUniqueName;

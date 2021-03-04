@@ -231,9 +231,9 @@ CODE_SAMPLE
         $class = $this->addNewPropertiesToClass($class, $newPropertyTypes);
 
         $parentSetUpStaticCallExpression = $this->setUpFactory->createParentStaticCall();
-        foreach ($newPropertyTypes as $type) {
+        foreach ($newPropertyTypes as $newPropertyType) {
             // container fetch assign
-            $assign = $this->createContainerGetTypeToPropertyAssign($type);
+            $assign = $this->createContainerGetTypeToPropertyAssign($newPropertyType);
 
             $setupClassMethod = $class->getMethod(MethodName::SET_UP);
 
@@ -299,8 +299,8 @@ CODE_SAMPLE
     private function addNewPropertiesToClass(Class_ $class, array $newProperties): Class_
     {
         $properties = [];
-        foreach ($newProperties as $objectType) {
-            $properties[] = $this->createPropertyFromType($objectType);
+        foreach ($newProperties as $newProperty) {
+            $properties[] = $this->createPropertyFromType($newProperty);
         }
 
         // add property to the start of the class

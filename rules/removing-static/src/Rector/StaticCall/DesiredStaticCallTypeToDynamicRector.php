@@ -84,8 +84,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->staticObjectTypes as $objectType) {
-            if (! $this->isObjectType($node->class, $objectType)) {
+        foreach ($this->staticObjectTypes as $staticObjectType) {
+            if (! $this->isObjectType($node->class, $staticObjectType)) {
                 continue;
             }
 
@@ -95,7 +95,7 @@ CODE_SAMPLE
                 return $this->createFromSelf($node);
             }
 
-            $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
+            $propertyName = $this->propertyNaming->fqnToVariableName($staticObjectType);
 
             $currentMethodName = $node->getAttribute(AttributeKey::METHOD_NAME);
             if ($currentMethodName === MethodName::CONSTRUCT) {
