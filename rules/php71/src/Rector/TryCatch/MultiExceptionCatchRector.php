@@ -72,7 +72,8 @@ CODE_SAMPLE
         /** @var Catch_[] $catchKeyByContent */
         foreach ($catchKeysByContent as $catchKeyByContent) {
             // no duplicates
-            if ((is_countable($catchKeyByContent) ? count($catchKeyByContent) : 0) < 2) {
+            $count = count($catchKeyByContent);
+            if ($count < 2) {
                 continue;
             }
 
