@@ -23,6 +23,12 @@ final class InflectorSingularResolver
     private const CAMELCASE_REGEX = '#(?<camelcase>([a-z]+|[A-Z]{1,}[a-z]+))#';
 
     /**
+     * @var string
+     * @see https://regex101.com/r/2aGdkZ/1
+     */
+    private const BY_MIDDLE_REGEX = '#(?<by>By[A-Z][a-z]+)#';
+
+    /**
      * @var Inflector
      */
     private $inflector;
@@ -34,6 +40,12 @@ final class InflectorSingularResolver
 
     public function resolve(string $currentName): string
     {
+        $matchBy = Strings::match($currentName, self::BY_MIDDLE_REGEX);
+        if ($matchBy) {
+            $newName = substr($currentName, 0, - strlen($matchBy['by']));
+            return $this->inflector->singularize($newName);
+        }
+
         if (array_key_exists($currentName, self::SINGULAR_VERB)) {
             return self::SINGULAR_VERB[$currentName];
         }
