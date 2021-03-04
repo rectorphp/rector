@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Type\ThisType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -21,11 +22,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameForeachValueVariableToMatchExprVariableRector extends AbstractRector
 {
     /**
-     * @var Inflector
+     * @var InflectorSingularResolver
      */
     private $inflector;
 
-    public function __construct(Inflector $inflector)
+    public function __construct(InflectorSingularResolver $inflector)
     {
         $this->inflector = $inflector;
     }
@@ -102,7 +103,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $singularValueVarName = $this->inflector->singularize($exprName);
+        $singularValueVarName = $this->inflector->resolve($exprName);
         $singularValueVarName = $singularValueVarName === $exprName
             ? 'single' . ucfirst($singularValueVarName)
             : $singularValueVarName;
