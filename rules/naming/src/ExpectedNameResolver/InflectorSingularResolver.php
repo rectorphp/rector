@@ -43,7 +43,7 @@ final class InflectorSingularResolver
         $matchBy = Strings::match($currentName, self::BY_MIDDLE_REGEX);
         if ($matchBy) {
             $newName = substr($currentName, 0, - strlen($matchBy['by']));
-            return $this->inflector->singularize($newName);
+            return $this->resolve($newName);
         }
 
         if (array_key_exists($currentName, self::SINGULAR_VERB)) {
