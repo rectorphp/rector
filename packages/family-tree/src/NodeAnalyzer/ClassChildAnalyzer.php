@@ -24,19 +24,19 @@ final class ClassChildAnalyzer
     {
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
 
-        foreach ($childrenClassReflections as $childrenClassReflection) {
-            $childrenClassReflectionHasMethod = $childrenClassReflection->hasMethod($methodName);
+        foreach ($childrenClassReflections as $childClassReflection) {
+            $childrenClassReflectionHasMethod = $childClassReflection->hasMethod($methodName);
             if (! $childrenClassReflectionHasMethod) {
                 continue;
             }
 
-            $constructorReflectionMethod = $childrenClassReflection->getNativeMethod($methodName);
+            $constructorReflectionMethod = $childClassReflection->getNativeMethod($methodName);
             if (! $constructorReflectionMethod instanceof PhpMethodReflection) {
                 continue;
             }
 
             $methodDeclaringClassReflection = $constructorReflectionMethod->getDeclaringClass();
-            if ($methodDeclaringClassReflection->getName() === $childrenClassReflection->getName()) {
+            if ($methodDeclaringClassReflection->getName() === $childClassReflection->getName()) {
                 return true;
             }
         }

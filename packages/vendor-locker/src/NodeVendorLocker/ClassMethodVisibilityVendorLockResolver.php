@@ -80,8 +80,8 @@ final class ClassMethodVisibilityVendorLockResolver
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
-        foreach ($childrenClassReflections as $childrenClassReflection) {
-            $childrenClassReflectionHasMethod = $childrenClassReflection->hasMethod($methodName);
+        foreach ($childrenClassReflections as $childClassReflection) {
+            $childrenClassReflectionHasMethod = $childClassReflection->hasMethod($methodName);
             if ($childrenClassReflectionHasMethod) {
                 return true;
             }

@@ -65,11 +65,11 @@ final class PropertyVisibilityVendorLockResolver
         $propertyName = $this->nodeNameResolver->getName($property);
 
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
-        foreach ($childrenClassReflections as $childrenClassReflection) {
-            if ($childrenClassReflection === $classReflection) {
+        foreach ($childrenClassReflections as $childClassReflection) {
+            if ($childClassReflection === $classReflection) {
                 continue;
             }
-            $childrenClassReflectionHasProperty = $childrenClassReflection->hasProperty($propertyName);
+            $childrenClassReflectionHasProperty = $childClassReflection->hasProperty($propertyName);
 
             if ($childrenClassReflectionHasProperty) {
                 return true;

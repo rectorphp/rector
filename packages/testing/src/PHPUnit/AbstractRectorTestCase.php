@@ -183,36 +183,33 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
     {
         $addedFilesWithContents = $this->removedAndAddedFilesCollector->getAddedFilesWithContent();
-        foreach ($addedFilesWithContents as $addedFilesWithContent) {
-            if (! Strings::endsWith($addedFilesWithContent->getFilePath(), $expectedExtraFileName)) {
+        foreach ($addedFilesWithContents as $addedFileWithContent) {
+            if (! Strings::endsWith($addedFileWithContent->getFilePath(), $expectedExtraFileName)) {
                 continue;
             }
 
-            $this->assertStringEqualsFile($expectedExtraContentFilePath, $addedFilesWithContent->getFileContent());
+            $this->assertStringEqualsFile($expectedExtraContentFilePath, $addedFileWithContent->getFileContent());
             return;
         }
 
         $addedFilesWithNodes = $this->removedAndAddedFilesCollector->getAddedFilesWithNodes();
-        foreach ($addedFilesWithNodes as $addedFilesWithNode) {
-            if (! Strings::endsWith($addedFilesWithNode->getFilePath(), $expectedExtraFileName)) {
+        foreach ($addedFilesWithNodes as $addedFileWithNode) {
+            if (! Strings::endsWith($addedFileWithNode->getFilePath(), $expectedExtraFileName)) {
                 continue;
             }
 
-            $printedFileContent = $this->betterStandardPrinter->prettyPrintFile($addedFilesWithNode->getNodes());
+            $printedFileContent = $this->betterStandardPrinter->prettyPrintFile($addedFileWithNode->getNodes());
             $this->assertStringEqualsFile($expectedExtraContentFilePath, $printedFileContent);
             return;
         }
 
         $movedFilesWithContent = $this->removedAndAddedFilesCollector->getMovedFileWithContent();
-        foreach ($movedFilesWithContent as $singleMovedFilesWithContent) {
-            if (! Strings::endsWith($singleMovedFilesWithContent->getNewPathname(), $expectedExtraFileName)) {
+        foreach ($movedFilesWithContent as $movedFileWithContent) {
+            if (! Strings::endsWith($movedFileWithContent->getNewPathname(), $expectedExtraFileName)) {
                 continue;
             }
 
-            $this->assertStringEqualsFile(
-                $expectedExtraContentFilePath,
-                $singleMovedFilesWithContent->getFileContent()
-            );
+            $this->assertStringEqualsFile($expectedExtraContentFilePath, $movedFileWithContent->getFileContent());
             return;
         }
 
@@ -275,16 +272,16 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
                 $fileInfosToProcess = array_merge([$originalFileInfo], $extraFileInfos);
 
                 // life-cycle trio :)
-                foreach ($fileInfosToProcess as $singleFileInfosToProcess) {
-                    $this->fileProcessor->parseFileInfoToLocalCache($singleFileInfosToProcess);
+                foreach ($fileInfosToProcess as $fileInfoToProcess) {
+                    $this->fileProcessor->parseFileInfoToLocalCache($fileInfoToProcess);
                 }
 
-                foreach ($fileInfosToProcess as $singleFileInfosToProcess) {
-                    $this->fileProcessor->refactor($singleFileInfosToProcess);
+                foreach ($fileInfosToProcess as $fileInfoToProcess) {
+                    $this->fileProcessor->refactor($fileInfoToProcess);
                 }
 
-                foreach ($fileInfosToProcess as $singleFileInfosToProcess) {
-                    $this->fileProcessor->postFileRefactor($singleFileInfosToProcess);
+                foreach ($fileInfosToProcess as $fileInfoToProcess) {
+                    $this->fileProcessor->postFileRefactor($fileInfoToProcess);
                 }
             }
 
