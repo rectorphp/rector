@@ -6,20 +6,14 @@ namespace Rector\Naming\ExpectedNameResolver;
 
 use Doctrine\Inflector\Inflector;
 use Nette\Utils\Strings;
-use PhpParser\Node;
 
 final class InflectorSingularResolver
 {
     /**
-     * @var Inflector
-     */
-    private $inflector;
-
-    /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const SINGULAR_VERB = [
-        'news' => 'new'
+        'news' => 'new',
     ];
 
     /**
@@ -28,6 +22,11 @@ final class InflectorSingularResolver
      */
     private const CAMELCASE_REGEX = '#(?<camelcase>([a-z]+|[A-Z]{1,}[a-z]+))#';
 
+    /**
+     * @var Inflector
+     */
+    private $inflector;
+
     public function __construct(Inflector $inflector)
     {
         $this->inflector = $inflector;
@@ -35,7 +34,7 @@ final class InflectorSingularResolver
 
     public function resolve(string $currentName): string
     {
-        if (in_array($currentName, array_keys(self::SINGULAR_VERB), true)) {
+        if (array_key_exists($currentName, self::SINGULAR_VERB)) {
             return self::SINGULAR_VERB[$currentName];
         }
 

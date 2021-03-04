@@ -186,12 +186,12 @@ CODE_SAMPLE
         $missingPropertyNames = [];
 
         // remove other properties that are accessible from this scope
-        foreach ($propertiesToComplete as $singlePropertiesToComplete) {
-            if ($classReflection->hasProperty($singlePropertiesToComplete)) {
+        foreach ($propertiesToComplete as $propertyToComplete) {
+            if ($classReflection->hasProperty($propertyToComplete)) {
                 continue;
             }
 
-            $missingPropertyNames[] = $singlePropertiesToComplete;
+            $missingPropertyNames[] = $propertyToComplete;
         }
 
         return $missingPropertyNames;

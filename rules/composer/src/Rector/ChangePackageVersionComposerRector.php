@@ -38,10 +38,10 @@ final class ChangePackageVersionComposerRector implements ComposerRectorInterfac
 
     public function refactor(ComposerJson $composerJson): void
     {
-        foreach ($this->packagesAndVersions as $packagesAndVersion) {
+        foreach ($this->packagesAndVersions as $packageAndVersion) {
             $composerJson->changePackageVersion(
-                $packagesAndVersion->getPackageName(),
-                $packagesAndVersion->getVersion()
+                $packageAndVersion->getPackageName(),
+                $packageAndVersion->getVersion()
             );
         }
     }

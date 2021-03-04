@@ -50,8 +50,8 @@ final class UnusedParameterResolver
             return [];
         }
 
-        foreach ($childrenOfClass as $childClassNode) {
-            $methodOfChild = $childClassNode->getMethod($methodName);
+        foreach ($childrenOfClass as $childOfClass) {
+            $methodOfChild = $childOfClass->getMethod($methodName);
             if (! $methodOfChild instanceof ClassMethod) {
                 continue;
             }

@@ -171,8 +171,8 @@ CODE_SAMPLE
         // process
         $this->injectObjectTypes = [];
 
-        foreach ($childrenClasses as $childrenClass) {
-            $constructorClassMethod = $childrenClass->getMethod(MethodName::CONSTRUCT);
+        foreach ($childrenClasses as $childClass) {
+            $constructorClassMethod = $childClass->getMethod(MethodName::CONSTRUCT);
             if (! $constructorClassMethod instanceof ClassMethod) {
                 continue;
             }

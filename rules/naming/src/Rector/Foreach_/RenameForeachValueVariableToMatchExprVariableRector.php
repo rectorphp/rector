@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Rector\Foreach_;
 
-use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -24,11 +23,11 @@ final class RenameForeachValueVariableToMatchExprVariableRector extends Abstract
     /**
      * @var InflectorSingularResolver
      */
-    private $inflector;
+    private $inflectorSingularResolver;
 
-    public function __construct(InflectorSingularResolver $inflector)
+    public function __construct(InflectorSingularResolver $inflectorSingularResolver)
     {
-        $this->inflector = $inflector;
+        $this->inflectorSingularResolver = $inflectorSingularResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -99,7 +98,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $singularValueVarName = $this->inflector->resolve($exprName);
+        $singularValueVarName = $this->inflectorSingularResolver->resolve($exprName);
         if ($this->shouldSkip($valueVarName, $singularValueVarName, $node)) {
             return null;
         }

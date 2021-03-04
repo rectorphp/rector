@@ -129,17 +129,17 @@ CODE_SAMPLE
         $this->complexNodeRemover->removePropertyAndUsages($node, $vendorLockedClassMethodNames);
 
         /** @var ClassMethod $method */
-        foreach ($classMethodsToCheck as $method) {
-            if (! $this->hasMethodSomeStmtsLeft($method)) {
+        foreach ($classMethodsToCheck as $classMethodToCheck) {
+            if (! $this->hasMethodSomeStmtsLeft($classMethodToCheck)) {
                 continue;
             }
 
-            $classMethodName = $this->getName($method->name);
+            $classMethodName = $this->getName($classMethodToCheck->name);
             if (in_array($classMethodName, $vendorLockedClassMethodNames, true)) {
                 continue;
             }
 
-            $this->complexNodeRemover->removeClassMethodAndUsages($method);
+            $this->complexNodeRemover->removeClassMethodAndUsages($classMethodToCheck);
         }
 
         return $node;
@@ -205,12 +205,12 @@ CODE_SAMPLE
     private function getVendorLockedClassMethodNames(array $methodsToCheck): array
     {
         $vendorLockedClassMethodsNames = [];
-        foreach ($methodsToCheck as $method) {
-            if (! $this->vendorLockResolver->isClassMethodRemovalVendorLocked($method)) {
+        foreach ($methodsToCheck as $methodToCheck) {
+            if (! $this->vendorLockResolver->isClassMethodRemovalVendorLocked($methodToCheck)) {
                 continue;
             }
 
-            $vendorLockedClassMethodsNames[] = $this->getName($method);
+            $vendorLockedClassMethodsNames[] = $this->getName($methodToCheck);
         }
 
         return $vendorLockedClassMethodsNames;

@@ -38,11 +38,11 @@ final class ReplacePackageAndVersionComposerRector implements ComposerRectorInte
 
     public function refactor(ComposerJson $composerJson): void
     {
-        foreach ($this->replacePackagesAndVersions as $replacePackagesAndVersion) {
+        foreach ($this->replacePackagesAndVersions as $replacePackageAndVersion) {
             $composerJson->replacePackage(
-                $replacePackagesAndVersion->getOldPackageName(),
-                $replacePackagesAndVersion->getNewPackageName(),
-                $replacePackagesAndVersion->getVersion()
+                $replacePackageAndVersion->getOldPackageName(),
+                $replacePackageAndVersion->getNewPackageName(),
+                $replacePackageAndVersion->getVersion()
             );
         }
     }
