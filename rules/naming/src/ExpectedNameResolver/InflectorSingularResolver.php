@@ -16,6 +16,13 @@ final class InflectorSingularResolver
     private $inflector;
 
     /**
+     * @var string[]
+     */
+    private const SINGULAR_VERB = [
+        'news' => 'new'
+    ];
+
+    /**
      * @var string
      * @see https://regex101.com/r/lbQaGC/1
      */
@@ -28,6 +35,10 @@ final class InflectorSingularResolver
 
     public function resolve(string $currentName): string
     {
+        if (in_array($currentName, array_keys(self::SINGULAR_VERB), true)) {
+            return self::SINGULAR_VERB[$currentName];
+        }
+
         if (strpos($currentName, 'single') === 0) {
             return $currentName;
         }
