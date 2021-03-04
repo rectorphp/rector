@@ -55,7 +55,7 @@ final class InflectorSingularResolver
             return self::SINGULAR_VERB[$currentName];
         }
 
-        if (strpos($currentName, (string) self::SINGLE) === 0) {
+        if (strpos($currentName, self::SINGLE) === 0) {
             return $currentName;
         }
 
@@ -68,11 +68,10 @@ final class InflectorSingularResolver
         $singularValueVarName = $singularValueVarName === $currentName
             ? self::SINGLE . ucfirst($singularValueVarName)
             : $singularValueVarName;
-
-        $length = strlen($singularValueVarName);
-        if (strpos($singularValueVarName, (string) self::SINGLE) !== 0) {
+        if (strpos($singularValueVarName, self::SINGLE) !== 0) {
             return $singularValueVarName;
         }
+        $length = strlen($singularValueVarName);
         if ($length < 40) {
             return $singularValueVarName;
         }
