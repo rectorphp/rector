@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php53\Tests\Rector\FuncCall\DirNameFileConstantToDirConstantRector;
 
 use Iterator;
-use Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class DirNameFileConstantToDirConstantRectorTest extends AbstractRectorTes
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return DirNameFileConstantToDirConstantRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

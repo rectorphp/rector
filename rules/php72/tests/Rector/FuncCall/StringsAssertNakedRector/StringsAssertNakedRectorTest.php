@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php72\Tests\Rector\FuncCall\StringsAssertNakedRector;
 
 use Iterator;
-use Rector\Php72\Rector\FuncCall\StringsAssertNakedRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class StringsAssertNakedRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return StringsAssertNakedRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

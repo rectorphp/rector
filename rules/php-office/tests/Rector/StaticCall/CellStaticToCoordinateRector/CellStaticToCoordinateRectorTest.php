@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPOffice\Tests\Rector\StaticCall\CellStaticToCoordinateRector;
 
 use Iterator;
-use Rector\PHPOffice\Rector\StaticCall\CellStaticToCoordinateRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class CellStaticToCoordinateRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return CellStaticToCoordinateRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

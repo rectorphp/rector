@@ -138,7 +138,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return '';
     }
 
-    protected function provideConfigFilePath(): string
+    public function provideConfigFilePath(): string
     {
         // can be implemented
         return '';

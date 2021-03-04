@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\ClassMethod\RemoveEmptyTestMethodRector;
 
 use Iterator;
-use Rector\PHPUnit\Rector\ClassMethod\RemoveEmptyTestMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RemoveEmptyTestMethodRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveEmptyTestMethodRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

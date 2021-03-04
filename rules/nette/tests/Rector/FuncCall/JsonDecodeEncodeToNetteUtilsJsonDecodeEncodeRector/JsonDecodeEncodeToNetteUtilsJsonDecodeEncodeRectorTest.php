@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Nette\Tests\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector;
 
 use Iterator;
-use Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRectorTest extends Abstr
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

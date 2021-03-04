@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Restoration\Tests\Rector\Class_\RemoveFinalFromEntityRector;
 
 use Iterator;
-use Rector\Restoration\Rector\Class_\RemoveFinalFromEntityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RemoveFinalFromEntityRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveFinalFromEntityRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

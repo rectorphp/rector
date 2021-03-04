@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php73\Tests\Rector\FuncCall\ArrayKeyFirstLastRector;
 
 use Iterator;
-use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ArrayKeyFirstLastRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ArrayKeyFirstLastRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

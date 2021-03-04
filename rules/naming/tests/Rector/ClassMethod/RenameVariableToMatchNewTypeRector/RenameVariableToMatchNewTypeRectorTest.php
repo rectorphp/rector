@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Naming\Tests\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 
 use Iterator;
-use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RenameVariableToMatchNewTypeRectorTest extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RenameVariableToMatchNewTypeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

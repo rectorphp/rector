@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\GetDefaultStyleToGetParentRector;
 
 use Iterator;
-use Rector\PHPOffice\Rector\MethodCall\GetDefaultStyleToGetParentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class GetDefaultStyleToGetParentRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return GetDefaultStyleToGetParentRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

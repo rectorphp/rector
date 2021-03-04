@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Defluent\Tests\Rector\Return_\ReturnFluentChainMethodCallToNormalMethodCallRector;
 
 use Iterator;
-use Rector\Defluent\Rector\Return_\ReturnFluentChainMethodCallToNormalMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ReturnFluentChainMethodCallToNormalMethodCallRectorTest extends Abst
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ReturnFluentChainMethodCallToNormalMethodCallRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

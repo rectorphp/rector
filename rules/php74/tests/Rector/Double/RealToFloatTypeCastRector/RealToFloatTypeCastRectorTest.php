@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php74\Tests\Rector\Double\RealToFloatTypeCastRector;
 
 use Iterator;
-use Rector\Php74\Rector\Double\RealToFloatTypeCastRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class RealToFloatTypeCastRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RealToFloatTypeCastRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

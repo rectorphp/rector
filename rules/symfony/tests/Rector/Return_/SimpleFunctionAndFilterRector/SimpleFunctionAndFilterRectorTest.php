@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\Return_\SimpleFunctionAndFilterRector;
 
 use Iterator;
-use Rector\Symfony\Rector\Return_\SimpleFunctionAndFilterRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class SimpleFunctionAndFilterRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SimpleFunctionAndFilterRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Nette\Tests\Rector\ClassMethod\TranslateClassMethodToVariadicsRector;
 
 use Iterator;
-use Rector\Nette\Rector\ClassMethod\TranslateClassMethodToVariadicsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -32,8 +31,8 @@ final class TranslateClassMethodToVariadicsRectorTest extends AbstractRectorTest
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return TranslateClassMethodToVariadicsRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

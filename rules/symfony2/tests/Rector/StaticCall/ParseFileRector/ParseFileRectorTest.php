@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony2\Tests\Rector\StaticCall\ParseFileRector;
 
 use Iterator;
-use Rector\Symfony2\Rector\StaticCall\ParseFileRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ParseFileRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ParseFileRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

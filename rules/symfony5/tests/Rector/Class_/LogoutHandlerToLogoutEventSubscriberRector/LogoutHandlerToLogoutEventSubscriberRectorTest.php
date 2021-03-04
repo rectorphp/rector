@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony5\Tests\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector;
 
 use Iterator;
-use Rector\Symfony5\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class LogoutHandlerToLogoutEventSubscriberRectorTest extends AbstractRecto
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return LogoutHandlerToLogoutEventSubscriberRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

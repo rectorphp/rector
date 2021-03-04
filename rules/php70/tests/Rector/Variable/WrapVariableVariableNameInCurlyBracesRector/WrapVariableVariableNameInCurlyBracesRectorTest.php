@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php70\Tests\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
 
 use Iterator;
-use Rector\Php70\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class WrapVariableVariableNameInCurlyBracesRectorTest extends AbstractRect
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return WrapVariableVariableNameInCurlyBracesRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

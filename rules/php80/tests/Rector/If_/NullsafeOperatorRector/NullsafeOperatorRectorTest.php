@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector;
 
 use Iterator;
-use Rector\Php80\Rector\If_\NullsafeOperatorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class NullsafeOperatorRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return NullsafeOperatorRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

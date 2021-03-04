@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php53\Tests\Rector\Ternary\TernaryToElvisRector;
 
 use Iterator;
-use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class TernaryToElvisRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return TernaryToElvisRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

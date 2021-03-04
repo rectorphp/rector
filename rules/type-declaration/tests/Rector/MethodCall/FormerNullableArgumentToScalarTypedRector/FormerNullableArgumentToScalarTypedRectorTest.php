@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\MethodCall\FormerNullableArgumentT
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FormerNullableArgumentToScalarTypedRectorTest extends AbstractRectorTestCase
@@ -24,8 +23,8 @@ final class FormerNullableArgumentToScalarTypedRectorTest extends AbstractRector
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return FormerNullableArgumentToScalarTypedRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

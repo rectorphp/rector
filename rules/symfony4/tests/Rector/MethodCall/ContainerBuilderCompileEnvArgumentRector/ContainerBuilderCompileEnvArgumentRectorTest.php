@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony4\Tests\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector;
 
 use Iterator;
-use Rector\Symfony4\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ContainerBuilderCompileEnvArgumentRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ContainerBuilderCompileEnvArgumentRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

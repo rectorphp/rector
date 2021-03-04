@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php72\Tests\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector;
 
 use Iterator;
-use Rector\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use SplFileInfo;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -29,8 +28,8 @@ final class ReplaceEachAssignmentWithKeyCurrentRectorTest extends AbstractRector
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ReplaceEachAssignmentWithKeyCurrentRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

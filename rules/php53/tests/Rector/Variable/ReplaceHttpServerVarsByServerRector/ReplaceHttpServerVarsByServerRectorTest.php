@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php53\Tests\Rector\Variable\ReplaceHttpServerVarsByServerRector;
 
 use Iterator;
-use Rector\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use SplFileInfo;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -28,8 +27,8 @@ final class ReplaceHttpServerVarsByServerRectorTest extends AbstractRectorTestCa
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ReplaceHttpServerVarsByServerRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

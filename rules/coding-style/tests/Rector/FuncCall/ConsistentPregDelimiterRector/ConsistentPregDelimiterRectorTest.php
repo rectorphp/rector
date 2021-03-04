@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentPregDelimiterRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ConsistentPregDelimiterRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ConsistentPregDelimiterRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

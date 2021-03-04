@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
 
 use Iterator;
-use Rector\Sensio\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class TemplateAnnotationToThisRenderRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return TemplateAnnotationToThisRenderRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

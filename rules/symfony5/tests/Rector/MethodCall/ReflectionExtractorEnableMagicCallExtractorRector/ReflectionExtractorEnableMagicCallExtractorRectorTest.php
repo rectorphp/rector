@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony5\Tests\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector;
 
 use Iterator;
-use Rector\Symfony5\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ReflectionExtractorEnableMagicCallExtractorRectorTest extends Abstra
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ReflectionExtractorEnableMagicCallExtractorRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

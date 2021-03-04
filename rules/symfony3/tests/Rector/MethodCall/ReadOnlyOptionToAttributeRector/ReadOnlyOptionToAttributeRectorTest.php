@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony3\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
 
 use Iterator;
-use Rector\Symfony3\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ReadOnlyOptionToAttributeRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ReadOnlyOptionToAttributeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

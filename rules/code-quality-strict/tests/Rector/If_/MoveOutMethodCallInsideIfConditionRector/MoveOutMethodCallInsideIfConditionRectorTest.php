@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector;
 
 use Iterator;
-use Rector\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class MoveOutMethodCallInsideIfConditionRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return MoveOutMethodCallInsideIfConditionRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

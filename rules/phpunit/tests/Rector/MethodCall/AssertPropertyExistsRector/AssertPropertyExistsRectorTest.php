@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertPropertyExistsRector;
 
 use Iterator;
-use Rector\PHPUnit\Rector\MethodCall\AssertPropertyExistsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class AssertPropertyExistsRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return AssertPropertyExistsRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

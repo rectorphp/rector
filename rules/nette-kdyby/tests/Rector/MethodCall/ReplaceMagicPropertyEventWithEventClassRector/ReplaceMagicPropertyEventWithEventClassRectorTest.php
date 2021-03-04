@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector;
 
 use Iterator;
-use Rector\NetteKdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -45,8 +44,8 @@ final class ReplaceMagicPropertyEventWithEventClassRectorTest extends AbstractRe
         ];
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ReplaceMagicPropertyEventWithEventClassRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

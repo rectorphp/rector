@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\MethodCall\GetParameterToConstructorInjectionRector;
 
 use Iterator;
-use Rector\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class GetParameterToConstructorInjectionRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return GetParameterToConstructorInjectionRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony3\Tests\Rector\ClassMethod\FormTypeGetParentRector;
 
 use Iterator;
-use Rector\Symfony3\Rector\ClassMethod\FormTypeGetParentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class FormTypeGetParentRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return FormTypeGetParentRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

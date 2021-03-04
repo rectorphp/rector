@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector;
 
 use Iterator;
-use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RenameForeachValueVariableToMatchMethodCallReturnTypeRectorTest exte
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

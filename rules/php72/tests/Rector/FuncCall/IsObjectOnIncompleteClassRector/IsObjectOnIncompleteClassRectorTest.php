@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php72\Tests\Rector\FuncCall\IsObjectOnIncompleteClassRector;
 
 use Iterator;
-use Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class IsObjectOnIncompleteClassRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return IsObjectOnIncompleteClassRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

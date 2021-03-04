@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Privatization\Tests\Rector\Class_\RepeatedLiteralToClassConstantRector;
 
 use Iterator;
-use Rector\Privatization\Rector\Class_\RepeatedLiteralToClassConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RepeatedLiteralToClassConstantRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RepeatedLiteralToClassConstantRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Laravel\Tests\Rector\New_\AddGuardToLoginEventRector;
 
 use Iterator;
-use Rector\Laravel\Rector\New_\AddGuardToLoginEventRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class AddGuardToLoginEventRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return AddGuardToLoginEventRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Tests\Rector\Class_\AlwaysInitializeUuidInEntityRector;
 
 use Iterator;
-use Rector\Doctrine\Rector\Class_\AlwaysInitializeUuidInEntityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class AlwaysInitializeUuidInEntityRectorTest extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return AlwaysInitializeUuidInEntityRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

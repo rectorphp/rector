@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony3\Tests\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
 
 use Iterator;
-use Rector\Symfony3\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ChangeStringCollectionOptionToConstantRectorTest extends AbstractRec
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ChangeStringCollectionOptionToConstantRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

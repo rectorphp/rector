@@ -7,7 +7,6 @@ namespace Rector\PSR4\Tests\Rector\Namespace_\MultipleClassFileToPsr4ClassesRect
 use Iterator;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -90,8 +89,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
         yield [new SmartFileInfo(__DIR__ . '/Fixture/skip_ready_exception.php.inc'), []];
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return MultipleClassFileToPsr4ClassesRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

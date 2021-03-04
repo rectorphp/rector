@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPOffice\Tests\Rector\StaticCall\ChangePdfWriterRector;
 
 use Iterator;
-use Rector\PHPOffice\Rector\StaticCall\ChangePdfWriterRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ChangePdfWriterRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ChangePdfWriterRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

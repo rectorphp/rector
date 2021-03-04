@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveDoubleAssignRector;
 
 use Iterator;
-use Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class RemoveDoubleAssignRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveDoubleAssignRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

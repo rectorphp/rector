@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony4\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
 
 use Iterator;
-use Rector\Symfony4\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class SimplifyWebTestCaseAssertionsRectorTest extends AbstractRectorTestCa
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SimplifyWebTestCaseAssertionsRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

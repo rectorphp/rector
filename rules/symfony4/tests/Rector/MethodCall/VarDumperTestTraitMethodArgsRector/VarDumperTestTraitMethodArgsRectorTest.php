@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony4\Tests\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
 
 use Iterator;
-use Rector\Symfony4\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class VarDumperTestTraitMethodArgsRectorTest extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return VarDumperTestTraitMethodArgsRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

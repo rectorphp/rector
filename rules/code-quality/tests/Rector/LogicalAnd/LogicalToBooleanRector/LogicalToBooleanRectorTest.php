@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Tests\Rector\LogicalAnd\LogicalToBooleanRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class LogicalToBooleanRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return LogicalToBooleanRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

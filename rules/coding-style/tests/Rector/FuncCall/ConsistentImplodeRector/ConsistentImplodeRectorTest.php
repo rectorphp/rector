@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentImplodeRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,8 +23,8 @@ final class ConsistentImplodeRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ConsistentImplodeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }
