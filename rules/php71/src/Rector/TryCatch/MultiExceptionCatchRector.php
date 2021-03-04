@@ -70,21 +70,21 @@ CODE_SAMPLE
 
         $catchKeysByContent = $this->collectCatchKeysByContent($node);
         /** @var Catch_[] $catchKeyByContent */
-        foreach ($catchKeysByContent as $catchKeyByContent) {
+        foreach ($catchKeysByContent as $catchKey) {
             // no duplicates
-            $count = count($catchKeyByContent);
+            $count = is_countable($catchKey) ? count($catchKey) : 0;
             if ($count < 2) {
                 continue;
             }
 
-            $collectedTypes = $this->collectTypesFromCatchedByIds($node, $catchKeyByContent);
+            $collectedTypes = $this->collectTypesFromCatchedByIds($node, $catchKey);
 
             /** @var Catch_ $firstCatch */
-            $firstCatch = array_shift($catchKeyByContent);
+            $firstCatch = array_shift($catchKey);
             $firstCatch->types = $collectedTypes;
 
-            foreach ($catchKeyByContent as $singleCatchKeyByContent) {
-                $this->removeNode($singleCatchKeyByContent);
+            foreach ($catchKey as $singleCatchKey) {
+                $this->removeNode($singleCatchKey);
             }
         }
 
