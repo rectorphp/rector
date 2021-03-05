@@ -131,23 +131,23 @@ CODE_SAMPLE
         FileNode $fileNode,
         array $groupNamesBySuffix
     ): void {
-        foreach ($groupNamesBySuffix as $groupNameBySuffix) {
+        foreach ($groupNamesBySuffix as $groupNames) {
             // has class suffix
-            $suffixPattern = '\w+' . $groupNameBySuffix . '(Test)?\.php$';
+            $suffixPattern = '\w+' . $groupNames . '(Test)?\.php$';
             if (! Strings::match($smartFileInfo->getRealPath(), '#' . $suffixPattern . '#')) {
                 continue;
             }
 
-            if ($this->isLocatedInExpectedLocation($groupNameBySuffix, $suffixPattern, $smartFileInfo)) {
+            if ($this->isLocatedInExpectedLocation($groupNames, $suffixPattern, $smartFileInfo)) {
                 continue;
             }
 
             // file is already in the group
-            if (Strings::match($smartFileInfo->getPath(), '#' . $groupNameBySuffix . '$#')) {
+            if (Strings::match($smartFileInfo->getPath(), '#' . $groupNames . '$#')) {
                 continue;
             }
 
-            $this->moveFileToGroupName($smartFileInfo, $fileNode, $groupNameBySuffix);
+            $this->moveFileToGroupName($smartFileInfo, $fileNode, $groupNames);
             return;
         }
     }
