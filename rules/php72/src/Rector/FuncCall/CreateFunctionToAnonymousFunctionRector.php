@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\Encapsed;
@@ -18,6 +19,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
@@ -42,12 +44,19 @@ final class CreateFunctionToAnonymousFunctionRector extends AbstractRector
      */
     private $anonymousFunctionFactory;
 
+    /**
+     * @var ReservedKeywordAnalyzer
+     */
+    private $reservedKeywordAnalyzer;
+
     public function __construct(
         InlineCodeParser $inlineCodeParser,
-        AnonymousFunctionFactory $anonymousFunctionFactory
+        AnonymousFunctionFactory $anonymousFunctionFactory,
+        ReservedKeywordAnalyzer $reservedKeywordAnalyzer
     ) {
         $this->inlineCodeParser = $inlineCodeParser;
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
+        $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -101,9 +110,24 @@ CODE_SAMPLE
 
         $params = $this->createParamsFromString($node->args[0]->value);
         $stmts = $this->parseStringToBody($node->args[1]->value);
-        $returnType = null;
 
-        return $this->anonymousFunctionFactory->create($params, $stmts, $returnType);
+        $refactored = $this->anonymousFunctionFactory->create($params, $stmts, null);
+        foreach ($refactored->uses as $key => $use) {
+            if (! $use->var instanceof Variable) {
+                continue;
+            }
+
+            $variableName = $this->getName($use->var);
+            if ($variableName === null) {
+                continue;
+            }
+
+            if ($this->reservedKeywordAnalyzer->isNativeVariable($variableName)) {
+                unset($refactored->uses[$key]);
+            }
+        }
+
+        return $refactored;
     }
 
     /**
