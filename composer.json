@@ -110,12 +110,15 @@
         ],
         "files": [
 <<<<<<< HEAD
+<<<<<<< HEAD
             "stubs/Symfony/Component/Form/FormTypeInterface.php",
             "stubs/Doctrine/Persistence/ObjectManager.php",
             "stubs/Doctrine/Common/Persistence/ObjectManager.php",
 =======
             "ci/downgrade/config/configuration.php",
 >>>>>>> d4f0e90b5c... [downgrade] simplify to 2 configs
+=======
+>>>>>>> f8a7c10791... rename downgrade_packages.sh to downgrade_rector_to_php71.sh
             "vendor/nette/forms/src/Forms/Controls/SubmitButton.php",
             "rules-tests/Restoration/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php",
             "rules-tests/DeadCode/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",

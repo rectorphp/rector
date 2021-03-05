@@ -2,10 +2,27 @@
 
 declare(strict_types=1);
 
+use Rector\Core\Configuration\Option;
 use Rector\Core\Stubs\PHPStanStubLoader;
+use Rector\Set\ValueObject\DowngradeSetList;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 $phpStanStubLoader = new PHPStanStubLoader();
 $phpStanStubLoader->loadStubs();
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $excludedPaths = array_merge(DowngradeRectorConfig::RECTOR_EXCLUDE_PATHS, DowngradeRectorConfig::DEPENDENCY_EXCLUDE_PATHS);
+    $parameters->set(Option::SKIP, $excludedPaths);
+
+    $parameters->set(Option::SETS, [
+        DowngradeSetList::PHP_80,
+        DowngradeSetList::PHP_74,
+        DowngradeSetList::PHP_73,
+        DowngradeSetList::PHP_72,
+    ]);
+};
 
 /**
  * Configuration consts for the different rector.php config files
