@@ -69,9 +69,8 @@ final class PropertyVisibilityVendorLockResolver
             if ($childClassReflection === $classReflection) {
                 continue;
             }
-            $childrenClassReflectionHasProperty = $childClassReflection->hasProperty($propertyName);
 
-            if ($childrenClassReflectionHasProperty) {
+            if ($childClassReflection->hasProperty($propertyName)) {
                 return true;
             }
         }
