@@ -108,7 +108,6 @@
             "rules-tests/Symfony4/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source"
         ],
         "files": [
-            "ci/downgrade/config/configuration.php",
             "vendor/nette/forms/src/Forms/Controls/SubmitButton.php",
             "rules-tests/Restoration/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php",
             "rules-tests/DeadCode/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",
