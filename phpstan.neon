@@ -607,8 +607,12 @@ parameters:
                 - '*NodeVisitor.php'
 
         - '#Class with base "NodeComparator" name is already used in "Symplify\\PHPStanRules\\Printer\\NodeComparator", "Rector\\Core\\PhpParser\\Comparing\\NodeComparator"\. Use unique name to make classes easy to recognize#'
+<<<<<<< HEAD
 
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             paths:
                 - packages/BetterPhpDocParser/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php
+=======
+        - '#Cannot cast array<string\>\|string\|null to string#'
+>>>>>>> ecbb522391... add test case stub

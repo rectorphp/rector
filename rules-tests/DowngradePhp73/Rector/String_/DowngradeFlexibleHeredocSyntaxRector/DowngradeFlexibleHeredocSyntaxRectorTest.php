@@ -12,7 +12,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @requires PHP >= 7.3
  */
-final class DowngradeFlexibleHeredocSyntaxTest extends AbstractRectorTestCase
+final class DowngradeFlexibleHeredocSyntaxRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

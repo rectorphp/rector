@@ -38,7 +38,6 @@ $rectorConfigsResolver = new RectorConfigsResolver();
 
 try {
     $bootstrapConfigs = $rectorConfigsResolver->provide();
-
     $rectorContainerFactory = new RectorContainerFactory();
     $container = $rectorContainerFactory->createFromBootstrapConfigs($bootstrapConfigs);
 } catch (SetNotFoundException $setNotFoundException) {

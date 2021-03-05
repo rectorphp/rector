@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector\DowngradeFlexibleHeredocSyntaxTest
+ * @see \Rector\Tests\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector\DowngradeFlexibleHeredocSyntaxRectorTest
  */
 final class DowngradeFlexibleHeredocSyntaxRector extends AbstractRector
 {
@@ -61,8 +61,13 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $stringKind = $node->getAttribute(AttributeKey::KIND);
-
         if (! in_array($stringKind, self::HERENOW_DOC_KINDS, true)) {
+            return null;
+        }
+
+        // skip correctly indented
+        $docIndentation = (string) $node->getAttribute(AttributeKey::DOC_INDENTATION);
+        if ($docIndentation === '') {
             return null;
         }
 
