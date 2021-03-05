@@ -145,9 +145,9 @@ CODE_SAMPLE
         // Remove the types in:
         // - all ancestors + their descendant classes
         // - all implemented interfaces + their implementing classes
-        foreach ($ancestorAndInterfaces as $ancestorClassOrInterface) {
+        foreach ($ancestorAndInterfaces as $ancestorAndInterface) {
             /** @var string $parentClassName */
-            $parentClassName = $ancestorClassOrInterface->getAttribute(AttributeKey::CLASS_NAME);
+            $parentClassName = $ancestorAndInterface->getAttribute(AttributeKey::CLASS_NAME);
             $classMethod = $this->nodeRepository->findClassMethod($parentClassName, $methodName);
             /**
              * If it doesn't find the method, it's because the method
@@ -163,7 +163,7 @@ CODE_SAMPLE
             if (! $classMethod instanceof ClassMethod) {
                 continue;
             }
-            $this->removeParamTypeFromMethod($ancestorClassOrInterface, $position, $classMethod);
+            $this->removeParamTypeFromMethod($ancestorAndInterface, $position, $classMethod);
             $this->removeParamTypeFromMethodForChildren($parentClassName, $methodName, $position);
         }
     }

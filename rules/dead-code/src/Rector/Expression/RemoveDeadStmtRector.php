@@ -65,8 +65,8 @@ CODE_SAMPLE
         $firstExpr = array_shift($livingCode);
         $node->expr = $firstExpr;
 
-        foreach ($livingCode as $expr) {
-            $newNode = new Expression($expr);
+        foreach ($livingCode as $singleLivingCode) {
+            $newNode = new Expression($singleLivingCode);
             $this->addNodeAfterNode($newNode, $node);
         }
 

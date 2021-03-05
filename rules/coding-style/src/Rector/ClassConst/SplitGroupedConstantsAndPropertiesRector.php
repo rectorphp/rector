@@ -97,8 +97,8 @@ CODE_SAMPLE
         $firstPropertyProperty = array_shift($allProperties);
         $node->props = [$firstPropertyProperty];
 
-        foreach ($allProperties as $anotherProperty) {
-            $nextProperty = new Property($node->flags, [$anotherProperty], $node->getAttributes());
+        foreach ($allProperties as $allProperty) {
+            $nextProperty = new Property($node->flags, [$allProperty], $node->getAttributes());
             $this->addNodeAfterNode($nextProperty, $node);
         }
 

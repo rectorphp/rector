@@ -28,8 +28,8 @@ final class StaticRectorStrings
      */
     public static function isInArrayInsensitive(string $checkedItem, array $array): bool
     {
-        foreach ($array as $item) {
-            if (Strings::lower($item) === Strings::lower($checkedItem)) {
+        foreach ($array as $singleArray) {
+            if (Strings::lower($singleArray) === Strings::lower($checkedItem)) {
                 return true;
             }
         }
@@ -93,9 +93,9 @@ final class StaticRectorStrings
      */
     public static function removeSuffixes(string $value, array $suffixesToRemove): string
     {
-        foreach ($suffixesToRemove as $prefixToRemove) {
-            if (Strings::endsWith($value, $prefixToRemove)) {
-                $value = Strings::substring($value, 0, -Strings::length($prefixToRemove));
+        foreach ($suffixesToRemove as $suffixToRemove) {
+            if (Strings::endsWith($value, $suffixToRemove)) {
+                $value = Strings::substring($value, 0, -Strings::length($suffixToRemove));
             }
         }
 

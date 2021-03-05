@@ -147,12 +147,12 @@ final class RectorNodeTraverser extends NodeTraverser
         $this->visitors = [];
 
         $enabledRectorClass = $this->enabledRectorClassProvider->getEnabledRectorClass();
-        foreach ($this->allPhpRectors as $phpRector) {
-            if (! is_a($phpRector, $enabledRectorClass, true)) {
+        foreach ($this->allPhpRectors as $allPhpRector) {
+            if (! is_a($allPhpRector, $enabledRectorClass, true)) {
                 continue;
             }
 
-            $this->addVisitor($phpRector);
+            $this->addVisitor($allPhpRector);
             break;
         }
     }
@@ -184,12 +184,12 @@ final class RectorNodeTraverser extends NodeTraverser
             return;
         }
 
-        foreach ($this->allPhpRectors as $phpRector) {
-            if ($this->configuration->isCacheEnabled() && ! $this->configuration->shouldClearCache() && $phpRector instanceof ZeroCacheRectorInterface) {
+        foreach ($this->allPhpRectors as $allPhpRector) {
+            if ($this->configuration->isCacheEnabled() && ! $this->configuration->shouldClearCache() && $allPhpRector instanceof ZeroCacheRectorInterface) {
                 continue;
             }
 
-            $this->addVisitor($phpRector);
+            $this->addVisitor($allPhpRector);
         }
 
         $this->areNodeVisitorsPrepared = true;

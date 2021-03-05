@@ -105,23 +105,23 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->variableMethodCallsToServiceCalls as $variableMethodCallsToServiceCalls) {
+        foreach ($this->variableMethodCallsToServiceCalls as $variableMethodCallToServiceCall) {
             if (! $node->var instanceof Variable) {
                 continue;
             }
 
-            if (! $this->isObjectType($node->var, $variableMethodCallsToServiceCalls->getVariableObjectType())) {
+            if (! $this->isObjectType($node->var, $variableMethodCallToServiceCall->getVariableObjectType())) {
                 continue;
             }
 
-            if (! $this->isName($node->name, $variableMethodCallsToServiceCalls->getMethodName())) {
+            if (! $this->isName($node->name, $variableMethodCallToServiceCall->getMethodName())) {
                 continue;
             }
 
             $firstArgValue = $node->args[0]->value;
             if (! $this->valueResolver->isValue(
                 $firstArgValue,
-                $variableMethodCallsToServiceCalls->getArgumentValue()
+                $variableMethodCallToServiceCall->getArgumentValue()
             )) {
                 continue;
             }
@@ -131,12 +131,12 @@ CODE_SAMPLE
                 continue;
             }
 
-            $serviceObjectType = new ObjectType($variableMethodCallsToServiceCalls->getServiceType());
+            $serviceObjectType = new ObjectType($variableMethodCallToServiceCall->getServiceType());
 
             $this->addConstructorDependency($serviceObjectType, $classLike);
             return $this->createServiceMethodCall(
                 $serviceObjectType,
-                $variableMethodCallsToServiceCalls->getServiceMethodName(),
+                $variableMethodCallToServiceCall->getServiceMethodName(),
                 $node
             );
         }

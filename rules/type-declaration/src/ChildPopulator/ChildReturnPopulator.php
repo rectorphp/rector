@@ -58,8 +58,8 @@ final class ChildReturnPopulator
         // update their methods as well
         foreach ($childrenClassLikes as $childClassLike) {
             $usedTraits = $this->nodeRepository->findUsedTraitsInClass($childClassLike);
-            foreach ($usedTraits as $trait) {
-                $this->addReturnTypeToChildMethod($trait, $classMethod, $returnType);
+            foreach ($usedTraits as $usedTrait) {
+                $this->addReturnTypeToChildMethod($usedTrait, $classMethod, $returnType);
             }
 
             $this->addReturnTypeToChildMethod($childClassLike, $classMethod, $returnType);

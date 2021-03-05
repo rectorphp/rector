@@ -163,6 +163,27 @@ CODE_SAMPLE
      */
     private function filterOutUniqueNames(array $assigns): array
     {
+        $assignsByName = $this->collectAssignsByName($assigns);
+        $assignsWithUniqueName = [];
+        /** @var Assign[] $assignByName */
+        foreach ($assignsByName as $assignByName) {
+            $count = count($assignByName);
+            if ($count > 1) {
+                continue;
+            }
+
+            $assignsWithUniqueName = array_merge($assignsWithUniqueName, $assignByName);
+        }
+
+        return $assignsWithUniqueName;
+    }
+
+    /**
+     * @param Assign[] $assigns
+     * @return array<string, Assign[]>
+     */
+    private function collectAssignsByName(array $assigns): array
+    {
         $assignsByName = [];
         foreach ($assigns as $assign) {
             /** @var string $variableName */
@@ -171,16 +192,7 @@ CODE_SAMPLE
             $assignsByName[$variableName][] = $assign;
         }
 
-        $assignsWithUniqueName = [];
-        foreach ($assignsByName as $assigns) {
-            if (count($assigns) > 1) {
-                continue;
-            }
-
-            $assignsWithUniqueName = array_merge($assignsWithUniqueName, $assigns);
-        }
-
-        return $assignsWithUniqueName;
+        return $assignsByName;
     }
 
     /**

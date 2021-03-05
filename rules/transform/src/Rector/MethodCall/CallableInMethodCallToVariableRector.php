@@ -94,16 +94,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->callableInMethodCallToVariable as $callableInMethodCallToVariable) {
-            if (! $this->isObjectType($node->var, $callableInMethodCallToVariable->getObjectType())) {
+        foreach ($this->callableInMethodCallToVariable as $singleCallableInMethodCallToVariable) {
+            if (! $this->isObjectType($node->var, $singleCallableInMethodCallToVariable->getObjectType())) {
                 continue;
             }
 
-            if (! isset($node->args[$callableInMethodCallToVariable->getArgumentPosition()])) {
+            if (! isset($node->args[$singleCallableInMethodCallToVariable->getArgumentPosition()])) {
                 continue;
             }
 
-            $arg = $node->args[$callableInMethodCallToVariable->getArgumentPosition()];
+            $arg = $node->args[$singleCallableInMethodCallToVariable->getArgumentPosition()];
             $argValueType = $this->getStaticType($arg->value);
             if (! $argValueType instanceof ClosureType) {
                 continue;

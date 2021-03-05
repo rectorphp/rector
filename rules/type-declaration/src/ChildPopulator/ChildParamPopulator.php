@@ -75,8 +75,8 @@ final class ChildParamPopulator
             if ($childClassLike instanceof Class_) {
                 $usedTraits = $this->nodeRepository->findUsedTraitsInClass($childClassLike);
 
-                foreach ($usedTraits as $trait) {
-                    $this->addParamTypeToMethod($trait, $position, $functionLike, $paramType);
+                foreach ($usedTraits as $usedTrait) {
+                    $this->addParamTypeToMethod($usedTrait, $position, $functionLike, $paramType);
                 }
             }
 

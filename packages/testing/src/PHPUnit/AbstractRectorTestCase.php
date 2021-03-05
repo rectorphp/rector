@@ -183,22 +183,22 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
     {
         $addedFilesWithContents = $this->removedAndAddedFilesCollector->getAddedFilesWithContent();
-        foreach ($addedFilesWithContents as $addedFilesWithContent) {
-            if (! Strings::endsWith($addedFilesWithContent->getFilePath(), $expectedExtraFileName)) {
+        foreach ($addedFilesWithContents as $addedFileWithContent) {
+            if (! Strings::endsWith($addedFileWithContent->getFilePath(), $expectedExtraFileName)) {
                 continue;
             }
 
-            $this->assertStringEqualsFile($expectedExtraContentFilePath, $addedFilesWithContent->getFileContent());
+            $this->assertStringEqualsFile($expectedExtraContentFilePath, $addedFileWithContent->getFileContent());
             return;
         }
 
         $addedFilesWithNodes = $this->removedAndAddedFilesCollector->getAddedFilesWithNodes();
-        foreach ($addedFilesWithNodes as $addedFileWithNodes) {
-            if (! Strings::endsWith($addedFileWithNodes->getFilePath(), $expectedExtraFileName)) {
+        foreach ($addedFilesWithNodes as $addedFileWithNode) {
+            if (! Strings::endsWith($addedFileWithNode->getFilePath(), $expectedExtraFileName)) {
                 continue;
             }
 
-            $printedFileContent = $this->betterStandardPrinter->prettyPrintFile($addedFileWithNodes->getNodes());
+            $printedFileContent = $this->betterStandardPrinter->prettyPrintFile($addedFileWithNode->getNodes());
             $this->assertStringEqualsFile($expectedExtraContentFilePath, $printedFileContent);
             return;
         }

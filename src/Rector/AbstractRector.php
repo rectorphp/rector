@@ -429,8 +429,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     protected function appendArgs(array $newArgs, array $appendingArgs): array
     {
-        foreach ($appendingArgs as $oldArgument) {
-            $newArgs[] = new Arg($oldArgument->value);
+        foreach ($appendingArgs as $appendingArg) {
+            $newArgs[] = new Arg($appendingArg->value);
         }
 
         return $newArgs;

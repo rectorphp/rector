@@ -104,12 +104,12 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($ifWithOnlyReturnsByHash as $stmts) {
+        foreach ($ifWithOnlyReturnsByHash as $ifWithOnlyReturns) {
             // keep first one
-            array_shift($stmts);
+            array_shift($ifWithOnlyReturns);
 
-            foreach ($stmts as $stmt) {
-                $this->removeNode($stmt);
+            foreach ($ifWithOnlyReturns as $ifWithOnlyReturn) {
+                $this->removeNode($ifWithOnlyReturn);
             }
         }
 

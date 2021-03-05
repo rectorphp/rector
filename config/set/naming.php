@@ -8,6 +8,7 @@ use Rector\Naming\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector
 use Rector\Naming\Rector\ClassMethod\MakeIsserClassMethodNameStartWithIsRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
+use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector;
 use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector;
 use Rector\Naming\Rector\Property\MakeBoolPropertyRespectIsHasWasMethodNamingRector;
 use Rector\Naming\Rector\Property\UnderscoreToCamelCasePropertyNameRector;
@@ -26,4 +27,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MakeBoolPropertyRespectIsHasWasMethodNamingRector::class);
     $services->set(UnderscoreToCamelCasePropertyNameRector::class);
     $services->set(UnderscoreToCamelCaseVariableNameRector::class);
+    $services->set(RenameForeachValueVariableToMatchExprVariableRector::class);
 };

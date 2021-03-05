@@ -116,12 +116,12 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
      */
     private function processFuncCallArgumentValue(Node $node, FuncCall $funcCall, Arg $requiredArg): ?Node
     {
-        foreach ($this->functionNamesWithAssertMethods as $functionNameWithAssertMethods) {
-            if (! $this->isName($funcCall, $functionNameWithAssertMethods->getFunctionName())) {
+        foreach ($this->functionNamesWithAssertMethods as $functionNameWithAssertMethod) {
+            if (! $this->isName($funcCall, $functionNameWithAssertMethod->getFunctionName())) {
                 continue;
             }
 
-            $this->renameMethod($node, $functionNameWithAssertMethods);
+            $this->renameMethod($node, $functionNameWithAssertMethod);
             $this->moveFunctionArgumentsUp($node, $funcCall, $requiredArg);
 
             return $node;

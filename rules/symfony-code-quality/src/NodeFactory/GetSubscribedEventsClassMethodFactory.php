@@ -92,13 +92,13 @@ final class GetSubscribedEventsClassMethodFactory
 
         $eventsToMethodsArray = new Array_();
 
-        foreach ($eventReferencesToMethodNames as $eventReferencesToMethodName) {
-            $priority = $eventReferencesToMethodName instanceof EventReferenceToMethodNameWithPriority ? $eventReferencesToMethodName->getPriority() : null;
+        foreach ($eventReferencesToMethodNames as $eventReferenceToMethodName) {
+            $priority = $eventReferenceToMethodName instanceof EventReferenceToMethodNameWithPriority ? $eventReferenceToMethodName->getPriority() : null;
 
             $eventsToMethodsArray->items[] = $this->createArrayItemFromMethodAndPriority(
                 $priority,
-                $eventReferencesToMethodName->getMethodName(),
-                $eventReferencesToMethodName->getClassConstFetch()
+                $eventReferenceToMethodName->getMethodName(),
+                $eventReferenceToMethodName->getClassConstFetch()
             );
         }
 
@@ -216,8 +216,8 @@ final class GetSubscribedEventsClassMethodFactory
         $eventItems = [];
         $alreadyUsedTags = [];
 
-        foreach ($methodNamesWithPriorities as $methodNamesWithPriority) {
-            foreach ($methodNamesWithPriority->getTags() as $tag) {
+        foreach ($methodNamesWithPriorities as $methodNameWithPriority) {
+            foreach ($methodNameWithPriority->getTags() as $tag) {
                 if (! $tag instanceof EventListenerTag) {
                     continue;
                 }

@@ -205,13 +205,13 @@ CODE_SAMPLE
         /** @var ReflectionParameter[] $parentReflectionMethodParams */
         $parentReflectionMethodParams = $reflectionMethod->getParameters();
 
-        foreach ($parentReflectionMethodParams as $reflectionParameter) {
-            if ($reflectionParameter->getName() === $paramName) {
+        foreach ($parentReflectionMethodParams as $parentReflectionMethodParam) {
+            if ($parentReflectionMethodParam->getName() === $paramName) {
                 /**
                  * Getting a ReflectionNamedType works from PHP 7.1 onwards
                  * @see https://www.php.net/manual/en/reflectionparameter.gettype.php#125334
                  */
-                $reflectionParamType = $reflectionParameter->getType();
+                $reflectionParamType = $parentReflectionMethodParam->getType();
 
                 /**
                  * If the type is null, we don't have enough information

@@ -50,16 +50,16 @@ final class RectorsFinder
         $foundClasses = $this->findClassesInDirectoriesByName($directories, '*Rector.php');
 
         $rectors = [];
-        foreach ($foundClasses as $class) {
-            if ($this->shouldSkipClass($class)) {
+        foreach ($foundClasses as $foundClass) {
+            if ($this->shouldSkipClass($foundClass)) {
                 continue;
             }
 
-            $reflectionClass = new ReflectionClass($class);
+            $reflectionClass = new ReflectionClass($foundClass);
             $rector = $reflectionClass->newInstanceWithoutConstructor();
             if (! $rector instanceof RectorInterface) {
                 // lowercase letter bug in RobotLoader
-                if (Strings::endsWith($class, 'rector')) {
+                if (Strings::endsWith($foundClass, 'rector')) {
                     continue;
                 }
 

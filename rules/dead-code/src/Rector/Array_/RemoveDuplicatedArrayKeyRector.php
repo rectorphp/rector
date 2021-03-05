@@ -55,10 +55,10 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($arrayItemsWithDuplicatedKey as $arrayItems) {
+        foreach ($arrayItemsWithDuplicatedKey as $arrayItemWithDuplicatedKey) {
             // keep last item
-            array_pop($arrayItems);
-            $this->removeNodes($arrayItems);
+            array_pop($arrayItemWithDuplicatedKey);
+            $this->removeNodes($arrayItemWithDuplicatedKey);
         }
 
         return $node;

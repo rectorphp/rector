@@ -91,11 +91,11 @@ CODE_SAMPLE
         $hasChanged = false;
 
         $assignsOfNew = $this->getAssignsOfNew($node);
-        foreach ($assignsOfNew as $assign) {
-            $expectedName = $this->expectedNameResolver->resolveForAssignNew($assign);
+        foreach ($assignsOfNew as $assignOfNew) {
+            $expectedName = $this->expectedNameResolver->resolveForAssignNew($assignOfNew);
 
             /** @var Variable $variable */
-            $variable = $assign->var;
+            $variable = $assignOfNew->var;
             if ($expectedName === null) {
                 continue;
             }
@@ -115,10 +115,10 @@ CODE_SAMPLE
             $hasChanged = true;
 
             // 1. rename assigned variable
-            $assign->var = new Variable($expectedName);
+            $assignOfNew->var = new Variable($expectedName);
 
             // 2. rename variable in the
-            $this->variableRenamer->renameVariableInFunctionLike($node, $assign, $currentName, $expectedName);
+            $this->variableRenamer->renameVariableInFunctionLike($node, $assignOfNew, $currentName, $expectedName);
         }
 
         if (! $hasChanged) {

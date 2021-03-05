@@ -65,8 +65,8 @@ final class ShowCommand extends Command
         if ($rectorCount > 0) {
             $this->symfonyStyle->title('Loaded Rector rules');
 
-            foreach ($activeRectors as $rector) {
-                $this->symfonyStyle->writeln(' * ' . get_class($rector));
+            foreach ($activeRectors as $activeRector) {
+                $this->symfonyStyle->writeln(' * ' . get_class($activeRector));
             }
 
             $message = sprintf('%d loaded Rectors', $rectorCount);
