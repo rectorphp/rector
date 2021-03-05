@@ -118,6 +118,10 @@ CODE_SAMPLE
             }
 
             $variableName = $this->getName($use->var);
+            if ($variableName === null) {
+                continue;
+            }
+
             if ($this->reservedKeywordAnalyzer->isNativeVariable($variableName)) {
                 unset($refactored->uses[$key]);
             }
