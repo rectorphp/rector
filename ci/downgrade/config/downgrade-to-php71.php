@@ -3,15 +3,18 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
+use Rector\Set\ValueObject\DowngradeSetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-    $services->set(FinalizeClassesWithoutChildrenRector::class);
-
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::AUTOLOAD_PATHS, [
-        __DIR__ . '/tests/Finalize/Fixture/Source'
+
+    $parameters->set(Option::SKIP, DowngradeRectorConfig::RECTOR_EXCLUDE_PATHS);
+
+    $parameters->set(Option::SETS, [
+        DowngradeSetList::PHP_80,
+        DowngradeSetList::PHP_74,
+        DowngradeSetList::PHP_73,
+        DowngradeSetList::PHP_72,
     ]);
 };
