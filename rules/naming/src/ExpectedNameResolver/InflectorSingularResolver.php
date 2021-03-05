@@ -24,9 +24,9 @@ final class InflectorSingularResolver
 
     /**
      * @var string
-     * @see https://regex101.com/r/2aGdkZ/1
+     * @see https://regex101.com/r/2aGdkZ/2
      */
-    private const BY_MIDDLE_REGEX = '#(?<by>By[A-Z][a-z]+)#';
+    private const BY_MIDDLE_REGEX = '#(?<by>By[A-Z][a-zA-Z]+)#';
 
     /**
      * @var string
