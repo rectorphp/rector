@@ -101,9 +101,11 @@ CODE_SAMPLE
 
         $params = $this->createParamsFromString($node->args[0]->value);
         $stmts = $this->parseStringToBody($node->args[1]->value);
-        $returnType = null;
+        if ($stmts === []) {
+            return null;
+        }
 
-        return $this->anonymousFunctionFactory->create($params, $stmts, $returnType);
+        return $this->anonymousFunctionFactory->create($params, $stmts, null);
     }
 
     /**
@@ -142,7 +144,16 @@ CODE_SAMPLE
         }
 
         $expr = $this->inlineCodeParser->stringify($expr);
-        return $this->inlineCodeParser->parse($expr);
+        $bodies = $this->inlineCodeParser->parse($expr);
+
+        foreach ($bodies as $body) {
+            $printedNode = $this->betterStandardPrinter->print($body);
+            if (strpos($printedNode, '$GLOBALS') !== false) {
+                return [];
+            }
+        }
+
+        return $bodies;
     }
 
     private function createEval(Expr $expr): Expression
