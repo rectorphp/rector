@@ -19,6 +19,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
@@ -43,12 +44,19 @@ final class CreateFunctionToAnonymousFunctionRector extends AbstractRector
      */
     private $anonymousFunctionFactory;
 
+    /**
+     * @var ReservedKeywordAnalyzer
+     */
+    private $reservedKeywordAnalyzer;
+
     public function __construct(
         InlineCodeParser $inlineCodeParser,
-        AnonymousFunctionFactory $anonymousFunctionFactory
+        AnonymousFunctionFactory $anonymousFunctionFactory,
+        ReservedKeywordAnalyzer $reservedKeywordAnalyzer
     ) {
         $this->inlineCodeParser = $inlineCodeParser;
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
+        $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -105,7 +113,12 @@ CODE_SAMPLE
 
         $refactored = $this->anonymousFunctionFactory->create($params, $stmts, null);
         foreach ($refactored->uses as $key => $use) {
-            if ($use->var instanceof Variable && $this->isName($use->var, 'GLOBALS')) {
+            if (! $use->var instanceof Variable) {
+                continue;
+            }
+
+            $variableName = $this->getName($use->var);
+            if ($this->reservedKeywordAnalyzer->isNativeVariable($variableName)) {
                 unset($refactored->uses[$key]);
             }
         }

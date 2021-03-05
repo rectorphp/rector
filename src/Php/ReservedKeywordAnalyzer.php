@@ -93,6 +93,7 @@ final class ReservedKeywordAnalyzer
         '_FILES',
         '_REQUEST',
         '_SESSION',
+        'GLOBALS',
     ];
 
     public function isNativeVariable(string $name): bool
