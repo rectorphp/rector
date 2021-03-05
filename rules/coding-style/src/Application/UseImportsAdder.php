@@ -45,6 +45,9 @@ final class UseImportsAdder
         );
 
         $newUses = $this->createUses($useImportTypes, $functionUseImportTypes, null);
+        if ($newUses === []) {
+            return $stmts;
+        }
 
         // place after declare strict_types
         foreach ($stmts as $key => $stmt) {
