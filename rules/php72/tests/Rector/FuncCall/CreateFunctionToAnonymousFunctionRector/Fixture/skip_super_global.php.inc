@@ -2,7 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\Fixture;
 
-final class DemoFile
+final class SkipSuperGlobal
 {
    function register_skin_deactivation_hook_function($code, $function)
    {
