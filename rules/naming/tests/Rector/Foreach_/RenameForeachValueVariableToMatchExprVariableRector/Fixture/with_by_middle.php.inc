@@ -24,8 +24,8 @@ class WithByMiddle
     public function run()
     {
         $array = [];
-        foreach ($methodsByClass as $methods) {
-            $array[] = $methods;
+        foreach ($methodsByClass as $method) {
+            $array[] = $method;
         }
     }
 }

@@ -6,6 +6,9 @@ namespace Rector\Naming\ExpectedNameResolver;
 
 use Doctrine\Inflector\Inflector;
 use Nette\Utils\Strings;
+use PhpParser\Node;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use PHPStan\Type\MixedType;
 
 final class InflectorSingularResolver
 {
@@ -38,16 +41,25 @@ final class InflectorSingularResolver
      */
     private $inflector;
 
-    public function __construct(Inflector $inflector)
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    public function __construct(Inflector $inflector, NodeTypeResolver $nodeTypeResolver)
     {
         $this->inflector = $inflector;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    public function resolve(string $currentName): string
+    public function resolve(string $currentName, Node $node): string
     {
         $matchBy = Strings::match($currentName, self::BY_MIDDLE_REGEX);
         if ($matchBy) {
-            return Strings::substring($currentName, 0, - strlen($matchBy['by']));
+            $newName = Strings::substring($currentName, 0, - strlen($matchBy['by']));
+            return $this->nodeTypeResolver->resolve($node) instanceof MixedType
+                ? $newName
+                : $this->resolve($newName, $node);
         }
 
         if (array_key_exists($currentName, self::SINGULAR_VERB)) {
