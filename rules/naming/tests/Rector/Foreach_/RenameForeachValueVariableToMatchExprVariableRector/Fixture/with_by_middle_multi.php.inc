@@ -24,8 +24,8 @@ class WithByMiddleMulti
     public function run()
     {
         $array = [];
-        foreach ($nodesByTypeAndPosition as $node) {
-            $array[] = $node;
+        foreach ($nodesByTypeAndPosition as $nodes) {
+            $array[] = $nodes;
         }
     }
 }

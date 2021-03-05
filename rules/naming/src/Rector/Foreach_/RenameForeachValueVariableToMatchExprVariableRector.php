@@ -98,7 +98,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $singularValueVarName = $this->inflectorSingularResolver->resolve($exprName, $node->valueVar);
+        $singularValueVarName = $this->inflectorSingularResolver->resolve($exprName);
         if ($this->shouldSkip($valueVarName, $singularValueVarName, $node)) {
             return null;
         }
