@@ -45,14 +45,25 @@ final class DowngradePathsCommand extends Command
 
         $downgradePaths = array_values($downgradePaths);
 
+<<<<<<< HEAD
         $rulesPaths = $this->resolveRulesPaths();
         $downgradePaths = array_merge($downgradePaths, $rulesPaths);
 
         // make symplify grouped into 1 directory, to make covariance downgrade work with all dependent classes
+=======
+        $downgradePaths[] = 'src';
+        $downgradePaths[] = 'packages';
+
+        $rulesPaths = $this->resolveRulesPaths();
+        $downgradePaths = array_merge($downgradePaths, $rulesPaths);
+
+        // make symplify grouped into 1 directory, small enough
+>>>>>>> cbf451db2b... add test case stub
         foreach ($downgradePaths as $key => $downgradePath) {
             if (Strings::startsWith($downgradePath, 'vendor/symplify')) {
                 unset($downgradePaths[$key]);
             }
+<<<<<<< HEAD
 
             if (Strings::startsWith($downgradePath, 'vendor/symfony')) {
                 unset($downgradePaths[$key]);
@@ -74,6 +85,15 @@ final class DowngradePathsCommand extends Command
 
         // bash format
         $downgradePathsLine = implode(';', $downgradePaths);
+=======
+        }
+
+        $downgradePaths = array_merge(['vendor/symplify'], $downgradePaths);
+        $downgradePaths = array_values($downgradePaths);
+
+        // bash format
+        $downgradePathsLine = implode(' ', $downgradePaths);
+>>>>>>> cbf451db2b... add test case stub
         echo $downgradePathsLine . PHP_EOL;
 
         return ShellCode::SUCCESS;

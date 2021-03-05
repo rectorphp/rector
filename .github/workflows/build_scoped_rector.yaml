@@ -1,7 +1,11 @@
 # builds the content of https://github.com/rectorphp/rector-prefixed
 name: Build Scoped Rector
 
+# also downgrade to PHP 7.1
+
 on:
+    pull_request: null
+
     push:
         branches:
             - main
@@ -21,20 +25,35 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.3
+                    coverage: none
+
                 # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
                 env:
                     COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
-            # 1. prepare dependencies
-            -   run: sh build/build-rector-scoped.sh
+            # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
+            -   run: composer install --no-dev --ansi
 
-            # 2. publish it to remote repository
+            # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
+            -  run: rsync --exclude rector-build -av * rector-build --quiet
+
+            # 2. downgrade rector
+            -   run: sh build/downgrade-rector.sh rector-build
+
+            # 3. scope rector
+            -   run: sh build/build-rector-scoped.sh rector-build
+
+            # @todo upload artifact?
+            # @todo run linter on the directory
+
+
+            # 6. publish it to remote repository
             -
                 uses: symplify/github-action-monorepo-split@1.1
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
-                    package-directory: 'rector-scoped'
+                    package-directory: 'rector-build'
                     split-repository-organization: 'rectorphp'
                     split-repository-name: 'rector-prefixed'
                     user-name: "kaizen-ci"

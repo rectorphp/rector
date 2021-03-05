@@ -61,7 +61,6 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $stringKind = $node->getAttribute(AttributeKey::KIND);
-
         if (! in_array($stringKind, self::HERENOW_DOC_KINDS, true)) {
             return null;
         }

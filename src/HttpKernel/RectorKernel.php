@@ -28,6 +28,9 @@ use Symplify\PhpConfigPrinter\Bundle\PhpConfigPrinterBundle;
 use Symplify\SimplePhpDocParser\Bundle\SimplePhpDocParserBundle;
 use Symplify\Skipper\Bundle\SkipperBundle;
 
+/**
+ * @todo possibly remove symfony/http-kernel and use the container build only
+ */
 final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterface
 {
     /**

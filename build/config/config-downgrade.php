@@ -13,15 +13,13 @@ $phpStanStubLoader->loadStubs();
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
-    $excludedPaths = array_merge(DowngradeRectorConfig::RECTOR_EXCLUDE_PATHS, DowngradeRectorConfig::DEPENDENCY_EXCLUDE_PATHS);
-    $parameters->set(Option::SKIP, $excludedPaths);
-
-    $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, null);
+    $parameters->set(Option::SKIP, DowngradeRectorConfig::DEPENDENCY_EXCLUDE_PATHS);
+    $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan-for-downgrade.neon');
 
     $parameters->set(Option::SETS, [
-        DowngradeSetList::PHP_80,
+//        DowngradeSetList::PHP_80,
 //        DowngradeSetList::PHP_74,
-//        DowngradeSetList::PHP_73,
+        DowngradeSetList::PHP_73,
 //        DowngradeSetList::PHP_72,
     ]);
 };
@@ -36,30 +34,30 @@ final class DowngradeRectorConfig
      */
     public const DEPENDENCY_EXCLUDE_PATHS = [
         '*/tests/*',
+        // symfony test are parts of package
+        '*/Test/*',
+
+        // missing phpunit test case
+        'packages/Testing/PHPUnit/AbstractCommunityRectorTestCase.php',
+        'packages/Testing/PHPUnit/AbstractRectorTestCase.php',
+
         // Individual classes that can be excluded because
         // they are not used by Rector, and they use classes
         // loaded with "require-dev" so it'd throw an error
-        __DIR__ . '/../../vendor/symfony/cache/DoctrineProvider.php',
-        __DIR__ . '/../../vendor/symfony/cache/Messenger/EarlyExpirationHandler.php',
-        __DIR__ . '/../../vendor/symfony/http-kernel/HttpKernelBrowser.php',
-        __DIR__ . '/../../vendor/symfony/string/Slugger/AsciiSlugger.php',
+
+        // use relative paths, so files are excluded on nested riecory too
+        'vendor/symfony/cache/DoctrineProvider.php',
+        'vendor/symfony/cache/Messenger/EarlyExpirationHandler.php',
+        'vendor/symfony/http-kernel/HttpKernelBrowser.php',
+        'vendor/symfony/string/Slugger/AsciiSlugger.php',
         // This class has an issue for PHP 7.1:
         // https://github.com/rectorphp/rector/issues/4816#issuecomment-743209526
         // It doesn't happen often, and Rector doesn't use it, so then
         // we simply skip downgrading this class
-        __DIR__ . '/../../vendor/symfony/cache/Adapter/CouchbaseBucketAdapter.php',
-    ];
-    /**
-     * Exclude paths when downgrading the Rector source code
-     */
-    public const RECTOR_EXCLUDE_PATHS = [
-        '*/tests/*',
-        '*/Source/*',
-        '*/Source*/*',
-        '*/Fixture/*',
-        '*/Fixture*/*',
-        '*/Expected/*',
-        '*/Expected*/*',
-        __DIR__ . '/../../packages/rector-generator/templates/*',
+        'vendor/symfony/cache/Adapter/CouchbaseBucketAdapter.php',
+        'vendor/symfony/dependency-injection/ExpressionLanguage.php',
+        'vendor/symfony/dependency-injection/ExpressionLanguageProvider.php',
+        'vendor/symfony/var-dumper/Caster/*',
+        'vendor/symplify/package-builder/src/Testing/AbstractKernelTestCase.php',
     ];
 }
