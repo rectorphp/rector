@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\Encapsed;
@@ -101,11 +102,15 @@ CODE_SAMPLE
 
         $params = $this->createParamsFromString($node->args[0]->value);
         $stmts = $this->parseStringToBody($node->args[1]->value);
-        if ($stmts === []) {
-            return null;
+
+        $refactored = $this->anonymousFunctionFactory->create($params, $stmts, null);
+        foreach ($refactored->uses as $key => $use) {
+            if ($use->var instanceof Variable && $this->isName($use->var, 'GLOBALS')) {
+                unset($refactored->uses[$key]);
+            }
         }
 
-        return $this->anonymousFunctionFactory->create($params, $stmts, null);
+        return $refactored;
     }
 
     /**
@@ -144,16 +149,7 @@ CODE_SAMPLE
         }
 
         $expr = $this->inlineCodeParser->stringify($expr);
-        $bodies = $this->inlineCodeParser->parse($expr);
-
-        foreach ($bodies as $body) {
-            $printedNode = $this->betterStandardPrinter->print($body);
-            if (strpos($printedNode, '$GLOBALS') !== false) {
-                return [];
-            }
-        }
-
-        return $bodies;
+        return $this->inlineCodeParser->parse($expr);
     }
 
     private function createEval(Expr $expr): Expression
