@@ -9,7 +9,7 @@ class ReturnSelf {
     }
 }
 
-final class SkipReturnSelf
+final class UseReturnSelf
 {
     public function run()
     {
@@ -33,7 +33,7 @@ class ReturnSelf {
     }
 }
 
-final class SkipReturnSelf
+final class UseReturnSelf
 {
     public function run()
     {
