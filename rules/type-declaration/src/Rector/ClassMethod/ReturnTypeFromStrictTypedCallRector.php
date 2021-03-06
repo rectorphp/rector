@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -20,6 +21,7 @@ use PhpParser\Node\UnionType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\VoidType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
@@ -99,15 +101,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
-            return null;
-        }
-
-        if ($node->returnType !== null) {
-            return null;
-        }
-
-        if ($node instanceof ClassMethod && $node->isMagic()) {
+        if ($this->isSkipped($node)) {
             return null;
         }
 
@@ -120,7 +114,11 @@ CODE_SAMPLE
         }
 
         if (count($returnedStrictTypes) === 1) {
-            $resolvedType = $this->nodeTypeResolver->resolve($returns[0]->expr);
+            $returnExpr = $returns[0]->expr;
+            $resolvedType = $returnExpr instanceof Expr
+                ? $this->nodeTypeResolver->resolve($returnExpr)
+                : new VoidType();
+
             $returnType = $resolvedType instanceof ObjectType
                 ? new FullyQualified($resolvedType->getClassName())
                 : $returnedStrictTypes[0];
@@ -136,6 +134,22 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    /**
+     * @param ClassMethod|Function_|Closure $node
+     */
+    private function isSkipped(Node $node): bool
+    {
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
+            return true;
+        }
+
+        if ($node->returnType !== null) {
+            return true;
+        }
+
+        return $node instanceof ClassMethod && $node->isMagic();
     }
 
     /**
