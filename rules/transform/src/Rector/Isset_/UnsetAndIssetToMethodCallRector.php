@@ -39,25 +39,12 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector implements Co
 <<<'CODE_SAMPLE'
 $container = new SomeContainer;
 isset($container["someKey"]);
-CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
-$container = new SomeContainer;
-$container->hasService("someKey");
-CODE_SAMPLE
-                ,
-                [
-                    self::ISSET_UNSET_TO_METHOD_CALL => [$unsetAndIssetToMethodCall],
-                ]
-            ),
-            new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
-$container = new SomeContainer;
 unset($container["someKey"]);
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
 $container = new SomeContainer;
+$container->hasService("someKey");
 $container->removeService("someKey");
 CODE_SAMPLE
                 ,
