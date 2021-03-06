@@ -26,7 +26,7 @@ final class ToStringToMethodCallRector extends AbstractRector implements Configu
     public const METHOD_NAMES_BY_TYPE = 'method_names_by_type';
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private $methodNamesByType = [];
 
@@ -75,6 +75,9 @@ CODE_SAMPLE
         return $this->processMethodCall($node);
     }
 
+    /**
+     * @param array<string, array<string, string>> $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->methodNamesByType = $configuration[self::METHOD_NAMES_BY_TYPE] ?? [];
@@ -83,7 +86,7 @@ CODE_SAMPLE
     private function processStringNode(String_ $string): ?Node
     {
         foreach ($this->methodNamesByType as $type => $methodName) {
-            if (! $this->isObjectType($string, new ObjectType($type))) {
+            if (! $this->isObjectType($string->expr, new ObjectType($type))) {
                 continue;
             }
 
