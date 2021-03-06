@@ -18,6 +18,7 @@ use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 
 final class UnionTypeCommonTypeNarrower
@@ -36,6 +37,7 @@ final class UnionTypeCommonTypeNarrower
         Stmt::class => [Node::class, Stmt::class],
         PhpDocTagValueNode::class => [PhpDocTagValueNode::class, \PHPStan\PhpDocParser\Ast\Node::class],
         \PhpParser\Node::class => [\PhpParser\Node::class],
+        RectorInterface::class => [RectorInterface::class],
     ];
 
     /**

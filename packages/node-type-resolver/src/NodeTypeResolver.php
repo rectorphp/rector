@@ -151,20 +151,23 @@ final class NodeTypeResolver
 
     public function resolve(Node $node): Type
     {
-        $type = $this->resolveFirstType($node);
+        return $this->resolveFirstType($node);
+//        return v;
 
-        if ($type instanceof IntersectionType) {
-            foreach ($type->getTypes() as $intersectionedType) {
-                if ($intersectionedType instanceof TypeWithClassName) {
-                    return $this->parentClassLikeTypeCorrector->correct($intersectionedType);
-                }
-            }
-        }
+//        if ($type instanceof IntersectionType) {
+//            foreach ($type->getTypes() as $intersectionedType) {
+//                if ($intersectionedType instanceof TypeWithClassName) {
+//                    return $type;
+//                    // return $this->parentClassLikeTypeCorrector->correct($intersectionedType);
+//                }
+//            }
+//        }
 
         if (! $type instanceof TypeWithClassName) {
             return $type;
         }
 
+        return $type;
         return $this->parentClassLikeTypeCorrector->correct($type);
     }
 

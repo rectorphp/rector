@@ -15,19 +15,10 @@ use PHPStan\Type\UnionType;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\TypeDeclaration\ValueObject\TypeStrictness;
 
 final class CallTypesResolver
 {
-    /**
-     * @var string
-     */
-    private const STRICTNESS_TYPE_DECLARATION = 'type_declaration';
-
-    /**
-     * @var string
-     */
-    private const STRICTNESS_DOCBLOCK = 'docblock';
-
     /**
      * @var NodeTypeResolver
      */
@@ -50,7 +41,7 @@ final class CallTypesResolver
      */
     public function resolveStrictTypesFromCalls(array $calls): array
     {
-        return $this->resolveTypesFromCalls($calls, self::STRICTNESS_TYPE_DECLARATION);
+        return $this->resolveTypesFromCalls($calls, TypeStrictness::STRICTNESS_TYPE_DECLARATION);
     }
 
     /**
@@ -59,7 +50,7 @@ final class CallTypesResolver
      */
     public function resolveWeakTypesFromCalls(array $calls): array
     {
-        return $this->resolveTypesFromCalls($calls, self::STRICTNESS_DOCBLOCK);
+        return $this->resolveTypesFromCalls($calls, TypeStrictness::STRICTNESS_DOCBLOCK);
     }
 
     /**
@@ -87,7 +78,7 @@ final class CallTypesResolver
 
     private function resolveArgValueType(string $strictnessLevel, Arg $arg): Type
     {
-        if ($strictnessLevel === self::STRICTNESS_TYPE_DECLARATION) {
+        if ($strictnessLevel === TypeStrictness::STRICTNESS_TYPE_DECLARATION) {
             $argValueType = $this->nodeTypeResolver->getNativeType($arg->value);
         } else {
             $argValueType = $this->nodeTypeResolver->resolve($arg->value);
