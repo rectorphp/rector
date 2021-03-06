@@ -149,12 +149,12 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    private function processSingleUnionType(Node $node, UnionType $unionType, NullableType $returnedStrictType): Node
+    private function processSingleUnionType(Node $node, UnionType $unionType, NullableType $nullableType): Node
     {
         $types = $unionType->getTypes();
         $returnType = $types[0] instanceof ObjectType && $types[1] instanceof NullType
             ? new NullableType(new FullyQualified($types[0]->getClassName()))
-            : $returnedStrictType;
+            : $nullableType;
 
         $node->returnType = $returnType;
         return $node;
