@@ -16,7 +16,7 @@ final class SkipFunctionLike
         $this->print($functionLike);
     }
 
-    public function print(FunctionLike $functionLike)
+    public function print(\PhpParser\Node\FunctionLike $functionLike)
     {
     }
 }
