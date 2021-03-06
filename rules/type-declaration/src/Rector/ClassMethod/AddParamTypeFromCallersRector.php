@@ -13,11 +13,14 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ * @see https://github.com/symplify/phpstan-rules/blob/master/docs/rules_overview.md#checktypehintcallertyperule
  *
- * @see \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\AddMethodCallBasedStrictParamTypeRectorTest
+ * @see \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeFromCallersRector\AddParamTypeFromCallersRectorTest
+ *
+ * Less strict version of \Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector,
+ * that can work with docblocks too
  */
-final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
+final class AddParamTypeFromCallersRector extends AbstractRector
 {
     /**
      * @var CallTypesResolver
@@ -39,57 +42,43 @@ final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change param type to strict type of passed expression', [
+        return new RuleDefinition('Add param type based on called types in that particular method', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-class SomeClass
+final class SomeClass
 {
-    public function getById($id)
+    public function run(Return_ $return)
     {
-    }
-}
-
-class CallerClass
-{
-    public function run(SomeClass $someClass)
-    {
-        $someClass->getById($this->getId());
+        $this->print($return);
     }
 
-    public function getId(): int
+    public function print($return)
     {
-        return 1000;
     }
 }
 CODE_SAMPLE
+
                 ,
                 <<<'CODE_SAMPLE'
-class SomeClass
+final class SomeClass
 {
-    public function getById(int $id)
+    public function run(Return_ $return)
     {
-    }
-}
-
-class CallerClass
-{
-    public function run(SomeClass $someClass)
-    {
-        $someClass->getById($this->getId());
+        $this->print($return);
     }
 
-    public function getId(): int
+    public function print(Return_ $return)
     {
-        return 1000;
     }
 }
 CODE_SAMPLE
+
             ),
         ]);
     }
 
     /**
-     * @return array<class-string<Node>>
+     * @return array<class-string<\PhpParser\Node>>
      */
     public function getNodeTypes(): array
     {
@@ -105,9 +94,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $classMethodCalls = $this->nodeRepository->findCallsByClassMethod($node);
-        $classMethodParameterTypes = $this->callTypesResolver->resolveStrictTypesFromCalls($classMethodCalls);
+        $calls = $this->nodeRepository->findCallsByClassMethod($node);
+        if ($calls === []) {
+            return null;
+        }
 
+        $classMethodParameterTypes = $this->callTypesResolver->resolveWeakTypesFromCalls($calls);
         return $this->classMethodParamTypeCompleter->complete($node, $classMethodParameterTypes);
     }
 }

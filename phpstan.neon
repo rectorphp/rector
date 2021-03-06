@@ -47,7 +47,6 @@ parameters:
         - stubs
 
     reportUnmatchedIgnoredErrors: false
-
     checkGenericClassInNonGenericObjectType: false
 
     excludes_analyse:
