@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 
 final class ClassMethodParamTypeCompleter
 {
@@ -16,9 +17,17 @@ final class ClassMethodParamTypeCompleter
      */
     private $staticTypeMapper;
 
-    public function __construct(StaticTypeMapper $staticTypeMapper)
-    {
+    /**
+     * @var ClassMethodParamVendorLockResolver
+     */
+    private $classMethodParamVendorLockResolver;
+
+    public function __construct(
+        StaticTypeMapper $staticTypeMapper,
+        ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver
+    ) {
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
     }
 
     /**
@@ -60,6 +69,10 @@ final class ClassMethodParamTypeCompleter
         }
 
         if (! isset($classMethod->params[$position])) {
+            return true;
+        }
+
+        if ($this->classMethodParamVendorLockResolver->isVendorLocked($classMethod, $position)) {
             return true;
         }
 

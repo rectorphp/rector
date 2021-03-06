@@ -95,7 +95,23 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isNullableParam(Param $param, FunctionLike $functionLike): bool
+    /**
+     * @param ClassMethod|Function_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($node->params === []) {
+            return null;
+        }
+
+        foreach ($node->params as $param) {
+            $this->refactorParam($param, $node);
+        }
+
+        return null;
+    }
+
+    private function isNullableParam(Param $param, FunctionLike $functionLike): bool
     {
         if ($param->variadic) {
             return false;
@@ -117,22 +133,6 @@ CODE_SAMPLE
 
         // Check if the type is different from the one declared in some ancestor
         return $this->getDifferentParamTypeFromAncestorClass($param, $functionLike) !== null;
-    }
-
-    /**
-     * @param ClassMethod|Function_ $node
-     */
-    public function refactor(Node $node): ?Node
-    {
-        if ($node->params === []) {
-            return null;
-        }
-
-        foreach ($node->params as $param) {
-            $this->refactorParam($param, $node);
-        }
-
-        return null;
     }
 
     private function getDifferentParamTypeFromAncestorClass(Param $param, FunctionLike $functionLike): ?string

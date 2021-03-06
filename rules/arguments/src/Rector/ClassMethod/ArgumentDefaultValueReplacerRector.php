@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -120,23 +121,23 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall|StaticCall $node
+     * @param MethodCall|StaticCall $expr
      */
-    private function processArgs(Node $node, ArgumentDefaultValueReplacer $argumentDefaultValueReplacer): void
+    private function processArgs(Expr $expr, ArgumentDefaultValueReplacer $argumentDefaultValueReplacer): void
     {
         $position = $argumentDefaultValueReplacer->getPosition();
 
-        $argValue = $this->valueResolver->getValue($node->args[$position]->value);
+        $argValue = $this->valueResolver->getValue($expr->args[$position]->value);
 
         if (is_scalar(
             $argumentDefaultValueReplacer->getValueBefore()
         ) && $argValue === $argumentDefaultValueReplacer->getValueBefore()) {
-            $node->args[$position] = $this->normalizeValueToArgument($argumentDefaultValueReplacer->getValueAfter());
+            $expr->args[$position] = $this->normalizeValueToArgument($argumentDefaultValueReplacer->getValueAfter());
         } elseif (is_array($argumentDefaultValueReplacer->getValueBefore())) {
-            $newArgs = $this->processArrayReplacement($node->args, $argumentDefaultValueReplacer);
+            $newArgs = $this->processArrayReplacement($expr->args, $argumentDefaultValueReplacer);
 
             if ($newArgs) {
-                $node->args = $newArgs;
+                $expr->args = $newArgs;
             }
         }
     }

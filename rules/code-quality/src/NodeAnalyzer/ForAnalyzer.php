@@ -16,7 +16,6 @@ use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Unset_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\AssignManipulator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -137,7 +136,7 @@ final class ForAnalyzer
         );
     }
 
-    public function isAssignmentWithArrayDimFetchAsVariableInsideForStatements(For_ $for, ?string $keyValueName): bool
+    public function isAssignmentWithArrayDimFetchAsVariableInsideForStatements(For_ $for, string $keyValueName): bool
     {
         return (bool) $this->betterNodeFinder->findFirst(
             $for->stmts,
@@ -148,10 +147,6 @@ final class ForAnalyzer
 
                 if (! $node->var instanceof ArrayDimFetch) {
                     return false;
-                }
-
-                if ($keyValueName === null) {
-                    throw new ShouldNotHappenException();
                 }
 
                 $arrayDimFetch = $node->var;

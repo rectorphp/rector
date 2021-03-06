@@ -101,13 +101,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Array_|List_ $node
+     * @param Array_|List_ $expr
      * @return Assign[]
      */
-    private function createStandaloneAssigns(Node $node, Array_ $rightArray): array
+    private function createStandaloneAssigns(Expr $expr, Array_ $rightArray): array
     {
         $standaloneAssigns = [];
-        foreach ($node->items as $key => $leftArrayItem) {
+        foreach ($expr->items as $key => $leftArrayItem) {
             if ($leftArrayItem === null) {
                 continue;
             }

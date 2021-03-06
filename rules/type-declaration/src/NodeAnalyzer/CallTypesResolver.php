@@ -77,9 +77,6 @@ final class CallTypesResolver
 
             foreach ($call->args as $position => $arg) {
                 $argValueType = $this->resolveArgValueType($strictnessLevel, $arg);
-
-                dump($argValueType);
-
                 $staticTypesByArgumentPosition[$position][] = $argValueType;
             }
         }
@@ -134,18 +131,12 @@ final class CallTypesResolver
             return $type;
         }
 
-        $firstUnionedType = null;
-
-        foreach ($type->getTypes() as $unionedType) {
-            if (! $unionedType instanceof TypeWithClassName) {
-                return $type;
-            }
-
-            if ($firstUnionedType === null) {
-                $firstUnionedType = $unionedType;
-            }
+        if (! $this->isTypeWithClassNameOnly($type)) {
+            return $type;
         }
 
+        /** @var TypeWithClassName $firstUnionedType */
+        $firstUnionedType = $type->getTypes()[0];
         foreach ($type->getTypes() as $unionedType) {
             if (! $unionedType instanceof TypeWithClassName) {
                 return $type;
@@ -157,5 +148,16 @@ final class CallTypesResolver
         }
 
         return $firstUnionedType;
+    }
+
+    private function isTypeWithClassNameOnly(UnionType $unionType): bool
+    {
+        foreach ($unionType->getTypes() as $unionedType) {
+            if (! $unionedType instanceof TypeWithClassName) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

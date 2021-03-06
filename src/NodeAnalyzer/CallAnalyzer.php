@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\NodeAnalyzer;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BooleanNot;
@@ -19,21 +18,21 @@ final class CallAnalyzer
      */
     private const OBJECT_CALLS = [MethodCall::class, NullsafeMethodCall::class, StaticCall::class];
 
-    public function isObjectCall(Node $node): bool
+    public function isObjectCall(Expr $expr): bool
     {
-        if ($node instanceof BooleanNot) {
-            $node = $node->expr;
+        if ($expr instanceof BooleanNot) {
+            $expr = $expr->expr;
         }
 
-        if ($node instanceof BinaryOp) {
-            $isObjectCallLeft = $this->isObjectCall($node->left);
-            $isObjectCallRight = $this->isObjectCall($node->right);
+        if ($expr instanceof BinaryOp) {
+            $isObjectCallLeft = $this->isObjectCall($expr->left);
+            $isObjectCallRight = $this->isObjectCall($expr->right);
 
             return $isObjectCallLeft || $isObjectCallRight;
         }
 
         foreach (self::OBJECT_CALLS as $objectCall) {
-            if (is_a($node, $objectCall, true)) {
+            if (is_a($expr, $objectCall, true)) {
                 return true;
             }
         }
