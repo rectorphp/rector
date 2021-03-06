@@ -84,6 +84,9 @@ parameters:
         # tests
         - tests/DependencyInjection/config
 
+        # system-level tests
+        - tests/system-tests
+
     ignoreErrors:
         - '#Parameter \#1 \$children of class PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocNode constructor expects array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode\>, array<int, PHPStan\\PhpDocParser\\Ast\\Node\> given#'
 

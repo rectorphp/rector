@@ -32,6 +32,7 @@
             <exclude>packages/rector-generator/templates/*</exclude>
             <exclude>packages/rector-generator/tests/RectorGenerator/Fixture/expected</exclude>
             <exclude>rules/nette-tester-to-phpunit/tests/Rector/RenameTesterTestToPHPUnitToTestFileRector/Source/*</exclude>
+            <exclude>tests/system-tests</exclude>
         </testsuite>
     </testsuites>
 </phpunit>
