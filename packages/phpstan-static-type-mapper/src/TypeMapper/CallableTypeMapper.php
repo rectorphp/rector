@@ -31,6 +31,9 @@ final class CallableTypeMapper implements TypeMapperInterface
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
 
+    /**
+     * @return class-string<\PHPStan\Type\Type>
+     */
     public function getNodeClass(): string
     {
         return CallableType::class;

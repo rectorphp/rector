@@ -7,6 +7,7 @@ namespace Rector\PHPStanStaticTypeMapper\TypeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\Reflection\ClassReflection;
@@ -27,6 +28,7 @@ final class UnionTypeCommonTypeNarrower
      * @var array<class-string<Node|\PHPStan\PhpDocParser\Ast\Node>, array<class-string<Node|\PHPStan\PhpDocParser\Ast\Node>>>
      */
     private const PRIORITY_TYPES = [
+        FunctionLike::class => [FunctionLike::class],
         BinaryOp::class => [BinaryOp::class, Expr::class],
         Expr::class => [Node::class, Expr::class],
         Stmt::class => [Node::class, Stmt::class],

@@ -42,6 +42,9 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
         $this->reflectionProvider = $reflectionProvider;
     }
 
+    /**
+     * @return class-string<\PHPStan\Type\Type>
+     */
     public function getNodeClass(): string
     {
         return ObjectType::class;

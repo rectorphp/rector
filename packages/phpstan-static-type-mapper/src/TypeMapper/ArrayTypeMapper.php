@@ -75,6 +75,9 @@ final class ArrayTypeMapper implements TypeMapperInterface
         $this->reflectionProvider = $reflectionProvider;
     }
 
+    /**
+     * @return class-string<\PHPStan\Type\Type>
+     */
     public function getNodeClass(): string
     {
         return ArrayType::class;

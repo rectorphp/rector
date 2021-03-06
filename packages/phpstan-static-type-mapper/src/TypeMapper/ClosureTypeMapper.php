@@ -32,6 +32,9 @@ final class ClosureTypeMapper implements TypeMapperInterface, PHPStanStaticTypeM
         $this->callableTypeMapper = $callableTypeMapper;
     }
 
+    /**
+     * @return class-string<\PHPStan\Type\Type>
+     */
     public function getNodeClass(): string
     {
         return ClosureType::class;

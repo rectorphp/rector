@@ -19,6 +19,9 @@ final class StrictMixedTypeMapper implements TypeMapperInterface
      */
     private const MIXED = 'mixed';
 
+    /**
+     * @return class-string<\PHPStan\Type\Type>
+     */
     public function getNodeClass(): string
     {
         return StrictMixedType::class;

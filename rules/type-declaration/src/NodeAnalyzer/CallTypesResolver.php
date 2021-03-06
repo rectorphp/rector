@@ -118,7 +118,6 @@ final class CallTypesResolver
 
             // narrow parents to most child type
             $unionedType = $this->narrowParentObjectTreeToSingleObjectChildType($unionedType);
-
             $staticTypeByArgumentPosition[$position] = $unionedType;
         }
 
@@ -137,6 +136,7 @@ final class CallTypesResolver
 
         /** @var TypeWithClassName $firstUnionedType */
         $firstUnionedType = $type->getTypes()[0];
+
         foreach ($type->getTypes() as $unionedType) {
             if (! $unionedType instanceof TypeWithClassName) {
                 return $type;

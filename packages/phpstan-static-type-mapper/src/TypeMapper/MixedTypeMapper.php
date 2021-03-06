@@ -14,6 +14,9 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class MixedTypeMapper implements TypeMapperInterface
 {
+    /**
+     * @return class-string<\PHPStan\Type\Type>
+     */
     public function getNodeClass(): string
     {
         return MixedType::class;

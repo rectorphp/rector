@@ -27,6 +27,9 @@ final class BooleanTypeMapper implements TypeMapperInterface
         $this->phpVersionProvider = $phpVersionProvider;
     }
 
+    /**
+     * @return class-string<\PHPStan\Type\Type>
+     */
     public function getNodeClass(): string
     {
         return BooleanType::class;

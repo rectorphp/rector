@@ -15,6 +15,9 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class ThisTypeMapper implements TypeMapperInterface
 {
+    /**
+     * @return class-string<\PHPStan\Type\Type>
+     */
     public function getNodeClass(): string
     {
         return ThisType::class;
