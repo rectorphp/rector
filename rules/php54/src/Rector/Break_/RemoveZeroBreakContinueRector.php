@@ -101,30 +101,30 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Break_|Continue_ $node
+     * @param Break_|Continue_ $stmt
      */
-    private function processVariableNum(Node $node, Variable $numVariable): ?Node
+    private function processVariableNum(Node\Stmt $stmt, Variable $numVariable): ?Node
     {
         $staticType = $this->getStaticType($numVariable);
 
         if ($staticType instanceof ConstantType) {
             if ($staticType instanceof ConstantIntegerType) {
                 if ($staticType->getValue() === 0) {
-                    $node->num = null;
-                    return $node;
+                    $stmt->num = null;
+                    return $stmt;
                 }
 
                 if ($staticType->getValue() > 0) {
-                    $node->num = new LNumber($staticType->getValue());
-                    return $node;
+                    $stmt->num = new LNumber($staticType->getValue());
+                    return $stmt;
                 }
             }
 
-            return $node;
+            return $stmt;
         }
 
         // remove variable
-        $node->num = null;
+        $stmt->num = null;
 
         return null;
     }

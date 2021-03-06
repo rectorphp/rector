@@ -146,6 +146,10 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
         $methodsWithWThisMock = $classMocks[$variable];
 
+        if ($param->var instanceof Expr) {
+            return null;
+        }
+
         // single use: "$mock = $this->createMock()"
         if (! $this->phpSpecMockCollector->isVariableMockInProperty($param->var)) {
             return $this->createNewMockVariableAssign($param, $name);

@@ -10,6 +10,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
+use PhpParser\NodeAbstract;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;
@@ -295,6 +296,11 @@ final class UnionTypeMapper implements TypeMapperInterface
 
         $sharedTypeWithClassName = $this->matchTwoObjectTypes($unionType);
         if ($sharedTypeWithClassName instanceof TypeWithClassName) {
+            // correctoins
+            if ($sharedTypeWithClassName->getClassName() === NodeAbstract::class) {
+                return new ObjectType(Node::class);
+            }
+
             return $sharedTypeWithClassName;
         }
 
