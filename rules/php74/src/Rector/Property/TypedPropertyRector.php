@@ -19,7 +19,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadDocBlock\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -151,7 +151,7 @@ CODE_SAMPLE
 
         $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $varType,
-            PHPStanStaticTypeMapper::KIND_PROPERTY
+            TypeKind::KIND_PROPERTY
         );
 
         if ($propertyTypeNode === null) {
