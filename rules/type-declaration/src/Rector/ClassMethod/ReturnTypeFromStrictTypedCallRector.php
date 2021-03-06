@@ -5,19 +5,24 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\UnionType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
+use PHPStan\Type\VoidType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
@@ -97,15 +102,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
-            return null;
-        }
-
-        if ($node->returnType !== null) {
-            return null;
-        }
-
-        if ($node instanceof ClassMethod && $node->isMagic()) {
+        if ($this->isSkipped($node)) {
             return null;
         }
 
@@ -118,17 +115,65 @@ CODE_SAMPLE
         }
 
         if (count($returnedStrictTypes) === 1) {
-            $node->returnType = $returnedStrictTypes[0];
+            $returnExpr = $returns[0]->expr;
+            $resolvedType = $returnExpr instanceof Expr
+                ? $this->nodeTypeResolver->resolve($returnExpr)
+                : new VoidType();
+
+            if ($resolvedType instanceof UnionType) {
+                /** @var NullableType $nullableType */
+                $nullableType = $returnedStrictTypes[0];
+                return $this->processSingleUnionType($node, $resolvedType, $nullableType);
+            }
+
+            /** @var Name $returnType */
+            $returnType = $resolvedType instanceof ObjectType
+                ? new FullyQualified($resolvedType->getClassName())
+                : $returnedStrictTypes[0];
+
+            $node->returnType = $returnType;
             return $node;
         }
 
         if ($this->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
+            /** @var PhpParserUnionType[] $returnedStrictTypes */
             $unwrappedTypes = $this->typeNodeUnwrapper->unwrapNullableUnionTypes($returnedStrictTypes);
-            $node->returnType = new UnionType($unwrappedTypes);
+            $returnType = new PhpParserUnionType($unwrappedTypes);
+            $node->returnType = $returnType;
             return $node;
         }
 
         return null;
+    }
+
+    /**
+     * @param ClassMethod|Function_|Closure $node
+     */
+    private function processSingleUnionType(Node $node, UnionType $unionType, NullableType $nullableType): Node
+    {
+        $types = $unionType->getTypes();
+        $returnType = $types[0] instanceof ObjectType && $types[1] instanceof NullType
+            ? new NullableType(new FullyQualified($types[0]->getClassName()))
+            : $nullableType;
+
+        $node->returnType = $returnType;
+        return $node;
+    }
+
+    /**
+     * @param ClassMethod|Function_|Closure $node
+     */
+    private function isSkipped(Node $node): bool
+    {
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
+            return true;
+        }
+
+        if ($node->returnType !== null) {
+            return true;
+        }
+
+        return $node instanceof ClassMethod && $node->isMagic();
     }
 
     /**
