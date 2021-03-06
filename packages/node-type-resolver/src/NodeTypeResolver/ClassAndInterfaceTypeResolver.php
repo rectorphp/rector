@@ -10,30 +10,17 @@ use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\ClassTypeResolverTest
+ * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\InterfaceTypeResolverTest
+ */
 final class ClassAndInterfaceTypeResolver implements NodeTypeResolverInterface
 {
-    /**
-     * @var ClassReflectionTypesResolver
-     */
-    private $classReflectionTypesResolver;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    public function __construct(ClassReflectionTypesResolver $classReflectionTypesResolver, TypeFactory $typeFactory)
-    {
-        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
-        $this->typeFactory = $typeFactory;
-    }
-
     /**
      * @return array<class-string<Node>>
      */
@@ -58,8 +45,6 @@ final class ClassAndInterfaceTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        $classTypes = $this->classReflectionTypesResolver->resolve($classReflection);
-
-        return $this->typeFactory->createObjectTypeOrUnionType($classTypes);
+        return new ObjectType($classReflection->getName(), null, $classReflection);
     }
 }

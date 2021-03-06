@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
+use Rector\CodingStyle\ValueObject\PreferenceSelfThis;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\Rector\AbstractRector;
@@ -25,23 +26,6 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
      * @var string
      */
     public const TYPE_TO_PREFERENCE = 'type_to_preference';
-
-    /**
-     * @api
-     * @var string
-     */
-    public const PREFER_SELF = self::SELF;
-
-    /**
-     * @api
-     * @var string
-     */
-    public const PREFER_THIS = 'this';
-
-    /**
-     * @var string[]
-     */
-    private const ALLOWED_OPTIONS = [self::PREFER_THIS, self::PREFER_SELF];
 
     /**
      * @var string
@@ -79,7 +63,7 @@ CODE_SAMPLE
                 ,
                 [
                     self::TYPE_TO_PREFERENCE => [
-                        'PHPUnit\Framework\TestCase' => self::PREFER_SELF,
+                        'PHPUnit\Framework\TestCase' => PreferenceSelfThis::PREFER_SELF,
                     ],
                 ]
             ),
@@ -104,7 +88,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($preference === self::PREFER_SELF) {
+            if ($preference === PreferenceSelfThis::PREFER_SELF) {
                 return $this->processToSelf($node);
             }
 
@@ -115,7 +99,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param mixed[] $configuration
+     * @param array<string, array<class-string, string>> $configuration
      */
     public function configure(array $configuration): void
     {
@@ -173,7 +157,7 @@ CODE_SAMPLE
 
     private function ensurePreferenceIsValid(string $preference): void
     {
-        if (in_array($preference, self::ALLOWED_OPTIONS, true)) {
+        if (in_array($preference, PreferenceSelfThis::ALLOWED_VALUES, true)) {
             return;
         }
 
@@ -181,7 +165,7 @@ CODE_SAMPLE
             'Preference configuration "%s" for "%s" is not valid. Use one of "%s"',
             $preference,
             self::class,
-            implode('", "', self::ALLOWED_OPTIONS)
+            implode('", "', PreferenceSelfThis::ALLOWED_VALUES)
         ));
     }
 }

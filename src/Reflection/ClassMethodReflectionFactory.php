@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Rector\Core\Reflection;
 
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\IntersectionType;
-use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use PHPStan\Type\TypeWithClassName;
 use ReflectionMethod;
 
 final class ClassMethodReflectionFactory
@@ -26,39 +24,26 @@ final class ClassMethodReflectionFactory
 
     public function createFromPHPStanTypeAndMethodName(Type $type, string $methodName): ?ReflectionMethod
     {
-        if ($type instanceof ShortenedObjectType) {
-            return $this->createReflectionMethodIfExists($type->getFullyQualifiedName(), $methodName);
+        if ($type instanceof ThisType) {
+            $type = $type->getStaticObjectType();
         }
 
-        if ($type instanceof ObjectType) {
-            return $this->createReflectionMethodIfExists($type->getClassName(), $methodName);
-        }
-
-        if ($type instanceof UnionType || $type instanceof IntersectionType) {
-            foreach ($type->getTypes() as $unionedType) {
-                if (! $unionedType instanceof ObjectType) {
-                    continue;
-                }
-
-                $methodReflection = $this->createFromPHPStanTypeAndMethodName($unionedType, $methodName);
-                if (! $methodReflection instanceof ReflectionMethod) {
-                    continue;
-                }
-
-                return $methodReflection;
-            }
-        }
-
-        return null;
-    }
-
-    public function createReflectionMethodIfExists(string $class, string $method): ?ReflectionMethod
-    {
-        if (! $this->reflectionProvider->hasClass($class)) {
+        if (! $type instanceof TypeWithClassName) {
             return null;
         }
 
-        $classReflection = $this->reflectionProvider->getClass($class);
+        return $this->createReflectionMethodIfExists($type, $methodName);
+    }
+
+    public function createReflectionMethodIfExists(
+        TypeWithClassName $typeWithClassName,
+        string $method
+    ): ?ReflectionMethod {
+        if (! $this->reflectionProvider->hasClass($typeWithClassName->getClassName())) {
+            return null;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($typeWithClassName->getClassName());
 
         $reflectionClass = $classReflection->getNativeReflection();
         if (! $reflectionClass->hasMethod($method)) {

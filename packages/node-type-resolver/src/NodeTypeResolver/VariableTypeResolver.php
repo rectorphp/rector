@@ -73,13 +73,11 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Param) {
-
             return $this->nodeTypeResolver->resolve($parent);
         }
 
         $variableName = $this->nodeNameResolver->getName($node);
         if ($variableName === null) {
-
             return new MixedType();
         }
 

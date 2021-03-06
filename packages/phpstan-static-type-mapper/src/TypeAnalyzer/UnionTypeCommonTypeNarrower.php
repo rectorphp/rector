@@ -27,7 +27,7 @@ final class UnionTypeCommonTypeNarrower
      * Key = the winner
      * Array = the group of types matched
      *
-     * @var array<class-string<Node|\PHPStan\PhpDocParser\Ast\Node>, array<class-string<Node|\PHPStan\PhpDocParser\Ast\Node>>>
+     * @var array<string, array<class-string<Node>|class-string<\PHPStan\PhpDocParser\Ast\Node>|class-string<RectorInterface>>>
      */
     private const PRIORITY_TYPES = [
         ClassLike::class => [ClassLike::class],
@@ -36,7 +36,7 @@ final class UnionTypeCommonTypeNarrower
         Expr::class => [Node::class, Expr::class],
         Stmt::class => [Node::class, Stmt::class],
         PhpDocTagValueNode::class => [PhpDocTagValueNode::class, \PHPStan\PhpDocParser\Ast\Node::class],
-        \PhpParser\Node::class => [\PhpParser\Node::class],
+        Node::class => [Node::class],
         RectorInterface::class => [RectorInterface::class],
     ];
 
@@ -169,8 +169,6 @@ final class UnionTypeCommonTypeNarrower
      */
     private function narrowAvailableTypes(array $availableTypes): array
     {
-        dump($availableTypes);
-
         /** @var string[] $sharedTypes */
         $sharedTypes = array_intersect(...$availableTypes);
         return array_values($sharedTypes);

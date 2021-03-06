@@ -9,8 +9,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Type\ObjectType;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\StringType;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -27,9 +28,15 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
      */
     private $propertyNaming;
 
-    public function __construct(PropertyNaming $propertyNaming)
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(PropertyNaming $propertyNaming, ReflectionProvider $reflectionProvider)
     {
         $this->propertyNaming = $propertyNaming;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -82,10 +89,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType(
-            $node->var,
-            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller')
-        )) {
+        $varType = $this->nodeTypeResolver->resolve($node->var);
+        if (! $varType instanceof TypeWithClassName) {
+            return null;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($varType->getClassName());
+        if (! $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Controller\Controller')) {
             return null;
         }
 
@@ -106,7 +116,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->addConstructorDependencyToClass($classLike, new StringType(), $propertyName);
+        $this->propertyAdder->addConstructorDependencyToClass($classLike, new StringType(), $propertyName, 0);
 
         return $this->nodeFactory->createPropertyFetch('this', $propertyName);
     }

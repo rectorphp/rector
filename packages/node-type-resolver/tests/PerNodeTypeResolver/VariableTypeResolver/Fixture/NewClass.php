@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source;
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Fixture;
 
-final class AssignmentClass
+final class NewClass
 {
     /**
      * @var FirstType
@@ -14,8 +14,7 @@ final class AssignmentClass
     public function getValue(): SecondType
     {
         $variable = new AnotherType;
+        $variable->test();
         $assignedVariable = $variable;
     }
 }
-
-$someClass = new NewClass;

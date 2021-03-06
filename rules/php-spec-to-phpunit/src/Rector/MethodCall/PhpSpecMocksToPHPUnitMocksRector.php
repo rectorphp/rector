@@ -10,6 +10,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Error;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
@@ -146,7 +147,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
         $methodsWithWThisMock = $classMocks[$variable];
 
-        if ($param->var instanceof Expr) {
+        if ($param->var instanceof Error) {
             return null;
         }
 

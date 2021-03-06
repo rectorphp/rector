@@ -6,10 +6,8 @@ namespace Rector\Doctrine\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -81,11 +79,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        $callerObjectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($node->var);
+        if (! $callerObjectType instanceof ObjectType) {
             return null;
         }
 
-        if (! $this->isObjectType($node->var, new ObjectType('Doctrine\ORM\EntityRepository'))) {
+        if (! $callerObjectType->isInstanceOf('Doctrine\ORM\EntityRepository')->yes()) {
             return null;
         }
 
@@ -94,17 +93,6 @@ CODE_SAMPLE
         }
 
         $node->var = $this->nodeFactory->createPropertyFetch('this', 'repository');
-
         return $node;
-    }
-
-    private function shouldSkip(MethodCall $methodCall): bool
-    {
-        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
-            return true;
-        }
-
-        return ! $this->isObjectType($classLike, new ObjectType('Doctrine\ORM\EntityRepository'));
     }
 }

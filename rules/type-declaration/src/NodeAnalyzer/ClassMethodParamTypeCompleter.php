@@ -99,11 +99,7 @@ final class ClassMethodParamTypeCompleter
             return true;
         }
 
-        if ($argumentStaticType instanceof CallableType && $this->isClosureObjectType($parameterStaticType)) {
-            return true;
-        }
-
-        return false;
+        return $argumentStaticType instanceof CallableType && $this->isClosureObjectType($parameterStaticType);
     }
 
     private function isClosureObjectType(Type $type): bool

@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -64,6 +65,11 @@ final class CallableClassMethodMatcher
         }
 
         $objectType = $this->nodeTypeResolver->resolve($objectExpr);
+
+        if ($objectType instanceof ThisType) {
+            $objectType = $objectType->getStaticObjectType();
+        }
+
         $objectType = $this->popFirstObjectType($objectType);
 
         if ($objectType instanceof ObjectType) {

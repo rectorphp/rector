@@ -97,12 +97,14 @@ CODE_SAMPLE
             }
 
             $propertyFetchVarType = $this->getObjectType($issetVar->var);
+
             if ($propertyFetchVarType instanceof TypeWithClassName) {
                 if (! $this->reflectionProvider->hasClass($propertyFetchVarType->getClassName())) {
                     continue;
                 }
 
                 $classReflection = $this->reflectionProvider->getClass($propertyFetchVarType->getClassName());
+
                 if (! $classReflection->hasProperty($propertyFetchName)) {
                     $newNodes[] = $this->replaceToPropertyExistsWithNullCheck(
                         $issetVar->var,

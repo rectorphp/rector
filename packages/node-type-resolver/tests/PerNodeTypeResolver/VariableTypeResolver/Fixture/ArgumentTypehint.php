@@ -2,7 +2,7 @@
 
 namespace SomeNamespace;
 
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\AnotherType;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Fixture\AnotherType;
 
 array_map(function (AnotherType $useUse) {
     return $useUse;

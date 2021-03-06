@@ -7,12 +7,12 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver
 use Iterator;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
+use PHPStan\Type\ThisType;
+use PHPStan\Type\TypeWithClassName;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\AnotherType;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\ThisClass;
-use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
-use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Fixture\AnotherType;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Fixture\ThisClass;
+use ReflectionClass;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\VariableTypeResolver
@@ -22,29 +22,26 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file, int $nodePosition, Type $expectedType): void
+    public function test(string $file, int $nodePosition, TypeWithClassName $expectedTypeWithClassName): void
     {
         $variableNodes = $this->getNodesForFileOfType($file, Variable::class);
 
         $resolvedType = $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]);
-        $this->assertEquals($expectedType, $resolvedType);
+        $this->assertInstanceOf(TypeWithClassName::class, $resolvedType);
+
+        /** @var TypeWithClassName $resolvedType */
+        $this->assertEquals($expectedTypeWithClassName->getClassName(), $resolvedType->getClassName());
     }
 
     public function provideData(): Iterator
     {
-        $unionTypeFactory = new UnionTypeFactory();
-
-        yield [
-            __DIR__ . '/Source/ThisClass.php',
-            0,
-            $unionTypeFactory->createUnionObjectType([ThisClass::class, AnotherClass::class]),
-        ];
+        yield [__DIR__ . '/Fixture/ThisClass.php', 0, new ThisType(new ReflectionClass(ThisClass::class))];
 
         $anotherTypeObjectType = new ObjectType(AnotherType::class);
 
-        yield [__DIR__ . '/Source/NewClass.php', 1, $anotherTypeObjectType];
-        yield [__DIR__ . '/Source/NewClass.php', 3, $anotherTypeObjectType];
-        yield [__DIR__ . '/Source/AssignmentClass.php', 2, $anotherTypeObjectType];
-        yield [__DIR__ . '/Source/ArgumentTypehint.php', 1, $anotherTypeObjectType];
+        yield [__DIR__ . '/Fixture/NewClass.php', 1, $anotherTypeObjectType];
+        yield [__DIR__ . '/Fixture/NewClass.php', 3, $anotherTypeObjectType];
+        yield [__DIR__ . '/Fixture/AssignmentClass.php', 2, $anotherTypeObjectType];
+        yield [__DIR__ . '/Fixture/ArgumentTypehint.php', 1, $anotherTypeObjectType];
     }
 }

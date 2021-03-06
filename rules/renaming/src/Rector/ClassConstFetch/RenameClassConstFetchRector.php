@@ -74,7 +74,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->renameClassConstFetches as $renameClassConstFetch) {
-            if (! $this->isObjectType($node, $renameClassConstFetch->getOldObjectType())) {
+            if (! $this->isObjectType($node->class, $renameClassConstFetch->getOldObjectType())) {
                 continue;
             }
 
