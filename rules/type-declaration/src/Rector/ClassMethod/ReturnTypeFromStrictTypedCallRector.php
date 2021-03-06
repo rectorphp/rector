@@ -121,9 +121,12 @@ CODE_SAMPLE
                 : new VoidType();
 
             if ($resolvedType instanceof UnionType) {
-                return $this->processSingleUnionType($node, $resolvedType, $returnedStrictTypes[0]);
+                /** @var NullableType $nullableType */
+                $nullableType = $returnedStrictTypes[0];
+                return $this->processSingleUnionType($node, $resolvedType, $nullableType);
             }
 
+            /** @var Name $returnType */
             $returnType = $resolvedType instanceof ObjectType
                 ? new FullyQualified($resolvedType->getClassName())
                 : $returnedStrictTypes[0];
@@ -133,15 +136,20 @@ CODE_SAMPLE
         }
 
         if ($this->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
+            /** @var PhpParserUnionType[] $returnedStrictTypes */
             $unwrappedTypes = $this->typeNodeUnwrapper->unwrapNullableUnionTypes($returnedStrictTypes);
-            $node->returnType = new UnionType($unwrappedTypes);
+            $returnType = new PhpParserUnionType($unwrappedTypes);
+            $node->returnType = $returnType;
             return $node;
         }
 
         return null;
     }
 
-    private function processSingleUnionType(Node $node, UnionType $unionType, Node $returnedStrictType): Node
+    /**
+     * @param ClassMethod|Function_|Closure $node
+     */
+    private function processSingleUnionType(Node $node, UnionType $unionType, NullableType $returnedStrictType): Node
     {
         $types = $unionType->getTypes();
         $returnType = $types[0] instanceof ObjectType && $types[1] instanceof NullType
