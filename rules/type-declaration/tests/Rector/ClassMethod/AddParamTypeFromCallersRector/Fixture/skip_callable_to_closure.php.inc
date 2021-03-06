@@ -4,8 +4,12 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeFromCaller
 
 final class SkipCallableToClosure
 {
-    public function run(callable $someCallback)
+    public function run()
     {
+        $someCallback = function () {
+            return 1;
+        };
+
         $this->setValue($someCallback);
     }
 

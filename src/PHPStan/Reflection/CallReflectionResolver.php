@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
-use PHPStan\Broker\FunctionNotFoundException;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptor;
@@ -126,21 +125,23 @@ final class CallReflectionResolver
      */
     private function resolveFunctionCall(FuncCall $funcCall)
     {
+        /** @var Scope|null $scope */
         $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
 
         if ($funcCall->name instanceof Name) {
-            try {
+            if ($this->reflectionProvider->hasFunction($funcCall->name, $scope)) {
                 return $this->reflectionProvider->getFunction($funcCall->name, $scope);
-            } catch (FunctionNotFoundException $functionNotFoundException) {
-                return null;
             }
+
+            return null;
         }
 
         if (! $scope instanceof Scope) {
             return null;
         }
 
-        return $this->typeToCallReflectionResolverRegistry->resolve($scope->getType($funcCall->name), $scope);
+        $funcCallNameType = $scope->getType($funcCall->name);
+        return $this->typeToCallReflectionResolverRegistry->resolve($funcCallNameType, $scope);
     }
 
     /**

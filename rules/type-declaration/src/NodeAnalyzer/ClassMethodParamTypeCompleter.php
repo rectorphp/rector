@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\CallableType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
@@ -82,7 +84,34 @@ final class ClassMethodParamTypeCompleter
         }
 
         $parameterStaticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($parameter->type);
+
+        if ($this->isClosureAndCallableType($parameterStaticType, $argumentStaticType)) {
+            return true;
+        }
+
         // already completed → skip
         return $parameterStaticType->equals($argumentStaticType);
+    }
+
+    private function isClosureAndCallableType(Type $parameterStaticType, Type $argumentStaticType): bool
+    {
+        if ($parameterStaticType instanceof CallableType && $this->isClosureObjectType($argumentStaticType)) {
+            return true;
+        }
+
+        if ($argumentStaticType instanceof CallableType && $this->isClosureObjectType($parameterStaticType)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isClosureObjectType(Type $type): bool
+    {
+        if (! $type instanceof ObjectType) {
+            return false;
+        }
+
+        return $type->getClassName() === 'Closure';
     }
 }
