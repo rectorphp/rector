@@ -15,7 +15,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadDocBlock\TagRemover\ParamTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
@@ -185,7 +185,7 @@ CODE_SAMPLE
 
         $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $inferedType,
-            PHPStanStaticTypeMapper::KIND_PARAM
+            TypeKind::KIND_PARAM
         );
 
         if ($paramTypeNode === null) {

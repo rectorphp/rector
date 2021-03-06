@@ -19,7 +19,7 @@ use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\ChildPopulator\ChildReturnPopulator;
 use Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover;
 use Rector\TypeDeclaration\PhpParserTypeAnalyzer;
@@ -174,7 +174,7 @@ CODE_SAMPLE
     {
         $inferredReturnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $inferedType,
-            PHPStanStaticTypeMapper::KIND_RETURN
+            TypeKind::KIND_RETURN
         );
 
         // nothing to change in PHP code
