@@ -11,12 +11,14 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -118,7 +120,12 @@ CODE_SAMPLE
         }
 
         if (count($returnedStrictTypes) === 1) {
-            $node->returnType = $returnedStrictTypes[0];
+            $resolvedType = $this->nodeTypeResolver->resolve($returns[0]->expr);
+            $returnType = $resolvedType instanceof ObjectType
+                ? new FullyQualified($resolvedType->getClassName())
+                : $returnedStrictTypes[0];
+
+            $node->returnType = $returnType;
             return $node;
         }
 
