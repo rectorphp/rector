@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\NodeFactory;
 
-use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\MethodCall;
@@ -50,9 +50,9 @@ final class AnonymousFunctionFactory
     }
 
     /**
-     * @param Variable|PropertyFetch $node
+     * @param Variable|PropertyFetch $expr
      */
-    public function create(PhpMethodReflection $phpMethodReflection, Node $node): Closure
+    public function create(PhpMethodReflection $phpMethodReflection, Expr $expr): Closure
     {
         /** @var FunctionVariantWithPhpDocs $functionVariantWithPhpDoc */
         $functionVariantWithPhpDoc = $phpMethodReflection->getVariants()[0];
@@ -62,7 +62,7 @@ final class AnonymousFunctionFactory
 
         $anonymousFunction->params = $newParams;
 
-        $innerMethodCall = new MethodCall($node, $phpMethodReflection->getName());
+        $innerMethodCall = new MethodCall($expr, $phpMethodReflection->getName());
         $innerMethodCall->args = $this->nodeFactory->createArgsFromParams($newParams);
 
         if (! $functionVariantWithPhpDoc->getReturnType() instanceof MixedType) {
@@ -80,8 +80,8 @@ final class AnonymousFunctionFactory
             $anonymousFunction->stmts[] = new Expression($innerMethodCall);
         }
 
-        if ($node instanceof Variable && ! $this->nodeNameResolver->isName($node, 'this')) {
-            $anonymousFunction->uses[] = new ClosureUse($node);
+        if ($expr instanceof Variable && ! $this->nodeNameResolver->isName($expr, 'this')) {
+            $anonymousFunction->uses[] = new ClosureUse($expr);
         }
 
         return $anonymousFunction;

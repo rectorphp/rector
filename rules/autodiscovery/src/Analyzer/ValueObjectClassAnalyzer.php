@@ -17,7 +17,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ValueObjectClassAnalyzer
 {
     /**
-     * @var bool[]
+     * @var array<string, bool>
      */
     private $valueObjectStatusByClassName = [];
 
@@ -98,7 +98,7 @@ final class ValueObjectClassAnalyzer
         return true;
     }
 
-    private function analyseWithoutConstructor(Class_ $class, ?string $className): bool
+    private function analyseWithoutConstructor(Class_ $class, string $className): bool
     {
         // A. has all properties with serialize?
         if ($this->hasAllPropertiesWithSerialize($class)) {

@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Arguments\NodeAnalyzer;
 
-use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Arguments\ValueObject\ArgumentAdder;
 use Rector\NodeNameResolver\NodeNameResolver;
 
@@ -40,26 +39,21 @@ final class ArgumentAddingScope
     }
 
     /**
-     * @param ClassMethod|MethodCall|StaticCall $node
+     * @param MethodCall|StaticCall $expr
      */
-    public function isInCorrectScope(Node $node, ArgumentAdder $argumentAdder): bool
+    public function isInCorrectScope(Expr $expr, ArgumentAdder $argumentAdder): bool
     {
         if ($argumentAdder->getScope() === null) {
             return true;
         }
 
         $scope = $argumentAdder->getScope();
-
-        if ($node instanceof ClassMethod) {
-            return $scope === self::SCOPE_CLASS_METHOD;
-        }
-
-        if ($node instanceof StaticCall) {
-            if (! $node->class instanceof Name) {
+        if ($expr instanceof StaticCall) {
+            if (! $expr->class instanceof Name) {
                 return false;
             }
 
-            if ($this->nodeNameResolver->isName($node->class, 'parent')) {
+            if ($this->nodeNameResolver->isName($expr->class, 'parent')) {
                 return $scope === self::SCOPE_PARENT_CALL;
             }
 

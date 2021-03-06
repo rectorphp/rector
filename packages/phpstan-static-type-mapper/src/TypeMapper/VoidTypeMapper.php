@@ -31,6 +31,9 @@ final class VoidTypeMapper implements TypeMapperInterface
         $this->phpVersionProvider = $phpVersionProvider;
     }
 
+    /**
+     * @return class-string<Type>
+     */
     public function getNodeClass(): string
     {
         return VoidType::class;

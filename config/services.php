@@ -21,6 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Symfony\Component\Filesystem\Filesystem;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -56,7 +57,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->alias(SymfonyApplication::class, ConsoleApplication::class);
 
     $services->set(NoRectorsLoadedReporter::class);
-    $services->set(\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser::class);
+    $services->set(SimpleCallableNodeTraverser::class);
 
     $services->set(TextDescriptor::class);
 
@@ -77,6 +78,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PrivatesCaller::class);
     $services->set(FinderSanitizer::class);
     $services->set(FileSystemFilter::class);
+
     $services->set(ParameterProvider::class)
         ->arg('$container', service('service_container'));
 

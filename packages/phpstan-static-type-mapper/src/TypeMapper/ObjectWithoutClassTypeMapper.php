@@ -36,6 +36,9 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface, PHPStan
         $this->phpVersionProvider = $phpVersionProvider;
     }
 
+    /**
+     * @return class-string<Type>
+     */
     public function getNodeClass(): string
     {
         return ObjectWithoutClassType::class;

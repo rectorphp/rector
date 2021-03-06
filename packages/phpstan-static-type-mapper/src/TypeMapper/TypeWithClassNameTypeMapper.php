@@ -24,6 +24,9 @@ final class TypeWithClassNameTypeMapper implements TypeMapperInterface
         $this->stringTypeMapper = $stringTypeMapper;
     }
 
+    /**
+     * @return class-string<Type>
+     */
     public function getNodeClass(): string
     {
         return TypeWithClassName::class;

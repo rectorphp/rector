@@ -212,6 +212,7 @@ CODE_SAMPLE
 
             return $this->isName($node->params[$position], $argumentName);
         }
+
         // already added?
         if (! isset($node->args[$position])) {
             // is correct scope?

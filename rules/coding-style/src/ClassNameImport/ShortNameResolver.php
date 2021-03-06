@@ -180,7 +180,7 @@ final class ShortNameResolver
 
     /**
      * @param Node[] $stmts
-     * @return string[]
+     * @return array<string, string>
      */
     private function resolveFromDocBlocks(array $stmts): array
     {
@@ -192,6 +192,7 @@ final class ShortNameResolver
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
             foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
+                /** @var PhpDocChildNode $phpDocChildNode */
                 $shortTagName = $this->resolveShortTagNameFromPhpDocChildNode($phpDocChildNode);
                 if ($shortTagName === null) {
                     continue;

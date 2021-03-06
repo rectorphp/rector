@@ -7,6 +7,7 @@ namespace Rector\PostRector\Application;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Symplify\Skipper\Skipper\Skipper;
@@ -30,13 +31,23 @@ final class PostFileProcessor
     private $currentFileInfoProvider;
 
     /**
+     * @var CurrentRectorProvider
+     */
+    private $currentRectorProvider;
+
+    /**
      * @param PostRectorInterface[] $postRectors
      */
-    public function __construct(Skipper $skipper, CurrentFileInfoProvider $currentFileInfoProvider, array $postRectors)
-    {
+    public function __construct(
+        Skipper $skipper,
+        CurrentFileInfoProvider $currentFileInfoProvider,
+        CurrentRectorProvider $currentRectorProvider,
+        array $postRectors
+    ) {
         $this->postRectors = $this->sortByPriority($postRectors);
         $this->skipper = $skipper;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
+        $this->currentRectorProvider = $currentRectorProvider;
     }
 
     /**
@@ -49,6 +60,8 @@ final class PostFileProcessor
             if ($this->shouldSkipPostRector($postRector)) {
                 continue;
             }
+
+            $this->currentRectorProvider->changeCurrentRector($postRector);
 
             $nodeTraverser = new NodeTraverser();
             $nodeTraverser->addVisitor($postRector);

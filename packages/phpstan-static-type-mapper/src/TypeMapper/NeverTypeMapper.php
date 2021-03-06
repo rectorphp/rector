@@ -13,6 +13,9 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class NeverTypeMapper implements TypeMapperInterface
 {
+    /**
+     * @return class-string<Type>
+     */
     public function getNodeClass(): string
     {
         return NeverType::class;

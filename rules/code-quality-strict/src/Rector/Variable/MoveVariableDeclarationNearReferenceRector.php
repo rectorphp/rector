@@ -309,7 +309,7 @@ CODE_SAMPLE
     /**
      * @param array<int, Node|null> $multiNodes
      */
-    private function getSameVarName(array $multiNodes, Node $node): ?Variable
+    private function getSameVarName(array $multiNodes, Variable $variable): ?Variable
     {
         foreach ($multiNodes as $multiNode) {
             if ($multiNode === null) {
@@ -317,12 +317,12 @@ CODE_SAMPLE
             }
 
             /** @var Variable|null $found */
-            $found = $this->betterNodeFinder->findFirst($multiNode, function (Node $n) use ($node): bool {
+            $found = $this->betterNodeFinder->findFirst($multiNode, function (Node $n) use ($variable): bool {
                 $n = $this->mayBeArrayDimFetch($n);
                 if (! $n instanceof Variable) {
                     return false;
                 }
-                return $this->isName($n, (string) $this->getName($node));
+                return $this->isName($n, (string) $this->getName($variable));
             });
 
             if ($found !== null) {
