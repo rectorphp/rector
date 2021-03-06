@@ -43,7 +43,7 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
     }
 
     /**
-     * @return class-string<\PHPStan\Type\Type>
+     * @return class-string<Type>
      */
     public function getNodeClass(): string
     {

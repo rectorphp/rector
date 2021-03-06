@@ -16,7 +16,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 final class SelfObjectTypeMapper implements TypeMapperInterface
 {
     /**
-     * @return class-string<\PHPStan\Type\Type>
+     * @return class-string<Type>
      */
     public function getNodeClass(): string
     {

@@ -76,7 +76,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
     }
 
     /**
-     * @return class-string<\PHPStan\Type\Type>
+     * @return class-string<Type>
      */
     public function getNodeClass(): string
     {

@@ -16,7 +16,7 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 final class HasOffsetTypeMapper implements TypeMapperInterface
 {
     /**
-     * @return class-string<\PHPStan\Type\Type>
+     * @return class-string<Type>
      */
     public function getNodeClass(): string
     {

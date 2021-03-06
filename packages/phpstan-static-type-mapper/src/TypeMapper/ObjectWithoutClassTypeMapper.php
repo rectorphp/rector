@@ -37,7 +37,7 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface, PHPStan
     }
 
     /**
-     * @return class-string<\PHPStan\Type\Type>
+     * @return class-string<Type>
      */
     public function getNodeClass(): string
     {
