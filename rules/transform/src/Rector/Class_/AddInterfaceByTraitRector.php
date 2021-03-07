@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -30,16 +29,6 @@ final class AddInterfaceByTraitRector extends AbstractRector implements Configur
      * @var array<string, string>
      */
     private $interfaceByTrait = [];
-
-    /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    public function __construct(ClassManipulator $classManipulator)
-    {
-        $this->classManipulator = $classManipulator;
-    }
 
     public function getRuleDefinition(): RuleDefinition
     {

@@ -88,16 +88,17 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $assign->expr instanceof Array_) {
+        $assignExpr = $assign->expr;
+        if (! $assignExpr instanceof Array_) {
             return true;
         }
 
-        if (count($assign->var->items) !== count($assign->expr->items)) {
+        if (count($assign->var->items) !== count($assignExpr->items)) {
             return true;
         }
 
         // is value swap
-        return $this->isValueSwap($assign->var, $assign->expr);
+        return $this->isValueSwap($assign->var, $assignExpr);
     }
 
     /**

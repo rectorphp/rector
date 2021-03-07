@@ -19,5 +19,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddClosureReturnTypeRector::class);
     $services->set(AddArrayParamDocTypeRector::class);
     $services->set(AddArrayReturnDocTypeRector::class);
-    $services->set(AddParamTypeFromCallersRector::class);
+    // $services->set(AddParamTypeFromCallersRector::class);
 };
