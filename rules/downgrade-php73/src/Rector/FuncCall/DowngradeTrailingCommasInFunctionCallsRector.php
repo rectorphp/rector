@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,6 +19,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeTrailingCommasInFunctionCallsRector extends AbstractRector
 {
+    /**
+     * @var FollowedByCommaAnalyzer
+     */
+    private $followedByCommaAnalyzer;
+
+    public function __construct(FollowedByCommaAnalyzer $followedByCommaAnalyzer)
+    {
+        $this->followedByCommaAnalyzer = $followedByCommaAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -66,9 +77,16 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node->args) {
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $last = $node->args[array_key_last($node->args)];
+            $lastArgumentPosition = array_key_last($node->args);
+
+            $last = $node->args[$lastArgumentPosition];
+            if (! $this->followedByCommaAnalyzer->isFollowed($last)) {
+                return null;
+            }
+
+            // remove comma
             $last->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, false);
+            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
 
         return $node;

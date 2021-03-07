@@ -187,7 +187,6 @@
             "rules/transform/tests/Rector/FuncCall/FuncCallToMethodCallRector/Source/some_view_function.php",
             "rules/type-declaration/tests/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php",
             "rules/type-declaration/tests/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",
-            "stubs/Nette/Localization/ITranslation.php",
             "vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php",
             "tests/debug_functions.php"
         ],

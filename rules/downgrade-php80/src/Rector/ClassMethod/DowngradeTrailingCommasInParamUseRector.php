@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticInstanceOf;
+use Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,6 +27,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeTrailingCommasInParamUseRector extends AbstractRector
 {
+    /**
+     * @var FollowedByCommaAnalyzer
+     */
+    private $followedByCommaAnalyzer;
+
+    public function __construct(FollowedByCommaAnalyzer $followedByCommaAnalyzer)
+    {
+        $this->followedByCommaAnalyzer = $followedByCommaAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -122,9 +133,7 @@ CODE_SAMPLE
             return $node;
         }
 
-        /** @var Closure $clean */
-        $clean = $this->cleanTrailingComma($node, $node->uses);
-        return $clean;
+        return $this->cleanTrailingComma($node, $node->uses);
     }
 
     /**
@@ -144,8 +153,14 @@ CODE_SAMPLE
      */
     private function cleanTrailingComma(Node $node, array $array): Node
     {
+        $lastPosition = array_key_last($array);
+
+        $last = $array[$lastPosition];
+        if (! $this->followedByCommaAnalyzer->isFollowed($last)) {
+            return $node;
+        }
+
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        $last = $array[array_key_last($array)];
         $last->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, false);
 
         return $node;

@@ -198,7 +198,6 @@
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Function_/count.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/YetAnotherClass.php",
             "rules/dead-code/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",
-            "rules/naming/tests/ValueObjectFactory/PropertyRenameFactory/Fixture/skip_some_class.php.inc",
             "rules/renaming/tests/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
             "rules/renaming/tests/Rector/Name/RenameClassRector/Source/SkipClassImportingSameName.php",
             "rules/renaming/tests/Rector/Name/RenameClassRector/Source/SkipSameNamedInterface.php",
@@ -208,7 +207,6 @@
             "rules/transform/tests/Rector/FuncCall/FuncCallToMethodCallRector/Source/some_view_function.php",
             "rules/type-declaration/tests/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php",
             "rules/type-declaration/tests/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",
-            "stubs/Nette/Localization/ITranslation.php",
             "vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php",
             "tests/debug_functions.php"
         ],

@@ -75,9 +75,9 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
     }
 
     /**
-     * @return BundleInterface[]
+     * @return iterable<BundleInterface>
      */
-    public function registerBundles(): array
+    public function registerBundles(): iterable
     {
         return [
             new ConsoleColorDiffBundle(),
