@@ -6,9 +6,9 @@ namespace Rector\Doctrine\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
-use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeFactory\EntityIdNodeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -30,11 +30,6 @@ final class AddEntityIdByConditionRector extends AbstractRector implements Confi
     private $detectedTraits = [];
 
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var EntityIdNodeFactory
      */
     private $entityIdNodeFactory;
@@ -44,14 +39,19 @@ final class AddEntityIdByConditionRector extends AbstractRector implements Confi
      */
     private $classInsertManipulator;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
-        ClassManipulator $classManipulator,
         EntityIdNodeFactory $entityIdNodeFactory,
-        ClassInsertManipulator $classInsertManipulator
+        ClassInsertManipulator $classInsertManipulator,
+        ReflectionProvider $reflectionProvider
     ) {
-        $this->classManipulator = $classManipulator;
         $this->entityIdNodeFactory = $entityIdNodeFactory;
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -140,13 +140,19 @@ CODE_SAMPLE
 
     private function isTraitMatch(Class_ $class): bool
     {
-        $usedTraits = $this->classManipulator->getUsedTraits($class);
+        $className = $this->getName($class);
+        if ($className === null) {
+            return false;
+        }
 
-        foreach (array_keys($usedTraits) as $traitName) {
-            foreach ($this->detectedTraits as $detectedTrait) {
-                if ($traitName === $detectedTrait) {
-                    return true;
-                }
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return false;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
+        foreach ($this->detectedTraits as $detectedTrait) {
+            if ($classReflection->hasTraitUse($detectedTrait)) {
+                return true;
             }
         }
 

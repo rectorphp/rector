@@ -45,6 +45,7 @@ final class ClassManipulator
     }
 
     /**
+     * @deprecated
      * @param Class_|Trait_ $classLike
      * @return array<string, Name>
      */

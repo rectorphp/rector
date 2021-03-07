@@ -98,7 +98,7 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
         $uniqueConstraintAroundSpaces = $this->matchCurlyBracketAroundSpaces($uniqueConstraintsContent);
 
         $uniqueConstraintTagValueNodes = $this->uniqueConstraintPhpDocNodeFactory->createUniqueConstraintTagValueNodes(
-            $table->uniqueConstraints,
+            (array) $table->uniqueConstraints,
             $uniqueConstraintsContent
         );
 

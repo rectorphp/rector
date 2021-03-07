@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver;
 
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassMemberAccessAnswerer;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Type;

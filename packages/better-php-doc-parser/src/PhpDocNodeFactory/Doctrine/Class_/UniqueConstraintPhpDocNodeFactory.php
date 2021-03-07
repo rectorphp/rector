@@ -45,12 +45,12 @@ final class UniqueConstraintPhpDocNodeFactory
     }
 
     /**
-     * @param UniqueConstraint[]|null $uniqueConstraints
+     * @param UniqueConstraint[] $uniqueConstraints
      * @return UniqueConstraintTagValueNode[]
      */
-    public function createUniqueConstraintTagValueNodes(?array $uniqueConstraints, string $annotationContent): array
+    public function createUniqueConstraintTagValueNodes(array $uniqueConstraints, string $annotationContent): array
     {
-        if ($uniqueConstraints === null) {
+        if ($uniqueConstraints === []) {
             return [];
         }
 
