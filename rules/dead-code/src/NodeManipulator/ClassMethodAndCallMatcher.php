@@ -58,7 +58,7 @@ final class ClassMethodAndCallMatcher
         }
 
         $objectType = new ObjectType($className);
-        $callerStaticType = $this->nodeTypeResolver->getStaticType($methodCall->var);
+        $callerStaticType = $this->nodeTypeResolver->resolve($methodCall->var);
 
         return $objectType->isSuperTypeOf($callerStaticType)
             ->yes();
@@ -78,7 +78,7 @@ final class ClassMethodAndCallMatcher
 
         $objectType = new ObjectType($className);
 
-        $callerStaticType = $this->getStaticType($staticCall->class);
+        $callerStaticType = $this->nodeTypeResolver->resolve($staticCall->class);
         if ($callerStaticType instanceof MixedType) {
             return false;
         }

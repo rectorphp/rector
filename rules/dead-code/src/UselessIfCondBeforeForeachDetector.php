@@ -57,7 +57,7 @@ final class UselessIfCondBeforeForeachDetector
         }
 
         // is array though?
-        $arrayType = $this->getStaticType($empty->expr);
+        $arrayType = $this->nodeTypeResolver->resolve($empty->expr);
 
         return ! $arrayType instanceof MixedType;
     }

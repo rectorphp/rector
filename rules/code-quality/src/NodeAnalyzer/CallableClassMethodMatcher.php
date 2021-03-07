@@ -64,7 +64,7 @@ final class CallableClassMethodMatcher
             throw new ShouldNotHappenException();
         }
 
-        $objectType = $this->getStaticType($objectExpr);
+        $objectType = $this->nodeTypeResolver->resolve($objectExpr);
 
         if ($objectType instanceof ThisType) {
             $objectType = $objectType->getStaticObjectType();
