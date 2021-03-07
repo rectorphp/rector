@@ -318,11 +318,13 @@ final class ParsedNodeCollector
     private function resolveClassConstant(ClassConstFetch $classConstFetch, string $className): ?string
     {
         if ($className === 'self') {
-            return $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
+            $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
+            return $classConstFetch;
         }
 
         if ($className === 'parent') {
-            return $classConstFetch->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+            $classConstFetch->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+            return $classConstFetch;
         }
 
         return $className;
