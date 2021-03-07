@@ -47,7 +47,7 @@ final class CountableAnalyzer
             return false;
         }
 
-        $callerObjectType = $this->getStaticType($expr->var);
+        $callerObjectType = $this->nodeTypeResolver->resolve($expr->var);
 
         $propertyName = $this->nodeNameResolver->getName($expr->name);
         if (! is_string($propertyName)) {

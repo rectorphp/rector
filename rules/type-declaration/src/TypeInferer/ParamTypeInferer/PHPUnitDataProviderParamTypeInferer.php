@@ -201,7 +201,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
                     continue;
                 }
 
-                $paramOnPositionTypes[] = $this->getStaticType($singleDataProvidedSetItem->value);
+                $paramOnPositionTypes[] = $this->nodeTypeResolver->resolve($singleDataProvidedSetItem->value);
             }
         }
 
