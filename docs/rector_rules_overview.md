@@ -1,4 +1,4 @@
-# 672 Rules Overview
+# 674 Rules Overview
 
 <br>
 
@@ -136,9 +136,9 @@
 
 - [SymfonyPhpConfig](#symfonyphpconfig) (1)
 
-- [Transform](#transform) (35)
+- [Transform](#transform) (36)
 
-- [TypeDeclaration](#typedeclaration) (17)
+- [TypeDeclaration](#typedeclaration) (18)
 
 - [Visibility](#visibility) (3)
 
@@ -2535,7 +2535,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to each own lines default value, to prevent undefined array issues
+Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
 
 - class: [`Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`](/rules/coding-style/src/Rector/Assign/SplitDoubleAssignRector.php)
 
@@ -13040,7 +13040,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
 
 :wrench: **configure it!**
 
@@ -15749,6 +15749,30 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+### NativeTestCaseRector
+
+Change Rector test case to Community version
+
+- class: [`Rector\Transform\Rector\Class_\NativeTestCaseRector`](/rules/transform/src/Rector/Class_/NativeTestCaseRector.php)
+
+```diff
+-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
++use Rector\Testing\PHPUnit\AbstractCommunityRectorTestCase;
+
+-final class SomeClassTest extends AbstractRectorTestCase
++final class SomeClassTest extends AbstractCommunityRectorTestCase
+ {
+-    public function getRectorClass(): string
++    public function provideConfigFilePath(): string
+     {
+-        return SomeRector::class;
++        return __DIR__ . '/config/configured_rule.php';
+     }
+ }
+```
+
+<br>
+
 ### NewArgToMethodCallRector
 
 Change new with specific argument to method call
@@ -16464,34 +16488,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
  $container = new SomeContainer;
 -isset($container["someKey"]);
-+$container->hasService("someKey");
-```
-
-<br>
-
-```php
-use Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector;
-use Rector\Transform\ValueObject\UnsetAndIssetToMethodCall;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(UnsetAndIssetToMethodCallRector::class)
-        ->call('configure', [[
-            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => ValueObjectInliner::inline([
-                new UnsetAndIssetToMethodCall('SomeContainer', 'hasService', 'removeService'),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- $container = new SomeContainer;
 -unset($container["someKey"]);
++$container->hasService("someKey");
 +$container->removeService("someKey");
 ```
 
@@ -16730,6 +16728,29 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  {
 -    public function process($name)
 +    public function process(string $name)
+     {
+     }
+ }
+```
+
+<br>
+
+### AddParamTypeFromCallersRector
+
+Add param type based on called types in that particular method
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromCallersRector`](/rules/type-declaration/src/Rector/ClassMethod/AddParamTypeFromCallersRector.php)
+
+```diff
+ final class SomeClass
+ {
+     public function run(Return_ $return)
+     {
+         $this->print($return);
+     }
+
+-    public function print($return)
++    public function print(Return_ $return)
      {
      }
  }
