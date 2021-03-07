@@ -26,6 +26,7 @@ use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use ReflectionClass;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -214,13 +215,13 @@ final class ShortNameResolver
      */
     private function resolveFromDocBlocks(array $stmts): array
     {
-        $nativeClassReflection = $this->resolveNativeClassReflection($stmts);
+        $reflectionClass = $this->resolveNativeClassReflection($stmts);
 
         $shortNamesToFullyQualifiedNames = [];
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (
             &$shortNamesToFullyQualifiedNames,
-            $nativeClassReflection
+            $reflectionClass
         ): void {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
@@ -231,8 +232,8 @@ final class ShortNameResolver
                     continue;
                 }
 
-                if ($nativeClassReflection !== null) {
-                    $fullyQualifiedTagName = Reflection::expandClassName($shortTagName, $nativeClassReflection);
+                if ($reflectionClass !== null) {
+                    $fullyQualifiedTagName = Reflection::expandClassName($shortTagName, $reflectionClass);
                 } else {
                     $fullyQualifiedTagName = $shortTagName;
                 }
@@ -283,9 +284,9 @@ final class ShortNameResolver
     }
 
     /**
-     * @param \PhpParser\Node[] $stmts
+     * @param Node[] $stmts
      */
-    private function resolveNativeClassReflection(array $stmts): ?\ReflectionClass
+    private function resolveNativeClassReflection(array $stmts): ?ReflectionClass
     {
         $firstClassLike = $this->nodeFinder->findFirstInstanceOf($stmts, ClassLike::class);
         if (! $firstClassLike instanceof ClassLike) {

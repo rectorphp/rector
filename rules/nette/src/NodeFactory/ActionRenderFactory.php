@@ -26,7 +26,7 @@ final class ActionRenderFactory
 
     public function __construct(
         NodeFactory $nodeFactory,
-        \Rector\Nette\NodeFactory\RenderParameterArrayFactory $renderParameterArrayFactory
+        RenderParameterArrayFactory $renderParameterArrayFactory
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->renderParameterArrayFactory = $renderParameterArrayFactory;
