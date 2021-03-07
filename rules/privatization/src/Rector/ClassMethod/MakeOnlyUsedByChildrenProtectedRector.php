@@ -120,12 +120,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $classObjectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($class);
-            if (! $classObjectType instanceof ObjectType) {
-                return null;
-            }
-
-            if (! $classObjectType->isInstanceOf($className)->yes()) {
+            if (! $this->isObjectType($class, new ObjectType($className))) {
                 return null;
             }
         }

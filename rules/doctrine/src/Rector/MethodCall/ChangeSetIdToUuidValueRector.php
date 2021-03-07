@@ -217,14 +217,10 @@ CODE_SAMPLE
 
     private function isUuidType(Expr $expr): bool
     {
-        $argumentStaticType = $this->getStaticType($expr);
-
-        // UUID is already set
-        if (! $argumentStaticType instanceof ObjectType) {
-            return false;
+        if ($expr instanceof ClassConstFetch) {
+            return $this->nodeTypeResolver->isObjectType($expr->class, new ObjectType('Ramsey\Uuid\Uuid'));
         }
 
-        return $argumentStaticType->isInstanceOf('Ramsey\Uuid\Uuid')
-            ->yes();
+        return $this->nodeTypeResolver->isObjectType($expr, new ObjectType('Ramsey\Uuid\Uuid'));
     }
 }

@@ -10,15 +10,15 @@ final class KeepReUse
 {
     public function resolveFirstTypes(Expr $node)
     {
-        /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($nodeScope === null) {
+        /** @var Scope|null $scope */
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($scope === null) {
             return [];
         }
 
         /** @var Scope $nodeScope */
-        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
 
-        return $nodeScope->getType($node);
+        return $scope->getType($node);
     }
 }

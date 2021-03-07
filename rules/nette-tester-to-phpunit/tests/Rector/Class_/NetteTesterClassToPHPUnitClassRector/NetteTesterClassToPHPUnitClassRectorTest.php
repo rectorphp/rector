@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class NetteTesterPHPUnitRectorTest extends AbstractRectorTestCase
+final class NetteTesterClassToPHPUnitClassRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

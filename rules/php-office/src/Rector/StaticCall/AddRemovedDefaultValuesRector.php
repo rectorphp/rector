@@ -65,13 +65,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $objectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($node);
-        if (! $objectType instanceof ObjectType) {
-            return null;
-        }
-
         foreach (PHPExcelMethodDefaultValues::METHOD_NAMES_BY_TYPE_WITH_VALUE as $type => $defaultValuesByMethodName) {
-            if (! $objectType->isInstanceOf($type)->yes()) {
+            if (! $this->isCallerObjectType($node, new ObjectType($type))) {
                 continue;
             }
 
@@ -109,5 +104,13 @@ CODE_SAMPLE
 
             $node->args[$position] = $arg;
         }
+    }
+
+    /**
+     * @param StaticCall|MethodCall $node
+     */
+    private function isCallerObjectType(Node $node, ObjectType $objectType): bool
+    {
+        return $this->isObjectType($node instanceof MethodCall ? $node->var : $node->class, $objectType);
     }
 }

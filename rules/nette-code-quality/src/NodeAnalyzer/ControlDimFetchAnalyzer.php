@@ -76,7 +76,7 @@ final class ControlDimFetchAnalyzer
         }
 
         foreach ($objectTypes as $objectType) {
-            if ($this->nodeTypeResolver->isObjectTypeOrNullableObjectType($node, $objectType)) {
+            if ($this->nodeTypeResolver->isObjectType($node, $objectType)) {
                 return true;
             }
         }

@@ -10,14 +10,9 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -40,12 +35,10 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
-use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
@@ -69,11 +62,6 @@ final class NodeTypeResolver
     private $arrayTypeAnalyzer;
 
     /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
-
-    /**
      * @var ClassAnalyzer
      */
     private $classAnalyzer;
@@ -94,21 +82,14 @@ final class NodeTypeResolver
     private $reflectionProvider;
 
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
     public function __construct(
         ObjectTypeSpecifier $objectTypeSpecifier,
-        TypeUnwrapper $typeUnwrapper,
         ClassAnalyzer $classAnalyzer,
         GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
         UnionTypeFactory $unionTypeFactory,
         ReflectionProvider $reflectionProvider,
-        NodeNameResolver $nodeNameResolver,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -116,12 +97,10 @@ final class NodeTypeResolver
         }
 
         $this->objectTypeSpecifier = $objectTypeSpecifier;
-        $this->typeUnwrapper = $typeUnwrapper;
         $this->classAnalyzer = $classAnalyzer;
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
         $this->unionTypeFactory = $unionTypeFactory;
         $this->reflectionProvider = $reflectionProvider;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -168,14 +147,6 @@ final class NodeTypeResolver
             return $this->isObjectTypeOfObjectType($resolvedType, $requiredObjectType);
         }
 
-        if ($requiredObjectType->isSuperTypeOf($resolvedType)->yes()) {
-            return true;
-        }
-
-        if ($resolvedType->equals($requiredObjectType)) {
-            return true;
-        }
-
         return $this->isMatchingUnionType($resolvedType, $requiredObjectType);
     }
 
@@ -186,23 +157,21 @@ final class NodeTypeResolver
             return $type;
         }
 
-        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $nodeScope instanceof Scope) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
             return new MixedType();
         }
+
         if (! $node instanceof Expr) {
             return new MixedType();
         }
 
         // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
-        if ($node instanceof New_) {
-            $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node->class);
-            if ($isAnonymousClass) {
-                return new ObjectWithoutClassType();
-            }
+        if ($node instanceof New_ && $this->classAnalyzer->isAnonymousClass($node->class)) {
+            return new ObjectWithoutClassType();
         }
 
-        $type = $nodeScope->getType($node);
+        $type = $scope->getType($node);
         // hot fix for phpstan not resolving chain method calls
 
         if (! $node instanceof MethodCall) {
@@ -303,34 +272,6 @@ final class NodeTypeResolver
         return is_a($this->resolve($node), $staticTypeClass);
     }
 
-    public function isObjectTypeOrNullableObjectType(Node $node, ObjectType $desiredObjectType): bool
-    {
-        if ($node instanceof Param && $node->type instanceof NullableType) {
-            /** @var Name|Identifier $node */
-            $node = $node->type->type;
-        }
-
-        if ($node instanceof Param && ! $node->type instanceof Name) {
-            return false;
-        }
-
-        if ($this->isObjectType($node, $desiredObjectType)) {
-            return true;
-        }
-
-        $nodeType = $this->getStaticType($node);
-        if (! $nodeType instanceof UnionType) {
-            return false;
-        }
-
-        $unwrappedNodeType = $this->typeUnwrapper->unwrapNullableType($nodeType);
-        if (! $unwrappedNodeType instanceof TypeWithClassName) {
-            return false;
-        }
-
-        return is_a($unwrappedNodeType->getClassName(), $desiredObjectType->getClassName(), true);
-    }
-
     public function isNullableObjectType(Node $node): bool
     {
         return $this->isNullableTypeOfSpecificType($node, ObjectType::class);
@@ -422,45 +363,6 @@ final class NodeTypeResolver
         return $this->isObjectType($classLike, $objectType);
     }
 
-    public function resolveObjectTypeToCompare(Node $node): ?ObjectType
-    {
-        if ($node instanceof StaticCall) {
-            return $this->resolveStaticCallClassNameObjectTypeToCompare($node);
-        }
-
-        if ($node instanceof Stmt) {
-            $classLike = $node->getAttribute(ClassLike::class);
-            if ($classLike === null) {
-                return null;
-            }
-
-            $className = $this->nodeNameResolver->getName($classLike);
-            if ($className === null) {
-                return null;
-            }
-
-            if (! $this->reflectionProvider->hasClass($className)) {
-                return null;
-            }
-
-            $classReflection = $this->reflectionProvider->getClass($className);
-            if ($classReflection instanceof ClassReflection) {
-                return new ObjectType($classReflection->getName(), null, $classReflection);
-            }
-        }
-
-        $callerType = $this->resolve($node);
-        if ($callerType instanceof ThisType) {
-            $callerType = $callerType->getStaticObjectType();
-        }
-
-        if (! $callerType instanceof ObjectType) {
-            return null;
-        }
-
-        return $callerType;
-    }
-
     public function resolveObjectTypeFromScope(Scope $scope): ?ObjectType
     {
         $classReflection = $scope->getClassReflection();
@@ -483,17 +385,9 @@ final class NodeTypeResolver
         }
     }
 
-    /**
-     * @deprecated
-     */
     private function isMatchingUnionType(Type $resolvedType, ObjectType $requiredObjectType): bool
     {
-        if (! $resolvedType instanceof UnionType) {
-            return false;
-        }
-
         $type = TypeCombinator::removeNull($resolvedType);
-
         // for falsy nullables
         $type = TypeCombinator::remove($type, new ConstantBooleanType(false));
 
@@ -593,34 +487,6 @@ final class NodeTypeResolver
         }
 
         return $otherType;
-    }
-
-    private function resolveStaticCallClassNameObjectTypeToCompare(StaticCall $staticCall): ?ObjectType
-    {
-        $className = $this->nodeNameResolver->getName($staticCall->class);
-
-        if ($className === 'parent') {
-            /** @var Scope $scope */
-            $scope = $staticCall->getAttribute(AttributeKey::SCOPE);
-
-            $classReflection = $scope->getClassReflection();
-            if (! $classReflection instanceof ClassReflection) {
-                throw new ShouldNotHappenException();
-            }
-
-            $className = $classReflection->getName();
-        }
-
-        if ($className === null) {
-            return null;
-        }
-
-        if (! $this->reflectionProvider->hasClass($className)) {
-            return null;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($className);
-        return new ObjectType($classReflection->getName(), null, $classReflection);
     }
 
     private function isObjectTypeOfObjectType(ObjectType $resolvedObjectType, ObjectType $requiredObjectType): bool

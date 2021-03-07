@@ -80,12 +80,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $staticClassObjectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($node);
-        if (! $staticClassObjectType instanceof ObjectType) {
-            return null;
-        }
-
-        if (! $staticClassObjectType->isInstanceOf('PHPExcel_Cell')->yes()) {
+        if (! $this->isObjectType($node->class, new ObjectType('PHPExcel_Cell'))) {
             return null;
         }
 

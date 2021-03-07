@@ -73,10 +73,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $nodeStaticType = $this->getStaticType($node->expr);
-
-        // void type
-        if (! $nodeStaticType instanceof VoidType) {
+        $exprType = $this->nodeTypeResolver->resolve($node->expr);
+        if (! $exprType instanceof VoidType) {
             return null;
         }
 

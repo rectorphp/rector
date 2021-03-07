@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\NetteTesterPHPUnitRectorTest
+ * @see \Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\NetteTesterClassToPHPUnitClassRectorTest
  */
 final class NetteAssertToPHPUnitAssertRector extends AbstractRector
 {
@@ -65,12 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $objectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($node);
-        if (! $objectType instanceof ObjectType) {
-            return null;
-        }
-
-        if (! $objectType->isInstanceOf('Tester\Assert')->yes()) {
+        if (! $this->isObjectType($node->class, new ObjectType('Tester\Assert'))) {
             return null;
         }
 
