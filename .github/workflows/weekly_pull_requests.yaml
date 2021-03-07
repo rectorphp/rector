@@ -13,7 +13,7 @@ jobs:
                 actions:
                     -
                         name: "Re-Generate CHANGELOG.md"
-                        run: "composer changelog"
+                        run: "rm -rf CHANGELOG.md && composer changelog"
                         branch: 'automated-regenerated-changelog'
 
                     -
