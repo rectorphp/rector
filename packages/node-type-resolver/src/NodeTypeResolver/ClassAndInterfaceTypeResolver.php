@@ -34,13 +34,14 @@ final class ClassAndInterfaceTypeResolver implements NodeTypeResolverInterface
      */
     public function resolve(Node $node): Type
     {
-        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $nodeScope instanceof Scope) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+
+        if (! $scope instanceof Scope) {
             // new node probably
             return new MixedType();
         }
 
-        $classReflection = $nodeScope->getClassReflection();
+        $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             return new MixedType();
         }

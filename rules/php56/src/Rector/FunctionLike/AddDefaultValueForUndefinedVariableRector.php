@@ -149,9 +149,9 @@ CODE_SAMPLE
             $variableName = $this->getName($node);
 
             // defined 100 %
-            /** @var Scope $nodeScope */
-            $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-            if ($nodeScope->hasVariableType($variableName)->yes()) {
+            /** @var Scope $scope */
+            $scope = $node->getAttribute(AttributeKey::SCOPE);
+            if ($scope->hasVariableType($variableName)->yes()) {
                 return null;
             }
 
