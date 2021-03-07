@@ -2,15 +2,22 @@
 
 declare(strict_types=1);
 
-return static function (
-    \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-): void {
+use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromCallersRector;
+use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
+use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector::class);
-    $services->set(\Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector::class);
-    $services->set(\Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector::class);
-    $services->set(\Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector::class);
-    $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector::class);
-    $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector::class);
-    $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromCallersRector::class);
+    $services->set(ParamTypeDeclarationRector::class);
+    $services->set(ReturnTypeDeclarationRector::class);
+    $services->set(PropertyTypeDeclarationRector::class);
+    $services->set(AddClosureReturnTypeRector::class);
+    $services->set(AddArrayParamDocTypeRector::class);
+    $services->set(AddArrayReturnDocTypeRector::class);
+    $services->set(AddParamTypeFromCallersRector::class);
 };
