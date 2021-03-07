@@ -16,6 +16,7 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverRegistry;
@@ -160,6 +161,10 @@ final class CallReflectionResolver
         }
 
         $classType = $this->nodeTypeResolver->resolve($node instanceof MethodCall ? $node->var : $node->class);
+
+        if ($classType instanceof ThisType) {
+            $classType = $classType->getStaticObjectType();
+        }
 
         if ($classType instanceof ObjectType) {
             if (! $this->reflectionProvider->hasClass($classType->getClassName())) {

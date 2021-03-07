@@ -25,6 +25,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
@@ -48,7 +49,6 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use Rector\SymfonyCodeQuality\ValueObject\ClassName;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
 final class NodeTypeResolver
@@ -126,6 +126,7 @@ final class NodeTypeResolver
 
     /**
      * Prevents circular dependency
+     *
      * @required
      */
     public function autowireNodeTypeResolver(ArrayTypeAnalyzer $arrayTypeAnalyzer): void
@@ -154,6 +155,7 @@ final class NodeTypeResolver
         }
 
         $resolvedType = $this->resolve($node);
+
         if ($resolvedType instanceof MixedType) {
             return false;
         }
@@ -174,7 +176,7 @@ final class NodeTypeResolver
             return true;
         }
 
-        return $this->isMatchingUnionType($requiredObjectType, $resolvedType);
+        return $this->isMatchingUnionType($resolvedType, $requiredObjectType);
     }
 
     public function resolve(Node $node): Type
@@ -437,6 +439,10 @@ final class NodeTypeResolver
                 return null;
             }
 
+            if (! $this->reflectionProvider->hasClass($className)) {
+                return null;
+            }
+
             $classReflection = $this->reflectionProvider->getClass($className);
             if ($classReflection instanceof ClassReflection) {
                 return new ObjectType($classReflection->getName(), null, $classReflection);
@@ -480,31 +486,23 @@ final class NodeTypeResolver
     /**
      * @deprecated
      */
-    private function isMatchingUnionType(ObjectType $requiredObjectType, Type $resolvedType): bool
+    private function isMatchingUnionType(Type $resolvedType, ObjectType $requiredObjectType): bool
     {
         if (! $resolvedType instanceof UnionType) {
             return false;
         }
 
-        foreach ($resolvedType->getTypes() as $unionedType) {
-            if ($unionedType instanceof TypeWithClassName && is_a(
-                $unionedType->getClassName(),
-                    $requiredObjectType->getClassName(),
-                true
-            )) {
-                return true;
-            }
+        $type = TypeCombinator::removeNull($resolvedType);
 
-            if (! $unionedType->equals($requiredObjectType)) {
-                continue;
-            }
+        // for falsy nullables
+        $type = TypeCombinator::remove($type, new ConstantBooleanType(false));
 
-            if ($unionedType->equals($requiredObjectType)) {
-                return true;
-            }
+        if (! $type instanceof ObjectType) {
+            return false;
         }
 
-        return false;
+        return $type->isInstanceOf($requiredObjectType->getClassName())
+            ->yes();
     }
 
     private function resolveArrayType(Expr $expr): Type
@@ -631,6 +629,10 @@ final class NodeTypeResolver
             return true;
         }
 
+        if ($resolvedObjectType->getClassName() === $requiredObjectType->getClassName()) {
+            return true;
+        }
+
         if (! $this->reflectionProvider->hasClass($resolvedObjectType->getClassName())) {
             return false;
         }
@@ -643,10 +645,6 @@ final class NodeTypeResolver
                     return true;
                 }
             }
-        }
-
-        if ($classReflection->getName() === $requiredObjectType->getClassName()) {
-            return true;
         }
 
         return $classReflection->isSubclassOf($requiredObjectType->getClassName());

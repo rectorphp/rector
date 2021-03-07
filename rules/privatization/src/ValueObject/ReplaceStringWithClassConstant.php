@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Privatization\ValueObject;
 
-use PHPStan\Type\ObjectType;
-
 final class ReplaceStringWithClassConstant
 {
     /**
@@ -39,9 +37,9 @@ final class ReplaceStringWithClassConstant
         $this->argPosition = $argPosition;
     }
 
-    public function getObjectType(): ObjectType
+    public function getClass(): string
     {
-        return new ObjectType($this->class);
+        return $this->class;
     }
 
     public function getMethod(): string

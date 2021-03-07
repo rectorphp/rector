@@ -24,8 +24,7 @@ use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 final class UnionTypeCommonTypeNarrower
 {
     /**
-     * Key = the winner
-     * Array = the group of types matched
+     * Key = the winner Array = the group of types matched
      *
      * @var array<string, array<class-string<Node>|class-string<\PHPStan\PhpDocParser\Ast\Node>|class-string<RectorInterface>>>
      */
@@ -169,6 +168,10 @@ final class UnionTypeCommonTypeNarrower
      */
     private function narrowAvailableTypes(array $availableTypes): array
     {
+        if (count($availableTypes) < 2) {
+            return [];
+        }
+
         /** @var string[] $sharedTypes */
         $sharedTypes = array_intersect(...$availableTypes);
         return array_values($sharedTypes);

@@ -624,3 +624,5 @@ parameters:
             message: '#Instead of "ReflectionClass" class/interface use "PHPStan\\Reflection\\ClassReflection"#'
             paths:
                 - packages/node-type-resolver/tests/PerNodeTypeResolver/VariableTypeResolver/VariableTypeResolverTest.php
+
+        - '#Cognitive complexity for "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector\:\:refactor\(\)" is 10, keep it under 9#'
