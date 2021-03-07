@@ -202,7 +202,7 @@ final class FluentChainMethodCallNodeAnalyzer
             $node = $node->var;
         }
 
-        $variableType = $this->nodeTypeResolver->resolve($node);
+        $variableType = $this->getStaticType($node);
         if ($variableType instanceof MixedType) {
             return false;
         }

@@ -89,7 +89,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $varType = $this->nodeTypeResolver->resolve($node->var);
+        $varType = $this->getStaticType($node->var);
         if (! $varType instanceof TypeWithClassName) {
             return null;
         }

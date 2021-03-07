@@ -251,7 +251,7 @@ CODE_SAMPLE
         Node $returnedStrictTypeNode,
         FunctionLike $functionLike
     ): Node {
-        $resolvedType = $this->nodeTypeResolver->resolve($return);
+        $resolvedType = $this->getStaticType($return);
 
         if ($resolvedType instanceof UnionType) {
             if (! $returnedStrictTypeNode instanceof NullableType) {

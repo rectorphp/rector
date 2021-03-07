@@ -125,7 +125,7 @@ final class DoctrineEntityManipulator
             return false;
         }
 
-        $objectType = $this->nodeTypeResolver->resolve($node->var);
+        $objectType = $this->getStaticType($node->var);
         if (! $objectType instanceof ObjectType) {
             return false;
         }

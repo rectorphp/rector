@@ -161,7 +161,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
 
     private function getTypeFromClassMethodYield(Array_ $classMethodYieldArrayNode): Type
     {
-        $arrayTypes = $this->nodeTypeResolver->resolve($classMethodYieldArrayNode);
+        $arrayTypes = $this->getStaticType($classMethodYieldArrayNode);
 
         // impossible to resolve
         if (! $arrayTypes instanceof ConstantArrayType) {
@@ -201,7 +201,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
                     continue;
                 }
 
-                $paramOnPositionTypes[] = $this->nodeTypeResolver->resolve($singleDataProvidedSetItem->value);
+                $paramOnPositionTypes[] = $this->getStaticType($singleDataProvidedSetItem->value);
             }
         }
 

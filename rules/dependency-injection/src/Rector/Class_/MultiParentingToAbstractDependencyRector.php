@@ -211,7 +211,7 @@ CODE_SAMPLE
 
         $objectTypes = [];
         foreach ($constructorClassMethod->getParams() as $param) {
-            $paramType = $this->getObjectType($param);
+            $paramType = $this->getStaticType($param);
             $paramType = $this->popFirstObjectTypeFromUnionType($paramType);
 
             if (! $paramType instanceof ObjectType) {

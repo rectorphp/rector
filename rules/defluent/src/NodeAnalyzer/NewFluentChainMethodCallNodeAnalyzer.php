@@ -46,12 +46,12 @@ final class NewFluentChainMethodCallNodeAnalyzer
             return null;
         }
 
-        $newType = $this->nodeTypeResolver->resolve($onlyArgValue);
+        $newType = $this->getStaticType($onlyArgValue);
         if ($newType instanceof MixedType) {
             return null;
         }
 
-        $parentMethodCallReturnType = $this->nodeTypeResolver->resolve($methodCall);
+        $parentMethodCallReturnType = $this->getStaticType($methodCall);
         if (! $newType->equals($parentMethodCallReturnType)) {
             return null;
         }

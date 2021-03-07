@@ -111,7 +111,7 @@ CODE_SAMPLE
         $type = $phpDocInfo->getVarType();
 
         if (! $type instanceof UnionType) {
-            $type = $this->getObjectType($assign->expr);
+            $type = $this->getStaticType($assign->expr);
         }
 
         if (! $type instanceof UnionType) {

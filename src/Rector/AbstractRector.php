@@ -348,7 +348,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     protected function getStaticType(Node $node): Type
     {
-        return $this->nodeTypeResolver->getStaticType($node);
+        return $this->nodeTypeResolver->resolve($node);
     }
 
     /**

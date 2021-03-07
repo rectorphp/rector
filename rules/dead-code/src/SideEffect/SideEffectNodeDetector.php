@@ -45,7 +45,7 @@ final class SideEffectNodeDetector
             return true;
         }
 
-        $exprStaticType = $this->nodeTypeResolver->resolve($expr);
+        $exprStaticType = $this->getStaticType($expr);
         if ($exprStaticType instanceof ConstantType) {
             return false;
         }

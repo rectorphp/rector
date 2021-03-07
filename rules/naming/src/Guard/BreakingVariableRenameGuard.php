@@ -269,7 +269,7 @@ final class BreakingVariableRenameGuard
      */
     private function isDateTimeAtNamingConvention(Param $param): bool
     {
-        $type = $this->nodeTypeResolver->resolve($param);
+        $type = $this->getStaticType($param);
         $type = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($type);
         if (! $type instanceof TypeWithClassName) {
             return false;

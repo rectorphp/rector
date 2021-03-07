@@ -69,7 +69,7 @@ final class CallTypeAnalyzer
             return $this->nodeTypeResolver->getStaticType($node->var);
         }
 
-        return $this->nodeTypeResolver->resolve($node->class);
+        return $this->getStaticType($node->class);
     }
 
     /**

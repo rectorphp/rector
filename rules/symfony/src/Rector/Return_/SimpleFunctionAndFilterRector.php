@@ -125,7 +125,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $newObjectType = $this->nodeTypeResolver->resolve($node->value);
+            $newObjectType = $this->getStaticType($node->value);
             return $this->processArrayItem($node, $newObjectType);
         });
 

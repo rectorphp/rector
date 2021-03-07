@@ -154,7 +154,7 @@ CODE_SAMPLE
     private function resolveStaticCallClassName(StaticCall $staticCall): ?string
     {
         if ($staticCall->class instanceof PropertyFetch) {
-            $objectType = $this->getObjectType($staticCall->class);
+            $objectType = $this->getStaticType($staticCall->class);
             if ($objectType instanceof ObjectType) {
                 return $objectType->getClassName();
             }

@@ -148,7 +148,7 @@ CODE_SAMPLE
     private function processNullableType(Property $property, Param $param): void
     {
         if ($this->nodeTypeResolver->isNullableType($property)) {
-            $objectType = $this->getObjectType($property);
+            $objectType = $this->getStaticType($property);
             $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType);
         }
     }

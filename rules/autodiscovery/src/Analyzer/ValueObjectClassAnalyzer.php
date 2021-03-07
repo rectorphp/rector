@@ -74,7 +74,7 @@ final class ValueObjectClassAnalyzer
 
         // resolve constructor types
         foreach ($constructClassMethod->params as $param) {
-            $paramType = $this->nodeTypeResolver->resolve($param);
+            $paramType = $this->getStaticType($param);
             if (! $paramType instanceof ObjectType) {
                 continue;
             }

@@ -272,10 +272,10 @@ CODE_SAMPLE
         }
 
         if ($node instanceof MethodCall) {
-            $objectType = $this->getObjectType($node->var);
+            $objectType = $this->getStaticType($node->var);
         } else {
             // StaticCall
-            $objectType = $this->getObjectType($node->class);
+            $objectType = $this->getStaticType($node->class);
         }
 
         $reflectionMethod = $this->classMethodReflectionFactory->createFromPHPStanTypeAndMethodName(

@@ -192,7 +192,7 @@ CODE_SAMPLE
 
     private function isParamDocTypeEqualToPhpType(Param $param, Type $paramType): bool
     {
-        $currentParamType = $this->getObjectType($param);
+        $currentParamType = $this->getStaticType($param);
         if ($currentParamType instanceof UnionType) {
             $currentParamType = $currentParamType->getTypes()[0];
         }
