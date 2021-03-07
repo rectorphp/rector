@@ -14,6 +14,105 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 ### Added
 
+- [#5705] [DX] Add forbidden parent classes
+- [#5598] [DeadCode] Add Extra files test for RemoveEmptyAbstractClassRector, Thanks to [@samsonasik]
+- [#5661] [EarlyReturn] Add ReturnBinaryOrToEarlyReturnRector, Thanks to [@samsonasik]
+- [#5669] [Meta] Add Monorepo Builder, Thanks to [@samsonasik]
+- [#5672] [Naming] Add RenameForeachValueVariableToMatchExprVariableRector, Thanks to [@samsonasik]
+- [#5700] [Rector-CI] Update EndBug/add-and-commit to v7.0.0, Thanks to [@samsonasik]
+- [#5727] [StaticReflection] Add OptimizedDirectorySourceLocator to speedup directory analysis
+- [#5765] [Transform] Add NativeTestCaseRector
+- [#5625] [TypeDeclaration] Add types when dataProviders that yield are used, Thanks to [@addshore]
+- [#5782] [TypeDeclaration] Add AddParamTypeFromCallersRector
+- [#5728] Add additional tags on Docker images based on git ref ([#5726]), Thanks to [@JanMikes]
+- [#5752] Add missing CAKEPHP_42 setlist, Thanks to [@othercorey]
+
+### Changed
+
+- [#5649] [Bin] Handle possible PHPStan Stubs runtime locations, Thanks to [@samsonasik]
+- [#5720] [CI] run rules dir by dir to identify static reflection weak sposts
+- [#5643] [CodeQuality] Mirror comment on InlineIfToExplicitIfRector, Thanks to [@samsonasik]
+- [#5699] [CodeQuality] Handle Named Argument in ThrowWithPreviousExceptionRector, Thanks to [@samsonasik]
+- [#5639] [CodingStyle] Skip double generic class string
+- [#5691] [CodingStyle] Skip RemoveUnusedAliasRector on used in ClassConstFetch, Thanks to [@samsonasik]
+- [#5693] [DX] Narrow wobly strings to strict ObjectType()
+- [#5694] [DX] Narrow wobly strings to strict ObjectType()  [#2]
+- [#5677] [DeadDocBlock] Skip RemoveUselessParamTagRector on Generic Type, Thanks to [@samsonasik]
+- [#5675] [DeadDocBlock] Skip RemoveUselessReturnTagRector on Generic Type, Thanks to [@samsonasik]
+- [#5730] [CI][Docker] Merge Docker image tagging jobs, Thanks to [@JanMikes]
+- [#5774] [Docker] Setup QEMU for multiarch Docker builds, Thanks to [@JanMikes]
+- [#5773] [Docker] Support multiple CPU architectures - arm64 + amd64, Thanks to [@JanMikes]
+- [#5760] [Docker] Support multiple PHP versions for xdebug + blackfire images, Thanks to [@JanMikes]
+- [#5734] [Docker] Documented multiple supported PHP versions, Thanks to [@JanMikes]
+- [#5711] [EarlyReturn] Handle Return Parent next if on ChangeAndIfToEarlyReturnRector, Thanks to [@samsonasik]
+- [#5627] [EarlyReturn] Handle ChangeAndIfToEarlyReturnRector has Return expr in if stmt fixture, Thanks to [@samsonasik]
+- [#5650] [EarlyReturn] Skip PreparedValueToEarlyReturnRector on previous var used in Assign Expr in if stmt, Thanks to [@samsonasik]
+- [#5660] [EarlyReturn] Skip ReturnAfterToEarlyOnBreakRector on non-linear previous assignment before foreach, Thanks to [@samsonasik]
+- [#5679] [EarlyReturn] Register ReturnBinaryOrToEarlyReturnRector to early-return config set, Thanks to [@samsonasik]
+- [#5706] [EarlyReturn] Handle Always return on ChangeAndIfToEarlyReturnRector, Thanks to [@samsonasik]
+- [#5682] [Naming] Various Improve RenameForeachValueVariableToMatchExprVariableRector, Thanks to [@samsonasik]
+- [#5696] [Naming] Register RenameForeachValueVariableToMatchExprVariableRector to naming config set, Thanks to [@samsonasik]
+- [#5718] [Naming] Handle UnderscoreToCamelCaseLocalVariableNameRector in used in next and previous assign variable, Thanks to [@samsonasik]
+- [#5741] [Naming] Skip UnderscoreToCamelCaseLocalVariableNameRector on used next/prev assign var as ArrayDimFetch, Thanks to [@samsonasik]
+- [#5686] [NodeTypeResolver] Handle object type or nullable object type from Parameter as Identifier, Thanks to [@samsonasik]
+- [#5778] [Php72] Handle usage super global on CreateFunctionToAnonymousFunctionRector, Thanks to [@samsonasik]
+- [#5645] [Php80] Skip ChangeSwitchToMatchRector on missed break, Thanks to [@samsonasik]
+- [#5644] [Php80] Handle Nullable Type on ClassPropertyAssignToConstructorPromotionRector, Thanks to [@samsonasik]
+- [#5671] [Privatization] Skip PrivatizeLocalOnlyMethodRector on use of SymfonyRouteTagValueNode, Thanks to [@samsonasik]
+- [#5737] [Privatization] Skip PrivatizeLocalOnlyMethodRector on use Symfony Route Attribute, Thanks to [@samsonasik]
+- [#5735] [Symfony4] Skip ConsoleExecuteReturnIntRector on ternary returns number, Thanks to [@samsonasik]
+- [#5747] [Symfony4] Handle Ternary with null if in ConsoleExecuteReturnIntRector, Thanks to [@samsonasik]
+- [#5642] [Transform] Move FunctionCallToConstantRector to FuncCallToConstFetchRector
+- [#5786] [TypeDeclaration] Improve param by caller types
+- [#5781] [TypeDeclaration] Handle return self on ReturnTypeFromStrictTypedCallRector, Thanks to [@samsonasik]
+- [#5662] update monorepo-builder syntax
+- [#5656] use RequireStringArgumentInConstructorRule
+- [#5655] Bump to Symplify 9.2.1
+- [#5648] cleanup unneeded AbstractTemporaryRector methods
+- [#5665] Make use of static reflection from PHPStan
+- [#5667] Build "scoped" Docker images in GitHub Actions, Thanks to [@mpdude]
+- [#5762] Merge CoreRectorInterface
+- [#5763] cleanup
+- [#5745] Change success message, Thanks to [@olivernybroe]
+- [#5772] Use the autoloader from where Rector was installed, not started, Thanks to [@mpdude]
+- [#5732] Improve Docker image tagging, Thanks to [@mpdude]
+- [#5729] Allow failure of pushing additional Docker image tags, Thanks to [@JanMikes]
+- [#5692] use getNodeTypes() with class-string generic type
+- [#5722] Point to the new parser nodes docs URL, Thanks to [@matthiasnoback]
+- [#5640] [automated] Re-Generate CHANGELOG.md, Thanks to [@github-actions][bot]
+- [#5641] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
+- [#5698] [automated] Re-Generate Nodes/Rectors Documentation, Thanks to [@github-actions][bot]
+- [#5657] [static] Improve types
+
+### Fixed
+
+- [#5777] [CodingStyle] Fix extra space on no extra import
+- [#5731] [CI][Docker] Fix missing image when tagging, Thanks to [@JanMikes]
+- [#5755] [Renaming] Fix importing of just renamed function
+- [#5659] [TypeDeclaration] Fixes for array dataProviders with multiple types, Thanks to [@addshore]
+- [#5726] Fix name of Docker image, Thanks to [@JanMikes]
+- [#5695] Fix url to nodes-overview, Thanks to [@staabm]
+
+### Removed
+
+- [#5709] [DX] Removing more parent abstract circular classes
+- [#5751] [Defluent] Remove AbstractFluentChainMethodCallRector
+- [#5717] [Downgrade] Remove excessive abstract class inheritance, use single service
+- [#5758] [MockistaToMockery] Drop as mockista is completely dead package
+- [#5746] [Nette] Remove AbstractWithFunctionToNetteUtilsStringsRector
+- [#5742] [Nette] Remove AbstractWithFunctionToNetteUtilsStringsRector
+- [#5721] [PHPStanStaticTypeMapperChecker] Drop as very limited testing benefit, overly protective
+- [#5749] [Symfony] Remove AbstractToConstructorInjectionRector
+- [#5753] [TypeDeclaration] Remove AbstractTypeDeclarationRector
+- [#5757] remove stub loader where not needed
+- [#5714] Removing parent classes
+- [#5759] Drop no longer needed secured rector version of Docker image, Thanks to [@JanMikes]
+- [#5761] drop AbstactCommand, inline
+- [#5736] remove abstract
+- [#5713] remove unmatched errors + require string in object types to avoid prefixing of generics objects
+
+### Added
+
 - [#5569] [Bin] Add PHPStan Stub ReflectionUnionType and Attribute to bin/rector, Thanks to [@samsonasik]
 - [#5630] [Coverage] Add --testdox to phpunit command on weekly code coverage generation, Thanks to [@samsonasik]
 - [#5558] [DeadCode] Add RemoveEmptyAbstractClassRector, Thanks to [@samsonasik]
@@ -6998,3 +7097,90 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#5523]: https://github.com/rectorphp/rector/pull/5523
 [@mpdude]: https://github.com/mpdude
 [@addshore]: https://github.com/addshore
+[#5786]: https://github.com/rectorphp/rector/pull/5786
+[#5782]: https://github.com/rectorphp/rector/pull/5782
+[#5781]: https://github.com/rectorphp/rector/pull/5781
+[#5778]: https://github.com/rectorphp/rector/pull/5778
+[#5777]: https://github.com/rectorphp/rector/pull/5777
+[#5774]: https://github.com/rectorphp/rector/pull/5774
+[#5773]: https://github.com/rectorphp/rector/pull/5773
+[#5772]: https://github.com/rectorphp/rector/pull/5772
+[#5765]: https://github.com/rectorphp/rector/pull/5765
+[#5763]: https://github.com/rectorphp/rector/pull/5763
+[#5762]: https://github.com/rectorphp/rector/pull/5762
+[#5761]: https://github.com/rectorphp/rector/pull/5761
+[#5760]: https://github.com/rectorphp/rector/pull/5760
+[#5759]: https://github.com/rectorphp/rector/pull/5759
+[#5758]: https://github.com/rectorphp/rector/pull/5758
+[#5757]: https://github.com/rectorphp/rector/pull/5757
+[#5755]: https://github.com/rectorphp/rector/pull/5755
+[#5753]: https://github.com/rectorphp/rector/pull/5753
+[#5752]: https://github.com/rectorphp/rector/pull/5752
+[#5751]: https://github.com/rectorphp/rector/pull/5751
+[#5749]: https://github.com/rectorphp/rector/pull/5749
+[#5747]: https://github.com/rectorphp/rector/pull/5747
+[#5746]: https://github.com/rectorphp/rector/pull/5746
+[#5745]: https://github.com/rectorphp/rector/pull/5745
+[#5742]: https://github.com/rectorphp/rector/pull/5742
+[#5741]: https://github.com/rectorphp/rector/pull/5741
+[#5737]: https://github.com/rectorphp/rector/pull/5737
+[#5736]: https://github.com/rectorphp/rector/pull/5736
+[#5735]: https://github.com/rectorphp/rector/pull/5735
+[#5734]: https://github.com/rectorphp/rector/pull/5734
+[#5732]: https://github.com/rectorphp/rector/pull/5732
+[#5731]: https://github.com/rectorphp/rector/pull/5731
+[#5730]: https://github.com/rectorphp/rector/pull/5730
+[#5729]: https://github.com/rectorphp/rector/pull/5729
+[#5728]: https://github.com/rectorphp/rector/pull/5728
+[#5727]: https://github.com/rectorphp/rector/pull/5727
+[#5726]: https://github.com/rectorphp/rector/pull/5726
+[#5722]: https://github.com/rectorphp/rector/pull/5722
+[#5721]: https://github.com/rectorphp/rector/pull/5721
+[#5720]: https://github.com/rectorphp/rector/pull/5720
+[#5718]: https://github.com/rectorphp/rector/pull/5718
+[#5717]: https://github.com/rectorphp/rector/pull/5717
+[#5714]: https://github.com/rectorphp/rector/pull/5714
+[#5713]: https://github.com/rectorphp/rector/pull/5713
+[#5711]: https://github.com/rectorphp/rector/pull/5711
+[#5709]: https://github.com/rectorphp/rector/pull/5709
+[#5706]: https://github.com/rectorphp/rector/pull/5706
+[#5705]: https://github.com/rectorphp/rector/pull/5705
+[#5700]: https://github.com/rectorphp/rector/pull/5700
+[#5699]: https://github.com/rectorphp/rector/pull/5699
+[#5698]: https://github.com/rectorphp/rector/pull/5698
+[#5696]: https://github.com/rectorphp/rector/pull/5696
+[#5695]: https://github.com/rectorphp/rector/pull/5695
+[#5694]: https://github.com/rectorphp/rector/pull/5694
+[#5693]: https://github.com/rectorphp/rector/pull/5693
+[#5692]: https://github.com/rectorphp/rector/pull/5692
+[#5691]: https://github.com/rectorphp/rector/pull/5691
+[#5686]: https://github.com/rectorphp/rector/pull/5686
+[#5682]: https://github.com/rectorphp/rector/pull/5682
+[#5679]: https://github.com/rectorphp/rector/pull/5679
+[#5677]: https://github.com/rectorphp/rector/pull/5677
+[#5675]: https://github.com/rectorphp/rector/pull/5675
+[#5672]: https://github.com/rectorphp/rector/pull/5672
+[#5671]: https://github.com/rectorphp/rector/pull/5671
+[#5669]: https://github.com/rectorphp/rector/pull/5669
+[#5667]: https://github.com/rectorphp/rector/pull/5667
+[#5665]: https://github.com/rectorphp/rector/pull/5665
+[#5662]: https://github.com/rectorphp/rector/pull/5662
+[#5661]: https://github.com/rectorphp/rector/pull/5661
+[#5660]: https://github.com/rectorphp/rector/pull/5660
+[#5659]: https://github.com/rectorphp/rector/pull/5659
+[#5657]: https://github.com/rectorphp/rector/pull/5657
+[#5656]: https://github.com/rectorphp/rector/pull/5656
+[#5655]: https://github.com/rectorphp/rector/pull/5655
+[#5650]: https://github.com/rectorphp/rector/pull/5650
+[#5649]: https://github.com/rectorphp/rector/pull/5649
+[#5648]: https://github.com/rectorphp/rector/pull/5648
+[#5645]: https://github.com/rectorphp/rector/pull/5645
+[#5644]: https://github.com/rectorphp/rector/pull/5644
+[#5643]: https://github.com/rectorphp/rector/pull/5643
+[#5642]: https://github.com/rectorphp/rector/pull/5642
+[#5641]: https://github.com/rectorphp/rector/pull/5641
+[#5640]: https://github.com/rectorphp/rector/pull/5640
+[#5639]: https://github.com/rectorphp/rector/pull/5639
+[#5627]: https://github.com/rectorphp/rector/pull/5627
+[#5625]: https://github.com/rectorphp/rector/pull/5625
+[#5598]: https://github.com/rectorphp/rector/pull/5598
