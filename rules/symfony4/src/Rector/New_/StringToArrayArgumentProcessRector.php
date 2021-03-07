@@ -139,7 +139,8 @@ CODE_SAMPLE
     private function splitProcessCommandToItems(string $process): array
     {
         $privatesCaller = new PrivatesCaller();
-        return $privatesCaller->callPrivateMethod(new StringInput(''), 'tokenize', [$process]);
+        $privatesCaller->callPrivateMethod(new StringInput(''), 'tokenize', [$process]);
+        return $privatesCaller;
     }
 
     private function processPreviousAssign(Node $node, Expr $firstArgumentExpr): void
