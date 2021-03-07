@@ -86,7 +86,8 @@ final class ValueResolver
             $class = $this->nodeNameResolver->getName($expr->class);
 
             if (in_array($class, ['self', 'static'], true)) {
-                return $expr->getAttribute(AttributeKey::CLASS_NAME);
+                $expr->getAttribute(AttributeKey::CLASS_NAME);
+                return $expr;
             }
 
             if ($this->nodeNameResolver->isName($expr->name, 'class')) {
@@ -202,7 +203,8 @@ final class ValueResolver
 
             // resolve "SomeClass::SOME_CONST"
             if ($expr instanceof ClassConstFetch) {
-                return $this->resolveClassConstFetch($expr);
+                $this->resolveClassConstFetch($expr);
+                return $this;
             }
 
             throw new ConstExprEvaluationException(sprintf(
@@ -296,7 +298,8 @@ final class ValueResolver
 
             if ($classReflection->hasConstant($constant)) {
                 $constantReflection = $classReflection->getConstant($constant);
-                return $constantReflection->getValue();
+                $constantReflection->getValue();
+                return $constantReflection;
             }
         }
 
