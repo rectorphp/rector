@@ -79,12 +79,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $callerObjectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($node->var);
-        if (! $callerObjectType instanceof ObjectType) {
-            return null;
-        }
-
-        if (! $callerObjectType->isInstanceOf('Doctrine\ORM\EntityRepository')->yes()) {
+        if (! $this->isObjectType($node->var, new ObjectType('Doctrine\ORM\EntityRepository'))) {
             return null;
         }
 

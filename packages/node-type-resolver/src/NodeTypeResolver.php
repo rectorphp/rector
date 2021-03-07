@@ -282,34 +282,6 @@ final class NodeTypeResolver
         return is_a($this->resolve($node), $staticTypeClass);
     }
 
-    public function isObjectTypeOrNullableObjectType(Node $node, ObjectType $desiredObjectType): bool
-    {
-        if ($node instanceof Param && $node->type instanceof NullableType) {
-            /** @var Name|Identifier $node */
-            $node = $node->type->type;
-        }
-
-        if ($node instanceof Param && ! $node->type instanceof Name) {
-            return false;
-        }
-
-        if ($this->isObjectType($node, $desiredObjectType)) {
-            return true;
-        }
-
-        $nodeType = $this->getStaticType($node);
-        if (! $nodeType instanceof UnionType) {
-            return false;
-        }
-
-        $unwrappedNodeType = $this->typeUnwrapper->unwrapNullableType($nodeType);
-        if (! $unwrappedNodeType instanceof TypeWithClassName) {
-            return false;
-        }
-
-        return is_a($unwrappedNodeType->getClassName(), $desiredObjectType->getClassName(), true);
-    }
-
     public function isNullableObjectType(Node $node): bool
     {
         return $this->isNullableTypeOfSpecificType($node, ObjectType::class);
@@ -423,9 +395,6 @@ final class NodeTypeResolver
         }
     }
 
-    /**
-     * @deprecated
-     */
     private function isMatchingUnionType(Type $resolvedType, ObjectType $requiredObjectType): bool
     {
         $type = TypeCombinator::removeNull($resolvedType);

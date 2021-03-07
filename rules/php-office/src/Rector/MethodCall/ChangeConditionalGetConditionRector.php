@@ -67,12 +67,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $callerObjectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($node->var);
-        if (! $callerObjectType instanceof ObjectType) {
-            return null;
-        }
-
-        if (! $callerObjectType->isInstanceOf('PHPExcel_Style_Conditional')->yes()) {
+        if (! $this->isObjectType($node->var, new ObjectType('PHPExcel_Style_Conditional'))) {
             return null;
         }
 

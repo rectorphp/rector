@@ -95,7 +95,7 @@ CODE_SAMPLE
 
         $isModifiedNode = false;
         foreach ($node->getParams() as $param) {
-            if (! $this->isObjectType($param->type, new ObjectType('DateTime'))) {
+            if (! $this->isObjectType($param, new ObjectType('DateTime'))) {
                 continue;
             }
 

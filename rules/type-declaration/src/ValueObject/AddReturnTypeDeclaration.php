@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\ValueObject;
 
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 
 final class AddReturnTypeDeclaration
@@ -43,5 +44,10 @@ final class AddReturnTypeDeclaration
     public function getReturnType(): Type
     {
         return $this->returnType;
+    }
+
+    public function getObjectType(): ObjectType
+    {
+        return new ObjectType($this->class);
     }
 }

@@ -82,12 +82,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $objectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($node);
-        if (! $objectType instanceof ObjectType) {
-            return null;
-        }
-
-        if (! $objectType->isInstanceOf('Symfony\Component\Console\Command\Command')->yes()) {
+        if (! $this->isObjectType($node, new ObjectType('Symfony\Component\Console\Command\Command'))) {
             return null;
         }
 
@@ -127,12 +122,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $objectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($node->class);
-            if (! $objectType instanceof ObjectType) {
-                return null;
-            }
-
-            if (! $objectType->isInstanceOf('Symfony\Component\Console\Command\Command')->yes()) {
+            if (! $this->isObjectType($node->class, new ObjectType('Symfony\Component\Console\Command\Command'))) {
                 return null;
             }
 

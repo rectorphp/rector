@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Privatization\NodeFactory\ClassConstantFetchValueFactory;
@@ -131,12 +130,7 @@ CODE_SAMPLE
         MethodCall $methodCall,
         ReplaceStringWithClassConstant $replaceStringWithClassConstant
     ): ?Arg {
-        $callerObjectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($methodCall->var);
-        if (! $callerObjectType instanceof ObjectType) {
-            return null;
-        }
-
-        if (! $callerObjectType->isInstanceOf($replaceStringWithClassConstant->getClass())->yes()) {
+        if (! $this->isObjectType($methodCall->var, $replaceStringWithClassConstant->getObjectType())) {
             return null;
         }
 
