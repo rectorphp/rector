@@ -6,6 +6,7 @@ namespace Rector\Core\PhpParser\Parser;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -72,36 +73,29 @@ final class InlineCodeParser
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromString($nodes);
     }
 
-    /**
-     * @param string|Node $content
-     */
-    public function stringify($content): string
+    public function stringify(Expr $expr): string
     {
-        if (is_string($content)) {
-            return $content;
+        if ($expr instanceof String_) {
+            return $expr->value;
         }
 
-        if ($content instanceof String_) {
-            return $content->value;
-        }
-
-        if ($content instanceof Encapsed) {
+        if ($expr instanceof Encapsed) {
             // remove "
-            $content = trim($this->betterStandardPrinter->print($content), '""');
+            $expr = trim($this->betterStandardPrinter->print($expr), '""');
             // use \$ → $
-            $content = Strings::replace($content, self::PRESLASHED_DOLLAR_REGEX, '$');
+            $expr = Strings::replace($expr, self::PRESLASHED_DOLLAR_REGEX, '$');
             // use \'{$...}\' → $...
-            return Strings::replace($content, self::CURLY_BRACKET_WRAPPER_REGEX, '$1');
+            return Strings::replace($expr, self::CURLY_BRACKET_WRAPPER_REGEX, '$1');
         }
 
-        if ($content instanceof Concat) {
-            return $this->stringify($content->left) . $this->stringify($content->right);
+        if ($expr instanceof Concat) {
+            return $this->stringify($expr->left) . $this->stringify($expr->right);
         }
 
-        if (StaticInstanceOf::isOneOf($content, [Variable::class, PropertyFetch::class, StaticPropertyFetch::class])) {
-            return $this->betterStandardPrinter->print($content);
+        if (StaticInstanceOf::isOneOf($expr, [Variable::class, PropertyFetch::class, StaticPropertyFetch::class])) {
+            return $this->betterStandardPrinter->print($expr);
         }
 
-        throw new ShouldNotHappenException(get_class($content) . ' ' . __METHOD__);
+        throw new ShouldNotHappenException(get_class($expr) . ' ' . __METHOD__);
     }
 }
