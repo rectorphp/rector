@@ -136,6 +136,11 @@ CODE_SAMPLE
             $parentReturnTypeNode = new NullableType($parentReturnTypeNode);
         }
 
+        // skip if type is already set
+        if ($this->nodeComparator->areNodesEqual($parentReturnTypeNode, $node->returnType)) {
+            return null;
+        }
+
         // Add the docblock before changing the type
         $this->addDocBlockReturn($node);
         $node->returnType = $parentReturnTypeNode;
@@ -201,6 +206,11 @@ CODE_SAMPLE
     private function addDocBlockReturn(ClassMethod $classMethod): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+
+        // keep return type if already set one
+        if (! $phpDocInfo->getReturnType() instanceof MixedType) {
+            return;
+        }
 
         /** @var Node $returnType */
         $returnType = $classMethod->returnType;

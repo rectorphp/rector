@@ -163,7 +163,7 @@ final class RemovedAndAddedFilesProcessor
                 $message = sprintf(
                     'File "%s" was moved to "%s":',
                     $movedFileWithNodes->getOldPathname(),
-                    $movedFileWithNodes->getNewPathname(),
+                    $movedFileWithNodes->getNewPathname()
                 );
                 $this->symfonyStyle->note($message);
             }
