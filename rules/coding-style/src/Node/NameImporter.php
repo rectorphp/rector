@@ -201,6 +201,7 @@ final class NameImporter
         $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
 
         $fullName = $name->toString();
+
         $autoImportNames = $this->parameterProvider->provideParameter(Option::AUTO_IMPORT_NAMES);
         if ($autoImportNames && ! $parentNode instanceof Node && ! Strings::contains(
             $fullName,
@@ -208,6 +209,7 @@ final class NameImporter
         ) && $this->reflectionProvider->hasFunction(new Name($fullName), null)) {
             return true;
         }
+
         if ($parentNode instanceof ConstFetch) {
             return count($name->parts) === 1;
         }

@@ -22,7 +22,7 @@ final class ExpectExceptionCodeFactory
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        \Rector\PHPUnit\NodeFactory\ArgumentShiftingFactory $argumentShiftingFactory
+        ArgumentShiftingFactory $argumentShiftingFactory
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->argumentShiftingFactory = $argumentShiftingFactory;
