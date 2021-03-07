@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -87,8 +88,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $objectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($node);
+        if (! $objectType instanceof ObjectType) {
+            return null;
+        }
+
         foreach ($this->methodReturnTypes as $methodReturnType) {
-            if (! $this->isObjectType($node, $methodReturnType->getObjectType())) {
+            if (! $objectType->isInstanceOf($methodReturnType->getClass())->yes()) {
                 continue;
             }
 

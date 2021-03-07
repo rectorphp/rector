@@ -82,7 +82,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, new ObjectType('Symfony\Component\Console\Command\Command'))) {
+        $objectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($node);
+        if (! $objectType instanceof ObjectType) {
+            return null;
+        }
+
+        if (! $objectType->isInstanceOf('Symfony\Component\Console\Command\Command')->yes()) {
             return null;
         }
 
@@ -121,7 +126,13 @@ CODE_SAMPLE
             if (! $node instanceof StaticCall) {
                 return null;
             }
-            if (! $this->isObjectType($node->class, new ObjectType('Symfony\Component\Console\Command\Command'))) {
+
+            $objectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($node->class);
+            if (! $objectType instanceof ObjectType) {
+                return null;
+            }
+
+            if (! $objectType->isInstanceOf('Symfony\Component\Console\Command\Command')->yes()) {
                 return null;
             }
 
@@ -144,6 +155,7 @@ CODE_SAMPLE
             if (! $node instanceof MethodCall) {
                 return null;
             }
+
             if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Console\Command\Command'))) {
                 return null;
             }

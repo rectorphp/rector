@@ -616,3 +616,13 @@ parameters:
                 - src/Console/Command/ProcessCommand.php
 
         - '#Content of method "getNextExpression\(\)" is duplicated with method "getNextExpression\(\)" in "Rector\\CodingStyle\\Rector\\Assign\\ManualJsonStringToJsonEncodeArrayRector" class\. Use unique content or service instead#'
+        - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\NodeTypeResolver\\NodeTypeResolver\\ParamTypeResolver" class\. Use unique content or service instead#'
+
+        # faking phpstan reflection in tests
+        - '#Parameter \#1 \$classReflection of class PHPStan\\Type\\ThisType constructor expects PHPStan\\Reflection\\ClassReflection\|string, ReflectionClass<Rector\\NodeTypeResolver\\Tests\\PerNodeTypeResolver\\VariableTypeResolver\\Fixture\\ThisClass\> given#'
+        -
+            message: '#Instead of "ReflectionClass" class/interface use "PHPStan\\Reflection\\ClassReflection"#'
+            paths:
+                - packages/node-type-resolver/tests/PerNodeTypeResolver/VariableTypeResolver/VariableTypeResolverTest.php
+
+        - '#Cognitive complexity for "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector\:\:refactor\(\)" is 10, keep it under 9#'

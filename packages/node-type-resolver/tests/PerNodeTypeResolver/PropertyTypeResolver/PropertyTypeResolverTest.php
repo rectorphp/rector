@@ -46,11 +46,7 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
 
         yield [__DIR__ . '/Source/MethodParamDocBlock.php', 0, new ObjectType(Html::class)];
 
-        yield [
-            __DIR__ . '/Source/MethodParamDocBlock.php',
-            1,
-            $unionTypeFactory->createUnionObjectType([ClassThatExtendsHtml::class, Html::class]),
-        ];
+        yield [__DIR__ . '/Source/MethodParamDocBlock.php', 1, new ObjectType(ClassThatExtendsHtml::class)];
 
         // mimics failing test from DomainDrivenDesign set
         $unionType = $unionTypeFactory->createUnionObjectType([SomeChild::class, new NullType()]);

@@ -14,6 +14,7 @@ use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\StandaloneLineInMultilineArrayFixer;
 use Symplify\CodingStandard\Fixer\Commenting\RemoveCommentedCodeFixer;
+use Symplify\CodingStandard\Fixer\LineLength\DocBlockLineLengthFixer;
 use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
@@ -69,6 +70,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
         // buggy - @todo fix on Symplify master
         RemoveCommentedCodeFixer::class,
+        DocBlockLineLengthFixer::class,
 
         // breaks on-purpose annotated variables
         ReturnAssignmentFixer::class,

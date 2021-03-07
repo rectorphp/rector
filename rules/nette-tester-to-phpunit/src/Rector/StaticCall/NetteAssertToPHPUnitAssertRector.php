@@ -65,7 +65,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, new ObjectType('Tester\Assert'))) {
+        $objectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($node);
+        if (! $objectType instanceof ObjectType) {
+            return null;
+        }
+
+        if (! $objectType->isInstanceOf('Tester\Assert')->yes()) {
             return null;
         }
 

@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -17,22 +18,25 @@ use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 
 final class UnionTypeCommonTypeNarrower
 {
     /**
-     * Key = the winner
-     * Array = the group of types matched
+     * Key = the winner Array = the group of types matched
      *
-     * @var array<class-string<Node|\PHPStan\PhpDocParser\Ast\Node>, array<class-string<Node|\PHPStan\PhpDocParser\Ast\Node>>>
+     * @var array<string, array<class-string<Node>|class-string<\PHPStan\PhpDocParser\Ast\Node>|class-string<RectorInterface>>>
      */
     private const PRIORITY_TYPES = [
+        ClassLike::class => [ClassLike::class],
         FunctionLike::class => [FunctionLike::class],
         BinaryOp::class => [BinaryOp::class, Expr::class],
         Expr::class => [Node::class, Expr::class],
         Stmt::class => [Node::class, Stmt::class],
         PhpDocTagValueNode::class => [PhpDocTagValueNode::class, \PHPStan\PhpDocParser\Ast\Node::class],
+        Node::class => [Node::class],
+        RectorInterface::class => [RectorInterface::class],
     ];
 
     /**
@@ -120,8 +124,13 @@ final class UnionTypeCommonTypeNarrower
 
             $typeClassReflections = $this->resolveClassParentClassesAndInterfaces($unionedType);
             $typeClassNames = [];
+
             foreach ($typeClassReflections as $typeClassReflection) {
                 $typeClassNames[] = $typeClassReflection->getName();
+            }
+
+            if ($typeClassNames === []) {
+                continue;
             }
 
             $availableTypes[] = $typeClassNames;
@@ -159,9 +168,12 @@ final class UnionTypeCommonTypeNarrower
      */
     private function narrowAvailableTypes(array $availableTypes): array
     {
+        if (count($availableTypes) < 2) {
+            return [];
+        }
+
         /** @var string[] $sharedTypes */
         $sharedTypes = array_intersect(...$availableTypes);
-
         return array_values($sharedTypes);
     }
 

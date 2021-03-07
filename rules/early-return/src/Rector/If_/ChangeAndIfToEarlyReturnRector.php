@@ -112,24 +112,27 @@ CODE_SAMPLE
 
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
-        $conditions = $this->nodeRepository->findBooleanAndConditions($expr);
-        $ifNextReturnClone = $ifNextReturn instanceof Return_
-            ? clone $ifNextReturn
-            : new Return_();
-
-        $isInLoop = $this->contextAnalyzer->isInLoop($node);
+        $booleanAndConditions = $this->nodeRepository->findBooleanAndConditions($expr);
 
         if (! $ifNextReturn instanceof Return_) {
             $this->addNodeAfterNode($node->stmts[0], $node);
-            return $this->processReplaceIfs($node, $conditions, $ifNextReturnClone);
+            return $this->processReplaceIfs($node, $booleanAndConditions, new Return_());
+        }
+
+        if ($ifNextReturn instanceof Return_ && $ifNextReturn->expr instanceof BooleanAnd) {
+            return null;
         }
 
         $this->removeNode($ifNextReturn);
         $ifNextReturn = $node->stmts[0];
         $this->addNodeAfterNode($ifNextReturn, $node);
 
-        if (! $isInLoop) {
-            return $this->processReplaceIfs($node, $conditions, $ifNextReturnClone);
+        $ifNextReturnClone = $ifNextReturn instanceof Return_
+            ? clone $ifNextReturn
+            : new Return_();
+
+        if (! $this->contextAnalyzer->isInLoop($node)) {
+            return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
         }
 
         if (! $ifNextReturn instanceof Expression) {
@@ -140,7 +143,7 @@ CODE_SAMPLE
             $this->addNodeAfterNode(new Return_(), $node);
         }
 
-        return $this->processReplaceIfs($node, $conditions, $ifNextReturnClone);
+        return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
     }
 
     /**
@@ -234,6 +237,7 @@ CODE_SAMPLE
         if (! $this->contextAnalyzer->isInLoop($if)) {
             return false;
         }
+
         return (bool) $this->betterNodeFinder->findParentTypes($if, [If_::class, Else_::class, ElseIf_::class]);
     }
 

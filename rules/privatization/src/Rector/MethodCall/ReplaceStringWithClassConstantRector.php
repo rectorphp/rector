@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Privatization\NodeFactory\ClassConstantFetchValueFactory;
@@ -119,7 +120,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param mixed[] $configuration
+     * @param array<string, mixed[]> $configuration
      */
     public function configure(array $configuration): void
     {
@@ -130,11 +131,16 @@ CODE_SAMPLE
         MethodCall $methodCall,
         ReplaceStringWithClassConstant $replaceStringWithClassConstant
     ): ?Arg {
-        if (! $this->isOnClassMethodCall(
-            $methodCall,
-            $replaceStringWithClassConstant->getObjectType(),
-            $replaceStringWithClassConstant->getMethod()
-        )) {
+        $callerObjectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($methodCall->var);
+        if (! $callerObjectType instanceof ObjectType) {
+            return null;
+        }
+
+        if (! $callerObjectType->isInstanceOf($replaceStringWithClassConstant->getClass())->yes()) {
+            return null;
+        }
+
+        if (! $this->isName($methodCall->name, $replaceStringWithClassConstant->getMethod())) {
             return null;
         }
 

@@ -94,6 +94,7 @@ final class ClassMethodExternalCallNodeAnalyzer
 
         foreach ($methodCalls as $methodCall) {
             $callerType = $this->nodeTypeResolver->resolve($methodCall->var);
+
             if (! $callerType instanceof TypeWithClassName) {
                 // unable to handle reliably
                 return $methodCalls;

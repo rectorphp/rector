@@ -10,6 +10,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
+use PhpParser\NodeAbstract;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;
@@ -22,6 +23,7 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture\Nullable;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
@@ -295,7 +297,7 @@ final class UnionTypeMapper implements TypeMapperInterface
 
         $sharedTypeWithClassName = $this->matchTwoObjectTypes($unionType);
         if ($sharedTypeWithClassName instanceof TypeWithClassName) {
-            return $sharedTypeWithClassName;
+            return $this->correctObjectType($sharedTypeWithClassName);
         }
 
         // find least common denominator
@@ -331,5 +333,18 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         return null;
+    }
+
+    private function correctObjectType(TypeWithClassName $typeWithClassName): TypeWithClassName
+    {
+        if ($typeWithClassName->getClassName() === NodeAbstract::class) {
+            return new ObjectType('PhpParser\Node');
+        }
+
+        if ($typeWithClassName->getClassName() === AbstractRector::class) {
+            return new ObjectType('Rector\Core\Contract\Rector\RectorInterface');
+        }
+
+        return $typeWithClassName;
     }
 }

@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\CodingStyle\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\AbstractTestCase;
 use Rector\CodingStyle\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\BeLocalClass;
+use Rector\CodingStyle\ValueObject\PreferenceSelfThis;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -11,9 +12,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PreferThisOrSelfMethodCallRector::class)
         ->call('configure', [[
             PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
-                AbstractTestCase::class => 'self',
-                BeLocalClass::class => 'this',
-                TestCase::class => 'self',
+                AbstractTestCase::class => PreferenceSelfThis::PREFER_SELF,
+                BeLocalClass::class => PreferenceSelfThis::PREFER_THIS,
+                TestCase::class => PreferenceSelfThis::PREFER_SELF,
             ],
         ]]);
 };

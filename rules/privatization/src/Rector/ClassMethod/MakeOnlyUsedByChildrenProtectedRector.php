@@ -9,13 +9,12 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
+use Rector\Privatization\VisibilityGuard\ChildClassMethodOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -30,16 +29,16 @@ final class MakeOnlyUsedByChildrenProtectedRector extends AbstractRector
     private $classMethodExternalCallNodeAnalyzer;
 
     /**
-     * @var FamilyRelationsAnalyzer
+     * @var ChildClassMethodOverrideGuard
      */
-    private $familyRelationsAnalyzer;
+    private $childClassMethodOverrideGuard;
 
     public function __construct(
         ClassMethodExternalCallNodeAnalyzer $classMethodExternalCallNodeAnalyzer,
-        FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        ChildClassMethodOverrideGuard $childClassMethodOverrideGuard
     ) {
         $this->classMethodExternalCallNodeAnalyzer = $classMethodExternalCallNodeAnalyzer;
-        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
+        $this->childClassMethodOverrideGuard = $childClassMethodOverrideGuard;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -107,11 +106,6 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            throw new ShouldNotHappenException();
-        }
-
         $externalCalls = $this->classMethodExternalCallNodeAnalyzer->getExternalCalls($node);
         if ($externalCalls === []) {
             return null;
@@ -126,13 +120,18 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->isObjectType($class, new ObjectType($className))) {
+            $classObjectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($class);
+            if (! $classObjectType instanceof ObjectType) {
+                return null;
+            }
+
+            if (! $classObjectType->isInstanceOf($className)->yes()) {
                 return null;
             }
         }
 
         $methodName = $this->getName($node);
-        if ($this->isOverriddenInChildClass($classReflection, $methodName)) {
+        if ($this->childClassMethodOverrideGuard->isOverriddenInChildClass($scope, $methodName)) {
             return null;
         }
 
@@ -165,26 +164,5 @@ CODE_SAMPLE
         }
 
         return ! $classMethod->isPublic();
-    }
-
-    private function isOverriddenInChildClass(ClassReflection $classReflection, string $methodName): bool
-    {
-        $childrenClassReflection = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
-
-        foreach ($childrenClassReflection as $childClassReflection) {
-            $singleChildrenClassReflectionHasMethod = $childClassReflection->hasMethod($methodName);
-            if (! $singleChildrenClassReflectionHasMethod) {
-                continue;
-            }
-
-            $methodReflection = $childClassReflection->getNativeMethod($methodName);
-            $methodDeclaringClass = $methodReflection->getDeclaringClass();
-
-            if ($methodDeclaringClass->getName() === $childClassReflection->getName()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

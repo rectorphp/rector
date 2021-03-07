@@ -34,6 +34,7 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
@@ -49,8 +50,8 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use ReflectionMethod;
 
 /**
- * This service contains all the parsed nodes. E.g. all the functions, method call, classes, static calls etc.
- * It's useful in case of context analysis, e.g. find all the usage of class method to detect, if the method is used.
+ * This service contains all the parsed nodes. E.g. all the functions, method call, classes, static calls etc. It's
+ * useful in case of context analysis, e.g. find all the usage of class method to detect, if the method is used.
  */
 final class NodeRepository
 {
@@ -76,6 +77,7 @@ final class NodeRepository
 
     /**
      * E.g. [$this, 'someLocalMethod']
+     *
      * @var array<string, array<string, ArrayCallable[]>>
      */
     private $arrayCallablesByTypeAndMethod = [];
@@ -150,6 +152,7 @@ final class NodeRepository
 
     /**
      * To prevent circular reference
+     *
      * @required
      */
     public function autowireNodeRepository(NodeTypeResolver $nodeTypeResolver): void
@@ -831,7 +834,12 @@ final class NodeRepository
     private function addCallByType(Node $node, Type $classType, string $methodName): void
     {
         if ($classType instanceof TypeWithClassName) {
+            if ($classType instanceof ThisType) {
+                $classType = $classType->getStaticObjectType();
+            }
+
             $this->callsByTypeAndMethod[$classType->getClassName()][$methodName][] = $node;
+            $this->addParentTypeWithClassName($classType, $node, $methodName);
         }
 
         if ($classType instanceof UnionType) {
@@ -861,5 +869,32 @@ final class NodeRepository
         }
 
         return $classReflections;
+    }
+
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function addParentTypeWithClassName(
+        TypeWithClassName $typeWithClassName,
+        Node $node,
+        string $methodName
+    ): void {
+        // include also parent types
+        if (! $typeWithClassName instanceof ObjectType) {
+            return;
+        }
+
+        if (! $this->reflectionProvider->hasClass($typeWithClassName->getClassName())) {
+            return;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($typeWithClassName->getClassName());
+        if (! $classReflection instanceof ClassReflection) {
+            return;
+        }
+
+        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
+            $this->callsByTypeAndMethod[$ancestorClassReflection->getName()][$methodName][] = $node;
+        }
     }
 }

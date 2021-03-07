@@ -11,16 +11,15 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Twig_SimpleFilter;
-use Twig_SimpleFunction;
 
 /**
  * Covers https://twig.symfony.com/doc/1.x/deprecated.html#function
@@ -30,7 +29,7 @@ use Twig_SimpleFunction;
 final class SimpleFunctionAndFilterRector extends AbstractRector
 {
     /**
-     * @var array<string, class-string<Twig_SimpleFilter>|class-string<Twig_SimpleFunction>>
+     * @var array<string, class-string>>
      */
     private const OLD_TO_NEW_CLASSES = [
         'Twig_Function_Method' => 'Twig_SimpleFunction',
@@ -102,12 +101,13 @@ CODE_SAMPLE
             return null;
         }
 
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof ClassLike) {
-            return null;
-        }
+        /** @var Scope $scope */
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
 
-        if (! $this->isObjectType($classLike, new ObjectType('Twig_Extension'))) {
+        /** @var ClassReflection $classReflection */
+        $classReflection = $scope->getClassReflection();
+
+        if (! $classReflection->isSubclassOf('Twig_Extension')) {
             return null;
         }
 
@@ -125,7 +125,8 @@ CODE_SAMPLE
                 return null;
             }
 
-            return $this->processArrayItem($node, $this->getObjectType($node->value));
+            $newObjectType = $this->nodeTypeResolver->resolve($node->value);
+            return $this->processArrayItem($node, $newObjectType);
         });
 
         return $node;

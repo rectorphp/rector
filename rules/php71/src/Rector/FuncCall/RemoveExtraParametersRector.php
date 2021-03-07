@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Php71\Rector\FuncCall;
 
-use function count;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -100,16 +99,16 @@ final class RemoveExtraParametersRector extends AbstractRector
             }
         }
 
-        $reflection = $this->callReflectionResolver->resolveCall($node);
-        if ($reflection === null) {
+        $functionReflection = $this->callReflectionResolver->resolveCall($node);
+        if ($functionReflection === null) {
             return true;
         }
 
-        if ($reflection->getVariants() === []) {
+        if ($functionReflection->getVariants() === []) {
             return true;
         }
 
-        return $this->hasVariadicParameters($reflection->getVariants());
+        return $this->hasVariadicParameters($functionReflection->getVariants());
     }
 
     /**

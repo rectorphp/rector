@@ -11,12 +11,12 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
-use PHPStan\Broker\FunctionNotFoundException;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverRegistry;
@@ -126,21 +126,23 @@ final class CallReflectionResolver
      */
     private function resolveFunctionCall(FuncCall $funcCall)
     {
+        /** @var Scope|null $scope */
         $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
 
         if ($funcCall->name instanceof Name) {
-            try {
+            if ($this->reflectionProvider->hasFunction($funcCall->name, $scope)) {
                 return $this->reflectionProvider->getFunction($funcCall->name, $scope);
-            } catch (FunctionNotFoundException $functionNotFoundException) {
-                return null;
             }
+
+            return null;
         }
 
         if (! $scope instanceof Scope) {
             return null;
         }
 
-        return $this->typeToCallReflectionResolverRegistry->resolve($scope->getType($funcCall->name), $scope);
+        $funcCallNameType = $scope->getType($funcCall->name);
+        return $this->typeToCallReflectionResolverRegistry->resolve($funcCallNameType, $scope);
     }
 
     /**
@@ -159,6 +161,10 @@ final class CallReflectionResolver
         }
 
         $classType = $this->nodeTypeResolver->resolve($node instanceof MethodCall ? $node->var : $node->class);
+
+        if ($classType instanceof ThisType) {
+            $classType = $classType->getStaticObjectType();
+        }
 
         if ($classType instanceof ObjectType) {
             if (! $this->reflectionProvider->hasClass($classType->getClassName())) {

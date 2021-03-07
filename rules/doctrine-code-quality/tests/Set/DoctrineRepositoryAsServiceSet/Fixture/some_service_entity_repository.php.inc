@@ -6,7 +6,7 @@ namespace Rector\DoctrineCodeQuality\Tests\Set\DoctrineRepositoryAsServiceSet\Fi
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\Mapping as ORM;
+use Rector\DoctrineCodeQuality\Tests\Set\DoctrineRepositoryAsServiceSet\Source\User;
 
 final class SomeServiceEntityRepository extends ServiceEntityRepository
 {
@@ -23,10 +23,6 @@ final class SomeServiceEntityRepository extends ServiceEntityRepository
     }
 }
 
-class User
-{
-}
-
 ?>
 -----
 <?php
@@ -37,12 +33,12 @@ namespace Rector\DoctrineCodeQuality\Tests\Set\DoctrineRepositoryAsServiceSet\Fi
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\Mapping as ORM;
+use Rector\DoctrineCodeQuality\Tests\Set\DoctrineRepositoryAsServiceSet\Source\User;
 
 final class SomeServiceEntityRepository
 {
     /**
-     * @var \Doctrine\ORM\EntityRepository<\Rector\DoctrineCodeQuality\Tests\Set\DoctrineRepositoryAsServiceSet\Fixture\User>
+     * @var \Doctrine\ORM\EntityRepository<\Rector\DoctrineCodeQuality\Tests\Set\DoctrineRepositoryAsServiceSet\Source\User>
      */
     private \Doctrine\ORM\EntityRepository $repository;
     public function __construct(private \Doctrine\ORM\EntityManagerInterface $entityManager)
@@ -56,10 +52,6 @@ final class SomeServiceEntityRepository
         $this->entityManager->flush();
         $this->entityManager->clear();
     }
-}
-
-class User
-{
 }
 
 ?>

@@ -67,12 +67,20 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isOnClassMethodCall($node, new ObjectType('PHPExcel_Style_Conditional'), 'getCondition')) {
+        $callerObjectType = $this->nodeTypeResolver->resolveObjectTypeToCompare($node->var);
+        if (! $callerObjectType instanceof ObjectType) {
+            return null;
+        }
+
+        if (! $callerObjectType->isInstanceOf('PHPExcel_Style_Conditional')->yes()) {
+            return null;
+        }
+
+        if (! $this->isName($node->name, 'getCondition')) {
             return null;
         }
 
         $node->name = new Identifier('getConditions');
-
         $arrayDimFetch = new ArrayDimFetch($node, new LNumber(0));
 
         return new Coalesce($arrayDimFetch, new String_(''));

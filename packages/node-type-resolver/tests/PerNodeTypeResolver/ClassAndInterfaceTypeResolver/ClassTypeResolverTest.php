@@ -6,16 +6,13 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTyp
 
 use Iterator;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Type\Type;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\TypeWithClassName;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\AnotherTrait;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\ClassWithParentClass;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\ClassWithParentInterface;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\ClassWithParentTrait;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\ClassWithTrait;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\ParentClass;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\SomeInterface;
-use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\ClassAndInterfaceTypeResolver
@@ -25,55 +22,35 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
     /**
      * @dataProvider dataProvider()
      */
-    public function test(string $file, int $nodePosition, Type $expectedType): void
+    public function test(string $file, int $nodePosition, ObjectType $expectedObjectType): void
     {
         $variableNodes = $this->getNodesForFileOfType($file, Class_::class);
 
         $resolvedType = $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]);
-        $this->assertEquals($expectedType, $resolvedType);
+        $this->assertInstanceOf(TypeWithClassName::class, $resolvedType);
+
+        /** @var TypeWithClassName $resolvedType */
+        $this->assertEquals($expectedObjectType->getClassName(), $resolvedType->getClassName());
     }
 
     public function dataProvider(): Iterator
     {
-        $unionTypeFactory = new UnionTypeFactory();
-
         yield [
             __DIR__ . '/Source/ClassWithParentInterface.php',
             0,
-            $unionTypeFactory->createUnionObjectType([ClassWithParentInterface::class, SomeInterface::class]),
+            new ObjectType(ClassWithParentInterface::class),
         ];
 
-        yield [
-            __DIR__ . '/Source/ClassWithParentClass.php',
-            0,
-            $unionTypeFactory->createUnionObjectType([ClassWithParentClass::class, ParentClass::class]),
-        ];
+        yield [__DIR__ . '/Source/ClassWithParentClass.php', 0, new ObjectType(ClassWithParentClass::class)];
 
-        yield [
-            __DIR__ . '/Source/ClassWithTrait.php',
-            0,
-            $unionTypeFactory->createUnionObjectType([ClassWithTrait::class, AnotherTrait::class]),
-        ];
+        yield [__DIR__ . '/Source/ClassWithTrait.php', 0, new ObjectType(ClassWithTrait::class)];
 
-        yield [
-            __DIR__ . '/Source/ClassWithParentTrait.php',
-            0,
-            $unionTypeFactory->createUnionObjectType(
-                [ClassWithParentTrait::class, ClassWithTrait::class, AnotherTrait::class]
-            ),
-        ];
+        yield [__DIR__ . '/Source/ClassWithParentTrait.php', 0, new ObjectType(ClassWithParentTrait::class)];
 
         yield [
             __DIR__ . '/Source/AnonymousClass.php',
             0,
-            $unionTypeFactory->createUnionObjectType(
-                [
-                    'AnonymousClassdefa360846b84894d4be1b25c2ce6da9',
-                    ParentClass::class,
-                    SomeInterface::class,
-                    AnotherTrait::class,
-                ]
-            ),
+            new ObjectType('AnonymousClassdefa360846b84894d4be1b25c2ce6da9'),
         ];
     }
 }

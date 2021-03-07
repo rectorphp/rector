@@ -6,6 +6,7 @@ namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -14,12 +15,17 @@ use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
@@ -27,16 +33,17 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
-use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassLikeTypeCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
@@ -62,11 +69,6 @@ final class NodeTypeResolver
     private $arrayTypeAnalyzer;
 
     /**
-     * @var ParentClassLikeTypeCorrector
-     */
-    private $parentClassLikeTypeCorrector;
-
-    /**
      * @var TypeUnwrapper
      */
     private $typeUnwrapper;
@@ -87,15 +89,26 @@ final class NodeTypeResolver
     private $unionTypeFactory;
 
     /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
     public function __construct(
         ObjectTypeSpecifier $objectTypeSpecifier,
-        ParentClassLikeTypeCorrector $parentClassLikeTypeCorrector,
         TypeUnwrapper $typeUnwrapper,
         ClassAnalyzer $classAnalyzer,
         GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
         UnionTypeFactory $unionTypeFactory,
+        ReflectionProvider $reflectionProvider,
+        NodeNameResolver $nodeNameResolver,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -103,15 +116,17 @@ final class NodeTypeResolver
         }
 
         $this->objectTypeSpecifier = $objectTypeSpecifier;
-        $this->parentClassLikeTypeCorrector = $parentClassLikeTypeCorrector;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->classAnalyzer = $classAnalyzer;
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
         $this->unionTypeFactory = $unionTypeFactory;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
      * Prevents circular dependency
+     *
      * @required
      */
     public function autowireNodeTypeResolver(ArrayTypeAnalyzer $arrayTypeAnalyzer): void
@@ -135,37 +150,70 @@ final class NodeTypeResolver
 
     public function isObjectType(Node $node, ObjectType $requiredObjectType): bool
     {
+        if ($node instanceof ClassConstFetch) {
+            throw new ShouldNotHappenException();
+        }
+
         $resolvedType = $this->resolve($node);
+
         if ($resolvedType instanceof MixedType) {
             return false;
         }
 
-        // this should also work with ObjectType and UnionType with ObjectType
-        // use PHPStan types here
+        if ($resolvedType instanceof ThisType) {
+            $resolvedType = $resolvedType->getStaticObjectType();
+        }
+
+        if ($resolvedType instanceof ObjectType) {
+            return $this->isObjectTypeOfObjectType($resolvedType, $requiredObjectType);
+        }
+
+        if ($requiredObjectType->isSuperTypeOf($resolvedType)->yes()) {
+            return true;
+        }
+
         if ($resolvedType->equals($requiredObjectType)) {
             return true;
         }
 
-        return $this->isMatchingUnionType($requiredObjectType, $resolvedType);
+        return $this->isMatchingUnionType($resolvedType, $requiredObjectType);
     }
 
     public function resolve(Node $node): Type
     {
-        $type = $this->resolveFirstType($node);
-
-        if ($type instanceof IntersectionType) {
-            foreach ($type->getTypes() as $intersectionedType) {
-                if ($intersectionedType instanceof TypeWithClassName) {
-                    return $this->parentClassLikeTypeCorrector->correct($intersectionedType);
-                }
-            }
-        }
-
-        if (! $type instanceof TypeWithClassName) {
+        $type = $this->resolveByNodeTypeResolvers($node);
+        if ($type !== null) {
             return $type;
         }
 
-        return $this->parentClassLikeTypeCorrector->correct($type);
+        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $nodeScope instanceof Scope) {
+            return new MixedType();
+        }
+        if (! $node instanceof Expr) {
+            return new MixedType();
+        }
+
+        // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
+        if ($node instanceof New_) {
+            $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node->class);
+            if ($isAnonymousClass) {
+                return new ObjectWithoutClassType();
+            }
+        }
+
+        $type = $nodeScope->getType($node);
+        // hot fix for phpstan not resolving chain method calls
+
+        if (! $node instanceof MethodCall) {
+            return $type;
+        }
+
+        if (! $type instanceof MixedType) {
+            return $type;
+        }
+
+        return $this->resolve($node->var);
     }
 
     /**
@@ -374,6 +422,60 @@ final class NodeTypeResolver
         return $this->isObjectType($classLike, $objectType);
     }
 
+    public function resolveObjectTypeToCompare(Node $node): ?ObjectType
+    {
+        if ($node instanceof StaticCall) {
+            return $this->resolveStaticCallClassNameObjectTypeToCompare($node);
+        }
+
+        if ($node instanceof Stmt) {
+            $classLike = $node->getAttribute(ClassLike::class);
+            if ($classLike === null) {
+                return null;
+            }
+
+            $className = $this->nodeNameResolver->getName($classLike);
+            if ($className === null) {
+                return null;
+            }
+
+            if (! $this->reflectionProvider->hasClass($className)) {
+                return null;
+            }
+
+            $classReflection = $this->reflectionProvider->getClass($className);
+            if ($classReflection instanceof ClassReflection) {
+                return new ObjectType($classReflection->getName(), null, $classReflection);
+            }
+        }
+
+        $callerType = $this->resolve($node);
+        if ($callerType instanceof ThisType) {
+            $callerType = $callerType->getStaticObjectType();
+        }
+
+        if (! $callerType instanceof ObjectType) {
+            return null;
+        }
+
+        return $callerType;
+    }
+
+    public function resolveObjectTypeFromScope(Scope $scope): ?ObjectType
+    {
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        $className = $classReflection->getName();
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return null;
+        }
+
+        return new ObjectType($className, null, $classReflection);
+    }
+
     private function addNodeTypeResolver(NodeTypeResolverInterface $nodeTypeResolver): void
     {
         foreach ($nodeTypeResolver->getNodeClasses() as $nodeClass) {
@@ -381,68 +483,26 @@ final class NodeTypeResolver
         }
     }
 
-    private function isMatchingUnionType(ObjectType $requiredObjectType, Type $resolvedType): bool
+    /**
+     * @deprecated
+     */
+    private function isMatchingUnionType(Type $resolvedType, ObjectType $requiredObjectType): bool
     {
         if (! $resolvedType instanceof UnionType) {
             return false;
         }
 
-        foreach ($resolvedType->getTypes() as $unionedType) {
-            if ($unionedType instanceof TypeWithClassName && is_a(
-                $unionedType->getClassName(),
-                    $requiredObjectType->getClassName(),
-                true
-            )) {
-                return true;
-            }
+        $type = TypeCombinator::removeNull($resolvedType);
 
-            if (! $unionedType->equals($requiredObjectType)) {
-                continue;
-            }
+        // for falsy nullables
+        $type = TypeCombinator::remove($type, new ConstantBooleanType(false));
 
-            if ($unionedType->equals($requiredObjectType)) {
-                return true;
-            }
+        if (! $type instanceof ObjectType) {
+            return false;
         }
 
-        return false;
-    }
-
-    private function resolveFirstType(Node $node): Type
-    {
-        $type = $this->resolveByNodeTypeResolvers($node);
-        if ($type !== null) {
-            return $type;
-        }
-
-        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $nodeScope instanceof Scope) {
-            return new MixedType();
-        }
-        if (! $node instanceof Expr) {
-            return new MixedType();
-        }
-
-        // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
-        if ($node instanceof New_) {
-            $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node->class);
-            if ($isAnonymousClass) {
-                return new ObjectWithoutClassType();
-            }
-        }
-
-        $type = $nodeScope->getType($node);
-        // hot fix for phpstan not resolving chain method calls
-
-        if (! $node instanceof MethodCall) {
-            return $type;
-        }
-
-        if (! $type instanceof MixedType) {
-            return $type;
-        }
-
-        return $this->resolveFirstType($node->var);
+        return $type->isInstanceOf($requiredObjectType->getClassName())
+            ->yes();
     }
 
     private function resolveArrayType(Expr $expr): Type
@@ -533,5 +593,60 @@ final class NodeTypeResolver
         }
 
         return $otherType;
+    }
+
+    private function resolveStaticCallClassNameObjectTypeToCompare(StaticCall $staticCall): ?ObjectType
+    {
+        $className = $this->nodeNameResolver->getName($staticCall->class);
+
+        if ($className === 'parent') {
+            /** @var Scope $scope */
+            $scope = $staticCall->getAttribute(AttributeKey::SCOPE);
+
+            $classReflection = $scope->getClassReflection();
+            if (! $classReflection instanceof ClassReflection) {
+                throw new ShouldNotHappenException();
+            }
+
+            $className = $classReflection->getName();
+        }
+
+        if ($className === null) {
+            return null;
+        }
+
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return null;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
+        return new ObjectType($classReflection->getName(), null, $classReflection);
+    }
+
+    private function isObjectTypeOfObjectType(ObjectType $resolvedObjectType, ObjectType $requiredObjectType): bool
+    {
+        if ($resolvedObjectType->isInstanceOf($requiredObjectType->getClassName())->yes()) {
+            return true;
+        }
+
+        if ($resolvedObjectType->getClassName() === $requiredObjectType->getClassName()) {
+            return true;
+        }
+
+        if (! $this->reflectionProvider->hasClass($resolvedObjectType->getClassName())) {
+            return false;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($resolvedObjectType->getClassName());
+
+        if ($classReflection instanceof ClassReflection) {
+            foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
+                if ($ancestorClassReflection->hasTraitUse($requiredObjectType->getClassName())) {
+                    return true;
+                }
+            }
+        }
+
+        return $classReflection->isSubclassOf($requiredObjectType->getClassName());
     }
 }
