@@ -155,14 +155,6 @@ final class NodeTypeResolver
             return $this->isObjectTypeOfObjectType($resolvedType, $requiredObjectType);
         }
 
-//        if ($requiredObjectType->isSuperTypeOf($resolvedType)->yes()) {
-//            return true;
-//        }
-
-//        if ($resolvedType->equals($requiredObjectType)) {
-//            return true;
-//        }
-
         return $this->isMatchingUnionType($resolvedType, $requiredObjectType);
     }
 
@@ -536,34 +528,6 @@ final class NodeTypeResolver
         }
 
         return $otherType;
-    }
-
-    private function resolveStaticCallClassNameObjectTypeToCompare(StaticCall $staticCall): ?ObjectType
-    {
-        $className = $this->nodeNameResolver->getName($staticCall->class);
-
-        if ($className === 'parent') {
-            /** @var Scope $scope */
-            $scope = $staticCall->getAttribute(AttributeKey::SCOPE);
-
-            $classReflection = $scope->getClassReflection();
-            if (! $classReflection instanceof ClassReflection) {
-                throw new ShouldNotHappenException();
-            }
-
-            $className = $classReflection->getName();
-        }
-
-        if ($className === null) {
-            return null;
-        }
-
-        if (! $this->reflectionProvider->hasClass($className)) {
-            return null;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($className);
-        return new ObjectType($classReflection->getName(), null, $classReflection);
     }
 
     private function isObjectTypeOfObjectType(ObjectType $resolvedObjectType, ObjectType $requiredObjectType): bool
