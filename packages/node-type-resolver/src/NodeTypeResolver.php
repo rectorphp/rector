@@ -35,7 +35,6 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
@@ -83,11 +82,6 @@ final class NodeTypeResolver
     private $reflectionProvider;
 
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
     public function __construct(
@@ -96,7 +90,6 @@ final class NodeTypeResolver
         GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
         UnionTypeFactory $unionTypeFactory,
         ReflectionProvider $reflectionProvider,
-        NodeNameResolver $nodeNameResolver,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -108,7 +101,6 @@ final class NodeTypeResolver
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
         $this->unionTypeFactory = $unionTypeFactory;
         $this->reflectionProvider = $reflectionProvider;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -175,10 +167,8 @@ final class NodeTypeResolver
         }
 
         // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
-        if ($node instanceof New_) {
-            if ($this->classAnalyzer->isAnonymousClass($node->class)) {
-                return new ObjectWithoutClassType();
-            }
+        if ($node instanceof New_ && $this->classAnalyzer->isAnonymousClass($node->class)) {
+            return new ObjectWithoutClassType();
         }
 
         $type = $scope->getType($node);
