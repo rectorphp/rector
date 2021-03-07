@@ -9,6 +9,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
@@ -105,14 +106,16 @@ CODE_SAMPLE
                 continue;
             }
 
-            $type = $this->paramTypeInferer->inferParam($param);
-            if ($type instanceof MixedType) {
+            $paramType = $this->paramTypeInferer->inferParam($param);
+
+            dump($paramType);
+
+            if ($paramType instanceof MixedType) {
                 continue;
             }
 
             $paramName = $this->getName($param);
-
-            $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
+            $this->phpDocTypeChanger->changeParamType($phpDocInfo, $paramType, $param, $paramName);
         }
 
         if ($phpDocInfo->hasChanged()) {
@@ -130,28 +133,25 @@ CODE_SAMPLE
         }
 
         // not an array type
-        if (! $this->isName($param->type, 'array')) {
+        $paramType = $this->nodeTypeResolver->resolve($param->type);
+        if ($paramType->isIterable()->no()) {
             return true;
         }
 
-        // not an array type
-        $paramStaticType = $this->getStaticType($param);
-        if ($paramStaticType instanceof MixedType) {
+        return $this->isArrayExplicitMixed($paramType);
+    }
+
+    private function isArrayExplicitMixed(Type $type): bool
+    {
+        if (! $type instanceof ArrayType) {
             return false;
         }
 
-        if (! $paramStaticType instanceof ArrayType) {
-            return true;
+        $iterableValueType = $type->getIterableValueType();
+        if (! $iterableValueType instanceof MixedType) {
+            return false;
         }
 
-        if (! $paramStaticType->getIterableValueType() instanceof MixedType) {
-            return true;
-        }
-
-        // is defined mixed[] explicitly
-        /** @var MixedType $mixedType */
-        $mixedType = $paramStaticType->getIterableValueType();
-
-        return $mixedType->isExplicitMixed();
+        return $iterableValueType->isExplicitMixed();
     }
 }
