@@ -56,7 +56,7 @@ final class ReflectionTypeResolver
 
     public function resolveMethodCallReturnType(MethodCall $methodCall): ?Type
     {
-        $objectType = $this->getStaticType($methodCall->var);
+        $objectType = $this->nodeTypeResolver->resolve($methodCall->var);
         if (! $objectType instanceof TypeWithClassName) {
             return null;
         }
@@ -86,7 +86,7 @@ final class ReflectionTypeResolver
 
     public function resolvePropertyFetchType(PropertyFetch $propertyFetch): ?Type
     {
-        $objectType = $this->getStaticType($propertyFetch->var);
+        $objectType = $this->nodeTypeResolver->resolve($propertyFetch->var);
         if (! $objectType instanceof TypeWithClassName) {
             return null;
         }

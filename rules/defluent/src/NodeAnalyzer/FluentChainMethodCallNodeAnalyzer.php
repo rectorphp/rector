@@ -84,14 +84,14 @@ final class FluentChainMethodCallNodeAnalyzer
             return false;
         }
 
-        $calleeStaticType = $this->nodeTypeResolver->getStaticType($methodCall->var);
+        $calleeStaticType = $this->nodeTypeResolver->resolve($methodCall->var);
 
         // we're not sure
         if ($calleeStaticType instanceof MixedType) {
             return false;
         }
 
-        $methodReturnStaticType = $this->nodeTypeResolver->getStaticType($methodCall);
+        $methodReturnStaticType = $this->nodeTypeResolver->resolve($methodCall);
 
         // is fluent type
         if (! $calleeStaticType->equals($methodReturnStaticType)) {
@@ -202,7 +202,7 @@ final class FluentChainMethodCallNodeAnalyzer
             $node = $node->var;
         }
 
-        $variableType = $this->getStaticType($node);
+        $variableType = $this->nodeTypeResolver->resolve($node);
         if ($variableType instanceof MixedType) {
             return false;
         }
