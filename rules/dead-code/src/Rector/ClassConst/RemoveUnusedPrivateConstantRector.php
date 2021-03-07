@@ -75,9 +75,7 @@ CODE_SAMPLE
             return null;
         }
 
-        // never used
-        $classConstFetches = $this->classConstManipulator->getAllClassConstFetch($node);
-        if ($classConstFetches !== []) {
+        if ($this->classConstManipulator->hasClassConstFetch($node)) {
             return null;
         }
 

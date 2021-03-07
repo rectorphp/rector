@@ -121,7 +121,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($return->expr === null) {
+        $returnedExpr = $return->expr;
+        if (! $returnedExpr instanceof Expr) {
             return null;
         }
 
@@ -132,7 +133,7 @@ CODE_SAMPLE
 
         $this->removeNode($returnToRemove);
 
-        $return = $this->createReturn($return->expr, $funcCall);
+        $return = $this->createReturn($returnedExpr, $funcCall);
 
         $this->commentsMerger->keepChildren($return, $node);
 

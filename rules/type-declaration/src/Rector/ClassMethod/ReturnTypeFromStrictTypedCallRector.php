@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -22,7 +22,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use PHPStan\Type\VoidType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
@@ -115,24 +115,7 @@ CODE_SAMPLE
         }
 
         if (count($returnedStrictTypes) === 1) {
-            $returnExpr = $returns[0]->expr;
-            $resolvedType = $returnExpr instanceof Expr
-                ? $this->nodeTypeResolver->resolve($returnExpr)
-                : new VoidType();
-
-            if ($resolvedType instanceof UnionType) {
-                /** @var NullableType $nullableType */
-                $nullableType = $returnedStrictTypes[0];
-                return $this->processSingleUnionType($node, $resolvedType, $nullableType);
-            }
-
-            /** @var Name $returnType */
-            $returnType = $resolvedType instanceof ObjectType
-                ? new FullyQualified($resolvedType->getClassName())
-                : $returnedStrictTypes[0];
-
-            $node->returnType = $returnType;
-            return $node;
+            return $this->refactorSingleReturnType($returns[0], $returnedStrictTypes[0], $node);
         }
 
         if ($this->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
@@ -257,5 +240,34 @@ CODE_SAMPLE
         }
 
         return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
+    }
+
+    /**
+     * @param ClassMethod|Function_|Closure $functionLike
+     * @param Name|NullableType|PhpParserUnionType $returnedStrictTypeNode
+     */
+    private function refactorSingleReturnType(
+        Return_ $return,
+        Node $returnedStrictTypeNode,
+        FunctionLike $functionLike
+    ): Node {
+        $resolvedType = $this->nodeTypeResolver->resolve($return);
+
+        if ($resolvedType instanceof UnionType) {
+            if (! $returnedStrictTypeNode instanceof NullableType) {
+                throw new ShouldNotHappenException();
+            }
+
+            return $this->processSingleUnionType($functionLike, $resolvedType, $returnedStrictTypeNode);
+        }
+
+        /** @var Name $returnType */
+        $returnType = $resolvedType instanceof ObjectType
+            ? new FullyQualified($resolvedType->getClassName())
+            : $returnedStrictTypeNode;
+
+        $functionLike->returnType = $returnType;
+
+        return $functionLike;
     }
 }

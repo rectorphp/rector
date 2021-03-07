@@ -56,14 +56,11 @@ final class ClassConstManipulator
         $this->nodeComparator = $nodeComparator;
     }
 
-    /**
-     * @return ClassConstFetch[]
-     */
-    public function getAllClassConstFetch(ClassConst $classConst): array
+    public function hasClassConstFetch(ClassConst $classConst): bool
     {
         $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
-            return [];
+            return false;
         }
 
         $searchInNodes = [$classLike];
@@ -78,7 +75,7 @@ final class ClassConstManipulator
             $searchInNodes[] = $usedTraitName;
         }
 
-        return $this->betterNodeFinder->find($searchInNodes, function (Node $node) use ($classConst): bool {
+        return (bool) $this->betterNodeFinder->find($searchInNodes, function (Node $node) use ($classConst): bool {
             // itself
             if ($this->nodeComparator->areNodesEqual($node, $classConst)) {
                 return false;

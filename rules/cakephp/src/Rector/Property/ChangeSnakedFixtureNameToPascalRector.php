@@ -92,11 +92,12 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $arrayItem->value instanceof String_) {
+            $itemValue = $arrayItem->value;
+            if (! $itemValue instanceof String_) {
                 continue;
             }
 
-            $this->renameFixtureName($arrayItem->value);
+            $this->renameFixtureName($itemValue);
         }
     }
 
