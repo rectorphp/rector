@@ -2,12 +2,11 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-class YieldStrings
+final class ReturnYieldIterator
 {
-    public function getValues(): iterable
+    public function someMethod()
     {
-        yield 'tom';
-        yield 'tam';
+        yield ['test', 'test2'];
     }
 }
 
@@ -17,15 +16,14 @@ class YieldStrings
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-class YieldStrings
+final class ReturnYieldIterator
 {
     /**
-     * @return \Iterator<string>
+     * @return \Iterator<string[]>
      */
-    public function getValues(): iterable
+    public function someMethod()
     {
-        yield 'tom';
-        yield 'tam';
+        yield ['test', 'test2'];
     }
 }
 

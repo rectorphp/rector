@@ -13,25 +13,16 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class YieldNodesReturnTypeInferer implements ReturnTypeInfererInterface
 {
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
     /**
      * @var NodeTypeResolver
      */
@@ -48,12 +39,10 @@ final class YieldNodesReturnTypeInferer implements ReturnTypeInfererInterface
     private $simpleCallableNodeTraverser;
 
     public function __construct(
-        PhpVersionProvider $phpVersionProvider,
         NodeTypeResolver $nodeTypeResolver,
         TypeFactory $typeFactory,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
-        $this->phpVersionProvider = $phpVersionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeFactory = $typeFactory;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -77,18 +66,11 @@ final class YieldNodesReturnTypeInferer implements ReturnTypeInfererInterface
                 continue;
             }
 
-            $yieldValueStaticType = $this->nodeTypeResolver->getStaticType($value);
-            $types[] = new ArrayType(new MixedType(), $yieldValueStaticType);
+            $types[] = $this->nodeTypeResolver->getStaticType($value);
         }
 
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ITERABLE_TYPE)) {
-            // @see https://www.php.net/manual/en/language.types.iterable.php
-            $types[] = new IterableType(new MixedType(), new MixedType());
-        } else {
-            $types[] = new ObjectType('Iterator');
-        }
-
-        return $this->typeFactory->createMixedPassedOrUnionType($types);
+        $types = $this->typeFactory->createMixedPassedOrUnionType($types);
+        return new FullyQualifiedGenericObjectType('Iterator', [$types]);
     }
 
     public function getPriority(): int

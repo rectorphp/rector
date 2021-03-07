@@ -12,6 +12,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadDocBlock\TagRemover\ParamTagRemover;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -33,10 +34,19 @@ final class AddArrayParamDocTypeRector extends AbstractRector
      */
     private $phpDocTypeChanger;
 
-    public function __construct(ParamTypeInferer $paramTypeInferer, PhpDocTypeChanger $phpDocTypeChanger)
-    {
+    /**
+     * @var ParamTagRemover
+     */
+    private $paramTagRemover;
+
+    public function __construct(
+        ParamTypeInferer $paramTypeInferer,
+        PhpDocTypeChanger $phpDocTypeChanger,
+        ParamTagRemover $paramTagRemover
+    ) {
         $this->paramTypeInferer = $paramTypeInferer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->paramTagRemover = $paramTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -106,9 +116,6 @@ CODE_SAMPLE
             }
 
             $paramType = $this->paramTypeInferer->inferParam($param);
-
-            dump($paramType);
-
             if ($paramType instanceof MixedType) {
                 continue;
             }
@@ -118,6 +125,7 @@ CODE_SAMPLE
         }
 
         if ($phpDocInfo->hasChanged()) {
+            $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
             return $node;
         }
 

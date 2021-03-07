@@ -14,6 +14,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -22,6 +23,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
@@ -214,6 +216,10 @@ final class NodeTypeResolver
             return $this->resolve($node);
         }
 
+        if ($node instanceof Return_) {
+            return $this->resolve($node);
+        }
+
         if (! $node instanceof Expr) {
             return new MixedType();
         }
@@ -239,11 +245,15 @@ final class NodeTypeResolver
         }
 
         $staticType = $scope->getType($node);
-        if (! $staticType instanceof ObjectType) {
+        if ($staticType instanceof GenericObjectType) {
             return $staticType;
         }
 
-        return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $staticType);
+        if ($staticType instanceof ObjectType) {
+            return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $staticType);
+        }
+
+        return $staticType;
     }
 
     public function isNumberType(Node $node): bool

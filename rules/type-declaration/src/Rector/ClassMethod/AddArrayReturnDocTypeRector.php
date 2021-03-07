@@ -21,6 +21,7 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadDocBlock\TagRemover\ReturnTagRemover;
 use Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType;
 use Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -66,18 +67,25 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
      */
     private $normalizeTypeToRespectArrayScalarType;
 
+    /**
+     * @var ReturnTagRemover
+     */
+    private $returnTagRemover;
+
     public function __construct(
         ReturnTypeInferer $returnTypeInferer,
         ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
         AdvancedArrayAnalyzer $advancedArrayAnalyzer,
         PhpDocTypeChanger $phpDocTypeChanger,
-        NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType
+        NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType,
+        ReturnTagRemover $returnTagRemover
     ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->advancedArrayAnalyzer = $advancedArrayAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->normalizeTypeToRespectArrayScalarType = $normalizeTypeToRespectArrayScalarType;
+        $this->returnTagRemover = $returnTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -163,6 +171,7 @@ CODE_SAMPLE
         }
 
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferredReturnType);
+        $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
 
         return $node;
     }
@@ -230,7 +239,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return ! $this->isNames($classMethod->returnType, ['array', 'iterable']);
+        return ! $this->isNames($classMethod->returnType, ['array', 'iterable', 'Iterator']);
     }
 
     private function hasArrayShapeNode(ClassMethod $classMethod): bool
