@@ -89,22 +89,24 @@ CODE_SAMPLE
     private function matchStrposInComparisonToFalse(BinaryOp $binaryOp): ?FuncCall
     {
         if ($this->valueResolver->isFalse($binaryOp->left)) {
-            if (! $binaryOp->right instanceof FuncCall) {
+            $rightExpr = $binaryOp->right;
+            if (! $rightExpr instanceof FuncCall) {
                 return null;
             }
 
-            if ($this->isName($binaryOp->right, 'strpos')) {
-                return $binaryOp->right;
+            if ($this->isName($rightExpr, 'strpos')) {
+                return $rightExpr;
             }
         }
 
         if ($this->valueResolver->isFalse($binaryOp->right)) {
-            if (! $binaryOp->left instanceof FuncCall) {
+            $leftExpr = $binaryOp->left;
+            if (! $leftExpr instanceof FuncCall) {
                 return null;
             }
 
-            if ($this->isName($binaryOp->left, 'strpos')) {
-                return $binaryOp->left;
+            if ($this->isName($leftExpr, 'strpos')) {
+                return $leftExpr;
             }
         }
 

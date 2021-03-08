@@ -8,21 +8,10 @@ use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class SplArrayFixedTypeNarrower
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-    }
-
-    public function narrow(\PHPStan\Type\Type $paramType): Type
+    public function narrow(Type $paramType): Type
     {
         if ($paramType->isSuperTypeOf(new ObjectType('SplArrayFixed'))->no()) {
             return $paramType;

@@ -1,16 +1,13 @@
 <?php
 
-declare(strict_types=1);
+namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-namespace Rector\Core\PhpParser\Parser;
-
-use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Parser as NikicParser;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class Parser
+final class SkipEmptyArray
 {
     /**
      * @var Stmt[][]
@@ -34,7 +31,7 @@ final class Parser
     }
 
     /**
-     * @return Node[]
+     * @return Stmt[]
      */
     public function parseFileInfo(SmartFileInfo $smartFileInfo): array
     {
@@ -48,10 +45,11 @@ final class Parser
 
         $nodes = $this->nikicParser->parse($fileContent);
         if ($nodes === null) {
-            $nodes = [];
+            $this->nodesByFile[$fileRealPath] = [];
+        } else {
+            $this->nodesByFile[$fileRealPath] = [];
         }
 
-        $this->nodesByFile[$fileRealPath] = $nodes;
         return $this->nodesByFile[$fileRealPath];
     }
 }

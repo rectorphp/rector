@@ -155,11 +155,12 @@ CODE_SAMPLE
 
         foreach ($classMethod->stmts as $statement) {
             if ($statement instanceof Return_) {
-                if (! $statement->expr instanceof Array_) {
+                $returnedExpr = $statement->expr;
+                if (! $returnedExpr instanceof Array_) {
                     continue;
                 }
 
-                return $statement->expr;
+                return $returnedExpr;
             }
         }
 

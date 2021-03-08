@@ -22,6 +22,9 @@ final class CommunityTestCaseRectorTest extends AbstractRectorTestCase
         $this->assertFileWithContentWasAdded($addedFileWithContent);
     }
 
+    /**
+     * @return Iterator<AddedFileWithContent[]|SmartFileInfo[]>
+     */
     public function provideData(): Iterator
     {
         $smartFileSystem = new SmartFileSystem();

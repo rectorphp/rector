@@ -30,7 +30,7 @@ final class StaticTypeAnalyzer
         }
 
         if ($type instanceof ArrayType) {
-            return $this->isAlwaysTurableArrayType($type);
+            return $this->isAlwaysTruableArrayType($type);
         }
 
         if ($this->isNullable($type)) {
@@ -92,7 +92,7 @@ final class StaticTypeAnalyzer
         return true;
     }
 
-    private function isAlwaysTurableArrayType(ArrayType $arrayType): bool
+    private function isAlwaysTruableArrayType(ArrayType $arrayType): bool
     {
         $itemType = $arrayType->getItemType();
         return $itemType instanceof ConstantScalarType && $itemType->getValue();

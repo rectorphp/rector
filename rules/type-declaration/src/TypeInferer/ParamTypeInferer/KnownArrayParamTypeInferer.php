@@ -53,10 +53,10 @@ final class KnownArrayParamTypeInferer implements ParamTypeInfererInterface
         $paramName = $this->nodeNameResolver->getName($param);
 
         // @todo create map later
-        if ($paramName === 'configs') {
-            if ($classReflection->isSubclassOf('Symfony\Component\DependencyInjection\Extension\Extension')) {
-                return new ArrayType(new MixedType(), new StringType());
-            }
+        if ($paramName === 'configs' && $classReflection->isSubclassOf(
+            'Symfony\Component\DependencyInjection\Extension\Extension'
+        )) {
+            return new ArrayType(new MixedType(), new StringType());
         }
 
         return new MixedType();

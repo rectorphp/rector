@@ -634,3 +634,5 @@ parameters:
              message: '#There should be no empty class#'
              paths:
                  - packages/static-type-mapper/src/ValueObject/Type/FullyQualifiedGenericObjectType.php
+
+        - '#(.*?) class\-string, string given#'

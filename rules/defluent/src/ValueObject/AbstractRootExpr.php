@@ -55,8 +55,10 @@ abstract class AbstractRootExpr implements RootExprAwareInterface, FirstCallFact
             return null;
         }
 
-        if ($currentStmt->expr instanceof Assign) {
-            return $currentStmt->expr;
+        $currentExpr = $currentStmt->expr;
+
+        if ($currentExpr instanceof Assign) {
+            return $currentExpr;
         }
 
         return null;

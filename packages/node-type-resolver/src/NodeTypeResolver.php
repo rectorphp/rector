@@ -40,6 +40,7 @@ use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
+use Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -84,6 +85,11 @@ final class NodeTypeResolver
     private $reflectionProvider;
 
     /**
+     * @var NodeTypeCorrector\HasOffsetTypeCorrector
+     */
+    private $hasOffsetTypeCorrector;
+
+    /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
     public function __construct(
@@ -92,6 +98,7 @@ final class NodeTypeResolver
         GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
         UnionTypeFactory $unionTypeFactory,
         ReflectionProvider $reflectionProvider,
+        HasOffsetTypeCorrector $hasOffsetTypeCorrector,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -103,6 +110,7 @@ final class NodeTypeResolver
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
         $this->unionTypeFactory = $unionTypeFactory;
         $this->reflectionProvider = $reflectionProvider;
+        $this->hasOffsetTypeCorrector = $hasOffsetTypeCorrector;
     }
 
     /**
@@ -156,7 +164,7 @@ final class NodeTypeResolver
     {
         $type = $this->resolveByNodeTypeResolvers($node);
         if ($type !== null) {
-            return $type;
+            return $this->hasOffsetTypeCorrector->correct($type);
         }
 
         $scope = $node->getAttribute(AttributeKey::SCOPE);
