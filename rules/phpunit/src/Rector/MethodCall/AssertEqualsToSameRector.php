@@ -49,16 +49,10 @@ final class AssertEqualsToSameRector extends AbstractRector
      */
     private $testsNodeAnalyzer;
 
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition

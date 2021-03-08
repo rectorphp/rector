@@ -4,7 +4,7 @@ namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertEqualsToSameRector\Fixtur
 
 use PHPUnit\Framework\TestCase;
 
-final class TestSkipped extends BTestCase
+final class TestSkipped extends TestCase
 {
     public function test()
     {
