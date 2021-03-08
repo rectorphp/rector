@@ -9,6 +9,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
@@ -141,7 +142,16 @@ CODE_SAMPLE
 
         // not an array type
         $paramType = $this->nodeTypeResolver->resolve($param->type);
-        if ($paramType->isIterable()->no()) {
+
+        // weird case for maybe interface
+        if ($paramType->isIterable()->maybe() && $paramType instanceof ObjectType) {
+            return true;
+        }
+
+        $isArrayable = $paramType->isIterable()
+            ->yes() || $paramType->isArray()
+            ->yes() || ($paramType->isIterable()->maybe() || $paramType->isArray()->maybe());
+        if (! $isArrayable) {
             return true;
         }
 
