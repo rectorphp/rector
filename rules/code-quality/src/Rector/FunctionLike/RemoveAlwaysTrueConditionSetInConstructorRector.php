@@ -113,6 +113,7 @@ CODE_SAMPLE
         if ($node->stmts === []) {
             return null;
         }
+
         $haveNodeChanged = false;
         foreach ($node->stmts as $key => $stmt) {
             if ($stmt instanceof Expression) {
@@ -163,7 +164,6 @@ CODE_SAMPLE
         }
 
         $propertyFetchType = $this->resolvePropertyFetchType($node->cond);
-
         return $this->staticTypeAnalyzer->isAlwaysTruableType($propertyFetchType);
     }
 

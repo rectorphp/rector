@@ -33,13 +33,13 @@ final class DetailedTypeAnalyzer
         return false;
     }
 
-    private function isTooDetailedGenericObjectType(Type $type): bool
+    private function isTooDetailedGenericObjectType(GenericObjectType $genericObjectType): bool
     {
-        if (count($type->getTypes()) !== 1) {
+        if (count($genericObjectType->getTypes()) !== 1) {
             return false;
         }
 
-        $genericType = $type->getTypes()[0];
+        $genericType = $genericObjectType->getTypes()[0];
         return $this->isTooDetailed($genericType);
     }
 }
