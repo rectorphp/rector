@@ -72,7 +72,6 @@
         "phpunit/phpunit": "^9.5",
         "symfony/security-core": "^5.2",
         "symfony/security-http": "^5.2",
-        "symplify/changelog-linker": "^9.2.4",
         "symplify/coding-standard": "^9.2.4",
         "symplify/easy-ci": "^9.1.0",
         "symplify/easy-coding-standard": "^9.2.4",
@@ -310,11 +309,6 @@
         ],
         "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
         "phpstan-config": "vendor/bin/phpstan analyse config --ansi --error-format symplify",
-        "changelog": [
-            "vendor/bin/changelog-linker dump-merges --ansi",
-            "vendor/bin/changelog-linker link --ansi",
-            "vendor/bin/changelog-linker cleanup --ansi"
-        ],
         "docs": [
             "vendor/bin/rule-doc-generator generate packages rules --output-file docs/rector_rules_overview.md --ansi --categorize",
             "vendor/bin/ecs check-markdown docs/rector_rules_overview.md docs/nodes_overview.md --ansi --fix"
