@@ -30,5 +30,3 @@ jobs:
                 if: "matrix.dependencies != 'lowest'"
 
             -   run: vendor/bin/phpunit
-
-            -   run: tests/system-tests/run-tests.sh
