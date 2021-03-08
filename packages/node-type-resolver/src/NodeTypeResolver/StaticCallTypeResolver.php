@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -65,23 +65,31 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
 
         // no specific method found, return class types, e.g. <ClassType>::$method()
         if (! is_string($methodName)) {
-            return $classType;
+            return new MixedType();
         }
-
-        if (! $classType instanceof ObjectType) {
-            return $classType;
-        }
-
-        if (! $this->reflectionProvider->hasClass($classType->getClassName())) {
-            return $classType;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($classType->getClassName());
 
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
-            return $classType;
+            return new MixedType();
         }
+
+        foreach ($classType->getReferencedClasses() as $referencedClass) {
+            $classMethodReturnType = $this->resolveClassMethodReturnType($referencedClass, $methodName, $scope);
+            if (! $classMethodReturnType instanceof MixedType) {
+                return $classMethodReturnType;
+            }
+        }
+
+        return new MixedType();
+    }
+
+    private function resolveClassMethodReturnType(string $referencedClass, string $methodName, Scope $scope): Type
+    {
+        if (! $this->reflectionProvider->hasClass($referencedClass)) {
+            return new MixedType();
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($referencedClass);
 
         foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
             if (! $ancestorClassReflection->hasMethod($methodName)) {
@@ -95,6 +103,6 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
             }
         }
 
-        return $classType;
+        return new MixedType();
     }
 }

@@ -39,7 +39,7 @@ final class NodeFactoryTest extends AbstractKernelTestCase
     }
 
     /**
-     * @return Iterator<int[][]|Array_[]<string, int>[]>>
+     * @return Iterator<int[][]|Array_[]<string, int>>
      */
     public function provideDataForArray(): Iterator
     {
