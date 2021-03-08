@@ -38,6 +38,9 @@ final class NodeFactoryTest extends AbstractKernelTestCase
         $this->assertEquals($expectedArrayNode, $arrayNode);
     }
 
+    /**
+     * @return Iterator<int[][]|Array_[]<string, int>[]|Array_[]>
+     */
     public function provideDataForArray(): Iterator
     {
         $array = new Array_();
