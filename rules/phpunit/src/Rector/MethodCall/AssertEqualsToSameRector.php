@@ -13,9 +13,11 @@ use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\VoidType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Renaming\NodeManipulator\IdentifierManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -52,10 +54,16 @@ final class AssertEqualsToSameRector extends AbstractRector
      */
     private $testsNodeAnalyzer;
 
-    public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer, NodeTypeResolver $nodeTypeResolver)
     {
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -102,7 +110,7 @@ final class AssertEqualsToSameRector extends AbstractRector
         }
 
         $valueNode = $node->args[0];
-        $valueNodeType = $this->getNodeType($valueNode->value);
+        $valueNodeType = $this->nodeTypeResolver->resolve($valueNode->value);
         if (! StaticInstanceOf::isOneOf($valueNodeType, self::SCALAR_TYPES)) {
             return null;
         }
@@ -110,13 +118,5 @@ final class AssertEqualsToSameRector extends AbstractRector
         $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
 
         return $node;
-    }
-
-    private function getNodeType(Expr $expr): Type
-    {
-        /** @var Scope $nodeScope */
-        $nodeScope = $expr->getAttribute(AttributeKey::SCOPE);
-
-        return $nodeScope->getType($expr);
     }
 }

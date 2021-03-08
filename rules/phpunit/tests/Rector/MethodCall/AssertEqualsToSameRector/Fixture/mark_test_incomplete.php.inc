@@ -1,13 +1,18 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertPropertyExistsRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertEqualsToSameRector\Fixture;
 
-final class TestIncomplete extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class TestIncomplete extends TestCase
 {
     public function test()
     {
         $this->markTestIncomplete('incomplete');
+
         $this->assertEquals('foo', 'foo');
+        $this->assertEquals(123, 123);
+        $this->assertEquals(1.23, 1.23);
     }
 }
 
@@ -15,14 +20,19 @@ final class TestIncomplete extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertPropertyExistsRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertEqualsToSameRector\Fixture;
 
-final class TestIncomplete extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class TestIncomplete extends TestCase
 {
     public function test()
     {
         $this->markTestIncomplete('incomplete');
+
         $this->assertSame('foo', 'foo');
+        $this->assertSame(123, 123);
+        $this->assertSame(1.23, 1.23);
     }
 }
 
