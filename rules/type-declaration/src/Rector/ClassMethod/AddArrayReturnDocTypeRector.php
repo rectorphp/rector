@@ -10,11 +10,9 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayShapeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
@@ -23,6 +21,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadDocBlock\TagRemover\ReturnTagRemover;
 use Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType;
+use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
@@ -37,11 +36,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddArrayReturnDocTypeRector extends AbstractRector
 {
-    /**
-     * @var int
-     */
-    private const MAX_NUMBER_OF_TYPES = 3;
-
     /**
      * @var ReturnTypeInferer
      */
@@ -72,13 +66,19 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
      */
     private $returnTagRemover;
 
+    /**
+     * @var DetailedTypeAnalyzer
+     */
+    private $detailedTypeAnalyzer;
+
     public function __construct(
         ReturnTypeInferer $returnTypeInferer,
         ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
         AdvancedArrayAnalyzer $advancedArrayAnalyzer,
         PhpDocTypeChanger $phpDocTypeChanger,
         NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType,
-        ReturnTagRemover $returnTagRemover
+        ReturnTagRemover $returnTagRemover,
+        DetailedTypeAnalyzer $detailedTypeAnalyzer
     ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
@@ -86,6 +86,7 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->normalizeTypeToRespectArrayScalarType = $normalizeTypeToRespectArrayScalarType;
         $this->returnTagRemover = $returnTagRemover;
+        $this->detailedTypeAnalyzer = $detailedTypeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -158,6 +159,10 @@ CODE_SAMPLE
             $node->returnType
         );
 
+        if ($this->detailedTypeAnalyzer->isTooDetailed($inferredReturnType)) {
+            return null;
+        }
+
         $currentReturnType = $phpDocInfo->getReturnType();
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType(
             $currentReturnType,
@@ -209,7 +214,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($newType instanceof UnionType && $this->shouldSkipUnionType($newType)) {
+        if ($this->detailedTypeAnalyzer->isTooDetailed($newType)) {
             return true;
         }
 
@@ -222,11 +227,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $newType instanceof ConstantArrayType) {
-            return false;
-        }
-
-        return count($newType->getValueTypes()) > self::MAX_NUMBER_OF_TYPES;
+        return $this->detailedTypeAnalyzer->isTooDetailed($newType);
     }
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
@@ -283,10 +284,5 @@ CODE_SAMPLE
         }
 
         return $this->advancedArrayAnalyzer->isMixedOfSpecificOverride($arrayType, $phpDocInfo);
-    }
-
-    private function shouldSkipUnionType(UnionType $unionType): bool
-    {
-        return count($unionType->getTypes()) > self::MAX_NUMBER_OF_TYPES;
     }
 }
