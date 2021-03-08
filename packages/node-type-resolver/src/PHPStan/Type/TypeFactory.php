@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PHPStan\Type;
 
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantFloatType;
 use PHPStan\Type\Constant\ConstantIntegerType;
@@ -14,7 +16,7 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
+use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VerbosityLevel;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -86,18 +88,19 @@ final class TypeFactory
     {
         // unwrap union types
         $unwrappedTypes = [];
-        foreach ($types as $key => $type) {
-            if ($type instanceof UnionType) {
-                $unwrappedTypes = array_merge($unwrappedTypes, $type->getTypes());
+        foreach ($types as $type) {
+            $flattenTypes = TypeUtils::flattenTypes($type);
 
-                unset($types[$key]);
+            foreach ($flattenTypes as $flattenType) {
+                if ($flattenType instanceof ConstantArrayType) {
+                    $unwrappedTypes = array_merge($unwrappedTypes, $this->unwrapConstantArrayTypes($flattenType));
+                } else {
+                    $unwrappedTypes[] = $flattenType;
+                }
             }
         }
 
-        $types = array_merge($types, $unwrappedTypes);
-
-        // re-index
-        return array_values($types);
+        return $unwrappedTypes;
     }
 
     /**
@@ -136,5 +139,23 @@ final class TypeFactory
         }
 
         return $type;
+    }
+
+    /**
+     * @return Type[]
+     */
+    private function unwrapConstantArrayTypes(ConstantArrayType $constantArrayType): array
+    {
+        $unwrappedTypes = [];
+
+        $flattenKeyTypes = TypeUtils::flattenTypes($constantArrayType->getKeyType());
+        $flattenItemTypes = TypeUtils::flattenTypes($constantArrayType->getItemType());
+
+        foreach ($flattenItemTypes as $position => $nestedFlattenItemType) {
+            $nestedFlattenKeyType = $flattenKeyTypes[$position];
+            $unwrappedTypes[] = new ArrayType($nestedFlattenKeyType, $nestedFlattenItemType);
+        }
+
+        return $unwrappedTypes;
     }
 }

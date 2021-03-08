@@ -30,7 +30,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropert
 final class SomeCallableType
 {
     /**
-     * @var null|callable
+     * @var callable|null
      */
     private $code;
     /**
