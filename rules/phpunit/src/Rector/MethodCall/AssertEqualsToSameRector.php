@@ -12,7 +12,6 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticInstanceOf;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Renaming\NodeManipulator\IdentifierManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -35,7 +34,7 @@ final class AssertEqualsToSameRector extends AbstractRector
      * - bool because this is taken care of AssertEqualsParameterToSpecificMethodsTypeRector
      * - null because this is taken care of AssertEqualsParameterToSpecificMethodsTypeRector
      *
-     * @var array<class-string<Type>>
+     * @var array<class-string<\PHPStan\Type\Type>>
      */
     private const SCALAR_TYPES = [FloatType::class, IntegerType::class, StringType::class];
 
