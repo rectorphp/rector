@@ -79,7 +79,7 @@ final class AssertFalseStrposToContainsRector extends AbstractRector
         }
 
         $firstArgumentValue = $node->args[0]->value;
-        if ($firstArgumentValue instanceof StaticCall) {
+        if ($firstArgumentValue instanceof StaticCall || $firstArgumentValue instanceof MethodCall) {
             return null;
         }
         if (! $this->isNames($firstArgumentValue, ['strpos', 'stripos'])) {
