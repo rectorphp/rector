@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory;
@@ -64,11 +63,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $routerObjectTypes = [];
 
     /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
      * @var ObjectType
      */
     private $routeListObjectType;
@@ -77,14 +71,12 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
         ExplicitRouteAnnotationDecorator $explicitRouteAnnotationDecorator,
         ReturnTypeInferer $returnTypeInferer,
         RouteInfoFactory $routeInfoFactory,
-        SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory,
-        ReflectionProvider $reflectionProvider
+        SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory
     ) {
         $this->routeInfoFactory = $routeInfoFactory;
         $this->returnTypeInferer = $returnTypeInferer;
         $this->explicitRouteAnnotationDecorator = $explicitRouteAnnotationDecorator;
         $this->symfonyRouteTagValueNodeFactory = $symfonyRouteTagValueNodeFactory;
-        $this->reflectionProvider = $reflectionProvider;
 
         $this->routerObjectTypes = [
             new ObjectType('Nette\Application\IRouter'),

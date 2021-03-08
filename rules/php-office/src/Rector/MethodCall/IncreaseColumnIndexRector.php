@@ -144,8 +144,9 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($assignVariable->expr instanceof LNumber) {
-            return $assignVariable->expr;
+        $assignedExpr = $assignVariable->expr;
+        if ($assignedExpr instanceof LNumber) {
+            return $assignedExpr;
         }
 
         return null;

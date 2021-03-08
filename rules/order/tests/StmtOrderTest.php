@@ -42,6 +42,9 @@ final class StmtOrderTest extends AbstractKernelTestCase
         $this->nodeNameResolver = $this->getService(NodeNameResolver::class);
     }
 
+    /**
+     * @return Iterator<array<int, array<int|string>>>
+     */
     public function dataProvider(): Iterator
     {
         yield [
