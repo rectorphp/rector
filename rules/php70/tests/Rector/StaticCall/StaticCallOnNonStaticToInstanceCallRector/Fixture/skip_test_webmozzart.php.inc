@@ -4,10 +4,10 @@ namespace Rector\Php70\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCa
 
 use Webmozart\Assert\Assert;
 
-final class TestWebmozzart
+final class SkipTestWebmozzart
 {
     public function doWork($values)
     {
-        Assert::allIsAOf(TestWebmozzart::class, $values);
+        Assert::allIsAOf('SomeType', $values);
     }
 }
