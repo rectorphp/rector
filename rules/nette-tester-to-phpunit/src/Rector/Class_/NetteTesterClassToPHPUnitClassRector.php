@@ -85,12 +85,12 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($node, new ObjectType('Tester\TestCase'))) {
+        if ($node instanceof MethodCall) {
+            $this->processUnderTestRun($node);
             return null;
         }
 
-        if ($node instanceof MethodCall) {
-            $this->processUnderTestRun($node);
+        if (! $this->isObjectType($node, new ObjectType('Tester\TestCase'))) {
             return null;
         }
 
@@ -110,6 +110,10 @@ CODE_SAMPLE
 
     private function processUnderTestRun(MethodCall $methodCall): void
     {
+        if (! $this->isObjectType($methodCall->var, new ObjectType('Tester\TestCase'))) {
+            return;
+        }
+
         if ($this->isName($methodCall->name, 'run')) {
             $this->removeNode($methodCall);
         }

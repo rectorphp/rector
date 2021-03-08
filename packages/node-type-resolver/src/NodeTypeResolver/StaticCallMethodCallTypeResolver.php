@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodReflection;
@@ -16,7 +17,7 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
-final class StaticCallTypeResolver implements NodeTypeResolverInterface
+final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @var NodeTypeResolver
@@ -42,7 +43,7 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
     /**
      * @required
      */
-    public function autowireStaticCallTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    public function autowireStaticCallMethodCallTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -52,15 +53,20 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
      */
     public function getNodeClasses(): array
     {
-        return [StaticCall::class];
+        return [StaticCall::class, MethodCall::class];
     }
 
     /**
-     * @param StaticCall $node
+     * @param StaticCall|MethodCall $node
      */
     public function resolve(Node $node): Type
     {
-        $classType = $this->nodeTypeResolver->resolve($node->class);
+        if ($node instanceof MethodCall) {
+            $callerType = $this->nodeTypeResolver->resolve($node->var);
+        } else {
+            $callerType = $this->nodeTypeResolver->resolve($node->class);
+        }
+
         $methodName = $this->nodeNameResolver->getName($node->name);
 
         // no specific method found, return class types, e.g. <ClassType>::$method()
@@ -73,7 +79,7 @@ final class StaticCallTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        foreach ($classType->getReferencedClasses() as $referencedClass) {
+        foreach ($callerType->getReferencedClasses() as $referencedClass) {
             $classMethodReturnType = $this->resolveClassMethodReturnType($referencedClass, $methodName, $scope);
             if (! $classMethodReturnType instanceof MixedType) {
                 return $classMethodReturnType;

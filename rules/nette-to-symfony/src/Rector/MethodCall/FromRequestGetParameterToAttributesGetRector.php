@@ -67,7 +67,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, new ObjectType('Nette\Application\Request'))) {
+        if (! $this->isObjectType($node->var, new ObjectType('Nette\Application\Request'))) {
             return null;
         }
 
