@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\NotIdentical;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
@@ -86,7 +87,7 @@ CODE_SAMPLE
         return $containsStaticCall;
     }
 
-    private function matchStrposInComparisonToFalse(BinaryOp $binaryOp): ?FuncCall
+    private function matchStrposInComparisonToFalse(BinaryOp $binaryOp): ?Expr
     {
         if ($this->valueResolver->isFalse($binaryOp->left)) {
             $rightExpr = $binaryOp->right;

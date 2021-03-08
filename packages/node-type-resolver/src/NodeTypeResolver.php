@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
@@ -41,6 +42,7 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector;
+use Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -85,9 +87,14 @@ final class NodeTypeResolver
     private $reflectionProvider;
 
     /**
-     * @var NodeTypeCorrector\HasOffsetTypeCorrector
+     * @var HasOffsetTypeCorrector
      */
     private $hasOffsetTypeCorrector;
+
+    /**
+     * @var IdentifierTypeResolver
+     */
+    private $identifierTypeResolver;
 
     /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
@@ -99,6 +106,7 @@ final class NodeTypeResolver
         UnionTypeFactory $unionTypeFactory,
         ReflectionProvider $reflectionProvider,
         HasOffsetTypeCorrector $hasOffsetTypeCorrector,
+        IdentifierTypeResolver $identifierTypeResolver,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -111,6 +119,7 @@ final class NodeTypeResolver
         $this->unionTypeFactory = $unionTypeFactory;
         $this->reflectionProvider = $reflectionProvider;
         $this->hasOffsetTypeCorrector = $hasOffsetTypeCorrector;
+        $this->identifierTypeResolver = $identifierTypeResolver;
     }
 
     /**
@@ -173,6 +182,11 @@ final class NodeTypeResolver
         }
 
         if (! $node instanceof Expr) {
+            // scalar type, e.g. from param type name
+            if ($node instanceof Identifier) {
+                return $this->identifierTypeResolver->resolve($node);
+            }
+
             return new MixedType();
         }
 

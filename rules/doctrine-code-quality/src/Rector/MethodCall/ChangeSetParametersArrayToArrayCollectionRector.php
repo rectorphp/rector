@@ -151,7 +151,7 @@ CODE_SAMPLE
 
         // compare root variable
         $rootExpr = $this->fluentChainMethodCallNodeAnalyzer->resolveRootMethodCall($methodCall);
-        if ($rootExpr === null) {
+        if (! $rootExpr instanceof MethodCall) {
             return true;
         }
 

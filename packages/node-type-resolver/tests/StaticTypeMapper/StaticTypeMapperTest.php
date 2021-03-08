@@ -88,6 +88,9 @@ final class StaticTypeMapperTest extends AbstractKernelTestCase
         $this->assertInstanceOf($expectedType, $phpStanType);
     }
 
+    /**
+     * @return Iterator<class-string<IterableType>[]|Identifier[]>
+     */
     public function provideDataForMapPhpParserNodePHPStanType(): Iterator
     {
         yield [new Identifier('iterable'), IterableType::class];

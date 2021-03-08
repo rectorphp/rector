@@ -24,6 +24,9 @@ final class MoveEntitiesToEntityDirectoryRectorTest extends AbstractRectorTestCa
         $this->assertFileWithContentWasAdded($expectedAddedFileWithContent);
     }
 
+    /**
+     * @return Iterator<AddedFileWithContent[]|SmartFileInfo[]>
+     */
     public function provideData(): Iterator
     {
         $smartFileSystem = new SmartFileSystem();

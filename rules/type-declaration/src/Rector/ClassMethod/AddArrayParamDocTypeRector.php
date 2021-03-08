@@ -144,7 +144,7 @@ CODE_SAMPLE
         $paramType = $this->nodeTypeResolver->resolve($param->type);
 
         // weird case for maybe interface
-        if ($paramType->isIterable()->maybe() && $paramType instanceof ObjectType) {
+        if ($paramType->isIterable()->maybe() && ($paramType instanceof ObjectType)) {
             return true;
         }
 
