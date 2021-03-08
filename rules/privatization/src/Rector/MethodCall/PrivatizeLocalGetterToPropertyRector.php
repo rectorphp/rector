@@ -110,10 +110,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $onlyStmt->expr instanceof PropertyFetch) {
+        $returnedExpr = $onlyStmt->expr;
+        if (! $returnedExpr instanceof PropertyFetch) {
             return null;
         }
 
-        return $onlyStmt->expr;
+        return $returnedExpr;
     }
 }
