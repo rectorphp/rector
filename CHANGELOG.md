@@ -1,5 +1,10 @@
-
 # Changelog
+
+**For future releases, we won't use CHANGELOG.md approach. Instead, we'll use [GitHub releases](https://github.com/rectorphp/rector/releases), that will highlight main important changes and new features we've added.**
+
+See [this issue](https://github.com/symplify/symplify/issues/3027) for more.
+
+---
 
 All notable changes to this project will be documented in this file.
 

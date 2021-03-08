@@ -143,11 +143,18 @@ CODE_SAMPLE
             return true;
         }
 
-        if (count($constType->getValueTypes()) > 3) {
-            foreach ($constType->getValueTypes() as $constValueType) {
-                if ($constValueType instanceof ConstantArrayType) {
-                    return true;
-                }
+        return $this->isHugeNestedConstantArrayTyp($constType);
+    }
+
+    private function isHugeNestedConstantArrayTyp(ConstantArrayType $constantArrayType): bool
+    {
+        if (count($constantArrayType->getValueTypes()) <= 3) {
+            return false;
+        }
+
+        foreach ($constantArrayType->getValueTypes() as $constValueType) {
+            if ($constValueType instanceof ConstantArrayType) {
+                return true;
             }
         }
 
