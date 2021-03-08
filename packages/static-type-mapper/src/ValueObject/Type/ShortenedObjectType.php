@@ -13,6 +13,9 @@ final class ShortenedObjectType extends ObjectType
      */
     private $fullyQualifiedName;
 
+    /**
+     * @param class-string $fullyQualifiedName
+     */
     public function __construct(string $shortName, string $fullyQualifiedName)
     {
         parent::__construct($shortName);

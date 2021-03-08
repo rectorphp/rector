@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Defluent\Rector\Return_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
@@ -108,7 +109,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function matchReturnMethodCall(Return_ $return): ?MethodCall
+    private function matchReturnMethodCall(Return_ $return): ?Expr
     {
         if ($return->expr === null) {
             return null;

@@ -15,4 +15,9 @@ class EntityRepository
      * @var EntityManager
      */
     protected $_em;
+
+    public function createQueryBuilder(): QueryBuilder
+    {
+        return new QueryBuilder();
+    }
 }

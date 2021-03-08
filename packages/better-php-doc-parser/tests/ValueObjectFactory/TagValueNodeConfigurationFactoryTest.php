@@ -61,6 +61,9 @@ final class TagValueNodeConfigurationFactoryTest extends AbstractKernelTestCase
         $this->assertSame(':', $tagValueNodeConfiguration->getArrayEqualSign());
     }
 
+    /**
+     * @return Iterator<string[]>
+     */
     public function provideData(): Iterator
     {
         yield ['(type="integer", nullable=true, options={"default":0})'];

@@ -4,15 +4,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclaration
 
 class KnownStaticNullable
 {
-    public function getMoreItems()
-    {
-        if ((bool) rand(0, 100)) {
-            return null;
-        }
-
-        return [];
-    }
-
     public function getStringNull()
     {
         /** @var string|null $value */
@@ -30,15 +21,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclaration
 
 class KnownStaticNullable
 {
-    public function getMoreItems(): ?array
-    {
-        if ((bool) rand(0, 100)) {
-            return null;
-        }
-
-        return [];
-    }
-
     public function getStringNull(): ?string
     {
         /** @var string|null $value */

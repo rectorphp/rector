@@ -72,6 +72,9 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
         $this->assertSame($currentName, $actualPropertyRename->getCurrentName());
     }
 
+    /**
+     * @return Iterator<string[]|SmartFileInfo[]>
+     */
     public function provideData(): Iterator
     {
         yield [new SmartFileInfo(__DIR__ . '/Fixture/skip_some_class.php.inc'), 'eliteManager', 'eventManager'];

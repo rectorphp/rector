@@ -60,6 +60,9 @@ final class TypeNodeAnalyzerTest extends AbstractKernelTestCase
         $this->assertSame($expectedIs, $isIntersection);
     }
 
+    /**
+     * @return Iterator<IntersectionTypeNode[]|bool[]>
+     */
     public function provideDataForIntersectionAndNotNullable(): Iterator
     {
         yield [new IntersectionTypeNode([new IdentifierTypeNode(self::INT)]), true];

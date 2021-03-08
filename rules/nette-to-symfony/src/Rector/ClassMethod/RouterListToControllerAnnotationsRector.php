@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory;
 use Rector\Core\Rector\AbstractRector;
@@ -229,7 +228,7 @@ CODE_SAMPLE
 
             if ($node->expr instanceof StaticCall) {
                 // for custom static route factories
-                return $this->isRouteStaticCallMatch($node->expr);
+                return $this->nodeTypeResolver->isObjectType($node->expr, new ObjectType('Nette\Application\IRouter'));
             }
 
             return false;
@@ -296,39 +295,6 @@ CODE_SAMPLE
                 );
             }
         }
-    }
-
-    private function isRouteStaticCallMatch(StaticCall $staticCall): bool
-    {
-        $className = $this->getName($staticCall->class);
-        if ($className === null) {
-            return false;
-        }
-
-        $methodName = $this->getName($staticCall->name);
-        if ($methodName === null) {
-            return false;
-        }
-
-        if (! $this->reflectionProvider->hasClass($className)) {
-            return false;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($className);
-        if (! $classReflection->hasMethod($methodName)) {
-            return false;
-        }
-
-        $methodReflection = $classReflection->getNativeMethod($methodName);
-        $parametersAcceptor = $methodReflection->getVariants()[0];
-
-        $returnType = $parametersAcceptor->getReturnType();
-
-        if ($returnType instanceof TypeWithClassName) {
-            return is_a($returnType->getClassName(), 'Nette\Application\IRouter', true);
-        }
-
-        return false;
     }
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool

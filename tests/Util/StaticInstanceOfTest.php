@@ -15,6 +15,7 @@ final class StaticInstanceOfTest extends TestCase
     /**
      * @dataProvider provideIsOneOf()
      * @param class-string[] $array
+     * @param DateTime|stdClass|null $object
      */
     public function testIsOneOf(?object $object, array $array, bool $expected): void
     {

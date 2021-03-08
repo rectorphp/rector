@@ -1,16 +1,20 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\Inheritance;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\FixtureInheritance;
 
-class A {
+class A
+{
     /** @return A */
-    public function test() {
+    public function test()
+    {
         return $this;
     }
 }
 
-class B extends A {
-    public function test() {
+class B extends A
+{
+    public function test()
+    {
         return $this;
     }
 }
@@ -19,16 +23,20 @@ class B extends A {
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\Inheritance;
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\FixtureInheritance;
 
-class A {
-    public function test(): self {
+class A
+{
+    public function test(): self
+    {
         return $this;
     }
 }
 
-class B extends A {
-    public function test(): \Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture\Inheritance\A {
+class B extends A
+{
+    public function test(): \Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\FixtureInheritance\A
+    {
         return $this;
     }
 }

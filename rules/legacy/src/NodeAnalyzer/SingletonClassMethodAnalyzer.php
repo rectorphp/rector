@@ -116,13 +116,17 @@ final class SingletonClassMethodAnalyzer
                 return $expr->left;
             }
         }
+
         // matching: "! self::$static"
         if (! $expr instanceof BooleanNot) {
             return null;
         }
-        if (! $expr->expr instanceof StaticPropertyFetch) {
+
+        $negatedExpr = $expr->expr;
+        if (! $negatedExpr instanceof StaticPropertyFetch) {
             return null;
         }
-        return $expr->expr;
+
+        return $negatedExpr;
     }
 }

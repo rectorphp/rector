@@ -200,7 +200,7 @@ CODE_SAMPLE
     private function matchMethodCall(MethodCall $methodCall): ?ObjectType
     {
         foreach ($this->callsToFluent as $callToFluent) {
-            if (! $this->isObjectType($methodCall, $callToFluent->getObjectType())) {
+            if (! $this->isObjectType($methodCall->var, $callToFluent->getObjectType())) {
                 continue;
             }
 

@@ -53,6 +53,9 @@ final class StaticRectorStringsTest extends TestCase
         $this->assertSame($expected, StaticRectorStrings::underscoreToCamelCase($content));
     }
 
+    /**
+     * @return Iterator<string[]>
+     */
     public function provideDataForUnderscoreToCamelCase(): Iterator
     {
         yield ['simple_test', 'simpleTest'];
@@ -66,6 +69,9 @@ final class StaticRectorStringsTest extends TestCase
         $this->assertSame($expected, StaticRectorStrings::underscoreToPascalCase($content));
     }
 
+    /**
+     * @return Iterator<string[]>
+     */
     public function provideDataForUnderscoreToPascalCase(): Iterator
     {
         yield ['simple_test', 'SimpleTest'];

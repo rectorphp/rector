@@ -67,7 +67,7 @@ final class StaticCallToFuncCallRector extends AbstractRector implements Configu
     public function refactor(Node $node): ?Node
     {
         foreach ($this->staticCallsToFunctions as $staticCallToFunction) {
-            if (! $this->isObjectType($node, $staticCallToFunction->getObjectType())) {
+            if (! $this->isObjectType($node->class, $staticCallToFunction->getObjectType())) {
                 continue;
             }
 

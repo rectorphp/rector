@@ -41,6 +41,9 @@ final class ArrayTypeComparatorTest extends AbstractKernelTestCase
         $this->assertSame($areExpectedEqual, $areEqual);
     }
 
+    /**
+     * @return Iterator<ArrayType[]|bool[]>
+     */
     public function provideData(): Iterator
     {
         $unionTypeFactory = new UnionTypeFactory();

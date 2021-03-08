@@ -21,6 +21,7 @@ use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterfac
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
@@ -64,7 +65,9 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
         }
 
         if ($type instanceof GenericObjectType) {
-            if (Strings::contains($type->getClassName(), '\\')) {
+            if ($type instanceof FullyQualifiedGenericObjectType) {
+                $name = '\\' . $type->getClassName();
+            } elseif (Strings::contains($type->getClassName(), '\\')) {
                 $name = '\\' . $type->getClassName();
             } else {
                 $name = $type->getClassName();
@@ -103,14 +106,22 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
         if ($type instanceof FullyQualifiedObjectType) {
             return new FullyQualified($type->getClassName());
         }
+
         if (! $type instanceof GenericObjectType) {
             // fallback
             return new FullyQualified($type->getClassName());
         }
+
+        if ($type->getClassName() === 'iterable') {
+            // fallback
+            return new Name('iterable');
+        }
+
         if ($type->getClassName() !== 'object') {
             // fallback
             return new FullyQualified($type->getClassName());
         }
+
         return new Name('object');
     }
 

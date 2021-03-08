@@ -14,7 +14,7 @@ final class ConstantReferenceRouterFactory
         $routeList = new RouteList();
 
         // case of single action controller, usually get() or __invoke() method
-        $routeList[] = Route::get(self::SOME_PATH, ConstantReferenceSomePresenter::class);
+        $routeList[] = new Route(self::SOME_PATH, ConstantReferenceSomePresenter::class);
 
         return $routeList;
     }
@@ -51,7 +51,7 @@ final class ConstantReferenceRouterFactory
 final class ConstantReferenceSomePresenter
 {
     /**
-     * @\Symfony\Component\Routing\Annotation\Route(path="/some-path", methods={"GET"})
+     * @\Symfony\Component\Routing\Annotation\Route(path="/some-path")
      */
     public function run()
     {

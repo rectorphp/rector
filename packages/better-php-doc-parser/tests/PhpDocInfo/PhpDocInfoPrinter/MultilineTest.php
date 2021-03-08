@@ -49,6 +49,9 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         yield [__DIR__ . '/Source/Multiline/multiline5.txt', new Nop()];
     }
 
+    /**
+     * @return Iterator<string[]|Class_[]>
+     */
     public function provideDataClass(): Iterator
     {
         yield [__DIR__ . '/Source/Class_/some_entity_class.txt', new Class_(SomeEntityClass::class)];

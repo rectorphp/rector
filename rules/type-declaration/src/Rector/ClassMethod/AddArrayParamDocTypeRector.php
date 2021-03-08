@@ -9,9 +9,11 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadDocBlock\TagRemover\ParamTagRemover;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -33,10 +35,19 @@ final class AddArrayParamDocTypeRector extends AbstractRector
      */
     private $phpDocTypeChanger;
 
-    public function __construct(ParamTypeInferer $paramTypeInferer, PhpDocTypeChanger $phpDocTypeChanger)
-    {
+    /**
+     * @var ParamTagRemover
+     */
+    private $paramTagRemover;
+
+    public function __construct(
+        ParamTypeInferer $paramTypeInferer,
+        PhpDocTypeChanger $phpDocTypeChanger,
+        ParamTagRemover $paramTagRemover
+    ) {
         $this->paramTypeInferer = $paramTypeInferer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->paramTagRemover = $paramTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -105,17 +116,17 @@ CODE_SAMPLE
                 continue;
             }
 
-            $type = $this->paramTypeInferer->inferParam($param);
-            if ($type instanceof MixedType) {
+            $paramType = $this->paramTypeInferer->inferParam($param);
+            if ($paramType instanceof MixedType) {
                 continue;
             }
 
             $paramName = $this->getName($param);
-
-            $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
+            $this->phpDocTypeChanger->changeParamType($phpDocInfo, $paramType, $param, $paramName);
         }
 
         if ($phpDocInfo->hasChanged()) {
+            $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
             return $node;
         }
 
@@ -130,28 +141,34 @@ CODE_SAMPLE
         }
 
         // not an array type
-        if (! $this->isName($param->type, 'array')) {
+        $paramType = $this->nodeTypeResolver->resolve($param->type);
+
+        // weird case for maybe interface
+        if ($paramType->isIterable()->maybe() && ($paramType instanceof ObjectType)) {
             return true;
         }
 
-        // not an array type
-        $paramStaticType = $this->getStaticType($param);
-        if ($paramStaticType instanceof MixedType) {
+        $isArrayable = $paramType->isIterable()
+            ->yes() || $paramType->isArray()
+            ->yes() || ($paramType->isIterable()->maybe() || $paramType->isArray()->maybe());
+        if (! $isArrayable) {
+            return true;
+        }
+
+        return $this->isArrayExplicitMixed($paramType);
+    }
+
+    private function isArrayExplicitMixed(Type $type): bool
+    {
+        if (! $type instanceof ArrayType) {
             return false;
         }
 
-        if (! $paramStaticType instanceof ArrayType) {
-            return true;
+        $iterableValueType = $type->getIterableValueType();
+        if (! $iterableValueType instanceof MixedType) {
+            return false;
         }
 
-        if (! $paramStaticType->getIterableValueType() instanceof MixedType) {
-            return true;
-        }
-
-        // is defined mixed[] explicitly
-        /** @var MixedType $mixedType */
-        $mixedType = $paramStaticType->getIterableValueType();
-
-        return $mixedType->isExplicitMixed();
+        return $iterableValueType->isExplicitMixed();
     }
 }

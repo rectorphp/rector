@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -32,9 +33,17 @@ final class ChangeSetParametersArrayToArrayCollectionRector extends AbstractRect
      */
     private $arrayTypeAnalyzer;
 
-    public function __construct(ArrayTypeAnalyzer $arrayTypeAnalyzer)
-    {
+    /**
+     * @var FluentChainMethodCallNodeAnalyzer
+     */
+    private $fluentChainMethodCallNodeAnalyzer;
+
+    public function __construct(
+        ArrayTypeAnalyzer $arrayTypeAnalyzer,
+        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
+    ) {
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
+        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
 
     /**
@@ -131,16 +140,22 @@ CODE_SAMPLE
             return true;
         }
 
-        //one of the cases when we are in the repo and it's extended from EntityRepository
+        // one of the cases when we are in the repo and it's extended from EntityRepository
         if (! $this->isObjectType($classLike, new ObjectType('Doctrine\ORM\EntityRepository'))) {
             return true;
         }
 
-        if (! $this->isObjectType($methodCall->var, new ObjectType('Doctrine\ORM\EntityRepository'))) {
+        if (! $this->isName($methodCall->name, 'setParameters')) {
             return true;
         }
 
-        return ! $this->isName($methodCall->name, 'setParameters');
+        // compare root variable
+        $rootExpr = $this->fluentChainMethodCallNodeAnalyzer->resolveRootMethodCall($methodCall);
+        if (! $rootExpr instanceof MethodCall) {
+            return true;
+        }
+
+        return ! $this->isObjectType($rootExpr, new ObjectType('Doctrine\ORM\QueryBuilder'));
     }
 
     private function getNewArrayCollectionFromSetParametersArgument(Arg $arg): New_
