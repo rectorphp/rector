@@ -37,6 +37,9 @@ final class NullableTypeNodeMapper implements PhpParserNodeMapperInterface
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }
 
+    /**
+     * @return class-string<\PhpParser\Node>
+     */
     public function getNodeType(): string
     {
         return NullableType::class;

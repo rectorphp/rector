@@ -22,6 +22,9 @@ final class IdentifierNodeMapper implements PhpParserNodeMapperInterface
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
     }
 
+    /**
+     * @return class-string<\PhpParser\Node>
+     */
     public function getNodeType(): string
     {
         return Identifier::class;

@@ -15,6 +15,9 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
 {
+    /**
+     * @return class-string<\PhpParser\Node>
+     */
     public function getNodeType(): string
     {
         return FullyQualified::class;
