@@ -78,11 +78,19 @@ final class ClassStringTypeMapper implements TypeMapperInterface, PHPStanStaticT
 
     private function normalizeType(string $classType): string
     {
+<<<<<<< HEAD
         if (is_a($classType, Expr::class, true)) {
             return Expr::class;
         }
 
         if (is_a($classType, Node::class, true)) {
+=======
+        if (is_a($classType, Node\Expr::class, true)) {
+            return Node\Expr::class;
+        }
+
+        if (is_a($classType, \PhpParser\Node::class, true)) {
+>>>>>>> 6508c4483... improve array-string-class type
             return Node::class;
         }
 
