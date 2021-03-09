@@ -179,21 +179,11 @@ final class TypeComparator
             $firstFqnClassName = $this->nodeTypeResolver->getFullyQualifiedClassName($firstArrayItemType);
             $secondFqnClassName = $this->nodeTypeResolver->getFullyQualifiedClassName($secondArrayItemType);
 
-            if (! $this->reflectionProvider->hasClass($firstFqnClassName)) {
-                return false;
-            }
-
-            if (! $this->reflectionProvider->hasClass($secondFqnClassName)) {
-                return false;
-            }
-
-            $firstClassReflection = $this->reflectionProvider->getClass($firstFqnClassName);
-            if ($firstClassReflection->isSubclassOf($secondFqnClassName)) {
+            if (is_a($firstFqnClassName, $secondFqnClassName, true)) {
                 return true;
             }
 
-            $secondClassReflection = $this->reflectionProvider->getClass($secondFqnClassName);
-            if ($secondClassReflection->isSubclassOf($firstFqnClassName)) {
+            if (is_a($secondFqnClassName, $firstFqnClassName, true)) {
                 return true;
             }
         }
