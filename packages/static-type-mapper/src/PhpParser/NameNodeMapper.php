@@ -42,6 +42,9 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         $this->reflectionProvider = $reflectionProvider;
     }
 
+    /**
+     * @return class-string<Node>
+     */
     public function getNodeType(): string
     {
         return Name::class;
