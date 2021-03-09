@@ -6,7 +6,6 @@ namespace Rector\NodeTypeResolver\TypeComparator;
 
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\MixedType;
@@ -50,19 +49,13 @@ final class TypeComparator
      */
     private $scalarTypeComparator;
 
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
         TypeHasher $typeHasher,
         TypeNormalizer $typeNormalizer,
         StaticTypeMapper $staticTypeMapper,
         NodeTypeResolver $nodeTypeResolver,
         ArrayTypeComparator $arrayTypeComparator,
-        ScalarTypeComparator $scalarTypeComparator,
-        ReflectionProvider $reflectionProvider
+        ScalarTypeComparator $scalarTypeComparator
     ) {
         $this->typeHasher = $typeHasher;
         $this->typeNormalizer = $typeNormalizer;
@@ -70,7 +63,6 @@ final class TypeComparator
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->arrayTypeComparator = $arrayTypeComparator;
         $this->scalarTypeComparator = $scalarTypeComparator;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function areTypesEqual(Type $firstType, Type $secondType): bool
