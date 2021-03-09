@@ -303,7 +303,7 @@ final class PropertyNaming
     }
 
     /**
-     * @return Node[]
+     * @return ClassMethod[]
      */
     private function getPrefixedClassMethods(Property $property): array
     {
