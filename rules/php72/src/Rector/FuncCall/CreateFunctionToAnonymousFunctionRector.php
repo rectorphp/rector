@@ -16,7 +16,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
@@ -156,7 +155,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Expression[]|Stmt[]
+     * @return Expression[]|Node[]
      */
     private function parseStringToBody(Expr $expr): array
     {
