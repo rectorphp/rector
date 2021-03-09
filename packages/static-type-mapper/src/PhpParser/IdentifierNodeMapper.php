@@ -23,7 +23,7 @@ final class IdentifierNodeMapper implements PhpParserNodeMapperInterface
     }
 
     /**
-     * @return class-string<\PhpParser\Node>
+     * @return class-string<Node>
      */
     public function getNodeType(): string
     {
