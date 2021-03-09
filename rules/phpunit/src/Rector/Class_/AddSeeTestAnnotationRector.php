@@ -25,6 +25,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddSeeTestAnnotationRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const SEE = 'see';
+
+    /**
      * @var TestClassResolver
      */
     private $testClassResolver;
@@ -129,7 +134,7 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-        $seeTags = $phpDocInfo->getTagsByName('see');
+        $seeTags = $phpDocInfo->getTagsByName(self::SEE);
 
         // is the @see annotation already added
         foreach ($seeTags as $seeTag) {
@@ -156,7 +161,7 @@ CODE_SAMPLE
 
     private function hasAlreadySeeAnnotation(PhpDocInfo $phpDocInfo, string $testCaseClassName): bool
     {
-        $seePhpDocTagNodes = $phpDocInfo->getTagsByName('see');
+        $seePhpDocTagNodes = $phpDocInfo->getTagsByName(self::SEE);
 
         foreach ($seePhpDocTagNodes as $seePhpDocTagNode) {
             if (! $seePhpDocTagNode->value instanceof GenericTagValueNode) {
@@ -176,7 +181,7 @@ CODE_SAMPLE
 
     private function removeNonExistingClassSeeAnnotation(PhpDocInfo $phpDocInfo): void
     {
-        $seePhpDocTagNodes = $phpDocInfo->getTagsByName('see');
+        $seePhpDocTagNodes = $phpDocInfo->getTagsByName(self::SEE);
 
         foreach ($seePhpDocTagNodes as $seePhpDocTagNode) {
             if (! $seePhpDocTagNode->value instanceof GenericTagValueNode) {
