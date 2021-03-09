@@ -182,12 +182,12 @@ final class ClassRenamer
             return null;
         }
 
-        $oldLastName = $name->getLast();
+        $last = $name->getLast();
         $newNameName = new FullyQualified($newName);
         $newNameLastName = $newNameName->getLast();
 
         $importNames = $this->parameterProvider->provideParameter(Option::AUTO_IMPORT_NAMES);
-        if ($oldLastName === $newNameLastName && $importNames) {
+        if ($last === $newNameLastName && $importNames) {
             $this->removeUseName($name);
         }
 
