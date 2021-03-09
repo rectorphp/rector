@@ -207,6 +207,10 @@ final class ClassRenamer
             return;
         }
 
+        if ($uses->alias !== null) {
+            return;
+        }
+
         $this->nodeRemover->removeNode($uses);
     }
 
