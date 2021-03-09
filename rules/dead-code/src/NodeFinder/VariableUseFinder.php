@@ -41,7 +41,7 @@ final class VariableUseFinder
 
     /**
      * @param Variable[] $assignedVariables
-     * @return Variable[]
+     * @return Node[]
      */
     public function resolveUsedVariables(Node $node, array $assignedVariables): array
     {

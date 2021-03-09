@@ -83,7 +83,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Variable[]
+     * @return Node[]
      */
     private function findVariableUsages(FunctionLike $functionLike, Assign $assign): array
     {
