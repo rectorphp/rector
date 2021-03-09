@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php73\Rector\Case_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Continue_;
@@ -14,6 +14,9 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
+/**
+ * @see \Rector\Php73\Tests\Rector\Case_\ConvertContinueToBreakRector\ConvertContinueToBreakRectorTest
+ */
 final class ConvertContinueToBreakRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
@@ -64,7 +67,7 @@ BAD_SWITCH,
         return $node;
     }
 
-    private function shouldReplaceWithBreak(Expr $node): bool
+    private function shouldReplaceWithBreak(Stmt $node): bool
     {
         if (!$node instanceof Continue_) {
             return false;
