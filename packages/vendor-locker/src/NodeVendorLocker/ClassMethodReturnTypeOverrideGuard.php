@@ -115,10 +115,8 @@ final class ClassMethodReturnTypeOverrideGuard
         }
 
         // new generic string type is more advanced than old array type
-        if ($oldType instanceof ArrayType && $newType instanceof ArrayType) {
-            if ($oldType->getItemType() instanceof StringType && $newType->getItemType() instanceof GenericClassStringType) {
-                return false;
-            }
+        if ($oldType instanceof ArrayType && $newType instanceof ArrayType && ($oldType->getItemType() instanceof StringType && $newType->getItemType() instanceof GenericClassStringType)) {
+            return false;
         }
 
         if ($oldType->isSuperTypeOf($newType)->yes()) {

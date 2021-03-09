@@ -277,10 +277,12 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
     private function isClassStringArrayType(ArrayType $arrayType): bool
     {
-        if (! $arrayType->getKeyType() instanceof MixedType && ! $arrayType->getKeyType() instanceof ConstantIntegerType) {
-            return false;
+        if ($arrayType->getKeyType() instanceof MixedType) {
+            return $arrayType->getItemType() instanceof GenericClassStringType;
         }
-
-        return $arrayType->getItemType() instanceof GenericClassStringType;
+        if ($arrayType->getKeyType() instanceof ConstantIntegerType) {
+            return $arrayType->getItemType() instanceof GenericClassStringType;
+        }
+        return false;
     }
 }

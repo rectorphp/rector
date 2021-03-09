@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
@@ -77,11 +78,11 @@ final class ClassStringTypeMapper implements TypeMapperInterface, PHPStanStaticT
 
     private function normalizeType(string $classType): string
     {
-        if (is_a($classType, Node\Expr::class, true)) {
-            return Node\Expr::class;
+        if (is_a($classType, Expr::class, true)) {
+            return Expr::class;
         }
 
-        if (is_a($classType, \PhpParser\Node::class, true)) {
+        if (is_a($classType, Node::class, true)) {
             return Node::class;
         }
 
