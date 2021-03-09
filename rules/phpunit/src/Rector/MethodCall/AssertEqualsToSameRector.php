@@ -5,17 +5,13 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PHPStan\Analyser\Scope;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
-use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticInstanceOf;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Renaming\NodeManipulator\IdentifierManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -38,7 +34,7 @@ final class AssertEqualsToSameRector extends AbstractRector
      * - bool because this is taken care of AssertEqualsParameterToSpecificMethodsTypeRector
      * - null because this is taken care of AssertEqualsParameterToSpecificMethodsTypeRector
      *
-     * @var array<class-string<Type>>
+     * @var array<class-string<\PHPStan\Type\Type>>
      */
     private const SCALAR_TYPES = [FloatType::class, IntegerType::class, StringType::class];
 
@@ -102,7 +98,7 @@ final class AssertEqualsToSameRector extends AbstractRector
         }
 
         $valueNode = $node->args[0];
-        $valueNodeType = $this->getNodeType($valueNode->value);
+        $valueNodeType = $this->nodeTypeResolver->resolve($valueNode->value);
         if (! StaticInstanceOf::isOneOf($valueNodeType, self::SCALAR_TYPES)) {
             return null;
         }
@@ -110,13 +106,5 @@ final class AssertEqualsToSameRector extends AbstractRector
         $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
 
         return $node;
-    }
-
-    private function getNodeType(Expr $expr): Type
-    {
-        /** @var Scope $nodeScope */
-        $nodeScope = $expr->getAttribute(AttributeKey::SCOPE);
-
-        return $nodeScope->getType($expr);
     }
 }
