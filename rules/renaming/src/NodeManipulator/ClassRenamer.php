@@ -186,10 +186,9 @@ final class ClassRenamer
         $newNameName = new FullyQualified($newName);
         $newNameLastName = $newNameName->getLast();
 
-        if ($oldLastName === $newNameLastName && $this->parameterProvider->provideParameter(
-            Option::AUTO_IMPORT_NAMES
-        )) {
-            $this->removeUseName($name, $newNameName);
+        $importNames = $this->parameterProvider->provideParameter(Option::AUTO_IMPORT_NAMES);
+        if ($oldLastName === $newNameLastName && $importNames) {
+            $this->removeUseName($name);
         }
 
         $name = new FullyQualified($newName);
@@ -197,13 +196,13 @@ final class ClassRenamer
         return $name;
     }
 
-    private function removeUseName(Name $oldName, Name $newName)
+    private function removeUseName(Name $oldName): void
     {
         $uses = $this->betterNodeFinder->findFirstPreviousOfNode($oldName, function (Node $node) use ($oldName): bool {
             return $node instanceof UseUse && $this->nodeNameResolver->areNamesEqual($node, $oldName);
         });
 
-        if ($uses === null) {
+        if (! $uses instanceof UseUse) {
             return;
         }
 
