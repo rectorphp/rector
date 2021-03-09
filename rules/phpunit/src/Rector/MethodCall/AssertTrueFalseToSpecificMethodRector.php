@@ -89,7 +89,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
         }
 
         $firstArgumentValue = $node->args[0]->value;
-        if ($firstArgumentValue instanceof StaticCall || $firstArgumentValue instanceof MethodCall) {
+        if (! $firstArgumentValue instanceof FuncCall && ! $firstArgumentValue instanceof Empty_) {
             return null;
         }
 

@@ -636,3 +636,8 @@ parameters:
                  - packages/static-type-mapper/src/ValueObject/Type/FullyQualifiedGenericObjectType.php
 
         - '#(.*?) class\-string, string given#'
+
+        -
+            message: '#Strict comparison using \=\=\= between PHPStan\\Type\\Type and null will always evaluate to false#'
+            paths:
+                - packages/node-type-resolver/src/PHPStan/Type/TypeFactory.php
