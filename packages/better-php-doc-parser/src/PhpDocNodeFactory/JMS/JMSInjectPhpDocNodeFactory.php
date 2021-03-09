@@ -44,7 +44,7 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<Inject>>
      */
     public function getClasses(): array
     {
