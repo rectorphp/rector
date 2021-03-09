@@ -116,7 +116,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Node[]
+     * @return Variable[]
      */
     private function resolveAssignedVariables(FunctionLike $functionLike): array
     {
