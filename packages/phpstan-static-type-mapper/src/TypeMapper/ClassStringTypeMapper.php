@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
@@ -39,7 +40,14 @@ final class ClassStringTypeMapper implements TypeMapperInterface, PHPStanStaticT
         $attributeAwareIdentifierTypeNode = new AttributeAwareIdentifierTypeNode('class-string');
 
         if ($type instanceof GenericClassStringType) {
-            $genericTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getGenericType());
+            $genericType = $type->getGenericType();
+            if ($genericType instanceof ObjectType) {
+                $className = $genericType->getClassName();
+                $className = $this->normalizeType($className);
+                $genericType = new ObjectType($className);
+            }
+
+            $genericTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericType);
             return new AttributeAwareGenericTypeNode($attributeAwareIdentifierTypeNode, [$genericTypeNode]);
         }
 
@@ -65,5 +73,18 @@ final class ClassStringTypeMapper implements TypeMapperInterface, PHPStanStaticT
     public function setPHPStanStaticTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
+    }
+
+    private function normalizeType(string $classType): string
+    {
+        if (is_a($classType, Node\Expr::class, true)) {
+            return Node\Expr::class;
+        }
+
+        if (is_a($classType, \PhpParser\Node::class, true)) {
+            return Node::class;
+        }
+
+        return $classType;
     }
 }

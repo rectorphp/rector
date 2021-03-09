@@ -120,7 +120,7 @@ CODE_SAMPLE
 
     /**
      * List of nodes this class checks, classes that implement @see \PhpParser\Node
-     * @return string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
