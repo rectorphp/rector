@@ -33,6 +33,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ *
  * @see https://wiki.php.net/rfc/scalar_type_hints_v5
  * @see https://github.com/nikic/TypeUtil
  * @see https://github.com/nette/type-fixer
@@ -158,20 +159,20 @@ CODE_SAMPLE
             return null;
         }
 
-        $inferedType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
+        $inferedReturnType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
             $node,
             [ReturnTypeDeclarationReturnTypeInferer::class]
         );
 
-        if ($inferedType instanceof MixedType) {
+        if ($inferedReturnType instanceof MixedType) {
             return null;
         }
 
-        if ($this->returnTypeAlreadyAddedChecker->isSameOrBetterReturnTypeAlreadyAdded($node, $inferedType)) {
+        if ($this->returnTypeAlreadyAddedChecker->isSameOrBetterReturnTypeAlreadyAdded($node, $inferedReturnType)) {
             return null;
         }
 
-        return $this->processType($node, $inferedType);
+        return $this->processType($node, $inferedReturnType);
     }
 
     /**
