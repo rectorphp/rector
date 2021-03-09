@@ -57,6 +57,8 @@ final class ConsoleApplication extends Application
 
         $this->addCommands($commands);
         $this->noRectorsLoadedReporter = $noRectorsLoadedReporter;
+
+        $this->setDefaultCommand('process');
     }
 
     public function doRun(InputInterface $input, OutputInterface $output): int
