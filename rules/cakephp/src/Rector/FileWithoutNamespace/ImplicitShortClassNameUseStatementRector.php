@@ -85,7 +85,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Node[]
+     * @return Name[]
      */
     private function findNames(FileWithoutNamespace $fileWithoutNamespace): array
     {
