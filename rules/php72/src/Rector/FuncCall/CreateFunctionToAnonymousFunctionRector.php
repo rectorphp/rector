@@ -155,7 +155,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Expression[]|Node[]
+     * @return Expression[]|\PhpParser\Node\Stmt[]
      */
     private function parseStringToBody(Expr $expr): array
     {
