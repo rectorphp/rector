@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -17,7 +18,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\TestClassResolver\TestClassResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PHPStan\Reflection\ReflectionProvider;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\Class_\AddSeeTestAnnotationRector\AddSeeTestAnnotationRectorTest
@@ -184,7 +184,7 @@ CODE_SAMPLE
             }
 
             $possibleClassName = $seePhpDocTagNode->value->value;
-            if (!$this->isSeeTestCaseClass($possibleClassName)) {
+            if (! $this->isSeeTestCaseClass($possibleClassName)) {
                 continue;
             }
 
