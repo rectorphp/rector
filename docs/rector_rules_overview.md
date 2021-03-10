@@ -11165,6 +11165,22 @@ Makes needles explicit strings
 
 <br>
 
+### ConvertContinueToBreakRector
+
+Replaces continue statement with break
+
+- class: [`Rector\Php73\Rector\Case_\ConvertContinueToBreakRector`](/rules/php73/src/Rector/Case_/ConvertContinueToBreakRector.php)
+
+```diff
+switch(true) {
+    case 1:
+-        continue;
++        break;
+}
+```
+
+<br>
+
 ## Php74
 
 ### AddLiteralSeparatorToNumberRector
