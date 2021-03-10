@@ -51,10 +51,6 @@ BAD_SWITCH,
 
     public function refactor(Node $node): ?Node
     {
-        if (!$node instanceof Case_) {
-            return null;
-        }
-
         $statements = $node->stmts;
 
         foreach ($statements as $i => $statement) {
