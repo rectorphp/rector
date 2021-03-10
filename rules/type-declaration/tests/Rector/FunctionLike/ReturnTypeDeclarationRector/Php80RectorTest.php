@@ -18,6 +18,9 @@ final class Php80RectorTest extends AbstractRectorTestCase
         $this->doTestFileInfo($fileInfo);
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo[]>
+     */
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureForPhp80');
