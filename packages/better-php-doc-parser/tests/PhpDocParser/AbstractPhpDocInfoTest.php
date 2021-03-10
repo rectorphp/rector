@@ -83,11 +83,17 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         $this->doTestContainsTagValueNodeType($nodeWithPhpDocInfo, $tagValueNodeType, $fileInfo);
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo[]>
+     */
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php'): Iterator
     {
         return StaticFixtureFinder::yieldDirectory($directory, $suffix);
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo[]>
+     */
     protected function findFilesFromDirectory(string $directory, string $suffix = '*.php'): Iterator
     {
         return StaticFixtureFinder::yieldDirectory($directory, $suffix);

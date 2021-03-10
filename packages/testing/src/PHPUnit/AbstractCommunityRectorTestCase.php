@@ -79,6 +79,9 @@ abstract class AbstractCommunityRectorTestCase extends AbstractKernelTestCase im
         $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo[]>
+     */
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc'): Iterator
     {
         return StaticFixtureFinder::yieldDirectory($directory, $suffix);

@@ -13,6 +13,7 @@ use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 abstract class AbstractPhpDocInfoPrinterTest extends AbstractKernelTestCase
@@ -47,6 +48,9 @@ abstract class AbstractPhpDocInfoPrinterTest extends AbstractKernelTestCase
         return $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo[]>
+     */
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php'): Iterator
     {
         return StaticFixtureFinder::yieldDirectory($directory, $suffix);
