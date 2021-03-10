@@ -49,6 +49,9 @@ BAD_SWITCH,
         ];
     }
 
+    /**
+     * @param Case_ $node
+     */
     public function refactor(Node $node): ?Node
     {
         $statements = $node->stmts;
