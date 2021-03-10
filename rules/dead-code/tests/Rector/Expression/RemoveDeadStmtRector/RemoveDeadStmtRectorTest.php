@@ -19,6 +19,9 @@ final class RemoveDeadStmtRectorTest extends AbstractRectorTestCase
         $this->doTestFileInfo($fileInfo);
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo[]>
+     */
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
@@ -32,6 +35,9 @@ final class RemoveDeadStmtRectorTest extends AbstractRectorTestCase
         $this->doTestFileInfo($fileInfo);
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo[]>
+     */
     public function provideDataForTestKeepComments(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureRemovedComments');
