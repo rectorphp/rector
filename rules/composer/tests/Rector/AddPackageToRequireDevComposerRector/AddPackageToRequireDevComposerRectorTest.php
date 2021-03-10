@@ -19,6 +19,9 @@ final class AddPackageToRequireDevComposerRectorTest extends AbstractComposerRec
         $this->doTestFileInfo($fileInfo);
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo[]>
+     */
     public function provideData(): Iterator
     {
         return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.json');
