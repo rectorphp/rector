@@ -48,6 +48,9 @@ final class PhpDocTypeMapperTest extends AbstractKernelTestCase
         $this->assertInstanceOf($expectedPHPStanType, $phpStanType);
     }
 
+    /**
+     * @return Iterator<class-string<ArrayType>[]|ArrayShapeNode[]>
+     */
     public function provideData(): Iterator
     {
         $arrayShapeNode = new ArrayShapeNode([new ArrayShapeItemNode(null, true, new IdentifierTypeNode('string'))]);

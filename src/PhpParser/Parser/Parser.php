@@ -45,8 +45,13 @@ final class Parser
         }
 
         $fileContent = $this->smartFileSystem->readFile($fileRealPath);
-        $this->nodesByFile[$fileRealPath] = (array) $this->nikicParser->parse($fileContent);
 
+        $nodes = $this->nikicParser->parse($fileContent);
+        if ($nodes === null) {
+            $nodes = [];
+        }
+
+        $this->nodesByFile[$fileRealPath] = $nodes;
         return $this->nodesByFile[$fileRealPath];
     }
 }

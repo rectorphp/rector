@@ -14,6 +14,7 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\Sorter\TypeInfererSorter;
+use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\VarDocPropertyTypeInferer;
 
@@ -45,10 +46,16 @@ final class PropertyTypeInferer
     private $varDocPropertyTypeInferer;
 
     /**
+     * @var GenericClassStringTypeNormalizer
+     */
+    private $genericClassStringTypeNormalizer;
+
+    /**
      * @param PropertyTypeInfererInterface[] $propertyTypeInferers
      */
     public function __construct(
         TypeInfererSorter $typeInfererSorter,
+        GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
         DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer,
         VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
         TypeFactory $typeFactory,
@@ -60,6 +67,7 @@ final class PropertyTypeInferer
         $this->typeFactory = $typeFactory;
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
+        $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
     }
 
     public function inferProperty(Property $property): Type
@@ -96,7 +104,7 @@ final class PropertyTypeInferer
             }
         }
 
-        return $resolvedType;
+        return $this->genericClassStringTypeNormalizer->normalize($resolvedType);
     }
 
     private function shouldUnionWithDefaultValue(Type $defaultValueType, Type $type): bool

@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
@@ -24,6 +23,7 @@ use Rector\TypeDeclaration\ChildPopulator\ChildReturnPopulator;
 use Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover;
 use Rector\TypeDeclaration\PhpParserTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker;
+use Rector\TypeDeclaration\TypeAnalyzer\ObjectTypeComparator;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
@@ -33,6 +33,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ *
  * @see https://wiki.php.net/rfc/scalar_type_hints_v5
  * @see https://github.com/nikic/TypeUtil
  * @see https://github.com/nette/type-fixer
@@ -77,6 +78,11 @@ final class ReturnTypeDeclarationRector extends AbstractRector
      */
     private $phpParserTypeAnalyzer;
 
+    /**
+     * @var ObjectTypeComparator
+     */
+    private $objectTypeComparator;
+
     public function __construct(
         ReturnTypeInferer $returnTypeInferer,
         ChildReturnPopulator $childReturnPopulator,
@@ -84,7 +90,8 @@ final class ReturnTypeDeclarationRector extends AbstractRector
         NonInformativeReturnTagRemover $nonInformativeReturnTagRemover,
         ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
         VendorLockResolver $vendorLockResolver,
-        PhpParserTypeAnalyzer $phpParserTypeAnalyzer
+        PhpParserTypeAnalyzer $phpParserTypeAnalyzer,
+        ObjectTypeComparator $objectTypeComparator
     ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->returnTypeAlreadyAddedChecker = $returnTypeAlreadyAddedChecker;
@@ -93,6 +100,7 @@ final class ReturnTypeDeclarationRector extends AbstractRector
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->vendorLockResolver = $vendorLockResolver;
         $this->phpParserTypeAnalyzer = $phpParserTypeAnalyzer;
+        $this->objectTypeComparator = $objectTypeComparator;
     }
 
     /**
@@ -151,20 +159,20 @@ CODE_SAMPLE
             return null;
         }
 
-        $inferedType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
+        $inferedReturnType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
             $node,
             [ReturnTypeDeclarationReturnTypeInferer::class]
         );
 
-        if ($inferedType instanceof MixedType) {
+        if ($inferedReturnType instanceof MixedType) {
             return null;
         }
 
-        if ($this->returnTypeAlreadyAddedChecker->isSameOrBetterReturnTypeAlreadyAdded($node, $inferedType)) {
+        if ($this->returnTypeAlreadyAddedChecker->isSameOrBetterReturnTypeAlreadyAdded($node, $inferedReturnType)) {
             return null;
         }
 
-        return $this->processType($node, $inferedType);
+        return $this->processType($node, $inferedReturnType);
     }
 
     /**
@@ -241,7 +249,7 @@ CODE_SAMPLE
         }
 
         $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
-        if ($this->isCurrentObjectTypeSubType($currentType, $inferedType)) {
+        if ($this->objectTypeComparator->isCurrentObjectTypeSubType($currentType, $inferedType)) {
             return true;
         }
 
@@ -270,22 +278,6 @@ CODE_SAMPLE
             // type override with correct one
             $functionLike->returnType = $inferredReturnNode;
         }
-    }
-
-    /**
-     * E.g. current E, new type A, E extends A → true
-     */
-    private function isCurrentObjectTypeSubType(Type $currentType, Type $inferedType): bool
-    {
-        if (! $currentType instanceof ObjectType) {
-            return false;
-        }
-
-        if (! $inferedType instanceof ObjectType) {
-            return false;
-        }
-
-        return is_a($currentType->getClassName(), $inferedType->getClassName(), true);
     }
 
     private function isNullableTypeSubType(Type $currentType, Type $inferedType): bool

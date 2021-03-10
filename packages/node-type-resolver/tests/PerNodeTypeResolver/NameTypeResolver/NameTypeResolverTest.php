@@ -27,6 +27,9 @@ final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
         $this->assertEquals($expectedType, $resolvedType);
     }
 
+    /**
+     * @return Iterator<int[]|string[]|ObjectType[]>
+     */
     public function provideData(): Iterator
     {
         $expectedObjectType = new ObjectType(AnotherClass::class);

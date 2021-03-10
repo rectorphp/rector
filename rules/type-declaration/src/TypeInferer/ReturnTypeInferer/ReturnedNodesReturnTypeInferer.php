@@ -24,6 +24,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
+use Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
@@ -53,16 +54,23 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
      */
     private $typeFactory;
 
+    /**
+     * @var SplArrayFixedTypeNarrower
+     */
+    private $splArrayFixedTypeNarrower;
+
     public function __construct(
         SilentVoidResolver $silentVoidResolver,
         NodeTypeResolver $nodeTypeResolver,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        TypeFactory $typeFactory
+        TypeFactory $typeFactory,
+        SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower
     ) {
         $this->silentVoidResolver = $silentVoidResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->typeFactory = $typeFactory;
+        $this->splArrayFixedTypeNarrower = $splArrayFixedTypeNarrower;
     }
 
     /**
@@ -90,13 +98,10 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
         $hasSilentVoid = $this->silentVoidResolver->hasSilentVoid($functionLike);
 
         foreach ($localReturnNodes as $localReturnNode) {
-            if ($localReturnNode->expr === null) {
-                $this->types[] = new VoidType();
-                continue;
-            }
+            $returnedExprType = $this->nodeTypeResolver->getStaticType($localReturnNode);
+            $returnedExprType = $this->splArrayFixedTypeNarrower->narrow($returnedExprType);
 
-            $exprType = $this->nodeTypeResolver->getStaticType($localReturnNode->expr);
-            $this->types[] = $exprType;
+            $this->types[] = $returnedExprType;
         }
 
         if ($hasSilentVoid) {

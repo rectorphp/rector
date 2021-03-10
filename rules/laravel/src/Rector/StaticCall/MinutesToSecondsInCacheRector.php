@@ -114,7 +114,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->typeToTimeMethodsAndPositions as $typeToTimeMethodAndPosition) {
-            if (! $this->isObjectType($node, $typeToTimeMethodAndPosition->getObjectType())) {
+            if (! $this->isObjectType(
+                $node instanceof MethodCall ? $node->var : $node->class,
+                $typeToTimeMethodAndPosition->getObjectType()
+            )) {
                 continue;
             }
 

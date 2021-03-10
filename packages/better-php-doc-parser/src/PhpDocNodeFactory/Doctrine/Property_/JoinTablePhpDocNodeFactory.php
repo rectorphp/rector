@@ -55,7 +55,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<JoinTable>>
      */
     public function getClasses(): array
     {

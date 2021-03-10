@@ -82,6 +82,11 @@ final class AssertFalseStrposToContainsRector extends AbstractRector
         if ($firstArgumentValue instanceof StaticCall) {
             return null;
         }
+
+        if ($firstArgumentValue instanceof MethodCall) {
+            return null;
+        }
+
         if (! $this->isNames($firstArgumentValue, ['strpos', 'stripos'])) {
             return null;
         }

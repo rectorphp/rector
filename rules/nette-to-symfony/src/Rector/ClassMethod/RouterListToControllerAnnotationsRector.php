@@ -11,9 +11,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory;
 use Rector\Core\Rector\AbstractRector;
@@ -65,11 +63,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $routerObjectTypes = [];
 
     /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
      * @var ObjectType
      */
     private $routeListObjectType;
@@ -78,14 +71,12 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
         ExplicitRouteAnnotationDecorator $explicitRouteAnnotationDecorator,
         ReturnTypeInferer $returnTypeInferer,
         RouteInfoFactory $routeInfoFactory,
-        SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory,
-        ReflectionProvider $reflectionProvider
+        SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory
     ) {
         $this->routeInfoFactory = $routeInfoFactory;
         $this->returnTypeInferer = $returnTypeInferer;
         $this->explicitRouteAnnotationDecorator = $explicitRouteAnnotationDecorator;
         $this->symfonyRouteTagValueNodeFactory = $symfonyRouteTagValueNodeFactory;
-        $this->reflectionProvider = $reflectionProvider;
 
         $this->routerObjectTypes = [
             new ObjectType('Nette\Application\IRouter'),
@@ -154,7 +145,7 @@ CODE_SAMPLE
 
     /**
      * List of nodes this class checks, classes that implement @see \PhpParser\Node
-     * @return string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
@@ -229,7 +220,7 @@ CODE_SAMPLE
 
             if ($node->expr instanceof StaticCall) {
                 // for custom static route factories
-                return $this->isRouteStaticCallMatch($node->expr);
+                return $this->nodeTypeResolver->isObjectType($node->expr, new ObjectType('Nette\Application\IRouter'));
             }
 
             return false;
@@ -296,39 +287,6 @@ CODE_SAMPLE
                 );
             }
         }
-    }
-
-    private function isRouteStaticCallMatch(StaticCall $staticCall): bool
-    {
-        $className = $this->getName($staticCall->class);
-        if ($className === null) {
-            return false;
-        }
-
-        $methodName = $this->getName($staticCall->name);
-        if ($methodName === null) {
-            return false;
-        }
-
-        if (! $this->reflectionProvider->hasClass($className)) {
-            return false;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($className);
-        if (! $classReflection->hasMethod($methodName)) {
-            return false;
-        }
-
-        $methodReflection = $classReflection->getNativeMethod($methodName);
-        $parametersAcceptor = $methodReflection->getVariants()[0];
-
-        $returnType = $parametersAcceptor->getReturnType();
-
-        if ($returnType instanceof TypeWithClassName) {
-            return is_a($returnType->getClassName(), 'Nette\Application\IRouter', true);
-        }
-
-        return false;
     }
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool

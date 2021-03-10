@@ -7,6 +7,7 @@ namespace Rector\NodeTypeResolver\TypeComparator;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -82,6 +83,7 @@ final class TypeComparator
             return true;
         }
 
+        // is template of
         return $this->areArrayTypeWithSingleObjectChildToParent($firstType, $secondType);
     }
 
@@ -143,9 +145,28 @@ final class TypeComparator
         if (! $secondType instanceof ArrayType) {
             return false;
         }
+
         $firstArrayItemType = $firstType->getItemType();
         $secondArrayItemType = $secondType->getItemType();
 
+        if ($this->isMutualObjectSubtypes($firstArrayItemType, $secondArrayItemType)) {
+            return true;
+        }
+
+        if (! $firstArrayItemType instanceof GenericClassStringType) {
+            return false;
+        }
+
+        if (! $secondArrayItemType instanceof GenericClassStringType) {
+            return false;
+        }
+
+        // @todo resolve later better with template map, @see https://github.com/symplify/symplify/pull/3034/commits/4f6be8b87e52117b1aa1613b9b689ae958a9d6f4
+        return $firstArrayItemType->getGenericType() instanceof ObjectType && $secondArrayItemType->getGenericType() instanceof ObjectType;
+    }
+
+    private function isMutualObjectSubtypes(Type $firstArrayItemType, Type $secondArrayItemType): bool
+    {
         if ($firstArrayItemType instanceof ObjectType && $secondArrayItemType instanceof ObjectType) {
             $firstFqnClassName = $this->nodeTypeResolver->getFullyQualifiedClassName($firstArrayItemType);
             $secondFqnClassName = $this->nodeTypeResolver->getFullyQualifiedClassName($secondArrayItemType);

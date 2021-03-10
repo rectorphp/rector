@@ -23,6 +23,9 @@ final class FormControlToControllerAndFormTypeRectorTest extends AbstractRectorT
         $this->doTestExtraFile($expectedExtraFileName, $expectedExtraContentFilePath);
     }
 
+    /**
+     * @return Iterator<string[]|SmartFileInfo[]>
+     */
     public function provideData(): Iterator
     {
         yield [

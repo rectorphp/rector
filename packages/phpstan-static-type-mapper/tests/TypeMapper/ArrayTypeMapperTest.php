@@ -47,6 +47,9 @@ final class ArrayTypeMapperTest extends AbstractKernelTestCase
         $this->assertSame($expectedResult, (string) $actualTypeNode);
     }
 
+    /**
+     * @return Iterator<string[]|ArrayType[]>
+     */
     public function provideDataWithoutKeys(): Iterator
     {
         $arrayType = new ArrayType(new MixedType(), new StringType());

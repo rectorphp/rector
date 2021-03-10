@@ -13,6 +13,7 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Generic\TemplateTypeParameterStrategy;
 use PHPStan\Type\Generic\TemplateTypeScope;
 use PHPStan\Type\Generic\TemplateTypeVariance;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 
 final class ExtendsTemplateTypeMapFallbackFactory
@@ -101,7 +102,7 @@ final class ExtendsTemplateTypeMapFallbackFactory
             new TemplateTypeParameterStrategy(),
             TemplateTypeVariance::createInvariant(),
             $parentGenericTypeName,
-            $typeWithClassName->getClassName()
+            new ObjectType($typeWithClassName->getClassName())
         );
     }
 }

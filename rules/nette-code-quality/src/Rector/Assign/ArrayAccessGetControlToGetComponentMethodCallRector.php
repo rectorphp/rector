@@ -87,6 +87,8 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isObjectType($assign->expr, new ObjectType('Nette\Application\UI\Presenter'));
+        $arrayDimFetch = $assign->expr;
+
+        return $this->isObjectType($arrayDimFetch->var, new ObjectType('Nette\Application\UI\Presenter'));
     }
 }

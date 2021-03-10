@@ -89,7 +89,6 @@ final class ArrayTypeMapper implements TypeMapperInterface
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         $itemType = $type->getItemType();
-
         if ($itemType instanceof UnionType && ! $type instanceof ConstantArrayType) {
             return $this->createArrayTypeNodeFromUnionType($itemType);
         }
@@ -158,6 +157,10 @@ final class ArrayTypeMapper implements TypeMapperInterface
             return false;
         }
 
+        if ($this->isClassStringArrayType($arrayType)) {
+            return true;
+        }
+
         // skip simple arrays, like "string[]", from converting to obvious "array<int, string>"
         if ($this->isIntegerKeyAndNonNestedArray($arrayType)) {
             return false;
@@ -189,8 +192,13 @@ final class ArrayTypeMapper implements TypeMapperInterface
     private function createGenericArrayType(ArrayType $arrayType, bool $withKey = false): AttributeAwareGenericTypeNode
     {
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType->getItemType());
-
         $attributeAwareIdentifierTypeNode = new AttributeAwareIdentifierTypeNode('array');
+
+        // is class-string[] list only
+        if ($this->isClassStringArrayType($arrayType)) {
+            $withKey = false;
+        }
+
         if ($withKey) {
             $keyTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType->getKeyType());
             $genericTypes = [$keyTypeNode, $itemTypeNode];
@@ -265,5 +273,16 @@ final class ArrayTypeMapper implements TypeMapperInterface
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericClassStringType);
 
         return new AttributeAwareGenericTypeNode(new AttributeAwareIdentifierTypeNode('array'), [$itemTypeNode]);
+    }
+
+    private function isClassStringArrayType(ArrayType $arrayType): bool
+    {
+        if ($arrayType->getKeyType() instanceof MixedType) {
+            return $arrayType->getItemType() instanceof GenericClassStringType;
+        }
+        if ($arrayType->getKeyType() instanceof ConstantIntegerType) {
+            return $arrayType->getItemType() instanceof GenericClassStringType;
+        }
+        return false;
     }
 }

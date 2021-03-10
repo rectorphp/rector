@@ -5,9 +5,9 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclaration
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 
-final class KeepAnonymousExtendedClass
+final class SkipReturnAbstractClassType
 {
-    public function getNodeVisitor(): NodeVisitorAbstract
+    public function create(): NodeVisitor
     {
         return new class extends NodeVisitorAbstract
         {

@@ -46,9 +46,12 @@ final class RectorConfigsResolver
         }
 
         $setFileInfos = $this->setAwareConfigResolver->resolveFromParameterSetsFromConfigFiles([$configFileInfo]);
+
+        /** @var SmartFileInfo[] $configFileInfos */
         $configFileInfos = array_merge([$configFileInfo], $setFileInfos);
 
         $this->resolvedConfigFileInfos[$hash] = $configFileInfos;
+
         return $configFileInfos;
     }
 

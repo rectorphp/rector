@@ -47,7 +47,7 @@ final class StaticAnalyzer
         }
 
         // probably magic method → we don't know
-        if (! $classReflection->hasMethod($methodName)) {
+        if (! $classReflection->hasNativeMethod($methodName)) {
             return false;
         }
 

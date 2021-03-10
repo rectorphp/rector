@@ -21,12 +21,15 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocClassRenamer;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class ClassRenamer
 {
@@ -75,6 +78,16 @@ final class ClassRenamer
      */
     private $reflectionProvider;
 
+    /**
+     * @var NodeRemover
+     */
+    private $nodeRemover;
+
+    /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
@@ -83,7 +96,9 @@ final class ClassRenamer
         PhpDocClassRenamer $phpDocClassRenamer,
         PhpDocInfoFactory $phpDocInfoFactory,
         DocBlockClassRenamer $docBlockClassRenamer,
-        ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider,
+        NodeRemover $nodeRemover,
+        ParameterProvider $parameterProvider
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -93,6 +108,8 @@ final class ClassRenamer
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
         $this->reflectionProvider = $reflectionProvider;
+        $this->nodeRemover = $nodeRemover;
+        $this->parameterProvider = $parameterProvider;
     }
 
     /**
@@ -164,11 +181,36 @@ final class ClassRenamer
             // also they might cause some rename
             return null;
         }
+
+        $last = $name->getLast();
+        $newNameName = new FullyQualified($newName);
+        $newNameLastName = $newNameName->getLast();
+
+        $importNames = $this->parameterProvider->provideParameter(Option::AUTO_IMPORT_NAMES);
+        if ($last === $newNameLastName && $importNames) {
+            $this->removeUseName($name);
+        }
+
         $name = new FullyQualified($newName);
-
         $name->setAttribute(AttributeKey::PARENT_NODE, $parentNode);
-
         return $name;
+    }
+
+    private function removeUseName(Name $oldName): void
+    {
+        $uses = $this->betterNodeFinder->findFirstPreviousOfNode($oldName, function (Node $node) use ($oldName): bool {
+            return $node instanceof UseUse && $this->nodeNameResolver->areNamesEqual($node, $oldName);
+        });
+
+        if (! $uses instanceof UseUse) {
+            return;
+        }
+
+        if ($uses->alias !== null) {
+            return;
+        }
+
+        $this->nodeRemover->removeNode($uses);
     }
 
     /**

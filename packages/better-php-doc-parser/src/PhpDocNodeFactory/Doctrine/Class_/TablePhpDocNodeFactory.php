@@ -58,7 +58,7 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<Table>>
      */
     public function getClasses(): array
     {

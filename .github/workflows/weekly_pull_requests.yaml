@@ -12,11 +12,6 @@ jobs:
             matrix:
                 actions:
                     -
-                        name: "Re-Generate CHANGELOG.md"
-                        run: "rm -rf CHANGELOG.md && composer changelog"
-                        branch: 'automated-regenerated-changelog'
-
-                    -
                         name: "Re-Generate Nodes/Rectors Documentation"
                         run: "composer docs"
                         branch: 'automated-regenerated-nodes-rectors-documentation'

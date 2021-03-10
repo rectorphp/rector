@@ -89,9 +89,10 @@ final class AssertPropertyExistsRector extends AbstractRector
         }
 
         $firstArgumentValue = $node->args[0]->value;
-        if ($firstArgumentValue instanceof StaticCall) {
+        if (! $firstArgumentValue instanceof FuncCall) {
             return null;
         }
+
         if (! $this->isName($firstArgumentValue, 'property_exists')) {
             return null;
         }

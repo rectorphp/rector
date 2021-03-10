@@ -61,14 +61,16 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends AbstractRector
         }
 
         $methodCall = $node->expr;
-        if (! $this->isObjectType(
-            $methodCall->var,
-            new ObjectType('Illuminate\Contracts\Foundation\Application')
-        )) {
+        if (! $methodCall->var instanceof ArrayDimFetch) {
             return null;
         }
 
-        if (! $methodCall->var instanceof ArrayDimFetch) {
+        $arrayDimFetch = $methodCall->var;
+
+        if (! $this->isObjectType(
+            $arrayDimFetch->var,
+            new ObjectType('Illuminate\Contracts\Foundation\Application')
+        )) {
             return null;
         }
 

@@ -159,14 +159,11 @@ CODE_SAMPLE
 
     private function matchReturnMethodCall(Return_ $return): ?MethodCall
     {
-        if ($return->expr === null) {
+        $returnExpr = $return->expr;
+        if (! $returnExpr instanceof MethodCall) {
             return null;
         }
 
-        if (! $return->expr instanceof MethodCall) {
-            return null;
-        }
-
-        return $return->expr;
+        return $returnExpr;
     }
 }
