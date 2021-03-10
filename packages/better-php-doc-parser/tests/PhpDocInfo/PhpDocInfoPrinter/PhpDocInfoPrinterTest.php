@@ -27,11 +27,17 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
         );
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo[]>
+     */
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureBasic', '*.txt');
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo[]>
+     */
     public function provideDataCallable(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureCallable', '*.txt');
@@ -47,6 +53,9 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
         $this->assertEmpty($this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo[]>
+     */
     public function provideDataEmpty(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureEmpty', '*.txt');
