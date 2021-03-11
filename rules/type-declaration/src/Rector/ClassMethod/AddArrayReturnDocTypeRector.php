@@ -29,6 +29,7 @@ use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationRe
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Type\Generic\GenericObjectType;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -184,11 +185,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->returnTypeAlreadyAddedChecker->isSameOrBetterReturnTypeAlreadyAdded(
-            $node,
-            $inferredReturnType
-        )) {
-            return null;
+        if ($inferredReturnType instanceof GenericObjectType && $currentReturnType instanceof MixedType) {
+            $types = $inferredReturnType->getTypes();
+            if ($types[0] instanceof MixedType && $types[1] instanceof ArrayType) {
+                return null;
+            }
         }
 
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferredReturnType);
