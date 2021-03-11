@@ -40,7 +40,7 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
     /**
      * @var ReturnTypeAlreadyAddedChecker
      */
-    public $returnTypeAlreadyAddedChecker;
+    private $returnTypeAlreadyAddedChecker;
 
     /**
      * @var ReturnTypeInferer
