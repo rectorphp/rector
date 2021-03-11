@@ -22,6 +22,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\DeadDocBlock\TagRemover\ReturnTagRemover;
 use Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
+use Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker;
 use Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
@@ -78,7 +79,8 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
         PhpDocTypeChanger $phpDocTypeChanger,
         NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType,
         ReturnTagRemover $returnTagRemover,
-        DetailedTypeAnalyzer $detailedTypeAnalyzer
+        DetailedTypeAnalyzer $detailedTypeAnalyzer,
+        ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker
     ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
@@ -87,6 +89,7 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
         $this->normalizeTypeToRespectArrayScalarType = $normalizeTypeToRespectArrayScalarType;
         $this->returnTagRemover = $returnTagRemover;
         $this->detailedTypeAnalyzer = $detailedTypeAnalyzer;
+        $this->returnTypeAlreadyAddedChecker = $returnTypeAlreadyAddedChecker;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -173,6 +176,10 @@ CODE_SAMPLE
         }
 
         if ($this->shouldSkipType($inferredReturnType, $node, $phpDocInfo)) {
+            return null;
+        }
+
+        if ($this->returnTypeAlreadyAddedChecker->isSameOrBetterReturnTypeAlreadyAdded($node, $inferredReturnType)) {
             return null;
         }
 
