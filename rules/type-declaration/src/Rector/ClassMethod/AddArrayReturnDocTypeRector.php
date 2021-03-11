@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -22,14 +23,12 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\DeadDocBlock\TagRemover\ReturnTagRemover;
 use Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
-use Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker;
 use Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PHPStan\Type\Generic\GenericObjectType;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -38,11 +37,6 @@ use PHPStan\Type\Generic\GenericObjectType;
  */
 final class AddArrayReturnDocTypeRector extends AbstractRector
 {
-    /**
-     * @var ReturnTypeAlreadyAddedChecker
-     */
-    private $returnTypeAlreadyAddedChecker;
-
     /**
      * @var ReturnTypeInferer
      */
@@ -85,8 +79,7 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
         PhpDocTypeChanger $phpDocTypeChanger,
         NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType,
         ReturnTagRemover $returnTagRemover,
-        DetailedTypeAnalyzer $detailedTypeAnalyzer,
-        ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker
+        DetailedTypeAnalyzer $detailedTypeAnalyzer
     ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
@@ -95,7 +88,6 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
         $this->normalizeTypeToRespectArrayScalarType = $normalizeTypeToRespectArrayScalarType;
         $this->returnTagRemover = $returnTagRemover;
         $this->detailedTypeAnalyzer = $detailedTypeAnalyzer;
-        $this->returnTypeAlreadyAddedChecker = $returnTypeAlreadyAddedChecker;
     }
 
     public function getRuleDefinition(): RuleDefinition
