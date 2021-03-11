@@ -36,7 +36,7 @@ jobs:
 
             # 3. publish it
             -
-                uses: symplify/github-action-monorepo-split@master
+                uses: symplify/github-action-monorepo-split@1.1
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:

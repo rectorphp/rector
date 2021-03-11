@@ -1,9 +1,9 @@
 name: Build docker images
 on:
     push:
-        # Publish `master` as Docker `latest` image.
+        # Publish `main` as Docker `latest` image.
         branches:
-            - master
+            - main
 
         # Publish `v1.2.3` tags as releases.
         tags:
@@ -36,7 +36,7 @@ jobs:
                   TAG=$(echo "${{ github.ref }}" | sed -e '/refs\/tags\//!d; s,refs/.*/v\?\(.*\),\1,')
                   BRANCH=$(echo "${{ github.ref }}" | sed -e '/refs\/heads\//!d; s,refs/.*/\(.*\),\1,')
 
-                  if [ "master" == "$BRANCH" ]; then
+                  if [ "main" == "$BRANCH" ]; then
                       DOCKER_TAGS="$DOCKER_TAGS php${{ matrix.php-version }}"
                       if [ "8.0" == "${{ matrix.php-version }}" ]; then
                           DOCKER_TAGS="$DOCKER_TAGS latest"

@@ -51,7 +51,7 @@ jobs:
                 with:
                     token: ${{ secrets.GITHUB_TOKEN }}
                     commit-message: "[automated] ${{ matrix.actions.name }}"
-                    base: 'master'
+                    base: 'main'
                     branch: ${{ matrix.actions.branch }}
                     title: '[automated] ${{ matrix.actions.name }}'
                     delete-branch: true
