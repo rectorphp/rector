@@ -45,7 +45,7 @@ final class MissingAtIndexIsFilledWithNull extends \PHPUnit\Framework\TestCase
     public function test(): void
     {
         $mock = $this->createMock(ToBeMocked::class);
-        $mock->method('create')->withConsecutive(['0'], [null], ['2'])->willReturnOnConsecutiveCalls('1', null, '3');
+        $mock->method('create')->withConsecutive(['0'], [$this->any()], ['2'])->willReturnOnConsecutiveCalls('1', null, '3');
     }
 }
 

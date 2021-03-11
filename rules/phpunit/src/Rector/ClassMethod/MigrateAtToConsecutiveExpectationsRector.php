@@ -18,13 +18,14 @@ use PHPParser\Node\Stmt\Expression;
 use PHPUnit\Framework\MockObject\Stub\ReturnReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeFactory\ConsecutiveAssertionFactory;
+use Rector\PHPUnit\Tests\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector\MigrateAtToConsecutiveExpectationsRectorTest;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertTrueFalseToSpecificMethodRector\AssertTrueFalseToSpecificMethodRectorTest
+ * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector\MigrateAtToConsecutiveExpectationsRectorTest
  */
-final class MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector extends AbstractRector
+final class MigrateAtToConsecutiveExpectationsRector extends AbstractRector
 {
     /**
      * @var ConsecutiveAssertionFactory

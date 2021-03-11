@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\ClassMethod\MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector;
+namespace Rector\PHPUnit\Tests\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector;
 
 use Iterator;
-use Rector\PHPUnit\Rector\ClassMethod\MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector;
+use Rector\PHPUnit\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRectorTest extends AbstractRectorTestCase
+final class MigrateAtToConsecutiveExpectationsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRectorTest 
 
     protected function getRectorClass(): string
     {
-        return MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector::class;
+        return MigrateAtToConsecutiveExpectationsRector::class;
     }
 }
