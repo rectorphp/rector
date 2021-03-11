@@ -12,13 +12,13 @@ use PHPParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PHPParser\Node\Expr\Variable;
 use PHPParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PHPParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPParser\Node\Stmt\Expression;
 use PHPUnit\Framework\MockObject\Stub\ReturnReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeFactory\ConsecutiveAssertionFactory;
-use Rector\PHPUnit\Tests\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector\MigrateAtToConsecutiveExpectationsRectorTest;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -320,7 +320,7 @@ final class MigrateAtToConsecutiveExpectationsRector extends AbstractRector
 
         if ($methodCall->name->name === 'willReturnReference') {
             return new Expr\New_(
-                new Name(ReturnReference::class),
+                new FullyQualified(ReturnReference::class),
                 [new Arg($methodCall->args[0]->value)]
             );
         }

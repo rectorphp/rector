@@ -67,7 +67,7 @@ final class DifferentReturnValues extends \PHPUnit\Framework\TestCase
     {
         $mock = $this->createMock(ToBeMocked::class);
         $reference = '2';
-        $mock->method('create')->willReturnOnConsecutiveCalls('1', new PHPUnit\Framework\MockObject\Stub\ReturnReference($reference), $this->returnValueMap(['foo' => 'bar']), $this->returnArgument(1), $this->returnCallback(static function () {
+        $mock->method('create')->willReturnOnConsecutiveCalls('1', new \PHPUnit\Framework\MockObject\Stub\ReturnReference($reference), $this->returnValueMap(['foo' => 'bar']), $this->returnArgument(1), $this->returnCallback(static function () {
             return null;
         }), $this->returnSelf(), $this->throwException(new \Exception()));
     }
