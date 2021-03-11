@@ -15,6 +15,7 @@ use PHPParser\Node\Name;
 use PHPParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPParser\Node\Stmt\Expression;
+use PHPUnit\Framework\MockObject\Stub\ReturnReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeFactory\ConsecutiveAssertionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -68,19 +69,21 @@ final class MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector exte
                 continue;
             }
             if ($stmt->expr instanceof MethodCall) {
-                if ($stmt->expr->name->name === 'willReturn') {
-                    $willReturn = $stmt->expr;
-                    if ($willReturn->name->name !== 'willReturn') {
-                        continue;
-                    }
-                    if (count($willReturn->args) !== 1) {
-                        continue;
-                    }
-                    $willReturnArg = $willReturn->args[0];
-                    $willReturnValue = $willReturnArg->value;
+                $transformableWillStatements = [
+                    'will',
+                    'willReturn',
+                    'willReturnReference',
+                    'willReturnMap',
+                    'willReturnArgument',
+                    'willReturnCallback',
+                    'willReturnSelf',
+                    'willThrowException',
+                ];
+                if (in_array($stmt->expr->name->name, $transformableWillStatements)) {
+                    $willReturnValue = $this->getReturnExpr($stmt->expr);
 
                     /** @var MethodCall $method */
-                    $method = $willReturn->var;
+                    $method = $stmt->expr->var;
                 } else {
                     $willReturnValue = null;
                     $method = $stmt->expr;
@@ -298,5 +301,43 @@ final class MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector exte
             }
         }
         return $mockEntries;
+    }
+
+    private function getReturnExpr(MethodCall $methodCall): Expr
+    {
+        if ($methodCall->name->name === 'will') {
+            return $methodCall->args[0]->value;
+        }
+
+        if ($methodCall->name->name === 'willReturnSelf') {
+            return new MethodCall(
+                new Variable(new Name('this')),
+                new Name('returnSelf'),
+                []
+            );
+        }
+
+        if ($methodCall->name->name === 'willReturnReference') {
+            return new Expr\New_(
+                new Name(ReturnReference::class),
+                [new Arg($methodCall->args[0]->value)]
+            );
+        }
+
+        $replaceMap = [
+            'willReturnMap' => 'returnValueMap',
+            'willReturnArgument' => 'returnArgument',
+            'willReturnCallback' => 'returnCallback',
+            'willThrowException' => 'throwException',
+        ];
+        if (array_key_exists($methodCall->name->name, $replaceMap)) {
+            return new MethodCall(
+                new Variable(new Name('this')),
+                new Name($replaceMap[$methodCall->name->name]),
+                [new Arg($methodCall->args[0]->value)]
+            );
+        }
+
+        return $methodCall->args[0]->value;
     }
 }
