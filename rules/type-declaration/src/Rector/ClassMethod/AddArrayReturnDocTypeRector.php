@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -174,6 +175,13 @@ CODE_SAMPLE
 
         if ($this->shouldSkipType($inferredReturnType, $node, $phpDocInfo)) {
             return null;
+        }
+
+        if ($inferredReturnType instanceof GenericObjectType && $currentReturnType instanceof MixedType) {
+            $types = $inferredReturnType->getTypes();
+            if ($types[0] instanceof MixedType && $types[1] instanceof ArrayType) {
+                return null;
+            }
         }
 
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferredReturnType);

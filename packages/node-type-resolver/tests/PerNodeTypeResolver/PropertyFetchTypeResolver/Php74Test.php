@@ -22,6 +22,9 @@ final class Php74Test extends AbstractPropertyFetchTypeResolverTest
         $this->doTestFileInfo($smartFileInfo);
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo>
+     */
     public function provideData(): Iterator
     {
         return StaticFixtureFinder::yieldDirectoryExclusively(__DIR__ . '/FixturePhp74');
