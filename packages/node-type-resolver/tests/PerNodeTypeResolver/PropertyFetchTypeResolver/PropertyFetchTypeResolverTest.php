@@ -18,6 +18,9 @@ final class PropertyFetchTypeResolverTest extends AbstractPropertyFetchTypeResol
         $this->doTestFileInfo($smartFileInfo);
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo>
+     */
     public function provideData(): Iterator
     {
         return StaticFixtureFinder::yieldDirectoryExclusively(__DIR__ . '/Fixture');
