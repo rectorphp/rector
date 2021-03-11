@@ -1,33 +1,32 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector\Fixture
 
-class ToBeMocked
+class Foo
 {
-    public function create()
+    public function someMethod()
     {
     }
 }
-
 final class Mixed extends \PHPUnit\Framework\TestCase
 {
     public function test(): void
     {
-        $mock = $this->createMock(ToBeMocked::class);
+        $mock = $this->createMock(Foo::class);
         $mock
             ->expects($this->at(0))
-            ->method('create')
+            ->method('someMethod')
             ->willReturn('1');
 
         $mock
             ->expects($this->at(1))
             ->with('1')
-            ->method('create');
+            ->method('someMethod');
 
         $mock
             ->expects($this->at(2))
             ->with('2')
-            ->method('create')
+            ->method('someMethod')
             ->willReturn('3');
     }
 }
@@ -36,22 +35,21 @@ final class Mixed extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector\Fixture
 
-class ToBeMocked
+class Foo
 {
-    public function create()
+    public function someMethod()
     {
     }
 }
-
 final class Mixed extends \PHPUnit\Framework\TestCase
 {
     public function test(): void
     {
-        $mock = $this->createMock(ToBeMocked::class);
+        $mock = $this->createMock(Foo::class);
 
-        $mock->method('create')->withConsecutive([null], ['1'], ['2'])->willReturnOnConsecutiveCalls('1', null, '3');
+        $mock->method('someMethod')->withConsecutive([null], ['1'], ['2'])->willReturnOnConsecutiveCalls('1', null, '3');
     }
 }
 

@@ -1,49 +1,48 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector\Fixture
 
-class ToBeMocked
+class Foo
 {
-    public function create()
+    public function someMethod()
     {
     }
 }
-
 final class DifferentReturnValues extends \PHPUnit\Framework\TestCase
 {
     public function test(): void
     {
-        $mock = $this->createMock(ToBeMocked::class);
+        $mock = $this->createMock(Foo::class);
         $mock
             ->expects($this->at(0))
-            ->method('create')
+            ->method('someMethod')
             ->willReturn('1');
         $reference = '2';
         $mock
             ->expects($this->at(1))
-            ->method('create')
+            ->method('someMethod')
             ->willReturnReference($reference);
         $mock
             ->expects($this->at(2))
-            ->method('create')
+            ->method('someMethod')
             ->willReturnMap(['foo' => 'bar']);
         $mock
             ->expects($this->at(3))
-            ->method('create')
+            ->method('someMethod')
             ->willReturnArgument(1);
         $mock
             ->expects($this->at(4))
-            ->method('create')
+            ->method('someMethod')
             ->willReturnCallback(static function () {
                 return null;
             });
         $mock
             ->expects($this->at(5))
-            ->method('create')
+            ->method('someMethod')
             ->willReturnSelf();
         $mock
             ->expects($this->at(6))
-            ->method('create')
+            ->method('someMethod')
             ->willThrowException(new \Exception());
     }
 }
@@ -52,22 +51,21 @@ final class DifferentReturnValues extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector\Fixture;
 
-class ToBeMocked
+class Foo
 {
-    public function create()
+    public function someMethod()
     {
     }
 }
-
 final class DifferentReturnValues extends \PHPUnit\Framework\TestCase
 {
     public function test(): void
     {
-        $mock = $this->createMock(ToBeMocked::class);
+        $mock = $this->createMock(Foo::class);
         $reference = '2';
-        $mock->method('create')->willReturnOnConsecutiveCalls('1', new \PHPUnit\Framework\MockObject\Stub\ReturnReference($reference), $this->returnValueMap(['foo' => 'bar']), $this->returnArgument(1), $this->returnCallback(static function () {
+        $mock->method('someMethod')->willReturnOnConsecutiveCalls('1', new \PHPUnit\Framework\MockObject\Stub\ReturnReference($reference), $this->returnValueMap(['foo' => 'bar']), $this->returnArgument(1), $this->returnCallback(static function () {
             return null;
         }), $this->returnSelf(), $this->throwException(new \Exception()));
     }
