@@ -16,6 +16,7 @@ use PHPParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
+use Rector\PHPUnit\NodeFactory\ConsecutiveAssertionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -24,6 +25,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector extends AbstractRector
 {
+    /**
+     * @var ConsecutiveAssertionFactory
+     */
+    private $consecutiveAssertionFactory;
+
+    public function __construct(ConsecutiveAssertionFactory $consecutiveAssertionFactory)
+    {
+        $this->consecutiveAssertionFactory = $consecutiveAssertionFactory;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -71,7 +82,7 @@ final class MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector exte
                     /** @var MethodCall $method */
                     $method = $willReturn->var;
                 } else {
-                    $willReturnValue = new ConstFetch(new Name('null'));
+                    $willReturnValue = null;
                     $method = $stmt->expr;
                 }
 
@@ -91,7 +102,7 @@ final class MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector exte
                     /** @var MethodCall $expects */
                     $expects = $maybeWith->var;
                 } else {
-                    $withArgs = [new ConstFetch(new Name('null'))];
+                    $withArgs = [null];
                     /** @var MethodCall $expects */
                     $expects = $method->var;
                 }
@@ -125,10 +136,6 @@ final class MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector exte
         }
 
         if (count($mockEntries) > 0) {
-            usort($mockEntries, static function ($mockEntryA, $mockEntryB) {
-                return $mockEntryA['index'] > $mockEntryB['index'];
-            });
-
             $entryCount = count($mockEntries);
             $removalCounter = 1;
             foreach ($stmts as $stmt) {
@@ -140,32 +147,156 @@ final class MigrateAtToWithConsecutiveAndWillReturnOnConsecutiveCallsRector exte
                         $this->removeNode($stmt);
                         $removalCounter++;
                     } else {
-                        $stmt->expr = new MethodCall(
-                            new MethodCall(
-                                new MethodCall(
-                                    $mockEntries[0]['var'],
-                                    new Name('method'),
-                                    $mockEntries[0]['methodArgs']
-                                ),
-                                new Name('withConsecutive'),
-                                array_map(static function (array $mockEntry) {
-                                    return new Arg(
-                                        new Expr\Array_(array_map(static function (Expr $expr) {
-                                            return new ArrayItem($expr);
-                                        }, $mockEntry['with']))
-                                    );
-                                }, $mockEntries)
-                            ),
-                            new Name('willReturnOnConsecutiveCalls'),
-                            array_map(static function (array $mockEntry) {
-                                return new Arg($mockEntry['return']);
-                            }, $mockEntries)
-                        );
+                        $stmt->expr = $this->buildNewExpectation($mockEntries);
                     }
                 }
             }
         }
 
         return $node;
+    }
+
+    private function buildNewExpectation(array $mockEntries): MethodCall
+    {
+        $var = $mockEntries[0]['var'];
+        $mockEntries = $this->fillMissingAtIndixes($mockEntries, $var);
+
+        usort($mockEntries, static function ($mockEntryA, $mockEntryB) {
+            return $mockEntryA['index'] > $mockEntryB['index'];
+        });
+        if ($this->hasReturnValue($mockEntries)) {
+            if ($this->hasWithValues($mockEntries)) {
+                return $this->consecutiveAssertionFactory->createWillReturnOnConsecutiveCalls(
+                    $this->consecutiveAssertionFactory->createWithConsecutive(
+                        $this->consecutiveAssertionFactory->createMethod(
+                            $mockEntries[0]['var'],
+                            $mockEntries[0]['methodArgs']
+                        ),
+                        $this->buildWithArgs($mockEntries)
+                    ),
+                    $this->buildReturnArgs($mockEntries)
+                );
+            }
+
+            return $this->consecutiveAssertionFactory->createWillReturnOnConsecutiveCalls(
+                $this->consecutiveAssertionFactory->createMethod(
+                    $mockEntries[0]['var'],
+                    $mockEntries[0]['methodArgs']
+                ),
+                $this->buildReturnArgs($mockEntries)
+            );
+        }
+
+        return $this->consecutiveAssertionFactory->createWithConsecutive(
+            $this->consecutiveAssertionFactory->createMethod(
+                $mockEntries[0]['var'],
+                $mockEntries[0]['methodArgs']
+            ),
+            $this->buildWithArgs($mockEntries)
+        );
+    }
+
+    private function hasReturnValue(array $mockEntries): bool
+    {
+        foreach ($mockEntries as $mockEntry) {
+            if ($mockEntry['return'] !== null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function hasWithValues(array $mockEntries): bool
+    {
+        foreach ($mockEntries as $mockEntry) {
+            if (
+                count($mockEntry['with']) > 1
+                || (
+                    count($mockEntry['with']) === 1
+                    && $mockEntry['with'][0] !== null
+                )) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return Arg[]
+     */
+    private function buildReturnArgs(array $mockEntries): array
+    {
+        return array_map(static function (?Expr $return) {
+            return new Arg($return ?: new ConstFetch(new Name('null')));
+        }, array_column($mockEntries, 'return'));
+    }
+
+    /**
+     * @return Arg[]
+     */
+    private function buildWithArgs(array $mockEntries): array
+    {
+        /** @var array<int, ?Expr> $with */
+        return array_map(static function (array $with) {
+            return new Arg(
+                new Expr\Array_(
+                    array_map(static function (?Expr $expr) {
+                        return new ArrayItem($expr ?: new ConstFetch(new Name('null')));
+                    }, $with)
+                )
+            );
+        }, array_column($mockEntries, 'with'));
+    }
+
+    private function fillMissingAtIndixes(array $mockEntries, Expr $var): array
+    {
+        $minIndex = min(array_column($mockEntries, 'index'));
+        $maxIndex = max(array_column($mockEntries, 'index'));
+
+        // 0,1,2,3,4
+        // min = 0 ; max = 4 ; count = 5
+        // OK
+
+        // 1,2,3,4
+        // min = 1 ; max = 4 ; count = 4
+        // ADD 0
+
+        // OR
+
+        // 3
+        // min = 3; max = 3 ; count = 1
+        // 0,1,2
+        if ($minIndex !== 0) {
+            for ($i = 0; $i < $minIndex; $i++) {
+                $mockEntries[] = [
+                    'var' => $var,
+                    'methodArgs' => [],
+                    'index' => $i,
+                    'return' => null,
+                    'with' => [null],
+                ];
+            }
+            $minIndex = 0;
+        }
+
+        // 0,1,2,4
+        // min = 0 ; max = 4 ; count = 4
+        // ADD 3
+        if (($maxIndex - $minIndex + 1) !== count($mockEntries)) {
+            $existingIndexes = array_column($mockEntries, 'index');
+            for ($i = 0; $i < $maxIndex; $i++) {
+                if (!in_array($i, $existingIndexes, true)) {
+                    $mockEntries[] = [
+                        'var' => $var,
+                        'methodArgs' => [],
+                        'index' => $i,
+                        'return' => null,
+                        'with' => [null],
+                    ];
+                }
+            }
+        }
+        return $mockEntries;
     }
 }
