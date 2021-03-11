@@ -64,7 +64,6 @@ final class Foo extends \PHPUnit\Framework\TestCase
             ->expects($this->exactly(3))
             ->method('create')
             ->withConsecutive(['0'], ['1'], ['2'])
-            ->method('create')
             ->willReturnOnConsecutiveCalls(
                 '1',
                 $this->throwException(new RuntimeException('Some message')),

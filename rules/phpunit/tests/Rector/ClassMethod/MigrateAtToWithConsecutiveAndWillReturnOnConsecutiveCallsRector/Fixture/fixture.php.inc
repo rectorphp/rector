@@ -15,14 +15,33 @@ final class Foo extends \PHPUnit\Framework\TestCase
     {
         $mock = $this->createMock(ToBeMocked::class);
         $mock
-            ->expects($this->exactly(3))
+            ->expects($this->at(0))
             ->method('create')
-            ->withConsecutive(['1'], ['2'], ['3']);
-
+            ->willReturn('1');
         $mock
-            ->expects($this->at(1)) // the middle creation will error
+            ->expects($this->at(1))
+            ->with('1')
             ->method('create')
-            ->willThrowException(new Exception());
+            ->willReturn('2');
+        $returnValue = true;
+        $mock
+            ->expects($this->at(3))
+            ->with('2')
+            ->method('create')
+            ->willReturn($returnValue);
+        $mock
+            ->expects($this->at(4))
+            ->with('2')
+            ->method('create');
+        $mock
+            ->expects($this->at(2))
+            ->method('create')
+            ->willReturn(null);
+        $mock
+            ->expects($this->at(5))
+            ->with('1', 2, true, ['foo' => 'bar'])
+            ->method('create')
+            ->willReturn(null);
     }
 }
 
@@ -44,15 +63,8 @@ final class Foo extends \PHPUnit\Framework\TestCase
     public function test(): void
     {
         $mock = $this->createMock(ToBeMocked::class);
-        $mock
-            ->expects($this->exactly(3))
-            ->method('create')
-            ->withConsecutive(['1'], ['2'], ['3'])
-            ->willReturnOnConsecutiveCalls(
-                null,
-                $this->throwException(new RuntimeException('Some message')),
-                null
-            );
+        $returnValue = true;
+        $mock->method('create')->withConsecutive([null], ['1'], [null], ['2'], ['2'], ['1', 2, true, ['foo' => 'bar']])->willReturnOnConsecutiveCalls('1', '2', null, $returnValue, null, null);
     }
 }
 
