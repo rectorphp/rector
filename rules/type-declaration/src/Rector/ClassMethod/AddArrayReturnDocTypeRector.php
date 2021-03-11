@@ -38,6 +38,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddArrayReturnDocTypeRector extends AbstractRector
 {
     /**
+     * @var \Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker|mixed
+     */
+    public $returnTypeAlreadyAddedChecker;
+
+    /**
      * @var ReturnTypeInferer
      */
     private $returnTypeInferer;
@@ -178,8 +183,12 @@ CODE_SAMPLE
         if ($this->shouldSkipType($inferredReturnType, $node, $phpDocInfo)) {
             return null;
         }
+        $returnTypeAlreadyAddedCheckerIsSameOrBetterReturnTypeAlreadyAdded = $this->returnTypeAlreadyAddedChecker->isSameOrBetterReturnTypeAlreadyAdded(
+            $node,
+            $inferredReturnType
+        );
 
-        if ($this->returnTypeAlreadyAddedChecker->isSameOrBetterReturnTypeAlreadyAdded($node, $inferredReturnType)) {
+        if ($returnTypeAlreadyAddedCheckerIsSameOrBetterReturnTypeAlreadyAdded) {
             return null;
         }
 
