@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteUtilsCodeQuality\Rector\LNumber;
+namespace Rector\Nette\Rector\LNumber;
 
 use Nette\Utils\DateTime;
 use PhpParser\Node;
@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
  *
- * @see \Rector\NetteUtilsCodeQuality\Tests\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector\ReplaceTimeNumberWithDateTimeConstantRectorTest
+ * @see \Rector\Nette\Tests\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector\ReplaceTimeNumberWithDateTimeConstantRectorTest
  */
 final class ReplaceTimeNumberWithDateTimeConstantRector extends AbstractRector
 {

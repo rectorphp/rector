@@ -8663,7 +8663,7 @@ Adds %% to placeholder name of `trans()` method if missing
 
 Replace `time` numbers with `Nette\Utils\DateTime` constants
 
-- class: [`Rector\NetteUtilsCodeQuality\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector`](/rules/nette-utils-code-quality/src/Rector/LNumber/ReplaceTimeNumberWithDateTimeConstantRector.php)
+- class: [`Rector\Nette\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector`](/rules/nette-utils-code-quality/src/Rector/LNumber/ReplaceTimeNumberWithDateTimeConstantRector.php)
 
 ```diff
  final class SomeClass

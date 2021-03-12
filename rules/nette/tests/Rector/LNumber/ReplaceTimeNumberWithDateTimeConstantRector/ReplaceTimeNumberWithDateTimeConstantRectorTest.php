@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteUtilsCodeQuality\Tests\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector;
+namespace Rector\Nette\Tests\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector;
 
 use Iterator;
-use Rector\NetteUtilsCodeQuality\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector;
+use Rector\Nette\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
