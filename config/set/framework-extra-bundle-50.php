@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Sensio\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
+use Rector\Symfony\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
