@@ -13755,7 +13755,7 @@ Rename file to respect class name
 
 Remove service from Sensio `@Route`
 
-- class: [`Rector\Sensio\Rector\ClassMethod\RemoveServiceFromSensioRouteRector`](../rules/Sensio/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php)
+- class: [`Rector\Symfony\Rector\ClassMethod\RemoveServiceFromSensioRouteRector`](../rules/Sensio/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php)
 
 ```diff
  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -13778,7 +13778,7 @@ Remove service from Sensio `@Route`
 
 Replace Sensio `@Route` annotation with Symfony one
 
-- class: [`Rector\Sensio\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector`](../rules/Sensio/Rector/ClassMethod/ReplaceSensioRouteAnnotationWithSymfonyRector.php)
+- class: [`Rector\Symfony\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector`](../rules/Sensio/Rector/ClassMethod/ReplaceSensioRouteAnnotationWithSymfonyRector.php)
 
 ```diff
 -use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -13801,7 +13801,7 @@ Replace Sensio `@Route` annotation with Symfony one
 
 Turns `@Template` annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony
 
-- class: [`Rector\Sensio\Rector\ClassMethod\TemplateAnnotationToThisRenderRector`](../rules/Sensio/Rector/ClassMethod/TemplateAnnotationToThisRenderRector.php)
+- class: [`Rector\Symfony\Rector\ClassMethod\TemplateAnnotationToThisRenderRector`](../rules/Sensio/Rector/ClassMethod/TemplateAnnotationToThisRenderRector.php)
 
 ```diff
 -/**
@@ -15500,7 +15500,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MergeInterfacesRector::OLD_TO_NEW_INTERFACES => [
                 'SomeOldInterface' => 'SomeInterface',
-                
+
             ], ]]);
 };
 ```
@@ -15571,7 +15571,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToPropertyFetchRector::METHOD_CALL_TO_PROPERTY_FETCHES => [
                 'someMethod' => 'someProperty',
-                
+
             ], ]]);
 };
 ```
@@ -15610,7 +15610,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToReturnRector::METHOD_CALL_WRAPS => [
                 'SomeClass' => ['deny'],
-                
+
             ], ]]);
 };
 ```
@@ -15902,7 +15902,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ParentClassToTraitsRector::PARENT_CLASS_TO_TRAITS => [
                 'Nette\Object' => ['Nette\SmartObject'],
-                
+
             ], ]]);
 };
 ```
@@ -16374,7 +16374,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ToStringToMethodCallRector::METHOD_NAMES_BY_TYPE => [
                 'SomeObject' => 'getPath',
-                
+
             ], ]]);
 };
 ```
@@ -17103,8 +17103,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ChangePropertyVisibilityRector::PROPERTY_TO_VISIBILITY_BY_CLASS => [
                 'FrameworkClass' => [
                     'someProperty' => 2,
-                    
-                    
+
+
                 ], ], ]]);
 };
 ```

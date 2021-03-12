@@ -80,7 +80,6 @@ jobs:
                     - rules/RemovingStatic
                     - rules/Renaming
                     - rules/Restoration
-                    - rules/Sensio
                     - rules/Symfony
                     - rules/Symfony2
                     - rules/Symfony3
