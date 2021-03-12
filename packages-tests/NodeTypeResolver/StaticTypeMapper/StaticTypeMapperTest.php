@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\StaticTypeMapper;
+namespace Rector\Tests\NodeTypeResolver\StaticTypeMapper;
 
 use Iterator;
 use PhpParser\Node;

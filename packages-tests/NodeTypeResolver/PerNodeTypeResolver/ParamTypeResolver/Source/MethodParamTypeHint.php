@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver\Source;
+namespace Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\ParamTypeResolver\Source;
 
 final class MethodParamTypeHint
 {

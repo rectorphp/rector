@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\Helper;
+namespace Rector\Tests\BetterPhpDocParser\PhpDocParser\Helper;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;

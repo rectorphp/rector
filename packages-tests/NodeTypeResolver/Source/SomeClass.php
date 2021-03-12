@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\Source;
+namespace Rector\Tests\NodeTypeResolver\Source;
 
 final class SomeClass
 {

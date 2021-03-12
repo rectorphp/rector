@@ -15,7 +15,7 @@ use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
 use Symplify\PackageBuilder\Php\TypeChecker;
 
 /**
- * @see \Rector\BetterPhpDocParser\Tests\ValueObjectFactory\TagValueNodeConfigurationFactoryTest
+ * @see \Rector\Tests\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactoryTest
  */
 final class TagValueNodeConfigurationFactory
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver\Source;
+namespace Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\PropertyFetchTypeResolver\Source;
 
 final class ClassWithTypedPropertyTypes
 {
@@ -20,7 +20,7 @@ final class ClassWithTypedPropertyTypes
 
     public ?Abc $abcNullable;
 
-    public \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver\Source\Abc $abcFQ;
+    public \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\PropertyFetchTypeResolver\Source\Abc $abcFQ;
 
     public IDontExist $nonexistent;
 

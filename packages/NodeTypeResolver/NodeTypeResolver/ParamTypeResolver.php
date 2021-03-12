@@ -24,7 +24,7 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 /**
- * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver\ParamTypeResolverTest
+ * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\ParamTypeResolver\ParamTypeResolverTest
  */
 final class ParamTypeResolver implements NodeTypeResolverInterface
 {

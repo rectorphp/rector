@@ -2,17 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver;
+namespace Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\VariableTypeResolver;
 
 use Iterator;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Fixture\ThisClass;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\AnotherType;
-use ReflectionClass;
+use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\VariableTypeResolver\Source\AnotherType;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\VariableTypeResolver
@@ -35,8 +32,6 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function provideData(): Iterator
     {
-        yield [__DIR__ . '/Fixture/this_class.php.inc', 0, new ThisType(new ReflectionClass(ThisClass::class))];
-
         $anotherTypeObjectType = new ObjectType(AnotherType::class);
         yield [__DIR__ . '/Fixture/new_class.php.inc', 1, $anotherTypeObjectType];
         yield [__DIR__ . '/Fixture/new_class.php.inc', 3, $anotherTypeObjectType];

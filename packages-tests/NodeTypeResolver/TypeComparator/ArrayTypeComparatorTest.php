@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\TypeComparator;
+namespace Rector\Tests\NodeTypeResolver\TypeComparator;
 
 use Iterator;
 use PHPStan\Type\ArrayType;
@@ -14,7 +14,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\NodeTypeResolver\Tests\TypeComparator\Source\SomeGenericTypeObject;
+use Rector\Tests\NodeTypeResolver\TypeComparator\Source\SomeGenericTypeObject;
 use Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;

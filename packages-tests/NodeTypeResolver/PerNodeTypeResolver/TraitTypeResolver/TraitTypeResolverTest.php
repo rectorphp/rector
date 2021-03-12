@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver;
+namespace Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\TraitTypeResolver;
 
 use Iterator;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\Source\AnotherTrait;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\Source\TraitWithTrait;
+use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\TraitTypeResolver\Source\AnotherTrait;
+use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\TraitTypeResolver\Source\TraitWithTrait;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 
 /**

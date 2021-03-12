@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver;
+namespace Rector\Tests\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use Rector\Core\HttpKernel\RectorKernel;

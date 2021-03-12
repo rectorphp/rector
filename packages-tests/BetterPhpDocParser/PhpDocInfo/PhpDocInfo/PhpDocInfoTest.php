@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo;
+namespace Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
