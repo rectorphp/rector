@@ -622,3 +622,5 @@ parameters:
             message: '#Function "class_exists\(\)" cannot be used/left in the code#'
             paths:
                 - src/HttpKernel/RectorKernel.php
+
+        - '#Content of method "getIfNextReturn\(\)" is duplicated with method "getIfNextReturn\(\)" in "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector" class\. Use unique content or service instead#'
