@@ -91,6 +91,15 @@
         }
     },
     "autoload-dev": {
+        "psr-4": {
+            "Rector\\Tests\\": ["packages-tests", "rules-tests"],
+            "Rector\\Core\\Tests\\": "tests",
+            "Rector\\RuleDocGenerator\\": "utils/rule-doc-generator/src",
+            "Rector\\PHPStanExtensions\\": "utils/phpstan-extensions/src",
+            "Rector\\PHPStanExtensions\\Tests\\": "utils/phpstan-extensions/tests",
+            "Rector\\Utils\\DoctrineAnnotationParserSyncer\\": "utils/doctrine-annotation-parser-syncer/src",
+            "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src"
+        },
         "classmap": [
             "rules-tests/Autodiscovery/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
             "rules-tests/Autodiscovery/Rector/FileNode/MoveServicesBySuffixToDirectoryRector/Expected",
@@ -118,16 +127,7 @@
             "rules-tests/TypeDeclaration/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",
             "vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php",
             "tests/debug_functions.php"
-        ],
-        "psr-4": {
-            "Rector\\Tests\\": ["packages-tests", "rules-tests"],
-            "Rector\\Core\\Tests\\": "tests",
-            "Rector\\RuleDocGenerator\\": "utils/rule-doc-generator/src",
-            "Rector\\PHPStanExtensions\\": "utils/phpstan-extensions/src",
-            "Rector\\PHPStanExtensions\\Tests\\": "utils/phpstan-extensions/tests",
-            "Rector\\Utils\\DoctrineAnnotationParserSyncer\\": "utils/doctrine-annotation-parser-syncer/src",
-            "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src"
-        }
+        ]
     },
     "scripts": {
         "complete-check": [

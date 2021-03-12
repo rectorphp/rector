@@ -22,7 +22,9 @@ jobs:
             matrix:
                 directories:
                     - rules
+                    - rules-tests
                     - packages
+                    - packages-tests
                     - src
                     - tests
 
