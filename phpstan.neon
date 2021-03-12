@@ -631,3 +631,4 @@ parameters:
                 - packages/BetterPhpDocParser/Attributes/Attribute/AttributeTrait.php
 
         - '#Do not use scalar or array as constructor parameter\. Use "Symplify\\PackageBuilder\\Parameter\\ParameterProvider" service instead#'
+        - '#Content of method "getNextExpression\(\)" is duplicated with method "getNextExpression\(\)" in "Rector\\Php73\\Rector\\FuncCall\\ArrayKeyFirstLastRector" class\. Use unique content or service instead#'

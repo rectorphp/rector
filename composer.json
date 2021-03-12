@@ -72,10 +72,9 @@
         "symfony/security-core": "^5.2",
         "symfony/security-http": "^5.2",
         "symplify/coding-standard": "^9.2.4",
-        "symplify/easy-ci": "^9.1.0",
+        "symplify/easy-ci": "^9.2.4",
         "symplify/easy-coding-standard": "^9.2.4",
         "symplify/easy-testing": "^9.2.4",
-        "symplify/monorepo-builder": "^9.2",
         "symplify/phpstan-extensions": "^9.2.4",
         "symplify/phpstan-rules": "^9.2.4",
         "tracy/tracy": "^2.8"
@@ -287,8 +286,7 @@
             "vendor/bin/ecs check-markdown docs/rector_rules_overview.md docs/nodes_overview.md --ansi --fix"
         ],
         "rector-ci": "bin/rector process --dry-run --ansi",
-        "rector": "bin/rector process --ansi",
-        "release": "vendor/bin/monorepo-builder release patch --ansi"
+        "rector": "bin/rector process --ansi"
     },
     "config": {
         "sort-packages": true
