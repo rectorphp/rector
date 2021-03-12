@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Legacy\Rector\Class_;
+namespace Rector\Transform\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use Rector\Legacy\NodeAnalyzer\SingletonClassMethodAnalyzer;
-use Rector\Legacy\ValueObject\PropertyAndClassMethodName;
+use Rector\Transform\NodeAnalyzer\SingletonClassMethodAnalyzer;
+use Rector\Transform\ValueObject\PropertyAndClassMethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,12 +18,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/lifbH
  * @see https://stackoverflow.com/a/203359/1348344
  * @see http://cleancode.blog/2017/07/20/how-to-avoid-many-instances-in-singleton-pattern/
- * @see \Rector\Tests\Legacy\Rector\Class_\ChangeSingletonToServiceRector\ChangeSingletonToServiceRectorTest
+ * @see \Rector\Tests\Transform\Rector\Class_\ChangeSingletonToServiceRector\ChangeSingletonToServiceRectorTest
  */
 final class ChangeSingletonToServiceRector extends AbstractRector
 {
     /**
-     * @var SingletonClassMethodAnalyzer
+     * @var \Rector\Transform\NodeAnalyzer\SingletonClassMethodAnalyzer
      */
     private $singletonClassMethodAnalyzer;
 

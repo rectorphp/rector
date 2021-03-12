@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Legacy\ValueObject;
+namespace Rector\Transform\ValueObject;
 
 final class FunctionToStaticCall
 {

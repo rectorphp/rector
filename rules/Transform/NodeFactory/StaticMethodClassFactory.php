@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Legacy\NodeFactory;
+namespace Rector\Transform\NodeFactory;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;

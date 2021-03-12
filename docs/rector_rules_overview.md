@@ -7145,7 +7145,7 @@ Change static `validate()` method to `$request->validate()`
 
 Change singleton class to normal class that can be registered as a service
 
-- class: [`Rector\Legacy\Rector\Class_\ChangeSingletonToServiceRector`](/rules/Legacy/src/Rector/Class_/ChangeSingletonToServiceRector.php)
+- class: [`Rector\Transform\Rector\Class_\ChangeSingletonToServiceRector`](/rules/Legacy/src/Rector/Class_/ChangeSingletonToServiceRector.php)
 
 ```diff
  class SomeClass

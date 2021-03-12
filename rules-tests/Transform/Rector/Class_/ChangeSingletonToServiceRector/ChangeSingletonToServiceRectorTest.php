@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Legacy\Rector\Class_\ChangeSingletonToServiceRector;
+namespace Rector\Tests\Transform\Rector\Class_\ChangeSingletonToServiceRector;
 
 use Iterator;
-use Rector\Legacy\Rector\Class_\ChangeSingletonToServiceRector;
+use Rector\Transform\Rector\Class_\ChangeSingletonToServiceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

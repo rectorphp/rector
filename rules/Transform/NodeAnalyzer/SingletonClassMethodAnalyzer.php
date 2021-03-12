@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Legacy\NodeAnalyzer;
+namespace Rector\Transform\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;

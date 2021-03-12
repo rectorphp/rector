@@ -14,9 +14,9 @@ use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
-use Rector\Legacy\Naming\FullyQualifiedNameResolver;
-use Rector\Legacy\NodeFactory\StaticMethodClassFactory;
-use Rector\Legacy\ValueObject\FunctionToStaticCall;
+use Rector\Transform\Naming\FullyQualifiedNameResolver;
+use Rector\Transform\NodeFactory\StaticMethodClassFactory;
+use Rector\Transform\ValueObject\FunctionToStaticCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -37,7 +37,7 @@ final class FunctionToStaticMethodRector extends AbstractRector
     private $staticMethodClassFactory;
 
     /**
-     * @var FullyQualifiedNameResolver
+     * @var \Rector\Transform\Naming\FullyQualifiedNameResolver
      */
     private $fullyQualifiedNameResolver;
 
@@ -143,7 +143,7 @@ CODE_SAMPLE
 
     /**
      * @param Node[] $stmts
-     * @param FunctionToStaticCall[] $functionsToStaticCalls
+     * @param \Rector\Transform\ValueObject\FunctionToStaticCall[] $functionsToStaticCalls
      * @return Node[]
      */
     private function replaceFuncCallsWithStaticCalls(array $stmts, array $functionsToStaticCalls): array
