@@ -7,7 +7,7 @@ namespace Rector\PHPUnit\NodeFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Name;
+use PhpParser\Node\Identifier;
 
 final class ConsecutiveAssertionFactory
 {
@@ -42,7 +42,7 @@ final class ConsecutiveAssertionFactory
     {
         return new MethodCall(
             $expr,
-            new Name($name),
+            new Identifier($name),
             $args
         );
     }
