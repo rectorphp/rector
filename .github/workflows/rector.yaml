@@ -86,7 +86,6 @@ jobs:
                     - rules/Symfony3
                     - rules/Symfony4
                     - rules/Symfony5
-                    - rules/SymfonyPhpConfig
                     - rules/Transform
                     - rules/TypeDeclaration
                     - rules/Visibility

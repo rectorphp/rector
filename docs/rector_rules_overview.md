@@ -15039,7 +15039,7 @@ final class RouteName
 
 Make sure there is `public()`, `autowire()`, `autoconfigure()` calls on `defaults()` in Symfony configs
 
-- class: [`Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector`](/rules/SymfonyPhpConfig/src/Rector/MethodCall/AutoInPhpSymfonyConfigRector.php)
+- class: [`Rector\Symfony\Rector\MethodCall\AutoInPhpSymfonyConfigRector`](/rules/SymfonyPhpConfig/src/Rector/MethodCall/AutoInPhpSymfonyConfigRector.php)
 
 ```diff
  use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

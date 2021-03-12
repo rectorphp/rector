@@ -14,7 +14,7 @@ use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivateProperty
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Rector\Set\ValueObject\SetList;
-use Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector;
+use Rector\Symfony\Rector\MethodCall\AutoInPhpSymfonyConfigRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\SymfonyPhpConfig\NodeAnalyzer;
+namespace Rector\Symfony\NodeAnalyzer;
 
 use PhpParser\Node\Expr\Closure;
 use Rector\NodeNameResolver\NodeNameResolver;
