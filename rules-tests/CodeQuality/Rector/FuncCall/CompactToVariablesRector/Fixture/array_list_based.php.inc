@@ -2,9 +2,7 @@
 
 namespace Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-final class ArrayListBased implements RunnableInterface
+final class ArrayListBased
 {
     public function run()
     {
@@ -23,9 +21,7 @@ final class ArrayListBased implements RunnableInterface
 
 namespace Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-final class ArrayListBased implements RunnableInterface
+final class ArrayListBased
 {
     public function run()
     {

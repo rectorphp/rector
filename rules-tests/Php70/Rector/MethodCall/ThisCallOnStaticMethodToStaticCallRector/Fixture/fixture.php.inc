@@ -2,8 +2,6 @@
 
 namespace Rector\Tests\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
 class SomeParent
 {
     public function speak()
@@ -24,7 +22,7 @@ class SomeChild extends SomeParent
     }
 }
 
-class SomeRunnable implements RunnableInterface
+class SomeRunnable
 {
     public function run()
     {
@@ -38,8 +36,6 @@ class SomeRunnable implements RunnableInterface
 <?php
 
 namespace Rector\Tests\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
-
-use Rector\Testing\Contract\RunnableInterface;
 
 class SomeParent
 {
@@ -61,7 +57,7 @@ class SomeChild extends SomeParent
     }
 }
 
-class SomeRunnable implements RunnableInterface
+class SomeRunnable
 {
     public function run()
     {

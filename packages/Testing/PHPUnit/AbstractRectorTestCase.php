@@ -22,7 +22,6 @@ use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Application\EnabledRectorClassProvider;
 use Rector\Testing\Configuration\AllRectorConfigFactory;
-use Rector\Testing\Contract\RunnableInterface;
 use Rector\Testing\Guard\FixtureGuard;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
@@ -81,11 +80,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      * @var bool
      */
     private static $isInitialized = false;
-
-    /**
-     * @var RunnableRectorFactory
-     */
-    private static $runnableRectorFactory;
 
     /**
      * @var RectorConfigsResolver
@@ -221,18 +215,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return sys_get_temp_dir() . '/_temp_fixture_easy_testing';
     }
 
-    protected function assertOriginalAndFixedFileResultEquals(
-        SmartFileInfo $originalFileInfo,
-        SmartFileInfo $expectedFileInfo
-    ): void {
-        $inputRunnable = self::$runnableRectorFactory->createRunnableClass($originalFileInfo);
-        $expectedRunnable = self::$runnableRectorFactory->createRunnableClass($expectedFileInfo);
-
-        $inputResult = $inputRunnable->run();
-        $expectedResult = $expectedRunnable->run();
-        $this->assertSame($expectedResult, $inputResult);
-    }
-
     private function createRectorRepositoryContainer(): void
     {
         if (self::$allRectorContainer === null) {
@@ -324,24 +306,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             return;
         }
 
-        self::$runnableRectorFactory = new RunnableRectorFactory();
         self::$smartFileSystem = new SmartFileSystem();
         self::$fixtureGuard = new FixtureGuard();
         self::$rectorConfigsResolver = new RectorConfigsResolver();
         self::$isInitialized = true;
-    }
-
-    private function processRunnableTest(SmartFileInfo $inputFileInfo, SmartFileInfo $expectedFileInfo): void
-    {
-        // runnable?
-        if (! file_exists($inputFileInfo->getPathname())) {
-            return;
-        }
-
-        if (! Strings::contains($inputFileInfo->getContents(), RunnableInterface::class)) {
-            return;
-        }
-
-        $this->assertOriginalAndFixedFileResultEquals($inputFileInfo, $expectedFileInfo);
     }
 }

@@ -83,7 +83,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php',
             __DIR__ . '/../packages/*/{ValueObject,Contract,Exception}',
             __DIR__ . '/../packages/NodeTypeResolver/Reflection/BetterReflection/RectorBetterReflectionSourceLocatorFactory.php',
-            __DIR__ . '/../packages/Testing/PHPUnit/Runnable/NodeVisitor',
             __DIR__ . '/../packages/Testing/PHPUnit',
         ]);
 

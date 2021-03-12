@@ -2,9 +2,7 @@
 
 namespace Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-final class CompactWithExtractParamOverride implements RunnableInterface
+final class CompactWithExtractParamOverride
 {
     public function run($result = 100)
     {
@@ -22,9 +20,7 @@ final class CompactWithExtractParamOverride implements RunnableInterface
 
 namespace Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-final class CompactWithExtractParamOverride implements RunnableInterface
+final class CompactWithExtractParamOverride
 {
     public function run($result = 100)
     {

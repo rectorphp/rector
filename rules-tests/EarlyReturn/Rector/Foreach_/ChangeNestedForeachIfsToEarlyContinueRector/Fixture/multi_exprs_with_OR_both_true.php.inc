@@ -2,9 +2,7 @@
 
 namespace Rector\Tests\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-class MultiExprsWithOrBothTruthy implements RunnableInterface
+class MultiExprsWithOrBothTruthy
 {
     public function run()
     {
@@ -32,9 +30,7 @@ class MultiExprsWithOrBothTruthy implements RunnableInterface
 
 namespace Rector\Tests\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-class MultiExprsWithOrBothTruthy implements RunnableInterface
+class MultiExprsWithOrBothTruthy
 {
     public function run()
     {
