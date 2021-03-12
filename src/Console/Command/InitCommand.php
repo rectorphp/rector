@@ -55,12 +55,10 @@ final class InitCommand extends Command
 
         $doesFileExist = $this->smartFileSystem->exists($rectorRootFilePath);
         if ($doesFileExist) {
-            $message = sprintf('Config file "%s" already exists', $rectorRootFilePath);
-            $this->symfonyStyle->warning($message);
+            $this->symfonyStyle->warning('Config file "rector.php" already exists');
         } else {
             $this->smartFileSystem->copy($rectorTemplateFilePath, $rectorRootFilePath);
-            $message = sprintf('"%s" config file was added', $rectorRootFilePath);
-            $this->symfonyStyle->success($message);
+            $this->symfonyStyle->success('"rector.php" config file was added');
         }
 
         return ShellCode::SUCCESS;
