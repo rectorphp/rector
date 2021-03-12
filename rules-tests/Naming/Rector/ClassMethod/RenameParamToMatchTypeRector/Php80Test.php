@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector;
+namespace Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 
 use Iterator;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;

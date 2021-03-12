@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector;
+namespace Rector\Tests\Php80\Rector\If_\NullsafeOperatorRector;
 
 use Iterator;
 use Rector\Php80\Rector\If_\NullsafeOperatorRector;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Sensio\Tests\Rector\ClassMethod\RemoveServiceFromSensioRouteRector;
+namespace Rector\Tests\Sensio\Rector\ClassMethod\RemoveServiceFromSensioRouteRector;
 
 use Iterator;
 use Rector\Sensio\Rector\ClassMethod\RemoveServiceFromSensioRouteRector;

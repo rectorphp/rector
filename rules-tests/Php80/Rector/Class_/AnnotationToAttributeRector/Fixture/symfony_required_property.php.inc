@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
 class SymfonyRequiredProperty
 {
@@ -14,7 +14,7 @@ class SymfonyRequiredProperty
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
 class SymfonyRequiredProperty
 {

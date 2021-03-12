@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
 
 class ClassWithInjects10ParentParent
 {
@@ -28,7 +28,7 @@ class ClassWithInjects10 extends ClassWithInjects10Parent
 -----
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
 
 class ClassWithInjects10ParentParent
 {

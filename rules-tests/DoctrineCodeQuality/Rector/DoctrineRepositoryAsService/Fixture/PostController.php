@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Fixture;
+namespace Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService\Fixture;
 
-use Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Source\Entity\Post;
-use Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\SymfonyController;
+use Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService\Source\Entity\Post;
+use Rector\Tests\Core\Rector\Architecture\DoctrineRepositoryAsService\Source\SymfonyController;
 use Symfony\Component\HttpFoundation\Response;
 
 final class PostController extends SymfonyController
@@ -21,18 +21,18 @@ final class PostController extends SymfonyController
 -----
 <?php
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Fixture;
+namespace Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService\Fixture;
 
-use Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Source\Entity\Post;
-use Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\SymfonyController;use Symfony\Component\HttpFoundation\Response;
+use Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService\Source\Entity\Post;
+use Rector\Tests\Core\Rector\Architecture\DoctrineRepositoryAsService\Source\SymfonyController;use Symfony\Component\HttpFoundation\Response;
 
 final class PostController extends SymfonyController
 {
     /**
-     * @var \Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\Repository\PostRepository
+     * @var \Rector\Tests\Core\Rector\Architecture\DoctrineRepositoryAsService\Source\Repository\PostRepository
      */
     private $postRepository;
-    public function __construct(\Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\Repository\PostRepository $postRepository)
+    public function __construct(\Rector\Tests\Core\Rector\Architecture\DoctrineRepositoryAsService\Source\Repository\PostRepository $postRepository)
     {
         $this->postRepository = $postRepository;
     }

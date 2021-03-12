@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\NewToMethodCallRectorTest
+ * @see \Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\NewToMethodCallRectorTest
  */
 final class NewToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {

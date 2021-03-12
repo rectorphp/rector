@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Ternary\SimplifyDuplicatedTernaryRector;
+namespace Rector\Tests\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector;

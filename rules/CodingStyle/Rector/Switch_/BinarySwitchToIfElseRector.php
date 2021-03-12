@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector\BinarySwitchToIfElseRectorTest
+ * @see \Rector\Tests\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector\BinarySwitchToIfElseRectorTest
  */
 final class BinarySwitchToIfElseRector extends AbstractRector
 {

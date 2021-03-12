@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector;
+namespace Rector\Tests\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;

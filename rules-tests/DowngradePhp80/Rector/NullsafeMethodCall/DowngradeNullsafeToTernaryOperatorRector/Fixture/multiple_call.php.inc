@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector\Fixture;
+namespace Rector\Tests\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector\Fixture;
 
 class MultipleCall
 {
@@ -15,7 +15,7 @@ class MultipleCall
 -----
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector\Fixture;
+namespace Rector\Tests\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector\Fixture;
 
 class MultipleCall
 {

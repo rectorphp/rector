@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector;
+namespace Rector\Tests\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector;
 
 use Iterator;
 use Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector;

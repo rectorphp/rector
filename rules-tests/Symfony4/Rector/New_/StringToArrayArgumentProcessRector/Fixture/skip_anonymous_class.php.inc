@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony4\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
+namespace Rector\Tests\Symfony4\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
 
 class SkipAnonymousClass
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Fixture;
 
 class DifferentVariableNameUsed
 {
@@ -22,7 +22,7 @@ class DifferentVariableNameUsed
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Fixture;
 
 class DifferentVariableNameUsed
 {

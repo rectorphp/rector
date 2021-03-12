@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\Fixture;
+namespace Rector\Tests\Naming\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\Fixture;
 
 final class FirstUnderscore
 {
@@ -12,7 +12,7 @@ final class FirstUnderscore
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\Fixture;
+namespace Rector\Tests\Naming\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\Fixture;
 
 final class FirstUnderscore
 {

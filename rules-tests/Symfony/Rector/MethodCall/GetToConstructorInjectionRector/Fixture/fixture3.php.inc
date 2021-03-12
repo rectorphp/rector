@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Source\GetTrait;
+use Rector\Tests\Symfony\Rector\MethodCall\GetToConstructorInjectionRector\Source\GetTrait;
 
 class ClassWithNamedServiceAndTrait
 {
@@ -18,14 +18,14 @@ class ClassWithNamedServiceAndTrait
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Source\GetTrait;
+use Rector\Tests\Symfony\Rector\MethodCall\GetToConstructorInjectionRector\Source\GetTrait;
 
 class ClassWithNamedServiceAndTrait
 {
     use GetTrait;
-    public function __construct(private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator)
+    public function __construct(private \Rector\Tests\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator)
     {
     }
 

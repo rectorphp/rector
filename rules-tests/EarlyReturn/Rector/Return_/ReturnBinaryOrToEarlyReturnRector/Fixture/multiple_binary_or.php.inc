@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryOrToEarlyReturnRector\Fixture;
+namespace Rector\Tests\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector\Fixture;
 
 class MultipleBinaryOr
 {
@@ -14,7 +14,7 @@ class MultipleBinaryOr
 -----
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\Return_\ReturnBinaryOrToEarlyReturnRector\Fixture;
+namespace Rector\Tests\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector\Fixture;
 
 class MultipleBinaryOr
 {

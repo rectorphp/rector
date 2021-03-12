@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Restoration\Tests\Rector\Property\MakeTypedPropertyNullableIfCheckedRector;
+namespace Rector\Tests\Restoration\Rector\Property\MakeTypedPropertyNullableIfCheckedRector;
 
 use Iterator;
 use Rector\Restoration\Rector\Property\MakeTypedPropertyNullableIfCheckedRector;

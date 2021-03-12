@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveUnusedDoctrineEntityMethodAndPropertyRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Class_\RemoveUnusedDoctrineEntityMethodAndPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
-use Rector\DeadCode\Tests\Rector\Class_\RemoveUnusedDoctrineEntityMethodAndPropertyRector\Source\SomeEntityProvider;
+use Rector\Tests\DeadCode\Rector\Class_\RemoveUnusedDoctrineEntityMethodAndPropertyRector\Source\SomeEntityProvider;
 
 class SkipTraitDocTypedAddict
 {

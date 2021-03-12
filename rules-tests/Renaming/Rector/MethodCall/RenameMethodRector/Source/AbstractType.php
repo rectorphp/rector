@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source;
+namespace Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\Source;
 
 abstract class AbstractType
 {

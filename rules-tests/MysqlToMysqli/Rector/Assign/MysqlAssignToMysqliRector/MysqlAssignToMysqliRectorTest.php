@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\MysqlToMysqli\Tests\Rector\Assign\MysqlAssignToMysqliRector;
+namespace Rector\Tests\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector;
 
 use Iterator;
 use Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector;

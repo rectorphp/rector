@@ -1,5 +1,5 @@
 <?php
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPublicMethodRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedPublicMethodRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;

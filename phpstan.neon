@@ -57,11 +57,7 @@ parameters:
         - packages/BetterPhpDocParser/ValueObject/PhpDocNode/AbstractTagValueNode.php
         - packages/Testing/PHPUnit/*.php
         - packages-tests/NodeVisitor/FunctionMethodAndClassNodeVisitor/FunctionMethodAndClassNodeVisitorTest.php
-        - rules/downgrade-php70/src/Rector/FunctionLike/AbstractDowngradeParamDeclarationRector.php
-
-        # phsptan bug
-        - packages/rector-generator/templates/*
-        # this invalidates whole cache everytime
+        - rules/DowngradePhp70/Rector/FunctionLike/AbstractDowngradeParamDeclarationRector.php
 
         # generated files
         - 'packages/DoctrineAnnotationGenerated/ConstantPreservingDocParser.php'
@@ -119,16 +115,16 @@ parameters:
 
         -
             message: "#^Cognitive complexity for \"Rector\\\\PhpSpecToPHPUnit\\\\Rector\\\\MethodCall\\\\PhpSpecPromisesToPHPUnitAssertRector\\:\\:refactor\\(\\)\" is 13, keep it under 9$#"
-            path: rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
+            path: rules/PhpSpecToPHPUnit/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
 
         -
             message: '#Class cognitive complexity is \d+, keep it under \d+#'
             paths:
-                - rules/php70/src/EregToPcreTransformer.php
+                - rules/Php70/EregToPcreTransformer.php
                 - packages/NodeCollector/NodeCollector/NodeRepository.php
                 - packages/NodeTypeResolver/NodeTypeResolver.php
-                - rules/code-quality-strict/src/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
-                - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
+                - rules/CodeQualityStrict/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
+                - rules/Php80/Rector/If_/NullsafeOperatorRector.php
 
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 9$#"
         - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\If_\\SimplifyIfIssetToNullCoalescingRector\:\:shouldSkip\(\)" is 10, keep it under 9#'
@@ -150,11 +146,6 @@ parameters:
         - '#Property PhpParser\\Node\\Stmt\\Foreach_\:\:\$valueVar \(PhpParser\\Node\\Expr\) does not accept PhpParser\\Node\\Expr\|null#'
         - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$type#'
 
-        # only local use
-        -
-            message: '#Class "Rector\\RectorGenerator\\Rector\\Closure\\AddNewServiceToSymfonyPhpConfigRector" is missing @see annotation with test case class reference#'
-            path: 'packages/rector-generator/src/Rector/Closure/AddNewServiceToSymfonyPhpConfigRector.php'
-
         - '#Parameter \#1 \$variable of class Rector\\Php70\\ValueObject\\VariableAssignPair constructor expects PhpParser\\Node\\Expr\\ArrayDimFetch\|PhpParser\\Node\\Expr\\PropertyFetch\|PhpParser\\Node\\Expr\\StaticPropertyFetch\|PhpParser\\Node\\Expr\\Variable, PhpParser\\Node\\Expr given#'
 
         # is nested expr
@@ -164,11 +155,7 @@ parameters:
         # wtf
         -
             message: '#Else branch is unreachable because ternary operator condition is always true#'
-            path: 'rules/psr4/src/Composer/PSR4NamespaceMatcher.php'
-
-        -
-            message: '#Class "Rector\\RectorGenerator\\ValueObject\\RectorRecipe" has invalid namespace category "ValueObject"\. Pick one of\: ""#'
-            path: packages/rector-generator/src/ValueObject/RectorRecipe.php
+            path: 'rules/PSR-4/Composer/PSR4NamespaceMatcher.php'
 
         - '#Parameter \#2 \$currentNode of method Rector\\CodingStyle\\Rector\\Assign\\ManualJsonStringToJsonEncodeArrayRector\:\:matchNextExprAssignConcatToSameVariable\(\) expects PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Expr\\AssignOp\\Concat, PhpParser\\Node given#'
 
@@ -177,30 +164,29 @@ parameters:
             paths:
                 # working with cvs file
                 # 3rd party package
-                - rules/php70/src/EregToPcreTransformer.php
+                - rules/Php70/EregToPcreTransformer.php
                 # template variables
-                - packages/rector-generator/src/TemplateVariablesFactory.php
                 # output format to json
-                - rules/doctrine/src/Collector/UuidMigrationDataCollector.php
+                - rules/Doctrine/Collector/UuidMigrationDataCollector.php
 
         -
             message: '#Use explicit return value over magic &reference#'
             paths:
                 # 3rd party code
-                -  rules/php70/src/EregToPcreTransformer.php
+                -  rules/Php70/EregToPcreTransformer.php
 
         # symfony/console
         -
              message: '#Use explicit return value over magic &reference#'
-             path: 'rules/dead-code/src/Rector/BinaryOp/RemoveDuplicatedInstanceOfRector.php'
+             path: 'rules/DeadCode/Rector/BinaryOp/RemoveDuplicatedInstanceOfRector.php'
 
         -
             message: '#Use value object over return of values#'
-            path: 'rules/phpunit/src/Composer/ComposerAutoloadedDirectoryProvider.php'
+            path: 'rules/PHPUnit/Composer/ComposerAutoloadedDirectoryProvider.php'
 
         -
             message: '#Use value object over return of values#'
-            path: 'rules/php70/src/EregToPcreTransformer.php'
+            path: 'rules/Php70/EregToPcreTransformer.php'
 
         -
             message: '#Nested foreach with empty statement is not allowed#'
@@ -239,13 +225,13 @@ parameters:
                 - src/Rector/AbstractRector.php
                 # playing around with doc block format
                 - packages/Comments/CommentRemover.php
-                - rules/coding-style/src/Rector/Assign/PHPStormVarAnnotationRector.php
-                - rules/code-quality/src/Rector/Return_/SimplifyUselessVariableRector.php
-                - rules/dead-code/src/Rector/Expression/RemoveDeadStmtRector.php
-                - rules/dead-doc-block/src/Rector/Node/RemoveNonExistingVarAnnotationRector.php
-                - rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecMocksToPHPUnitMocksRector.php
+                - rules/CodingStyle/Rector/Assign/PHPStormVarAnnotationRector.php
+                - rules/CodeQuality/Rector/Return_/SimplifyUselessVariableRector.php
+                - rules/DeadCode/Rector/Expression/RemoveDeadStmtRector.php
+                - rules/DeadDocBlock/Rector/Node/RemoveNonExistingVarAnnotationRector.php
+                - rules/PhpSpecToPHPUnit/Rector/MethodCall/PhpSpecMocksToPHPUnitMocksRector.php
+                - rules/CodingStyle/Node/DocAliasResolver.php
                 - packages/BetterPhpDocParser/Comment/CommentsMerger.php
-                - rules/coding-style/src/Node/DocAliasResolver.php
                 - packages/Comments/NodeDocBlock/DocBlockUpdater.php
                 - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfoFactory.php
                 - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php
@@ -254,9 +240,9 @@ parameters:
         -
             message: '#If condition is always false#'
             paths:
-                - rules/renaming/src/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector.php
-                - rules/code-quality/src/Rector/Concat/JoinStringConcatRector.php
-                - rules/php80/src/Rector/Switch_/ChangeSwitchToMatchRector.php
+                - rules/Renaming/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector.php
+                - rules/CodeQuality/Rector/Concat/JoinStringConcatRector.php
+                - rules/Php80/Rector/Switch_/ChangeSwitchToMatchRector.php
                 - packages/NodeNestingScope/NodeFinder/ScopeAwareNodeFinder.php
 
         # internal generating Rector
@@ -268,7 +254,6 @@ parameters:
         -
             message: '#Do not use setter on a service#'
             paths:
-                - packages/rector-generator/src/Rector/Closure/AddNewServiceToSymfonyPhpConfigRector.php
                 - src/Configuration/Configuration.php
                 # prevent circular dependnecy
                 - packages/StaticTypeMapper/Naming/NameScopeFactory.php
@@ -295,7 +280,7 @@ parameters:
         -
              message: '#Access to an undefined property PhpParser\\Node\:\:\$expr#'
              paths:
-                - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
+                - rules/Php80/Rector/If_/NullsafeOperatorRector.php
 
         ###################################################
 
@@ -307,7 +292,7 @@ parameters:
         -
             message: '#Comparison operation "<" between 0 and 2 is always true#'
             paths:
-                - rules/php70/src/Rector/FuncCall/MultiDirnameRector.php
+                - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
         - '#PHPDoc tag @param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
 
         # intersection mess
@@ -325,15 +310,15 @@ parameters:
         # known values from other methods
         -
             message: '#Negated boolean expression is always true#'
-            path: rules/php-spec-to-phpunit/src/NodeFactory/AssertMethodCallFactory.php
+            path: rules/PhpSpecToPHPUnit/NodeFactory/AssertMethodCallFactory.php
 
         -
             message: '#Call to function in_array\(\) with arguments string, array\(\) and true will always evaluate to false#'
-            path: rules/php56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php
+            path: rules/Php56/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php
 
         -
             message: '#Parameter \#1 \$left of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
-            path: rules/php70/src/Rector/If_/IfToSpaceshipRector.php
+            path: rules/Php70/Rector/If_/IfToSpaceshipRector.php
 
         - '#PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable given#'
 
@@ -346,13 +331,13 @@ parameters:
         -
              message: '#Use `\$class\-\>namespaceName` instead of `\$class\-\>name` that only returns short class name#'
              paths:
-                  - rules/coding-style/src/Naming/NameRenamer.php
+                  - rules/CodingStyle/Naming/NameRenamer.php
                   - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
 
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             paths:
-                - rules/defluent/src/ValueObject/*
+                - rules/Defluent/ValueObject/*
                 - src/Rector/AbstractRector.php
 
         - '#Parameter \#1 \$keyName of method Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareArrayShapeItemNode\:\:createKeyWithSpacePattern\(\) expects PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null, PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null given#'
@@ -374,22 +359,22 @@ parameters:
             message: '#Unreachable statement \- code above always terminates#'
             paths:
                 - bin/rector.php
-                - rules/php70/src/Rector/FuncCall/MultiDirnameRector.php
+                - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
 
         # @todo fix later
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             paths:
-                - rules/naming/src/Guard/PropertyConflictingNameGuard/AbstractPropertyConflictingNameGuard.php
-                - rules/naming/src/PropertyRenamer/AbstractPropertyRenamer.php
+                - rules/Naming/Guard/PropertyConflictingNameGuard/AbstractPropertyConflictingNameGuard.php
+                - rules/Naming/PropertyRenamer/AbstractPropertyRenamer.php
 
         -
             message: '#There should be no empty class#'
             paths:
                 - packages/StaticTypeMapper/ValueObject/Type/ParentStaticType.php #9
                 - packages/StaticTypeMapper/ValueObject/Type/SelfObjectType.php #9
-                - rules/symfony/tests/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeEntityManager.php #7
-                - rules/symfony/tests/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeNonKernelClass.php #7
+                - rules-tests/Symfony/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeEntityManager.php #7
+                - rules-tests/Symfony/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeNonKernelClass.php #7
 
         # generics nullable bugs
         - '#Method (.*?) should return T of PhpParser\\Node\|null but returns PhpParser\\Node\|null#'
@@ -426,7 +411,7 @@ parameters:
             paths:
                 - src/Rector/AbstractRector.php
                 # setter to avoid circular dependency in nested collector
-                - rules/nette-code-quality/src/NodeResolver/MethodNamesByInputNamesResolver.php
+                - rules/NetteCodeQuality/NodeResolver/MethodNamesByInputNamesResolver.php
                 - packages/StaticTypeMapper/StaticTypeMapper.php
                 - packages/BetterPhpDocParser/Attributes/Ast/AttributeAwareNodeFactory.php
                 - packages/BetterPhpDocParser/PhpDocParser/BetterPhpDocParser.php
@@ -458,7 +443,7 @@ parameters:
 
         -
             message: '#Namespace "Rector\\Composer\\Tests\\Rector" is only reserved for "Rector"\. Move the class somewhere else#'
-            path: rules/composer/tests/Rector/AbstractComposerRectorTestCase.php
+            path: rules-tests/Composer/Rector/AbstractComposerRectorTestCase.php
 
         - '#Class with base "SetList" name is already used in "Symplify\\EasyCodingStandard\\ValueObject\\Set\\SetList", "Rector\\Set\\ValueObject\\SetList"\. Use unique name to make classes easy to recognize#'
         - '#Class with base "PhpVersion" name is already used in "PHPStan\\Php\\PhpVersion", "Rector\\Core\\ValueObject\\PhpVersion"\. Use unique name to make classes easy to recognize#'
@@ -503,7 +488,7 @@ parameters:
              paths:
                  # on PhpParser Nodes
                  - src/NodeManipulator/ClassMethodAssignManipulator.php
-                 - rules/php80/src/Rector/If_/NullsafeOperatorRector.php
+                 - rules/Php80/Rector/If_/NullsafeOperatorRector.php
                  - packages/NodeTypeResolver/NodeVisitor/FunctionMethodAndClassNodeVisitor.php
                  - packages/NodeTypeResolver/NodeVisitor/StatementNodeVisitor.php
                  - packages/NodeNameResolver/NodeNameResolver.php
@@ -515,14 +500,12 @@ parameters:
         -
             message: '#Function "class_implements\(\)" cannot be used/left in the code#'
             paths:
-                - rules/symfony/src/ValueObject/ServiceMap/ServiceMap.php
+                - rules/Symfony/ValueObject/ServiceMap/ServiceMap.php
 
         -
             message: '#Instead of "ReflectionClass" class/interface use "PHPStan\\Reflection\\ClassReflection"#'
             paths:
                 # own classes
-                 - packages/rector-generator/src/Provider/SetsListProvider.php
-                 - packages/rector-generator/src/Provider/NodeTypesProvider.php
                  - packages/Testing/Finder/RectorsFinder.php
                  - packages/StaticTypeMapper/TypeFactory/UnionTypeFactory.php
                  - packages/Set/RectorSetProvider.php
@@ -542,12 +525,12 @@ parameters:
         -
             message: '#Function "get_declared_classes\(\)" cannot be used/left in the code#'
             paths:
-                - rules/restoration/src/ClassMap/ExistingClassesProvider.php
+                - rules/Restoration/ClassMap/ExistingClassesProvider.php
 
         -
             message: '#Parameter \#1 \$types of method Rector\\Defluent\\NodeAnalyzer\\FluentCallStaticTypeResolver\:\:filterOutAlreadyPresentParentClasses\(\) expects array<class\-string\>, array<int, string\> given#'
             paths:
-                - rules/defluent/src/NodeAnalyzer/FluentCallStaticTypeResolver.php
+                - rules/Defluent/NodeAnalyzer/FluentCallStaticTypeResolver.php
 
         - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\Isset_\\IssetOnPropertyObjectToPropertyExistsRector\:\:refactor\(\)" is \d+, keep it under 9#'
 
@@ -567,12 +550,12 @@ parameters:
         -
             message: '#Offset 0 does not exist on array<PhpParser\\Node\\Stmt\>\|null#'
             paths:
-                - rules/naming/src/Naming/PropertyNaming.php
+                - rules/Naming/Naming/PropertyNaming.php
 
         -
             message: '#Parameter \#1 \$value of function count expects array\|Countable, array<PhpParser\\Node\\Stmt\>\|null given#'
             paths:
-                -  rules/naming/src/Naming/PropertyNaming.php
+                -  rules/Naming/Naming/PropertyNaming.php
 
         -
             message: '#Use quoted string in constructor "new PHPStan\\Type\\ObjectType\(\)" argument on position 0 instead of "\:\:class\. It prevent scoping of the class in building prefixed package#'
@@ -593,6 +576,8 @@ parameters:
         - '#Content of method "matchReturnMethodCall\(\)" is duplicated with method "matchReturnMethodCall\(\)" in "Rector\\Defluent\\Rector\\Return_\\ReturnFluentChainMethodCallToNormalMethodCallRector" class\. Use unique content or service instead#'
         - '#Content of method "matchReturnMethodCall\(\)" is duplicated with method "matchReturnMethodCall\(\)" in "Rector\\Defluent\\Rector\\Return_\\ReturnNewFluentChainMethodCallToNonFluentRector" class\. Use unique content or service instead#'
         - '#Content of method "decoratePropertyWithDocBlock\(\)" is duplicated with method "decoratePropertyWithDocBlock\(\)" in "Rector\\DowngradePhp74\\Rector\\Property\\DowngradeTypedPropertyRector" class\. Use unique content or service instead#'
+        - '#Content of method "decoratePropertyWithDocBlock\(\)" is duplicated with method "decoratePropertyWithDocBlock\(\)" in "Rector\\DowngradePhp80\\Rector\\Property\\DowngradeUnionTypeTypedPropertyRector" class\. Use unique content or service instead#'
+
         -
             message: '#Argument and options "debug" got confused#'
             paths:

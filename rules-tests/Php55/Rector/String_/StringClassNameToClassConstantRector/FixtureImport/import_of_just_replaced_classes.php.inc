@@ -1,15 +1,15 @@
 <?php
 
-namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\FixtureImport;
+namespace Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\FixtureImport;
 
 class ImportOfJustReplacedClasses
 {
     public function run()
     {
-        $class = 'Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\SomeUser';
+        $class = 'Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\SomeUser';
         $user = new $class;
 
-        $anotherClass = 'Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\SomeSecurity\SomeUser';
+        $anotherClass = 'Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\SomeSecurity\SomeUser';
         $user = new $anotherClass;
     }
 }
@@ -18,9 +18,9 @@ class ImportOfJustReplacedClasses
 -----
 <?php
 
-namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\FixtureImport;
+namespace Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\FixtureImport;
 
-use Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\SomeUser;
+use Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\SomeUser;
 class ImportOfJustReplacedClasses
 {
     public function run()
@@ -28,7 +28,7 @@ class ImportOfJustReplacedClasses
         $class = SomeUser::class;
         $user = new $class;
 
-        $anotherClass = \Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\SomeSecurity\SomeUser::class;
+        $anotherClass = \Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\SomeSecurity\SomeUser::class;
         $user = new $anotherClass;
     }
 }

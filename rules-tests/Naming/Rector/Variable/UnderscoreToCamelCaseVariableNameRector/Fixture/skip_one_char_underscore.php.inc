@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\Fixture;
+namespace Rector\Tests\Naming\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\Fixture;
 
 function runskipOneCharUnderscore()
 {

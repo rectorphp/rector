@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\ArgumentRemoverRectorTest
+ * @see \Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\ArgumentRemoverRectorTest
  */
 final class ArgumentRemoverRector extends AbstractRector implements ConfigurableRectorInterface
 {

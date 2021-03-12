@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp73\Tests\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector\Fixture;
+namespace Rector\Tests\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector\Fixture;
 
 class OptionsSkippedValues {
     public function setCookies()
@@ -15,7 +15,7 @@ class OptionsSkippedValues {
 -----
 <?php
 
-namespace Rector\DowngradePhp73\Tests\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector\Fixture;
+namespace Rector\Tests\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector\Fixture;
 
 class OptionsSkippedValues {
     public function setCookies()

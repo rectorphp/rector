@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php54\Tests\Rector\Break_\RemoveZeroBreakContinueRector;
+namespace Rector\Tests\Php54\Rector\Break_\RemoveZeroBreakContinueRector;
 
 use Iterator;
 use Rector\Php54\Rector\Break_\RemoveZeroBreakContinueRector;

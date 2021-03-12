@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector\FixturePostImport;
+namespace Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\FixturePostImport;
 
 final class InstanceofSomeClass
 {
@@ -18,7 +18,7 @@ final class InstanceofSomeClass
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector\FixturePostImport;
+namespace Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\FixturePostImport;
 
 use PhpParser\Node\Stmt\ClassMethod;
 final class InstanceofSomeClass

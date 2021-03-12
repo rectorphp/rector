@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
 class Config
 {
@@ -19,7 +19,7 @@ class Config
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture;
 
 class Config
 {

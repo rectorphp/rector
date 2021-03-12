@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Restoration\Tests\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector;
+namespace Rector\Tests\Restoration\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector;
 
 use Iterator;
 use Rector\Restoration\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector;

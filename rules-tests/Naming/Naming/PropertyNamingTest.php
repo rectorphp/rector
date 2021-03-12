@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\Naming;
+namespace Rector\Tests\Naming\Naming;
 
 use Iterator;
 use Rector\Core\HttpKernel\RectorKernel;

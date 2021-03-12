@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Source\StandaloneClass as BaseKernel;
+use Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Source\StandaloneClass as BaseKernel;
 
 class StandaloneClass extends BaseKernel
 {

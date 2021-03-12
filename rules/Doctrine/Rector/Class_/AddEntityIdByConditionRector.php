@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Doctrine\Tests\Rector\Class_\AddEntityIdByConditionRector\AddEntityIdByConditionRectorTest
+ * @see \Rector\Tests\Doctrine\Rector\Class_\AddEntityIdByConditionRector\AddEntityIdByConditionRectorTest
  */
 final class AddEntityIdByConditionRector extends AbstractRector implements ConfigurableRectorInterface
 {

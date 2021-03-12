@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony3\Tests\Rector\ClassMethod\GetRequestRector\GetRequestRectorTest
+ * @see \Rector\Tests\Symfony3\Rector\ClassMethod\GetRequestRector\GetRequestRectorTest
  */
 final class GetRequestRector extends AbstractRector
 {

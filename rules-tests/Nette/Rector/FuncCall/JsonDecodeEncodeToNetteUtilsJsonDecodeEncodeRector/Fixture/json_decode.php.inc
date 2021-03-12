@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector\Fixture;
+namespace Rector\Tests\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector\Fixture;
 
 class JsonDecode
 {
@@ -17,7 +17,7 @@ class JsonDecode
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector\Fixture;
+namespace Rector\Tests\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector\Fixture;
 
 class JsonDecode
 {

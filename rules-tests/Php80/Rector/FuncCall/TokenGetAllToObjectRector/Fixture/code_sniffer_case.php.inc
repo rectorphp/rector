@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\FuncCall\TokenGetAllToObjectRector\Fixture;
+namespace Rector\Tests\Php80\Rector\FuncCall\TokenGetAllToObjectRector\Fixture;
 
 final class CodeSnifferCase
 {
@@ -23,7 +23,7 @@ final class CodeSnifferCase
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\FuncCall\TokenGetAllToObjectRector\Fixture;
+namespace Rector\Tests\Php80\Rector\FuncCall\TokenGetAllToObjectRector\Fixture;
 
 final class CodeSnifferCase
 {

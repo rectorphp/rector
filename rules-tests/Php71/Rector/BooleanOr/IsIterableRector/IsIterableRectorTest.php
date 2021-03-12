@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php71\Tests\Rector\BooleanOr\IsIterableRector;
+namespace Rector\Tests\Php71\Rector\BooleanOr\IsIterableRector;
 
 use Iterator;
 use Rector\Php71\Rector\BooleanOr\IsIterableRector;

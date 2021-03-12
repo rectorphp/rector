@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/symfony/symfony/pull/35308
  *
- * @see \Rector\Transform\Tests\Rector\StaticCall\StaticCallToNewRector\StaticCallToNewRectorTest
+ * @see \Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\StaticCallToNewRectorTest
  */
 final class StaticCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
 {

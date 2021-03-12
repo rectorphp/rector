@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Foreach_\RemoveUnusedForeachKeyRector;
+namespace Rector\Tests\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;

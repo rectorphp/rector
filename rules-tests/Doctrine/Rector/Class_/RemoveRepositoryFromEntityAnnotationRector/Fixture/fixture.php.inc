@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,7 +15,7 @@ class Product
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 

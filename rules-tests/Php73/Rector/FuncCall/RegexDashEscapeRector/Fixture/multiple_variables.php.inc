@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\RegexDashEscapeRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\RegexDashEscapeRector\Fixture;
 
 class MultipleVariables
 {
@@ -22,7 +22,7 @@ class MultipleVariables
 -----
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\RegexDashEscapeRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\RegexDashEscapeRector\Fixture;
 
 class MultipleVariables
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php73\Tests\Rector\ConstFetch\SensitiveConstantNameRector\Fixture;
+namespace Rector\Tests\Php73\Rector\ConstFetch\SensitiveConstantNameRector\Fixture;
 
 function sensitiveConstantName()
 {
@@ -17,7 +17,7 @@ function sensitiveConstantName()
 -----
 <?php
 
-namespace Rector\Php73\Tests\Rector\ConstFetch\SensitiveConstantNameRector\Fixture;
+namespace Rector\Tests\Php73\Rector\ConstFetch\SensitiveConstantNameRector\Fixture;
 
 function sensitiveConstantName()
 {

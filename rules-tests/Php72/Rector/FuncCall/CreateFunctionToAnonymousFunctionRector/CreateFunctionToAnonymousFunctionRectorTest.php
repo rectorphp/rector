@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector;
+namespace Rector\Tests\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector;
 
 use Iterator;
 use Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector;

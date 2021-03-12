@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\JsonThrowOnErrorRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\JsonThrowOnErrorRector\Fixture;
 
 function jsonThrowOnError()
 {
@@ -16,7 +16,7 @@ function jsonThrowOnError()
 -----
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\JsonThrowOnErrorRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\JsonThrowOnErrorRector\Fixture;
 
 function jsonThrowOnError()
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstructorRector;
+namespace Rector\Tests\NetteCodeQuality\Rector\Class_\MoveInjectToExistingConstructorRector;
 
 use Iterator;
 use Rector\NetteCodeQuality\Rector\Class_\MoveInjectToExistingConstructorRector;

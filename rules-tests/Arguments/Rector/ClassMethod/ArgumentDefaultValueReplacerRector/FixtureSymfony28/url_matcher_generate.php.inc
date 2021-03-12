@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Arguments\Tests\Rector\ClassMethod\ArgumentDefaultValueReplacerRector\FixtureSymfony28;
+namespace Rector\Tests\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector\FixtureSymfony28;
 
 use Symfony\Component\Routing\Router;
 
@@ -18,7 +18,7 @@ class UrlMatcherGenerate
 -----
 <?php
 
-namespace Rector\Arguments\Tests\Rector\ClassMethod\ArgumentDefaultValueReplacerRector\FixtureSymfony28;
+namespace Rector\Tests\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector\FixtureSymfony28;
 
 use Symfony\Component\Routing\Router;
 

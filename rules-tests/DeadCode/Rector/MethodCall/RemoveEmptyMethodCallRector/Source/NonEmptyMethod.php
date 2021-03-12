@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Source;
+namespace Rector\Tests\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector\Source;
 
 use DateTime;
 

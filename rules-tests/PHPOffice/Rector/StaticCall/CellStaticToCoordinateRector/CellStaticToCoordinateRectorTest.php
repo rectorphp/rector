@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPOffice\Tests\Rector\StaticCall\CellStaticToCoordinateRector;
+namespace Rector\Tests\PHPOffice\Rector\StaticCall\CellStaticToCoordinateRector;
 
 use Iterator;
 use Rector\PHPOffice\Rector\StaticCall\CellStaticToCoordinateRector;

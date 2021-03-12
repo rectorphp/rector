@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\MethodCall\BuilderExpandToHelperExpandRector\Fixture;
+namespace Rector\Tests\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector\Fixture;
 
 use Nette\DI\CompilerExtension;
 
@@ -16,7 +16,7 @@ final class SomeClass extends CompilerExtension
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\MethodCall\BuilderExpandToHelperExpandRector\Fixture;
+namespace Rector\Tests\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector\Fixture;
 
 use Nette\DI\CompilerExtension;
 

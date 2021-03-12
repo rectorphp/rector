@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Fixture;
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,7 +21,7 @@ final class SomeController
 -----
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Fixture;
 
 use Symfony\Component\HttpFoundation\Request;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
@@ -84,7 +84,7 @@ class MultipleRunsClass
 -----
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;

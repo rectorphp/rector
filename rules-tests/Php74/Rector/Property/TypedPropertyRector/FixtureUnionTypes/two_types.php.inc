@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\FixtureUnionTypes;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionTypes;
 
 final class TwoTypes
 {
@@ -14,7 +14,7 @@ final class TwoTypes
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\FixtureUnionTypes;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionTypes;
 
 final class TwoTypes
 {

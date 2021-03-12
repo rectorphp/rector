@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
 
 use Nette\Application\UI\Control;
 
@@ -22,7 +22,7 @@ class GetPresenterSession extends Control
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
 
 use Nette\Application\UI\Control;
 

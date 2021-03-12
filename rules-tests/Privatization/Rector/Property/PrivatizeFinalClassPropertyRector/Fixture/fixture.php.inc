@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector\Fixture;
 
 final class Fixture
 {
@@ -11,7 +11,7 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector\Fixture;
 
 final class Fixture
 {

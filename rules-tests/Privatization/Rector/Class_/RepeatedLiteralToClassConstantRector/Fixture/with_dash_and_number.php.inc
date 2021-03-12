@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Privatization\Tests\Rector\Class_\RepeatedLiteralToClassConstantRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\Class_\RepeatedLiteralToClassConstantRector\Fixture;
 
 class WithDashAndNumber
 {
@@ -27,7 +27,7 @@ class WithDashAndNumber
 -----
 <?php
 
-namespace Rector\Privatization\Tests\Rector\Class_\RepeatedLiteralToClassConstantRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\Class_\RepeatedLiteralToClassConstantRector\Fixture;
 
 class WithDashAndNumber
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveDefaultArgumentValueRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector\Fixture;
 
-use function Rector\DeadCode\Tests\Rector\MethodCall\RemoveDefaultArgumentValueRector\Source\userDefinedFunction;
+use function Rector\Tests\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector\Source\userDefinedFunction;
 
 class UserVendorFunction
 {
@@ -16,9 +16,9 @@ class UserVendorFunction
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveDefaultArgumentValueRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector\Fixture;
 
-use function Rector\DeadCode\Tests\Rector\MethodCall\RemoveDefaultArgumentValueRector\Source\userDefinedFunction;
+use function Rector\Tests\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector\Source\userDefinedFunction;
 
 class UserVendorFunction
 {

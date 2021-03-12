@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 
@@ -17,7 +17,7 @@ final class SomeTest extends TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 

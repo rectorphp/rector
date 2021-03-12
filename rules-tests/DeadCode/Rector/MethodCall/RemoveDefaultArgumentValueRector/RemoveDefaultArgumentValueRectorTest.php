@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveDefaultArgumentValueRector;
+namespace Rector\Tests\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector;

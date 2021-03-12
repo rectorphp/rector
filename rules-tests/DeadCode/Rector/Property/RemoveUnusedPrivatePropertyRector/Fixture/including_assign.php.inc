@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
@@ -18,7 +18,7 @@ final class IncludingAssign extends AbstractKernelTestCase
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 

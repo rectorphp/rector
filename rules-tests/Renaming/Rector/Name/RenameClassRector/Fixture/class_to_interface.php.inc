@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\Fixture;
 
 class ClassToInterface extends \DateTime
 {
@@ -14,7 +14,7 @@ class ClassToInterface extends \DateTime
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\Fixture;
 
 class ClassToInterface extends \DateTime
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTagValueNodes;
+namespace Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTagValueNodes;
 
 use DI\Annotation\Inject;
 
@@ -8,7 +8,7 @@ class InjectFromProtectedVar
 {
     /**
      * @Inject
-     * @var \Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\ExistingDependency
+     * @var \Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\ExistingDependency
      */
     protected $someDependency;
 }
@@ -17,13 +17,13 @@ class InjectFromProtectedVar
 -----
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTagValueNodes;
+namespace Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTagValueNodes;
 
 use DI\Annotation\Inject;
 
 class InjectFromProtectedVar
 {
-    public function __construct(protected \Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\ExistingDependency $someDependency)
+    public function __construct(protected \Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\ExistingDependency $someDependency)
     {
     }
 }

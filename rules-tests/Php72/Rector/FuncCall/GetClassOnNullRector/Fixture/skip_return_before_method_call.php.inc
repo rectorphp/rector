@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector\Fixture;
+namespace Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\Fixture;
 
 trait SomeTrait
 {

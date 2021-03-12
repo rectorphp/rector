@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony4\Tests\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\Fixture;
+namespace Rector\Tests\Symfony4\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\Fixture;
 
-use Rector\Symfony4\Tests\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\Source\CustomEvent;
+use Rector\Tests\Symfony4\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\Source\CustomEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\EventDispatcher\Event;
 

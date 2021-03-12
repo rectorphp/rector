@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
 
 final class PropertyAfterInstantiationIfAlwaysExists
 {
@@ -19,7 +19,7 @@ final class PropertyAfterInstantiationIfAlwaysExists
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
 
 final class PropertyAfterInstantiationIfAlwaysExists
 {

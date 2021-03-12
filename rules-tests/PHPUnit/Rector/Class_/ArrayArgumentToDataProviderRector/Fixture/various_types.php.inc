@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\Class_\ArrayArgumentToDataProviderRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector\Fixture;
 
 class VariousTypesTest extends \PHPUnit\Framework\TestCase
 {
@@ -14,7 +14,7 @@ class VariousTypesTest extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\Class_\ArrayArgumentToDataProviderRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector\Fixture;
 
 class VariousTypesTest extends \PHPUnit\Framework\TestCase
 {

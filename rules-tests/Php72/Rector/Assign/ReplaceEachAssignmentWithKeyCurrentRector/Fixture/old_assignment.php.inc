@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector\Fixture;
+namespace Rector\Tests\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector\Fixture;
 
 final class OldAssignment
 {
@@ -16,7 +16,7 @@ final class OldAssignment
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector\Fixture;
+namespace Rector\Tests\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector\Fixture;
 
 final class OldAssignment
 {

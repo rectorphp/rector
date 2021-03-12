@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DependencyInjection\Tests\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
+ * @see \Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
  */
 final class AddMethodParentCallRector extends AbstractRector implements ConfigurableRectorInterface
 {

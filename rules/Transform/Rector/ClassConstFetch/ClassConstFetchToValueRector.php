@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Transform\Tests\Rector\ClassConstFetch\ClassConstFetchToValueRector\ClassConstFetchToValueRectorTest
+ * @see \Rector\Tests\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector\ClassConstFetchToValueRectorTest
  */
 final class ClassConstFetchToValueRector extends AbstractRector implements ConfigurableRectorInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\AddPregQuoteDelimiterRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector\Fixture;
 
 class Fixture
 {
@@ -16,7 +16,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\AddPregQuoteDelimiterRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector\Fixture;
 
 class Fixture
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php54\Tests\Rector\Break_\RemoveZeroBreakContinueRector\Fixture;
+namespace Rector\Tests\Php54\Rector\Break_\RemoveZeroBreakContinueRector\Fixture;
 
 function runContinueZeroes($random)
 {
@@ -20,7 +20,7 @@ function breakIt()
 -----
 <?php
 
-namespace Rector\Php54\Tests\Rector\Break_\RemoveZeroBreakContinueRector\Fixture;
+namespace Rector\Tests\Php54\Rector\Break_\RemoveZeroBreakContinueRector\Fixture;
 
 function runContinueZeroes($random)
 {

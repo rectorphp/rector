@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Sensio\Tests\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector\Fixture;
+namespace Rector\Tests\Sensio\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector\Fixture;
 
 use Symfony\Component\Routing\Annotation\Route;
 

@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/sebastianbergmann/phpunit/issues/3494#issuecomment-480283612
  * @see https://github.com/sebastianbergmann/phpunit/issues/3495
  *
- * @see \Rector\PHPUnit\Tests\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector\ReplaceAssertArraySubsetWithDmsPolyfillRectorTest
+ * @see \Rector\Tests\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector\ReplaceAssertArraySubsetWithDmsPolyfillRectorTest
  */
 final class ReplaceAssertArraySubsetWithDmsPolyfillRector extends AbstractRector
 {

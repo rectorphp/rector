@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
 
 use DateTimeInterface;
 
@@ -16,7 +16,7 @@ class ClassWithInjects8Parent
 class ClassWithInjects8 extends ClassWithInjects8Parent
 {
     /**
-     * @var \Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProduct
+     * @var \Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProduct
      * @inject
      */
     public $property;
@@ -26,7 +26,7 @@ class ClassWithInjects8 extends ClassWithInjects8Parent
 -----
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
 
 use DateTimeInterface;
 
@@ -39,7 +39,7 @@ class ClassWithInjects8Parent
 
 class ClassWithInjects8 extends ClassWithInjects8Parent
 {
-    public function __construct(\DateTimeInterface $dateTime, private \Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProduct $property)
+    public function __construct(\DateTimeInterface $dateTime, private \Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProduct $property)
     {
         parent::__construct($dateTime);
     }

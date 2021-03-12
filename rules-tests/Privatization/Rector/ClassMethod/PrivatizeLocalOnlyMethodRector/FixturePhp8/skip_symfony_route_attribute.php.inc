@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\FixturePhp8;
+namespace Rector\Tests\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\FixturePhp8;
 
 use Symfony\Component\Routing\Annotation\Route;
 

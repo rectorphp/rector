@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteTesterToPHPUnit\Tests\Rector\RenameTesterTestToPHPUnitToTestFileRector\Source;
+namespace Rector\Tests\NetteTesterToPHPUnit\Rector\RenameTesterTestToPHPUnitToTestFileRector\Source;
 
 final class SomeCase
 {

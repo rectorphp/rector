@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveUnreachableStatementRector;
+namespace Rector\Tests\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;

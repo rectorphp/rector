@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
-use Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
+use Rector\Tests\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
 
 class NoSetUuid
 {
@@ -18,17 +18,17 @@ class NoSetUuid
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
-use Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
+use Rector\Tests\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
 
 class NoSetUuid
 {
     public function run()
     {
         $car = new Building();
-        $car->setId(\Ramsey\Uuid\Uuid::fromString('%s-%s-%s-%s-%s'));
+        $car->setId(\Ramsey\Uuid\Uuid::fromString('%s'));
     }
 }
 

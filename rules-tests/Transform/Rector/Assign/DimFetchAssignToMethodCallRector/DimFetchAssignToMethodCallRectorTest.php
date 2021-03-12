@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\Assign\DimFetchAssignToMethodCallRector;
+namespace Rector\Tests\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

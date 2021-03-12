@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\MakeIsserClassMethodNameStartWithIsRector;
+namespace Rector\Tests\Naming\Rector\ClassMethod\MakeIsserClassMethodNameStartWithIsRector;
 
 use Iterator;
 use Rector\Naming\Rector\ClassMethod\MakeIsserClassMethodNameStartWithIsRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\NotIdentical\StrContainsRector\Fixture;
+namespace Rector\Tests\Php80\Rector\NotIdentical\StrContainsRector\Fixture;
 
 class Fixture
 {
@@ -14,7 +14,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\NotIdentical\StrContainsRector\Fixture;
+namespace Rector\Tests\Php80\Rector\NotIdentical\StrContainsRector\Fixture;
 
 class Fixture
 {

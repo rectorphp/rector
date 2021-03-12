@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Ternary\SwitchNegatedTernaryRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector\Fixture;
 
 class Fixture
 {
@@ -16,7 +16,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Ternary\SwitchNegatedTernaryRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector\Fixture;
 
 class Fixture
 {

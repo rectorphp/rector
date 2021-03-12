@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveDuplicatedIfReturnRector;
+namespace Rector\Tests\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector;

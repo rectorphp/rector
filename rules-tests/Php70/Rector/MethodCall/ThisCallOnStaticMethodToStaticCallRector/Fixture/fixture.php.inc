@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
+namespace Rector\Tests\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
 
 use Rector\Testing\Contract\RunnableInterface;
 
@@ -37,7 +37,7 @@ class SomeRunnable implements RunnableInterface
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
+namespace Rector\Tests\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
 
 use Rector\Testing\Contract\RunnableInterface;
 

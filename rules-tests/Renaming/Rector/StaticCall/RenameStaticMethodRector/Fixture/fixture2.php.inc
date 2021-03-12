@@ -1,6 +1,6 @@
 <?php
 
-use Rector\Renaming\Tests\Rector\StaticCall\RenameStaticMethodRector\Source\FormMacros;
+use Rector\Tests\Renaming\Rector\StaticCall\RenameStaticMethodRector\Source\FormMacros;
 
 function staticMethodNameReplacer2()
 {
@@ -12,7 +12,7 @@ function staticMethodNameReplacer2()
 -----
 <?php
 
-use Rector\Renaming\Tests\Rector\StaticCall\RenameStaticMethodRector\Source\FormMacros;
+use Rector\Tests\Renaming\Rector\StaticCall\RenameStaticMethodRector\Source\FormMacros;
 
 function staticMethodNameReplacer2()
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\Interface_\DeleteFactoryInterfaceRector;
+namespace Rector\Tests\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector;
 
 use Iterator;
 use Rector\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony4\Tests\Rector\ClassMethod\ConsoleExecuteReturnIntRector\Fixture;
+namespace Rector\Tests\Symfony4\Rector\ClassMethod\ConsoleExecuteReturnIntRector\Fixture;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

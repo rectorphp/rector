@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector\Fixture\Entity;
+namespace Rector\Tests\DoctrineCodeQuality\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector\Fixture\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

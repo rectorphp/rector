@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php56\Tests\Rector\FuncCall\PowToExpRector;
+namespace Rector\Tests\Php56\Rector\FuncCall\PowToExpRector;
 
 use Iterator;
 use Rector\Php56\Rector\FuncCall\PowToExpRector;

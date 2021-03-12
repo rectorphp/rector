@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Assign\RemoveDoubleAssignRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Assign\RemoveDoubleAssignRector\Fixture;
 
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;

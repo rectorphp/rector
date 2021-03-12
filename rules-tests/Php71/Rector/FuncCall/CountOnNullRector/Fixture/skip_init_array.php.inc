@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\Fixture;
 
 final class SkipInitArray
 {

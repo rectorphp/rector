@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\ComplextArray;
+namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\ComplextArray;
 
 /**
  * @param null|Foo[] $one
@@ -17,7 +17,7 @@ function someFunction($one, $two, $three, $four, $five)
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\ComplextArray;
+namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture\ComplextArray;
 
 /**
  * @param null|Foo[] $one

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 class NoSlash
 {
@@ -18,7 +18,7 @@ class NoSlash
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 class NoSlash
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQualityStrict\Tests\Rector\Stmt\VarInlineAnnotationToAssertRector\Fixture;
+namespace Rector\Tests\CodeQualityStrict\Rector\Stmt\VarInlineAnnotationToAssertRector\Fixture;
 
 class SingleScalarAssert
 {
@@ -15,7 +15,7 @@ class SingleScalarAssert
 -----
 <?php
 
-namespace Rector\CodeQualityStrict\Tests\Rector\Stmt\VarInlineAnnotationToAssertRector\Fixture;
+namespace Rector\Tests\CodeQualityStrict\Rector\Stmt\VarInlineAnnotationToAssertRector\Fixture;
 
 class SingleScalarAssert
 {

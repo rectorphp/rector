@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderClassConstantsByIntegerValueRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderClassConstantsByIntegerValueRector\Fixture;
 
 class FromZero
 {
@@ -15,7 +15,7 @@ class FromZero
 -----
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderClassConstantsByIntegerValueRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderClassConstantsByIntegerValueRector\Fixture;
 
 class FromZero
 {

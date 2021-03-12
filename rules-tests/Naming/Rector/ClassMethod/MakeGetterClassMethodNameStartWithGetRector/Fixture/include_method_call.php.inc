@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector\Fixture;
+namespace Rector\Tests\Naming\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector\Fixture;
 
 class IncludeMethodCall
 {
@@ -27,7 +27,7 @@ class UsingMethodCall
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector\Fixture;
+namespace Rector\Tests\Naming\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector\Fixture;
 
 class IncludeMethodCall
 {

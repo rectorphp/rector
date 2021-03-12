@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
 
-use Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Source\ATrait;
+use Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\Source\ATrait;
 
 abstract class SkipHasTrait
 {

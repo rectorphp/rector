@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony4\Tests\Rector\ConstFetch\ConstraintUrlOptionRector;
+namespace Rector\Tests\Symfony4\Rector\ConstFetch\ConstraintUrlOptionRector;
 
 use Iterator;
 use Rector\Symfony4\Rector\ConstFetch\ConstraintUrlOptionRector;

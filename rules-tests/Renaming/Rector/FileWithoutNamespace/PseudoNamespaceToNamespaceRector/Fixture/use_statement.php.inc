@@ -1,8 +1,8 @@
 <?php
 
-use Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Source\Keep_This;
+use Rector\Tests\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Source\Keep_This;
 
-class Rector_Renaming_Tests_Rector_FileWithoutNamespace_PseudoNamespaceToNamespaceRector_Fixture_UseStatement
+class Rector_Tests_Renaming_Rector_FileWithoutNamespace_PseudoNamespaceToNamespaceRector_Fixture_UseStatement
 {
     public function run()
     {
@@ -14,9 +14,9 @@ class Rector_Renaming_Tests_Rector_FileWithoutNamespace_PseudoNamespaceToNamespa
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
-use Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Source\Keep_This;
+use Rector\Tests\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Source\Keep_This;
 class UseStatement
 {
     public function run()

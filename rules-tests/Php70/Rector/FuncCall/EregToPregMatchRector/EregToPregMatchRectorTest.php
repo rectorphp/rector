@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Tests\Rector\FuncCall\EregToPregMatchRector;
+namespace Rector\Tests\Php70\Rector\FuncCall\EregToPregMatchRector;
 
 use Iterator;
 use Rector\Php70\Rector\FuncCall\EregToPregMatchRector;

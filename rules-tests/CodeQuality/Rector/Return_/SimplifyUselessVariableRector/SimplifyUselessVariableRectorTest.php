@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector;
+namespace Rector\Tests\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;

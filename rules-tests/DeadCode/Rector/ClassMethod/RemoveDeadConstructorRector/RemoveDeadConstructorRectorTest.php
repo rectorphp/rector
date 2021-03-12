@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDeadConstructorRector;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector;

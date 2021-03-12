@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedClassConstantRector\Source;
+namespace Rector\Tests\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector\Source;
 
 abstract class AbstractEnum
 {

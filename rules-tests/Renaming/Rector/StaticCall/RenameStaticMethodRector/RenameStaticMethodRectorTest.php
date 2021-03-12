@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Renaming\Tests\Rector\StaticCall\RenameStaticMethodRector;
+namespace Rector\Tests\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

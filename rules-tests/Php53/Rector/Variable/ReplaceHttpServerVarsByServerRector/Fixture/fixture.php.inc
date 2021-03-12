@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php53\Tests\Rector\Variable\ReplaceHttpServerVarsByServerRector\Fixture;
+namespace Rector\Tests\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector\Fixture;
 
 class Fixture
 {
@@ -15,7 +15,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php53\Tests\Rector\Variable\ReplaceHttpServerVarsByServerRector\Fixture;
+namespace Rector\Tests\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector\Fixture;
 
 class Fixture
 {

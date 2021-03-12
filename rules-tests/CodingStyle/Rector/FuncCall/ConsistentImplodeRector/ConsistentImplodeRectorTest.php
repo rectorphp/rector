@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentImplodeRector;
+namespace Rector\Tests\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;

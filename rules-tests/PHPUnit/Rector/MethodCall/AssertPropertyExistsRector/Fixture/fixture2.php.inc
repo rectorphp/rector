@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertPropertyExistsRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertPropertyExistsRector\Fixture;
 
 final class MyTest2 extends \PHPUnit\Framework\TestCase
 {
@@ -15,7 +15,7 @@ final class MyTest2 extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertPropertyExistsRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertPropertyExistsRector\Fixture;
 
 final class MyTest2 extends \PHPUnit\Framework\TestCase
 {

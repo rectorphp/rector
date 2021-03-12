@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Tests\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
+namespace Rector\Tests\Php70\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
 
 use Iterator;
 use Rector\Php70\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;

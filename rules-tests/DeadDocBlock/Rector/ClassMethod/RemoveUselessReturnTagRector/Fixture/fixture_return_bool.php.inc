@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRector\Fixture;
+namespace Rector\Tests\DeadDocBlock\Rector\ClassMethod\RemoveUselessReturnTagRector\Fixture;
 
 class FixtureReturnBool
 {
@@ -17,7 +17,7 @@ class FixtureReturnBool
 -----
 <?php
 
-namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRector\Fixture;
+namespace Rector\Tests\DeadDocBlock\Rector\ClassMethod\RemoveUselessReturnTagRector\Fixture;
 
 class FixtureReturnBool
 {

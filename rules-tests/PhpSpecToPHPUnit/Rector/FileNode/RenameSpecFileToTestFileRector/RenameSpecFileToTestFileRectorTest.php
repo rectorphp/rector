@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpSpecToPHPUnit\Tests\Rector\FileNode\RenameSpecFileToTestFileRector;
+namespace Rector\Tests\PhpSpecToPHPUnit\Rector\FileNode\RenameSpecFileToTestFileRector;
 
 use Iterator;
 use Nette\Utils\Strings;

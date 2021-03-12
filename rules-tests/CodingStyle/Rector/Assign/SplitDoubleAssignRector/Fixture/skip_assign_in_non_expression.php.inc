@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Assign\SplitDoubleAssignRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Assign\SplitDoubleAssignRector\Fixture;
 
 class SkipAssignInNonExpression
 {

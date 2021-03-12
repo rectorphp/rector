@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony2\Tests\Rector\MethodCall\AddFlashRector;
+namespace Rector\Tests\Symfony2\Rector\MethodCall\AddFlashRector;
 
 use Iterator;
 use Rector\Symfony2\Rector\MethodCall\AddFlashRector;

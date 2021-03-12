@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Ternary\SimplifyTautologyTernaryRector;
+namespace Rector\Tests\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;

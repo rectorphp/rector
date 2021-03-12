@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertTrueFalseInternalTypeToSpecificMethodRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertTrueFalseInternalTypeToSpecificMethodRector\Fixture;
 
 final class ThridArgument extends \PHPUnit\Framework\TestCase
 {
@@ -18,7 +18,7 @@ final class ThridArgument extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertTrueFalseInternalTypeToSpecificMethodRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertTrueFalseInternalTypeToSpecificMethodRector\Fixture;
 
 final class ThridArgument extends \PHPUnit\Framework\TestCase
 {

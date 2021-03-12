@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\RemovingStatic\Tests\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector\Fixture;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

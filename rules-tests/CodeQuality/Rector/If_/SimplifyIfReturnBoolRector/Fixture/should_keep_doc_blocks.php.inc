@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
 
 final class ShouldKeepDocBlocks
 {
@@ -47,7 +47,7 @@ final class ShouldKeepDocBlocks
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
 
 final class ShouldKeepDocBlocks
 {

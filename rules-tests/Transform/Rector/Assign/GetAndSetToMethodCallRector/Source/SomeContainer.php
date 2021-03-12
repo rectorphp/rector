@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source;
+namespace Rector\Tests\Transform\Rector\Assign\GetAndSetToMethodCallRector\Source;
 
 final class SomeContainer
 {

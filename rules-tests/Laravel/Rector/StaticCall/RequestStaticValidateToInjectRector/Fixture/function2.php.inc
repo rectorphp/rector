@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Laravel\Tests\Rector\StaticCall\RequestStaticValidateToInjectRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector\Fixture;
 
 class Function2
 {
@@ -14,7 +14,7 @@ class Function2
 -----
 <?php
 
-namespace Rector\Laravel\Tests\Rector\StaticCall\RequestStaticValidateToInjectRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector\Fixture;
 
 class Function2
 {

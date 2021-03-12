@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Visibility\Tests\Rector\Property\ChangePropertyVisibilityRector\ChangePropertyVisibilityRectorTest
+ * @see \Rector\Tests\Visibility\Rector\Property\ChangePropertyVisibilityRector\ChangePropertyVisibilityRectorTest
  */
 final class ChangePropertyVisibilityRector extends AbstractRector implements ConfigurableRectorInterface
 {

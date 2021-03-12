@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\CascadeValidationFormBuilderRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\CascadeValidationFormBuilderRector\Fixture;
 
 class Fixture
 {
@@ -28,7 +28,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\CascadeValidationFormBuilderRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\CascadeValidationFormBuilderRector\Fixture;
 
 class Fixture
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Restoration\Tests\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
+namespace Rector\Tests\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

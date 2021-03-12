@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector\Fixture;
 
 use Symfony\Component\Translation\Translator;
 
@@ -20,7 +20,7 @@ final class SomeController
 -----
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector\Fixture;
 
 use Symfony\Component\Translation\Translator;
 

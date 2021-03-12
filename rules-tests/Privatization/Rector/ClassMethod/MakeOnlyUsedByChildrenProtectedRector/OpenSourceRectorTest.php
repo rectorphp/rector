@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Privatization\Tests\Rector\ClassMethod\MakeOnlyUsedByChildrenProtectedRector;
+namespace Rector\Tests\Privatization\Rector\ClassMethod\MakeOnlyUsedByChildrenProtectedRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

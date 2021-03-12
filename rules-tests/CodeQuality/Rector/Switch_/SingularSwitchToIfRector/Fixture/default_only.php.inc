@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Switch_\SingularSwitchToIfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Switch_\SingularSwitchToIfRector\Fixture;
 
 final class DefaultOnly
 {
@@ -20,7 +20,7 @@ final class DefaultOnly
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Switch_\SingularSwitchToIfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Switch_\SingularSwitchToIfRector\Fixture;
 
 final class DefaultOnly
 {

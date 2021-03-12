@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\Fixture;
 
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\AbstractManualExtension;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\AbstractManualExtension;
 
 final class UnderscoreDoc extends AbstractManualExtension
 {
@@ -16,9 +16,9 @@ final class UnderscoreDoc extends AbstractManualExtension
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\Fixture;
 
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\AbstractManualExtension;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\AbstractManualExtension;
 
 final class UnderscoreDoc extends AbstractManualExtension
 {

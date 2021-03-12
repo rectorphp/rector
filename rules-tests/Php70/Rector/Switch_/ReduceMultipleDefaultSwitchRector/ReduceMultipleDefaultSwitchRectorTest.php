@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Tests\Rector\Switch_\ReduceMultipleDefaultSwitchRector;
+namespace Rector\Tests\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector;
 
 use Iterator;
 use Rector\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector;

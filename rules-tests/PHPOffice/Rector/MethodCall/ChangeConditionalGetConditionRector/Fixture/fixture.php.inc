@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\MethodCall\ChangeConditionalGetConditionRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\MethodCall\ChangeConditionalGetConditionRector\Fixture;
 
 final class Fixture
 {
@@ -15,7 +15,7 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\MethodCall\ChangeConditionalGetConditionRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\MethodCall\ChangeConditionalGetConditionRector\Fixture;
 
 final class Fixture
 {

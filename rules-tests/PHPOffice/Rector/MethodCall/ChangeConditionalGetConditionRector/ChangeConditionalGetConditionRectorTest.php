@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPOffice\Tests\Rector\MethodCall\ChangeConditionalGetConditionRector;
+namespace Rector\Tests\PHPOffice\Rector\MethodCall\ChangeConditionalGetConditionRector;
 
 use Iterator;
 use Rector\PHPOffice\Rector\MethodCall\ChangeConditionalGetConditionRector;

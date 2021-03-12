@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://externals.io/message/108562
  * @see https://github.com/php/php-src/pull/5179
  *
- * @see \Rector\Php80\Tests\Rector\NotIdentical\StrContainsRector\StrContainsRectorTest
+ * @see \Rector\Tests\Php80\Rector\NotIdentical\StrContainsRector\StrContainsRectorTest
  */
 final class StrContainsRector extends AbstractRector
 {

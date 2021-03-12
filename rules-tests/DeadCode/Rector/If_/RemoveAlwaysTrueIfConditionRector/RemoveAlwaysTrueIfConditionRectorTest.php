@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\If_\RemoveAlwaysTrueIfConditionRector;
+namespace Rector\Tests\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;

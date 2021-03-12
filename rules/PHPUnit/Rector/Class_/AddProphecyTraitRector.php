@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/sebastianbergmann/phpunit/issues/4141
  * @see https://github.com/sebastianbergmann/phpunit/issues/4149
  *
- * @see \Rector\PHPUnit\Tests\Rector\Class_\AddProphecyTraitRector\AddProphecyTraitRectorTest
+ * @see \Rector\Tests\PHPUnit\Rector\Class_\AddProphecyTraitRector\AddProphecyTraitRectorTest
  */
 final class AddProphecyTraitRector extends AbstractRector
 {

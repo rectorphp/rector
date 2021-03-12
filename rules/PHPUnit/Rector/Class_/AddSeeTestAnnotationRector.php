@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\PHPUnit\Tests\Rector\Class_\AddSeeTestAnnotationRector\AddSeeTestAnnotationRectorTest
+ * @see \Rector\Tests\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector\AddSeeTestAnnotationRectorTest
  */
 final class AddSeeTestAnnotationRector extends AbstractRector
 {

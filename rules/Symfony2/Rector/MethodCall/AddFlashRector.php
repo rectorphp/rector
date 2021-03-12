@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony2\Tests\Rector\MethodCall\AddFlashRector\AddFlashRectorTest
+ * @see \Rector\Tests\Symfony2\Rector\MethodCall\AddFlashRector\AddFlashRectorTest
  */
 final class AddFlashRector extends AbstractRector
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector;
+namespace Rector\Tests\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

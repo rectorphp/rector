@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector;
+namespace Rector\Tests\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector;
 
 use Iterator;
 use Rector\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector;

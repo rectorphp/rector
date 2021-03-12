@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony5\Tests\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector\Fixture;
+namespace Rector\Tests\Symfony5\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector\Fixture;
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -16,7 +16,7 @@ class CreateWithoutArguments
 -----
 <?php
 
-namespace Rector\Symfony5\Tests\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector\Fixture;
+namespace Rector\Tests\Symfony5\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector\Fixture;
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 

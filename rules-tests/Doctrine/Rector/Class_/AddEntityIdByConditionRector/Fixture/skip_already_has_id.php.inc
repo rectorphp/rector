@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AddEntityIdByConditionRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\AddEntityIdByConditionRector\Fixture;
 
-use Rector\Doctrine\Tests\Rector\Class_\AddEntityIdByConditionRector\Source\SomeTrait;
+use Rector\Tests\Doctrine\Rector\Class_\AddEntityIdByConditionRector\Source\SomeTrait;
 
 class SkipAlreadyHasId
 {

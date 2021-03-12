@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector;
+namespace Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector;
 
 use Iterator;
 use Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector;

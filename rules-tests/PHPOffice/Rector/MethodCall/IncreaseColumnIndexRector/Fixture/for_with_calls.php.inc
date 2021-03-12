@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\MethodCall\IncreaseColumnIndexRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\MethodCall\IncreaseColumnIndexRector\Fixture;
 
 final class ForWithCalls
 {
@@ -20,7 +20,7 @@ final class ForWithCalls
 -----
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\MethodCall\IncreaseColumnIndexRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\MethodCall\IncreaseColumnIndexRector\Fixture;
 
 final class ForWithCalls
 {

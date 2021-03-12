@@ -1,12 +1,12 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
 
 class SkipNonExistingClass
 {
     public function run()
     {
-        return '<?php if (Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\SomeClassThatDoesntExist::staticCall()) { ?>';
+        return '<?php if (Rector\Tests\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\SomeClassThatDoesntExist::staticCall()) { ?>';
     }
 }
 

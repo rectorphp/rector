@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Foreach_\SimplifyForeachToCoalescingRector;
+namespace Rector\Tests\CodeQuality\Rector\Foreach_\SimplifyForeachToCoalescingRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToCoalescingRector;

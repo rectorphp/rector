@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\ActionSuffixRemoverRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\ClassMethod\ActionSuffixRemoverRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Rector\Tests\Symfony\Rector\Source\SymfonyController;
 
 class AppController extends SymfonyController
 {
@@ -15,9 +15,9 @@ class AppController extends SymfonyController
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\ActionSuffixRemoverRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\ClassMethod\ActionSuffixRemoverRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Rector\Tests\Symfony\Rector\Source\SymfonyController;
 
 class AppController extends SymfonyController
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\SomeParent;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\SomeParent;
 
 class DoctrineManyToOneClassKeywordClassImported
 {
@@ -18,10 +18,10 @@ class DoctrineManyToOneClassKeywordClassImported
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\SomeParent;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\SomeParent;
 
 class DoctrineManyToOneClassKeywordClassImported
 {
@@ -29,7 +29,7 @@ class DoctrineManyToOneClassKeywordClassImported
      * @ORM\ManyToOne(targetEntity=SomeParent::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private \Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\SomeParent $package;
+    private \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\SomeParent $package;
 }
 
 ?>

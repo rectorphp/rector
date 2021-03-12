@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\TimestampableBehaviorRector\Fixture;
+namespace Rector\Tests\DoctrineGedmoToKnplabs\Rector\Class_\TimestampableBehaviorRector\Fixture;
 
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -13,7 +13,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\TimestampableBehaviorRector\Fixture;
+namespace Rector\Tests\DoctrineGedmoToKnplabs\Rector\Class_\TimestampableBehaviorRector\Fixture;
 
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 

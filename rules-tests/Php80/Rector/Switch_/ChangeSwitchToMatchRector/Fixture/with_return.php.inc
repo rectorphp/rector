@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
 
 class WithReturn
 {
@@ -22,7 +22,7 @@ class WithReturn
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
 
 class WithReturn
 {

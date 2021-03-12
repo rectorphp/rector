@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Defluent\Tests\Rector\Return_\DefluentReturnMethodCallRector\Fixture;
+namespace Rector\Tests\Defluent\Rector\Return_\DefluentReturnMethodCallRector\Fixture;
 
-use Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Source\FluentInterfaceClass;
+use Rector\Tests\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Source\FluentInterfaceClass;
 
 class SomeClass
 {
@@ -17,9 +17,9 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Defluent\Tests\Rector\Return_\DefluentReturnMethodCallRector\Fixture;
+namespace Rector\Tests\Defluent\Rector\Return_\DefluentReturnMethodCallRector\Fixture;
 
-use Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Source\FluentInterfaceClass;
+use Rector\Tests\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Source\FluentInterfaceClass;
 
 class SomeClass
 {

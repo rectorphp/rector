@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Ternary\SwitchNegatedTernaryRector;
+namespace Rector\Tests\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\StrictArraySearchRector;
+namespace Rector\Tests\CodingStyle\Rector\FuncCall\StrictArraySearchRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector;

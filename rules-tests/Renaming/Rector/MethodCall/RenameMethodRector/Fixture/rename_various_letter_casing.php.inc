@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\Fixture;
 
-use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
+use Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
 
 class RenameVariousLetterCasing extends AbstractType
 {
@@ -16,9 +16,9 @@ class RenameVariousLetterCasing extends AbstractType
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\Fixture;
 
-use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
+use Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
 
 class RenameVariousLetterCasing extends AbstractType
 {

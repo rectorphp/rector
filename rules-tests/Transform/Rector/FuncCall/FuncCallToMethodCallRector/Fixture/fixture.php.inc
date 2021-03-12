@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
 
 final class Fixture
 {
@@ -14,11 +14,11 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
 
 final class Fixture
 {
-    public function __construct(private \Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Source\SomeTranslator $someTranslator)
+    public function __construct(private \Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Source\SomeTranslator $someTranslator)
     {
     }
     public function run()

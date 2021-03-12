@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Laravel\Tests\Rector\StaticCall\Redirect301ToPermanentRedirectRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector\Fixture;
 
 class Fixture
 {
@@ -14,7 +14,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Laravel\Tests\Rector\StaticCall\Redirect301ToPermanentRedirectRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector\Fixture;
 
 class Fixture
 {

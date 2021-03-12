@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
 final class ArrayListParams
 {
@@ -16,7 +16,7 @@ final class ArrayListParams
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
 final class ArrayListParams
 {

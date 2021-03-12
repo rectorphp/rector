@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector;
+namespace Rector\Tests\Transform\Rector\Assign\PropertyAssignToMethodCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

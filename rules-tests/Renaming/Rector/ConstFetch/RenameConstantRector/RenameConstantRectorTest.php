@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Renaming\Tests\Rector\ConstFetch\RenameConstantRector;
+namespace Rector\Tests\Renaming\Rector\ConstFetch\RenameConstantRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

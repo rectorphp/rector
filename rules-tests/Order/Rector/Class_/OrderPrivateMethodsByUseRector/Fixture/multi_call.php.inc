@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
 
 class MultiCall
 {
@@ -28,7 +28,7 @@ class MultiCall
 -----
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
 
 class MultiCall
 {

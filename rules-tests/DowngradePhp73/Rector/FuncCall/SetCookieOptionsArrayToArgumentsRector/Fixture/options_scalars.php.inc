@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp73\Tests\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector\Fixture;
+namespace Rector\Tests\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector\Fixture;
 
 class OptionsScalars {
     public function setCookies()
@@ -18,7 +18,7 @@ class OptionsScalars {
 -----
 <?php
 
-namespace Rector\DowngradePhp73\Tests\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector\Fixture;
+namespace Rector\Tests\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector\Fixture;
 
 class OptionsScalars {
     public function setCookies()

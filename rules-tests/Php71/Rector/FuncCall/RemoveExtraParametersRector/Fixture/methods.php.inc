@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 
-use Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Source\SomeExternalClass;
+use Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\Source\SomeExternalClass;
 
 final class MethodExtraArgument
 {
@@ -27,9 +27,9 @@ final class MethodExtraArgument
 -----
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 
-use Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Source\SomeExternalClass;
+use Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\Source\SomeExternalClass;
 
 final class MethodExtraArgument
 {

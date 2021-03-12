@@ -1,11 +1,11 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector\FixturePostImport;
+namespace Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\FixturePostImport;
 
 final class PostImportClass
 {
     /**
-     * @var \Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector\Source\SomeSuperLongClass|null
+     * @var \Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\Source\SomeSuperLongClass|null
      */
     private $cache;
 
@@ -19,9 +19,9 @@ final class PostImportClass
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector\FixturePostImport;
+namespace Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\FixturePostImport;
 
-use Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector\Source\SomeSuperLongClass;
+use Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\Source\SomeSuperLongClass;
 final class PostImportClass
 {
     /**

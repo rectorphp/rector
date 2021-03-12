@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Include_\FollowRequireByDirRector;
+namespace Rector\Tests\CodingStyle\Rector\Include_\FollowRequireByDirRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector;

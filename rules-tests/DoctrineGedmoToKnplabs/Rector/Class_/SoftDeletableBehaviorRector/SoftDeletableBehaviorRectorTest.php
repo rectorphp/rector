@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\SoftDeletableBehaviorRector;
+namespace Rector\Tests\DoctrineGedmoToKnplabs\Rector\Class_\SoftDeletableBehaviorRector;
 
 use Iterator;
 use Rector\DoctrineGedmoToKnplabs\Rector\Class_\SoftDeletableBehaviorRector;

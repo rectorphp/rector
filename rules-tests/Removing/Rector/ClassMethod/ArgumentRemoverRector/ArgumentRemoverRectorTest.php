@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector;
+namespace Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

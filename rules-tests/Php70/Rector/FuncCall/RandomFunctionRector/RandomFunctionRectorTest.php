@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Tests\Rector\FuncCall\RandomFunctionRector;
+namespace Rector\Tests\Php70\Rector\FuncCall\RandomFunctionRector;
 
 use Iterator;
 use Rector\Php70\Rector\FuncCall\RandomFunctionRector;

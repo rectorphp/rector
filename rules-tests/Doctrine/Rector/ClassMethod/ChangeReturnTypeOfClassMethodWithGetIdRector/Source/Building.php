@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector\Source;
+namespace Rector\Tests\Doctrine\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector\Source;
 
 use Doctrine\ORM\Mapping as ORM;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\MockeryToProphecy\Tests\Rector\StaticCall\MockeryToProphecyRector\Fixture;
+namespace Rector\Tests\MockeryToProphecy\Rector\StaticCall\MockeryToProphecyRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +16,7 @@ final class MockeryClose extends TestCase
 -----
 <?php
 
-namespace Rector\MockeryToProphecy\Tests\Rector\StaticCall\MockeryToProphecyRector\Fixture;
+namespace Rector\Tests\MockeryToProphecy\Rector\StaticCall\MockeryToProphecyRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 

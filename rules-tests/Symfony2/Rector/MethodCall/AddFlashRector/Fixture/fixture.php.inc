@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony2\Tests\Rector\MethodCall\AddFlashRector\Fixture;
+namespace Rector\Tests\Symfony2\Rector\MethodCall\AddFlashRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +17,7 @@ class AppController extends Controller
 -----
 <?php
 
-namespace Rector\Symfony2\Tests\Rector\MethodCall\AddFlashRector\Fixture;
+namespace Rector\Tests\Symfony2\Rector\MethodCall\AddFlashRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\ShortenElseIfRector\Fixture;
 
 class SkipNoElseIf
 {

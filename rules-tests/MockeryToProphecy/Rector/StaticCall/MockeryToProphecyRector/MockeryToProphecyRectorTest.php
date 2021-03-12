@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\MockeryToProphecy\Tests\Rector\StaticCall\MockeryToProphecyRector;
+namespace Rector\Tests\MockeryToProphecy\Rector\StaticCall\MockeryToProphecyRector;
 
 use Iterator;
 use Rector\MockeryToProphecy\Rector\StaticCall\MockeryCloseRemoveRector;

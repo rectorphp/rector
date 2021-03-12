@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
+namespace Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
 
 class ResetOverStaticCall {
     public static function test() {}
@@ -14,7 +14,7 @@ function run() {
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
+namespace Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
 
 class ResetOverStaticCall {
     public static function test() {}

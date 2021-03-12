@@ -1,7 +1,7 @@
 <?php
 
 use Rector\Restoration\Rector\New_\CompleteMissingDependencyInNewRector;
-use Rector\Restoration\Tests\Rector\New_\CompleteMissingDependencyInNewRector\Source\RandomDependency;
+use Rector\Tests\Restoration\Rector\New_\CompleteMissingDependencyInNewRector\Source\RandomDependency;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

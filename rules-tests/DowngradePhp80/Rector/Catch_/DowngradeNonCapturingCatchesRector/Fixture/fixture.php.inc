@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\Catch_\DowngradeNonCapturingCatchesRector\Fixture;
+namespace Rector\Tests\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector\Fixture;
 
 class Fixture
 {
@@ -18,7 +18,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\Catch_\DowngradeNonCapturingCatchesRector\Fixture;
+namespace Rector\Tests\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector\Fixture;
 
 class Fixture
 {

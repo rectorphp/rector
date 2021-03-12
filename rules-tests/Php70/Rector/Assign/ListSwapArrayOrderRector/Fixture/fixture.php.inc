@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\Assign\ListSwapArrayOrderRector\Fixture;
+namespace Rector\Tests\Php70\Rector\Assign\ListSwapArrayOrderRector\Fixture;
 
 class Fixture
 {
@@ -14,7 +14,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\Assign\ListSwapArrayOrderRector\Fixture;
+namespace Rector\Tests\Php70\Rector\Assign\ListSwapArrayOrderRector\Fixture;
 
 class Fixture
 {

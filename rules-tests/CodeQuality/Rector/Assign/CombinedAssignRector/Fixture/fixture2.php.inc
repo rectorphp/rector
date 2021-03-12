@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Assign\CombinedAssignRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Assign\CombinedAssignRector\Fixture;
 
-use Rector\CodeQuality\Tests\Rector\Assign\CombinedAssignRector\Source\AbstractSomeClassSoParentCanBeUsed;
+use Rector\Tests\CodeQuality\Rector\Assign\CombinedAssignRector\Source\AbstractSomeClassSoParentCanBeUsed;
 
 class Whatever extends AbstractSomeClassSoParentCanBeUsed
 {
@@ -30,9 +30,9 @@ class Whatever extends AbstractSomeClassSoParentCanBeUsed
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Assign\CombinedAssignRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Assign\CombinedAssignRector\Fixture;
 
-use Rector\CodeQuality\Tests\Rector\Assign\CombinedAssignRector\Source\AbstractSomeClassSoParentCanBeUsed;
+use Rector\Tests\CodeQuality\Rector\Assign\CombinedAssignRector\Source\AbstractSomeClassSoParentCanBeUsed;
 
 class Whatever extends AbstractSomeClassSoParentCanBeUsed
 {

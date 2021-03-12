@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector\Fixture;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -16,7 +16,7 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector\Fixture;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
 

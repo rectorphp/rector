@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector\Fixture;
+namespace Rector\Tests\Nette\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector\Fixture;
 
 final class Fixture
 {
@@ -14,7 +14,7 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector\Fixture;
+namespace Rector\Tests\Nette\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector\Fixture;
 
 final class Fixture
 {

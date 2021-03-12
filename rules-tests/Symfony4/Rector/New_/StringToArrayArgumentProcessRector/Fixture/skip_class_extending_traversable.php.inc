@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony4\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
+namespace Rector\Tests\Symfony4\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
 
-use Rector\Symfony4\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\TraversableClass;
+use Rector\Tests\Symfony4\Rector\New_\StringToArrayArgumentProcessRector\Source\TraversableClass;
 
 class TestClass
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony4\Tests\Rector\New_\RootNodeTreeBuilderRector;
+namespace Rector\Tests\Symfony4\Rector\New_\RootNodeTreeBuilderRector;
 
 use Iterator;
 use Rector\Symfony4\Rector\New_\RootNodeTreeBuilderRector;

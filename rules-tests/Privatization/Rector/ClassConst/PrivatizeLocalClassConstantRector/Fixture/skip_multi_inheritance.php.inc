@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
-use Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Source\AbstractInBetweenVariableParentClassUser;
-use Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Source\AbstractVariableParentClassUser;
+use Rector\Tests\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector\Source\AbstractInBetweenVariableParentClassUser;
+use Rector\Tests\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector\Source\AbstractVariableParentClassUser;
 
 class SkipMultiInheritance extends AbstractInBetweenVariableParentClassUser
 {

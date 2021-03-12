@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Name\FixClassCaseSensitivityNameRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector\Fixture;
 
-use Rector\CodeQuality\Tests\Rector\Name\FixClassCaseSensitivityNameRector\Source\Misscasetypedclass;
+use Rector\Tests\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector\Source\Misscasetypedclass;
 
 final class SomeClass
 {
@@ -16,15 +16,15 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Name\FixClassCaseSensitivityNameRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector\Fixture;
 
-use Rector\CodeQuality\Tests\Rector\Name\FixClassCaseSensitivityNameRector\Source\MissCaseTypedClass;
+use Rector\Tests\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector\Source\MissCaseTypedClass;
 
 final class SomeClass
 {
     public function run()
     {
-        $misscasetypedclass = new \Rector\CodeQuality\Tests\Rector\Name\FixClassCaseSensitivityNameRector\Source\MissCaseTypedClass();
+        $misscasetypedclass = new \Rector\Tests\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector\Source\MissCaseTypedClass();
     }
 }
 

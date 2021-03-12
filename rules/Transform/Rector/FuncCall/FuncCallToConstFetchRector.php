@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Transform\Tests\Rector\FuncCall\FuncCallToConstFetchRector\FunctionCallToConstantRectorTest
+ * @see \Rector\Tests\Transform\Rector\FuncCall\FuncCallToConstFetchRector\FunctionCallToConstantRectorTest
  */
 final class FuncCallToConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {

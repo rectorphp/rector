@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\Fixture;
 
 use stdClass;
 
@@ -20,7 +20,7 @@ function countables2()
 -----
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\Fixture;
 
 use stdClass;
 

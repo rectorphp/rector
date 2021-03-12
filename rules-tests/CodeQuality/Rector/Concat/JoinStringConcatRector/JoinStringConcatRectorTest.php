@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Concat\JoinStringConcatRector;
+namespace Rector\Tests\CodeQuality\Rector\Concat\JoinStringConcatRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;

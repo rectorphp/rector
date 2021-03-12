@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\IntvalToTypeCastRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector\Fixture;
 
 class Fixture
 {
@@ -18,7 +18,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\IntvalToTypeCastRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector\Fixture;
 
 class Fixture
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Defluent\Tests\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector\Source;
+namespace Rector\Tests\Defluent\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector\Source;
 
 final class AnotherClass
 {

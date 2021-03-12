@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
 class FixtureMarkAsTruthyNegationCheck
 {
@@ -15,7 +15,7 @@ class FixtureMarkAsTruthyNegationCheck
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\Fixture;
 
 class FixtureMarkAsTruthyNegationCheck
 {

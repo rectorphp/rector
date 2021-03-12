@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\StaticCall\ExportToReflectionFunctionRector\Fixture;
+namespace Rector\Tests\Php74\Rector\StaticCall\ExportToReflectionFunctionRector\Fixture;
 
 class Fixture
 {
@@ -15,7 +15,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\StaticCall\ExportToReflectionFunctionRector\Fixture;
+namespace Rector\Tests\Php74\Rector\StaticCall\ExportToReflectionFunctionRector\Fixture;
 
 class Fixture
 {

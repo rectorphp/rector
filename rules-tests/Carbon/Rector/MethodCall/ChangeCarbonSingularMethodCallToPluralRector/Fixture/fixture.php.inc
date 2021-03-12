@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Carbon\Tests\Rector\MethodCall\ChangeCarbonSingularMethodCallToPluralRector\Fixture;
+namespace Rector\Tests\Carbon\Rector\MethodCall\ChangeCarbonSingularMethodCallToPluralRector\Fixture;
 
 use Carbon\Carbon;
 
@@ -16,7 +16,7 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Carbon\Tests\Rector\MethodCall\ChangeCarbonSingularMethodCallToPluralRector\Fixture;
+namespace Rector\Tests\Carbon\Rector\MethodCall\ChangeCarbonSingularMethodCallToPluralRector\Fixture;
 
 use Carbon\Carbon;
 

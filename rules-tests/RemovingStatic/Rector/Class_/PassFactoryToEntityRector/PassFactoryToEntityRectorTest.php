@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector;
+namespace Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

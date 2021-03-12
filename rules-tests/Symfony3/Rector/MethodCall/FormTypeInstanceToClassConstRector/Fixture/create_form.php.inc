@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
-use Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\SomeFormType;
+use Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\SomeFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class SomeController extends Controller
@@ -17,16 +17,16 @@ class SomeController extends Controller
 -----
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
-use Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\SomeFormType;
+use Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\SomeFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class SomeController extends Controller
 {
     public function action()
     {
-        $form = $this->createForm(\Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\SomeFormType::class);
+        $form = $this->createForm(\Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\SomeFormType::class);
     }
 }
 

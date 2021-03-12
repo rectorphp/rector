@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Closure\ClosureToArrowFunctionRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Closure\ClosureToArrowFunctionRector\Fixture;
 
 class ReferencedButNotUsed
 {
@@ -16,7 +16,7 @@ class ReferencedButNotUsed
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Closure\ClosureToArrowFunctionRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Closure\ClosureToArrowFunctionRector\Fixture;
 
 class ReferencedButNotUsed
 {

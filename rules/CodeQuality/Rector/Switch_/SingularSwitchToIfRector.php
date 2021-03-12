@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\CodeQuality\Tests\Rector\Switch_\SingularSwitchToIfRector\SingularSwitchToIfRectorTest
+ * @see \Rector\Tests\CodeQuality\Rector\Switch_\SingularSwitchToIfRector\SingularSwitchToIfRectorTest
  */
 final class SingularSwitchToIfRector extends AbstractRector
 {

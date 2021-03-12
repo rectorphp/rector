@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Include_\AbsolutizeRequireAndIncludePathRector;
+namespace Rector\Tests\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector;

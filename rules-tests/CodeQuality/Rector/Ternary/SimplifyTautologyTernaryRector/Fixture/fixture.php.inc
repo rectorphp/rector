@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Ternary\SimplifyTautologyTernaryRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector\Fixture;
 
 function tautologyTernary()
 {
@@ -19,7 +19,7 @@ function tautologyTernary()
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Ternary\SimplifyTautologyTernaryRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector\Fixture;
 
 function tautologyTernary()
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\Class_\AddProphecyTraitRector;
+namespace Rector\Tests\PHPUnit\Rector\Class_\AddProphecyTraitRector;
 
 use Iterator;
 use Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector;

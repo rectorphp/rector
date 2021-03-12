@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php52\Tests\Rector\Property\VarToPublicPropertyRector\Fixture;
+namespace Rector\Tests\Php52\Rector\Property\VarToPublicPropertyRector\Fixture;
 
 final class Fixture
 {
@@ -12,7 +12,7 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\Php52\Tests\Rector\Property\VarToPublicPropertyRector\Fixture;
+namespace Rector\Tests\Php52\Rector\Property\VarToPublicPropertyRector\Fixture;
 
 final class Fixture
 {

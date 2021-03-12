@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector\Fixture;
 
-use Rector\Doctrine\Tests\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector\Source\Car;
+use Rector\Tests\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector\Source\Car;
 
 class SomeClass
 {
@@ -18,9 +18,9 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector\Fixture;
 
-use Rector\Doctrine\Tests\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector\Source\Car;
+use Rector\Tests\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector\Source\Car;
 
 class SomeClass
 {

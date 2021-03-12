@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveCodeAfterReturnRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector\Fixture;
 
 class Fixture
 {
@@ -15,7 +15,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveCodeAfterReturnRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector\Fixture;
 
 class Fixture
 {

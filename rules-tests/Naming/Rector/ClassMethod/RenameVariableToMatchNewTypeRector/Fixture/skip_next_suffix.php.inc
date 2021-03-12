@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\Fixture;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Param;

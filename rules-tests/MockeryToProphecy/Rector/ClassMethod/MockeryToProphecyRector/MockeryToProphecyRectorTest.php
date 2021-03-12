@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\MockeryToProphecy\Tests\Rector\ClassMethod\MockeryToProphecyRector;
+namespace Rector\Tests\MockeryToProphecy\Rector\ClassMethod\MockeryToProphecyRector;
 
 use Iterator;
 use Rector\MockeryToProphecy\Rector\ClassMethod\MockeryCreateMockToProphizeRector;

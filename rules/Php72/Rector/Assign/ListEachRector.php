@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @source https://wiki.php.net/rfc/deprecations_php_7_2#each
  *
- * @see \Rector\Php72\Tests\Rector\Assign\ListEachRector\ListEachRectorTest
+ * @see \Rector\Tests\Php72\Rector\Assign\ListEachRector\ListEachRectorTest
  */
 final class ListEachRector extends AbstractRector
 {

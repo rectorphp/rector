@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony2\Tests\Rector\MethodCall\RedirectToRouteRector;
+namespace Rector\Tests\Symfony2\Rector\MethodCall\RedirectToRouteRector;
 
 use Iterator;
 use Rector\Symfony2\Rector\MethodCall\RedirectToRouteRector;

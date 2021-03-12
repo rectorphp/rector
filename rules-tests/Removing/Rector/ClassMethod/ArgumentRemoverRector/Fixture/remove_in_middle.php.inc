@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Fixture;
+namespace Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\Fixture;
 
-use Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\RemoveInTheMiddle;
+use Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\Source\RemoveInTheMiddle;
 
 final class RemoveInMiddle extends RemoveInTheMiddle
 {
@@ -16,9 +16,9 @@ final class RemoveInMiddle extends RemoveInTheMiddle
 -----
 <?php
 
-namespace Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Fixture;
+namespace Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\Fixture;
 
-use Rector\Removing\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\RemoveInTheMiddle;
+use Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\Source\RemoveInTheMiddle;
 
 final class RemoveInMiddle extends RemoveInTheMiddle
 {

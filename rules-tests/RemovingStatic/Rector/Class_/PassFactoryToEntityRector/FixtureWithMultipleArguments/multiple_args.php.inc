@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\Fixture;
 
-use Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService;
+use Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService;
 
 class SomeClassWithMoreArguments
 {
@@ -31,13 +31,13 @@ class AnotherClassWithMoreArguments
 -----
 <?php
 
-namespace Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\Fixture;
 
-use Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService;
+use Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService;
 
 class SomeClassWithMoreArguments
 {
-    public function __construct(private \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Fixture\AnotherClassWithMoreArgumentsFactory $anotherClassWithMoreArgumentsFactory)
+    public function __construct(private \Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\Fixture\AnotherClassWithMoreArgumentsFactory $anotherClassWithMoreArgumentsFactory)
     {
     }
     public function run()
@@ -50,7 +50,7 @@ class AnotherClassWithMoreArguments
 {
     private $number;
 
-    public function __construct($number, private \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService $turnMeToService)
+    public function __construct($number, private \Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService $turnMeToService)
     {
         $this->number = $number;
     }

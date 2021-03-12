@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\ClassMethod\UnSpreadOperatorRector;
+namespace Rector\Tests\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony5\Tests\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector\Fixture;
+namespace Rector\Tests\Symfony5\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector\Fixture;
 
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Definition;
@@ -20,7 +20,7 @@ class PassVariable
 -----
 <?php
 
-namespace Rector\Symfony5\Tests\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector\Fixture;
+namespace Rector\Tests\Symfony5\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector\Fixture;
 
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Definition;

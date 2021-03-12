@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPOffice\Tests\Rector\StaticCall\AddRemovedDefaultValuesRector;
+namespace Rector\Tests\PHPOffice\Rector\StaticCall\AddRemovedDefaultValuesRector;
 
 use Iterator;
 use Rector\PHPOffice\Rector\StaticCall\AddRemovedDefaultValuesRector;

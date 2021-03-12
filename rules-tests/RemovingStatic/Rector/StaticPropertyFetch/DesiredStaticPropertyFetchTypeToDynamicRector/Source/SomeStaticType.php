@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\RemovingStatic\Tests\Rector\StaticPropertyFetch\DesiredStaticPropertyFetchTypeToDynamicRector\Source;
+namespace Rector\Tests\RemovingStatic\Rector\StaticPropertyFetch\DesiredStaticPropertyFetchTypeToDynamicRector\Source;
 
 final class SomeStaticType
 {

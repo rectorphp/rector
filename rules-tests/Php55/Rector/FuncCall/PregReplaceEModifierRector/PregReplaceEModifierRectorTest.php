@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php55\Tests\Rector\FuncCall\PregReplaceEModifierRector;
+namespace Rector\Tests\Php55\Rector\FuncCall\PregReplaceEModifierRector;
 
 use Iterator;
 use Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector;

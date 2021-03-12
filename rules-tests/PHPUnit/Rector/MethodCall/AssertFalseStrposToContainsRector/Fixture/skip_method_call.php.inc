@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertFalseStrposToContainsRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertFalseStrposToContainsRector\Fixture;
 
 final class SkipMethodCall extends \PHPUnit\Framework\TestCase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Name\FixClassCaseSensitivityNameRector;
+namespace Rector\Tests\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector;

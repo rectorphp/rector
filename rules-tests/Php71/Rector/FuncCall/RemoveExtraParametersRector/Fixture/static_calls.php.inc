@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 
 final class StaticCalls
 {
@@ -20,7 +20,7 @@ final class StaticCalls
 -----
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 
 final class StaticCalls
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRector\Fixture;
+namespace Rector\Tests\DeadDocBlock\Rector\ClassMethod\RemoveUselessReturnTagRector\Fixture;
 
 use stdClass;
 
@@ -19,7 +19,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRector\Fixture;
+namespace Rector\Tests\DeadDocBlock\Rector\ClassMethod\RemoveUselessReturnTagRector\Fixture;
 
 use stdClass;
 

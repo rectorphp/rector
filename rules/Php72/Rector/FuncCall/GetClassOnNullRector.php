@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see http://php.net/manual/en/migration72.incompatible.php#migration72.incompatible.no-null-to-get_class
  * @see https://3v4l.org/sk0fp
- * @see \Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector\GetClassOnNullRectorTest
+ * @see \Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\GetClassOnNullRectorTest
  */
 final class GetClassOnNullRector extends AbstractRector
 {

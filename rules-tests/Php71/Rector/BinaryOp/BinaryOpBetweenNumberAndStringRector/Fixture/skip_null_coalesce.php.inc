@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector\Fixture;
+namespace Rector\Tests\Php71\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector\Fixture;
 
 class SkipNullCoalesce
 {

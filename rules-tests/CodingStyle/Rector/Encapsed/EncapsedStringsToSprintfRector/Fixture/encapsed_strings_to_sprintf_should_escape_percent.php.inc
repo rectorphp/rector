@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Encapsed\EncapsedStringsToSprintfRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector\Fixture;
 
 final class EncapsedStringsToSprintfShouldEscapePercent
 {
@@ -13,13 +13,13 @@ final class EncapsedStringsToSprintfShouldEscapePercent
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Encapsed\EncapsedStringsToSprintfRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector\Fixture;
 
 final class EncapsedStringsToSprintfShouldEscapePercent
 {
     public function run(string $value)
     {
-        return sprintf('%s%%', $value);
+        return sprintf('%s%', $value);
     }
 }
 ?>

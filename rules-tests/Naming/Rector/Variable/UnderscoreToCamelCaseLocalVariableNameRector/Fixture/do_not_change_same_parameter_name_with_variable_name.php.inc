@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\Fixture;
+namespace Rector\Tests\Naming\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\Fixture;
 
 final class DoNotChangeSameParameterNameWithVariableName
 {
@@ -13,7 +13,7 @@ final class DoNotChangeSameParameterNameWithVariableName
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\Fixture;
+namespace Rector\Tests\Naming\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector\Fixture;
 
 final class DoNotChangeSameParameterNameWithVariableName
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony5\Tests\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector\Fixture;
+namespace Rector\Tests\Symfony5\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector\Fixture;
 
 use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ final class LogoutHandlerWithoutAnyUsage implements LogoutHandlerInterface
 -----
 <?php
 
-namespace Rector\Symfony5\Tests\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector\Fixture;
+namespace Rector\Tests\Symfony5\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector\Fixture;
 
 use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;

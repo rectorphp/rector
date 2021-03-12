@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector\Source\FirstTrait;
-use Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector\Source\SecondTrait;
+use Rector\Tests\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector\Source\FirstTrait;
+use Rector\Tests\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector\Source\SecondTrait;
 
 class TraitUses
 {
@@ -14,10 +14,10 @@ class TraitUses
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector\Source\FirstTrait;
-use Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector\Source\SecondTrait;
+use Rector\Tests\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector\Source\FirstTrait;
+use Rector\Tests\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector\Source\SecondTrait;
 
 class TraitUses
 {

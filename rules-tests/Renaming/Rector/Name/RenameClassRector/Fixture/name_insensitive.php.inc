@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\Fixture;
 
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClassWithTypo;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClassWithTypo;
 
 class NameInsensitive extends OldClassWithTypO
 {
@@ -16,15 +16,15 @@ class NameInsensitive extends OldClassWithTypO
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\Fixture;
 
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClassWithTypo;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClassWithTypo;
 
-class NameInsensitive extends \Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClassWithoutTypo
+class NameInsensitive extends \Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClassWithoutTypo
 {
-    public function run(): \Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClassWithoutTypo
+    public function run(): \Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClassWithoutTypo
     {
-        $oldClassWithTypo = new \Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClassWithoutTypo;
+        $oldClassWithTypo = new \Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClassWithoutTypo;
     }
 }
 

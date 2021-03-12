@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/sebastianbergmann/phpunit/commit/34a0abd8b56a4a9de83c9e56384f462541a0f939
  *
  * @see https://github.com/sebastianbergmann/phpunit/tree/master/src/Runner/Hook
- * @see \Rector\PHPUnit\Tests\Rector\Class_\TestListenerToHooksRector\TestListenerToHooksRectorTest
+ * @see \Rector\Tests\PHPUnit\Rector\Class_\TestListenerToHooksRector\TestListenerToHooksRectorTest
  */
 final class TestListenerToHooksRector extends AbstractRector
 {

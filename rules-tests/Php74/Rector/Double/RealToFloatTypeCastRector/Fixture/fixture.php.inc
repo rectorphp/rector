@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Double\RealToFloatTypeCastRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Double\RealToFloatTypeCastRector\Fixture;
 
 class Fixture
 {
@@ -16,7 +16,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Double\RealToFloatTypeCastRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Double\RealToFloatTypeCastRector\Fixture;
 
 class Fixture
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\RemovingStatic\Tests\Rector\StaticCall\DesiredStaticCallTypeToDynamicRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\StaticCall\DesiredStaticCallTypeToDynamicRector\Fixture;
 
-use Rector\RemovingStatic\Tests\Rector\StaticCall\DesiredStaticCallTypeToDynamicRector\Source\SomeStaticMethod;
+use Rector\Tests\RemovingStatic\Rector\StaticCall\DesiredStaticCallTypeToDynamicRector\Source\SomeStaticMethod;
 
 final class SomeStaticCall
 {
@@ -16,9 +16,9 @@ final class SomeStaticCall
 -----
 <?php
 
-namespace Rector\RemovingStatic\Tests\Rector\StaticCall\DesiredStaticCallTypeToDynamicRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\StaticCall\DesiredStaticCallTypeToDynamicRector\Fixture;
 
-use Rector\RemovingStatic\Tests\Rector\StaticCall\DesiredStaticCallTypeToDynamicRector\Source\SomeStaticMethod;
+use Rector\Tests\RemovingStatic\Rector\StaticCall\DesiredStaticCallTypeToDynamicRector\Source\SomeStaticMethod;
 
 final class SomeStaticCall
 {

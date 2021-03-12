@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\Name\ReservedObjectRector\Fixture;
+namespace Rector\Tests\Php71\Rector\Name\ReservedObjectRector\Fixture;
 
 function myFunction(): object
 {

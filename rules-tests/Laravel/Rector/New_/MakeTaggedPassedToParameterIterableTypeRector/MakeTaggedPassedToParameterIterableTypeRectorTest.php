@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Laravel\Tests\Rector\New_\MakeTaggedPassedToParameterIterableTypeRector;
+namespace Rector\Tests\Laravel\Rector\New_\MakeTaggedPassedToParameterIterableTypeRector;
 
 use Iterator;
 use Rector\Laravel\Rector\New_\MakeTaggedPassedToParameterIterableTypeRector;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\MethodCall\RequestGetCookieDefaultArgumentToCoalesceRector;
+namespace Rector\Tests\Nette\Rector\MethodCall\RequestGetCookieDefaultArgumentToCoalesceRector;
 
 use Iterator;
 use Rector\Nette\Rector\MethodCall\RequestGetCookieDefaultArgumentToCoalesceRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
+namespace Rector\Tests\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
 
 class MultipleMethods
 {
@@ -21,7 +21,7 @@ class MultipleMethods
 -----
 <?php
 
-namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
+namespace Rector\Tests\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
 
 class MultipleMethodsEventSubscriber implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
 {

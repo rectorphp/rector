@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector;
+namespace Rector\Tests\DeadCode\Rector\FunctionLike\RemoveOverriddenValuesRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\FunctionLike\RemoveOverriddenValuesRector;

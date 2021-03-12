@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Source\ClassicTrait;
-use Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Source\StandaloneTrait as DuplicatedStandaloneTrait;
+use Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Source\ClassicTrait;
+use Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Source\StandaloneTrait as DuplicatedStandaloneTrait;
 
 trait UnneededStandaloneTrait
 {
@@ -14,10 +14,10 @@ trait UnneededStandaloneTrait
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Source\ClassicTrait;
-use Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Source\StandaloneTrait;
+use Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Source\ClassicTrait;
+use Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Source\StandaloneTrait;
 
 trait UnneededStandaloneTrait
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Plus\UseIncrementAssignRector;
+namespace Rector\Tests\CodingStyle\Rector\Plus\UseIncrementAssignRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector;

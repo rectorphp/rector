@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony4\Tests\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector\Fixture;
+namespace Rector\Tests\Symfony4\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector\Fixture;
 
 function containerBuilderCompilerEnvArgument()
 {
@@ -12,7 +12,7 @@ function containerBuilderCompilerEnvArgument()
 -----
 <?php
 
-namespace Rector\Symfony4\Tests\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector\Fixture;
+namespace Rector\Tests\Symfony4\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector\Fixture;
 
 function containerBuilderCompilerEnvArgument()
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony3\Tests\Rector\Source;
+namespace Rector\Tests\Symfony3\Rector\Source;
 
 abstract class AbstractSymfonyController
 {

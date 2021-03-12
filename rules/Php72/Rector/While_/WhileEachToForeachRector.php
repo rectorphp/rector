@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @source https://wiki.php.net/rfc/deprecations_php_7_2#each
  *
- * @see \Rector\Php72\Tests\Rector\While_\WhileEachToForeachRector\WhileEachToForeachRectorTest
+ * @see \Rector\Tests\Php72\Rector\While_\WhileEachToForeachRector\WhileEachToForeachRectorTest
  */
 final class WhileEachToForeachRector extends AbstractRector
 {

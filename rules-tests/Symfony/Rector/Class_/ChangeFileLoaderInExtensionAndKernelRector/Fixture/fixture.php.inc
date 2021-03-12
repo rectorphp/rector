@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector\Fixture;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,7 +21,7 @@ final class SomeExtension extends Extension
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector\Fixture;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

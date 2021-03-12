@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Encapsed\EncapsedStringsToSprintfRector;
+namespace Rector\Tests\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;

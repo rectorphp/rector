@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony5\Tests\Rector\New_\PropertyPathMapperToDataMapperRector;
+namespace Rector\Tests\Symfony5\Rector\New_\PropertyPathMapperToDataMapperRector;
 
 use Iterator;
 use Rector\Symfony5\Rector\New_\PropertyPathMapperToDataMapperRector;

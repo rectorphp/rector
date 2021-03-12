@@ -1,11 +1,11 @@
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTagValueNodes;
+namespace Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTagValueNodes;
 
-use Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\DifferntButFirstListed\Bar as FooBarFirst;
-use Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Bar;
-use Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Foo;
-use Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\DifferntButFirstListed\Foo as BarFooLast;
+use Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\DifferntButFirstListed\Bar as FooBarFirst;
+use Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Bar;
+use Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Foo;
+use Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\DifferntButFirstListed\Foo as BarFooLast;
 use DI\Annotation\Inject;
 
 class InjectFromVarWithTypeOfSameName
@@ -29,17 +29,21 @@ class InjectFromVarWithTypeOfSameName
 -----
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTagValueNodes;
+namespace Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTagValueNodes;
 
-use Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\DifferntButFirstListed\Bar as FooBarFirst;
-use Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Bar;
-use Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Foo;
-use Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\DifferntButFirstListed\Foo as BarFooLast;
+use Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\DifferntButFirstListed\Bar as FooBarFirst;
+use Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Bar;
+use Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Foo;
+use Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\DifferntButFirstListed\Foo as BarFooLast;
 use DI\Annotation\Inject;
 
 class InjectFromVarWithTypeOfSameName
 {
-    public function __construct(private \Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Bar $someBarDependency, private \Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Foo $someFooDependency)
+<<<<<<< HEAD
+    public function __construct(private \Rector\Tests\DependencyInjection\Rector\Tests\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Bar $someBarDependency, private \Rector\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Foo $someFooDependency)
+=======
+    public function __construct(private \Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Bar $someBarDependency, private \Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\Foo $someFooDependency)
+>>>>>>> 87b25b5a6... fixup! fixing
     {
     }
 }

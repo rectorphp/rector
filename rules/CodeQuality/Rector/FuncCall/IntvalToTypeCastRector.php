@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/kalessil/phpinspectionsea/commit/25f53c8c7e08234c34b0d21f308f7c5cbd7a6c95
  * @see https://www.php.net/manual/en/function.intval.php
  *
- * @see \Rector\CodeQuality\Tests\Rector\FuncCall\IntvalToTypeCastRector\IntvalToTypeCastRectorTest
+ * @see \Rector\Tests\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector\IntvalToTypeCastRectorTest
  */
 final class IntvalToTypeCastRector extends AbstractRector
 {

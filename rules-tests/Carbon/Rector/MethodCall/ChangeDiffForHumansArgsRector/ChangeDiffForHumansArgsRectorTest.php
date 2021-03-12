@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Carbon\Tests\Rector\MethodCall\ChangeDiffForHumansArgsRector;
+namespace Rector\Tests\Carbon\Rector\MethodCall\ChangeDiffForHumansArgsRector;
 
 use Iterator;
 use Rector\Carbon\Rector\MethodCall\ChangeDiffForHumansArgsRector;

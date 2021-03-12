@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Function_\RemoveUnusedFunctionRector;
+namespace Rector\Tests\DeadCode\Rector\Function_\RemoveUnusedFunctionRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Function_\RemoveUnusedFunctionRector;

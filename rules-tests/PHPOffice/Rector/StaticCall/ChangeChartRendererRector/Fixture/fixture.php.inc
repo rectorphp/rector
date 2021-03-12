@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\StaticCall\ChangeChartRendererRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\StaticCall\ChangeChartRendererRector\Fixture;
 
 final class Fixture
 {
@@ -14,7 +14,7 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\StaticCall\ChangeChartRendererRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\StaticCall\ChangeChartRendererRector\Fixture;
 
 final class Fixture
 {

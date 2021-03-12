@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
 
 use Illuminate\Support\Facades\Response;
 
@@ -16,7 +16,7 @@ class ExampleController
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
 
 use Illuminate\Support\Facades\Response;
 

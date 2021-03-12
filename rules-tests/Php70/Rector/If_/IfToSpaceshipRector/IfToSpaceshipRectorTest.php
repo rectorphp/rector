@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Tests\Rector\If_\IfToSpaceshipRector;
+namespace Rector\Tests\Php70\Rector\If_\IfToSpaceshipRector;
 
 use Iterator;
 use Rector\Php70\Rector\If_\IfToSpaceshipRector;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\Fixture;
 
-use Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Source\ClassWithCountableProperty;
+use Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\Source\ClassWithCountableProperty;
 
 final class SkipCountableRemoteProperty
 {

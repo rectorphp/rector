@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\RemoveExpectAnyFromMockRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\RemoveExpectAnyFromMockRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +19,7 @@ class SomeClass extends TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\RemoveExpectAnyFromMockRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\RemoveExpectAnyFromMockRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 

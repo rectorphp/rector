@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Defluent\Tests\Rector\Return_\DefluentReturnMethodCallRector\Fixture;
+namespace Rector\Tests\Defluent\Rector\Return_\DefluentReturnMethodCallRector\Fixture;
 
-use Rector\Defluent\Tests\Rector\Return_\DefluentReturnMethodCallRector\Source\SelfButNewVersion;
+use Rector\Tests\Defluent\Rector\Return_\DefluentReturnMethodCallRector\Source\SelfButNewVersion;
 
 final class SkipNewObject
 {

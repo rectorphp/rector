@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\NotIdentical\StrposToStringsContainsRector\Fixture;
+namespace Rector\Tests\Nette\Rector\NotIdentical\StrposToStringsContainsRector\Fixture;
 
 class Fixture
 {
@@ -21,7 +21,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\NotIdentical\StrposToStringsContainsRector\Fixture;
+namespace Rector\Tests\Nette\Rector\NotIdentical\StrposToStringsContainsRector\Fixture;
 
 class Fixture
 {

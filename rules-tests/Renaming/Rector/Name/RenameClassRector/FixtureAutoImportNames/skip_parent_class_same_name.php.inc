@@ -1,7 +1,7 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\FixtureAutoImportNames;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\FixtureAutoImportNames;
 
-final class SkipParentClassSameName extends \Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\SkipParentClassSameName
+final class SkipParentClassSameName extends \Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\SkipParentClassSameName
 {
 }

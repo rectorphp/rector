@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php80\Tests\Rector\FunctionLike\UnionTypesRector;
+namespace Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector;
 
 use Iterator;
 use Rector\Php80\Rector\FunctionLike\UnionTypesRector;

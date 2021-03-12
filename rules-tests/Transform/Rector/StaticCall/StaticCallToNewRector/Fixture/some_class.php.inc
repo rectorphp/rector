@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToNewRector\Fixture;
+namespace Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\Fixture;
 
-use Rector\Transform\Tests\Rector\StaticCall\StaticCallToNewRector\Source\SomeJsonResponse;
+use Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\Source\SomeJsonResponse;
 
 class SomeClass
 {
@@ -16,15 +16,15 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToNewRector\Fixture;
+namespace Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\Fixture;
 
-use Rector\Transform\Tests\Rector\StaticCall\StaticCallToNewRector\Source\SomeJsonResponse;
+use Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\Source\SomeJsonResponse;
 
 class SomeClass
 {
     public function run()
     {
-        $dotenv = new \Rector\Transform\Tests\Rector\StaticCall\StaticCallToNewRector\Source\SomeJsonResponse();
+        $dotenv = new \Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\Source\SomeJsonResponse();
     }
 }
 

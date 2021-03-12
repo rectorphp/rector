@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony4\Tests\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\Fixture;
+namespace Rector\Tests\Symfony4\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\Fixture;
 
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -18,7 +18,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Symfony4\Tests\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\Fixture;
+namespace Rector\Tests\Symfony4\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\Fixture;
 
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

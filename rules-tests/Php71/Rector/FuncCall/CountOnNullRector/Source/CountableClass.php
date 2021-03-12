@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Source;
+namespace Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\Source;
 use Countable;
 
 final class CountableClass implements Countable

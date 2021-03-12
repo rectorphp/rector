@@ -18,7 +18,7 @@ use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\TypeDeclaration\ValueObject\NestedArrayType;
 
 /**
- * @see \Rector\TypeDeclaration\Tests\TypeNormalizerTest
+ * @see \Rector\Tests\TypeDeclaration\TypeNormalizerTest
  */
 final class TypeNormalizer
 {

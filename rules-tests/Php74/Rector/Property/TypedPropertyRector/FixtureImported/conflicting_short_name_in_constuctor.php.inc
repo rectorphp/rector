@@ -1,14 +1,14 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\FixtureImported;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureImported;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\ConflictingName;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\ConflictingName;
 use Rector;
 
 final class ConflictingShortNameInConstructor
 {
     /**
-     * @var Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\Nested\ConflictingName
+     * @var Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\Nested\ConflictingName
      */
     private $firstOne;
 
@@ -21,14 +21,14 @@ final class ConflictingShortNameInConstructor
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\FixtureImported;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureImported;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\ConflictingName;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\ConflictingName;
 use Rector;
 
 final class ConflictingShortNameInConstructor
 {
-    private \Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\Nested\ConflictingName $firstOne;
+    private \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\Nested\ConflictingName $firstOne;
 
     public function __construct(ConflictingName $conflictingName)
     {

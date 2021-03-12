@@ -29,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://symfony.com/doc/current/components/http_kernel.html#creating-an-event-listener
  * @see https://github.com/symfony/symfony/blob/master/src/Symfony/Component/HttpKernel/KernelEvents.php
  *
- * @see \Rector\NetteToSymfony\Tests\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector\RenameEventNamesInEventSubscriberRectorTest
+ * @see \Rector\Tests\NetteToSymfony\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector\RenameEventNamesInEventSubscriberRectorTest
  */
 final class RenameEventNamesInEventSubscriberRector extends AbstractRector
 {

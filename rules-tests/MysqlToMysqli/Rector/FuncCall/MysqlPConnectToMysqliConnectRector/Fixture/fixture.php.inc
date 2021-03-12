@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\MysqlToMysqli\Tests\Rector\FuncCall\MysqlPConnectToMysqliConnectRector\Fixture;
+namespace Rector\Tests\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector\Fixture;
 
 final class Fixture
 {
@@ -14,7 +14,7 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\MysqlToMysqli\Tests\Rector\FuncCall\MysqlPConnectToMysqliConnectRector\Fixture;
+namespace Rector\Tests\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector\Fixture;
 
 final class Fixture
 {

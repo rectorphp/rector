@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/Atlantic18/DoctrineExtensions/blob/v2.4.x/doc/loggable.md
  * @see https://github.com/KnpLabs/DoctrineBehaviors/blob/4e0677379dd4adf84178f662d08454a9627781a8/docs/loggable.md
  *
- * @see \Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\LoggableBehaviorRector\LoggableBehaviorRectorTest
+ * @see \Rector\Tests\DoctrineGedmoToKnplabs\Rector\Class_\LoggableBehaviorRector\LoggableBehaviorRectorTest
  */
 final class LoggableBehaviorRector extends AbstractRector
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source;
+namespace Rector\Tests\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source;
 
 class FirstService
 {

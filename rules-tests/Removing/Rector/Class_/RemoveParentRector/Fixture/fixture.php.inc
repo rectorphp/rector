@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Removing\Tests\Rector\Class_\RemoveParentRector\Fixture;
+namespace Rector\Tests\Removing\Rector\Class_\RemoveParentRector\Fixture;
 
-use Rector\Removing\Tests\Rector\Class_\RemoveParentRector\Source\ParentTypeToBeRemoved;
+use Rector\Tests\Removing\Rector\Class_\RemoveParentRector\Source\ParentTypeToBeRemoved;
 
 class SomeClass extends ParentTypeToBeRemoved
 {
@@ -12,9 +12,9 @@ class SomeClass extends ParentTypeToBeRemoved
 -----
 <?php
 
-namespace Rector\Removing\Tests\Rector\Class_\RemoveParentRector\Fixture;
+namespace Rector\Tests\Removing\Rector\Class_\RemoveParentRector\Fixture;
 
-use Rector\Removing\Tests\Rector\Class_\RemoveParentRector\Source\ParentTypeToBeRemoved;
+use Rector\Tests\Removing\Rector\Class_\RemoveParentRector\Source\ParentTypeToBeRemoved;
 
 class SomeClass
 {

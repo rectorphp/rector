@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Identical\StrEndsWithRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Identical\StrEndsWithRector\Fixture;
 
 class SubstrOtherWay
 {
@@ -14,7 +14,7 @@ class SubstrOtherWay
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Identical\StrEndsWithRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Identical\StrEndsWithRector\Fixture;
 
 class SubstrOtherWay
 {

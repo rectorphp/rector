@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://symfony.com/doc/3.0/form/form_collections.html
  * @see https://symfony2-document.readthedocs.io/en/latest/reference/forms/types/collection.html#type
  *
- * @see \Rector\Symfony3\Tests\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector\ChangeStringCollectionOptionToConstantRectorTest
+ * @see \Rector\Tests\Symfony3\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector\ChangeStringCollectionOptionToConstantRectorTest
  */
 final class ChangeStringCollectionOptionToConstantRector extends AbstractRector
 {

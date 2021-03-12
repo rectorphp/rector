@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector;
+namespace Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector;

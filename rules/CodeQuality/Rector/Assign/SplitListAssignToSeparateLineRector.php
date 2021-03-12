@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://mobile.twitter.com/ivanhoe011/status/1246376872931401728
  *
- * @see \Rector\CodeQuality\Tests\Rector\Assign\SplitListAssignToSeparateLineRector\SplitListAssignToSeparateLineRectorTest
+ * @see \Rector\Tests\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector\SplitListAssignToSeparateLineRectorTest
  */
 final class SplitListAssignToSeparateLineRector extends AbstractRector
 {

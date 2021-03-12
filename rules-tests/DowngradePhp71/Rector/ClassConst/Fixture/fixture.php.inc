@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp71\Tests\Rector\ClassConst\Fixture;
+namespace Rector\Tests\DowngradePhp71\Rector\ClassConst\Fixture;
 
 class Fixture
 {
@@ -14,7 +14,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\DowngradePhp71\Tests\Rector\ClassConst\Fixture;
+namespace Rector\Tests\DowngradePhp71\Rector\ClassConst\Fixture;
 
 class Fixture
 {

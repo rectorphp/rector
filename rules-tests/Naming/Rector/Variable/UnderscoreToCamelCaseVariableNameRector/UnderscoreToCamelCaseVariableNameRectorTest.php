@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\Rector\Variable\UnderscoreToCamelCaseVariableNameRector;
+namespace Rector\Tests\Naming\Rector\Variable\UnderscoreToCamelCaseVariableNameRector;
 
 use Iterator;
 use Rector\Naming\Rector\Variable\UnderscoreToCamelCaseVariableNameRector;

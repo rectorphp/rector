@@ -24,8 +24,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://www.php.net/manual/en/function.compact.php
  *
- * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\RemoveUnusedParameterRectorTest
- * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\OpenSourceRectorTest
+ * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector\RemoveUnusedParameterRectorTest
+ * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector\OpenSourceRectorTest
  */
 final class RemoveUnusedParameterRector extends AbstractRector implements ZeroCacheRectorInterface
 {

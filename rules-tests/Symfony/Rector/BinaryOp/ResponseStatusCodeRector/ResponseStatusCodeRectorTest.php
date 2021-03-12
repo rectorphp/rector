@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\BinaryOp\ResponseStatusCodeRector;
+namespace Rector\Tests\Symfony\Rector\BinaryOp\ResponseStatusCodeRector;
 
 use Iterator;
 use Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Sensio\Tests\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector;
+namespace Rector\Tests\Sensio\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector;
 
 use Iterator;
 use Rector\Sensio\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector;

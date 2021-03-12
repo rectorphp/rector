@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Source\ObjectToBeAliased as Aliased;
+use Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\Source\ObjectToBeAliased as Aliased;
 
 class ConstructorParamWithAliasedParam
 {
@@ -18,9 +18,9 @@ class ConstructorParamWithAliasedParam
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Source\ObjectToBeAliased as Aliased;
+use Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\Source\ObjectToBeAliased as Aliased;
 
 class ConstructorParamWithAliasedParam
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\MysqlToMysqli\Tests\Fixture;
+namespace Rector\Tests\MysqlToMysqli\Fixture;
 
 final class DifferentNameConnectionVariable
 {
@@ -20,7 +20,7 @@ final class DifferentNameConnectionVariable
 
 declare(strict_types=1);
 
-namespace Rector\MysqlToMysqli\Tests\Fixture;
+namespace Rector\Tests\MysqlToMysqli\Fixture;
 
 final class DifferentNameConnectionVariable
 {

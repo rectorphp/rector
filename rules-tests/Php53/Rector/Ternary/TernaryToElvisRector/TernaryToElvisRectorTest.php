@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php53\Tests\Rector\Ternary\TernaryToElvisRector;
+namespace Rector\Tests\Php53\Rector\Ternary\TernaryToElvisRector;
 
 use Iterator;
 use Rector\Php53\Rector\Ternary\TernaryToElvisRector;

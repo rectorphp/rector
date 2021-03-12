@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector;
+namespace Rector\Tests\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\SymfonyCodeQuality\Tests\Rector\Attribute\ExtractAttributeRouteNameConstantsRector;
+namespace Rector\Tests\SymfonyCodeQuality\Rector\Attribute\ExtractAttributeRouteNameConstantsRector;
 
 use Iterator;
 use Rector\SymfonyCodeQuality\Rector\Attribute\ExtractAttributeRouteNameConstantsRector;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Assign\RemoveDoubleAssignRector;
+namespace Rector\Tests\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;

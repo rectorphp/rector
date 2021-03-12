@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidToEntityWhereMissingRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
-use Rector\Doctrine\Tests\Rector\Class_\AddUuidToEntityWhereMissingRector\Source\BaseEntityWithConstructor;
+use Rector\Tests\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector\Source\BaseEntityWithConstructor;
 
 /**
  * @ORM\Entity
@@ -23,10 +23,10 @@ class WithParentConstructor extends BaseEntityWithConstructor
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidToEntityWhereMissingRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
-use Rector\Doctrine\Tests\Rector\Class_\AddUuidToEntityWhereMissingRector\Source\BaseEntityWithConstructor;
+use Rector\Tests\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector\Source\BaseEntityWithConstructor;
 
 /**
  * @ORM\Entity

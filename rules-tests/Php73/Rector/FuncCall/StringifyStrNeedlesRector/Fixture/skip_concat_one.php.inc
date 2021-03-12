@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\StringifyStrNeedlesRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\StringifyStrNeedlesRector\Fixture;
 
 final class SkipConcatOne
 {

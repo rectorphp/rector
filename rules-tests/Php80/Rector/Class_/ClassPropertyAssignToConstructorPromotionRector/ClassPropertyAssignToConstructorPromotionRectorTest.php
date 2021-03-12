@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+namespace Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 
 use Iterator;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;

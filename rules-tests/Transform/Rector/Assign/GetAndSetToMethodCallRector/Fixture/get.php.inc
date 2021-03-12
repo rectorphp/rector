@@ -1,6 +1,6 @@
 <?php
 
-use Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\SomeContainer;
+use Rector\Tests\Transform\Rector\Assign\GetAndSetToMethodCallRector\Source\SomeContainer;
 
 function getAndSetToMethodCall()
 {
@@ -18,7 +18,7 @@ function getAndSetToMethodCall()
 -----
 <?php
 
-use Rector\Transform\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\SomeContainer;
+use Rector\Tests\Transform\Rector\Assign\GetAndSetToMethodCallRector\Source\SomeContainer;
 
 function getAndSetToMethodCall()
 {

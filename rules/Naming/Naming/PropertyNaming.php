@@ -29,7 +29,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
  * @deprecated
  * @todo merge with very similar logic in
  * @see VariableNaming
- * @see \Rector\Naming\Tests\Naming\PropertyNamingTest
+ * @see \Rector\Tests\Naming\Naming\PropertyNamingTest
  */
 final class PropertyNaming
 {

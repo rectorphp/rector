@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Property\AddFalseDefaultToBoolPropertyRector;
+namespace Rector\Tests\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector;

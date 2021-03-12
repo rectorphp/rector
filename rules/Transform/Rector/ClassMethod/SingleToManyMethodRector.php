@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Transform\Tests\Rector\ClassMethod\SingleToManyMethodRector\SingleToManyMethodRectorTest
+ * @see \Rector\Tests\Transform\Rector\ClassMethod\SingleToManyMethodRector\SingleToManyMethodRectorTest
  */
 final class SingleToManyMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {

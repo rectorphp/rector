@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector;
+namespace Rector\Tests\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector;
 
 use Iterator;
 use Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector;

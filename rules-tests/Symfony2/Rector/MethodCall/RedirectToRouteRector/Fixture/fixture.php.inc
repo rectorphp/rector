@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony2\Tests\Rector\MethodCall\RedirectToRouteRector\Fixture;
+namespace Rector\Tests\Symfony2\Rector\MethodCall\RedirectToRouteRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -16,7 +16,7 @@ class AppController extends Controller
 -----
 <?php
 
-namespace Rector\Symfony2\Tests\Rector\MethodCall\RedirectToRouteRector\Fixture;
+namespace Rector\Tests\Symfony2\Rector\MethodCall\RedirectToRouteRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 

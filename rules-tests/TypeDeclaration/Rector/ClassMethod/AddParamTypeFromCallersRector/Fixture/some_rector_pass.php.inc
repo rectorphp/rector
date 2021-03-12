@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeFromCallersRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromCallersRector\Fixture;
 
 use Rector\Core\Rector\AbstractRector;
 use Rector\PostRector\Rector\AbstractPostRector;
@@ -22,7 +22,7 @@ final class SomeRectorPass
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeFromCallersRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromCallersRector\Fixture;
 
 use Rector\Core\Rector\AbstractRector;
 use Rector\PostRector\Rector\AbstractPostRector;

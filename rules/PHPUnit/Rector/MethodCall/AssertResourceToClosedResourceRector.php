@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @source https://github.com/sebastianbergmann/phpunit/pull/4365
  *
- * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertResourceToClosedResourceRector\AssertResourceToClosedResourceRectorTest
+ * @see \Rector\Tests\PHPUnit\Rector\MethodCall\AssertResourceToClosedResourceRector\AssertResourceToClosedResourceRectorTest
  */
 final class AssertResourceToClosedResourceRector extends AbstractRector
 {

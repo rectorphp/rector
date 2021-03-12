@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\ClassMethod\WrapReturnRector\Fixture;
+namespace Rector\Tests\Transform\Rector\ClassMethod\WrapReturnRector\Fixture;
 
-use Rector\Transform\Tests\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
+use Rector\Tests\Transform\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
 
 final class SomeClass extends SomeReturnClass
 {
@@ -16,9 +16,9 @@ final class SomeClass extends SomeReturnClass
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\ClassMethod\WrapReturnRector\Fixture;
+namespace Rector\Tests\Transform\Rector\ClassMethod\WrapReturnRector\Fixture;
 
-use Rector\Transform\Tests\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
+use Rector\Tests\Transform\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
 
 final class SomeClass extends SomeReturnClass
 {

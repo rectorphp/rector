@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector;
+namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

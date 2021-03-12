@@ -1,19 +1,19 @@
 <?php
 
-namespace Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\Fixture;
 
 final class AnotherClassFactory
 {
     /**
-     * @var \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService
+     * @var \Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService
      */
     private $turnMeToService;
-    public function __construct(\Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService $turnMeToService)
+    public function __construct(\Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService $turnMeToService)
     {
         $this->turnMeToService = $turnMeToService;
     }
-    public function create(): \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Fixture\AnotherClass
+    public function create(): \Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\Fixture\AnotherClass
     {
-        return new \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Fixture\AnotherClass($this->turnMeToService);
+        return new \Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\Fixture\AnotherClass($this->turnMeToService);
     }
 }

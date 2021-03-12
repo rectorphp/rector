@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 final class OverrideNonArrayMixed
 {
@@ -16,7 +16,7 @@ final class OverrideNonArrayMixed
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 final class OverrideNonArrayMixed
 {

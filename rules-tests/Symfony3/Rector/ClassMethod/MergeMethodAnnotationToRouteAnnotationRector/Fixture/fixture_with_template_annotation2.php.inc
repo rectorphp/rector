@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector\Fixture;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -22,7 +22,7 @@ class ClassWithTemplateAnnotation2Controller
 -----
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector\Fixture;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;

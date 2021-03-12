@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Source\ParentClassWithGetTrait;
+use Rector\Tests\Symfony\Rector\MethodCall\GetToConstructorInjectionRector\Source\ParentClassWithGetTrait;
 
 class SkipUnknownService extends ParentClassWithGetTrait
 {

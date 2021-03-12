@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderFirstLevelClassStatementsRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderFirstLevelClassStatementsRector\Fixture;
 
 final class SameNames
 {
@@ -15,7 +15,7 @@ final class SameNames
 -----
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderFirstLevelClassStatementsRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderFirstLevelClassStatementsRector\Fixture;
 
 final class SameNames
 {

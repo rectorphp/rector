@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\String_\SymplifyQuoteEscapeRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector\Fixture;
 
 class Fixture
 {
@@ -15,7 +15,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\String_\SymplifyQuoteEscapeRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector\Fixture;
 
 class Fixture
 {

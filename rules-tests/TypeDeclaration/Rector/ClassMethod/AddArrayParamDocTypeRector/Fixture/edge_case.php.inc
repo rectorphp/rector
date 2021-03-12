@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayParamDocTypeRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayParamDocTypeRector\Source\MeetingRoom;
+use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector\Source\MeetingRoom;
 
 class EdgeCase
 {
@@ -21,9 +21,9 @@ class EdgeCase
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayParamDocTypeRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayParamDocTypeRector\Source\MeetingRoom;
+use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector\Source\MeetingRoom;
 
 class EdgeCase
 {
@@ -33,7 +33,7 @@ class EdgeCase
     private $amenities;
 
     /**
-     * @param \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayParamDocTypeRector\Source\MeetingRoom[] $amenities
+     * @param \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector\Source\MeetingRoom[] $amenities
      */
     public function __construct(array $amenities)
     {

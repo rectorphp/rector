@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 
 use ReflectionClass;
 

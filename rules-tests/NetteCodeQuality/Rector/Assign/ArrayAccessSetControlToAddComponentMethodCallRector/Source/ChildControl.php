@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteCodeQuality\Tests\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Source;
+namespace Rector\Tests\NetteCodeQuality\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Source;
 
 use Nette\Application\UI\Control;
 

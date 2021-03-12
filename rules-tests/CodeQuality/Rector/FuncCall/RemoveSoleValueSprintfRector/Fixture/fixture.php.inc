@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\RemoveSoleValueSprintfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector\Fixture;
 
 class Fixture
 {
@@ -17,7 +17,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\RemoveSoleValueSprintfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector\Fixture;
 
 class Fixture
 {

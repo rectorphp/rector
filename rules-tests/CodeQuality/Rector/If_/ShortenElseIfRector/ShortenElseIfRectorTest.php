@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector;
+namespace Rector\Tests\CodeQuality\Rector\If_\ShortenElseIfRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\If_\ShortenElseIfRector;

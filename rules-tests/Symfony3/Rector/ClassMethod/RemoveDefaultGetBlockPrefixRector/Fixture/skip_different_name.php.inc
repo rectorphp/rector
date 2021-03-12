@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector\Fixture;
 
 use Symfony\Component\Form\AbstractType;
 

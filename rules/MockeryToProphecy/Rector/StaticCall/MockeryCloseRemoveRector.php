@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\MockeryToProphecy\Tests\Rector\StaticCall\MockeryToProphecyRector\MockeryToProphecyRectorTest
+ * @see \Rector\Tests\MockeryToProphecy\Rector\StaticCall\MockeryToProphecyRector\MockeryToProphecyRectorTest
  */
 final class MockeryCloseRemoveRector extends AbstractRector
 {

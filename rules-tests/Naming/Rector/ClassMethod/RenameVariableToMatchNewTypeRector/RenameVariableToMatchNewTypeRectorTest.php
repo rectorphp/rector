@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
+namespace Rector\Tests\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 
 use Iterator;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;

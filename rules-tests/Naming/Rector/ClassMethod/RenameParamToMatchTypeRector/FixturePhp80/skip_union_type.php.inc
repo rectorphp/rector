@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\FixturePhp80;
+namespace Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\FixturePhp80;
 
-use Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\EliteManager;
+use Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\EliteManager;
 
 class SkipUnionType
 {

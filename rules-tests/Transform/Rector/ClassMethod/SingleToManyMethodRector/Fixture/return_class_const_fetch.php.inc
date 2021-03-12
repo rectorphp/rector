@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\ClassMethod\SingleToManyMethodRector\Fixture;
+namespace Rector\Tests\Transform\Rector\ClassMethod\SingleToManyMethodRector\Fixture;
 
-use Rector\Transform\Tests\Rector\ClassMethod\SingleToManyMethodRector\Source\OneToManyInterface;
+use Rector\Tests\Transform\Rector\ClassMethod\SingleToManyMethodRector\Source\OneToManyInterface;
 
 class ReturnClassConstFetch implements OneToManyInterface
 {
@@ -16,9 +16,9 @@ class ReturnClassConstFetch implements OneToManyInterface
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\ClassMethod\SingleToManyMethodRector\Fixture;
+namespace Rector\Tests\Transform\Rector\ClassMethod\SingleToManyMethodRector\Fixture;
 
-use Rector\Transform\Tests\Rector\ClassMethod\SingleToManyMethodRector\Source\OneToManyInterface;
+use Rector\Tests\Transform\Rector\ClassMethod\SingleToManyMethodRector\Source\OneToManyInterface;
 
 class ReturnClassConstFetch implements OneToManyInterface
 {

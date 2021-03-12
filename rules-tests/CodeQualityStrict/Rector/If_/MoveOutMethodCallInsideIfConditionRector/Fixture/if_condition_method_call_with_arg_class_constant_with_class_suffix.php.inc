@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
+namespace Rector\Tests\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
-use Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Source\SomeClassWithConstants;
+use Rector\Tests\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Source\SomeClassWithConstants;
 
 class IfConditionMethodCallWithArgClassConstantSuffixClass
 {
@@ -24,9 +24,9 @@ class IfConditionMethodCallWithArgClassConstantSuffixClass
 -----
 <?php
 
-namespace Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
+namespace Rector\Tests\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
-use Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Source\SomeClassWithConstants;
+use Rector\Tests\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Source\SomeClassWithConstants;
 
 class IfConditionMethodCallWithArgClassConstantSuffixClass
 {

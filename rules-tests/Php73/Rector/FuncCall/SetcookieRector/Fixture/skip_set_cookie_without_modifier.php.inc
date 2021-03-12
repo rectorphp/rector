@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\SetcookieRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\SetcookieRector\Fixture;
 
 class SkipSetCookieWithoutModifier
 {

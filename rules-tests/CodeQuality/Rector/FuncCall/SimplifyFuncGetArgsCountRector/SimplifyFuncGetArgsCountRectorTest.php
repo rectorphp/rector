@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyFuncGetArgsCountRector;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\SimplifyFuncGetArgsCountRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyFuncGetArgsCountRector;

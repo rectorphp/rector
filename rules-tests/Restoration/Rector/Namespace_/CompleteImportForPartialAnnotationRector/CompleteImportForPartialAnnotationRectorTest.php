@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Restoration\Tests\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
+namespace Rector\Tests\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\List_\EmptyListRector\Fixture;
+namespace Rector\Tests\Php70\Rector\List_\EmptyListRector\Fixture;
 
 function emptyList()
 {
@@ -16,7 +16,7 @@ function emptyList()
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\List_\EmptyListRector\Fixture;
+namespace Rector\Tests\Php70\Rector\List_\EmptyListRector\Fixture;
 
 function emptyList()
 {

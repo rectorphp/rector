@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\ClassMethod\SetStateToStaticRector\Fixture;
+namespace Rector\Tests\Php80\Rector\ClassMethod\SetStateToStaticRector\Fixture;
 
 class NoStatic
 {
@@ -14,7 +14,7 @@ class NoStatic
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\ClassMethod\SetStateToStaticRector\Fixture;
+namespace Rector\Tests\Php80\Rector\ClassMethod\SetStateToStaticRector\Fixture;
 
 class NoStatic
 {

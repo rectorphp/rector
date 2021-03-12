@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php55\Tests\Rector\Class_\ClassConstantToSelfClassRector;
+namespace Rector\Tests\Php55\Rector\Class_\ClassConstantToSelfClassRector;
 
 use Iterator;
 use Rector\Php55\Rector\Class_\ClassConstantToSelfClassRector;

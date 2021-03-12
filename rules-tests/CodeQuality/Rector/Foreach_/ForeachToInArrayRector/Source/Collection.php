@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Source;
+namespace Rector\Tests\CodeQuality\Rector\Foreach_\ForeachToInArrayRector\Source;
 
 use ArrayIterator;
 use Closure;

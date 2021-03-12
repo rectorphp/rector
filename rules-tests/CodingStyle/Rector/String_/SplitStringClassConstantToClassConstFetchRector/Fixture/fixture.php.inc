@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\String_\SplitStringClassConstantToClassConstFetchRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector\Fixture;
 
 class SomeClass
 {
@@ -11,7 +11,7 @@ class AnotherClass
 {
     public function get()
     {
-        return 'Rector\CodingStyle\Tests\Rector\String_\SplitStringClassConstantToClassConstFetchRector\Fixture\SomeClass::HI';
+        return 'Rector\Tests\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector\Fixture\SomeClass::HI';
     }
 }
 
@@ -19,7 +19,7 @@ class AnotherClass
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\String_\SplitStringClassConstantToClassConstFetchRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector\Fixture;
 
 class SomeClass
 {
@@ -30,7 +30,7 @@ class AnotherClass
 {
     public function get()
     {
-        return \Rector\CodingStyle\Tests\Rector\String_\SplitStringClassConstantToClassConstFetchRector\Fixture\SomeClass::class . '::HI';
+        return \Rector\Tests\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector\Fixture\SomeClass::class . '::HI';
     }
 }
 

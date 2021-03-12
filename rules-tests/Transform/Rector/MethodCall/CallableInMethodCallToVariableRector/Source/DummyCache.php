@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\MethodCall\CallableInMethodCallToVariableRector\Source;
+namespace Rector\Tests\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector\Source;
 
 final class DummyCache
 {

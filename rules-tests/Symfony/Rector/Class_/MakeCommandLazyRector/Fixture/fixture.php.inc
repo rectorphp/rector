@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\Class_\MakeCommandLazyRector\Fixture;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,7 +22,7 @@ class SunshineCommand extends \Symfony\Component\Console\Command\Command
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\Class_\MakeCommandLazyRector\Fixture;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

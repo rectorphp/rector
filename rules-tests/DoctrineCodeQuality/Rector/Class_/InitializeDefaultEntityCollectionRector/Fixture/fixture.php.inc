@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\Class_\InitializeDefaultEntityCollectionRector\Fixture;
+namespace Rector\Tests\DoctrineCodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,7 +19,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\Class_\InitializeDefaultEntityCollectionRector\Fixture;
+namespace Rector\Tests\DoctrineCodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 

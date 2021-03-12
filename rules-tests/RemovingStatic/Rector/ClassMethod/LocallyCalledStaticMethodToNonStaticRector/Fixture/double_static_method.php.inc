@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\RemovingStatic\Tests\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector\Fixture;
 
 class DoubleStaticMethod
 {
@@ -18,7 +18,7 @@ class DoubleStaticMethod
 -----
 <?php
 
-namespace Rector\RemovingStatic\Tests\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector\Fixture;
 
 class DoubleStaticMethod
 {

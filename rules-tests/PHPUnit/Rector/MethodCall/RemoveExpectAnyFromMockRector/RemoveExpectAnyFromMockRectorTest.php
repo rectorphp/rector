@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\RemoveExpectAnyFromMockRector;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\RemoveExpectAnyFromMockRector;
 
 use Iterator;
 use Rector\PHPUnit\Rector\MethodCall\RemoveExpectAnyFromMockRector;

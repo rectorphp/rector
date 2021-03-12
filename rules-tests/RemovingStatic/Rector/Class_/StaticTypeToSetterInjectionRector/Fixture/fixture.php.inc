@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector\Fixture;
 
-use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory;
+use Rector\Tests\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory;
 
 final class CheckoutEntityFactory
 {
@@ -20,17 +20,17 @@ final class CheckoutEntityFactory
 
 declare(strict_types=1);
 
-namespace Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector\Fixture;
 
-use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory;
+use Rector\Tests\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory;
 
 final class CheckoutEntityFactory
 {
     /**
-     * @var \Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory
+     * @var \Rector\Tests\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory
      */
     private $genericEntityFactory;
-    public function setGenericEntityFactory(\Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory $genericEntityFactory): void
+    public function setGenericEntityFactory(\Rector\Tests\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory $genericEntityFactory): void
     {
         $this->genericEntityFactory = $genericEntityFactory;
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php74\Tests\Rector\FuncCall\ArrayKeyExistsOnPropertyRector;
+namespace Rector\Tests\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector;
 
 use Iterator;
 use Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector;

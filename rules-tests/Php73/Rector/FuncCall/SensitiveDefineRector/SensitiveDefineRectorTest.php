@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php73\Tests\Rector\FuncCall\SensitiveDefineRector;
+namespace Rector\Tests\Php73\Rector\FuncCall\SensitiveDefineRector;
 
 use Iterator;
 use Rector\Php73\Rector\FuncCall\SensitiveDefineRector;

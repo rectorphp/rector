@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
+namespace Rector\Tests\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;

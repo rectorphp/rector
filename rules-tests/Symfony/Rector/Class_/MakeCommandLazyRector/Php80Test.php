@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector;
+namespace Rector\Tests\Symfony\Rector\Class_\MakeCommandLazyRector;
 
 use Iterator;
 use Rector\Symfony\Rector\Class_\MakeCommandLazyRector;

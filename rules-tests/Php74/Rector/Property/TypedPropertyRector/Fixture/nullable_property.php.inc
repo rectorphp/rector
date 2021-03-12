@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
 final class ClassWithNullableProperty
 {
@@ -21,15 +21,15 @@ final class ClassWithNullableProperty
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
 final class ClassWithNullableProperty
 {
-    private ?\Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $nullableClassWithDefaultNull = null;
+    private ?\Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass $nullableClassWithDefaultNull = null;
 
-    private ?\Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $yetAnotherClass = null;
+    private ?\Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass $yetAnotherClass = null;
 }
 
 ?>

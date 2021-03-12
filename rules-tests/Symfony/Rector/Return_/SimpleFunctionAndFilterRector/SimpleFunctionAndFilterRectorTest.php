@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Return_\SimpleFunctionAndFilterRector;
+namespace Rector\Tests\Symfony\Rector\Return_\SimpleFunctionAndFilterRector;
 
 use Iterator;
 use Rector\Symfony\Rector\Return_\SimpleFunctionAndFilterRector;

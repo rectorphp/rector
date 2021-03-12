@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony5\Tests\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRector\Fixture;
+namespace Rector\Tests\Symfony5\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRector\Fixture;
 
 class SkipNotValidatorBuilder
 {

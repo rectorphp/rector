@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector\Fixture;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

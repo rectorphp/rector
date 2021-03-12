@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\StringsAssertNakedRector\Fixture;
+namespace Rector\Tests\Php72\Rector\FuncCall\StringsAssertNakedRector\Fixture;
 
 function nakedAssert()
 {
@@ -23,7 +23,7 @@ function nakedAssert()
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\StringsAssertNakedRector\Fixture;
+namespace Rector\Tests\Php72\Rector\FuncCall\StringsAssertNakedRector\Fixture;
 
 function nakedAssert()
 {

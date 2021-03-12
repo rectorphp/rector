@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;

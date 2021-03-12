@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\If_\RemoveDeadInstanceOfRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\If_\RemoveDeadInstanceOfRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\If_;
@@ -28,7 +28,7 @@ class DoNotRemoveParentChildFlip
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\If_\RemoveDeadInstanceOfRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\If_\RemoveDeadInstanceOfRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\If_;

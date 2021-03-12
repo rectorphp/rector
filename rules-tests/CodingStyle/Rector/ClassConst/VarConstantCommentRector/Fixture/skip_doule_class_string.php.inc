@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 use Nette\Utils\Strings;
 use PHPStan\TrinaryLogic;

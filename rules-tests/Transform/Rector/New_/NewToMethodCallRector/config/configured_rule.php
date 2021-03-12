@@ -1,8 +1,8 @@
 <?php
 
 use Rector\Transform\Rector\New_\NewToMethodCallRector;
-use Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClass;
-use Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClassFactory;
+use Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\Source\MyClass;
+use Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\Source\MyClassFactory;
 use Rector\Transform\ValueObject\NewToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

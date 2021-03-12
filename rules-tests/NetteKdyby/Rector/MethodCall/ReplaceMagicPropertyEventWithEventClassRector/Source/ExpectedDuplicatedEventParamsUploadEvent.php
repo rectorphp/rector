@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Fixture\Event;
+namespace Rector\Tests\NetteKdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Fixture\Event;
 
 final class DuplicatedEventParamsUploadEvent extends \Symfony\Contracts\EventDispatcher\Event
 {

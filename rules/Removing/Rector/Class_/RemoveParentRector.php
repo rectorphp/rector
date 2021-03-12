@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Removing\Tests\Rector\Class_\RemoveParentRector\RemoveParentRectorTest
+ * @see \Rector\Tests\Removing\Rector\Class_\RemoveParentRector\RemoveParentRectorTest
  */
 final class RemoveParentRector extends AbstractRector implements ConfigurableRectorInterface
 {

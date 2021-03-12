@@ -3,17 +3,17 @@
 use Acme\Bar\DoNotUpdateExistingTargetNamespace;
 use Manual\Twig\TwigFilter;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture\DuplicatedClass;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\AbstractManualExtension;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\Contract\FirstInterface;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\Contract\SecondInterface;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\Contract\ThirdInterface;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClassWithoutTypo;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClassWithTypo;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\SomeFinalClass;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\SomeNonFinalClass;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Fixture\DuplicatedClass;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\AbstractManualExtension;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\Contract\FirstInterface;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\Contract\SecondInterface;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\Contract\ThirdInterface;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClassWithoutTypo;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClassWithTypo;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\SomeFinalClass;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\SomeNonFinalClass;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -38,7 +38,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'AnotherMyOldClass' => 'AnotherMyNewClass',
                 'MyNamespace\AnotherMyClass' => 'MyNewClassWithoutNamespace',
                 // test duplicated class - @see https://github.com/rectorphp/rector/issues/1438
-                'Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture\SingularClass' => DuplicatedClass::class,
+                'Rector\Tests\Renaming\Rector\Name\RenameClassRector\Fixture\SingularClass' => DuplicatedClass::class,
                 // test duplicated class - @see https://github.com/rectorphp/rector/issues/5389
                 FirstInterface::class => ThirdInterface::class,
                 SecondInterface::class => ThirdInterface::class,

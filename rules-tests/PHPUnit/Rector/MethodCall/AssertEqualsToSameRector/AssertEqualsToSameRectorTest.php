@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertEqualsToSameRector;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertEqualsToSameRector;
 
 use Iterator;
 use Rector\PHPUnit\Rector\MethodCall\AssertEqualsToSameRector;

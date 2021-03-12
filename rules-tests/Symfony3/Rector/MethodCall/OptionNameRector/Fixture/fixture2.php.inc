@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\OptionNameRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\OptionNameRector\Fixture;
 
-use Rector\Symfony3\Tests\Rector\MethodCall\OptionNameRector\Source\AbstractType;
+use Rector\Tests\Symfony3\Rector\MethodCall\OptionNameRector\Source\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
 class RegistrationFormType2 extends AbstractType
@@ -20,9 +20,9 @@ class RegistrationFormType2 extends AbstractType
 -----
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\OptionNameRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\OptionNameRector\Fixture;
 
-use Rector\Symfony3\Tests\Rector\MethodCall\OptionNameRector\Source\AbstractType;
+use Rector\Tests\Symfony3\Rector\MethodCall\OptionNameRector\Source\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
 class RegistrationFormType2 extends AbstractType

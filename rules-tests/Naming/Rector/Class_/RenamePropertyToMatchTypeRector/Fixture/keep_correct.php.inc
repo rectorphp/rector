@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
 
-use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\AMP;
+use Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\AMP;
 use DateTime;
 
 class KeepCorrect

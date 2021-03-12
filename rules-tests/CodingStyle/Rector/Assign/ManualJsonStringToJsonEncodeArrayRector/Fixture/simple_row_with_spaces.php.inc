@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector\Fixture;
 
 final class SimpleRowWithSpaces
 {
@@ -15,7 +15,7 @@ final class SimpleRowWithSpaces
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector\Fixture;
 
 final class SimpleRowWithSpaces
 {

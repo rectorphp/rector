@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony4\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
+namespace Rector\Tests\Symfony4\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

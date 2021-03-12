@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector\Fixture;
+namespace Rector\Tests\DoctrineCodeQuality\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -24,7 +24,7 @@ class Product
 -----
 <?php
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector\Fixture;
+namespace Rector\Tests\DoctrineCodeQuality\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 

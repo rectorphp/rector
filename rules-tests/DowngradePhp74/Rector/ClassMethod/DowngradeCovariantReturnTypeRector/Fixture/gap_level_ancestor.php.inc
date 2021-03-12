@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
+namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
 
 class GapLevelParentType {}
 class GapLevelChildType extends GapLevelParentType {}
@@ -27,7 +27,7 @@ class GapLevelC extends GapLevelB
 -----
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
+namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
 
 class GapLevelParentType {}
 class GapLevelChildType extends GapLevelParentType {}
@@ -46,7 +46,7 @@ class GapLevelB extends GapLevelA
 
 class GapLevelC extends GapLevelB
 {
-    public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\GapLevelParentType
+    public function covariantReturnTypes(): \Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\GapLevelParentType
     { /* … */ }
 }
 

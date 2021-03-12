@@ -17,7 +17,7 @@ use Webmozart\Assert\Assert;
 /**
  * @sponsor Thanks https://twitter.com/afilina & Zenika (CAN) for sponsoring this rule - visit them on https://zenika.ca/en/en
  *
- * @see \Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallRector\RemoveFuncCallRectorTest
+ * @see \Rector\Tests\Removing\Rector\FuncCall\RemoveFuncCallRector\RemoveFuncCallRectorTest
  */
 final class RemoveFuncCallRector extends AbstractRector implements ConfigurableRectorInterface
 {

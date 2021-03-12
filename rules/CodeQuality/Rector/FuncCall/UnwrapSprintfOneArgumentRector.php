@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/pull/5280
- * @see \Rector\CodeQuality\Tests\Rector\FuncCall\UnwrapSprintfOneArgumentRector\UnwrapSprintfOneArgumentRectorTest
+ * @see \Rector\Tests\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector\UnwrapSprintfOneArgumentRectorTest
  */
 final class UnwrapSprintfOneArgumentRector extends AbstractRector
 {

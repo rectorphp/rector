@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector\Fixture;
+namespace Rector\Tests\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector\Fixture;
 
 class SomeClass
 {
@@ -14,7 +14,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector\Fixture;
+namespace Rector\Tests\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector\Fixture;
 
 class SomeClass
 {

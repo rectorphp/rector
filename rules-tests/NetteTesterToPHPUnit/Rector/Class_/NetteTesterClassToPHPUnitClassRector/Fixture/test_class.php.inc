@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
+namespace Rector\Tests\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
 
 use Tester\Assert;
 use Tester\TestCase;
@@ -32,7 +32,7 @@ class ExtensionTest extends TestCase
 -----
 <?php
 
-namespace Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
+namespace Rector\Tests\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
 
 use Tester\Assert;
 use Tester\TestCase;

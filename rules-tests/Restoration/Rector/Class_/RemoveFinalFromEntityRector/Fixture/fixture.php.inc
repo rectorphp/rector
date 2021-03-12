@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Restoration\Tests\Rector\Class_\RemoveFinalFromEntityRector\Fixture;
+namespace Rector\Tests\Restoration\Rector\Class_\RemoveFinalFromEntityRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,7 +15,7 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Restoration\Tests\Rector\Class_\RemoveFinalFromEntityRector\Fixture;
+namespace Rector\Tests\Restoration\Rector\Class_\RemoveFinalFromEntityRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\TranslationBehaviorRector\Fixture;
+namespace Rector\Tests\DoctrineGedmoToKnplabs\Rector\Class_\TranslationBehaviorRector\Fixture;
 
 /**
  * @ORM\Entity

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Autodiscovery\Tests\Rector\FileNode\MoveServicesBySuffixToDirectoryRector\Source\Controller;
+namespace Rector\Tests\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector\Source\Controller;
 
 final class Orange
 {

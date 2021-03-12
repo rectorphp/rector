@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteCodeQuality\Tests\Rector\Identical\SubstrMinusToStringEndsWithRector;
+namespace Rector\Tests\NetteCodeQuality\Rector\Identical\SubstrMinusToStringEndsWithRector;
 
 use Iterator;
 use Rector\NetteCodeQuality\Rector\Identical\SubstrMinusToStringEndsWithRector;

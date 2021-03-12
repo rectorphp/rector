@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Defluent\Tests\Rector\ClassMethod\NormalToFluentRector;
+namespace Rector\Tests\Defluent\Rector\ClassMethod\NormalToFluentRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

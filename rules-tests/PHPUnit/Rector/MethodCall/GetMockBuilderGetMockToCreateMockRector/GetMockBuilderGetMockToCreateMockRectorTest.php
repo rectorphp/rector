@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
 
 use Iterator;
 use Rector\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;

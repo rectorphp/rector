@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Defluent\Tests\Rector\ClassMethod\NormalToFluentRector\NormalToFluentRectorTest
+ * @see \Rector\Tests\Defluent\Rector\ClassMethod\NormalToFluentRector\NormalToFluentRectorTest
  */
 final class NormalToFluentRector extends AbstractRector implements ConfigurableRectorInterface
 {

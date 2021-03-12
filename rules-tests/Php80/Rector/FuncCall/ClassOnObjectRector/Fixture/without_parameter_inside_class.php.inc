@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\FuncCall\ClassOnObjectRector\Fixture;
+namespace Rector\Tests\Php80\Rector\FuncCall\ClassOnObjectRector\Fixture;
 
 class WithoutParameterInsideClass
 {
@@ -14,7 +14,7 @@ class WithoutParameterInsideClass
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\FuncCall\ClassOnObjectRector\Fixture;
+namespace Rector\Tests\Php80\Rector\FuncCall\ClassOnObjectRector\Fixture;
 
 class WithoutParameterInsideClass
 {

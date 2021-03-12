@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Return_\SimpleFunctionAndFilterRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\Return_\SimpleFunctionAndFilterRector\Fixture;
 
 final class SomeExtension extends \Twig_Extension
 {
@@ -16,7 +16,7 @@ final class SomeExtension extends \Twig_Extension
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Return_\SimpleFunctionAndFilterRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\Return_\SimpleFunctionAndFilterRector\Fixture;
 
 final class SomeExtension extends \Twig_Extension
 {

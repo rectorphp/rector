@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\Fixture;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Scalar\String_;
@@ -21,7 +21,7 @@ final class InIfSetRename
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\Fixture;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Scalar\String_;

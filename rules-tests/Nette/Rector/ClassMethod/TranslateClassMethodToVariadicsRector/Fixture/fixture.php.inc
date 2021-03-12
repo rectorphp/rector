@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\ClassMethod\TranslateClassMethodToVariadicsRector\Fixture;
+namespace Rector\Tests\Nette\Rector\ClassMethod\TranslateClassMethodToVariadicsRector\Fixture;
 
 use Nette\Localization\ITranslator;
 
@@ -16,7 +16,7 @@ final class SomeClass implements ITranslator
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\ClassMethod\TranslateClassMethodToVariadicsRector\Fixture;
+namespace Rector\Tests\Nette\Rector\ClassMethod\TranslateClassMethodToVariadicsRector\Fixture;
 
 use Nette\Localization\ITranslator;
 

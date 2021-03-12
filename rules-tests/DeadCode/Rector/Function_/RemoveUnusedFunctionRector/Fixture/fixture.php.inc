@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Function_\RemoveUnusedFunctionRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Function_\RemoveUnusedFunctionRector\Fixture;
 
 function removeMe()
 {
@@ -16,7 +16,7 @@ useMe();
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Function_\RemoveUnusedFunctionRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Function_\RemoveUnusedFunctionRector\Fixture;
 
 function useMe()
 {

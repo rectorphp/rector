@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Source;
+namespace Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\Source;
 
-use Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\FixtureExtraFiles\SkipUsedAbstractClass;
+use Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\FixtureExtraFiles\SkipUsedAbstractClass;
 
 final class UseAbstract
 {

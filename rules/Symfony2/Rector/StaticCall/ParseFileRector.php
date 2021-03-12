@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony2\Tests\Rector\StaticCall\ParseFileRector\ParseFileRectorTest
+ * @see \Rector\Tests\Symfony2\Rector\StaticCall\ParseFileRector\ParseFileRectorTest
  */
 final class ParseFileRector extends AbstractRector
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\Interface_\DeleteFactoryInterfaceRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector\Fixture;
 
-use Rector\NetteToSymfony\Tests\Rector\Interface_\DeleteFactoryInterfaceRector\Source\SomeControl;
+use Rector\Tests\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector\Source\SomeControl;
 
 interface SkipSomeFactoryInterface
 {

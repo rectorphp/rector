@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony4\Tests\Rector\StaticCall\ProcessBuilderInstanceRector;
+namespace Rector\Tests\Symfony4\Rector\StaticCall\ProcessBuilderInstanceRector;
 
 use Iterator;
 use Rector\Symfony4\Rector\StaticCall\ProcessBuilderInstanceRector;

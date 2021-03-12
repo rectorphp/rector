@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Autodiscovery\Tests\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector;
+namespace Rector\Tests\Autodiscovery\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector;
 
 use Iterator;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;

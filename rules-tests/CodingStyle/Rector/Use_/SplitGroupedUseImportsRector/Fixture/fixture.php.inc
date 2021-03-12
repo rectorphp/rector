@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector\Fixture;
 
 use A, B;
 
@@ -12,7 +12,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector\Fixture;
 
 use A;
 use B;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 
-use Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Source\MethodWithFuncGetArgs;
+use Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\Source\MethodWithFuncGetArgs;
 
 final class BetterFuncGetAll
 {
@@ -16,9 +16,9 @@ final class BetterFuncGetAll
 -----
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 
-use Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Source\MethodWithFuncGetArgs;
+use Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\Source\MethodWithFuncGetArgs;
 
 final class BetterFuncGetAll
 {

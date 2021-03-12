@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\Ternary\TernaryToNullCoalescingRector\Fixture;
+namespace Rector\Tests\Php70\Rector\Ternary\TernaryToNullCoalescingRector\Fixture;
 
 function ternaryToNullCoalescing4()
 {
@@ -37,7 +37,7 @@ function ternaryToNullCoalescing4()
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\Ternary\TernaryToNullCoalescingRector\Fixture;
+namespace Rector\Tests\Php70\Rector\Ternary\TernaryToNullCoalescingRector\Fixture;
 
 function ternaryToNullCoalescing4()
 {

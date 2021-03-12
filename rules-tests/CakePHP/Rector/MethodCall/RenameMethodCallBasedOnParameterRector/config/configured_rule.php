@@ -1,7 +1,7 @@
 <?php
 
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
-use Rector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParameterRector\Source\SomeModelType;
+use Rector\Tests\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector\Source\SomeModelType;
 use Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Fixture;
 
-use Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\AbstractWhatever;
+use Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\AbstractWhatever;
 
 class KeepSelf extends AbstractWhatever
 {

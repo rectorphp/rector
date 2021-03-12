@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
 
-use Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Source\AbstractEmptyMethod;
+use Rector\Tests\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector\Source\AbstractEmptyMethod;
 
 final class SkipAbstractEmptyMethod
 {

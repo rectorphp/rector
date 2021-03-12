@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php73\Tests\Rector\FuncCall\StringifyStrNeedlesRector\Source;
+namespace Rector\Tests\Php73\Rector\FuncCall\StringifyStrNeedlesRector\Source;
 
 final class ReturnsString
 {

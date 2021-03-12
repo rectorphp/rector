@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector;
+namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
+namespace Rector\Tests\Sensio\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
 
 use Iterator;
 use Rector\Sensio\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;

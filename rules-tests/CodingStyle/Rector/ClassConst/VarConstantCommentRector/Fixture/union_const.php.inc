@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 class UnionConst
 {
@@ -17,7 +17,7 @@ class UnionConst
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 class UnionConst
 {

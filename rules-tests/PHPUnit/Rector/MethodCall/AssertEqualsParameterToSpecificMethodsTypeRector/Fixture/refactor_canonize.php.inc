@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +18,7 @@ final class RefactorCanonize extends TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Defluent\Tests\NodeFactory\FluentChainMethodCallRootExtractor\Source;
+namespace Rector\Tests\Defluent\NodeFactory\FluentChainMethodCallRootExtractor\Source;
 
 final class SomeClassWithFluentMethods
 {

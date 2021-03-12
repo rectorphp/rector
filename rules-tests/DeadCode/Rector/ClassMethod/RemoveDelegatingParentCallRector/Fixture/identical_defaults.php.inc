@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector\Fixture;
 
-use Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector\Source\ClassWithStringDefaultParameter;
+use Rector\Tests\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector\Source\ClassWithStringDefaultParameter;
 
 final class IdenticalDefaults extends ClassWithStringDefaultParameter
 {
@@ -16,9 +16,9 @@ final class IdenticalDefaults extends ClassWithStringDefaultParameter
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector\Fixture;
 
-use Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector\Source\ClassWithStringDefaultParameter;
+use Rector\Tests\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector\Source\ClassWithStringDefaultParameter;
 
 final class IdenticalDefaults extends ClassWithStringDefaultParameter
 {

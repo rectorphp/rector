@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\ForToForeachRectorTest
+ * @see \Rector\Tests\CodeQuality\Rector\For_\ForToForeachRector\ForToForeachRectorTest
  */
 final class ForToForeachRector extends AbstractRector
 {

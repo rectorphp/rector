@@ -24,7 +24,7 @@ use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
 
 /**
- * @see \Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
+ * @see \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
  */
 final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRector
 {

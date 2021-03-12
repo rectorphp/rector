@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\Unset_\UnsetCastRector\Fixture;
+namespace Rector\Tests\Php72\Rector\Unset_\UnsetCastRector\Fixture;
 
 class UnsetExpr
 {
@@ -16,7 +16,7 @@ class UnsetExpr
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\Unset_\UnsetCastRector\Fixture;
+namespace Rector\Tests\Php72\Rector\Unset_\UnsetCastRector\Fixture;
 
 class UnsetExpr
 {

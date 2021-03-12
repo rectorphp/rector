@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector\Source;
+namespace Rector\Tests\DowngradePhp72\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector\Source;
 
 
 class AnotherClass

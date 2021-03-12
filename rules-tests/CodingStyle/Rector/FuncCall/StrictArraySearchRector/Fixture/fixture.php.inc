@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\StrictArraySearchRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\FuncCall\StrictArraySearchRector\Fixture;
 
 class Fixture
 {
@@ -13,7 +13,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\StrictArraySearchRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\FuncCall\StrictArraySearchRector\Fixture;
 
 class Fixture
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SymfonyPhpConfig\Tests\Rector\MethodCall\AutoInPhpSymfonyConfigRector\Fixture;
+namespace Rector\Tests\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector\Fixture;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

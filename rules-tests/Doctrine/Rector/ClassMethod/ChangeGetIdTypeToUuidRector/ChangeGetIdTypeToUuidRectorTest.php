@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeGetIdTypeToUuidRector;
+namespace Rector\Tests\Doctrine\Rector\ClassMethod\ChangeGetIdTypeToUuidRector;
 
 use Iterator;
 use Rector\Doctrine\Rector\ClassMethod\ChangeGetIdTypeToUuidRector;

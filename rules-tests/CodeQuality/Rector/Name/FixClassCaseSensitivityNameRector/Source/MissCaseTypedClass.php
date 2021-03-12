@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Name\FixClassCaseSensitivityNameRector\Source;
+namespace Rector\Tests\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector\Source;
 
 final class MissCaseTypedClass
 {

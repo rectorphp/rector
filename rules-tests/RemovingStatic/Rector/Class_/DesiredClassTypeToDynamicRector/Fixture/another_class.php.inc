@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\RemovingStatic\Tests\Rector\Class_\DesiredClassTypeToDynamicRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\Class_\DesiredClassTypeToDynamicRector\Fixture;
 
-use Rector\RemovingStatic\Tests\Rector\Class_\DesiredClassTypeToDynamicRector\Source\FirstStaticClass;
+use Rector\Tests\RemovingStatic\Rector\Class_\DesiredClassTypeToDynamicRector\Source\FirstStaticClass;
 
 class AnotherClass
 {
@@ -16,13 +16,13 @@ class AnotherClass
 -----
 <?php
 
-namespace Rector\RemovingStatic\Tests\Rector\Class_\DesiredClassTypeToDynamicRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\Class_\DesiredClassTypeToDynamicRector\Fixture;
 
-use Rector\RemovingStatic\Tests\Rector\Class_\DesiredClassTypeToDynamicRector\Source\FirstStaticClass;
+use Rector\Tests\RemovingStatic\Rector\Class_\DesiredClassTypeToDynamicRector\Source\FirstStaticClass;
 
 class AnotherClass
 {
-    public function __construct(private \Rector\RemovingStatic\Tests\Rector\Class_\DesiredClassTypeToDynamicRector\Source\FirstStaticClass $firstStaticClass)
+    public function __construct(private \Rector\Tests\RemovingStatic\Rector\Class_\DesiredClassTypeToDynamicRector\Source\FirstStaticClass $firstStaticClass)
     {
     }
     public function run()

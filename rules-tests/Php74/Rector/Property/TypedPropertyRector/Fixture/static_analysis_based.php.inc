@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 final class StaticAnalysisBased
 {
@@ -16,7 +16,7 @@ final class StaticAnalysisBased
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 final class StaticAnalysisBased
 {

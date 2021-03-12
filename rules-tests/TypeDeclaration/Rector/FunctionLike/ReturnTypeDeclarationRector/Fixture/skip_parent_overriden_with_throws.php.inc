@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
 
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\ParentObjectReturnInterface;
+use Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\ParentObjectReturnInterface;
 
 final class SkipParentOverridenWithThrows implements ParentObjectReturnInterface
 {

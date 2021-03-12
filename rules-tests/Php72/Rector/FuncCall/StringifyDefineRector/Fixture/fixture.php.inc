@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\StringifyDefineRector\Fixture;
+namespace Rector\Tests\Php72\Rector\FuncCall\StringifyDefineRector\Fixture;
 
 class Fixture
 {
@@ -15,7 +15,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\StringifyDefineRector\Fixture;
+namespace Rector\Tests\Php72\Rector\FuncCall\StringifyDefineRector\Fixture;
 
 class Fixture
 {

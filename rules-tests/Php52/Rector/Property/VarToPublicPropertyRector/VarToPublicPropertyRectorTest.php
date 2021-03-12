@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php52\Tests\Rector\Property\VarToPublicPropertyRector;
+namespace Rector\Tests\Php52\Rector\Property\VarToPublicPropertyRector;
 
 use Iterator;
 use Rector\Php52\Rector\Property\VarToPublicPropertyRector;

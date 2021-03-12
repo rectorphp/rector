@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Arguments\Tests\Rector\ClassMethod\ArgumentAdderRector\Fixture;
+namespace Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector\Fixture;
 
-use Rector\Arguments\Tests\Rector\ClassMethod\ArgumentAdderRector\Source\SomeContainerBuilder;
+use Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector\Source\SomeContainerBuilder;
 
 class SkipAlreadyAdded extends SomeContainerBuilder
 {

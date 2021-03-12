@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
 
 use Nette\Application\UI\Control;
 
@@ -17,7 +17,7 @@ class SomeControl extends Control
 -----
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
 
 use Nette\Application\UI\Control;
 

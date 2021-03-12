@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php80\Tests\Rector\Catch_\RemoveUnusedVariableInCatchRector;
+namespace Rector\Tests\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
 
 use Iterator;
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;

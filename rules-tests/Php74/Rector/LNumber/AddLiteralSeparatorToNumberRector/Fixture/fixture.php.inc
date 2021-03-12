@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\LNumber\AddLiteralSeparatorToNumberRector\Fixture;
+namespace Rector\Tests\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector\Fixture;
 
 class Fixture
 {
@@ -18,7 +18,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\LNumber\AddLiteralSeparatorToNumberRector\Fixture;
+namespace Rector\Tests\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector\Fixture;
 
 class Fixture
 {

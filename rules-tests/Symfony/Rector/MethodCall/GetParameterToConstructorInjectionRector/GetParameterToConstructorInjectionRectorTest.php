@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetParameterToConstructorInjectionRector;
+namespace Rector\Tests\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector;
 
 use Iterator;
 use Rector\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector;

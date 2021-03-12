@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\Fixture;
+namespace Rector\Tests\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\Fixture;
 
 final class SuperGlobal
 {
@@ -16,7 +16,7 @@ final class SuperGlobal
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\Fixture;
+namespace Rector\Tests\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\Fixture;
 
 final class SuperGlobal
 {

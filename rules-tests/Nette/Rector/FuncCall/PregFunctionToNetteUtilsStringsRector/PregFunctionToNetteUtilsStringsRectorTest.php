@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector;
+namespace Rector\Tests\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector;
 
 use Iterator;
 use Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector;

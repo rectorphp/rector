@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\Expression\MethodCallToReturnRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Expression\MethodCallToReturnRector\Fixture;
 
-use Rector\Transform\Tests\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
+use Rector\Tests\Transform\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
 
 class SomeClass
 {
@@ -16,9 +16,9 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\Expression\MethodCallToReturnRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Expression\MethodCallToReturnRector\Fixture;
 
-use Rector\Transform\Tests\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
+use Rector\Tests\Transform\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
 
 class SomeClass
 {

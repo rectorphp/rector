@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
 final class UncompactNextUses
 {
@@ -21,7 +21,7 @@ final class UncompactNextUses
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
 final class UncompactNextUses
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
-use Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Source\SomeProtectedParentClass;
+use Rector\Tests\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector\Source\SomeProtectedParentClass;
 
 class SkipParentClassProtected extends SomeProtectedParentClass
 {

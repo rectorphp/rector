@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\MysqlToMysqli\Tests;
+namespace Rector\Tests\MysqlToMysqli;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -25,6 +25,6 @@ final class SetTest extends AbstractRectorTestCase
 
     protected function provideConfigFilePath(): string
     {
-        return __DIR__ . '/../../../config/set/mysql-to-mysqli.php';
+        return __DIR__ . '/../../config/set/mysql-to-mysqli.php';
     }
 }

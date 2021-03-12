@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\Class_\MergeInterfacesRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Class_\MergeInterfacesRector\Fixture;
 
-use Rector\Transform\Tests\Rector\Class_\MergeInterfacesRector\Source\SomeOldInterface;
+use Rector\Tests\Transform\Rector\Class_\MergeInterfacesRector\Source\SomeOldInterface;
 
 class SomeClass2 implements SomeOldInterface
 {
@@ -13,11 +13,11 @@ class SomeClass2 implements SomeOldInterface
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\Class_\MergeInterfacesRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Class_\MergeInterfacesRector\Fixture;
 
-use Rector\Transform\Tests\Rector\Class_\MergeInterfacesRector\Source\SomeOldInterface;
+use Rector\Tests\Transform\Rector\Class_\MergeInterfacesRector\Source\SomeOldInterface;
 
-class SomeClass2 implements Rector\Transform\Tests\Rector\Class_\MergeInterfacesRector\Source\SomeInterface
+class SomeClass2 implements Rector\Tests\Transform\Rector\Class_\MergeInterfacesRector\Source\SomeInterface
 {
 
 }

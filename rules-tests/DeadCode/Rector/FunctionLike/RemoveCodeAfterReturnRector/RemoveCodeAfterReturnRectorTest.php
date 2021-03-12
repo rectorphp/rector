@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveCodeAfterReturnRector;
+namespace Rector\Tests\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector;

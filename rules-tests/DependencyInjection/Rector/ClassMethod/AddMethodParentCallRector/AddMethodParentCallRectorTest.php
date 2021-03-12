@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DependencyInjection\Tests\Rector\ClassMethod\AddMethodParentCallRector;
+namespace Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

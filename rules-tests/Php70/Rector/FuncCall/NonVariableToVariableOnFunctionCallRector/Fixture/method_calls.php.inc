@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
+namespace Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
 
-use Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Source\VariousCallsClass;
+use Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Source\VariousCallsClass;
 
 final class MethodCalls
 {
@@ -19,9 +19,9 @@ final class MethodCalls
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
+namespace Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
 
-use Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Source\VariousCallsClass;
+use Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Source\VariousCallsClass;
 
 final class MethodCalls
 {

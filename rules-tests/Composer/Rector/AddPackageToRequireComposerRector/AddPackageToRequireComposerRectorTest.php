@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\Tests\Rector\AddPackageToRequireComposerRector;
+namespace Rector\Tests\Composer\Rector\AddPackageToRequireComposerRector;
 
 use Iterator;
-use Rector\Composer\Tests\Rector\AbstractComposerRectorTestCase;
+use Rector\Tests\Composer\Rector\AbstractComposerRectorTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

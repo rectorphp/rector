@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
 class Uri
 {
@@ -13,7 +13,7 @@ class SkipDifferentOrder
 {
     /**
      * @param mixed $value
-     * @return string|\Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture\Uri|null
+     * @return string|\Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture\Uri|null
      */
     public function changeValue($value){
         if (null === $value || '' === $value) {

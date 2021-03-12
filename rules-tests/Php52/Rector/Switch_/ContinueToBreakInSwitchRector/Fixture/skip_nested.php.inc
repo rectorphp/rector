@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php52\Tests\Rector\Switch_\ContinueToBreakInSwitchRector\Fixture;
+namespace Rector\Tests\Php52\Rector\Switch_\ContinueToBreakInSwitchRector\Fixture;
 
 function skip_nested($value, array $array)
 {

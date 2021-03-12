@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertRegExpRector\AssertRegExpRectorTest
+ * @see \Rector\Tests\PHPUnit\Rector\MethodCall\AssertRegExpRector\AssertRegExpRectorTest
  */
 final class AssertRegExpRector extends AbstractRector
 {

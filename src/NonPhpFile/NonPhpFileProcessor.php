@@ -12,7 +12,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
- * @see \Rector\Renaming\Tests\Rector\Name\RenameClassRector\RenameNonPhpTest
+ * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameNonPhpTest
  */
 final class NonPhpFileProcessor
 {

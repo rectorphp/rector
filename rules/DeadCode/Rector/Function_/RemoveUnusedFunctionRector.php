@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DeadCode\Tests\Rector\Function_\RemoveUnusedFunctionRector\RemoveUnusedFunctionRectorTest
+ * @see \Rector\Tests\DeadCode\Rector\Function_\RemoveUnusedFunctionRector\RemoveUnusedFunctionRectorTest
  */
 final class RemoveUnusedFunctionRector extends AbstractRector implements ZeroCacheRectorInterface
 {

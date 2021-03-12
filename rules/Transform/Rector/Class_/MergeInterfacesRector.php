@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * - https://github.com/FriendsOfPHP/PHP-CS-Fixer/commit/a1cdb4d2dd8f45d731244eed406e1d537218cc66
  * - https://github.com/FriendsOfPHP/PHP-CS-Fixer/commit/614d2e6f7af5a5b0be5363ff536aed2b7ee5a31d
  *
- * @see \Rector\Transform\Tests\Rector\Class_\MergeInterfacesRector\MergeInterfacesRectorTest
+ * @see \Rector\Tests\Transform\Rector\Class_\MergeInterfacesRector\MergeInterfacesRectorTest
  */
 final class MergeInterfacesRector extends AbstractRector implements ConfigurableRectorInterface
 {

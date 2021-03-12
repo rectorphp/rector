@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Fixture;
 
-use Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
+use Rector\Tests\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
 
 final class SomeClass
 {
@@ -27,9 +27,9 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Fixture;
 
-use Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
+use Rector\Tests\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
 
 final class SomeClass
 {
@@ -38,7 +38,7 @@ final class SomeClass
      */
     private $firstService;
 
-    public function __construct(FirstService $firstService, private \Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService $anotherService)
+    public function __construct(FirstService $firstService, private \Rector\Tests\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService $anotherService)
     {
         $this->firstService = $firstService;
     }

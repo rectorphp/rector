@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27821/files
- * @see \Rector\Symfony4\Tests\Rector\New_\StringToArrayArgumentProcessRector\StringToArrayArgumentProcessRectorTest
+ * @see \Rector\Tests\Symfony4\Rector\New_\StringToArrayArgumentProcessRector\StringToArrayArgumentProcessRectorTest
  */
 final class StringToArrayArgumentProcessRector extends AbstractRector
 {

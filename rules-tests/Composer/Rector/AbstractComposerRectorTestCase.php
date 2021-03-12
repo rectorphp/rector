@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Composer\Tests\Rector;
+namespace Rector\Tests\Composer\Rector;
 
 use Nette\Utils\Json;
 use Rector\Composer\Modifier\ComposerModifier;
-use Rector\Composer\Tests\Contract\ConfigFileAwareInterface;
+use Rector\Tests\Composer\Contract\ConfigFileAwareInterface;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Testing\Guard\FixtureGuard;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;

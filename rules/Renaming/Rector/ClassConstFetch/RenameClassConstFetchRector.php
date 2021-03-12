@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstFetchRector\RenameClassConstFetchRectorTest
+ * @see \Rector\Tests\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector\RenameClassConstFetchRectorTest
  */
 final class RenameClassConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {

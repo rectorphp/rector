@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\ClassMethod\GetRequestRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\ClassMethod\GetRequestRector\Fixture;
 
-use Rector\Symfony3\Tests\Rector\Source\AbstractSymfonyController;
+use Rector\Tests\Symfony3\Rector\Source\AbstractSymfonyController;
 
 class SomeController extends AbstractSymfonyController
 {
@@ -16,9 +16,9 @@ class SomeController extends AbstractSymfonyController
 -----
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\ClassMethod\GetRequestRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\ClassMethod\GetRequestRector\Fixture;
 
-use Rector\Symfony3\Tests\Rector\Source\AbstractSymfonyController;
+use Rector\Tests\Symfony3\Rector\Source\AbstractSymfonyController;
 
 class SomeController extends AbstractSymfonyController
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp71\Tests\Rector\Array_\SymmetricArrayDestructuringToListRector\Fixture;
+namespace Rector\Tests\DowngradePhp71\Rector\Array_\SymmetricArrayDestructuringToListRector\Fixture;
 
 class InForeach
 {
@@ -16,7 +16,7 @@ class InForeach
 -----
 <?php
 
-namespace Rector\DowngradePhp71\Tests\Rector\Array_\SymmetricArrayDestructuringToListRector\Fixture;
+namespace Rector\Tests\DowngradePhp71\Rector\Array_\SymmetricArrayDestructuringToListRector\Fixture;
 
 class InForeach
 {

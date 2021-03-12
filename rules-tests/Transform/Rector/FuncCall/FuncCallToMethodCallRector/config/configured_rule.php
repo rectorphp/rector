@@ -1,7 +1,7 @@
 <?php
 
 use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
-use Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Source\SomeTranslator;
+use Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Source\SomeTranslator;
 use Rector\Transform\ValueObject\FuncCallToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -17,7 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new FuncCallToMethodCall('translate', SomeTranslator::class, 'translateMethod'),
 
                 new FuncCallToMethodCall(
-                    'Rector\Transform\Tests\Rector\Function_\FuncCallToMethodCallRector\Source\some_view_function',
+                    'Rector\Tests\Transform\Rector\Function_\FuncCallToMethodCallRector\Source\some_view_function',
                     'Namespaced\SomeRenderer',
                     'render'
                 ),

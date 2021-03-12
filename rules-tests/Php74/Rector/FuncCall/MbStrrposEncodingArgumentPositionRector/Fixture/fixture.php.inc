@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector\Fixture;
+namespace Rector\Tests\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector\Fixture;
 
 class Fixture
 {
@@ -15,7 +15,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector\Fixture;
+namespace Rector\Tests\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector\Fixture;
 
 class Fixture
 {

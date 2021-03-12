@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Assign\PropertyAssignToMethodCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
+use Rector\Tests\Transform\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
 
 class SomePresenter
 {
@@ -17,9 +17,9 @@ class SomePresenter
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Assign\PropertyAssignToMethodCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
+use Rector\Tests\Transform\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
 
 class SomePresenter
 {

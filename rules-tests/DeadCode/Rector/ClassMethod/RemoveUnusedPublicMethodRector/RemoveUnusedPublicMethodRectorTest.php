@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPublicMethodRector;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedPublicMethodRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPublicMethodRector;

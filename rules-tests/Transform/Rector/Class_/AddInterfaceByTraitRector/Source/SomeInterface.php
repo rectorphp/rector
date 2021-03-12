@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\Class_\AddInterfaceByTraitRector\Source;
+namespace Rector\Tests\Transform\Rector\Class_\AddInterfaceByTraitRector\Source;
 
 interface SomeInterface
 {

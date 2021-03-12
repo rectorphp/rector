@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassMethod\UnSpreadOperatorRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector\Fixture;
 
 final class HandleMultipleItemsToArray
 {
@@ -18,7 +18,7 @@ final class HandleMultipleItemsToArray
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassMethod\UnSpreadOperatorRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector\Fixture;
 
 final class HandleMultipleItemsToArray
 {

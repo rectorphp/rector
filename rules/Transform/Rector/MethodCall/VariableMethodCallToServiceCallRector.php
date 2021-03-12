@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Transform\Tests\Rector\MethodCall\VariableMethodCallToServiceCallRector\VariableMethodCallToServiceCallRectorTest
+ * @see \Rector\Tests\Transform\Rector\MethodCall\VariableMethodCallToServiceCallRector\VariableMethodCallToServiceCallRectorTest
  */
 final class VariableMethodCallToServiceCallRector extends AbstractRector implements ConfigurableRectorInterface
 {

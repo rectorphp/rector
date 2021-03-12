@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony3\Tests\Rector\ClassMethod\FormTypeGetParentRector;
+namespace Rector\Tests\Symfony3\Rector\ClassMethod\FormTypeGetParentRector;
 
 use Iterator;
 use Rector\Symfony3\Rector\ClassMethod\FormTypeGetParentRector;

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php80\Tests\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Fixture;
+namespace Rector\Tests\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Fixture;
 
-use Rector\Php80\Tests\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Source\SomeOutsideClass;
+use Rector\Tests\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Source\SomeOutsideClass;
 
 final class SkipExternalNew
 {

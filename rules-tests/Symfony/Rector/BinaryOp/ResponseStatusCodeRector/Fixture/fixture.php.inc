@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\BinaryOp\ResponseStatusCodeRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\BinaryOp\ResponseStatusCodeRector\Fixture;
 
 class Fixture
 {
@@ -24,7 +24,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\BinaryOp\ResponseStatusCodeRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\BinaryOp\ResponseStatusCodeRector\Fixture;
 
 class Fixture
 {

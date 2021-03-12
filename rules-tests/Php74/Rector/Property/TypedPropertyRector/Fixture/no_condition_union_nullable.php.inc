@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\ReturnString;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\ReturnString;
 
 class NoConditionUnionNullable
 {
@@ -19,9 +19,9 @@ class NoConditionUnionNullable
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\ReturnString;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\ReturnString;
 
 class NoConditionUnionNullable
 {

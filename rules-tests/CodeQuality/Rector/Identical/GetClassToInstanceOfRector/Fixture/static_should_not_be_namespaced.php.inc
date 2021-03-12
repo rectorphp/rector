@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Identical\GetClassToInstanceOfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Identical\GetClassToInstanceOfRector\Fixture;
 
 class StaticShouldNotBeNamespaced {
     public function test() {
@@ -12,7 +12,7 @@ class StaticShouldNotBeNamespaced {
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Identical\GetClassToInstanceOfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Identical\GetClassToInstanceOfRector\Fixture;
 
 class StaticShouldNotBeNamespaced {
     public function test() {

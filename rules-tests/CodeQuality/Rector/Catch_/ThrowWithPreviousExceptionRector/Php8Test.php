@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Catch_\ThrowWithPreviousExceptionRector;
+namespace Rector\Tests\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector;

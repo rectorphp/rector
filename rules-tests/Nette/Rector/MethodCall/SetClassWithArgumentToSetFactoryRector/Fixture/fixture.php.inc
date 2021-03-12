@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector\Fixture;
+namespace Rector\Tests\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector\Fixture;
 
 use Nette\DI\ContainerBuilder;
 
@@ -17,7 +17,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector\Fixture;
+namespace Rector\Tests\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector\Fixture;
 
 use Nette\DI\ContainerBuilder;
 

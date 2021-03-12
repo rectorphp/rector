@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php55\Tests\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
+namespace Rector\Tests\Php55\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
 
 class RemoveOnlyEndE
 {
@@ -14,7 +14,7 @@ class RemoveOnlyEndE
 -----
 <?php
 
-namespace Rector\Php55\Tests\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
+namespace Rector\Tests\Php55\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
 
 class RemoveOnlyEndE
 {

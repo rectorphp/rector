@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
 
-use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\EliteManager;
+use Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\EliteManager;
 
 class RenameParam
 {
@@ -21,9 +21,9 @@ class RenameParam
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
 
-use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\EliteManager;
+use Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\EliteManager;
 
 class RenameParam
 {

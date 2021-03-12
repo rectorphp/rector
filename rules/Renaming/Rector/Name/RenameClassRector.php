@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Renaming\Tests\Rector\Name\RenameClassRector\RenameClassRectorTest
+ * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameClassRectorTest
  */
 final class RenameClassRector extends AbstractRector implements ConfigurableRectorInterface
 {

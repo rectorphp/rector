@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://www.php.net/manual/en/mysqli.error.php
  * @see https://www.php.net/manual/en/mysqli.query.php
  *
- * @see \Rector\MysqlToMysqli\Tests\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector\MysqlQueryMysqlErrorWithLinkRectorTest
+ * @see \Rector\Tests\MysqlToMysqli\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector\MysqlQueryMysqlErrorWithLinkRectorTest
  */
 final class MysqlQueryMysqlErrorWithLinkRector extends AbstractRector
 {

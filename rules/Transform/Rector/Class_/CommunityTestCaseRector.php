@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Transform\Tests\Rector\Class_\CommunityTestCaseRector\CommunityTestCaseRectorTest
+ * @see \Rector\Tests\Transform\Rector\Class_\CommunityTestCaseRector\CommunityTestCaseRectorTest
  */
 final class CommunityTestCaseRector extends AbstractRector
 {

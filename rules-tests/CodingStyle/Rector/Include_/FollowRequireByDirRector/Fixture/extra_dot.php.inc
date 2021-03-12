@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Include_\FollowRequireByDirRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Include_\FollowRequireByDirRector\Fixture;
 
 class ExtraDot
 {
@@ -15,7 +15,7 @@ class ExtraDot
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Include_\FollowRequireByDirRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Include_\FollowRequireByDirRector\Fixture;
 
 class ExtraDot
 {

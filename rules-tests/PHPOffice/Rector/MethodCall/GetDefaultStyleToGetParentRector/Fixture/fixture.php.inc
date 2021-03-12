@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\MethodCall\GetDefaultStyleToGetParentRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\MethodCall\GetDefaultStyleToGetParentRector\Fixture;
 
 class Fixture
 {
@@ -15,7 +15,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\MethodCall\GetDefaultStyleToGetParentRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\MethodCall\GetDefaultStyleToGetParentRector\Fixture;
 
 class Fixture
 {

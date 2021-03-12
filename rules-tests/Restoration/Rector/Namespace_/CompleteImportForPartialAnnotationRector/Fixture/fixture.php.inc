@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Restoration\Tests\Rector\Namespace_\CompleteImportForPartialAnnotationRector\Fixture;
+namespace Rector\Tests\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector\Fixture;
 
 class SomeClass
 {
@@ -14,7 +14,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Restoration\Tests\Rector\Namespace_\CompleteImportForPartialAnnotationRector\Fixture;
+namespace Rector\Tests\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 class SomeClass

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector\Fixture;
+namespace Rector\Tests\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector\Fixture;
 
 final class ReturnFixture
 {
@@ -18,7 +18,7 @@ final class ReturnFixture
 -----
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector\Fixture;
+namespace Rector\Tests\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector\Fixture;
 
 final class ReturnFixture
 {

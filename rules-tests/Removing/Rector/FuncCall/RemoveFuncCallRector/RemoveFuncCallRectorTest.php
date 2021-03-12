@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallRector;
+namespace Rector\Tests\Removing\Rector\FuncCall\RemoveFuncCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp74\Tests\Rector\Coalesce\DowngradeNullCoalescingOperatorRector;
+namespace Rector\Tests\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector;
 
 use Iterator;
 use Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector;

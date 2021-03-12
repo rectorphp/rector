@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Restoration\Tests\Rector\Use_\RestoreFullyQualifiedNameRector;
+namespace Rector\Tests\Restoration\Rector\Use_\RestoreFullyQualifiedNameRector;
 
 use Iterator;
 use Rector\Restoration\Rector\Use_\RestoreFullyQualifiedNameRector;

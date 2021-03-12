@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony4\Tests\Rector\StaticCall\ProcessBuilderInstanceRector\Fixture;
+namespace Rector\Tests\Symfony4\Rector\StaticCall\ProcessBuilderInstanceRector\Fixture;
 
 use Symfony\Component\Process\ProcessBuilder;
 
@@ -13,7 +13,7 @@ function processBuilderInstance()
 -----
 <?php
 
-namespace Rector\Symfony4\Tests\Rector\StaticCall\ProcessBuilderInstanceRector\Fixture;
+namespace Rector\Tests\Symfony4\Rector\StaticCall\ProcessBuilderInstanceRector\Fixture;
 
 use Symfony\Component\Process\ProcessBuilder;
 

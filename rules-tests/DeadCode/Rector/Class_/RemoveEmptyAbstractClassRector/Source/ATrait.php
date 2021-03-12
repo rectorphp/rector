@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Source;
+namespace Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\Source;
 
 trait ATrait
 {}

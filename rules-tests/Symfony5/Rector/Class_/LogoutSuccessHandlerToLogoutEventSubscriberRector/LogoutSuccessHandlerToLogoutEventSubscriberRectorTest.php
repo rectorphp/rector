@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony5\Tests\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector;
+namespace Rector\Tests\Symfony5\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector;
 
 use Iterator;
 use Rector\Symfony5\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector;

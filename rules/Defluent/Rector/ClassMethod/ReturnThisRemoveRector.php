@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Defluent\Tests\Rector\ClassMethod\ReturnThisRemoveRector\ReturnThisRemoveRectorTest
+ * @see \Rector\Tests\Defluent\Rector\ClassMethod\ReturnThisRemoveRector\ReturnThisRemoveRectorTest
  */
 final class ReturnThisRemoveRector extends AbstractRector
 {

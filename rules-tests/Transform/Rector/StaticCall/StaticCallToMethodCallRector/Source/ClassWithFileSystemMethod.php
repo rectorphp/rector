@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Source;
+namespace Rector\Tests\Transform\Rector\StaticCall\StaticCallToMethodCallRector\Source;
 
 use Symplify\SmartFileSystem\SmartFileSystem;
 

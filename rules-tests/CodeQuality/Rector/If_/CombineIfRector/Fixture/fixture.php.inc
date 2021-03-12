@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\CombineIfRector\Fixture;
 
 class Fixture
 {
@@ -18,7 +18,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\CombineIfRector\Fixture;
 
 class Fixture
 {

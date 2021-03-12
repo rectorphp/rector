@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/sebastianbergmann/phpunit/blob/master/ChangeLog-8.0.md
  *
- * @see \Rector\PHPUnit\Tests\Rector\MethodCall\SpecificAssertContainsRector\SpecificAssertContainsRectorTest
+ * @see \Rector\Tests\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector\SpecificAssertContainsRectorTest
  */
 final class SpecificAssertContainsRector extends AbstractRector
 {

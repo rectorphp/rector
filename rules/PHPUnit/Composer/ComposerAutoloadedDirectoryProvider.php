@@ -39,7 +39,7 @@ final class ComposerAutoloadedDirectoryProvider
     public function provide(): array
     {
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            return [getcwd() . '/src', getcwd() . '/tests', getcwd() . '/packages', getcwd() . '/rules'];
+            return [getcwd() . '/src', getcwd() . '/tests', getcwd() . '/packages-tests', getcwd() . '/rules-tests'];
         }
 
         $composerJson = $this->loadComposerJsonArray();

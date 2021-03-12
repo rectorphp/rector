@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Defluent\Tests\Rector\Return_\ReturnFluentChainMethodCallToNormalMethodCallRector\Fixture;
+namespace Rector\Tests\Defluent\Rector\Return_\ReturnFluentChainMethodCallToNormalMethodCallRector\Fixture;
 
 use Nette\Forms\Controls\TextInput;
 use Nette\Forms\Form;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\BlameableBehaviorRector;
+namespace Rector\Tests\DoctrineGedmoToKnplabs\Rector\Class_\BlameableBehaviorRector;
 
 use Iterator;
 use Rector\DoctrineGedmoToKnplabs\Rector\Class_\BlameableBehaviorRector;

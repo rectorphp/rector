@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
 
 use PhpParser\Node\Stmt\If_;
 
@@ -20,7 +20,7 @@ class IdenticalNonCast
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
 
 use PhpParser\Node\Stmt\If_;
 

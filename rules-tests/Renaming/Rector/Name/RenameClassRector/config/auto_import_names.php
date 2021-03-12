@@ -6,10 +6,10 @@ use Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
 
 use Rector\Core\Configuration\Option;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\FirstNamespace\SomeServiceClass as SomeServiceClassFirstNamespace;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\SecondNamespace\SomeServiceClass;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\FirstNamespace\SomeServiceClass as SomeServiceClassFirstNamespace;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\SecondNamespace\SomeServiceClass;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

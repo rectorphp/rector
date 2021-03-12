@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\Fixture;
 
 use Ramsey\Uuid\UuidInterface;
-use Rector\Doctrine\Tests\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector\Source\Building;
+use Rector\Tests\Doctrine\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector\Source\Building;
 
 final class SkipAlreadyCompleted
 {

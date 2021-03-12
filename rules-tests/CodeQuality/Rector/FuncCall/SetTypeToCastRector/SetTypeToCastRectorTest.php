@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\SetTypeToCastRector;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\SetTypeToCastRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\SetTypeToCastRector;

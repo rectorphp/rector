@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\Source;
+namespace Rector\Tests\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector\Source;
 
 abstract class AbstractClassWithProtectedProperty
 {

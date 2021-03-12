@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Visibility\Tests\Rector\Property\ChangePropertyVisibilityRector\Fixture;
+namespace Rector\Tests\Visibility\Rector\Property\ChangePropertyVisibilityRector\Fixture;
 
 class Fixture3
 {
@@ -11,7 +11,7 @@ class Fixture3
 -----
 <?php
 
-namespace Rector\Visibility\Tests\Rector\Property\ChangePropertyVisibilityRector\Fixture;
+namespace Rector\Tests\Visibility\Rector\Property\ChangePropertyVisibilityRector\Fixture;
 
 class Fixture3
 {

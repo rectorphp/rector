@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\Class_\MakeCommandLazyRector\Fixture;
 
 class SetNameFluentChain extends \Symfony\Component\Console\Command\Command
 {
@@ -17,7 +17,7 @@ class SetNameFluentChain extends \Symfony\Component\Console\Command\Command
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\Class_\MakeCommandLazyRector\Fixture;
 
 class SetNameFluentChain extends \Symfony\Component\Console\Command\Command
 {

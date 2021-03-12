@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Source;
+namespace Rector\Tests\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Source;
 
 
 final class SomeClassWithConstants

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\StringifyStrNeedlesRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\StringifyStrNeedlesRector\Fixture;
 
 trait ResourceHandler
 {
@@ -15,7 +15,7 @@ trait ResourceHandler
 -----
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\StringifyStrNeedlesRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\StringifyStrNeedlesRector\Fixture;
 
 trait ResourceHandler
 {

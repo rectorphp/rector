@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Assign\SplitListAssignToSeparateLineRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector\Fixture;
 
 final class SkipSplitOfArray
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPropertiesByVisibilityRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderPropertiesByVisibilityRector\Fixture;
 
 final class Fixture
 {
@@ -16,7 +16,7 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPropertiesByVisibilityRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderPropertiesByVisibilityRector\Fixture;
 
 final class Fixture
 {

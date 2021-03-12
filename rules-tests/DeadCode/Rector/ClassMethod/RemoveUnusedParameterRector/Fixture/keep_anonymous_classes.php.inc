@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\FixtureInterface
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector\FixtureInterface
 {
     interface Foo
     {
@@ -8,9 +8,9 @@ namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\F
     }
 }
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\Fixture
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector\Fixture
 {
-    use Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\FixtureInterface\Foo;
+    use Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector\FixtureInterface\Foo;
 
     class Baz
     {

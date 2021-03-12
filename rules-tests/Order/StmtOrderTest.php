@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Order\Tests;
+namespace Rector\Tests\Order;
 
 use Iterator;
 use PhpParser\Node\Stmt\Class_;

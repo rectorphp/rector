@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadDocBlock\Tests\Rector\Property\RemoveUselessVarTagRector;
+namespace Rector\Tests\DeadDocBlock\Rector\Property\RemoveUselessVarTagRector;
 
 use Iterator;
 use Rector\DeadDocBlock\Rector\Property\RemoveUselessVarTagRector;

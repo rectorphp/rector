@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector;
+namespace Rector\Tests\Order\Rector\Class_\OrderConstantsByVisibilityRector;
 
 use Iterator;
 use Rector\Order\Rector\Class_\OrderConstantsByVisibilityRector;

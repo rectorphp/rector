@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\MethodCall\ChangeConditionalReturnedCellRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\MethodCall\ChangeConditionalReturnedCellRector\Fixture;
 
 final class SetExplicit
 {
@@ -15,7 +15,7 @@ final class SetExplicit
 -----
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\MethodCall\ChangeConditionalReturnedCellRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\MethodCall\ChangeConditionalReturnedCellRector\Fixture;
 
 final class SetExplicit
 {

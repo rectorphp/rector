@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Ternary\SimplifyDuplicatedTernaryRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector\Fixture;
 
 class Fixture
 {
@@ -15,7 +15,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Ternary\SimplifyDuplicatedTernaryRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector\Fixture;
 
 class Fixture
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\FuncCall\ArrayKeyExistsOnPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector\Fixture;
 
 class Fixture
 {
@@ -14,7 +14,7 @@ array_key_exists('value', $someClass);
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\FuncCall\ArrayKeyExistsOnPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector\Fixture;
 
 class Fixture
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DependencyInjection\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector;
+namespace Rector\Tests\DependencyInjection\Rector\Class_\ActionInjectionToConstructorInjectionRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

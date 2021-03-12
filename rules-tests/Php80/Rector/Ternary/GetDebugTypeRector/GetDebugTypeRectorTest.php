@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php80\Tests\Rector\Ternary\GetDebugTypeRector;
+namespace Rector\Tests\Php80\Rector\Ternary\GetDebugTypeRector;
 
 use Iterator;
 use Rector\Php80\Rector\Ternary\GetDebugTypeRector;

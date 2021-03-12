@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Defluent\Tests\Rector\ClassMethod\ReturnThisRemoveRector;
+namespace Rector\Tests\Defluent\Rector\ClassMethod\ReturnThisRemoveRector;
 
 use Iterator;
 use Rector\Defluent\Rector\ClassMethod\ReturnThisRemoveRector;

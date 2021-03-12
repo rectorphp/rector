@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\Expression\MethodCallToReturnRector;
+namespace Rector\Tests\Transform\Rector\Expression\MethodCallToReturnRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

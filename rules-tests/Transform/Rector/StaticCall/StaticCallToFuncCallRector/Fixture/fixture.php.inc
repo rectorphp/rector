@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToFuncCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\StaticCall\StaticCallToFuncCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\StaticCall\StaticCallToFuncCallRector\Source\SomeOldStaticClass;
+use Rector\Tests\Transform\Rector\StaticCall\StaticCallToFuncCallRector\Source\SomeOldStaticClass;
 
 class SomeClass
 {
@@ -16,9 +16,9 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToFuncCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\StaticCall\StaticCallToFuncCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\StaticCall\StaticCallToFuncCallRector\Source\SomeOldStaticClass;
+use Rector\Tests\Transform\Rector\StaticCall\StaticCallToFuncCallRector\Source\SomeOldStaticClass;
 
 class SomeClass
 {

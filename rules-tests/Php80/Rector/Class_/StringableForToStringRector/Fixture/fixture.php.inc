@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\StringableForToStringRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Class_\StringableForToStringRector\Fixture;
 
 class SomeClass
 {
@@ -14,7 +14,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\StringableForToStringRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Class_\StringableForToStringRector\Fixture;
 
 class SomeClass implements \Stringable
 {

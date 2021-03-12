@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfIssetToNullCoalescingRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfIssetToNullCoalescingRector\Fixture;
 
 final class Fixture
 {
@@ -18,7 +18,7 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfIssetToNullCoalescingRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfIssetToNullCoalescingRector\Fixture;
 
 final class Fixture
 {

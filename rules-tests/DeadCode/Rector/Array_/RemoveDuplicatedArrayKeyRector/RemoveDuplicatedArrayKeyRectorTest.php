@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Array_\RemoveDuplicatedArrayKeyRector;
+namespace Rector\Tests\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;

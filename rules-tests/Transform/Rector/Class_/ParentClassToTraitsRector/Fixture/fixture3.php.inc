@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Class_\ParentClassToTraitsRector\Fixture;
 
 use Rector;
 
-class ClassWithExternalConstant3 extends Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject
+class ClassWithExternalConstant3 extends Rector\Tests\Transform\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject
 {
     public $property;
 }
@@ -13,13 +13,13 @@ class ClassWithExternalConstant3 extends Rector\Transform\Tests\Rector\Class_\Pa
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Class_\ParentClassToTraitsRector\Fixture;
 
 use Rector;
 
 class ClassWithExternalConstant3
 {
-    use \Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
+    use \Rector\Tests\Transform\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
     public $property;
 }
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php71\Tests\Rector\List_\ListToArrayDestructRector;
+namespace Rector\Tests\Php71\Rector\List_\ListToArrayDestructRector;
 
 use Iterator;
 use Rector\Php71\Rector\List_\ListToArrayDestructRector;

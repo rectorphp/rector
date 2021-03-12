@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Privatization\Tests\Rector\Class_\ChangeLocalPropertyToVariableRector;
+namespace Rector\Tests\Privatization\Rector\Class_\ChangeLocalPropertyToVariableRector;
 
 use Iterator;
 use Rector\Privatization\Rector\Class_\ChangeLocalPropertyToVariableRector;

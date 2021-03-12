@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadDocBlock\Tests\Rector\ClassLike\RemoveAnnotationRector;
+namespace Rector\Tests\DeadDocBlock\Rector\ClassLike\RemoveAnnotationRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

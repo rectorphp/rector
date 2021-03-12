@@ -1,12 +1,12 @@
 <?php
 
-use function Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Function_\count;
+use function Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Function_\count;
 
 class ImportFunctionWithoutNamespace
 {
     public function run()
     {
-        return \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Function_\count([1]);
+        return \Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Function_\count([1]);
     }
 }
 
@@ -14,7 +14,7 @@ class ImportFunctionWithoutNamespace
 -----
 <?php
 
-use function Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Function_\count;
+use function Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Function_\count;
 
 class ImportFunctionWithoutNamespace
 {

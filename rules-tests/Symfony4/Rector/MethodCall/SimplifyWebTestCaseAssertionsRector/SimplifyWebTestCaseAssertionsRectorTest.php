@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony4\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
+namespace Rector\Tests\Symfony4\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
 
 use Iterator;
 use Rector\Symfony4\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;

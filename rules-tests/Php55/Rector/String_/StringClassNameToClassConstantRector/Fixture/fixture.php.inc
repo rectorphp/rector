@@ -1,17 +1,17 @@
 <?php
 
-namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Fixture;
+namespace Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Fixture;
 
 class Fixture
 {
     public function run()
     {
-        return 'Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\AnotherClass';
+        return 'Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\AnotherClass';
     }
 
     public function preSlash()
     {
-        return '\Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\AnotherClass';
+        return '\Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\AnotherClass';
     }
 }
 
@@ -19,18 +19,18 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Fixture;
+namespace Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Fixture;
 
 class Fixture
 {
     public function run()
     {
-        return \Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\AnotherClass::class;
+        return \Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\AnotherClass::class;
     }
 
     public function preSlash()
     {
-        return \Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\AnotherClass::class;
+        return \Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\AnotherClass::class;
     }
 }
 

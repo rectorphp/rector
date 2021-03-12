@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Assign\RemoveAssignOfVoidReturnFunctionRector;
+namespace Rector\Tests\DeadCode\Rector\Assign\RemoveAssignOfVoidReturnFunctionRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Assign\RemoveAssignOfVoidReturnFunctionRector;

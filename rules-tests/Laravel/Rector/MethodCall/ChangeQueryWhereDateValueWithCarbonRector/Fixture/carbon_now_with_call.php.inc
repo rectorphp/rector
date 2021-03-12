@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Laravel\Tests\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector\Fixture;
 
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
@@ -17,7 +17,7 @@ final class CarbonNowWithCall
 -----
 <?php
 
-namespace Rector\Laravel\Tests\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector\Fixture;
 
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;

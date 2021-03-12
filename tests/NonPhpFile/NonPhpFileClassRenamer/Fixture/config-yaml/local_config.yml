@@ -1,5 +1,5 @@
 services:
-    Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass: null
+    Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass: null
 -----
 services:
-    Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass: null
+    Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass: null

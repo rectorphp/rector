@@ -1,12 +1,12 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector\Fixture;
 
 class Fixture
 {
     function unsetAndIsset()
     {
-        $container = new \Rector\Transform\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector\Source\LocalContainer;
+        $container = new \Rector\Tests\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector\Source\LocalContainer;
         isset($container['someService']);
         unset($container['someService']);
     }
@@ -16,13 +16,13 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector\Fixture;
 
 class Fixture
 {
     function unsetAndIsset()
     {
-        $container = new \Rector\Transform\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector\Source\LocalContainer;
+        $container = new \Rector\Tests\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector\Source\LocalContainer;
         $container->hasService('someService');
         $container->removeService('someService');
     }

@@ -1,7 +1,7 @@
 <?php
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
-use Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Source\SomeModelType;
+use Rector\Tests\CakePHP\Rector\MethodCall\ModalToGetSetRector\Source\SomeModelType;
 use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

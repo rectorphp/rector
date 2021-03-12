@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
+namespace Rector\Tests\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
 
 use Rector\Testing\Contract\RunnableInterface;
 
@@ -30,7 +30,7 @@ class MultiExprsWithOrBothTruthy implements RunnableInterface
 -----
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
+namespace Rector\Tests\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
 
 use Rector\Testing\Contract\RunnableInterface;
 

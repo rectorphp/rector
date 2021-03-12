@@ -25,7 +25,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 /**
- * @see \Rector\Defluent\Tests\NodeFactory\FluentChainMethodCallRootExtractor\FluentChainMethodCallRootExtractorTest
+ * @see \Rector\Tests\Defluent\NodeFactory\FluentChainMethodCallRootExtractor\FluentChainMethodCallRootExtractorTest
  */
 final class FluentChainMethodCallRootExtractor
 {

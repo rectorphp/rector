@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\String_\StringToClassConstantRector;
+namespace Rector\Tests\Transform\Rector\String_\StringToClassConstantRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

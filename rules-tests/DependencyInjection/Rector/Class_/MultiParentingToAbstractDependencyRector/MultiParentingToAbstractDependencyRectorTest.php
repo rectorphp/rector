@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector;
+namespace Rector\Tests\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

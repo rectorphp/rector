@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\MethodCall\MethodCallToStaticCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\Source\AnotherDependency;
+use Rector\Tests\Transform\Rector\MethodCall\MethodCallToStaticCallRector\Source\AnotherDependency;
 
 final class SomeClass
 {
@@ -23,9 +23,9 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\MethodCall\MethodCallToStaticCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector\Source\AnotherDependency;
+use Rector\Tests\Transform\Rector\MethodCall\MethodCallToStaticCallRector\Source\AnotherDependency;
 
 final class SomeClass
 {

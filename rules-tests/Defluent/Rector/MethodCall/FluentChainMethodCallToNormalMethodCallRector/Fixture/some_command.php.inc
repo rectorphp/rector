@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Fixture;
+namespace Rector\Tests\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Fixture;
 
 use Symfony\Component\Console\Command\Command;
 
@@ -18,7 +18,7 @@ class SomeCommand extends Command
 -----
 <?php
 
-namespace Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Fixture;
+namespace Rector\Tests\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Fixture;
 
 use Symfony\Component\Console\Command\Command;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\Assign\ListEachRector\Fixture;
+namespace Rector\Tests\Php72\Rector\Assign\ListEachRector\Fixture;
 
 function each3()
 {
@@ -16,7 +16,7 @@ function each3()
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\Assign\ListEachRector\Fixture;
+namespace Rector\Tests\Php72\Rector\Assign\ListEachRector\Fixture;
 
 function each3()
 {

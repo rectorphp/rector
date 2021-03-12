@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Property\AddUuidAnnotationsToIdPropertyRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Property\AddUuidAnnotationsToIdPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
@@ -25,7 +25,7 @@ class SomeFixture
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Property\AddUuidAnnotationsToIdPropertyRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Property\AddUuidAnnotationsToIdPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;

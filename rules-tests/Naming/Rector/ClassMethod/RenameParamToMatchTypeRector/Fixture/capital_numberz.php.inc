@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Fixture;
 
-use Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\PHP9Crawler;
+use Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\PHP9Crawler;
 
 class CapitalNumberz
 {
@@ -15,9 +15,9 @@ class CapitalNumberz
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Fixture;
 
-use Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\PHP9Crawler;
+use Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\PHP9Crawler;
 
 class CapitalNumberz
 {

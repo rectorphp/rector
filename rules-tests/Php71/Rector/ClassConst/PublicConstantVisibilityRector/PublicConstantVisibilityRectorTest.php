@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php71\Tests\Rector\ClassConst\PublicConstantVisibilityRector;
+namespace Rector\Tests\Php71\Rector\ClassConst\PublicConstantVisibilityRector;
 
 use Iterator;
 use Rector\Php71\Rector\ClassConst\PublicConstantVisibilityRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\Property\ChangeSnakedFixtureNameToPascal\Fixture;
+namespace Rector\Tests\CakePHP\Rector\Property\ChangeSnakedFixtureNameToPascal\Fixture;
 
 class Fixture
 {
@@ -16,7 +16,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\Property\ChangeSnakedFixtureNameToPascal\Fixture;
+namespace Rector\Tests\CakePHP\Rector\Property\ChangeSnakedFixtureNameToPascal\Fixture;
 
 class Fixture
 {

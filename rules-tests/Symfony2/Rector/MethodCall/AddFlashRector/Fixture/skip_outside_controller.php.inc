@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony2\Tests\Rector\MethodCall\AddFlashRector\Fixture;
+namespace Rector\Tests\Symfony2\Rector\MethodCall\AddFlashRector\Fixture;
 
 use Symfony\Component\HttpFoundation\Request;
 

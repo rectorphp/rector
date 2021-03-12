@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony4\Tests\Rector\StaticCall\ProcessBuilderInstanceRector\ProcessBuilderInstanceRectorTest
+ * @see \Rector\Tests\Symfony4\Rector\StaticCall\ProcessBuilderInstanceRector\ProcessBuilderInstanceRectorTest
  */
 final class ProcessBuilderInstanceRector extends AbstractRector
 {

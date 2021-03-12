@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Doctrine\Tests\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector;
+namespace Rector\Tests\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector;
 
 use Iterator;
 use Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector;

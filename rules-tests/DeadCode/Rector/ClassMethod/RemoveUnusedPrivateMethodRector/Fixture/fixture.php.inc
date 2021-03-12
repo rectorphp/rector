@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Fixture;
 
-use Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Source\AnotherCaller;
+use Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Source\AnotherCaller;
 
 final class SomeController
 {
@@ -32,9 +32,9 @@ final class SomeController
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Fixture;
 
-use Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Source\AnotherCaller;
+use Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Source\AnotherCaller;
 
 final class SomeController
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
+namespace Rector\Tests\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
 
 class SomeListener
 {
@@ -13,7 +13,7 @@ class SomeListener
 -----
 <?php
 
-namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
+namespace Rector\Tests\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
 
 class SomeEventSubscriber implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
 {

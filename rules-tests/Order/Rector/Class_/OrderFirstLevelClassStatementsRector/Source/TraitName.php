@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Rector\Order\Tests\Rector\Class_\OrderFirstLevelClassStatementsRector\Source;
+namespace Rector\Tests\Order\Rector\Class_\OrderFirstLevelClassStatementsRector\Source;
 
 
 trait TraitName

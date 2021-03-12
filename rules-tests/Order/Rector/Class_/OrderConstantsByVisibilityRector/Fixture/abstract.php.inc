@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderConstantsByVisibilityRector\Fixture;
 
 abstract class AbstractClass
 {
@@ -13,7 +13,7 @@ abstract class AbstractClass
 -----
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderConstantsByVisibilityRector\Fixture;
 
 abstract class AbstractClass
 {

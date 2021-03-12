@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Autodiscovery\Tests\Rector\FileNode\MoveServicesBySuffixToDirectoryRector\Source\Entity;
+namespace Rector\Tests\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector\Source\Entity;
 
-use Rector\Autodiscovery\Tests\Rector\FileNode\MoveServicesBySuffixToDirectoryRector\Source\Controller\Nested\AbstractBaseWithSpaceMapper;
+use Rector\Tests\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector\Source\Controller\Nested\AbstractBaseWithSpaceMapper;
 
 final class UserWithSpaceMapper extends AbstractBaseWithSpaceMapper
 {

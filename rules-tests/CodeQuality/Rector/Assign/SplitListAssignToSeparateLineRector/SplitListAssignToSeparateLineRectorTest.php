@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Assign\SplitListAssignToSeparateLineRector;
+namespace Rector\Tests\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector;

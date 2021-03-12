@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessParamTagRector\Fixture;
+namespace Rector\Tests\DeadDocBlock\Rector\ClassMethod\RemoveUselessParamTagRector\Fixture;
 
 use PhpParser\Node\Expr\PropertyFetch;
 
@@ -19,7 +19,7 @@ class SomeClassNamespacedArgParamReturnFQCN
 -----
 <?php
 
-namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessParamTagRector\Fixture;
+namespace Rector\Tests\DeadDocBlock\Rector\ClassMethod\RemoveUselessParamTagRector\Fixture;
 
 use PhpParser\Node\Expr\PropertyFetch;
 

@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Convert legacy setcookie arguments to new array options
  *
- * @see \Rector\Php73\Tests\Rector\FuncCall\SetcookieRector\SetCookieRectorTest
+ * @see \Rector\Tests\Php73\Rector\FuncCall\SetcookieRector\SetCookieRectorTest
  *
  * @see https://www.php.net/setcookie
  * @see https://wiki.php.net/rfc/same-site-cookie

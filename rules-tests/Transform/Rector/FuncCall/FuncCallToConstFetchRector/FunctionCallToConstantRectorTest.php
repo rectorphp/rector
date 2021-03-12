@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToConstFetchRector;
+namespace Rector\Tests\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\For_\ForToForeachRector\Fixture;
 
 class DontChangePassedCountArgAsDimfetch
 {
@@ -18,7 +18,7 @@ class DontChangePassedCountArgAsDimfetch
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\For_\ForToForeachRector\Fixture;
 
 class DontChangePassedCountArgAsDimfetch
 {

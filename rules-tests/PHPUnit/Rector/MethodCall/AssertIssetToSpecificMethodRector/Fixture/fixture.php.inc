@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertIssetToSpecificMethodRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertIssetToSpecificMethodRector\Fixture;
 
 final class MyIssetTest extends \PHPUnit\Framework\TestCase
 {
@@ -17,7 +17,7 @@ final class MyIssetTest extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertIssetToSpecificMethodRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertIssetToSpecificMethodRector\Fixture;
 
 final class MyIssetTest extends \PHPUnit\Framework\TestCase
 {

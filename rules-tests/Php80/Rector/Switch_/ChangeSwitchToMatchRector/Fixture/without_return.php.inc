@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
 
 class WithoutReturn
 {
@@ -16,7 +16,7 @@ class WithoutReturn
                 break;
         }
     }
-    
+
     private function x($value) {}
     private function y($value) {}
 }
@@ -25,7 +25,7 @@ class WithoutReturn
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
 
 class WithoutReturn
 {
@@ -36,7 +36,7 @@ class WithoutReturn
             default => $this->y($value),
         };
     }
-    
+
     private function x($value) {}
     private function y($value) {}
 }

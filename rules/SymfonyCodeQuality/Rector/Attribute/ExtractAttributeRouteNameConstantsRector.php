@@ -21,7 +21,7 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @see https://tomasvotruba.com/blog/2020/12/21/5-new-combos-opened-by-symfony-52-and-php-80/
  *
- * @see \Rector\SymfonyCodeQuality\Tests\Rector\Attribute\ExtractAttributeRouteNameConstantsRector\ExtractAttributeRouteNameConstantsRectorTest
+ * @see \Rector\Tests\SymfonyCodeQuality\Rector\Attribute\ExtractAttributeRouteNameConstantsRector\ExtractAttributeRouteNameConstantsRectorTest
  */
 final class ExtractAttributeRouteNameConstantsRector extends AbstractRector
 {

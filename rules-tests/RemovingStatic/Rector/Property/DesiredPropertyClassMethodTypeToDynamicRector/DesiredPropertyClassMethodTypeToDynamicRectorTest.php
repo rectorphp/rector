@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\RemovingStatic\Tests\Rector\Property\DesiredPropertyClassMethodTypeToDynamicRector;
+namespace Rector\Tests\RemovingStatic\Rector\Property\DesiredPropertyClassMethodTypeToDynamicRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

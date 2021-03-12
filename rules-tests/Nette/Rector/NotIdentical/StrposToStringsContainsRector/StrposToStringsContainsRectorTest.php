@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\NotIdentical\StrposToStringsContainsRector;
+namespace Rector\Tests\Nette\Rector\NotIdentical\StrposToStringsContainsRector;
 
 use Iterator;
 use Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector;

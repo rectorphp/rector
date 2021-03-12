@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
 final class NettePersistent
 {
@@ -16,7 +16,7 @@ final class NettePersistent
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
 final class NettePersistent
 {

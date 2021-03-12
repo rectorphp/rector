@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\MethodCall\VariableMethodCallToServiceCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\MethodCall\VariableMethodCallToServiceCallRector\Fixture;
 
 class SomeClass
 {
@@ -14,7 +14,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\MethodCall\VariableMethodCallToServiceCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\MethodCall\VariableMethodCallToServiceCallRector\Fixture;
 
 class SomeClass
 {

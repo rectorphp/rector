@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see http://php.net/manual/en/language.operators.comparison.php#language.operators.comparison.ternary
  * @see https://stackoverflow.com/a/1993455/1348344
- * @see \Rector\Php53\Tests\Rector\Ternary\TernaryToElvisRector\TernaryToElvisRectorTest
+ * @see \Rector\Tests\Php53\Rector\Ternary\TernaryToElvisRector\TernaryToElvisRectorTest
  */
 final class TernaryToElvisRector extends AbstractRector
 {

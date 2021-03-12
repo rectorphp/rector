@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector\Fixture;
+namespace Rector\Tests\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector\Fixture;
 
 function break_missplaced_function()
 {
@@ -30,7 +30,7 @@ function break_missplace_again()
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector\Fixture;
+namespace Rector\Tests\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector\Fixture;
 
 function break_missplaced_function()
 {

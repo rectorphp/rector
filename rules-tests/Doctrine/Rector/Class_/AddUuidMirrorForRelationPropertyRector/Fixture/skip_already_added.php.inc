@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,13 +10,13 @@ use Doctrine\ORM\Mapping as ORM;
 class SkipAlreadyAdded
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\YetAnotherEntity", cascade={"persist", "merge"})
+     * @ORM\ManyToOne(targetEntity="Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\YetAnotherEntity", cascade={"persist", "merge"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $amenity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\YetAnotherEntity", cascade={"persist", "merge"})
+     * @ORM\ManyToOne(targetEntity="Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\YetAnotherEntity", cascade={"persist", "merge"})
      * @ORM\JoinColumn(nullable=true, referencedColumnName="uuid")
      */
     private $amenityUuid;

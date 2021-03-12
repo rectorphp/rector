@@ -1,17 +1,17 @@
 <?php
 
-namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\Fixture\Event;
+namespace Rector\Tests\NetteKdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\Fixture\Event;
 
 final class SomeClassCopyEvent extends \Symfony\Contracts\EventDispatcher\Event
 {
-    private \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\Fixture\SomeClass $someClass;
+    private \Rector\Tests\NetteKdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\Fixture\SomeClass $someClass;
     private string $key;
-    public function __construct(\Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\Fixture\SomeClass $someClass, string $key)
+    public function __construct(\Rector\Tests\NetteKdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\Fixture\SomeClass $someClass, string $key)
     {
         $this->someClass = $someClass;
         $this->key = $key;
     }
-    public function getSomeClass(): \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\Fixture\SomeClass
+    public function getSomeClass(): \Rector\Tests\NetteKdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\Fixture\SomeClass
     {
         return $this->someClass;
     }

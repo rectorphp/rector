@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector;
+namespace Rector\Tests\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector;

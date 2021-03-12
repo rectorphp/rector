@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedPrivateConstantRector;
+namespace Rector\Tests\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector;

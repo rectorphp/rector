@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector;
+namespace Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector;
 
 use Iterator;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;

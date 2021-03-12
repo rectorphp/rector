@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\Class_\NativeTestCaseRector;
+namespace Rector\Tests\Transform\Rector\Class_\NativeTestCaseRector;
 
 use Iterator;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;

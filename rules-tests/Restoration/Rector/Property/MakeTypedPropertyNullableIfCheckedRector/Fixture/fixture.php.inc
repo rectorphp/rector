@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Restoration\Tests\Rector\Property\MakeTypedPropertyNullableIfCheckedRector\Fixture;
+namespace Rector\Tests\Restoration\Rector\Property\MakeTypedPropertyNullableIfCheckedRector\Fixture;
 
-use Rector\Restoration\Tests\Rector\Property\MakeTypedPropertyNullableIfCheckedRector\Source\PropertyTypeClass;
+use Rector\Tests\Restoration\Rector\Property\MakeTypedPropertyNullableIfCheckedRector\Source\PropertyTypeClass;
 
 final class SomeClass
 {
@@ -24,9 +24,9 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Restoration\Tests\Rector\Property\MakeTypedPropertyNullableIfCheckedRector\Fixture;
+namespace Rector\Tests\Restoration\Rector\Property\MakeTypedPropertyNullableIfCheckedRector\Fixture;
 
-use Rector\Restoration\Tests\Rector\Property\MakeTypedPropertyNullableIfCheckedRector\Source\PropertyTypeClass;
+use Rector\Tests\Restoration\Rector\Property\MakeTypedPropertyNullableIfCheckedRector\Source\PropertyTypeClass;
 
 final class SomeClass
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\Fixture;
 
 use Rector\DynamicTypeAnalysis\Probe\TypeStaticProbe;
-use Rector\DynamicTypeAnalysis\Tests\ProbeStorage\StaticInMemoryProbeStorage;
+use Rector\Tests\DynamicTypeAnalysis\ProbeStorage\StaticInMemoryProbeStorage;
 
 final class WithStaticCall
 {
@@ -20,10 +20,10 @@ final class WithStaticCall
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\Fixture;
 
 use Rector\DynamicTypeAnalysis\Probe\TypeStaticProbe;
-use Rector\DynamicTypeAnalysis\Tests\ProbeStorage\StaticInMemoryProbeStorage;
+use Rector\Tests\DynamicTypeAnalysis\ProbeStorage\StaticInMemoryProbeStorage;
 
 final class WithStaticCall
 {

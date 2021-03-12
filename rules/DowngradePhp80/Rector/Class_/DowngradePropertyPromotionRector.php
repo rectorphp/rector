@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://wiki.php.net/rfc/constructor_promotion
  *
- * @see \Rector\DowngradePhp80\Tests\Rector\Class_\DowngradePropertyPromotionRector\DowngradePropertyPromotionRectorTest
+ * @see \Rector\Tests\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector\DowngradePropertyPromotionRectorTest
  */
 final class DowngradePropertyPromotionRector extends AbstractRector
 {

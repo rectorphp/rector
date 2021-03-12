@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SkipOneToOne
 {
     /**
-     * @ORM\OneToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\EntityOneToOne", cascade={"persist", "merge"}, mappedBy="skip")
+     * @ORM\OneToOne(targetEntity="Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\EntityOneToOne", cascade={"persist", "merge"}, mappedBy="skip")
      * @ORM\JoinColumn(nullable=false)
      */
     private $amenity;

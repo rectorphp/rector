@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
-use Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\AnotherFormTypeClass;
+use Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\AnotherFormTypeClass;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilder;
@@ -22,9 +22,9 @@ class SomeAnotherController extends Controller
 -----
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
-use Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\AnotherFormTypeClass;
+use Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\AnotherFormTypeClass;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilder;
@@ -33,10 +33,10 @@ class SomeAnotherController extends Controller
 {
     public function action(FormBuilder $builder)
     {
-        $builder->add('someText', \Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture\SomeClass::class);
+        $builder->add('someText', \Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture\SomeClass::class);
 
         $form = new TextType();
-        $form->add('text', \Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\AnotherFormTypeClass::class);
+        $form->add('text', \Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\AnotherFormTypeClass::class);
     }
 }
 

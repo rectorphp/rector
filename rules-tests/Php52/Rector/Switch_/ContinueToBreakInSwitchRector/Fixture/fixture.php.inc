@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php52\Tests\Rector\Switch_\ContinueToBreakInSwitchRector\Fixture;
+namespace Rector\Tests\Php52\Rector\Switch_\ContinueToBreakInSwitchRector\Fixture;
 
 function some_run($value)
 {
@@ -18,7 +18,7 @@ function some_run($value)
 -----
 <?php
 
-namespace Rector\Php52\Tests\Rector\Switch_\ContinueToBreakInSwitchRector\Fixture;
+namespace Rector\Tests\Php52\Rector\Switch_\ContinueToBreakInSwitchRector\Fixture;
 
 function some_run($value)
 {

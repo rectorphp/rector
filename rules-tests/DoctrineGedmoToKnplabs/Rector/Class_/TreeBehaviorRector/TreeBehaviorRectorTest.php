@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\TreeBehaviorRector;
+namespace Rector\Tests\DoctrineGedmoToKnplabs\Rector\Class_\TreeBehaviorRector;
 
 use Iterator;
 use Rector\DoctrineGedmoToKnplabs\Rector\Class_\TreeBehaviorRector;

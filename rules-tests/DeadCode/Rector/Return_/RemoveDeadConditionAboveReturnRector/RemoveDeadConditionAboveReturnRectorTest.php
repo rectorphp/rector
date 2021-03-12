@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Return_\RemoveDeadConditionAboveReturnRector;
+namespace Rector\Tests\DeadCode\Rector\Return_\RemoveDeadConditionAboveReturnRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Return_\RemoveDeadConditionAboveReturnRector;

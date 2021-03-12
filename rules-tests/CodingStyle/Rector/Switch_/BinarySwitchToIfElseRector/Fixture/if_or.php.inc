@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector\Fixture;
 
 final class IfOr
 {
@@ -20,7 +20,7 @@ final class IfOr
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector\Fixture;
 
 final class IfOr
 {

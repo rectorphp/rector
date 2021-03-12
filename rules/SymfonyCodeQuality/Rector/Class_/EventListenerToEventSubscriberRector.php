@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\EventListenerToEventSubscriberRectorTest
+ * @see \Rector\Tests\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\EventListenerToEventSubscriberRectorTest
  */
 final class EventListenerToEventSubscriberRector extends AbstractRector
 {

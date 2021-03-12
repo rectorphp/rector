@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Fixture;
+namespace Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Fixture;
 
 final class SkipIsA
 {
@@ -8,7 +8,7 @@ final class SkipIsA
     {
         return is_a(
             $variable,
-            'Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\AnotherClass',
+            'Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\AnotherClass',
             true
         );
     }

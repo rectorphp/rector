@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\FixturePhp80;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector\FixturePhp80;
 
 class PropertyPromotion
 {
@@ -13,7 +13,7 @@ class PropertyPromotion
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\FixturePhp80;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector\FixturePhp80;
 
 class PropertyPromotion
 {

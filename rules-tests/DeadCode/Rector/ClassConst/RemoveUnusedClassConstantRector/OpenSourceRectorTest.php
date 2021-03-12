@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedClassConstantRector;
+namespace Rector\Tests\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

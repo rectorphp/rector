@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
+namespace Rector\Tests\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

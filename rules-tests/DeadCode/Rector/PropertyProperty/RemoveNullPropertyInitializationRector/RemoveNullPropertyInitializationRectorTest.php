@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\PropertyProperty\RemoveNullPropertyInitializationRector;
+namespace Rector\Tests\DeadCode\Rector\PropertyProperty\RemoveNullPropertyInitializationRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\PropertyProperty\RemoveNullPropertyInitializationRector;

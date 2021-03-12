@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\BooleanOr\IsIterableRector\Fixture;
+namespace Rector\Tests\Php71\Rector\BooleanOr\IsIterableRector\Fixture;
 
 use Traversable;
 
@@ -24,7 +24,7 @@ if (! function_exists('is_iterable')) {
 -----
 <?php
 
-namespace Rector\Php71\Tests\Rector\BooleanOr\IsIterableRector\Fixture;
+namespace Rector\Tests\Php71\Rector\BooleanOr\IsIterableRector\Fixture;
 
 use Traversable;
 

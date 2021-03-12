@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Composer\Tests\Rector\ReplacePackageAndVersionComposerRector\ReplacePackageAndVersionComposerRectorTest
+ * @see \Rector\Tests\Composer\Rector\ReplacePackageAndVersionComposerRector\ReplacePackageAndVersionComposerRectorTest
  */
 final class ReplacePackageAndVersionComposerRector implements ComposerRectorInterface
 {

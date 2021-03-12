@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
 
 use Nette\Utils\FileSystem;
 
@@ -16,7 +16,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
 
 use Nette\Utils\FileSystem;
 

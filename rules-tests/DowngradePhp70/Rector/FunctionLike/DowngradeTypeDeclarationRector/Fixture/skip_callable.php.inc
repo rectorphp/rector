@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeDeclarationRector\Fixture;
+namespace Rector\Tests\DowngradePhp70\Rector\FunctionLike\DowngradeTypeDeclarationRector\Fixture;
 
 class SkipCallable
 {

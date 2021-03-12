@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\Identical\SubstrMinusToStringEndsWithRector\Fixture;
+namespace Rector\Tests\NetteCodeQuality\Rector\Identical\SubstrMinusToStringEndsWithRector\Fixture;
 
 function withVarValue($var, $value)
 {
@@ -14,7 +14,7 @@ function withVarValue($var, $value)
 -----
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\Identical\SubstrMinusToStringEndsWithRector\Fixture;
+namespace Rector\Tests\NetteCodeQuality\Rector\Identical\SubstrMinusToStringEndsWithRector\Fixture;
 
 function withVarValue($var, $value)
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnitSymfony\Tests\Rector\StaticCall\AddMessageToEqualsResponseCodeRector\Fixture;
+namespace Rector\Tests\PHPUnitSymfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +26,7 @@ final class SomeClassTest extends TestCase
 -----
 <?php
 
-namespace Rector\PHPUnitSymfony\Tests\Rector\StaticCall\AddMessageToEqualsResponseCodeRector\Fixture;
+namespace Rector\Tests\PHPUnitSymfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;

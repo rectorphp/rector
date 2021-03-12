@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\Fixture;
+namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\Fixture;
 
 class WithInterfaceParentType {}
 class WithInterfaceChildType extends WithInterfaceParentType {}
@@ -19,7 +19,7 @@ interface WithInterfaceB extends WithInterfaceA
 -----
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\Fixture;
+namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\Fixture;
 
 class WithInterfaceParentType {}
 class WithInterfaceChildType extends WithInterfaceParentType {}
@@ -32,7 +32,7 @@ interface WithInterfaceA
 interface WithInterfaceB extends WithInterfaceA
 {
     /**
-     * @param \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\Fixture\WithInterfaceParentType $type
+     * @param \Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\Fixture\WithInterfaceParentType $type
      */
     public function contraVariantArguments($type);
 }

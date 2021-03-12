@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector;
+namespace Rector\Tests\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Ternary\TernaryConditionVariableAssignmentRector;
+namespace Rector\Tests\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;

@@ -1,7 +1,7 @@
 <?php
 
 use Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector;
-use Rector\DependencyInjection\Tests\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
+use Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

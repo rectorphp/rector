@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp74\Tests\Rector\Property\DowngradeTypedPropertyRector;
+namespace Rector\Tests\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
 
 use Iterator;
 use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;

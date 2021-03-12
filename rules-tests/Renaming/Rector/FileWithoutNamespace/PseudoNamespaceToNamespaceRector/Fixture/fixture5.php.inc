@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
 use PHPUnit_TestCase;
-use Rector\Arguments\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\Source\Keep_This;
+use Rector\Tests\Arguments\Rector\Name\PseudoNamespaceToNamespaceRector\Source\Keep_This;
 
 class SomeTestCase
 {
@@ -22,10 +22,10 @@ class SomeTestCase
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\Fixture;
 
 use PHPUnit\TestCase;
-use Rector\Arguments\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\Source\Keep_This;
+use Rector\Tests\Arguments\Rector\Name\PseudoNamespaceToNamespaceRector\Source\Keep_This;
 
 class SomeTestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
 
 abstract class AnotherAbstractClass
 {
@@ -22,7 +22,7 @@ class SomeClass extends SomeAbstractClass
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
 
 abstract class AnotherAbstractClass
 {
@@ -32,7 +32,7 @@ abstract class AnotherAbstractClass
      }
 }
 
-class SomeClass extends \Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture\AnotherAbstractClass
+class SomeClass extends \Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture\AnotherAbstractClass
 {
 }
 

@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\BinaryOp\ResponseStatusCodeRector\ResponseStatusCodeRectorTest
+ * @see \Rector\Tests\Symfony\Rector\BinaryOp\ResponseStatusCodeRector\ResponseStatusCodeRectorTest
  */
 final class ResponseStatusCodeRector extends AbstractRector
 {

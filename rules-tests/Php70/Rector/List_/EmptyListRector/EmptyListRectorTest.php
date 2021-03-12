@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Tests\Rector\List_\EmptyListRector;
+namespace Rector\Tests\Php70\Rector\List_\EmptyListRector;
 
 use Iterator;
 use Rector\Php70\Rector\List_\EmptyListRector;

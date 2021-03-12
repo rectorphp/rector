@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture\RFC;
+namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture\RFC;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,7 +21,7 @@ class AssertRange
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\Fixture\RFC;
+namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture\RFC;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

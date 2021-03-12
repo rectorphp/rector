@@ -1,12 +1,12 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
 
 class Fixture
 {
     public function run()
     {
-        return '<?php if (Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\Fixture::staticCall()) { ?>';
+        return '<?php if (Rector\Tests\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\Fixture::staticCall()) { ?>';
     }
 }
 
@@ -14,13 +14,13 @@ class Fixture
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
 
 class Fixture
 {
     public function run()
     {
-        return '<?php if (' . \Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\Fixture::class . '::staticCall()) { ?>';
+        return '<?php if (' . \Rector\Tests\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\Fixture::class . '::staticCall()) { ?>';
     }
 }
 

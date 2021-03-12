@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector\Fixture;
+namespace Rector\Tests\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector\Fixture;
 
 class Fixture
 {
@@ -17,7 +17,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector\Fixture;
+namespace Rector\Tests\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector\Fixture;
 
 class Fixture
 {

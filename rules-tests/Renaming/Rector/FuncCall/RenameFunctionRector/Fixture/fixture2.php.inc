@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\FuncCall\RenameFunctionRector\Fixture;
 
 class Fixture2
 {
@@ -20,7 +20,7 @@ class Fixture2
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\FuncCall\RenameFunctionRector\Fixture;
 
 class Fixture2
 {

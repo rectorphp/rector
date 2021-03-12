@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Laravel\Tests\Rector\ClassMethod\AddParentBootToModelClassMethodRector;
+namespace Rector\Tests\Laravel\Rector\ClassMethod\AddParentBootToModelClassMethodRector;
 
 use Iterator;
 use Rector\Laravel\Rector\ClassMethod\AddParentBootToModelClassMethodRector;

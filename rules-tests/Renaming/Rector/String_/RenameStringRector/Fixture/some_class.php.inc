@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\String_\RenameStringRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\String_\RenameStringRector\Fixture;
 
 class SomeClass
 {
@@ -14,7 +14,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\String_\RenameStringRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\String_\RenameStringRector\Fixture;
 
 class SomeClass
 {

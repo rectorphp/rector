@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\MethodCall\CallableInMethodCallToVariableRector\Fixture;
+namespace Rector\Tests\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector\Fixture;
 
-use Rector\Transform\Tests\Rector\MethodCall\CallableInMethodCallToVariableRector\Source\DummyCache;
+use Rector\Tests\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector\Source\DummyCache;
 
 final class ManyStmts
 {
@@ -19,9 +19,9 @@ final class ManyStmts
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\MethodCall\CallableInMethodCallToVariableRector\Fixture;
+namespace Rector\Tests\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector\Fixture;
 
-use Rector\Transform\Tests\Rector\MethodCall\CallableInMethodCallToVariableRector\Source\DummyCache;
+use Rector\Tests\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector\Source\DummyCache;
 
 final class ManyStmts
 {

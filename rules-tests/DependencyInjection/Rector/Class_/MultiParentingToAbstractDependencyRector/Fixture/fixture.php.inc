@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
+namespace Rector\Tests\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
 
-use Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency;
+use Rector\Tests\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency;
 
 abstract class AbstractParentClass
 {
@@ -37,9 +37,9 @@ class SecondChild extends AbstractParentClass
 -----
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
+namespace Rector\Tests\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
 
-use Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency;
+use Rector\Tests\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency;
 
 abstract class AbstractParentClass
 {
@@ -48,7 +48,7 @@ abstract class AbstractParentClass
      */
     private $someDependency;
 
-    public function injectAbstractParentClass(\Rector\DependencyInjection\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency $someDependency)
+    public function injectAbstractParentClass(\Rector\Tests\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency $someDependency)
     {
         $this->someDependency = $someDependency;
     }

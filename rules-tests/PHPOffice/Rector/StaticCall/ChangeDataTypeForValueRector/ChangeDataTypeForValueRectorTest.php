@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPOffice\Tests\Rector\StaticCall\ChangeDataTypeForValueRector;
+namespace Rector\Tests\PHPOffice\Rector\StaticCall\ChangeDataTypeForValueRector;
 
 use Iterator;
 use Rector\PHPOffice\Rector\StaticCall\ChangeDataTypeForValueRector;

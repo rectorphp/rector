@@ -1,16 +1,16 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClass;
+use Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\Source\MyClass;
 
 final class SomeOtherController
 {
     /**
-     * @var \Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClassFactory
+     * @var \Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\Source\MyClassFactory
      */
     private $mySomeFactory;
-    public function __construct(\Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClassFactory $mySomeFactory)
+    public function __construct(\Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\Source\MyClassFactory $mySomeFactory)
     {
         $this->mySomeFactory = $mySomeFactory;
     }
@@ -24,17 +24,17 @@ final class SomeOtherController
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClass;
+use Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\Source\MyClass;
 
 final class SomeOtherController
 {
     /**
-     * @var \Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClassFactory
+     * @var \Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\Source\MyClassFactory
      */
     private $mySomeFactory;
-    public function __construct(\Rector\Transform\Tests\Rector\New_\NewToMethodCallRector\Source\MyClassFactory $mySomeFactory)
+    public function __construct(\Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\Source\MyClassFactory $mySomeFactory)
     {
         $this->mySomeFactory = $mySomeFactory;
     }

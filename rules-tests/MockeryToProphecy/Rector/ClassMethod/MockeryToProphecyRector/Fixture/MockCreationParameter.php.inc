@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\MockeryToProphecy\Tests\Rector\ClassMethod\MockeryToProphecyRector\Fixture;
+namespace Rector\Tests\MockeryToProphecy\Rector\ClassMethod\MockeryToProphecyRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 
@@ -17,7 +17,7 @@ final class MockCreationParameter extends TestCase
 -----
 <?php
 
-namespace Rector\MockeryToProphecy\Tests\Rector\ClassMethod\MockeryToProphecyRector\Fixture;
+namespace Rector\Tests\MockeryToProphecy\Rector\ClassMethod\MockeryToProphecyRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 

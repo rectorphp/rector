@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\List_\ListToArrayDestructRector\Fixture;
+namespace Rector\Tests\Php71\Rector\List_\ListToArrayDestructRector\Fixture;
 
 class Fixture
 {
@@ -17,7 +17,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php71\Tests\Rector\List_\ListToArrayDestructRector\Fixture;
+namespace Rector\Tests\Php71\Rector\List_\ListToArrayDestructRector\Fixture;
 
 class Fixture
 {

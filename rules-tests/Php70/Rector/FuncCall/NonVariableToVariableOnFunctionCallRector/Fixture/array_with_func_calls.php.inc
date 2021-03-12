@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
+namespace Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
 
 function wrap($str) {}
 
@@ -16,7 +16,7 @@ function baz() {
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
+namespace Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
 
 function wrap($str) {}
 

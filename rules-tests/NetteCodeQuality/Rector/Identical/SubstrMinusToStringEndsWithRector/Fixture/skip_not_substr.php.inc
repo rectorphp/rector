@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\Identical\SubstrMinusToStringEndsWithRector\Fixture;
+namespace Rector\Tests\NetteCodeQuality\Rector\Identical\SubstrMinusToStringEndsWithRector\Fixture;
 
 function skipNotSustr($var)
 {

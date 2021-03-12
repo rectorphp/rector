@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 
 final class RemoveAnotherClassMethodCallExtraArgument
 {
@@ -23,7 +23,7 @@ function better_func_get_args() {
 -----
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 
 final class RemoveAnotherClassMethodCallExtraArgument
 {

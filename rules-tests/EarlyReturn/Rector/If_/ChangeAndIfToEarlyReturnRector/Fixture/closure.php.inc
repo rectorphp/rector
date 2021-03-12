@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
+namespace Rector\Tests\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
@@ -26,7 +26,7 @@ class ClosureClass
 -----
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
+namespace Rector\Tests\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;

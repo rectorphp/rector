@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector;
+namespace Rector\Tests\Php71\Rector\Assign\AssignArrayToStringRector;
 
 use Iterator;
 use Rector\Php71\Rector\Assign\AssignArrayToStringRector;

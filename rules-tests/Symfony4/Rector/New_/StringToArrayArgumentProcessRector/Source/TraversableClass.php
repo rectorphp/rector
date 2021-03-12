@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony4\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source;
+namespace Rector\Tests\Symfony4\Rector\New_\StringToArrayArgumentProcessRector\Source;
 
 final class TraversableClass implements \IteratorAggregate
 {

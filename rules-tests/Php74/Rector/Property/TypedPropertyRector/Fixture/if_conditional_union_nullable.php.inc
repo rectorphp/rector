@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\ReturnString;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\ReturnString;
 
 class IfConditionalUnionNullable
 {
@@ -21,9 +21,9 @@ class IfConditionalUnionNullable
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\ReturnString;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\ReturnString;
 
 class IfConditionalUnionNullable
 {

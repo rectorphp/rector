@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Transform\Tests\Rector\New_\NewToConstructorInjectionRector\NewToConstructorInjectionRectorTest
+ * @see \Rector\Tests\Transform\Rector\New_\NewToConstructorInjectionRector\NewToConstructorInjectionRectorTest
  */
 final class NewToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
 {

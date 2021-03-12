@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Ternary\GetDebugTypeRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Ternary\GetDebugTypeRector\Fixture;
 
 class Fixture
 {
@@ -14,7 +14,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Ternary\GetDebugTypeRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Ternary\GetDebugTypeRector\Fixture;
 
 class Fixture
 {

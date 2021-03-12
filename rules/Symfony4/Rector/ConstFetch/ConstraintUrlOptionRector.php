@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#validator
- * @see \Rector\Symfony4\Tests\Rector\ConstFetch\ConstraintUrlOptionRector\ConstraintUrlOptionRectorTest
+ * @see \Rector\Tests\Symfony4\Rector\ConstFetch\ConstraintUrlOptionRector\ConstraintUrlOptionRectorTest
  */
 final class ConstraintUrlOptionRector extends AbstractRector
 {

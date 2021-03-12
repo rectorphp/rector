@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetParameterToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -21,7 +21,7 @@ final class ParamWithDot extends Controller
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetParameterToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 

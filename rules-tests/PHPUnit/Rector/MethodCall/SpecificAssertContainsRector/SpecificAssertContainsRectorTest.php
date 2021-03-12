@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\SpecificAssertContainsRector;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector;
 
 use Iterator;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector;

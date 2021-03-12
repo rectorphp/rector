@@ -1,8 +1,8 @@
 <?php
 
 use Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector;
-use Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source\ConfigurableClass;
-use Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source\FactoryClass;
+use Rector\Tests\CakePHP\Rector\MethodCall\ArrayToFluentCallRector\Source\ConfigurableClass;
+use Rector\Tests\CakePHP\Rector\MethodCall\ArrayToFluentCallRector\Source\FactoryClass;
 use Rector\CakePHP\ValueObject\ArrayToFluentCall;
 use Rector\CakePHP\ValueObject\FactoryMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

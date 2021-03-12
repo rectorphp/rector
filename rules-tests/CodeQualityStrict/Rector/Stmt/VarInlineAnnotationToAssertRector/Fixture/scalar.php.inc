@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQualityStrict\Tests\Rector\Stmt\VarInlineAnnotationToAssertRector\Fixture;
+namespace Rector\Tests\CodeQualityStrict\Rector\Stmt\VarInlineAnnotationToAssertRector\Fixture;
 
 class ScalarClass
 {
@@ -21,7 +21,7 @@ class ScalarClass
 -----
 <?php
 
-namespace Rector\CodeQualityStrict\Tests\Rector\Stmt\VarInlineAnnotationToAssertRector\Fixture;
+namespace Rector\Tests\CodeQualityStrict\Rector\Stmt\VarInlineAnnotationToAssertRector\Fixture;
 
 class ScalarClass
 {

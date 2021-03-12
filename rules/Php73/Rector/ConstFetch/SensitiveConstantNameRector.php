@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/case_insensitive_constant_deprecation
- * @see \Rector\Php73\Tests\Rector\ConstFetch\SensitiveConstantNameRector\SensitiveConstantNameRectorTest
+ * @see \Rector\Tests\Php73\Rector\ConstFetch\SensitiveConstantNameRector\SensitiveConstantNameRectorTest
  */
 final class SensitiveConstantNameRector extends AbstractRector
 {

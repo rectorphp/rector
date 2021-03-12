@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\SomeParent;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\SomeParent;
 
 final class ComplexArray
 {
@@ -21,9 +21,9 @@ final class ComplexArray
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\SomeParent;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\SomeParent;
 
 final class ComplexArray
 {

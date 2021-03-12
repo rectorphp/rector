@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 /**
- * @see \Rector\Order\Tests\StmtOrderTest
+ * @see \Rector\Tests\Order\StmtOrderTest
  */
 final class StmtOrder
 {

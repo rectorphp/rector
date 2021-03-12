@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\Switch_\ReduceMultipleDefaultSwitchRector\Fixture;
+namespace Rector\Tests\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector\Fixture;
 
 function multipleDefaults()
 {
@@ -38,7 +38,7 @@ function multipleDefaultsSoMany()
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\Switch_\ReduceMultipleDefaultSwitchRector\Fixture;
+namespace Rector\Tests\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector\Fixture;
 
 function multipleDefaults()
 {

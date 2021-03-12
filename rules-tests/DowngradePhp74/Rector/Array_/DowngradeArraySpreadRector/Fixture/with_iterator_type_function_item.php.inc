@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
+namespace Rector\Tests\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
 use Traversable;
 use ArrayIterator;
@@ -22,7 +22,7 @@ class WithIteratorTypeFunctionItemClass
 -----
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\Array_\DowngradeArraySpreadRector\Fixture;
+namespace Rector\Tests\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector\Fixture;
 
 use Traversable;
 use ArrayIterator;

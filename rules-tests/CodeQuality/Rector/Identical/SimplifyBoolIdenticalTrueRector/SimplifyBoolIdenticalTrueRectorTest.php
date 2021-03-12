@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyBoolIdenticalTrueRector;
+namespace Rector\Tests\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;

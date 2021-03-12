@@ -1,6 +1,6 @@
 <?php declare (strict_types=1);
 
-namespace Rector\Symfony3\Tests\Rector\ClassMethod\GetRequestRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\ClassMethod\GetRequestRector\Fixture;
 
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 

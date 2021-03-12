@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyInArrayValuesRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector\Fixture;
 
 final class InArray
 {
@@ -20,7 +20,7 @@ final class InArray
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyInArrayValuesRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector\Fixture;
 
 final class InArray
 {

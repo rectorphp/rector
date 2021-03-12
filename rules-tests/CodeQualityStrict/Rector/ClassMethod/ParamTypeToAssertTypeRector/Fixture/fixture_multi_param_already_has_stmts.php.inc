@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQualityStrict\Tests\Rector\ClassMethod\ParamTypeToAssertTypeRector\Fixture;
+namespace Rector\Tests\CodeQualityStrict\Rector\ClassMethod\ParamTypeToAssertTypeRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -22,7 +22,7 @@ class SomeClassMultiParamAlreadyHasStmts
 -----
 <?php
 
-namespace Rector\CodeQualityStrict\Tests\Rector\ClassMethod\ParamTypeToAssertTypeRector\Fixture;
+namespace Rector\Tests\CodeQualityStrict\Rector\ClassMethod\ParamTypeToAssertTypeRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;

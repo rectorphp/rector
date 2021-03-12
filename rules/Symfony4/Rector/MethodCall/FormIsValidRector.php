@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony4\Tests\Rector\MethodCall\FormIsValidRector\FormIsValidRectorTest
+ * @see \Rector\Tests\Symfony4\Rector\MethodCall\FormIsValidRector\FormIsValidRectorTest
  */
 final class FormIsValidRector extends AbstractRector
 {

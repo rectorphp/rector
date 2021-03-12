@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Legacy\Tests\Rector\Class_\ChangeSingletonToServiceRector;
+namespace Rector\Tests\Legacy\Rector\Class_\ChangeSingletonToServiceRector;
 
 use Iterator;
 use Rector\Legacy\Rector\Class_\ChangeSingletonToServiceRector;

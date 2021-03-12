@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstFetchRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector\Fixture;
 
-use Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstFetchRector\Source\LocalFormEvents;
+use Rector\Tests\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector\Source\LocalFormEvents;
 
 class SomeClass
 {
@@ -20,9 +20,9 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstFetchRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector\Fixture;
 
-use Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstFetchRector\Source\LocalFormEvents;
+use Rector\Tests\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector\Source\LocalFormEvents;
 
 class SomeClass
 {
@@ -31,7 +31,7 @@ class SomeClass
         return [
             LocalFormEvents::PRE_SUBMIT,
             LocalFormEvents::PRE_SUBMIT,
-            \Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstFetchRector\Source\DifferentClass::NEW_CONSTANT,
+            \Rector\Tests\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector\Source\DifferentClass::NEW_CONSTANT,
         ];
     }
 }

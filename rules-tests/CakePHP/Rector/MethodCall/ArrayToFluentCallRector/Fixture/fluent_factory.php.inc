@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Fixture;
+namespace Rector\Tests\CakePHP\Rector\MethodCall\ArrayToFluentCallRector\Fixture;
 
-use Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source;
+use Rector\Tests\CakePHP\Rector\MethodCall\ArrayToFluentCallRector\Source;
 
 function arrayToFluentCall()
 {
@@ -19,9 +19,9 @@ function arrayToFluentCall()
 -----
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Fixture;
+namespace Rector\Tests\CakePHP\Rector\MethodCall\ArrayToFluentCallRector\Fixture;
 
-use Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source;
+use Rector\Tests\CakePHP\Rector\MethodCall\ArrayToFluentCallRector\Source;
 
 function arrayToFluentCall()
 {

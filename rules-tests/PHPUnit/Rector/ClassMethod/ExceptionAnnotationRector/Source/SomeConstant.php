@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\ClassMethod\ExceptionAnnotationRector\Source;
+namespace Rector\Tests\PHPUnit\Rector\ClassMethod\ExceptionAnnotationRector\Source;
 
 final class SomeConstant
 {

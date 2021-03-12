@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Catch_\RemoveUnusedVariableInCatchRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector\Fixture;
 
 final class Fixture
 {
@@ -16,7 +16,7 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Catch_\RemoveUnusedVariableInCatchRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector\Fixture;
 
 final class Fixture
 {

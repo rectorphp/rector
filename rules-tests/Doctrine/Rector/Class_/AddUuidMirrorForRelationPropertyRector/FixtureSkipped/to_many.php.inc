@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ToMany
 {
     /**
-     * @ORM\ManyToMany(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\FooEntity", cascade={"persist", "merge"})
+     * @ORM\ManyToMany(targetEntity="Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\FooEntity", cascade={"persist", "merge"})
      */
     private $amenity;
 }
@@ -36,7 +36,7 @@ class FooEntity
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -47,11 +47,11 @@ use Doctrine\ORM\Mapping as ORM;
 class ToMany
 {
     /**
-     * @ORM\ManyToMany(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\FooEntity", cascade={"persist", "merge"})
+     * @ORM\ManyToMany(targetEntity="Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\FooEntity", cascade={"persist", "merge"})
      */
     private $amenity;
     /**
-     * @ORM\ManyToMany(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\FooEntity", cascade={"persist", "merge"})
+     * @ORM\ManyToMany(targetEntity="Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\FooEntity", cascade={"persist", "merge"})
      * @ORM\JoinTable(name="tomany_fooentity_uuid", joinColumns={
      *     @ORM\JoinColumn(referencedColumnName="uuid")
      * }, inverseJoinColumns={

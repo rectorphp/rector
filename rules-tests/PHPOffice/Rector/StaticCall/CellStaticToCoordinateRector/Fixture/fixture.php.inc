@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\StaticCall\CellStaticToCoordinateRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\StaticCall\CellStaticToCoordinateRector\Fixture;
 
 class Fixture
 {
@@ -14,7 +14,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\StaticCall\CellStaticToCoordinateRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\StaticCall\CellStaticToCoordinateRector\Fixture;
 
 class Fixture
 {

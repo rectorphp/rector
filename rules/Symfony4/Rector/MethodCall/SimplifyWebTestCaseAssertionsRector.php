@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
  * @see https://github.com/symfony/symfony/pull/30813/files
- * @see \Rector\Symfony4\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\SimplifyWebTestCaseAssertionsRectorTest
+ * @see \Rector\Tests\Symfony4\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\SimplifyWebTestCaseAssertionsRectorTest
  */
 final class SimplifyWebTestCaseAssertionsRector extends AbstractRector
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
 
 use Iterator;
 use Rector\Symfony3\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\ClassMethod\GetRequestRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\ClassMethod\GetRequestRector\Fixture;
 
-use Rector\Symfony3\Tests\Rector\Source\SymfonyController;
+use Rector\Tests\Symfony3\Rector\Source\SymfonyController;
 use Symfony\TestCase\Request;
 
 class ClassWithParameterPresent extends SymfonyController
@@ -17,9 +17,9 @@ class ClassWithParameterPresent extends SymfonyController
 -----
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\ClassMethod\GetRequestRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\ClassMethod\GetRequestRector\Fixture;
 
-use Rector\Symfony3\Tests\Rector\Source\SymfonyController;
+use Rector\Tests\Symfony3\Rector\Source\SymfonyController;
 use Symfony\TestCase\Request;
 
 class ClassWithParameterPresent extends SymfonyController

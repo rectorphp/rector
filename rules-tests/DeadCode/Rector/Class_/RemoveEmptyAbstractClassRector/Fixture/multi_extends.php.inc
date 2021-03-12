@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
 
 abstract class AnotherAbstractClassMulti
 {
@@ -26,7 +26,7 @@ class MultiExtends extends SomeAbstractClassMulti2
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture;
 
 abstract class AnotherAbstractClassMulti
 {
@@ -36,7 +36,7 @@ abstract class AnotherAbstractClassMulti
      }
 }
 
-class MultiExtends extends \Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture\AnotherAbstractClassMulti
+class MultiExtends extends \Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\Fixture\AnotherAbstractClassMulti
 {
 }
 

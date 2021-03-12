@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\Class_\MergeInterfacesRector;
+namespace Rector\Tests\Transform\Rector\Class_\MergeInterfacesRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

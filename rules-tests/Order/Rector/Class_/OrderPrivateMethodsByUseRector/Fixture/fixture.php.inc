@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
 
 class Fixture
 {
@@ -23,7 +23,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
 
 class Fixture
 {

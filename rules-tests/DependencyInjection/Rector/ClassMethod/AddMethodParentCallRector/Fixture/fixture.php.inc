@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\ClassMethod\AddMethodParentCallRector\Fixture;
+namespace Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\Fixture;
 
-use Rector\DependencyInjection\Tests\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
+use Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
 
 class SunshineCommand extends ParentClassWithNewConstructor
 {
@@ -16,9 +16,9 @@ class SunshineCommand extends ParentClassWithNewConstructor
 -----
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\ClassMethod\AddMethodParentCallRector\Fixture;
+namespace Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\Fixture;
 
-use Rector\DependencyInjection\Tests\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
+use Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
 
 class SunshineCommand extends ParentClassWithNewConstructor
 {

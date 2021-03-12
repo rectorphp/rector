@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Rector\Tests\Symfony\Rector\Source\SymfonyController;
 
 class ClassWithNamedService extends SymfonyController
 {
@@ -20,9 +20,9 @@ class ClassWithNamedService extends SymfonyController
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Rector\Tests\Symfony\Rector\Source\SymfonyController;
 
 class ClassWithNamedService extends SymfonyController
 {

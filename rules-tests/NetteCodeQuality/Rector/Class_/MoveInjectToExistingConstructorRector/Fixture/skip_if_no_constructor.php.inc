@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstructorRector\Fixture;
+namespace Rector\Tests\NetteCodeQuality\Rector\Class_\MoveInjectToExistingConstructorRector\Fixture;
 
 final class SkipIfNoConstructor
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidToEntityWhereMissingRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,7 +22,7 @@ class SomeEntityWithIntegerId
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidToEntityWhereMissingRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 

@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://laravel.com/docs/8.x/helpers#method-app
  * @see https://github.com/laravel/framework/blob/8.x/src/Illuminate/Foundation/helpers.php
  *
- * @see \Rector\Laravel\Tests\Rector\FuncCall\HelperFuncCallToFacadeClassRector\HelperFuncCallToFacadeClassRectorTest
+ * @see \Rector\Tests\Laravel\Rector\FuncCall\HelperFuncCallToFacadeClassRector\HelperFuncCallToFacadeClassRectorTest
  */
 final class HelperFuncCallToFacadeClassRector extends AbstractRector
 {

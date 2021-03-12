@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * - https://github.com/symfony/symfony/pull/22441/files
  * - https://github.com/symfony/symfony/blob/master/UPGRADE-3.3.md#console
  *
- * @see \Rector\Symfony3\Tests\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector\ConsoleExceptionToErrorEventConstantRectorTest
+ * @see \Rector\Tests\Symfony3\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector\ConsoleExceptionToErrorEventConstantRectorTest
  */
 final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
 {

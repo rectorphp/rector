@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteCodeQuality\Tests\Rector\ClassMethod\MergeTemplateSetFileToTemplateRenderRector;
+namespace Rector\Tests\NetteCodeQuality\Rector\ClassMethod\MergeTemplateSetFileToTemplateRenderRector;
 
 use Iterator;
 use Rector\NetteCodeQuality\Rector\ClassMethod\MergeTemplateSetFileToTemplateRenderRector;

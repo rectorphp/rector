@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony4\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
+namespace Rector\Tests\Symfony4\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
 
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -17,7 +17,7 @@ function stringToArgumentArray2()
 -----
 <?php
 
-namespace Rector\Symfony4\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
+namespace Rector\Tests\Symfony4\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
 
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Console\Output\ConsoleOutput;

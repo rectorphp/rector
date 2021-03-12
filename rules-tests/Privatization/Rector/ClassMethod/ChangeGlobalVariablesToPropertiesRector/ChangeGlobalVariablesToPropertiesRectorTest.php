@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Privatization\Tests\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector;
+namespace Rector\Tests\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector;
 
 use Iterator;
 use Rector\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector;

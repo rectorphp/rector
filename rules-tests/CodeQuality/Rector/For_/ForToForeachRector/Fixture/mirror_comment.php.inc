@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\For_\ForToForeachRector\Fixture;
 
 class MirrorComment
 {
@@ -16,7 +16,7 @@ class MirrorComment
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\For_\ForToForeachRector\Fixture;
 
 class MirrorComment
 {

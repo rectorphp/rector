@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
+namespace Rector\Tests\Php80\Rector\If_\NullsafeOperatorRector\Fixture;
 
 class SoooManyNullChecks
 {
@@ -29,7 +29,7 @@ class SoooManyNullChecks
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\If_\NullsafeOperatorRector\Fixture;
+namespace Rector\Tests\Php80\Rector\If_\NullsafeOperatorRector\Fixture;
 
 class SoooManyNullChecks
 {

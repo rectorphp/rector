@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Property\RemoveTemporaryUuidRelationPropertyRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Property\RemoveTemporaryUuidRelationPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -24,7 +24,7 @@ class Column
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Property\RemoveTemporaryUuidRelationPropertyRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Property\RemoveTemporaryUuidRelationPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 

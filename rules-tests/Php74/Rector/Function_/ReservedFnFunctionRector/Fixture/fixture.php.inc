@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Function_\ReservedFnFunctionRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Function_\ReservedFnFunctionRector\Fixture;
 
 class Fixture
 {
@@ -19,7 +19,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Function_\ReservedFnFunctionRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Function_\ReservedFnFunctionRector\Fixture;
 
 class Fixture
 {

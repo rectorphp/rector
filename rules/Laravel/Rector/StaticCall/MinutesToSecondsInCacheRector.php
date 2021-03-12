@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/laravel/framework/pull/27276
  * @see https://laravel.com/docs/5.8/upgrade#cache-ttl-in-seconds
  *
- * @see \Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\MinutesToSecondsInCacheRectorTest
+ * @see \Rector\Tests\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector\MinutesToSecondsInCacheRectorTest
  */
 final class MinutesToSecondsInCacheRector extends AbstractRector
 {

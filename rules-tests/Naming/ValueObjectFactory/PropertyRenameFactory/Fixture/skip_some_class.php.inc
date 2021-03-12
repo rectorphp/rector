@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\ValueObjectFactory\PropertyRenameFactory\Fixture;
+namespace Rector\Tests\Naming\ValueObjectFactory\PropertyRenameFactory\Fixture;
 
-use Rector\Naming\Tests\ValueObjectFactory\PropertyRenameFactory\Source\EliteManager;
+use Rector\Tests\Naming\ValueObjectFactory\PropertyRenameFactory\Source\EliteManager;
 
 class SkipSomeClass
 {

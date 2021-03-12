@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Assign\CombinedAssignRector\Source;
+namespace Rector\Tests\CodeQuality\Rector\Assign\CombinedAssignRector\Source;
 
 class AbstractSomeClassSoParentCanBeUsed
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\StaticCall\GetMockRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\StaticCall\GetMockRector\Fixture;
 
 final class MyGetMockTest extends \PHPUnit\Framework\TestCase
 {
@@ -14,7 +14,7 @@ final class MyGetMockTest extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\StaticCall\GetMockRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\StaticCall\GetMockRector\Fixture;
 
 final class MyGetMockTest extends \PHPUnit\Framework\TestCase
 {

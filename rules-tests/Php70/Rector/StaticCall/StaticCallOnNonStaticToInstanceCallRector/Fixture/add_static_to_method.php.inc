@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\Fixture;
+namespace Rector\Tests\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\Fixture;
 
 class AddStaticToMethodTest
 {
@@ -38,7 +38,7 @@ class ClassWrapToPreventCodeRun
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\Fixture;
+namespace Rector\Tests\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\Fixture;
 
 class AddStaticToMethodTest
 {

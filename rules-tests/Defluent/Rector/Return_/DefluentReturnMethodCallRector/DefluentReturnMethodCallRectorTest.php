@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Defluent\Tests\Rector\Return_\DefluentReturnMethodCallRector;
+namespace Rector\Tests\Defluent\Rector\Return_\DefluentReturnMethodCallRector;
 
 use Iterator;
 use Rector\Defluent\Rector\Return_\DefluentReturnMethodCallRector;

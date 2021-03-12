@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://wiki.php.net/rfc/shorter_attribute_syntax
  * @see https://wiki.php.net/rfc/shorter_attribute_syntax_change - FINAL #[...] syntax !
  *
- * @see \Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\AnnotationToAttributeRectorTest
+ * @see \Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\AnnotationToAttributeRectorTest
  */
 final class AnnotationToAttributeRector extends AbstractRector
 {

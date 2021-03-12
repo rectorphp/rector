@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
+namespace Rector\Tests\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
+namespace Rector\Tests\Php71\Rector\Assign\AssignArrayToStringRector\Fixture;
 
 class Fixture2
 {
@@ -20,7 +20,7 @@ class Fixture2
 -----
 <?php
 
-namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
+namespace Rector\Tests\Php71\Rector\Assign\AssignArrayToStringRector\Fixture;
 
 class Fixture2
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Scalar\LNumber;
@@ -22,7 +22,7 @@ final class ImproveArrayType
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Scalar\LNumber;

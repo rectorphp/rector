@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
+namespace Rector\Tests\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
 class IfConditionMethodCallWithArgStringHasNumericInFirstChar
 {
@@ -22,7 +22,7 @@ class IfConditionMethodCallWithArgStringHasNumericInFirstChar
 -----
 <?php
 
-namespace Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
+namespace Rector\Tests\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
 class IfConditionMethodCallWithArgStringHasNumericInFirstChar
 {

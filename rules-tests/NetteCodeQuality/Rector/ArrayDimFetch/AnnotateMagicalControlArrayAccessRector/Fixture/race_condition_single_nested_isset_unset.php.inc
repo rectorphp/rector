@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector\Fixture;
+namespace Rector\Tests\NetteCodeQuality\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector\Fixture;
 
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;
@@ -28,7 +28,7 @@ final class RaceConditionPresenter extends Presenter
 -----
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector\Fixture;
+namespace Rector\Tests\NetteCodeQuality\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector\Fixture;
 
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;

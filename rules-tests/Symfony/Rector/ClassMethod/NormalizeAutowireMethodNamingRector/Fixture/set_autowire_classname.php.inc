@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\NormalizeAutowireMethodNamingRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\ClassMethod\NormalizeAutowireMethodNamingRector\Fixture;
 
 final class SetAutowireClassname
 {
@@ -14,7 +14,7 @@ final class SetAutowireClassname
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\NormalizeAutowireMethodNamingRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\ClassMethod\NormalizeAutowireMethodNamingRector\Fixture;
 
 final class SetAutowireClassname
 {

@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony2\Tests\Rector\MethodCall\RedirectToRouteRector\RedirectToRouteRectorTest
+ * @see \Rector\Tests\Symfony2\Rector\MethodCall\RedirectToRouteRector\RedirectToRouteRectorTest
  */
 final class RedirectToRouteRector extends AbstractRector
 {

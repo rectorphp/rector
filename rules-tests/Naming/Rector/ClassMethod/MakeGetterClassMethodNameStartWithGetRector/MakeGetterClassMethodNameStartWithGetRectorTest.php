@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector;
+namespace Rector\Tests\Naming\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector;
 
 use Iterator;
 use Rector\Naming\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector;

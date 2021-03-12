@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Tests;
+namespace Rector\Tests\TypeDeclaration;
 
 use Iterator;
 use PHPStan\Type\ArrayType;

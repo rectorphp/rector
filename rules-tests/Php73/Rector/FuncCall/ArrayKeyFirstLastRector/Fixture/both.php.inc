@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\ArrayKeyFirstLastRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\ArrayKeyFirstLastRector\Fixture;
 
 class Both
 {
@@ -21,7 +21,7 @@ class Both
 -----
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\ArrayKeyFirstLastRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\ArrayKeyFirstLastRector\Fixture;
 
 class Both
 {

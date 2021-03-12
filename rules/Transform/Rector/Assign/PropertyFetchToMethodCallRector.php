@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\PropertyFetchToMethodCallRectorTest
+ * @see \Rector\Tests\Transform\Rector\Assign\PropertyFetchToMethodCallRector\PropertyFetchToMethodCallRectorTest
  */
 final class PropertyFetchToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {

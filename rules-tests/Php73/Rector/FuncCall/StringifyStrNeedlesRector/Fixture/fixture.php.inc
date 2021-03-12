@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\StringifyStrNeedlesRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\StringifyStrNeedlesRector\Fixture;
 
 function stringifyStrNeedle()
 {
@@ -18,7 +18,7 @@ function stringifyStrNeedle()
 -----
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\StringifyStrNeedlesRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\StringifyStrNeedlesRector\Fixture;
 
 function stringifyStrNeedle()
 {

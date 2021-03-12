@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeFinalClassMethodRector;
+namespace Rector\Tests\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector;
 
 use Iterator;
 use Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector;

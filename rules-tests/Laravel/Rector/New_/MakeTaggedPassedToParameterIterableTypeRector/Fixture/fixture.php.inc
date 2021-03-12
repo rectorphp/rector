@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Laravel\Tests\Rector\New_\MakeTaggedPassedToParameterIterableTypeRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\New_\MakeTaggedPassedToParameterIterableTypeRector\Fixture;
 
 class AnotherClass
 {
@@ -27,7 +27,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Laravel\Tests\Rector\New_\MakeTaggedPassedToParameterIterableTypeRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\New_\MakeTaggedPassedToParameterIterableTypeRector\Fixture;
 
 class AnotherClass
 {

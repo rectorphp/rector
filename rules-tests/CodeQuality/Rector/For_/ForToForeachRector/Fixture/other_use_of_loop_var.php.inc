@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\For_\ForToForeachRector\Fixture;
 
 class OtherUseOfLoopVar
 {
@@ -18,7 +18,7 @@ class OtherUseOfLoopVar
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\For_\ForToForeachRector\Fixture;
 
 class OtherUseOfLoopVar
 {

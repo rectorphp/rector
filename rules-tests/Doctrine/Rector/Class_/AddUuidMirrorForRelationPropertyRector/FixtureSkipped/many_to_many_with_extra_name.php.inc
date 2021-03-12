@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
@@ -12,9 +12,9 @@ use JMS\Serializer\Annotation as Serializer;
 class ManyToManyWithExtraName
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
+     * @ORM\ManyToOne(targetEntity="Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
      * @ORM\JoinColumn(name="role_id", referencedColumnName="id", nullable=false)
-     * @Serializer\Type("Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
+     * @Serializer\Type("Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
      */
     private $itemRole;
 }
@@ -39,7 +39,7 @@ class BarEntity
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
@@ -51,14 +51,14 @@ use JMS\Serializer\Annotation as Serializer;
 class ManyToManyWithExtraName
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
+     * @ORM\ManyToOne(targetEntity="Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
      * @ORM\JoinColumn(name="role_id", referencedColumnName="id", nullable=false)
-     * @Serializer\Type("Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
+     * @Serializer\Type("Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
      */
     private $itemRole;
     /**
-     * @ORM\ManyToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
-     * @Serializer\Type("Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
+     * @ORM\ManyToOne(targetEntity="Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
+     * @Serializer\Type("Rector\Tests\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
      * @ORM\JoinColumn(referencedColumnName="uuid", nullable=true)
      */
     private $itemRoleUuid;

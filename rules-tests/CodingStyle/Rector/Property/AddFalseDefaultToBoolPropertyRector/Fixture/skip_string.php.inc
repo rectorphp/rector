@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Property\AddFalseDefaultToBoolPropertyRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector\Fixture;
 
 class SkipString
 {

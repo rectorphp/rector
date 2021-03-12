@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadDocBlock\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
+namespace Rector\Tests\DeadDocBlock\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
 
 class OtherCommentBeforeVar
 {
@@ -16,7 +16,7 @@ class OtherCommentBeforeVar
 -----
 <?php
 
-namespace Rector\DeadDocBlock\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
+namespace Rector\Tests\DeadDocBlock\Rector\Node\RemoveNonExistingVarAnnotationRector\Fixture;
 
 class OtherCommentBeforeVar
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php73\Tests\Rector\String_\SensitiveHereNowDocRector;
+namespace Rector\Tests\Php73\Rector\String_\SensitiveHereNowDocRector;
 
 use Iterator;
 use Rector\Php73\Rector\String_\SensitiveHereNowDocRector;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Tests\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
+namespace Rector\Tests\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
 
 use Iterator;
 use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;

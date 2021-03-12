@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyConditionsRector;
+namespace Rector\Tests\CodeQuality\Rector\Identical\SimplifyConditionsRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector;

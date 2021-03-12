@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyStrposLowerRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector\Fixture;
 
 final class Strpos
 {
@@ -22,7 +22,7 @@ final class Strpos
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyStrposLowerRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector\Fixture;
 
 final class Strpos
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector;
+namespace Rector\Tests\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

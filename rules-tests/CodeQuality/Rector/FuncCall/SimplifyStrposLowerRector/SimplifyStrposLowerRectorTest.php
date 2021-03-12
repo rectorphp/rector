@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyStrposLowerRector;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector;

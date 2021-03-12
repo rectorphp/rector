@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\DependencyInjection\Rector\Class_\ActionInjectionToConstructorInjectionRector\Fixture;
 
-use Rector\DependencyInjection\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\ProductRepository;
+use Rector\Tests\DependencyInjection\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\ProductRepository;
 
 final class SomeController
 {
@@ -16,13 +16,13 @@ final class SomeController
 -----
 <?php
 
-namespace Rector\DependencyInjection\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\DependencyInjection\Rector\Class_\ActionInjectionToConstructorInjectionRector\Fixture;
 
-use Rector\DependencyInjection\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\ProductRepository;
+use Rector\Tests\DependencyInjection\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\ProductRepository;
 
 final class SomeController
 {
-    public function __construct(private \Rector\DependencyInjection\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\ProductRepository $productRepository)
+    public function __construct(private \Rector\Tests\DependencyInjection\Rector\Class_\ActionInjectionToConstructorInjectionRector\Source\ProductRepository $productRepository)
     {
     }
     public function default()

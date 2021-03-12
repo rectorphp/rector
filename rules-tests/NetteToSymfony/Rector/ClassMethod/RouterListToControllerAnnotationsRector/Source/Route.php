@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Source;
+namespace Rector\Tests\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Source;
 
 final class Route
 {

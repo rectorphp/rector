@@ -11,7 +11,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DeadCode\Tests\Rector\BooleanAnd\RemoveAndTrueRector\RemoveAndTrueRectorTest
+ * @see \Rector\Tests\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector\RemoveAndTrueRectorTest
  */
 final class RemoveAndTrueRector extends AbstractRector
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Source\TranslatorProvider;
+use Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Source\TranslatorProvider;
 
 final class ReUseTranslator extends TranslatorProvider
 {
@@ -16,9 +16,9 @@ final class ReUseTranslator extends TranslatorProvider
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Source\TranslatorProvider;
+use Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Source\TranslatorProvider;
 
 final class ReUseTranslator extends TranslatorProvider
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRector;
+namespace Rector\Tests\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector;
 
 use Iterator;
 use Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector;

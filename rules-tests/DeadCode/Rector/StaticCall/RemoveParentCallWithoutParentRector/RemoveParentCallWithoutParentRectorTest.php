@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\StaticCall\RemoveParentCallWithoutParentRector;
+namespace Rector\Tests\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;

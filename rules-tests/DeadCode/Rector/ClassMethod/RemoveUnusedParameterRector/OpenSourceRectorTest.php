@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

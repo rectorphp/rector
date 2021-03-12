@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Defluent\Tests\NodeFactory\FluentChainMethodCallRootExtractor\Fixture;
+namespace Rector\Tests\Defluent\NodeFactory\FluentChainMethodCallRootExtractor\Fixture;
 
-use Rector\Defluent\Tests\NodeFactory\FluentChainMethodCallRootExtractor\Source\AnotherTypeFactory;
+use Rector\Tests\Defluent\NodeFactory\FluentChainMethodCallRootExtractor\Source\AnotherTypeFactory;
 
 final class SkipIsFactoryVariableDoubleMethodCall
 {

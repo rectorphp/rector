@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/symfony/symfony/pull/35858
  *
- * @see \Rector\Renaming\Tests\Rector\String_\RenameStringRector\RenameStringRectorTest
+ * @see \Rector\Tests\Renaming\Rector\String_\RenameStringRector\RenameStringRectorTest
  */
 final class RenameStringRector extends AbstractRector implements ConfigurableRectorInterface
 {

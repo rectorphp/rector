@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php74\Tests\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector;
+namespace Rector\Tests\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector;
 
 use Iterator;
 use Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector\Fixture;
 
 class GetMockOnly extends \PHPUnit\Framework\TestCase
 {
@@ -15,7 +15,7 @@ class GetMockOnly extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector\Fixture;
 
 class GetMockOnly extends \PHPUnit\Framework\TestCase
 {

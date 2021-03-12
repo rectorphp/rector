@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Tests\Rector\Assign\ListSwapArrayOrderRector;
+namespace Rector\Tests\Php70\Rector\Assign\ListSwapArrayOrderRector;
 
 use Iterator;
 use Rector\Php70\Rector\Assign\ListSwapArrayOrderRector;

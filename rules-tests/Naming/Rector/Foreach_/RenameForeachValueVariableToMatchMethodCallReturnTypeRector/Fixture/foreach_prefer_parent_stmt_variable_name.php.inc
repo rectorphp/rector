@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Fixture;
 
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Trait_;
@@ -35,7 +35,7 @@ class ForeachPreferParentStmtVariableName
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Fixture;
 
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Trait_;

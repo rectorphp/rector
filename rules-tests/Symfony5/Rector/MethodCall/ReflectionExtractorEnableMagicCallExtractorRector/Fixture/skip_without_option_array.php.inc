@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony5\Tests\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector\Fixture;
+namespace Rector\Tests\Symfony5\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector\Fixture;
 
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 

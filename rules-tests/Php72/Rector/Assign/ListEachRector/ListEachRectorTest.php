@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php72\Tests\Rector\Assign\ListEachRector;
+namespace Rector\Tests\Php72\Rector\Assign\ListEachRector;
 
 use Iterator;
 use Rector\Php72\Rector\Assign\ListEachRector;

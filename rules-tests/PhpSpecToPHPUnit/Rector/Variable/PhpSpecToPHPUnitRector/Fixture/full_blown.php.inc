@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
+namespace spec\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use Ecommerce\Cart\Cart;
 use Ecommerce\Cart\Exception\NotFoundException;
@@ -175,7 +175,7 @@ class CartSpec extends ObjectBehavior
 -----
 <?php
 
-namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
+namespace Tests\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use Ecommerce\Cart\Cart;
 use Ecommerce\Cart\Exception\NotFoundException;
@@ -190,12 +190,12 @@ use PhpSpec\ObjectBehavior;
 
 class CartTest extends \PHPUnit\Framework\TestCase
 {
-    private \Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\Cart $cart;
+    private \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\Cart $cart;
     protected function setUp()
     {
         DefaultCurrency::setProvider(new DummyDefaultCurrencyProvider());
 
-        $this->cart = new \Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\Cart(Uuid::uuid1());
+        $this->cart = new \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\Cart(Uuid::uuid1());
     }
 
     public function testInitializable()

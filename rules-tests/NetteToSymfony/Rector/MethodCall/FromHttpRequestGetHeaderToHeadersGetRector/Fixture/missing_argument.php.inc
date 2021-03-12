@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Fixture;
 
 use Nette\Http\Request;
-use Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Source\IrrelevantRequest;
+use Rector\Tests\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Source\IrrelevantRequest;
 
 final class SomeMissingArgumentController
 {
@@ -27,10 +27,10 @@ final class SomeMissingArgumentController
 -----
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Fixture;
 
 use Nette\Http\Request;
-use Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Source\IrrelevantRequest;
+use Rector\Tests\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Source\IrrelevantRequest;
 
 final class SomeMissingArgumentController
 {

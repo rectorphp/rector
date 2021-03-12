@@ -19,7 +19,7 @@ use Webmozart\Assert\Assert;
  * - https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
  * - https://github.com/silverstripe/silverstripe-upgrader/issues/71#issue-320145944
  *
- * @see \Rector\Transform\Tests\Rector\Class_\ParentClassToTraitsRector\ParentClassToTraitsRectorTest
+ * @see \Rector\Tests\Transform\Rector\Class_\ParentClassToTraitsRector\ParentClassToTraitsRectorTest
  */
 final class ParentClassToTraitsRector extends AbstractRector implements ConfigurableRectorInterface
 {

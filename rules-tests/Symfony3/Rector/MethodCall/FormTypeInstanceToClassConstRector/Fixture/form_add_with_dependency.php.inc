@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormBuilder;
@@ -30,7 +30,7 @@ class SomeTypeWithCtor
 -----
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormBuilder;
@@ -39,7 +39,7 @@ class SomeAnotherControllerWithArgs extends Controller
 {
     public function action(FormBuilder $builder)
     {
-        $builder->add('someText', \Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture\SomeTypeWithCtor::class, ['number' => 1]);
+        $builder->add('someText', \Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture\SomeTypeWithCtor::class, ['number' => 1]);
     }
 }
 

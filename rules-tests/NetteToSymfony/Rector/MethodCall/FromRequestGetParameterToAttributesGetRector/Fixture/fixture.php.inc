@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector\Fixture;
 
 use Nette\Application\Request;
 
@@ -21,7 +21,7 @@ final class SomeController
 -----
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector\Fixture;
 
 use Nette\Application\Request;
 

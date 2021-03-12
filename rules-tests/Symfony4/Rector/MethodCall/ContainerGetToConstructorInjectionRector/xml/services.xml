@@ -8,15 +8,15 @@
         <service id="some_service" alias="stdClass"></service>
 
         <!-- ->register(id, class) -->
-        <service id="translator.data_collector" class="Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslator"></service>
+        <service id="translator.data_collector" class="Rector\Tests\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslator"></service>
 
         <!-- ->setAlias(alias, id) -->
         <service id="translator" alias="translator.data_collector"></service>
 
         <!-- ->setAlias(alias, id) -->
-        <service id="Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslatorInterface" alias="translator.data_collector"></service>
+        <service id="Rector\Tests\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslatorInterface" alias="translator.data_collector"></service>
 
         <!-- ->register(id, class) -->
-        <service id="entity.manager" class="Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeEntityManager"></service>
+        <service id="entity.manager" class="Rector\Tests\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeEntityManager"></service>
     </services>
 </container>

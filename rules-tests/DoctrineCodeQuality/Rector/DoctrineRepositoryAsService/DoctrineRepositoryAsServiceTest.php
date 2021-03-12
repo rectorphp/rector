@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService;
+namespace Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

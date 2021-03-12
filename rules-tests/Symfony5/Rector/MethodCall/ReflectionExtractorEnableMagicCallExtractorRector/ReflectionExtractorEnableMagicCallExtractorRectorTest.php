@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony5\Tests\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector;
+namespace Rector\Tests\Symfony5\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector;
 
 use Iterator;
 use Rector\Symfony5\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector;

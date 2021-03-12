@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php73\Tests\Rector\FuncCall\SetcookieRector;
+namespace Rector\Tests\Php73\Rector\FuncCall\SetcookieRector;
 
 use Iterator;
 use Rector\Php73\Rector\FuncCall\SetCookieRector;

@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Covers https://twig.symfony.com/doc/1.x/deprecated.html#function
  *
- * @see \Rector\Symfony\Tests\Rector\Return_\SimpleFunctionAndFilterRector\SimpleFunctionAndFilterRectorTest
+ * @see \Rector\Tests\Symfony\Rector\Return_\SimpleFunctionAndFilterRector\SimpleFunctionAndFilterRectorTest
  */
 final class SimpleFunctionAndFilterRector extends AbstractRector
 {

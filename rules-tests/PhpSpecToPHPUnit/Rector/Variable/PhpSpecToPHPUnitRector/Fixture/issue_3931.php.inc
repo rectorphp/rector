@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
+namespace spec\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use JsonApiBundle\Paging\PageLinksGenerator;
 use JsonApiBundle\Paging\Paginator;
@@ -52,7 +52,7 @@ class PageLinksGeneratorSpec extends ObjectBehavior
 -----
 <?php
 
-namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
+namespace Tests\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use JsonApiBundle\Paging\PageLinksGenerator;
 use JsonApiBundle\Paging\Paginator;
@@ -66,7 +66,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class PageLinksGeneratorTest extends \PHPUnit\Framework\TestCase
 {
-    private \Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\PageLinksGenerator $pageLinksGenerator;
+    private \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\PageLinksGenerator $pageLinksGenerator;
     private \PHPUnit\Framework\MockObject\MockObject|\Router $router;
     public function testInitializable()
     {
@@ -76,7 +76,7 @@ class PageLinksGeneratorTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->router = $this->createMock(Router::class);
-        $this->pageLinksGenerator = new \Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\PageLinksGenerator($this->router);
+        $this->pageLinksGenerator = new \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\PageLinksGenerator($this->router);
     }
 
     public function testReturnOnlySelfLinkWhenNoResults()

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector\Fixture;
 
-use Rector\Doctrine\Tests\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector\Source\Building;
+use Rector\Tests\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector\Source\Building;
 
 class SomeClass
 {
@@ -19,9 +19,9 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector\Fixture;
 
-use Rector\Doctrine\Tests\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector\Source\Building;
+use Rector\Tests\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector\Source\Building;
 
 class SomeClass
 {

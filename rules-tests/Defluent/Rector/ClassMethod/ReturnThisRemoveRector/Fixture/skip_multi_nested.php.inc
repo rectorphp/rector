@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Defluent\Tests\Rector\ClassMethod\ReturnThisRemoveRector\Fixture;
+namespace Rector\Tests\Defluent\Rector\ClassMethod\ReturnThisRemoveRector\Fixture;
 
 class SkipMultiNested
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony5\Tests\Rector\MethodCall\FormBuilderSetDataMapperRector\Fixture;
+namespace Rector\Tests\Symfony5\Rector\MethodCall\FormBuilderSetDataMapperRector\Fixture;
 
 use Symfony\Component\Form\FormConfigBuilderInterface;
 

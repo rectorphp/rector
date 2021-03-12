@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\ClassMethod\ActionSuffixRemoverRector\ActionSuffixRemoverRectorTest
+ * @see \Rector\Tests\Symfony\Rector\ClassMethod\ActionSuffixRemoverRector\ActionSuffixRemoverRectorTest
  */
 final class ActionSuffixRemoverRector extends AbstractRector
 {

@@ -42,7 +42,6 @@ final class PSR4NamespaceMatcher implements PSR4AutoloadNamespaceMatcherInterfac
 
         foreach ($psr4Autoloads as $namespace => $path) {
             // remove extra slash
-            /** @var string[] $paths */
             $paths = is_array($path) ? $path : [$path];
 
             foreach ($paths as $singlePath) {

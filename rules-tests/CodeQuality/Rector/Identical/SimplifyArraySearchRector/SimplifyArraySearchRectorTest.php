@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyArraySearchRector;
+namespace Rector\Tests\CodeQuality\Rector\Identical\SimplifyArraySearchRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Identical\SimplifyArraySearchRector;

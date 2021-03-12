@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
 use Rector\Testing\Contract\RunnableInterface;
 
@@ -21,7 +21,7 @@ final class ArrayListBased implements RunnableInterface
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector\Fixture;
 
 use Rector\Testing\Contract\RunnableInterface;
 

@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Php71\Tests\Rector\BooleanOr\IsIterableRector\IsIterableRectorTest
+ * @see \Rector\Tests\Php71\Rector\BooleanOr\IsIterableRector\IsIterableRectorTest
  */
 final class IsIterableRector extends AbstractRector
 {

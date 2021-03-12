@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\NormalizeAutowireMethodNamingRector;
+namespace Rector\Tests\Symfony\Rector\ClassMethod\NormalizeAutowireMethodNamingRector;
 
 use Iterator;
 use Rector\Symfony\Rector\ClassMethod\NormalizeAutowireMethodNamingRector;

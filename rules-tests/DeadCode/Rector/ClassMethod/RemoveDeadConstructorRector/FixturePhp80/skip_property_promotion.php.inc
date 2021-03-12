@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDeadConstructorRector\FixturePhp80;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector\FixturePhp80;
 
 class SkipPropertyPromotion
 {

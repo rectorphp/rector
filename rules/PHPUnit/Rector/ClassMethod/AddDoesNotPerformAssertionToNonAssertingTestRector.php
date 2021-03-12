@@ -23,7 +23,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  * @see https://phpunit.readthedocs.io/en/7.3/annotations.html#doesnotperformassertions
  * @see https://github.com/sebastianbergmann/phpunit/issues/2484
  *
- * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector\AddDoesNotPerformAssertionToNonAssertingTestRectorTest
+ * @see \Rector\Tests\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector\AddDoesNotPerformAssertionToNonAssertingTestRectorTest
  */
 final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractRector
 {

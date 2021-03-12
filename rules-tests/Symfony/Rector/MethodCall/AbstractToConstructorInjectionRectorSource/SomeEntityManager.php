@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource;
+namespace Rector\Tests\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRectorSource;
 
 final class SomeEntityManager
 {

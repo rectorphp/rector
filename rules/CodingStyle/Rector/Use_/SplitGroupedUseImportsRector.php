@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
  *
- * @see \Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector\SplitGroupedUseImportsRectorTest
+ * @see \Rector\Tests\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector\SplitGroupedUseImportsRectorTest
  */
 final class SplitGroupedUseImportsRector extends AbstractRector
 {

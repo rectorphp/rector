@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Switch_\SingularSwitchToIfRector;
+namespace Rector\Tests\CodeQuality\Rector\Switch_\SingularSwitchToIfRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector;

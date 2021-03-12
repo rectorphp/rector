@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector;
+namespace Rector\Tests\Nette\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector;
 
 use Iterator;
 use Rector\Nette\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector;

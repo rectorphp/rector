@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\New_\NewStaticToNewSelfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\New_\NewStaticToNewSelfRector\Fixture;
 
 final class Fixture
 {
@@ -14,7 +14,7 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\New_\NewStaticToNewSelfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\New_\NewStaticToNewSelfRector\Fixture;
 
 final class Fixture
 {

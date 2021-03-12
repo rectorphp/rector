@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector;

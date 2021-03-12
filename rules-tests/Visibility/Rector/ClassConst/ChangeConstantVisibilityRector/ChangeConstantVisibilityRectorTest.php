@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRector;
+namespace Rector\Tests\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

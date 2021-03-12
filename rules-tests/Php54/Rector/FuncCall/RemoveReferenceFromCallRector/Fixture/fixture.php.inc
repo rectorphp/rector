@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php54\Tests\Rector\FuncCall\RemoveReferenceFromCallRector\Fixture;
+namespace Rector\Tests\Php54\Rector\FuncCall\RemoveReferenceFromCallRector\Fixture;
 
 function removeReference($one)
 {
@@ -11,7 +11,7 @@ function removeReference($one)
 -----
 <?php
 
-namespace Rector\Php54\Tests\Rector\FuncCall\RemoveReferenceFromCallRector\Fixture;
+namespace Rector\Tests\Php54\Rector\FuncCall\RemoveReferenceFromCallRector\Fixture;
 
 function removeReference($one)
 {

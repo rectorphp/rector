@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\ClassMethod\FinalPrivateToPrivateVisibilityRector\Fixture;
+namespace Rector\Tests\Php80\Rector\ClassMethod\FinalPrivateToPrivateVisibilityRector\Fixture;
 
 class FinalPrivate
 {
@@ -14,7 +14,7 @@ class FinalPrivate
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\ClassMethod\FinalPrivateToPrivateVisibilityRector\Fixture;
+namespace Rector\Tests\Php80\Rector\ClassMethod\FinalPrivateToPrivateVisibilityRector\Fixture;
 
 class FinalPrivate
 {

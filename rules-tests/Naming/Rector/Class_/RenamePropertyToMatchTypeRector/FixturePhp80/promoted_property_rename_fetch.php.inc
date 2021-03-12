@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\FixturePhp80;
+namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\FixturePhp80;
 
-use Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\EliteManager;
+use Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\EliteManager;
 
 final class PromotedPropertyRenameFetch
 {
@@ -22,9 +22,9 @@ final class PromotedPropertyRenameFetch
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\FixturePhp80;
+namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\FixturePhp80;
 
-use Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\EliteManager;
+use Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\EliteManager;
 
 final class PromotedPropertyRenameFetch
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector;
+namespace Rector\Tests\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector;
 
 use Iterator;
 use Rector\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector;

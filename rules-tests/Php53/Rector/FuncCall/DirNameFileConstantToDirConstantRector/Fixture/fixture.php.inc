@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php53\Tests\Rector\FuncCall\DirNameFileConstantToDirConstantRector\Fixture;
+namespace Rector\Tests\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector\Fixture;
 
 class Fixture
 {
@@ -14,7 +14,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php53\Tests\Rector\FuncCall\DirNameFileConstantToDirConstantRector\Fixture;
+namespace Rector\Tests\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector\Fixture;
 
 class Fixture
 {

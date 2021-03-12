@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Privatization\Tests\Rector\Class_\FinalizeClassesWithoutChildrenRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 use Snowflake\Snowflake;

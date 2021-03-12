@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Foreach_\SimplifyForeachToArrayFilterRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Foreach_\SimplifyForeachToArrayFilterRector\Fixture;
 
 $directories = [];
 $possibleDirectories = [];
@@ -14,7 +14,7 @@ foreach ($possibleDirectories as $possibleDirectory) {
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Foreach_\SimplifyForeachToArrayFilterRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Foreach_\SimplifyForeachToArrayFilterRector\Fixture;
 
 $directories = [];
 $possibleDirectories = [];

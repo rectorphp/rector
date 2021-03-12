@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Doctrine\Tests\Rector\Property\AddUuidAnnotationsToIdPropertyRector;
+namespace Rector\Tests\Doctrine\Rector\Property\AddUuidAnnotationsToIdPropertyRector;
 
 use Iterator;
 use Rector\Doctrine\Rector\Property\AddUuidAnnotationsToIdPropertyRector;

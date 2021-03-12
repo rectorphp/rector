@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPOffice\Tests\Rector\StaticCall\ChangeSearchLocationToRegisterReaderRector;
+namespace Rector\Tests\PHPOffice\Rector\StaticCall\ChangeSearchLocationToRegisterReaderRector;
 
 use Iterator;
 use Rector\PHPOffice\Rector\StaticCall\ChangeSearchLocationToRegisterReaderRector;

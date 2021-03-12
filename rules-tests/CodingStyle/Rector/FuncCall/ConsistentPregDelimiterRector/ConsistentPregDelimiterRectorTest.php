@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentPregDelimiterRector;
+namespace Rector\Tests\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;

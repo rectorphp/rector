@@ -2,7 +2,7 @@
 
 use Nette\Utils\Html;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
-use Rector\Renaming\Tests\Rector\StaticCall\RenameStaticMethodRector\Source\FormMacros;
+use Rector\Tests\Renaming\Rector\StaticCall\RenameStaticMethodRector\Source\FormMacros;
 use Rector\Renaming\ValueObject\RenameStaticMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

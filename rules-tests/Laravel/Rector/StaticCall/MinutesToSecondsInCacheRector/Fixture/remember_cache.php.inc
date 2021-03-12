@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector\Fixture;
 
 use Illuminate\Contracts\Cache\Repository;
 
@@ -16,7 +16,7 @@ final class RememberCache
 -----
 <?php
 
-namespace Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector\Fixture;
 
 use Illuminate\Contracts\Cache\Repository;
 

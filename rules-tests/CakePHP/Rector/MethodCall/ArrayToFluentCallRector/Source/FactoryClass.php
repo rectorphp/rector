@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source;
+namespace Rector\Tests\CakePHP\Rector\MethodCall\ArrayToFluentCallRector\Source;
 
 class FactoryClass
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\FixtureAutoImported;
+namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixtureAutoImported;
 
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,7 +18,7 @@ class SymfonyRoute
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\AnnotationToAttributeRector\FixtureAutoImported;
+namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixtureAutoImported;
 
 use Symfony\Component\Routing\Annotation\Route;
 

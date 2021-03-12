@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony3\Tests\Rector\ClassMethod\GetRequestRector;
+namespace Rector\Tests\Symfony3\Rector\ClassMethod\GetRequestRector;
 
 use Iterator;
 use Rector\Symfony3\Rector\ClassMethod\GetRequestRector;

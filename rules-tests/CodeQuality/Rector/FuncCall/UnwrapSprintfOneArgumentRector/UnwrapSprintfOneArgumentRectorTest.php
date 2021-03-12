@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\UnwrapSprintfOneArgumentRector;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector;

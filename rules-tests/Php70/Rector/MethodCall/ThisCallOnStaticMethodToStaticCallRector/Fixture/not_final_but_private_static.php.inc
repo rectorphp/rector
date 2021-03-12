@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
+namespace Rector\Tests\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
 
 class NotFinalButPrivateStatic
 {
@@ -19,7 +19,7 @@ class NotFinalButPrivateStatic
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
+namespace Rector\Tests\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
 
 class NotFinalButPrivateStatic
 {

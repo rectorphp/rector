@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector;
 
 use Iterator;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector;

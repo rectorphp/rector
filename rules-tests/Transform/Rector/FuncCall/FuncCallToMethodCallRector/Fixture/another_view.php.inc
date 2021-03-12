@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
 
 use function view;
 
@@ -17,7 +17,7 @@ class AnotherView
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
 
 use function view;
 

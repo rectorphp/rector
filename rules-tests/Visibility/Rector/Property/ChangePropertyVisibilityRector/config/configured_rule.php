@@ -2,7 +2,7 @@
 
 use Rector\Core\ValueObject\Visibility;
 use Rector\Visibility\Rector\Property\ChangePropertyVisibilityRector;
-use Rector\Visibility\Tests\Rector\Property\ChangePropertyVisibilityRector\Source\ParentObject;
+use Rector\Tests\Visibility\Rector\Property\ChangePropertyVisibilityRector\Source\ParentObject;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'toBePrivateProperty' => Visibility::PRIVATE,
                     'toBePublicStaticProperty' => Visibility::PUBLIC,
                 ],
-                'Rector\Visibility\Tests\Rector\Property\ChangePropertyVisibilityRector\Fixture\Fixture3' => [
+                'Rector\Tests\Visibility\Rector\Property\ChangePropertyVisibilityRector\Fixture\Fixture3' => [
                     'toBePublicStaticProperty' => Visibility::PUBLIC,
                 ],
             ],

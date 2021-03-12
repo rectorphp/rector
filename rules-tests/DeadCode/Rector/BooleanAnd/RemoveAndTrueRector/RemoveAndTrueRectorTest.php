@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\BooleanAnd\RemoveAndTrueRector;
+namespace Rector\Tests\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector;

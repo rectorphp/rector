@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Removing\Tests\Rector\Class_\RemoveTraitRector;
+namespace Rector\Tests\Removing\Rector\Class_\RemoveTraitRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Ternary\UnnecessaryTernaryExpressionRector;
+namespace Rector\Tests\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;

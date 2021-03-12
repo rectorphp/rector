@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Identical\GetClassToInstanceOfRector;
+namespace Rector\Tests\CodeQuality\Rector\Identical\GetClassToInstanceOfRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector;

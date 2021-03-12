@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Source\AliasedStaticCall as CallOnMe;
+use Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Source\AliasedStaticCall as CallOnMe;
 
 class HandleStaticCall
 {
@@ -16,9 +16,9 @@ class HandleStaticCall
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Source\AliasedStaticCall;
+use Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Source\AliasedStaticCall;
 
 class HandleStaticCall
 {

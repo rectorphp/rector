@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderFirstLevelClassStatementsRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderFirstLevelClassStatementsRector\Fixture;
 
-use Rector\Order\Tests\Rector\Class_\OrderFirstLevelClassStatementsRector\Source\TraitName;
-use Rector\Order\Tests\Rector\Class_\OrderFirstLevelClassStatementsRector\Source\TraitName2;
+use Rector\Tests\Order\Rector\Class_\OrderFirstLevelClassStatementsRector\Source\TraitName;
+use Rector\Tests\Order\Rector\Class_\OrderFirstLevelClassStatementsRector\Source\TraitName2;
 
 final class SomeClass
 {
@@ -20,10 +20,10 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderFirstLevelClassStatementsRector\Fixture;
+namespace Rector\Tests\Order\Rector\Class_\OrderFirstLevelClassStatementsRector\Fixture;
 
-use Rector\Order\Tests\Rector\Class_\OrderFirstLevelClassStatementsRector\Source\TraitName;
-use Rector\Order\Tests\Rector\Class_\OrderFirstLevelClassStatementsRector\Source\TraitName2;
+use Rector\Tests\Order\Rector\Class_\OrderFirstLevelClassStatementsRector\Source\TraitName;
+use Rector\Tests\Order\Rector\Class_\OrderFirstLevelClassStatementsRector\Source\TraitName2;
 
 final class SomeClass
 {

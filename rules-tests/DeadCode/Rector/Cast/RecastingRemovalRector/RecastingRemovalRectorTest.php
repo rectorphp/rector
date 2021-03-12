@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Cast\RecastingRemovalRector;
+namespace Rector\Tests\DeadCode\Rector\Cast\RecastingRemovalRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Expression\DeadCodeRemovingRector\Fixture\ArrayDimFetch;
+namespace Rector\Tests\CodeQuality\Rector\Expression\DeadCodeRemovingRector\Fixture\ArrayDimFetch;
 
 function commentUnwrapKeep()
 {
@@ -12,7 +12,7 @@ function commentUnwrapKeep()
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Expression\DeadCodeRemovingRector\Fixture\ArrayDimFetch;
+namespace Rector\Tests\CodeQuality\Rector\Expression\DeadCodeRemovingRector\Fixture\ArrayDimFetch;
 
 function commentUnwrapKeep()
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
+namespace Rector\Tests\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
@@ -21,7 +21,7 @@ final class MethodCallAndVariableName
 -----
 <?php
 
-namespace Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
+namespace Rector\Tests\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector\Fixture;
 
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\LogicalAnd\LogicalToBooleanRector;
+namespace Rector\Tests\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;

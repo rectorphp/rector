@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\CompleteVarDocTypePropertyRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Source\SomeService;
+use Rector\Tests\TypeDeclaration\Rector\Property\CompleteVarDocTypePropertyRector\Source\SomeService;
 
 class SkipMoreSpecific
 {

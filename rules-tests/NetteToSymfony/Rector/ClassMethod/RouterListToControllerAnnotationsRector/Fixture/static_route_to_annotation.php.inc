@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Fixture;
 
 use Nette\Application\Routers\RouteList;
-use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Source\RouteFactory;
+use Rector\Tests\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Source\RouteFactory;
 
 final class StaticRouterFactory
 {
@@ -29,10 +29,10 @@ final class StaticSomePresenter
 -----
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Fixture;
 
 use Nette\Application\Routers\RouteList;
-use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Source\RouteFactory;
+use Rector\Tests\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector\Source\RouteFactory;
 
 final class StaticRouterFactory
 {

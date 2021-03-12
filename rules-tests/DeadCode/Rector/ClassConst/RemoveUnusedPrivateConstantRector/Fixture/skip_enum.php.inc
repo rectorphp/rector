@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedPrivateConstantRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector\Fixture;
 
-use Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedPrivateConstantRector\Source\AbstractEnum;
+use Rector\Tests\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector\Source\AbstractEnum;
 
 class SkipEnum extends AbstractEnum
 {

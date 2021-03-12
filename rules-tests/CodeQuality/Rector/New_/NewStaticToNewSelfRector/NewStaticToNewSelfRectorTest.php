@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\New_\NewStaticToNewSelfRector;
+namespace Rector\Tests\CodeQuality\Rector\New_\NewStaticToNewSelfRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector;

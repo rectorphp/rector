@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/shopsys/shopsys/pull/524
- * @see \Rector\CodingStyle\Tests\Rector\Assign\PHPStormVarAnnotationRector\PHPStormVarAnnotationRectorTest
+ * @see \Rector\Tests\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector\PHPStormVarAnnotationRectorTest
  */
 final class PHPStormVarAnnotationRector extends AbstractRector
 {

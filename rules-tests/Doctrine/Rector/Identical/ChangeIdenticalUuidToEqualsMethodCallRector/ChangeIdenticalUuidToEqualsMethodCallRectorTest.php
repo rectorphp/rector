@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Doctrine\Tests\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector;
+namespace Rector\Tests\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector;
 
 use Iterator;
 use Rector\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector;

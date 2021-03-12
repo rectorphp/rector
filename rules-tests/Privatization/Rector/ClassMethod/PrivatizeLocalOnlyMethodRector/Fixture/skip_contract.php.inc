@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\Fixture;
 
-use Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\Source\SomeContractWithGo;
+use Rector\Tests\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\Source\SomeContractWithGo;
 
 class SkipContract implements SomeContractWithGo
 {

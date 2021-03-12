@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
 
 final class FixtureRemoveMethodCallOnThis
 {
@@ -18,7 +18,7 @@ final class FixtureRemoveMethodCallOnThis
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector\Fixture;
 
 final class FixtureRemoveMethodCallOnThis
 {

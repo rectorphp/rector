@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\TryCatch\RemoveDeadTryCatchRector;
+namespace Rector\Tests\DeadCode\Rector\TryCatch\RemoveDeadTryCatchRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\TryCatch\RemoveDeadTryCatchRector;

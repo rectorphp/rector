@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\ClassConstFetch\ClassConstFetchToValueRector\Fixture;
+namespace Rector\Tests\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector\Fixture;
 
-use Rector\Transform\Tests\Rector\ClassConstFetch\ClassConstFetchToValueRector\Source\OldClassWithConstants;
+use Rector\Tests\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector\Source\OldClassWithConstants;
 
 class ClassWithExternalConstant
 {
@@ -16,9 +16,9 @@ class ClassWithExternalConstant
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\ClassConstFetch\ClassConstFetchToValueRector\Fixture;
+namespace Rector\Tests\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector\Fixture;
 
-use Rector\Transform\Tests\Rector\ClassConstFetch\ClassConstFetchToValueRector\Source\OldClassWithConstants;
+use Rector\Tests\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector\Source\OldClassWithConstants;
 
 class ClassWithExternalConstant
 {

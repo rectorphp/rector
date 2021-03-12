@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\Nested;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\Nested;
 
 final class ConflictingName
 {

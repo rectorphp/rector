@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Tests;
+namespace Rector\Tests\Php70;
 
 use Iterator;
 use PHPUnit\Framework\TestCase;

@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Transform\Tests\Rector\String_\ToStringToMethodCallRector\ToStringToMethodCallRectorTest
+ * @see \Rector\Tests\Transform\Rector\String_\ToStringToMethodCallRector\ToStringToMethodCallRectorTest
  */
 final class ToStringToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {

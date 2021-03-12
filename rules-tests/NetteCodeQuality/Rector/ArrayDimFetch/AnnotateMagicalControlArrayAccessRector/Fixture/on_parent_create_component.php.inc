@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector\Fixture;
+namespace Rector\Tests\NetteCodeQuality\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector\Fixture;
 
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Presenter;
@@ -25,7 +25,7 @@ abstract class SomeParentPresenter extends Presenter
 -----
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector\Fixture;
+namespace Rector\Tests\NetteCodeQuality\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector\Fixture;
 
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Presenter;

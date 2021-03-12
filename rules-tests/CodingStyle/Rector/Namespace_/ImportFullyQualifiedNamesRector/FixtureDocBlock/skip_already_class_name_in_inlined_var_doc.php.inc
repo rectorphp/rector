@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\FixtureDocBlock;
+namespace Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\FixtureDocBlock;
 
 class SkipAlreadyClassNameInInlinedVarDoc
 {
     public function run($anotherVariable)
     {
-        /** @var \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\SkipAlreadyClassNameInInlinedVarDoc $typedVariable */
+        /** @var \Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\SkipAlreadyClassNameInInlinedVarDoc $typedVariable */
         $typedVariable = $anotherVariable;
     }
 }

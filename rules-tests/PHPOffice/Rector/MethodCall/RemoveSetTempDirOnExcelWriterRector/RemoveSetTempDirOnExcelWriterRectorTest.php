@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPOffice\Tests\Rector\MethodCall\RemoveSetTempDirOnExcelWriterRector;
+namespace Rector\Tests\PHPOffice\Rector\MethodCall\RemoveSetTempDirOnExcelWriterRector;
 
 use Iterator;
 use Rector\PHPOffice\Rector\MethodCall\RemoveSetTempDirOnExcelWriterRector;

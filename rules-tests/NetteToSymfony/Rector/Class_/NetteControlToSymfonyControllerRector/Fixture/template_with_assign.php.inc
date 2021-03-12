@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
 
 use App\Service\BasketManager;
 use Nette\Application\UI\Control;
@@ -36,7 +36,7 @@ class TemplateWithAssign extends Control
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
 
 use App\Service\BasketManager;
 use Nette\Application\UI\Control;

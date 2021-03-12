@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Catch_\ThrowWithPreviousExceptionRector\FixturePhp8;
+namespace Rector\Tests\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector\FixturePhp8;
 
 class NamedArgument
 {
@@ -18,7 +18,7 @@ class NamedArgument
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Catch_\ThrowWithPreviousExceptionRector\FixturePhp8;
+namespace Rector\Tests\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector\FixturePhp8;
 
 class NamedArgument
 {

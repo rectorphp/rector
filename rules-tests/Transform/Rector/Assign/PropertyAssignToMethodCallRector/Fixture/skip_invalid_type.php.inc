@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Assign\PropertyAssignToMethodCallRector\Fixture;
 
 use stdClass;
 

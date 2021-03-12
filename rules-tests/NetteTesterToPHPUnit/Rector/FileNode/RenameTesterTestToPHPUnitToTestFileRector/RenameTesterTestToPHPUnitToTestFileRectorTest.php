@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteTesterToPHPUnit\Tests\Rector\FileNode\RenameTesterTestToPHPUnitToTestFileRector;
+namespace Rector\Tests\NetteTesterToPHPUnit\Rector\FileNode\RenameTesterTestToPHPUnitToTestFileRector;
 
 use Iterator;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;

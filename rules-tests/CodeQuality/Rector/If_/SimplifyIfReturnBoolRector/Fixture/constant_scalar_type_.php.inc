@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
 
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\NullType;
@@ -25,7 +25,7 @@ class ConstantScalarType_
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
 
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\NullType;

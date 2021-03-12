@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector;
+namespace Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Concat\JoinStringConcatRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Concat\JoinStringConcatRector\Fixture;
 
 class SkipNewline
 {

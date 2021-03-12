@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector;
+namespace Rector\Tests\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

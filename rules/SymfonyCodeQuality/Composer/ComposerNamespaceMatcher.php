@@ -36,11 +36,17 @@ final class ComposerNamespaceMatcher
         $composerJson = $this->composerJsonFactory->createFromFilePath($composerJsonFilePath);
         $autoload = $composerJson->getAutoload();
         foreach ($autoload['psr-4'] ?? [] as $namespace => $directory) {
-            if (! Strings::startsWith($path, $directory)) {
-                continue;
+            if (! is_array($directory)) {
+                $directory = [$directory];
             }
 
-            return rtrim($namespace, '\\');
+            foreach ($directory as $singleDirectory) {
+                if (! Strings::startsWith($path, $singleDirectory)) {
+                    continue;
+                }
+
+                return rtrim($namespace, '\\');
+            }
         }
 
         return null;

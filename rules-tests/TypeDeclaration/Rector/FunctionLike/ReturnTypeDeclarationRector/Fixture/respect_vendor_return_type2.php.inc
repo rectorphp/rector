@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\RespectVendorReturnType;
+use Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\RespectVendorReturnType;
 
 final class RespectVendorReturnType2 extends RespectVendorReturnType
 {
@@ -20,9 +20,9 @@ final class RespectVendorReturnType2 extends RespectVendorReturnType
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\RespectVendorReturnType;
+use Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\RespectVendorReturnType;
 
 final class RespectVendorReturnType2 extends RespectVendorReturnType
 {

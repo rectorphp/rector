@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDeadRecursiveClassMethodRector;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveDeadRecursiveClassMethodRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDeadRecursiveClassMethodRector;

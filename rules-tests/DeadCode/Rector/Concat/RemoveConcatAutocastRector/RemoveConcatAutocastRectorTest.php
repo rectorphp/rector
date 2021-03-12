@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Concat\RemoveConcatAutocastRector;
+namespace Rector\Tests\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;

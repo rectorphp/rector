@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\For_\ForRepeatedCountToOwnVariableRector;
+namespace Rector\Tests\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector;

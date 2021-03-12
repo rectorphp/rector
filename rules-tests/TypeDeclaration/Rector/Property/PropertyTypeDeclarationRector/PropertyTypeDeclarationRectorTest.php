@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

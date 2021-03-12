@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\New_\NewToConstructorInjectionRector\FixturePhp80;
+namespace Rector\Tests\Transform\Rector\New_\NewToConstructorInjectionRector\FixturePhp80;
 
-use Rector\Transform\Tests\Rector\New_\NewToConstructorInjectionRector\Source\DummyValidator;
+use Rector\Tests\Transform\Rector\New_\NewToConstructorInjectionRector\Source\DummyValidator;
 
 final class SomeClassToPromotedProperty
 {
@@ -17,13 +17,13 @@ final class SomeClassToPromotedProperty
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\New_\NewToConstructorInjectionRector\FixturePhp80;
+namespace Rector\Tests\Transform\Rector\New_\NewToConstructorInjectionRector\FixturePhp80;
 
-use Rector\Transform\Tests\Rector\New_\NewToConstructorInjectionRector\Source\DummyValidator;
+use Rector\Tests\Transform\Rector\New_\NewToConstructorInjectionRector\Source\DummyValidator;
 
 final class SomeClassToPromotedProperty
 {
-    public function __construct(private \Rector\Transform\Tests\Rector\New_\NewToConstructorInjectionRector\Source\DummyValidator $dummyValidator)
+    public function __construct(private \Rector\Tests\Transform\Rector\New_\NewToConstructorInjectionRector\Source\DummyValidator $dummyValidator)
     {
     }
     public function run()

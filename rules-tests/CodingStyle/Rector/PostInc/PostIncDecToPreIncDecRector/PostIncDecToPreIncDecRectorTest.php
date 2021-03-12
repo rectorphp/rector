@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\PostInc\PostIncDecToPreIncDecRector;
+namespace Rector\Tests\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;

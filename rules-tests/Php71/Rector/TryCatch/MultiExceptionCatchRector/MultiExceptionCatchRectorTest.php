@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php71\Tests\Rector\TryCatch\MultiExceptionCatchRector;
+namespace Rector\Tests\Php71\Rector\TryCatch\MultiExceptionCatchRector;
 
 use Iterator;
 use Rector\Php71\Rector\TryCatch\MultiExceptionCatchRector;

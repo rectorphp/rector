@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -24,7 +24,7 @@ final class SplFileInfoEdgeCase
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
 use Symfony\Component\Finder\SplFileInfo;
 

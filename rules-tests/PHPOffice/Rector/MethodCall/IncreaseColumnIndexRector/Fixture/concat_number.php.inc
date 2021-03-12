@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\MethodCall\IncreaseColumnIndexRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\MethodCall\IncreaseColumnIndexRector\Fixture;
 
 final class ConcatNumber
 {
@@ -17,7 +17,7 @@ final class ConcatNumber
 -----
 <?php
 
-namespace Rector\PHPOffice\Tests\Rector\MethodCall\IncreaseColumnIndexRector\Fixture;
+namespace Rector\Tests\PHPOffice\Rector\MethodCall\IncreaseColumnIndexRector\Fixture;
 
 final class ConcatNumber
 {

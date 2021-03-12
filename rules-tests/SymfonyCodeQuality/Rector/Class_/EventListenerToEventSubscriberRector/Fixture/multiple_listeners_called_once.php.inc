@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
+namespace Rector\Tests\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
 
 class MultipleListenersCalledOnce
 {
@@ -17,7 +17,7 @@ class MultipleListenersCalledOnce
 -----
 <?php
 
-namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
+namespace Rector\Tests\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
 
 class MultipleListenersCalledOnceEventSubscriber implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
 {

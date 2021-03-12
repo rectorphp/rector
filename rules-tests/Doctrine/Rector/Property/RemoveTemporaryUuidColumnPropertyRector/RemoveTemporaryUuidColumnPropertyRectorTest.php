@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Doctrine\Tests\Rector\Property\RemoveTemporaryUuidColumnPropertyRector;
+namespace Rector\Tests\Doctrine\Rector\Property\RemoveTemporaryUuidColumnPropertyRector;
 
 use Iterator;
 use Rector\Doctrine\Rector\Property\RemoveTemporaryUuidColumnPropertyRector;

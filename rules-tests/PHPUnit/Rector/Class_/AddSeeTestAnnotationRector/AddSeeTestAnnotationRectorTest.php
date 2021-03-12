@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\Class_\AddSeeTestAnnotationRector;
+namespace Rector\Tests\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
 
 use Iterator;
 use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\New_\NewStaticToNewSelfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\New_\NewStaticToNewSelfRector\Fixture;
 
 class SkipNonFinal
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Fixture;
+namespace Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Fixture;
 
 class SkipErrorAndException
 {

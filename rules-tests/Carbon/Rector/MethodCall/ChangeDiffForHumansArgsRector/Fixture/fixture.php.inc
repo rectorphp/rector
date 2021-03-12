@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Carbon\Tests\Rector\MethodCall\ChangeDiffForHumansArgsRector\Fixture;
+namespace Rector\Tests\Carbon\Rector\MethodCall\ChangeDiffForHumansArgsRector\Fixture;
 
 use Carbon\Carbon;
 
@@ -18,7 +18,7 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Carbon\Tests\Rector\MethodCall\ChangeDiffForHumansArgsRector\Fixture;
+namespace Rector\Tests\Carbon\Rector\MethodCall\ChangeDiffForHumansArgsRector\Fixture;
 
 use Carbon\Carbon;
 

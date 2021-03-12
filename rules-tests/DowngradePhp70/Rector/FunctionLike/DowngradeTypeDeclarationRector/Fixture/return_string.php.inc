@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeDeclarationRector\Fixture;
+namespace Rector\Tests\DowngradePhp70\Rector\FunctionLike\DowngradeTypeDeclarationRector\Fixture;
 
 final class ReturnString
 {
@@ -14,7 +14,7 @@ final class ReturnString
 -----
 <?php
 
-namespace Rector\DowngradePhp70\Tests\Rector\FunctionLike\DowngradeTypeDeclarationRector\Fixture;
+namespace Rector\Tests\DowngradePhp70\Rector\FunctionLike\DowngradeTypeDeclarationRector\Fixture;
 
 final class ReturnString
 {

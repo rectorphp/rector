@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/sebastianbergmann/phpunit/issues/3120
  * "If, and only if, the expects() method is called on this stub to set up expectations then that stub becomes a mock."
  *
- * @see \Rector\PHPUnit\Tests\Rector\MethodCall\CreateMockToCreateStubRector\CreateMockToCreateStubRectorTest
+ * @see \Rector\Tests\PHPUnit\Rector\MethodCall\CreateMockToCreateStubRector\CreateMockToCreateStubRectorTest
  */
 final class CreateMockToCreateStubRector extends AbstractRector
 {

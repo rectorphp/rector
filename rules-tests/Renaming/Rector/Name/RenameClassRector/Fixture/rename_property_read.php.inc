@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\Fixture;
 
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass;
 
 /**
  * @property OldClass $some
@@ -17,14 +17,14 @@ class RenamePropertyRead
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\Fixture;
 
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass;
 
 /**
- * @property \Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass $some
- * @property-read \Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass $someRead
- * @property-write \Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass $someWrite
+ * @property \Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass $some
+ * @property-read \Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass $someRead
+ * @property-write \Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass $someWrite
  */
 class RenamePropertyRead
 {

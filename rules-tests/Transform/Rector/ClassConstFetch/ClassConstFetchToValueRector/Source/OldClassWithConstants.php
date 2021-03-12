@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\ClassConstFetch\ClassConstFetchToValueRector\Source;
+namespace Rector\Tests\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector\Source;
 
 final class OldClassWithConstants
 {

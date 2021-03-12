@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://www.php.net/manual/en/control-structures.continue.php
  * @see https://www.php.net/manual/en/control-structures.break.php
  *
- * @see \Rector\Php54\Tests\Rector\Break_\RemoveZeroBreakContinueRector\RemoveZeroBreakContinueRectorTest
+ * @see \Rector\Tests\Php54\Rector\Break_\RemoveZeroBreakContinueRector\RemoveZeroBreakContinueRectorTest
  */
 final class RemoveZeroBreakContinueRector extends AbstractRector
 {

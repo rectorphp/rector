@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\DeadDocBlock\Tests\Rector\ClassLike\RemoveAnnotationRector\RemoveAnnotationRectorTest
+ * @see \Rector\Tests\DeadDocBlock\Rector\ClassLike\RemoveAnnotationRector\RemoveAnnotationRectorTest
  */
 final class RemoveAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
 {

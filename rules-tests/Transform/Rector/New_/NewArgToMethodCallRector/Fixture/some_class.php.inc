@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\New_\NewArgToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\New_\NewArgToMethodCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\New_\NewArgToMethodCallRector\Source\SomeDotenv;
+use Rector\Tests\Transform\Rector\New_\NewArgToMethodCallRector\Source\SomeDotenv;
 
 class SomeClass
 {
@@ -16,9 +16,9 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\New_\NewArgToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\New_\NewArgToMethodCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\New_\NewArgToMethodCallRector\Source\SomeDotenv;
+use Rector\Tests\Transform\Rector\New_\NewArgToMethodCallRector\Source\SomeDotenv;
 
 class SomeClass
 {

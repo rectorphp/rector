@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector;
+namespace Rector\Tests\Generics\Rector\Class_\GenericsPHPStormMethodAnnotationRector;
 
 use Iterator;
 use Rector\Generics\Rector\Class_\GenericsPHPStormMethodAnnotationRector;

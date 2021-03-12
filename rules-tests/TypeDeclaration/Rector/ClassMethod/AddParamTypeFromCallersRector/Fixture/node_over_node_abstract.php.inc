@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeFromCallersRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromCallersRector\Fixture;
 
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\For_;
@@ -26,7 +26,7 @@ final class NodeOverNodeAbstract
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeFromCallersRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromCallersRector\Fixture;
 
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\For_;

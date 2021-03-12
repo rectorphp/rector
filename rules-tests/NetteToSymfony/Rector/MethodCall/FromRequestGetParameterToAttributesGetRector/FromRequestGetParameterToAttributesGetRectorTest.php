@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector;
+namespace Rector\Tests\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector;
 
 use Iterator;
 use Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector;

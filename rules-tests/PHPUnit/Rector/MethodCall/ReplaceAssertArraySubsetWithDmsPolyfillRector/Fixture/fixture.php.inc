@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +18,7 @@ class SomeClass extends TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 

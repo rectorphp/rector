@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector\Fixture;
 
-use Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
+use Rector\Tests\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
 
 class WithIntConstantOnly
 {
@@ -22,13 +22,13 @@ class WithIntConstantOnly
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector\Fixture;
 
-use Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
+use Rector\Tests\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
 
 class WithIntConstantOnly
 {
-    const INTEGER_CONSTANT = '%s-%s-%s-%s-%s';
+    const INTEGER_CONSTANT = '%s';
 
     public function run()
     {

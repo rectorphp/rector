@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;
+namespace Rector\Tests\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;
 
 use Iterator;
 use Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;

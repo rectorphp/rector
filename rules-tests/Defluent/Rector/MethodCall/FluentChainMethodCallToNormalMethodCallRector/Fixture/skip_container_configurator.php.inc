@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Defluent\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Fixture;
+namespace Rector\Tests\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Fixture;
 
 use Rector\Defluent\Rector\ClassMethod\ReturnThisRemoveRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

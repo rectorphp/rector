@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
+namespace Rector\Tests\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
 
 use Iterator;
 use Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;

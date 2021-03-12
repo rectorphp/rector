@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector\Fixture;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -35,7 +35,7 @@ class SubtypeOfObject
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector\Fixture;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;

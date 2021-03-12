@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\WithConsecutiveArgToArrayRector;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\WithConsecutiveArgToArrayRector;
 
 use Iterator;
 use Rector\PHPUnit\Rector\MethodCall\WithConsecutiveArgToArrayRector;

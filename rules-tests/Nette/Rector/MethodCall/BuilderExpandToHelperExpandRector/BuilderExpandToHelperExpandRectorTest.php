@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\MethodCall\BuilderExpandToHelperExpandRector;
+namespace Rector\Tests\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector;
 
 use Iterator;
 use Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector;

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Fixture;
+namespace Rector\Tests\Generics\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Fixture;
 
-use Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Source\AbstractGenericMaybeArrayRepository;
-use Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Source\RealObject;
+use Rector\Tests\Generics\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Source\AbstractGenericMaybeArrayRepository;
+use Rector\Tests\Generics\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Source\RealObject;
 
 /**
  * @template TEntity as RealObject
@@ -21,15 +21,15 @@ final class ArrayLikeNullable extends AbstractGenericMaybeArrayRepository
 
 declare(strict_types=1);
 
-namespace Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Fixture;
+namespace Rector\Tests\Generics\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Fixture;
 
-use Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Source\AbstractGenericMaybeArrayRepository;
-use Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Source\RealObject;
+use Rector\Tests\Generics\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Source\AbstractGenericMaybeArrayRepository;
+use Rector\Tests\Generics\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Source\RealObject;
 
 /**
  * @template TEntity as RealObject
  * @extends AbstractRepository<TEntity>
- * @method \Rector\Generics\Tests\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Source\RealObject[]|null findAllMaybe(string $some, int $type, $unknown)
+ * @method \Rector\Tests\Generics\Rector\Class_\GenericsPHPStormMethodAnnotationRector\Source\RealObject[]|null findAllMaybe(string $some, int $type, $unknown)
  */
 final class ArrayLikeNullable extends AbstractGenericMaybeArrayRepository
 {

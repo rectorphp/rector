@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Assign\PHPStormVarAnnotationRector;
+namespace Rector\Tests\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector;

@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see http://wiki.php.net/rfc/json_throw_on_error
  * @see https://3v4l.org/5HMVE
- * @see \Rector\Php73\Tests\Rector\FuncCall\JsonThrowOnErrorRector\JsonThrowOnErrorRectorTest
+ * @see \Rector\Tests\Php73\Rector\FuncCall\JsonThrowOnErrorRector\JsonThrowOnErrorRectorTest
  */
 final class JsonThrowOnErrorRector extends AbstractRector
 {

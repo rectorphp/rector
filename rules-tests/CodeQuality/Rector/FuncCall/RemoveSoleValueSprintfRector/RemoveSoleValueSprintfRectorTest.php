@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\RemoveSoleValueSprintfRector;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector;

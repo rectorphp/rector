@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony3\Tests\Rector\MethodCall\OptionNameRector\OptionNameRectorTest
+ * @see \Rector\Tests\Symfony3\Rector\MethodCall\OptionNameRector\OptionNameRectorTest
  */
 final class OptionNameRector extends AbstractRector
 {

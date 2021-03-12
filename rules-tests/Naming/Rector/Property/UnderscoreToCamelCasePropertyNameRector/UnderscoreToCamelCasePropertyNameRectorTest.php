@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\Rector\Property\UnderscoreToCamelCasePropertyNameRector;
+namespace Rector\Tests\Naming\Rector\Property\UnderscoreToCamelCasePropertyNameRector;
 
 use Iterator;
 use Rector\Naming\Rector\Property\UnderscoreToCamelCasePropertyNameRector;

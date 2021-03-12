@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://wiki.php.net/rfc/object-typehint
  * @see https://github.com/cebe/yii2/commit/9548a212ecf6e50fcdb0e5ba6daad88019cfc544
- * @see \Rector\Php71\Tests\Rector\Name\ReservedObjectRector\ReservedObjectRectorTest
+ * @see \Rector\Tests\Php71\Rector\Name\ReservedObjectRector\ReservedObjectRectorTest
  */
 final class ReservedObjectRector extends AbstractRector implements ConfigurableRectorInterface
 {

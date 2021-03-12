@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeStaticTypeDeclarationRector\Source;
+namespace Rector\Tests\DowngradePhp80\Rector\FunctionLike\DowngradeStaticTypeDeclarationRector\Source;
 
 
 class AnotherClass

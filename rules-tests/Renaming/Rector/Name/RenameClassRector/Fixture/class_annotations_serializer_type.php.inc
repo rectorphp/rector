@@ -1,13 +1,13 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\Fixture;
 
 use JMS\Serializer\Annotation as Serializer;
 
 class ClassAnnotationsSerializerIterableType
 {
     /**
-     * @Serializer\Type("array<Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass>")
+     * @Serializer\Type("array<Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass>")
      */
     public $flights = [];
 }
@@ -16,14 +16,14 @@ class ClassAnnotationsSerializerIterableType
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\Fixture;
 
 use JMS\Serializer\Annotation as Serializer;
 
 class ClassAnnotationsSerializerIterableType
 {
     /**
-     * @Serializer\Type("array<Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass>")
+     * @Serializer\Type("array<Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass>")
      */
     public $flights = [];
 }

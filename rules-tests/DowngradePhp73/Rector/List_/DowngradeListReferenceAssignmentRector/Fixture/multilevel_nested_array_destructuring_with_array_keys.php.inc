@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
+namespace Rector\Tests\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
 class MultilevelNestedArrayDestructuringWithArrayKeys
 {
@@ -15,7 +15,7 @@ class MultilevelNestedArrayDestructuringWithArrayKeys
 -----
 <?php
 
-namespace Rector\DowngradePhp73\Tests\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
+namespace Rector\Tests\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector\Fixture;
 
 class MultilevelNestedArrayDestructuringWithArrayKeys
 {

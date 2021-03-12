@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector\FixtureUnionTypes;
+namespace Rector\Tests\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector\FixtureUnionTypes;
 
 class MultipleTypes
 {
@@ -18,7 +18,7 @@ class MultipleTypes
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector\FixtureUnionTypes;
+namespace Rector\Tests\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector\FixtureUnionTypes;
 
 class MultipleTypes
 {

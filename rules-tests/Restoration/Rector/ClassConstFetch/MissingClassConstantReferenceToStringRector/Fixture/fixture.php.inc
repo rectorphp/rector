@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Restoration\Tests\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector\Fixture;
+namespace Rector\Tests\Restoration\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector\Fixture;
 
 use NonExistingClass;
 
@@ -16,7 +16,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Restoration\Tests\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector\Fixture;
+namespace Rector\Tests\Restoration\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector\Fixture;
 
 use NonExistingClass;
 

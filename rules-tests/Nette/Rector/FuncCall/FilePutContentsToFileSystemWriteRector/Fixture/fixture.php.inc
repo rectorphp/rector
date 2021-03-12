@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\FuncCall\FilePutContentsToFileSystemWriteRector\Fixture;
+namespace Rector\Tests\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector\Fixture;
 
 class Fixture
 {
@@ -16,7 +16,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\FuncCall\FilePutContentsToFileSystemWriteRector\Fixture;
+namespace Rector\Tests\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector\Fixture;
 
 class Fixture
 {

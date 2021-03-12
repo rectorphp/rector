@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 class Promise
 {
@@ -27,7 +27,7 @@ final class NonArrayGenericTypes
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 class Promise
 {
@@ -47,7 +47,7 @@ final class NonArrayGenericTypes
     /**
      * @var Promise<Foo>
      */
-    private \Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture\Promise $bar;
+    private \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture\Promise $bar;
 }
 
 ?>

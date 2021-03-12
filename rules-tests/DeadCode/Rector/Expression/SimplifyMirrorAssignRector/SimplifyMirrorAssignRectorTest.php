@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Expression\SimplifyMirrorAssignRector;
+namespace Rector\Tests\DeadCode\Rector\Expression\SimplifyMirrorAssignRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Expression\SimplifyMirrorAssignRector;

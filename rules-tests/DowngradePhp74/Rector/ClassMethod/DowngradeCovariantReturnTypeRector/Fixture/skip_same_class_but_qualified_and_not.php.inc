@@ -1,13 +1,13 @@
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
+namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
 
 class SameButDifferentParentType {}
 class SameButDifferentChildType extends SameButDifferentParentType {}
 
 class SameButDifferentA
 {
-    public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\SameButDifferentParentType
+    public function covariantReturnTypes(): \Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\SameButDifferentParentType
     { /* … */ }
 }
 
@@ -19,7 +19,7 @@ class SameButDifferentB extends SameButDifferentA
 
 class SameButDifferentC extends SameButDifferentB
 {
-    public function covariantReturnTypes(): \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\SameButDifferentParentType
+    public function covariantReturnTypes(): \Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\SameButDifferentParentType
     { /* … */ }
 }
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\FixtureImported;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureImported;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\ConflictingName;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\ConflictingName;
 use Rector;
 
 final class ConflictingShortName
@@ -13,7 +13,7 @@ final class ConflictingShortName
     private $firstOne;
 
     /**
-     * @var Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\Nested\ConflictingName
+     * @var Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\Nested\ConflictingName
      */
     private $secondOne;
 }
@@ -22,16 +22,16 @@ final class ConflictingShortName
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\FixtureImported;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureImported;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\ConflictingName;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\ConflictingName;
 use Rector;
 
 final class ConflictingShortName
 {
     private ConflictingName $firstOne;
 
-    private \Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\Nested\ConflictingName $secondOne;
+    private \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\Nested\ConflictingName $secondOne;
 }
 
 ?>

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Source\ParentClassWithGetTrait;
+use Rector\Tests\Symfony\Rector\MethodCall\GetToConstructorInjectionRector\Source\ParentClassWithGetTrait;
 
 class ClassWithNamedServiceAndParentTrait extends ParentClassWithGetTrait
 {
@@ -16,13 +16,13 @@ class ClassWithNamedServiceAndParentTrait extends ParentClassWithGetTrait
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
+namespace Rector\Tests\Symfony\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Source\ParentClassWithGetTrait;
+use Rector\Tests\Symfony\Rector\MethodCall\GetToConstructorInjectionRector\Source\ParentClassWithGetTrait;
 
 class ClassWithNamedServiceAndParentTrait extends ParentClassWithGetTrait
 {
-    public function __construct(private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator)
+    public function __construct(private \Rector\Tests\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator)
     {
     }
     public function render()

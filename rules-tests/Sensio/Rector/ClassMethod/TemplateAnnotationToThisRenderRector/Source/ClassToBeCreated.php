@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\Source;
+namespace Rector\Tests\Sensio\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\Source;
 
 final class ClassToBeCreated
 {

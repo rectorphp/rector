@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallArgRector\Fixture;
+namespace Rector\Tests\Removing\Rector\FuncCall\RemoveFuncCallArgRector\Fixture;
 
 final class SkipMethodCallReturningClosure
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Foreach_\ForeachToInArrayRector\Fixture;
 
-use Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Source\Collection;
+use Rector\Tests\CodeQuality\Rector\Foreach_\ForeachToInArrayRector\Source\Collection;
 
 final class SkipCollections
 {

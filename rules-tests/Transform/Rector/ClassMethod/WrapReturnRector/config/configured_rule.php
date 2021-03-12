@@ -1,7 +1,7 @@
 <?php
 
 use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
-use Rector\Transform\Tests\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
+use Rector\Tests\Transform\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
 use Rector\Transform\ValueObject\WrapReturn;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

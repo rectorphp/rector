@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\FixturePhp74;
+namespace Rector\Tests\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\FixturePhp74;
 
 function run()
 {
@@ -14,7 +14,7 @@ function run()
 -----
 <?php
 
-namespace Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\FixturePhp74;
+namespace Rector\Tests\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\FixturePhp74;
 
 function run()
 {

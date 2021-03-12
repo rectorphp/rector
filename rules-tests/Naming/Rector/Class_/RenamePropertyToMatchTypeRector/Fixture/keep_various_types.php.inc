@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
 
-use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ContainerInterface;
-use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ILoader;
-use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\SingleSomeClass;
+use Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ContainerInterface;
+use Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ILoader;
+use Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\SingleSomeClass;
 use SplFileInfo;
 
 class KeepVariousTypes

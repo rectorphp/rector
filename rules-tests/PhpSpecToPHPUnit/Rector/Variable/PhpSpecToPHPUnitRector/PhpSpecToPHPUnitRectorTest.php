@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector;
+namespace Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

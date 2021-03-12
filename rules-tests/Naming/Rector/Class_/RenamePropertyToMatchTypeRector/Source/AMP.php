@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source;
+namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source;
 
 final class AMP
 {

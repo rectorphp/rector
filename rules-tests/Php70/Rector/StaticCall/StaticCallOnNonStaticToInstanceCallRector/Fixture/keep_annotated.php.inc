@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\Fixture;
+namespace Rector\Tests\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\Fixture;
 
 /**
  * @method static array fetchAll(...$args)

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Source;
+namespace Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Source;
 
 final class Mapping
 {

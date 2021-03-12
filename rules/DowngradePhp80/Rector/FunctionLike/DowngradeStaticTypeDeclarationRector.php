@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeStaticTypeDeclarationRector\DowngradeStaticTypeDeclarationRectorTest
+ * @see \Rector\Tests\DowngradePhp80\Rector\FunctionLike\DowngradeStaticTypeDeclarationRector\DowngradeStaticTypeDeclarationRectorTest
  */
 final class DowngradeStaticTypeDeclarationRector extends AbstractRector
 {

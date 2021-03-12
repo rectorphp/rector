@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeFromCallersRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromCallersRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeFromCallersRector\Source\ClassWithConstant;
+use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromCallersRector\Source\ClassWithConstant;
 
 final class SkipConstantFetch
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Defluent\Tests\NodeFactory\FluentChainMethodCallRootExtractor;
+namespace Rector\Tests\Defluent\NodeFactory\FluentChainMethodCallRootExtractor;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;

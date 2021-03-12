@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Autodiscovery\Tests\Rector\FileNode\MoveEntitiesToEntityDirectoryRector;
+namespace Rector\Tests\Autodiscovery\Rector\FileNode\MoveEntitiesToEntityDirectoryRector;
 
 use Iterator;
 use Rector\Autodiscovery\Rector\FileNode\MoveEntitiesToEntityDirectoryRector;

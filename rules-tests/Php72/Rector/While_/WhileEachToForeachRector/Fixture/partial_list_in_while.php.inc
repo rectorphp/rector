@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\While_\WhileEachToForeachRector\Fixture;
+namespace Rector\Tests\Php72\Rector\While_\WhileEachToForeachRector\Fixture;
 
 use Rector\Testing\Contract\RunnableInterface;
 
@@ -23,7 +23,7 @@ final class PartialListInWhile implements RunnableInterface
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\While_\WhileEachToForeachRector\Fixture;
+namespace Rector\Tests\Php72\Rector\While_\WhileEachToForeachRector\Fixture;
 
 use Rector\Testing\Contract\RunnableInterface;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Tests\Rector\Class_\DowngradePropertyPromotionRector;
+namespace Rector\Tests\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector;
 
 use Iterator;
 use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector;

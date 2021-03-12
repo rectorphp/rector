@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\AddPregQuoteDelimiterRector;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector;

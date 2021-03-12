@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Privatization\Tests\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector;
+namespace Rector\Tests\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector;
 
 use Iterator;
 use Rector\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector;

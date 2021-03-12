@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Depends on @see PassFactoryToUniqueObjectRector
  *
- * @see \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\PassFactoryToEntityRectorTest
+ * @see \Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\PassFactoryToEntityRectorTest
  */
 final class NewUniqueObjectToEntityFactoryRector extends AbstractRector implements ConfigurableRectorInterface
 {

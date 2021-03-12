@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Foreach_\RemoveUnusedForeachKeyRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector\Fixture;
 
 class Fixture
 {
@@ -21,7 +21,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Foreach_\RemoveUnusedForeachKeyRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector\Fixture;
 
 class Fixture
 {

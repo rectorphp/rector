@@ -1,7 +1,7 @@
 <?php
 
 use Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector;
-use Rector\Transform\Tests\Rector\MethodCall\CallableInMethodCallToVariableRector\Source\DummyCache;
+use Rector\Tests\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector\Source\DummyCache;
 use Rector\Transform\ValueObject\CallableInMethodCallToVariable;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

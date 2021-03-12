@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony5\Tests\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector\Fixture;
+namespace Rector\Tests\Symfony5\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector\Fixture;
 
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -16,7 +16,7 @@ class ArgumentTrue
 -----
 <?php
 
-namespace Rector\Symfony5\Tests\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector\Fixture;
+namespace Rector\Tests\Symfony5\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector\Fixture;
 
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 

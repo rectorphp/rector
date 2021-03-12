@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\RemovingStatic\Tests\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Fixture;
 
-use Rector\RemovingStatic\Tests\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Source\ClassWithStaticMethods;
+use Rector\Tests\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Source\ClassWithStaticMethods;
 use PHPUnit\Framework\TestCase;
 
 final class SetupAlreadyExistsTest extends TestCase
@@ -27,14 +27,14 @@ final class SetupAlreadyExistsTest extends TestCase
 -----
 <?php
 
-namespace Rector\RemovingStatic\Tests\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Fixture;
+namespace Rector\Tests\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Fixture;
 
-use Rector\RemovingStatic\Tests\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Source\ClassWithStaticMethods;
+use Rector\Tests\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Source\ClassWithStaticMethods;
 use PHPUnit\Framework\TestCase;
 
 final class SetupAlreadyExistsTest extends \Symfony\Bundle\FrameworkBundle\Test\KernelTestCase
 {
-    private \Rector\RemovingStatic\Tests\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Source\ClassWithStaticMethods $classWithStaticMethods;
+    private \Rector\Tests\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Source\ClassWithStaticMethods $classWithStaticMethods;
     /**
      * @var string
      */
@@ -43,7 +43,7 @@ final class SetupAlreadyExistsTest extends \Symfony\Bundle\FrameworkBundle\Test\
     protected function setUp(): void
     {
         parent::setUp();
-        $this->classWithStaticMethods = self::$container->get(\Rector\RemovingStatic\Tests\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Source\ClassWithStaticMethods::class);
+        $this->classWithStaticMethods = self::$container->get(\Rector\Tests\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Source\ClassWithStaticMethods::class);
         $this->legitimation = 'GO';
     }
 

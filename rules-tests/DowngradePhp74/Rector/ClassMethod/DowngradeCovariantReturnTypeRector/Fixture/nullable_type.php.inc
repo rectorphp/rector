@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
+namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
 
 class NullableParentType {}
 class NullableChildType extends NullableParentType {}
@@ -21,7 +21,7 @@ class NullableB extends NullableA
 -----
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
+namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture;
 
 class NullableParentType {}
 class NullableChildType extends NullableParentType {}
@@ -34,7 +34,7 @@ class NullableA
 
 class NullableB extends NullableA
 {
-    public function covariantReturnTypes(): ?\Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\NullableParentType
+    public function covariantReturnTypes(): ?\Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\Fixture\NullableParentType
     { /* … */ }
 }
 

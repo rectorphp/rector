@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Transform\Tests\Rector\String_\StringToClassConstantRector\StringToClassConstantRectorTest
+ * @see \Rector\Tests\Transform\Rector\String_\StringToClassConstantRector\StringToClassConstantRectorTest
  */
 final class StringToClassConstantRector extends AbstractRector implements ConfigurableRectorInterface
 {

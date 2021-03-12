@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Privatization\Tests\Rector\MethodCall\ReplaceStringWithClassConstantRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\Fixture;
 
 final class ReplaceWithConstant
 {
@@ -18,13 +18,13 @@ final class ReplaceWithConstant
 -----
 <?php
 
-namespace Rector\Privatization\Tests\Rector\MethodCall\ReplaceStringWithClassConstantRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\Fixture;
 
 final class ReplaceWithConstant
 {
     public function run()
     {
-        $this->call(\Rector\Privatization\Tests\Rector\MethodCall\ReplaceStringWithClassConstantRector\Source\Placeholder::NAME);
+        $this->call(\Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\Source\Placeholder::NAME);
     }
 
     public function call(string $value)

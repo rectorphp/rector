@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Stmt\DeadCodeRemovingRector\Fixture\ArrayDimFetch;
+namespace Rector\Tests\CodeQuality\Rector\Stmt\DeadCodeRemovingRector\Fixture\ArrayDimFetch;
 
 function wrapToPreventPhpStanCallingMethods ()
 {
@@ -21,7 +21,7 @@ function wrapToPreventPhpStanCallingMethods ()
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Stmt\DeadCodeRemovingRector\Fixture\ArrayDimFetch;
+namespace Rector\Tests\CodeQuality\Rector\Stmt\DeadCodeRemovingRector\Fixture\ArrayDimFetch;
 
 function wrapToPreventPhpStanCallingMethods ()
 {

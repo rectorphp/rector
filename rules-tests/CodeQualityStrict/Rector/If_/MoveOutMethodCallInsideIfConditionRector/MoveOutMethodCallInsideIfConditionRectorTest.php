@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQualityStrict\Tests\Rector\If_\MoveOutMethodCallInsideIfConditionRector;
+namespace Rector\Tests\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector;
 
 use Iterator;
 use Rector\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector;

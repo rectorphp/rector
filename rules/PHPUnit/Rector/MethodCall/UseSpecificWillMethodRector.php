@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/4160
  * @see https://github.com/symfony/symfony/pull/29685/files
- * @see \Rector\PHPUnit\Tests\Rector\MethodCall\UseSpecificWillMethodRector\UseSpecificWillMethodRectorTest
+ * @see \Rector\Tests\PHPUnit\Rector\MethodCall\UseSpecificWillMethodRector\UseSpecificWillMethodRectorTest
  */
 final class UseSpecificWillMethodRector extends AbstractRector
 {

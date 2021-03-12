@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\ValueObjectFactory\PropertyRenameFactory;
+namespace Rector\Tests\Naming\ValueObjectFactory\PropertyRenameFactory;
 
 use Iterator;
 use PhpParser\Node\Stmt\Property;

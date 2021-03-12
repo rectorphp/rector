@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Function_\CamelCaseFunctionNamingToUnderscoreRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Function_\CamelCaseFunctionNamingToUnderscoreRector\Fixture;
 
 class SkipIsA
 {

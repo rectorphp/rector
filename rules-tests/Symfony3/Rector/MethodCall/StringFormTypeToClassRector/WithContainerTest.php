@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\StringFormTypeToClassRector;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\StringFormTypeToClassRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

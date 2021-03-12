@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPOffice\Tests\Rector\MethodCall\GetDefaultStyleToGetParentRector;
+namespace Rector\Tests\PHPOffice\Rector\MethodCall\GetDefaultStyleToGetParentRector;
 
 use Iterator;
 use Rector\PHPOffice\Rector\MethodCall\GetDefaultStyleToGetParentRector;

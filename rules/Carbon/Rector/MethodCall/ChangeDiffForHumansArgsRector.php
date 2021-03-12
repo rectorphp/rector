@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://carbon.nesbot.com/docs/#api-carbon-2
  *
- * @see \Rector\Carbon\Tests\Rector\MethodCall\ChangeDiffForHumansArgsRector\ChangeDiffForHumansArgsRectorTest
+ * @see \Rector\Tests\Carbon\Rector\MethodCall\ChangeDiffForHumansArgsRector\ChangeDiffForHumansArgsRectorTest
  */
 final class ChangeDiffForHumansArgsRector extends AbstractRector
 {

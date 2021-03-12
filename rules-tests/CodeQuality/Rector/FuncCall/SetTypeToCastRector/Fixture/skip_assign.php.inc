@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\SetTypeToCastRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\SetTypeToCastRector\Fixture;
 
 class SkipAssign
 {

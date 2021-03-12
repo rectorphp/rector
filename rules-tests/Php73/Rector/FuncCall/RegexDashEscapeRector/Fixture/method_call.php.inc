@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\RegexDashEscapeRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\RegexDashEscapeRector\Fixture;
 
 use Nette\Utils\Strings;
 
@@ -19,7 +19,7 @@ class UniqueMethodNameCall
 -----
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\RegexDashEscapeRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\RegexDashEscapeRector\Fixture;
 
 use Nette\Utils\Strings;
 

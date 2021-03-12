@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector;
+namespace Rector\Tests\CodeQuality\Rector\For_\ForToForeachRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\For_\ForToForeachRector;

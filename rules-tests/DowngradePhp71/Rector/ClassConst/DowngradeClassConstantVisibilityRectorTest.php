@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp71\Tests\Rector\ClassConst;
+namespace Rector\Tests\DowngradePhp71\Rector\ClassConst;
 
 use Iterator;
 use Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRector;

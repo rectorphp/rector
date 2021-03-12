@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Removing\Tests\Rector\Class_\RemoveTraitRector\Source;
+namespace Rector\Tests\Removing\Rector\Class_\RemoveTraitRector\Source;
 
 trait TraitToBeRemoved
 {

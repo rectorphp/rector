@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHP\Tests\Rector\Namespace_\AppUsesStaticCallToUseStatementRector\Fixture;
+namespace Rector\Tests\CakePHP\Rector\Namespace_\AppUsesStaticCallToUseStatementRector\Fixture;
 
 \App::uses('Component', 'Controller');
 
@@ -16,7 +16,7 @@ class CakeControllerWithStrictTypes
 
 declare(strict_types=1);
 
-namespace Rector\CakePHP\Tests\Rector\Namespace_\AppUsesStaticCallToUseStatementRector\Fixture;
+namespace Rector\Tests\CakePHP\Rector\Namespace_\AppUsesStaticCallToUseStatementRector\Fixture;
 
 use Cake\Controller\Component;
 

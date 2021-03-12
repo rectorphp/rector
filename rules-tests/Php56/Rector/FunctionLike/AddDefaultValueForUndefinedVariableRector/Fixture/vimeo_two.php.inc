@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture;
+namespace Rector\Tests\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture;
 
 class VimeoTwo
 {
@@ -20,7 +20,7 @@ class VimeoTwo
 -----
 <?php
 
-namespace Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture;
+namespace Rector\Tests\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture;
 
 class VimeoTwo
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\ClassMethod\RemoveEmptyTestMethodRector;
+namespace Rector\Tests\PHPUnit\Rector\ClassMethod\RemoveEmptyTestMethodRector;
 
 use Iterator;
 use Rector\PHPUnit\Rector\ClassMethod\RemoveEmptyTestMethodRector;

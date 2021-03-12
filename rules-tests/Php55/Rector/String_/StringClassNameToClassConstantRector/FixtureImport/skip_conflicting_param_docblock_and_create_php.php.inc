@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\FixtureImport;
+namespace Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\FixtureImport;
 
-use Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\View;
+use Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\View;
 
 final class SkipConflictingParamDocBlockAndCreatePhp
 {
@@ -15,6 +15,6 @@ final class SkipConflictingParamDocBlockAndCreatePhp
 
     public function countAction()
     {
-        return new \Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\Nested\View;
+        return new \Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\Nested\View;
     }
 }

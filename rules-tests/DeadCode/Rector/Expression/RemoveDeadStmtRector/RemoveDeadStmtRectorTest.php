@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Expression\RemoveDeadStmtRector;
+namespace Rector\Tests\DeadCode\Rector\Expression\RemoveDeadStmtRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Expression\RemoveDeadStmtRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
+namespace Rector\Tests\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
 
 class WithPriorityListener
 {
@@ -13,7 +13,7 @@ class WithPriorityListener
 -----
 <?php
 
-namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
+namespace Rector\Tests\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\Fixture;
 
 class WithPriorityEventSubscriber implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
 {

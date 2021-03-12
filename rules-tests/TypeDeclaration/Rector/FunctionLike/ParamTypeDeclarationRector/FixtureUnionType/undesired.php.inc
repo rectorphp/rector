@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\FixtureUnionType;
+namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\FixtureUnionType;
 
 /**
  * @param real|int $a
@@ -14,7 +14,7 @@ function someFunction($a, $b, $c) {
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\FixtureUnionType;
+namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\FixtureUnionType;
 
 /**
  * @param int|void $c

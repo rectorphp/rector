@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\Nested;
+namespace Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\Nested;
 
 final class View
 {

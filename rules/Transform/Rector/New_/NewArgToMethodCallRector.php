@@ -17,7 +17,7 @@ use Webmozart\Assert\Assert;
 /**
  * @see https://github.com/symfony/symfony/pull/35308
  *
- * @see \Rector\Transform\Tests\Rector\New_\NewArgToMethodCallRector\NewArgToMethodCallRectorTest
+ * @see \Rector\Tests\Transform\Rector\New_\NewArgToMethodCallRector\NewArgToMethodCallRectorTest
  */
 final class NewArgToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {

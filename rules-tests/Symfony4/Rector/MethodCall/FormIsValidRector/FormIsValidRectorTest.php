@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony4\Tests\Rector\MethodCall\FormIsValidRector;
+namespace Rector\Tests\Symfony4\Rector\MethodCall\FormIsValidRector;
 
 use Iterator;
 use Rector\Symfony4\Rector\MethodCall\FormIsValidRector;

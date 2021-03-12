@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Restoration\Tests\Rector\Namespace_\CompleteImportForPartialAnnotationRector\Fixture;
+namespace Rector\Tests\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector\Fixture;
 
 class KeepNonAnnotations
 {

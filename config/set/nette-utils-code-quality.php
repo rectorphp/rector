@@ -9,17 +9,8 @@ use Rector\Nette\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector;
 use Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector;
 use Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector;
 use Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector;
-<<<<<<< HEAD
-use Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector;
-<<<<<<< HEAD
-use Rector\NetteUtilsCodeQuality\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector;
-=======
 use Rector\Nette\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector;
 use Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector;
->>>>>>> 67679bef2... fixup! remove rules configs
-=======
-use Rector\Nette\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector;
->>>>>>> 93dc7d236... remove rules configs + merge nette-utils-coding-quality to nette package
 use Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
 use Rector\Transform\ValueObject\FuncCallToStaticCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

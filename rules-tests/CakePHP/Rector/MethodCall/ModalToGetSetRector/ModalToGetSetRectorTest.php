@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector;
+namespace Rector\Tests\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Transform\Tests\Rector\ClassMethod\WrapReturnRector\WrapReturnRectorTest
+ * @see \Rector\Tests\Transform\Rector\ClassMethod\WrapReturnRector\WrapReturnRectorTest
  */
 final class WrapReturnRector extends AbstractRector implements ConfigurableRectorInterface
 {

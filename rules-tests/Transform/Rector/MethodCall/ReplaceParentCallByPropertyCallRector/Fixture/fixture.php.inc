@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Source\TypeClassToReplaceMethodCallBy;
+use Rector\Tests\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Source\TypeClassToReplaceMethodCallBy;
 
 final class SomeClass
 {
@@ -16,9 +16,9 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Source\TypeClassToReplaceMethodCallBy;
+use Rector\Tests\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Source\TypeClassToReplaceMethodCallBy;
 
 final class SomeClass
 {

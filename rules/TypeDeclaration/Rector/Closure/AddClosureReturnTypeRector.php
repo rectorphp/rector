@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector\AddClosureReturnTypeRectorTest
+ * @see \Rector\Tests\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector\AddClosureReturnTypeRectorTest
  */
 final class AddClosureReturnTypeRector extends AbstractRector
 {

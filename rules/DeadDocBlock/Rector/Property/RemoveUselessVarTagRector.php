@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DeadDocBlock\Tests\Rector\Property\RemoveUselessVarTagRector\RemoveUselessVarTagRectorTest
+ * @see \Rector\Tests\DeadDocBlock\Rector\Property\RemoveUselessVarTagRector\RemoveUselessVarTagRectorTest
  */
 final class RemoveUselessVarTagRector extends AbstractRector
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Laravel\Tests\Rector\StaticCall\RequestStaticValidateToInjectRector;
+namespace Rector\Tests\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
 
 use Iterator;
 use Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector;

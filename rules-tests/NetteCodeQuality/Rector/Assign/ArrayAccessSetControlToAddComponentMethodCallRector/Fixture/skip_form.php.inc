@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Fixture;
+namespace Rector\Tests\NetteCodeQuality\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Fixture;
 
 use Nette\Forms\Controls\TextInput;
 use Nette\Forms\Form;

@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27476
- * @see \Rector\Symfony4\Tests\Rector\New_\RootNodeTreeBuilderRector\RootNodeTreeBuilderRectorTest
+ * @see \Rector\Tests\Symfony4\Rector\New_\RootNodeTreeBuilderRector\RootNodeTreeBuilderRectorTest
  */
 final class RootNodeTreeBuilderRector extends AbstractRector
 {

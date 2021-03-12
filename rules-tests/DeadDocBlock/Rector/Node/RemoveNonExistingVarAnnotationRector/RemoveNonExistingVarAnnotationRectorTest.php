@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadDocBlock\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector;
+namespace Rector\Tests\DeadDocBlock\Rector\Node\RemoveNonExistingVarAnnotationRector;
 
 use Iterator;
 use Rector\DeadDocBlock\Rector\Node\RemoveNonExistingVarAnnotationRector;

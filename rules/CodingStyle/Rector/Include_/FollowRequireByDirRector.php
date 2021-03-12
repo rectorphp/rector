@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\CodingStyle\Tests\Rector\Include_\FollowRequireByDirRector\FollowRequireByDirRectorTest
+ * @see \Rector\Tests\CodingStyle\Rector\Include_\FollowRequireByDirRector\FollowRequireByDirRectorTest
  */
 final class FollowRequireByDirRector extends AbstractRector
 {

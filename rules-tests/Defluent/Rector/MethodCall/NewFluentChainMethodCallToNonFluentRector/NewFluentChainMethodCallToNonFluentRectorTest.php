@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Defluent\Tests\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector;
+namespace Rector\Tests\Defluent\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector;
 
 use Iterator;
 use Rector\Defluent\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector;

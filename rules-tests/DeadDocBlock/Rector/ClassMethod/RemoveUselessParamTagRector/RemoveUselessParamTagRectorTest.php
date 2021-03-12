@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessParamTagRector;
+namespace Rector\Tests\DeadDocBlock\Rector\ClassMethod\RemoveUselessParamTagRector;
 
 use Iterator;
 use Rector\DeadDocBlock\Rector\ClassMethod\RemoveUselessParamTagRector;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\FixtureAutoImportNames;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\FixtureAutoImportNames;
 
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass;
 
 class ClassToNewWithPostImport
 {
@@ -16,10 +16,10 @@ class ClassToNewWithPostImport
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector\FixtureAutoImportNames;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\FixtureAutoImportNames;
 
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass;
-use Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass;
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass;
 
 class ClassToNewWithPostImport
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
 final class ImportRootNamespaceClassesDisabled
 {
@@ -10,7 +10,7 @@ final class ImportRootNamespaceClassesDisabled
     private $date;
 
     /**
-     * @var \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Response
+     * @var \Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Response
      */
     private $response;
 
@@ -19,8 +19,8 @@ final class ImportRootNamespaceClassesDisabled
         /** @var \DateTime $currentDate */
         $currentDate = new \DateTime();
 
-        /** @var \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Response $response */
-        $response = new \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Response();
+        /** @var \Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Response $response */
+        $response = new \Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Response();
 
         $this->date = $currentDate;
         $this->response = $response;
@@ -36,12 +36,12 @@ final class ImportRootNamespaceClassesDisabled
         return $this->date;
     }
 
-    public function setResponse(?\Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Response $response): void
+    public function setResponse(?\Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Response $response): void
     {
         $this->response = $response;
     }
 
-    public function getResponse(): ?\Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Response
+    public function getResponse(): ?\Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Response
     {
         return $this->response;
     }
@@ -50,9 +50,9 @@ final class ImportRootNamespaceClassesDisabled
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Response;
+use Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Response;
 final class ImportRootNamespaceClassesDisabled
 {
     /**

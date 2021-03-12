@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\CompleteVarDocTypePropertyRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Source\SomeService as SignalSlotDispatcher;
+use Rector\Tests\TypeDeclaration\Rector\Property\CompleteVarDocTypePropertyRector\Source\SomeService as SignalSlotDispatcher;
 
 class SlotReplacement
 {

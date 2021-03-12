@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Removing\Tests\Rector\FuncCall\RemoveFuncCallRector\Fixture;
+namespace Rector\Tests\Removing\Rector\FuncCall\RemoveFuncCallRector\Fixture;
 
 class SkipAssign
 {

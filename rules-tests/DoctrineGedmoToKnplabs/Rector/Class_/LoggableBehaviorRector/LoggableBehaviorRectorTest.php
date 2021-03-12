@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\LoggableBehaviorRector;
+namespace Rector\Tests\DoctrineGedmoToKnplabs\Rector\Class_\LoggableBehaviorRector;
 
 use Iterator;
 use Rector\DoctrineGedmoToKnplabs\Rector\Class_\LoggableBehaviorRector;

@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Restoration\Tests\Rector\Class_\RemoveFinalFromEntityRector\RemoveFinalFromEntityRectorTest
+ * @see \Rector\Tests\Restoration\Rector\Class_\RemoveFinalFromEntityRector\RemoveFinalFromEntityRectorTest
  */
 final class RemoveFinalFromEntityRector extends AbstractRector
 {

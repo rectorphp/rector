@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertInstanceOfComparisonRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertInstanceOfComparisonRector\Fixture;
 
 use Foo\Bar;
 
@@ -18,7 +18,7 @@ final class MyOfComparissonTest extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertInstanceOfComparisonRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertInstanceOfComparisonRector\Fixture;
 
 use Foo\Bar;
 
@@ -26,7 +26,7 @@ final class MyOfComparissonTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $this->assertInstanceOf(\Rector\PHPUnit\Tests\Rector\MethodCall\AssertInstanceOfComparisonRector\Fixture\Foo::class, $something);
+        $this->assertInstanceOf(\Rector\Tests\PHPUnit\Rector\MethodCall\AssertInstanceOfComparisonRector\Fixture\Foo::class, $something);
         $this->assertNotInstanceOf(\Namespaced\Foo::class, $something);
         $this->assertInstanceOf(\Foo\Bar\Baz::class, $something);
     }

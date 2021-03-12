@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -23,7 +23,7 @@ class NestedCallable
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\ClassMethod\RenameParamToMatchTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;

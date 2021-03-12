@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\UseSpecificWillMethodRector;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\UseSpecificWillMethodRector;
 
 use Iterator;
 use Rector\PHPUnit\Rector\MethodCall\UseSpecificWillMethodRector;

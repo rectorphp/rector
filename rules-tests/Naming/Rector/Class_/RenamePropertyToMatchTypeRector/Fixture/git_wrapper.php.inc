@@ -1,13 +1,13 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
 
-use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\GitWrapper;
+use Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\GitWrapper;
 
 class GitWrapperChange
 {
     /**
-     * @var \Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\GitWrapper
+     * @var \Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\GitWrapper
      */
     private $wrapper;
 
@@ -21,14 +21,14 @@ class GitWrapperChange
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
+namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
 
-use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\GitWrapper;
+use Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\GitWrapper;
 
 class GitWrapperChange
 {
     /**
-     * @var \Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\GitWrapper
+     * @var \Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\GitWrapper
      */
     private $gitWrapper;
 

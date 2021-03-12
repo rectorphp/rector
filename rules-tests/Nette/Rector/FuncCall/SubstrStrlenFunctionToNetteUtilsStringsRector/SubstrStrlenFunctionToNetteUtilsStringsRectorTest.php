@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector;
+namespace Rector\Tests\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector;
 
 use Iterator;
 use Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector;

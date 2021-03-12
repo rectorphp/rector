@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Class_\AddArrayDefaultToArrayPropertyRector;
+namespace Rector\Tests\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector;

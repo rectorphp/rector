@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\Foreach_\SimplifyForeachInstanceOfRector;
+namespace Rector\Tests\PHPUnit\Rector\Foreach_\SimplifyForeachInstanceOfRector;
 
 use Iterator;
 use Rector\PHPUnit\Rector\Foreach_\SimplifyForeachInstanceOfRector;

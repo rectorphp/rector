@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new PseudoNamespaceToNamespace('PHPUnit_', ['PHPUnit_Framework_MockObject_MockObject']),
                 new PseudoNamespaceToNamespace('ChangeMe_', ['KeepMe_']),
                 new PseudoNamespaceToNamespace(
-                    'Rector_Renaming_Tests_Rector_FileWithoutNamespace_PseudoNamespaceToNamespaceRector_Fixture_'
+                    'Rector_Tests_Renaming_Rector_FileWithoutNamespace_PseudoNamespaceToNamespaceRector_Fixture_'
                 ),
             ]),
         ]]);

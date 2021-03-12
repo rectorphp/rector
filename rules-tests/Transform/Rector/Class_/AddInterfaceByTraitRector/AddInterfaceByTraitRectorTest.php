@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\Class_\AddInterfaceByTraitRector;
+namespace Rector\Tests\Transform\Rector\Class_\AddInterfaceByTraitRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

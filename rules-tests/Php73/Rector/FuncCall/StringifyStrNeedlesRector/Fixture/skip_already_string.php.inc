@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php73\Tests\Rector\FuncCall\StringifyStrNeedlesRector\Fixture;
+namespace Rector\Tests\Php73\Rector\FuncCall\StringifyStrNeedlesRector\Fixture;
 
-use Rector\Php73\Tests\Rector\FuncCall\StringifyStrNeedlesRector\Source\ReturnsString;
+use Rector\Tests\Php73\Rector\FuncCall\StringifyStrNeedlesRector\Source\ReturnsString;
 
 final class SkipAlreadyString
 {

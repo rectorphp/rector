@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php73\Tests\Rector\BinaryOr\IsCountableRector\Fixture;
+namespace Rector\Tests\Php73\Rector\BinaryOr\IsCountableRector\Fixture;
 
 use Countable;
 
@@ -24,7 +24,7 @@ if (! function_exists('is_countable')) {
 -----
 <?php
 
-namespace Rector\Php73\Tests\Rector\BinaryOr\IsCountableRector\Fixture;
+namespace Rector\Tests\Php73\Rector\BinaryOr\IsCountableRector\Fixture;
 
 use Countable;
 

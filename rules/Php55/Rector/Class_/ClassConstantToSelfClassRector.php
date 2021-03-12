@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
  * @see https://3v4l.org/INd7o
- * @see \Rector\Php55\Tests\Rector\Class_\ClassConstantToSelfClassRector\ClassConstantToSelfClassRectorTest
+ * @see \Rector\Tests\Php55\Rector\Class_\ClassConstantToSelfClassRector\ClassConstantToSelfClassRectorTest
  */
 final class ClassConstantToSelfClassRector extends AbstractRector
 {

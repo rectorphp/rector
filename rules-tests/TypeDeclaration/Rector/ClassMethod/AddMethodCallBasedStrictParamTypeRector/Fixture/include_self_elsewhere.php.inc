@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\Fixture;
 
 final class IncludeSelfElsewhere
 {
@@ -21,7 +21,7 @@ final class AnotherClassWithUsingSelf
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\Fixture;
 
 final class IncludeSelfElsewhere
 {
@@ -33,7 +33,7 @@ final class IncludeSelfElsewhere
 
 final class AnotherClassWithUsingSelf
 {
-    public function setIncludeSelfElsewhere(\Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\Fixture\IncludeSelfElsewhere $some)
+    public function setIncludeSelfElsewhere(\Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\Fixture\IncludeSelfElsewhere $some)
     {
     }
 }

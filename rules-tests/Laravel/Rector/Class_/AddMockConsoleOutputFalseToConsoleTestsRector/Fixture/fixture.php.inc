@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Laravel\Tests\Rector\Class_\AddMockConsoleOutputFalseToConsoleTestsRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\Class_\AddMockConsoleOutputFalseToConsoleTestsRector\Fixture;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\TestCase;
@@ -17,7 +17,7 @@ final class SomeTest extends TestCase
 -----
 <?php
 
-namespace Rector\Laravel\Tests\Rector\Class_\AddMockConsoleOutputFalseToConsoleTestsRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\Class_\AddMockConsoleOutputFalseToConsoleTestsRector\Fixture;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\TestCase;

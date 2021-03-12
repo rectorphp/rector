@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php73\Tests\Rector\BinaryOr\IsCountableRector;
+namespace Rector\Tests\Php73\Rector\BinaryOr\IsCountableRector;
 
 use Iterator;
 use Rector\Php73\Rector\BooleanOr\IsCountableRector;

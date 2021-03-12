@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\NotEqual\CommonNotEqualRector;
+namespace Rector\Tests\CodeQuality\Rector\NotEqual\CommonNotEqualRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector;

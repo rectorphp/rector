@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
+namespace Rector\Tests\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;

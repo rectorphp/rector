@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Renaming\Tests\Rector\PropertyFetch\RenamePropertyRector\Source;
+namespace Rector\Tests\Renaming\Rector\PropertyFetch\RenamePropertyRector\Source;
 
 final class ClassWithProperties
 {

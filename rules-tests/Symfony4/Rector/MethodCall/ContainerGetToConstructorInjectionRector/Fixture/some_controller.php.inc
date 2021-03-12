@@ -1,6 +1,6 @@
 <?php
 
-use Rector\Symfony4\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
+use Rector\Tests\Symfony4\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 
 final class SomeController extends ContainerAwareParentClass
 {
@@ -14,7 +14,7 @@ final class SomeController extends ContainerAwareParentClass
 -----
 <?php
 
-use Rector\Symfony4\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
+use Rector\Tests\Symfony4\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 
 final class SomeController extends ContainerAwareParentClass
 {

@@ -29,7 +29,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see https://lab.axioma.lv/symfony2/pagebundle/commit/062f9f87add5740ea89072e376dd703f3188d2ce
  *
- * @see \Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\TranslationBehaviorRector\TranslationBehaviorRectorTest
+ * @see \Rector\Tests\DoctrineGedmoToKnplabs\Rector\Class_\TranslationBehaviorRector\TranslationBehaviorRectorTest
  */
 final class TranslationBehaviorRector extends AbstractRector
 {

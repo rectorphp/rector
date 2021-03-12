@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Fixture;
+namespace Rector\Tests\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Fixture;
 
 class SomeObject
 {
@@ -13,7 +13,7 @@ class SomeObject
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Fixture;
+namespace Rector\Tests\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector\Fixture;
 
 class SomeObject
 {

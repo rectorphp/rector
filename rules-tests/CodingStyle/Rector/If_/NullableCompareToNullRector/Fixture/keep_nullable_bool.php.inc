@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\If_\NullableCompareToNullRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\If_\NullableCompareToNullRector\Fixture;
 
 class KeepNullableBool
 {

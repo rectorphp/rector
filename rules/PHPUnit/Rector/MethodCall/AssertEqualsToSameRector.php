@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertEqualsToSameRector\AssertEqualsToSameRectorTest
+ * @see \Rector\Tests\PHPUnit\Rector\MethodCall\AssertEqualsToSameRector\AssertEqualsToSameRectorTest
  */
 final class AssertEqualsToSameRector extends AbstractRector
 {

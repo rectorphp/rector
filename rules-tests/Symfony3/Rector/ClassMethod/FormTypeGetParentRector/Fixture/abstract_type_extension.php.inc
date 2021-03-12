@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\ClassMethod\FormTypeGetParentRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\ClassMethod\FormTypeGetParentRector\Fixture;
 
 use Symfony\Component\Form\AbstractTypeExtension;
 
@@ -16,7 +16,7 @@ class TypeExtension extends AbstractTypeExtension
 -----
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\ClassMethod\FormTypeGetParentRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\ClassMethod\FormTypeGetParentRector\Fixture;
 
 use Symfony\Component\Form\AbstractTypeExtension;
 

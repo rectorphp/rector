@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector\Fixture;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Contributte\Events\Extra\Event\Application\PresenterStartupEvent;
@@ -19,7 +19,7 @@ final class PresenterStartup implements EventSubscriberInterface
 -----
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector\Fixture;
+namespace Rector\Tests\NetteToSymfony\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector\Fixture;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Contributte\Events\Extra\Event\Application\PresenterStartupEvent;

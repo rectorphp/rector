@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Restoration\Tests\Rector\New_\CompleteMissingDependencyInNewRector;
+namespace Rector\Tests\Restoration\Rector\New_\CompleteMissingDependencyInNewRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

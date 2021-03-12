@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\ClassMethod\RenameAnnotationRector\Fixture;
+namespace Rector\Tests\Renaming\Rector\ClassMethod\RenameAnnotationRector\Fixture;
 
 /*
  * This definition fails only when is extending \PHPUnit\Framework\TestCase

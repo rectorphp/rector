@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Source\Another;
+namespace Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\Source\Another;
 
 class AbstractKernel
 {

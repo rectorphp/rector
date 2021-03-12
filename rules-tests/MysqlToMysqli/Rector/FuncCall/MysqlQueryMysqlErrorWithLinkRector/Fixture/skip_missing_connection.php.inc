@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\MysqlToMysqli\Tests\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector\Fixture;
+namespace Rector\Tests\MysqlToMysqli\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector\Fixture;
 
 class SkipMissingConnection
 {

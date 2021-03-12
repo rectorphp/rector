@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\ActionSuffixRemoverRector;
+namespace Rector\Tests\Symfony\Rector\ClassMethod\ActionSuffixRemoverRector;
 
 use Iterator;
 use Rector\Symfony\Rector\ClassMethod\ActionSuffixRemoverRector;

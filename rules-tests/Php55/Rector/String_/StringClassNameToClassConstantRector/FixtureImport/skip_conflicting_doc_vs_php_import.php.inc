@@ -1,13 +1,13 @@
 <?php
 
-namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\FixtureImport;
+namespace Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\FixtureImport;
 
-use Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\View;
+use Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\View;
 
 class SkipConflictingDocVsPhpImport
 {
     /**
-     * @var \Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\Nested\View
+     * @var \Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\Nested\View
      */
     public $view;
 
@@ -16,7 +16,7 @@ class SkipConflictingDocVsPhpImport
     }
 
     /**
-     * @return \Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Source\Nested\View
+     * @return \Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\Source\Nested\View
      */
     public function getView()
     {

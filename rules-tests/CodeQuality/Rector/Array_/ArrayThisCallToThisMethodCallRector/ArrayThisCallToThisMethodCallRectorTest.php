@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Array_\ArrayThisCallToThisMethodCallRector;
+namespace Rector\Tests\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\FixturePhp74;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\FixturePhp74;
 
 class SkipTypedProperty
 {

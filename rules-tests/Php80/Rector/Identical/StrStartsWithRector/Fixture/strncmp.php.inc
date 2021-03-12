@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Identical\StrStartsWithRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Identical\StrStartsWithRector\Fixture;
 
 class Strncmp
 {
@@ -16,7 +16,7 @@ class Strncmp
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Identical\StrStartsWithRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Identical\StrStartsWithRector\Fixture;
 
 class Strncmp
 {

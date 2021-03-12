@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Fixture;
+namespace Rector\Tests\NetteCodeQuality\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Fixture;
 
 use Nette\Application\UI\Presenter;
-use Rector\NetteCodeQuality\Tests\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Source\ChildControl;
+use Rector\Tests\NetteCodeQuality\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Source\ChildControl;
 
 class SomeClass extends Presenter
 {
@@ -18,10 +18,10 @@ class SomeClass extends Presenter
 -----
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Fixture;
+namespace Rector\Tests\NetteCodeQuality\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Fixture;
 
 use Nette\Application\UI\Presenter;
-use Rector\NetteCodeQuality\Tests\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Source\ChildControl;
+use Rector\Tests\NetteCodeQuality\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Source\ChildControl;
 
 class SomeClass extends Presenter
 {

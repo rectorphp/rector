@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Legacy\Tests\Rector\Class_\ChangeSingletonToServiceRector\Fixture;
+namespace Rector\Tests\Legacy\Rector\Class_\ChangeSingletonToServiceRector\Fixture;
 
 class Fixture
 {
@@ -20,7 +20,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Legacy\Tests\Rector\Class_\ChangeSingletonToServiceRector\Fixture;
+namespace Rector\Tests\Legacy\Rector\Class_\ChangeSingletonToServiceRector\Fixture;
 
 class Fixture
 {

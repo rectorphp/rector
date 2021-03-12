@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector\Fixture;
+namespace Rector\Tests\Nette\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector\Fixture;
 
 use Nette\Application\UI\Control;
 use Nette\ComponentModel\IContainer;
@@ -18,7 +18,7 @@ class SomeControl extends Control
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector\Fixture;
+namespace Rector\Tests\Nette\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector\Fixture;
 
 use Nette\Application\UI\Control;
 use Nette\ComponentModel\IContainer;

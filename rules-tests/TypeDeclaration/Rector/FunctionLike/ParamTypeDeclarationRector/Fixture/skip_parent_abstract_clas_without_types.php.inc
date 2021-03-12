@@ -2,7 +2,7 @@
 
 // https://github.com/rectorphp/rector/issues/812
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
 
 final class SkipParentAbstractClassWithoutType extends AbstractAccountingRefGenerator
 {

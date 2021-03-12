@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector\Fixture;
 
 final class Fixture
 {
@@ -17,7 +17,7 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector\Fixture;
 
 final class Fixture
 {

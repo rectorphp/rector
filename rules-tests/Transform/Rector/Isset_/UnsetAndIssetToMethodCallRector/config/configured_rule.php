@@ -1,7 +1,7 @@
 <?php
 
 use Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector;
-use Rector\Transform\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector\Source\LocalContainer;
+use Rector\Tests\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector\Source\LocalContainer;
 use Rector\Transform\ValueObject\UnsetAndIssetToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

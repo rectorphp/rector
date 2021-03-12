@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php74\Tests\Rector\LNumber\AddLiteralSeparatorToNumberRector;
+namespace Rector\Tests\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

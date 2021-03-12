@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
+namespace Rector\Tests\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
 
-use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\ORMTestCase;
+use Rector\Tests\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\ORMTestCase;
 use Tester\Assert;
 
 class EventsCompatibilityTest extends ORMTestCase
@@ -170,9 +170,9 @@ class EventsCompatibilityTest extends ORMTestCase
 -----
 <?php
 
-namespace Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
+namespace Rector\Tests\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
 
-use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\ORMTestCase;
+use Rector\Tests\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\ORMTestCase;
 use Tester\Assert;
 
 class EventsCompatibilityTest extends \PHPUnit\Framework\TestCase

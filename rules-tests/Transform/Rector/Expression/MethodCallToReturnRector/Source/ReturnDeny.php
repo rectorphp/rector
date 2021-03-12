@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\Expression\MethodCallToReturnRector\Source;
+namespace Rector\Tests\Transform\Rector\Expression\MethodCallToReturnRector\Source;
 
 final class ReturnDeny
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\Fixture;
 
 class PrivateClassParent extends ParentClassWithPrivateMethod
 {
@@ -20,7 +20,7 @@ class ParentClassWithPrivateMethod
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\Fixture;
 
 class PrivateClassParent extends ParentClassWithPrivateMethod
 {

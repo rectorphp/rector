@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/Atlantic18/DoctrineExtensions/blob/v2.4.x/doc/blameable.md
  * @see https://github.com/KnpLabs/DoctrineBehaviors/blob/2cf2585710a9f23d0c8362a7b52f45bf89dc0d3a/docs/blameable.md
  *
- * @see \Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\BlameableBehaviorRector\BlameableBehaviorRectorTest
+ * @see \Rector\Tests\DoctrineGedmoToKnplabs\Rector\Class_\BlameableBehaviorRector\BlameableBehaviorRectorTest
  */
 final class BlameableBehaviorRector extends AbstractRector
 {

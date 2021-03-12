@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AddEntityIdByConditionRector;
+namespace Rector\Tests\Doctrine\Rector\Class_\AddEntityIdByConditionRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

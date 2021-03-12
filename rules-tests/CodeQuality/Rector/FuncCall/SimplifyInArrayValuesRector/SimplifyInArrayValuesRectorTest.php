@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyInArrayValuesRector;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector;

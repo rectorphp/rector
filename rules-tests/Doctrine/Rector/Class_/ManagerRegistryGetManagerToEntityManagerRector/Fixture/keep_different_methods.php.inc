@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector\Fixture;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 

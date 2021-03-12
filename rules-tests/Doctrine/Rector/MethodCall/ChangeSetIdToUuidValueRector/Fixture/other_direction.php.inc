@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector\Fixture;
 
 use Ramsey\Uuid\Uuid;
-use Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
+use Rector\Tests\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
 
 class OtherDirection
 {
@@ -19,10 +19,10 @@ class OtherDirection
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector\Fixture;
 
 use Ramsey\Uuid\Uuid;
-use Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
+use Rector\Tests\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector\Source\Building;
 
 class OtherDirection
 {

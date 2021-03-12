@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyConditionsRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\Identical\SimplifyConditionsRector\Fixture;
 
 class SkipDualNull
 {

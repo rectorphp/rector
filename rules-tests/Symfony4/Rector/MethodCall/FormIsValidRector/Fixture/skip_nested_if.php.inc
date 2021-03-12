@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony4\Tests\Rector\MethodCall\FormIsValidRector\Fixture;
+namespace Rector\Tests\Symfony4\Rector\MethodCall\FormIsValidRector\Fixture;
 
 use Symfony\Component\Form\Form;
 

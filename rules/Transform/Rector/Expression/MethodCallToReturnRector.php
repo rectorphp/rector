@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Transform\Tests\Rector\Expression\MethodCallToReturnRector\MethodCallToReturnRectorTest
+ * @see \Rector\Tests\Transform\Rector\Expression\MethodCallToReturnRector\MethodCallToReturnRectorTest
  */
 final class MethodCallToReturnRector extends AbstractRector implements ConfigurableRectorInterface
 {

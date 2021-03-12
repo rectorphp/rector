@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector;
+namespace Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 
 use Iterator;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;

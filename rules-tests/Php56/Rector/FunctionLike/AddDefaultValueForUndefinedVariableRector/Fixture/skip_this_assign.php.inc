@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture;
+namespace Rector\Tests\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture;
 
 class SkipThisAssign
 {
@@ -11,4 +11,4 @@ $fn = function() {
     return $this->val;
 };
 
-$closure = \Closure::bind($fn, new SkipThisAssign(), '\Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture\SkipThisAssign');
+$closure = \Closure::bind($fn, new SkipThisAssign(), '\Rector\Tests\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture\SkipThisAssign');

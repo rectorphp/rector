@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Tests\Rector\Ternary\TernaryToNullCoalescingRector;
+namespace Rector\Tests\Php70\Rector\Ternary\TernaryToNullCoalescingRector;
 
 use Iterator;
 use Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector;

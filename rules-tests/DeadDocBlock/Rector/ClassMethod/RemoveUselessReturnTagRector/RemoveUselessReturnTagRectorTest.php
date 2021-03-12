@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadDocBlock\Tests\Rector\ClassMethod\RemoveUselessReturnTagRector;
+namespace Rector\Tests\DeadDocBlock\Rector\ClassMethod\RemoveUselessReturnTagRector;
 
 use Iterator;
 use Rector\DeadDocBlock\Rector\ClassMethod\RemoveUselessReturnTagRector;

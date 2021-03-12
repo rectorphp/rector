@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\Fixture;
 
-use Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\Source\ExternalClass;
+use Rector\Tests\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\Source\ExternalClass;
 
 class SkipExternalCall
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
+namespace Rector\Tests\Php71\Rector\Assign\AssignArrayToStringRector\Fixture;
 
 function assignArrayToString6()
 {
@@ -16,7 +16,7 @@ function assignArrayToString6()
 -----
 <?php
 
-namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
+namespace Rector\Tests\Php71\Rector\Assign\AssignArrayToStringRector\Fixture;
 
 function assignArrayToString6()
 {

@@ -36,7 +36,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see http://www.keganv.com/passing-arguments-controller-file-type-symfony-3/
  * @see https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
  *
- * @see \Rector\Symfony3\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\FormTypeInstanceToClassConstRectorTest
+ * @see \Rector\Tests\Symfony3\Rector\MethodCall\FormTypeInstanceToClassConstRector\FormTypeInstanceToClassConstRectorTest
  */
 final class FormTypeInstanceToClassConstRector extends AbstractRector
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\NetteFormToSymfonyFormRector;
+namespace Rector\Tests\NetteToSymfony\Rector\MethodCall\NetteFormToSymfonyFormRector;
 
 use Iterator;
 use Rector\NetteToSymfony\Rector\MethodCall\NetteFormToSymfonyFormRector;

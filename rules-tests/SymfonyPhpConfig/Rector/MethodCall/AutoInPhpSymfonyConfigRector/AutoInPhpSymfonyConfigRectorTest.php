@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\SymfonyPhpConfig\Tests\Rector\MethodCall\AutoInPhpSymfonyConfigRector;
+namespace Rector\Tests\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector;
 
 use Iterator;
 use Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstructorRector\Fixture;
+namespace Rector\Tests\NetteCodeQuality\Rector\Class_\MoveInjectToExistingConstructorRector\Fixture;
 
-use Rector\NetteCodeQuality\Tests\Rector\Class_\MoveInjectToExistingConstructorRector\Source\ClassWithParentConstructor;
+use Rector\Tests\NetteCodeQuality\Rector\Class_\MoveInjectToExistingConstructorRector\Source\ClassWithParentConstructor;
 
 final class SkipIfParentConstructor extends ClassWithParentConstructor
 {

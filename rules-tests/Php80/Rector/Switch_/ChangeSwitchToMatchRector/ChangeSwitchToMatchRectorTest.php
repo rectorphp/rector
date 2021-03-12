@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php80\Tests\Rector\Switch_\ChangeSwitchToMatchRector;
+namespace Rector\Tests\Php80\Rector\Switch_\ChangeSwitchToMatchRector;
 
 use Iterator;
 use Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector;

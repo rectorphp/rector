@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php53\Tests\Rector\Ternary\TernaryToElvisRector\Fixture;
+namespace Rector\Tests\Php53\Rector\Ternary\TernaryToElvisRector\Fixture;
 
 function elvis()
 {
@@ -11,7 +11,7 @@ function elvis()
 -----
 <?php
 
-namespace Rector\Php53\Tests\Rector\Ternary\TernaryToElvisRector\Fixture;
+namespace Rector\Tests\Php53\Rector\Ternary\TernaryToElvisRector\Fixture;
 
 function elvis()
 {

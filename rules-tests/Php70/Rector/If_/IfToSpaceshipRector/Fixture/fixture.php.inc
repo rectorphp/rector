@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\If_\IfToSpaceshipRector\Fixture;
+namespace Rector\Tests\Php70\Rector\If_\IfToSpaceshipRector\Fixture;
 
 class Fixture
 {
@@ -42,7 +42,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\If_\IfToSpaceshipRector\Fixture;
+namespace Rector\Tests\Php70\Rector\If_\IfToSpaceshipRector\Fixture;
 
 class Fixture
 {

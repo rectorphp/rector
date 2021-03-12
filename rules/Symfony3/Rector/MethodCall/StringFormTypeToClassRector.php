@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Covers https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
  *
- * @see \Rector\Symfony3\Tests\Rector\MethodCall\StringFormTypeToClassRector\StringFormTypeToClassRectorTest
+ * @see \Rector\Tests\Symfony3\Rector\MethodCall\StringFormTypeToClassRector\StringFormTypeToClassRectorTest
  */
 final class StringFormTypeToClassRector extends AbstractRector
 {

@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector\OrderConstantsByVisibilityRectorTest
+ * @see \Rector\Tests\Order\Rector\Class_\OrderConstantsByVisibilityRector\OrderConstantsByVisibilityRectorTest
  */
 final class OrderConstantsByVisibilityRector extends AbstractRector
 {

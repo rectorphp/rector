@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Assign\RemoveUnusedAssignVariableRector;
+namespace Rector\Tests\DeadCode\Rector\Assign\RemoveUnusedAssignVariableRector;
 
 use Iterator;
 use Rector\DeadCode\Rector\Assign\RemoveUnusedAssignVariableRector;

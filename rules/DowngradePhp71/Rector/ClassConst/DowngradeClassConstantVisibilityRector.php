@@ -11,7 +11,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DowngradePhp71\Tests\Rector\ClassConst\DowngradeClassConstantVisibilityRectorTest
+ * @see \Rector\Tests\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRectorTest
  */
 final class DowngradeClassConstantVisibilityRector extends AbstractRector
 {

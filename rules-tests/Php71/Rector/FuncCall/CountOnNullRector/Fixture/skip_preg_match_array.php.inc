@@ -2,7 +2,7 @@
 
 // @covers https://github.com/rectorphp/rector/issues/786
 
-namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\Fixture;
 
 class SkipPregMatchArray
 {

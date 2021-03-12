@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\FuncCall\MultiDirnameRector\Fixture;
+namespace Rector\Tests\Php70\Rector\FuncCall\MultiDirnameRector\Fixture;
 
 function multiDirname3()
 {
@@ -13,7 +13,7 @@ function multiDirname3()
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\FuncCall\MultiDirnameRector\Fixture;
+namespace Rector\Tests\Php70\Rector\FuncCall\MultiDirnameRector\Fixture;
 
 function multiDirname3()
 {

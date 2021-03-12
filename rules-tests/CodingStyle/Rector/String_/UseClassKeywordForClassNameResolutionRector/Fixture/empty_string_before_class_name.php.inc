@@ -1,12 +1,12 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
 
 class EmptyStringBeforeClassName
 {
     public function run()
     {
-        return 'Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\EmptyStringBeforeClassName::staticCall()) { ?>';
+        return 'Rector\Tests\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\EmptyStringBeforeClassName::staticCall()) { ?>';
     }
 }
 
@@ -14,13 +14,13 @@ class EmptyStringBeforeClassName
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture;
 
 class EmptyStringBeforeClassName
 {
     public function run()
     {
-        return \Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\EmptyStringBeforeClassName::class . '::staticCall()) { ?>';
+        return \Rector\Tests\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector\Fixture\EmptyStringBeforeClassName::class . '::staticCall()) { ?>';
     }
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\FuncCall\PreslashSimpleFunctionRector\Fixture;
 
 class Fixture
 {
@@ -14,7 +14,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\PreslashSimpleFunctionRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\FuncCall\PreslashSimpleFunctionRector\Fixture;
 
 class Fixture
 {

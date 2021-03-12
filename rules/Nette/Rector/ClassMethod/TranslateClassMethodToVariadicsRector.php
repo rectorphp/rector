@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/nette/utils/pull/178
  * @see https://github.com/contributte/translation/commit/d374c4c05b57dff1e5b327bb9bf98c392769806c
  *
- * @see \Rector\Nette\Tests\Rector\ClassMethod\TranslateClassMethodToVariadicsRector\TranslateClassMethodToVariadicsRectorTest
+ * @see \Rector\Tests\Nette\Rector\ClassMethod\TranslateClassMethodToVariadicsRector\TranslateClassMethodToVariadicsRectorTest
  * @note must be run before "composer update nette/utils:^3.0", because param contract break causes fatal error
  */
 final class TranslateClassMethodToVariadicsRector extends AbstractRector

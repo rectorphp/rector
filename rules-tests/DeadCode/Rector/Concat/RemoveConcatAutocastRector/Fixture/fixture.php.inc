@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Concat\RemoveConcatAutocastRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Concat\RemoveConcatAutocastRector\Fixture;
 
 class Fixture
 {
@@ -14,7 +14,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Concat\RemoveConcatAutocastRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\Concat\RemoveConcatAutocastRector\Fixture;
 
 class Fixture
 {

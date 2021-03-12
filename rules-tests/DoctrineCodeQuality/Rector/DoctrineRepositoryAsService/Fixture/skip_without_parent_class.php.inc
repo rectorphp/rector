@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Fixture;
+namespace Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService\Fixture;
 
 use App\Entity\Post;
-use Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Source\RandomClass;
+use Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService\Source\RandomClass;
 
 final class SkipWithoutParentClass extends RandomClass
 {

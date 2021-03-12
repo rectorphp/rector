@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Fixture;
 
-use Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Source\SomeTypedPropertyClass;
+use Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Source\SomeTypedPropertyClass;
 
 final class UsefulCommentTypeWithVarType
 {
@@ -21,9 +21,9 @@ final class UsefulCommentTypeWithVarType
 -----
 <?php
 
-namespace Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Fixture;
 
-use Rector\Php80\Tests\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Source\SomeTypedPropertyClass;
+use Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\Source\SomeTypedPropertyClass;
 
 final class UsefulCommentTypeWithVarType
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\SluggableBehaviorRector;
+namespace Rector\Tests\DoctrineGedmoToKnplabs\Rector\Class_\SluggableBehaviorRector;
 
 use Iterator;
 use Rector\DoctrineGedmoToKnplabs\Rector\Class_\SluggableBehaviorRector;

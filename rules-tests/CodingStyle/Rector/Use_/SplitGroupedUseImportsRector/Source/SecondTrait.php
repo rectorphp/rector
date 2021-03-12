@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Use_\SplitGroupedUseImportsRector\Source;
+namespace Rector\Tests\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector\Source;
 
 trait SecondTrait
 {

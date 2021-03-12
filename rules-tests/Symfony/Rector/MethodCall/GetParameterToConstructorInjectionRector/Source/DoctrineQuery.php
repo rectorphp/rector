@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetParameterToConstructorInjectionRector\Source;
+namespace Rector\Tests\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector\Source;
 
 final class DoctrineQuery
 {

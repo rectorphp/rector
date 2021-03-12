@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Arguments\Tests\Rector\FuncCall\SwapFuncCallArgumentsRector;
+namespace Rector\Tests\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

@@ -2,8 +2,8 @@
 
 use Rector\Core\Configuration\Option;
 use Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector;
-use Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Source\GetTrait;
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Rector\Tests\Symfony\Rector\MethodCall\GetToConstructorInjectionRector\Source\GetTrait;
+use Rector\Tests\Symfony\Rector\Source\SymfonyController;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

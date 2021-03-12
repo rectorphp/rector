@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector;
+namespace Rector\Tests\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector;

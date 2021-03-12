@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertPropertyExistsRector\AssertPropertyExistsRectorTest
+ * @see \Rector\Tests\PHPUnit\Rector\MethodCall\AssertPropertyExistsRector\AssertPropertyExistsRectorTest
  */
 final class AssertPropertyExistsRector extends AbstractRector
 {

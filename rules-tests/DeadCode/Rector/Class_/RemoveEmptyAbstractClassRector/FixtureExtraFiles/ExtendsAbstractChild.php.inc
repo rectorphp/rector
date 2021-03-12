@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\FixtureExtraFiles;
+namespace Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\FixtureExtraFiles;
 
-use Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Source\AbstractChild;
+use Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\Source\AbstractChild;
 
 final class ExtendsAbstractChild extends AbstractChild
 {
@@ -12,11 +12,11 @@ final class ExtendsAbstractChild extends AbstractChild
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\FixtureExtraFiles;
+namespace Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\FixtureExtraFiles;
 
-use Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Source\AbstractChild;
+use Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\Source\AbstractChild;
 
-final class ExtendsAbstractChild extends \Rector\DeadCode\Tests\Rector\Class_\RemoveEmptyAbstractClassRector\Source\AbstractMain
+final class ExtendsAbstractChild extends \Rector\Tests\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector\Source\AbstractMain
 {
 }
 

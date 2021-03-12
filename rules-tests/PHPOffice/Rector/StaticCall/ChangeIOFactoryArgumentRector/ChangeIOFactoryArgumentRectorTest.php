@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPOffice\Tests\Rector\StaticCall\ChangeIOFactoryArgumentRector;
+namespace Rector\Tests\PHPOffice\Rector\StaticCall\ChangeIOFactoryArgumentRector;
 
 use Iterator;
 use Rector\PHPOffice\Rector\StaticCall\ChangeIOFactoryArgumentRector;

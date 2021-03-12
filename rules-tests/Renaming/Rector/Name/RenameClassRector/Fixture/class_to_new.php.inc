@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector;
 
-class MyCustomValidatorTest extends \Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass
+class MyCustomValidatorTest extends \Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass
 {
     // ...
 }
@@ -11,9 +11,9 @@ class MyCustomValidatorTest extends \Rector\Renaming\Tests\Rector\Name\RenameCla
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Name\RenameClassRector;
+namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector;
 
-class MyCustomValidatorTest extends \Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass
+class MyCustomValidatorTest extends \Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass
 {
     // ...
 }

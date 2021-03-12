@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\Source\ClassToBeCreated;
+use Rector\Tests\Sensio\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\Source\ClassToBeCreated;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -27,7 +27,7 @@ final class ArrayMapReturnController extends AbstractController
 
 namespace AppBundle\Controller;
 
-use Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\Source\ClassToBeCreated;
+use Rector\Tests\Sensio\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\Source\ClassToBeCreated;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 

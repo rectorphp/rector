@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php54\Tests\Rector\FuncCall\RemoveReferenceFromCallRector;
+namespace Rector\Tests\Php54\Rector\FuncCall\RemoveReferenceFromCallRector;
 
 use Iterator;
 use Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector;

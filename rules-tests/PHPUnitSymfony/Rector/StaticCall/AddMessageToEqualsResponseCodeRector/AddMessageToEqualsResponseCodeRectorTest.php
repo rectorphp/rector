@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnitSymfony\Tests\Rector\StaticCall\AddMessageToEqualsResponseCodeRector;
+namespace Rector\Tests\PHPUnitSymfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector;
 
 use Iterator;
 use Rector\PHPUnitSymfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector;

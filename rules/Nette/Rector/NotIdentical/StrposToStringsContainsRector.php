@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/CubLi
  * @see https://github.com/nette/utils/blob/bd961f49b211997202bda1d0fbc410905be370d4/src/Utils/Strings.php#L81
  *
- * @see \Rector\Nette\Tests\Rector\NotIdentical\StrposToStringsContainsRector\StrposToStringsContainsRectorTest
+ * @see \Rector\Tests\Nette\Rector\NotIdentical\StrposToStringsContainsRector\StrposToStringsContainsRectorTest
  */
 final class StrposToStringsContainsRector extends AbstractRector
 {

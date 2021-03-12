@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony3\Tests\Rector\MethodCall\StringFormTypeToClassRector\Fixture;
+namespace Rector\Tests\Symfony3\Rector\MethodCall\StringFormTypeToClassRector\Fixture;
 
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilder;

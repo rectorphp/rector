@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeCovariantReturnTypeRector;
+namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector;
 
 use Iterator;
 use Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector;

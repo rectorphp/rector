@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQualityStrict\Tests\Rector\Stmt\VarInlineAnnotationToAssertRector;
+namespace Rector\Tests\CodeQualityStrict\Rector\Stmt\VarInlineAnnotationToAssertRector;
 
 use Iterator;
 use Rector\CodeQualityStrict\Rector\Stmt\VarInlineAnnotationToAssertRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Laravel\Tests\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector\Fixture;
 
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
@@ -18,7 +18,7 @@ class VariableDateTime
 -----
 <?php
 
-namespace Rector\Laravel\Tests\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector\Fixture;
+namespace Rector\Tests\Laravel\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector\Fixture;
 
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\String_\StringToClassConstantRector\Fixture;
+namespace Rector\Tests\Transform\Rector\String_\StringToClassConstantRector\Fixture;
 
 final class Fixture
 {
@@ -17,7 +17,7 @@ final class Fixture
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\String_\StringToClassConstantRector\Fixture;
+namespace Rector\Tests\Transform\Rector\String_\StringToClassConstantRector\Fixture;
 
 final class Fixture
 {

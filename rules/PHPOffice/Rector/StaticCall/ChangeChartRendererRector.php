@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#rendering-charts
  *
- * @see \Rector\PHPOffice\Tests\Rector\StaticCall\ChangeChartRendererRector\ChangeChartRendererRectorTest
+ * @see \Rector\Tests\PHPOffice\Rector\StaticCall\ChangeChartRendererRector\ChangeChartRendererRectorTest
  */
 final class ChangeChartRendererRector extends AbstractRector
 {

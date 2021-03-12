@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertRegExpRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertRegExpRector\Fixture;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {
@@ -17,7 +17,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertRegExpRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\MethodCall\AssertRegExpRector\Fixture;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {

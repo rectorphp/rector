@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\Fixture;
+namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\Fixture;
 
 class GapLevelInterfaceParentType {}
 class GapLevelInterfaceChildType extends GapLevelInterfaceParentType {}
@@ -23,7 +23,7 @@ interface GapLevelInterfaceC extends GapLevelInterfaceB
 -----
 <?php
 
-namespace Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\Fixture;
+namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\Fixture;
 
 class GapLevelInterfaceParentType {}
 class GapLevelInterfaceChildType extends GapLevelInterfaceParentType {}
@@ -40,7 +40,7 @@ interface GapLevelInterfaceB extends GapLevelInterfaceA
 interface GapLevelInterfaceC extends GapLevelInterfaceB
 {
     /**
-     * @param \Rector\DowngradePhp74\Tests\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\Fixture\GapLevelInterfaceParentType $type
+     * @param \Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\Fixture\GapLevelInterfaceParentType $type
      */
     public function contraVariantArguments($type);
 }

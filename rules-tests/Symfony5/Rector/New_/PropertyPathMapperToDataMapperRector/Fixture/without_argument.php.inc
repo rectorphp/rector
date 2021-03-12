@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony5\Tests\Rector\New_\PropertyPathMapperToDataMapperRector\Fixture;
+namespace Rector\Tests\Symfony5\Rector\New_\PropertyPathMapperToDataMapperRector\Fixture;
 
 use Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper;
 
@@ -16,7 +16,7 @@ class WithoutArgument
 -----
 <?php
 
-namespace Rector\Symfony5\Tests\Rector\New_\PropertyPathMapperToDataMapperRector\Fixture;
+namespace Rector\Tests\Symfony5\Rector\New_\PropertyPathMapperToDataMapperRector\Fixture;
 
 use Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper;
 

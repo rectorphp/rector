@@ -1,11 +1,11 @@
 <?php
-namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
 final class SkipReturnPhpDoc2
 {
     /** @return array{a: string, b: float, c: array<int, string>} */
-    public function get(): array { 
-        
+    public function get(): array {
+
         return [
             [
 				'a' => 'hi!',

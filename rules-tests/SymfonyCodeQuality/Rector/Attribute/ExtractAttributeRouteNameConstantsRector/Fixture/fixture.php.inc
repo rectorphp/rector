@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SymfonyCodeQuality\Tests\Rector\Attribute\ExtractAttributeRouteNameConstantsRector\Fixture;
+namespace Rector\Tests\SymfonyCodeQuality\Rector\Attribute\ExtractAttributeRouteNameConstantsRector\Fixture;
 
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -21,7 +21,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\SymfonyCodeQuality\Tests\Rector\Attribute\ExtractAttributeRouteNameConstantsRector\Fixture;
+namespace Rector\Tests\SymfonyCodeQuality\Rector\Attribute\ExtractAttributeRouteNameConstantsRector\Fixture;
 
 use Symfony\Component\Routing\Annotation\Route;
 

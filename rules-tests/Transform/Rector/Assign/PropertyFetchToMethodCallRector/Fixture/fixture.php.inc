@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Assign\PropertyFetchToMethodCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\Source\Translator;
+use Rector\Tests\Transform\Rector\Assign\PropertyFetchToMethodCallRector\Source\Translator;
 
 final class CustomTranslator extends Translator
 {
@@ -20,9 +20,9 @@ final class CustomTranslator extends Translator
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Assign\PropertyFetchToMethodCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\Assign\PropertyFetchToMethodCallRector\Source\Translator;
+use Rector\Tests\Transform\Rector\Assign\PropertyFetchToMethodCallRector\Source\Translator;
 
 final class CustomTranslator extends Translator
 {

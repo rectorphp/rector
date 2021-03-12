@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\ClassMethod\TranslateClassMethodToVariadicsRector;
+namespace Rector\Tests\Nette\Rector\ClassMethod\TranslateClassMethodToVariadicsRector;
 
 use Iterator;
 use Rector\Nette\Rector\ClassMethod\TranslateClassMethodToVariadicsRector;
@@ -21,7 +21,7 @@ final class TranslateClassMethodToVariadicsRectorTest extends AbstractRectorTest
             $this->smartFileSystem->remove($localFilePath);
         }
 
-        require_once __DIR__ . '/../../../../../../stubs/Nette/Localization/ITranslation.php';
+        require_once __DIR__ . '/../../../../../stubs/Nette/Localization/ITranslation.php';
 
         // to make test work with fixture
         $this->doTestFileInfo($fileInfo);

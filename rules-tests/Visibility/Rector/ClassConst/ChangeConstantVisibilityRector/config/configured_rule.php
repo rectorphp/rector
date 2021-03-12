@@ -2,7 +2,7 @@
 
 use Rector\Core\ValueObject\Visibility;
 use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
-use Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Source\ParentObject;
+use Rector\Tests\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector\Source\ParentObject;
 use Rector\Visibility\ValueObject\ChangeConstantVisibility;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -21,7 +21,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ),
                 new ChangeConstantVisibility(ParentObject::class, 'TO_BE_PRIVATE_CONSTANT', Visibility::PRIVATE),
                 new ChangeConstantVisibility(
-                    'Rector\Visibility\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture\Fixture2',
+                    'Rector\Tests\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture\Fixture2',
                     'TO_BE_PRIVATE_CONSTANT',
                     Visibility::PRIVATE
                 ),

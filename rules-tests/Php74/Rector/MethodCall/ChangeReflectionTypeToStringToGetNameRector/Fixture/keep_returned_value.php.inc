@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector\Fixture;
+namespace Rector\Tests\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector\Fixture;
 
 class KeepReturnedValue
 {

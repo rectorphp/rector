@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\Assign\ListSwapArrayOrderRector\Fixture;
+namespace Rector\Tests\Php70\Rector\Assign\ListSwapArrayOrderRector\Fixture;
 
 class MissingListItem
 {
@@ -14,7 +14,7 @@ class MissingListItem
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\Assign\ListSwapArrayOrderRector\Fixture;
+namespace Rector\Tests\Php70\Rector\Assign\ListSwapArrayOrderRector\Fixture;
 
 class MissingListItem
 {

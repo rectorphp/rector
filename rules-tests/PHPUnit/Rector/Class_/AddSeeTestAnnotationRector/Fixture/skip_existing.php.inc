@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\Class_\AddSeeTestAnnotationRector\Fixture;
+namespace Rector\Tests\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector\Fixture;
 
 /**
- * @see \Rector\PHPUnit\Tests\Rector\Class_\AddSeeTestAnnotationRector\Source\SomeExistingTest
+ * @see \Rector\Tests\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector\Source\SomeExistingTest
  */
 class SkipExisting
 {

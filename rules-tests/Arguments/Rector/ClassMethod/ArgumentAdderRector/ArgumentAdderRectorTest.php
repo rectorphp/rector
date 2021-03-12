@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Arguments\Tests\Rector\ClassMethod\ArgumentAdderRector;
+namespace Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

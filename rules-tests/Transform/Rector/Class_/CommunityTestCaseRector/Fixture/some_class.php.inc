@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\Class_\CommunityTestCaseRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Class_\CommunityTestCaseRector\Fixture;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -16,7 +16,7 @@ final class SomeClassTest extends AbstractRectorTestCase
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\Class_\CommunityTestCaseRector\Fixture;
+namespace Rector\Tests\Transform\Rector\Class_\CommunityTestCaseRector\Fixture;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 

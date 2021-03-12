@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
+ * @see \Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
  */
 final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends AbstractRector
 {

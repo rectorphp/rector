@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\FixtureImported;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureImported;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\ConflictingName;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\ConflictingName;
 
 final class AlreadyImportedShortName
 {
@@ -23,9 +23,9 @@ final class AlreadyImportedShortName
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\FixtureImported;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureImported;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\ConflictingName;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\ConflictingName;
 
 final class AlreadyImportedShortName
 {

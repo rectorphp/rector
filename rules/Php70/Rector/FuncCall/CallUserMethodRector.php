@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Php70\Tests\Rector\FuncCall\CallUserMethodRector\CallUserMethodRectorTest
+ * @see \Rector\Tests\Php70\Rector\FuncCall\CallUserMethodRector\CallUserMethodRectorTest
  */
 final class CallUserMethodRector extends AbstractRector
 {

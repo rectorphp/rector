@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\MethodCall\AddNextrasDatePickerToDateControlRector;
+namespace Rector\Tests\Nette\Rector\MethodCall\AddNextrasDatePickerToDateControlRector;
 
 use Iterator;
 use Rector\Nette\Rector\MethodCall\AddNextrasDatePickerToDateControlRector;

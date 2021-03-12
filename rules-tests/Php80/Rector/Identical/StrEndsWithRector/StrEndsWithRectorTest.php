@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php80\Tests\Rector\Identical\StrEndsWithRector;
+namespace Rector\Tests\Php80\Rector\Identical\StrEndsWithRector;
 
 use Iterator;
 use Rector\Php80\Rector\Identical\StrEndsWithRector;

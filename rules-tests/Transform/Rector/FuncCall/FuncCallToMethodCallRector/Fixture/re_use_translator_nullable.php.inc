@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Source\NullableTranslatorProvider;
+use Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Source\NullableTranslatorProvider;
 
 final class ReUseTranslatorNullable extends NullableTranslatorProvider
 {
@@ -16,9 +16,9 @@ final class ReUseTranslatorNullable extends NullableTranslatorProvider
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
 
-use Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Source\NullableTranslatorProvider;
+use Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\Source\NullableTranslatorProvider;
 
 final class ReUseTranslatorNullable extends NullableTranslatorProvider
 {

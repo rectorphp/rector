@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadDocBlock\Tests\Rector\Property\RemoveUselessVarTagRector\Fixture;
+namespace Rector\Tests\DeadDocBlock\Rector\Property\RemoveUselessVarTagRector\Fixture;
 
 final class SomeClass
 {
@@ -14,7 +14,7 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\DeadDocBlock\Tests\Rector\Property\RemoveUselessVarTagRector\Fixture;
+namespace Rector\Tests\DeadDocBlock\Rector\Property\RemoveUselessVarTagRector\Fixture;
 
 final class SomeClass
 {

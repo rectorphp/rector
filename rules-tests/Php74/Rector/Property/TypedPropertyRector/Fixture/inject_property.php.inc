@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
 final class InjectProperty extends AbstractParentPresenter
 {
@@ -22,16 +22,16 @@ abstract class AbstractParentPresenter
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
-use Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
+use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
 final class InjectProperty extends AbstractParentPresenter
 {
     /**
      * @inject
      */
-    private \Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $anotherClass;
+    private \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass $anotherClass;
 }
 
 abstract class AbstractParentPresenter

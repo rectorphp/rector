@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php71\Tests\Rector\Name\ReservedObjectRector;
+namespace Rector\Tests\Php71\Rector\Name\ReservedObjectRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

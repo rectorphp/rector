@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Expression\InlineIfToExplicitIfRector;
+namespace Rector\Tests\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;

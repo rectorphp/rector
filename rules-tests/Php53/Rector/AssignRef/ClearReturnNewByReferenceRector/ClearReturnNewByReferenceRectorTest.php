@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php53\Tests\Rector\AssignRef\ClearReturnNewByReferenceRector;
+namespace Rector\Tests\Php53\Rector\AssignRef\ClearReturnNewByReferenceRector;
 
 use Iterator;
 use Rector\Php53\Rector\AssignRef\ClearReturnNewByReferenceRector;

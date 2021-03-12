@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\New_\NewToStaticCallRector\Fixture;
+namespace Rector\Tests\Transform\Rector\New_\NewToStaticCallRector\Fixture;
 
 class SkipAnotherClass
 {

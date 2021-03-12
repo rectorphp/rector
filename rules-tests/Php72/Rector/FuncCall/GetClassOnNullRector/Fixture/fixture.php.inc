@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector\Fixture;
+namespace Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\Fixture;
 
 final class Fixture
 {
@@ -27,7 +27,7 @@ function getClassOnNullOutsideClass()
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector\Fixture;
+namespace Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\Fixture;
 
 final class Fixture
 {

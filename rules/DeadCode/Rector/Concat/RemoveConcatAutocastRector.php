@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\DeadCode\Tests\Rector\Concat\RemoveConcatAutocastRector\RemoveConcatAutocastRectorTest
+ * @see \Rector\Tests\DeadCode\Rector\Concat\RemoveConcatAutocastRector\RemoveConcatAutocastRectorTest
  */
 final class RemoveConcatAutocastRector extends AbstractRector
 {

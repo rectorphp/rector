@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AlwaysInitializeUuidInEntityRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\AlwaysInitializeUuidInEntityRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -20,7 +20,7 @@ class PreviousStepTest
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Rector\Class_\AlwaysInitializeUuidInEntityRector\Fixture;
+namespace Rector\Tests\Doctrine\Rector\Class_\AlwaysInitializeUuidInEntityRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 

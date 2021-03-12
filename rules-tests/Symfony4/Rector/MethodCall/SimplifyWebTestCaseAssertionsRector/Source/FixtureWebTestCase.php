@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony4\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\Source;
+namespace Rector\Tests\Symfony4\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\Source;
 
 class FixtureWebTestCase
 {

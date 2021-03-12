@@ -36,7 +36,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * - https://github.com/rectorphp/rector/issues/700#issue-370301169
  * - https://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations#inject
  *
- * @see \Rector\DependencyInjection\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\AnnotatedPropertyInjectToConstructorInjectionRectorTest
+ * @see \Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\AnnotatedPropertyInjectToConstructorInjectionRectorTest
  */
 final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {

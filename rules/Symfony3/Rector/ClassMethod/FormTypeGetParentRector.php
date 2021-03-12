@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony3\Tests\Rector\ClassMethod\FormTypeGetParentRector\FormTypeGetParentRectorTest
+ * @see \Rector\Tests\Symfony3\Rector\ClassMethod\FormTypeGetParentRector\FormTypeGetParentRectorTest
  */
 final class FormTypeGetParentRector extends AbstractRector
 {

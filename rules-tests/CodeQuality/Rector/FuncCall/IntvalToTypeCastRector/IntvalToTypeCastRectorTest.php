@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\IntvalToTypeCastRector;
+namespace Rector\Tests\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQualityStrict\Tests\Rector\ClassMethod\ParamTypeToAssertTypeRector;
+namespace Rector\Tests\CodeQualityStrict\Rector\ClassMethod\ParamTypeToAssertTypeRector;
 
 use Iterator;
 use Rector\CodeQualityStrict\Rector\ClassMethod\ParamTypeToAssertTypeRector;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\MysqlToMysqli\Tests\Fixture;
+namespace Rector\Tests\MysqlToMysqli\Fixture;
 
 final class Setfixture
 {
@@ -109,7 +109,7 @@ final class Setfixture
 
 declare(strict_types=1);
 
-namespace Rector\MysqlToMysqli\Tests\Fixture;
+namespace Rector\Tests\MysqlToMysqli\Fixture;
 
 final class Setfixture
 {

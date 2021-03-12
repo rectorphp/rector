@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\ShortenElseIfRector\Fixture;
 
 class NestedElse
 {
@@ -37,7 +37,7 @@ class NestedElse
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector\Fixture;
+namespace Rector\Tests\CodeQuality\Rector\If_\ShortenElseIfRector\Fixture;
 
 class NestedElse
 {

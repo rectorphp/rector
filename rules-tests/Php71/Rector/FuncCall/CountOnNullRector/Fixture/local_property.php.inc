@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\Fixture;
 
 final class LocalProperty
 {
@@ -31,7 +31,7 @@ final class LocalProperty
 -----
 <?php
 
-namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
+namespace Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\Fixture;
 
 final class LocalProperty
 {
