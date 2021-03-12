@@ -12069,7 +12069,7 @@ Rename "*Spec.php" file to "*Test.php" file
 
 Rename references for classes that were renamed during Rector run
 
-- class: [`Rector\PostRector\Rector\ClassRenamingPostRector`](/packages/post-rector/src/Rector/ClassRenamingPostRector.php)
+- class: [`Rector\PostRector\Rector\ClassRenamingPostRector`](/PostRector/src/Rector/ClassRenamingPostRector.php)
 
 ```diff
 -function (OriginalClass $someClass)
@@ -12084,7 +12084,7 @@ Rename references for classes that were renamed during Rector run
 
 Imports fully qualified names
 
-- class: [`Rector\PostRector\Rector\NameImportingPostRector`](/packages/post-rector/src/Rector/NameImportingPostRector.php)
+- class: [`Rector\PostRector\Rector\NameImportingPostRector`](/PostRector/src/Rector/NameImportingPostRector.php)
 
 ```diff
 +use App\AnotherClass;
@@ -12104,7 +12104,7 @@ Imports fully qualified names
 
 Add nodes on weird positions
 
-- class: [`Rector\PostRector\Rector\NodeAddingPostRector`](/packages/post-rector/src/Rector/NodeAddingPostRector.php)
+- class: [`Rector\PostRector\Rector\NodeAddingPostRector`](/PostRector/src/Rector/NodeAddingPostRector.php)
 
 ```diff
  class SomeClass
@@ -12125,7 +12125,7 @@ Add nodes on weird positions
 
 Remove nodes from weird positions
 
-- class: [`Rector\PostRector\Rector\NodeRemovingPostRector`](/packages/post-rector/src/Rector/NodeRemovingPostRector.php)
+- class: [`Rector\PostRector\Rector\NodeRemovingPostRector`](/PostRector/src/Rector/NodeRemovingPostRector.php)
 
 ```diff
  class SomeClass
@@ -12146,7 +12146,7 @@ Remove nodes from weird positions
 
 Replaces nodes on weird positions
 
-- class: [`Rector\PostRector\Rector\NodeToReplacePostRector`](/packages/post-rector/src/Rector/NodeToReplacePostRector.php)
+- class: [`Rector\PostRector\Rector\NodeToReplacePostRector`](/PostRector/src/Rector/NodeToReplacePostRector.php)
 
 ```diff
  class SomeClass
@@ -12165,7 +12165,7 @@ Replaces nodes on weird positions
 
 Add dependency properties
 
-- class: [`Rector\PostRector\Rector\PropertyAddingPostRector`](/packages/post-rector/src/Rector/PropertyAddingPostRector.php)
+- class: [`Rector\PostRector\Rector\PropertyAddingPostRector`](/PostRector/src/Rector/PropertyAddingPostRector.php)
 
 ```diff
  class SomeClass
@@ -12184,7 +12184,7 @@ Add dependency properties
 
 Add unique use imports collected during Rector run
 
-- class: [`Rector\PostRector\Rector\UseAddingPostRector`](/packages/post-rector/src/Rector/UseAddingPostRector.php)
+- class: [`Rector\PostRector\Rector\UseAddingPostRector`](/PostRector/src/Rector/UseAddingPostRector.php)
 
 ```diff
 +use App\AnotherClass;

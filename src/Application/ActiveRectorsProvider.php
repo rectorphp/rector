@@ -63,7 +63,7 @@ final class ActiveRectorsProvider
     {
         sort($rectors);
 
-        return array_filter($rectors, function (RectorInterface $rector): bool {
+        $rectors = array_filter($rectors, function (RectorInterface $rector): bool {
             // utils rules
             if ($rector instanceof InternalRectorInterface) {
                 return false;
@@ -72,5 +72,11 @@ final class ActiveRectorsProvider
             // skip as internal and always run
             return ! $rector instanceof PostRectorInterface;
         });
+
+        usort($rectors, function (RectorInterface $firstRector, RectorInterface $secondRector): int {
+            return get_class($firstRector) <=> get_class($secondRector);
+        });
+
+        return $rectors;
     }
 }

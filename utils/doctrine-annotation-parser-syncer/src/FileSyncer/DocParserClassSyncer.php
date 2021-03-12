@@ -13,6 +13,6 @@ final class DocParserClassSyncer extends AbstractClassSyncer
 
     public function getTargetFilePath(): string
     {
-        return __DIR__ . '/../../../../packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php';
+        return __DIR__ . '/../../../../packages/DoctrineAnnotationGenerated/ConstantPreservingDocParser.php';
     }
 }
