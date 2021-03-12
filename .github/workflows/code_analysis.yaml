@@ -43,6 +43,13 @@ jobs:
                         name: 'Validate Max File Length'
                         run: vendor/bin/easy-ci validate-file-length packages rules src tests
 
+                    # see https://github.com/rectorphp/rector-generator
+                    -
+                        name: 'Rector Generate From Recipe'
+                        run: |
+                            bin/rector init-recipe --ansi
+                            bin/rector generate --ansi
+
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
 

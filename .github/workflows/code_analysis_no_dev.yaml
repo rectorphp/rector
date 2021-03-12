@@ -10,12 +10,6 @@ jobs:
             matrix:
                 actions:
                     -
-                        name: 'Rector Recipe'
-                        run: |
-                            bin/rector init-recipe --ansi
-                            bin/rector generate --ansi
-
-                    -
                         name: 'Rector List'
                         run: bin/rector list
 
