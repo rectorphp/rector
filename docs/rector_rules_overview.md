@@ -14969,7 +14969,7 @@ Migrates from deprecated ValidatorBuilder->enableAnnotationMapping($reader) to V
 
 Change Symfony Event listener class to Event Subscriber based on configuration in service.yaml file
 
-- class: [`Rector\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector`](/rules/SymfonyCodeQuality/src/Rector/Class_/EventListenerToEventSubscriberRector.php)
+- class: [`Rector\Symfony\Rector\Class_\EventListenerToEventSubscriberRector`](/rules/SymfonyCodeQuality/src/Rector/Class_/EventListenerToEventSubscriberRector.php)
 
 ```diff
 -class SomeListener
@@ -15004,7 +15004,7 @@ Change Symfony Event listener class to Event Subscriber based on configuration i
 
 `Extract` #[Route] attribute name argument from string to constant
 
-- class: [`Rector\SymfonyCodeQuality\Rector\Attribute\ExtractAttributeRouteNameConstantsRector`](/rules/SymfonyCodeQuality/src/Rector/Attribute/ExtractAttributeRouteNameConstantsRector.php)
+- class: [`Rector\Symfony\Rector\Attribute\ExtractAttributeRouteNameConstantsRector`](/rules/SymfonyCodeQuality/src/Rector/Attribute/ExtractAttributeRouteNameConstantsRector.php)
 
 ```diff
  use Symfony\Component\Routing\Annotation\Route;

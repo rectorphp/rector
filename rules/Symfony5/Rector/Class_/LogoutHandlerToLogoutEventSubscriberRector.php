@@ -10,9 +10,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
+use Rector\Symfony\ValueObject\EventReferenceToMethodName;
 use Rector\Symfony5\NodeFactory\OnLogoutClassMethodFactory;
-use Rector\SymfonyCodeQuality\NodeFactory\GetSubscribedEventsClassMethodFactory;
-use Rector\SymfonyCodeQuality\ValueObject\EventReferenceToMethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 

@@ -51,7 +51,6 @@ jobs:
                     - rules/EarlyReturn
                     - rules/Generics
                     - rules/Laravel
-                    - rules/Legacy
                     - rules/MockeryToProphecy
                     - rules/MysqlToMysqli
                     - rules/Naming
@@ -75,7 +74,6 @@ jobs:
                     - rules/PHPOffice
                     - rules/PhpSpecToPHPUnit
                     - rules/PHPUnit
-                    - rules/PHPUnitSymfony
                     - rules/Privatization
                     - rules/PSR4
                     - rules/Removing
@@ -88,7 +86,6 @@ jobs:
                     - rules/Symfony3
                     - rules/Symfony4
                     - rules/Symfony5
-                    - rules/SymfonyCodeQuality
                     - rules/SymfonyPhpConfig
                     - rules/Transform
                     - rules/TypeDeclaration

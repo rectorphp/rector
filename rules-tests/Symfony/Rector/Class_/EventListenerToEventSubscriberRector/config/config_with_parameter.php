@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-use Rector\Symfony\Rector\Attribute\ExtractAttributeRouteNameConstantsRector;
-use Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector;
+use Rector\Core\Configuration\Option;
 use Rector\Symfony\Rector\Class_\EventListenerToEventSubscriberRector;
-use Rector\Symfony\Rector\Class_\MakeCommandLazyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+    // wtf: all test have to be in single file due to autoloading race-condigition and container creating issue of fixture
+    $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ . '/listener_services.xml');
+
     $services = $containerConfigurator->services();
-    $services->set(ResponseStatusCodeRector::class);
-    $services->set(MakeCommandLazyRector::class);
     $services->set(EventListenerToEventSubscriberRector::class);
-    $services->set(ExtractAttributeRouteNameConstantsRector::class);
 };
