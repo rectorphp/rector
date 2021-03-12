@@ -4,24 +4,41 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Rector\RectorGenerator\TemplateInitializer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
+use Symplify\SmartFileSystem\FileSystemGuard;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class InitCommand extends Command
 {
     /**
-     * @var TemplateInitializer
+     * @var FileSystemGuard
      */
-    private $templateInitializer;
+    private $fileSystemGuard;
 
-    public function __construct(TemplateInitializer $templateInitializer)
-    {
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
+
+    public function __construct(
+        FileSystemGuard $fileSystemGuard,
+        SmartFileSystem $smartFileSystem,
+        SymfonyStyle $symfonyStyle
+    ) {
+        $this->fileSystemGuard = $fileSystemGuard;
+        $this->smartFileSystem = $smartFileSystem;
+        $this->symfonyStyle = $symfonyStyle;
+
         parent::__construct();
-
-        $this->templateInitializer = $templateInitializer;
     }
 
     protected function configure(): void
@@ -31,7 +48,20 @@ final class InitCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->templateInitializer->initialize(__DIR__ . '/../../../templates/rector.php.dist', 'rector.php');
+        $rectorTemplateFilePath = __DIR__ . '/../../../templates/rector.php.dist';
+        $this->fileSystemGuard->ensureFileExists($rectorTemplateFilePath, __METHOD__);
+
+        $rectorRootFilePath = getcwd() . '/rector.php';
+
+        $doesFileExist = $this->smartFileSystem->exists($rectorRootFilePath);
+        if ($doesFileExist) {
+            $message = sprintf('Config file "%s" already exists', $rectorRootFilePath);
+            $this->symfonyStyle->warning($message);
+        } else {
+            $this->smartFileSystem->copy($rectorTemplateFilePath, $rectorRootFilePath);
+            $message = sprintf('"%s" config file was added', $rectorRootFilePath);
+            $this->symfonyStyle->success($message);
+        }
 
         return ShellCode::SUCCESS;
     }
