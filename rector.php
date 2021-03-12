@@ -88,4 +88,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);
     $parameters->set(Option::ENABLE_CACHE, true);
+    $parameters->set(Option::CACHE_DIR, 'tmp');
 };

@@ -21,12 +21,78 @@ jobs:
             fail-fast: false
             matrix:
                 directories:
-                    - rules
-                    - rules-tests
                     - packages
                     - packages-tests
                     - src
                     - tests
+                    - rules-tests
+
+                    - rules/Arguments
+                    - rules/Autodiscovery
+                    - rules/CakePHP
+                    - rules/Carbon
+                    - rules/CodeQuality
+                    - rules/CodeQualityStrict
+                    - rules/CodingStyle
+                    - rules/Composer
+                    - rules/DeadCode
+                    - rules/DeadDocBlock
+                    - rules/Defluent
+                    - rules/DependencyInjection
+                    - rules/Doctrine
+                    - rules/DoctrineCodeQuality
+                    - rules/DoctrineGedmoToKnplabs
+                    - rules/DowngradePhp70
+                    - rules/DowngradePhp71
+                    - rules/DowngradePhp72
+                    - rules/DowngradePhp73
+                    - rules/DowngradePhp74
+                    - rules/DowngradePhp80
+                    - rules/EarlyReturn
+                    - rules/Generics
+                    - rules/Laravel
+                    - rules/Legacy
+                    - rules/MockeryToProphecy
+                    - rules/MysqlToMysqli
+                    - rules/Naming
+                    - rules/Nette
+                    - rules/NetteCodeQuality
+                    - rules/NetteKdyby
+                    - rules/NetteTesterToPHPUnit
+                    - rules/NetteToSymfony
+                    - rules/Order
+                    - rules/Php52
+                    - rules/Php53
+                    - rules/Php54
+                    - rules/Php55
+                    - rules/Php56
+                    - rules/Php70
+                    - rules/Php71
+                    - rules/Php72
+                    - rules/Php73
+                    - rules/Php74
+                    - rules/Php80
+                    - rules/PHPOffice
+                    - rules/PhpSpecToPHPUnit
+                    - rules/PHPUnit
+                    - rules/PHPUnitSymfony
+                    - rules/Privatization
+                    - rules/PSR4
+                    - rules/Removing
+                    - rules/RemovingStatic
+                    - rules/Renaming
+                    - rules/Restoration
+                    - rules/Sensio
+                    - rules/Symfony
+                    - rules/Symfony2
+                    - rules/Symfony3
+                    - rules/Symfony4
+                    - rules/Symfony5
+                    - rules/SymfonyCodeQuality
+                    - rules/SymfonyPhpConfig
+                    - rules/Transform
+                    - rules/TypeDeclaration
+                    - rules/Visibility
 
         runs-on: ubuntu-latest
         steps:
@@ -51,6 +117,16 @@ jobs:
                     php-version: 7.3
                     coverage: none
 
+            -   uses: actions/cache@v2
+                env:
+                    cache-name: rector-container-cache
+                with:
+                    path: tmp
+                    key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('${{ matrix.directories }}') }}
+                    restore-keys: |
+                        ${{ runner.os }}-build-${{ env.cache-name }}-
+                        ${{ runner.os }}-build-
+                        ${{ runner.os }}-
 
             -   run: composer install --no-progress --ansi
 
