@@ -13,6 +13,6 @@ final class AnnotationReaderClassSyncer extends AbstractClassSyncer
 
     public function getTargetFilePath(): string
     {
-        return __DIR__ . '/../../../../packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php';
+        return __DIR__ . '/../../../../packages/DoctrineAnnotationGenerated/ConstantPreservingAnnotationReader.php';
     }
 }

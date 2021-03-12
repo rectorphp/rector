@@ -70,6 +70,8 @@ final class ExistingClassesProvider
             $robotLoader->addDirectory(getcwd() . '/' . $directory);
         }
 
+        $robotLoader->excludeDirectory(__DIR__ . '/../../../../packages/rector-generator');
+
         $classNames = [];
         foreach (array_keys($robotLoader->getIndexedClasses()) as $className) {
             if (! is_string($className)) {

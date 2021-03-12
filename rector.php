@@ -83,7 +83,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Source/*',
         '*/Expected/*',
 
-        __DIR__ . '/packages/doctrine-annotation-generated/src',
+        __DIR__ . '/packages/DoctrineAnnotationGenerated',
         // template files
         __DIR__ . '/packages/rector-generator/templates',
         __DIR__ . '/packages/rector-generator/src/ValueObject/RectorRecipe.php',

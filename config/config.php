@@ -7,9 +7,12 @@ use Rector\Core\ValueObject\ProjectType;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    // @todo this should be removed
     $containerConfigurator->import(__DIR__ . '/../packages/*/config/config.php');
+
     $containerConfigurator->import(__DIR__ . '/../rules/*/config/config.php');
     $containerConfigurator->import(__DIR__ . '/services.php');
+    $containerConfigurator->import(__DIR__ . '/parameters.php');
     $containerConfigurator->import(__DIR__ . '/../utils/*/config/config.php', null, true);
 
     $parameters = $containerConfigurator->parameters();
