@@ -37,7 +37,7 @@ final class FunctionToStaticMethodRector extends AbstractRector
     private $staticMethodClassFactory;
 
     /**
-     * @var \Rector\Transform\Naming\FullyQualifiedNameResolver
+     * @var FullyQualifiedNameResolver
      */
     private $fullyQualifiedNameResolver;
 
@@ -143,7 +143,7 @@ CODE_SAMPLE
 
     /**
      * @param Node[] $stmts
-     * @param \Rector\Transform\ValueObject\FunctionToStaticCall[] $functionsToStaticCalls
+     * @param FunctionToStaticCall[] $functionsToStaticCalls
      * @return Node[]
      */
     private function replaceFuncCallsWithStaticCalls(array $stmts, array $functionsToStaticCalls): array
