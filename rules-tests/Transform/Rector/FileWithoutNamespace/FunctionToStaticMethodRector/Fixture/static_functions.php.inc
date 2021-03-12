@@ -19,6 +19,6 @@ declare(strict_types=1);
 
 namespace Rector\Tests\Transform\Rector\FileWithoutNamespace\FunctionToStaticMethodRector\Fixture;
 
-$value = %staticFunctions::firstStaticFunction();
+$value = \StaticFunctions::firstStaticFunction();
 
 ?>

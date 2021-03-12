@@ -12,7 +12,7 @@ final class SameEnd
      * @param Another\Trait_ $secondTrait
      * @param \Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\Trait_ $thirdTrait
      */
-    public function __construct(\Rector\Tests\CodingStyle\Rector\Tests\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\Trait_ $firstTrait, Another\Trait_ $secondTrait, \Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\Trait_ $thirdTrait)
+    public function __construct(\Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\Trait_ $firstTrait, Another\Trait_ $secondTrait, \Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\Trait_ $thirdTrait)
     {
     }
 }

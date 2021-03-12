@@ -7,11 +7,11 @@
 >
     <testsuites>
         <testsuite name="main">
-            <directory>rules/*/tests</directory>
-            <directory>packages-tests</directory>
             <directory>tests</directory>
+            <directory>rules-tests</directory>
+            <directory>packages-tests</directory>
             <directory>utils/*/tests</directory>
-            <exclude>rules/nette-tester-to-phpunit/tests/Rector/RenameTesterTestToPHPUnitToTestFileRector/Source/*</exclude>
+            <exclude>rules-tests/NetteTesterToPHPUnit/Rector/RenameTesterTestToPHPUnitToTestFileRector/Source/*</exclude>
         </testsuite>
     </testsuites>
 

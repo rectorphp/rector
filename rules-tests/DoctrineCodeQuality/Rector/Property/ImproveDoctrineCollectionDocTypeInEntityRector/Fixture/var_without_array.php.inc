@@ -33,7 +33,7 @@ class VarWithoutArray
 {
     /**
      * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")
-     * @var \Rector\Tests\DoctrineCodeQuality\Rector\Tests\Property\ImproveDoctrineCollectionDocTypeInEntityRector\Source\Training[]|\Doctrine\Common\Collections\Collection<int, \Rector\DoctrineCodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector\Source\Training>
+     * @var \Rector\Tests\DoctrineCodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector\Source\Training[]|\Doctrine\Common\Collections\Collection<int, \Rector\Tests\DoctrineCodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector\Source\Training>
      */
     private $trainings = [];
 }

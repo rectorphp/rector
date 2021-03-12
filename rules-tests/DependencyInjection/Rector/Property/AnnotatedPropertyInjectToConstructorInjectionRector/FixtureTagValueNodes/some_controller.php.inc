@@ -27,11 +27,7 @@ use JMS\DiExtraBundle\Annotation as DI;
 
 final class SomeController
 {
-<<<<<<< HEAD
-    public function __construct(private \Rector\Tests\Symfony\Rector\Tests\MethodCall\AbstractToConstructorInjectionRectorSource\SomeEntityManager $entityManager, private \Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $translator)
-=======
     public function __construct(private \Rector\Tests\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeEntityManager $entityManager, private \Rector\Tests\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $translator)
->>>>>>> cd209cd9c... fixup! fixup! fixup! fixup! fixup! fixing
     {
     }
 }

@@ -15,8 +15,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
 
+    $services->defaults()
+        ->public()
+        ->autowire()
+        ->autoconfigure();
+
     // psr-4
     $services->alias(PSR4AutoloadNamespaceMatcherInterface::class, PSR4NamespaceMatcher::class);
+
+    $services->load('Rector\\', __DIR__ . '/../rules')
+        ->exclude([__DIR__ . '/../rules/*/{ValueObject,Rector,Contract,Exception}']);
 
     // symfony code-quality
     $services->set(Parser::class);

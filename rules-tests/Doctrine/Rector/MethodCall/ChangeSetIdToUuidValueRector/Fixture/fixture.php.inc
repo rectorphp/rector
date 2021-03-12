@@ -32,7 +32,7 @@ class SomeClass
     public function run()
     {
         $buildingFirst = new Building();
-        $buildingFirst->setId(Uuid::fromString('%s'));
+        $buildingFirst->setId(Uuid::fromString('a3bfab84-e207-4ddd-b96d-488151de9e96'));
 
         $buildingFirst2 = new Building();
         $buildingFirst2->setUuid('skip_this');

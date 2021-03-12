@@ -33,11 +33,7 @@ use Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToCo
 
 class ClassWithInjects7
 {
-<<<<<<< HEAD
-    public function __construct(private \Rector\Tests\DependencyInjection\Rector\Tests\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeInterface $session, private \Rector\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface $product)
-=======
     public function __construct(private \Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeInterface $session, private \Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface $product)
->>>>>>> cd209cd9c... fixup! fixup! fixup! fixup! fixup! fixing
     {
     }
 }

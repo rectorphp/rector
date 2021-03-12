@@ -52,7 +52,7 @@ is_subclass_of($some, \Rector\Tests\Php71\Rector\Name\ReservedObjectRector\Fixtu
 
 is_a($some, \Rector\Tests\Php71\Rector\Name\ReservedObjectRector\Fixture\SmartObject::class);
 
-function someFunction(\Rector\Tests\Php71\Rector\Tests\Name\ReservedObjectRector\Fixture\SmartObject $reservedObject): \Rector\Php71\Rector\Name\ReservedObjectRector\Fixture\SmartObject {
+function someFunction(\Rector\Tests\Php71\Rector\Name\ReservedObjectRector\Fixture\SmartObject $reservedObject): \Rector\Tests\Php71\Rector\Name\ReservedObjectRector\Fixture\SmartObject {
     return $reservedObject;
 }
 
