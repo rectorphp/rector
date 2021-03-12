@@ -71,7 +71,7 @@ final class ValidateFixtureFilenameCommand extends Command
             ->path('#/Fixture/#')
             ->in(__DIR__ . '/../../../../tests')
             ->in(__DIR__ . '/../../../../packages-tests')
-            ->in(__DIR__ . '/../../../../rules/*/tests');
+            ->in(__DIR__ . '/../../../../rules-tests');
 
         return $this->finderSanitizer->sanitize($finder);
     }

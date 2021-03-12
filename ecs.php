@@ -73,7 +73,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // breaks on-purpose annotated variables
         ReturnAssignmentFixer::class,
 
-        PhpdocTypesFixer::class => [__DIR__ . '/rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'],
+        PhpdocTypesFixer::class => [__DIR__ . '/rules/Php74/Rector/Double/RealToFloatTypeCastRector.php'],
         PhpUnitStrictFixer::class => [
             __DIR__ . '/packages-tests/BetterPhpDocParser/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php',
             __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',
