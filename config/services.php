@@ -49,6 +49,7 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\PackageBuilder\Strings\StringFormatConverter;
 use Symplify\SmartFileSystem\FileSystemFilter;
+use Symplify\SmartFileSystem\FileSystemGuard;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\Json\JsonFileSystem;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -87,6 +88,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     $services->alias(SymfonyApplication::class, ConsoleApplication::class);
+
+    $services->set(FileSystemGuard::class);
 
     $services->set(NoRectorsLoadedReporter::class);
     $services->set(SimpleCallableNodeTraverser::class);
