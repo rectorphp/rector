@@ -82,7 +82,7 @@ final class ValidateFixtureSuffixCommand extends Command
             ->notPath('Rector/FileNode/RenameSpecFileToTestFileRector/Fixture/some_file_Spec.php')
             ->notPath('Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Fixture/DateTime.php')
             ->in(__DIR__ . '/../../../../tests')
-            ->in(__DIR__ . '/../../../../packages/*/tests')
+            ->in(__DIR__ . '/../../../../packages-tests')
             ->in(__DIR__ . '/../../../../rules/*/tests');
 
         return $this->finderSanitizer->sanitize($finder);
