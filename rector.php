@@ -14,7 +14,6 @@ use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivateProperty
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Rector\Set\ValueObject\SetList;
-use Rector\Symfony\Rector\MethodCall\AutoInPhpSymfonyConfigRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -35,8 +34,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 TestCase::class => PreferenceSelfThis::PREFER_THIS,
             ],
         ]]);
-
-    $services->set(AutoInPhpSymfonyConfigRector::class);
 
     $parameters = $containerConfigurator->parameters();
 
@@ -64,7 +61,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::PATHS, [
         __DIR__ . '/src',
         __DIR__ . '/rules',
+        __DIR__ . '/rules-tests',
         __DIR__ . '/packages',
+        __DIR__ . '/packages-tests',
         __DIR__ . '/tests',
         __DIR__ . '/utils',
         __DIR__ . '/config/set',
@@ -88,5 +87,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);
     $parameters->set(Option::ENABLE_CACHE, true);
-    $parameters->set(Option::CACHE_DIR, 'tmp');
 };
