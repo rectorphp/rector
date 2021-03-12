@@ -152,7 +152,7 @@ This Rector adds new default arguments in calls of defined methods and class typ
 
 :wrench: **configure it!**
 
-- class: [`Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector`](/rules/arguments/src/Rector/ClassMethod/ArgumentAdderRector.php)
+- class: [`Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector`](/rules/Arguments/src/Rector/ClassMethod/ArgumentAdderRector.php)
 
 ```php
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
@@ -220,7 +220,7 @@ Replaces defined map of arguments in defined methods and their calls.
 
 :wrench: **configure it!**
 
-- class: [`Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector`](/rules/arguments/src/Rector/ClassMethod/ArgumentDefaultValueReplacerRector.php)
+- class: [`Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector`](/rules/Arguments/src/Rector/ClassMethod/ArgumentDefaultValueReplacerRector.php)
 
 ```php
 use Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
@@ -256,7 +256,7 @@ Swap arguments in function calls
 
 :wrench: **configure it!**
 
-- class: [`Rector\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector`](/rules/arguments/src/Rector/FuncCall/SwapFuncCallArgumentsRector.php)
+- class: [`Rector\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector`](/rules/Arguments/src/Rector/FuncCall/SwapFuncCallArgumentsRector.php)
 
 ```php
 use Rector\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector;
