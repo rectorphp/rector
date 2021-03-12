@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\Fixture\SymfonyRoute;
+namespace Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\Fixture\SymfonyRoute;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\Source\MyController;
+use Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\Source\MyController;
 
 final class RouteNameWithMethodAndClassConstant
 {

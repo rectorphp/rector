@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitor\Fixture;
+namespace Rector\Tests\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor\Fixture;
 
 class Simple
 {

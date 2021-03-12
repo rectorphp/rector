@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Fixture;
+namespace Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\VariableTypeResolver\Fixture;
 
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\AnotherType;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\FirstType;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\SecondType;
+use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\VariableTypeResolver\Source\AnotherType;
+use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\VariableTypeResolver\Source\FirstType;
+use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\VariableTypeResolver\Source\SecondType;
 
 final class NewClass
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Fixture;
+namespace Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\VariableTypeResolver\Fixture;
 
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\AnotherType;
+use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\VariableTypeResolver\Source\AnotherType;
 
 array_map(function (AnotherType $useUse) {
     return $useUse;

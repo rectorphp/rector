@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\NameTypeResolver\Source;
+namespace Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\NameTypeResolver\Source;
 
-use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
+use Rector\Tests\NodeTypeResolver\Source\AnotherClass;
 
 class ParentCall extends AnotherClass
 {

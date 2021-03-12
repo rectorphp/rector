@@ -9,6 +9,7 @@ use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
 use Rector\Core\DependencyInjection\Loader\ConfigurableCallValuesCollectingPhpFileLoader;
+use Rector\RectorGenerator\Bundle\RectorGeneratorBundle;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\GlobFileLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -79,13 +80,20 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
      */
     public function registerBundles(): iterable
     {
-        return [
+        $bundles = [
             new ConsoleColorDiffBundle(),
             new PhpConfigPrinterBundle(),
             new ComposerJsonManipulatorBundle(),
             new SkipperBundle(),
             new SimplePhpDocParserBundle(),
         ];
+
+        // only for dev
+        if (class_exists(RectorGeneratorBundle::class)) {
+            $bundles[] = new RectorGeneratorBundle();
+        }
+
+        return $bundles;
     }
 
     protected function build(ContainerBuilder $containerBuilder): void

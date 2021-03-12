@@ -145,4 +145,4 @@ That's it!
 
 Do you want to save time with making rules and tests?
 
-Use [the `create` command](/docs/rector_recipe.md).
+Use [the `generate` command](https://github.com/rectorphp/rector-generator).

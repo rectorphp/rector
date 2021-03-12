@@ -16,7 +16,7 @@ on:
     pull_request: null
 
 jobs:
-    rector-ci:
+    rector:
         strategy:
             fail-fast: false
             matrix:

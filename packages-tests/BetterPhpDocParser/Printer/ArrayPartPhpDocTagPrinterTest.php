@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\Printer;
+namespace Rector\Tests\BetterPhpDocParser\Printer;
 
 use Iterator;
 use PHPUnit\Framework\TestCase;

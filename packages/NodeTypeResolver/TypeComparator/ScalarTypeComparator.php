@@ -11,7 +11,7 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 
 /**
- * @see \Rector\NodeTypeResolver\Tests\TypeComparator\ScalarTypeComparatorTest
+ * @see \Rector\Tests\NodeTypeResolver\TypeComparator\ScalarTypeComparatorTest
  */
 final class ScalarTypeComparator
 {

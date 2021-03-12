@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver;
+namespace Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\ParamTypeResolver;
 
 use Iterator;
 use PhpParser\Node\Param;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver\Source\Html;
+use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\ParamTypeResolver\Source\Html;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\ParamTypeResolver

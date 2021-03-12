@@ -38,7 +38,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 /**
  * @template TNode as \PHPStan\PhpDocParser\Ast\Node
- * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
+ * @see \Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
  */
 final class PhpDocInfo
 {

@@ -632,3 +632,8 @@ parameters:
 
         - '#Do not use scalar or array as constructor parameter\. Use "Symplify\\PackageBuilder\\Parameter\\ParameterProvider" service instead#'
         - '#Content of method "getNextExpression\(\)" is duplicated with method "getNextExpression\(\)" in "Rector\\Php73\\Rector\\FuncCall\\ArrayKeyFirstLastRector" class\. Use unique content or service instead#'
+
+        -
+            message: '#Function "class_exists\(\)" cannot be used/left in the code#'
+            paths:
+                - src/HttpKernel/RectorKernel.php

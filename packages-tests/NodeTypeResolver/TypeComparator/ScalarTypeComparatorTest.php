@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\TypeComparator;
+namespace Rector\Tests\NodeTypeResolver\TypeComparator;
 
 use Iterator;
 use PHPStan\Type\BooleanType;

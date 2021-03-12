@@ -27,7 +27,7 @@ use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 
 /**
  * Maps PhpParser <=> PHPStan <=> PHPStan doc <=> string type nodes between all possible formats
- * @see \Rector\NodeTypeResolver\Tests\StaticTypeMapper\StaticTypeMapperTest
+ * @see \Rector\Tests\NodeTypeResolver\StaticTypeMapper\StaticTypeMapperTest
  */
 final class StaticTypeMapper
 {

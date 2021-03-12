@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\PhpDocParser;
+namespace Rector\Tests\BetterPhpDocParser\PhpDocParser;
 
 use Iterator;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;

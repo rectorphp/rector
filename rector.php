@@ -84,9 +84,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Expected/*',
 
         __DIR__ . '/packages/DoctrineAnnotationGenerated',
-        // template files
-        __DIR__ . '/packages/rector-generator/templates',
-        __DIR__ . '/packages/rector-generator/src/ValueObject/RectorRecipe.php',
     ]);
 
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);

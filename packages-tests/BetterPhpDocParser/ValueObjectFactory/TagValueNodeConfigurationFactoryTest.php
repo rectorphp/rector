@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\ValueObjectFactory;
+namespace Rector\Tests\BetterPhpDocParser\ValueObjectFactory;
 
 use Iterator;
 use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Doctrine\ColumnTagValueNodeFactory;

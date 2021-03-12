@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\TypeComparator\Source;
+namespace Rector\Tests\NodeTypeResolver\TypeComparator\Source;
 
 final class SomeGenericTypeObject
 {

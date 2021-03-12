@@ -60,8 +60,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         # generated from /vendor
         __DIR__ . '/packages/DoctrineAnnotationGenerated/ConstantPreservingDocParser.php',
         __DIR__ . '/packages/DoctrineAnnotationGenerated/ConstantPreservingAnnotationReader.php',
-        // template files
-        __DIR__ . '/packages/rector-generator/templates',
 
         UnaryOperatorSpacesFixer::class,
         // buggy with specific markdown snippet file in docs/rules_overview.md

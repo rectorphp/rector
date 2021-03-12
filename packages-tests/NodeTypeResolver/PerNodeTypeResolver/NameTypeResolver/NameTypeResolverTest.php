@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\NameTypeResolver;
+namespace Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\NameTypeResolver;
 
 use Iterator;
 use PhpParser\Node\Name;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
-use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
+use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\Tests\NodeTypeResolver\Source\AnotherClass;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\NameTypeResolver

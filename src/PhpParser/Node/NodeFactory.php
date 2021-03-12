@@ -221,7 +221,6 @@ final class NodeFactory
     public function createPropertyAssignmentWithExpr(string $propertyName, Expr $expr): Assign
     {
         $propertyFetch = $this->createPropertyFetch(self::THIS, $propertyName);
-
         return new Assign($propertyFetch, $expr);
     }
 

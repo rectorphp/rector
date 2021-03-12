@@ -101,7 +101,6 @@ final class RectorsFinder
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_finder');
 
         $robotLoader->acceptFiles = [$name];
-        $robotLoader->excludeDirectory(__DIR__ . '/../../../packages/rector-generator');
 
         $robotLoader->refresh();
         $robotLoader->rebuild();
