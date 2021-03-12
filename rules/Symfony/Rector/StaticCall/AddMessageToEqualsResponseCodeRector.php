@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnitSymfony\Rector\StaticCall;
+namespace Rector\Symfony\Rector\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\PHPUnitSymfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector\AddMessageToEqualsResponseCodeRectorTest
+ * @see \Rector\Tests\Symfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector\AddMessageToEqualsResponseCodeRectorTest
  */
 final class AddMessageToEqualsResponseCodeRector extends AbstractRector
 {

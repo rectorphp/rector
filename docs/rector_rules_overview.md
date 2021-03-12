@@ -9985,7 +9985,7 @@ Split `withConsecutive()` arg to array
 
 Add response content to response code assert, so it is easier to debug
 
-- class: [`Rector\PHPUnitSymfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector`](/rules/PHPUnitSymfony/src/Rector/StaticCall/AddMessageToEqualsResponseCodeRector.php)
+- class: [`Rector\Symfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector`](/rules/PHPUnitSymfony/src/Rector/StaticCall/AddMessageToEqualsResponseCodeRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;

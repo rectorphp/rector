@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\PHPUnitSymfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector;
+namespace Rector\Tests\Symfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector;
 
 use Iterator;
-use Rector\PHPUnitSymfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector;
+use Rector\Symfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
