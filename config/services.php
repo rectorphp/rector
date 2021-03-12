@@ -84,7 +84,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../packages/NodeTypeResolver/Reflection/BetterReflection/RectorBetterReflectionSourceLocatorFactory.php',
             __DIR__ . '/../packages/Testing/PHPUnit/Runnable/NodeVisitor',
             __DIR__ . '/../packages/Testing/PHPUnit',
-            __DIR__ . '/../packages/rector-generator',
         ]);
 
     $services->alias(SymfonyApplication::class, ConsoleApplication::class);
