@@ -43,7 +43,7 @@ final class SomeServiceEntityRepository
     private \Doctrine\ORM\EntityRepository $repository;
     public function __construct(private \Doctrine\ORM\EntityManagerInterface $entityManager)
     {
-        $this->repository = $entityManager->getRepository(User::class);
+        $this->repository = $entityManager->getRepository(\Rector\Tests\DoctrineCodeQuality\Set\DoctrineRepositoryAsServiceSet\Source\User::class);
     }
 
     public function save(User $user): void

@@ -6,10 +6,12 @@ namespace Rector\DoctrineCodeQuality\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DoctrineCodeQuality\NodeAnalyzer\EntityObjectTypeResolver;
 use Rector\DoctrineCodeQuality\NodeFactory\RepositoryAssignFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -34,14 +36,21 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
      */
     private $repositoryAssignFactory;
 
+    /**
+     * @var EntityObjectTypeResolver
+     */
+    private $entityObjectTypeResolver;
+
     public function __construct(
         ClassDependencyManipulator $classDependencyManipulator,
         ClassInsertManipulator $classInsertManipulator,
-        RepositoryAssignFactory $repositoryAssignFactory
+        RepositoryAssignFactory $repositoryAssignFactory,
+        EntityObjectTypeResolver $entityObjectTypeResolver
     ) {
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->classInsertManipulator = $classInsertManipulator;
         $this->repositoryAssignFactory = $repositoryAssignFactory;
+        $this->entityObjectTypeResolver = $entityObjectTypeResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -69,6 +78,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class PostRepository
 {
+    /**
+     * @var \Doctrine\ORM\EntityRepository<Post>
+     */
     private EntityRepository $repository;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -102,12 +114,11 @@ CODE_SAMPLE
         // remove parent class
         $node->extends = null;
 
+        $entityObjectType = $this->entityObjectTypeResolver->resolveFromRepositoryClass($node);
+        $genericObjectType = new GenericObjectType('Doctrine\ORM\EntityRepository', [$entityObjectType]);
+
         // add $repository property
-        $this->classInsertManipulator->addPropertyToClass(
-            $node,
-            'repository',
-            new ObjectType('Doctrine\ORM\EntityRepository')
-        );
+        $this->classInsertManipulator->addPropertyToClass($node, 'repository', $genericObjectType);
 
         // add $entityManager and assign to constuctor
         $repositoryAssign = $this->repositoryAssignFactory->create($node);

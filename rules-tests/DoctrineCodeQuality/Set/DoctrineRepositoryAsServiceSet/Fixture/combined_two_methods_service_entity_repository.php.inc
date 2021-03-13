@@ -23,7 +23,7 @@ final class CombinedTwomethodsServiceEntityRepository extends ServiceEntityRepos
         $this->_em->flush();
     }
 
-    /** @return User[] */
+    /** @return Car[] */
     public function findByEnabled(bool $enabled): array
     {
         return $this->findBy([
@@ -52,7 +52,7 @@ final class CombinedTwomethodsServiceEntityRepository
     private \Doctrine\ORM\EntityRepository $repository;
     public function __construct(private \Doctrine\ORM\EntityManagerInterface $entityManager)
     {
-        $this->repository = $entityManager->getRepository(Car::class);
+        $this->repository = $entityManager->getRepository(\Rector\Tests\DoctrineCodeQuality\Set\DoctrineRepositoryAsServiceSet\Source\Car::class);
     }
 
     public function deleteByEnabled(): void
@@ -63,7 +63,7 @@ final class CombinedTwomethodsServiceEntityRepository
         $this->entityManager->flush();
     }
 
-    /** @return User[] */
+    /** @return Car[] */
     public function findByEnabled(bool $enabled): array
     {
         return $this->repository->findBy([

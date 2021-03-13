@@ -11,16 +11,13 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\Expression;
 
 final class RepositoryNodeFactory
 {
-    public function createRepositoryAssign(Expr $entityReferenceExpr): Expression
+    public function createRepositoryAssign(Expr $entityReferenceExpr): Assign
     {
         $propertyFetch = new PropertyFetch(new Variable('this'), new Identifier('repository'));
-        $assign = new Assign($propertyFetch, $this->createGetRepositoryMethodCall($entityReferenceExpr));
-
-        return new Expression($assign);
+        return new Assign($propertyFetch, $this->createGetRepositoryMethodCall($entityReferenceExpr));
     }
 
     private function createGetRepositoryMethodCall(Expr $entityReferenceExpr): MethodCall

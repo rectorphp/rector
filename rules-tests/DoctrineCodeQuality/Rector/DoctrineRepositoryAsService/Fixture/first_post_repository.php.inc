@@ -31,6 +31,9 @@ use Doctrine\ORM\EntityRepository;
 
 final class FirstPostRepository
 {
+    /**
+     * @var \Doctrine\ORM\EntityRepository<\Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService\Source\Entity\Post>
+     */
     private \Doctrine\ORM\EntityRepository $repository;
     public function __construct(\Doctrine\ORM\EntityManagerInterface $entityManager)
     {

@@ -10,7 +10,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\NodeFactory\RepositoryNodeFactory;
@@ -42,15 +44,21 @@ final class ServiceEntityRepositoryParentCallToDIRector extends AbstractRector
      * @var PropertyToAddCollector
      */
     private $propertyToAddCollector;
+    /**
+     * @var ClassDependencyManipulator
+     */
+    private $classDependencyManipulator;
 
     public function __construct(
         RepositoryNodeFactory $repositoryNodeFactory,
         RepositoryTypeFactory $repositoryTypeFactory,
-        PropertyToAddCollector $propertyToAddCollector
+        PropertyToAddCollector $propertyToAddCollector,
+        ClassDependencyManipulator $classDependencyManipulator
     ) {
         $this->repositoryNodeFactory = $repositoryNodeFactory;
         $this->repositoryTypeFactory = $repositoryTypeFactory;
         $this->propertyToAddCollector = $propertyToAddCollector;
+        $this->classDependencyManipulator = $classDependencyManipulator;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -133,7 +141,14 @@ CODE_SAMPLE
         $entityReferenceExpr = $this->removeParentConstructAndCollectEntityReference($node);
 
         // 3. add $entityManager->getRepository() fetch assign
-        $node->stmts[] = $this->repositoryNodeFactory->createRepositoryAssign($entityReferenceExpr);
+
+        $repositoryAssign = $this->repositoryNodeFactory->createRepositoryAssign($entityReferenceExpr);
+        $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign(
+            $classLike,
+            'entityManager',
+            new ObjectType('Doctrine\ORM\EntityManagerInterface'),
+            $repositoryAssign
+        );
 
         // 4. add $repository property
         $this->addRepositoryProperty($classLike, $entityReferenceExpr);

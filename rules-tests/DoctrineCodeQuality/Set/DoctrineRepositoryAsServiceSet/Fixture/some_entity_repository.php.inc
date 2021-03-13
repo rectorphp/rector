@@ -31,6 +31,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 final class SomeEntityRepository
 {
+    /**
+     * @var \Doctrine\ORM\EntityRepository<\Rector\Tests\DoctrineCodeQuality\Set\DoctrineRepositoryAsServiceSet\Fixture\Some>
+     */
     private \Doctrine\ORM\EntityRepository $repository;
     public function __construct(\Doctrine\ORM\EntityManagerInterface $entityManager)
     {
