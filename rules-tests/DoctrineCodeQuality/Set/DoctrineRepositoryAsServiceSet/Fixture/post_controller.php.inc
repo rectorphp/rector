@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService\Fixture;
+namespace Rector\Tests\DoctrineCodeQuality\Set\DoctrineRepositoryAsServiceSet\Fixture;
 
-use Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService\Source\Entity\Post;
+use Rector\Tests\DoctrineCodeQuality\Set\DoctrineRepositoryAsServiceSet\Source\Entity\Post;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,9 +21,9 @@ final class PostController extends AbstractController
 -----
 <?php
 
-namespace Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService\Fixture;
+namespace Rector\Tests\DoctrineCodeQuality\Set\DoctrineRepositoryAsServiceSet\Fixture;
 
-use Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService\Source\Entity\Post;
+use Rector\Tests\DoctrineCodeQuality\Set\DoctrineRepositoryAsServiceSet\Source\Entity\Post;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 

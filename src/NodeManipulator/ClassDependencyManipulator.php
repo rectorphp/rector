@@ -109,6 +109,7 @@ final class ClassDependencyManipulator
             $this->addPromotedProperty($class, $propertyMetadata);
         } else {
             $assign = $this->nodeFactory->createPropertyAssignment($propertyMetadata->getName());
+
             $this->addConstructorDependencyWithCustomAssign(
                 $class,
                 $propertyMetadata->getName(),

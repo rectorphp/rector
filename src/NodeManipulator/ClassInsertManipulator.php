@@ -123,6 +123,7 @@ final class ClassInsertManipulator
             }
 
             $class->stmts = $this->insertBefore($class->stmts, $stmt, $key);
+
             return true;
         }
 
