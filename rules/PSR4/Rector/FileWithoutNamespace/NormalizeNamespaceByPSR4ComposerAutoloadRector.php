@@ -19,8 +19,6 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ComposerJsonAwareCodeSample
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
- *
  * @see \Rector\Tests\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\NormalizeNamespaceByPSR4ComposerAutoloadRectorTest
  */
 final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRector

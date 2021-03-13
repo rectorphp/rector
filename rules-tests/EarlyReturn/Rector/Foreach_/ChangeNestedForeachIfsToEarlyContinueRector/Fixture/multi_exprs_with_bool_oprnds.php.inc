@@ -2,9 +2,7 @@
 
 namespace Rector\Tests\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-class MultiExprsWithBoolOprnds implements RunnableInterface
+class MultiExprsWithBoolOprnds
 {
     public function run()
     {
@@ -32,9 +30,7 @@ class MultiExprsWithBoolOprnds implements RunnableInterface
 
 namespace Rector\Tests\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-class MultiExprsWithBoolOprnds implements RunnableInterface
+class MultiExprsWithBoolOprnds
 {
     public function run()
     {

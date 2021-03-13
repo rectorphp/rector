@@ -16,7 +16,7 @@ final class CallAnalyzer
     /**
      * @var array<class-string<Expr>>
      */
-    private const OBJECT_CALLS = [MethodCall::class, NullsafeMethodCall::class, StaticCall::class];
+    private const OBJECT_CALL_TYPES = [MethodCall::class, NullsafeMethodCall::class, StaticCall::class];
 
     public function isObjectCall(Expr $expr): bool
     {
@@ -31,8 +31,8 @@ final class CallAnalyzer
             return $isObjectCallLeft || $isObjectCallRight;
         }
 
-        foreach (self::OBJECT_CALLS as $objectCall) {
-            if (is_a($expr, $objectCall, true)) {
+        foreach (self::OBJECT_CALL_TYPES as $objectCallType) {
+            if (is_a($expr, $objectCallType, true)) {
                 return true;
             }
         }

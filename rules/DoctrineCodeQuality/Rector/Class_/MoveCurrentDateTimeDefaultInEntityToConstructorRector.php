@@ -18,8 +18,6 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @sponsor Thanks https://www.luzanky.cz/ for sponsoring this rule
- *
  * @see https://stackoverflow.com/a/7698687/1348344
  *
  * @see \Rector\Tests\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector\MoveCurrentDateTimeDefaultInEntityToConstructorRectorTest

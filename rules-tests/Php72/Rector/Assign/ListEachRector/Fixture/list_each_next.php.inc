@@ -2,9 +2,7 @@
 
 namespace Rector\Tests\Php72\Rector\Assign\ListEachRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-final class ListEachNext implements RunnableInterface
+final class ListEachNext
 {
     public function run()
     {
@@ -24,9 +22,7 @@ final class ListEachNext implements RunnableInterface
 
 namespace Rector\Tests\Php72\Rector\Assign\ListEachRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-final class ListEachNext implements RunnableInterface
+final class ListEachNext
 {
     public function run()
     {

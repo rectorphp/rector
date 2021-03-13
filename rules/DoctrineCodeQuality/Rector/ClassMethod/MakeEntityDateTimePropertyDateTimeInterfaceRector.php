@@ -15,8 +15,6 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @sponsor Thanks https://www.luzanky.cz/ for sponsoring this rule
- *
  * @see related to maker bundle https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html
  *
  * @see \Rector\Tests\DoctrineCodeQuality\Rector\ClassMethod\MakeEntityDateTimePropertyDateTimeInterfaceRector\MakeEntityDateTimePropertyDateTimeInterfaceRectorTest

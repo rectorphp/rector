@@ -2,9 +2,7 @@
 
 namespace Rector\Tests\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-class EachFixture implements RunnableInterface
+class EachFixture
 {
     public function run()
     {
@@ -22,9 +20,7 @@ class EachFixture implements RunnableInterface
 
 namespace Rector\Tests\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector\Fixture;
 
-use Rector\Testing\Contract\RunnableInterface;
-
-class EachFixture implements RunnableInterface
+class EachFixture
 {
     public function run()
     {
