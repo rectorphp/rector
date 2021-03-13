@@ -6,6 +6,7 @@ namespace Rector\Symfony5\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
@@ -95,7 +96,7 @@ CODE_SAMPLE
         $node->name = new Identifier('configureRouting');
         $node->returnType = new Identifier('void');
 
-        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node): ?MethodCall {
             if (! $node instanceof MethodCall) {
                 return null;
             }
@@ -116,7 +117,7 @@ CODE_SAMPLE
             $controllerValue = $node->args[1]->value;
             $nameValue = $node->args[2]->value ?? null;
 
-            if ($nameValue === null) {
+            if (! $nameValue instanceof Expr) {
                 throw new NotImplementedYetException();
             }
 
