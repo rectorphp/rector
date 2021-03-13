@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="first_listener" class="Rector\Tests\Symfony\Rector\Class_\EventListenerToEventSubscriberRector\Fixture\SomeListener">
+            <tag name="kernel.event_listener" event="some_event" method="methodToBeCalled"/>
+        </service>
+
+        <service id="second_listener" class="Rector\Tests\Symfony\Rector\Class_\EventListenerToEventSubscriberRector\Fixture\WithPriorityListener">
+            <tag name="kernel.event_listener" event="some_event" method="callMe" priority="1540" />
+        </service>
+
+        <service id="third_listener" class="Rector\Tests\Symfony\Rector\Class_\EventListenerToEventSubscriberRector\Fixture\MultipleMethods">
+            <tag name="kernel.event_listener" event="single_event" method="singles"/>
+            <tag name="kernel.event_listener" event="multi_event" method="callMe"/>
+            <tag name="kernel.event_listener" event="multi_event" method="meToo"/>
+        </service>
+
+        <service id="fourth_listener" class="Rector\Tests\Symfony\Rector\Class_\EventListenerToEventSubscriberRector\Fixture\MultipleListenersCalledOnce">
+            <tag name="kernel.event_listener" event="single_event" method="singles"/>
+            <tag name="kernel.event_listener" event="single_second_event" method="second"/>
+        </service>
+
+        <service id="fifth_listener" class="Rector\Tests\Symfony\Rector\Class_\EventListenerToEventSubscriberRector\Fixture\MultipleMethodsWithNonKernel">
+            <tag name="another_listener" event="unknown_event" method="unknownMethod"/>
+            <tag name="kernel.event_listener" event="single_event" method="singles"/>
+        </service>
+
+        <service id="event_dispatcher" class="Symfony\Component\EventDispatcher\EventDispatcher"/>
+    </services>
+</container>

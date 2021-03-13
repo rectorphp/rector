@@ -35,8 +35,7 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.4
-                    coverage: xdebug
-
+                    coverage: none
 
             -
                 run: composer install --no-progress --ansi
@@ -51,7 +50,7 @@ jobs:
                 with:
                     token: ${{ secrets.GITHUB_TOKEN }}
                     commit-message: "[automated] ${{ matrix.actions.name }}"
-                    base: 'master'
+                    base: 'main'
                     branch: ${{ matrix.actions.branch }}
                     title: '[automated] ${{ matrix.actions.name }}'
                     delete-branch: true

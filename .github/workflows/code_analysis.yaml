@@ -17,18 +17,6 @@ jobs:
                         name: Validate Fixtures
                         run: bin/rector validate-fixture-suffix --ansi
 
-                    -
-                        name: Validate Fixtures Namespace
-                        run: bin/rector validate-fixture-namespace --ansi
-
-                    -
-                        name: Validate Fixtures class name
-                        run: bin/rector validate-fixture-classname --ansi
-
-                    -
-                        name: Validate Fixtures file name
-                        run: bin/rector validate-fixture-filename --ansi
-
                     # make sure skipped files have "skip_" prefix
                     -
                         name: Validate Fixtures skip file prefix
@@ -42,6 +30,13 @@ jobs:
                     -
                         name: 'Validate Max File Length'
                         run: vendor/bin/easy-ci validate-file-length packages rules src tests
+
+                    # see https://github.com/rectorphp/rector-generator
+                    -
+                        name: 'Rector Generate From Recipe'
+                        run: |
+                            bin/rector init-recipe --ansi
+                            bin/rector generate --ansi
 
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest

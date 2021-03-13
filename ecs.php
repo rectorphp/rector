@@ -58,10 +58,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Fixture/*',
         '*/Expected/*',
         # generated from /vendor
-        __DIR__ . '/packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php',
-        __DIR__ . '/packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php',
-        // template files
-        __DIR__ . '/packages/rector-generator/templates',
+        __DIR__ . '/packages/DoctrineAnnotationGenerated/ConstantPreservingDocParser.php',
+        __DIR__ . '/packages/DoctrineAnnotationGenerated/ConstantPreservingAnnotationReader.php',
 
         UnaryOperatorSpacesFixer::class,
         // buggy with specific markdown snippet file in docs/rules_overview.md
@@ -75,9 +73,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // breaks on-purpose annotated variables
         ReturnAssignmentFixer::class,
 
-        PhpdocTypesFixer::class => [__DIR__ . '/rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'],
+        PhpdocTypesFixer::class => [__DIR__ . '/rules/Php74/Rector/Double/RealToFloatTypeCastRector.php'],
         PhpUnitStrictFixer::class => [
-            __DIR__ . '/packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php',
+            __DIR__ . '/packages-tests/BetterPhpDocParser/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php',
             __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',
             '*TypeResolverTest.php',
         ],
