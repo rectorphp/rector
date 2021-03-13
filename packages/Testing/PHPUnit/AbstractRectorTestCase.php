@@ -170,8 +170,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo, $extraFileInfos);
         $this->originalTempFileInfo = $inputFileInfo;
-
-        $this->processRunnableTest($inputFileInfo, $expectedFileInfo);
     }
 
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void

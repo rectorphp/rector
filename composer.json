@@ -44,7 +44,6 @@
         "symfony/cache": "^4.4.8|^5.1",
         "symfony/console": "^4.4.8|^5.1",
         "symfony/dependency-injection": "^5.1",
-        "symfony/expression-language": "^4.4.8|^5.1",
         "symfony/finder": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
         "symfony/process": "^4.4.8|^5.1",
