@@ -23,6 +23,7 @@ final class RequireRectorCategoryByGetNodeTypesRule implements Rule
      * @var string
      */
     public const ERROR_MESSAGE = 'Class "%s" has invalid namespace category "%s". Pick one of: "%s"';
+
     /**
      * @var NodeFinder
      */

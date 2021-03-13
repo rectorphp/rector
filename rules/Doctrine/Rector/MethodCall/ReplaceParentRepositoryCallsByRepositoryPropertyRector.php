@@ -88,6 +88,7 @@ CODE_SAMPLE
         }
 
         $node->var = $this->nodeFactory->createPropertyFetch('this', 'repository');
+
         return $node;
     }
 }

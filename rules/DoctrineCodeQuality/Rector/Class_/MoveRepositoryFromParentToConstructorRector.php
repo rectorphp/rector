@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\DoctrineCodeQuality\Rector\Class_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
@@ -12,7 +11,6 @@ use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DoctrineCodeQuality\NodeFactory\RepositoryAssignFactory;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -97,22 +95,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->extends === null) {
-            return null;
-        }
-
-        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName !== 'Doctrine\ORM\EntityRepository') {
-            return null;
-        }
-
-        /** @var string|null $className */
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return null;
-        }
-
-        if (! Strings::endsWith($className, 'Repository')) {
+        if (! $this->isObjectType($node, new ObjectType('Doctrine\ORM\EntityRepository'))) {
             return null;
         }
 
