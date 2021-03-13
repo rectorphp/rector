@@ -18,10 +18,6 @@ jobs:
                         run: bin/rector validate-fixture-suffix --ansi
 
                     -
-                        name: Validate Fixtures Namespace
-                        run: bin/rector validate-fixture-namespace --ansi
-
-                    -
                         name: Validate Fixtures class name
                         run: bin/rector validate-fixture-classname --ansi
 
