@@ -56,11 +56,10 @@ final class EntityIdNodeFactory
 
     public function createIdProperty(): Property
     {
-        $uuidProperty = $this->nodeFactory->createPrivateProperty('id');
+        $idProperty = $this->nodeFactory->createPrivateProperty('id');
+        $this->decoratePropertyWithIdAnnotations($idProperty);
 
-        $this->decoratePropertyWithIdAnnotations($uuidProperty);
-
-        return $uuidProperty;
+        return $idProperty;
     }
 
     private function decoratePropertyWithIdAnnotations(Property $property): void
