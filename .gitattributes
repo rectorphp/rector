@@ -26,6 +26,7 @@ utils export-ignore
 stubs export-ignore
 tests export-ignore
 packages-tests export-ignore
+rules-tests export-ignore
 
 .travis.yml export-ignore
 
