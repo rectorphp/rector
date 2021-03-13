@@ -1,17 +1,23 @@
 <?php
 
-use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
+
+use Iterator;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 class IteratorNoMixed
 {
-    public function getFiles()
+    public function getFiles(): iterable
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory();
     }
 
-    private function yieldFilesFromDirectory(string $directory)
+    /**
+     * @return Iterator<SmartFileInfo>
+     */
+    private function yieldFilesFromDirectory()
     {
-        return StaticFixtureFinder::yieldDirectoryExclusively($directory);
+        yield [new SmartFileInfo('...')];
     }
 }
 
@@ -19,21 +25,27 @@ class IteratorNoMixed
 -----
 <?php
 
-use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
+
+use Iterator;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 class IteratorNoMixed
 {
-    public function getFiles()
-    {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
-    }
-
     /**
      * @return Iterator<\Symplify\SmartFileSystem\SmartFileInfo>
      */
-    private function yieldFilesFromDirectory(string $directory)
+    public function getFiles(): iterable
     {
-        return StaticFixtureFinder::yieldDirectoryExclusively($directory);
+        return $this->yieldFilesFromDirectory();
+    }
+
+    /**
+     * @return Iterator<SmartFileInfo>
+     */
+    private function yieldFilesFromDirectory()
+    {
+        yield [new SmartFileInfo('...')];
     }
 }
 
