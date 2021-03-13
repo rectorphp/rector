@@ -11,25 +11,18 @@ use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
-use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer;
-use Symplify\CodingStandard\Fixer\ArrayNotation\StandaloneLineInMultilineArrayFixer;
 use Symplify\CodingStandard\Fixer\Commenting\RemoveCommentedCodeFixer;
 use Symplify\CodingStandard\Fixer\LineLength\DocBlockLineLengthFixer;
-use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(StandaloneLineInMultilineArrayFixer::class);
-    $services->set(ArrayOpenerAndCloserNewlineFixer::class);
 
     $services->set(GeneralPhpdocAnnotationRemoveFixer::class)
         ->call('configure', [[
             'annotations' => ['throws', 'author', 'package', 'group'],
         ]]);
-
-    $services->set(LineLengthFixer::class);
 
     $services->set(NoSuperfluousPhpdocTagsFixer::class)
         ->call('configure', [[
@@ -57,11 +50,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Source/*',
         '*/Fixture/*',
         '*/Expected/*',
+
         # generated from /vendor
         __DIR__ . '/packages/DoctrineAnnotationGenerated/ConstantPreservingDocParser.php',
         __DIR__ . '/packages/DoctrineAnnotationGenerated/ConstantPreservingAnnotationReader.php',
 
         UnaryOperatorSpacesFixer::class,
+
         // buggy with specific markdown snippet file in docs/rules_overview.md
         ArrayListItemNewlineFixer::class,
         BlankLineAfterOpeningTagFixer::class,
@@ -74,6 +69,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ReturnAssignmentFixer::class,
 
         PhpdocTypesFixer::class => [__DIR__ . '/rules/Php74/Rector/Double/RealToFloatTypeCastRector.php'],
+
+        // buggy on "Float" class
         PhpUnitStrictFixer::class => [
             __DIR__ . '/packages-tests/BetterPhpDocParser/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php',
             __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',
