@@ -17,10 +17,6 @@ jobs:
                         name: Validate Fixtures
                         run: bin/rector validate-fixture-suffix --ansi
 
-                    -
-                        name: Validate Fixtures class name
-                        run: bin/rector validate-fixture-classname --ansi
-
                     # make sure skipped files have "skip_" prefix
                     -
                         name: Validate Fixtures skip file prefix
