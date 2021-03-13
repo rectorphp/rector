@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Stmt\Nop;
 
-final class ImproveNullable
+final class DoubleCallArray
 {
     public function getName(?Node $node)
     {
@@ -16,7 +16,7 @@ final class ImproveNullable
 
 final class CallGetName
 {
-    public function run(ImproveNullable $improveNullable)
+    public function run(DoubleCallArray $improveNullable)
     {
         $nop = new Nop();
         $improveNullable->getName($nop);
@@ -36,7 +36,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Stmt\Nop;
 
-final class ImproveNullable
+final class DoubleCallArray
 {
     public function getName(\PhpParser\Node $node)
     {
@@ -46,7 +46,7 @@ final class ImproveNullable
 
 final class CallGetName
 {
-    public function run(ImproveNullable $improveNullable)
+    public function run(DoubleCallArray $improveNullable)
     {
         $nop = new Nop();
         $improveNullable->getName($nop);
