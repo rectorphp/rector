@@ -20,7 +20,7 @@ final class ChangeOrIfContinueToMultiContinueRectorTest extends AbstractRectorTe
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

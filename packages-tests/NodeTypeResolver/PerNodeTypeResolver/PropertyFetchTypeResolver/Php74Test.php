@@ -23,7 +23,7 @@ final class Php74Test extends AbstractPropertyFetchTypeResolverTest
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

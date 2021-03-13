@@ -20,7 +20,7 @@ final class ReturnNewFluentChainMethodCallToNonFluentRectorTest extends Abstract
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

@@ -20,7 +20,7 @@ final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRectorTest extends 
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

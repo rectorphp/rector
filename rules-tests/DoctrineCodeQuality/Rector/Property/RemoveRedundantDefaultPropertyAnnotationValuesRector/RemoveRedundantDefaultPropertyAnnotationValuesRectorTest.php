@@ -20,7 +20,7 @@ final class RemoveRedundantDefaultPropertyAnnotationValuesRectorTest extends Abs
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

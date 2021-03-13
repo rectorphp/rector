@@ -20,7 +20,7 @@ final class PrivatizeLocalPropertyToPrivatePropertyRectorTest extends AbstractRe
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

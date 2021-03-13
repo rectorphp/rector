@@ -19,7 +19,7 @@ final class ToStringToMethodCallRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

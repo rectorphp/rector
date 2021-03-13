@@ -20,7 +20,7 @@ final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRectorTest extends A
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

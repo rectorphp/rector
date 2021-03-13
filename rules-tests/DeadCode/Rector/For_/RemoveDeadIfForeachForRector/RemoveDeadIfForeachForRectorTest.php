@@ -20,7 +20,7 @@ final class RemoveDeadIfForeachForRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {
