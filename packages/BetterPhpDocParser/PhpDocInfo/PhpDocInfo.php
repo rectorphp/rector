@@ -405,25 +405,6 @@ final class PhpDocInfo
         return $this->tokens === [];
     }
 
-    /**
-     * @return string[]
-     */
-    public function getThrowsClassNames(): array
-    {
-        $throwsClasses = [];
-        foreach ($this->getThrowsTypes() as $throwsType) {
-            if ($throwsType instanceof ShortenedObjectType) {
-                $throwsClasses[] = $throwsType->getFullyQualifiedName();
-            }
-
-            if ($throwsType instanceof FullyQualifiedObjectType) {
-                $throwsClasses[] = $throwsType->getClassName();
-            }
-        }
-
-        return $throwsClasses;
-    }
-
     public function makeSingleLined(): void
     {
         $this->isSingleLine = true;
@@ -528,22 +509,5 @@ final class PhpDocInfo
         }
 
         throw new NotImplementedYetException(get_class($phpDocTagValueNode));
-    }
-
-    /**
-     * @return Type[]
-     */
-    private function getThrowsTypes(): array
-    {
-        $throwsTypes = [];
-
-        foreach ($this->phpDocNode->getThrowsTagValues() as $throwsTagValueNode) {
-            $throwsTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
-                $throwsTagValueNode,
-                $this->node
-            );
-        }
-
-        return $throwsTypes;
     }
 }
