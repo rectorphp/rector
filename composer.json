@@ -109,6 +109,8 @@
         ],
         "files": [
             "vendor/nette/forms/src/Forms/Controls/SubmitButton.php",
+            "rules-tests/Renaming/Rector/Name/RenameClassRector/Source/DuplicatedClass.php",
+            "rules-tests/CodingStyle/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/FixtureSharedShortName.php",
             "rules-tests/Restoration/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php",
             "rules-tests/CodingStyle/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/AnotherClass.php",
             "rules-tests/CodingStyle/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Foo.php",

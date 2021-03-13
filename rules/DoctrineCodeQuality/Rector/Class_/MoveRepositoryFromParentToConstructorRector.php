@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Rector\DoctrineCodeQuality\Rector\Class_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DoctrineCodeQuality\NodeAnalyzer\EntityObjectTypeResolver;
 use Rector\DoctrineCodeQuality\NodeFactory\RepositoryAssignFactory;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DoctrineCodeQuality\Rector\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
+ * @see \Rector\Tests\DoctrineCodeQuality\Set\DoctrineRepositoryAsServiceSet\DoctrineRepositoryAsServiceSetTest
  */
 final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
 {
@@ -36,14 +36,21 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
      */
     private $repositoryAssignFactory;
 
+    /**
+     * @var EntityObjectTypeResolver
+     */
+    private $entityObjectTypeResolver;
+
     public function __construct(
         ClassDependencyManipulator $classDependencyManipulator,
         ClassInsertManipulator $classInsertManipulator,
-        RepositoryAssignFactory $repositoryAssignFactory
+        RepositoryAssignFactory $repositoryAssignFactory,
+        EntityObjectTypeResolver $entityObjectTypeResolver
     ) {
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->classInsertManipulator = $classInsertManipulator;
         $this->repositoryAssignFactory = $repositoryAssignFactory;
+        $this->entityObjectTypeResolver = $entityObjectTypeResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -71,6 +78,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class PostRepository
 {
+    /**
+     * @var \Doctrine\ORM\EntityRepository<Post>
+     */
     private EntityRepository $repository;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -97,34 +107,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->extends === null) {
-            return null;
-        }
-
-        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName !== 'Doctrine\ORM\EntityRepository') {
-            return null;
-        }
-
-        /** @var string|null $className */
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return null;
-        }
-
-        if (! Strings::endsWith($className, 'Repository')) {
+        if (! $this->isObjectType($node, new ObjectType('Doctrine\ORM\EntityRepository'))) {
             return null;
         }
 
         // remove parent class
         $node->extends = null;
 
+        $entityObjectType = $this->entityObjectTypeResolver->resolveFromRepositoryClass($node);
+        $genericObjectType = new GenericObjectType('Doctrine\ORM\EntityRepository', [$entityObjectType]);
+
         // add $repository property
-        $this->classInsertManipulator->addPropertyToClass(
-            $node,
-            'repository',
-            new ObjectType('Doctrine\ORM\EntityRepository')
-        );
+        $this->classInsertManipulator->addPropertyToClass($node, 'repository', $genericObjectType);
 
         // add $entityManager and assign to constuctor
         $repositoryAssign = $this->repositoryAssignFactory->create($node);

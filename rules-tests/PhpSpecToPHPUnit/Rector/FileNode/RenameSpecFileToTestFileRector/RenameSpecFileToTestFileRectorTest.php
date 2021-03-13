@@ -27,6 +27,9 @@ final class RenameSpecFileToTestFileRectorTest extends AbstractRectorTestCase
         $this->assertTrue(Strings::endsWith($movedFile->getNewPathname(), 'Test.php'));
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo>
+     */
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture', '*.php');

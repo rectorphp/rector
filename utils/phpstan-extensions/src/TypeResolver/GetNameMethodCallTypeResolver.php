@@ -22,7 +22,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 
-final class MethodCallTypeResolver
+final class GetNameMethodCallTypeResolver
 {
     /**
      * @var class-string<Node>

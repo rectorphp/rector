@@ -43,7 +43,7 @@ final class FindOneByServiceEntityRepository
     private \Doctrine\ORM\EntityRepository $repository;
     public function __construct(private \Doctrine\ORM\EntityManagerInterface $entityManager)
     {
-        $this->repository = $entityManager->getRepository(Car::class);
+        $this->repository = $entityManager->getRepository(\Rector\Tests\DoctrineCodeQuality\Set\DoctrineRepositoryAsServiceSet\Source\Car::class);
     }
 
     public function findOneByEmail(string $email): ?object

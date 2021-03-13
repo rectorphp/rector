@@ -1,4 +1,6 @@
 services:
+    - PhpParser\NodeFinder
+
     -
         class: Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
         tags: [phpstan.rules.rule]

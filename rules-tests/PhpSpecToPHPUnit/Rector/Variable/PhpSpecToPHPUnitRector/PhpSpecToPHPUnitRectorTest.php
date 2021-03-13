@@ -6,6 +6,7 @@ namespace Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PhpSpecToPHPUnitRectorTest extends AbstractRectorTestCase
@@ -20,7 +21,7 @@ final class PhpSpecToPHPUnitRectorTest extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.php.inc');
     }
 
     protected function provideConfigFilePath(): string

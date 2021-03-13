@@ -18,6 +18,9 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRectorTest extends AbstractR
         $this->doTestFileInfo($smartFileInfo);
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo>
+     */
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');

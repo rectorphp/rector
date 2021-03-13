@@ -109,6 +109,7 @@ final class ClassDependencyManipulator
             $this->addPromotedProperty($class, $propertyMetadata);
         } else {
             $assign = $this->nodeFactory->createPropertyAssignment($propertyMetadata->getName());
+
             $this->addConstructorDependencyWithCustomAssign(
                 $class,
                 $propertyMetadata->getName(),
@@ -192,6 +193,11 @@ final class ClassDependencyManipulator
         $param = $this->nodeFactory->createPromotedPropertyParam($propertyMetadata);
 
         if ($constructClassMethod instanceof ClassMethod) {
+            // parameter is already added
+            if ($this->hasMethodParameter($constructClassMethod, $propertyMetadata->getName())) {
+                return;
+            }
+
             $constructClassMethod->params[] = $param;
         } else {
             $constructClassMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
@@ -253,5 +259,16 @@ final class ClassDependencyManipulator
         }
 
         return $this->isParamInConstructor($class, $propertyMetadata->getName());
+    }
+
+    private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
+    {
+        foreach ($classMethod->params as $param) {
+            if ($this->nodeNameResolver->isName($param->var, $name)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

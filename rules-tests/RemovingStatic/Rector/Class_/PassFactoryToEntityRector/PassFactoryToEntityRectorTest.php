@@ -27,6 +27,9 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
         );
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo>
+     */
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureWithMultipleArguments');

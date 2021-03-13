@@ -20,6 +20,9 @@ final class DeleteFactoryInterfaceFileSystemRectorTest extends AbstractRectorTes
         $this->assertFileWasRemoved($this->originalTempFileInfo);
     }
 
+    /**
+     * @return Iterator<mixed, SmartFileInfo>
+     */
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
