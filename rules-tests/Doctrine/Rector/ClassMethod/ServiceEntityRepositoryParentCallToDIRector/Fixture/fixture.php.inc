@@ -30,7 +30,7 @@ final class ProjectRepository extends ServiceEntityRepository
      * @var \Doctrine\ORM\EntityRepository<\Rector\Tests\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector\Source\Project>
      */
     private \Doctrine\ORM\EntityRepository $repository;
-    public function __construct(private \Doctrine\ORM\EntityManagerInterface $entityManager)
+    public function __construct(\Doctrine\ORM\EntityManagerInterface $entityManager)
     {
         $this->repository = $entityManager->getRepository(Project::class);
     }

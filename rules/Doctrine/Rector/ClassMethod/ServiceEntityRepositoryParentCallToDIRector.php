@@ -44,6 +44,7 @@ final class ServiceEntityRepositoryParentCallToDIRector extends AbstractRector
      * @var PropertyToAddCollector
      */
     private $propertyToAddCollector;
+
     /**
      * @var ClassDependencyManipulator
      */
@@ -141,8 +142,8 @@ CODE_SAMPLE
         $entityReferenceExpr = $this->removeParentConstructAndCollectEntityReference($node);
 
         // 3. add $entityManager->getRepository() fetch assign
-
         $repositoryAssign = $this->repositoryNodeFactory->createRepositoryAssign($entityReferenceExpr);
+
         $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign(
             $classLike,
             'entityManager',

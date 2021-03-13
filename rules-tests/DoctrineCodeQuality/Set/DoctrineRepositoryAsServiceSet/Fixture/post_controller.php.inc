@@ -29,13 +29,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class PostController extends AbstractController
 {
-    /**
-     * @var \Rector\Tests\Core\Rector\Architecture\DoctrineRepositoryAsService\Source\Repository\PostRepository
-     */
-    private $postRepository;
-    public function __construct(\Rector\Tests\Core\Rector\Architecture\DoctrineRepositoryAsService\Source\Repository\PostRepository $postRepository)
+    public function __construct(private \Rector\Tests\DoctrineCodeQuality\Set\DoctrineRepositoryAsServiceSet\Source\Repository\PostRepository $postRepository)
     {
-        $this->postRepository = $postRepository;
     }
     public function anythingAction(int $id): Response
     {
