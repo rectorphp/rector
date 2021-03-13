@@ -33,8 +33,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 /**
  * @template TNode as \PHPStan\PhpDocParser\Ast\Node
