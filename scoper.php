@@ -29,6 +29,16 @@ return [
     ScoperOption::PATCHERS => [
         // [BEWARE] $filePath is absolute!
 
+        // fixes https://github.com/rectorphp/rector-prefixed/runs/2103759172
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::contains($filePath, 'vendor/jean85/pretty-package-versions/src/PrettyVersions.php')) {
+                return $content;
+            }
+
+            // return Composer\InstalledVersions;
+            return Strings::replace($content, '#' . $prefix . '\\Composer\\InstalledVersions#', 'Composer\InstalledVersions');
+        },
+
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
         function (string $filePath, string $prefix, string $content): string {
             // skip vendor
@@ -51,8 +61,6 @@ return [
 
         // scoper missed PSR-4 autodiscovery in Symfony
         function (string $filePath, string $prefix, string $content): string {
-
-
             // scoper missed PSR-4 autodiscovery in Symfony
             if (! Strings::endsWith($filePath, 'config.php') && ! Strings::endsWith($filePath, 'services.php')) {
                 return $content;
