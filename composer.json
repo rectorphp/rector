@@ -154,6 +154,7 @@
         "rector": "bin/rector process --ansi"
     },
     "config": {
+        "platform-check": false,
         "sort-packages": true
     },
     "minimum-stability": "dev",
