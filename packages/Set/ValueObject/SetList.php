@@ -151,31 +151,6 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    public const DOCTRINE_ID_TO_UUID_STEP_1 = __DIR__ . '/../../../config/set/doctrine-id-to-uuid-step-1.php';
-
-    /**
-     * @var string
-     */
-    public const DOCTRINE_ID_TO_UUID_STEP_2 = __DIR__ . '/../../../config/set/doctrine-id-to-uuid-step-2.php';
-
-    /**
-     * @var string
-     */
-    public const DOCTRINE_ID_TO_UUID_STEP_3 = __DIR__ . '/../../../config/set/doctrine-id-to-uuid-step-3.php';
-
-    /**
-     * @var string
-     */
-    public const DOCTRINE_ID_TO_UUID_STEP_4 = __DIR__ . '/../../../config/set/doctrine-id-to-uuid-step-4.php';
-
-    /**
-     * @var string
-     */
-    public const DOCTRINE_ID_TO_UUID_STEP_5 = __DIR__ . '/../../../config/set/doctrine-id-to-uuid-step-5.php';
-
-    /**
-     * @var string
-     */
     public const DOCTRINE_REPOSITORY_AS_SERVICE = __DIR__ . '/../../../config/set/doctrine-repository-as-service.php';
 
     /**
