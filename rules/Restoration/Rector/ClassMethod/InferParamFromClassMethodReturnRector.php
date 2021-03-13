@@ -23,8 +23,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @sponsor Thanks https://github.com/eonx-com for sponsoring this rule
- *
  * @see \Rector\Tests\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector\InferParamFromClassMethodReturnRectorTest
  */
 final class InferParamFromClassMethodReturnRector extends AbstractRector implements ConfigurableRectorInterface
