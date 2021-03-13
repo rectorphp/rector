@@ -36,7 +36,7 @@
         "nette/robot-loader": "^3.2 <=3.3.1",
         "nette/utils": "^3.2",
         "nikic/php-parser": "^4.10.4",
-        "phpstan/phpdoc-parser": "^0.4.12",
+        "phpstan/phpdoc-parser": "dev-tv-add-attributes as 0.4.12",
         "phpstan/phpstan": "^0.12.81",
         "phpstan/phpstan-phpunit": "^0.12.18",
         "psr/simple-cache": "^1.0",
@@ -158,5 +158,11 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/TomasVotruba/phpdoc-parser.git"
+        }
+    ]
 }
