@@ -6,7 +6,6 @@ namespace Rector\Tests\TypeDeclaration\Rector\Property\CompleteVarDocTypePropert
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\Property\CompleteVarDocTypePropertyRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -30,8 +29,8 @@ final class CompleteVarDocTypePropertyRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return CompleteVarDocTypePropertyRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;
 
 use Iterator;
-use Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class ManagerRegistryGetManagerToEntityManagerRectorTest extends AbstractR
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ManagerRegistryGetManagerToEntityManagerRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

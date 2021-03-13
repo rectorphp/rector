@@ -14,18 +14,12 @@ use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivateProperty
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Rector\Set\ValueObject\SetList;
-<<<<<<< HEAD
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
-=======
-use Rector\Transform\Rector\Class_\NativeTestCaseRector;
->>>>>>> 54c18e2e04... use config
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
-    $services->set(NativeTestCaseRector::class);
 
     $configuration = ValueObjectInliner::inline([
         new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),

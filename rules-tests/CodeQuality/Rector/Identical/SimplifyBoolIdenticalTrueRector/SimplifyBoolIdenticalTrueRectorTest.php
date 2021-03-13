@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class SimplifyBoolIdenticalTrueRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SimplifyBoolIdenticalTrueRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\DoctrineGedmoToKnplabs\Rector\Class_\TimestampableBehaviorRector;
 
 use Iterator;
-use Rector\DoctrineGedmoToKnplabs\Rector\Class_\TimestampableBehaviorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class TimestampableBehaviorRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return TimestampableBehaviorRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

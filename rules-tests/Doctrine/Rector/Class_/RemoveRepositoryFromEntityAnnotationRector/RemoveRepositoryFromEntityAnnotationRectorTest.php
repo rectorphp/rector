@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
 
 use Iterator;
-use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class RemoveRepositoryFromEntityAnnotationRectorTest extends AbstractRecto
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveRepositoryFromEntityAnnotationRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\CakePHP\Rector\FileWithoutNamespace\ImplicitShortClassNameUseStatementRector;
 
 use Iterator;
-use Rector\CakePHP\Rector\FileWithoutNamespace\ImplicitShortClassNameUseStatementRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class ImplicitShortClassNameUseStatementRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ImplicitShortClassNameUseStatementRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

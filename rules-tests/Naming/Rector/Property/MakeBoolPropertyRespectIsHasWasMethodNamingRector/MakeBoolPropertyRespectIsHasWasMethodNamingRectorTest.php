@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Naming\Rector\Property\MakeBoolPropertyRespectIsHasWasMethodNamingRector;
 
 use Iterator;
-use Rector\Naming\Rector\Property\MakeBoolPropertyRespectIsHasWasMethodNamingRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class MakeBoolPropertyRespectIsHasWasMethodNamingRectorTest extends Abstra
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return MakeBoolPropertyRespectIsHasWasMethodNamingRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

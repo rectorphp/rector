@@ -6,7 +6,6 @@ namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictCo
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -30,8 +29,8 @@ final class TypedPropertyFromStrictConstructorRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return TypedPropertyFromStrictConstructorRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

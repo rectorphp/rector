@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class ArrayKeyExistsTernaryThenValueToCoalescingRectorTest extends Abstrac
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ArrayKeyExistsTernaryThenValueToCoalescingRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

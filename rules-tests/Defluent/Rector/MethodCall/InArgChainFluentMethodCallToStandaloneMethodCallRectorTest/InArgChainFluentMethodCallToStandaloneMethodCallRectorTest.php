@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Defluent\Rector\MethodCall\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest;
 
 use Iterator;
-use Rector\Defluent\Rector\MethodCall\InArgFluentChainMethodCallToStandaloneMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class InArgChainFluentMethodCallToStandaloneMethodCallRectorTest extends A
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return InArgFluentChainMethodCallToStandaloneMethodCallRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

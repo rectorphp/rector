@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector;
 
 use Iterator;
-use Rector\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -28,8 +27,8 @@ final class Php74Test extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp74');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveEmptyMethodCallRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

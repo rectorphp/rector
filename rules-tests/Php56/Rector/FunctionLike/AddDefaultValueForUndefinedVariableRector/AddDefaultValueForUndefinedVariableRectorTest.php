@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
 
 use Iterator;
-use Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class AddDefaultValueForUndefinedVariableRectorTest extends AbstractRector
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return AddDefaultValueForUndefinedVariableRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

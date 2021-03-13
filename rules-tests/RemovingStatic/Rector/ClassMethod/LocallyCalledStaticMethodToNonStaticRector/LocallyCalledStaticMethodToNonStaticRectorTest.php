@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\RemovingStatic\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector;
 
 use Iterator;
-use Rector\RemovingStatic\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class LocallyCalledStaticMethodToNonStaticRectorTest extends AbstractRecto
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return LocallyCalledStaticMethodToNonStaticRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

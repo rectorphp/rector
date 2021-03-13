@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\PHPOffice\Rector\StaticCall\ChangeIOFactoryArgumentRector;
 
 use Iterator;
-use Rector\PHPOffice\Rector\StaticCall\ChangeIOFactoryArgumentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class ChangeIOFactoryArgumentRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ChangeIOFactoryArgumentRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

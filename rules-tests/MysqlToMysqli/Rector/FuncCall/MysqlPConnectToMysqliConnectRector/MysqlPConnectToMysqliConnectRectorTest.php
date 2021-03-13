@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector;
 
 use Iterator;
-use Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class MysqlPConnectToMysqliConnectRectorTest extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return MysqlPConnectToMysqliConnectRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

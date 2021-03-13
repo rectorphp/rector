@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class SymplifyQuoteEscapeRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SymplifyQuoteEscapeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

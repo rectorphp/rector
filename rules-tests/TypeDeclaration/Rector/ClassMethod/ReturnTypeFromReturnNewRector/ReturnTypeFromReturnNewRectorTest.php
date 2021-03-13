@@ -6,7 +6,6 @@ namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNe
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ReturnTypeFromReturnNewRectorTest extends AbstractRectorTestCase
@@ -27,8 +26,8 @@ final class ReturnTypeFromReturnNewRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ReturnTypeFromReturnNewRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

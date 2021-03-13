@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector;
 
 use Iterator;
-use Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class CreateFunctionToAnonymousFunctionRectorTest extends AbstractRectorTe
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return CreateFunctionToAnonymousFunctionRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector;
 
 use Iterator;
-use Rector\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -28,8 +27,8 @@ final class DowngradeNumericLiteralSeparatorRectorTest extends AbstractRectorTes
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return DowngradeNumericLiteralSeparatorRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

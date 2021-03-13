@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
 
 use Iterator;
-use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -30,8 +29,8 @@ final class DowngradeUnionTypeTypedPropertyRectorTest extends AbstractRectorTest
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return DowngradeUnionTypeTypedPropertyRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

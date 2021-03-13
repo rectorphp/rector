@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector;
 
 use Iterator;
-use Rector\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -28,8 +27,8 @@ final class DeleteFactoryInterfaceFileSystemRectorTest extends AbstractRectorTes
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return DeleteFactoryInterfaceRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

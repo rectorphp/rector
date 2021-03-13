@@ -109,7 +109,9 @@
             "rules-tests/CakePHP/Rector/Namespace_/AppUsesStaticCallToUseStatementRector/Source",
             "rules-tests/CodingStyle/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source",
             "rules-tests/Renaming/Rector/Name/RenameClassRector/Source",
-            "rules-tests/Renaming/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Source"
+            "rules-tests/Renaming/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Source",
+            "rules-tests/CodingStyle/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source",
+            "rules-tests/Renaming/Rector/Name/RenameClassRector/Source"
         ],
         "files": [
             "stubs/Doctrine/Persistence/ObjectManager.php",
@@ -120,7 +122,6 @@
             "rules-tests/Transform/Rector/FuncCall/FuncCallToMethodCallRector/Source/some_view_function.php",
             "rules-tests/TypeDeclaration/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php",
             "rules-tests/TypeDeclaration/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",
-            "vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php",
             "tests/debug_functions.php"
         ]
     },

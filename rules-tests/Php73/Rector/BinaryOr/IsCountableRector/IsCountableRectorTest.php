@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Php73\Rector\BinaryOr\IsCountableRector;
 
 use Iterator;
-use Rector\Php73\Rector\BooleanOr\IsCountableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -28,8 +27,8 @@ final class IsCountableRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return IsCountableRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

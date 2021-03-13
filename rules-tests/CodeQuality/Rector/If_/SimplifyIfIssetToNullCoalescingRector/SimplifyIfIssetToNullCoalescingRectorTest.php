@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfIssetToNullCoalescingRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\If_\SimplifyIfIssetToNullCoalescingRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class SimplifyIfIssetToNullCoalescingRectorTest extends AbstractRectorTest
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SimplifyIfIssetToNullCoalescingRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

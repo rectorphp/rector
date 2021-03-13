@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class UnionTypeCompleteDynamicPropertiesRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureUnionTypes');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return CompleteDynamicPropertiesRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

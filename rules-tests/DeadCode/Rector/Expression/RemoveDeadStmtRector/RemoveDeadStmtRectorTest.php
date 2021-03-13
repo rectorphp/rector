@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\DeadCode\Rector\Expression\RemoveDeadStmtRector;
 
 use Iterator;
-use Rector\DeadCode\Rector\Expression\RemoveDeadStmtRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -43,8 +42,8 @@ final class RemoveDeadStmtRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureRemovedComments');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveDeadStmtRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

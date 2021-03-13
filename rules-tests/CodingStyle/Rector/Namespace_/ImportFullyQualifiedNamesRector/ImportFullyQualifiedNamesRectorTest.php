@@ -47,7 +47,7 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureGeneric');
     }
 
-    protected function provideConfigFilePath(): string
+    public function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/import_config.php';
     }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector;
 
 use Iterator;
-use Rector\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -28,8 +27,8 @@ final class RestoreDefaultNullToNullableTypePropertyRectorTest extends AbstractR
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RestoreDefaultNullToNullableTypePropertyRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

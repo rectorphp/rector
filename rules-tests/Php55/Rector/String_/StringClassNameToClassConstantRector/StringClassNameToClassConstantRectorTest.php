@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector;
 
 use Iterator;
-use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class StringClassNameToClassConstantRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return StringClassNameToClassConstantRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }
