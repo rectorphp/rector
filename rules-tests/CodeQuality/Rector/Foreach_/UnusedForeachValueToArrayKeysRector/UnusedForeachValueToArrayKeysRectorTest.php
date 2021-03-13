@@ -20,7 +20,7 @@ final class UnusedForeachValueToArrayKeysRectorTest extends AbstractRectorTestCa
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

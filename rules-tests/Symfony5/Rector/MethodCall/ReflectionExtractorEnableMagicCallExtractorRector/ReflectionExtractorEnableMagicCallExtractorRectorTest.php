@@ -20,7 +20,7 @@ final class ReflectionExtractorEnableMagicCallExtractorRectorTest extends Abstra
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

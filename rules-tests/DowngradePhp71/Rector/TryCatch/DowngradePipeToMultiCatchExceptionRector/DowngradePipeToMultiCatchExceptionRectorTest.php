@@ -20,7 +20,7 @@ final class DowngradePipeToMultiCatchExceptionRectorTest extends AbstractRectorT
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

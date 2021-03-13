@@ -20,7 +20,7 @@ final class AddMockConsoleOutputFalseToConsoleTestsRectorTest extends AbstractRe
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

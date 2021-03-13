@@ -20,7 +20,7 @@ final class ArrayAccessSetControlToAddComponentMethodCallRectorTest extends Abst
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

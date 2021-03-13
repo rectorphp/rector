@@ -20,7 +20,7 @@ final class MakeUnusedClassesWithChildrenAbstractRectorTest extends AbstractRect
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

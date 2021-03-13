@@ -144,10 +144,12 @@ CODE_SAMPLE
         // 3. add $entityManager->getRepository() fetch assign
         $repositoryAssign = $this->repositoryNodeFactory->createRepositoryAssign($entityReferenceExpr);
 
+        $entityManagerObjectType = new ObjectType('Doctrine\ORM\EntityManagerInterface');
+
         $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign(
             $classLike,
             'entityManager',
-            new ObjectType('Doctrine\ORM\EntityManagerInterface'),
+            $entityManagerObjectType,
             $repositoryAssign
         );
 
@@ -155,7 +157,7 @@ CODE_SAMPLE
         $this->addRepositoryProperty($classLike, $entityReferenceExpr);
 
         // 5. add param + add property, dependency
-        $this->propertyAdder->addServiceConstructorDependencyToClass($classLike, 'Doctrine\ORM\EntityManagerInterface');
+        $this->propertyAdder->addServiceConstructorDependencyToClass($classLike, $entityManagerObjectType);
 
         return $node;
     }

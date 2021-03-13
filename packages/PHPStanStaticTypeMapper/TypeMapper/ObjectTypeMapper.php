@@ -12,6 +12,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
@@ -65,22 +66,7 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
         }
 
         if ($type instanceof GenericObjectType) {
-            if ($type instanceof FullyQualifiedGenericObjectType) {
-                $name = '\\' . $type->getClassName();
-            } elseif (Strings::contains($type->getClassName(), '\\')) {
-                $name = '\\' . $type->getClassName();
-            } else {
-                $name = $type->getClassName();
-            }
-            $identifierTypeNode = new IdentifierTypeNode($name);
-
-            $genericTypeNodes = [];
-            foreach ($type->getTypes() as $genericType) {
-                $typeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericType);
-                $genericTypeNodes[] = $typeNode;
-            }
-
-            return new AttributeAwareGenericTypeNode($identifierTypeNode, $genericTypeNodes);
+            return $this->mapGenericObjectType($type);
         }
 
         return new AttributeAwareIdentifierTypeNode('\\' . $type->getClassName());
@@ -155,5 +141,37 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
     public function setPHPStanStaticTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
+    }
+
+    private function mapGenericObjectType(GenericObjectType $genericObjectType): AttributeAwareGenericTypeNode
+    {
+        $name = $this->resolveGenericObjectTypeName($genericObjectType);
+        $identifierTypeNode = new IdentifierTypeNode($name);
+
+        $genericTypeNodes = [];
+        foreach ($genericObjectType->getTypes() as $key => $genericType) {
+            // mixed type on 1st item in iterator has no value
+            if ($name === 'Iterator' && $genericType instanceof MixedType && $key === 0) {
+                continue;
+            }
+
+            $typeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericType);
+            $genericTypeNodes[] = $typeNode;
+        }
+
+        return new AttributeAwareGenericTypeNode($identifierTypeNode, $genericTypeNodes);
+    }
+
+    private function resolveGenericObjectTypeName(GenericObjectType $genericObjectType): string
+    {
+        if ($genericObjectType instanceof FullyQualifiedGenericObjectType) {
+            return '\\' . $genericObjectType->getClassName();
+        }
+
+        if (Strings::contains($genericObjectType->getClassName(), '\\')) {
+            return '\\' . $genericObjectType->getClassName();
+        }
+
+        return $genericObjectType->getClassName();
     }
 }

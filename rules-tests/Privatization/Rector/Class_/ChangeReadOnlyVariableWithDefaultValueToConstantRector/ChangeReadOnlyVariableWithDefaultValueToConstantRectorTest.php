@@ -20,7 +20,7 @@ final class ChangeReadOnlyVariableWithDefaultValueToConstantRectorTest extends A
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

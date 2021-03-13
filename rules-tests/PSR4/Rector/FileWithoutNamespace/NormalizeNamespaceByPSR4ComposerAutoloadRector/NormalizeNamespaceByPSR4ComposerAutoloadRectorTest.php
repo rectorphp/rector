@@ -19,7 +19,7 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRectorTest extends AbstractR
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

@@ -20,7 +20,7 @@ final class SimplifyForeachToArrayFilterRectorTest extends AbstractRectorTestCas
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

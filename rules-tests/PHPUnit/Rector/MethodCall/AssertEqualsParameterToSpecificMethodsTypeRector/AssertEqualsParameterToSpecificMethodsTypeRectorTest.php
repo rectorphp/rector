@@ -20,7 +20,7 @@ final class AssertEqualsParameterToSpecificMethodsTypeRectorTest extends Abstrac
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

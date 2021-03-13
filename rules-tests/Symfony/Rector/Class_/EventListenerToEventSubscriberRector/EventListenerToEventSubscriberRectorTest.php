@@ -19,7 +19,7 @@ final class EventListenerToEventSubscriberRectorTest extends AbstractRectorTestC
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

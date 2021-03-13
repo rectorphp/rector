@@ -24,7 +24,7 @@ final class Php4ConstructorRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return Iterator<mixed, SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
     public function provideData(): Iterator
     {

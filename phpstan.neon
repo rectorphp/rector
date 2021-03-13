@@ -151,12 +151,6 @@ parameters:
         # is nested expr
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$expr#'
 
-        - '#Parameter \#1 \$files of method Symplify\\SmartFileSystem\\Finder\\FinderSanitizer\:\:sanitize\(\) expects \(iterable<SplFileInfo\|string\>&Nette\\Utils\\Finder\)\|Symfony\\Component\\Finder\\Finder, array<string\> given#'
-        # wtf
-        -
-            message: '#Else branch is unreachable because ternary operator condition is always true#'
-            path: 'rules/PSR-4/Composer/PSR4NamespaceMatcher.php'
-
         - '#Parameter \#2 \$currentNode of method Rector\\CodingStyle\\Rector\\Assign\\ManualJsonStringToJsonEncodeArrayRector\:\:matchNextExprAssignConcatToSameVariable\(\) expects PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Expr\\AssignOp\\Concat, PhpParser\\Node given#'
 
         -
@@ -219,8 +213,6 @@ parameters:
         -
             message: '#"(getComments|getDocComment|setDocComment)\(\)" call on "PhpParser\\Node" type is not allowed#'
             paths:
-                # merging comments
-                - packages-tests/BetterPhpDocParser/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php
                 - src/PhpParser/NodeTransformer.php
                 - src/Rector/AbstractRector.php
                 # playing around with doc block format
@@ -234,7 +226,6 @@ parameters:
                 - packages/BetterPhpDocParser/Comment/CommentsMerger.php
                 - packages/Comments/NodeDocBlock/DocBlockUpdater.php
                 - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfoFactory.php
-                - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php
 
         # false positives checked in another method
         -
@@ -373,8 +364,6 @@ parameters:
             paths:
                 - packages/StaticTypeMapper/ValueObject/Type/ParentStaticType.php #9
                 - packages/StaticTypeMapper/ValueObject/Type/SelfObjectType.php #9
-                - rules-tests/Symfony/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeEntityManager.php #7
-                - rules-tests/Symfony/Rector/MethodCall/AbstractToConstructorInjectionRectorSource/SomeNonKernelClass.php #7
 
         # generics nullable bugs
         - '#Method (.*?) should return T of PhpParser\\Node\|null but returns PhpParser\\Node\|null#'
@@ -447,11 +436,6 @@ parameters:
 
         - '#Class with base "SetList" name is already used in "Symplify\\EasyCodingStandard\\ValueObject\\Set\\SetList", "Rector\\Set\\ValueObject\\SetList"\. Use unique name to make classes easy to recognize#'
         - '#Class with base "PhpVersion" name is already used in "PHPStan\\Php\\PhpVersion", "Rector\\Core\\ValueObject\\PhpVersion"\. Use unique name to make classes easy to recognize#'
-
-        -
-            message: '#For complex configuration use value object over array#'
-            paths:
-                 - '*/config/configured_rule.php'
 
         -
             message: '#Use local named constant instead of inline string for regex to explain meaning by constant name#'
@@ -553,11 +537,6 @@ parameters:
                 - rules/Naming/Naming/PropertyNaming.php
 
         -
-            message: '#Parameter \#1 \$value of function count expects array\|Countable, array<PhpParser\\Node\\Stmt\>\|null given#'
-            paths:
-                -  rules/Naming/Naming/PropertyNaming.php
-
-        -
             message: '#Use quoted string in constructor "new PHPStan\\Type\\ObjectType\(\)" argument on position 0 instead of "\:\:class\. It prevent scoping of the class in building prefixed package#'
             paths:
                 - packages-tests/NodeTypeResolver
@@ -588,10 +567,6 @@ parameters:
 
         # faking phpstan reflection in tests
         - '#Parameter \#1 \$classReflection of class PHPStan\\Type\\ThisType constructor expects PHPStan\\Reflection\\ClassReflection\|string, ReflectionClass<Rector\\NodeTypeResolver\\Tests\\PerNodeTypeResolver\\VariableTypeResolver\\Fixture\\ThisClass\> given#'
-        -
-            message: '#Instead of "ReflectionClass" class/interface use "PHPStan\\Reflection\\ClassReflection"#'
-            paths:
-                - packages-tests/NodeTypeResolver/PerNodeTypeResolver/VariableTypeResolver/VariableTypeResolverTest.php
 
         - '#Cognitive complexity for "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector\:\:refactor\(\)" is 10, keep it under 9#'
         - '#Parameter \#2 \$returnedStrictTypeNode of method Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector\:\:refactorSingleReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType, PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PHPStan\\Type\\UnionType given#'
@@ -615,7 +590,6 @@ parameters:
             paths:
                 - packages/BetterPhpDocParser/Attributes/Attribute/AttributeTrait.php
 
-        - '#Do not use scalar or array as constructor parameter\. Use "Symplify\\PackageBuilder\\Parameter\\ParameterProvider" service instead#'
         - '#Content of method "getNextExpression\(\)" is duplicated with method "getNextExpression\(\)" in "Rector\\Php73\\Rector\\FuncCall\\ArrayKeyFirstLastRector" class\. Use unique content or service instead#'
 
         -
@@ -624,4 +598,5 @@ parameters:
                 - src/HttpKernel/RectorKernel.php
 
         - '#Content of method "getIfNextReturn\(\)" is duplicated with method "getIfNextReturn\(\)" in "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector" class\. Use unique content or service instead#'
-        - '#Content of method "hasMethodParameter\(\)" is duplicated with method "hasMethodParameter\(\)" in "Rector\\Core\\NodeManipulator\\ClassDependencyManipulator" class\. Use unique content or service instead#'
+
+        - '#Do not use scalar or array as constructor parameter\. Use "Symplify\\PackageBuilder\\Parameter\\ParameterProvider" service instead#'
