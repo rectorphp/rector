@@ -12,7 +12,7 @@ use PHPStan\Type\CallableType;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareCallableTypeNode;
+use Rector\AttributeAwarePhpDoc\ValueObject\Type\BetterCallableTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 
@@ -46,7 +46,7 @@ final class CallableTypeMapper implements TypeMapperInterface
     {
         $returnTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getReturnType());
 
-        return new AttributeAwareCallableTypeNode(new IdentifierTypeNode('callable'), [], $returnTypeNode);
+        return new BetterCallableTypeNode(new IdentifierTypeNode('callable'), [], $returnTypeNode);
     }
 
     /**

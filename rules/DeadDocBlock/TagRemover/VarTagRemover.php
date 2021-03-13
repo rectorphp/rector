@@ -10,11 +10,10 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\DeadDocBlock\DeadVarTagValueNodeAnalyzer;
@@ -118,9 +117,9 @@ final class VarTagRemover
      */
     private function isNonBasicArrayType(Node $node, VarTagValueNode $varTagValueNode): bool
     {
-        if ($varTagValueNode->type instanceof AttributeAwareUnionTypeNode) {
+        if ($varTagValueNode->type instanceof UnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
-                if ($type instanceof AttributeAwareArrayTypeNode && $this->isArrayOfExistingClassNode($node, $type)) {
+                if ($type instanceof ArrayTypeNode && $this->isArrayOfExistingClassNode($node, $type)) {
                     return true;
                 }
             }
@@ -138,14 +137,9 @@ final class VarTagRemover
         return $varTagValueNode->type instanceof ArrayTypeNode;
     }
 
-    private function isArrayOfExistingClassNode(
-        Node $node,
-        AttributeAwareArrayTypeNode $attributeAwareArrayTypeNode
-    ): bool {
-        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
-            $attributeAwareArrayTypeNode,
-            $node
-        );
+    private function isArrayOfExistingClassNode(Node $node, ArrayTypeNode $arrayTypeNode): bool
+    {
+        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($arrayTypeNode, $node);
 
         if (! $staticType instanceof ArrayType) {
             return false;

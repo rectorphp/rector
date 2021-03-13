@@ -9,10 +9,7 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\ValueObject\AttributeKey\AttributeKey;
 
 final class MultilineSpaceFormatPreserver
 {
@@ -51,9 +48,9 @@ final class MultilineSpaceFormatPreserver
      * Fix multiline BC break - https://github.com/phpstan/phpdoc-parser/pull/26/files
      */
     public function fixMultilineDescriptions(
-        AttributeAwareNodeInterface $attributeAwareNode
-    ): AttributeAwareNodeInterface {
-        $originalContent = $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT);
+        \PHPStan\PhpDocParser\Ast\Node $attributeAwareNode
+    ): \PHPStan\PhpDocParser\Ast\Node {
+        $originalContent = $attributeAwareNode->getAttribute(AttributeKey::ORIGINAL_CONTENT);
         if (! $originalContent) {
             return $attributeAwareNode;
         }
@@ -61,20 +58,20 @@ final class MultilineSpaceFormatPreserver
         $nodeWithRestoredSpaces = $this->restoreOriginalSpacingInText($attributeAwareNode);
         if ($nodeWithRestoredSpaces !== null) {
             $attributeAwareNode = $nodeWithRestoredSpaces;
-            $attributeAwareNode->setAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES, true);
+            $attributeAwareNode->setAttribute(AttributeKey::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES, true);
         }
 
         return $attributeAwareNode;
     }
 
     /**
-     * @param PhpDocTextNode|AttributeAwareNodeInterface $attributeAwareNode
+     * @param PhpDocTextNode|\PHPStan\PhpDocParser\Ast\Node $attributeAwareNode
      */
     private function restoreOriginalSpacingInText(
-        AttributeAwareNodeInterface $attributeAwareNode
-    ): ?AttributeAwareNodeInterface {
+        \PHPStan\PhpDocParser\Ast\Node $attributeAwareNode
+    ): ?\PHPStan\PhpDocParser\Ast\Node {
         /** @var string $originalContent */
-        $originalContent = $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT);
+        $originalContent = $attributeAwareNode->getAttribute(AttributeKey::ORIGINAL_CONTENT);
         $oldSpaces = Strings::matchAll($originalContent, '#\s+#ms');
 
         $currentText = $this->resolveCurrentPhpDocNodeText($attributeAwareNode);
@@ -110,9 +107,9 @@ final class MultilineSpaceFormatPreserver
     }
 
     private function setNewTextToPhpDocNode(
-        AttributeAwareNodeInterface $attributeAwareNode,
+        \PHPStan\PhpDocParser\Ast\Node $attributeAwareNode,
         string $newText
-    ): AttributeAwareNodeInterface {
+    ): \PHPStan\PhpDocParser\Ast\Node {
         if ($attributeAwareNode instanceof PhpDocTagNode && property_exists(
             $attributeAwareNode->value,
             'description'
@@ -124,7 +121,7 @@ final class MultilineSpaceFormatPreserver
             $attributeAwareNode->text = $newText;
         }
 
-        if ($attributeAwareNode instanceof AttributeAwarePhpDocTagNode && $attributeAwareNode->value instanceof AttributeAwareGenericTagValueNode) {
+        if ($attributeAwareNode instanceof PhpDocTagNode && $attributeAwareNode->value instanceof GenericTagValueNode) {
             $attributeAwareNode->value->value = $newText;
         }
 

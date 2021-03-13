@@ -12,8 +12,8 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
+use Rector\AttributeAwarePhpDoc\ValueObject\Type\BetterArrayTypeNode;
+use Rector\AttributeAwarePhpDoc\ValueObject\Type\BetterUnionTypeNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
@@ -62,7 +62,7 @@ final class IterableTypeMapper implements TypeMapperInterface
             return $this->convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes($itemTypeNode);
         }
 
-        return new AttributeAwareArrayTypeNode($itemTypeNode);
+        return new BetterArrayTypeNode($itemTypeNode);
     }
 
     /**
@@ -88,7 +88,7 @@ final class IterableTypeMapper implements TypeMapperInterface
 
     private function convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes(
         UnionTypeNode $unionTypeNode
-    ): AttributeAwareUnionTypeNode {
+    ): BetterUnionTypeNode {
         $unionedArrayType = [];
         foreach ($unionTypeNode->types as $unionedType) {
             if ($unionedType instanceof UnionTypeNode) {
@@ -103,6 +103,6 @@ final class IterableTypeMapper implements TypeMapperInterface
             $unionedArrayType[] = new ArrayTypeNode($unionedType);
         }
 
-        return new AttributeAwareUnionTypeNode($unionedArrayType);
+        return new BetterUnionTypeNode($unionedArrayType);
     }
 }

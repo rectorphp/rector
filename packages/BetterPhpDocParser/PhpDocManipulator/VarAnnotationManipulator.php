@@ -6,11 +6,11 @@ namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\FullyQualifiedIdentifierTypeNode;
+use Rector\AttributeAwarePhpDoc\ValueObject\Type\FullyQualifiedIdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -47,13 +47,9 @@ final class VarAnnotationManipulator
 
         $fullyQualifiedIdentifierTypeNode = new FullyQualifiedIdentifierTypeNode($typeWithClassName->getClassName());
 
-        $attributeAwareVarTagValueNode = new AttributeAwareVarTagValueNode(
-            $fullyQualifiedIdentifierTypeNode,
-            '$' . $variableName,
-            ''
-        );
+        $varTagValueNode = new VarTagValueNode($fullyQualifiedIdentifierTypeNode, '$' . $variableName, '');
 
-        $phpDocInfo->addTagValueNode($attributeAwareVarTagValueNode);
+        $phpDocInfo->addTagValueNode($varTagValueNode);
     }
 
     public function decorateNodeWithType(Node $node, Type $staticType): void

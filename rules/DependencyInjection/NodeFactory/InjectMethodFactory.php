@@ -7,7 +7,7 @@ namespace Rector\DependencyInjection\NodeFactory;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SymfonyRequiredTagNode;
+use Rector\AttributeAwarePhpDoc\ValueObject\SymfonyRequiredTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpParser\Node\NodeFactory;

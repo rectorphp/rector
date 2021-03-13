@@ -10,10 +10,10 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Use_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\MixedType;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Restoration\NameMatcher\FullyQualifiedNameMatcher;
 use Rector\Restoration\NameMatcher\PhpDocTypeNodeNameMatcher;
@@ -149,8 +149,8 @@ CODE_SAMPLE
     private function refactorReturnTagValueNode(ClassMethod $classMethod): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if (! $attributeAwareReturnTagValueNode instanceof AttributeAwareReturnTagValueNode) {
+        $returnTagValue = $phpDocInfo->getReturnTagValue();
+        if (! $returnTagValue instanceof ReturnTagValueNode) {
             return;
         }
 
@@ -158,15 +158,15 @@ CODE_SAMPLE
             return;
         }
 
-        if ($attributeAwareReturnTagValueNode->type instanceof IdentifierTypeNode) {
+        if ($returnTagValue->type instanceof IdentifierTypeNode) {
             $fullyQualifiedTypeNode = $this->phpDocTypeNodeNameMatcher->matchIdentifier(
-                $attributeAwareReturnTagValueNode->type->name
+                $returnTagValue->type->name
             );
             if (! $fullyQualifiedTypeNode instanceof TypeNode) {
                 return;
             }
 
-            $attributeAwareReturnTagValueNode->type = $fullyQualifiedTypeNode;
+            $returnTagValue->type = $fullyQualifiedTypeNode;
             $phpDocInfo->markAsChanged();
         }
     }

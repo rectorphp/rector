@@ -6,10 +6,10 @@ namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
@@ -41,10 +41,10 @@ final class BooleanTypeMapper implements TypeMapperInterface
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         if ($this->isFalseBooleanTypeWithUnion($type)) {
-            return new AttributeAwareIdentifierTypeNode('false');
+            return new IdentifierTypeNode('false');
         }
 
-        return new AttributeAwareIdentifierTypeNode('bool');
+        return new IdentifierTypeNode('bool');
     }
 
     /**

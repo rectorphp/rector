@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_;
 
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
 use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 
-final class IndexTagValueNode extends AbstractDoctrineTagValueNode implements TagAwareNodeInterface
+final class IndexTagValueNode extends AbstractDoctrineTagValueNode
 {
     /**
      * @var string|null

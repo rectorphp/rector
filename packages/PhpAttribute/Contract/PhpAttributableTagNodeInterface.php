@@ -10,6 +10,9 @@ interface PhpAttributableTagNodeInterface extends Node
 {
     public function getShortName(): string;
 
+    /**
+     * @return class-string
+     */
     public function getAttributeClassName(): string;
 
     /**

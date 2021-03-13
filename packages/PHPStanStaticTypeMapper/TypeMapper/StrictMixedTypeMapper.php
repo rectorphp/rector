@@ -9,7 +9,6 @@ use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\StrictMixedType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class StrictMixedTypeMapper implements TypeMapperInterface
@@ -32,7 +31,7 @@ final class StrictMixedTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
-        return new AttributeAwareIdentifierTypeNode(self::MIXED);
+        return new IdentifierTypeNode(self::MIXED);
     }
 
     /**

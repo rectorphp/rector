@@ -14,15 +14,14 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
-use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
-use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
+use Rector\AttributeAwarePhpDoc\DecoratingNodeFactory;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\StringTagMatchingPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\MultiPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
+use Rector\BetterPhpDocParser\ValueObject\AttributeKey\AttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -62,11 +61,6 @@ final class BetterPhpDocParser extends PhpDocParser
     private $privatesAccessor;
 
     /**
-     * @var AttributeAwareNodeFactory
-     */
-    private $attributeAwareNodeFactory;
-
-    /**
      * @var MultilineSpaceFormatPreserver
      */
     private $multilineSpaceFormatPreserver;
@@ -92,17 +86,22 @@ final class BetterPhpDocParser extends PhpDocParser
     private $stringTagMatchingPhpDocNodeFactories = [];
 
     /**
+     * @var \Rector\AttributeAwarePhpDoc\DecoratingNodeFactory
+     */
+    private $decoratingNodeFactory;
+
+    /**
      * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
      * @param StringTagMatchingPhpDocNodeFactoryInterface[] $stringTagMatchingPhpDocNodeFactories
      */
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
-        AttributeAwareNodeFactory $attributeAwareNodeFactory,
         MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
         CurrentNodeProvider $currentNodeProvider,
         ClassAnnotationMatcher $classAnnotationMatcher,
         AnnotationContentResolver $annotationContentResolver,
+        DecoratingNodeFactory $decoratingNodeFactory,
         array $phpDocNodeFactories = [],
         array $stringTagMatchingPhpDocNodeFactories = []
     ) {
@@ -110,25 +109,24 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $this->privatesCaller = new PrivatesCaller();
         $this->privatesAccessor = new PrivatesAccessor();
-        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->annotationContentResolver = $annotationContentResolver;
+        $this->stringTagMatchingPhpDocNodeFactories = $stringTagMatchingPhpDocNodeFactories;
+        $this->decoratingNodeFactory = $decoratingNodeFactory;
 
         $this->setPhpDocNodeFactories($phpDocNodeFactories);
-        $this->stringTagMatchingPhpDocNodeFactories = $stringTagMatchingPhpDocNodeFactories;
     }
 
     /**
-     * @return AttributeAwarePhpDocNode|PhpDocNode
+     * @return PhpDocNode|PhpDocNode
      */
     public function parse(TokenIterator $tokenIterator): PhpDocNode
     {
         $originalTokenIterator = clone $tokenIterator;
 
         $tokenIterator->consumeTokenType(Lexer::TOKEN_OPEN_PHPDOC);
-
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
 
         $children = [];
@@ -148,7 +146,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $phpDocNode = new PhpDocNode(array_values($children));
         $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
 
-        return $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
+        return $this->decoratingNodeFactory->createFromNode($phpDocNode, $docContent);
     }
 
     public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
@@ -201,7 +199,7 @@ final class BetterPhpDocParser extends PhpDocParser
             $tagValueNode = parent::parseTagValue($tokenIterator, $tag);
         }
 
-        return $this->attributeAwareNodeFactory->createFromNode($tagValueNode, $docContent);
+        return $this->decoratingNodeFactory->createFromNode($tagValueNode, $docContent);
     }
 
     /**
@@ -229,8 +227,8 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $startAndEnd = new StartAndEnd($tokenStart, $tokenEnd);
 
-        $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
-        $attributeAwareNode->setAttribute(Attribute::START_END, $startAndEnd);
+        $attributeAwareNode = $this->decoratingNodeFactory->createFromNode($phpDocNode, $docContent);
+        $attributeAwareNode->setAttribute(AttributeKey::START_END, $startAndEnd);
 
         $possibleMultilineText = $this->multilineSpaceFormatPreserver->resolveCurrentPhpDocNodeText(
             $attributeAwareNode
@@ -248,7 +246,7 @@ final class BetterPhpDocParser extends PhpDocParser
             $match = Strings::match($originalContent, $currentTextPattern);
 
             if (isset($match['line'])) {
-                $attributeAwareNode->setAttribute(Attribute::ORIGINAL_CONTENT, $match['line']);
+                $attributeAwareNode->setAttribute(AttributeKey::ORIGINAL_CONTENT, $match['line']);
             }
         }
 

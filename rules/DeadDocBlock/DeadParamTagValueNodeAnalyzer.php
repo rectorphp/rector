@@ -7,7 +7,7 @@ namespace Rector\DeadDocBlock;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 
@@ -48,7 +48,7 @@ final class DeadParamTagValueNodeAnalyzer
             return false;
         }
 
-        if ($paramTagValueNode->type instanceof AttributeAwareGenericTypeNode) {
+        if ($paramTagValueNode->type instanceof GenericTypeNode) {
             return false;
         }
 

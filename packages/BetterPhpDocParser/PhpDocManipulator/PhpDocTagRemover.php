@@ -12,9 +12,9 @@ final class PhpDocTagRemover
 {
     public function removeByName(PhpDocInfo $phpDocInfo, string $name): void
     {
-        $attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
 
-        foreach ($attributeAwarePhpDocNode->children as $key => $phpDocChildNode) {
+        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
             if (! $phpDocChildNode instanceof PhpDocTagNode) {
                 continue;
             }
@@ -23,7 +23,7 @@ final class PhpDocTagRemover
                 continue;
             }
 
-            unset($attributeAwarePhpDocNode->children[$key]);
+            unset($phpDocNode->children[$key]);
 
             $phpDocInfo->markAsChanged();
         }
@@ -31,11 +31,11 @@ final class PhpDocTagRemover
 
     public function removeTagValueFromNode(PhpDocInfo $phpDocInfo, Node $desiredNode): void
     {
-        $attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
+        $PhpDocNode = $phpDocInfo->getPhpDocNode();
 
-        foreach ($attributeAwarePhpDocNode->children as $key => $phpDocChildNode) {
+        foreach ($PhpDocNode->children as $key => $phpDocChildNode) {
             if ($phpDocChildNode === $desiredNode) {
-                unset($attributeAwarePhpDocNode->children[$key]);
+                unset($PhpDocNode->children[$key]);
                 $phpDocInfo->markAsChanged();
                 continue;
             }
@@ -48,7 +48,7 @@ final class PhpDocTagRemover
                 continue;
             }
 
-            unset($attributeAwarePhpDocNode->children[$key]);
+            unset($PhpDocNode->children[$key]);
             $phpDocInfo->markAsChanged();
         }
     }

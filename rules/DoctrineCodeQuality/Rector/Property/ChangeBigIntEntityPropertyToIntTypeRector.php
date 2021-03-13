@@ -99,8 +99,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $attributeAwareVarTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (! $attributeAwareVarTagValueNode instanceof VarTagValueNode) {
+        $varTagValueNode = $phpDocInfo->getVarTagValueNode();
+        if (! $varTagValueNode instanceof VarTagValueNode) {
             return null;
         }
 

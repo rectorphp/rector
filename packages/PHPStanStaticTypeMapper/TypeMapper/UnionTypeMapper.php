@@ -12,6 +12,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PhpParser\NodeAbstract;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
@@ -19,8 +20,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
-use Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture\Nullable;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
@@ -112,7 +111,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         $unionTypesNodes = array_unique($unionTypesNodes);
-        return new AttributeAwareUnionTypeNode($unionTypesNodes);
+        return new UnionTypeNode($unionTypesNodes);
     }
 
     /**

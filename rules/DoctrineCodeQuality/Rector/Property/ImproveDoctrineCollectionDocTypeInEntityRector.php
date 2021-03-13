@@ -144,10 +144,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $attributeAwareVarTagValueNode = $this->collectionVarTagValueNodeResolver->resolve($property);
-        if ($attributeAwareVarTagValueNode !== null) {
+        $varTagValueNode = $this->collectionVarTagValueNodeResolver->resolve($property);
+        if ($varTagValueNode !== null) {
             $collectionObjectType = $this->collectionTypeResolver->resolveFromTypeNode(
-                $attributeAwareVarTagValueNode->type,
+                $varTagValueNode->type,
                 $property
             );
 

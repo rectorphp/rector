@@ -108,6 +108,11 @@
             "rules-tests/Symfony4/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source"
         ],
         "files": [
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/GenericTagValueNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTagNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTextNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/ParamTagValueNode.php",
             "vendor/nette/forms/src/Forms/Controls/SubmitButton.php",
             "rules-tests/Renaming/Rector/Name/RenameClassRector/Source/DuplicatedClass.php",
             "rules-tests/CodingStyle/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/FixtureSharedShortName.php",

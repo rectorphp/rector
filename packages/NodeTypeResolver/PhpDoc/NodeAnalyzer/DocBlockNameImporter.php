@@ -59,9 +59,9 @@ final class DocBlockNameImporter
 
     public function importNames(PhpDocInfo $phpDocInfo, Node $phpParserNode): void
     {
-        $attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
+        $PhpDocNode = $phpDocInfo->getPhpDocNode();
 
-        $this->phpDocNodeTraverser->traverseWithCallable($attributeAwarePhpDocNode, '', function (
+        $this->phpDocNodeTraverser->traverseWithCallable($PhpDocNode, '', function (
             PhpDocParserNode $docNode
         ) use ($phpDocInfo, $phpParserNode): PhpDocParserNode {
             if (! $docNode instanceof IdentifierTypeNode) {

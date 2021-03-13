@@ -9,8 +9,7 @@ use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
+use Rector\AttributeAwarePhpDoc\ValueObject\Type\BetterArrayTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class NonEmptyArrayTypeMapper implements TypeMapperInterface
@@ -28,7 +27,7 @@ final class NonEmptyArrayTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
-        return new AttributeAwareArrayTypeNode(new AttributeAwareIdentifierTypeNode('mixed'));
+        return new BetterArrayTypeNode(new IdentifierTypeNode('mixed'));
     }
 
     /**

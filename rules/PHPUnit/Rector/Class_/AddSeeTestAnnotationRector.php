@@ -10,8 +10,6 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
@@ -156,7 +154,7 @@ CODE_SAMPLE
 
     private function createSeePhpDocTagNode(string $className): PhpDocTagNode
     {
-        return new AttributeAwarePhpDocTagNode('@see', new AttributeAwareGenericTagValueNode('\\' . $className));
+        return new PhpDocTagNode('@see', new GenericTagValueNode('\\' . $className));
     }
 
     private function hasAlreadySeeAnnotation(PhpDocInfo $phpDocInfo, string $testCaseClassName): bool

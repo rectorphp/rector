@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ReflectionProvider;
@@ -16,8 +17,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\BetterGenericTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
@@ -58,18 +58,18 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         if ($type instanceof ShortenedObjectType) {
-            return new AttributeAwareIdentifierTypeNode($type->getClassName());
+            return new IdentifierTypeNode($type->getClassName());
         }
 
         if ($type instanceof AliasedObjectType) {
-            return new AttributeAwareIdentifierTypeNode($type->getClassName());
+            return new IdentifierTypeNode($type->getClassName());
         }
 
         if ($type instanceof GenericObjectType) {
             return $this->mapGenericObjectType($type);
         }
 
-        return new AttributeAwareIdentifierTypeNode('\\' . $type->getClassName());
+        return new IdentifierTypeNode('\\' . $type->getClassName());
     }
 
     /**
@@ -143,7 +143,7 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
 
-    private function mapGenericObjectType(GenericObjectType $genericObjectType): AttributeAwareGenericTypeNode
+    private function mapGenericObjectType(GenericObjectType $genericObjectType): GenericTypeNode
     {
         $name = $this->resolveGenericObjectTypeName($genericObjectType);
         $identifierTypeNode = new IdentifierTypeNode($name);
@@ -159,7 +159,7 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
             $genericTypeNodes[] = $typeNode;
         }
 
-        return new AttributeAwareGenericTypeNode($identifierTypeNode, $genericTypeNodes);
+        return new BetterGenericTypeNode($identifierTypeNode, $genericTypeNodes);
     }
 
     private function resolveGenericObjectTypeName(GenericObjectType $genericObjectType): string

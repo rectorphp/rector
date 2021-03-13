@@ -3,7 +3,6 @@
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 class SkipUnionArray
 {

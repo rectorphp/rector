@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\Node as PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
@@ -17,15 +17,11 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ClassNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
@@ -67,12 +63,12 @@ final class PhpDocInfo
     private $tokens = [];
 
     /**
-     * @var AttributeAwarePhpDocNode
+     * @var PhpDocNode
      */
     private $phpDocNode;
 
     /**
-     * @var AttributeAwarePhpDocNode
+     * @var PhpDocNode
      */
     private $originalPhpDocNode;
 
@@ -110,7 +106,7 @@ final class PhpDocInfo
      * @param mixed[] $tokens
      */
     public function __construct(
-        AttributeAwarePhpDocNode $attributeAwarePhpDocNode,
+        PhpDocNode $PhpDocNode,
         array $tokens,
         string $originalContent,
         StaticTypeMapper $staticTypeMapper,
@@ -119,9 +115,9 @@ final class PhpDocInfo
         CurrentNodeProvider $currentNodeProvider,
         RectorChangeCollector $rectorChangeCollector
     ) {
-        $this->phpDocNode = $attributeAwarePhpDocNode;
+        $this->phpDocNode = $PhpDocNode;
         $this->tokens = $tokens;
-        $this->originalPhpDocNode = clone $attributeAwarePhpDocNode;
+        $this->originalPhpDocNode = clone $PhpDocNode;
         $this->originalContent = $originalContent;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->node = $node;
@@ -147,12 +143,12 @@ final class PhpDocInfo
         $this->addPhpDocTagNode($spacelessPhpDocTagNode);
     }
 
-    public function getPhpDocNode(): AttributeAwarePhpDocNode
+    public function getPhpDocNode(): PhpDocNode
     {
         return $this->phpDocNode;
     }
 
-    public function getOriginalPhpDocNode(): AttributeAwarePhpDocNode
+    public function getOriginalPhpDocNode(): PhpDocNode
     {
         return $this->originalPhpDocNode;
     }
@@ -413,9 +409,9 @@ final class PhpDocInfo
         return $this->isSingleLine;
     }
 
-    public function getReturnTagValue(): ?AttributeAwareReturnTagValueNode
+    public function getReturnTagValue(): ?ReturnTagValueNode
     {
-        /** @var AttributeAwareReturnTagValueNode[] $returnTagValueNodes */
+        /** @var ReturnTagValueNode[] $returnTagValueNodes */
         $returnTagValueNodes = $this->phpDocNode->getReturnTagValues();
         return $returnTagValueNodes[0] ?? null;
     }
