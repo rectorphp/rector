@@ -8,21 +8,19 @@ class Foo
     {
     }
 }
-final class MissingAtIndexIsFilledWithNull extends \PHPUnit\Framework\TestCase
+final class MissingWithIsReplacedByEmptyArrayIfNoReturnExpectation2 extends \PHPUnit\Framework\TestCase
 {
     public function test(): void
     {
         $mock = $this->createMock(Foo::class);
         $mock
-            ->expects($this->at(0))
-            ->with('0')
-            ->method('someMethod')
-            ->willReturn('1');
+            ->expects($this->at(1))
+            ->with('1')
+            ->method('someMethod');
         $mock
             ->expects($this->at(2))
             ->with('2')
-            ->method('someMethod')
-            ->willReturn('3');
+            ->method('someMethod');
     }
 }
 
@@ -38,12 +36,12 @@ class Foo
     {
     }
 }
-final class MissingAtIndexIsFilledWithNull extends \PHPUnit\Framework\TestCase
+final class MissingWithIsReplacedByEmptyArrayIfNoReturnExpectation2 extends \PHPUnit\Framework\TestCase
 {
     public function test(): void
     {
         $mock = $this->createMock(Foo::class);
-        $mock->method('someMethod')->withConsecutive(['0'], [null], ['2'])->willReturnOnConsecutiveCalls('1', null, '3');
+        $mock->method('someMethod')->withConsecutive([], ['1'], ['2']);
     }
 }
 

@@ -14,6 +14,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\PHPUnit\ValueObject\ExpectationMock;
+use Rector\PHPUnit\ValueObject\ExpectationMockCollection;
 
 final class ConsecutiveAssertionFactory
 {
@@ -24,11 +25,9 @@ final class ConsecutiveAssertionFactory
         'willThrowException' => 'throwException',
     ];
 
-    /**
-     * @param ExpectationMock[] $expectationMocks
-     */
-    public function createAssertionFromExpectationMocks(array $expectationMocks): MethodCall
+    public function createAssertionFromExpectationMockCollection(ExpectationMockCollection $expectationMockCollection): MethodCall
     {
+        $expectationMocks = $expectationMockCollection->getExpectationMocks();
 
         $var = $expectationMocks[0]->getExpectationVariable();
         $methodArguments = $expectationMocks[0]->getMethodArguments();

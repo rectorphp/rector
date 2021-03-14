@@ -5,16 +5,7 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -23,6 +14,7 @@ use Rector\PHPUnit\NodeAnalyzer\ExpectationAnalyzer;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFactory\ConsecutiveAssertionFactory;
 use Rector\PHPUnit\ValueObject\ExpectationMock;
+use Rector\PHPUnit\ValueObject\ExpectationMockCollection;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -31,17 +23,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MigrateAtToConsecutiveExpectationsRector extends AbstractRector
 {
-    private const PROCESSABLE_WILL_STATEMENTS = [
-        'will',
-        'willReturn',
-        'willReturnReference',
-        'willReturnMap',
-        'willReturnArgument',
-        'willReturnCallback',
-        'willReturnSelf',
-        'willThrowException',
-    ];
-
     /**
      * @var ConsecutiveAssertionFactory
      */
@@ -100,41 +81,32 @@ final class MigrateAtToConsecutiveExpectationsRector extends AbstractRector
         }
 
         $expressions = array_filter($stmts, function (Stmt $expr) {
-            return $stmt instanceof Expression && $stmt->expr instanceof MethodCall;
+            return $expr instanceof Expression && $expr->expr instanceof MethodCall;
         });
 
-        $expectationMocks = $this->getExpectationMocks($expressions);
+        $expectationMockCollection = $this->expectationAnalyzer->getExpectationsFromExpressions($expressions);
 
-        if (count($expectationMocks) === 0) {
+        if (!$expectationMockCollection->hasExpectationMocks()) {
             return null;
         }
 
-        $this->replaceExpectationNodes($expectationMocks, $expressions);
+        $expectationCollections = $this->groupExpectationCollectionsByVariableName($expectationMockCollection);
+        foreach ($expectationCollections as $expectationCollection) {
+            $this->replaceExpectationNodes($expectationCollection);
+        }
 
         return $node;
     }
 
-    /**
-     * @param ExpectationMock[] $expectationMocks
-     */
-    private function buildNewExpectation(array $expectationMocks): MethodCall
+    private function buildNewExpectation(ExpectationMockCollection $expectationMockCollection): MethodCall
     {
-        $var = $expectationMocks[0]->getExpectationVariable();
-        $expectationMocks = $this->fillMissingAtIndexes($expectationMocks, $var);
-        return $this->consecutiveAssertionFactory->createAssertionFromExpectationMocks($expectationMocks);
+        $expectationMockCollection = $this->fillMissingAtIndexes($expectationMockCollection);
+        return $this->consecutiveAssertionFactory->createAssertionFromExpectationMockCollection($expectationMockCollection);
     }
 
-    /**
-     * @param ExpectationMock[] $expectationMocks
-     * @return ExpectationMock[]
-     */
-    private function fillMissingAtIndexes(array $expectationMocks, Variable $var): array
+    private function fillMissingAtIndexes(ExpectationMockCollection $expectationMockCollection): ExpectationMockCollection
     {
-        $indexes = array_map(static function (ExpectationMock $expectationMock) {
-            return $expectationMock->getIndex();
-        }, $expectationMocks);
-        $minIndex = min($indexes);
-        $maxIndex = max($indexes);
+        $var = $expectationMockCollection->getExpectationMocks()[0]->getExpectationVariable();
 
         // 0,1,2,3,4
         // min = 0 ; max = 4 ; count = 5
@@ -149,126 +121,93 @@ final class MigrateAtToConsecutiveExpectationsRector extends AbstractRector
         // 3
         // min = 3; max = 3 ; count = 1
         // 0,1,2
-        if ($minIndex !== 0) {
-            for ($i = 0; $i < $minIndex; ++$i) {
-                $expectationMocks[] = new ExpectationMock($var, [], $i, null, []);
+        if ($expectationMockCollection->getLowestAtIndex() !== 0) {
+            for ($i = 0; $i < $expectationMockCollection->getLowestAtIndex(); ++$i) {
+                $expectationMockCollection->add(
+                    new ExpectationMock($var, [], $i, null, [], null)
+                );
             }
-            $minIndex = 0;
         }
 
         // 0,1,2,4
         // min = 0 ; max = 4 ; count = 4
         // ADD 3
-        if (($maxIndex - $minIndex + 1) !== count($expectationMocks)) {
-            $existingIndexes = array_column($expectationMocks, 'index');
-            for ($i = 0; $i < $maxIndex; ++$i) {
+        if ($expectationMockCollection->isMissingAtIndexBetweenHighestAndLowest()) {
+            $existingIndexes = array_column($expectationMockCollection->getExpectationMocks(), 'index');
+            for ($i = 1; $i < $expectationMockCollection->getHighestAtIndex(); ++$i) {
                 if (!in_array($i, $existingIndexes, true)) {
-                    $expectationMocks[] = new ExpectationMock($var, [], $i, null, []);
+                    $expectationMockCollection->add(
+                        new ExpectationMock($var, [], $i, null, [], null)
+                    );
                 }
             }
         }
-        return $expectationMocks;
+        return $expectationMockCollection;
     }
 
-    /**
-     * @param Expression[] $stmts
-     * @return ExpectationMock[]
-     */
-    private function getExpectationMocks(array $stmts): array
+    private function replaceExpectationNodes(ExpectationMockCollection $expectationMockCollection): void
     {
-        $expectationMocks = [];
-        foreach ($stmts as $stmt) {
-            /** @var MethodCall $expr */
-            $expr = $stmt->expr;
-            $method = $this->getMethod($expr);
-            if (!$this->testsNodeAnalyzer->isPHPUnitMethodName($method, 'method')) {
-                continue;
-            }
-
-            /** @var MethodCall $expects */
-            $expects = $this->getExpects($method->var, $method);
-            if (!$this->expectationAnalyzer->isValidExpectsCall($expects)) {
-                continue;
-            }
-
-            $expectsArg = $expects->args[0];
-            /** @var MethodCall $expectsValue */
-            $expectsValue = $expectsArg->value;
-            if (!$this->expectationAnalyzer->isValidAtCall($expectsValue)) {
-                continue;
-            }
-
-            $atArg = $expectsValue->args[0];
-            $atValue = $atArg->value;
-            if ($atValue instanceof LNumber && $expects->var instanceof Variable) {
-                $expectationMocks[] = new ExpectationMock(
-                    $expects->var,
-                    $method->args,
-                    $atValue->value,
-                    $this->getWill($expr),
-                    $this->getWithArgs($method->var)
-                );
-            }
+        if ($this->shouldSkipReplacement($expectationMockCollection)) {
+            return;
         }
-        return $expectationMocks;
-    }
 
-    /**
-     * @param ExpectationMock[] $expectationMocks
-     * @param Expression[] $stmts
-     */
-    private function replaceExpectationNodes(array $expectationMocks, array $stmts): void
-    {
-        $entryCount = count($expectationMocks);
-        $removalCounter = 1;
-        foreach ($stmts as $stmt) {
-            if ($removalCounter < $entryCount) {
-                $this->removeNode($stmt);
-                ++$removalCounter;
+        $endLines = array_map(static function (ExpectationMock $expectationMock) {
+            $originalExpression = $expectationMock->originalExpression();
+            return $originalExpression === null ? 0 : $originalExpression->getEndLine();
+        }, $expectationMockCollection->getExpectationMocks());
+        $max = max($endLines);
+
+        foreach ($expectationMockCollection->getExpectationMocks() as $expectationMock) {
+            $originalExpression = $expectationMock->originalExpression();
+            if ($originalExpression === null) {
+                continue;
+            }
+            if ($max > $originalExpression->getEndLine()) {
+                $this->removeNode($originalExpression);
             } else {
-                $stmt->expr = $this->buildNewExpectation($expectationMocks);
+                $originalExpression->expr = $this->buildNewExpectation($expectationMockCollection);
             }
         }
     }
 
-    private function getMethod(MethodCall $expr): MethodCall
+    private function shouldSkipReplacement(ExpectationMockCollection $expectationMockCollection): bool
     {
-        if ($this->testsNodeAnalyzer->isPHPUnitMethodNames($expr, self::PROCESSABLE_WILL_STATEMENTS) && $expr->var instanceof MethodCall) {
-            return $expr->var;
+        if (!$expectationMockCollection->hasReturnValues()) {
+            return false;
         }
 
-        return $expr;
-    }
-
-    private function getWill(MethodCall $expr): ?Expr
-    {
-        if (!$this->testsNodeAnalyzer->isPHPUnitMethodNames($expr, self::PROCESSABLE_WILL_STATEMENTS)) {
-            return null;
+        if (!$expectationMockCollection->isExpectedMethodAlwaysTheSame()) {
+            return true;
         }
 
-        return $this->consecutiveAssertionFactory->createWillReturn($expr);
-    }
-
-    private function getExpects(Expr $maybeWith, MethodCall $method): Expr
-    {
-        if ($this->testsNodeAnalyzer->isPHPUnitMethodName($maybeWith, 'with') && $maybeWith instanceof MethodCall) {
-            return $maybeWith->var;
+        if ($expectationMockCollection->hasMissingAtIndexes()) {
+            return true;
         }
 
-        return $method->var;
+        if ($expectationMockCollection->hasMissingReturnValues()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * @return array<int, Expr|null>
+     * @return ExpectationMockCollection[]
      */
-    private function getWithArgs(Expr $maybeWith): array
+    private function groupExpectationCollectionsByVariableName(ExpectationMockCollection $expectationMockCollection): array
     {
-        if ($this->testsNodeAnalyzer->isPHPUnitMethodName($maybeWith, 'with') && $maybeWith instanceof MethodCall) {
-            return array_map(static function (Arg $arg) {
-                return $arg->value;
-            }, $maybeWith->args);
+        $groupedByVariable = [];
+        foreach ($expectationMockCollection->getExpectationMocks() as $expectationMock) {
+            $variable = $expectationMock->getExpectationVariable();
+            if (!is_string($variable->name)) {
+                continue;
+            }
+            if (!isset($groupedByVariable[$variable->name])) {
+                $groupedByVariable[$variable->name] = new ExpectationMockCollection();
+            }
+            $groupedByVariable[$variable->name]->add($expectationMock);
         }
 
-        return [null];
+        return array_values($groupedByVariable);
     }
 }
