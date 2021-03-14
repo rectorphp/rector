@@ -85,6 +85,9 @@ CODE_SAMPLE
         return $funcCall;
     }
 
+    /**
+     * @param Identical|NotIdentical $expr
+     */
     private function matchFuncCall(Expr $expr): ?FuncCall
     {
         if ($this->valueResolver->isFalse($expr->left)) {
@@ -92,7 +95,9 @@ CODE_SAMPLE
                 return null;
             }
 
-            return $expr->right;
+            /** @var FuncCall $funcCall */
+            $funcCall = $expr->right;
+            return $funcCall;
         }
 
         if ($this->valueResolver->isFalse($expr->right)) {
@@ -100,7 +105,9 @@ CODE_SAMPLE
                 return null;
             }
 
-            return $expr->left;
+            /** @var FuncCall $funcCall */
+            $funcCall = $expr->left;
+            return $funcCall;
         }
 
         return null;
