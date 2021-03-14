@@ -30,8 +30,6 @@ jobs:
                   password: ${{ secrets.DOCKER_PASSWORD }}
 
             - name: Build images
-              env:
-                IMAGES: docker
               run: |
                   DOCKER_TAGS=""
 
