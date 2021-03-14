@@ -9,8 +9,8 @@ parameters:
     featureToggles:
         disableRuntimeReflectionProvider: true
 
-    services:
-        - PhpParser\NodeFinder
+services:
+    - PhpParser\NodeFinder
 
 includes:
     - utils/phpstan-extensions/config/phpstan-extensions.neon
