@@ -317,9 +317,6 @@ final class PhpDocInfoPrinter
         $output .= $phpDocTagNode->name;
 
         $phpDocTagNodeValue = $phpDocTagNode->value;
-        if (! $phpDocTagNodeValue instanceof AttributeAwareNodeInterface) {
-            throw new ShouldNotHappenException();
-        }
 
         $nodeOutput = $this->printNode($phpDocTagNodeValue, $startAndEnd);
         $tagSpaceSeparator = $this->resolveTagSpaceSeparator($phpDocTagNode);

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Printer;
 
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 
 final class SpacePatternFactory
@@ -24,7 +24,7 @@ final class SpacePatternFactory
             return $this->createSpacePatternForParamTagValueNode($phpDocTagNode->value, $spacePattern);
         }
 
-        if ($phpDocTagNode->value instanceof AttributeAwareGenericTagValueNode) {
+        if ($phpDocTagNode->value instanceof GenericTagValueNode) {
             $originalValue = $phpDocTagNode->value->getAttribute('original_value') ?? $phpDocTagNode->value->value;
 
             // break by line break, to prevent false content positive

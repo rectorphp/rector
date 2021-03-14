@@ -10,7 +10,6 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 final class AttributeAwareParamTagValueNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
 {
@@ -18,11 +17,6 @@ final class AttributeAwareParamTagValueNodeFactory implements AttributeNodeAware
      * @var AttributeAwareNodeFactory
      */
     private $attributeAwareNodeFactory;
-
-    public function getOriginalNodeClass(): string
-    {
-        return ParamTagValueNode::class;
-    }
 
     public function isMatch(Node $node): bool
     {
@@ -32,7 +26,7 @@ final class AttributeAwareParamTagValueNodeFactory implements AttributeNodeAware
     /**
      * @param ParamTagValueNode $node
      */
-    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareParamTagValueNode
     {
         $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type, $docContent);
 

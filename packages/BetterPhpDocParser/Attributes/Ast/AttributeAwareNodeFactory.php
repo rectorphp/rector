@@ -9,9 +9,14 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactoryCollector;
+use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayShapeItemNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 /**
  * @see \Rector\Tests\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactoryTest
@@ -19,13 +24,22 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 final class AttributeAwareNodeFactory
 {
     /**
-     * @var AttributeAwareNodeFactoryCollector
+     * @var AttributeNodeAwareFactoryInterface[]
      */
-    private $attributeAwareNodeFactoryCollector;
+    private $attributeAwareNodeFactories = [];
 
-    public function __construct(AttributeAwareNodeFactoryCollector $attributeAwareNodeFactoryCollector)
+    /**
+     * @var PhpDocNodeTraverser
+     */
+    private $phpDocNodeTraverser;
+
+    /**
+     * @param AttributeNodeAwareFactoryInterface[] $attributeAwareNodeFactories
+     */
+    public function __construct(array $attributeAwareNodeFactories, PhpDocNodeTraverser $phpDocNodeTraverser)
     {
-        $this->attributeAwareNodeFactoryCollector = $attributeAwareNodeFactoryCollector;
+        $this->attributeAwareNodeFactories = $attributeAwareNodeFactories;
+        $this->phpDocNodeTraverser = $phpDocNodeTraverser;
     }
 
     /**
@@ -33,21 +47,40 @@ final class AttributeAwareNodeFactory
      */
     public function createFromNode(Node $node, string $docContent): BaseNode
     {
+        $node = $this->phpDocNodeTraverser->traverseWithCallable($node, $docContent, function (
+            $node,
+            string $docContent
+        ) {
+            if ($node instanceof UnionTypeNode && ! $node instanceof AttributeAwareUnionTypeNode) {
+                return new AttributeAwareUnionTypeNode($node->types, $docContent);
+            }
+
+            if ($node instanceof ArrayShapeItemNode && ! $node instanceof AttributeAwareArrayShapeItemNode) {
+                return new AttributeAwareArrayShapeItemNode(
+                    $node->keyName,
+                    $node->optional,
+                    $node->valueType,
+                    $docContent
+                );
+            }
+            return $node;
+        });
+
         if ($node instanceof AttributeAwareNodeInterface) {
             return $node;
         }
 
-        foreach ($this->attributeAwareNodeFactoryCollector->provide() as $attributeNodeAwareFactory) {
-            if (! $attributeNodeAwareFactory->isMatch($node)) {
+        foreach ($this->attributeAwareNodeFactories as $attributeAwareNodeFactory) {
+            if (! $attributeAwareNodeFactory->isMatch($node)) {
                 continue;
             }
 
             // prevents cyclic dependency
-            if ($attributeNodeAwareFactory instanceof AttributeAwareNodeFactoryAwareInterface) {
-                $attributeNodeAwareFactory->setAttributeAwareNodeFactory($this);
+            if ($attributeAwareNodeFactory instanceof AttributeAwareNodeFactoryAwareInterface) {
+                $attributeAwareNodeFactory->setAttributeAwareNodeFactory($this);
             }
 
-            return $attributeNodeAwareFactory->create($node, $docContent);
+            return $attributeAwareNodeFactory->create($node, $docContent);
         }
 
         return $node;

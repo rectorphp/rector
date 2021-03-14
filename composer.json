@@ -61,6 +61,7 @@
         "symfony/http-kernel": "^4.4.8|^5.1",
         "symfony/process": "^4.4.8|^5.1",
         "symfony/uid": "^4.4.8|^5.1",
+<<<<<<< HEAD
         "symplify/astral": "^9.2",
         "symplify/autowire-array-parameter": "^9.2",
         "symplify/console-color-diff": "^9.2",
@@ -71,6 +72,31 @@
         "symplify/skipper": "^9.2",
         "symplify/smart-file-system": "^9.2",
         "symplify/symfony-php-config": "^9.2",
+=======
+<<<<<<< HEAD
+        "symplify/astral": "^9.2.11",
+        "symplify/autowire-array-parameter": "^9.2.11",
+        "symplify/console-color-diff": "^9.2.11",
+        "symplify/package-builder": "^9.2.11",
+        "symplify/rule-doc-generator-contracts": "^9.2",
+        "symplify/set-config-resolver": "^9.2.11",
+        "symplify/simple-php-doc-parser": "^9.2.11",
+        "symplify/skipper": "^9.2.11",
+        "symplify/smart-file-system": "^9.2.11",
+        "symplify/symfony-php-config": "^9.2.11",
+=======
+        "symplify/astral": "^9.2.4",
+        "symplify/autowire-array-parameter": "^9.2.4",
+        "symplify/console-color-diff": "^9.2.4",
+        "symplify/package-builder": "^9.2.4",
+        "symplify/rule-doc-generator": "^9.2.4",
+        "symplify/set-config-resolver": "^9.2.4",
+        "symplify/simple-php-doc-parser": "dev-main",
+        "symplify/skipper": "^9.2.4",
+        "symplify/smart-file-system": "^9.2.4",
+        "symplify/symfony-php-config": "^9.2.4",
+>>>>>>> f6ec46d106... remove attribute aware return tag
+>>>>>>> 2f5596fa17... remove AttributeAware*
         "webmozart/assert": "^1.10"
     },
     "require-dev": {
@@ -121,6 +147,7 @@
             "vendor/phpstan/phpdoc-parser/src/Ast/Type/IdentifierTypeNode.php",
             "vendor/phpstan/phpdoc-parser/src/Ast/Type/UnionTypeNode.php",
             "vendor/phpstan/phpdoc-parser/src/Ast/Type/ConstTypeNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/Type/NullableTypeNode.php",
             "vendor/phpstan/phpdoc-parser/src/Ast/Type/IntersectionTypeNode.php",
             "vendor/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeNode.php",
             "vendor/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeItemNode.php",

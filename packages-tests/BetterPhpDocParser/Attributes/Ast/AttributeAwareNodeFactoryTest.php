@@ -11,9 +11,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePropertyTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareNullableTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
@@ -57,20 +54,17 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
         /** @var PhpDocTagNode $childNode */
         $propertyTagValueNode = $childNode->value;
         $this->assertInstanceOf(PropertyTagValueNode::class, $propertyTagValueNode);
-        $this->assertInstanceOf(AttributeAwarePropertyTagValueNode::class, $propertyTagValueNode);
 
         // test nullable
         /** @var PropertyTagValueNode $propertyTagValueNode */
         $nullableTypeNode = $propertyTagValueNode->type;
 
         $this->assertInstanceOf(NullableTypeNode::class, $nullableTypeNode);
-        $this->assertInstanceOf(AttributeAwareNullableTypeNode::class, $nullableTypeNode);
 
         // test type inside nullable
         /** @var NullableTypeNode $nullableTypeNode */
         $identifierTypeNode = $nullableTypeNode->type;
         $this->assertInstanceOf(IdentifierTypeNode::class, $identifierTypeNode);
-        $this->assertInstanceOf(AttributeAwareIdentifierTypeNode::class, $identifierTypeNode);
     }
 
     public function testAlreadyAttributeAware(): void

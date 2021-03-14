@@ -18,14 +18,12 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ClassNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
+use Rector\BetterPhpDocParser\ValueObject\NodeTypes;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
@@ -390,8 +388,8 @@ final class PhpDocInfo
 
         $name = $this->resolveNameForPhpDocTagValueNode($phpDocTagValueNode);
 
-        $attributeAwarePhpDocTagNode = new AttributeAwarePhpDocTagNode($name, $phpDocTagValueNode);
-        $this->addPhpDocTagNode($attributeAwarePhpDocTagNode);
+        $phpDocTagNode = new PhpDocTagNode($name, $phpDocTagValueNode);
+        $this->addPhpDocTagNode($phpDocTagNode);
     }
 
     public function isNewNode(): bool
@@ -413,9 +411,8 @@ final class PhpDocInfo
         return $this->isSingleLine;
     }
 
-    public function getReturnTagValue(): ?AttributeAwareReturnTagValueNode
+    public function getReturnTagValue(): ?ReturnTagValueNode
     {
-        /** @var AttributeAwareReturnTagValueNode[] $returnTagValueNodes */
         $returnTagValueNodes = $this->phpDocNode->getReturnTagValues();
         return $returnTagValueNodes[0] ?? null;
     }
@@ -481,12 +478,13 @@ final class PhpDocInfo
 
     private function ensureTypeIsTagValueNode(string $type, string $location): void
     {
-        if (StaticInstanceOf::isOneOf($type, [
+        $desiredTypes = array_merge([
             PhpDocTagValueNode::class,
             PhpDocTagNode::class,
-            TypeAwareTagValueNodeInterface::class,
             PhpAttributableTagNodeInterface::class,
-        ])) {
+        ], NodeTypes::TYPE_AWARE_NODES);
+
+        if (StaticInstanceOf::isOneOf($type, $desiredTypes)) {
             return;
         }
 

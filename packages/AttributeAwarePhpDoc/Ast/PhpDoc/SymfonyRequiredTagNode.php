@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
 
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
@@ -24,7 +25,7 @@ final class SymfonyRequiredTagNode extends PhpDocTagNode implements PhpAttributa
 
     public function __construct()
     {
-        parent::__construct(self::NAME, new AttributeAwareGenericTagValueNode(''));
+        parent::__construct(self::NAME, new GenericTagValueNode(''));
     }
 
     public function __toString(): string

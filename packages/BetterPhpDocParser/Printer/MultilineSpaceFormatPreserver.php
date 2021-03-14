@@ -48,6 +48,7 @@ final class MultilineSpaceFormatPreserver
 
     /**
      * Fix multiline BC break - https://github.com/phpstan/phpdoc-parser/pull/26/files
+     * @param BaseNode $node
      */
     public function fixMultilineDescriptions(Node $node): void
     {
@@ -57,7 +58,7 @@ final class MultilineSpaceFormatPreserver
         }
 
         $nodeWithRestoredSpaces = $this->restoreOriginalSpacingInText($node);
-        if (! $nodeWithRestoredSpaces instanceof AttributeAwareNodeInterface) {
+        if ($nodeWithRestoredSpaces === null) {
             return;
         }
 
@@ -66,7 +67,7 @@ final class MultilineSpaceFormatPreserver
     }
 
     /**
-     * @param AttributeAwareNodeInterface|BaseNode $node
+     * @param AttributeAwareNodeInterface&BaseNode $node
      */
     private function restoreOriginalSpacingInText(Node $node): ?Node
     {
