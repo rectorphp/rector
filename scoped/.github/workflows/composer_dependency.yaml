@@ -47,4 +47,4 @@ jobs:
                     # run
                     composer require rector/rector-prefixed:dev-main --dev --ansi
                     composer require symfony/console ${{ matrix.symfony_version }}
-                    vendor/bin/rector --debug --ansi
+                    vendor/bin/rector list --debug --ansi
