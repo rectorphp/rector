@@ -75,6 +75,22 @@ final class ExpectationMockCollection
         return false;
     }
 
+    public function hasWithValues(): bool
+    {
+        foreach ($this->getExpectationMocks() as $expectationMock) {
+            if (
+                count($expectationMock->getWithArguments()) > 1
+                || (
+                    count($expectationMock->getWithArguments()) === 1
+                    && $expectationMock->getWithArguments()[0] !== null
+                )) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function hasReturnValues(): bool
     {
         foreach ($this->getExpectationMocks() as $expectationMock) {

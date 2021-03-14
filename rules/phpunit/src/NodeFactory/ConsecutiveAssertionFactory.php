@@ -32,11 +32,9 @@ final class ConsecutiveAssertionFactory
         $var = $expectationMocks[0]->getExpectationVariable();
         $methodArguments = $expectationMocks[0]->getMethodArguments();
 
-        usort($expectationMocks, static function (ExpectationMock $expectationMockA, ExpectationMock $expectationMockB) {
-            return $expectationMockA->getIndex() > $expectationMockB->getIndex() ? 1 : -1;
-        });
+        $expectationMocks = $this->sortExpectationMocksByIndex($expectationMocks);
 
-        if (!$this->hasReturnValue($expectationMocks)) {
+        if (!$expectationMockCollection->hasReturnValues()) {
             return $this->createWithConsecutive(
                 $this->createMethod(
                     $var,
@@ -46,7 +44,7 @@ final class ConsecutiveAssertionFactory
             );
         }
 
-        if ($this->hasWithValues($expectationMocks)) {
+        if ($expectationMockCollection->hasWithValues()) {
             return $this->createWillReturnOnConsecutiveCalls(
                 $this->createWithConsecutive(
                     $this->createMethod(
@@ -66,40 +64,6 @@ final class ConsecutiveAssertionFactory
             ),
             $this->createReturnArgs($expectationMocks)
         );
-
-
-    }
-
-    /**
-     * @param ExpectationMock[] $expectationMocks
-     */
-    private function hasReturnValue(array $expectationMocks): bool
-    {
-        foreach ($expectationMocks as $expectationMock) {
-            if ($expectationMock->getReturn() !== null) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param ExpectationMock[] $expectationMocks
-     */
-    private function hasWithValues(array $expectationMocks): bool
-    {
-        foreach ($expectationMocks as $expectationMock) {
-            if (
-                count($expectationMock->getWithArguments()) > 1
-                || (
-                    count($expectationMock->getWithArguments()) === 1
-                    && $expectationMock->getWithArguments()[0] !== null
-                )) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -217,5 +181,13 @@ final class ConsecutiveAssertionFactory
             new Identifier($name),
             $args
         );
+    }
+
+    private function sortExpectationMocksByIndex(array $expectationMocks): array
+    {
+        usort($expectationMocks, static function (ExpectationMock $expectationMockA, ExpectationMock $expectationMockB) {
+            return $expectationMockA->getIndex() > $expectationMockB->getIndex() ? 1 : -1;
+        });
+        return $expectationMocks;
     }
 }
