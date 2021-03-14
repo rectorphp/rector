@@ -135,11 +135,11 @@ CODE_SAMPLE
         /** @var ClassLike[] $classLikes */
         $classLikes = $this->betterNodeFinder->findClassLikes($namespace->stmts);
 
-        $emptyNamespace = $this->namespaceManipulator->removeClassLikes($namespace);
+        $this->namespaceManipulator->removeClassLikes($namespace);
 
         $nodeToReturn = null;
         foreach ($classLikes as $classLike) {
-            $newNamespace = clone $emptyNamespace;
+            $newNamespace = clone $namespace;
             $newNamespace->stmts[] = $classLike;
 
             // 1. is the class that will be kept in original file?

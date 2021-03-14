@@ -645,7 +645,8 @@ final class NodeFactory
         }
 
         if ($arrayItem !== null) {
-            return $this->createArrayItemWithKey($key, $arrayItem);
+            $this->decoreateArrayItemWithKey($key, $arrayItem);
+            return $arrayItem;
         }
 
         throw new NotImplementedYetException(sprintf(
@@ -734,13 +735,11 @@ final class NodeFactory
     /**
      * @param int|string|null $key
      */
-    private function createArrayItemWithKey($key, ArrayItem $arrayItem): ArrayItem
+    private function decoreateArrayItemWithKey($key, ArrayItem $arrayItem): void
     {
         if ($key !== null) {
             $arrayItem->key = BuilderHelpers::normalizeValue($key);
         }
-
-        return $arrayItem;
     }
 
     /**

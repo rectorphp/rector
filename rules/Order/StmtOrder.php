@@ -50,7 +50,7 @@ final class StmtOrder
     /**
      * @param array<int, int> $oldToNewKeys
      */
-    public function reorderClassStmtsByOldToNewKeys(ClassLike $classLike, array $oldToNewKeys): ClassLike
+    public function reorderClassStmtsByOldToNewKeys(ClassLike $classLike, array $oldToNewKeys): void
     {
         $reorderedStmts = [];
 
@@ -75,8 +75,6 @@ final class StmtOrder
 
             $classLike->stmts[$i] = $reorderedStmts[$i];
         }
-
-        return $classLike;
     }
 
     /**

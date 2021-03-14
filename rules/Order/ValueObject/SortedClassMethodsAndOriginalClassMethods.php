@@ -54,6 +54,9 @@ final class SortedClassMethodsAndOriginalClassMethods
 
     public function hasOrderSame(): bool
     {
-        return array_values($this->sortedClassMethods) === array_values($this->originalClassMethods);
+        $sortedClassMethodValues = array_values($this->sortedClassMethods);
+        $originalClassMethodValues = array_values($this->originalClassMethods);
+
+        return $sortedClassMethodValues === $originalClassMethodValues;
     }
 }

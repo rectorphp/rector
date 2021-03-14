@@ -55,6 +55,7 @@ final class ExpectExceptionMessageFactory
             return null;
         }
 
-        return $this->argumentShiftingFactory->createFromMethodCall($methodCall, 'expectExceptionMessage');
+        $this->argumentShiftingFactory->removeAllButFirstArgMethodCall($methodCall, 'expectExceptionMessage');
+        return $methodCall;
     }
 }

@@ -9,7 +9,7 @@ use PhpParser\Node\Identifier;
 
 final class ArgumentShiftingFactory
 {
-    public function createFromMethodCall(MethodCall $methodCall, string $methodName): MethodCall
+    public function removeAllButFirstArgMethodCall(MethodCall $methodCall, string $methodName): void
     {
         $methodCall->name = new Identifier($methodName);
         foreach (array_keys($methodCall->args) as $i) {
@@ -20,7 +20,5 @@ final class ArgumentShiftingFactory
 
             unset($methodCall->args[$i]);
         }
-
-        return $methodCall;
     }
 }

@@ -121,8 +121,7 @@ CODE_SAMPLE
                 $sortedAndOriginalClassMethods->getOriginalClassMethods()
             );
 
-            /** @var Class_ $node */
-            $node = $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
+            $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
 
             $sortedAndOriginalClassMethods = $this->getSortedAndOriginalClassMethods($node);
         }

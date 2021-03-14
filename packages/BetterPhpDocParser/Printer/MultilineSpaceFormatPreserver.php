@@ -50,21 +50,20 @@ final class MultilineSpaceFormatPreserver
     /**
      * Fix multiline BC break - https://github.com/phpstan/phpdoc-parser/pull/26/files
      */
-    public function fixMultilineDescriptions(
-        AttributeAwareNodeInterface $attributeAwareNode
-    ): AttributeAwareNodeInterface {
+    public function fixMultilineDescriptions(AttributeAwareNodeInterface $attributeAwareNode): void
+    {
         $originalContent = $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT);
         if (! $originalContent) {
-            return $attributeAwareNode;
+            return;
         }
 
         $nodeWithRestoredSpaces = $this->restoreOriginalSpacingInText($attributeAwareNode);
-        if ($nodeWithRestoredSpaces !== null) {
-            $attributeAwareNode = $nodeWithRestoredSpaces;
-            $attributeAwareNode->setAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES, true);
+        if ($nodeWithRestoredSpaces === null) {
+            return;
         }
 
-        return $attributeAwareNode;
+        $attributeAwareNode = $nodeWithRestoredSpaces;
+        $attributeAwareNode->setAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES, true);
     }
 
     /**
@@ -106,13 +105,14 @@ final class MultilineSpaceFormatPreserver
             return null;
         }
 
-        return $this->setNewTextToPhpDocNode($attributeAwareNode, $newText);
+        $this->decoratePhpDocNodeWithNewText($attributeAwareNode, $newText);
+        return $attributeAwareNode;
     }
 
-    private function setNewTextToPhpDocNode(
+    private function decoratePhpDocNodeWithNewText(
         AttributeAwareNodeInterface $attributeAwareNode,
         string $newText
-    ): AttributeAwareNodeInterface {
+    ): void {
         if ($attributeAwareNode instanceof PhpDocTagNode && property_exists(
             $attributeAwareNode->value,
             'description'
@@ -124,10 +124,14 @@ final class MultilineSpaceFormatPreserver
             $attributeAwareNode->text = $newText;
         }
 
-        if ($attributeAwareNode instanceof AttributeAwarePhpDocTagNode && $attributeAwareNode->value instanceof AttributeAwareGenericTagValueNode) {
-            $attributeAwareNode->value->value = $newText;
+        if (! $attributeAwareNode instanceof AttributeAwarePhpDocTagNode) {
+            return;
         }
 
-        return $attributeAwareNode;
+        if (! $attributeAwareNode->value instanceof AttributeAwareGenericTagValueNode) {
+            return;
+        }
+
+        $attributeAwareNode->value->value = $newText;
     }
 }
