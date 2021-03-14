@@ -1,4 +1,4 @@
-# 672 Rules Overview
+# 661 Rules Overview
 
 <br>
 
@@ -28,7 +28,7 @@
 
 - [DependencyInjection](#dependencyinjection) (5)
 
-- [Doctrine](#doctrine) (18)
+- [Doctrine](#doctrine) (6)
 
 - [DoctrineCodeQuality](#doctrinecodequality) (11)
 
@@ -112,9 +112,7 @@
 
 - [Restoration](#restoration) (8)
 
-- [Sensio](#sensio) (3)
-
-- [Symfony](#symfony) (11)
+- [Symfony](#symfony) (14)
 
 - [Symfony2](#symfony2) (3)
 
@@ -122,7 +120,7 @@
 
 - [Symfony4](#symfony4) (12)
 
-- [Symfony5](#symfony5) (9)
+- [Symfony5](#symfony5) (10)
 
 - [Transform](#transform) (37)
 
@@ -2525,7 +2523,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to each own lines default value, to prevent undefined array issues
+Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
 
 - class: [`Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`](../rules/CodingStyle/Rector/Assign/SplitDoubleAssignRector.php)
 
@@ -4608,301 +4606,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
-### AddUuidAnnotationsToIdPropertyRector
-
-Add uuid annotations to `$id` property
-
-- class: [`Rector\Doctrine\Rector\Property\AddUuidAnnotationsToIdPropertyRector`](../rules/Doctrine/Rector/Property/AddUuidAnnotationsToIdPropertyRector.php)
-
-```diff
- use Doctrine\ORM\Attributes as ORM;
-
- /**
-  * @ORM\Entity
-  */
- class SomeClass
- {
-     /**
--     * @var int
-+     * @var \Ramsey\Uuid\UuidInterface
-      * @ORM\Id
--     * @ORM\Column(type="integer")
--     * @ORM\GeneratedValue(strategy="AUTO")
--     * @Serializer\Type("int")
-+     * @ORM\Column(type="uuid_binary")
-+     * @Serializer\Type("string")
-      */
-     public $id;
- }
-```
-
-<br>
-
-### AddUuidMirrorForRelationPropertyRector
-
-Adds `$uuid` property to entities, that already have `$id` with integer type.Require for step-by-step migration from int to uuid.
-
-- class: [`Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector`](../rules/Doctrine/Rector/Class_/AddUuidMirrorForRelationPropertyRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-  * @ORM\Entity
-  */
- class SomeEntity
- {
-     /**
-      * @ORM\ManyToOne(targetEntity="AnotherEntity", cascade={"persist", "merge"})
-      * @ORM\JoinColumn(nullable=false)
-      */
-     private $amenity;
-+
-+    /**
-+     * @ORM\ManyToOne(targetEntity="AnotherEntity", cascade={"persist", "merge"})
-+     * @ORM\JoinColumn(nullable=true, referencedColumnName="uuid")
-+     */
-+    private $amenityUuid;
- }
-
- /**
-  * @ORM\Entity
-  */
- class AnotherEntity
- {
-     /**
-      * @var int
-      * @ORM\Id
-      * @ORM\Column(type="integer")
-      * @ORM\GeneratedValue(strategy="AUTO")
-      */
-     private $id;
-
-     private $uuid;
- }
-```
-
-<br>
-
-### AddUuidToEntityWhereMissingRector
-
-Adds `$uuid` property to entities, that already have `$id` with integer type.Require for step-by-step migration from int to uuid. In following step it should be renamed to `$id` and replace it
-
-- class: [`Rector\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector`](../rules/Doctrine/Rector/Class_/AddUuidToEntityWhereMissingRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-  * @ORM\Entity
-  */
- class SomeEntityWithIntegerId
- {
-     /**
-+     * @var \Ramsey\Uuid\UuidInterface
-+     * @ORM\Column(type="uuid_binary", unique=true, nullable=true)
-+     */
-+    private $uuid;
-+    /**
-      * @var int
-      * @ORM\Id
-      * @ORM\Column(type="integer")
-      * @ORM\GeneratedValue(strategy="AUTO")
-      */
-     private $id;
- }
-```
-
-<br>
-
-### AlwaysInitializeUuidInEntityRector
-
-Add uuid initializion to all entities that misses it
-
-- class: [`Rector\Doctrine\Rector\Class_\AlwaysInitializeUuidInEntityRector`](../rules/Doctrine/Rector/Class_/AlwaysInitializeUuidInEntityRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-  * @ORM\Entity
-  */
- class AddUuidInit
- {
-     /**
-      * @ORM\Id
-      * @var UuidInterface
-      */
-     private $superUuid;
-+    public function __construct()
-+    {
-+        $this->superUuid = \Ramsey\Uuid\Uuid::uuid4();
-+    }
- }
-```
-
-<br>
-
-### ChangeGetIdTypeToUuidRector
-
-Change return type of `getId()` to uuid interface
-
-- class: [`Rector\Doctrine\Rector\ClassMethod\ChangeGetIdTypeToUuidRector`](../rules/Doctrine/Rector/ClassMethod/ChangeGetIdTypeToUuidRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-  * @ORM\Entity
-  */
- class GetId
- {
--    public function getId(): int
-+    public function getId(): \Ramsey\Uuid\UuidInterface
-     {
-         return $this->id;
-     }
- }
-```
-
-<br>
-
-### ChangeGetUuidMethodCallToGetIdRector
-
-Change `getUuid()` method call to `getId()`
-
-- class: [`Rector\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector`](../rules/Doctrine/Rector/MethodCall/ChangeGetUuidMethodCallToGetIdRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
- use Ramsey\Uuid\Uuid;
- use Ramsey\Uuid\UuidInterface;
-
- class SomeClass
- {
-     public function run()
-     {
-         $buildingFirst = new Building();
-
--        return $buildingFirst->getUuid()->toString();
-+        return $buildingFirst->getId()->toString();
-     }
- }
-
- /**
-  * @ORM\Entity
-  */
- class UuidEntity
- {
-     private $uuid;
-     public function getUuid(): UuidInterface
-     {
-         return $this->uuid;
-     }
- }
-```
-
-<br>
-
-### ChangeIdenticalUuidToEqualsMethodCallRector
-
-Change `$uuid` === 1 to `$uuid->equals(\Ramsey\Uuid\Uuid::fromString(1))`
-
-- class: [`Rector\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector`](../rules/Doctrine/Rector/Identical/ChangeIdenticalUuidToEqualsMethodCallRector.php)
-
-```diff
- class SomeClass
- {
-     public function match($checkedId): int
-     {
-         $building = new Building();
-
--        return $building->getId() === $checkedId;
-+        return $building->getId()->equals(\Ramsey\Uuid\Uuid::fromString($checkedId));
-     }
- }
-```
-
-<br>
-
-### ChangeReturnTypeOfClassMethodWithGetIdRector
-
-Change `getUuid()` method call to `getId()`
-
-- class: [`Rector\Doctrine\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector`](../rules/Doctrine/Rector/ClassMethod/ChangeReturnTypeOfClassMethodWithGetIdRector.php)
-
-```diff
- class SomeClass
- {
--    public function getBuildingId(): int
-+    public function getBuildingId(): \Ramsey\Uuid\UuidInterface
-     {
-         $building = new Building();
-
-         return $building->getId();
-     }
- }
-```
-
-<br>
-
-### ChangeSetIdToUuidValueRector
-
-Change set id to uuid values
-
-- class: [`Rector\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector`](../rules/Doctrine/Rector/MethodCall/ChangeSetIdToUuidValueRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
- use Ramsey\Uuid\Uuid;
-
- class SomeClass
- {
-     public function run()
-     {
-         $buildingFirst = new Building();
--        $buildingFirst->setId(1);
--        $buildingFirst->setUuid(Uuid::fromString('a3bfab84-e207-4ddd-b96d-488151de9e96'));
-+        $buildingFirst->setId(Uuid::fromString('a3bfab84-e207-4ddd-b96d-488151de9e96'));
-     }
- }
-
- /**
-  * @ORM\Entity
-  */
- class Building
- {
- }
-```
-
-<br>
-
-### ChangeSetIdTypeToUuidRector
-
-Change param type of `setId()` to uuid interface
-
-- class: [`Rector\Doctrine\Rector\ClassMethod\ChangeSetIdTypeToUuidRector`](../rules/Doctrine/Rector/ClassMethod/ChangeSetIdTypeToUuidRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-  * @ORM\Entity
-  */
- class SetId
- {
-     private $id;
-
--    public function setId(int $uuid): int
-+    public function setId(\Ramsey\Uuid\UuidInterface $uuid): int
-     {
-         return $this->id = $uuid;
-     }
- }
-```
-
-<br>
-
 ### EntityAliasToClassConstantReferenceRector
 
 Replaces doctrine alias with class.
@@ -4989,62 +4692,6 @@ Removes repository class from `@Entity` annotation
   */
  class Product
  {
- }
-```
-
-<br>
-
-### RemoveTemporaryUuidColumnPropertyRector
-
-Remove temporary `$uuid` property
-
-- class: [`Rector\Doctrine\Rector\Property\RemoveTemporaryUuidColumnPropertyRector`](../rules/Doctrine/Rector/Property/RemoveTemporaryUuidColumnPropertyRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-  * @ORM\Entity
-  */
- class Column
- {
-     /**
-      * @ORM\Column
-      */
-     public $id;
--
--    /**
--     * @ORM\Column
--     */
--    public $uuid;
- }
-```
-
-<br>
-
-### RemoveTemporaryUuidRelationPropertyRector
-
-Remove temporary *Uuid relation properties
-
-- class: [`Rector\Doctrine\Rector\Property\RemoveTemporaryUuidRelationPropertyRector`](../rules/Doctrine/Rector/Property/RemoveTemporaryUuidRelationPropertyRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-  * @ORM\Entity
-  */
- class Column
- {
-     /**
-      * @ORM\ManyToMany(targetEntity="Phonenumber")
-      */
-     private $apple;
--
--    /**
--     * @ORM\ManyToMany(targetEntity="Phonenumber")
--     */
--    private $appleUuid;
  }
 ```
 
@@ -5350,6 +4997,9 @@ Turns parent EntityRepository class to constructor dependency
 -final class PostRepository extends EntityRepository
 +final class PostRepository
  {
++    /**
++     * @var \Doctrine\ORM\EntityRepository<Post>
++     */
 +    private EntityRepository $repository;
 +
 +    public function __construct(EntityManagerInterface $entityManager)
@@ -12950,7 +12600,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
 
 :wrench: **configure it!**
 
@@ -13749,72 +13399,6 @@ Rename file to respect class name
 
 <br>
 
-## Sensio
-
-### RemoveServiceFromSensioRouteRector
-
-Remove service from Sensio `@Route`
-
-- class: [`Rector\Symfony\Rector\ClassMethod\RemoveServiceFromSensioRouteRector`](../rules/Sensio/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php)
-
-```diff
- use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
- final class SomeClass
- {
-     /**
--     * @Route(service="some_service")
-+     * @Route()
-      */
-     public function run()
-     {
-     }
- }
-```
-
-<br>
-
-### ReplaceSensioRouteAnnotationWithSymfonyRector
-
-Replace Sensio `@Route` annotation with Symfony one
-
-- class: [`Rector\Symfony\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector`](../rules/Sensio/Rector/ClassMethod/ReplaceSensioRouteAnnotationWithSymfonyRector.php)
-
-```diff
--use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-+use Symfony\Component\Routing\Annotation\Route;
-
- final class SomeClass
- {
-     /**
-      * @Route()
-      */
-     public function run()
-     {
-     }
- }
-```
-
-<br>
-
-### TemplateAnnotationToThisRenderRector
-
-Turns `@Template` annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony
-
-- class: [`Rector\Symfony\Rector\ClassMethod\TemplateAnnotationToThisRenderRector`](../rules/Sensio/Rector/ClassMethod/TemplateAnnotationToThisRenderRector.php)
-
-```diff
--/**
-- * @Template()
-- */
- public function indexAction()
- {
-+    return $this->render('index.html.twig');
- }
-```
-
-<br>
-
 ## Symfony
 
 ### ActionSuffixRemoverRector
@@ -14086,6 +13670,52 @@ Use autowire + class name suffix for method with `@required` annotation
 
 <br>
 
+### RemoveServiceFromSensioRouteRector
+
+Remove service from Sensio `@Route`
+
+- class: [`Rector\Symfony\Rector\ClassMethod\RemoveServiceFromSensioRouteRector`](../rules/Symfony/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php)
+
+```diff
+ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+ final class SomeClass
+ {
+     /**
+-     * @Route(service="some_service")
++     * @Route()
+      */
+     public function run()
+     {
+     }
+ }
+```
+
+<br>
+
+### ReplaceSensioRouteAnnotationWithSymfonyRector
+
+Replace Sensio `@Route` annotation with Symfony one
+
+- class: [`Rector\Symfony\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector`](../rules/Symfony/Rector/ClassMethod/ReplaceSensioRouteAnnotationWithSymfonyRector.php)
+
+```diff
+-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
++use Symfony\Component\Routing\Annotation\Route;
+
+ final class SomeClass
+ {
+     /**
+      * @Route()
+      */
+     public function run()
+     {
+     }
+ }
+```
+
+<br>
+
 ### ResponseStatusCodeRector
 
 Turns status code numbers to constants
@@ -14133,6 +13763,24 @@ Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.
 +             new Twig_SimpleFilter('is_mobile', [$this, 'isMobile']),
          ];
      }
+ }
+```
+
+<br>
+
+### TemplateAnnotationToThisRenderRector
+
+Turns `@Template` annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony
+
+- class: [`Rector\Symfony\Rector\ClassMethod\TemplateAnnotationToThisRenderRector`](../rules/Symfony/Rector/ClassMethod/TemplateAnnotationToThisRenderRector.php)
+
+```diff
+-/**
+- * @Template()
+- */
+ public function indexAction()
+ {
++    return $this->render('index.html.twig');
  }
 ```
 
@@ -14941,6 +14589,35 @@ Migrates from deprecated enable_magic_call_extraction context option in Reflecti
 
 <br>
 
+### RouteCollectionBuilderToRoutingConfiguratorRector
+
+Change RouteCollectionBuilder to RoutingConfiguratorRector
+
+- class: [`Rector\Symfony5\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector`](../rules/Symfony5/Rector/ClassMethod/RouteCollectionBuilderToRoutingConfiguratorRector.php)
+
+```diff
+ use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+ use Symfony\Component\HttpKernel\Kernel;
+-use Symfony\Component\Routing\RouteCollectionBuilder;
++use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+
+ final class ConcreteMicroKernel extends Kernel
+ {
+     use MicroKernelTrait;
+
+-    protected function configureRoutes(RouteCollectionBuilder $routes)
++    protected function configureRouting(RoutingConfigurator $routes): void
+     {
+-        $routes->add('/admin', 'App\Controller\AdminController::dashboard', 'admin_dashboard');
+-    }
+-}
++        $routes->add('admin_dashboard', '/admin')
++            ->controller('App\Controller\AdminController::dashboard')
++    }}
+```
+
+<br>
+
 ### ValidatorBuilderEnableAnnotationMappingRector
 
 Migrates from deprecated ValidatorBuilder->enableAnnotationMapping($reader) to ValidatorBuilder->enableAnnotationMapping(true)->setDoctrineAnnotationReader($reader)
@@ -15500,7 +15177,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MergeInterfacesRector::OLD_TO_NEW_INTERFACES => [
                 'SomeOldInterface' => 'SomeInterface',
-
+                
             ], ]]);
 };
 ```
@@ -15571,7 +15248,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToPropertyFetchRector::METHOD_CALL_TO_PROPERTY_FETCHES => [
                 'someMethod' => 'someProperty',
-
+                
             ], ]]);
 };
 ```
@@ -15610,7 +15287,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToReturnRector::METHOD_CALL_WRAPS => [
                 'SomeClass' => ['deny'],
-
+                
             ], ]]);
 };
 ```
@@ -15902,7 +15579,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ParentClassToTraitsRector::PARENT_CLASS_TO_TRAITS => [
                 'Nette\Object' => ['Nette\SmartObject'],
-
+                
             ], ]]);
 };
 ```
@@ -16374,7 +16051,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ToStringToMethodCallRector::METHOD_NAMES_BY_TYPE => [
                 'SomeObject' => 'getPath',
-
+                
             ], ]]);
 };
 ```
@@ -17103,8 +16780,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ChangePropertyVisibilityRector::PROPERTY_TO_VISIBILITY_BY_CLASS => [
                 'FrameworkClass' => [
                     'someProperty' => 2,
-
-
+                    
+                    
                 ], ], ]]);
 };
 ```
