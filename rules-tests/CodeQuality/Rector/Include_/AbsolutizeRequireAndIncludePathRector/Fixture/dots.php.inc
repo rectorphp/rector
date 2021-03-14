@@ -7,6 +7,8 @@ class Dots
     public function run()
     {
         require './vendor/autoload.php';
+
+        require '../AbsolutizeRequireAndIncludePathRectorTest.php';
     }
 }
 
@@ -20,7 +22,9 @@ class Dots
 {
     public function run()
     {
-        require __DIR__ . './vendor/autoload.php';
+        require __DIR__ . '/vendor/autoload.php';
+
+        require __DIR__ . '/../AbsolutizeRequireAndIncludePathRectorTest.php';
     }
 }
 

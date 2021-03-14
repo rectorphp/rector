@@ -75,14 +75,15 @@ CODE_SAMPLE
         /** @var string $includeValue */
         $includeValue = $this->valueResolver->getValue($node->expr);
 
-        // skip phar
-        if (Strings::startsWith($includeValue, 'phar://')) {
+        // skip phar and absolute paths
+        if (Strings::startsWith($includeValue, 'phar://') || Strings::startsWith($includeValue, '/')) {
             return null;
         }
 
         // add preslash to string
-        // keep dots
-        if (! Strings::startsWith($includeValue, '/') && ! Strings::startsWith($includeValue, '.')) {
+        if (Strings::startsWith($includeValue, './')) {
+            $node->expr->value = substr($includeValue, 1);
+        } else {
             $node->expr->value = '/' . $includeValue;
         }
 
