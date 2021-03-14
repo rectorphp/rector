@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
@@ -90,7 +91,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $onlyNodeInIf->var instanceof ArrayDimFetch) {
+        $arrayDimFetch = $onlyNodeInIf->var;
+        if (! $arrayDimFetch instanceof ArrayDimFetch) {
             return null;
         }
 
@@ -103,7 +105,11 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->createAssignNode($node, $name, $onlyNodeInIf->var);
+        if (! $this->forLoopFillsAnotherArray($node, $arrayDimFetch)) {
+            return null;
+        }
+
+        return $this->createAssignNode($node, $name, $arrayDimFetch);
     }
 
     private function shouldSkip(Foreach_ $foreach): bool
@@ -138,5 +144,19 @@ CODE_SAMPLE
         $arrayFilterFuncCall = new FuncCall(new Name('array_filter'), $args);
 
         return new Assign($arrayDimFetch->var, $arrayFilterFuncCall);
+    }
+
+    private function forLoopFillsAnotherArray(Foreach_ $node, ArrayDimFetch $arrayDimFetch): bool
+    {
+        $loopVar = $node->expr;
+        if (! $loopVar instanceof Variable) {
+            return false;
+        }
+        $varThatIsModified = $arrayDimFetch->var;
+        if (! $varThatIsModified instanceof Variable) {
+            return false;
+        }
+
+        return $loopVar->name !== $varThatIsModified->name;
     }
 }
