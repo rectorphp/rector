@@ -6,14 +6,15 @@ namespace Rector\PHPUnit\ValueObject;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Variable;
 
 final class ExpectationMock
 {
 
     /**
-     * @var Expr
+     * @var Variable
      */
-    private $var;
+    private $expectationVariable;
 
     /**
      * @var Arg[]
@@ -39,18 +40,18 @@ final class ExpectationMock
      * @param Arg[] $methodArguments
      * @param array<int, null|Expr> $withArguments
      */
-    public function __construct(Expr $var, array $methodArguments, int $index, ?Expr $return, array $withArguments)
+    public function __construct(Variable $expectationVariable, array $methodArguments, int $index, ?Expr $return, array $withArguments)
     {
-        $this->var = $var;
+        $this->expectationVariable = $expectationVariable;
         $this->methodArguments = $methodArguments;
         $this->index = $index;
         $this->return = $return;
         $this->withArguments = $withArguments;
     }
 
-    public function getVar(): Expr
+    public function getExpectationVariable(): Variable
     {
-        return $this->var;
+        return $this->expectationVariable;
     }
 
     /**

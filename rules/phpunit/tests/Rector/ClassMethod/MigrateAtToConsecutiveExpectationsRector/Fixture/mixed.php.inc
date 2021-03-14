@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector\Fixture
+namespace Rector\PHPUnit\Tests\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector\Fixture;
 
 class Foo
 {
@@ -35,7 +35,7 @@ final class Mixed extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector\Fixture
+namespace Rector\PHPUnit\Tests\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector\Fixture;
 
 class Foo
 {
