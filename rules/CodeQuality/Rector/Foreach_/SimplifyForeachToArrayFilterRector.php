@@ -74,11 +74,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($funcCallNode->args) !== 1) {
-            return null;
-        }
-
-        if (! $this->nodeComparator->areNodesEqual($funcCallNode->args[0], $node->valueVar)) {
+        if (! $this->isSimpleCall($funcCallNode, $node)) {
             return null;
         }
 
@@ -158,5 +154,14 @@ CODE_SAMPLE
         }
 
         return $loopVar->name !== $varThatIsModified->name;
+    }
+
+    private function isSimpleCall(FuncCall $funcCallNode, Foreach_ $foreach): bool
+    {
+        if (count($funcCallNode->args) !== 1) {
+            return false;
+        }
+
+        return $this->nodeComparator->areNodesEqual($funcCallNode->args[0], $foreach->valueVar);
     }
 }
