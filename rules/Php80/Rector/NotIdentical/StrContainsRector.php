@@ -85,7 +85,7 @@ CODE_SAMPLE
         return $funcCall;
     }
 
-    private function matchFuncCall(Expr $expr): ?Expr
+    private function matchFuncCall(Expr $expr): ?FuncCall
     {
         if ($this->valueResolver->isFalse($expr->left)) {
             if (! $this->nodeNameResolver->isFuncCallNames($expr->right, self::OLD_STR_NAMES)) {

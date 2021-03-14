@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Php80\Rector\NotIdentical\StrContainsRector\Fixture;
 
-class IdenticalFalse
+class IdenticalStrpos
 {
     public function run()
     {
@@ -16,7 +16,7 @@ class IdenticalFalse
 
 namespace Rector\Tests\Php80\Rector\NotIdentical\StrContainsRector\Fixture;
 
-class IdenticalFalse
+class IdenticalStrpos
 {
     public function run()
     {
