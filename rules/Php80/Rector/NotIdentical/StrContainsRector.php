@@ -70,7 +70,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $funcCall = $this->matchFuncCall($node);
+        $funcCall = $this->matchIdenticalOrNotIdenticalToFalse($node);
 
         if (! $funcCall instanceof FuncCall) {
             return null;
@@ -88,7 +88,7 @@ CODE_SAMPLE
     /**
      * @param Identical|NotIdentical $expr
      */
-    private function matchFuncCall(Expr $expr): ?FuncCall
+    private function matchIdenticalOrNotIdenticalToFalse(Expr $expr): ?FuncCall
     {
         if ($this->valueResolver->isFalse($expr->left)) {
             if (! $this->nodeNameResolver->isFuncCallNames($expr->right, self::OLD_STR_NAMES)) {
