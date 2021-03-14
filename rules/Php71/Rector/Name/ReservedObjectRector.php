@@ -91,7 +91,6 @@ CODE_SAMPLE
             }
 
             $identifier->name = $replacement;
-
             return $identifier;
         }
 

@@ -100,7 +100,11 @@ final class ReturnTypeAlreadyAddedChecker
         }
 
         $className = $functionLike->getAttribute(AttributeKey::CLASS_NAME);
-        return ltrim($this->nodeComparator->printWithoutComments($returnNode), '\\') === $className;
+
+        $nodeContent = $this->nodeComparator->printWithoutComments($returnNode);
+        $nodeContentWithoutPreslash = ltrim($nodeContent, '\\');
+
+        return $nodeContentWithoutPreslash === $className;
     }
 
     /**

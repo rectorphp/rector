@@ -29,7 +29,7 @@ final class StaticRectorStrings
     public static function isInArrayInsensitive(string $checkedItem, array $array): bool
     {
         foreach ($array as $singleArray) {
-            if (Strings::lower($singleArray) === Strings::lower($checkedItem)) {
+            if (strtolower($singleArray) === strtolower($checkedItem)) {
                 return true;
             }
         }

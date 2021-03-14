@@ -126,13 +126,14 @@ CODE_SAMPLE
             }
 
             $newObjectType = $this->nodeTypeResolver->resolve($node->value);
-            return $this->processArrayItem($node, $newObjectType);
+            $this->processArrayItem($node, $newObjectType);
+            return $node;
         });
 
         return $node;
     }
 
-    private function processArrayItem(ArrayItem $arrayItem, Type $newNodeType): ArrayItem
+    private function processArrayItem(ArrayItem $arrayItem, Type $newNodeType): void
     {
         foreach (self::OLD_TO_NEW_CLASSES as $oldClass => $newClass) {
             $oldClassObjectType = new ObjectType($oldClass);
@@ -157,11 +158,8 @@ CODE_SAMPLE
             $oldArguments = $arrayItem->value->args;
 
             $this->createNewArrayItem($arrayItem, $oldArguments, $filterName);
-
-            return $arrayItem;
+            break;
         }
-
-        return $arrayItem;
     }
 
     /**

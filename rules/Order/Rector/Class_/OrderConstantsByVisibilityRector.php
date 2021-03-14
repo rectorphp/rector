@@ -93,6 +93,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
+        $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
+        return $node;
     }
 }

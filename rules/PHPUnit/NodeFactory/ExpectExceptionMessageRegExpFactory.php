@@ -57,21 +57,18 @@ final class ExpectExceptionMessageRegExpFactory
             return null;
         }
 
-        $expectExceptionMessageRegExpMethodCall = $this->argumentShiftingFactory->createFromMethodCall(
+        $this->argumentShiftingFactory->removeAllButFirstArgMethodCall(
             $methodCall,
             'expectExceptionMessageRegExp'
         );
 
         // put regex between "#...#" to create match
-        if ($expectExceptionMessageRegExpMethodCall->args[0]->value instanceof String_) {
+        if ($methodCall->args[0]->value instanceof String_) {
             /** @var String_ $oldString */
             $oldString = $methodCall->args[0]->value;
-            $expectExceptionMessageRegExpMethodCall->args[0]->value = new String_('#' . preg_quote(
-                $oldString->value,
-                '#'
-            ) . '#');
+            $methodCall->args[0]->value = new String_('#' . preg_quote($oldString->value, '#') . '#');
         }
 
-        return $expectExceptionMessageRegExpMethodCall;
+        return $methodCall;
     }
 }

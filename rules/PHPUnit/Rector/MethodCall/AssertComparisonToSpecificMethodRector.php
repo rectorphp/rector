@@ -120,8 +120,10 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
      */
     private function processCallWithBinaryOp(Node $node, BinaryOp $binaryOp): ?Node
     {
+        $binaryOpClass = get_class($binaryOp);
+
         foreach ($this->binaryOpWithAssertMethods as $binaryOpWithAssertMethod) {
-            if (get_class($binaryOp) !== $binaryOpWithAssertMethod->getBinaryOpClass()) {
+            if ($binaryOpClass !== $binaryOpWithAssertMethod->getBinaryOpClass()) {
                 continue;
             }
 

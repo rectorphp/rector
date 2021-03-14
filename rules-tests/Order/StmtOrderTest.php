@@ -91,14 +91,13 @@ final class StmtOrderTest extends AbstractKernelTestCase
     public function testReorderClassStmtsByOldToNewKeys(): void
     {
         $class = $this->getTestClassNode();
-        $classLike = $this->stmtOrder->reorderClassStmtsByOldToNewKeys($class, self::OLD_TO_NEW_KEYS);
+
+        $this->stmtOrder->reorderClassStmtsByOldToNewKeys($class, self::OLD_TO_NEW_KEYS);
+
         $expectedClass = $this->getExpectedClassNode();
-
-        $this->assertTrue($this->nodeNameResolver->areNamesEqual($expectedClass->stmts[0], $classLike->stmts[0]));
-
-        $this->assertTrue($this->nodeNameResolver->areNamesEqual($expectedClass->stmts[1], $classLike->stmts[1]));
-
-        $this->assertTrue($this->nodeNameResolver->areNamesEqual($expectedClass->stmts[2], $classLike->stmts[2]));
+        $this->assertTrue($this->nodeNameResolver->areNamesEqual($expectedClass->stmts[0], $class->stmts[0]));
+        $this->assertTrue($this->nodeNameResolver->areNamesEqual($expectedClass->stmts[1], $class->stmts[1]));
+        $this->assertTrue($this->nodeNameResolver->areNamesEqual($expectedClass->stmts[2], $class->stmts[2]));
     }
 
     private function getTestClassNode(): Class_

@@ -599,4 +599,11 @@ parameters:
 
         - '#Content of method "getIfNextReturn\(\)" is duplicated with method "getIfNextReturn\(\)" in "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector" class\. Use unique content or service instead#'
 
-        - '#Do not use scalar or array as constructor parameter\. Use "Symplify\\PackageBuilder\\Parameter\\ParameterProvider" service instead#'
+        # part of refactor() API, node must be returned, or does bring any value
+        -
+            message: '#Use void instead of modify and return self object#'
+            paths:
+                - '*Rector.php'
+                - '*NodeVisitor.php'
+
+        - '#Class with base "NodeComparator" name is already used in "Symplify\\PHPStanRules\\Printer\\NodeComparator", "Rector\\Core\\PhpParser\\Comparing\\NodeComparator"\. Use unique name to make classes easy to recognize#'

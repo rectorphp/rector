@@ -63,7 +63,8 @@ final class UnionTypeCommonTypeNarrower
 
         if ($sharedTypes !== []) {
             foreach (self::PRIORITY_TYPES as $winningType => $groupTypes) {
-                if (array_intersect($groupTypes, $sharedTypes) === $groupTypes) {
+                $intersectedGroupTypes = array_intersect($groupTypes, $sharedTypes);
+                if ($intersectedGroupTypes === $groupTypes) {
                     return new ObjectType($winningType);
                 }
             }
@@ -186,7 +187,8 @@ final class UnionTypeCommonTypeNarrower
 
         if ($sharedTypes !== []) {
             foreach (self::PRIORITY_TYPES as $winningType => $groupTypes) {
-                if (array_intersect($groupTypes, $sharedTypes) === $groupTypes) {
+                $intersectedGroupTypes = array_intersect($groupTypes, $sharedTypes);
+                if ($intersectedGroupTypes === $groupTypes) {
                     return new GenericClassStringType(new ObjectType($winningType));
                 }
             }

@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\Namespace_;
 
 final class NamespaceManipulator
 {
-    public function removeClassLikes(Namespace_ $namespace): Namespace_
+    public function removeClassLikes(Namespace_ $namespace): void
     {
         foreach ($namespace->stmts as $key => $namespaceStatement) {
             if (! $namespaceStatement instanceof ClassLike) {
@@ -17,7 +17,5 @@ final class NamespaceManipulator
 
             unset($namespace->stmts[$key]);
         }
-
-        return $namespace;
     }
 }
