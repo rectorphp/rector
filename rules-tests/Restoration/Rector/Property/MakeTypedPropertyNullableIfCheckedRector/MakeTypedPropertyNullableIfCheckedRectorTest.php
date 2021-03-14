@@ -12,7 +12,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class MakeTypedPropertyNullableIfCheckedRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP 7.4
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void

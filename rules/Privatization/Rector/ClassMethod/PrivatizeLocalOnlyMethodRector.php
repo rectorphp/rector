@@ -36,12 +36,6 @@ final class PrivatizeLocalOnlyMethodRector extends AbstractRector implements Zer
     private const COMMON_PUBLIC_METHOD_CONTROLLER_REGEX = '#^(render|action|handle|inject)#';
 
     /**
-     * @var string
-     * @see https://regex101.com/r/FXhI9M/1
-     */
-    private const CONTROLLER_PRESENTER_SUFFIX_REGEX = '#(Controller|Presenter)$#';
-
-    /**
      * @var ClassMethodVisibilityVendorLockResolver
      */
     private $classMethodVisibilityVendorLockResolver;
@@ -149,7 +143,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isControllerAction($classLike, $classMethod)) {
+        if ($this->isControllerAction($classLike, $classMethod, $phpDocInfo)) {
             return true;
         }
 
@@ -188,24 +182,22 @@ CODE_SAMPLE
         return $phpDocInfo->hasByType(ApiPhpDocTagNode::class);
     }
 
-    private function isControllerAction(Class_ $class, ClassMethod $classMethod): bool
+    private function isControllerAction(Class_ $class, ClassMethod $classMethod, PhpDocInfo $phpDocInfo): bool
     {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             return false;
         }
 
-        if (! Strings::match($className, self::CONTROLLER_PRESENTER_SUFFIX_REGEX)) {
-            return false;
+        if ($this->hasSymfonyRouteAttrGroup($classMethod)) {
+            return true;
         }
 
         $classMethodName = $this->getName($classMethod);
-
         if ((bool) Strings::match($classMethodName, self::COMMON_PUBLIC_METHOD_CONTROLLER_REGEX)) {
             return true;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         return $phpDocInfo->hasByType(NetteInjectTagNode::class);
     }
 

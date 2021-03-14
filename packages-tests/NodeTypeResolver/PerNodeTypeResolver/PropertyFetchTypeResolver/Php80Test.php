@@ -10,11 +10,13 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\NodeTypeResolver\NodeTypeResolver\PropertyFetchTypeResolver
+ *
+ * This is needed, because php-parser on lower php version does not parse union types
+ * @requires PHP 8.0
  */
 final class Php80Test extends AbstractPropertyFetchTypeResolverTest
 {
     /**
-     * @requires PHP 8.0
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $smartFileInfo): void

@@ -18,7 +18,6 @@ final class ListEachRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
-     * @requires PHP < 8.0
      */
     public function test(SmartFileInfo $fileInfo): void
     {

@@ -599,4 +599,6 @@ parameters:
 
         - '#Content of method "getIfNextReturn\(\)" is duplicated with method "getIfNextReturn\(\)" in "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector" class\. Use unique content or service instead#'
 
-        - '#Do not use scalar or array as constructor parameter\. Use "Symplify\\PackageBuilder\\Parameter\\ParameterProvider" service instead#'
+        # resolve later
+        - '#Use void instead of modify and return self object#'
+        - '#Do not compare call directly, use a variable assign#'

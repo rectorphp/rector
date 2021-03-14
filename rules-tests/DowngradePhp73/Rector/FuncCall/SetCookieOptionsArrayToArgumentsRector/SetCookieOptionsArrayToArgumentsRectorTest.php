@@ -12,7 +12,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class SetCookieOptionsArrayToArgumentsRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP 7.3
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void

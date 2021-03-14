@@ -11,7 +11,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class SkipParentConstructOverrideInPHP72Test extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP 7.2
      * @see https://phpunit.readthedocs.io/en/8.3/incomplete-and-skipped-tests.html#incomplete-and-skipped-tests-requires-tables-api
      *
      * @dataProvider provideData()

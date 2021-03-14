@@ -9,11 +9,14 @@ use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOp
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * This is needed, because php-parser on lower php version does not parse union types
+ * @requires PHP >= 8.0
+ */
 final class DowngradeNullsafeToTernaryOperatorRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
-     * @requires PHP >= 8.0
      */
     public function test(SmartFileInfo $fileInfo): void
     {

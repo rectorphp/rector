@@ -9,9 +9,6 @@ use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @requires PHP 8.0
- */
 final class Php80Test extends AbstractRectorTestCase
 {
     /**

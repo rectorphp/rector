@@ -13,7 +13,6 @@ final class DowngradeUnionTypeDeclarationRectorTest extends AbstractRectorTestCa
 {
     /**
      * @dataProvider provideData()
-     * @requires PHP 8.0
      */
     public function test(SmartFileInfo $fileInfo): void
     {

@@ -11,7 +11,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class PropertyTypeParamTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP 7.4
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void

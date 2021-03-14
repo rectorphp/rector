@@ -13,7 +13,6 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP 7.4
      * @dataProvider provideData()
      * @param SmartFileInfo[] $extraFileInfos
      */

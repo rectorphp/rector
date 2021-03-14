@@ -9,9 +9,6 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @requires PHP 7.4
- */
 final class TypedPropertyFromStrictConstructorRectorTest extends AbstractRectorTestCase
 {
     /**

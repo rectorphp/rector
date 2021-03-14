@@ -13,7 +13,6 @@ final class Php8Test extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
-     * @requires PHP 8
      */
     public function test(SmartFileInfo $fileInfo): void
     {

@@ -13,7 +13,6 @@ final class OrderMethodsByVisibilityRectorTest extends AbstractRectorTestCase
 {
     /**
      * Final + private method breaks :)
-     * @requires PHP < 8.0
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void

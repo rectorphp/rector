@@ -13,7 +13,6 @@ final class Php74Test extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
-     * @requires PHP 7.4
      */
     public function test(SmartFileInfo $fileInfo): void
     {

@@ -8,11 +8,14 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * This is needed, because php-parser on lower php version does not recognize attributes
+ * @requires PHP 8.0
+ */
 final class Php8Test extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
-     * @requires PHP 8
      */
     public function test(SmartFileInfo $fileInfo): void
     {

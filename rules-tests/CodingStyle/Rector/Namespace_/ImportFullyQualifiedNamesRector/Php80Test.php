@@ -10,11 +10,13 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\PostRector\Rector\NameImportingPostRector
+ *
+ * This is needed, because php-parser on lower php version does not recognize attributes
+ * @requires PHP 8.0
  */
 final class Php80Test extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP 8.0
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void

@@ -9,9 +9,6 @@ use Rector\Symfony\Rector\Attribute\ExtractAttributeRouteNameConstantsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @requires PHP 8.0
- */
 final class ExtractAttributeRouteNameConstantsRectorTest extends AbstractRectorTestCase
 {
     /**

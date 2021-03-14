@@ -9,9 +9,6 @@ use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @requires PHP 8.0
- */
 final class DowngradeUnionTypeTypedPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
