@@ -58,7 +58,7 @@ final class MultilineSpaceFormatPreserver
         }
 
         $nodeWithRestoredSpaces = $this->restoreOriginalSpacingInText($attributeAwareNode);
-        if ($nodeWithRestoredSpaces === null) {
+        if (! $nodeWithRestoredSpaces instanceof AttributeAwareNodeInterface) {
             return;
         }
 

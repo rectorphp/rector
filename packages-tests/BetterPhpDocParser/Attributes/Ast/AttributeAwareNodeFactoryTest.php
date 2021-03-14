@@ -41,8 +41,8 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
         $this->assertInstanceOf(AttributeAwarePhpDocNode::class, $attributeAwarePhpDocNode);
 
         $childNode = $attributeAwarePhpDocNode->children[0];
+
         $this->assertInstanceOf(PhpDocTextNode::class, $childNode);
-        $this->assertInstanceOf(AttributeAwarePhpDocTextNode::class, $childNode);
     }
 
     public function testPropertyTag(): void
