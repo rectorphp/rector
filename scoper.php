@@ -42,7 +42,7 @@ return [
         },
         // + one above https://github.com/rectorphp/rector-prefixed/blob/329c8fa2dcdd77b791231969bc861d2e2fefad17/vendor/composer/InstalledVersions.php
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::contains($filePath, 'vendor/composer/InstalledVersions.php;')) {
+            if (! Strings::contains($filePath, 'vendor/composer/InstalledVersions.php')) {
                 return $content;
             }
 
