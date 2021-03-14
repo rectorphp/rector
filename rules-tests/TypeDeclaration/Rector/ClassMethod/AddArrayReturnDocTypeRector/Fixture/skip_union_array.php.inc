@@ -2,17 +2,18 @@
 
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
+use PHPStan\PhpDocParser\Ast\BaseNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
 
 class SkipUnionArray
 {
     /**
-     * @return PhpDocTagNode[]|AttributeAwareNodeInterface[]
+     * @return PhpDocTagNode[]|BaseNode[]
      */
     public function getTags(array $tags): array
     {
-        /** @var PhpDocTagNode[]|AttributeAwareNodeInterface[] $tags */
+        /** @var PhpDocTagNode[]|BaseNode[] $tags */
         return $tags;
     }
 }

@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 final class MultilineSpaceFormatPreserver
 {
@@ -58,7 +57,7 @@ final class MultilineSpaceFormatPreserver
         }
 
         $nodeWithRestoredSpaces = $this->restoreOriginalSpacingInText($node);
-        if ($nodeWithRestoredSpaces === null) {
+        if (! $nodeWithRestoredSpaces instanceof Node) {
             return;
         }
 
@@ -67,7 +66,7 @@ final class MultilineSpaceFormatPreserver
     }
 
     /**
-     * @param AttributeAwareNodeInterface&BaseNode $node
+     * @param BaseNode $node
      */
     private function restoreOriginalSpacingInText(Node $node): ?Node
     {

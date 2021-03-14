@@ -17,7 +17,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -220,7 +220,7 @@ final class PhpDocInfoPrinter
     }
 
     /**
-     * @param AttributeAwareNodeInterface|BaseNode $node
+     * @param BaseNode $node
      */
     private function printNode(
         Node $node,
@@ -307,7 +307,7 @@ final class PhpDocInfoPrinter
     }
 
     /**
-     * @param PhpDocTagNode|AttributeAwareNodeInterface $phpDocTagNode
+     * @param PhpDocTagNode&BaseNode $phpDocTagNode
      */
     private function printPhpDocTagNode(
         PhpDocTagNode $phpDocTagNode,
@@ -344,7 +344,7 @@ final class PhpDocInfoPrinter
     }
 
     /**
-     * @param AttributeAwareNodeInterface|BaseNode $node
+     * @param BaseNode $node
      */
     private function printAttributeWithAsterisk(Node $node): string
     {
@@ -362,7 +362,7 @@ final class PhpDocInfoPrinter
             return $this->removedNodePositions;
         }
 
-        /** @var AttributeAwareNodeInterface[] $removedNodes */
+        /** @var BaseNode[] $removedNodes */
         $removedNodes = array_diff(
             $this->phpDocInfo->getOriginalPhpDocNode()
                 ->children,
@@ -425,7 +425,7 @@ final class PhpDocInfoPrinter
     }
 
     /**
-     * @param AttributeAwareNodeInterface&PhpDocTagNode $phpDocTagNode
+     * @param BaseNode&PhpDocTagNode $phpDocTagNode
      */
     private function hasDescription(PhpDocTagNode $phpDocTagNode): bool
     {

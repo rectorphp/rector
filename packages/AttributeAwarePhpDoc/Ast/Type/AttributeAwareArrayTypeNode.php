@@ -8,14 +8,11 @@ use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
 
-final class AttributeAwareArrayTypeNode extends ArrayTypeNode implements AttributeAwareNodeInterface
+final class AttributeAwareArrayTypeNode extends ArrayTypeNode
 {
-    use AttributeTrait;
-
     public function __toString(): string
     {
         if ($this->type instanceof CallableTypeNode) {

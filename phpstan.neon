@@ -275,9 +275,6 @@ parameters:
                 - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
         - '#PHPDoc tag @param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
 
-        # intersection mess
-        - '#Parameter \#1 \$phpDocTagNodes of method Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMethodCallFactory\:\:createFromTagValueNodes\(\) expects array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\>, array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|Rector\\BetterPhpDocParser\\Contract\\PhpDocNode\\AttributeAwareNodeInterface\> given#'
-
         # false postives
         - '#Parameter \#2 \$right of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
         - '#Parameter \#1 \$stmts of class Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace constructor expects array<PhpParser\\Node\\Stmt\>, array<PhpParser\\Node\> given#'
@@ -304,9 +301,6 @@ parameters:
 
         # unable to test, because the method is final
         - '#Class "Rector\\Nette\\Rector\\Class_\\MoveFinalGetUserToCheckRequirementsClassMethodRector" is missing @see annotation with test case class reference#'
-
-        # type juggling
-        - '#AttributeAwareNodeInterface#'
 
         -
              message: '#Use `\$class\-\>namespaceName` instead of `\$class\-\>name` that only returns short class name#'

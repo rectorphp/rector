@@ -8,9 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\BaseNode;
 use PHPStan\Type\ObjectType;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SymfonyRequiredTagNode;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\ApiPhpDocTagNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagNode;
 use Rector\Core\Rector\AbstractRector;
@@ -25,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
 {
     /**
-     * @var array<class-string<AttributeAwareNodeInterface>>
+     * @var array<class-string<BaseNode>>
      */
     private const TAG_NODES_REQUIRING_PUBLIC = [
         ApiPhpDocTagNode::class,

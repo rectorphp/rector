@@ -15,7 +15,7 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayShapeItemNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 /**
@@ -43,7 +43,7 @@ final class AttributeAwareNodeFactory
     }
 
     /**
-     * @return PhpDocNode|PhpDocChildNode|PhpDocTagValueNode|AttributeAwareNodeInterface
+     * @return PhpDocNode|PhpDocChildNode|PhpDocTagValueNode|BaseNode
      */
     public function createFromNode(Node $node, string $docContent): BaseNode
     {
@@ -65,10 +65,6 @@ final class AttributeAwareNodeFactory
             }
             return $node;
         });
-
-        if ($node instanceof AttributeAwareNodeInterface) {
-            return $node;
-        }
 
         foreach ($this->attributeAwareNodeFactories as $attributeAwareNodeFactory) {
             if (! $attributeAwareNodeFactory->isMatch($node)) {

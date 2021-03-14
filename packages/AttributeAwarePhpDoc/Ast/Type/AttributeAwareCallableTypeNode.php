@@ -8,13 +8,9 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
-final class AttributeAwareCallableTypeNode extends CallableTypeNode implements AttributeAwareNodeInterface
+final class AttributeAwareCallableTypeNode extends CallableTypeNode
 {
-    use AttributeTrait;
-
     public function __toString(): string
     {
         // keep original (Psalm?) format, see https://github.com/rectorphp/rector/issues/2841

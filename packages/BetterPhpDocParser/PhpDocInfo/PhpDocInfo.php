@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\BaseNode;
 use PHPStan\PhpDocParser\Ast\Node as PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -20,7 +21,7 @@ use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ClassNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\ValueObject\NodeTypes;
@@ -174,13 +175,13 @@ final class PhpDocInfo
     }
 
     /**
-     * @return PhpDocTagNode[]|AttributeAwareNodeInterface[]
+     * @return array<PhpDocTagNode&BaseNode>
      */
     public function getTagsByName(string $name): array
     {
         $name = $this->annotationNaming->normalizeName($name);
 
-        /** @var PhpDocTagNode[]|AttributeAwareNodeInterface[] $tags */
+        /** @var array<PhpDocTagNode&BaseNode> $tags */
         $tags = $this->phpDocNode->getTags();
 
         $tags = array_filter($tags, function (PhpDocTagNode $tag) use ($name): bool {

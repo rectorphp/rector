@@ -6,16 +6,12 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 /**
  * @see \Rector\BetterPhpDocParser\PhpDocNodeFactory\StringMatchingPhpDocNodeFactory\ApiPhpDocNodeFactory
  */
-final class ApiPhpDocTagNode extends PhpDocTagNode implements AttributeAwareNodeInterface
+final class ApiPhpDocTagNode extends PhpDocTagNode
 {
-    use AttributeTrait;
-
     /**
      * @var string
      */

@@ -67,14 +67,6 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
         $this->assertInstanceOf(IdentifierTypeNode::class, $identifierTypeNode);
     }
 
-    public function testAlreadyAttributeAware(): void
-    {
-        $attributeAwarePhpDocNode = new AttributeAwarePhpDocNode([]);
-        $returnedNode = $this->attributeAwareNodeFactory->createFromNode($attributeAwarePhpDocNode, '');
-
-        $this->assertSame($returnedNode, $attributeAwarePhpDocNode);
-    }
-
     /**
      * Creates doc block for:
      * some text
