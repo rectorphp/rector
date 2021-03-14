@@ -160,7 +160,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
 
-        // needed for PHPStan, because the analyzed file is just create in /temp
+        // needed for PHPStan, because the analyzed file is just created in /temp
         /** @var NodeScopeResolver $nodeScopeResolver */
         $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
         $nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
