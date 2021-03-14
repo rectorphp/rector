@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit;
 
+use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
@@ -12,6 +13,8 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
  */
 final class PHPUnitExpectedExceptionTagValueNode implements PhpDocTagValueNode
 {
+    use NodeAttributes;
+
     /**
      * @var string
      */

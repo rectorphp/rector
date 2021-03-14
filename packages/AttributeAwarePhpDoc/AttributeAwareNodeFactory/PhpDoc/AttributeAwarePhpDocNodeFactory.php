@@ -37,9 +37,8 @@ final class AttributeAwarePhpDocNodeFactory implements AttributeNodeAwareFactory
 
     /**
      * @param PhpDocNode $node
-     * @return AttributeAwarePhpDocNode
      */
-    public function create(Node $node, string $docContent)
+    public function create(Node $node, string $docContent): Node
     {
         $this->phpDocNodeTraverser->traverseWithCallable($node, $docContent, function (Node $node) use (
             $docContent

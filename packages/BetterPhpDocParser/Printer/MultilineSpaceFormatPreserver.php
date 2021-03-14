@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
-use PHPStan\PhpDocParser\Ast\BaseNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -47,7 +46,6 @@ final class MultilineSpaceFormatPreserver
 
     /**
      * Fix multiline BC break - https://github.com/phpstan/phpdoc-parser/pull/26/files
-     * @param BaseNode $node
      */
     public function fixMultilineDescriptions(Node $node): void
     {
@@ -65,15 +63,11 @@ final class MultilineSpaceFormatPreserver
         $node->setAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES, true);
     }
 
-    /**
-     * @param BaseNode $node
-     */
     private function restoreOriginalSpacingInText(Node $node): ?Node
     {
         /** @var string $originalContent */
         $originalContent = $node->getAttribute(Attribute::ORIGINAL_CONTENT);
         $oldSpaces = Strings::matchAll($originalContent, '#\s+#ms');
-
         $currentText = $this->resolveCurrentPhpDocNodeText($node);
         if ($currentText === null) {
             return null;

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\BaseNode;
 use PHPStan\PhpDocParser\Ast\Node as PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -175,27 +174,26 @@ final class PhpDocInfo
     }
 
     /**
-     * @return array<PhpDocTagNode&BaseNode>
+     * @return array<PhpDocTagNode>
      */
     public function getTagsByName(string $name): array
     {
         $name = $this->annotationNaming->normalizeName($name);
 
-        /** @var array<PhpDocTagNode&BaseNode> $tags */
         $tags = $this->phpDocNode->getTags();
 
         $tags = array_filter($tags, function (PhpDocTagNode $tag) use ($name): bool {
             return $tag->name === $name;
         });
-        $tags = array_values($tags);
 
+        $tags = array_values($tags);
         return array_values($tags);
     }
 
     public function getParamType(string $name): Type
     {
-        $attributeAwareParamTagValueNode = $this->getParamTagValueByName($name);
-        return $this->getTypeOrMixed($attributeAwareParamTagValueNode);
+        $paramTagValueByName = $this->getParamTagValueByName($name);
+        return $this->getTypeOrMixed($paramTagValueByName);
     }
 
     /**
@@ -301,7 +299,7 @@ final class PhpDocInfo
     /**
      * @template T of \PHPStan\PhpDocParser\Ast\Node
      * @param class-string<T> $type
-     * @return T[]
+     * @return array<T>
      */
     public function findAllByType(string $type): array
     {
@@ -331,9 +329,14 @@ final class PhpDocInfo
             $foundTagsValueNodes[] = $phpDocChildNode->value;
         }
 
+        /** @var \PHPStan\PhpDocParser\Ast\Node[] $foundTagsValueNodes */
         return $foundTagsValueNodes;
     }
 
+    /**
+     * @template T of \PHPStan\PhpDocParser\Ast\Node
+     * @param class-string<T> $type
+     */
     public function removeByType(string $type): void
     {
         $this->ensureTypeIsTagValueNode($type, __METHOD__);
@@ -479,6 +482,7 @@ final class PhpDocInfo
 
     private function ensureTypeIsTagValueNode(string $type, string $location): void
     {
+        /** @var array<class-string> $desiredTypes */
         $desiredTypes = array_merge([
             PhpDocTagValueNode::class,
             PhpDocTagNode::class,

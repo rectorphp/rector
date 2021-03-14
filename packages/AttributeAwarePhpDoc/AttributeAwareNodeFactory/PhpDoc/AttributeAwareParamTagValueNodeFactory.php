@@ -25,8 +25,9 @@ final class AttributeAwareParamTagValueNodeFactory implements AttributeNodeAware
 
     /**
      * @param ParamTagValueNode $node
+     * @return AttributeAwareParamTagValueNode
      */
-    public function create(Node $node, string $docContent): AttributeAwareParamTagValueNode
+    public function create(Node $node, string $docContent): Node
     {
         $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type, $docContent);
 

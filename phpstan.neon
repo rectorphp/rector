@@ -359,6 +359,7 @@ parameters:
         - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<PhpParser\\Node\>\:\:findFirst\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
         - '#Parameter \#2 \$type of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<T of PhpParser\\Node\>\:\:findInstanceOfName\(\) expects class\-string<T of PhpParser\\Node\>, string given#'
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findVariableOfName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns T of PhpParser\\Node\|null#'
+        - '#Method Rector\\AttributeAwarePhpDoc\\AttributeAwareNodeFactory\\PhpDoc\\AttributeAwareTemplateTagValueNodeFactory\:\:create\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns Rector\\AttributeAwarePhpDoc\\Ast\\PhpDoc\\AttributeAwareTemplateTagValueNode#'
 
         # fixed in php-parser master
         - '#Method Rector\\Symfony\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
@@ -584,3 +585,11 @@ parameters:
         -
             message: '#Function "interface_exists\(\)" cannot be used/left in the code#'
             path: packages/Testing/PhpConfigPrinter/config/php-config-printer-config.php
+
+        # generics fails
+        - '#Method Rector\\BetterPhpDocParser\\Attributes\\Ast\\AttributeAwareNodeFactory\:\:createFromNode\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns PHPStan\\PhpDocParser\\Ast\\Node#'
+        - '#Method Rector\\AttributeAwarePhpDoc\\AttributeAwareNodeFactory\\Type\\AttributeAwareIntersectionTypeNodeFactory\:\:create\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareIntersectionTypeNode#'
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:findAllByType\(\) should return array<T of PHPStan\\PhpDocParser\\Ast\\Node\> but returns array<PHPStan\\PhpDocParser\\Ast\\Node\>#'
+
+        # PHP 7_4 literal syntax
+        - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\|int\) does not accept string#'

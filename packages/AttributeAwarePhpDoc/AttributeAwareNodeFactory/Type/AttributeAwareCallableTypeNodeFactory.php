@@ -25,8 +25,9 @@ final class AttributeAwareCallableTypeNodeFactory implements AttributeNodeAwareF
 
     /**
      * @param CallableTypeNode $node
+     * @return AttributeAwareCallableTypeNode
      */
-    public function create(Node $node, string $docContent): AttributeAwareCallableTypeNode
+    public function create(Node $node, string $docContent): Node
     {
         $identifier = $this->attributeAwareNodeFactory->createFromNode($node->identifier, $docContent);
 

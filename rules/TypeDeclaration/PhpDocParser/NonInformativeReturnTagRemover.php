@@ -71,13 +71,13 @@ final class NonInformativeReturnTagRemover
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
 
-        $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if (! $attributeAwareReturnTagValueNode instanceof ReturnTagValueNode) {
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if (! $returnTagValueNode instanceof ReturnTagValueNode) {
             return;
         }
 
         // useful
-        if ($attributeAwareReturnTagValueNode->description !== '') {
+        if ($returnTagValueNode->description !== '') {
             return;
         }
 
@@ -89,15 +89,15 @@ final class NonInformativeReturnTagRemover
             return;
         }
 
-        $this->removeNonUniqueUselessDocNames($returnType, $attributeAwareReturnTagValueNode, $phpDocInfo);
-        $this->removeShortObjectType($returnType, $attributeAwareReturnTagValueNode, $phpDocInfo);
-        $this->removeNullableType($returnType, $attributeAwareReturnTagValueNode, $phpDocInfo);
-        $this->removeFullyQualifiedObjectType($returnType, $attributeAwareReturnTagValueNode, $phpDocInfo);
+        $this->removeNonUniqueUselessDocNames($returnType, $returnTagValueNode, $phpDocInfo);
+        $this->removeShortObjectType($returnType, $returnTagValueNode, $phpDocInfo);
+        $this->removeNullableType($returnType, $returnTagValueNode, $phpDocInfo);
+        $this->removeFullyQualifiedObjectType($returnType, $returnTagValueNode, $phpDocInfo);
     }
 
     private function removeNonUniqueUselessDocNames(
         Type $returnType,
-        ReturnTagValueNode $attributeAwareReturnTagValueNode,
+        ReturnTagValueNode $returnTagValueNode,
         PhpDocInfo $phpDocInfo
     ): void {
         foreach (self::USELESS_DOC_NAMES_BY_TYPE_CLASS as $typeClass => $uselessDocNames) {
@@ -105,7 +105,7 @@ final class NonInformativeReturnTagRemover
                 continue;
             }
 
-            if (! $this->isIdentifierWithValues($attributeAwareReturnTagValueNode->type, $uselessDocNames)) {
+            if (! $this->isIdentifierWithValues($returnTagValueNode->type, $uselessDocNames)) {
                 continue;
             }
 
@@ -116,14 +116,14 @@ final class NonInformativeReturnTagRemover
 
     private function removeShortObjectType(
         Type $returnType,
-        ReturnTagValueNode $attributeAwareReturnTagValueNode,
+        ReturnTagValueNode $returnTagValueNode,
         PhpDocInfo $phpDocInfo
     ): void {
         if (! $returnType instanceof ShortenedObjectType) {
             return;
         }
 
-        if (! $this->isIdentifierWithValues($attributeAwareReturnTagValueNode->type, [$returnType->getShortName()])) {
+        if (! $this->isIdentifierWithValues($returnTagValueNode->type, [$returnType->getShortName()])) {
             return;
         }
 
@@ -132,7 +132,7 @@ final class NonInformativeReturnTagRemover
 
     private function removeNullableType(
         Type $returnType,
-        ReturnTagValueNode $attributeAwareReturnTagValueNode,
+        ReturnTagValueNode $returnTagValueNode,
         PhpDocInfo $phpDocInfo
     ): void {
         $nullabledReturnType = $this->matchNullabledType($returnType);
@@ -140,7 +140,7 @@ final class NonInformativeReturnTagRemover
             return;
         }
 
-        $nullabledReturnTagValueNode = $this->matchNullabledReturnTagValueNode($attributeAwareReturnTagValueNode);
+        $nullabledReturnTagValueNode = $this->matchNullabledReturnTagValueNode($returnTagValueNode);
         if (! $nullabledReturnTagValueNode instanceof TypeNode) {
             return;
         }
@@ -162,19 +162,19 @@ final class NonInformativeReturnTagRemover
 
     private function removeFullyQualifiedObjectType(
         Type $returnType,
-        ReturnTagValueNode $attributeAwareReturnTagValueNode,
+        ReturnTagValueNode $returnTagValueNode,
         PhpDocInfo $phpDocInfo
     ): void {
         if (! $returnType instanceof FullyQualifiedObjectType) {
             return;
         }
 
-        if (! $attributeAwareReturnTagValueNode->type instanceof IdentifierTypeNode) {
+        if (! $returnTagValueNode->type instanceof IdentifierTypeNode) {
             return;
         }
 
         $className = $returnType->getClassName();
-        $returnTagValueNodeType = (string) $attributeAwareReturnTagValueNode->type;
+        $returnTagValueNodeType = (string) $returnTagValueNode->type;
 
         if ($this->isClassNameAndPartMatch($className, $returnTagValueNodeType)) {
             $phpDocInfo->removeByType(ReturnTagValueNode::class);

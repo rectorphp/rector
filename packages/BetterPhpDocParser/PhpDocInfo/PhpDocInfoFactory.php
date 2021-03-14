@@ -6,7 +6,6 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\BaseNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
@@ -169,7 +168,6 @@ final class PhpDocInfoFactory
         }
 
         $phpDocChildNodes = $attributeAwarePhpDocNode->children;
-        /** @var BaseNode $lastChildNode */
         $lastChildNode = array_pop($phpDocChildNodes);
 
         /** @var StartAndEnd $startAndEnd */

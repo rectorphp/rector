@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
 
-use PHPStan\PhpDocParser\Ast\BaseNode;
+use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use Symplify\SimplePhpDocParser\ValueObject\Ast\PhpDoc\SimplePhpDocNode;
 
 final class AttributeAwarePhpDocNode extends SimplePhpDocNode
 {
+    use NodeAttributes;
+
     /**
-     * @var array<PhpDocChildNode&BaseNode>
+     * @var array<PhpDocChildNode>
      */
     public $children = [];
 

@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Attributes\Ast;
 
-use PHPStan\PhpDocParser\Ast\BaseNode;
 use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayShapeItemNode;
@@ -38,17 +34,26 @@ final class AttributeAwareNodeFactory
      */
     public function __construct(array $attributeAwareNodeFactories, PhpDocNodeTraverser $phpDocNodeTraverser)
     {
+        foreach ($attributeAwareNodeFactories as $attributeAwareNodeFactory) {
+            // prevents cyclic dependency
+            if ($attributeAwareNodeFactory instanceof AttributeAwareNodeFactoryAwareInterface) {
+                $attributeAwareNodeFactory->setAttributeAwareNodeFactory($this);
+            }
+        }
+
         $this->attributeAwareNodeFactories = $attributeAwareNodeFactories;
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
     }
 
     /**
-     * @return PhpDocNode|PhpDocChildNode|PhpDocTagValueNode|BaseNode
+     * @template T of \PHPStan\PhpDocParser\Ast\Node
+     * @param T $node
+     * @return T
      */
-    public function createFromNode(Node $node, string $docContent): BaseNode
+    public function createFromNode(Node $node, string $docContent): Node
     {
         $node = $this->phpDocNodeTraverser->traverseWithCallable($node, $docContent, function (
-            $node,
+            Node $node,
             string $docContent
         ) {
             if ($node instanceof UnionTypeNode && ! $node instanceof AttributeAwareUnionTypeNode) {
@@ -69,11 +74,6 @@ final class AttributeAwareNodeFactory
         foreach ($this->attributeAwareNodeFactories as $attributeAwareNodeFactory) {
             if (! $attributeAwareNodeFactory->isMatch($node)) {
                 continue;
-            }
-
-            // prevents cyclic dependency
-            if ($attributeAwareNodeFactory instanceof AttributeAwareNodeFactoryAwareInterface) {
-                $attributeAwareNodeFactory->setAttributeAwareNodeFactory($this);
             }
 
             return $attributeAwareNodeFactory->create($node, $docContent);

@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Rector\AttributeAwarePhpDoc\Ast\Type;
 
 use Nette\Utils\Strings;
+use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
 final class AttributeAwareCallableTypeNode extends CallableTypeNode
 {
+    use NodeAttributes;
+
     public function __toString(): string
     {
         // keep original (Psalm?) format, see https://github.com/rectorphp/rector/issues/2841

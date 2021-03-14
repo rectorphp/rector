@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
-use PHPStan\PhpDocParser\Ast\BaseNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -219,9 +218,6 @@ final class PhpDocInfoPrinter
         return Strings::replace($phpDocString, self::SPACE_AFTER_ASTERISK_REGEX, '$1*');
     }
 
-    /**
-     * @param BaseNode $node
-     */
     private function printNode(
         Node $node,
         ?StartAndEnd $startAndEnd = null,
@@ -274,6 +270,9 @@ final class PhpDocInfoPrinter
         $lastTokenPosition = $this->attributeAwarePhpDocNode->getAttribute(
             Attribute::LAST_TOKEN_POSITION
         ) ?: $this->currentTokenPosition;
+        if ($lastTokenPosition === 0) {
+            $lastTokenPosition = 1;
+        }
 
         return $this->addTokensFromTo($output, $lastTokenPosition, $this->tokenCount, true);
     }
@@ -306,9 +305,6 @@ final class PhpDocInfoPrinter
         return $this->appendToOutput($output, $from, $to, $positionJumpSet);
     }
 
-    /**
-     * @param PhpDocTagNode&BaseNode $phpDocTagNode
-     */
     private function printPhpDocTagNode(
         PhpDocTagNode $phpDocTagNode,
         StartAndEnd $startAndEnd,
@@ -343,9 +339,6 @@ final class PhpDocInfoPrinter
         return $output . $nodeOutput;
     }
 
-    /**
-     * @param BaseNode $node
-     */
     private function printAttributeWithAsterisk(Node $node): string
     {
         $content = (string) $node;
@@ -362,7 +355,6 @@ final class PhpDocInfoPrinter
             return $this->removedNodePositions;
         }
 
-        /** @var BaseNode[] $removedNodes */
         $removedNodes = array_diff(
             $this->phpDocInfo->getOriginalPhpDocNode()
                 ->children,
@@ -424,9 +416,6 @@ final class PhpDocInfoPrinter
         return '';
     }
 
-    /**
-     * @param BaseNode&PhpDocTagNode $phpDocTagNode
-     */
     private function hasDescription(PhpDocTagNode $phpDocTagNode): bool
     {
         $hasDescriptionWithOriginalSpaces = $phpDocTagNode->getAttribute(

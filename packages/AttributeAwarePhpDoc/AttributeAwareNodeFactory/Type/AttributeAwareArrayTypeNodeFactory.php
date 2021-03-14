@@ -25,8 +25,9 @@ final class AttributeAwareArrayTypeNodeFactory implements AttributeNodeAwareFact
 
     /**
      * @param ArrayTypeNode $node
+     * @return AttributeAwareArrayTypeNode
      */
-    public function create(Node $node, string $docContent): AttributeAwareArrayTypeNode
+    public function create(Node $node, string $docContent): Node
     {
         $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type, $docContent);
 
