@@ -66,7 +66,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Identical::class|NotIdentical $node
+     * @param Identical|NotIdentical $node
      */
     public function refactor(Node $node): ?Node
     {
