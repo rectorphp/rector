@@ -29,6 +29,18 @@ return [
     ScoperOption::PATCHERS => [
         // [BEWARE] $filePath is absolute!
 
+        // fixes https://github.com/rectorphp/rector-prefixed/runs/2103759172
+        // and https://github.com/rectorphp/rector-prefixed/blob/0cc433e746b645df5f905fa038573c3a1a9634f0/vendor/jean85/pretty-package-versions/src/PrettyVersions.php#L6
+        function (string $filePath, string $prefix, string $content): string {
+            if (getenv('IMAGES') !== 'docker') {
+                return $content;
+            }
+
+            // return Composer\InstalledVersions;
+            // see https://regex101.com/r/v8zRMm/1
+            return Strings::replace($content, '#' . $prefix . '\\\\Composer\\\\InstalledVersions#', 'Composer\InstalledVersions');
+        },
+
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
         function (string $filePath, string $prefix, string $content): string {
             // skip vendor
