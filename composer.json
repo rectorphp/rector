@@ -104,7 +104,7 @@
             "rules-tests/Autodiscovery/Rector/FileNode/MoveServicesBySuffixToDirectoryRector/Expected",
             "rules-tests/CakePHP/Rector/FileWithoutNamespace/ImplicitShortClassNameUseStatementRector/Source",
             "rules-tests/CakePHP/Rector/Namespace_/AppUsesStaticCallToUseStatementRector/Source",
-            "rules-tests/CodingStyle/Rector/Namespace_/ImportFullyQualifiedNamesRector",
+            "rules-tests/CodingStyle/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source",
             "rules-tests/Renaming/Rector/Name/RenameClassRector/Source",
             "rules-tests/Renaming/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Source",
             "rules-tests/Symfony4/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source"
