@@ -35,6 +35,10 @@ jobs:
                         name: 'PHPStan for config'
                         run: composer phpstan-config
 
+                    -
+                        name: "Check doctrine/annotation"
+                        run: "bin/rector sync-annotation-parser --dry-run --ansi"
+
                     # see https://github.com/rectorphp/rector-generator
                     -
                         name: 'Rector Generate From Recipe'
