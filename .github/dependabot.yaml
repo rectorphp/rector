@@ -4,8 +4,8 @@ updates:
     -
         package-ecosystem: composer
         directory: "/"
-        schedule:
         open-pull-requests-limit: 5
+        schedule:
             interval: weekly
 
     -
