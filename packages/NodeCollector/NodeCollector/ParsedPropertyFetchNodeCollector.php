@@ -37,17 +37,9 @@ final class ParsedPropertyFetchNodeCollector
      */
     private $nodeTypeResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-    }
-
-    /**
-     * To prevent circular reference
-     * @required
-     */
-    public function autowireParsedPropertyFetchNodeCollector(NodeTypeResolver $nodeTypeResolver): void
-    {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 

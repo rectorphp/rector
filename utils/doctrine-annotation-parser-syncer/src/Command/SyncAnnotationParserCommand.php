@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Utils\DoctrineAnnotationParserSyncer\Command;
 
 use Rector\Core\Configuration\Option;
-use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\ClassSyncerInterface;
+use Rector\Utils\DoctrineAnnotationParserSyncer\FileSyncer\AnnotationReaderClassSyncer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -13,15 +13,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SyncAnnotationParserCommand extends Command
 {
-    /**
-     * @var ClassSyncerInterface[]
-     */
-    private $classSyncers = [];
-
     /**
      * @var SymfonyStyle
      */
@@ -33,13 +27,18 @@ final class SyncAnnotationParserCommand extends Command
     private $parameterProvider;
 
     /**
-     * @param ClassSyncerInterface[] $classSyncers
+     * @var AnnotationReaderClassSyncer
      */
-    public function __construct(array $classSyncers, SymfonyStyle $symfonyStyle, ParameterProvider $parameterProvider)
-    {
+    private $annotationReaderClassSyncer;
+
+    public function __construct(
+        AnnotationReaderClassSyncer $annotationReaderClassSyncer,
+        SymfonyStyle $symfonyStyle,
+        ParameterProvider $parameterProvider
+    ) {
         $this->symfonyStyle = $symfonyStyle;
-        $this->classSyncers = $classSyncers;
         $this->parameterProvider = $parameterProvider;
+        $this->annotationReaderClassSyncer = $annotationReaderClassSyncer;
 
         parent::__construct();
     }
@@ -63,43 +62,16 @@ final class SyncAnnotationParserCommand extends Command
 
         $dryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
 
-        foreach ($this->classSyncers as $classSyncer) {
-            $isSuccess = $classSyncer->sync($dryRun);
-            if (! $isSuccess) {
-                $sourceFileInfo = new SmartFileInfo($classSyncer->getSourceFilePath());
+        $isSuccess = $this->annotationReaderClassSyncer->sync($dryRun);
+        if (! $isSuccess) {
+            $message = 'Doctrine Annotation files have changed, sync them: bin/rector sync-annotation-parser';
+            $this->symfonyStyle->error($message);
 
-                $message = sprintf(
-                    'File "%s" has changed,%sregenerate it: %s',
-                    $sourceFileInfo->getRelativeFilePathFromCwd(),
-                    PHP_EOL,
-                    'bin/rector sync-annotation-parser'
-                );
-                $this->symfonyStyle->error($message);
-
-                return ShellCode::ERROR;
-            }
-
-            $message = $this->createMessageAboutFileChanges($classSyncer, $dryRun);
-
-            $this->symfonyStyle->note($message);
+            return ShellCode::ERROR;
         }
 
-        $this->symfonyStyle->success('Done');
+        $this->symfonyStyle->success('Constant preserving doctrine/annotation parser was updated');
 
         return ShellCode::SUCCESS;
-    }
-
-    private function createMessageAboutFileChanges(ClassSyncerInterface $classSyncer, bool $dryRun): string
-    {
-        $sourceFileInfo = new SmartFileInfo($classSyncer->getSourceFilePath());
-        $targetFileInfo = new SmartFileInfo($classSyncer->getTargetFilePath());
-
-        $messageFormat = $dryRun ? 'Original "%s" is in sync with "%s"' : 'Original "%s" was changed and refactored to "%s"';
-
-        return sprintf(
-            $messageFormat,
-            $sourceFileInfo->getRelativeFilePathFromCwd(),
-            $targetFileInfo->getRelativeFilePathFromCwd()
-        );
     }
 }

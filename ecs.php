@@ -21,7 +21,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GeneralPhpdocAnnotationRemoveFixer::class)
         ->call('configure', [[
-            'annotations' => ['throws', 'author', 'package', 'group'],
+            'annotations' => ['throws', 'author', 'package', 'group', 'required'],
         ]]);
 
     $services->set(NoSuperfluousPhpdocTagsFixer::class)
@@ -50,6 +50,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Source/*',
         '*/Fixture/*',
         '*/Expected/*',
+
+        GeneralPhpdocAnnotationRemoveFixer::class => [
+            __DIR__ . '/src/Rector/AbstractRector.php',
+            '*TypeInferer*',
+            '*TypeResolver*',
+            '*NameResolver*',
+            '*Mapper*',
+            __DIR__ . '/packages/StaticTypeMapper/Naming/NameScopeFactory.php',
+            __DIR__ . '/packages/NodeTypeResolver/NodeTypeResolver.php',
+            __DIR__ . '/packages/BetterPhpDocParser/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php',
+        ],
 
         # generated from /vendor
         __DIR__ . '/packages/DoctrineAnnotationGenerated/ConstantPreservingDocParser.php',

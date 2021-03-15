@@ -139,7 +139,8 @@ final class NodeRepository
         ParsedClassConstFetchNodeCollector $parsedClassConstFetchNodeCollector,
         ParsedNodeCollector $parsedNodeCollector,
         TypeUnwrapper $typeUnwrapper,
-        ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
@@ -148,15 +149,6 @@ final class NodeRepository
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->reflectionProvider = $reflectionProvider;
-    }
-
-    /**
-     * To prevent circular reference
-     *
-     * @required
-     */
-    public function autowireNodeRepository(NodeTypeResolver $nodeTypeResolver): void
-    {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
