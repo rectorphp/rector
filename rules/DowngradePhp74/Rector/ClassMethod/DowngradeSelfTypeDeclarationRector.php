@@ -6,9 +6,11 @@ namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ThisType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,9 +24,17 @@ final class DowngradeSelfTypeDeclarationRector extends AbstractRector
      */
     private $phpDocFromTypeDeclarationDecorator;
 
-    public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
-    {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(
+        PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator,
+        ReflectionProvider $reflectionProvider
+    ) {
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -70,7 +80,21 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, ThisType::class);
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($scope === null) {
+            // in a trait
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+            $classReflection = $this->reflectionProvider->getClass($className);
+        } else {
+            $classReflection = $scope->getClassReflection();
+        }
+
+        if ($classReflection === null) {
+            return null;
+        }
+
+        $thisType = new ThisType($classReflection);
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $thisType);
 
         return $node;
     }

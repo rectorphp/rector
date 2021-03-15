@@ -2523,7 +2523,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
+Split multiple inline assigns to each own lines default value, to prevent undefined array issues
 
 - class: [`Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`](../rules/CodingStyle/Rector/Assign/SplitDoubleAssignRector.php)
 
@@ -6098,7 +6098,7 @@ Change constructor property promotion to property asssign
 
 Remove "static" return and param type, add a `"@param` `$this"` and `"@return` `$this"` tag instead
 
-- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeStaticTypeDeclarationRector`](../rules/DowngradePhp80/Rector/FunctionLike/DowngradeStaticTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRector`](../rules/DowngradePhp80/Rector/ClassMethod/DowngradeStaticTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -12600,7 +12600,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
 
 :wrench: **configure it!**
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\VoidType;
@@ -33,7 +34,7 @@ final class DowngradeVoidTypeDeclarationRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [Function_::class, ClassMethod::class];
+        return [Function_::class, ClassMethod::class, Closure::class];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -68,11 +69,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod|Function_ $node
+     * @param ClassMethod|Function_|Closure $node
      */
     public function refactor(Node $node): ?Node
     {
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, VoidType::class);
+        $voidType = new VoidType();
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $voidType);
 
         return $node;
     }

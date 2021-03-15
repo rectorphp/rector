@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\TypeDeclaration;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -59,7 +60,7 @@ final class PhpDocFromTypeDeclarationDecorator
     }
 
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param ClassMethod|Function_|Closure $functionLike
      */
     public function decorateReturn(FunctionLike $functionLike): void
     {
@@ -85,6 +86,7 @@ final class PhpDocFromTypeDeclarationDecorator
         }
 
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+
         foreach ($excludedTypes as $excludedType) {
             if (is_a($type, $excludedType, true)) {
                 return;
@@ -96,18 +98,17 @@ final class PhpDocFromTypeDeclarationDecorator
 
     /**
      * @param ClassMethod|Function_ $functionLike
-     * @param class-string<Node|Type> $requireTypeNode
      */
     public function decorateParamWithSpecificType(
         Param $param,
         FunctionLike $functionLike,
-        string $requireTypeNode
+        Type $requireType
     ): void {
         if ($param->type === null) {
             return;
         }
 
-        if (! $this->isTypeMatch($param->type, $requireTypeNode)) {
+        if (! $this->isTypeMatchOrSubType($param->type, $requireType)) {
             return;
         }
 
@@ -116,45 +117,30 @@ final class PhpDocFromTypeDeclarationDecorator
     }
 
     /**
-     * @param ClassMethod|Function_ $functionLike
-     * @param class-string<Node|Type> $requireTypeNode
+     * @param ClassMethod|Function_|Closure $functionLike
      */
-    public function decorateReturnWithSpecificType(FunctionLike $functionLike, string $requireTypeNode): void
+    public function decorateReturnWithSpecificType(FunctionLike $functionLike, Type $requireType): void
     {
         if ($functionLike->returnType === null) {
             return;
         }
 
-        if (! $this->isTypeMatch($functionLike->returnType, $requireTypeNode)) {
+        if (! $this->isTypeMatchOrSubType($functionLike->returnType, $requireType)) {
             return;
         }
 
         $this->decorateReturn($functionLike);
     }
 
-    /**
-     * @param class-string<Node|Type> $requireTypeNodeClass
-     */
-    private function isTypeMatch(Node $typeNode, string $requireTypeNodeClass): bool
+    private function isTypeMatchOrSubType(Node $typeNode, Type $requireType): bool
     {
-        if (is_a($requireTypeNodeClass, Node::class, true) && ! is_a($typeNode, $requireTypeNodeClass, true)) {
-            return false;
+        $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
+
+        // cover nullable union types
+        if ($returnType instanceof UnionType) {
+            $returnType = $this->typeUnwrapper->unwrapNullableType($returnType);
         }
-
-        if (is_a($requireTypeNodeClass, Type::class, true)) {
-            $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
-
-            // cover nullable union types
-            if ($returnType instanceof UnionType) {
-                $returnType = $this->typeUnwrapper->unwrapNullableType($returnType);
-            }
-
-            if (! is_a($returnType, $requireTypeNodeClass, true)) {
-                return false;
-            }
-        }
-
-        return true;
+        return is_a($returnType, get_class($requireType), true);
     }
 
     /**

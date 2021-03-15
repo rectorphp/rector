@@ -45,11 +45,11 @@ final class DowngradeObjectTypeDeclarationRector extends AbstractRector
             $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType(
                 $param,
                 $node,
-                ObjectWithoutClassType::class
+                new ObjectWithoutClassType()
             );
         }
 
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, ObjectWithoutClassType::class);
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, new ObjectWithoutClassType());
 
         return $node;
     }

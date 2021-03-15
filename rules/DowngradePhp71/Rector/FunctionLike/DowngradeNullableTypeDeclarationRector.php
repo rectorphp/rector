@@ -86,7 +86,11 @@ CODE_SAMPLE
             $this->refactorParamType($param, $node);
         }
 
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, NullableType::class);
+        if (! $node->returnType instanceof NullableType) {
+            return null;
+        }
+
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturn($node);
 
         return $node;
     }

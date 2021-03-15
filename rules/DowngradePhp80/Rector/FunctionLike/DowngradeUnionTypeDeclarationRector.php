@@ -78,10 +78,18 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($node->getParams() as $param) {
-            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, UnionType::class);
+            if (! $param->type instanceof UnionType) {
+                continue;
+            }
+
+            $this->phpDocFromTypeDeclarationDecorator->decorateParam($param, $node);
         }
 
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, UnionType::class);
+        if (! $node->returnType instanceof UnionType) {
+            return null;
+        }
+
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturn($node);
 
         return $node;
     }

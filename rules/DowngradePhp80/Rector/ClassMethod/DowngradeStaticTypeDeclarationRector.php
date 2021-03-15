@@ -2,19 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Rector\FunctionLike;
+namespace Rector\DowngradePhp80\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\StaticType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DowngradePhp80\Rector\FunctionLike\DowngradeStaticTypeDeclarationRector\DowngradeStaticTypeDeclarationRectorTest
+ * @see \Rector\Tests\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRector\DowngradeStaticTypeDeclarationRectorTest
  */
 final class DowngradeStaticTypeDeclarationRector extends AbstractRector
 {
@@ -33,7 +35,7 @@ final class DowngradeStaticTypeDeclarationRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [Function_::class, ClassMethod::class];
+        return [ClassMethod::class];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -70,15 +72,24 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod|Function_ $node
+     * @param ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($node->getParams() as $param) {
-            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, StaticType::class);
+        /** @var Scope $scope */
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
         }
 
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, StaticType::class);
+        $staticType = new StaticType($classReflection->getName());
+
+        foreach ($node->getParams() as $param) {
+            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $staticType);
+        }
+
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $staticType);
 
         return $node;
     }
