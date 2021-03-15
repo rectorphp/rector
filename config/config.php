@@ -12,22 +12,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/services-rules.php');
     $containerConfigurator->import(__DIR__ . '/parameters.php');
     $containerConfigurator->import(__DIR__ . '/../utils/*/config/config.php', null, true);
-
-    $parameters = $containerConfigurator->parameters();
-
-    $parameters->set(Option::PATHS, []);
-
-    $parameters->set(Option::FILE_EXTENSIONS, ['php']);
-
-    $parameters->set(Option::AUTOLOAD_PATHS, []);
-
-    $parameters->set(Option::AUTO_IMPORT_NAMES, false);
-    $parameters->set(Option::IMPORT_SHORT_CLASSES, true);
-    $parameters->set(Option::IMPORT_DOC_BLOCKS, true);
-
-    $parameters->set(Option::PHP_VERSION_FEATURES, null);
-
-    $parameters->set(Option::PROJECT_TYPE, ProjectType::PROPRIETARY);
-    $parameters->set(Option::NESTED_CHAIN_METHOD_CALL_LIMIT, 30);
-    $parameters->set(Option::SKIP, []);
 };
