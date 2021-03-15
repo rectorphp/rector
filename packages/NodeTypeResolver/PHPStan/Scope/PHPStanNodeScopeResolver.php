@@ -126,13 +126,6 @@ final class PHPStanNodeScopeResolver
 
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $nodeCallback = function (Node $node, Scope $scope): void {
-            // the class reflection is resolved AFTER entering to class node
-            // so we need to get it from the first after this one
-            if ($node instanceof Class_ || $node instanceof Interface_) {
-                /** @var Scope $scope */
-                $scope = $this->resolveClassOrInterfaceScope($node, $scope);
-            }
-
             // traversing trait inside class that is using it scope (from referenced) - the trait traversed by Rector is different (directly from parsed file)
             if ($scope->isInTrait()) {
                 /** @var ClassReflection $classReflection */
@@ -141,6 +134,13 @@ final class PHPStanNodeScopeResolver
                 $this->traitNodeScopeCollector->addForTraitAndNode($traitName, $node, $scope);
 
                 return;
+            }
+
+            // the class reflection is resolved AFTER entering to class node
+            // so we need to get it from the first after this one
+            if ($node instanceof Class_ || $node instanceof Interface_) {
+                /** @var Scope $scope */
+                $scope = $this->resolveClassOrInterfaceScope($node, $scope);
             }
 
             // special case for unreachable nodes

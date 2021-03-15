@@ -1,5 +1,8 @@
 #!/bin/sh -l
 
+# see https://stackoverflow.com/questions/66644233/how-to-propagate-colors-from-bash-script-to-github-action?noredirect=1#comment117811853_66644233
+export TERM=xterm-color
+
 # show errors
 set -e
 
@@ -20,8 +23,7 @@ note()
 
 # configure here
 BUILD_DIRECTORY=$1
-
-RESULT_DIRECTORY="rector-final-build"
+RESULT_DIRECTORY=$2
 
 # ---------------------------
 
@@ -47,7 +49,6 @@ rm -rf "$BUILD_DIRECTORY"
 # copy metafiles needed for release
 note "Copy metafiles like composer.json, .github etc to repository"
 rm -f "$RESULT_DIRECTORY/composer.json"
-cp -R build/target-repository/. "$RESULT_DIRECTORY"
 
 # make bin/rector runnable without "php"
 chmod 777 "$RESULT_DIRECTORY/bin/rector"
