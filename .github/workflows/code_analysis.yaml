@@ -19,11 +19,6 @@ jobs:
                         run: vendor/symplify/easy-testing/bin/easy-testing validate-fixture-skip-naming rules tests
 
                     -
-                        name: 'Validate Sets Loading'
-                        # this is very slow, so it has to be in own workflow
-                        run: bin/rector validate-sets --ansi
-
-                    -
                         name: 'Validate Max File Length'
                         run: vendor/bin/easy-ci validate-file-length packages rules src tests
 

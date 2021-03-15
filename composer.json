@@ -95,8 +95,7 @@
             "Rector\\RuleDocGenerator\\": "utils/rule-doc-generator/src",
             "Rector\\PHPStanExtensions\\": "utils/phpstan-extensions/src",
             "Rector\\PHPStanExtensions\\Tests\\": "utils/phpstan-extensions/tests",
-            "Rector\\Utils\\DoctrineAnnotationParserSyncer\\": "utils/doctrine-annotation-parser-syncer/src",
-            "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src"
+            "Rector\\Utils\\DoctrineAnnotationParserSyncer\\": "utils/doctrine-annotation-parser-syncer/src"
         },
         "classmap": [
             "rules-tests/Autodiscovery/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
