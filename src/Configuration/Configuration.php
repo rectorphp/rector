@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Configuration;
 
-use Jean85\PrettyVersions;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
@@ -116,12 +115,6 @@ final class Configuration
         if ($commandLinePaths !== []) {
             $this->paths = $commandLinePaths;
         }
-    }
-
-    public function getPrettyVersion(): string
-    {
-        $version = PrettyVersions::getVersion('rector/rector');
-        return $version->getPrettyVersion();
     }
 
     /**

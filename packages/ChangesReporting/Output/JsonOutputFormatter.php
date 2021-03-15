@@ -7,6 +7,7 @@ namespace Rector\ChangesReporting\Output;
 use Nette\Utils\Json;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
+use Rector\Core\Application\RectorApplication;
 use Rector\Core\Configuration\Configuration;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -42,7 +43,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     {
         $errorsArray = [
             'meta' => [
-                'version' => $this->configuration->getPrettyVersion(),
+                'version' => RectorApplication::VERSION,
                 'config' => $this->configuration->getMainConfigFilePath(),
             ],
             'totals' => [

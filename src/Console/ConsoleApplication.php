@@ -7,6 +7,7 @@ namespace Rector\Core\Console;
 use Composer\XdebugHandler\XdebugHandler;
 use OutOfBoundsException;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use Rector\Core\Application\RectorApplication;
 use Rector\Core\Bootstrap\NoRectorsLoadedReporter;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
@@ -42,13 +43,7 @@ final class ConsoleApplication extends Application
         CommandNaming $commandNaming,
         array $commands = []
     ) {
-        try {
-            $version = $configuration->getPrettyVersion();
-        } catch (OutOfBoundsException $outOfBoundsException) {
-            $version = 'Unknown';
-        }
-
-        parent::__construct(self::NAME, $version);
+        parent::__construct(self::NAME, RectorApplication::VERSION);
 
         foreach ($commands as $command) {
             $commandName = $commandNaming->resolveFromCommand($command);

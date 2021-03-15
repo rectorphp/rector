@@ -32,6 +32,13 @@ use Throwable;
 final class RectorApplication
 {
     /**
+     * @var string
+     * @see https://github.com/composer/composer/blob/b6826f352390b4c952be8fd75d60cfd4f6f39f11/src/Composer/Composer.php#L54
+     * @see https://github.com/composer/composer/blob/dfc69140fe720b169b978b18b7863611cc0d8077/src/Composer/Compiler.php#L46-L50
+     */
+    public const VERSION = '@package_version@';
+
+    /**
      * Why 4? One for each cycle, so user sees some activity all the time:
      *
      * 1) parsing files
