@@ -1,0 +1,89 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\PHPUnit\Rector\ClassMethod;
+
+use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Rector\AbstractRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
+/**
+ * @see \Rector\Tests\PHPUnit\Rector\ClassMethod\RemoveEmptyTestMethodRector\RemoveEmptyTestMethodRectorTest
+ */
+final class RemoveEmptyTestMethodRector extends AbstractRector
+{
+    /**
+     * @var TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
+    {
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+    }
+
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Remove empty test methods', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+class SomeTest extends \PHPUnit\Framework\TestCase
+{
+    /**
+     * testGetTranslatedModelField method
+     *
+     * @return void
+     */
+    public function testGetTranslatedModelField()
+    {
+    }
+}
+CODE_SAMPLE
+,
+                <<<'CODE_SAMPLE'
+class SomeTest extends \PHPUnit\Framework\TestCase
+{
+}
+CODE_SAMPLE
+            ),
+        ]);
+    }
+
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class];
+    }
+
+    /**
+     * @param ClassMethod $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if (! $this->testsNodeAnalyzer->isInTestClass($node)) {
+            return null;
+        }
+
+        if (! $this->isName($node->name, 'test*')) {
+            return null;
+        }
+
+        if ($node->stmts === null) {
+            return null;
+        }
+
+        if ($node->stmts !== []) {
+            return null;
+        }
+
+        $this->removeNode($node);
+
+        return null;
+    }
+}

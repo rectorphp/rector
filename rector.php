@@ -14,7 +14,6 @@ use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivateProperty
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Rector\Set\ValueObject\SetList;
-use Rector\SymfonyPhpConfig\Rector\MethodCall\AutoInPhpSymfonyConfigRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -36,8 +35,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ]]);
 
-    $services->set(AutoInPhpSymfonyConfigRector::class);
-
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::SETS, [
@@ -46,14 +43,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::CODE_QUALITY_STRICT,
         SetList::DEAD_CODE,
         SetList::DEAD_CODE_STRICT,
-        SetList::DEAD_DOC_BLOCK,
         SetList::NETTE_UTILS_CODE_QUALITY,
         SetList::PRIVATIZATION,
         SetList::NAMING,
-        SetList::DEFLUENT,
         SetList::TYPE_DECLARATION,
         SetList::PHPUNIT_CODE_QUALITY,
-        SetList::SYMFONY_AUTOWIRE,
         SetList::PHP_71,
         SetList::PHP_72,
         SetList::PHP_73,
@@ -64,7 +58,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::PATHS, [
         __DIR__ . '/src',
         __DIR__ . '/rules',
+        __DIR__ . '/rules-tests',
         __DIR__ . '/packages',
+        __DIR__ . '/packages-tests',
         __DIR__ . '/tests',
         __DIR__ . '/utils',
         __DIR__ . '/config/set',
@@ -83,10 +79,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Source/*',
         '*/Expected/*',
 
-        __DIR__ . '/packages/doctrine-annotation-generated/src',
-        // template files
-        __DIR__ . '/packages/rector-generator/templates',
-        __DIR__ . '/packages/rector-generator/src/ValueObject/RectorRecipe.php',
+        __DIR__ . '/packages/DoctrineAnnotationGenerated',
     ]);
 
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);

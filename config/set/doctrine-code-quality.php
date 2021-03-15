@@ -14,6 +14,8 @@ use Rector\DoctrineCodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeI
 use Rector\DoctrineCodeQuality\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector;
 use Rector\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector;
 use Rector\Privatization\ValueObject\ReplaceStringWithClassConstant;
+use Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
+use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -37,6 +39,22 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'orderBy',
                     1,
                     'Doctrine\Common\Collections\Criteria'
+                ),
+            ]),
+        ]]);
+
+    $services->set(ServiceGetterToConstructorInjectionRector::class)
+        ->call('configure', [[
+            ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => ValueObjectInliner::inline([
+                new ServiceGetterToConstructorInjection(
+                    'Doctrine\Common\Persistence\ManagerRegistry',
+                    'getConnection',
+                    'Doctrine\DBAL\Connection'
+                ),
+                new ServiceGetterToConstructorInjection(
+                    'Doctrine\ORM\EntityManagerInterface',
+                    'getConfiguration',
+                    'Doctrine\ORM\Configuration'
                 ),
             ]),
         ]]);

@@ -5,16 +5,13 @@
 # Set syntax highlight on GitHub
 # https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
 *.neon linguist-language=YAML
-*.neon.dist linguist-language=YAML
 
 # Remove files for archives generated using `git archive`
-.coveralls.yml export-ignore
 .editorconfig export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
 .phpstorm.meta.php export-ignore
 CODE_OF_CONDUCT.md export-ignore
-easy-coding-standard.neon export-ignore
 LICENSE export-ignore
 ecs.php export-ignore
 phpstan.neon export-ignore
@@ -24,8 +21,9 @@ rector.php export-ignore
 bin/rector.php !export-ignore
 utils export-ignore
 stubs export-ignore
-
-.travis.yml export-ignore
+tests export-ignore
+packages-tests export-ignore
+rules-tests export-ignore
 
 # testing Windows spaces - https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
 packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/FixtureBasic/with_spac.txt text eol=crlf

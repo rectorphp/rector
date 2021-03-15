@@ -13,13 +13,12 @@ use Rector\DowngradePhp71\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRect
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-    $services->set(DowngradeNullableTypeDeclarationRector::class);
-    $services->set(DowngradeVoidTypeDeclarationRector::class);
-
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_70);
 
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeNullableTypeDeclarationRector::class);
+    $services->set(DowngradeVoidTypeDeclarationRector::class);
     $services->set(DowngradeClassConstantVisibilityRector::class);
     $services->set(DowngradePipeToMultiCatchExceptionRector::class);
     $services->set(SymmetricArrayDestructuringToListRector::class);

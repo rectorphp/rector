@@ -48,6 +48,9 @@ use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 use Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
 use Rector\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector;
 use Rector\DeadCode\Rector\TryCatch\RemoveDeadTryCatchRector;
+use Rector\DeadDocBlock\Rector\ClassMethod\RemoveUselessParamTagRector;
+use Rector\DeadDocBlock\Rector\ClassMethod\RemoveUselessReturnTagRector;
+use Rector\DeadDocBlock\Rector\Node\RemoveNonExistingVarAnnotationRector;
 use Rector\PHPUnit\Rector\ClassMethod\RemoveEmptyTestMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -100,4 +103,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveDeadInstanceOfRector::class);
     $services->set(RemoveEmptyAbstractClassRector::class);
     $services->set(RemoveDeadLoopRector::class);
+
+    // docblock
+    $services->set(RemoveUselessParamTagRector::class);
+    $services->set(RemoveUselessReturnTagRector::class);
+    $services->set(RemoveNonExistingVarAnnotationRector::class);
 };

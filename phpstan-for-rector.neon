@@ -5,6 +5,13 @@ parameters:
     scanDirectories:
         - stubs
 
+    # see https://github.com/rectorphp/rector/issues/3490#issue-634342324
+    featureToggles:
+        disableRuntimeReflectionProvider: true
+
+services:
+    - PhpParser\NodeFinder
+
 includes:
     - utils/phpstan-extensions/config/phpstan-extensions.neon
     - vendor/phpstan/phpstan-nette/extension.neon
