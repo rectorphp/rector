@@ -1,4 +1,4 @@
-# 659 Rules Overview
+# 656 Rules Overview
 
 <br>
 
@@ -56,7 +56,7 @@
 
 - [MysqlToMysqli](#mysqltomysqli) (4)
 
-- [Naming](#naming) (12)
+- [Naming](#naming) (9)
 
 - [Nette](#nette) (21)
 
@@ -7062,67 +7062,6 @@ Rename variable to match new ClassType
 -        $search->advance();
 +        $dreamSearch = new DreamSearch();
 +        $dreamSearch->advance();
-     }
- }
-```
-
-<br>
-
-### UnderscoreToCamelCaseLocalVariableNameRector
-
-Change under_score local variable names to camelCase
-
-- class: [`Rector\Naming\Rector\Variable\UnderscoreToCamelCaseLocalVariableNameRector`](../rules/Naming/Rector/Variable/UnderscoreToCamelCaseLocalVariableNameRector.php)
-
-```diff
- final class SomeClass
- {
-     public function run($a_b)
-     {
--        $some_value = $a_b;
-+        $someValue = $a_b;
-     }
- }
-```
-
-<br>
-
-### UnderscoreToCamelCasePropertyNameRector
-
-Change under_score names to camelCase
-
-- class: [`Rector\Naming\Rector\Property\UnderscoreToCamelCasePropertyNameRector`](../rules/Naming/Rector/Property/UnderscoreToCamelCasePropertyNameRector.php)
-
-```diff
- final class SomeClass
- {
--    public $property_name;
-+    public $propertyName;
-
-     public function run($a)
-     {
--        $this->property_name = 5;
-+        $this->propertyName = 5;
-     }
- }
-```
-
-<br>
-
-### UnderscoreToCamelCaseVariableNameRector
-
-Change under_score names to camelCase
-
-- class: [`Rector\Naming\Rector\Variable\UnderscoreToCamelCaseVariableNameRector`](../rules/Naming/Rector/Variable/UnderscoreToCamelCaseVariableNameRector.php)
-
-```diff
- final class SomeClass
- {
--    public function run($a_b)
-+    public function run($aB)
-     {
--        $some_value = $a_b;
-+        $someValue = $aB;
      }
  }
 ```
