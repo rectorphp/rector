@@ -16,11 +16,6 @@ jobs:
                         run: "bin/rector sync-annotation-parser --dry-run --ansi"
                         branch: 'automated-regenerate-doctrine-parser'
 
-                    -
-                        name: "Re-Propagate Monorepo Dependencies"
-                        run: "composer propagate --ansi"
-                        branch: 'automated-propagate-monorepo-dependencies'
-
         name: ${{ matrix.actions.name }}
 
         runs-on: ubuntu-latest
