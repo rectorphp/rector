@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\IterableType;
+use PHPStan\Type\MixedType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -75,7 +76,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $iterableType = new IterableType();
+        $iterableType = new IterableType(new MixedType(), new MixedType());
 
         foreach ($node->params as $param) {
             $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $iterableType);

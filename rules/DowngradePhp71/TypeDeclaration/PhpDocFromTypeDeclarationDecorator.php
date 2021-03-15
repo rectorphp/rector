@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\TypeDeclaration;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -67,7 +68,7 @@ final class PhpDocFromTypeDeclarationDecorator
     }
 
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param ClassMethod|Function_|Closure $functionLike
      */
     public function decorateReturn(FunctionLike $functionLike): void
     {
@@ -124,7 +125,7 @@ final class PhpDocFromTypeDeclarationDecorator
     }
 
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param ClassMethod|Function_|Closure $functionLike
      */
     public function decorateReturnWithSpecificType(FunctionLike $functionLike, Type $requireType): void
     {
