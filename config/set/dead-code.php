@@ -10,7 +10,6 @@ use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
 use Rector\DeadCode\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector;
 use Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector;
 use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
-use Rector\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector;
 use Rector\DeadCode\Rector\Class_\RemoveUnusedDoctrineEntityMethodAndPropertyRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector;
@@ -101,7 +100,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveDeadConditionAboveReturnRector::class);
     $services->set(RemoveUnusedConstructorParamRector::class);
     $services->set(RemoveDeadInstanceOfRector::class);
-    $services->set(RemoveEmptyAbstractClassRector::class);
     $services->set(RemoveDeadLoopRector::class);
 
     // docblock
