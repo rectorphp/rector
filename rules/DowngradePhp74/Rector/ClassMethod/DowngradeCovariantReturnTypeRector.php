@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
@@ -184,6 +185,10 @@ CODE_SAMPLE
 
             $classMethodScope = $classMethod->getAttribute(AttributeKey::SCOPE);
             $parameterMethodReflection = $parentClassAndInterface->getMethod($methodName, $classMethodScope);
+
+            if (! $parameterMethodReflection instanceof PhpMethodReflection) {
+                continue;
+            }
 
             /** @var Type $parentReturnType */
             $parentReturnType = $this->privatesCaller->callPrivateMethod(

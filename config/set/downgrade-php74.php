@@ -18,6 +18,9 @@ use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);
+
     $services = $containerConfigurator->services();
     $services->set(DowngradeTypedPropertyRector::class);
     $services->set(ArrowFunctionToAnonymousFunctionRector::class);
@@ -28,10 +31,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeStripTagsCallWithArrayRector::class);
     $services->set(DowngradeArraySpreadRector::class);
     $services->set(DowngradeArrayMergeCallWithoutArgumentsRector::class);
-
-    $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);
-
     $services->set(DowngradeFreadFwriteFalsyToNegationRector::class);
     $services->set(DowngradeSelfTypeDeclarationRector::class);
 };
