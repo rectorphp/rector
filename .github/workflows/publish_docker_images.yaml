@@ -57,4 +57,4 @@ jobs:
                         --push \
                         $DOCKER_TAG_ARG \
                         --platform linux/amd64,linux/arm64 \
-                        --build-arg .
+                        .
