@@ -75,15 +75,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $iterableType = new IterableType();
+
         foreach ($node->params as $param) {
-            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType(
-                $param,
-                $node,
-                new IterableType()
-            );
+            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $iterableType);
         }
 
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, IterableType::class);
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $iterableType);
 
         return $node;
     }

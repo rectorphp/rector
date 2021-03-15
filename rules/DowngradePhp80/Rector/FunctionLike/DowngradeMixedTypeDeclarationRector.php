@@ -73,11 +73,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $mixedType = new MixedType();
+
         foreach ($node->getParams() as $param) {
-            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, new MixedType());
+            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $mixedType);
         }
 
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, MixedType::class);
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $mixedType);
 
         return $node;
     }
