@@ -1,0 +1,16 @@
+version: 2
+
+updates:
+    -
+        package-ecosystem: composer
+        directory: "/"
+        schedule:
+        open-pull-requests-limit: 5
+            interval: weekly
+
+    -
+        package-ecosystem: github-actions
+        directory: "/"
+        open-pull-requests-limit: 5
+        schedule:
+            interval: monthly
