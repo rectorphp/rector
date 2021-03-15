@@ -15,7 +15,6 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
@@ -46,25 +45,18 @@ final class PhpDocFromTypeDeclarationDecorator
      */
     private $typeUnwrapper;
 
-    /**
-     * @var TypeComparator
-     */
-    private $typeComparator;
-
     public function __construct(
         StaticTypeMapper $staticTypeMapper,
         PhpDocInfoFactory $phpDocInfoFactory,
         NodeNameResolver $nodeNameResolver,
         PhpDocTypeChanger $phpDocTypeChanger,
-        TypeUnwrapper $typeUnwrapper,
-        TypeComparator $typeComparator
+        TypeUnwrapper $typeUnwrapper
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->typeUnwrapper = $typeUnwrapper;
-        $this->typeComparator = $typeComparator;
     }
 
     /**
@@ -148,12 +140,7 @@ final class PhpDocFromTypeDeclarationDecorator
         if ($returnType instanceof UnionType) {
             $returnType = $this->typeUnwrapper->unwrapNullableType($returnType);
         }
-
-        if (! is_a($returnType, get_class($requireType), true)) {
-            return false;
-        }
-
-        return true;
+        return is_a($returnType, get_class($requireType), true);
     }
 
     /**

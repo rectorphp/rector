@@ -7,6 +7,7 @@ namespace Rector\DowngradePhp80\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -77,17 +78,18 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($node->getParams() as $param) {
-            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType(
-                $param,
-                $node,
-                new \PHPStan\Type\UnionType([])
-            );
+            if (! $param->type instanceof UnionType) {
+                continue;
+            }
+
+            $this->phpDocFromTypeDeclarationDecorator->decorateParam($param, $node);
         }
 
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType(
-            $node,
-            new \PHPStan\Type\UnionType([])
-        );
+        if (! $node->returnType instanceof UnionType) {
+            return null;
+        }
+
+        $this->phpDocFromTypeDeclarationDecorator->decorateReturn($node);
 
         return $node;
     }

@@ -142,9 +142,9 @@ CODE_SAMPLE
         return new Assign($arrayDimFetch->var, $arrayFilterFuncCall);
     }
 
-    private function forLoopFillsAnotherArray(Foreach_ $node, ArrayDimFetch $arrayDimFetch): bool
+    private function forLoopFillsAnotherArray(Foreach_ $foreach, ArrayDimFetch $arrayDimFetch): bool
     {
-        $loopVar = $node->expr;
+        $loopVar = $foreach->expr;
         if (! $loopVar instanceof Variable) {
             return false;
         }
@@ -156,12 +156,12 @@ CODE_SAMPLE
         return $loopVar->name !== $varThatIsModified->name;
     }
 
-    private function isSimpleCall(FuncCall $funcCallNode, Foreach_ $foreach): bool
+    private function isSimpleCall(FuncCall $funcCall, Foreach_ $foreach): bool
     {
-        if (count($funcCallNode->args) !== 1) {
+        if (count($funcCall->args) !== 1) {
             return false;
         }
 
-        return $this->nodeComparator->areNodesEqual($funcCallNode->args[0], $foreach->valueVar);
+        return $this->nodeComparator->areNodesEqual($funcCall->args[0], $foreach->valueVar);
     }
 }

@@ -2523,7 +2523,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
+Split multiple inline assigns to each own lines default value, to prevent undefined array issues
 
 - class: [`Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`](../rules/CodingStyle/Rector/Assign/SplitDoubleAssignRector.php)
 
@@ -6098,7 +6098,7 @@ Change constructor property promotion to property asssign
 
 Remove "static" return and param type, add a `"@param` `$this"` and `"@return` `$this"` tag instead
 
-- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRector`](../rules/DowngradePhp80/Rector/FunctionLike/DowngradeStaticTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRector`](../rules/DowngradePhp80/Rector/ClassMethod/DowngradeStaticTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -12600,7 +12600,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
 
 :wrench: **configure it!**
 
@@ -15177,7 +15177,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MergeInterfacesRector::OLD_TO_NEW_INTERFACES => [
                 'SomeOldInterface' => 'SomeInterface',
-
+                
             ], ]]);
 };
 ```
@@ -15248,7 +15248,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToPropertyFetchRector::METHOD_CALL_TO_PROPERTY_FETCHES => [
                 'someMethod' => 'someProperty',
-
+                
             ], ]]);
 };
 ```
@@ -15287,7 +15287,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToReturnRector::METHOD_CALL_WRAPS => [
                 'SomeClass' => ['deny'],
-
+                
             ], ]]);
 };
 ```
@@ -15579,7 +15579,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ParentClassToTraitsRector::PARENT_CLASS_TO_TRAITS => [
                 'Nette\Object' => ['Nette\SmartObject'],
-
+                
             ], ]]);
 };
 ```
@@ -16051,7 +16051,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ToStringToMethodCallRector::METHOD_NAMES_BY_TYPE => [
                 'SomeObject' => 'getPath',
-
+                
             ], ]]);
 };
 ```
@@ -16780,8 +16780,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ChangePropertyVisibilityRector::PROPERTY_TO_VISIBILITY_BY_CLASS => [
                 'FrameworkClass' => [
                     'someProperty' => 2,
-
-
+                    
+                    
                 ], ], ]]);
 };
 ```
