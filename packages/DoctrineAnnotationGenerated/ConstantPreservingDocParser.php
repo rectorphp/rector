@@ -782,19 +782,19 @@ EXCEPTION
          */
         if ($this->identifierEndsWithClassConstant($identifier) && !$this->identifierStartsWithBackslash($identifier)) {
             $resolvedValue = \substr($identifier, 0, $this->getClassConstantPositionInIdentifier($identifier));
-            \Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector::collects($originalIdentifier, $resolvedValue);
+            \Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector::collect($originalIdentifier, $resolvedValue);
             return $resolvedValue;
         }
         if ($this->identifierEndsWithClassConstant($identifier) && $this->identifierStartsWithBackslash($identifier)) {
             $resolvedValue = \substr($identifier, 1, $this->getClassConstantPositionInIdentifier($identifier) - 1);
-            \Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector::collects($originalIdentifier, $resolvedValue);
+            \Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector::collect($originalIdentifier, $resolvedValue);
             return $resolvedValue;
         }
         if (!\defined($identifier)) {
             throw \Doctrine\Common\Annotations\AnnotationException::semanticalErrorConstants($identifier, $this->context);
         }
         $resolvedValue = \constant($identifier);
-        \Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector::collects($originalIdentifier, $resolvedValue);
+        \Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector::collect($originalIdentifier, $resolvedValue);
         return $resolvedValue;
     }
     private function identifierStartsWithBackslash(string $identifier): bool

@@ -65,7 +65,6 @@
         "nette/application": "^3.0.7",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
-        "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpstan/phpstan-nette": "^0.12.16",
         "phpunit/phpunit": "^9.5",
         "rector/rector-generator": "^0.1.1",
@@ -139,7 +138,7 @@
         "phpstan-config": "vendor/bin/phpstan analyse config --ansi --error-format symplify",
         "docs": [
             "vendor/bin/rule-doc-generator generate packages rules --output-file docs/rector_rules_overview.md --ansi --categorize",
-            "vendor/bin/ecs check-markdown docs/rector_rules_overview.md docs/nodes_overview.md --ansi --fix"
+            "vendor/bin/ecs check-markdown docs/rector_rules_overview.md --ansi --fix"
         ],
         "rector": "bin/rector process --ansi"
     },

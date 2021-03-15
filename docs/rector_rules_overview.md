@@ -1,4 +1,4 @@
-# 661 Rules Overview
+# 659 Rules Overview
 
 <br>
 
@@ -20,7 +20,7 @@
 
 - [Composer](#composer) (5)
 
-- [DeadCode](#deadcode) (49)
+- [DeadCode](#deadcode) (48)
 
 - [DeadDocBlock](#deaddocblock) (5)
 
@@ -112,7 +112,7 @@
 
 - [Restoration](#restoration) (8)
 
-- [Symfony](#symfony) (14)
+- [Symfony](#symfony) (13)
 
 - [Symfony2](#symfony2) (3)
 
@@ -3504,35 +3504,6 @@ Remove duplicated instanceof in one call
 +        $isIt = $value instanceof A;
 +        $isIt = $value instanceof A;
      }
- }
-```
-
-<br>
-
-### RemoveEmptyAbstractClassRector
-
-Empty abstract class that does nothing
-
-- class: [`Rector\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector`](../rules/DeadCode/Rector/Class_/RemoveEmptyAbstractClassRector.php)
-
-```diff
--class SomeClass extends SomeAbstractClass
-+class SomeClass extends AnotherAbstractClass
- {
- }
-
--abstract class SomeAbstractClass extends AnotherAbstractClass
-+abstracst clas AnotherAbstractClass
- {
--}
--
--abstract class AnotherAbstractClass
--{
-      public function getName()
-      {
--        return 'name';
-+          return 'cowo';
-      }
  }
 ```
 
@@ -13645,25 +13616,6 @@ Make Symfony commands lazy
      public function configure()
      {
 -        $this->setName('sunshine');
-     }
- }
-```
-
-<br>
-
-### NormalizeAutowireMethodNamingRector
-
-Use autowire + class name suffix for method with `@required` annotation
-
-- class: [`Rector\Symfony\Rector\ClassMethod\NormalizeAutowireMethodNamingRector`](../rules/Symfony/Rector/ClassMethod/NormalizeAutowireMethodNamingRector.php)
-
-```diff
- class SomeClass
- {
-     /** @required */
--    public function foo()
-+    public function autowireSomeClass()
-     {
      }
  }
 ```
