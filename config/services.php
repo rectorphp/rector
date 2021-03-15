@@ -74,18 +74,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/PhpParser/Node/CustomNode',
         ]);
 
-    $services->load('Rector\\', __DIR__ . '/../packages')
-        ->exclude([
-            // @todo move to value object
-            __DIR__ . '/../packages/AttributeAwarePhpDoc/Ast',
-            __DIR__ . '/../packages/BetterPhpDocParser/Attributes/Ast/PhpDoc',
-            __DIR__ . '/../packages/BetterPhpDocParser/Attributes/Attribute',
-            __DIR__ . '/../packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php',
-            __DIR__ . '/../packages/*/{ValueObject,Contract,Exception}',
-            __DIR__ . '/../packages/NodeTypeResolver/Reflection/BetterReflection/RectorBetterReflectionSourceLocatorFactory.php',
-            __DIR__ . '/../packages/Testing/PHPUnit',
-        ]);
-
     $services->alias(SymfonyApplication::class, ConsoleApplication::class);
 
     $services->set(FileSystemGuard::class);
