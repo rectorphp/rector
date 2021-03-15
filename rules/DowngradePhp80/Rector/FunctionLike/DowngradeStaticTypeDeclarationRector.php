@@ -75,7 +75,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($node->getParams() as $param) {
-            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, StaticType::class);
+            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, new StaticType());
         }
 
         $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, StaticType::class);

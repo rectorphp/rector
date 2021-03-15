@@ -79,7 +79,7 @@ CODE_SAMPLE
             $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType(
                 $param,
                 $node,
-                IterableType::class
+                new IterableType()
             );
         }
 

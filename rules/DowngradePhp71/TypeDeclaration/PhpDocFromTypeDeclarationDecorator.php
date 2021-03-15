@@ -14,6 +14,7 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
@@ -44,18 +45,25 @@ final class PhpDocFromTypeDeclarationDecorator
      */
     private $typeUnwrapper;
 
+    /**
+     * @var TypeComparator
+     */
+    private $typeComparator;
+
     public function __construct(
         StaticTypeMapper $staticTypeMapper,
         PhpDocInfoFactory $phpDocInfoFactory,
         NodeNameResolver $nodeNameResolver,
         PhpDocTypeChanger $phpDocTypeChanger,
-        TypeUnwrapper $typeUnwrapper
+        TypeUnwrapper $typeUnwrapper,
+        TypeComparator $typeComparator
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->typeUnwrapper = $typeUnwrapper;
+        $this->typeComparator = $typeComparator;
     }
 
     /**
@@ -85,6 +93,7 @@ final class PhpDocFromTypeDeclarationDecorator
         }
 
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+
         foreach ($excludedTypes as $excludedType) {
             if (is_a($type, $excludedType, true)) {
                 return;
@@ -96,18 +105,17 @@ final class PhpDocFromTypeDeclarationDecorator
 
     /**
      * @param ClassMethod|Function_ $functionLike
-     * @param class-string<Node|Type> $requireTypeNode
      */
     public function decorateParamWithSpecificType(
         Param $param,
         FunctionLike $functionLike,
-        string $requireTypeNode
+        Type $requireType
     ): void {
         if ($param->type === null) {
             return;
         }
 
-        if (! $this->isTypeMatch($param->type, $requireTypeNode)) {
+        if (! $this->isTypeMatchOrSubType($param->type, $requireType)) {
             return;
         }
 
@@ -117,41 +125,31 @@ final class PhpDocFromTypeDeclarationDecorator
 
     /**
      * @param ClassMethod|Function_ $functionLike
-     * @param class-string<Node|Type> $requireTypeNode
      */
-    public function decorateReturnWithSpecificType(FunctionLike $functionLike, string $requireTypeNode): void
+    public function decorateReturnWithSpecificType(FunctionLike $functionLike, Type $requireType): void
     {
         if ($functionLike->returnType === null) {
             return;
         }
 
-        if (! $this->isTypeMatch($functionLike->returnType, $requireTypeNode)) {
+        if (! $this->isTypeMatchOrSubType($functionLike->returnType, $requireType)) {
             return;
         }
 
         $this->decorateReturn($functionLike);
     }
 
-    /**
-     * @param class-string<Node|Type> $requireTypeNodeClass
-     */
-    private function isTypeMatch(Node $typeNode, string $requireTypeNodeClass): bool
+    private function isTypeMatchOrSubType(Node $typeNode, Type $requireType): bool
     {
-        if (is_a($requireTypeNodeClass, Node::class, true) && ! is_a($typeNode, $requireTypeNodeClass, true)) {
-            return false;
+        $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
+
+        // cover nullable union types
+        if ($returnType instanceof UnionType) {
+            $returnType = $this->typeUnwrapper->unwrapNullableType($returnType);
         }
 
-        if (is_a($requireTypeNodeClass, Type::class, true)) {
-            $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
-
-            // cover nullable union types
-            if ($returnType instanceof UnionType) {
-                $returnType = $this->typeUnwrapper->unwrapNullableType($returnType);
-            }
-
-            if (! is_a($returnType, $requireTypeNodeClass, true)) {
-                return false;
-            }
+        if (! is_a($returnType, get_class($requireType), true)) {
+            return false;
         }
 
         return true;

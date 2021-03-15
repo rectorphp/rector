@@ -74,7 +74,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($node->getParams() as $param) {
-            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, MixedType::class);
+            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, new MixedType());
         }
 
         $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, MixedType::class);
