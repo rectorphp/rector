@@ -564,16 +564,22 @@ parameters:
 
         - '#Class with base "NodeComparator" name is already used in "Symplify\\PHPStanRules\\Printer\\NodeComparator", "Rector\\Core\\PhpParser\\Comparing\\NodeComparator"\. Use unique name to make classes easy to recognize#'
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 5e8e267c44... add test case stub
+=======
+>>>>>>> ad3cb2c224... [CI] add PHP 7.1 versions too
+>>>>>>> 2572699c7c... [CI] add PHP 7.1 versions too
 
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             paths:
                 - packages/BetterPhpDocParser/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         # @todo fix in symplify
@@ -597,9 +603,24 @@ parameters:
 =======
 =======
 =======
+=======
+
+>>>>>>> 2572699c7c... [CI] add PHP 7.1 versions too
         - '#Cannot cast array<string\>\|string\|null to string#'
+<<<<<<< HEAD
 >>>>>>> ecbb522391... add test case stub
 >>>>>>> 26af319bc5... add test case stub
+<<<<<<< HEAD
 >>>>>>> 5e8e267c44... add test case stub
+<<<<<<< HEAD
 >>>>>>> cbf451db2b... add test case stub
+<<<<<<< HEAD
 >>>>>>> b8d9d6b850... add test case stub
+=======
+=======
+=======
+=======
+>>>>>>> ad3cb2c224... [CI] add PHP 7.1 versions too
+>>>>>>> 2572699c7c... [CI] add PHP 7.1 versions too
+>>>>>>> 16c4aab3cf... [CI] add PHP 7.1 versions too
+>>>>>>> c49c7b31e9... [CI] add linter for php code

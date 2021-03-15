@@ -31,7 +31,6 @@ jobs:
                 env:
                     COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
-
             # note "Coping root files to $NESTED_DIRECTORY directory"; Exclude the scoped/nested directories to prevent rsync from copying in a loop
             - run: rsync --exclude "$NESTED_DIRECTORY" -av * "$NESTED_DIRECTORY" --quiet
 
