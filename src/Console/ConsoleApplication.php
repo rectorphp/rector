@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\Console;
 
 use Composer\XdebugHandler\XdebugHandler;
-use OutOfBoundsException;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\RectorApplication;
 use Rector\Core\Bootstrap\NoRectorsLoadedReporter;
