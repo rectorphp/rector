@@ -56,7 +56,7 @@ jobs:
                     php-version: 7.3
                     coverage: none
 
-            -   uses: actions/cache@v2
+            -   uses: actions/cache@v2.1.4
                 env:
                     cache-name: rector-container-cache
                 with:
