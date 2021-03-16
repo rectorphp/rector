@@ -37,18 +37,12 @@ final class ParsedClassConstFetchNodeCollector
      */
     private $reflectionProvider;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
-    {
+    public function __construct(
+        NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider,
+        NodeTypeResolver $nodeTypeResolver
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
-    }
-
-    /**
-     * To prevent circular reference
-     * @required
-     */
-    public function autowireParsedClassConstFetchNodeCollector(NodeTypeResolver $nodeTypeResolver): void
-    {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
