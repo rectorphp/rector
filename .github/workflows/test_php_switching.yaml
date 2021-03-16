@@ -1,0 +1,38 @@
+name: nightly workflow
+on:
+    push:
+jobs:
+    ubuntu:
+        name: nightly
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-20.04]
+        steps:
+            - name: Setup PHP 7.1
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: 7.1
+            - name: Check PHP 7.1
+              run: php -v
+
+            - name: Setup PHP 7.4
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: 7.4
+            - name: Check PHP 7.4
+              run: php -v
+
+            - name: Setup PHP 8.0
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: 8.0
+            - name: Check PHP 8.0
+              run: php -v
+
+            - name: Setup PHP 7.1
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: 7.1
+            - name: Check PHP 7.1
+              run: php -v
