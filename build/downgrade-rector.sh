@@ -21,7 +21,10 @@ BUILD_DIRECTORY=$1
 # 1. downgrade it
 echo "[NOTE] Running downgrade in '$BUILD_DIRECTORY' directory\n";
 
-# 2. provide directories to downgrade; includes the rector dirs
+# 2. add polyfill packages to keep old function
+composer require symfony/polyfill --ansi symfony/polyfill-php80 symfony/polyfill-php74 symfony/polyfill-php73 symfony/polyfill-php72 --update-no-dev --working-dir $BUILD_DIRECTORY
+
+# 3. provide directories to downgrade; includes the rector dirs
 directories=$(php -d memory_limit=-1 bin/rector downgrade-paths 7.1 --config build/config/config-downgrade.php --working-dir $BUILD_DIRECTORY --ansi)
 
 # 4. downgrade the directories
