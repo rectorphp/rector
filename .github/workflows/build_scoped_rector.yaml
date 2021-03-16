@@ -1,17 +1,13 @@
 # builds the content of https://github.com/rectorphp/rector-prefixed
 name: Build Scoped Rector
 
-# also downgrade to PHP 7.1
-
 on:
     pull_request: null
 
     push:
         branches:
             - main
-
-        # to avoid running tagged and non-tagged workflows at the same time
-        tags-ignore:
+        tags:
             - '*'
 
 jobs:
@@ -20,6 +16,8 @@ jobs:
         steps:
             -
                 uses: actions/checkout@v2
+                with:
+                    fetch-depth: 0
 
             -
                 uses: shivammathur/setup-php@v2
@@ -56,14 +54,29 @@ jobs:
             # 5. copy repository meta files
             -   run: cp -R build/target-repository/. rector-prefixed-downgraded
 
-            # 6. publish it to remote repository
+            # 6. publish it to remote repository without tag
             -
                 uses: symplify/github-action-monorepo-split@1.1
+                if: "!startsWith(github.ref, 'refs/tags/')"
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
                     package-directory: 'rector-prefixed-downgraded'
                     split-repository-organization: 'rectorphp'
                     split-repository-name: 'rector-prefixed'
+                    user-name: "kaizen-ci"
+                    user-email: "info@kaizen-ci.org"
+
+            # 7. publish it to remote repository without tag
+            -
+                uses: symplify/github-action-monorepo-split@1.1
+                if: "startsWith(github.ref, 'refs/tags/')"
+                env:
+                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+                with:
+                    package-directory: 'rector-prefixed-downgraded'
+                    split-repository-organization: 'rectorphp'
+                    split-repository-name: 'rector-prefixed'
+                    tag: ${GITHUB_REF#refs/tags/}
                     user-name: "kaizen-ci"
                     user-email: "info@kaizen-ci.org"
