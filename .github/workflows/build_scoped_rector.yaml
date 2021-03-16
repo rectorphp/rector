@@ -7,8 +7,6 @@ on:
     push:
         branches:
             - main
-
-        # include tagging to
         tags:
             - '*'
 
