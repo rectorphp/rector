@@ -183,6 +183,10 @@ final class ConsecutiveAssertionFactory
         );
     }
 
+    /**
+     * @param ExpectationMock[] $expectationMocks
+     * @return ExpectationMock[]
+     */
     private function sortExpectationMocksByIndex(array $expectationMocks): array
     {
         usort($expectationMocks, static function (ExpectationMock $expectationMockA, ExpectationMock $expectationMockB) {
