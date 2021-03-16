@@ -85,6 +85,7 @@ final class ExpectationAnalyzer
                 );
             }
         }
+
         return $expectationMockCollection;
     }
 
