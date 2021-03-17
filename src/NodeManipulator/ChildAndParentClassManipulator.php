@@ -12,8 +12,8 @@ use Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
+use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ChildAndParentClassManipulator
 {
@@ -42,18 +42,25 @@ final class ChildAndParentClassManipulator
      */
     private $reflectionProvider;
 
+    /**
+     * @var ParentClassScopeResolver
+     */
+    private $parentClassScopeResolver;
+
     public function __construct(
         NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
         NodeRepository $nodeRepository,
         PromotedPropertyParamCleaner $promotedPropertyParamCleaner,
-        ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider,
+        ParentClassScopeResolver $parentClassScopeResolver
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeRepository = $nodeRepository;
         $this->promotedPropertyParamCleaner = $promotedPropertyParamCleaner;
         $this->reflectionProvider = $reflectionProvider;
+        $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
 
     /**
@@ -147,8 +154,7 @@ final class ChildAndParentClassManipulator
                 return $constructMethodNode;
             }
 
-            /** @var string|null $parentClassName */
-            $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+            $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($class);
             if ($parentClassName === null) {
                 return null;
             }

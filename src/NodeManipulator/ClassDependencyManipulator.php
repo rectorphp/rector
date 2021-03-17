@@ -11,6 +11,8 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
 use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
@@ -211,22 +213,23 @@ final class ClassDependencyManipulator
 
     private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
     {
-        $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName === null) {
+        $scope = $class->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
             return false;
         }
 
-        if (! $this->reflectionProvider->hasClass($parentClassName)) {
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
             return false;
         }
 
-        $classReflection = $this->reflectionProvider->getClass($parentClassName);
-        $parentClassReflection = $classReflection->getParentClass();
-        if ($parentClassReflection === false) {
-            return false;
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if ($parentClassReflection->hasMethod($methodName)) {
+                return true;
+            }
         }
 
-        return $parentClassReflection->hasMethod($methodName);
+        return false;
     }
 
     private function createParentClassMethodCall(string $methodName): Expression

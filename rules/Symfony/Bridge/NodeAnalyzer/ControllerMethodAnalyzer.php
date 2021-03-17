@@ -7,10 +7,20 @@ namespace Rector\Symfony\Bridge\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 
 final class ControllerMethodAnalyzer
 {
+    /**
+     * @var ParentClassScopeResolver
+     */
+    private $parentClassScopeResolver;
+
+    public function __construct(ParentClassScopeResolver $parentClassScopeResolver)
+    {
+        $this->parentClassScopeResolver = $parentClassScopeResolver;
+    }
+
     /**
      * Detect if is <some>Action() in Controller
      */
@@ -20,7 +30,7 @@ final class ControllerMethodAnalyzer
             return false;
         }
 
-        $parentClassName = (string) $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        $parentClassName = (string) $this->parentClassScopeResolver->resolveParentClassName($node);
         if (Strings::endsWith($parentClassName, 'Controller')) {
             return true;
         }

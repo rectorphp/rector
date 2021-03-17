@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -25,9 +26,17 @@ final class RemoveParentCallWithoutParentRector extends AbstractRector
      */
     private $classMethodManipulator;
 
-    public function __construct(ClassMethodManipulator $classMethodManipulator)
-    {
+    /**
+     * @var ParentClassScopeResolver
+     */
+    private $parentClassScopeResolver;
+
+    public function __construct(
+        ClassMethodManipulator $classMethodManipulator,
+        ParentClassScopeResolver $parentClassScopeResolver
+    ) {
         $this->classMethodManipulator = $classMethodManipulator;
+        $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -84,7 +93,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
         if ($parentClassName === null) {
             $this->removeNode($node);
             return null;

@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -95,9 +96,17 @@ final class ParsedNodeCollector
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var ParentClassScopeResolver
+     */
+    private $parentClassScopeResolver;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        ParentClassScopeResolver $parentClassScopeResolver
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
 
     /**
@@ -322,7 +331,7 @@ final class ParsedNodeCollector
         }
 
         if ($className === 'parent') {
-            return $classConstFetch->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+            return $this->parentClassScopeResolver->resolveParentClassName($classConstFetch);
         }
 
         return $className;

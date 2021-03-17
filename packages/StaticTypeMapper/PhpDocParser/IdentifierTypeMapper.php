@@ -15,6 +15,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
+use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
@@ -34,12 +35,19 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
      */
     private $objectTypeSpecifier;
 
+    /**
+     * @var ParentClassScopeResolver
+     */
+    private $parentClassScopeResolver;
+
     public function __construct(
         ObjectTypeSpecifier $objectTypeSpecifier,
-        ScalarStringToTypeMapper $scalarStringToTypeMapper
+        ScalarStringToTypeMapper $scalarStringToTypeMapper,
+        ParentClassScopeResolver $parentClassScopeResolver
     ) {
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
+        $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
 
     public function getNodeType(): string
@@ -101,13 +109,12 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
 
     private function mapParent(Node $node): Type
     {
-        /** @var string|null $parentClassName */
-        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName === null) {
-            return new MixedType();
+        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
+        if ($parentClassName !== null) {
+            return new ParentStaticType($parentClassName);
         }
 
-        return new ParentStaticType($parentClassName);
+        return new MixedType();
     }
 
     private function mapStatic(Node $node): Type

@@ -6,6 +6,8 @@ namespace Rector\Symfony2\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
@@ -70,8 +72,14 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName !== 'Symfony\Bundle\FrameworkBundle\Controller\Controller') {
+        /** @var Scope $scope */
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        if (! $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Controller\Controller')) {
             return null;
         }
 

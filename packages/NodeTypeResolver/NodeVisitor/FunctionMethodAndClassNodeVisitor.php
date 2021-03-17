@@ -6,8 +6,6 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -110,10 +108,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
 
         $node->setAttribute(AttributeKey::CLASS_NODE, $this->classLike);
         $node->setAttribute(AttributeKey::CLASS_NAME, $this->className);
-
-        if ($this->classLike instanceof Class_) {
-            $this->setParentClassName($this->classLike, $node);
-        }
     }
 
     private function processMethod(Node $node): void
@@ -157,19 +151,5 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         } else {
             $this->className = (string) $classLike->name;
         }
-    }
-
-    private function setParentClassName(Class_ $class, Node $node): void
-    {
-        if ($class->extends === null) {
-            return;
-        }
-
-        $parentClassResolvedName = $class->extends->getAttribute(AttributeKey::RESOLVED_NAME);
-        if ($parentClassResolvedName instanceof FullyQualified) {
-            $parentClassResolvedName = $parentClassResolvedName->toString();
-        }
-
-        $node->setAttribute(AttributeKey::PARENT_CLASS_NAME, $parentClassResolvedName);
     }
 }

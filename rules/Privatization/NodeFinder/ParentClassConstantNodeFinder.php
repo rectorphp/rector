@@ -7,7 +7,7 @@ namespace Rector\Privatization\NodeFinder;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 
 final class ParentClassConstantNodeFinder
 {
@@ -16,9 +16,15 @@ final class ParentClassConstantNodeFinder
      */
     private $nodeRepository;
 
-    public function __construct(NodeRepository $nodeRepository)
+    /**
+     * @var ParentClassScopeResolver
+     */
+    private $parentClassScopeResolver;
+
+    public function __construct(NodeRepository $nodeRepository, ParentClassScopeResolver $parentClassScopeResolver)
     {
         $this->nodeRepository = $nodeRepository;
+        $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
 
     public function find(string $class, string $constant): ?ClassConst
@@ -28,8 +34,7 @@ final class ParentClassConstantNodeFinder
             return null;
         }
 
-        /** @var string|null $parentClassName */
-        $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($classNode);
         if ($parentClassName === null) {
             return null;
         }

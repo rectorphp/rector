@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -39,9 +39,17 @@ final class ContainerGetToConstructorInjectionRector extends AbstractRector impl
      */
     private $dependencyInjectionMethodCallAnalyzer;
 
-    public function __construct(DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer)
-    {
+    /**
+     * @var ParentClassScopeResolver
+     */
+    private $parentClassScopeResolver;
+
+    public function __construct(
+        DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer,
+        ParentClassScopeResolver $parentClassScopeResolver
+    ) {
         $this->dependencyInjectionMethodCallAnalyzer = $dependencyInjectionMethodCallAnalyzer;
+        $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -115,8 +123,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if (! in_array($parentClassName, $this->containerAwareParentTypes, true)) {
+        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
+        if ($parentClassName !== null && ! in_array($parentClassName, $this->containerAwareParentTypes, true)) {
             return null;
         }
 

@@ -16,7 +16,6 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\StaticAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -46,14 +45,21 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
      */
     private $reflectionProvider;
 
+    /**
+     * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
+     */
+    private $parentClassScopeResolver;
+
     public function __construct(
         ClassMethodManipulator $classMethodManipulator,
         StaticAnalyzer $staticAnalyzer,
-        ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider,
+        \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver
     ) {
         $this->classMethodManipulator = $classMethodManipulator;
         $this->staticAnalyzer = $staticAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
+        $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -174,7 +180,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $parentClassName = $staticCall->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($staticCall);
         return $className === $parentClassName;
     }
 

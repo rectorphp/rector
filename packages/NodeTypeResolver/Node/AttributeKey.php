@@ -38,12 +38,6 @@ final class AttributeKey
     public const CLASS_NODE = ClassLike::class;
 
     /**
-     * @deprecated
-     * @var string
-     */
-    public const PARENT_CLASS_NAME = 'parentClassName';
-
-    /**
      * @var string
      */
     public const METHOD_NAME = 'methodName';

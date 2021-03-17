@@ -6,9 +6,11 @@ namespace Rector\Visibility\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\Visibility;
+use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -29,6 +31,16 @@ final class ChangeMethodVisibilityRector extends AbstractRector implements Confi
      * @var ChangeMethodVisibility[]
      */
     private $methodVisibilities = [];
+
+    /**
+     * @var ParentClassScopeResolver
+     */
+    private $parentClassScopeResolver;
+
+    public function __construct(ParentClassScopeResolver $parentClassScopeResolver)
+    {
+        $this->parentClassScopeResolver = $parentClassScopeResolver;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -67,17 +79,13 @@ class MyClass extends FrameworkClass
     }
 }
 CODE_SAMPLE
-                                ,
-                                [
-                                    self::METHOD_VISIBILITIES => [
-                                        new ChangeMethodVisibility(
-                                            'FrameworkClass',
-                                            'someMethod',
-                                            Visibility::PROTECTED
-                                        ),
-                                    ],
-                                ]
-                            ),
+                    ,
+                    [
+                        self::METHOD_VISIBILITIES => [
+                            new ChangeMethodVisibility('FrameworkClass', 'someMethod', Visibility::PROTECTED),
+                        ],
+                    ]
+                ),
             ]
         );
     }
@@ -95,15 +103,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // doesn't have a parent class
-        if (! $node->hasAttribute(AttributeKey::PARENT_CLASS_NAME)) {
+        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
+        if ($parentClassName === null) {
             return null;
         }
 
-        $nodeParentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-
         foreach ($this->methodVisibilities as $methodVisibility) {
-            if ($methodVisibility->getClass() !== $nodeParentClassName) {
+            if ($methodVisibility->getClass() !== $parentClassName) {
                 continue;
             }
 
@@ -119,6 +125,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param array<string, ChangeMethodVisibility[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $methodVisibilities = $configuration[self::METHOD_VISIBILITIES] ?? [];

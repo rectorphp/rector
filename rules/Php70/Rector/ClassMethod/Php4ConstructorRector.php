@@ -155,10 +155,10 @@ CODE_SAMPLE
 
     private function processParentPhp4ConstructCall(StaticCall $staticCall): void
     {
-        $parentClassName = $staticCall->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        $parentClassName = $this->resolveParentClassName($staticCall);
 
         // no parent class
-        if (! is_string($parentClassName)) {
+        if ($parentClassName === null) {
             return;
         }
 
@@ -181,5 +181,25 @@ CODE_SAMPLE
         }
 
         $staticCall->name = new Identifier(MethodName::CONSTRUCT);
+    }
+
+    private function resolveParentClassName(StaticCall $staticCall): ?string
+    {
+        $scope = $staticCall->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+        $classReflection = $scope->getClassReflection();
+
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        $parentClassReflection = $classReflection->getParentClass();
+        if (! $parentClassReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        return $parentClassReflection->getName();
     }
 }
