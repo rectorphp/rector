@@ -134,25 +134,25 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Symfony\Component\Notifier\NotifierInterface',
                     'send',
                     1,
-                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface'),
+                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface')
                 ),
                 new AddParamTypeDeclaration(
                     'Symfony\Component\Notifier\Notifier',
                     'getChannels',
                     1,
-                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface'),
+                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface')
                 ),
                 new AddParamTypeDeclaration(
                     'Symfony\Component\Notifier\Channel\ChannelInterface',
                     'notify',
                     1,
-                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface'),
+                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface')
                 ),
                 new AddParamTypeDeclaration(
                     'Symfony\Component\Notifier\Channel\ChannelInterface',
                     'supports',
                     1,
-                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface'),
+                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface')
                 ),
             ]),
         ]]);
@@ -165,19 +165,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Symfony\Component\Notifier\Notification\ChatNotificationInterface',
                     'asChatMessage',
                     0,
-                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface'),
+                    new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface')
                 ),
                 new AddParamTypeDeclaration(
                     'Symfony\Component\Notifier\Notification\EmailNotificationInterface',
                     'asEmailMessage',
                     0,
-                    new ObjectType('Symfony\Component\Notifier\Recipient\EmailRecipientInterface'),
+                    new ObjectType('Symfony\Component\Notifier\Recipient\EmailRecipientInterface')
                 ),
                 new AddParamTypeDeclaration(
                     'Symfony\Component\Notifier\Notification\SmsNotificationInterface',
                     'asSmsMessage',
                     0,
-                    new ObjectType('Symfony\Component\Notifier\Recipient\SmsRecipientInterface'),
+                    new ObjectType('Symfony\Component\Notifier\Recipient\SmsRecipientInterface')
                 ),
             ]),
         ]]);

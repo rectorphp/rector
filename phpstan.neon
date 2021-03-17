@@ -576,3 +576,9 @@ parameters:
                 - rules/Symfony/ConstantNameAndValueMatcher.php
                 - rules/Privatization/Rector/Class_/ChangeReadOnlyVariableWithDefaultValueToConstantRector.php
                 - rules/Privatization/Naming/ConstantNaming.php
+
+
+        -
+            message: '#Cannot cast array<string\>\|string\|null to string#'
+            paths:
+                - utils/compiler/src/Command/DowngradePathsCommand.php
