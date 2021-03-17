@@ -32,10 +32,6 @@ final class NameScopeFactory
      */
     private $phpDocInfoFactory;
 
-    public function __construct()
-    {
-    }
-
     /**
      * This is needed to avoid circular references
      * @required
