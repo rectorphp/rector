@@ -161,7 +161,11 @@ CODE_SAMPLE
     {
         // skip cases without namespace, problematic to analyse
         $namespace = $this->betterNodeFinder->findParentType($use, Namespace_::class);
+<<<<<<< HEAD
         if (! $namespace instanceof Node) {
+=======
+        if ($namespace === null) {
+>>>>>>> 2bf327c238... make use of reflection
             return true;
         }
 

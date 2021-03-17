@@ -23,6 +23,14 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
      */
     private $betterNodeFinder;
 
+<<<<<<< HEAD
+=======
+    /**
+     * @var Namespace_|null
+     */
+    private $namespace;
+
+>>>>>>> 2bf327c238... make use of reflection
     public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
