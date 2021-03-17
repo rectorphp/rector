@@ -2,21 +2,14 @@
 
 namespace Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\Fixture;
 
-interface A
+interface ParentWithString
 {
-    public function test(array $input);
+    public function test(string $input);
 }
 
-class B implements A
+class ChildString implements ParentWithString
 {
     public function test($input)
-    {
-    }
-}
-
-class C implements A
-{
-    public function test(array $input)
     {
     }
 }
@@ -27,26 +20,16 @@ class C implements A
 
 namespace Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\Fixture;
 
-interface A
+interface ParentWithString
 {
     /**
-     * @param mixed[] $input
+     * @param string $input
      */
     public function test($input);
 }
 
-class B implements A
+class ChildString implements ParentWithString
 {
-    public function test($input)
-    {
-    }
-}
-
-class C implements A
-{
-    /**
-     * @param mixed[] $input
-     */
     public function test($input)
     {
     }

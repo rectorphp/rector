@@ -688,6 +688,11 @@ final class NodeRepository
         return $conditions;
     }
 
+    public function findClassLike(string $classLikeName): ?ClassLike
+    {
+        return $this->findClass($classLikeName) ?? $this->findInterface($classLikeName);
+    }
+
     private function collectArray(Array_ $array): void
     {
         $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($array);

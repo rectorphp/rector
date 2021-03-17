@@ -5,23 +5,23 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp72\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp72\NodeAnalyzer\NativeTypeClassTreeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
+ * @see https://3v4l.org/fOgSE
  *
  * @see \Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\DowngradeParameterTypeWideningRectorTest
  */
@@ -32,15 +32,30 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
      */
     private $phpDocTypeChanger;
 
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
-    {
+    /**
+     * @var NativeTypeClassTreeResolver
+     */
+    private $nativeTypeClassTreeResolver;
+
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    public function __construct(
+        PhpDocTypeChanger $phpDocTypeChanger,
+        NativeTypeClassTreeResolver $nativeTypeClassTreeResolver,
+        TypeFactory $typeFactory
+    ) {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->nativeTypeClassTreeResolver = $nativeTypeClassTreeResolver;
+        $this->typeFactory = $typeFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Remove argument type declarations in the parent and in all child classes, whenever some child class removes it',
+            'Change param type to match the lowest type in whole family tree',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -49,37 +64,21 @@ interface A
     public function test(array $input);
 }
 
-class B implements A
-{
-    public function test($input){} // type omitted for $input
-}
-
 class C implements A
 {
-    public function test(array $input){}
+    public function test($input){}
 }
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
 interface A
 {
-    /**
-     * @param array $input
-     */
-    public function test($input);
-}
-
-class B implements A
-{
-    public function test($input){} // type omitted for $input
+    public function test(array $input);
 }
 
 class C implements A
 {
-    /**
-     * @param array $input
-     */
-    public function test($input);
+    public function test(array $input){}
 }
 CODE_SAMPLE
             ),
@@ -91,35 +90,31 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Function_::class, ClassMethod::class];
+        return [ClassMethod::class];
     }
 
     /**
-     * @param ClassMethod|Function_ $node
+     * @param ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->params === null) {
-            return null;
-        }
         if ($node->params === []) {
             return null;
         }
-        foreach ($node->params as $position => $param) {
-            $this->refactorParamForAncestorsAndSiblings($param, $node, (int) $position);
+
+        foreach (array_keys($node->params) as $position) {
+            $this->refactorParamForSelfAndSiblings($node, (int) $position);
         }
 
         return null;
     }
 
-    private function refactorParamForAncestorsAndSiblings(Param $param, FunctionLike $functionLike, int $position): void
+    /**
+     * The topmost class is the source of truth, so we go only down to avoid up/down collission
+     */
+    private function refactorParamForSelfAndSiblings(ClassMethod $classMethod, int $position): void
     {
-        // The param on the child class must have no type
-        if ($param->type !== null) {
-            return;
-        }
-
-        $scope = $functionLike->getAttribute(AttributeKey::SCOPE);
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             // possibly trait
             return;
@@ -130,101 +125,36 @@ CODE_SAMPLE
             return;
         }
 
-        /** @var string $methodName */
-        $methodName = $this->getName($functionLike);
-        $paramName = $this->getName($param);
+        if (count($classReflection->getAncestors()) === 1) {
+            return;
+        }
 
-        // Obtain the list of the ancestors classes and implemented interfaces
-        // with a different signature
-        /** @var ClassLike[] $ancestorAndInterfaces */
-        $ancestorAndInterfaces = array_merge(
-            $this->getClassesWithDifferentSignature($classReflection, $methodName, $paramName),
-            $this->getInterfacesWithDifferentSignature($classReflection, $methodName, $paramName)
-        );
+        /** @var string $methodName */
+        $methodName = $this->nodeNameResolver->getName($classMethod);
 
         // Remove the types in:
         // - all ancestors + their descendant classes
         // - all implemented interfaces + their implementing classes
-        foreach ($ancestorAndInterfaces as $ancestorAndInterface) {
-            /** @var string $parentClassName */
-            $parentClassName = $ancestorAndInterface->getAttribute(AttributeKey::CLASS_NAME);
-            $classMethod = $this->nodeRepository->findClassMethod($parentClassName, $methodName);
-            /**
-             * If it doesn't find the method, it's because the method
-             * lives somewhere else.
-             * For instance, in test "interface_on_parent_class.php.inc",
-             * the ancestor abstract class is also retrieved
-             * as containing the method, but it does not: it is
-             * in its implemented interface. That happens because
-             * `ReflectionMethod` doesn't allow to do do the distinction.
-             * The interface is also retrieve though, so that method
-             * will eventually be refactored.
-             */
-            if (! $classMethod instanceof ClassMethod) {
-                continue;
-            }
-            $this->removeParamTypeFromMethod($ancestorAndInterface, $position, $classMethod);
-            $this->removeParamTypeFromMethodForChildren($parentClassName, $methodName, $position);
-        }
-    }
 
-    /**
-     * Obtain the list of the ancestors classes with a different signature
-     * @return Class_[]
-     */
-    private function getClassesWithDifferentSignature(
-        ClassReflection $classReflection,
-        string $methodName,
-        string $paramName
-    ): array {
-        // 1. All ancestor classes with different signature
-        $ancestorClassReflections = array_filter(
-            $classReflection->getParents(),
-            function (ClassReflection $classReflection) use ($methodName, $paramName): bool {
-                return $this->hasMethodWithTypedParam($classReflection, $methodName, $paramName);
-            }
+        $parameterTypesByParentClassLikes = $this->resolveParameterTypesByClassLike(
+            $classReflection,
+            $methodName,
+            $position
         );
 
-        $classes = [];
-        foreach ($ancestorClassReflections as $ancestorClassReflection) {
-            $class = $this->nodeRepository->findClass($ancestorClassReflection->getName());
-            if (! $class instanceof Class_) {
-                continue;
-            }
-
-            $classes[] = $class;
+        // we need at least 2 methods to have a possible conflict
+        if (count($parameterTypesByParentClassLikes) < 2) {
+            return;
         }
 
-        return $classes;
-    }
+        $uniqueParameterTypes = $this->typeFactory->uniquateTypes($parameterTypesByParentClassLikes);
 
-    /**
-     * Obtain the list of the implemented interfaces with a different signature
-     * @return Interface_[]
-     */
-    private function getInterfacesWithDifferentSignature(
-        ClassReflection $classReflection,
-        string $methodName,
-        string $paramName
-    ): array {
-        $interfaceClassReflections = array_filter(
-            $classReflection->getInterfaces(),
-            function (ClassReflection $interfaceReflection) use ($methodName, $paramName): bool {
-                return $this->hasMethodWithTypedParam($interfaceReflection, $methodName, $paramName);
-            }
-        );
-
-        $interfaces = [];
-        foreach ($interfaceClassReflections as $interfaceClassReflection) {
-            $interface = $this->nodeRepository->findInterface($interfaceClassReflection->getName());
-            if (! $interface instanceof Interface_) {
-                continue;
-            }
-
-            $interfaces[] = $interface;
+        // we need at least 2 unique types
+        if (count($uniqueParameterTypes) === 1) {
+            return;
         }
 
-        return $interfaces;
+        $this->refactorClassWithAncestorsAndChildren($classReflection, $methodName, $position);
     }
 
     private function removeParamTypeFromMethod(
@@ -233,6 +163,7 @@ CODE_SAMPLE
         ClassMethod $classMethod
     ): void {
         $classMethodName = $this->getName($classMethod);
+
         $currentClassMethod = $classLike->getMethod($classMethodName);
         if (! $currentClassMethod instanceof ClassMethod) {
             return;
@@ -275,31 +206,6 @@ CODE_SAMPLE
         }
     }
 
-    private function hasMethodWithTypedParam(
-        ClassReflection $classReflection,
-        string $methodName,
-        string $paramName
-    ): bool {
-        if (! $classReflection->hasMethod($methodName)) {
-            return false;
-        }
-
-        $reflectionClass = $classReflection->getNativeReflection();
-        $reflectionMethodReflection = $reflectionClass->getMethod($methodName);
-
-        foreach ($reflectionMethodReflection->getParameters() as $reflectionParameter) {
-            if ($reflectionParameter->getName() !== $paramName) {
-                continue;
-            }
-
-            if ($reflectionParameter->getType() !== null) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * Add the current param type in the PHPDoc
      */
@@ -314,5 +220,65 @@ CODE_SAMPLE
         $paramName = $this->getName($param);
         $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $mappedCurrentParamType, $param, $paramName);
+    }
+
+    /**
+     * @return array<class-string, Type>
+     */
+    private function resolveParameterTypesByClassLike(
+        ClassReflection $classReflection,
+        string $methodName,
+        int $position
+    ): array {
+        $parameterTypesByParentClassLikes = [];
+
+        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
+            $parameterType = $this->nativeTypeClassTreeResolver->resolveParameterReflectionType(
+                $ancestorClassReflection,
+                $methodName,
+                $position
+            );
+            $parameterTypesByParentClassLikes[$ancestorClassReflection->getName()] = $parameterType;
+        }
+
+        return $parameterTypesByParentClassLikes;
+    }
+
+    private function refactorClassWithAncestorsAndChildren(
+        ClassReflection $classReflection,
+        string $methodName,
+        int $position
+    ): void {
+        foreach ($classReflection->getAncestors() as $ancestorClassRelection) {
+            $classLike = $this->nodeRepository->findClassLike($ancestorClassRelection->getName());
+            if (! $classLike instanceof ClassLike) {
+                continue;
+            }
+
+            $currentClassMethod = $classLike->getMethod($methodName);
+            if (! $currentClassMethod instanceof ClassMethod) {
+                continue;
+            }
+
+            $className = $this->getName($classLike);
+            if ($className === null) {
+                continue;
+            }
+
+            /**
+             * If it doesn't find the method, it's because the method
+             * lives somewhere else.
+             * For instance, in test "interface_on_parent_class.php.inc",
+             * the ancestorClassReflection abstract class is also retrieved
+             * as containing the method, but it does not: it is
+             * in its implemented interface. That happens because
+             * `ReflectionMethod` doesn't allow to do do the distinction.
+             * The interface is also retrieve though, so that method
+             * will eventually be refactored.
+             */
+
+            $this->removeParamTypeFromMethod($classLike, $position, $currentClassMethod);
+            $this->removeParamTypeFromMethodForChildren($className, $methodName, $position);
+        }
     }
 }
