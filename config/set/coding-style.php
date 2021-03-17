@@ -19,7 +19,6 @@ use Rector\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector;
-use Rector\CodingStyle\Rector\Function_\CamelCaseFunctionNamingToUnderscoreRector;
 use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
 use Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector;
 use Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
@@ -74,7 +73,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ]]);
 
-    $services->set(CamelCaseFunctionNamingToUnderscoreRector::class);
     $services->set(SplitGroupedUseImportsRector::class);
     $services->set(RemoveDoubleUnderscoreInMethodNameRector::class);
     $services->set(PostIncDecToPreIncDecRector::class);

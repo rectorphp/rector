@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,7 +27,7 @@ final class ChangeSnakedFixtureNameToPascalRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes $fixtues style from snake_case to PascalCase.', [
+        return new RuleDefinition('Changes $fixtures style from snake_case to PascalCase.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeTest
@@ -109,7 +110,8 @@ CODE_SAMPLE
 
         $pascalCaseTableParts = array_map(
             function (string $token): string {
-                return StaticRectorStrings::underscoreToPascalCase($token);
+                $stringy = new Stringy($token);
+                return (string) $stringy->upperCamelize();
             },
             $tableParts
         );

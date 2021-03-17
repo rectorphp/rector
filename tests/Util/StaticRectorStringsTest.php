@@ -11,20 +11,6 @@ use Rector\Core\Util\StaticRectorStrings;
 final class StaticRectorStringsTest extends TestCase
 {
     /**
-     * @dataProvider provideDataForDashesToCamelCase()
-     */
-    public function testDashesToCamelCase(string $content, string $expected): void
-    {
-        $this->assertSame($expected, StaticRectorStrings::dashesToCamelCase($content));
-    }
-
-    public function provideDataForDashesToCamelCase(): Iterator
-    {
-        yield ['simple-test', 'SimpleTest'];
-        yield ['easy', 'Easy'];
-    }
-
-    /**
      * @dataProvider provideDataForCamelCaseToUnderscore()
      */
     public function testCamelCaseToUnderscore(string $content, string $expected): void
@@ -46,14 +32,6 @@ final class StaticRectorStringsTest extends TestCase
     }
 
     /**
-     * @dataProvider provideDataForUnderscoreToCamelCase()
-     */
-    public function testUnderscoreToCamelCase(string $content, string $expected): void
-    {
-        $this->assertSame($expected, StaticRectorStrings::underscoreToCamelCase($content));
-    }
-
-    /**
      * @return Iterator<string[]>
      */
     public function provideDataForUnderscoreToCamelCase(): Iterator
@@ -61,13 +39,6 @@ final class StaticRectorStringsTest extends TestCase
         yield ['simple_test', 'simpleTest'];
     }
 
-    /**
-     * @dataProvider provideDataForUnderscoreToPascalCase()
-     */
-    public function testUnderscoreToPascalCase(string $content, string $expected): void
-    {
-        $this->assertSame($expected, StaticRectorStrings::underscoreToPascalCase($content));
-    }
 
     /**
      * @return Iterator<string[]>

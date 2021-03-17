@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Stringy\Stringy;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ClassNaming
@@ -68,7 +69,8 @@ final class ClassNaming
             $basenameWithoutSuffix = Strings::replace($basenameWithoutSuffix, self::INPUT_HASH_NAMING_REGEX, '');
         }
 
-        return StaticRectorStrings::underscoreToPascalCase($basenameWithoutSuffix);
+        $stringy = new Stringy($basenameWithoutSuffix);
+        return (string) $stringy->upperCamelize();
     }
 
     /**
@@ -77,7 +79,9 @@ final class ClassNaming
     public function createMethodNameFromFunction(Function_ $function): string
     {
         $functionName = (string) $function->name;
-        return StaticRectorStrings::underscoreToCamelCase($functionName);
+
+        $stringy = new Stringy($functionName);
+        return (string) $stringy->camelize();
     }
 
     public function replaceSuffix(string $content, string $oldSuffix, string $newSuffix): string

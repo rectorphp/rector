@@ -37,41 +37,9 @@ final class StaticRectorStrings
         return false;
     }
 
-    public static function dashesToCamelCase(string $input): string
-    {
-        $parts = explode('-', $input);
-        $uppercasedParts = array_map('ucfirst', $parts);
-        return implode('', $uppercasedParts);
-    }
-
-    public static function camelCaseToDashes(string $input): string
-    {
-        return self::camelCaseToGlue($input, '-');
-    }
-
     public static function camelCaseToUnderscore(string $input): string
     {
         return self::camelCaseToGlue($input, '_');
-    }
-
-    public static function underscoreToPascalCase(string $input): string
-    {
-        $parts = explode('_', $input);
-        $uppercasedParts = array_map('ucfirst', $parts);
-        return implode('', $uppercasedParts);
-    }
-
-    public static function underscoreToCamelCase(string $input): string
-    {
-        $input = self::underscoreToPascalCase($input);
-
-        return lcfirst($input);
-    }
-
-    public static function uppercaseUnderscoreToCamelCase(string $input): string
-    {
-        $input = strtolower($input);
-        return self::underscoreToCamelCase($input);
     }
 
     /**

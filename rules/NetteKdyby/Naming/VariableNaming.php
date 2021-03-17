@@ -29,6 +29,7 @@ use Rector\Core\Util\StaticInstanceOf;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Stringy\Stringy;
 
 final class VariableNaming
 {
@@ -76,7 +77,8 @@ final class VariableNaming
             $variableName = lcfirst($shortClassName);
         }
 
-        return StaticRectorStrings::underscoreToCamelCase($variableName);
+        $stringy = new Stringy($variableName);
+        return (string) $stringy->camelize();
     }
 
     public function resolveFromNodeWithScopeCountAndFallbackName(
@@ -211,7 +213,8 @@ final class VariableNaming
                 $valueName = $this->nodeNameResolver->getName($arrayDimFetch->var);
                 $dimName = $this->valueResolver->getValue($arrayDimFetch->dim);
 
-                $dimName = StaticRectorStrings::underscoreToPascalCase($dimName);
+                $stringy = new Stringy($dimName);
+                $dimName = (string) $stringy->upperCamelize();
 
                 return $valueName . $dimName;
             }
