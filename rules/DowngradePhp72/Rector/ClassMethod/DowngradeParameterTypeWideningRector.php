@@ -98,6 +98,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->isMagic()) {
+            return null;
+        }
+
         if ($node->params === []) {
             return null;
         }
