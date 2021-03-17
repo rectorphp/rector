@@ -46,7 +46,7 @@ parameters:
     scanDirectories:
         - stubs
 
-#    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: false
     checkGenericClassInNonGenericObjectType: false
 
     excludes_analyse:
@@ -85,9 +85,7 @@ parameters:
 
         # mixed
         - '#Offset int\|string\|null does not exist on array<PhpParser\\Node\\Stmt>\|null#'
-        - '#class-string<T of object>\|T of object#'
 
-        - '#Method Rector\\Php80\\Rector\\NotIdentical\\StrContainsRector\:\:matchNotIdenticalToFalse\(\) should return PhpParser\\Node\\Expr\\FuncCall\|null but returns PhpParser\\Node\\Expr#'
 
         # broken
         - '#Parameter \#2 \$name of method Rector\\NodeNameResolver\\NodeNameResolver\:\:isName\(\) expects string, string\|null given#'
@@ -156,12 +154,8 @@ parameters:
         -
             message: '#Array (with keys|destruct) is not allowed\. Use value object to pass data instead#'
             paths:
-                # working with cvs file
                 # 3rd party package
                 - rules/Php70/EregToPcreTransformer.php
-                # template variables
-                # output format to json
-                - rules/Doctrine/Collector/UuidMigrationDataCollector.php
 
         -
             message: '#Use explicit return value over magic &reference#'
@@ -208,8 +202,6 @@ parameters:
             paths:
                 - packages/DoctrineAnnotationGenerated/PhpDocNode/ConstantReferenceIdentifierRestorer.php # 61
 
-        - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocInfo\\PhpDocInfo\\PhpDocInfoTest\:\:createPhpDocInfoFromFile\(\) should return Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo but returns Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\|null#'
-
         -
             message: '#"(getComments|getDocComment|setDocComment)\(\)" call on "PhpParser\\Node" type is not allowed#'
             paths:
@@ -248,9 +240,6 @@ parameters:
                 - src/Configuration/Configuration.php
                 # prevent circular dependnecy
                 - packages/StaticTypeMapper/Naming/NameScopeFactory.php
-
-        # class-string vs string
-        - '#Parameter \#1 \$expected of method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) expects class\-string<object\>, string given#'
 
         -
             message: '#Cannot cast array<string\>\|bool\|string\|null to string#'
@@ -329,7 +318,6 @@ parameters:
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             paths:
                 - rules/Defluent/ValueObject/*
-                - src/Rector/AbstractRector.php
 
         - '#Parameter \#1 \$keyName of method Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareArrayShapeItemNode\:\:createKeyWithSpacePattern\(\) expects PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null, PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null given#'
         - '#AttributeAwarePhpDocNode#'
@@ -381,7 +369,6 @@ parameters:
         # fixed in php-parser master
         - '#Method Rector\\Symfony\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
         - '#Parameter \#4 \$classWithConstants of class Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant constructor expects class\-string, string given#'
-        - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return T of PhpParser\\Node but returns PhpParser\\Node#'
 
         -
              message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\.#'
@@ -389,11 +376,6 @@ parameters:
                  - config/set/*
 
         - '#Class with base "FileNode" name is already used in "PHPStan\\Node\\FileNode", "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileNode"\. Use unique name to make classes easy to recognize#'
-
-        -
-            message: '#Class Rector\\RemovingStatic\\Tests\\Rector\\Property\\DesiredPropertyClassMethodTypeToDynamicRector\\Fixture\\StaticProperty not found#'
-            paths:
-                - rules/removing-static/tests/Rector/Property/DesiredPropertyClassMethodTypeToDynamicRector/config/some_config.php
 
         # buggy phpstan clas-string
         - '#Method (.*?) should return class\-string but returns string#'
@@ -462,7 +444,6 @@ parameters:
                 - packages/AttributeAwarePhpDoc/Ast/PhpDoc/AttributeAwareParamTagValueNode.php
 
         - '#Property Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap\:\:\$binaryOpToAssignClasses \(array<class\-string<PhpParser\\Node\\Expr\\BinaryOp\>, class\-string<PhpParser\\Node\\Expr\\BinaryOp\>\>\) does not accept array#'
-        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\RemovingStatic\\Rector\\Class_\\PassFactoryToUniqueObjectRector" class\. Use unique content or abstract service instead#'
 
         -
              message: '#Function "class_exists\(\)" cannot be used/left in the code#'
@@ -530,29 +511,9 @@ parameters:
         - '#Cognitive complexity for "Rector\\NetteCodeQuality\\FormControlTypeResolver\\MagicNetteFactoryInterfaceFormControlTypeResolver\:\:resolve\(\)" is 12, keep it under 9#'
         - '#Content of method "matchAssignExprToPropertyName\(\)" is duplicated with method "matchAssignExprToPropertyName\(\)" in "Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector" class\. Use unique content or abstract service instead#'
 
-        # make more tolerand, e.g. at least 2-3 lines
-        - '#Content of method "isConflicting\(\)" is duplicated with method "isConflicting\(\)" in "Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\UnderscoreCamelCaseConflictingNameGuard" class\. Use unique content or abstract service instead#'
+        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in (.*?) Use unique content or service instead#'
 
-
-        -
-            message: '#Offset 0 does not exist on array<PhpParser\\Node\\Stmt\>\|null#'
-            paths:
-                - rules/Naming/Naming/PropertyNaming.php
-
-        -
-            message: '#Use quoted string in constructor "new PHPStan\\Type\\ObjectType\(\)" argument on position 0 instead of "\:\:class\. It prevent scoping of the class in building prefixed package#'
-            paths:
-                - packages-tests/NodeTypeResolver
-
-        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in "Rector\\Composer\\Rector\\AddPackageToRequireComposerRector" class\. Use unique content or service instead#'
         - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer" class\. Use unique content or service instead#'
-
-        - '#PHPDoc tag @return with type PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_\|Rector\\Naming\\Matcher\\Closure\|null is not subtype of native type PhpParser\\Node\\FunctionLike\|null#'
-
-        -
-            message: '#Do not use "array_filter" function with complex content, make it more readable with extracted method or single\-line statement#'
-            paths:
-                - src/Application/ActiveRectorsProvider.php
 
         - '#Content of method "getIfNextReturn\(\)" is duplicated with method "getIfNextReturn\(\)" in "Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory" class\. Use unique content or service instead#'
         - '#Content of method "matchReturnMethodCall\(\)" is duplicated with method "matchReturnMethodCall\(\)" in "Rector\\Defluent\\Rector\\Return_\\ReturnFluentChainMethodCallToNormalMethodCallRector" class\. Use unique content or service instead#'
@@ -568,9 +529,6 @@ parameters:
         - '#Content of method "getNextExpression\(\)" is duplicated with method "getNextExpression\(\)" in "Rector\\CodingStyle\\Rector\\Assign\\ManualJsonStringToJsonEncodeArrayRector" class\. Use unique content or service instead#'
         - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\NodeTypeResolver\\NodeTypeResolver\\ParamTypeResolver" class\. Use unique content or service instead#'
 
-        # faking phpstan reflection in tests
-        - '#Parameter \#1 \$classReflection of class PHPStan\\Type\\ThisType constructor expects PHPStan\\Reflection\\ClassReflection\|string, ReflectionClass<Rector\\NodeTypeResolver\\Tests\\PerNodeTypeResolver\\VariableTypeResolver\\Fixture\\ThisClass\> given#'
-
         - '#Cognitive complexity for "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector\:\:refactor\(\)" is 10, keep it under 9#'
         - '#Parameter \#2 \$returnedStrictTypeNode of method Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector\:\:refactorSingleReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType, PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PHPStan\\Type\\UnionType given#'
         - '#Method Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeTrailingCommasInParamUseRector\:\:processUses\(\) should return PhpParser\\Node\\Expr\\Closure but returns PhpParser\\Node#'
@@ -582,11 +540,6 @@ parameters:
                  - packages/StaticTypeMapper/ValueObject/Type/FullyQualifiedGenericObjectType.php
 
         - '#(.*?) class\-string, string given#'
-
-        -
-            message: '#Strict comparison using \=\=\= between PHPStan\\Type\\Type and null will always evaluate to false#'
-            paths:
-                - packages/NodeTypeResolver/PHPStan/Type/TypeFactory.php
 
         -
             message: '#Do not use trait, extract to a service and dependency injection instead#'
@@ -610,8 +563,3 @@ parameters:
                 - '*NodeVisitor.php'
 
         - '#Class with base "NodeComparator" name is already used in "Symplify\\PHPStanRules\\Printer\\NodeComparator", "Rector\\Core\\PhpParser\\Comparing\\NodeComparator"\. Use unique name to make classes easy to recognize#'
-
-        -
-            message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
-            paths:
-                - packages/BetterPhpDocParser/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php
