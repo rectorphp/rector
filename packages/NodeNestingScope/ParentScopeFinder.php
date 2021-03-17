@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ParentScopeFinder
 {
@@ -30,10 +29,12 @@ final class ParentScopeFinder
      */
     public function find(Node $node): ?Node
     {
-        return $node->getAttribute(AttributeKey::CLOSURE_NODE) ??
-            $node->getAttribute(AttributeKey::FUNCTION_NODE) ??
-            $node->getAttribute(AttributeKey::METHOD_NODE) ??
-            $node->getAttribute(AttributeKey::CLASS_NODE) ??
-            $this->betterNodeFinder->findParentType($node, Namespace_::class);
+        return $this->betterNodeFinder->findParentTypes($node, [
+            Closure::class,
+            Function_::class,
+            ClassMethod::class,
+            Class_::class,
+            Namespace_::class,
+        ]);
     }
 }

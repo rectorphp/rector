@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -19,9 +20,15 @@ final class FunctionLikeFirstLevelStatementResolver
      */
     private $parentScopeFinder;
 
-    public function __construct(ParentScopeFinder $parentScopeFinder)
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    public function __construct(ParentScopeFinder $parentScopeFinder, BetterNodeFinder $betterNodeFinder)
     {
         $this->parentScopeFinder = $parentScopeFinder;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function resolveFirstLevelStatement(Node $node): Node
@@ -57,7 +64,7 @@ final class FunctionLikeFirstLevelStatementResolver
      */
     private function matchMultiplierClosure(Node $node): ?Closure
     {
-        $closure = $node->getAttribute(AttributeKey::CLOSURE_NODE);
+        $closure = $this->betterNodeFinder->findParentType($node, Closure::class);
         if (! $closure instanceof Closure) {
             return null;
         }

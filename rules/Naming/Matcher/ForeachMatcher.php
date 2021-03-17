@@ -10,9 +10,9 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\ValueObject\VariableAndCallForeach;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ForeachMatcher
 {
@@ -26,10 +26,19 @@ final class ForeachMatcher
      */
     private $callMatcher;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, CallMatcher $callMatcher)
-    {
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        CallMatcher $callMatcher,
+        BetterNodeFinder $betterNodeFinder
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callMatcher = $callMatcher;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function match(Foreach_ $foreach): ?VariableAndCallForeach
@@ -61,8 +70,9 @@ final class ForeachMatcher
      */
     private function getFunctionLike(Foreach_ $foreach): ?FunctionLike
     {
-        return $foreach->getAttribute(AttributeKey::CLOSURE_NODE) ??
-            $foreach->getAttribute(AttributeKey::METHOD_NODE) ??
-            $foreach->getAttribute(AttributeKey::FUNCTION_NODE);
+        return $this->betterNodeFinder->findParentTypes(
+            $foreach,
+            [Closure::class, ClassMethod::class, Function_::class]
+        );
     }
 }

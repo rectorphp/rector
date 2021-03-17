@@ -15,6 +15,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeCollector\StaticAnalyzer;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -46,7 +47,7 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
     private $reflectionProvider;
 
     /**
-     * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
+     * @var ParentClassScopeResolver
      */
     private $parentClassScopeResolver;
 
@@ -54,7 +55,7 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
         ClassMethodManipulator $classMethodManipulator,
         StaticAnalyzer $staticAnalyzer,
         ReflectionProvider $reflectionProvider,
-        \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver
+        ParentClassScopeResolver $parentClassScopeResolver
     ) {
         $this->classMethodManipulator = $classMethodManipulator;
         $this->staticAnalyzer = $staticAnalyzer;

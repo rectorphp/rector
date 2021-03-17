@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\ValueObject\VariableAndCallAssign;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class VariableAndCallAssignMatcher
 {
@@ -26,10 +26,19 @@ final class VariableAndCallAssignMatcher
      */
     private $nodeNameResolver;
 
-    public function __construct(CallMatcher $callMatcher, NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    public function __construct(
+        CallMatcher $callMatcher,
+        NodeNameResolver $nodeNameResolver,
+        BetterNodeFinder $betterNodeFinder
+    ) {
         $this->callMatcher = $callMatcher;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function match(Assign $assign): ?VariableAndCallAssign
@@ -61,8 +70,9 @@ final class VariableAndCallAssignMatcher
      */
     private function getFunctionLike(Assign $assign): ?FunctionLike
     {
-        return $assign->getAttribute(AttributeKey::CLOSURE_NODE) ??
-            $assign->getAttribute(AttributeKey::METHOD_NODE) ??
-            $assign->getAttribute(AttributeKey::FUNCTION_NODE);
+        return $this->betterNodeFinder->findParentTypes(
+            $assign,
+            [Closure::class, ClassMethod::class, Function_::class]
+        );
     }
 }

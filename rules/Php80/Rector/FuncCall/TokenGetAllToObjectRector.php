@@ -108,15 +108,17 @@ CODE_SAMPLE
             return;
         }
 
-        $classMethodOrFunctionNode = $funcCall->getAttribute(AttributeKey::METHOD_NODE) ?:
-            $funcCall->getAttribute(AttributeKey::FUNCTION_NODE);
-
-        if ($classMethodOrFunctionNode === null) {
+        /** @var ClassMethod|Function_|null $classMethodOrFunction */
+        $classMethodOrFunction = $this->betterNodeFinder->findParentTypes(
+            $funcCall,
+            [ClassMethod::class, Function_::class]
+        );
+        if ($classMethodOrFunction === null) {
             return;
         }
 
         // dummy approach, improve when needed
-        $this->replaceGetNameOrGetValue($classMethodOrFunctionNode, $assign->var);
+        $this->replaceGetNameOrGetValue($classMethodOrFunction, $assign->var);
     }
 
     /**

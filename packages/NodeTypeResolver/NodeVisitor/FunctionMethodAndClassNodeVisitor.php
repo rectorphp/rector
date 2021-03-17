@@ -74,8 +74,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     {
         $this->processClass($node);
         $this->processMethod($node);
-        $this->processFunction($node);
-        $this->processClosure($node);
 
         return $node;
     }
@@ -121,24 +119,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
 
         $node->setAttribute(AttributeKey::METHOD_NAME, $this->methodName);
         $node->setAttribute(AttributeKey::METHOD_NODE, $this->classMethod);
-    }
-
-    private function processFunction(Node $node): void
-    {
-        if ($node instanceof Function_) {
-            $this->function = $node;
-        }
-
-        $node->setAttribute(AttributeKey::FUNCTION_NODE, $this->function);
-    }
-
-    private function processClosure(Node $node): void
-    {
-        if ($node instanceof Closure) {
-            $this->closure = $node;
-        }
-
-        $node->setAttribute(AttributeKey::CLOSURE_NODE, $this->closure);
     }
 
     private function setClassNodeAndName(?ClassLike $classLike): void

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\Node;
 
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\Scope;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -46,11 +45,6 @@ final class AttributeKey
      * @var string
      */
     public const METHOD_NODE = 'methodNode';
-
-    /**
-     * @var string
-     */
-    public const FUNCTION_NODE = 'functionNode';
 
     /**
      * Internal php-parser name.
@@ -169,11 +163,6 @@ final class AttributeKey
      * @var string
      */
     public const DO_NOT_CHANGE = 'do_not_change';
-
-    /**
-     * @var string
-     */
-    public const CLOSURE_NODE = Closure::class;
 
     /**
      * @var string

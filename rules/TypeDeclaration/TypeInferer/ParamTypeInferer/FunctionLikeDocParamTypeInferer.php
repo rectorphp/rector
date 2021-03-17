@@ -6,11 +6,13 @@ namespace Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 
 final class FunctionLikeDocParamTypeInferer implements ParamTypeInfererInterface
@@ -25,10 +27,19 @@ final class FunctionLikeDocParamTypeInferer implements ParamTypeInfererInterface
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory)
-    {
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        PhpDocInfoFactory $phpDocInfoFactory,
+        BetterNodeFinder $betterNodeFinder
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function inferParam(Param $param): Type
@@ -50,7 +61,7 @@ final class FunctionLikeDocParamTypeInferer implements ParamTypeInfererInterface
 
     private function resolveScopeNode(Param $param): ?FunctionLike
     {
-        return $param->getAttribute(AttributeKey::METHOD_NODE) ?? $param->getAttribute(AttributeKey::FUNCTION_NODE);
+        return $this->betterNodeFinder->findParentTypes($param, [ClassMethod::class, Function_::class]);
     }
 
     /**

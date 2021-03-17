@@ -70,8 +70,7 @@ final class InvertedIfFactory
 
     private function getNextReturnExpr(If_ $if): ?Node
     {
-        /** @var Closure|null $closure */
-        $closure = $if->getAttribute(AttributeKey::CLOSURE_NODE);
+        $closure = $this->betterNodeFinder->findParentType($if, Closure::class);
         if ($closure instanceof Closure) {
             return null;
         }
