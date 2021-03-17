@@ -46,24 +46,34 @@ final class DowngradePathsCommand extends Command
         $downgradePaths = array_values($downgradePaths);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         $rulesPaths = $this->resolveRulesPaths();
         $downgradePaths = array_merge($downgradePaths, $rulesPaths);
 
         // make symplify grouped into 1 directory, to make covariance downgrade work with all dependent classes
 =======
         $downgradePaths[] = 'src';
+=======
+>>>>>>> 3086e35f6a... update for covariance
         $downgradePaths[] = 'packages';
 
         $rulesPaths = $this->resolveRulesPaths();
         $downgradePaths = array_merge($downgradePaths, $rulesPaths);
 
+<<<<<<< HEAD
         // make symplify grouped into 1 directory, small enough
 >>>>>>> cbf451db2b... add test case stub
+=======
+        // make symplify grouped into 1 directory, to make covariance downgrade work with all dependent classes
+>>>>>>> 3086e35f6a... update for covariance
         foreach ($downgradePaths as $key => $downgradePath) {
             if (Strings::startsWith($downgradePath, 'vendor/symplify')) {
                 unset($downgradePaths[$key]);
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3086e35f6a... update for covariance
 
             if (Strings::startsWith($downgradePath, 'vendor/symfony')) {
                 unset($downgradePaths[$key]);
@@ -76,6 +86,7 @@ final class DowngradePathsCommand extends Command
             if (Strings::startsWith($downgradePath, 'vendor/psr')) {
                 unset($downgradePaths[$key]);
             }
+<<<<<<< HEAD
         }
 
         $downgradePaths = array_merge(['vendor/symplify vendor/symfony vendor/psr vendor/nikic src packages'],
@@ -86,14 +97,20 @@ final class DowngradePathsCommand extends Command
         // bash format
         $downgradePathsLine = implode(';', $downgradePaths);
 =======
+=======
+>>>>>>> 3086e35f6a... update for covariance
         }
 
-        $downgradePaths = array_merge(['vendor/symplify'], $downgradePaths);
+        $downgradePaths = array_merge(['vendor/symplify vendor/symfony vendor/psr vendor/nikic src'], $downgradePaths);
         $downgradePaths = array_values($downgradePaths);
 
         // bash format
+<<<<<<< HEAD
         $downgradePathsLine = implode(' ', $downgradePaths);
 >>>>>>> cbf451db2b... add test case stub
+=======
+        $downgradePathsLine = implode(';', $downgradePaths);
+>>>>>>> 3086e35f6a... update for covariance
         echo $downgradePathsLine . PHP_EOL;
 
         return ShellCode::SUCCESS;

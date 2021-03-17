@@ -199,7 +199,6 @@ final class ProcessCommand extends Command
         $this->configuration->validateConfigParameters();
 
         $paths = $this->configuration->getPaths();
-
         $phpFileInfos = $this->phpFilesFinder->findInPaths($paths);
 
         $this->additionalAutoloader->autoloadWithInputAndSource($input);

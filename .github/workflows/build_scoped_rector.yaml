@@ -67,7 +67,7 @@ jobs:
                     user-name: "kaizen-ci"
                     user-email: "info@kaizen-ci.org"
 
-            # 7. publish it to remote repository without tag
+            # 7. publish it to remote repository with tag
             -
                 uses: symplify/github-action-monorepo-split@1.1
                 if: "startsWith(github.ref, 'refs/tags/')"
