@@ -35,14 +35,11 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.4
-                    coverage: xdebug
+                    coverage: none
 
+            -   uses: "ramsey/composer-install@v1"
 
-            -
-                run: composer install --no-progress --ansi
-
-            -
-                run: ${{ matrix.actions.run }}
+            -   run: ${{ matrix.actions.run }}
 
             # see https://github.com/peter-evans/create-pull-request
             -
@@ -51,7 +48,7 @@ jobs:
                 with:
                     token: ${{ secrets.GITHUB_TOKEN }}
                     commit-message: "[automated] ${{ matrix.actions.name }}"
-                    base: 'master'
+                    base: 'main'
                     branch: ${{ matrix.actions.branch }}
                     title: '[automated] ${{ matrix.actions.name }}'
                     delete-branch: true

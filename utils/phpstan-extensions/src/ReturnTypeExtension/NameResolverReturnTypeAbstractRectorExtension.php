@@ -12,7 +12,7 @@ use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Rector\AbstractTemporaryRector;
-use Rector\PHPStanExtensions\TypeResolver\MethodCallTypeResolver;
+use Rector\PHPStanExtensions\TypeResolver\GetNameMethodCallTypeResolver;
 
 /**
  * @see AbstractTemporaryRector::getName()
@@ -22,11 +22,11 @@ use Rector\PHPStanExtensions\TypeResolver\MethodCallTypeResolver;
 final class NameResolverReturnTypeAbstractRectorExtension implements DynamicMethodReturnTypeExtension
 {
     /**
-     * @var MethodCallTypeResolver
+     * @var GetNameMethodCallTypeResolver
      */
     private $methodCallTypeResolver;
 
-    public function __construct(MethodCallTypeResolver $methodCallTypeResolver)
+    public function __construct(GetNameMethodCallTypeResolver $methodCallTypeResolver)
     {
         $this->methodCallTypeResolver = $methodCallTypeResolver;
     }

@@ -6,7 +6,6 @@ namespace Rector\Core\Application;
 
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use Rector\RectorGenerator\Contract\InternalRectorInterface;
 use Symplify\Skipper\Skipper\Skipper;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -63,14 +62,15 @@ final class ActiveRectorsProvider
     {
         sort($rectors);
 
-        return array_filter($rectors, function (RectorInterface $rector): bool {
-            // utils rules
-            if ($rector instanceof InternalRectorInterface) {
-                return false;
-            }
-
+        $rectors = array_filter($rectors, function (RectorInterface $rector): bool {
             // skip as internal and always run
             return ! $rector instanceof PostRectorInterface;
         });
+
+        usort($rectors, function (RectorInterface $firstRector, RectorInterface $secondRector): int {
+            return get_class($firstRector) <=> get_class($secondRector);
+        });
+
+        return $rectors;
     }
 }

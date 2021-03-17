@@ -131,7 +131,7 @@ CODE_SAMPLE
         $arguments = [$identifierVariable, $resolvedVariable];
         $staticCall = $this->nodeFactory->createStaticCall(
             ResolvedConstantStaticCollector::class,
-            'collects',
+            'collect',
             $arguments
         );
 

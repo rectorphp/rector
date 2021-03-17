@@ -116,7 +116,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository',
             ],
         ]]);
-
-    $services->set(RemoveRepositoryFromEntityAnnotationRector::class);
-    $services->set(ReplaceParentRepositoryCallsByRepositoryPropertyRector::class);
 };

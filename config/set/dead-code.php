@@ -10,7 +10,6 @@ use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
 use Rector\DeadCode\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector;
 use Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector;
 use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
-use Rector\DeadCode\Rector\Class_\RemoveEmptyAbstractClassRector;
 use Rector\DeadCode\Rector\Class_\RemoveUnusedDoctrineEntityMethodAndPropertyRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector;
@@ -48,6 +47,9 @@ use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 use Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
 use Rector\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector;
 use Rector\DeadCode\Rector\TryCatch\RemoveDeadTryCatchRector;
+use Rector\DeadDocBlock\Rector\ClassMethod\RemoveUselessParamTagRector;
+use Rector\DeadDocBlock\Rector\ClassMethod\RemoveUselessReturnTagRector;
+use Rector\DeadDocBlock\Rector\Node\RemoveNonExistingVarAnnotationRector;
 use Rector\PHPUnit\Rector\ClassMethod\RemoveEmptyTestMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -98,6 +100,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveDeadConditionAboveReturnRector::class);
     $services->set(RemoveUnusedConstructorParamRector::class);
     $services->set(RemoveDeadInstanceOfRector::class);
-    $services->set(RemoveEmptyAbstractClassRector::class);
     $services->set(RemoveDeadLoopRector::class);
+
+    // docblock
+    $services->set(RemoveUselessParamTagRector::class);
+    $services->set(RemoveUselessReturnTagRector::class);
+    $services->set(RemoveNonExistingVarAnnotationRector::class);
 };

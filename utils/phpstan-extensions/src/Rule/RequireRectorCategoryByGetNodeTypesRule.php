@@ -24,6 +24,16 @@ final class RequireRectorCategoryByGetNodeTypesRule implements Rule
      */
     public const ERROR_MESSAGE = 'Class "%s" has invalid namespace category "%s". Pick one of: "%s"';
 
+    /**
+     * @var NodeFinder
+     */
+    private $nodeFinder;
+
+    public function __construct(NodeFinder $nodeFinder)
+    {
+        $this->nodeFinder = $nodeFinder;
+    }
+
     public function getNodeType(): string
     {
         return ClassMethod::class;
@@ -97,10 +107,8 @@ final class RequireRectorCategoryByGetNodeTypesRule implements Rule
      */
     private function resolveAllowedNodeCategories(ClassMethod $classMethod): array
     {
-        $nodeFinder = new NodeFinder();
-
         /** @var ClassConstFetch[] $classConstFetches */
-        $classConstFetches = $nodeFinder->findInstanceOf((array) $classMethod->stmts, ClassConstFetch::class);
+        $classConstFetches = $this->nodeFinder->findInstanceOf((array) $classMethod->stmts, ClassConstFetch::class);
         $allowedRectorCategories = [];
 
         foreach ($classConstFetches as $classConstFetch) {
