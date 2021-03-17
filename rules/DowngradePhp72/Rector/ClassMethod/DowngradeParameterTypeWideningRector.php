@@ -10,9 +10,9 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DowngradePhp72\NodeAnalyzer\ClassLikeParentResolver;
 use Rector\DowngradePhp72\NodeAnalyzer\NativeTypeClassTreeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -33,11 +33,6 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
     private $phpDocTypeChanger;
 
     /**
-     * @var ClassLikeParentResolver
-     */
-    private $classLikeParentResolver;
-
-    /**
      * @var NativeTypeClassTreeResolver
      */
     private $nativeTypeClassTreeResolver;
@@ -49,12 +44,10 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
 
     public function __construct(
         PhpDocTypeChanger $phpDocTypeChanger,
-        ClassLikeParentResolver $classLikeParentResolver,
         NativeTypeClassTreeResolver $nativeTypeClassTreeResolver,
         TypeFactory $typeFactory
     ) {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->classLikeParentResolver = $classLikeParentResolver;
         $this->nativeTypeClassTreeResolver = $nativeTypeClassTreeResolver;
         $this->typeFactory = $typeFactory;
     }
@@ -109,7 +102,7 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($node->params as $position => $param) {
+        foreach (array_keys($node->params) as $position) {
             $this->refactorParamForSelfAndSiblings($node, (int) $position);
         }
 
@@ -119,9 +112,9 @@ CODE_SAMPLE
     /**
      * The topmost class is the source of truth, so we go only down to avoid up/down collission
      */
-    private function refactorParamForSelfAndSiblings(ClassMethod $functionLike, int $position): void
+    private function refactorParamForSelfAndSiblings(ClassMethod $classMethod, int $position): void
     {
-        $scope = $functionLike->getAttribute(AttributeKey::SCOPE);
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             // possibly trait
             return;
@@ -137,7 +130,7 @@ CODE_SAMPLE
         }
 
         /** @var string $methodName */
-        $methodName = $this->nodeNameResolver->getName($functionLike);
+        $methodName = $this->nodeNameResolver->getName($classMethod);
 
         // Remove the types in:
         // - all ancestors + their descendant classes
@@ -230,7 +223,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return array<class-string, \PHPStan\Type\Type>
+     * @return array<class-string, Type>
      */
     private function resolveParameterTypesByClassLike(
         ClassReflection $classReflection,
@@ -258,7 +251,7 @@ CODE_SAMPLE
     ): void {
         foreach ($classReflection->getAncestors() as $ancestorClassRelection) {
             $classLike = $this->nodeRepository->findClassLike($ancestorClassRelection->getName());
-            if ($classLike === null) {
+            if (! $classLike instanceof ClassLike) {
                 continue;
             }
 

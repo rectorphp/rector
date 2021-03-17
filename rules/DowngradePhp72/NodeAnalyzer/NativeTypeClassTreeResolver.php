@@ -48,8 +48,8 @@ final class NativeTypeClassTreeResolver
             return new MixedType();
         }
 
-        $nativeMethodReflection = $nativeReflectionClass->getMethod($methodName);
-        $parameterReflection = $nativeMethodReflection->getParameters()[$position] ?? null;
+        $reflectionMethod = $nativeReflectionClass->getMethod($methodName);
+        $parameterReflection = $reflectionMethod->getParameters()[$position] ?? null;
         if ($parameterReflection === null) {
             return new MixedType();
         }
@@ -88,14 +88,14 @@ final class NativeTypeClassTreeResolver
         throw new NotImplementedYetException();
     }
 
-    private function resolveNativeType(\ReflectionParameter $parameterReflection): Type
+    private function resolveNativeType(\ReflectionParameter $reflectionParameter): Type
     {
-        if (! $parameterReflection instanceof ReflectionParameter) {
+        if (! $reflectionParameter instanceof ReflectionParameter) {
             return new MixedType();
         }
 
         $betterReflectionParameter = $this->privatesAccessor->getPrivateProperty(
-            $parameterReflection,
+            $reflectionParameter,
             'betterReflectionParameter'
         );
 
