@@ -83,27 +83,27 @@ CODE_SAMPLE
 
     private function prepareFlags(bool $currentValue): BitwiseOr
     {
-        $classConstFetch = $this->nodeFactory->createClassConstFetch(
+        $magicGetClassConstFetch = $this->nodeFactory->createClassConstFetch(
             'Symfony\Component\PropertyAccess\PropertyAccessor',
             'MAGIC_GET'
         );
-        $magicSet = $this->nodeFactory->createClassConstFetch(
+
+        $magicSetClassConstFetch = $this->nodeFactory->createClassConstFetch(
             'Symfony\Component\PropertyAccess\PropertyAccessor',
             'MAGIC_SET'
         );
+
         if (! $currentValue) {
-            return new BitwiseOr($classConstFetch, $magicSet);
+            return new BitwiseOr($magicGetClassConstFetch, $magicSetClassConstFetch);
         }
 
-        return new BitwiseOr(
-            new BitwiseOr(
-                $this->nodeFactory->createClassConstFetch(
-                    'Symfony\Component\PropertyAccess\PropertyAccessor',
-                    'MAGIC_CALL'
-                ),
-                $classConstFetch,
-            ),
-            $magicSet,
+        $magicCallClassConstFetch = $this->nodeFactory->createClassConstFetch(
+            'Symfony\Component\PropertyAccess\PropertyAccessor',
+            'MAGIC_CALL'
+        );
+
+        return new BitwiseOr(new BitwiseOr(
+            $magicCallClassConstFetch, $magicGetClassConstFetch), $magicSetClassConstFetch
         );
     }
 }
