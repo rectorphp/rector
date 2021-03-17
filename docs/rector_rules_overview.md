@@ -72,7 +72,7 @@
 
 - [PHPOffice](#phpoffice) (14)
 
-- [PHPUnit](#phpunit) (38)
+- [PHPUnit](#phpunit) (39)
 
 - [PSR4](#psr4) (2)
 
@@ -9181,6 +9181,21 @@ Turns getMock*() methods to `createMock()`
 
 <br>
 
+### MigrateAtToConsecutiveExpectationRector
+
+Migrates deprecated `$this->expects($this->at(n))` expectations to `withConsecutive` and `willReturnOnConsecutiveCalls`
+
+- class: [`Rector\PHPUnit\Rector\ClassMethod\MigrateAtToConsecutiveExpectationsRector`](../rules/PHPUnit/Rector/ClassMethod/MigrateAtToConsecutiveExpectationsRector.php)
+
+```diff
+$mock = $this->createMock(Foo::class);
+-$mock->expects($this->at(0))->with('0')->method('someMethod')->willReturn('1');
+-$mock->expects($this->at(1))->with('1')->method('someMethod')->willReturn('2');
++$mock->method('someMethod')->withConsecutive(['0'], ['1'])->willReturnOnConsecutiveCalls('1', '2');
+```
+
+<br>
+
 ### RemoveDataProviderTestPrefixRector
 
 Data provider methods cannot start with "test" prefix
@@ -15068,7 +15083,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MergeInterfacesRector::OLD_TO_NEW_INTERFACES => [
                 'SomeOldInterface' => 'SomeInterface',
-                
+
             ], ]]);
 };
 ```
@@ -15139,7 +15154,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToPropertyFetchRector::METHOD_CALL_TO_PROPERTY_FETCHES => [
                 'someMethod' => 'someProperty',
-                
+
             ], ]]);
 };
 ```
@@ -15178,7 +15193,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToReturnRector::METHOD_CALL_WRAPS => [
                 'SomeClass' => ['deny'],
-                
+
             ], ]]);
 };
 ```
@@ -15470,7 +15485,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ParentClassToTraitsRector::PARENT_CLASS_TO_TRAITS => [
                 'Nette\Object' => ['Nette\SmartObject'],
-                
+
             ], ]]);
 };
 ```
@@ -15942,7 +15957,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ToStringToMethodCallRector::METHOD_NAMES_BY_TYPE => [
                 'SomeObject' => 'getPath',
-                
+
             ], ]]);
 };
 ```
@@ -16671,8 +16686,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ChangePropertyVisibilityRector::PROPERTY_TO_VISIBILITY_BY_CLASS => [
                 'FrameworkClass' => [
                     'someProperty' => 2,
-                    
-                    
+
+
                 ], ], ]]);
 };
 ```
