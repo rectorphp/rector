@@ -37,6 +37,9 @@ final class TestClassResolverTest extends AbstractKernelTestCase
         $this->assertSame($expectedTestClass, $testClass);
     }
 
+    /**
+     * @return Iterator<mixed>
+     */
     public function provideData(): Iterator
     {
         yield [SeeSomeClass::class, SeeSomeClassTest::class];

@@ -26,6 +26,9 @@ final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractRec
         }
     }
 
+    /**
+     * @return Iterator<mixed>
+     */
     public function provideData(): Iterator
     {
         $smartFileSystem = new SmartFileSystem();

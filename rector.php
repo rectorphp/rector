@@ -69,6 +69,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::SKIP, [
         StringClassNameToClassConstantRector::class,
+        // some classes in config might not exist without dev dependencies
         SplitStringClassConstantToClassConstFetchRector::class,
 
         PrivatizeLocalPropertyToPrivatePropertyRector::class => [__DIR__ . '/src/Rector/AbstractRector.php'],

@@ -7,11 +7,10 @@ namespace Rector\Core\Console;
 use Composer\XdebugHandler\XdebugHandler;
 use OutOfBoundsException;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Core\Bootstrap\NoRectorsLoadedReporter;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Console\Command\ProcessCommand;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
-use Rector\Core\Exception\NoRectorsLoadedException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -19,7 +18,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
-use Throwable;
 
 final class ConsoleApplication extends Application
 {
@@ -29,19 +27,10 @@ final class ConsoleApplication extends Application
     private const NAME = 'Rector';
 
     /**
-     * @var NoRectorsLoadedReporter
-     */
-    private $noRectorsLoadedReporter;
-
-    /**
      * @param Command[] $commands
      */
-    public function __construct(
-        Configuration $configuration,
-        NoRectorsLoadedReporter $noRectorsLoadedReporter,
-        CommandNaming $commandNaming,
-        array $commands = []
-    ) {
+    public function __construct(Configuration $configuration, CommandNaming $commandNaming, array $commands = [])
+    {
         try {
             $version = $configuration->getPrettyVersion();
         } catch (OutOfBoundsException $outOfBoundsException) {
@@ -56,9 +45,7 @@ final class ConsoleApplication extends Application
         }
 
         $this->addCommands($commands);
-        $this->noRectorsLoadedReporter = $noRectorsLoadedReporter;
-
-        $this->setDefaultCommand('process');
+        $this->setDefaultCommand(CommandNaming::classToName(ProcessCommand::class));
     }
 
     public function doRun(InputInterface $input, OutputInterface $output): int
@@ -92,16 +79,6 @@ final class ConsoleApplication extends Application
         }
 
         return parent::doRun($input, $output);
-    }
-
-    public function renderThrowable(Throwable $throwable, OutputInterface $output): void
-    {
-        if (is_a($throwable, NoRectorsLoadedException::class)) {
-            $this->noRectorsLoadedReporter->report();
-            return;
-        }
-
-        parent::renderThrowable($throwable, $output);
     }
 
     protected function getDefaultInputDefinition(): InputDefinition

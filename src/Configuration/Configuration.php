@@ -8,7 +8,6 @@ use Jean85\PrettyVersions;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
-use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -24,11 +23,6 @@ final class Configuration
      * @var bool
      */
     private $showProgressBar = true;
-
-    /**
-     * @var bool
-     */
-    private $areAnyPhpRectorsLoaded = false;
 
     /**
      * @var bool
@@ -144,20 +138,6 @@ final class Configuration
         }
 
         return $this->showProgressBar;
-    }
-
-    public function areAnyPhpRectorsLoaded(): bool
-    {
-        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            return true;
-        }
-
-        return $this->areAnyPhpRectorsLoaded;
-    }
-
-    public function setAreAnyPhpRectorsLoaded(bool $areAnyPhpRectorsLoaded): void
-    {
-        $this->areAnyPhpRectorsLoaded = $areAnyPhpRectorsLoaded;
     }
 
     public function getOutputFile(): ?string

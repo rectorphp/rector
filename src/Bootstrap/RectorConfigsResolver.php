@@ -77,6 +77,13 @@ final class RectorConfigsResolver
             }
         }
 
+        // load config only if "sync" command is used to avoid useless rules traversing
+        if ($argvInput->getFirstArgument() === 'sync-annotation-parser') {
+            $configFileInfos[] = new SmartFileInfo(
+                __DIR__ . '/../../utils/doctrine-annotation-parser-syncer/config/config.php'
+            );
+        }
+
         return new BootstrapConfigs($mainConfigFileInfo, $configFileInfos);
     }
 }

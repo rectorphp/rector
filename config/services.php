@@ -24,7 +24,6 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\Caching\Cache\Adapter\FilesystemAdapterFactory;
-use Rector\Core\Bootstrap\NoRectorsLoadedReporter;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
@@ -78,7 +77,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FileSystemGuard::class);
 
-    $services->set(NoRectorsLoadedReporter::class);
     $services->set(SimpleCallableNodeTraverser::class);
 
     $services->set(ParserFactory::class);
