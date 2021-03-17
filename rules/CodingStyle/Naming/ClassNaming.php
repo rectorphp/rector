@@ -9,7 +9,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Function_;
-use Rector\Core\Util\StaticRectorStrings;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Stringy\Stringy;
 use Symplify\SmartFileSystem\SmartFileInfo;

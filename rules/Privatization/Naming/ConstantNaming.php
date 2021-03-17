@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Privatization\Naming;
 
 use PhpParser\Node\Stmt\PropertyProperty;
-use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Stringy\Stringy;
 
@@ -26,6 +25,7 @@ final class ConstantNaming
         $propertyName = $this->nodeNameResolver->getName($propertyProperty);
 
         $stringy = new Stringy($propertyName);
-        return (string) $stringy->underscored()->toUpperCase();
+        return (string) $stringy->underscored()
+            ->toUpperCase();
     }
 }

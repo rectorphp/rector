@@ -7,8 +7,8 @@ namespace Rector\Symfony;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\Util\StaticRectorStrings;
 use Rector\Symfony\ValueObject\ConstantNameAndValue;
+use Stringy\Stringy;
 
 final class ConstantNameAndValueMatcher
 {
@@ -33,7 +33,9 @@ final class ConstantNameAndValueMatcher
             return null;
         }
 
-        $constantName = StaticRectorStrings::camelCaseToConstant($argumentValue);
+        $stringy = new Stringy($argumentValue);
+        $constantName = (string) $stringy->underscored()
+            ->toUpperCase();
 
         if (! ctype_alpha($constantName[0])) {
             $constantName = $prefixForNumeric . $constantName;

@@ -13,8 +13,8 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -89,7 +89,9 @@ CODE_SAMPLE
             $shortClassName = (string) Strings::before($shortClassName, 'Type');
         }
 
-        $underscoredClassShortName = StaticRectorStrings::camelCaseToUnderscore($shortClassName);
+        $stringy = new Stringy($shortClassName);
+        $underscoredClassShortName = (string) $stringy->underscored();
+
         if ($underscoredClassShortName !== $returnedValue) {
             return null;
         }

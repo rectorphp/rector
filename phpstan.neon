@@ -563,3 +563,16 @@ parameters:
                 - '*NodeVisitor.php'
 
         - '#Class with base "NodeComparator" name is already used in "Symplify\\PHPStanRules\\Printer\\NodeComparator", "Rector\\Core\\PhpParser\\Comparing\\NodeComparator"\. Use unique name to make classes easy to recognize#'
+
+        -
+            message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
+            paths:
+                - packages/BetterPhpDocParser/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php
+
+        # @todo fix in symplify
+        -
+            message: '#Do not use chained method calls\. Put each on separated lines#'
+            paths:
+                - rules/Symfony/ConstantNameAndValueMatcher.php
+                - rules/Privatization/Rector/Class_/ChangeReadOnlyVariableWithDefaultValueToConstantRector.php
+                - rules/Privatization/Naming/ConstantNaming.php

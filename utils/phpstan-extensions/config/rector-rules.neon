@@ -1,5 +1,12 @@
 services:
     -
+        class: Symplify\PHPStanRules\ObjectCalisthenics\Rules\NoChainMethodCallRule
+        tags: [phpstan.rules.rule]
+        arguments:
+            allowedChainTypes:
+                - Stringy\Stringy
+
+    -
         class: Symplify\PHPStanRules\Rules\NoInheritanceRule
         tags: [phpstan.rules.rule]
         arguments:

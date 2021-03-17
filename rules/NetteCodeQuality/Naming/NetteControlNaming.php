@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NetteCodeQuality\Naming;
 
 use Nette\Utils\Strings;
-use Rector\Core\Util\StaticRectorStrings;
 use Stringy\Stringy;
 
 final class NetteControlNaming
