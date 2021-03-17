@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ThisType;
 use Rector\Core\Rector\AbstractRector;
@@ -89,7 +90,7 @@ CODE_SAMPLE
             $classReflection = $scope->getClassReflection();
         }
 
-        if ($classReflection === null) {
+        if (! $classReflection instanceof ClassReflection) {
             return null;
         }
 

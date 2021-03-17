@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -35,10 +36,19 @@ final class PhpSpecRenaming
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, StringFormatConverter $stringFormatConverter)
-    {
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        StringFormatConverter $stringFormatConverter,
+        BetterNodeFinder $betterNodeFinder
+    ) {
         $this->stringFormatConverter = $stringFormatConverter;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function renameMethod(ClassMethod $classMethod): void
@@ -68,7 +78,7 @@ final class PhpSpecRenaming
 
     public function renameNamespace(Class_ $class): void
     {
-        $namespace = $class->getAttribute(AttributeKey::NAMESPACE_NODE);
+        $namespace = $this->betterNodeFinder->findParentType($class, Namespace_::class);
         if (! $namespace instanceof Namespace_) {
             return;
         }

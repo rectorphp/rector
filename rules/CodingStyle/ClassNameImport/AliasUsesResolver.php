@@ -7,7 +7,7 @@ namespace Rector\CodingStyle\ClassNameImport;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 
 final class AliasUsesResolver
 {
@@ -16,9 +16,15 @@ final class AliasUsesResolver
      */
     private $useImportsTraverser;
 
-    public function __construct(UseImportsTraverser $useImportsTraverser)
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    public function __construct(UseImportsTraverser $useImportsTraverser, BetterNodeFinder $betterNodeFinder)
     {
         $this->useImportsTraverser = $useImportsTraverser;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**
@@ -27,7 +33,7 @@ final class AliasUsesResolver
     public function resolveForNode(Node $node): array
     {
         if (! $node instanceof Namespace_) {
-            $node = $node->getAttribute(AttributeKey::NAMESPACE_NODE);
+            $node = $this->betterNodeFinder->findParentType($node, Namespace_::class);
         }
 
         if ($node instanceof Namespace_) {

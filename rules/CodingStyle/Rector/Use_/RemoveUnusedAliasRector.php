@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\Rector\Use_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Naming\NameRenamer;
@@ -159,7 +160,7 @@ CODE_SAMPLE
     private function shouldSkipUse(Use_ $use): bool
     {
         // skip cases without namespace, problematic to analyse
-        $namespace = $use->getAttribute(AttributeKey::NAMESPACE_NODE);
+        $namespace = $this->betterNodeFinder->findParentType($use, Namespace_::class);
         if ($namespace === null) {
             return true;
         }
