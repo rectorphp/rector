@@ -46,7 +46,7 @@ parameters:
     scanDirectories:
         - stubs
 
-    reportUnmatchedIgnoredErrors: false
+#    reportUnmatchedIgnoredErrors: false
     checkGenericClassInNonGenericObjectType: false
 
     excludes_analyse:
@@ -352,13 +352,16 @@ parameters:
                 - bin/rector.php
                 - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
 
-        # @todo fix later
         -
-            message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
+            message: '#Function "class_exists\(\)" cannot be used/left in the code#'
             paths:
-                - rules/Naming/Guard/PropertyConflictingNameGuard/AbstractPropertyConflictingNameGuard.php
-                - rules/Naming/PropertyRenamer/AbstractPropertyRenamer.php
+                - bin/rector.php
 
+        -
+            message: '#Do not use static property#'
+            path: 'bin/rector.php'
+
+        # @todo fix later
         -
             message: '#There should be no empty class#'
             paths:

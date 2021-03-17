@@ -28,6 +28,9 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
         $this->assertFilesWereAdded($expectedFilePathsWithContents);
     }
 
+    /**
+     * @return Iterator<mixed>
+     */
     public function provideData(): Iterator
     {
         $smartFileSystem = new SmartFileSystem();

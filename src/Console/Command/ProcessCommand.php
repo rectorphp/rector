@@ -16,9 +16,9 @@ use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\FileSystem\PhpFilesFinder;
-use Rector\Core\Guard\RectorGuard;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
+use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -40,11 +40,6 @@ final class ProcessCommand extends Command
      * @var AdditionalAutoloader
      */
     private $additionalAutoloader;
-
-    /**
-     * @var RectorGuard
-     */
-    private $rectorGuard;
 
     /**
      * @var ErrorAndDiffCollector
@@ -96,6 +91,11 @@ final class ProcessCommand extends Command
      */
     private $changedFilesDetector;
 
+    /**
+     * @var MissingRectorRulesReporter
+     */
+    private $missingRectorRulesReporter;
+
     public function __construct(
         AdditionalAutoloader $additionalAutoloader,
         ChangedFilesDetector $changedFilesDetector,
@@ -105,15 +105,14 @@ final class ProcessCommand extends Command
         NonPhpFileProcessor $nonPhpFileProcessor,
         OutputFormatterCollector $outputFormatterCollector,
         RectorApplication $rectorApplication,
-        RectorGuard $rectorGuard,
         RectorNodeTraverser $rectorNodeTraverser,
         SymfonyStyle $symfonyStyle,
         ComposerProcessor $composerProcessor,
-        PhpFilesFinder $phpFilesFinder
+        PhpFilesFinder $phpFilesFinder,
+        MissingRectorRulesReporter $missingRectorRulesReporter
     ) {
         $this->filesFinder = $filesFinder;
         $this->additionalAutoloader = $additionalAutoloader;
-        $this->rectorGuard = $rectorGuard;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->configuration = $configuration;
         $this->rectorApplication = $rectorApplication;
@@ -124,6 +123,7 @@ final class ProcessCommand extends Command
         $this->symfonyStyle = $symfonyStyle;
         $this->composerProcessor = $composerProcessor;
         $this->phpFilesFinder = $phpFilesFinder;
+        $this->missingRectorRulesReporter = $missingRectorRulesReporter;
 
         parent::__construct();
     }
@@ -190,11 +190,13 @@ final class ProcessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $exitCode = $this->missingRectorRulesReporter->reportIfMissing();
+        if ($exitCode !== null) {
+            return $exitCode;
+        }
+
         $this->configuration->resolveFromInput($input);
         $this->configuration->validateConfigParameters();
-        $this->configuration->setAreAnyPhpRectorsLoaded((bool) $this->rectorNodeTraverser->getPhpRectorCount());
-
-        $this->rectorGuard->ensureSomeRectorsAreRegistered();
 
         $paths = $this->configuration->getPaths();
 

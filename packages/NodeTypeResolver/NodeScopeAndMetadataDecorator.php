@@ -10,7 +10,6 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
-use Rector\Core\Configuration\Configuration;
 use Rector\NodeCollector\NodeVisitor\NodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FirstLevelNodeVisitor;
@@ -59,11 +58,6 @@ final class NodeScopeAndMetadataDecorator
     private $nodeCollectorNodeVisitor;
 
     /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
      * @var NodeConnectingVisitor
      */
     private $nodeConnectingVisitor;
@@ -80,7 +74,6 @@ final class NodeScopeAndMetadataDecorator
 
     public function __construct(
         CloningVisitor $cloningVisitor,
-        Configuration $configuration,
         FileInfoNodeVisitor $fileInfoNodeVisitor,
         FunctionMethodAndClassNodeVisitor $functionMethodAndClassNodeVisitor,
         NamespaceNodeVisitor $namespaceNodeVisitor,
@@ -98,7 +91,6 @@ final class NodeScopeAndMetadataDecorator
         $this->statementNodeVisitor = $statementNodeVisitor;
         $this->fileInfoNodeVisitor = $fileInfoNodeVisitor;
         $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
-        $this->configuration = $configuration;
         $this->nodeConnectingVisitor = $nodeConnectingVisitor;
         $this->functionLikeParamArgPositionNodeVisitor = $functionLikeParamArgPositionNodeVisitor;
         $this->firstLevelNodeVisitor = $firstLevelNodeVisitor;
@@ -116,12 +108,9 @@ final class NodeScopeAndMetadataDecorator
             // required by PHPStan
             'replaceNodes' => true,
         ]));
-        $nodes = $nodeTraverser->traverse($nodes);
 
-        // node scoping is needed only for Scope
-        if ($needsScope || $this->configuration->areAnyPhpRectorsLoaded()) {
-            $nodes = $this->phpStanNodeScopeResolver->processNodes($nodes, $smartFileInfo);
-        }
+        $nodes = $nodeTraverser->traverse($nodes);
+        $nodes = $this->phpStanNodeScopeResolver->processNodes($nodes, $smartFileInfo);
 
         $nodeTraverser = new NodeTraverser();
 

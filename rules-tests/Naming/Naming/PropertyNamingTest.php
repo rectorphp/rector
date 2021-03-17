@@ -38,6 +38,9 @@ final class PropertyNamingTest extends AbstractKernelTestCase
         }
     }
 
+    /**
+     * @return Iterator<mixed>
+     */
     public function getExpectedNameFromMethodNameDataProvider(): Iterator
     {
         yield ['getMethods', 'method'];

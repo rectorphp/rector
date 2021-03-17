@@ -50,6 +50,9 @@ final class TypeNormalizerTest extends AbstractKernelTestCase
         $this->assertSame($expectedDocString, $unionDocString);
     }
 
+    /**
+     * @return Iterator<mixed>
+     */
     public function provideDataNormalizeArrayOfUnionToUnionArray(): Iterator
     {
         $unionType = new UnionType([new StringType(), new IntegerType()]);

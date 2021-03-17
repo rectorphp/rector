@@ -55,6 +55,9 @@ final class EregToPcreTransformerTest extends TestCase
         yield ['hi', '#hi#mi'];
     }
 
+    /**
+     * @return Iterator<mixed>
+     */
     public function provideDataDropping(): Iterator
     {
         yield ['mearie\.org', '#mearie\.org#m'];

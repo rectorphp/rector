@@ -11,6 +11,7 @@ use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\SetConfigResolver\Bootstrap\InvalidSetReporter;
 use Symplify\SetConfigResolver\Exception\SetNotFoundException;
+use Tracy\Debugger;
 
 // @ intentionally: continue anyway
 @ini_set('memory_limit', '-1');
@@ -36,6 +37,11 @@ $symfonyStyle = $symfonyStyleFactory->create();
 
 $rectorConfigsResolver = new RectorConfigsResolver();
 
+// for simpler debugging output
+if (class_exists(Debugger::class)) {
+    Debugger::$maxDepth = 2;
+}
+
 try {
     $bootstrapConfigs = $rectorConfigsResolver->provide();
 
@@ -49,6 +55,7 @@ try {
     $symfonyStyle->error($throwable->getMessage());
     exit(ShellCode::ERROR);
 }
+
 
 /** @var ConsoleApplication $application */
 $application = $container->get(ConsoleApplication::class);
