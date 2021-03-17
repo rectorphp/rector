@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\NodeCollector\ScopeResolver;
 
+use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ParentClassScopeResolver
 {
-    public function resolveParentClassName(\PhpParser\Node $node): ?string
+    public function resolveParentClassName(Node $node): ?string
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {

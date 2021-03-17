@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
+use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -59,7 +60,10 @@ final class FunctionLikeDocParamTypeInferer implements ParamTypeInfererInterface
         return $this->matchParamNodeFromDoc($paramTypesByName, $param);
     }
 
-    private function resolveScopeNode(Param $param): ?FunctionLike
+    /**
+     * @return ClassMethod|Function_|null
+     */
+    private function resolveScopeNode(Param $param): ?Node
     {
         return $this->betterNodeFinder->findParentTypes($param, [ClassMethod::class, Function_::class]);
     }

@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
 use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
 use Rector\Core\Php\PhpVersionProvider;
@@ -66,11 +65,6 @@ final class ClassDependencyManipulator
      */
     private $nodeNameResolver;
 
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
         ChildAndParentClassManipulator $childAndParentClassManipulator,
         ClassInsertManipulator $classInsertManipulator,
@@ -79,8 +73,7 @@ final class ClassDependencyManipulator
         StmtsManipulator $stmtsManipulator,
         PhpVersionProvider $phpVersionProvider,
         PropertyPresenceChecker $propertyPresenceChecker,
-        NodeNameResolver $nodeNameResolver,
-        ReflectionProvider $reflectionProvider
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->classMethodAssignManipulator = $classMethodAssignManipulator;
         $this->nodeFactory = $nodeFactory;
@@ -90,7 +83,6 @@ final class ClassDependencyManipulator
         $this->phpVersionProvider = $phpVersionProvider;
         $this->propertyPresenceChecker = $propertyPresenceChecker;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function addConstructorDependency(Class_ $class, PropertyMetadata $propertyMetadata): void

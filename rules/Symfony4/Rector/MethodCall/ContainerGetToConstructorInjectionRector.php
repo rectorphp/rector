@@ -124,11 +124,15 @@ CODE_SAMPLE
         }
 
         $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
-        if ($parentClassName !== null && ! in_array($parentClassName, $this->containerAwareParentTypes, true)) {
-            return null;
+        if ($parentClassName === null) {
+            return $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($node);
         }
 
-        return $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($node);
+        if (in_array($parentClassName, $this->containerAwareParentTypes, true)) {
+            return $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($node);
+        }
+
+        return null;
     }
 
     public function configure(array $configuration): void

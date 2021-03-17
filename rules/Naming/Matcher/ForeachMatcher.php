@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Matcher;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
@@ -68,7 +68,7 @@ final class ForeachMatcher
     /**
      * @return ClassMethod|Function_|Closure|null
      */
-    private function getFunctionLike(Foreach_ $foreach): ?FunctionLike
+    private function getFunctionLike(Foreach_ $foreach): ?Node
     {
         return $this->betterNodeFinder->findParentTypes(
             $foreach,

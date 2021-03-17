@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -45,16 +43,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     private $classMethod;
 
     /**
-     * @var Function_|null
-     */
-    private $function;
-
-    /**
-     * @var Closure|null
-     */
-    private $closure;
-
-    /**
      * @param Node[] $nodes
      * @return Node[]|null
      */
@@ -64,8 +52,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         $this->className = null;
         $this->methodName = null;
         $this->classMethod = null;
-        $this->function = null;
-        $this->closure = null;
 
         return null;
     }
@@ -88,10 +74,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         if ($node instanceof ClassMethod) {
             $this->classMethod = array_pop($this->methodStack);
             $this->methodName = (string) $this->methodName;
-        }
-
-        if ($node instanceof Closure) {
-            $this->closure = null;
         }
 
         return null;
