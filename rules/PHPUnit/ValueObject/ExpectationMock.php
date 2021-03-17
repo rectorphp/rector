@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-
 namespace Rector\PHPUnit\ValueObject;
 
 use PhpParser\Node\Arg;
@@ -11,7 +10,6 @@ use PhpParser\Node\Stmt\Expression;
 
 final class ExpectationMock
 {
-
     /**
      * @var Variable
      */
@@ -46,8 +44,14 @@ final class ExpectationMock
      * @param Arg[] $methodArguments
      * @param array<int, null|Expr> $withArguments
      */
-    public function __construct(Variable $expectationVariable, array $methodArguments, int $index, ?Expr $return, array $withArguments, ?Expression $originalExpression)
-    {
+    public function __construct(
+        Variable $expectationVariable,
+        array $methodArguments,
+        int $index,
+        ?Expr $return,
+        array $withArguments,
+        ?Expression $originalExpression
+    ) {
         $this->expectationVariable = $expectationVariable;
         $this->methodArguments = $methodArguments;
         $this->index = $index;

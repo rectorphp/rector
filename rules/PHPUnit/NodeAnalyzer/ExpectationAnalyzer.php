@@ -37,8 +37,10 @@ final class ExpectationAnalyzer
      */
     private $consecutiveAssertionFactory;
 
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ConsecutiveAssertionFactory $consecutiveAssertionFactory)
-    {
+    public function __construct(
+        TestsNodeAnalyzer $testsNodeAnalyzer,
+        ConsecutiveAssertionFactory $consecutiveAssertionFactory
+    ) {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->consecutiveAssertionFactory = $consecutiveAssertionFactory;
     }
@@ -53,20 +55,20 @@ final class ExpectationAnalyzer
             /** @var MethodCall $expr */
             $expr = $stmt->expr;
             $method = $this->getMethod($expr);
-            if (!$this->testsNodeAnalyzer->isPHPUnitMethodName($method, 'method')) {
+            if (! $this->testsNodeAnalyzer->isPHPUnitMethodName($method, 'method')) {
                 continue;
             }
 
             /** @var MethodCall $expects */
             $expects = $this->getExpects($method->var, $method);
-            if (!$this->isValidExpectsCall($expects)) {
+            if (! $this->isValidExpectsCall($expects)) {
                 continue;
             }
 
             $expectsArg = $expects->args[0];
             /** @var MethodCall $expectsValue */
             $expectsValue = $expectsArg->value;
-            if (!$this->isValidAtCall($expectsValue)) {
+            if (! $this->isValidAtCall($expectsValue)) {
                 continue;
             }
 
@@ -89,9 +91,38 @@ final class ExpectationAnalyzer
         return $expectationMockCollection;
     }
 
+    public function isValidExpectsCall(MethodCall $expr): bool
+    {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodName($expr, 'expects')) {
+            return false;
+        }
+
+        if (count($expr->args) !== 1) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isValidAtCall(MethodCall $expr): bool
+    {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodName($expr, 'at')) {
+            return false;
+        }
+
+        if (count($expr->args) !== 1) {
+            return false;
+        }
+
+        return true;
+    }
+
     private function getMethod(MethodCall $expr): MethodCall
     {
-        if ($this->testsNodeAnalyzer->isPHPUnitMethodNames($expr, self::PROCESSABLE_WILL_STATEMENTS) && $expr->var instanceof MethodCall) {
+        if ($this->testsNodeAnalyzer->isPHPUnitMethodNames(
+            $expr,
+            self::PROCESSABLE_WILL_STATEMENTS
+        ) && $expr->var instanceof MethodCall) {
             return $expr->var;
         }
 
@@ -100,7 +131,7 @@ final class ExpectationAnalyzer
 
     private function getWill(MethodCall $expr): ?Expr
     {
-        if (!$this->testsNodeAnalyzer->isPHPUnitMethodNames($expr, self::PROCESSABLE_WILL_STATEMENTS)) {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodNames($expr, self::PROCESSABLE_WILL_STATEMENTS)) {
             return null;
         }
 
@@ -128,31 +159,5 @@ final class ExpectationAnalyzer
         }
 
         return [null];
-    }
-
-    public function isValidExpectsCall(MethodCall $expr): bool
-    {
-        if (!$this->testsNodeAnalyzer->isPHPUnitMethodName($expr, 'expects')) {
-            return false;
-        }
-
-        if (count($expr->args) !== 1) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function isValidAtCall(MethodCall $expr): bool
-    {
-        if (!$this->testsNodeAnalyzer->isPHPUnitMethodName($expr, 'at')) {
-            return false;
-        }
-
-        if (count($expr->args) !== 1) {
-            return false;
-        }
-
-        return true;
     }
 }

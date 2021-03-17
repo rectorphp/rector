@@ -42,8 +42,7 @@ final class MigrateAtToConsecutiveExpectationsRector extends AbstractRector
         ConsecutiveAssertionFactory $consecutiveAssertionFactory,
         TestsNodeAnalyzer $testsNodeAnalyzer,
         ExpectationAnalyzer $expectationAnalyzer
-    )
-    {
+    ) {
         $this->consecutiveAssertionFactory = $consecutiveAssertionFactory;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->expectationAnalyzer = $expectationAnalyzer;
@@ -59,7 +58,8 @@ final class MigrateAtToConsecutiveExpectationsRector extends AbstractRector
 $mock = $this->createMock(Foo::class);
 $mock->expects($this->at(0))->with('0')->method('someMethod')->willReturn('1');
 $mock->expects($this->at(1))->with('1')->method('someMethod')->willReturn('2');
-CODE_SAMPLE,
+CODE_SAMPLE
+,
                     <<<'CODE_SAMPLE'
 $mock = $this->createMock(Foo::class);
 $mock->method('someMethod')->withConsecutive(['0'], ['1'])->willReturnOnConsecutiveCalls('1', '2');
@@ -94,7 +94,7 @@ CODE_SAMPLE
 
         $expectationMockCollection = $this->expectationAnalyzer->getExpectationsFromExpressions($expressions);
 
-        if (!$expectationMockCollection->hasExpectationMocks()) {
+        if (! $expectationMockCollection->hasExpectationMocks()) {
             return null;
         }
 
@@ -109,12 +109,16 @@ CODE_SAMPLE
     private function buildNewExpectation(ExpectationMockCollection $expectationMockCollection): MethodCall
     {
         $expectationMockCollection = $this->fillMissingAtIndexes($expectationMockCollection);
-        return $this->consecutiveAssertionFactory->createAssertionFromExpectationMockCollection($expectationMockCollection);
+        return $this->consecutiveAssertionFactory->createAssertionFromExpectationMockCollection(
+            $expectationMockCollection
+        );
     }
 
-    private function fillMissingAtIndexes(ExpectationMockCollection $expectationMockCollection): ExpectationMockCollection
-    {
-        $var = $expectationMockCollection->getExpectationMocks()[0]->getExpectationVariable();
+    private function fillMissingAtIndexes(
+        ExpectationMockCollection $expectationMockCollection
+    ): ExpectationMockCollection {
+        $var = $expectationMockCollection->getExpectationMocks()[0]
+            ->getExpectationVariable();
 
         // 0,1,2,3,4
         // min = 0 ; max = 4 ; count = 5
@@ -131,9 +135,7 @@ CODE_SAMPLE
         // 0,1,2
         if ($expectationMockCollection->getLowestAtIndex() !== 0) {
             for ($i = 0; $i < $expectationMockCollection->getLowestAtIndex(); ++$i) {
-                $expectationMockCollection->add(
-                    new ExpectationMock($var, [], $i, null, [], null)
-                );
+                $expectationMockCollection->add(new ExpectationMock($var, [], $i, null, [], null));
             }
         }
 
@@ -143,10 +145,8 @@ CODE_SAMPLE
         if ($expectationMockCollection->isMissingAtIndexBetweenHighestAndLowest()) {
             $existingIndexes = array_column($expectationMockCollection->getExpectationMocks(), 'index');
             for ($i = 1; $i < $expectationMockCollection->getHighestAtIndex(); ++$i) {
-                if (!in_array($i, $existingIndexes, true)) {
-                    $expectationMockCollection->add(
-                        new ExpectationMock($var, [], $i, null, [], null)
-                    );
+                if (! in_array($i, $existingIndexes, true)) {
+                    $expectationMockCollection->add(new ExpectationMock($var, [], $i, null, [], null));
                 }
             }
         }
@@ -180,11 +180,11 @@ CODE_SAMPLE
 
     private function shouldSkipReplacement(ExpectationMockCollection $expectationMockCollection): bool
     {
-        if (!$expectationMockCollection->hasReturnValues()) {
+        if (! $expectationMockCollection->hasReturnValues()) {
             return false;
         }
 
-        if (!$expectationMockCollection->isExpectedMethodAlwaysTheSame()) {
+        if (! $expectationMockCollection->isExpectedMethodAlwaysTheSame()) {
             return true;
         }
 
@@ -202,15 +202,16 @@ CODE_SAMPLE
     /**
      * @return ExpectationMockCollection[]
      */
-    private function groupExpectationCollectionsByVariableName(ExpectationMockCollection $expectationMockCollection): array
-    {
+    private function groupExpectationCollectionsByVariableName(
+        ExpectationMockCollection $expectationMockCollection
+    ): array {
         $groupedByVariable = [];
         foreach ($expectationMockCollection->getExpectationMocks() as $expectationMock) {
             $variable = $expectationMock->getExpectationVariable();
-            if (!is_string($variable->name)) {
+            if (! is_string($variable->name)) {
                 continue;
             }
-            if (!isset($groupedByVariable[$variable->name])) {
+            if (! isset($groupedByVariable[$variable->name])) {
                 $groupedByVariable[$variable->name] = new ExpectationMockCollection();
             }
             $groupedByVariable[$variable->name]->add($expectationMock);

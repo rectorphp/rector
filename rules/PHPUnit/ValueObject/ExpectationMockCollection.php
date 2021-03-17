@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-
 namespace Rector\PHPUnit\ValueObject;
 
 use PhpParser\Node\Scalar\String_;
@@ -33,7 +32,7 @@ final class ExpectationMockCollection
 
     public function getHighestAtIndex(): int
     {
-        if (!$this->hasExpectationMocks()) {
+        if (! $this->hasExpectationMocks()) {
             return 0;
         }
 
@@ -45,7 +44,7 @@ final class ExpectationMockCollection
 
     public function getLowestAtIndex(): int
     {
-        if (!$this->hasExpectationMocks()) {
+        if (! $this->hasExpectationMocks()) {
             return 0;
         }
 
@@ -118,7 +117,7 @@ final class ExpectationMockCollection
         $previousMethod = '';
         foreach ($this->getExpectationMocks() as $expectationMock) {
             $methodArgument = $expectationMock->getMethodArguments()[0];
-            if (null !== $methodArgument && $methodArgument->value instanceof String_) {
+            if ($methodArgument !== null && $methodArgument->value instanceof String_) {
                 if ($previousMethod === '') {
                     $previousMethod = $methodArgument->value->value;
                 }
