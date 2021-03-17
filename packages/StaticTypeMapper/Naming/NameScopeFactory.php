@@ -14,7 +14,6 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
@@ -33,14 +32,8 @@ final class NameScopeFactory
      */
     private $phpDocInfoFactory;
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    public function __construct()
     {
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**
