@@ -12,7 +12,7 @@ if (class_exists('Doctrine\ORM\EntityRepository')) {
 class EntityRepository
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $_em;
 

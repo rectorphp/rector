@@ -21,7 +21,7 @@ jobs:
             -
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 8.0
+                    php-version: 7.3
                 # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
                 env:
                     COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
@@ -36,7 +36,7 @@ jobs:
 
             # 3. publish it
             -
-                uses: symplify/github-action-monorepo-split@master
+                uses: symplify/github-action-monorepo-split@1.1
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:

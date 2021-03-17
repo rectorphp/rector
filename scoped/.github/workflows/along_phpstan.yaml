@@ -30,11 +30,11 @@ jobs:
             -   run: |
                     cd standalone
                     # run
-                    composer require rector/rector-prefixed:dev-master --dev --ansi
+                    composer require rector/rector-prefixed:dev-main --dev --ansi
                     composer require phpstan/phpstan --dev --ansi
 
             -
                 run: |
                     cd standalone
-                    vendor/bin/rector -h --ansi
+                    vendor/bin/rector list -h --ansi
                     vendor/bin/phpstan -h --ansi

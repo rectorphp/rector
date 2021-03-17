@@ -69,6 +69,11 @@ final class ClassMethodAssignManipulator
      */
     private $callReflectionResolver;
 
+    /**
+     * @var array<string, string[]>
+     */
+    private $alreadyAddedClassMethodNames = [];
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
@@ -121,6 +126,9 @@ final class ClassMethodAssignManipulator
 
         $classMethod->params[] = $this->nodeFactory->createParamFromNameAndType($name, $type);
         $classMethod->stmts[] = new Expression($assign);
+
+        $classMethodHash = spl_object_hash($classMethod);
+        $this->alreadyAddedClassMethodNames[$classMethodHash][] = $name;
     }
 
     /**
@@ -217,13 +225,18 @@ final class ClassMethodAssignManipulator
 
     private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
     {
-        foreach ($classMethod->params as $constructorParameter) {
-            if ($this->nodeNameResolver->isName($constructorParameter->var, $name)) {
+        foreach ($classMethod->params as $param) {
+            if ($this->nodeNameResolver->isName($param->var, $name)) {
                 return true;
             }
         }
 
-        return false;
+        $classMethodHash = spl_object_hash($classMethod);
+        if (! isset($this->alreadyAddedClassMethodNames[$classMethodHash])) {
+            return false;
+        }
+
+        return in_array($name, $this->alreadyAddedClassMethodNames[$classMethodHash], true);
     }
 
     /**

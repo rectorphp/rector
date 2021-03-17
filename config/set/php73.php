@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use Rector\Php73\Rector\BooleanOr\IsCountableRector;
 use Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector;
 use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
@@ -46,4 +47,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(StringifyStrNeedlesRector::class);
     $services->set(JsonThrowOnErrorRector::class);
     $services->set(RegexDashEscapeRector::class);
+    $services->set(ContinueToBreakInSwitchRector::class);
 };

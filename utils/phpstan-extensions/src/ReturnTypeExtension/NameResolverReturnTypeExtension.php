@@ -11,7 +11,7 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PHPStanExtensions\TypeResolver\MethodCallTypeResolver;
+use Rector\PHPStanExtensions\TypeResolver\GetNameMethodCallTypeResolver;
 
 /**
  * @see \Rector\NodeNameResolver\NodeNameResolver::getName()
@@ -21,11 +21,11 @@ use Rector\PHPStanExtensions\TypeResolver\MethodCallTypeResolver;
 final class NameResolverReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     /**
-     * @var MethodCallTypeResolver
+     * @var GetNameMethodCallTypeResolver
      */
     private $methodCallTypeResolver;
 
-    public function __construct(MethodCallTypeResolver $methodCallTypeResolver)
+    public function __construct(GetNameMethodCallTypeResolver $methodCallTypeResolver)
     {
         $this->methodCallTypeResolver = $methodCallTypeResolver;
     }
