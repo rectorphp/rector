@@ -55,8 +55,16 @@ final class MigrateAtToConsecutiveExpectationsRector extends AbstractRector
             'Migrates deprecated $this->at to $this->withConsecutive and $this->willReturnOnConsecutiveCalls',
             [
                 new CodeSample(
-                    '',
-                    ''
+                    <<<'CODE_SAMPLE'
+$mock = $this->createMock(Foo::class);
+$mock->expects($this->at(0))->with('0')->method('someMethod')->willReturn('1');
+$mock->expects($this->at(1))->with('1')->method('someMethod')->willReturn('2');
+CODE_SAMPLE,
+                    <<<'CODE_SAMPLE'
+$mock = $this->createMock(Foo::class);
+$mock->method('someMethod')->withConsecutive(['0'], ['1'])->willReturnOnConsecutiveCalls('1', '2');
+CODE_SAMPLE
+
                 ),
             ]
         );
