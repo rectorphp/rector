@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -165,7 +166,12 @@ final class ObjectTypeSpecifier
 
     private function matchSameNamespacedObjectType(Node $node, ObjectType $objectType): ?ObjectType
     {
-        $namespaceName = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
+        $namespaceName = $scope->getNamespace();
         if ($namespaceName === null) {
             return null;
         }

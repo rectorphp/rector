@@ -11,6 +11,8 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -107,23 +109,28 @@ CODE_SAMPLE
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        $namespace = $classMethod->getAttribute(AttributeKey::NAMESPACE_NAME);
+        /** @var Scope $scope */
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+
         // catch only classes without namespace
-        if ($namespace !== null) {
+        if ($scope->getNamespace() !== null) {
             return true;
         }
+
         if ($classMethod->isAbstract()) {
             return true;
         }
+
         if ($classMethod->isStatic()) {
             return true;
         }
 
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
-            return false;
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return true;
         }
-        return $classLike->name === null;
+
+        return $classReflection->isAnonymous();
     }
 
     private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethod): void

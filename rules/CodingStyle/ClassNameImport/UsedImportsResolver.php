@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class UsedImportsResolver
@@ -46,7 +45,12 @@ final class UsedImportsResolver
      */
     public function resolveForNode(Node $node): array
     {
-        $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NODE);
+        if ($node instanceof Namespace_) {
+            $namespace = $node;
+        } else {
+            $namespace = $this->betterNodeFinder->findParentType($node, Namespace_::class);
+        }
+
         if ($namespace instanceof Namespace_) {
             return $this->resolveForNamespace($namespace);
         }

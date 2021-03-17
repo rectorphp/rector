@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -55,8 +56,12 @@ final class ClassAnnotationMatcher
     private function resolveFullyQualifiedClass(array $uses, Node $node, string $tag): string
     {
         if ($uses === []) {
-            /** @var string|null $namespace */
-            $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
+            $scope = $node->getAttribute(AttributeKey::SCOPE);
+            if (! $scope instanceof Scope) {
+                return $tag;
+            }
+
+            $namespace = $scope->getNamespace();
             if ($namespace !== null) {
                 $namespacedTag = $namespace . '\\' . $tag;
                 if ($this->reflectionProvider->hasClass($namespacedTag)) {

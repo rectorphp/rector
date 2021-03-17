@@ -8,6 +8,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
+use PHPStan\Analyser\Scope;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -39,8 +40,13 @@ final class SymfonyControllerFactory
             return null;
         }
 
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
         /** @var string $namespaceName */
-        $namespaceName = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
+        $namespaceName = $scope->getNamespace();
 
         $formControllerClass = new Class_('SomeFormController');
         $formControllerClass->extends = new FullyQualified(

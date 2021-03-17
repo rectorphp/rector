@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\NameScope;
+use PHPStan\Analyser\Scope;
 use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -42,7 +43,8 @@ final class NameScopeFactory
 
     public function createNameScopeFromNodeWithoutTemplateTypes(Node $node): NameScope
     {
-        $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        $namespace = $scope instanceof Scope ? $scope->getNamespace() : null;
 
         /** @var Use_[] $useNodes */
         $useNodes = (array) $node->getAttribute(AttributeKey::USE_NODES);

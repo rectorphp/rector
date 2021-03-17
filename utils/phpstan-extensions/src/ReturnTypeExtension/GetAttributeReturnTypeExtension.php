@@ -49,7 +49,6 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
         AttributeKey::class . '::USE_NODES' => [Use_::class],
         # scalars
         AttributeKey::class . '::PARENT_CLASS_NAME' => 'string',
-        AttributeKey::class . '::NAMESPACE_NAME' => 'string',
         AttributeKey::class . '::CLASS_NAME' => 'string',
         AttributeKey::class . '::METHOD_NAME' => 'string',
     ];
