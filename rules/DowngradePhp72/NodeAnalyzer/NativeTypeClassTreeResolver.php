@@ -54,11 +54,22 @@ final class NativeTypeClassTreeResolver
             return $nativeType;
         }
 
+<<<<<<< HEAD
         return TypehintHelper::decideTypeFromReflection(
             $parameterReflection->getType(),
             null,
             $classReflection->getName()
         );
+=======
+        $classReflection = $parameterReflection->getClass();
+        if ($classReflection instanceof ClassReflection) {
+            $className = $classReflection->getName();
+        } else {
+            $className = null;
+        }
+
+        return TypehintHelper::decideTypeFromReflection($parameterReflection->getType(), null, $className);
+>>>>>>> 0a073fac41... skip parent type for construtc
     }
 
     private function resolveNativeType(\ReflectionParameter $reflectionParameter): Type
