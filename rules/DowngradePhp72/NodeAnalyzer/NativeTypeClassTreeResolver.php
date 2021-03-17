@@ -50,7 +50,7 @@ final class NativeTypeClassTreeResolver
 
         $reflectionMethod = $nativeReflectionClass->getMethod($methodName);
         $parameterReflection = $reflectionMethod->getParameters()[$position] ?? null;
-        if ($parameterReflection === null) {
+        if (! $parameterReflection instanceof \ReflectionParameter) {
             return new MixedType();
         }
 
