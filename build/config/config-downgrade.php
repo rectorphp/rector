@@ -45,9 +45,7 @@ final class DowngradeRectorConfig
         // they are not used by Rector, and they use classes
         // loaded with "require-dev" so it'd throw an error
 
-        // use relative paths, so files are excluded on nested riecory too
-        'vendor/symfony/cache/DoctrineProvider.php',
-        'vendor/symfony/cache/Messenger/EarlyExpirationHandler.php',
+        // use relative paths, so files are excluded on nested directory too
         'vendor/symfony/http-kernel/HttpKernelBrowser.php',
         'vendor/symfony/string/Slugger/AsciiSlugger.php',
 
@@ -58,7 +56,6 @@ final class DowngradeRectorConfig
         // https://github.com/rectorphp/rector/issues/4816#issuecomment-743209526
         // It doesn't happen often, and Rector doesn't use it, so then
         // we simply skip downgrading this class
-        'vendor/symfony/cache/Adapter/CouchbaseBucketAdapter.php',
         'vendor/symfony/dependency-injection/ExpressionLanguage.php',
         'vendor/symfony/dependency-injection/ExpressionLanguageProvider.php',
         'vendor/symfony/var-dumper/Caster/*',
