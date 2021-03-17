@@ -19,9 +19,9 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassMethodAssignManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
+use Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -288,8 +288,8 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        $constantName = StaticRectorStrings::camelCaseToUnderscore($variableName);
-
-        return strtoupper($constantName);
+        $stringy = new Stringy($variableName);
+        return (string) $stringy->underscored()
+            ->toUpperCase();
     }
 }

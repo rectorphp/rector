@@ -19,7 +19,7 @@ class KeepPresenterName
 
         /** @var string $presenterPart */
         $presenterPart = Strings::substring($presenterPart, 0, -Strings::length('Presenter'));
-        $presenterPart = StaticRectorStrings::camelCaseToDashes($presenterPart);
+        $presenterPart = StaticRectorStrings::anything($presenterPart);
 
         $match = (array) Strings::match($this->getName($classMethod), '#^(action|render)(?<short_action_name>.*?$)#sm');
         $actionPart = lcfirst($match['short_action_name']);

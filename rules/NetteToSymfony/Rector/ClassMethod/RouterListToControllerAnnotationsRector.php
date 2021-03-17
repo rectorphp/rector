@@ -15,11 +15,11 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticRectorStrings;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NetteToSymfony\Routing\ExplicitRouteAnnotationDecorator;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
+use Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -319,7 +319,9 @@ CODE_SAMPLE
         $presenterPart = Strings::after($presenterName, '\\', -1);
 
         $presenterPart = Strings::substring($presenterPart, 0, -Strings::length('Presenter'));
-        $presenterPart = StaticRectorStrings::camelCaseToDashes($presenterPart);
+
+        $stringy = new Stringy($presenterPart);
+        $presenterPart = (string) $stringy->dasherize();
 
         $match = (array) Strings::match($this->getName($classMethod), self::ACTION_RENDER_NAME_MATCHING_REGEX);
         $actionPart = lcfirst($match['short_action_name']);

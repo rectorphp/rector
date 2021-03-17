@@ -6,11 +6,11 @@ namespace Rector\Set;
 
 use Nette\Utils\Strings;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Util\StaticRectorStrings;
 use Rector\Set\Contract\SetListInterface;
 use Rector\Set\ValueObject\DowngradeSetList;
 use Rector\Set\ValueObject\SetList;
 use ReflectionClass;
+use Stringy\Stringy;
 use Symplify\SetConfigResolver\Exception\SetNotFoundException;
 use Symplify\SetConfigResolver\Provider\AbstractSetProvider;
 use Symplify\SetConfigResolver\ValueObject\Set;
@@ -84,7 +84,8 @@ final class RectorSetProvider extends AbstractSetProvider
                 throw new ShouldNotHappenException($message);
             }
 
-            $setName = StaticRectorStrings::constantToDashes($name);
+            $stringy = new Stringy($name);
+            $setName = (string) $stringy->dasherize();
 
             // remove `-` before numbers
             $setName = Strings::replace($setName, self::DASH_NUMBER_REGEX, '$1');
