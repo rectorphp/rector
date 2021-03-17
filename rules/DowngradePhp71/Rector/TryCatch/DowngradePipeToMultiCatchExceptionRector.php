@@ -39,7 +39,6 @@ try {
     $sameCode;
 }
 CODE_SAMPLE
-                    ,
                 ),
             ]
         );

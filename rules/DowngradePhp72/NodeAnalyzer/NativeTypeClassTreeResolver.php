@@ -8,16 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionParameter;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\BooleanType;
-use PHPStan\Type\FloatType;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use Rector\Core\Exception\NotImplementedYetException;
+use PHPStan\Type\TypehintHelper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use ReflectionNamedType;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class NativeTypeClassTreeResolver
@@ -60,32 +54,11 @@ final class NativeTypeClassTreeResolver
             return $nativeType;
         }
 
-        if (! $parameterReflection->getType() instanceof ReflectionNamedType) {
-            return new MixedType();
-        }
-
-        $typeName = (string) $parameterReflection->getType();
-        if ($typeName === 'array') {
-            return new ArrayType(new MixedType(), new MixedType());
-        }
-
-        if ($typeName === 'string') {
-            return new StringType();
-        }
-
-        if ($typeName === 'bool') {
-            return new BooleanType();
-        }
-
-        if ($typeName === 'int') {
-            return new IntegerType();
-        }
-
-        if ($typeName === 'float') {
-            return new FloatType();
-        }
-
-        throw new NotImplementedYetException();
+        return TypehintHelper::decideTypeFromReflection(
+            $parameterReflection->getType(),
+            null,
+            $classReflection->getName()
+        );
     }
 
     private function resolveNativeType(\ReflectionParameter $reflectionParameter): Type

@@ -172,15 +172,13 @@ CODE_SAMPLE
             return new BitwiseOr($magicGetClassConstFetch, $magicSetClassConstFetch);
         }
 
+        $magicCallClassConstFetch = $this->nodeFactory->createClassConstFetch(
+            'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor',
+            'MAGIC_CALL'
+        );
+
         return new BitwiseOr(
-            new BitwiseOr(
-                $this->nodeFactory->createClassConstFetch(
-                    'Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor',
-                    'MAGIC_CALL'
-                ),
-                $magicGetClassConstFetch,
-            ),
-            $magicSetClassConstFetch,
+            new BitwiseOr($magicCallClassConstFetch, $magicGetClassConstFetch), $magicSetClassConstFetch
         );
     }
 }

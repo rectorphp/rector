@@ -6,8 +6,8 @@ namespace Rector\DowngradePhp80\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\StaticType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
@@ -25,9 +25,17 @@ final class DowngradeStaticTypeDeclarationRector extends AbstractRector
      */
     private $phpDocFromTypeDeclarationDecorator;
 
-    public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
-    {
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(
+        PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator,
+        ReflectionProvider $reflectionProvider
+    ) {
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -76,9 +84,14 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Scope $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
-        $classReflection = $scope->getClassReflection();
+        if ($scope === null) {
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+            $classReflection = $this->reflectionProvider->getClass($className);
+        } else {
+            $classReflection = $scope->getClassReflection();
+        }
+
         if (! $classReflection instanceof ClassReflection) {
             return null;
         }
