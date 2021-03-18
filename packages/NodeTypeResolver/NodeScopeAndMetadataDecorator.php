@@ -12,7 +12,6 @@ use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use Rector\NodeCollector\NodeVisitor\NodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\FirstLevelNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
@@ -67,11 +66,6 @@ final class NodeScopeAndMetadataDecorator
      */
     private $functionLikeParamArgPositionNodeVisitor;
 
-    /**
-     * @var FirstLevelNodeVisitor
-     */
-    private $firstLevelNodeVisitor;
-
     public function __construct(
         CloningVisitor $cloningVisitor,
         FileInfoNodeVisitor $fileInfoNodeVisitor,
@@ -81,8 +75,7 @@ final class NodeScopeAndMetadataDecorator
         PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
         StatementNodeVisitor $statementNodeVisitor,
         NodeConnectingVisitor $nodeConnectingVisitor,
-        FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor,
-        FirstLevelNodeVisitor $firstLevelNodeVisitor
+        FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor
     ) {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->cloningVisitor = $cloningVisitor;
@@ -93,7 +86,6 @@ final class NodeScopeAndMetadataDecorator
         $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
         $this->nodeConnectingVisitor = $nodeConnectingVisitor;
         $this->functionLikeParamArgPositionNodeVisitor = $functionLikeParamArgPositionNodeVisitor;
-        $this->firstLevelNodeVisitor = $firstLevelNodeVisitor;
     }
 
     /**
@@ -129,7 +121,6 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser->addVisitor($this->nodeConnectingVisitor);
         $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
-        $nodeTraverser->addVisitor($this->firstLevelNodeVisitor);
         $nodeTraverser->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
 
         $nodes = $nodeTraverser->traverse($nodes);

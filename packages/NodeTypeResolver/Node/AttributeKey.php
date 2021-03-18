@@ -177,10 +177,5 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const IS_FIRST_LEVEL_STATEMENT = 'is_first_level_statement';
-
-    /**
-     * @var string
-     */
     public const FUNC_ARGS_TRAILING_COMMA = 'trailing_comma';
 }
