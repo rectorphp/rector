@@ -99,7 +99,7 @@
             "Rector\\Utils\\DoctrineAnnotationParserSyncer\\": "utils/doctrine-annotation-parser-syncer/src"
         },
         "classmap": [
-            "stubs",
+            "stubs/Annotations",
             "rules-tests/Autodiscovery/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
             "rules-tests/Autodiscovery/Rector/FileNode/MoveServicesBySuffixToDirectoryRector/Expected",
             "rules-tests/CakePHP/Rector/FileWithoutNamespace/ImplicitShortClassNameUseStatementRector/Source",
@@ -110,6 +110,9 @@
             "rules-tests/Symfony4/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source"
         ],
         "files": [
+            "stubs/Symfony/Component/Form/FormTypeInterface.php",
+            "stubs/Doctrine/Persistence/ObjectManager.php",
+            "stubs/Doctrine/Common/Persistence/ObjectManager.php",
             "vendor/nette/forms/src/Forms/Controls/SubmitButton.php",
             "rules-tests/Restoration/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php",
             "rules-tests/DeadCode/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",
