@@ -41,6 +41,9 @@ final class DowngradeRectorConfig
         'packages/Testing/PHPUnit/AbstractCommunityRectorTestCase.php',
         'packages/Testing/PHPUnit/AbstractRectorTestCase.php',
 
+        // only for dev
+        'packages/Testing/PhpConfigPrinter/*',
+
         // Individual classes that can be excluded because
         // they are not used by Rector, and they use classes
         // loaded with "require-dev" so it'd throw an error
@@ -48,6 +51,7 @@ final class DowngradeRectorConfig
         // use relative paths, so files are excluded on nested directory too
         'vendor/symfony/http-kernel/HttpKernelBrowser.php',
         'vendor/symfony/string/Slugger/AsciiSlugger.php',
+
 
         // always excluded
         '*vendor/symfony/polyfill*/bootstrap80.php',

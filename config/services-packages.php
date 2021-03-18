@@ -21,6 +21,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../packages/BetterPhpDocParser/Attributes/Attribute',
             __DIR__ . '/../packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php',
             __DIR__ . '/../packages/Testing/PHPUnit',
+            __DIR__ . '/../packages/Testing/PhpConfigPrinter/YamlFileContentProvider.php',
+            __DIR__ . '/../packages/Testing/PhpConfigPrinter/SymfonyVersionFeatureGuard.php',
 
             // used in PHPStan
             __DIR__ . '/../packages/NodeTypeResolver/Reflection/BetterReflection/RectorBetterReflectionSourceLocatorFactory.php',
