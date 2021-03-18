@@ -16,6 +16,9 @@ use Rector\PHPUnit\ValueObject\ExpectationMockCollection;
 
 final class ExpectationAnalyzer
 {
+    /**
+     * @var string[]
+     */
     private const PROCESSABLE_WILL_STATEMENTS = [
         'will',
         'willReturn',
@@ -74,90 +77,99 @@ final class ExpectationAnalyzer
 
             $atArg = $expectsValue->args[0];
             $atValue = $atArg->value;
-            if ($atValue instanceof LNumber && $expects->var instanceof Variable) {
-                $expectationMockCollection->add(
-                    new ExpectationMock(
-                        $expects->var,
-                        $method->args,
-                        $atValue->value,
-                        $this->getWill($expr),
-                        $this->getWithArgs($method->var),
-                        $stmt
-                    )
-                );
+            if (! $atValue instanceof LNumber) {
+                continue;
             }
+            if (! $expects->var instanceof Variable) {
+                continue;
+            }
+
+            $expectationMockCollection->add(
+                new ExpectationMock(
+                    $expects->var,
+                    $method->args,
+                    $atValue->value,
+                    $this->getWill($expr),
+                    $this->getWithArgs($method->var),
+                    $stmt
+                )
+            );
         }
 
         return $expectationMockCollection;
     }
 
-    public function isValidExpectsCall(MethodCall $expr): bool
+    public function isValidExpectsCall(MethodCall $methodCall): bool
     {
-        if (! $this->testsNodeAnalyzer->isPHPUnitMethodName($expr, 'expects')) {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodName($methodCall, 'expects')) {
             return false;
         }
 
-        if (count($expr->args) !== 1) {
+        if (count($methodCall->args) !== 1) {
             return false;
         }
 
         return true;
     }
 
-    public function isValidAtCall(MethodCall $expr): bool
+    public function isValidAtCall(MethodCall $methodCall): bool
     {
-        if (! $this->testsNodeAnalyzer->isPHPUnitMethodName($expr, 'at')) {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodName($methodCall, 'at')) {
             return false;
         }
 
-        if (count($expr->args) !== 1) {
+        if (count($methodCall->args) !== 1) {
             return false;
         }
 
         return true;
     }
 
-    private function getMethod(MethodCall $expr): MethodCall
+    private function getMethod(MethodCall $methodCall): MethodCall
     {
         if ($this->testsNodeAnalyzer->isPHPUnitMethodNames(
-            $expr,
+            $methodCall,
             self::PROCESSABLE_WILL_STATEMENTS
-        ) && $expr->var instanceof MethodCall) {
-            return $expr->var;
+        ) && $methodCall->var instanceof MethodCall) {
+            return $methodCall->var;
         }
 
-        return $expr;
+        return $methodCall;
     }
 
-    private function getWill(MethodCall $expr): ?Expr
+    private function getWill(MethodCall $methodCall): ?Expr
     {
-        if (! $this->testsNodeAnalyzer->isPHPUnitMethodNames($expr, self::PROCESSABLE_WILL_STATEMENTS)) {
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodNames($methodCall, self::PROCESSABLE_WILL_STATEMENTS)) {
             return null;
         }
 
-        return $this->consecutiveAssertionFactory->createWillReturn($expr);
+        return $this->consecutiveAssertionFactory->createWillReturn($methodCall);
     }
 
-    private function getExpects(Expr $maybeWith, MethodCall $method): Expr
+    private function getExpects(Expr $expr, MethodCall $methodCall): Expr
     {
-        if ($this->testsNodeAnalyzer->isPHPUnitMethodName($maybeWith, 'with') && $maybeWith instanceof MethodCall) {
-            return $maybeWith->var;
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodName($expr, 'with')) {
+            return $methodCall->var;
         }
-
-        return $method->var;
+        if (! $expr instanceof MethodCall) {
+            return $methodCall->var;
+        }
+        return $expr->var;
     }
 
     /**
      * @return array<int, Expr|null>
      */
-    private function getWithArgs(Expr $maybeWith): array
+    private function getWithArgs(Expr $expr): array
     {
-        if ($this->testsNodeAnalyzer->isPHPUnitMethodName($maybeWith, 'with') && $maybeWith instanceof MethodCall) {
-            return array_map(static function (Arg $arg) {
-                return $arg->value;
-            }, $maybeWith->args);
+        if (! $this->testsNodeAnalyzer->isPHPUnitMethodName($expr, 'with')) {
+            return [null];
         }
-
-        return [null];
+        if (! $expr instanceof MethodCall) {
+            return [null];
+        }
+        return array_map(static function (Arg $arg): Expr {
+            return $arg->value;
+        }, $expr->args);
     }
 }

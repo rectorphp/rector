@@ -18,7 +18,7 @@ final class ExpectationMock
     /**
      * @var Arg[]
      */
-    private $methodArguments;
+    private $methodArguments = [];
 
     /**
      * @var int
@@ -28,12 +28,12 @@ final class ExpectationMock
     /**
      * @var ?Expr
      */
-    private $return;
+    private $expr;
 
     /**
      * @var array<int, null|Expr>
      */
-    private $withArguments;
+    private $withArguments = [];
 
     /**
      * @var Expression|null
@@ -48,14 +48,14 @@ final class ExpectationMock
         Variable $expectationVariable,
         array $methodArguments,
         int $index,
-        ?Expr $return,
+        ?Expr $expr,
         array $withArguments,
         ?Expression $originalExpression
     ) {
         $this->expectationVariable = $expectationVariable;
         $this->methodArguments = $methodArguments;
         $this->index = $index;
-        $this->return = $return;
+        $this->expr = $expr;
         $this->withArguments = $withArguments;
         $this->originalExpression = $originalExpression;
     }
@@ -80,7 +80,7 @@ final class ExpectationMock
 
     public function getReturn(): ?Expr
     {
-        return $this->return;
+        return $this->expr;
     }
 
     /**
@@ -91,7 +91,7 @@ final class ExpectationMock
         return $this->withArguments;
     }
 
-    public function originalExpression(): ?Expression
+    public function getOriginalExpression(): ?Expression
     {
         return $this->originalExpression;
     }
