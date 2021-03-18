@@ -38,9 +38,6 @@ final class NativeTypeClassTreeResolver
         int $position
     ): Type {
         $nativeReflectionClass = $classReflection->getNativeReflection();
-        if (! $nativeReflectionClass->hasMethod($methodName)) {
-            return new MixedType();
-        }
 
         $reflectionMethod = $nativeReflectionClass->getMethod($methodName);
         $parameterReflection = $reflectionMethod->getParameters()[$position] ?? null;
