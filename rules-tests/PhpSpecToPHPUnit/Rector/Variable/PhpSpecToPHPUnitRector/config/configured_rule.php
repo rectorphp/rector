@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\PhpSpecToPHPUnit\Rector\Class_\AddMockPropertiesRector;
 use Rector\PhpSpecToPHPUnit\Rector\Class_\PhpSpecClassToPHPUnitClassRector;
 use Rector\PhpSpecToPHPUnit\Rector\ClassMethod\PhpSpecMethodToPHPUnitMethodRector;
@@ -10,10 +12,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(
-        # 1. first convert mocks
-        PhpSpecMocksToPHPUnitMocksRector::class
-    );
+
+    $services->set(PhpSpecMocksToPHPUnitMocksRector::class);
     $services->set(PhpSpecPromisesToPHPUnitAssertRector::class);
     $services->set(PhpSpecMethodToPHPUnitMethodRector::class);
     $services->set(PhpSpecClassToPHPUnitClassRector::class);

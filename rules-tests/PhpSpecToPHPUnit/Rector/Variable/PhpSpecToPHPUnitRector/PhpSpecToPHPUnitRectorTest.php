@@ -21,7 +21,7 @@ final class PhpSpecToPHPUnitRectorTest extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.php.inc');
+        return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture');
     }
 
     protected function provideConfigFilePath(): string

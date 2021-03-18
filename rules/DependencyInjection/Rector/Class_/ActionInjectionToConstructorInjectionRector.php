@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection;
-use Rector\Symfony\ServiceMapProvider;
+use Rector\Symfony\DataProvider\ServiceMapProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 

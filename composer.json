@@ -38,9 +38,10 @@
         "nette/robot-loader": "^3.4",
         "nette/utils": "^3.2",
         "nikic/php-parser": "^4.10.4",
-        "phpstan/phpdoc-parser": "^0.4.12",
+        "phpstan/phpdoc-parser": "0.4.12",
         "phpstan/phpstan": "^0.12.81",
         "phpstan/phpstan-phpunit": "^0.12.18",
+        "rector/rector-symfony": "dev-main",
         "sebastian/diff": "^4.0.4",
         "symfony/console": "^4.4.8|^5.1",
         "symfony/dependency-injection": "^5.1",
@@ -69,8 +70,6 @@
         "phpstan/phpstan-nette": "^0.12.16",
         "phpunit/phpunit": "^9.5",
         "rector/rector-generator": "^0.1.1",
-        "symfony/security-core": "^5.2",
-        "symfony/security-http": "^5.2",
         "symplify/coding-standard": "^9.2.11",
         "symplify/easy-ci": "^9.2.11",
         "symplify/easy-coding-standard": "^9.2.11",
@@ -80,7 +79,8 @@
         "tracy/tracy": "^2.8"
     },
     "replace": {
-        "rector/rector-prefixed": "self.version"
+        "rector/rector-prefixed": "self.version",
+        "rector/rector": "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -106,11 +106,9 @@
             "rules-tests/CakePHP/Rector/Namespace_/AppUsesStaticCallToUseStatementRector/Source",
             "rules-tests/CodingStyle/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source",
             "rules-tests/Renaming/Rector/Name/RenameClassRector/Source",
-            "rules-tests/Renaming/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Source",
-            "rules-tests/Symfony4/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source"
+            "rules-tests/Renaming/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Source"
         ],
         "files": [
-            "stubs/Symfony/Component/Form/FormTypeInterface.php",
             "stubs/Doctrine/Persistence/ObjectManager.php",
             "stubs/Doctrine/Common/Persistence/ObjectManager.php",
             "vendor/nette/forms/src/Forms/Controls/SubmitButton.php",

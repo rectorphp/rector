@@ -56,7 +56,7 @@ final class PhpSpecMockCollector
     {
         $className = $this->nodeNameResolver->getName($class);
 
-        if (isset($this->mocks[$className])) {
+        if (isset($this->mocks[$className]) && $this->mocks[$className] !== []) {
             return $this->mocks[$className];
         }
 
@@ -112,7 +112,6 @@ final class PhpSpecMockCollector
 
         /** @var string $class */
         $class = $param->getAttribute(AttributeKey::CLASS_NAME);
-
         $this->mocks[$class][$variable][] = $param->getAttribute(AttributeKey::METHOD_NAME);
 
         if ($param->type === null) {

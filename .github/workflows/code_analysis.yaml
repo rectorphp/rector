@@ -3,6 +3,10 @@ name: Code Analysis
 on:
     pull_request: null
 
+env:
+    # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
+    COMPOSER_ROOT_VERSION: "dev-main"
+
 jobs:
     code_analysis:
         strategy:
@@ -11,7 +15,7 @@ jobs:
                 actions:
                     -
                         name: 'Composer Validate'
-                        run: composer validate --strict
+                        run: composer validate --strict --ansi
 
                     # make sure skipped files have "skip_" prefix
                     -

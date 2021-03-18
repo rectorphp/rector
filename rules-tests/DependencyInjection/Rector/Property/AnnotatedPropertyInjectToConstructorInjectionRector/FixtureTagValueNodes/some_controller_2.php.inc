@@ -7,7 +7,7 @@ use JMS\DiExtraBundle\Annotation as DI;
 class SomeController2
 {
     /**
-     * @DI\Inject("Rector\Tests\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeEntityManager")
+     * @DI\Inject("Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeEntityManager")
      */
     private $entityManager;
 }
@@ -22,7 +22,7 @@ use JMS\DiExtraBundle\Annotation as DI;
 
 class SomeController2
 {
-    public function __construct(private \Rector\Tests\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeEntityManager $entityManager)
+    public function __construct(private \Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeEntityManager $entityManager)
     {
     }
 }
