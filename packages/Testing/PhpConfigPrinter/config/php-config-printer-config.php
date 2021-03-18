@@ -16,9 +16,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public()
         ->autoconfigure();
 
-    $services->set(SymfonyVersionFeatureGuard::class);
-    $services->alias(SymfonyVersionFeatureGuardInterface::class, SymfonyVersionFeatureGuard::class);
+    // only for dev
+    if (interface_exists(SymfonyVersionFeatureGuardInterface::class)) {
+        $services->set(SymfonyVersionFeatureGuard::class);
+        $services->alias(SymfonyVersionFeatureGuardInterface::class, SymfonyVersionFeatureGuard::class);
 
-    $services->set(YamlFileContentProvider::class);
-    $services->alias(YamlFileContentProviderInterface::class, YamlFileContentProvider::class);
+        $services->set(YamlFileContentProvider::class);
+        $services->alias(YamlFileContentProviderInterface::class, YamlFileContentProvider::class);
+    }
 };

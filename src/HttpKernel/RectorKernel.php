@@ -85,7 +85,6 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
     {
         $bundles = [
             new ConsoleColorDiffBundle(),
-            new PhpConfigPrinterBundle(),
             new ComposerJsonManipulatorBundle(),
             new SkipperBundle(),
             new SimplePhpDocParserBundle(),
@@ -94,6 +93,10 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
         // only for dev
         if (class_exists(RectorGeneratorBundle::class)) {
             $bundles[] = new RectorGeneratorBundle();
+        }
+
+        if (class_exists(PhpConfigPrinterBundle::class)) {
+            $bundles[] = new PhpConfigPrinterBundle();
         }
 
         return $bundles;
