@@ -109,8 +109,10 @@ CODE_SAMPLE
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        /** @var Scope $scope */
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return true;
+        }
 
         // catch only classes without namespace
         if ($scope->getNamespace() !== null) {
