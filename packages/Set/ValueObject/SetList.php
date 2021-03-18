@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Set\ValueObject;
 
 use Rector\Set\Contract\SetListInterface;
+use Rector\Set\SymfonySetList;
 
 final class SetList implements SetListInterface
 {
@@ -504,89 +505,123 @@ final class SetList implements SetListInterface
     public const SWIFTMAILER_60 = __DIR__ . '/../../../config/set/swiftmailer60.php';
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_26 = __DIR__ . '/../../../config/set/symfony26.php';
+    public const SYMFONY_26 = SymfonySetList::SYMFONY_26;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_28 = __DIR__ . '/../../../config/set/symfony28.php';
+    public const SYMFONY_28 = SymfonySetList::SYMFONY_28;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_30 = __DIR__ . '/../../../config/set/symfony30.php';
+    public const SYMFONY_30 = SymfonySetList::SYMFONY_30;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_31 = __DIR__ . '/../../../config/set/symfony31.php';
+    public const SYMFONY_31 = SymfonySetList::SYMFONY_31;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_32 = __DIR__ . '/../../../config/set/symfony32.php';
+    public const SYMFONY_32 = SymfonySetList::SYMFONY_32;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_33 = __DIR__ . '/../../../config/set/symfony33.php';
+    public const SYMFONY_33 = SymfonySetList::SYMFONY_33;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_34 = __DIR__ . '/../../../config/set/symfony34.php';
+    public const SYMFONY_34 = SymfonySetList::SYMFONY_34;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_40 = __DIR__ . '/../../../config/set/symfony40.php';
+    public const SYMFONY_40 = SymfonySetList::SYMFONY_40;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_41 = __DIR__ . '/../../../config/set/symfony41.php';
+    public const SYMFONY_41 = SymfonySetList::SYMFONY_41;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_42 = __DIR__ . '/../../../config/set/symfony42.php';
+    public const SYMFONY_42 = SymfonySetList::SYMFONY_42;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_43 = __DIR__ . '/../../../config/set/symfony43.php';
+    public const SYMFONY_43 = SymfonySetList::SYMFONY_43;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_44 = __DIR__ . '/../../../config/set/symfony44.php';
+    public const SYMFONY_44 = SymfonySetList::SYMFONY_44;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_50 = __DIR__ . '/../../../config/set/symfony50.php';
+    public const SYMFONY_50 = SymfonySetList::SYMFONY_50;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_50_TYPES = __DIR__ . '/../../../config/set/symfony50-types.php';
+    public const SYMFONY_50_TYPES = SymfonySetList::SYMFONY_50_TYPES;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_52 = __DIR__ . '/../../../config/set/symfony52.php';
+    public const SYMFONY_52 = SymfonySetList::SYMFONY_52;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_CODE_QUALITY = __DIR__ . '/../../../config/set/symfony-code-quality.php';
+    public const SYMFONY_CODE_QUALITY = SymfonySetList::SYMFONY_CODE_QUALITY;
 
     /**
+     * For BC layer
+     * @deprecated Use SymfonySetList from rector/rector-symfony instead
      * @var string
      */
-    public const SYMFONY_CONSTRUCTOR_INJECTION = __DIR__ . '/../../../config/set/symfony-constructor-injection.php';
+    public const SYMFONY_CONSTRUCTOR_INJECTION = SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION;
 
     /**
      * @var string

@@ -27,7 +27,7 @@ final class RectorSetProvider extends AbstractSetProvider
     /**
      * @var array<class-string<SetListInterface>>
      */
-    private const SET_LIST_CLASSES = [SetList::class, DowngradeSetList::class];
+    private const SET_LIST_CLASSES = [SetList::class, DowngradeSetList::class, SymfonySetList::class];
 
     /**
      * @var Set[]
