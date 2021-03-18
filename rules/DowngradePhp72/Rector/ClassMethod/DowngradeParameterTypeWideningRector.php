@@ -139,7 +139,6 @@ CODE_SAMPLE
         // Remove the types in:
         // - all ancestors + their descendant classes
         // - all implemented interfaces + their implementing classes
-
         $parameterTypesByParentClassLikes = $this->resolveParameterTypesByClassLike(
             $classReflection,
             $methodName,

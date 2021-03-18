@@ -92,7 +92,8 @@ final class DowngradePathsCommand extends Command
         $finder = new Finder();
         $finder->directories()
             ->depth(0)
-            ->in(__DIR__ . '/../../../../rules');
+            ->in(__DIR__ . '/../../../../rules')
+            ->sortByName();
 
         $rulesPaths = [];
         foreach ($finder->getIterator() as $fileInfo) {
