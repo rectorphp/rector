@@ -41,7 +41,7 @@ return [
         // fixes https://github.com/rectorphp/rector-prefixed/runs/2143717534
         function (string $filePath, string $prefix, string $content) use ($filePathsToRemoveNamespace): string {
             // @see https://regex101.com/r/0jaVB1/1
-            $prefixedNamespacePattern = '#^namespace (.*?);$#';
+            $prefixedNamespacePattern = '#^namespace (.*?);$#m';
 
             foreach ($filePathsToRemoveNamespace as $filePathToRemoveNamespace) {
                 if (Strings::endsWith($filePath, $filePathToRemoveNamespace)) {
