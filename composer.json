@@ -34,11 +34,7 @@
         "doctrine/annotations": "^1.12",
         "doctrine/inflector": "^2.0",
         "jean85/pretty-package-versions": "^1.5.1|^2.0.1",
-<<<<<<< HEAD
-=======
         "nette/caching": "^3.1",
-        "nette/robot-loader": "^3.2 <=3.3.1",
->>>>>>> 7306af57f0... [Caching] Add nette/cache, lighter
         "nette/utils": "^3.2",
         "nikic/php-parser": "^4.10.4",
         "nette/robot-loader": "^3.4",
