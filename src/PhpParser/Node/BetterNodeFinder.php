@@ -85,7 +85,7 @@ final class BetterNodeFinder
     }
 
     /**
-     * @template T of Node
+     * @template T of \PhpParser\Node
      * @param array<class-string<T>> $types
      * @return T|null
      */
@@ -347,8 +347,8 @@ final class BetterNodeFinder
     }
 
     /**
-     * @param Node|Node[] $nodes
      * @template T of Node
+     * @param Node|Node[] $nodes
      * @param class-string<T> $type
      * @return T|null
      */

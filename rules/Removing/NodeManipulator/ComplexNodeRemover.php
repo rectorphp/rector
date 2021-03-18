@@ -182,10 +182,8 @@ final class ComplexNodeRemover
             return;
         }
 
-        $constructClassMethodStmts = $constructClassMethod->stmts;
-
         foreach ($constructClassMethod->getParams() as $param) {
-            $variable = $this->betterNodeFinder->findFirst($constructClassMethodStmts, function (Node $node) use (
+            $variable = $this->betterNodeFinder->findFirst((array) $constructClassMethod->stmts, function (Node $node) use (
                 $param
             ): bool {
                 return $this->nodeComparator->areNodesEqual($param->var, $node);

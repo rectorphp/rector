@@ -202,7 +202,7 @@ final class ClassMethodReturnTypeOverrideGuard
 
     private function hasClassMethodExprReturn(ClassMethod $classMethod): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($classMethod->getStmts(), function (Node $node): bool {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
             if (! $node instanceof Return_) {
                 return false;
             }
