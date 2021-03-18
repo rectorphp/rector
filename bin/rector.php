@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Nette\Utils\Strings;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
@@ -47,6 +48,16 @@ try {
     $rectorContainerFactory = new RectorContainerFactory();
     $container = $rectorContainerFactory->createFromBootstrapConfigs($bootstrapConfigs);
 } catch (SetNotFoundException $setNotFoundException) {
+    // possible custom set list
+    $match = Strings::match($setNotFoundException->getMessage(), '#Set (".*") was not found#');
+    if ($match) {
+        $path = realpath(trim($match[1], '"'));
+        if ($path) {
+            // eg : /Users/samsonasik/www/laminas-mvc-skeleton/vendor/laminas/laminas-servicemanager-migration/config/rector/set/laminas-servicemanager-40.php
+            echo $path;die;
+        }
+    }
+
     $invalidSetReporter = new InvalidSetReporter();
     $invalidSetReporter->report($setNotFoundException);
     exit(ShellCode::ERROR);
