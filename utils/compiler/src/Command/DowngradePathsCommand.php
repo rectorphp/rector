@@ -71,10 +71,16 @@ final class DowngradePathsCommand extends Command
             }
         }
 
-        $downgradePaths = array_merge(['vendor/symplify vendor/symfony vendor/psr vendor/nikic src packages'],
+        $downgradePaths = array_merge(['vendor/symplify vendor/symfony vendor/psr src'],
             $downgradePaths
         );
         $downgradePaths = array_values($downgradePaths);
+
+        // put last, to make printer and base printer covariance fix
+        $downgradePaths[] = 'src/PhpParser/Printer vendor/nikic';
+
+        dump($downgradePaths);
+        die;
 
         // bash format
         $downgradePathsLine = implode(';', $downgradePaths);
@@ -92,7 +98,8 @@ final class DowngradePathsCommand extends Command
         $finder = new Finder();
         $finder->directories()
             ->depth(0)
-            ->in(__DIR__ . '/../../../../rules');
+            ->in(__DIR__ . '/../../../../rules')
+            ->sortByName();
 
         $rulesPaths = [];
         foreach ($finder->getIterator() as $fileInfo) {
