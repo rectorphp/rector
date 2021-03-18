@@ -11,7 +11,7 @@ use Rector\Compiler\ValueObject\ScoperOption;
 require_once __DIR__ . '/vendor/autoload.php';
 
 // [BEWARE] this path is relative to the root and location of this file
-$filePathsToSkip = [
+$filePathsToRemoveNamespace = [
     // @see https://github.com/rectorphp/rector/issues/2852#issuecomment-586315588
     'vendor/symfony/deprecation-contracts/function.php',
     // it would make polyfill function work only with namespace = brokes
@@ -34,10 +34,23 @@ $timestamp = $dateTime->format('Ymd');
 // see https://github.com/humbug/php-scoper
 return [
     ScoperOption::PREFIX => 'RectorPrefix' . $timestamp,
-    ScoperOption::FILES_WHITELIST => $filePathsToSkip,
     ScoperOption::WHITELIST => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),
     ScoperOption::PATCHERS => [
         // [BEWARE] $filePath is absolute!
+
+        // fixes https://github.com/rectorphp/rector-prefixed/runs/2143717534
+        function (string $filePath, string $prefix, string $content) use ($filePathsToRemoveNamespace): string {
+            // @see https://regex101.com/r/0jaVB1/1
+            $prefixedNamespacePattern = '#^namespace (.*?);$#';
+
+            foreach ($filePathsToRemoveNamespace as $filePathToRemoveNamespace) {
+                if (Strings::endsWith($filePath, $filePathToRemoveNamespace)) {
+                    return Strings::replace($content, $prefixedNamespacePattern, '');
+                }
+            }
+
+            return $content;
+        },
 
         // fixes https://github.com/rectorphp/rector-prefixed/runs/2103759172
         // and https://github.com/rectorphp/rector-prefixed/blob/0cc433e746b645df5f905fa038573c3a1a9634f0/vendor/jean85/pretty-package-versions/src/PrettyVersions.php#L6
