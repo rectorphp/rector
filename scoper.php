@@ -13,7 +13,17 @@ require_once __DIR__ . '/vendor/autoload.php';
 // [BEWARE] this path is relative to the root and location of this file
 $filePathsToSkip = [
     // @see https://github.com/rectorphp/rector/issues/2852#issuecomment-586315588
-    'vendor/symfony/deprecation-contracts/function.php'
+    'vendor/symfony/deprecation-contracts/function.php',
+    // it would make polyfill function work only with namespace = brokes
+    'vendor/symfony/polyfill-ctype/bootstrap.php',
+    'vendor/symfony/polyfill-intl-normalizer/bootstrap.php',
+    'vendor/symfony/polyfill-intl-grapheme/bootstrap.php',
+    'vendor/symfony/polyfill-mbstring/bootstrap.php',
+    'vendor/symfony/polyfill-php80/bootstrap.php',
+    'vendor/symfony/polyfill-php74/bootstrap.php',
+    'vendor/symfony/polyfill-php73/bootstrap.php',
+    'vendor/symfony/polyfill-php72/bootstrap.php',
+    'vendor/symfony/polyfill-uuid/bootstrap.php',
 ];
 
 // remove phpstan, because it is already prefixed in its own scope
