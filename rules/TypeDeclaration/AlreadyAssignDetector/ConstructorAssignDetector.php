@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
@@ -57,9 +56,9 @@ final class ConstructorAssignDetector
             }
         }
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($constructClassMethod->stmts, function (Node $node) use (
-            $propertyName, &$isAssignedInConstructor
-        ): ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($constructClassMethod->stmts, function (
+            Node $node
+        ) use ($propertyName, &$isAssignedInConstructor): ?int {
             $expr = $this->matchAssignExprToPropertyName($node, $propertyName);
             if (! $expr instanceof Expr) {
                 return null;
