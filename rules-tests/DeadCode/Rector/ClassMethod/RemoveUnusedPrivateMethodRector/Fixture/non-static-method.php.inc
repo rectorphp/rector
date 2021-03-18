@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Fixture;
 
-final class DemoFile
+class DemoFile
 {
     private function notcalled() {
         $x = 3;
@@ -24,7 +24,7 @@ final class DemoFile
 
 namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Fixture;
 
-final class DemoFile
+class DemoFile
 {
     public function run()
     {
