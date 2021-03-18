@@ -11,7 +11,6 @@ use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -22,7 +21,7 @@ final class FileHashComputer
 {
     public function compute(SmartFileInfo $fileInfo): string
     {
-        $this->ensureIsYamlOrPhp($fileInfo);
+        $this->ensureIsPhp($fileInfo);
 
         $containerBuilder = new ContainerBuilder();
         $fileLoader = $this->createFileLoader($fileInfo, $containerBuilder);
@@ -30,18 +29,19 @@ final class FileHashComputer
         $fileLoader->load($fileInfo->getRealPath());
 
         $parameterBag = $containerBuilder->getParameterBag();
+
         return $this->arrayToHash($containerBuilder->getDefinitions()) . $this->arrayToHash($parameterBag->all());
     }
 
-    private function ensureIsYamlOrPhp(SmartFileInfo $fileInfo): void
+    private function ensureIsPhp(SmartFileInfo $fileInfo): void
     {
-        if ($fileInfo->hasSuffixes(['yml', 'yaml', 'php'])) {
+        if ($fileInfo->hasSuffixes(['php'])) {
             return;
         }
 
         throw new ShouldNotHappenException(sprintf(
             // getRealPath() cannot be used, as it breaks in phar
-            'Provide only YAML/PHP file, ready for Symfony Dependency Injection. "%s" given', $fileInfo->getRelativeFilePath()
+            'Provide only PHP file, ready for Symfony Dependency Injection. "%s" given', $fileInfo->getRelativeFilePath()
         ));
     }
 
@@ -52,7 +52,6 @@ final class FileHashComputer
         $fileLoaders = [
             new GlobFileLoader($containerBuilder, $fileLocator),
             new PhpFileLoader($containerBuilder, $fileLocator),
-            new YamlFileLoader($containerBuilder, $fileLocator),
         ];
 
         $loaderResolver = new LoaderResolver($fileLoaders);

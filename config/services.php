@@ -6,6 +6,7 @@ use Composer\Semver\VersionParser;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\Rules\English\InflectorFactory;
+use Nette\Caching\Cache;
 use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
 use PhpParser\NodeFinder;
@@ -20,10 +21,8 @@ use PHPStan\File\FileHelper;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\Reflection\ReflectionProvider;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\SimpleCache\CacheInterface;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
-use Rector\Caching\Cache\Adapter\FilesystemAdapterFactory;
+use Rector\Caching\Cache\NetteCacheFactory;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
@@ -31,10 +30,6 @@ use Rector\DoctrineAnnotationGenerated\ConstantPreservingAnnotationReader;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Component\Cache\Adapter\TagAwareAdapter;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
-use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -127,14 +122,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->factory([service(PHPStanServicesFactory::class), 'createDependencyResolver']);
     $services->set(FileHelper::class)
         ->factory([service(PHPStanServicesFactory::class), 'createFileHelper']);
-    $services->set(Psr16Cache::class);
-    $services->alias(CacheInterface::class, Psr16Cache::class);
-    $services->set(FilesystemAdapter::class)
-        ->factory([service(FilesystemAdapterFactory::class), 'create']);
-    $services->set(TagAwareAdapter::class)
-        ->arg('$itemsPool', service(FilesystemAdapter::class));
-    $services->alias(CacheItemPoolInterface::class, FilesystemAdapter::class);
-    $services->alias(TagAwareAdapterInterface::class, TagAwareAdapter::class);
+
+    $services->set(Cache::class)
+        ->factory([service(NetteCacheFactory::class), 'create']);
 
     // type resolving
     $services->set(IntermediateSourceLocator::class);
