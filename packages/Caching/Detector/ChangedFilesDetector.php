@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Caching\Detector;
 
+use Nette\Caching\Cache;
 use Nette\Utils\Strings;
 use Rector\Caching\Config\FileHashComputer;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -21,19 +21,19 @@ final class ChangedFilesDetector
     private const CONFIGURATION_HASH_KEY = 'configuration_hash';
 
     /**
-     * @var TagAwareAdapterInterface
-     */
-    private $tagAwareAdapter;
-
-    /**
      * @var FileHashComputer
      */
     private $fileHashComputer;
 
-    public function __construct(FileHashComputer $fileHashComputer, TagAwareAdapterInterface $tagAwareAdapter)
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    public function __construct(FileHashComputer $fileHashComputer, Cache $cache)
     {
-        $this->tagAwareAdapter = $tagAwareAdapter;
         $this->fileHashComputer = $fileHashComputer;
+        $this->cache = $cache;
     }
 
     /**
@@ -44,9 +44,8 @@ final class ChangedFilesDetector
         $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
         $hash = $this->hashFile($smartFileInfo);
 
-        $this->saveItemWithValue($fileInfoCacheKey, $hash);
-
-        $this->saveItemWithValue($fileInfoCacheKey . '_files', $dependentFiles);
+        $this->cache->save($fileInfoCacheKey, $hash);
+        $this->cache->save($fileInfoCacheKey . '_files', $dependentFiles);
     }
 
     public function hasFileChanged(SmartFileInfo $smartFileInfo): bool
@@ -54,23 +53,22 @@ final class ChangedFilesDetector
         $currentFileHash = $this->hashFile($smartFileInfo);
 
         $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
-        $cacheItem = $this->tagAwareAdapter->getItem($fileInfoCacheKey);
 
-        $oldFileHash = $cacheItem->get();
-
-        return $currentFileHash !== $oldFileHash;
+        $cachedValue = $this->cache->load($fileInfoCacheKey);
+        return $currentFileHash !== $cachedValue;
     }
 
     public function invalidateFile(SmartFileInfo $smartFileInfo): void
     {
         $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
-
-        $this->tagAwareAdapter->deleteItem($fileInfoCacheKey);
+        $this->cache->remove($fileInfoCacheKey);
     }
 
     public function clear(): void
     {
-        $this->tagAwareAdapter->clear();
+        $this->cache->clean([
+            Cache::ALL => true,
+        ]);
     }
 
     /**
@@ -80,14 +78,14 @@ final class ChangedFilesDetector
     {
         $fileInfoCacheKey = $this->getFileInfoCacheKey($fileInfo);
 
-        $cacheItem = $this->tagAwareAdapter->getItem($fileInfoCacheKey . '_files');
-        if ($cacheItem->get() === null) {
+        $cacheValue = $this->cache->load($fileInfoCacheKey . '_files');
+        if ($cacheValue === null) {
             return [];
         }
 
         $dependentFileInfos = [];
 
-        $dependentFiles = $cacheItem->get();
+        $dependentFiles = $cacheValue;
         foreach ($dependentFiles as $dependentFile) {
             if (! file_exists($dependentFile)) {
                 continue;
@@ -119,34 +117,22 @@ final class ChangedFilesDetector
         return (string) sha1_file($smartFileInfo->getRealPath());
     }
 
-    /**
-     * @param mixed $value
-     */
-    private function saveItemWithValue(string $key, $value): void
-    {
-        $cacheItem = $this->tagAwareAdapter->getItem($key);
-        $cacheItem->set($value);
-
-        $this->tagAwareAdapter->save($cacheItem);
-    }
-
     private function storeConfigurationDataHash(SmartFileInfo $fileInfo, string $configurationHash): void
     {
         $key = self::CONFIGURATION_HASH_KEY . '_' . Strings::webalize($fileInfo->getRealPath());
-
         $this->invalidateCacheIfConfigurationChanged($key, $configurationHash);
 
-        $this->saveItemWithValue($key, $configurationHash);
+        $this->cache->save($key, $configurationHash);
     }
 
     private function invalidateCacheIfConfigurationChanged(string $key, string $configurationHash): void
     {
-        $cacheItem = $this->tagAwareAdapter->getItem($key);
-
-        $oldConfigurationHash = $cacheItem->get();
-        if ($configurationHash !== $oldConfigurationHash) {
-            // should be unique per getcwd()
-            $this->clear();
+        $oldCachedValue = $this->cache->load($key);
+        if ($oldCachedValue === $configurationHash) {
+            return;
         }
+
+        // should be unique per getcwd()
+        $this->clear();
     }
 }
