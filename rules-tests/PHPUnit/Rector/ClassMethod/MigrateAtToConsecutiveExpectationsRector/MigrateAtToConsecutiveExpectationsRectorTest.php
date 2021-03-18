@@ -19,6 +19,9 @@ final class MigrateAtToConsecutiveExpectationsRectorTest extends AbstractRectorT
         $this->doTestFileInfo($fileInfo);
     }
 
+    /**
+     * @return Iterator<SmartFileInfo>
+     */
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');

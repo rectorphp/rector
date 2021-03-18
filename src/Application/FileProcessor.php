@@ -11,7 +11,6 @@ use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\PhpParser\Parser\Parser;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
-use Rector\Core\Stubs\StubLoader;
 use Rector\Core\ValueObject\Application\ParsedStmtsAndTokens;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
@@ -51,11 +50,6 @@ final class FileProcessor
     private $currentFileInfoProvider;
 
     /**
-     * @var StubLoader
-     */
-    private $stubLoader;
-
-    /**
      * @var AffectedFilesCollector
      */
     private $affectedFilesCollector;
@@ -79,7 +73,6 @@ final class FileProcessor
         Parser $parser,
         PostFileProcessor $postFileProcessor,
         RectorNodeTraverser $rectorNodeTraverser,
-        StubLoader $stubLoader,
         TokensByFilePathStorage $tokensByFilePathStorage
     ) {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
@@ -88,7 +81,6 @@ final class FileProcessor
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
-        $this->stubLoader = $stubLoader;
         $this->affectedFilesCollector = $affectedFilesCollector;
         $this->postFileProcessor = $postFileProcessor;
         $this->tokensByFilePathStorage = $tokensByFilePathStorage;
@@ -127,7 +119,6 @@ final class FileProcessor
 
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
-        $this->stubLoader->loadStubs();
         $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
 
         $this->makeSureFileIsParsed($smartFileInfo);
