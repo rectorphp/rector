@@ -92,12 +92,12 @@ final class UseAddingPostRector extends AbstractPostRector
         $this->useNodesToAddCollector->clear($smartFileInfo);
 
         // A. has namespace? add under it
-        $foundNode = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
-        if ($foundNode instanceof Namespace_) {
+        $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
+        if ($namespace instanceof Namespace_) {
             // first clean
-            $this->useImportsRemover->removeImportsFromNamespace($foundNode, $removedShortUses);
+            $this->useImportsRemover->removeImportsFromNamespace($namespace, $removedShortUses);
             // then add, to prevent adding + removing false positive of same short use
-            $this->useImportsAdder->addImportsToNamespace($foundNode, $useImportTypes, $functionUseImportTypes);
+            $this->useImportsAdder->addImportsToNamespace($namespace, $useImportTypes, $functionUseImportTypes);
 
             return $nodes;
         }

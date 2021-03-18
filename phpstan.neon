@@ -587,3 +587,6 @@ parameters:
 
         # phpstan bug
         - '#Unable to resolve the template type T in call to method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentTypes\(\)#'
+        -
+            message: '#Function "interface_exists\(\)" cannot be used/left in the code#'
+            path: packages/Testing/PhpConfigPrinter/config/php-config-printer-config.php

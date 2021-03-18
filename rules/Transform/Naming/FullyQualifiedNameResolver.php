@@ -32,12 +32,12 @@ final class FullyQualifiedNameResolver
      */
     public function resolveFullyQualifiedName(array $nodes, string $shortClassName): string
     {
-        $foundNode = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
-        if (! $foundNode instanceof Namespace_) {
+        $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
+        if (! $namespace instanceof Namespace_) {
             return $shortClassName;
         }
 
-        $namespaceName = $this->nodeNameResolver->getName($foundNode);
+        $namespaceName = $this->nodeNameResolver->getName($namespace);
         if ($namespaceName === null) {
             return $shortClassName;
         }

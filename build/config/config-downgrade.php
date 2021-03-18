@@ -50,8 +50,11 @@ final class DowngradeRectorConfig
 
         // use relative paths, so files are excluded on nested directory too
         'vendor/symfony/http-kernel/HttpKernelBrowser.php',
-        'vendor/symfony/string/Slugger/AsciiSlugger.php',
 
+        // not used at all
+        'vendor/symfony/http-foundation/Session/*',
+        'vendor/symfony/string/Slugger/AsciiSlugger.php',
+        'vendor/nette/caching/src/Bridges/*',
 
         // always excluded
         '*vendor/symfony/polyfill*/bootstrap80.php',
