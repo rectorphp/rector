@@ -12,7 +12,9 @@ rector-recipe.php
 # testing
 abz
 
+# scoped & downgraded version
 php-scoper.phar
 box.phar
+php-parallel-lint
 
 tmp

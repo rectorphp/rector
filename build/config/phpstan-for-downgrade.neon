@@ -1,0 +1,11 @@
+# this config has extensions, that helps PHPStan inside Rector to resolve more precise types
+parameters:
+    inferPrivatePropertyTypeFromConstructor: true
+
+    scanDirectories:
+        # this is needed for symfony/dependendency-injection as it has hidden dependency on symfony/expression-language that we don't use here
+        - ../../stubs
+
+    # see https://github.com/rectorphp/rector/issues/3490#issue-634342324
+    featureToggles:
+        disableRuntimeReflectionProvider: true

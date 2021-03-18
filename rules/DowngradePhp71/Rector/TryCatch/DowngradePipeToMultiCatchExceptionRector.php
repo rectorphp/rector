@@ -30,7 +30,7 @@ try {
  }
 CODE_SAMPLE
                     ,
-                    <<<'CODE_SAMPLE'
+<<<'CODE_SAMPLE'
 try {
     // Some code...
 } catch (ExceptionType1 $exception) {

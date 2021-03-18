@@ -44,7 +44,6 @@ if (class_exists(Debugger::class)) {
 
 try {
     $bootstrapConfigs = $rectorConfigsResolver->provide();
-
     $rectorContainerFactory = new RectorContainerFactory();
     $container = $rectorContainerFactory->createFromBootstrapConfigs($bootstrapConfigs);
 } catch (SetNotFoundException $setNotFoundException) {

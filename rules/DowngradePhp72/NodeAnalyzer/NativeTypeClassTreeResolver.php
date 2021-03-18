@@ -57,7 +57,8 @@ final class NativeTypeClassTreeResolver
         return TypehintHelper::decideTypeFromReflection(
             $parameterReflection->getType(),
             null,
-            $classReflection->getName()
+            $classReflection->getName(),
+            $parameterReflection->isVariadic()
         );
     }
 

@@ -126,13 +126,6 @@ final class PHPStanNodeScopeResolver
 
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $nodeCallback = function (Node $node, Scope $scope): void {
-            // the class reflection is resolved AFTER entering to class node
-            // so we need to get it from the first after this one
-            if ($node instanceof Class_ || $node instanceof Interface_) {
-                /** @var Scope $scope */
-                $scope = $this->resolveClassOrInterfaceScope($node, $scope);
-            }
-
             // traversing trait inside class that is using it scope (from referenced) - the trait traversed by Rector is different (directly from parsed file)
             if ($scope->isInTrait()) {
                 /** @var ClassReflection $classReflection */
@@ -141,6 +134,13 @@ final class PHPStanNodeScopeResolver
                 $this->traitNodeScopeCollector->addForTraitAndNode($traitName, $node, $scope);
 
                 return;
+            }
+
+            // the class reflection is resolved AFTER entering to class node
+            // so we need to get it from the first after this one
+            if ($node instanceof Class_ || $node instanceof Interface_) {
+                /** @var Scope $scope */
+                $scope = $this->resolveClassOrInterfaceScope($node, $scope);
             }
 
             // special case for unreachable nodes
@@ -185,10 +185,10 @@ final class PHPStanNodeScopeResolver
         // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91
         if ($classLike instanceof Class_ && Strings::match($className, self::ANONYMOUS_CLASS_START_REGEX)) {
             $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $scope);
-        } elseif ($this->reflectionProvider->hasClass($className)) {
-            $classReflection = $this->reflectionProvider->getClass($className);
-        } else {
+        } elseif (! $this->reflectionProvider->hasClass($className)) {
             return $scope;
+        } else {
+            $classReflection = $this->reflectionProvider->getClass($className);
         }
 
         /** @var MutatingScope $scope */

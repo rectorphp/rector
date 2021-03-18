@@ -577,10 +577,10 @@ parameters:
                 - rules/Privatization/Rector/Class_/ChangeReadOnlyVariableWithDefaultValueToConstantRector.php
                 - rules/Privatization/Naming/ConstantNaming.php
 
-
         -
             message: '#Cannot cast array<string\>\|string\|null to string#'
             paths:
                 - utils/compiler/src/Command/DowngradePathsCommand.php
 
         - '#Method Rector\\Testing\\Finder\\RectorsFinder\:\:findClassesInDirectoriesByName\(\) should return array<class\-string\> but returns array<int, string\>#'
+        - '#Cannot cast array<string\>\|string\|null to string#'

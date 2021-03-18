@@ -49,6 +49,10 @@ final class DowngradePathsCommand extends Command
         $downgradePaths = array_merge($downgradePaths, $rulesPaths);
 
         // make symplify grouped into 1 directory, to make covariance downgrade work with all dependent classes
+        $rulesPaths = $this->resolveRulesPaths();
+        $downgradePaths = array_merge($downgradePaths, $rulesPaths);
+
+        // make symplify grouped into 1 directory, to make covariance downgrade work with all dependent classes
         foreach ($downgradePaths as $key => $downgradePath) {
             if (Strings::startsWith($downgradePath, 'vendor/symplify')) {
                 unset($downgradePaths[$key]);
@@ -74,6 +78,7 @@ final class DowngradePathsCommand extends Command
 
         // bash format
         $downgradePathsLine = implode(';', $downgradePaths);
+
         echo $downgradePathsLine . PHP_EOL;
 
         return ShellCode::SUCCESS;

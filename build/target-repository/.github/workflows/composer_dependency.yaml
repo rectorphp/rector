@@ -1,17 +1,18 @@
-name: Along PHPStan
+name: Composer Dependency
 
 on: [pull_request, push]
 
 jobs:
-    along_phpstan:
+    run_as_composer_dependency:
         runs-on: ubuntu-latest
 
         strategy:
             fail-fast: false
             matrix:
-                php_version: ['7.3', '7.4', '8.0']
+                php_version: ['7.1', '7.2', '7.3', '7.4', '8.0']
+                symfony_version: ['2.8', '3.4', '4.4']
 
-        name: "PHP ${{ matrix.php_version }}"
+        name: "PHP ${{ matrix.php_version }} and Symfony ${{ matrix.symfony_version }}"
 
         steps:
             -   uses: actions/checkout@v2
@@ -31,10 +32,5 @@ jobs:
                     cd standalone
                     # run
                     composer require rector/rector-prefixed:dev-main --dev --ansi
-                    composer require phpstan/phpstan --dev --ansi
-
-            -
-                run: |
-                    cd standalone
-                    vendor/bin/rector list -h --ansi
-                    vendor/bin/phpstan -h --ansi
+                    composer require symfony/console ${{ matrix.symfony_version }}
+                    vendor/bin/rector list --debug --ansi
