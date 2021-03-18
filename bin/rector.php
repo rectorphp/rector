@@ -8,10 +8,12 @@ use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\SetConfigResolver\Bootstrap\InvalidSetReporter;
 use Symplify\SetConfigResolver\Exception\SetNotFoundException;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Tracy\Debugger;
 
 // @ intentionally: continue anyway
@@ -48,19 +50,26 @@ try {
     $rectorContainerFactory = new RectorContainerFactory();
     $container = $rectorContainerFactory->createFromBootstrapConfigs($bootstrapConfigs);
 } catch (SetNotFoundException $setNotFoundException) {
-    // possible custom set list
     $match = Strings::match($setNotFoundException->getMessage(), '#Set (".*") was not found#');
     if ($match) {
         $path = realpath(trim($match[1], '"'));
         if ($path) {
-            // eg : /Users/samsonasik/www/laminas-mvc-skeleton/vendor/laminas/laminas-servicemanager-migration/config/rector/set/laminas-servicemanager-40.php
-            echo $path;die;
+            $rectorContainerFactory = new RectorContainerFactory();
+            try {
+                $container = $rectorContainerFactory->createFromBootstrapConfigs(
+                    new BootstrapConfigs(new SmartFileInfo($path), [])
+                );
+            } catch (SetNotFoundException $setNotFoundException) {
+                $invalidSetReporter = new InvalidSetReporter();
+                $invalidSetReporter->report($setNotFoundException);
+                exit(ShellCode::ERROR);
+            }
         }
+    } else {
+        $invalidSetReporter = new InvalidSetReporter();
+        $invalidSetReporter->report($setNotFoundException);
+        exit(ShellCode::ERROR);
     }
-
-    $invalidSetReporter = new InvalidSetReporter();
-    $invalidSetReporter->report($setNotFoundException);
-    exit(ShellCode::ERROR);
 } catch (Throwable $throwable) {
     $symfonyStyle->error($throwable->getMessage());
     exit(ShellCode::ERROR);
