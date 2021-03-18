@@ -8,10 +8,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(
-        Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
-        __DIR__ . '/../../../../../Symfony/Rector/MethodCall/GetToConstructorInjectionRector/xml/services.xml'
-    );
+    $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ . '/../xml/services.xml');
 
     $services = $containerConfigurator->services();
     $services->set(AnnotatedPropertyInjectToConstructorInjectionRector::class);

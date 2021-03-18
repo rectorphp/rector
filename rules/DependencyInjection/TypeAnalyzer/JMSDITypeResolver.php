@@ -13,7 +13,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Symfony\ServiceMapProvider;
+use Rector\Symfony\DataProvider\ServiceMapProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class JMSDITypeResolver
@@ -53,6 +53,7 @@ final class JMSDITypeResolver
     public function resolve(Property $property, JMSInjectTagValueNode $jmsInjectTagValueNode): Type
     {
         $serviceMap = $this->serviceMapProvider->provide();
+
         $serviceName = $jmsInjectTagValueNode->getServiceName();
 
         if ($serviceName) {

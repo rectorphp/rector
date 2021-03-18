@@ -5,6 +5,10 @@ on:
         # https://crontab.guru/once-a-week
         -   cron: "0 0 * * 0"
 
+env:
+    # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
+    COMPOSER_ROOT_VERSION: "dev-main"
+
 jobs:
     weekly_pull_requests:
         strategy:
