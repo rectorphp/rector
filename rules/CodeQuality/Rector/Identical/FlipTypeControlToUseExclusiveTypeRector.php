@@ -188,6 +188,7 @@ CODE_SAMPLE
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $varTagValueNode);
         }
 
-        return new BooleanNot(new Instanceof_($expr, new FullyQualified($type->getClassName())));
+        $className = ltrim($type->getClassName(), '\\');
+        return new BooleanNot(new Instanceof_($expr, new FullyQualified($className)));
     }
 }

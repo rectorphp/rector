@@ -24,11 +24,6 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const USE_NODES = 'useNodes';
-
-    /**
-     * @var string
-     */
     public const CLASS_NAME = 'className';
 
     /**

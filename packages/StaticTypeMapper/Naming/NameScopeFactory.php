@@ -14,8 +14,10 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\DataCollector\UsePerFileInfoDataCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see https://github.com/phpstan/phpstan-src/blob/8376548f76e2c845ae047e3010e873015b796818/src/Analyser/NameScope.php#L32
@@ -33,6 +35,16 @@ final class NameScopeFactory
     private $phpDocInfoFactory;
 
     /**
+     * @var UsePerFileInfoDataCollector
+     */
+    private $usePerFileInfoDataCollector;
+
+    public function __construct(UsePerFileInfoDataCollector $usePerFileInfoDataCollector)
+    {
+        $this->usePerFileInfoDataCollector = $usePerFileInfoDataCollector;
+    }
+
+    /**
      * This is needed to avoid circular references
      * @required
      */
@@ -46,13 +58,15 @@ final class NameScopeFactory
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         $namespace = $scope instanceof Scope ? $scope->getNamespace() : null;
 
-        /** @var Use_[] $useNodes */
-        $useNodes = (array) $node->getAttribute(AttributeKey::USE_NODES);
+        /** @var SmartFileInfo $fileInfo */
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
 
-        $uses = $this->resolveUseNamesByAlias($useNodes);
+        $useNodes = $this->usePerFileInfoDataCollector->getUsesByFileInfo($fileInfo);
+
+        $useNamesByAlias = $this->resolveUseNamesByAlias($useNodes);
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
-        return new NameScope($namespace, $uses, $className);
+        return new NameScope($namespace, $useNamesByAlias, $className);
     }
 
     public function createNameScopeFromNode(Node $node): NameScope

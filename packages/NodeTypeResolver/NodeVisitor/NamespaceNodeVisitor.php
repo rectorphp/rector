@@ -5,27 +5,38 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\DataCollector\UsePerFileInfoDataCollector;
+use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NamespaceNodeVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var Use_[]
-     */
-    private $useNodes = [];
-
     /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder)
-    {
+    /**
+     * @var UsePerFileInfoDataCollector
+     */
+    private $usePerFileInfoDataCollector;
+
+    /**
+     * @var CurrentFileInfoProvider
+     */
+    private $currentFileInfoProvider;
+
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        UsePerFileInfoDataCollector $usePerFileInfoDataCollector,
+        CurrentFileInfoProvider $currentFileInfoProvider
+    ) {
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->usePerFileInfoDataCollector = $usePerFileInfoDataCollector;
+        $this->currentFileInfoProvider = $currentFileInfoProvider;
     }
 
     /**
@@ -34,24 +45,18 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
      */
     public function beforeTraverse(array $nodes): ?array
     {
-        // init basic use nodes for non-namespaced code
         /** @var Use_[] $uses */
         $uses = $this->betterNodeFinder->findInstanceOf($nodes, Use_::class);
-        $this->useNodes = $uses;
-
-        return null;
-    }
-
-    public function enterNode(Node $node): ?Node
-    {
-        if ($node instanceof Namespace_) {
-            /** @var Use_[] $uses */
-            $uses = $this->betterNodeFinder->findInstanceOf($node, Use_::class);
-            $this->useNodes = $uses;
+        if ($uses === []) {
+            return null;
         }
 
-        $node->setAttribute(AttributeKey::USE_NODES, $this->useNodes);
+        $firstNode = $nodes[0];
 
-        return $node;
+        /** @var SmartFileInfo $fileInfo */
+        $fileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
+        $this->usePerFileInfoDataCollector->addUsesPerFileInfo($uses, $fileInfo);
+
+        return null;
     }
 }

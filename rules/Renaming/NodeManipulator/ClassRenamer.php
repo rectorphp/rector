@@ -26,11 +26,13 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
+use Rector\NodeTypeResolver\DataCollector\UsePerFileInfoDataCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ClassRenamer
 {
@@ -89,6 +91,11 @@ final class ClassRenamer
      */
     private $parameterProvider;
 
+    /**
+     * @var UsePerFileInfoDataCollector
+     */
+    private $usePerFileInfoDataCollector;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
@@ -99,7 +106,8 @@ final class ClassRenamer
         DocBlockClassRenamer $docBlockClassRenamer,
         ReflectionProvider $reflectionProvider,
         NodeRemover $nodeRemover,
-        ParameterProvider $parameterProvider
+        ParameterProvider $parameterProvider,
+        UsePerFileInfoDataCollector $usePerFileInfoDataCollector
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -111,6 +119,7 @@ final class ClassRenamer
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeRemover = $nodeRemover;
         $this->parameterProvider = $parameterProvider;
+        $this->usePerFileInfoDataCollector = $usePerFileInfoDataCollector;
     }
 
     /**
@@ -427,9 +436,11 @@ final class ClassRenamer
 
     private function isValidUseImportChange(string $newName, UseUse $useUse): bool
     {
-        /** @var Use_[]|null $useNodes */
-        $useNodes = $useUse->getAttribute(AttributeKey::USE_NODES);
-        if ($useNodes === null) {
+        /** @var SmartFileInfo $fileInfo */
+        $fileInfo = $useUse->getAttribute(AttributeKey::FILE_INFO);
+
+        $useNodes = $this->usePerFileInfoDataCollector->getUsesByFileInfo($fileInfo);
+        if ($useNodes === []) {
             return true;
         }
 

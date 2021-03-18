@@ -12,7 +12,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Use_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
@@ -46,7 +45,6 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
         AttributeKey::class . '::PARENT_NODE' => Node::class,
         AttributeKey::class . '::NEXT_NODE' => Node::class,
         AttributeKey::class . '::PREVIOUS_NODE' => Node::class,
-        AttributeKey::class . '::USE_NODES' => [Use_::class],
         # scalars
         AttributeKey::class . '::PARENT_CLASS_NAME' => 'string',
         AttributeKey::class . '::CLASS_NAME' => 'string',

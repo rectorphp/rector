@@ -210,6 +210,7 @@ final class ForAnalyzer
         if (! $parent instanceof Node) {
             return false;
         }
+
         return $this->nodeNameResolver->isFuncCallName($parent, self::COUNT);
     }
 }

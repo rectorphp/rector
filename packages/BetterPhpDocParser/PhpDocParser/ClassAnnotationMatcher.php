@@ -10,7 +10,9 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
+use Rector\NodeTypeResolver\DataCollector\UsePerFileInfoDataCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Matches "@ORM\Entity" to FQN names based on use imports in the file
@@ -27,9 +29,17 @@ final class ClassAnnotationMatcher
      */
     private $reflectionProvider;
 
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
+    /**
+     * @var UsePerFileInfoDataCollector
+     */
+    private $usePerFileInfoDataCollector;
+
+    public function __construct(
+        ReflectionProvider $reflectionProvider,
+        UsePerFileInfoDataCollector $usePerFileInfoDataCollector
+     ) {
         $this->reflectionProvider = $reflectionProvider;
+        $this->usePerFileInfoDataCollector = $usePerFileInfoDataCollector;
     }
 
     public function resolveTagFullyQualifiedName(string $tag, Node $node): string
@@ -41,10 +51,11 @@ final class ClassAnnotationMatcher
 
         $tag = ltrim($tag, '@');
 
-        /** @var Use_[] $useNodes */
-        $useNodes = (array) $node->getAttribute(AttributeKey::USE_NODES);
+        /** @var SmartFileInfo $fileInfo */
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        $uses = $this->usePerFileInfoDataCollector->getUsesByFileInfo($fileInfo);
 
-        $fullyQualifiedClass = $this->resolveFullyQualifiedClass($useNodes, $node, $tag);
+        $fullyQualifiedClass = $this->resolveFullyQualifiedClass($uses, $node, $tag);
         $this->fullyQualifiedNameByHash[$uniqueHash] = $fullyQualifiedClass;
 
         return $fullyQualifiedClass;

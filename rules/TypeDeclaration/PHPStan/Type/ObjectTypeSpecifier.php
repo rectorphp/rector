@@ -8,17 +8,18 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\NodeTypeResolver\DataCollector\UsePerFileInfoDataCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ObjectTypeSpecifier
 {
@@ -27,9 +28,17 @@ final class ObjectTypeSpecifier
      */
     private $reflectionProvider;
 
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
+    /**
+     * @var UsePerFileInfoDataCollector
+     */
+    private $usePerFileInfoDataCollector;
+
+    public function __construct(
+        UsePerFileInfoDataCollector $usePerFileInfoDataCollector,
+        ReflectionProvider $reflectionProvider
+    ) {
         $this->reflectionProvider = $reflectionProvider;
+        $this->usePerFileInfoDataCollector = $usePerFileInfoDataCollector;
     }
 
     /**
@@ -37,9 +46,11 @@ final class ObjectTypeSpecifier
      */
     public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType): Type
     {
-        /** @var Use_[]|null $uses */
-        $uses = $node->getAttribute(AttributeKey::USE_NODES);
-        if ($uses === null) {
+        /** @var SmartFileInfo $fileInfo */
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        $uses = $this->usePerFileInfoDataCollector->getUsesByFileInfo($fileInfo);
+
+        if ($uses === []) {
             return $objectType;
         }
 
@@ -70,9 +81,11 @@ final class ObjectTypeSpecifier
 
     private function matchAliasedObjectType(Node $node, ObjectType $objectType): ?AliasedObjectType
     {
-        /** @var Use_[]|null $uses */
-        $uses = $node->getAttribute(AttributeKey::USE_NODES);
-        if ($uses === null) {
+        /** @var SmartFileInfo $fileInfo */
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        $uses = $this->usePerFileInfoDataCollector->getUsesByFileInfo($fileInfo);
+
+        if ($uses === []) {
             return null;
         }
 
@@ -133,9 +146,11 @@ final class ObjectTypeSpecifier
 
     private function matchShortenedObjectType(Node $node, ObjectType $objectType): ?ShortenedObjectType
     {
-        /** @var Use_[]|null $uses */
-        $uses = $node->getAttribute(AttributeKey::USE_NODES);
-        if ($uses === null) {
+        /** @var SmartFileInfo $fileInfo */
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        $uses = $this->usePerFileInfoDataCollector->getUsesByFileInfo($fileInfo);
+
+        if ($uses === []) {
             return null;
         }
 
