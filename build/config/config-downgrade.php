@@ -53,6 +53,7 @@ final class DowngradeRectorConfig
         'vendor/symfony/http-foundation/Session/*',
         'vendor/symfony/string/Slugger/AsciiSlugger.php',
         'vendor/symfony/cache/*',
+        'nette/caching/src/Bridges/*',
 
         // always excluded
         '*vendor/symfony/polyfill*/bootstrap80.php',
