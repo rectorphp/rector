@@ -1,9 +1,9 @@
 <?php
 
 use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
+use Rector\Removing\ValueObject\ArgumentRemover;
 use Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\Source\Persister;
 use Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\Source\RemoveInTheMiddle;
-use Rector\Removing\ValueObject\ArgumentRemover;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

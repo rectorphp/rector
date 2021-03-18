@@ -14,9 +14,9 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Tests\NodeTypeResolver\TypeComparator\Source\SomeGenericTypeObject;
 use Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
+use Rector\Tests\NodeTypeResolver\TypeComparator\Source\SomeGenericTypeObject;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class ArrayTypeComparatorTest extends AbstractKernelTestCase

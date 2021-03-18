@@ -1,7 +1,7 @@
 <?php
 
-use Rector\Transform\Rector\Expression\MethodCallToReturnRector;
 use Rector\Tests\Transform\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
+use Rector\Transform\Rector\Expression\MethodCallToReturnRector;
 use Rector\Transform\ValueObject\MethodCallToReturn;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

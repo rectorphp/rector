@@ -1,8 +1,8 @@
 <?php
 
 use Rector\Core\ValueObject\Visibility;
-use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
 use Rector\Tests\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector\Source\ParentObject;
+use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
 use Rector\Visibility\ValueObject\ChangeConstantVisibility;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

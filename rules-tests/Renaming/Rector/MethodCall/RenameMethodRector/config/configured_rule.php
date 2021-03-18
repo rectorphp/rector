@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
-use Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
+use Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

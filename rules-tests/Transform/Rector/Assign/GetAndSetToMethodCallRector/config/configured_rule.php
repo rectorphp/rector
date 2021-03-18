@@ -1,8 +1,8 @@
 <?php
 
-use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
 use Rector\Tests\Transform\Rector\Assign\GetAndSetToMethodCallRector\Source\Klarka;
 use Rector\Tests\Transform\Rector\Assign\GetAndSetToMethodCallRector\Source\SomeContainer;
+use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

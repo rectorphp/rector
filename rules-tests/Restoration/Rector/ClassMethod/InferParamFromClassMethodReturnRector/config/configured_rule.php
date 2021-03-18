@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
-use Rector\Tests\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector\Source\SomeType;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
+use Rector\Tests\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector\Source\SomeType;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

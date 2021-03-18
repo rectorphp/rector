@@ -6,9 +6,9 @@ namespace Rector\Tests\Composer\Rector;
 
 use Nette\Utils\Json;
 use Rector\Composer\Modifier\ComposerModifier;
-use Rector\Tests\Composer\Contract\ConfigFileAwareInterface;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Testing\Guard\FixtureGuard;
+use Rector\Tests\Composer\Contract\ConfigFileAwareInterface;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;

@@ -1,8 +1,8 @@
 <?php
 
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
-use Rector\Tests\Renaming\Rector\PropertyFetch\RenamePropertyRector\Source\ClassWithProperties;
 use Rector\Renaming\ValueObject\RenameProperty;
+use Rector\Tests\Renaming\Rector\PropertyFetch\RenamePropertyRector\Source\ClassWithProperties;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

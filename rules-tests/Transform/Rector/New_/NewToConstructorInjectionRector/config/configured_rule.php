@@ -1,7 +1,7 @@
 <?php
 
-use Rector\Transform\Rector\New_\NewToConstructorInjectionRector;
 use Rector\Tests\Transform\Rector\New_\NewToConstructorInjectionRector\Source\DummyValidator;
+use Rector\Transform\Rector\New_\NewToConstructorInjectionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

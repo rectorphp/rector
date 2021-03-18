@@ -9,7 +9,6 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\Tests\BetterPhpDocParser\PhpDocParser\AbstractPhpDocInfoTest;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EmbeddedTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\TableTagValueNode;
@@ -24,6 +23,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioTemplateTagVal
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertChoiceTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertTypeTagValueNode;
+use Rector\Tests\BetterPhpDocParser\PhpDocParser\AbstractPhpDocInfoTest;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest

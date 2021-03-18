@@ -1,7 +1,7 @@
 <?php
 
-use Rector\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector;
 use Rector\Tests\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector\Source\OldClassWithConstants;
+use Rector\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector;
 use Rector\Transform\ValueObject\ClassConstFetchToValue;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

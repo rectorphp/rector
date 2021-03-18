@@ -1,7 +1,7 @@
 <?php
 
-use Rector\Transform\Rector\ClassMethod\SingleToManyMethodRector;
 use Rector\Tests\Transform\Rector\ClassMethod\SingleToManyMethodRector\Source\OneToManyInterface;
+use Rector\Transform\Rector\ClassMethod\SingleToManyMethodRector;
 use Rector\Transform\ValueObject\SingleToManyMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;

@@ -1,8 +1,8 @@
 <?php
 
 use Rector\Core\ValueObject\Visibility;
-use Rector\Visibility\Rector\Property\ChangePropertyVisibilityRector;
 use Rector\Tests\Visibility\Rector\Property\ChangePropertyVisibilityRector\Source\ParentObject;
+use Rector\Visibility\Rector\Property\ChangePropertyVisibilityRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
