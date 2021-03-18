@@ -53,9 +53,9 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
 
         $firstNode = $nodes[0];
 
-        /** @var SmartFileInfo $fileInfo */
-        $fileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        $this->usePerFileInfoDataCollector->addUsesPerFileInfo($uses, $fileInfo);
+        /** @var SmartFileInfo $smartFileInfo */
+        $smartFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
+        $this->usePerFileInfoDataCollector->addUsesPerFileInfo($uses, $smartFileInfo);
 
         return null;
     }
