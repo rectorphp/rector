@@ -71,14 +71,10 @@ final class DowngradePathsCommand extends Command
             }
         }
 
-        $downgradePaths = array_merge(['vendor/symplify vendor/symfony vendor/psr src'], $downgradePaths);
+        $downgradePaths = array_merge(['vendor/symplify vendor/symfony vendor/psr vendor/nikic src packages'],
+            $downgradePaths
+        );
         $downgradePaths = array_values($downgradePaths);
-
-        // put last, to make printer and base printer covariance fix
-        $downgradePaths[] = 'src/PhpParser/Printer vendor/nikic';
-
-        dump($downgradePaths);
-        die;
 
         // bash format
         $downgradePathsLine = implode(';', $downgradePaths);

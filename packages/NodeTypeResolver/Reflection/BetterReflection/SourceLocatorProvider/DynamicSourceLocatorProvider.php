@@ -10,6 +10,7 @@ use PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocator;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator;
 use Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterface
@@ -28,6 +29,11 @@ final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterfa
      * @var FileNodesFetcher
      */
     private $fileNodesFetcher;
+
+    /**
+     * @var SourceLocator|null
+     */
+    private $cachedSourceLocator;
 
     public function __construct(FileNodesFetcher $fileNodesFetcher)
     {
@@ -49,6 +55,13 @@ final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterfa
 
     public function provide(): SourceLocator
     {
+        // do not cache for PHPUnit, as in test every fixture is different
+        $isPHPUnitRun = StaticPHPUnitEnvironment::isPHPUnitRun();
+
+        if ($this->cachedSourceLocator && $isPHPUnitRun === false) {
+            return $this->cachedSourceLocator;
+        }
+
         $sourceLocators = [];
         foreach ($this->files as $file) {
             $sourceLocators[] = new OptimizedSingleFileSourceLocator($this->fileNodesFetcher, $file);
@@ -58,7 +71,9 @@ final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterfa
             $sourceLocators[] = new OptimizedDirectorySourceLocator($this->fileNodesFetcher, $files);
         }
 
-        return new AggregateSourceLocator($sourceLocators);
+        $this->cachedSourceLocator = new AggregateSourceLocator($sourceLocators);
+
+        return $this->cachedSourceLocator;
     }
 
     /**
