@@ -25,7 +25,7 @@ jobs:
                         name: 'Along PHPStan'
                         install: composer require phpstan/phpstan --dev --ansi
                         run: |
-                            php bin/rector list --ansi
+                            vendor/bin/rector list --ansi
                             vendor/bin/phpstan -h --ansi
 
         name: "PHP ${{ matrix.php_version }}"
