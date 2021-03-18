@@ -40,7 +40,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         'assertSame' => ['shouldBe', 'shouldReturn'],
         'assertNotSame' => ['shouldNotBe', 'shouldNotReturn'],
         'assertCount' => ['shouldHaveCount'],
-        'assertEquals' => ['shouldBeEqualTo'],
+        'assertEquals' => ['shouldBeEqualTo', 'shouldEqual'],
         'assertNotEquals' => ['shouldNotBeEqualTo'],
         'assertContains' => ['shouldContain'],
         'assertNotContains' => ['shouldNotContain'],
