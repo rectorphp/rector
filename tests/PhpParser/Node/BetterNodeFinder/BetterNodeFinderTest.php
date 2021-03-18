@@ -49,7 +49,7 @@ final class BetterNodeFinderTest extends AbstractKernelTestCase
         $this->assertInstanceOf(Class_::class, $class);
 
         /** @var Variable $variable */
-        $classLikeNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($variable, ClassLike::class);
+        $classLikeNode = $this->betterNodeFinder->findParentType($variable, ClassLike::class);
         $this->assertSame($classLikeNode, $class);
     }
 
@@ -58,6 +58,6 @@ final class BetterNodeFinderTest extends AbstractKernelTestCase
         /** @var Variable $variableNode */
         $variableNode = $this->betterNodeFinder->findFirstInstanceOf($this->nodes, Variable::class);
 
-        $this->assertNull($this->betterNodeFinder->findFirstAncestorInstanceOf($variableNode, Array_::class));
+        $this->assertNull($this->betterNodeFinder->findParentType($variableNode, Array_::class));
     }
 }

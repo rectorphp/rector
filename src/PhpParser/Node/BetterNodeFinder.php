@@ -111,24 +111,6 @@ final class BetterNodeFinder
     }
 
     /**
-     * @param class-string<T> $type
-     * @return T|null
-     */
-    public function findFirstAncestorInstanceOf(Node $node, string $type): ?Node
-    {
-        $currentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        while ($currentNode !== null) {
-            if ($currentNode instanceof $type) {
-                return $currentNode;
-            }
-
-            $currentNode = $currentNode->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        return null;
-    }
-
-    /**
      * @param array<class-string<T>> $types
      * @return T|null
      */
