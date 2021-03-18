@@ -2,8 +2,6 @@
 name: Build Scoped Rector
 
 on:
-    pull_request: null
-
     push:
         branches:
             - main
