@@ -49,14 +49,14 @@ final class ConstructorAssignDetector
 
         $isAssignedInConstructor = false;
 
-        foreach ($constructClassMethod->stmts as $methodStmt) {
+        foreach ((array) $constructClassMethod->stmts as $methodStmt) {
             $methodStmt->setAttribute(self::IS_FIRST_LEVEL_STATEMENT, true);
             if ($methodStmt instanceof Expression) {
                 $methodStmt->expr->setAttribute(self::IS_FIRST_LEVEL_STATEMENT, true);
             }
         }
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($constructClassMethod->stmts, function (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $constructClassMethod->stmts, function (
             Node $node
         ) use ($propertyName, &$isAssignedInConstructor): ?int {
             $expr = $this->matchAssignExprToPropertyName($node, $propertyName);

@@ -75,10 +75,16 @@ final class ExpectationMockCollection
             if (count($expectationMock->getWithArguments()) > 1) {
                 return true;
             }
-            if (count($expectationMock->getWithArguments()) === 1
-            && $expectationMock->getWithArguments()[0] !== null) {
-                return true;
+
+            if (count($expectationMock->getWithArguments()) !== 1) {
+                continue;
             }
+
+            if ($expectationMock->getWithArguments()[0] === null) {
+                continue;
+            }
+
+            return true;
         }
 
         return false;

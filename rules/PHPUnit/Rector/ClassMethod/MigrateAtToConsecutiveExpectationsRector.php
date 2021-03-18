@@ -153,7 +153,7 @@ CODE_SAMPLE
 
         $endLines = array_map(static function (ExpectationMock $expectationMock): int {
             $originalExpression = $expectationMock->getOriginalExpression();
-            return ! $originalExpression instanceof Expression ? 0 : $originalExpression->getEndLine();
+            return $originalExpression instanceof Expression ? $originalExpression->getEndLine() : 0;
         }, $expectationMockCollection->getExpectationMocks());
         $max = max($endLines);
 
