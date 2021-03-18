@@ -10,12 +10,14 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\NodeAnalyzer\NativeTypeClassTreeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -42,14 +44,28 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
      */
     private $typeFactory;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    /**
+     * @var PrivatesAccessor
+     */
+    private $privatesAccessor;
+
     public function __construct(
         PhpDocTypeChanger $phpDocTypeChanger,
         NativeTypeClassTreeResolver $nativeTypeClassTreeResolver,
-        TypeFactory $typeFactory
+        TypeFactory $typeFactory,
+        ReflectionProvider $reflectionProvider,
+        PrivatesAccessor $privatesAccessor
     ) {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->nativeTypeClassTreeResolver = $nativeTypeClassTreeResolver;
         $this->typeFactory = $typeFactory;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->privatesAccessor = $privatesAccessor;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -129,9 +145,9 @@ CODE_SAMPLE
             return;
         }
 
-        if (count($classReflection->getAncestors()) === 1) {
-            return;
-        }
+//        if (count($classReflection->getAncestors()) === 1) {
+//            return;
+//        }
 
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
@@ -139,7 +155,6 @@ CODE_SAMPLE
         // Remove the types in:
         // - all ancestors + their descendant classes
         // - all implemented interfaces + their implementing classes
-
         $parameterTypesByParentClassLikes = $this->resolveParameterTypesByClassLike(
             $classReflection,
             $methodName,
