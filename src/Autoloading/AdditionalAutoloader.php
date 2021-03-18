@@ -47,6 +47,10 @@ final class AdditionalAutoloader
         }
 
         $autoloadPaths = $this->parameterProvider->provideArrayParameter(Option::AUTOLOAD_PATHS);
+        if ($autoloadPaths === []) {
+            return;
+        }
+
         $this->dynamicSourceLocatorDecorator->addPaths($autoloadPaths);
     }
 

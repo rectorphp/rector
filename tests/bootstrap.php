@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Core\Stubs\PHPStanStubLoader;
-use Rector\Core\Stubs\StubLoader;
 use Tracy\Debugger;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -13,9 +12,6 @@ error_reporting(E_ALL ^ E_DEPRECATED);
 
 // performance boost
 gc_disable();
-
-$stubLoader = new StubLoader();
-$stubLoader->loadStubs();
 
 $phpStanStubLoader = new PHPStanStubLoader();
 $phpStanStubLoader->loadStubs();
