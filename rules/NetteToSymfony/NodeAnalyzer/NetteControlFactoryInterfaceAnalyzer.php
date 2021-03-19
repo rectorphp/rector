@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 final class NetteControlFactoryInterfaceAnalyzer
@@ -38,7 +39,13 @@ final class NetteControlFactoryInterfaceAnalyzer
                 new ObjectType('Nette\Application\UI\Form'),
             ]);
 
-            return $controlOrForm->isSuperTypeOf($returnType)->yes();
+            if ($returnType instanceof ShortenedObjectType) {
+                $returnType = new ObjectType($returnType->getFullyQualifiedName());
+            }
+
+            if ($controlOrForm->isSuperTypeOf($returnType)->yes()) {
+                return true;
+            }
         }
 
         return false;
