@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -183,22 +182,6 @@ final class NodeNameResolver
         return $names;
     }
 
-    /**
-     * @param Node[] $nodes
-     */
-    public function haveName(array $nodes, string $name): bool
-    {
-        foreach ($nodes as $node) {
-            if (! $this->isName($node, $name)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
     public function isLocalPropertyFetchNamed(Node $node, string $name): bool
     {
         if (! $node instanceof PropertyFetch) {
@@ -214,15 +197,6 @@ final class NodeNameResolver
         }
 
         if ($node->name instanceof Expr) {
-            return false;
-        }
-
-        return $this->isName($node->name, $name);
-    }
-
-    public function isLocalStaticPropertyFetchNamed(Node $node, string $name): bool
-    {
-        if (! $node instanceof StaticPropertyFetch) {
             return false;
         }
 

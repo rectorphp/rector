@@ -90,7 +90,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
             new ConsoleColorDiffBundle(),
             new ComposerJsonManipulatorBundle(),
             new SkipperBundle(),
-            new SimplePhpDocParserBundle()
+            new SimplePhpDocParserBundle(),
         ];
 
         return $bundles;
