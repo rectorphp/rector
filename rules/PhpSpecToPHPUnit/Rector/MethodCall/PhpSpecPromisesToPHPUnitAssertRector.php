@@ -287,7 +287,11 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
 
     private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $this->nodeNameResolver->isVariableName($methodCall->var, self::THIS)) {
+        if (! $methodCall->var instanceof Variable) {
+            return true;
+        }
+
+        if (! $this->nodeNameResolver->isName($methodCall->var, self::THIS)) {
             return true;
         }
 

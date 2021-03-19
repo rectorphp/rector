@@ -295,33 +295,6 @@ final class NodeNameResolver
     }
 
     /**
-     * @deprecated Helper function causes to lose the type on the outside. Better avoid it
-     * @param string[] $methodNames
-     */
-    public function isStaticCallsNamed(Node $node, string $className, array $methodNames): bool
-    {
-        foreach ($methodNames as $methodName) {
-            if ($this->isStaticCallNamed($node, $className, $methodName)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @deprecated Helper function causes to lose the type on the outside. Better avoid it
-     */
-    public function isVariableName(Node $node, string $name): bool
-    {
-        if (! $node instanceof Variable) {
-            return false;
-        }
-
-        return $this->isName($node, $name);
-    }
-
-    /**
      * @param ObjectType[] $desiredObjectTypes
      */
     public function isInClassNames(Node $node, array $desiredObjectTypes): bool

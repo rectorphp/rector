@@ -134,7 +134,7 @@ CODE_SAMPLE
                 return;
             }
 
-            if (! $this->nodeNameResolver->isVariableName($node, $oldVariableName)) {
+            if (! $this->nodeNameResolver->isName($node, $oldVariableName)) {
                 return;
             }
 
