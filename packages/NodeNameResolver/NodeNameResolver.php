@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -246,26 +245,6 @@ final class NodeNameResolver
         }
 
         return false;
-    }
-
-    /**
-     * @deprecated Helper function causes to lose the type on the outside. Better avoid it
-     */
-    public function isStaticCallNamed(Node $node, string $className, string $methodName): bool
-    {
-        if (! $node instanceof StaticCall) {
-            return false;
-        }
-
-        if ($node->class instanceof New_) {
-            if (! $this->isName($node->class->class, $className)) {
-                return false;
-            }
-        } elseif (! $this->isName($node->class, $className)) {
-            return false;
-        }
-
-        return $this->isName($node->name, $methodName);
     }
 
     /**

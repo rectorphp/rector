@@ -62,11 +62,12 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->nodeNameResolver->isStaticCallNamed(
-            $node,
-            'Doctrine\Common\Annotations\AnnotationRegistry',
-            'registerFile'
-        )) {
+        $callerType = $this->nodeTypeResolver->resolve($node->class);
+        if (! $callerType->isSuperTypeOf(new ObjectType('Doctrine\Common\Annotations\AnnotationRegistry'))->yes()) {
+            return null;
+        }
+
+        if (! $this->isName($node->name, 'registerFile')) {
             return null;
         }
 

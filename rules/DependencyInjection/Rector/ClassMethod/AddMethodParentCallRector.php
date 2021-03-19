@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DependencyInjection\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -139,7 +140,15 @@ CODE_SAMPLE
         return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
             $method
         ): bool {
-            return $this->nodeNameResolver->isStaticCallNamed($node, 'parent', $method);
+            if (! $node instanceof StaticCall) {
+                return false;
+            }
+
+            if (! $this->isName($node->class, 'parent')) {
+                return false;
+            }
+
+            return $this->isName($node->name, $method);
         });
     }
 }

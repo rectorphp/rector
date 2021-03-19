@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -61,7 +62,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->nodeNameResolver->isStaticCallNamed($node, 'PHPExcel_IOFactory', 'addSearchLocation')) {
+        $callerType = $this->nodeTypeResolver->resolve($node->class);
+        if (! $callerType->isSuperTypeOf(new ObjectType('PHPExcel_IOFactory'))->yes()) {
+            return null;
+        }
+
+        if (! $this->isName($node->name, 'addSearchLocation')) {
             return null;
         }
 

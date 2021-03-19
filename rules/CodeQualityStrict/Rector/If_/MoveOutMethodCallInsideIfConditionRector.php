@@ -167,6 +167,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $scope->hasVariableType($variableName)->yes();
+        return $scope->hasVariableType($variableName)
+            ->yes();
     }
 }
