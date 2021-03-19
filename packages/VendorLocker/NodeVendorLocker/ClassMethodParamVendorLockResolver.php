@@ -4,27 +4,16 @@ declare(strict_types=1);
 
 namespace Rector\VendorLocker\NodeVendorLocker;
 
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\VendorLocker\Reflection\ClassReflectionAncestorAnalyzer;
-use Rector\VendorLocker\Reflection\MethodReflectionContractAnalyzer;
 
 final class ClassMethodParamVendorLockResolver
 {
-    /**
-     * @var ClassReflectionAncestorAnalyzer
-     */
-    private $classReflectionAncestorAnalyzer;
-
-    /**
-     * @var MethodReflectionContractAnalyzer
-     */
-    private $methodReflectionContractAnalyzer;
-
     /**
      * @var NodeNameResolver
      */
@@ -35,14 +24,8 @@ final class ClassMethodParamVendorLockResolver
      */
     private $nodeRepository;
 
-    public function __construct(
-        ClassReflectionAncestorAnalyzer $classReflectionAncestorAnalyzer,
-        MethodReflectionContractAnalyzer $methodReflectionContractAnalyzer,
-        NodeNameResolver $nodeNameResolver,
-        NodeRepository $nodeRepository
-    ) {
-        $this->classReflectionAncestorAnalyzer = $classReflectionAncestorAnalyzer;
-        $this->methodReflectionContractAnalyzer = $methodReflectionContractAnalyzer;
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
+    {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeRepository = $nodeRepository;
     }
@@ -76,12 +59,12 @@ final class ClassMethodParamVendorLockResolver
 
             // class is vendor, its locking us
             $classLike = $this->nodeRepository->findClassLike($ancestorClassReflection->getName());
-            if ($classLike === null) {
+            if (! $classLike instanceof ClassLike) {
                 return true;
             }
 
             $classMethod = $classLike->getMethod($methodName);
-            if ($classMethod === null) {
+            if (! $classMethod instanceof ClassMethod) {
                 continue;
             }
 
