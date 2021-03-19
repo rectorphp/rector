@@ -68,6 +68,7 @@ final class MultilineSpaceFormatPreserver
         /** @var string $originalContent */
         $originalContent = $node->getAttribute(Attribute::ORIGINAL_CONTENT);
         $oldSpaces = Strings::matchAll($originalContent, '#\s+#ms');
+
         $currentText = $this->resolveCurrentPhpDocNodeText($node);
         if ($currentText === null) {
             return null;

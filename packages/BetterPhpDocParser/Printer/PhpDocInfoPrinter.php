@@ -231,7 +231,7 @@ final class PhpDocInfoPrinter
         $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($node);
 
         if ($startAndEnd !== null) {
-            $isLastToken = ($nodeCount === $key);
+            $isLastToken = $nodeCount === $key;
 
             $output = $this->addTokensFromTo(
                 $output,
@@ -311,7 +311,6 @@ final class PhpDocInfoPrinter
         string $output
     ): string {
         $output .= $phpDocTagNode->name;
-
         $phpDocTagNodeValue = $phpDocTagNode->value;
 
         $nodeOutput = $this->printNode($phpDocTagNodeValue, $startAndEnd);
@@ -342,7 +341,6 @@ final class PhpDocInfoPrinter
     private function printAttributeWithAsterisk(Node $node): string
     {
         $content = (string) $node;
-
         return $this->explodeAndImplode($content, PHP_EOL, self::NEWLINE_ASTERISK);
     }
 
@@ -351,9 +349,7 @@ final class PhpDocInfoPrinter
      */
     private function getRemovedNodesPositions(): array
     {
-        if ($this->removedNodePositions !== []) {
-            return $this->removedNodePositions;
-        }
+        $removedNodePositions = [];
 
         $removedNodes = array_diff(
             $this->phpDocInfo->getOriginalPhpDocNode()
@@ -361,20 +357,34 @@ final class PhpDocInfoPrinter
             $this->attributeAwarePhpDocNode->children
         );
 
+        $lastEndPosition = null;
+
         foreach ($removedNodes as $removedNode) {
             /** @var StartAndEnd $removedPhpDocNodeInfo */
             $removedPhpDocNodeInfo = $removedNode->getAttribute(Attribute::START_END);
 
             // change start position to start of the line, so the whole line is removed
             $seekPosition = $removedPhpDocNodeInfo->getStart();
-            while ($this->tokens[$seekPosition][1] !== Lexer::TOKEN_HORIZONTAL_WS) {
+
+            while ($seekPosition >= 0 && $this->tokens[$seekPosition][1] !== Lexer::TOKEN_HORIZONTAL_WS) {
+                if ($this->tokens[$seekPosition][1] === Lexer::TOKEN_PHPDOC_EOL) {
+                    break;
+                }
+
+                // do not colide
+                if ($lastEndPosition < $seekPosition) {
+                    break;
+                }
+
                 --$seekPosition;
             }
 
-            $this->removedNodePositions[] = new StartAndEnd($seekPosition - 1, $removedPhpDocNodeInfo->getEnd());
+            $lastEndPosition = $removedPhpDocNodeInfo->getEnd();
+
+            $removedNodePositions[] = new StartAndEnd(max(0, $seekPosition - 1), $removedPhpDocNodeInfo->getEnd());
         }
 
-        return $this->removedNodePositions;
+        return $removedNodePositions;
     }
 
     /**
@@ -385,6 +395,7 @@ final class PhpDocInfoPrinter
         for ($i = $from; $i < $to; ++$i) {
             while (isset($positionJumpSet[$i])) {
                 $i = $positionJumpSet[$i];
+                continue;
             }
 
             $output .= $this->tokens[$i][0] ?? '';
