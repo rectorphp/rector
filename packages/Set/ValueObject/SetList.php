@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Set\ValueObject;
 
 use Rector\Set\Contract\SetListInterface;
+use Rector\Set\NetteSetList;
 use Rector\Set\SymfonySetList;
 
 final class SetList implements SetListInterface
@@ -262,37 +263,27 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    public const NETTE_24 = __DIR__ . '/../../../config/set/nette-24.php';
+    public const NETTE_24 = NetteSetList::NETTE_24;
 
     /**
      * @var string
      */
-    public const NETTE_30 = __DIR__ . '/../../../config/set/nette-30.php';
+    public const NETTE_30 = NetteSetList::NETTE_30;
 
     /**
      * @var string
      */
-    public const NETTE_30_PARAM_TYPES = __DIR__ . '/../../../config/set/nette-30-param-types.php';
+    public const NETTE_31 = NetteSetList::NETTE_31;
 
     /**
      * @var string
      */
-    public const NETTE_30_RETURN_TYPES = __DIR__ . '/../../../config/set/nette-30-return-types.php';
+    public const NETTE_CODE_QUALITY = NetteSetList::NETTE_CODE_QUALITY;
 
     /**
      * @var string
      */
-    public const NETTE_30_DEPENDENCY_INJECTION = __DIR__ . '/../../../config/set/nette-30-dependency-injection.php';
-
-    /**
-     * @var string
-     */
-    public const NETTE_31 = __DIR__ . '/../../../config/set/nette-31.php';
-
-    /**
-     * @var string
-     */
-    public const NETTE_CODE_QUALITY = __DIR__ . '/../../../config/set/nette-code-quality.php';
+    public const NETTE_UTILS_CODE_QUALITY = NetteSetList::NETTE_UTILS_CODE_QUALITY;
 
     /**
      * @var string
@@ -307,27 +298,12 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    public const NETTE_PARAM_TYPES = __DIR__ . '/../../../config/set/nette-30-param-types.php';
-
-    /**
-     * @var string
-     */
-    public const NETTE_RETURN_TYPES = __DIR__ . '/../../../config/set/nette-30-return-types.php';
-
-    /**
-     * @var string
-     */
     public const NETTE_TESTER_TO_PHPUNIT = __DIR__ . '/../../../config/set/nette-tester-to-phpunit.php';
 
     /**
      * @var string
      */
     public const NETTE_TO_SYMFONY = __DIR__ . '/../../../config/set/nette-to-symfony.php';
-
-    /**
-     * @var string
-     */
-    public const NETTE_UTILS_CODE_QUALITY = __DIR__ . '/../../../config/set/nette-utils-code-quality.php';
 
     /**
      * @var string

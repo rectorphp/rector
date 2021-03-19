@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -12,9 +13,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // rector root
     $containerConfigurator->import(__DIR__ . '/../vendor/rector/rector-symfony/config/config.php', null, 'not_found');
+    $containerConfigurator->import(__DIR__ . '/../vendor/rector/rector-nette/config/config.php', null, 'not_found');
     // rector sub-package
     $containerConfigurator->import(__DIR__ . '/../../rector-symfony/config/config.php', null, 'not_found');
+    $containerConfigurator->import(__DIR__ . '/../../rector-nette/config/config.php', null, 'not_found');
 
     // require only in dev
     $containerConfigurator->import(__DIR__ . '/../utils/compiler/config/config.php', null, 'not_found');
+
+
+    // to override extension-loaded config
+    $parameters =  $containerConfigurator->parameters();
+    $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, getcwd() . '/phpstan-for-rector.neon');
 };

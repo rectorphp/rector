@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteKdyby\Naming;
+namespace Rector\Php70\NodeAnalyzer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -30,8 +30,16 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Stringy\Stringy;
 
+/**
+ * @todo extract to own service with collector
+ */
 final class VariableNaming
 {
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     /**
      * @var NodeNameResolver
      */
@@ -42,42 +50,14 @@ final class VariableNaming
      */
     private $valueResolver;
 
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     public function __construct(
+        NodeTypeResolver $nodeTypeResolver,
         NodeNameResolver $nodeNameResolver,
-        ValueResolver $valueResolver,
-        NodeTypeResolver $nodeTypeResolver
+        ValueResolver $valueResolver
     ) {
+        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-    }
-
-    public function resolveFromNode(Node $node): ?string
-    {
-        $nodeType = $this->nodeTypeResolver->getStaticType($node);
-        return $this->resolveFromNodeAndType($node, $nodeType);
-    }
-
-    public function resolveFromNodeAndType(Node $node, Type $type): ?string
-    {
-        $variableName = $this->resolveBareFromNode($node);
-        if ($variableName === null) {
-            return null;
-        }
-
-        // adjust static to specific class
-        if ($variableName === 'this' && $type instanceof ThisType) {
-            $shortClassName = $this->nodeNameResolver->getShortName($type->getClassName());
-            $variableName = lcfirst($shortClassName);
-        }
-
-        $stringy = new Stringy($variableName);
-        return (string) $stringy->camelize();
     }
 
     public function resolveFromNodeWithScopeCountAndFallbackName(
@@ -120,6 +100,23 @@ final class VariableNaming
         return $valueName;
     }
 
+    public function resolveFromNodeAndType(Node $node, Type $type): ?string
+    {
+        $variableName = $this->resolveBareFromNode($node);
+        if ($variableName === null) {
+            return null;
+        }
+
+        // adjust static to specific class
+        if ($variableName === 'this' && $type instanceof ThisType) {
+            $shortClassName = $this->nodeNameResolver->getShortName($type->getClassName());
+            $variableName = lcfirst($shortClassName);
+        }
+
+        $stringy = new Stringy($variableName);
+        return (string) $stringy->camelize();
+    }
+
     public function resolveFromFuncCallFirstArgumentWithSuffix(
         FuncCall $funcCall,
         string $suffix,
@@ -130,62 +127,10 @@ final class VariableNaming
         return $this->createCountedValueName($bareName, $scope);
     }
 
-    private function resolveBareFromNode(Node $node): ?string
+    private function resolveFromNode(Node $node): ?string
     {
-        $node = $this->unwrapNode($node);
-
-        if ($node instanceof ArrayDimFetch) {
-            return $this->resolveParamNameFromArrayDimFetch($node);
-        }
-
-        if ($node instanceof PropertyFetch) {
-            return $this->resolveFromPropertyFetch($node);
-        }
-
-        if ($node !== null && StaticInstanceOf::isOneOf(
-            $node,
-            [MethodCall::class, NullsafeMethodCall::class, StaticCall::class])) {
-            return $this->resolveFromMethodCall($node);
-        }
-
-        if ($node instanceof New_) {
-            return $this->resolveFromNew($node);
-        }
-
-        if ($node instanceof FuncCall) {
-            return $this->resolveFromNode($node->name);
-        }
-
-        if (! $node instanceof Node) {
-            throw new NotImplementedYetException();
-        }
-
-        $paramName = $this->nodeNameResolver->getName($node);
-        if ($paramName !== null) {
-            return $paramName;
-        }
-
-        if ($node instanceof String_) {
-            return $node->value;
-        }
-
-        return null;
-    }
-
-    private function resolveBareFuncCallArgumentName(FuncCall $funcCall, string $fallbackName, string $suffix): string
-    {
-        $argumentValue = $funcCall->args[0]->value;
-        if ($argumentValue instanceof MethodCall || $argumentValue instanceof StaticCall) {
-            $name = $this->nodeNameResolver->getName($argumentValue->name);
-        } else {
-            $name = $this->nodeNameResolver->getName($argumentValue);
-        }
-
-        if ($name === null) {
-            return $fallbackName;
-        }
-
-        return $name . $suffix;
+        $nodeType = $this->nodeTypeResolver->getStaticType($node);
+        return $this->resolveFromNodeAndType($node, $nodeType);
     }
 
     private function unwrapNode(Node $node): ?Node
@@ -224,23 +169,58 @@ final class VariableNaming
         return $this->resolveBareFromNode($arrayDimFetch);
     }
 
-    private function resolveFromPropertyFetch(PropertyFetch $propertyFetch): string
+    private function resolveBareFromNode(Node $node): ?string
     {
-        $varName = $this->nodeNameResolver->getName($propertyFetch->var);
-        if (! is_string($varName)) {
+        $node = $this->unwrapNode($node);
+
+        if ($node instanceof ArrayDimFetch) {
+            return $this->resolveParamNameFromArrayDimFetch($node);
+        }
+
+        if ($node instanceof PropertyFetch) {
+            return $this->resolveFromPropertyFetch($node);
+        }
+
+        if ($node !== null && StaticInstanceOf::isOneOf(
+                $node,
+                [MethodCall::class, NullsafeMethodCall::class, StaticCall::class])) {
+
+            /** @var MethodCall|NullsafeMethodCall|StaticCall $node */
+            return $this->resolveFromMethodCall($node);
+        }
+
+        if ($node instanceof New_) {
+            return $this->resolveFromNew($node);
+        }
+
+        if ($node instanceof FuncCall) {
+            return $this->resolveFromNode($node->name);
+        }
+
+        if (! $node instanceof Node) {
             throw new NotImplementedYetException();
         }
 
-        $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
-        if (! is_string($propertyName)) {
-            throw new NotImplementedYetException();
+        $paramName = $this->nodeNameResolver->getName($node);
+        if ($paramName !== null) {
+            return $paramName;
         }
 
-        if ($varName === 'this') {
-            return $propertyName;
+        if ($node instanceof String_) {
+            return $node->value;
         }
 
-        return $varName . ucfirst($propertyName);
+        return null;
+    }
+
+    private function resolveFromNew(New_ $new): string
+    {
+        if ($new->class instanceof Name) {
+            $className = $this->nodeNameResolver->getName($new->class);
+            return $this->nodeNameResolver->getShortName($className);
+        }
+
+        throw new NotImplementedYetException();
     }
 
     /**
@@ -260,13 +240,41 @@ final class VariableNaming
         return $methodName;
     }
 
-    private function resolveFromNew(New_ $new): string
+    private function resolveFromPropertyFetch(PropertyFetch $propertyFetch): string
     {
-        if ($new->class instanceof Name) {
-            $className = $this->nodeNameResolver->getName($new->class);
-            return $this->nodeNameResolver->getShortName($className);
+        $varName = $this->nodeNameResolver->getName($propertyFetch->var);
+        if (! is_string($varName)) {
+            throw new NotImplementedYetException();
         }
 
-        throw new NotImplementedYetException();
+        $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
+        if (! is_string($propertyName)) {
+            throw new NotImplementedYetException();
+        }
+
+        if ($varName === 'this') {
+            return $propertyName;
+        }
+
+        return $varName . ucfirst($propertyName);
+    }
+
+    private function resolveBareFuncCallArgumentName(
+        FuncCall $funcCall,
+        string $fallbackName,
+        string $suffix
+    ): string {
+        $argumentValue = $funcCall->args[0]->value;
+        if ($argumentValue instanceof MethodCall || $argumentValue instanceof StaticCall) {
+            $name = $this->nodeNameResolver->getName($argumentValue->name);
+        } else {
+            $name = $this->nodeNameResolver->getName($argumentValue);
+        }
+
+        if ($name === null) {
+            return $fallbackName;
+        }
+
+        return $name . $suffix;
     }
 }
