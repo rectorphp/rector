@@ -55,7 +55,7 @@ final class AttributeAwareNodeFactory
         $node = $this->phpDocNodeTraverser->traverseWithCallable($node, $docContent, function (
             Node $node,
             string $docContent
-        ) {
+        ): Node {
             if ($node instanceof UnionTypeNode && ! $node instanceof AttributeAwareUnionTypeNode) {
                 return new AttributeAwareUnionTypeNode($node->types, $docContent);
             }
