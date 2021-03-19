@@ -7,7 +7,6 @@ namespace Rector\NodeNameResolver;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -273,18 +272,6 @@ final class NodeNameResolver
         }
 
         return false;
-    }
-
-    /**
-     * @deprecated Helper function causes to lose the type on the outside. Better avoid it
-     */
-    public function isFuncCallName(Node $node, string $name): bool
-    {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        return $this->isName($node, $name);
     }
 
     /**

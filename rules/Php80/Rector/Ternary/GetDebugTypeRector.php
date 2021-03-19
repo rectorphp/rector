@@ -77,19 +77,27 @@ CODE_SAMPLE
 
     private function shouldSkip(Ternary $ternary): bool
     {
-        if (! $this->nodeNameResolver->isFuncCallName($ternary->cond, 'is_object')) {
+        if (! $ternary->cond instanceof FuncCall) {
             return true;
         }
 
-        if ($ternary->if === null) {
+        if (! $this->nodeNameResolver->isName($ternary->cond, 'is_object')) {
             return true;
         }
 
-        if (! $this->nodeNameResolver->isFuncCallName($ternary->if, 'get_class')) {
+        if (! $ternary->if instanceof FuncCall) {
             return true;
         }
 
-        return ! $this->nodeNameResolver->isFuncCallName($ternary->else, 'gettype');
+        if (! $this->nodeNameResolver->isName($ternary->if, 'get_class')) {
+            return true;
+        }
+
+        if (! $ternary->else instanceof FuncCall) {
+            return true;
+        }
+
+        return ! $this->nodeNameResolver->isName($ternary->else, 'gettype');
     }
 
     private function areValuesIdentical(Ternary $ternary): bool

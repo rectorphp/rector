@@ -83,7 +83,11 @@ CODE_SAMPLE
 
     private function shouldSkip(Assign $assign): bool
     {
-        if (! $this->nodeNameResolver->isFuncCallName($assign->expr, 'each')) {
+        if (! $assign->expr instanceof FuncCall) {
+            return true;
+        }
+
+        if (! $this->nodeNameResolver->isName($assign->expr, 'each')) {
             return true;
         }
 
