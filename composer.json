@@ -38,8 +38,17 @@
         "nette/robot-loader": "^3.4",
         "nette/utils": "^3.2",
         "nikic/php-parser": "^4.10.4",
+<<<<<<< HEAD
         "phpstan/phpdoc-parser": "^0.5",
         "phpstan/phpstan": "^0.12.82",
+=======
+<<<<<<< HEAD
+        "phpstan/phpdoc-parser": "0.4.12",
+=======
+        "phpstan/phpdoc-parser": "dev-tv-add-attributes as 0.4.12",
+>>>>>>> f8f4ccf9ef... fixup! [scoper] skip polyfill functions to make them work
+        "phpstan/phpstan": "^0.12.81",
+>>>>>>> 84a47ec19d... fixup! [scoper] skip polyfill functions to make them work
         "phpstan/phpstan-phpunit": "^0.12.18",
         "rector/rector-symfony": "dev-main",
         "rector/rector-nette": "dev-main",
@@ -90,7 +99,35 @@
             "Rector\\": ["packages", "rules"],
             "Rector\\Core\\": "src",
             "Rector\\Compiler\\": "utils/compiler/src"
-        }
+        },
+        "files": [
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTagNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PropertyTagValueNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/DeprecatedTagValueNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/ExtendsTagValueNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/ThrowsTagValueNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/InvalidTagValueNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/MethodTagValueNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/MethodTagValueParameterNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/GenericTagValueNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/ReturnTagValueNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/TemplateTagValueNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTextNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/ParamTagValueNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/VarTagValueNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/Type/ArrayTypeNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/Type/ThisTypeNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/Type/IdentifierTypeNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/Type/UnionTypeNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/Type/ConstTypeNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/Type/IntersectionTypeNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeItemNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/Type/GenericTypeNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/Type/CallableTypeNode.php",
+            "vendor/phpstan/phpdoc-parser/src/Ast/Type/CallableTypeParameterNode.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -152,5 +189,11 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/TomasVotruba/phpdoc-parser.git"
+        }
+    ]
 }

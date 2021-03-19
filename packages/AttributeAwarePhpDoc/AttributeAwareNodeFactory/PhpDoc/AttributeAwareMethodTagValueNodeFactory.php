@@ -6,7 +6,6 @@ namespace Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareMethodTagValueNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
@@ -60,14 +59,9 @@ final class AttributeAwareMethodTagValueNodeFactory implements AttributeNodeAwar
         string $docContent
     ): ?AttributeAwareNodeInterface {
         if ($methodTagValueNode->returnType !== null) {
-            return $this->createAttributeAwareReturnType($methodTagValueNode->returnType, $docContent);
+            return $this->attributeAwareNodeFactory->createFromNode($methodTagValueNode->returnType, $docContent);
         }
 
         return null;
-    }
-
-    private function createAttributeAwareReturnType(TypeNode $typeNode, string $docContent): AttributeAwareNodeInterface
-    {
-        return $this->attributeAwareNodeFactory->createFromNode($typeNode, $docContent);
     }
 }

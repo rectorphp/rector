@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode;
 
 use Nette\Utils\Strings;
+use PHPStan\PhpDocParser\Ast\BaseNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
@@ -17,7 +18,7 @@ use Rector\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactor
 use Rector\Core\Exception\ShouldNotHappenException;
 use Symplify\PackageBuilder\Php\TypeChecker;
 
-abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
+abstract class AbstractTagValueNode extends BaseNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
 {
     use AttributeTrait;
 

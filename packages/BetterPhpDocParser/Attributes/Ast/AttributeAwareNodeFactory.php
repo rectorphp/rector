@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Attributes\Ast;
 
+use PHPStan\PhpDocParser\Ast\BaseNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -11,7 +12,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactoryCollector;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 
 /**
  * @see \Rector\Tests\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactoryTest
@@ -31,7 +31,7 @@ final class AttributeAwareNodeFactory
     /**
      * @return PhpDocNode|PhpDocChildNode|PhpDocTagValueNode|AttributeAwareNodeInterface
      */
-    public function createFromNode(Node $node, string $docContent): AttributeAwareNodeInterface
+    public function createFromNode(Node $node, string $docContent): BaseNode
     {
         if ($node instanceof AttributeAwareNodeInterface) {
             return $node;
@@ -50,10 +50,6 @@ final class AttributeAwareNodeFactory
             return $attributeNodeAwareFactory->create($node, $docContent);
         }
 
-        throw new ShouldNotHappenException(sprintf(
-            'Node "%s" was missed in "%s". Generate it with: bin/rector sync-types',
-            get_class($node),
-            __METHOD__
-        ));
+        return $node;
     }
 }

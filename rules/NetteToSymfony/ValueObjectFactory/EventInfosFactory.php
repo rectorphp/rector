@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Event;
+namespace Rector\NetteToSymfony\ValueObjectFactory;
 
 use Rector\NetteToSymfony\ValueObject\EventInfo;
 
