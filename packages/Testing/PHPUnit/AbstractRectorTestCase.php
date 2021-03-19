@@ -13,16 +13,13 @@ use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use Rector\Testing\Application\EnabledRectorClassProvider;
-use Rector\Testing\Configuration\AllRectorConfigFactory;
-use Rector\Testing\Guard\FixtureGuard;
+use Rector\Testing\Contract\RectorTestInterface;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
@@ -30,9 +27,8 @@ use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
-abstract class AbstractRectorTestCase extends AbstractKernelTestCase
+abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements RectorTestInterface
 {
     use MovingFilesTrait;
 
@@ -40,11 +36,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      * @var FileProcessor
      */
     protected $fileProcessor;
-
-    /**
-     * @var SmartFileSystem
-     */
-    protected static $smartFileSystem;
 
     /**
      * @var NonPhpFileProcessor
@@ -55,11 +46,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      * @var ParameterProvider
      */
     protected $parameterProvider;
-
-    /**
-     * @var FixtureGuard
-     */
-    protected static $fixtureGuard;
 
     /**
      * @var RemovedAndAddedFilesCollector
@@ -93,26 +79,15 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
+        // speed up
+        @ini_set('memory_limit', '-1');
+
         $this->initializeDependencies();
 
-        if ($this->provideConfigFilePath() !== '') {
-            $configFileInfo = new SmartFileInfo($this->provideConfigFilePath());
-            $configFileInfos = self::$rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
+        $configFileInfo = new SmartFileInfo($this->provideConfigFilePath());
+        $configFileInfos = self::$rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
 
-            $this->bootKernelWithConfigsAndStaticCache(RectorKernel::class, $configFileInfos);
-
-            /** @var EnabledRectorClassProvider $enabledRectorsProvider */
-            $enabledRectorsProvider = $this->getService(EnabledRectorClassProvider::class);
-            $enabledRectorsProvider->reset();
-        } else {
-            // prepare container with all rectors
-            // cache only rector tests - defined in phpunit.xml
-            $this->createRectorRepositoryContainer();
-
-            /** @var EnabledRectorClassProvider $enabledRectorsProvider */
-            $enabledRectorsProvider = $this->getService(EnabledRectorClassProvider::class);
-            $enabledRectorsProvider->setEnabledRectorClass($this->getRectorClass());
-        }
+        $this->bootKernelWithConfigsAndStaticCache(RectorKernel::class, $configFileInfos);
 
         $this->fileProcessor = $this->getService(FileProcessor::class);
         $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);
@@ -123,18 +98,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->removedAndAddedFilesCollector->reset();
     }
 
-    /**
-     * @return class-string<RectorInterface>
-     */
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        // can be implemented
-        return '';
-    }
-
-    protected function provideConfigFilePath(): string
-    {
-        // can be implemented
+        // must be implemented
         return '';
     }
 
@@ -151,8 +117,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo, array $extraFileInfos = []): void
     {
-        self::$fixtureGuard->ensureFileInfoHasDifferentBeforeAndAfterContent($fixtureFileInfo);
-
         $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
             $fixtureFileInfo,
             false
@@ -160,7 +124,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
 
-        // needed for PHPStan, because the analyzed file is just created in /temp
+        // needed for PHPStan, because the analyzed file is just created in /temp - need for trait and similar deps
         /** @var NodeScopeResolver $nodeScopeResolver */
         $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
         $nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
@@ -214,21 +178,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected function getFixtureTempDirectory(): string
     {
         return sys_get_temp_dir() . '/_temp_fixture_easy_testing';
-    }
-
-    private function createRectorRepositoryContainer(): void
-    {
-        if (self::$allRectorContainer === null) {
-            $allRectorConfigFactory = new AllRectorConfigFactory();
-            $configFilePath = $allRectorConfigFactory->create();
-            $this->bootKernelWithConfigs(RectorKernel::class, [$configFilePath]);
-
-            self::$allRectorContainer = self::$container;
-            return;
-        }
-
-        // load from cache
-        self::$container = self::$allRectorContainer;
     }
 
     /**
@@ -307,8 +256,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             return;
         }
 
-        self::$smartFileSystem = new SmartFileSystem();
-        self::$fixtureGuard = new FixtureGuard();
         self::$rectorConfigsResolver = new RectorConfigsResolver();
         self::$isInitialized = true;
     }

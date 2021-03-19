@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector;
 
 use Iterator;
-use Rector\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class ChangeNestedIfsToEarlyReturnRectorTest extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ChangeNestedIfsToEarlyReturnRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

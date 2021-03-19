@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector;
 
 use Iterator;
-use Rector\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class ReduceMultipleDefaultSwitchRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ReduceMultipleDefaultSwitchRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

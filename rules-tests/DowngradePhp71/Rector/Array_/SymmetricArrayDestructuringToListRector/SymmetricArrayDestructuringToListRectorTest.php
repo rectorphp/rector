@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\DowngradePhp71\Rector\Array_\SymmetricArrayDestructuringToListRector;
 
 use Iterator;
-use Rector\DowngradePhp71\Rector\Array_\SymmetricArrayDestructuringToListRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -28,8 +27,8 @@ final class SymmetricArrayDestructuringToListRectorTest extends AbstractRectorTe
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SymmetricArrayDestructuringToListRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

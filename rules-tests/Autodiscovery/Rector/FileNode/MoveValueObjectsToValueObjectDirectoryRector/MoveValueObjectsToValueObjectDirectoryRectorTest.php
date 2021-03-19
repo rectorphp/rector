@@ -63,7 +63,7 @@ final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractRec
         yield [new SmartFileInfo(__DIR__ . '/Source/Utils/SomeSuffixedTest.php.inc'), null];
     }
 
-    protected function provideConfigFilePath(): string
+    public function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/configured_rule.php';
     }

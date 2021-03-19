@@ -26,7 +26,7 @@ final class MultiParentingToAbstractDependencyRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function provideConfigFilePath(): string
+    public function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/nette_config.php';
     }

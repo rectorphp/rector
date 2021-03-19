@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector;
 
 use Iterator;
-use Rector\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class PrivatizeLocalGetterToPropertyRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return PrivatizeLocalGetterToPropertyRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Php72\Rector\FuncCall\StringifyDefineRector;
 
 use Iterator;
-use Rector\Php72\Rector\FuncCall\StringifyDefineRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -30,8 +29,8 @@ final class StringifyDefineRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return StringifyDefineRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

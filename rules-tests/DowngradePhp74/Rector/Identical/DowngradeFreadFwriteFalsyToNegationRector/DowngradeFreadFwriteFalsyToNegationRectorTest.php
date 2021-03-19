@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\DowngradePhp74\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector;
 
 use Iterator;
-use Rector\DowngradePhp74\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -28,8 +27,8 @@ final class DowngradeFreadFwriteFalsyToNegationRectorTest extends AbstractRector
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return DowngradeFreadFwriteFalsyToNegationRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

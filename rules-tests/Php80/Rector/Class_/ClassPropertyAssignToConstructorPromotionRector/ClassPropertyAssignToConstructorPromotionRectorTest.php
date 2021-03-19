@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 
 use Iterator;
-use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -28,8 +27,8 @@ final class ClassPropertyAssignToConstructorPromotionRectorTest extends Abstract
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ClassPropertyAssignToConstructorPromotionRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

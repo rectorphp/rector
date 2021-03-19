@@ -26,7 +26,7 @@ final class InheritanceTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureInheritance');
     }
 
-    protected function provideConfigFilePath(): string
+    public function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/scalar_types.php';
     }

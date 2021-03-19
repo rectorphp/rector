@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\DoctrineCodeQuality\Rector\ClassMethod\MakeEntityDateTimePropertyDateTimeInterfaceRector;
 
 use Iterator;
-use Rector\DoctrineCodeQuality\Rector\ClassMethod\MakeEntityDateTimePropertyDateTimeInterfaceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class MakeEntityDateTimePropertyDateTimeInterfaceRectorTest extends Abstra
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return MakeEntityDateTimePropertyDateTimeInterfaceRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

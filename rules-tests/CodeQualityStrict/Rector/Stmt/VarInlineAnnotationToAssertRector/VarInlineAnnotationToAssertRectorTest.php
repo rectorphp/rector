@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\CodeQualityStrict\Rector\Stmt\VarInlineAnnotationToAssertRector;
 
 use Iterator;
-use Rector\CodeQualityStrict\Rector\Stmt\VarInlineAnnotationToAssertRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class VarInlineAnnotationToAssertRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return VarInlineAnnotationToAssertRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

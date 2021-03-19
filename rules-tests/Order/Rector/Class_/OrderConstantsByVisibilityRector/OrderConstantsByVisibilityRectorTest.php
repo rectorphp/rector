@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Order\Rector\Class_\OrderConstantsByVisibilityRector;
 
 use Iterator;
-use Rector\Order\Rector\Class_\OrderConstantsByVisibilityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class OrderConstantsByVisibilityRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return OrderConstantsByVisibilityRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

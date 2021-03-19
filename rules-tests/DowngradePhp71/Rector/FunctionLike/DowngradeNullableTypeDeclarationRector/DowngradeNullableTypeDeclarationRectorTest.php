@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector;
 
 use Iterator;
-use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class DowngradeNullableTypeDeclarationRectorTest extends AbstractRectorTes
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return DowngradeNullableTypeDeclarationRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector;
 
 use Iterator;
-use Rector\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class RenameMktimeWithoutArgsToTimeRectorTest extends AbstractRectorTestCa
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RenameMktimeWithoutArgsToTimeRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

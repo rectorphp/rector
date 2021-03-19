@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Privatization\Rector\ClassMethod\MakeOnlyUsedByChildrenProtectedRector;
 
 use Iterator;
-use Rector\Privatization\Rector\ClassMethod\MakeOnlyUsedByChildrenProtectedRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class MakeOnlyUsedByChildrenProtectedRectorTest extends AbstractRectorTest
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return MakeOnlyUsedByChildrenProtectedRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

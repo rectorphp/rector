@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 
 use Iterator;
-use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -28,8 +27,8 @@ final class RemoveParentCallWithoutParentRectorTest extends AbstractRectorTestCa
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveParentCallWithoutParentRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

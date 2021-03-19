@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
 
 use Iterator;
-use Rector\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class OptionalParametersAfterRequiredRectorTest extends AbstractRectorTest
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return OptionalParametersAfterRequiredRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

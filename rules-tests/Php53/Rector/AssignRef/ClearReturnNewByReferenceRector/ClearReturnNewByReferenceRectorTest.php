@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Php53\Rector\AssignRef\ClearReturnNewByReferenceRector;
 
 use Iterator;
-use Rector\Php53\Rector\AssignRef\ClearReturnNewByReferenceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use SplFileInfo;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -28,8 +27,8 @@ final class ClearReturnNewByReferenceRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ClearReturnNewByReferenceRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

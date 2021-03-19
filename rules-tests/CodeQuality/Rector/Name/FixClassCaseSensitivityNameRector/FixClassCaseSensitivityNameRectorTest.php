@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -30,8 +29,8 @@ final class FixClassCaseSensitivityNameRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return FixClassCaseSensitivityNameRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

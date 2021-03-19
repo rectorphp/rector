@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
 
 use Iterator;
-use Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class RemoveDuplicatedCaseInSwitchRectorTest extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveDuplicatedCaseInSwitchRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

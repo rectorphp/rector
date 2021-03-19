@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Defluent\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector;
 
 use Iterator;
-use Rector\Defluent\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class NewFluentChainMethodCallToNonFluentRectorTest extends AbstractRector
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return NewFluentChainMethodCallToNonFluentRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -6,8 +6,6 @@ use Rector\Core\Configuration\Option;
 use Rector\PSR4\Composer\PSR4NamespaceMatcher;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\Yaml\Parser;
-use Symplify\PhpConfigPrinter\Printer\PhpParserPhpConfigPrinter;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
@@ -25,8 +23,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->load('Rector\\', __DIR__ . '/../rules')
         ->exclude([__DIR__ . '/../rules/*/{ValueObject,Rector,Contract,Exception}']);
-
-    // symfony code-quality
-    $services->set(Parser::class);
-    $services->set(PhpParserPhpConfigPrinter::class);
 };

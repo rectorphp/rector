@@ -7,7 +7,6 @@ namespace Rector\Tests\PhpSpecToPHPUnit\Rector\FileNode\RenameSpecFileToTestFile
 use Iterator;
 use Nette\Utils\Strings;
 use Rector\FileSystemRector\Contract\MovedFileInterface;
-use Rector\PhpSpecToPHPUnit\Rector\FileNode\RenameSpecFileToTestFileRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -35,8 +34,8 @@ final class RenameSpecFileToTestFileRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture', '*.php');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RenameSpecFileToTestFileRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

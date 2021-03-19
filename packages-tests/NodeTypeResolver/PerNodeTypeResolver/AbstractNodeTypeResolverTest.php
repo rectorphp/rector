@@ -45,7 +45,6 @@ abstract class AbstractNodeTypeResolverTest extends AbstractKernelTestCase
     protected function getNodesForFileOfType(string $file, string $type): array
     {
         $nodes = $this->testingParser->parseFileToDecoratedNodes($file);
-
         return $this->betterNodeFinder->findInstanceOf($nodes, $type);
     }
 }

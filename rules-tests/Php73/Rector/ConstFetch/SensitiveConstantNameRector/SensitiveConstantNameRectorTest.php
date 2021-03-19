@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Php73\Rector\ConstFetch\SensitiveConstantNameRector;
 
 use Iterator;
-use Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class SensitiveConstantNameRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return SensitiveConstantNameRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

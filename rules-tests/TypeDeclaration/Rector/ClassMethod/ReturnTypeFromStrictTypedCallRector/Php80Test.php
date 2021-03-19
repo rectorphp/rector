@@ -6,7 +6,6 @@ namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTy
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Php80Test extends AbstractRectorTestCase
@@ -28,8 +27,8 @@ final class Php80Test extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp80');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ReturnTypeFromStrictTypedCallRector::class;
+        return __DIR__ . '/config/php80_rule.php';
     }
 }

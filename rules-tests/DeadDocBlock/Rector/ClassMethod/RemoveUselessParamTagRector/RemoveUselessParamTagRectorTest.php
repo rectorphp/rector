@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\DeadDocBlock\Rector\ClassMethod\RemoveUselessParamTagRector;
 
 use Iterator;
-use Rector\DeadDocBlock\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use SplFileInfo;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -28,8 +27,8 @@ final class RemoveUselessParamTagRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return RemoveUselessParamTagRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

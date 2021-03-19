@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector;
 
 use Iterator;
-use Rector\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class ThisCallOnStaticMethodToStaticCallRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return ThisCallOnStaticMethodToStaticCallRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

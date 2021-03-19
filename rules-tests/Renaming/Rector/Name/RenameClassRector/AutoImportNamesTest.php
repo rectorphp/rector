@@ -29,7 +29,7 @@ final class AutoImportNamesTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureAutoImportNames');
     }
 
-    protected function provideConfigFilePath(): string
+    public function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/auto_import_names.php';
     }

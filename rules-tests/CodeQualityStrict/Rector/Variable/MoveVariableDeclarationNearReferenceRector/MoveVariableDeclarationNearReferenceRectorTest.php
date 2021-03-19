@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\CodeQualityStrict\Rector\Variable\MoveVariableDeclarationNearReferenceRector;
 
 use Iterator;
-use Rector\CodeQualityStrict\Rector\Variable\MoveVariableDeclarationNearReferenceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class MoveVariableDeclarationNearReferenceRectorTest extends AbstractRecto
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return MoveVariableDeclarationNearReferenceRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

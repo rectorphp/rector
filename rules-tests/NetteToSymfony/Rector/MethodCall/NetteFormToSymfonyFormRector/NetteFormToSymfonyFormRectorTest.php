@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\NetteToSymfony\Rector\MethodCall\NetteFormToSymfonyFormRector;
 
 use Iterator;
-use Rector\NetteToSymfony\Rector\MethodCall\NetteFormToSymfonyFormRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,8 +26,8 @@ final class NetteFormToSymfonyFormRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return NetteFormToSymfonyFormRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

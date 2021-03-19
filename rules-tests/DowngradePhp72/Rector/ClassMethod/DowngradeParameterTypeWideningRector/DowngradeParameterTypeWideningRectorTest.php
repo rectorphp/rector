@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 
 use Iterator;
-use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -28,8 +27,8 @@ final class DowngradeParameterTypeWideningRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    public function provideConfigFilePath(): string
     {
-        return DowngradeParameterTypeWideningRector::class;
+        return __DIR__ . '/config/configured_rule.php';
     }
 }
