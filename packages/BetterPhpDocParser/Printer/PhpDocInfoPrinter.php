@@ -349,7 +349,9 @@ final class PhpDocInfoPrinter
      */
     private function getRemovedNodesPositions(): array
     {
-        $removedNodePositions = [];
+        if ($this->removedNodePositions !== []) {
+            return $this->removedNodePositions;
+        }
 
         $removedNodes = array_diff(
             $this->phpDocInfo->getOriginalPhpDocNode()
@@ -381,10 +383,13 @@ final class PhpDocInfoPrinter
 
             $lastEndPosition = $removedPhpDocNodeInfo->getEnd();
 
-            $removedNodePositions[] = new StartAndEnd(max(0, $seekPosition - 1), $removedPhpDocNodeInfo->getEnd());
+            $this->removedNodePositions[] = new StartAndEnd(max(
+                0,
+                $seekPosition - 1
+            ), $removedPhpDocNodeInfo->getEnd());
         }
 
-        return $removedNodePositions;
+        return $this->removedNodePositions;
     }
 
     /**

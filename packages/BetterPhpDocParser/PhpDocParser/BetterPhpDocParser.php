@@ -296,32 +296,6 @@ final class BetterPhpDocParser extends PhpDocParser
         return $this->adjustTokenEndToFitClassAnnotation($tokenIterator, $tokenEnd);
     }
 
-//    private function getOriginalContentFromTokenIterator(TokenIterator $tokenIterator): string
-//    {
-//        $originalTokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
-//        $originalContent = '';
-//
-//        foreach ($originalTokens as $originalToken) {
-//            // skip opening
-//            if ($originalToken[1] === Lexer::TOKEN_OPEN_PHPDOC) {
-//                continue;
-//            }
-//
-//            // skip closing
-//            if ($originalToken[1] === Lexer::TOKEN_CLOSE_PHPDOC) {
-//                continue;
-//            }
-//
-//            if ($originalToken[1] === Lexer::TOKEN_PHPDOC_EOL) {
-//                $originalToken[0] = PHP_EOL;
-//            }
-//
-//            $originalContent .= $originalToken[0];
-//        }
-//
-//        return trim($originalContent);
-//    }
-
     /**
      * @see https://github.com/rectorphp/rector/issues/2158
      *

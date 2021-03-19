@@ -8,8 +8,6 @@ use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Lexer\Lexer;
-//use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineTagNodeInterface;
-//use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 
 final class WhitespaceDetector
