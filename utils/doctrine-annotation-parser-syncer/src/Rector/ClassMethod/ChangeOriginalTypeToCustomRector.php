@@ -7,9 +7,11 @@ namespace Rector\Utils\DoctrineAnnotationParserSyncer\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ObjectType;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,10 +31,15 @@ final class ChangeOriginalTypeToCustomRector extends AbstractRector implements C
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->nodeNameResolver->isInClassNamed(
-            $node,
-            new ObjectType('Doctrine\Common\Annotations\AnnotationReader')
-        )) {
+        /** @var Scope $scope */
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        if ($classReflection->getName() !== 'Doctrine\Common\Annotations\AnnotationReader') {
             return null;
         }
 

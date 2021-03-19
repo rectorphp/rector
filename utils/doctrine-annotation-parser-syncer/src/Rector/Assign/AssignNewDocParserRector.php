@@ -8,8 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
-use PHPStan\Type\ObjectType;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -17,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AssignNewDocParserRector extends AbstractRector implements ClassSyncerRectorInterface
 {
     /**
-     * @return array<class-string<\PhpParser\Node>>
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
@@ -29,10 +31,15 @@ final class AssignNewDocParserRector extends AbstractRector implements ClassSync
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->nodeNameResolver->isInClassNamed(
-            $node,
-            new ObjectType('Doctrine\Common\Annotations\AnnotationReader')
-        )) {
+        /** @var Scope $scope */
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        if ($classReflection->getName() !== 'Doctrine\Common\Annotations\AnnotationReader') {
             return null;
         }
 

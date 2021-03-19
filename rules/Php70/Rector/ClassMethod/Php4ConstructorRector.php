@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php70\Rector\ClassMethod;
 
 use PhpParser\Node;
-<<<<<<< HEAD
 use PhpParser\Node\Expr;
-=======
->>>>>>> cd14c85316... cleanup
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
@@ -210,7 +207,6 @@ CODE_SAMPLE
         return $parentClassReflection->getName();
     }
 
-<<<<<<< HEAD
     private function isLocalMethodCallNamed(Expr $expr, string $name): bool
     {
         if (! $expr instanceof MethodCall) {
@@ -230,26 +226,5 @@ CODE_SAMPLE
         }
 
         return $this->isName($expr->name, $name);
-=======
-    private function isLocalMethodCallNamed(Node $node, string $name): bool
-    {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if ($node->var instanceof StaticCall) {
-            return false;
-        }
-
-        if ($node->var instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isName($node->var, 'this')) {
-            return false;
-        }
-
-        return $this->isName($node->name, $name);
->>>>>>> cd14c85316... cleanup
     }
 }
