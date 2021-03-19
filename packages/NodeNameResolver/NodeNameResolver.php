@@ -212,41 +212,6 @@ final class NodeNameResolver
         return (bool) Strings::match($currentName, $suffixNamePattern);
     }
 
-    public function isLocalMethodCallNamed(Node $node, string $name): bool
-    {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if ($node->var instanceof StaticCall) {
-            return false;
-        }
-
-        if ($node->var instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isName($node->var, 'this')) {
-            return false;
-        }
-
-        return $this->isName($node->name, $name);
-    }
-
-    /**
-     * @param string[] $names
-     */
-    public function isLocalMethodCallsNamed(Node $node, array $names): bool
-    {
-        foreach ($names as $name) {
-            if ($this->isLocalMethodCallNamed($node, $name)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * @param ObjectType[] $desiredObjectTypes
      */

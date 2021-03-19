@@ -102,7 +102,7 @@ CODE_SAMPLE
             }
 
             $callerType = $this->nodeTypeResolver->resolve($node->class);
-            if (! $callerType->isSuperTypeOf(new ObjectType('Mocker'))->yes()) {
+            if (! $callerType->isSuperTypeOf(new ObjectType('Mockery'))->yes()) {
                 return null;
             }
 

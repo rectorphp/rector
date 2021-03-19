@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -65,11 +66,9 @@ CODE_SAMPLE
     {
         $callerType = $this->nodeTypeResolver->resolve($node->class);
 
-        if ($callerType->isSuperTypeOf(new ObjectType('PHPExcel_Settings'))->yes()) {
-            if ($this->nodeNameResolver->isNames($node->name, ['setPdfRendererName', 'setPdfRenderer'])) {
-                $this->removeNode($node);
-                return null;
-            }
+        if ($this->isSettingsPdfRendererStaticCall($callerType, $node)) {
+            $this->removeNode($node);
+            return null;
         }
 
         if ($callerType->isSuperTypeOf(new ObjectType('PHPExcel_IOFactory'))->yes() && $this->nodeNameResolver->isName(
@@ -87,5 +86,14 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    private function isSettingsPdfRendererStaticCall(Type $callerType, StaticCall $staticCall): bool
+    {
+        if (! $callerType->isSuperTypeOf(new ObjectType('PHPExcel_Settings'))->yes()) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isNames($staticCall->name, ['setPdfRendererName', 'setPdfRenderer']);
     }
 }
