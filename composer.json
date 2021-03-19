@@ -44,6 +44,7 @@
         "rector/rector-symfony": "dev-main",
         "rector/rector-nette": "dev-main",
         "rector/rector-laravel": "dev-main",
+        "rector/rector-phpunit": "dev-main",
         "sebastian/diff": "^4.0.4",
         "symfony/console": "^4.4.8|^5.1",
         "symfony/dependency-injection": "^5.1",
