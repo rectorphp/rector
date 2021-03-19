@@ -6,14 +6,23 @@ namespace Rector\Php70\NodeAnalyzer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Cast;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ThisType;
+use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Util\StaticInstanceOf;
@@ -91,7 +100,7 @@ final class VariableNaming
         return $valueName;
     }
 
-    public function resolveFromNodeAndType(Node $node, \PHPStan\Type\Type $type): ?string
+    public function resolveFromNodeAndType(Node $node, Type $type): ?string
     {
         $variableName = $this->resolveBareFromNode($node);
         if ($variableName === null) {
@@ -109,7 +118,7 @@ final class VariableNaming
     }
 
     public function resolveFromFuncCallFirstArgumentWithSuffix(
-        Expr\FuncCall $funcCall,
+        FuncCall $funcCall,
         string $suffix,
         string $fallbackName,
         ?Scope $scope
@@ -126,15 +135,15 @@ final class VariableNaming
 
     private function unwrapNode(Node $node): ?Node
     {
-        if ($node instanceof Node\Arg) {
+        if ($node instanceof Arg) {
             return $node->value;
         }
 
-        if ($node instanceof Expr\Cast) {
+        if ($node instanceof Cast) {
             return $node->expr;
         }
 
-        if ($node instanceof Expr\Ternary) {
+        if ($node instanceof Ternary) {
             return $node->if;
         }
 
@@ -144,7 +153,7 @@ final class VariableNaming
     private function resolveParamNameFromArrayDimFetch(ArrayDimFetch $arrayDimFetch): ?string
     {
         while ($arrayDimFetch instanceof ArrayDimFetch) {
-            if ($arrayDimFetch->dim instanceof Node\Scalar) {
+            if ($arrayDimFetch->dim instanceof Scalar) {
                 $valueName = $this->nodeNameResolver->getName($arrayDimFetch->var);
                 $dimName = $this->valueResolver->getValue($arrayDimFetch->dim);
 
@@ -180,11 +189,11 @@ final class VariableNaming
             return $this->resolveFromMethodCall($node);
         }
 
-        if ($node instanceof Expr\New_) {
+        if ($node instanceof New_) {
             return $this->resolveFromNew($node);
         }
 
-        if ($node instanceof Expr\FuncCall) {
+        if ($node instanceof FuncCall) {
             return $this->resolveFromNode($node->name);
         }
 
@@ -197,16 +206,16 @@ final class VariableNaming
             return $paramName;
         }
 
-        if ($node instanceof Node\Scalar\String_) {
+        if ($node instanceof String_) {
             return $node->value;
         }
 
         return null;
     }
 
-    private function resolveFromNew(Expr\New_ $new): string
+    private function resolveFromNew(New_ $new): string
     {
-        if ($new->class instanceof Node\Name) {
+        if ($new->class instanceof Name) {
             $className = $this->nodeNameResolver->getName($new->class);
             return $this->nodeNameResolver->getShortName($className);
         }
@@ -251,7 +260,7 @@ final class VariableNaming
     }
 
     private function resolveBareFuncCallArgumentName(
-        Expr\FuncCall $funcCall,
+        FuncCall $funcCall,
         string $fallbackName,
         string $suffix
     ): string {
