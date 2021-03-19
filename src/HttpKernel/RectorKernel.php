@@ -19,8 +19,12 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
+use Symplify\ComposerJsonManipulator\Bundle\ComposerJsonManipulatorBundle;
+use Symplify\ConsoleColorDiff\Bundle\ConsoleColorDiffBundle;
 use Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
+use Symplify\SimplePhpDocParser\Bundle\SimplePhpDocParserBundle;
+use Symplify\Skipper\Bundle\SkipperBundle;
 
 /**
  * @todo possibly remove symfony/http-kernel and use the container build only
@@ -82,7 +86,14 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
      */
     public function registerBundles(): iterable
     {
-        return [];
+        $bundles = [
+            new ConsoleColorDiffBundle(),
+            new ComposerJsonManipulatorBundle(),
+            new SkipperBundle(),
+            new SimplePhpDocParserBundle()
+        ];
+
+        return $bundles;
     }
 
     protected function build(ContainerBuilder $containerBuilder): void
