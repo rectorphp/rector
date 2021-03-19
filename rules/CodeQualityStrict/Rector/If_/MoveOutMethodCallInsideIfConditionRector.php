@@ -162,10 +162,11 @@ CODE_SAMPLE
 
     private function isVariableNameAlreadyDefined(If_ $if, string $variableName): bool
     {
-        /** @var Scope $scope */
         $scope = $if->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return false;
+        }
 
-        return $scope->hasVariableType($variableName)
-            ->yes();
+        return $scope->hasVariableType($variableName)->yes();
     }
 }
