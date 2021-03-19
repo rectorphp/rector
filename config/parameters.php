@@ -9,7 +9,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
-
     // paths and extensions
     $parameters->set(Option::PATHS, []);
     $parameters->set(Option::FILE_EXTENSIONS, ['php']);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Set\ValueObject;
 
+use Rector\Laravel\Set\LaravelSetList;
 use Rector\Set\Contract\SetListInterface;
 use Rector\Set\NetteSetList;
 use Rector\Set\SymfonySetList;
@@ -19,11 +20,6 @@ final class SetList implements SetListInterface
      * @var string
      */
     public const ACTION_INJECTION_TO_CONSTRUCTOR_INJECTION = __DIR__ . '/../../../config/set/action-injection-to-constructor-injection.php';
-
-    /**
-     * @var string
-     */
-    public const ARRAY_STR_FUNCTIONS_TO_STATIC_CALL = __DIR__ . '/../../../config/set/laravel-array-str-functions-to-static-call.php';
 
     /**
      * @var string
@@ -181,69 +177,102 @@ final class SetList implements SetListInterface
     public const KDYBY_TRANSLATOR_TO_CONTRIBUTTE_TRANSLATION = __DIR__ . '/../../../config/set/kdyby-translator-to-contributte-translation.php';
 
     /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
      * @var string
      */
-    public const LARAVEL_50 = __DIR__ . '/../../../config/set/laravel50.php';
+    public const ARRAY_STR_FUNCTIONS_TO_STATIC_CALL = LaravelSetList::ARRAY_STR_FUNCTIONS_TO_STATIC_CALL;
 
     /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
      * @var string
      */
-    public const LARAVEL_51 = __DIR__ . '/../../../config/set/laravel51.php';
+    public const LARAVEL_50 = LaravelSetList::LARAVEL_50;
 
     /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
      * @var string
      */
-    public const LARAVEL_52 = __DIR__ . '/../../../config/set/laravel52.php';
+    public const LARAVEL_51 = LaravelSetList::LARAVEL_51;
 
     /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
      * @var string
      */
-    public const LARAVEL_53 = __DIR__ . '/../../../config/set/laravel53.php';
+    public const LARAVEL_52 = LaravelSetList::LARAVEL_52;
 
     /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
      * @var string
      */
-    public const LARAVEL_54 = __DIR__ . '/../../../config/set/laravel54.php';
+    public const LARAVEL_53 = LaravelSetList::LARAVEL_53;
 
     /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
      * @var string
      */
-    public const LARAVEL_55 = __DIR__ . '/../../../config/set/laravel55.php';
+    public const LARAVEL_54 = LaravelSetList::LARAVEL_54;
 
     /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
      * @var string
      */
-    public const LARAVEL_56 = __DIR__ . '/../../../config/set/laravel56.php';
+    public const LARAVEL_55 = LaravelSetList::LARAVEL_55;
 
     /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
      * @var string
      */
-    public const LARAVEL_57 = __DIR__ . '/../../../config/set/laravel57.php';
+    public const LARAVEL_56 = LaravelSetList::LARAVEL_56;
 
     /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
      * @var string
      */
-    public const LARAVEL_58 = __DIR__ . '/../../../config/set/laravel58.php';
+    public const LARAVEL_57 = LaravelSetList::LARAVEL_57;
 
     /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
      * @var string
      */
-    public const LARAVEL_60 = __DIR__ . '/../../../config/set/laravel60.php';
+    public const LARAVEL_58 = LaravelSetList::LARAVEL_58;
 
     /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
      * @var string
      */
-    public const LARAVEL_STATIC_TO_INJECTION = __DIR__ . '/../../../config/set/laravel-static-to-injection.php';
+    public const LARAVEL_60 = LaravelSetList::LARAVEL_60;
 
     /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
      * @var string
      */
-    public const LARAVEL_CODE_QUALITY = __DIR__ . '/../../../config/set/laravel-code-quality.php';
+    public const LARAVEL_STATIC_TO_INJECTION = LaravelSetList::LARAVEL_STATIC_TO_INJECTION;
 
     /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
      * @var string
      */
-    public const LARAVEL_ARRAY_STR_FUNCTION_TO_STATIC_CALL = __DIR__ . '/../../../config/set/laravel-array-str-functions-to-static-call.php';
+    public const LARAVEL_CODE_QUALITY = LaravelSetList::LARAVEL_CODE_QUALITY;
+
+    /**
+     * For BC layer
+     * @deprecated Use LaravelSetList from rector/rector-laravel instead
+     * @var string
+     */
+    public const LARAVEL_ARRAY_STR_FUNCTION_TO_STATIC_CALL = LaravelSetList::ARRAY_STR_FUNCTIONS_TO_STATIC_CALL;
 
     /**
      * @var string
