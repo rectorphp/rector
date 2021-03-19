@@ -22,6 +22,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
+use Rector\RemovingStatic\NodeAnalyzer\SetUpClassMethodUpdater;
 use Rector\RemovingStatic\NodeFactory\SelfContainerFactory;
 use Rector\RemovingStatic\NodeFactory\SetUpFactory;
 use Rector\RemovingStatic\ValueObject\PHPUnitClass;
@@ -75,7 +76,7 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector implem
     private $selfContainerFactory;
 
     /**
-     * @var \Rector\RemovingStatic\NodeAnalyzer\SetUpClassMethodUpdater
+     * @var SetUpClassMethodUpdater
      */
     private $setUpClassMethodUpdater;
 
@@ -85,7 +86,7 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector implem
         SetUpClassMethodFactory $setUpClassMethodFactory,
         SetUpFactory $setUpFactory,
         SelfContainerFactory $selfContainerFactory,
-        \Rector\RemovingStatic\NodeAnalyzer\SetUpClassMethodUpdater $setUpClassMethodUpdater
+        SetUpClassMethodUpdater $setUpClassMethodUpdater
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->classInsertManipulator = $classInsertManipulator;
