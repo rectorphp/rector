@@ -29,13 +29,8 @@ jobs:
                     - packages-tests
                     - src
                     - tests
+                    - rules
                     - rules-tests
-
-                    - rules/Arguments rules/Autodiscovery rules/CakePHP rules/Carbon rules/CodeQuality rules/CodeQualityStrict rules/CodingStyle rules/Composer rules/DeadCode rules/DeadDocBlock rules/Defluent
-                    - rules/DependencyInjection rules/Doctrine rules/DoctrineCodeQuality rules/DoctrineGedmoToKnplabs  rules/DowngradePhp70 rules/DowngradePhp71 rules/DowngradePhp72 rules/DowngradePhp73 rules/DowngradePhp74 rules/DowngradePhp80
-                    - rules/EarlyReturn rules/Generics rules/Laravel rules/MockeryToProphecy rules/MysqlToMysqli rules/Naming rules/Nette rules/NetteCodeQuality rules/NetteKdyby rules/NetteTesterToPHPUnit rules/NetteToSymfony rules/Order
-                    - rules/Php52 rules/Php53 rules/Php54 rules/Php55 rules/Php56 rules/Php70 rules/Php71 rules/Php72 rules/Php73 rules/Php74 rules/Php80 rules/PHPOffice rules/PhpSpecToPHPUnit rules/PHPUnit
-                    - rules/Privatization rules/PSR4 rules/Removing rules/RemovingStatic rules/Renaming rules/Restoration rules/Transform rules/TypeDeclaration rules/Visibility
 
         runs-on: ubuntu-latest
         steps:
