@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -186,7 +187,8 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! is_a($parameterType->getClassName(), Throwable::class, true)) {
+            $objectType = new ObjectType('Throwable');
+            if ($objectType->isSuperTypeOf($parameterType)->no()) {
                 continue;
             }
 
