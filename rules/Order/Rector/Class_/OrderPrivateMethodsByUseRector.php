@@ -6,6 +6,7 @@ namespace Rector\Order\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -156,7 +157,11 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->nodeNameResolver->isVariableName($node->var, 'this')) {
+            if (! $node->var instanceof Variable) {
+                return null;
+            }
+
+            if (! $this->nodeNameResolver->isName($node->var, 'this')) {
                 return null;
             }
 

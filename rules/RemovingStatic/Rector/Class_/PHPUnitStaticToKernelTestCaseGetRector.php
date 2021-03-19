@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace Rector\RemovingStatic\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -21,7 +17,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -341,21 +336,6 @@ CODE_SAMPLE
 
         return $this->nodeFactory->createPrivatePropertyFromNameAndType($propertyName, $objectType);
     }
-
-//    private function createContainerGetTypeMethodCall(ObjectType $objectType): MethodCall
-//    {
-//        $staticPropertyFetch = new StaticPropertyFetch(new Name('self'), 'container');
-//        $getMethodCall = new MethodCall($staticPropertyFetch, 'get');
-//
-//        $className = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType);
-//        if (! $className instanceof Name) {
-//            throw new ShouldNotHappenException();
-//        }
-//
-//        $getMethodCall->args[] = new Arg(new ClassConstFetch($className, 'class'));
-//
-//        return $getMethodCall;
-//    }
 
     private function getParentSetUpStaticCallPosition(ClassMethod $setupClassMethod): ?int
     {

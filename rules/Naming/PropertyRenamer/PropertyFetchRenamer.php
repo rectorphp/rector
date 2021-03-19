@@ -47,16 +47,16 @@ final class PropertyFetchRenamer
                     return $node;
                 }
 
-                if ($this->nodeNameResolver->isLocalStaticPropertyFetchNamed($node, $currentName)) {
-                    if (! $node instanceof StaticPropertyFetch) {
-                        return null;
-                    }
-
-                    $node->name = new VarLikeIdentifier($expectedName);
-                    return $node;
+                if (! $node instanceof StaticPropertyFetch) {
+                    return null;
                 }
 
-                return null;
+                if (! $this->nodeNameResolver->isName($node->name, $currentName)) {
+                    return null;
+                }
+
+                $node->name = new VarLikeIdentifier($expectedName);
+                return $node;
             }
         );
     }

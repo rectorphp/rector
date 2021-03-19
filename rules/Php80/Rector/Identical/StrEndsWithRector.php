@@ -133,7 +133,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->nodeNameResolver->isFuncCallName($node->expr, 'strlen')) {
+        if (! $node->expr instanceof FuncCall) {
+            return null;
+        }
+
+        if (! $this->nodeNameResolver->isName($node->expr, 'strlen')) {
             return null;
         }
 

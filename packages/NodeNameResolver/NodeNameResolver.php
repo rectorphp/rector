@@ -7,12 +7,10 @@ namespace Rector\NodeNameResolver;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -184,22 +182,6 @@ final class NodeNameResolver
         return $names;
     }
 
-    /**
-     * @param Node[] $nodes
-     */
-    public function haveName(array $nodes, string $name): bool
-    {
-        foreach ($nodes as $node) {
-            if (! $this->isName($node, $name)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
     public function isLocalPropertyFetchNamed(Node $node, string $name): bool
     {
         if (! $node instanceof PropertyFetch) {
@@ -219,27 +201,6 @@ final class NodeNameResolver
         }
 
         return $this->isName($node->name, $name);
-    }
-
-    public function isLocalStaticPropertyFetchNamed(Node $node, string $name): bool
-    {
-        if (! $node instanceof StaticPropertyFetch) {
-            return false;
-        }
-
-        return $this->isName($node->name, $name);
-    }
-
-    /**
-     * @param string[] $names
-     */
-    public function isFuncCallNames(Node $node, array $names): bool
-    {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        return $this->isNames($node, $names);
     }
 
     /**
@@ -290,18 +251,6 @@ final class NodeNameResolver
     /**
      * @deprecated Helper function causes to lose the type on the outside. Better avoid it
      */
-    public function isFuncCallName(Node $node, string $name): bool
-    {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        return $this->isName($node, $name);
-    }
-
-    /**
-     * @deprecated Helper function causes to lose the type on the outside. Better avoid it
-     */
     public function isStaticCallNamed(Node $node, string $className, string $methodName): bool
     {
         if (! $node instanceof StaticCall) {
@@ -317,33 +266,6 @@ final class NodeNameResolver
         }
 
         return $this->isName($node->name, $methodName);
-    }
-
-    /**
-     * @deprecated Helper function causes to lose the type on the outside. Better avoid it
-     * @param string[] $methodNames
-     */
-    public function isStaticCallsNamed(Node $node, string $className, array $methodNames): bool
-    {
-        foreach ($methodNames as $methodName) {
-            if ($this->isStaticCallNamed($node, $className, $methodName)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @deprecated Helper function causes to lose the type on the outside. Better avoid it
-     */
-    public function isVariableName(Node $node, string $name): bool
-    {
-        if (! $node instanceof Variable) {
-            return false;
-        }
-
-        return $this->isName($node, $name);
     }
 
     /**

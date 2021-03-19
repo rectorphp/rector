@@ -11,16 +11,10 @@ use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Type\MixedType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\VendorLocker\Reflection\ClassReflectionAncestorAnalyzer;
 use Rector\VendorLocker\Reflection\MethodReflectionContractAnalyzer;
 
 final class ClassMethodReturnVendorLockResolver
 {
-    /**
-     * @var ClassReflectionAncestorAnalyzer
-     */
-    private $classReflectionAncestorAnalyzer;
-
     /**
      * @var MethodReflectionContractAnalyzer
      */
@@ -32,11 +26,9 @@ final class ClassMethodReturnVendorLockResolver
     private $nodeNameResolver;
 
     public function __construct(
-        ClassReflectionAncestorAnalyzer $classReflectionAncestorAnalyzer,
         MethodReflectionContractAnalyzer $methodReflectionContractAnalyzer,
         NodeNameResolver $nodeNameResolver
     ) {
-        $this->classReflectionAncestorAnalyzer = $classReflectionAncestorAnalyzer;
         $this->methodReflectionContractAnalyzer = $methodReflectionContractAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -53,7 +45,7 @@ final class ClassMethodReturnVendorLockResolver
             return false;
         }
 
-        if (! $this->classReflectionAncestorAnalyzer->hasAncestors($classReflection)) {
+        if (count($classReflection->getAncestors()) === 1) {
             return false;
         }
 

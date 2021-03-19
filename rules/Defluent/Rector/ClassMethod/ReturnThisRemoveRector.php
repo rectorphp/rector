@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Defluent\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -122,11 +123,11 @@ CODE_SAMPLE
         }
 
         $return = $returns[0];
-        if ($return->expr === null) {
+        if (! $return->expr instanceof Variable) {
             return null;
         }
 
-        if (! $this->nodeNameResolver->isVariableName($return->expr, 'this')) {
+        if (! $this->nodeNameResolver->isName($return->expr, 'this')) {
             return null;
         }
 

@@ -267,7 +267,11 @@ CODE_SAMPLE
             $variableName,
             $constantName
         ): ?ClassConstFetch {
-            if (! $this->nodeNameResolver->isVariableName($node, $variableName)) {
+            if (! $node instanceof Variable) {
+                return null;
+            }
+
+            if (! $this->nodeNameResolver->isName($node, $variableName)) {
                 return null;
             }
 

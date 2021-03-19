@@ -193,6 +193,10 @@ CODE_SAMPLE
 
     private function isIteratorToArrayFuncCall(Expr $expr): bool
     {
-        return $this->nodeNameResolver->isFuncCallName($expr, 'iterator_to_array');
+        if (! $expr instanceof FuncCall) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isName($expr, 'iterator_to_array');
     }
 }
