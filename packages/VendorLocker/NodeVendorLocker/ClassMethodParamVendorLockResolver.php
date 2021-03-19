@@ -59,6 +59,10 @@ final class ClassMethodParamVendorLockResolver
             return false;
         }
 
+        if ($classMethod->isMagic()) {
+            return true;
+        }
+
         $methodName = $this->nodeNameResolver->getName($classMethod);
         foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
             // skip self
@@ -66,62 +70,25 @@ final class ClassMethodParamVendorLockResolver
                 continue;
             }
 
-            if (! $classReflection->hasNativeMethod($methodName)) {
+            if (! $ancestorClassReflection->hasNativeMethod($methodName)) {
                 continue;
             }
-        }
 
-//        if (! $this->classReflectionAncestorAnalyzer->hasAncestors($classReflection)) {
-//            return false;
-//        }
-
-
-        if ($classReflection->getParentClass() !== false) {
-            $vendorLock = $this->isParentClassVendorLocking(
-                $classReflection->getParentClass(),
-                $paramPosition,
-                $methodName
-            );
-            if ($vendorLock !== null) {
-                return $vendorLock;
+            // class is vendor, its locking us
+            $classLike = $this->nodeRepository->findClassLike($ancestorClassReflection->getName());
+            if ($classLike === null) {
+                return true;
             }
-        }
 
-        if ($classReflection->isClass()) {
-            return $this->methodReflectionContractAnalyzer->hasInterfaceContract($classReflection, $methodName);
-        }
+            $classMethod = $classLike->getMethod($methodName);
+            if ($classMethod === null) {
+                continue;
+            }
 
-        if ($classReflection->isInterface()) {
-            return $this->methodReflectionContractAnalyzer->hasInterfaceContract($classReflection, $methodName);
+            $paramType = $classMethod->params[$paramPosition]->type;
+            return $paramType !== null;
         }
 
         return false;
-    }
-
-    private function isParentClassVendorLocking(
-        ClassReflection $parentClassReflection,
-        int $paramPosition,
-        string $methodName
-    ): ?bool {
-        $parentClass = $this->nodeRepository->findClass($parentClassReflection->getName());
-        if ($parentClass !== null) {
-            $parentClassMethod = $parentClass->getMethod($methodName);
-            // parent class method in local scope → it's ok
-            if ($parentClassMethod !== null) {
-                // parent method has no type → we cannot change it here
-                if (! isset($parentClassMethod->params[$paramPosition])) {
-                    return false;
-                }
-                return $parentClassMethod->params[$paramPosition]->type === null;
-            }
-        }
-
-        if ($parentClassReflection->hasMethod($methodName)) {
-            // parent class method in external scope → it's not ok
-            // if not, look for it's parent parent
-            return true;
-        }
-
-        return null;
     }
 }

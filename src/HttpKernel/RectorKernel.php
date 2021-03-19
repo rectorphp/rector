@@ -86,14 +86,12 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
      */
     public function registerBundles(): iterable
     {
-        $bundles = [
+        return [
             new ConsoleColorDiffBundle(),
             new ComposerJsonManipulatorBundle(),
             new SkipperBundle(),
             new SimplePhpDocParserBundle(),
         ];
-
-        return $bundles;
     }
 
     protected function build(ContainerBuilder $containerBuilder): void
