@@ -87,7 +87,7 @@ In this particular case, the code should change - `final` should be added so tha
 ```php
 <?php
 
-namespace Rector\Privatization\Tests\Rector\Class_\FinalizeClassesWithoutChildrenRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector\Fixture;
 
 class AddFinal
 {
@@ -97,7 +97,7 @@ class AddFinal
 -----
 <?php
 
-namespace Rector\Privatization\Tests\Rector\Class_\FinalizeClassesWithoutChildrenRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector\Fixture;
 
 final class AddFinal
 {
@@ -113,13 +113,13 @@ final class AddFinal
 Run PHPUnit with the test file to confirm:
 
 ```bash
-vendor/bin/phpunit rules/privatization/tests/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php
+vendor/bin/phpunit rules-tests/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php
 ```
 
 To run only the single test fixture, add `--filter test#X`, where X is the fixture's order number.
 
 ```bash
-vendor/bin/phpunit rules/privatization/tests/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php --filter test#4
+vendor/bin/phpunit rules-tests/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenRector/FinalizeClassesWithoutChildrenRectorTest.php --filter test#4
 ```
 
 If PHPUnit fails, you've successfully added a test case! :)
