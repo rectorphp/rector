@@ -10,7 +10,6 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayShapeItemNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 final class AttributeAwareArrayShapeItemNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
 {
@@ -19,11 +18,6 @@ final class AttributeAwareArrayShapeItemNodeFactory implements AttributeNodeAwar
      */
     private $attributeAwareNodeFactory;
 
-    public function getOriginalNodeClass(): string
-    {
-        return ArrayShapeItemNode::class;
-    }
-
     public function isMatch(Node $node): bool
     {
         return is_a($node, ArrayShapeItemNode::class, true);
@@ -31,8 +25,9 @@ final class AttributeAwareArrayShapeItemNodeFactory implements AttributeNodeAwar
 
     /**
      * @param ArrayShapeItemNode $node
+     * @return AttributeAwareArrayShapeItemNode
      */
-    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): Node
     {
         $node->valueType = $this->attributeAwareNodeFactory->createFromNode($node->valueType, $docContent);
         return new AttributeAwareArrayShapeItemNode($node->keyName, $node->optional, $node->valueType, $docContent);

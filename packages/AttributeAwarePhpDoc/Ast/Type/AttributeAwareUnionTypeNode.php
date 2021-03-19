@@ -7,13 +7,9 @@ namespace Rector\AttributeAwarePhpDoc\Ast\Type;
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
-final class AttributeAwareUnionTypeNode extends UnionTypeNode implements AttributeAwareNodeInterface
+final class AttributeAwareUnionTypeNode extends UnionTypeNode
 {
-    use AttributeTrait;
-
     /**
      * @var string
      * @see https://regex101.com/r/Hwk7Cg/1

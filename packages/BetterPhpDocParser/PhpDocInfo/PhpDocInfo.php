@@ -18,14 +18,12 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ClassNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
+use Rector\BetterPhpDocParser\ValueObject\NodeTypes;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
@@ -176,27 +174,26 @@ final class PhpDocInfo
     }
 
     /**
-     * @return PhpDocTagNode[]|AttributeAwareNodeInterface[]
+     * @return array<PhpDocTagNode>
      */
     public function getTagsByName(string $name): array
     {
         $name = $this->annotationNaming->normalizeName($name);
 
-        /** @var PhpDocTagNode[]|AttributeAwareNodeInterface[] $tags */
         $tags = $this->phpDocNode->getTags();
 
         $tags = array_filter($tags, function (PhpDocTagNode $tag) use ($name): bool {
             return $tag->name === $name;
         });
-        $tags = array_values($tags);
 
+        $tags = array_values($tags);
         return array_values($tags);
     }
 
     public function getParamType(string $name): Type
     {
-        $attributeAwareParamTagValueNode = $this->getParamTagValueByName($name);
-        return $this->getTypeOrMixed($attributeAwareParamTagValueNode);
+        $paramTagValueByName = $this->getParamTagValueByName($name);
+        return $this->getTypeOrMixed($paramTagValueByName);
     }
 
     /**
@@ -302,7 +299,7 @@ final class PhpDocInfo
     /**
      * @template T of \PHPStan\PhpDocParser\Ast\Node
      * @param class-string<T> $type
-     * @return T[]
+     * @return array<T>
      */
     public function findAllByType(string $type): array
     {
@@ -332,9 +329,14 @@ final class PhpDocInfo
             $foundTagsValueNodes[] = $phpDocChildNode->value;
         }
 
+        /** @var \PHPStan\PhpDocParser\Ast\Node[] $foundTagsValueNodes */
         return $foundTagsValueNodes;
     }
 
+    /**
+     * @template T of \PHPStan\PhpDocParser\Ast\Node
+     * @param class-string<T> $type
+     */
     public function removeByType(string $type): void
     {
         $this->ensureTypeIsTagValueNode($type, __METHOD__);
@@ -390,8 +392,8 @@ final class PhpDocInfo
 
         $name = $this->resolveNameForPhpDocTagValueNode($phpDocTagValueNode);
 
-        $attributeAwarePhpDocTagNode = new AttributeAwarePhpDocTagNode($name, $phpDocTagValueNode);
-        $this->addPhpDocTagNode($attributeAwarePhpDocTagNode);
+        $phpDocTagNode = new PhpDocTagNode($name, $phpDocTagValueNode);
+        $this->addPhpDocTagNode($phpDocTagNode);
     }
 
     public function isNewNode(): bool
@@ -413,9 +415,8 @@ final class PhpDocInfo
         return $this->isSingleLine;
     }
 
-    public function getReturnTagValue(): ?AttributeAwareReturnTagValueNode
+    public function getReturnTagValue(): ?ReturnTagValueNode
     {
-        /** @var AttributeAwareReturnTagValueNode[] $returnTagValueNodes */
         $returnTagValueNodes = $this->phpDocNode->getReturnTagValues();
         return $returnTagValueNodes[0] ?? null;
     }
@@ -481,12 +482,14 @@ final class PhpDocInfo
 
     private function ensureTypeIsTagValueNode(string $type, string $location): void
     {
-        if (StaticInstanceOf::isOneOf($type, [
+        /** @var array<class-string> $desiredTypes */
+        $desiredTypes = array_merge([
             PhpDocTagValueNode::class,
             PhpDocTagNode::class,
-            TypeAwareTagValueNodeInterface::class,
             PhpAttributableTagNodeInterface::class,
-        ])) {
+        ], NodeTypes::TYPE_AWARE_NODES);
+
+        if (StaticInstanceOf::isOneOf($type, $desiredTypes)) {
             return;
         }
 

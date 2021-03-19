@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Attributes\Ast;
 
 use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactoryCollector;
+use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayShapeItemNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
+
+use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 /**
  * @see \Rector\Tests\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactoryTest
@@ -19,41 +20,65 @@ use Rector\Core\Exception\ShouldNotHappenException;
 final class AttributeAwareNodeFactory
 {
     /**
-     * @var AttributeAwareNodeFactoryCollector
+     * @var AttributeNodeAwareFactoryInterface[]
      */
-    private $attributeAwareNodeFactoryCollector;
+    private $attributeAwareNodeFactories = [];
 
-    public function __construct(AttributeAwareNodeFactoryCollector $attributeAwareNodeFactoryCollector)
+    /**
+     * @var PhpDocNodeTraverser
+     */
+    private $phpDocNodeTraverser;
+
+    /**
+     * @param AttributeNodeAwareFactoryInterface[] $attributeAwareNodeFactories
+     */
+    public function __construct(array $attributeAwareNodeFactories, PhpDocNodeTraverser $phpDocNodeTraverser)
     {
-        $this->attributeAwareNodeFactoryCollector = $attributeAwareNodeFactoryCollector;
+        foreach ($attributeAwareNodeFactories as $attributeAwareNodeFactory) {
+            // prevents cyclic dependency
+            if ($attributeAwareNodeFactory instanceof AttributeAwareNodeFactoryAwareInterface) {
+                $attributeAwareNodeFactory->setAttributeAwareNodeFactory($this);
+            }
+        }
+
+        $this->attributeAwareNodeFactories = $attributeAwareNodeFactories;
+        $this->phpDocNodeTraverser = $phpDocNodeTraverser;
     }
 
     /**
-     * @return PhpDocNode|PhpDocChildNode|PhpDocTagValueNode|AttributeAwareNodeInterface
+     * @template T of \PHPStan\PhpDocParser\Ast\Node
+     * @param T $node
+     * @return T
      */
-    public function createFromNode(Node $node, string $docContent): AttributeAwareNodeInterface
+    public function createFromNode(Node $node, string $docContent): Node
     {
-        if ($node instanceof AttributeAwareNodeInterface) {
-            return $node;
-        }
+        $node = $this->phpDocNodeTraverser->traverseWithCallable($node, $docContent, function (
+            Node $node,
+            string $docContent
+        ): Node {
+            if ($node instanceof UnionTypeNode && ! $node instanceof AttributeAwareUnionTypeNode) {
+                return new AttributeAwareUnionTypeNode($node->types, $docContent);
+            }
 
-        foreach ($this->attributeAwareNodeFactoryCollector->provide() as $attributeNodeAwareFactory) {
-            if (! $attributeNodeAwareFactory->isMatch($node)) {
+            if ($node instanceof ArrayShapeItemNode && ! $node instanceof AttributeAwareArrayShapeItemNode) {
+                return new AttributeAwareArrayShapeItemNode(
+                    $node->keyName,
+                    $node->optional,
+                    $node->valueType,
+                    $docContent
+                );
+            }
+            return $node;
+        });
+
+        foreach ($this->attributeAwareNodeFactories as $attributeAwareNodeFactory) {
+            if (! $attributeAwareNodeFactory->isMatch($node)) {
                 continue;
             }
 
-            // prevents cyclic dependency
-            if ($attributeNodeAwareFactory instanceof AttributeAwareNodeFactoryAwareInterface) {
-                $attributeNodeAwareFactory->setAttributeAwareNodeFactory($this);
-            }
-
-            return $attributeNodeAwareFactory->create($node, $docContent);
+            return $attributeAwareNodeFactory->create($node, $docContent);
         }
 
-        throw new ShouldNotHappenException(sprintf(
-            'Node "%s" was missed in "%s". Generate it with: bin/rector sync-types',
-            get_class($node),
-            __METHOD__
-        ));
+        return $node;
     }
 }

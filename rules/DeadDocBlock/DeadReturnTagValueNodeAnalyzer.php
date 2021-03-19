@@ -6,7 +6,7 @@ namespace Rector\DeadDocBlock;
 
 use PhpParser\Node\FunctionLike;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 
 final class DeadReturnTagValueNodeAnalyzer
@@ -34,7 +34,7 @@ final class DeadReturnTagValueNodeAnalyzer
             return false;
         }
 
-        if ($returnTagValueNode->type instanceof AttributeAwareGenericTypeNode) {
+        if ($returnTagValueNode->type instanceof GenericTypeNode) {
             return false;
         }
 

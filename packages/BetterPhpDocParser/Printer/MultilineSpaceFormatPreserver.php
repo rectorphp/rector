@@ -9,10 +9,7 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 final class MultilineSpaceFormatPreserver
 {
@@ -50,33 +47,29 @@ final class MultilineSpaceFormatPreserver
     /**
      * Fix multiline BC break - https://github.com/phpstan/phpdoc-parser/pull/26/files
      */
-    public function fixMultilineDescriptions(AttributeAwareNodeInterface $attributeAwareNode): void
+    public function fixMultilineDescriptions(Node $node): void
     {
-        $originalContent = $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT);
+        $originalContent = $node->getAttribute(Attribute::ORIGINAL_CONTENT);
         if (! $originalContent) {
             return;
         }
 
-        $nodeWithRestoredSpaces = $this->restoreOriginalSpacingInText($attributeAwareNode);
-        if (! $nodeWithRestoredSpaces instanceof AttributeAwareNodeInterface) {
+        $nodeWithRestoredSpaces = $this->restoreOriginalSpacingInText($node);
+        if (! $nodeWithRestoredSpaces instanceof Node) {
             return;
         }
 
-        $attributeAwareNode = $nodeWithRestoredSpaces;
-        $attributeAwareNode->setAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES, true);
+        $node = $nodeWithRestoredSpaces;
+        $node->setAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES, true);
     }
 
-    /**
-     * @param PhpDocTextNode|AttributeAwareNodeInterface $attributeAwareNode
-     */
-    private function restoreOriginalSpacingInText(
-        AttributeAwareNodeInterface $attributeAwareNode
-    ): ?AttributeAwareNodeInterface {
+    private function restoreOriginalSpacingInText(Node $node): ?Node
+    {
         /** @var string $originalContent */
-        $originalContent = $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT);
+        $originalContent = $node->getAttribute(Attribute::ORIGINAL_CONTENT);
         $oldSpaces = Strings::matchAll($originalContent, '#\s+#ms');
 
-        $currentText = $this->resolveCurrentPhpDocNodeText($attributeAwareNode);
+        $currentText = $this->resolveCurrentPhpDocNodeText($node);
         if ($currentText === null) {
             return null;
         }
@@ -105,33 +98,28 @@ final class MultilineSpaceFormatPreserver
             return null;
         }
 
-        $this->decoratePhpDocNodeWithNewText($attributeAwareNode, $newText);
-        return $attributeAwareNode;
+        $this->decoratePhpDocNodeWithNewText($node, $newText);
+        return $node;
     }
 
-    private function decoratePhpDocNodeWithNewText(
-        AttributeAwareNodeInterface $attributeAwareNode,
-        string $newText
-    ): void {
-        if ($attributeAwareNode instanceof PhpDocTagNode && property_exists(
-            $attributeAwareNode->value,
-            'description'
-        )) {
-            $attributeAwareNode->value->description = $newText;
+    private function decoratePhpDocNodeWithNewText(Node $node, string $newText): void
+    {
+        if ($node instanceof PhpDocTagNode && property_exists($node->value, 'description')) {
+            $node->value->description = $newText;
         }
 
-        if ($attributeAwareNode instanceof PhpDocTextNode) {
-            $attributeAwareNode->text = $newText;
+        if ($node instanceof PhpDocTextNode) {
+            $node->text = $newText;
         }
 
-        if (! $attributeAwareNode instanceof AttributeAwarePhpDocTagNode) {
+        if (! $node instanceof PhpDocTagNode) {
             return;
         }
 
-        if (! $attributeAwareNode->value instanceof AttributeAwareGenericTagValueNode) {
+        if (! $node->value instanceof GenericTagValueNode) {
             return;
         }
 
-        $attributeAwareNode->value->value = $newText;
+        $node->value->value = $newText;
     }
 }

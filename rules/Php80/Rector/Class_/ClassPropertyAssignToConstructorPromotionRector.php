@@ -173,11 +173,11 @@ CODE_SAMPLE
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
-        $attributeAwareParamTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
-        if (! $attributeAwareParamTagValueNode instanceof ParamTagValueNode) {
+        $paramTagValueByName = $phpDocInfo->getParamTagValueByName($paramName);
+        if (! $paramTagValueByName instanceof ParamTagValueNode) {
             return;
         }
 
-        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $attributeAwareParamTagValueNode);
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueByName);
     }
 }

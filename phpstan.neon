@@ -118,6 +118,7 @@ parameters:
         -
             message: '#Class cognitive complexity is \d+, keep it under \d+#'
             paths:
+                - packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php
                 - rules/Php70/EregToPcreTransformer.php
                 - packages/NodeCollector/NodeCollector/NodeRepository.php
                 - packages/NodeTypeResolver/NodeTypeResolver.php
@@ -275,9 +276,6 @@ parameters:
                 - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
         - '#PHPDoc tag @param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
 
-        # intersection mess
-        - '#Parameter \#1 \$phpDocTagNodes of method Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMethodCallFactory\:\:createFromTagValueNodes\(\) expects array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\>, array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|Rector\\BetterPhpDocParser\\Contract\\PhpDocNode\\AttributeAwareNodeInterface\> given#'
-
         # false postives
         - '#Parameter \#2 \$right of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
         - '#Parameter \#1 \$stmts of class Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace constructor expects array<PhpParser\\Node\\Stmt\>, array<PhpParser\\Node\> given#'
@@ -304,9 +302,6 @@ parameters:
 
         # unable to test, because the method is final
         - '#Class "Rector\\Nette\\Rector\\Class_\\MoveFinalGetUserToCheckRequirementsClassMethodRector" is missing @see annotation with test case class reference#'
-
-        # type juggling
-        - '#AttributeAwareNodeInterface#'
 
         -
              message: '#Use `\$class\-\>namespaceName` instead of `\$class\-\>name` that only returns short class name#'
@@ -365,6 +360,7 @@ parameters:
         - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<PhpParser\\Node\>\:\:findFirst\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
         - '#Parameter \#2 \$type of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<T of PhpParser\\Node\>\:\:findInstanceOfName\(\) expects class\-string<T of PhpParser\\Node\>, string given#'
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findVariableOfName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns T of PhpParser\\Node\|null#'
+        - '#Method Rector\\AttributeAwarePhpDoc\\AttributeAwareNodeFactory\\PhpDoc\\AttributeAwareTemplateTagValueNodeFactory\:\:create\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns Rector\\AttributeAwarePhpDoc\\Ast\\PhpDoc\\AttributeAwareTemplateTagValueNode#'
 
         # fixed in php-parser master
         - '#Method Rector\\Symfony\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
@@ -590,3 +586,15 @@ parameters:
         -
             message: '#Function "interface_exists\(\)" cannot be used/left in the code#'
             path: packages/Testing/PhpConfigPrinter/config/php-config-printer-config.php
+
+        # generics fails
+        - '#Method Rector\\BetterPhpDocParser\\Attributes\\Ast\\AttributeAwareNodeFactory\:\:createFromNode\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns PHPStan\\PhpDocParser\\Ast\\Node#'
+        - '#Method Rector\\AttributeAwarePhpDoc\\AttributeAwareNodeFactory\\Type\\AttributeAwareIntersectionTypeNodeFactory\:\:create\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareIntersectionTypeNode#'
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:findAllByType\(\) should return array<T of PHPStan\\PhpDocParser\\Ast\\Node\> but returns array<PHPStan\\PhpDocParser\\Ast\\Node\>#'
+
+        # PHP 7_4 literal syntax
+        - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\|int\) does not accept string#'
+
+        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\Printer\\WhitespaceDetector\:\:detectOldWhitespaces\(\)" is 20, keep it under 9#'
+        - '#Method Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayTypeMapper\:\:narrowConstantArrayTypeOfUnionType\(\) should return PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode\|null but returns PHPStan\\PhpDocParser\\Ast\\Node#'
+        - '#Method Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectTypeMapper\:\:mapToPHPStanPhpDocTypeNode\(\) should return PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode but returns PHPStan\\PhpDocParser\\Ast\\Node#'

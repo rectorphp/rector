@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
+use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -15,7 +16,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -218,7 +219,7 @@ final class PhpDocInfoPrinter
     }
 
     private function printNode(
-        AttributeAwareNodeInterface $attributeAwareNode,
+        Node $node,
         ?StartAndEnd $startAndEnd = null,
         int $key = 0,
         int $nodeCount = 0
@@ -226,11 +227,11 @@ final class PhpDocInfoPrinter
         $output = '';
 
         /** @var StartAndEnd|null $startAndEnd */
-        $startAndEnd = $attributeAwareNode->getAttribute(Attribute::START_END) ?: $startAndEnd;
-        $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($attributeAwareNode);
+        $startAndEnd = $node->getAttribute(Attribute::START_END) ?: $startAndEnd;
+        $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($node);
 
         if ($startAndEnd !== null) {
-            $isLastToken = ($nodeCount === $key);
+            $isLastToken = $nodeCount === $key;
 
             $output = $this->addTokensFromTo(
                 $output,
@@ -242,26 +243,26 @@ final class PhpDocInfoPrinter
             $this->currentTokenPosition = $startAndEnd->getEnd();
         }
 
-        if ($attributeAwareNode instanceof PhpDocTagNode) {
+        if ($node instanceof PhpDocTagNode) {
             if ($startAndEnd !== null) {
-                return $this->printPhpDocTagNode($attributeAwareNode, $startAndEnd, $output);
+                return $this->printPhpDocTagNode($node, $startAndEnd, $output);
             }
 
-            return $output . self::NEWLINE_ASTERISK . $this->printAttributeWithAsterisk($attributeAwareNode);
+            return $output . self::NEWLINE_ASTERISK . $this->printAttributeWithAsterisk($node);
         }
 
-        if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startAndEnd) {
-            $nodeContent = (string) $attributeAwareNode;
+        if (! $node instanceof PhpDocTextNode && ! $node instanceof GenericTagValueNode && $startAndEnd) {
+            $nodeContent = (string) $node;
 
             return $this->originalSpacingRestorer->restoreInOutputWithTokensStartAndEndPosition(
-                $attributeAwareNode,
+                $node,
                 $nodeContent,
                 $this->tokens,
                 $startAndEnd
             );
         }
 
-        return $output . $this->printAttributeWithAsterisk($attributeAwareNode);
+        return $output . $this->printAttributeWithAsterisk($node);
     }
 
     private function printEnd(string $output): string
@@ -269,6 +270,9 @@ final class PhpDocInfoPrinter
         $lastTokenPosition = $this->attributeAwarePhpDocNode->getAttribute(
             Attribute::LAST_TOKEN_POSITION
         ) ?: $this->currentTokenPosition;
+        if ($lastTokenPosition === 0) {
+            $lastTokenPosition = 1;
+        }
 
         return $this->addTokensFromTo($output, $lastTokenPosition, $this->tokenCount, true);
     }
@@ -301,20 +305,13 @@ final class PhpDocInfoPrinter
         return $this->appendToOutput($output, $from, $to, $positionJumpSet);
     }
 
-    /**
-     * @param PhpDocTagNode|AttributeAwareNodeInterface $phpDocTagNode
-     */
     private function printPhpDocTagNode(
         PhpDocTagNode $phpDocTagNode,
         StartAndEnd $startAndEnd,
         string $output
     ): string {
         $output .= $phpDocTagNode->name;
-
         $phpDocTagNodeValue = $phpDocTagNode->value;
-        if (! $phpDocTagNodeValue instanceof AttributeAwareNodeInterface) {
-            throw new ShouldNotHappenException();
-        }
 
         $nodeOutput = $this->printNode($phpDocTagNodeValue, $startAndEnd);
         $tagSpaceSeparator = $this->resolveTagSpaceSeparator($phpDocTagNode);
@@ -341,10 +338,9 @@ final class PhpDocInfoPrinter
         return $output . $nodeOutput;
     }
 
-    private function printAttributeWithAsterisk(AttributeAwareNodeInterface $attributeAwareNode): string
+    private function printAttributeWithAsterisk(Node $node): string
     {
-        $content = (string) $attributeAwareNode;
-
+        $content = (string) $node;
         return $this->explodeAndImplode($content, PHP_EOL, self::NEWLINE_ASTERISK);
     }
 
@@ -357,12 +353,13 @@ final class PhpDocInfoPrinter
             return $this->removedNodePositions;
         }
 
-        /** @var AttributeAwareNodeInterface[] $removedNodes */
         $removedNodes = array_diff(
             $this->phpDocInfo->getOriginalPhpDocNode()
                 ->children,
             $this->attributeAwarePhpDocNode->children
         );
+
+        $lastEndPosition = null;
 
         foreach ($removedNodes as $removedNode) {
             /** @var StartAndEnd $removedPhpDocNodeInfo */
@@ -370,11 +367,26 @@ final class PhpDocInfoPrinter
 
             // change start position to start of the line, so the whole line is removed
             $seekPosition = $removedPhpDocNodeInfo->getStart();
-            while ($this->tokens[$seekPosition][1] !== Lexer::TOKEN_HORIZONTAL_WS) {
+
+            while ($seekPosition >= 0 && $this->tokens[$seekPosition][1] !== Lexer::TOKEN_HORIZONTAL_WS) {
+                if ($this->tokens[$seekPosition][1] === Lexer::TOKEN_PHPDOC_EOL) {
+                    break;
+                }
+
+                // do not colide
+                if ($lastEndPosition < $seekPosition) {
+                    break;
+                }
+
                 --$seekPosition;
             }
 
-            $this->removedNodePositions[] = new StartAndEnd($seekPosition - 1, $removedPhpDocNodeInfo->getEnd());
+            $lastEndPosition = $removedPhpDocNodeInfo->getEnd();
+
+            $this->removedNodePositions[] = new StartAndEnd(max(
+                0,
+                $seekPosition - 1
+            ), $removedPhpDocNodeInfo->getEnd());
         }
 
         return $this->removedNodePositions;
@@ -388,6 +400,7 @@ final class PhpDocInfoPrinter
         for ($i = $from; $i < $to; ++$i) {
             while (isset($positionJumpSet[$i])) {
                 $i = $positionJumpSet[$i];
+                continue;
             }
 
             $output .= $this->tokens[$i][0] ?? '';
@@ -419,9 +432,6 @@ final class PhpDocInfoPrinter
         return '';
     }
 
-    /**
-     * @param AttributeAwareNodeInterface&PhpDocTagNode $phpDocTagNode
-     */
     private function hasDescription(PhpDocTagNode $phpDocTagNode): bool
     {
         $hasDescriptionWithOriginalSpaces = $phpDocTagNode->getAttribute(

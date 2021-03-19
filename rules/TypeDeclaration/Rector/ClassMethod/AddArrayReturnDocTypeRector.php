@@ -9,14 +9,13 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayShapeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
@@ -254,24 +253,24 @@ CODE_SAMPLE
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
-        $attributeAwareReturnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if (! $attributeAwareReturnTagValueNode instanceof ReturnTagValueNode) {
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if (! $returnTagValueNode instanceof ReturnTagValueNode) {
             return false;
         }
 
-        if ($attributeAwareReturnTagValueNode->type instanceof AttributeAwareGenericTypeNode) {
+        if ($returnTagValueNode->type instanceof GenericTypeNode) {
             return true;
         }
 
-        if ($attributeAwareReturnTagValueNode->type instanceof AttributeAwareArrayShapeNode) {
+        if ($returnTagValueNode->type instanceof ArrayShapeNode) {
             return true;
         }
 
-        if (! $attributeAwareReturnTagValueNode->type instanceof ArrayTypeNode) {
+        if (! $returnTagValueNode->type instanceof ArrayTypeNode) {
             return false;
         }
 
-        return $attributeAwareReturnTagValueNode->type->type instanceof ArrayShapeNode;
+        return $returnTagValueNode->type->type instanceof ArrayShapeNode;
     }
 
     private function hasInheritDoc(ClassMethod $classMethod): bool

@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
 
+use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
-final class DataProviderTagValueNode implements PhpDocTagValueNode, AttributeAwareNodeInterface
+final class DataProviderTagValueNode implements PhpDocTagValueNode
 {
-    use AttributeTrait;
+    use NodeAttributes;
 
     /**
      * @var string

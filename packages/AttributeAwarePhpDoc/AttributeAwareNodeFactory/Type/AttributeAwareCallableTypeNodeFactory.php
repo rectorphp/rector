@@ -10,7 +10,6 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareCallableTypeNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 final class AttributeAwareCallableTypeNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
 {
@@ -19,11 +18,6 @@ final class AttributeAwareCallableTypeNodeFactory implements AttributeNodeAwareF
      */
     private $attributeAwareNodeFactory;
 
-    public function getOriginalNodeClass(): string
-    {
-        return CallableTypeNode::class;
-    }
-
     public function isMatch(Node $node): bool
     {
         return is_a($node, CallableTypeNode::class, true);
@@ -31,8 +25,9 @@ final class AttributeAwareCallableTypeNodeFactory implements AttributeNodeAwareF
 
     /**
      * @param CallableTypeNode $node
+     * @return AttributeAwareCallableTypeNode
      */
-    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): Node
     {
         $identifier = $this->attributeAwareNodeFactory->createFromNode($node->identifier, $docContent);
 

@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette;
 
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
 /**
  * @see \Rector\BetterPhpDocParser\PhpDocNodeFactory\StringMatchingPhpDocNodeFactory\NettePersistentPhpDocNodeFactory
  */
-final class NettePersistentTagNode extends PhpDocTagNode implements PhpAttributableTagNodeInterface, AttributeAwareNodeInterface
+final class NettePersistentTagNode extends PhpDocTagNode implements PhpAttributableTagNodeInterface
 {
-    use AttributeTrait;
-
     /**
      * @var string
      */
@@ -24,7 +21,7 @@ final class NettePersistentTagNode extends PhpDocTagNode implements PhpAttributa
 
     public function __construct()
     {
-        parent::__construct(self::NAME, new AttributeAwareGenericTagValueNode(''));
+        parent::__construct(self::NAME, new GenericTagValueNode(''));
     }
 
     public function getShortName(): string

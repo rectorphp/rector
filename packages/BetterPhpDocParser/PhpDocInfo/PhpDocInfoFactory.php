@@ -14,7 +14,7 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
@@ -168,7 +168,6 @@ final class PhpDocInfoFactory
         }
 
         $phpDocChildNodes = $attributeAwarePhpDocNode->children;
-        /** @var AttributeAwareNodeInterface $lastChildNode */
         $lastChildNode = array_pop($phpDocChildNodes);
 
         /** @var StartAndEnd $startAndEnd */

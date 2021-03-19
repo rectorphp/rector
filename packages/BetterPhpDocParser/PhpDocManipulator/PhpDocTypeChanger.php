@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
 use PhpParser\Node\Param;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -65,8 +65,8 @@ final class PhpDocTypeChanger
             $phpDocInfo->markAsChanged();
         } else {
             // add completely new one
-            $attributeAwareVarTagValueNode = new AttributeAwareVarTagValueNode($newPHPStanPhpDocType, '', '');
-            $phpDocInfo->addTagValueNode($attributeAwareVarTagValueNode);
+            $varTagValueNode = new VarTagValueNode($newPHPStanPhpDocType, '', '');
+            $phpDocInfo->addTagValueNode($varTagValueNode);
         }
     }
 
@@ -87,8 +87,8 @@ final class PhpDocTypeChanger
             $phpDocInfo->markAsChanged();
         } else {
             // add completely new one
-            $attributeAwareReturnTagValueNode = new AttributeAwareReturnTagValueNode($newPHPStanPhpDocType, '');
-            $phpDocInfo->addTagValueNode($attributeAwareReturnTagValueNode);
+            $returnTagValueNode = new ReturnTagValueNode($newPHPStanPhpDocType, '');
+            $phpDocInfo->addTagValueNode($returnTagValueNode);
         }
     }
 

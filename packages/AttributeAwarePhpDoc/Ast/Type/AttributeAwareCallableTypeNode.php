@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Rector\AttributeAwarePhpDoc\Ast\Type;
 
 use Nette\Utils\Strings;
+use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
-final class AttributeAwareCallableTypeNode extends CallableTypeNode implements AttributeAwareNodeInterface
+final class AttributeAwareCallableTypeNode extends CallableTypeNode
 {
-    use AttributeTrait;
+    use NodeAttributes;
 
     public function __toString(): string
     {
