@@ -91,7 +91,11 @@ CODE_SAMPLE
     private function matchIdenticalOrNotIdenticalToFalse(Expr $expr): ?FuncCall
     {
         if ($this->valueResolver->isFalse($expr->left)) {
-            if (! $this->nodeNameResolver->isFuncCallNames($expr->right, self::OLD_STR_NAMES)) {
+            if (! $expr->right instanceof FuncCall) {
+                return null;
+            }
+
+            if (! $this->isNames($expr->right, self::OLD_STR_NAMES)) {
                 return null;
             }
 
@@ -101,7 +105,11 @@ CODE_SAMPLE
         }
 
         if ($this->valueResolver->isFalse($expr->right)) {
-            if (! $this->nodeNameResolver->isFuncCallNames($expr->left, self::OLD_STR_NAMES)) {
+            if (! $expr->left instanceof FuncCall) {
+                return null;
+            }
+
+            if (! $this->isNames($expr->left, self::OLD_STR_NAMES)) {
                 return null;
             }
 

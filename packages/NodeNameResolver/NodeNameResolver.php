@@ -231,18 +231,6 @@ final class NodeNameResolver
     }
 
     /**
-     * @param string[] $names
-     */
-    public function isFuncCallNames(Node $node, array $names): bool
-    {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        return $this->isNames($node, $names);
-    }
-
-    /**
      * Ends with ucname
      * Starts with adjective, e.g. (Post $firstPost, Post $secondPost)
      */

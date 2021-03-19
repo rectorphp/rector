@@ -253,7 +253,7 @@ CODE_SAMPLE
 
             $funcCall = $initExpr->expr;
 
-            if ($this->nodeNameResolver->isFuncCallName($funcCall, self::COUNT)) {
+            if ($this->nodeNameResolver->isName($funcCall, self::COUNT)) {
                 $this->countValueVariableExpr = $initExpr->var;
                 $this->countValueName = $this->getName($initExpr->var);
                 $this->iteratedExpr = $funcCall->args[0]->value;
@@ -280,11 +280,13 @@ CODE_SAMPLE
             return false;
         }
 
-        // count($values)
-        if ($this->nodeNameResolver->isFuncCallName($condExprs[0]->right, self::COUNT)) {
-            /** @var FuncCall $countFuncCall */
-            $countFuncCall = $condExprs[0]->right;
-            $this->iteratedExpr = $countFuncCall->args[0]->value;
+        $funcCall = $condExprs[0]->right;
+        if (! $funcCall instanceof FuncCall) {
+            return false;
+        }
+
+        if ($this->nodeNameResolver->isName($funcCall, self::COUNT)) {
+            $this->iteratedExpr = $funcCall->args[0]->value;
             return true;
         }
 
