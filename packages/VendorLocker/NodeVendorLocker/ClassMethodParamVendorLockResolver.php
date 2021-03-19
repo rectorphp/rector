@@ -59,11 +59,22 @@ final class ClassMethodParamVendorLockResolver
             return false;
         }
 
-        if (! $this->classReflectionAncestorAnalyzer->hasAncestors($classReflection)) {
-            return false;
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
+            // skip self
+            if ($ancestorClassReflection === $classReflection) {
+                continue;
+            }
+
+            if (! $classReflection->hasNativeMethod($methodName)) {
+                continue;
+            }
         }
 
-        $methodName = $this->nodeNameResolver->getName($classMethod);
+//        if (! $this->classReflectionAncestorAnalyzer->hasAncestors($classReflection)) {
+//            return false;
+//        }
+
 
         if ($classReflection->getParentClass() !== false) {
             $vendorLock = $this->isParentClassVendorLocking(

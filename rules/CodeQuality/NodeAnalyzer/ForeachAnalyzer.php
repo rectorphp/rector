@@ -112,10 +112,6 @@ final class ForeachAnalyzer
                 }
 
                 // is dim same as key value name, ...[$i]
-//                if ($node->dim === null) {
-//                    return null;
-//                }
-//
                 if (! $node->dim instanceof Variable) {
                     return null;
                 }
