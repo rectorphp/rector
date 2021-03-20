@@ -76,7 +76,7 @@ final class DocBlockNameImporter
             $importShortClasses = $this->parameterProvider->provideBoolParameter(Option::IMPORT_SHORT_CLASSES);
 
             // Importing root namespace classes (like \DateTime) is optional
-            if ($importShortClasses === false && substr_count($staticType->getClassName(), '\\') === 0) {
+            if (! $importShortClasses && substr_count($staticType->getClassName(), '\\') === 0) {
                 return $docNode;
             }
 

@@ -96,11 +96,6 @@ final class PhpDocInfoPrinter
     private $phpDocInfo;
 
     /**
-     * @var MultilineSpaceFormatPreserver
-     */
-    private $multilineSpaceFormatPreserver;
-
-    /**
      * @var SpacePatternFactory
      */
     private $spacePatternFactory;
@@ -123,7 +118,6 @@ final class PhpDocInfoPrinter
         DocBlockInliner $docBlockInliner
     ) {
         $this->originalSpacingRestorer = $originalSpacingRestorer;
-        $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
         $this->spacePatternFactory = $spacePatternFactory;
         $this->emptyPhpDocDetector = $emptyPhpDocDetector;
         $this->docBlockInliner = $docBlockInliner;

@@ -36,17 +36,9 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
      */
     private $useImportTypesInFilePath = [];
 
-    /**
-     * @var NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
-
-    public function __construct(
-        CurrentFileInfoProvider $currentFileInfoProvider,
-        NodesToRemoveCollector $nodesToRemoveCollector
-    ) {
+    public function __construct(CurrentFileInfoProvider $currentFileInfoProvider)
+    {
         $this->currentFileInfoProvider = $currentFileInfoProvider;
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
 
     public function isActive(): bool
