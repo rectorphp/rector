@@ -25,7 +25,6 @@ use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
 use Rector\RemovingStatic\NodeAnalyzer\SetUpClassMethodUpdater;
 use Rector\RemovingStatic\NodeFactory\SelfContainerFactory;
 use Rector\RemovingStatic\NodeFactory\SetUpFactory;
-use Rector\RemovingStatic\ValueObject\PHPUnitClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -184,7 +183,7 @@ CODE_SAMPLE
 
     private function processClass(Class_ $class): ?Class_
     {
-        if ($this->isObjectType($class, new ObjectType(PHPUnitClass::TEST_CASE))) {
+        if ($this->isObjectType($class, new ObjectType('PHPUnit\Framework\TestCase'))) {
             return $this->processPHPUnitClass($class);
         }
 
