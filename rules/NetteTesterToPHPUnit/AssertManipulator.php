@@ -22,6 +22,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
+use Rector\PHPUnit\PhpDoc\Node\PHPUnitDoesNotPerformAssertionTagNode;
 use Rector\PostRector\Collector\NodesToAddCollector;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 
@@ -274,7 +275,7 @@ final class AssertManipulator
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $phpDocInfo->addPhpDocTagNode(new \Rector\PHPUnit\PhpDoc\Node\PHPUnitDoesNotPerformAssertionTagNode());
+        $phpDocInfo->addPhpDocTagNode(new PHPUnitDoesNotPerformAssertionTagNode());
     }
 
     private function renameAssertMethod(StaticCall $staticCall): void

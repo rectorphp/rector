@@ -119,22 +119,6 @@ final class VariableNaming
         return null;
     }
 
-    private function resolveBareFuncCallArgumentName(FuncCall $funcCall, string $fallbackName, string $suffix): string
-    {
-        $argumentValue = $funcCall->args[0]->value;
-        if ($argumentValue instanceof MethodCall || $argumentValue instanceof StaticCall) {
-            $name = $this->nodeNameResolver->getName($argumentValue->name);
-        } else {
-            $name = $this->nodeNameResolver->getName($argumentValue);
-        }
-
-        if ($name === null) {
-            return $fallbackName;
-        }
-
-        return $name . $suffix;
-    }
-
     private function unwrapNode(Node $node): ?Node
     {
         if ($node instanceof Arg) {

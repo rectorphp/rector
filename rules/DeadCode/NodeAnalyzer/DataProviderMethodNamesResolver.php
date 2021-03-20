@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PHPUnit\PhpDoc\Node\PHPUnitDataProviderTagValueNode;
 
 final class DataProviderMethodNamesResolver
 {
@@ -55,7 +56,7 @@ final class DataProviderMethodNamesResolver
     }
 
     /**
-     * @return \Rector\PHPUnit\PhpDoc\Node\PHPUnitDataProviderTagValueNode[]
+     * @return PHPUnitDataProviderTagValueNode[]
      */
     private function resolvePHPUnitDataProviderTagValueNodes(Class_ $class): array
     {
@@ -69,7 +70,7 @@ final class DataProviderMethodNamesResolver
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
             $foundPHPUnitDataProviderTagValueNodes = $phpDocInfo->findAllByType(
-                \Rector\PHPUnit\PhpDoc\Node\PHPUnitDataProviderTagValueNode::class
+                PHPUnitDataProviderTagValueNode::class
             );
             $phpunitDataProviderTagValueNodes = array_merge(
                 $phpunitDataProviderTagValueNodes,
