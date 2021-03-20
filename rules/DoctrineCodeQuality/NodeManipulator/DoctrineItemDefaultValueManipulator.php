@@ -34,11 +34,11 @@ final class DoctrineItemDefaultValueManipulator
         string $item,
         $defaultValue
     ): bool {
-        $attributableItems = $doctrineTagValueNode->getAttributableItems();
-        if (! isset($attributableItems[$item])) {
+        $items = $doctrineTagValueNode->getItems();
+        if (! isset($items[$item])) {
             return false;
         }
 
-        return $attributableItems[$item] === $defaultValue;
+        return $items[$item] === $defaultValue;
     }
 }

@@ -10,10 +10,8 @@ use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
 use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
 use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
-use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 
-final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implements ToManyTagNodeInterface, MappedByNodeInterface, InversedByNodeInterface, PhpAttributableTagNodeInterface
+final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implements ToManyTagNodeInterface, MappedByNodeInterface, InversedByNodeInterface
 {
     /**
      * @var string
@@ -75,10 +73,5 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
     public function getShortName(): string
     {
         return '@ORM\ManyToMany';
-    }
-
-    public function getAttributeClassName(): string
-    {
-        return PhpAttributeGroupFactory::TO_BE_ANNOUNCED;
     }
 }

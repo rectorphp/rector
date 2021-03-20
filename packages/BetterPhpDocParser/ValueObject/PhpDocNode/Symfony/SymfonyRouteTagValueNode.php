@@ -8,12 +8,11 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\ClassNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
-use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
-final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface, PhpAttributableTagNodeInterface, ClassNameAwareTagInterface
+final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface, ClassNameAwareTagInterface
 {
     /**
      * @var string
@@ -57,19 +56,6 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     public function mimicTagValueNodeConfiguration(AbstractTagValueNode $abstractTagValueNode): void
     {
         $this->tagValueNodeConfiguration->mimic($abstractTagValueNode->tagValueNodeConfiguration);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function getAttributableItems(): array
-    {
-        return $this->filterOutMissingItems($this->items);
-    }
-
-    public function getAttributeClassName(): string
-    {
-        return self::CLASS_NAME;
     }
 
     public function getClassName(): string

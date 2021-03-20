@@ -9,11 +9,8 @@ use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\AroundSpaces;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\PhpAttribute\Contract\ManyPhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 
-final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implements PhpAttributableTagNodeInterface, ManyPhpAttributableTagNodeInterface
+final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
 {
     /**
      * @var string
@@ -94,47 +91,6 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
     public function getShortName(): string
     {
         return '@ORM\JoinTable';
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function getAttributableItems(): array
-    {
-        $items = [];
-
-        if ($this->name !== null) {
-            $items['name'] = $this->name;
-        }
-
-        if ($this->schema !== null) {
-            $items['schema'] = $this->schema;
-        }
-
-        return $items;
-    }
-
-    /**
-     * @return array<string, mixed[]>
-     */
-    public function provide(): array
-    {
-        $items = [];
-
-        foreach ($this->joinColumns as $joinColumn) {
-            $items[$joinColumn->getShortName()] = $joinColumn->getAttributableItems();
-        }
-
-        foreach ($this->inverseJoinColumns as $inverseJoinColumn) {
-            $items['@ORM\InverseJoinColumn'] = $inverseJoinColumn->getAttributableItems();
-        }
-
-        return $items;
-    }
-
-    public function getAttributeClassName(): string
-    {
-        return PhpAttributeGroupFactory::TO_BE_ANNOUNCED;
     }
 
     /**

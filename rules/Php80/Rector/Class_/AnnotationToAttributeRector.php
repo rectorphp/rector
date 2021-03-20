@@ -11,10 +11,17 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\PhpAttribute\AnnotationToAttributeConverter;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see https://wiki.php.net/rfc/attributes_v2
@@ -23,22 +30,40 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\AnnotationToAttributeRectorTest
  */
-final class AnnotationToAttributeRector extends AbstractRector
+final class AnnotationToAttributeRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var AnnotationToAttributeConverter
+     * @var string
      */
-    private $annotationToAttributeConverter;
+    public const ANNOTATION_TO_ATTRIBUTE = 'annotation_to_attribute';
 
-    public function __construct(AnnotationToAttributeConverter $annotationToAttributeConverter)
-    {
-        $this->annotationToAttributeConverter = $annotationToAttributeConverter;
+    /**
+     * @var AnnotationToAttribute[]
+     */
+    private $annotationsToAttributes = [];
+
+    /**
+     * @var PhpAttributeGroupFactory
+     */
+    private $phpAttributeGroupFactory;
+
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
+    public function __construct(
+        PhpAttributeGroupFactory $phpAttributeGroupFactory,
+        PhpDocTagRemover $phpDocTagRemover
+    ) {
+        $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change annotation to attribute', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -64,6 +89,14 @@ class SymfonyRoute
     }
 }
 CODE_SAMPLE
+                , [
+                    self::ANNOTATION_TO_ATTRIBUTE => [
+                        new AnnotationToAttribute(
+                            SymfonyRouteTagValueNode::class,
+                            'Symfony\Component\Routing\Annotation\Route'
+                        ),
+                    ],
+                ]
             ),
         ]);
     }
@@ -88,6 +121,48 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return $this->annotationToAttributeConverter->convertNode($node);
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::ATTRIBUTES)) {
+            return null;
+        }
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return null;
+        }
+
+        $hasNewAttrGroups = false;
+
+        foreach ($this->annotationsToAttributes as $annotationToAttribute) {
+            $tagNodeType = $annotationToAttribute->getTagNodeClass();
+            $phpDocTagNode = $phpDocInfo->getByType($tagNodeType);
+            if (! $phpDocTagNode instanceof \PHPStan\PhpDocParser\Ast\Node) {
+                continue;
+            }
+
+            // 1. remove php-doc tag
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $phpDocTagNode);
+
+            // 2. add attributes
+            $node->attrGroups[] = $this->phpAttributeGroupFactory->create($phpDocTagNode, $annotationToAttribute);
+
+            $hasNewAttrGroups = true;
+        }
+
+        if ($hasNewAttrGroups) {
+            return $node;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array<string, AnnotationToAttribute[]> $configuration
+     */
+    public function configure(array $configuration): void
+    {
+        $annotationsToAttributes = $configuration[self::ANNOTATION_TO_ATTRIBUTE] ?? [];
+        Assert::allIsInstanceOf($annotationsToAttributes, AnnotationToAttribute::class);
+
+        $this->annotationsToAttributes = $annotationsToAttributes;
     }
 }

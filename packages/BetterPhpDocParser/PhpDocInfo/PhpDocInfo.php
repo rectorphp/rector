@@ -27,7 +27,6 @@ use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticInstanceOf;
-use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 /**
@@ -493,7 +492,6 @@ final class PhpDocInfo
         $desiredTypes = array_merge([
             PhpDocTagValueNode::class,
             PhpDocTagNode::class,
-            PhpAttributableTagNodeInterface::class,
         ], NodeTypes::TYPE_AWARE_NODES);
 
         if (StaticInstanceOf::isOneOf($type, $desiredTypes)) {
