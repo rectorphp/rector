@@ -126,12 +126,14 @@ final class PhpDocInfoPrinter
     {
         $docContent = (string) $phpDocInfo->getPhpDocNode();
 
+        // fix missing newline in the end of docblock
+        $docContent = Strings::replace($docContent, '#\*/$#', "\n */");
+
         if ($phpDocInfo->isSingleLine()) {
             return $this->docBlockInliner->inline($docContent);
         }
 
-        // fix missing newline in the end of docblock
-        return Strings::replace($docContent, '#\*/$#', "\n */");
+        return $docContent;
     }
 
     /**
