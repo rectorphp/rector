@@ -3,9 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\PostRector\Rector\NameImportingPostRector;
-use Rector\PostRector\Rector\NodeAddingPostRector;
-use Rector\PostRector\Rector\UseAddingPostRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\FirstNamespace\SomeServiceClass as SomeServiceClassFirstNamespace;
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass;
