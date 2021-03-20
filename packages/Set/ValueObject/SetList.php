@@ -6,9 +6,9 @@ namespace Rector\Set\ValueObject;
 
 use Rector\CakePHP\Sets\CakePHPSetList;
 use Rector\Laravel\Set\LaravelSetList;
+use Rector\Nette\Set\NetteSetList;
 use Rector\PHPUnit\Sets\PHPUnitSetList;
 use Rector\Set\Contract\SetListInterface;
-use Rector\Set\NetteSetList;
 use Rector\Set\SwiftmailerSetList;
 use Rector\Set\SymfonySetList;
 use Rector\Set\TwigSetList;

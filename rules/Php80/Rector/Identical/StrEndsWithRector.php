@@ -12,8 +12,8 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\UnaryMinus;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NetteCodeQuality\NodeAnalyzer\BinaryOpAnalyzer;
-use Rector\NetteCodeQuality\ValueObject\FuncCallAndExpr;
+use Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer;
+use Rector\Nette\ValueObject\FuncCallAndExpr;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
