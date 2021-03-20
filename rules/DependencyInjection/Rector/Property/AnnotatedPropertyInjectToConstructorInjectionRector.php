@@ -144,7 +144,7 @@ CODE_SAMPLE
 
         foreach (self::INJECT_TAG_VALUE_NODE_TYPES as $tagValueNodeType) {
             $injectTagValueNode = $phpDocInfo->getByType($tagValueNodeType);
-            if ($injectTagValueNode === null) {
+            if (! $injectTagValueNode instanceof  \PHPStan\PhpDocParser\Ast\Node) {
                 continue;
             }
 

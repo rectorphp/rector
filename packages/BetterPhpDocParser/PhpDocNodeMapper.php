@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Attributes\Ast;
+namespace Rector\BetterPhpDocParser;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -22,7 +22,7 @@ use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 /**
- * @see \Rector\Tests\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactoryTest
+ * @see \Rector\Tests\BetterPhpDocParser\PhpDocNodeMapperTest
  */
 final class PhpDocNodeMapper
 {
@@ -43,25 +43,13 @@ final class PhpDocNodeMapper
      */
     public function transform(Node $node, string $docContent): Node
     {
-        $node = $this->phpDocNodeTraverser->traverseWithCallable($node, $docContent, function (
-            Node $node,
-            string $docContent
-        ): Node {
+        $transformingCallable = function (Node $node, string $docContent): Node {
             if ($node instanceof IntersectionTypeNode && ! $node instanceof BracketsAwareIntersectionTypeNode) {
                 return new BracketsAwareIntersectionTypeNode($node->types);
             }
 
             if ($node instanceof ArrayTypeNode && ! $node instanceof SpacingAwareArrayTypeNode) {
                 return new SpacingAwareArrayTypeNode($node->type);
-            }
-
-            if ($node instanceof ArrayShapeItemNode && ! $node instanceof SpacingAwareArrayShapeItemNode) {
-                return new SpacingAwareArrayShapeItemNode(
-                    $node->keyName,
-                    $node->optional,
-                    $node->valueType,
-                    $docContent
-                );
             }
 
             if ($node instanceof CallableTypeNode && ! $node instanceof SpacingAwareCallableTypeNode) {
@@ -89,8 +77,8 @@ final class PhpDocNodeMapper
             }
 
             return $node;
-        });
+        };
 
-        return $node;
+        return $this->phpDocNodeTraverser->traverseWithCallable($node, $docContent, $transformingCallable);
     }
 }

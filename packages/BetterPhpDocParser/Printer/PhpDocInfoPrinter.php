@@ -132,11 +132,13 @@ final class PhpDocInfoPrinter
     public function printNew(PhpDocInfo $phpDocInfo): string
     {
         $docContent = (string) $phpDocInfo->getPhpDocNode();
+
         if ($phpDocInfo->isSingleLine()) {
             return $this->docBlockInliner->inline($docContent);
         }
 
-        return $docContent;
+        // fix missing newline in the end of docblock
+        return Strings::replace($docContent, '#\*/$#', "\n */");
     }
 
     /**
@@ -170,6 +172,7 @@ final class PhpDocInfoPrinter
         $this->removedNodePositions = [];
 
         $phpDocString = $this->printPhpDocNode($this->phpDocNode);
+
         $phpDocString = $this->removeExtraSpacesAfterAsterisk($phpDocString);
 
         // hotfix of extra space with callable ()
@@ -228,6 +231,7 @@ final class PhpDocInfoPrinter
         /** @var StartAndEnd|null $startAndEnd */
         $startAndEnd = $node->getAttribute(Attribute::START_END) ?: $startAndEnd;
 //        $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($node);
+
 
         if ($startAndEnd !== null) {
             $isLastToken = $nodeCount === $key;

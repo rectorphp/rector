@@ -12,9 +12,9 @@ use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\Attributes\Ast\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
@@ -47,7 +47,7 @@ final class PhpDocInfoFactory
     /**
      * @var PhpDocNodeMapper
      */
-    private $attributeAwareNodeFactory;
+    private $phpDocNodeMapper;
 
     /**
      * @var AnnotationNaming
@@ -65,7 +65,7 @@ final class PhpDocInfoFactory
     private $phpDocInfosByObjectHash = [];
 
     public function __construct(
-        PhpDocNodeMapper $attributeAwareNodeFactory,
+        PhpDocNodeMapper $phpDocNodeMapper,
         CurrentNodeProvider $currentNodeProvider,
         Lexer $lexer,
         BetterPhpDocParser $betterPhpDocParser,
@@ -77,7 +77,7 @@ final class PhpDocInfoFactory
         $this->lexer = $lexer;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
+        $this->phpDocNodeMapper = $phpDocNodeMapper;
         $this->annotationNaming = $annotationNaming;
         $this->rectorChangeCollector = $rectorChangeCollector;
     }
@@ -186,7 +186,7 @@ final class PhpDocInfoFactory
         Node $node
     ): PhpDocInfo {
         /** @var PhpDocNode $phpDocNode */
-        $phpDocNode = $this->attributeAwareNodeFactory->transform($phpDocNode, $content);
+        $phpDocNode = $this->phpDocNodeMapper->transform($phpDocNode, $content);
 
         $phpDocInfo = new PhpDocInfo(
             $phpDocNode,

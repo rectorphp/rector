@@ -99,17 +99,15 @@ parameters:
                 - *Test.php
 
         -
-            message: "#^Cognitive complexity for \"Rector\\\\BetterPhpDocParser\\\\Printer\\\\WhitespaceDetector\\:\\:detectOldWhitespaces\\(\\)\" is 18, keep it under 9$#"
-            count: 1
-            path: packages/BetterPhpDocParser/Printer/WhitespaceDetector.php
+            message: "#^Cognitive complexity for \"Rector\\\\BetterPhpDocParser\\\\Printer\\\\WhitespaceDetector\\:\\:detectOldWhitespaces\\(\\)\" is (.*?), keep it under 9$#"
+            paths:
+                 - packages/BetterPhpDocParser/Printer/WhitespaceDetector.php
 
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$class#'
         - '#Property PhpParser\\Node\\Stmt\\Namespace_\:\:\$stmts \(array<PhpParser\\Node\\Stmt\>\) does not accept array<PhpParser\\Node\>#'
 
-
-
-        - '#Cognitive complexity for "Rector\\Php80\\NodeResolver\\SwitchExprsResolver\:\:resolve\(\)" is \d+, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\Php80\\NodeResolver\\SwitchExprsResolver\:\:resolve\(\)" is (.*?), keep it under 9#'
 
         -
             message: "#^Cognitive complexity for \"Rector\\\\PhpSpecToPHPUnit\\\\Rector\\\\MethodCall\\\\PhpSpecPromisesToPHPUnitAssertRector\\:\\:refactor\\(\\)\" is 13, keep it under 9$#"
@@ -129,13 +127,7 @@ parameters:
         - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\If_\\SimplifyIfIssetToNullCoalescingRector\:\:shouldSkip\(\)" is 10, keep it under 9#'
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\Type\\ObjectTypeSpecifier\:\:matchShortenedObjectType\(\)" is 10, keep it under 9#'
         - '#Cognitive complexity for "Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver\:\:getValue\(\)" is \d+, keep it under 9#'
-        - '#Cognitive complexity for "Rector\\NetteKdyby\\ContributeEventClassResolver\:\:resolveGetterMethodByEventClassAndParam\(\)" is \d+, keep it under 9#'
         - '#Cognitive complexity for "Rector\\DeadCode\\NodeManipulator\\LivingCodeManipulator\:\:keepLivingCodeFromExpr\(\)" is \d+, keep it under 9#'
-        -
-             message: '#Class cognitive complexity is \d+, keep it under 50#'
-             paths:
-                  - packages/NodeNameResolver/NodeNameResolver.php
-
 
         - '#Parameter \#1 \$type of method PhpParser\\Builder\\FunctionLike\:\:setReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
 
@@ -171,10 +163,6 @@ parameters:
 
         -
             message: '#Use value object over return of values#'
-            path: 'rules/PHPUnit/Composer/ComposerAutoloadedDirectoryProvider.php'
-
-        -
-            message: '#Use value object over return of values#'
             path: 'rules/Php70/EregToPcreTransformer.php'
 
         -
@@ -185,18 +173,12 @@ parameters:
             message: '#Function "dump\(\)" cannot be used/left in the code#'
             path: tests/debug_functions.php
 
-        - '#Method Rector\\NetteKdyby\\NodeFactory\\EventValueObjectClassFactory\:\:wrapClassToNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
-
         - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector\:\:refactor\(\) expects PhpParser\\Node\\Expr\\AssignOp\\Div\|PhpParser\\Node\\Expr\\AssignOp\\Minus\|PhpParser\\Node\\Expr\\AssignOp\\Mul\|PhpParser\\Node\\Expr\\AssignOp\\Plus\|PhpParser\\Node\\Expr\\BinaryOp\\Div\|PhpParser\\Node\\Expr\\BinaryOp\\Minus\|PhpParser\\Node\\Expr\\BinaryOp\\Mul\|PhpParser\\Node\\Expr\\BinaryOp\\Plus, PhpParser\\Node\\Expr\\AssignOp\|PhpParser\\Node\\Expr\\BinaryOp given#'
-
-        # trait in trait call
-        - '#Parameter \#1 \$expr of class PhpParser\\Node\\Stmt\\Expression constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt given#'
 
         # symplify 9
         - '#Use decoupled factory service to create "(.*?)" object#'
         - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
         - '#Do not use factory/method call in constructor\. Put factory in config and get service with dependency injection#'
-        - '#Constant string value need to only have small letters, _, \-, \. and numbers#'
 
         -
             message: '#Use explicit names over dynamic ones#'
@@ -263,8 +245,6 @@ parameters:
              paths:
                 - rules/Php80/Rector/If_/NullsafeOperatorRector.php
 
-        ###################################################
-
         - '#Method "evaluateBinaryToVersionCompareCondition\(\)" returns bool type, so the name should start with is/has/was#'
 
         # soo many false positive naming - fix later with Recto rule
@@ -274,7 +254,7 @@ parameters:
             message: '#Comparison operation "<" between 0 and 2 is always true#'
             paths:
                 - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
-        - '#PHPDoc tag @param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
+#        - '#PHPDoc tag @param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
 
         # false postives
         - '#Parameter \#2 \$right of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
@@ -301,7 +281,7 @@ parameters:
         - '#PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable given#'
 
         # unable to test, because the method is final
-        - '#Class "Rector\\Nette\\Rector\\Class_\\MoveFinalGetUserToCheckRequirementsClassMethodRector" is missing @see annotation with test case class reference#'
+#        - '#Class "Rector\\Nette\\Rector\\Class_\\MoveFinalGetUserToCheckRequirementsClassMethodRector" is missing @see annotation with test case class reference#'
 
         -
              message: '#Use `\$class\-\>namespaceName` instead of `\$class\-\>name` that only returns short class name#'
@@ -355,12 +335,11 @@ parameters:
         - '#Method (.*?) should return (.*?)\|null but returns PhpParser\\Node\|null#'
         - '#Method (.*?) should return array<T of PhpParser\\Node\> but returns array<PhpParser\\Node\>#'
 
-        - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<PhpParser\\Node\>\:\:findFirst\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
+#        - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<PhpParser\\Node\>\:\:findFirst\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
         - '#Parameter \#2 \$type of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<T of PhpParser\\Node\>\:\:findInstanceOfName\(\) expects class\-string<T of PhpParser\\Node\>, string given#'
-        - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findVariableOfName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns T of PhpParser\\Node\|null#'
+#        - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findVariableOfName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns T of PhpParser\\Node\|null#'
 
         # fixed in php-parser master
-        - '#Method Rector\\Symfony\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
         - '#Parameter \#4 \$classWithConstants of class Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant constructor expects class\-string, string given#'
 
         -
@@ -378,7 +357,6 @@ parameters:
             paths:
                 - src/Rector/AbstractRector.php
                 # setter to avoid circular dependency in nested collector
-                - rules/NetteCodeQuality/NodeResolver/MethodNamesByInputNamesResolver.php
                 - packages/StaticTypeMapper/StaticTypeMapper.php
                 - packages/BetterPhpDocParser/PhpDocParser/BetterPhpDocParser.php
                 - packages/PHPStanStaticTypeMapper/PHPStanStaticTypeMapper.php
@@ -426,8 +404,6 @@ parameters:
                 # tracy::$maxDepth
                 - tests/bootstrap.php
 
-        # known values
-        - '#Method Rector\\Testing\\Finder\\RectorsFinder\:\:findClassesInDirectoriesByName\(\) should return array<class\-string\> but returns array<int, \(int\|string\)\>#'
         - '#Property PhpParser\\Node\\Param\:\:\$type \(PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\|null\) does not accept PhpParser\\Node#'
 
         -
@@ -440,7 +416,6 @@ parameters:
         -
              message: '#Function "class_exists\(\)" cannot be used/left in the code#'
              paths:
-                  - packages/Testing/Finder/RectorsFinder.php
                   - packages/BetterPhpDocParser/AnnotationReader/AnnotationReaderFactory.php
 
         -
@@ -458,15 +433,9 @@ parameters:
                  - packages/BetterPhpDocParser/Printer/MultilineSpaceFormatPreserver.php
 
         -
-            message: '#Function "class_implements\(\)" cannot be used/left in the code#'
-            paths:
-                - rules/Symfony/ValueObject/ServiceMap/ServiceMap.php
-
-        -
             message: '#Instead of "ReflectionClass" class/interface use "PHPStan\\Reflection\\ClassReflection"#'
             paths:
                 # own classes
-                 - packages/Testing/Finder/RectorsFinder.php
                  - packages/StaticTypeMapper/TypeFactory/UnionTypeFactory.php
                  - packages/Set/RectorSetProvider.php
 
@@ -477,10 +446,8 @@ parameters:
         # known types
         - '#Call to an undefined method PHPStan\\Type\\ConstantType\:\:getValue\(\)#'
         - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:getNativePropertyReflection\(\) should return ReflectionProperty\|null but return statement is missing#'
-        - '#Parameter \#1 \$node of method Rector\\NetteKdyby\\Naming\\VariableNaming\:\:resolveFromMethodCall\(\) expects PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\NullsafeMethodCall\|PhpParser\\Node\\Expr\\StaticCall, PhpParser\\Node given#'
         - '#Parameter \#1 \$stmts of method Rector\\EarlyReturn\\Rector\\Return_\\PreparedValueToEarlyReturnRector\:\:collectIfs\(\) expects array<PhpParser\\Node\\Stmt\\If_\>, array<PhpParser\\Node\\Stmt\> given#'
         - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\If_\:\:\$stmts#'
-        - '#Method Rector\\NetteKdyby\\DataProvider\\EventAndListenerTreeProvider\:\:getListeningClassMethodsInEventSubscriberByClass\(\) should return array<class\-string, array<PhpParser\\Node\\Stmt\\ClassMethod\>\> but returns array<string, array<PhpParser\\Node\\Stmt\\ClassMethod\>\>#'
 
         -
             message: '#Function "get_declared_classes\(\)" cannot be used/left in the code#'
@@ -500,26 +467,10 @@ parameters:
             paths:
                 - packages/ReadWrite/Guard/VariableToConstantGuard.php
 
-        - '#Cognitive complexity for "Rector\\NetteCodeQuality\\FormControlTypeResolver\\MagicNetteFactoryInterfaceFormControlTypeResolver\:\:resolve\(\)" is 12, keep it under 9#'
-        - '#Content of method "matchAssignExprToPropertyName\(\)" is duplicated with method "matchAssignExprToPropertyName\(\)" in "Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector" class\. Use unique content or abstract service instead#'
-
-        - '#Content of method "configure\(\)" is duplicated with method "configure\(\)" in (.*?) Use unique content or service instead#'
-
-        - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer" class\. Use unique content or service instead#'
-
-        - '#Content of method "getIfNextReturn\(\)" is duplicated with method "getIfNextReturn\(\)" in "Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory" class\. Use unique content or service instead#'
-        - '#Content of method "matchReturnMethodCall\(\)" is duplicated with method "matchReturnMethodCall\(\)" in "Rector\\Defluent\\Rector\\Return_\\ReturnFluentChainMethodCallToNormalMethodCallRector" class\. Use unique content or service instead#'
-        - '#Content of method "matchReturnMethodCall\(\)" is duplicated with method "matchReturnMethodCall\(\)" in "Rector\\Defluent\\Rector\\Return_\\ReturnNewFluentChainMethodCallToNonFluentRector" class\. Use unique content or service instead#'
-        - '#Content of method "decoratePropertyWithDocBlock\(\)" is duplicated with method "decoratePropertyWithDocBlock\(\)" in "Rector\\DowngradePhp74\\Rector\\Property\\DowngradeTypedPropertyRector" class\. Use unique content or service instead#'
-        - '#Content of method "decoratePropertyWithDocBlock\(\)" is duplicated with method "decoratePropertyWithDocBlock\(\)" in "Rector\\DowngradePhp80\\Rector\\Property\\DowngradeUnionTypeTypedPropertyRector" class\. Use unique content or service instead#'
-
         -
             message: '#Argument and options "debug" got confused#'
             paths:
                 - src/Console/Command/ProcessCommand.php
-
-        - '#Content of method "getNextExpression\(\)" is duplicated with method "getNextExpression\(\)" in "Rector\\CodingStyle\\Rector\\Assign\\ManualJsonStringToJsonEncodeArrayRector" class\. Use unique content or service instead#'
-        - '#Content of method "getFunctionLikePhpDocInfo\(\)" is duplicated with method "getFunctionLikePhpDocInfo\(\)" in "Rector\\NodeTypeResolver\\NodeTypeResolver\\ParamTypeResolver" class\. Use unique content or service instead#'
 
         - '#Cognitive complexity for "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector\:\:refactor\(\)" is 10, keep it under 9#'
         - '#Parameter \#2 \$returnedStrictTypeNode of method Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector\:\:refactorSingleReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType, PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PHPStan\\Type\\UnionType given#'
@@ -533,20 +484,6 @@ parameters:
 
         - '#(.*?) class\-string, string given#'
 
-        -
-            message: '#Do not use trait, extract to a service and dependency injection instead#'
-            paths:
-                - packages/BetterPhpDocParser/Attributes/Attribute/AttributeTrait.php
-
-        - '#Content of method "getNextExpression\(\)" is duplicated with method "getNextExpression\(\)" in "Rector\\Php73\\Rector\\FuncCall\\ArrayKeyFirstLastRector" class\. Use unique content or service instead#'
-
-        -
-            message: '#Function "class_exists\(\)" cannot be used/left in the code#'
-            paths:
-                - src/HttpKernel/RectorKernel.php
-
-        - '#Content of method "getIfNextReturn\(\)" is duplicated with method "getIfNextReturn\(\)" in "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector" class\. Use unique content or service instead#'
-
         # part of refactor() API, node must be returned, or does bring any value
         -
             message: '#Use void instead of modify and return self object#'
@@ -554,49 +491,27 @@ parameters:
                 - '*Rector.php'
                 - '*NodeVisitor.php'
 
-        - '#Class with base "NodeComparator" name is already used in "Symplify\\PHPStanRules\\Printer\\NodeComparator", "Rector\\Core\\PhpParser\\Comparing\\NodeComparator"\. Use unique name to make classes easy to recognize#'
-
-        -
-            message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
-            paths:
-                - packages/BetterPhpDocParser/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php
-
-        # @todo fix in symplify
-        -
-            message: '#Do not use chained method calls\. Put each on separated lines#'
-            paths:
-                - rules/Symfony/ConstantNameAndValueMatcher.php
-                - rules/Privatization/Rector/Class_/ChangeReadOnlyVariableWithDefaultValueToConstantRector.php
-                - rules/Privatization/Naming/ConstantNaming.php
-
         -
             message: '#Cannot cast array<string\>\|string\|null to string#'
             paths:
                 - utils/compiler/src/Command/DowngradePathsCommand.php
 
-        - '#Method Rector\\Testing\\Finder\\RectorsFinder\:\:findClassesInDirectoriesByName\(\) should return array<class\-string\> but returns array<int, string\>#'
         - '#Cannot cast array<string\>\|string\|null to string#'
-
-        # phpstan bug
-        - '#Unable to resolve the template type T in call to method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentTypes\(\)#'
-        -
-            message: '#Function "interface_exists\(\)" cannot be used/left in the code#'
-            path: packages/Testing/PhpConfigPrinter/config/php-config-printer-config.php
 
         # generics fails
         - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:findAllByType\(\) should return array<T of PHPStan\\PhpDocParser\\Ast\\Node\> but returns array<PHPStan\\PhpDocParser\\Ast\\Node\>#'
-        - '#Method Rector\\BetterPhpDocParser\\Attributes\\Ast\\PhpDocNodeMapper\:\:transform\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns PHPStan\\PhpDocParser\\Ast\\Node#'
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeMapper\:\:transform\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns PHPStan\\PhpDocParser\\Ast\\Node#'
 
 
         # PHP 7_4 literal syntax
         - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\|int\) does not accept string#'
 
-        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\Printer\\WhitespaceDetector\:\:detectOldWhitespaces\(\)" is 20, keep it under 9#'
-        - '#Method Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayTypeMapper\:\:narrowConstantArrayTypeOfUnionType\(\) should return PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode\|null but returns PHPStan\\PhpDocParser\\Ast\\Node#'
-        - '#Method Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectTypeMapper\:\:mapToPHPStanPhpDocTypeNode\(\) should return PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode but returns PHPStan\\PhpDocParser\\Ast\\Node#'
+        - '#Parameter \#1 \$keyName of method Rector\\BetterPhpDocParser\\ValueObject\\Type\\SpacingAwareArrayShapeItemNode\:\:createKeyWithSpacePattern\(\) expects PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null, PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null given#'
 
         -
             # inlined plug and pass mapper, to avoid overly complexity
-            message: '#Cognitive complexity for "Rector\\BetterPhpDocParser\\Attributes\\Ast\\PhpDocNodeMapper\:\:transform\(\)" is 16, keep it under 9#'
+            message: '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocNodeMapper\:\:transform\(\)" is \d+, keep it under 9#'
             paths:
-                - packages/BetterPhpDocParser/Attributes/Ast/PhpDocNodeMapper.php
+                - packages/BetterPhpDocParser/PhpDocNodeMapper.php
+
+        - '#Unable to resolve the template type T in call to method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentTypes\(\)#'

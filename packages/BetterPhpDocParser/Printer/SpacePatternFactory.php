@@ -40,20 +40,20 @@ final class SpacePatternFactory
     }
 
     private function createSpacePatternForParamTagValueNode(
-        VariadicAwareParamTagValueNode $attributeAwareParamTagValueNode,
+        VariadicAwareParamTagValueNode $variadicAwareParamTagValueNode,
         string $spacePattern
     ): string {
         // type could be changed, so better keep it here
         $spacePattern .= self::TYPE_PATTERN;
 
-        if ($attributeAwareParamTagValueNode->parameterName !== '') {
+        if ($variadicAwareParamTagValueNode->parameterName !== '') {
             $spacePattern .= '\s+';
 
-            if ($attributeAwareParamTagValueNode->isVariadic) {
+            if ($variadicAwareParamTagValueNode->isVariadic) {
                 $spacePattern .= '...';
             }
 
-            $spacePattern .= preg_quote($attributeAwareParamTagValueNode->parameterName, '#');
+            $spacePattern .= preg_quote($variadicAwareParamTagValueNode->parameterName, '#');
         }
 
         return '#' . $spacePattern . '#';

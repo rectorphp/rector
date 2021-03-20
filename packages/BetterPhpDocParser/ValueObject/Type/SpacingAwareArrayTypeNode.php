@@ -57,15 +57,15 @@ final class SpacingAwareArrayTypeNode extends ArrayTypeNode
         return implode('|', $singleTypesAsString);
     }
 
-    private function printUnionType(BracketsAwareUnionTypeNode $attributeAwareUnionTypeNode): string
+    private function printUnionType(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode): string
     {
         $unionedTypes = [];
 
-        if ($attributeAwareUnionTypeNode->isWrappedWithBrackets()) {
-            return $attributeAwareUnionTypeNode . '[]';
+        if ($bracketsAwareUnionTypeNode->isWrappedWithBrackets()) {
+            return $bracketsAwareUnionTypeNode . '[]';
         }
 
-        foreach ($attributeAwareUnionTypeNode->types as $unionedType) {
+        foreach ($bracketsAwareUnionTypeNode->types as $unionedType) {
             $unionedTypes[] = $unionedType . '[]';
         }
 

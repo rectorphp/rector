@@ -140,10 +140,10 @@ final class VarTagRemover
 
     private function isArrayOfExistingClassNode(
         Node $node,
-        SpacingAwareArrayTypeNode $attributeAwareArrayTypeNode
+        SpacingAwareArrayTypeNode $spacingAwareArrayTypeNode
     ): bool {
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
-            $attributeAwareArrayTypeNode,
+            $spacingAwareArrayTypeNode,
             $node
         );
 
