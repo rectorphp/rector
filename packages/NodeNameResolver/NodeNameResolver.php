@@ -10,12 +10,9 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -24,7 +21,6 @@ use Rector\Core\Util\StaticInstanceOf;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\Regex\RegexPatternDetector;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NodeNameResolver
@@ -60,11 +56,6 @@ final class NodeNameResolver
     private $betterStandardPrinter;
 
     /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
     public function __construct(
@@ -72,7 +63,6 @@ final class NodeNameResolver
         BetterStandardPrinter $betterStandardPrinter,
         CurrentFileInfoProvider $currentFileInfoProvider,
         ClassNaming $classNaming,
-        ReflectionProvider $reflectionProvider,
         array $nodeNameResolvers = []
     ) {
         $this->regexPatternDetector = $regexPatternDetector;
@@ -80,7 +70,6 @@ final class NodeNameResolver
         $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->classNaming = $classNaming;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -102,7 +91,7 @@ final class NodeNameResolver
      */
     public function isName($node, string $name): bool
     {
-        if ($node instanceof MethodCall) {
+        if ($node instanceof MethodCall || $node instanceof StaticCall) {
             $message = sprintf(
                 'Name called on "%s" is not possible. Use $this->getName($node->name) instead',
                 get_class($node)
@@ -210,44 +199,6 @@ final class NodeNameResolver
     {
         $suffixNamePattern = '#\w+' . ucfirst($expectedName) . '#';
         return (bool) Strings::match($currentName, $suffixNamePattern);
-    }
-
-    /**
-     * @param ObjectType[] $desiredObjectTypes
-     */
-    public function isInClassNames(Node $node, array $desiredObjectTypes): bool
-    {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
-            return false;
-        }
-
-        foreach ($desiredObjectTypes as $desiredObjectType) {
-            if ($this->isInClassNamed($classNode, $desiredObjectType)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function isInClassNamed(Node $node, ObjectType $objectType): bool
-    {
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return false;
-        }
-
-        if (! $this->reflectionProvider->hasClass($className)) {
-            return false;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($className);
-        if ($classReflection->getName() === $objectType->getClassName()) {
-            return true;
-        }
-
-        return $classReflection->isSubclassOf($objectType->getClassName());
     }
 
     /**

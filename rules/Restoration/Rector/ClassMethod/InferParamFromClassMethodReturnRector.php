@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
@@ -155,7 +157,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, mixed[]> $configuration
+     * @param array<string, InferParamFromClassMethodReturn[]> $configuration
      */
     public function configure(array $configuration): void
     {
@@ -169,10 +171,17 @@ CODE_SAMPLE
         ClassMethod $classMethod,
         InferParamFromClassMethodReturn $inferParamFromClassMethodReturn
     ): ?ClassMethod {
-        if (! $this->nodeNameResolver->isInClassNamed(
-            $classMethod,
-            $inferParamFromClassMethodReturn->getObjectType()
-        )) {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        if (! $classReflection->isSubclassOf($inferParamFromClassMethodReturn->getClass())) {
             return null;
         }
 

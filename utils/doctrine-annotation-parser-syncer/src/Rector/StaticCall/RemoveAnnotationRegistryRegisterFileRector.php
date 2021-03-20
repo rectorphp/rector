@@ -6,8 +6,11 @@ namespace Rector\Utils\DoctrineAnnotationParserSyncer\Rector\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -53,12 +56,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $desiredObjectTypes = [
-            new ObjectType('Doctrine\Common\Annotations\DocParser'),
-            new ObjectType('Doctrine\Common\Annotations\AnnotationReader'),
-        ];
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
 
-        if (! $this->nodeNameResolver->isInClassNames($node, $desiredObjectTypes)) {
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        if (! $classReflection->isSubclassOf(
+            'Doctrine\Common\Annotations\DocParser'
+        ) && ! $classReflection->isSubclassOf('Doctrine\Common\Annotations\AnnotationReader')) {
             return null;
         }
 
