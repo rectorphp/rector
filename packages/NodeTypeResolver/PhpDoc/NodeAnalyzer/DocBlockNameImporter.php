@@ -73,10 +73,10 @@ final class DocBlockNameImporter
                 return $docNode;
             }
 
-            $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES);
+            $importShortClasses = $this->parameterProvider->provideBoolParameter(Option::IMPORT_SHORT_CLASSES);
 
             // Importing root namespace classes (like \DateTime) is optional
-            if (! $importShortClasses && substr_count($staticType->getClassName(), '\\') === 0) {
+            if ($importShortClasses === false && substr_count($staticType->getClassName(), '\\') === 0) {
                 return $docNode;
             }
 
@@ -98,6 +98,7 @@ final class DocBlockNameImporter
         }
 
         // should skip because its already used
+
         if ($this->useNodesToAddCollector->isShortImported($node, $fullyQualifiedObjectType)) {
             if ($this->useNodesToAddCollector->isImportShortable($node, $fullyQualifiedObjectType)) {
                 $identifierTypeNode->name = $fullyQualifiedObjectType->getShortName();
