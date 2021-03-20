@@ -6,6 +6,7 @@ namespace Rector\Set\ValueObject;
 
 use Rector\CakePHP\Sets\CakePHPSetList;
 use Rector\Laravel\Set\LaravelSetList;
+use Rector\Nette\Set\KdybySetList;
 use Rector\Nette\Set\NetteSetList;
 use Rector\PHPUnit\Sets\PHPUnitSetList;
 use Rector\Set\Contract\SetListInterface;
@@ -188,17 +189,19 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    public const KDYBY_EVENTS_TO_CONTRIBUTTE_EVENT_DISPATCHER = __DIR__ . '/../../../config/set/kdyby-events-to-contributte-event-dispatcher.php';
-
-    /**
-     * @var string
-     */
     public const KDYBY_TO_SYMFONY = __DIR__ . '/../../../config/set/kdyby-to-symfony.php';
 
     /**
+     * @deprecated Use KdybySetList instead
      * @var string
      */
-    public const KDYBY_TRANSLATOR_TO_CONTRIBUTTE_TRANSLATION = __DIR__ . '/../../../config/set/kdyby-translator-to-contributte-translation.php';
+    public const KDYBY_EVENTS_TO_CONTRIBUTTE_EVENT_DISPATCHER = KdybySetList::KDYBY_EVENTS_TO_CONTRIBUTTE_EVENT_DISPATCHER;
+
+    /**
+     * @deprecated Use KdybySetList instead
+     * @var string
+     */
+    public const KDYBY_TRANSLATOR_TO_CONTRIBUTTE_TRANSLATION = KdybySetList::KDYBY_TRANSLATOR_TO_CONTRIBUTTE_TRANSLATION;
 
     /**
      * For BC layer

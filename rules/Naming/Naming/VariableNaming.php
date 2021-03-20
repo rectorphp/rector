@@ -90,8 +90,8 @@ final class VariableNaming
         }
 
         if ($node !== null && StaticInstanceOf::isOneOf(
-                $node,
-                [MethodCall::class, NullsafeMethodCall::class, StaticCall::class])) {
+            $node,
+            [MethodCall::class, NullsafeMethodCall::class, StaticCall::class])) {
             return $this->resolveFromMethodCall($node);
         }
 
@@ -211,10 +211,6 @@ final class VariableNaming
     {
         if ($new->class instanceof Name) {
             $className = $this->nodeNameResolver->getName($new->class);
-            if ($className === null) {
-                throw new NotImplementedYetException();
-            }
-
             return $this->nodeNameResolver->getShortName($className);
         }
 
