@@ -70,8 +70,10 @@ final class ParsedClassConstFetchNodeCollector
         }
 
         // current class
-        /** @var string $classOfUse */
         $classOfUse = $node->getAttribute(AttributeKey::CLASS_NAME);
+        if ($classOfUse === null) {
+            return;
+        }
 
         $this->classConstantFetchByClassAndName[$className][$constantName][] = $classOfUse;
 
