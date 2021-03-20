@@ -7,7 +7,6 @@ namespace Rector\DeadCode\NodeAnalyzer;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit\PHPUnitDataProviderTagValueNode;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\RemovingStatic\ValueObject\PHPUnitClass;
 
@@ -57,7 +56,7 @@ final class DataProviderMethodNamesResolver
     }
 
     /**
-     * @return PHPUnitDataProviderTagValueNode[]
+     * @return \Rector\PHPUnit\PhpDoc\Node\PHPUnitDataProviderTagValueNode[]
      */
     private function resolvePHPUnitDataProviderTagValueNodes(Class_ $class): array
     {
@@ -70,7 +69,9 @@ final class DataProviderMethodNamesResolver
         foreach ($class->getMethods() as $classMethod) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
-            $foundPHPUnitDataProviderTagValueNodes = $phpDocInfo->findAllByType(PHPUnitDataProviderTagValueNode::class);
+            $foundPHPUnitDataProviderTagValueNodes = $phpDocInfo->findAllByType(
+                \Rector\PHPUnit\PhpDoc\Node\PHPUnitDataProviderTagValueNode::class
+            );
             $phpunitDataProviderTagValueNodes = array_merge(
                 $phpunitDataProviderTagValueNodes,
                 $foundPHPUnitDataProviderTagValueNodes

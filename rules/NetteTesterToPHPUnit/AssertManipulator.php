@@ -17,7 +17,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\BooleanType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPUnit\PHPUnitDoesNotPerformAssertionTagNode;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -275,7 +274,7 @@ final class AssertManipulator
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $phpDocInfo->addPhpDocTagNode(new PHPUnitDoesNotPerformAssertionTagNode());
+        $phpDocInfo->addPhpDocTagNode(new \Rector\PHPUnit\PhpDoc\Node\PHPUnitDoesNotPerformAssertionTagNode());
     }
 
     private function renameAssertMethod(StaticCall $staticCall): void
