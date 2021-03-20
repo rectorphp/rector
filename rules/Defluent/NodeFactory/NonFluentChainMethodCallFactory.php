@@ -15,7 +15,7 @@ use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\Defluent\NodeResolver\FirstMethodCallVarResolver;
 use Rector\Defluent\ValueObject\AssignAndRootExpr;
 use Rector\Defluent\ValueObject\FluentCallsKind;
-use Rector\NetteKdyby\Naming\VariableNaming;
+use Rector\Naming\Naming\VariableNaming;
 
 final class NonFluentChainMethodCallFactory
 {

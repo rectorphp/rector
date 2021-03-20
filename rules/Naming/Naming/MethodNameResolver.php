@@ -6,7 +6,6 @@ namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Expr;
-use Rector\NetteKdyby\Naming\VariableNaming;
 
 final class MethodNameResolver
 {

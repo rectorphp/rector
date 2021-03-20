@@ -8,9 +8,9 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\DocParser;
 use Doctrine\Common\Annotations\Reader;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagNode;
 use Rector\DoctrineAnnotationGenerated\ConstantPreservingAnnotationReader;
 use Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser;
+use Rector\Nette\PhpDoc\Node\NetteInjectTagNode;
 
 final class AnnotationReaderFactory
 {

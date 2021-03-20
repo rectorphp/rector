@@ -7,8 +7,8 @@ namespace Rector\PostRector\NodeAnalyzer;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Nette\NetteInjectTagNode;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Nette\PhpDoc\Node\NetteInjectTagNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class NetteInjectDetector
