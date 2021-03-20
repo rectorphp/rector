@@ -36,9 +36,17 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
      */
     private $useImportTypesInFilePath = [];
 
-    public function __construct(CurrentFileInfoProvider $currentFileInfoProvider)
-    {
+    /**
+     * @var NodesToRemoveCollector
+     */
+    private $nodesToRemoveCollector;
+
+    public function __construct(
+        CurrentFileInfoProvider $currentFileInfoProvider,
+        NodesToRemoveCollector $nodesToRemoveCollector
+    ) {
         $this->currentFileInfoProvider = $currentFileInfoProvider;
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
 
     public function isActive(): bool
@@ -106,7 +114,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
                 if ($useUse->alias === null) {
                     $objectTypes[] = new FullyQualifiedObjectType((string) $useUse->name);
                 } else {
-                    $objectTypes[] = new AliasedObjectType($useUse->alias, (string) $useUse->name);
+                    $objectTypes[] = new AliasedObjectType($useUse->alias->toString(), (string) $useUse->name);
                 }
             }
         }

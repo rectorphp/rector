@@ -96,6 +96,7 @@ final class NameImportingPostRector extends AbstractPostRector
 
     public function getPriority(): int
     {
+        // this must run after NodeRemovingPostRector, sine renamed use imports can block next import
         return 600;
     }
 

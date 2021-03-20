@@ -122,6 +122,7 @@ parameters:
                 - packages/NodeTypeResolver/NodeTypeResolver.php
                 - rules/CodeQualityStrict/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
                 - rules/Php80/Rector/If_/NullsafeOperatorRector.php
+                - rules/Renaming/NodeManipulator/ClassRenamer.php
 
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 9$#"
         - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\If_\\SimplifyIfIssetToNullCoalescingRector\:\:shouldSkip\(\)" is 10, keep it under 9#'

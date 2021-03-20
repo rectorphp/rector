@@ -211,7 +211,13 @@ final class ClassRenamer
             return;
         }
 
-        $this->nodeRemover->removeNode($uses);
+        // ios the only one? Remove whole use instead to avoid "use ;" constructions
+        $parentUse = $uses->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentUse instanceof Use_ && count($parentUse->uses) === 1) {
+            $this->nodeRemover->removeNode($parentUse);
+        } else {
+            $this->nodeRemover->removeNode($uses);
+        }
     }
 
     /**
