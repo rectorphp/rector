@@ -80,7 +80,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
     /**
      * @var DynamicSourceLocatorProvider
      */
-    private $dynamicDirectoryLocatorProvider;
+    private $dynamicSourceLocatorProvider;
 
     protected function setUp(): void
     {
@@ -98,7 +98,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);
         $this->parameterProvider = $this->getService(ParameterProvider::class);
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
-        $this->dynamicDirectoryLocatorProvider = $this->getService(DynamicSourceLocatorProvider::class);
+        $this->dynamicSourceLocatorProvider = $this->getService(DynamicSourceLocatorProvider::class);
 
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
@@ -135,7 +135,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
         $nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
 
-        $this->dynamicDirectoryLocatorProvider->setFileInfo($inputFileInfo);
+        $this->dynamicSourceLocatorProvider->setFileInfo($inputFileInfo);
 
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
 
