@@ -112,7 +112,6 @@ final class PhpDocInfoPrinter
 
     public function __construct(
         EmptyPhpDocDetector $emptyPhpDocDetector,
-        MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
         OriginalSpacingRestorer $originalSpacingRestorer,
         SpacePatternFactory $spacePatternFactory,
         DocBlockInliner $docBlockInliner
