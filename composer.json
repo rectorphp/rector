@@ -83,8 +83,7 @@
         "tracy/tracy": "^2.8"
     },
     "replace": {
-        "rector/rector-prefixed": "self.version",
-        "rector/rector": "self.version"
+        "rector/rector-prefixed": "self.version"
     },
     "autoload": {
         "psr-4": {
