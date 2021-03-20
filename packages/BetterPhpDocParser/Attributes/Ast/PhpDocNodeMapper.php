@@ -8,45 +8,31 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SpacingAwareTemplateTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\VariadicAwareParamTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\SpacingAwareCallableTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\BracketsAwareUnionTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\SpacingAwareArrayShapeItemNode;
-use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
-use Rector\AttributeAwarePhpDoc\Contract\PhpDocNodeTransformerInterface;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\SpacingAwareTemplateTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayShapeItemNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 /**
  * @see \Rector\Tests\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactoryTest
  */
-final class AttributeAwareNodeFactory
+final class PhpDocNodeMapper
 {
-    /**
-     * @var PhpDocNodeTransformerInterface[]
-     */
-    private $phpDocNodeTransformers = [];
-
     /**
      * @var PhpDocNodeTraverser
      */
     private $phpDocNodeTraverser;
 
-    /**
-     * @param PhpDocNodeTransformerInterface[] $phpDocNodeTransformers
-     */
-    public function __construct(array $phpDocNodeTransformers, PhpDocNodeTraverser $phpDocNodeTraverser)
+    public function __construct(PhpDocNodeTraverser $phpDocNodeTraverser)
     {
-        foreach ($phpDocNodeTransformers as $phpDocNodeTransformer) {
-            // prevents cyclic dependency
-            if ($phpDocNodeTransformer instanceof AttributeAwareNodeFactoryAwareInterface) {
-                $phpDocNodeTransformer->setAttributeAwareNodeFactory($this);
-            }
-        }
-
-        $this->phpDocNodeTransformers = $phpDocNodeTransformers;
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
     }
 
@@ -61,6 +47,23 @@ final class AttributeAwareNodeFactory
             Node $node,
             string $docContent
         ): Node {
+            if ($node instanceof IntersectionTypeNode && ! $node instanceof BracketsAwareIntersectionTypeNode) {
+                return new BracketsAwareIntersectionTypeNode($node->types);
+            }
+
+            if ($node instanceof ArrayTypeNode && ! $node instanceof SpacingAwareArrayTypeNode) {
+                return new SpacingAwareArrayTypeNode($node->type);
+            }
+
+            if ($node instanceof ArrayShapeItemNode && ! $node instanceof SpacingAwareArrayShapeItemNode) {
+                return new SpacingAwareArrayShapeItemNode(
+                    $node->keyName,
+                    $node->optional,
+                    $node->valueType,
+                    $docContent
+                );
+            }
+
             if ($node instanceof CallableTypeNode && ! $node instanceof SpacingAwareCallableTypeNode) {
                 return new SpacingAwareCallableTypeNode($node->identifier, $node->parameters, $node->returnType);
             }
@@ -83,14 +86,6 @@ final class AttributeAwareNodeFactory
                 return new VariadicAwareParamTagValueNode(
                     $node->type, $node->isVariadic, $node->parameterName, $node->description
                 );
-            }
-
-            foreach ($this->phpDocNodeTransformers as $phpDocNodeTransformer) {
-                if (! $phpDocNodeTransformer->isMatch($node)) {
-                    continue;
-                }
-
-                return $phpDocNodeTransformer->transform($node, $docContent);
             }
 
             return $node;

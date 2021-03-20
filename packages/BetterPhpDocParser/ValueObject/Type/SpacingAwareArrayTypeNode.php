@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Ast\Type;
+namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
@@ -11,7 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
 
-final class AttributeAwareArrayTypeNode extends ArrayTypeNode
+final class SpacingAwareArrayTypeNode extends ArrayTypeNode
 {
     public function __toString(): string
     {

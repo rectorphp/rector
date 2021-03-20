@@ -29,7 +29,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Symplify\SimplePhpDocParser\ValueObject\Ast\PhpDoc\SimplePhpDocNode;
 
 /**
  * @template TNode as \PHPStan\PhpDocParser\Ast\Node
@@ -64,12 +63,12 @@ final class PhpDocInfo
     private $tokens = [];
 
     /**
-     * @var SimplePhpDocNode
+     * @var PhpDocNode
      */
     private $phpDocNode;
 
     /**
-     * @var SimplePhpDocNode
+     * @var PhpDocNode
      */
     private $originalPhpDocNode;
 
@@ -268,7 +267,6 @@ final class PhpDocInfo
     }
 
     /**
-     * @template TNode as \PHPStan\PhpDocParser\Ast\Node
      * @param class-string<TNode> $type
      * @return TNode|null
      */
@@ -422,7 +420,17 @@ final class PhpDocInfo
 
     public function getParamTagValueByName(string $name): ?ParamTagValueNode
     {
-        return $this->phpDocNode->getParam($name);
+        $desiredParamNameWithDollar = '$' . ltrim($name, '$');
+
+        foreach ($this->getParamTagValueNodes() as $paramTagValueNode) {
+            if ($paramTagValueNode->parameterName !== $desiredParamNameWithDollar) {
+                continue;
+            }
+
+            return $paramTagValueNode;
+        }
+
+        return null;
     }
 
     /**

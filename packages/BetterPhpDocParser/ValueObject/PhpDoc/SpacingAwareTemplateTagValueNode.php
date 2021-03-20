@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
+namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;

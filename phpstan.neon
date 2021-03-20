@@ -314,7 +314,6 @@ parameters:
             paths:
                 - rules/Defluent/ValueObject/*
 
-        - '#Parameter \#1 \$keyName of method Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareArrayShapeItemNode\:\:createKeyWithSpacePattern\(\) expects PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null, PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null given#'
 
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
 
@@ -359,7 +358,6 @@ parameters:
         - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<PhpParser\\Node\>\:\:findFirst\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
         - '#Parameter \#2 \$type of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<T of PhpParser\\Node\>\:\:findInstanceOfName\(\) expects class\-string<T of PhpParser\\Node\>, string given#'
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findVariableOfName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns T of PhpParser\\Node\|null#'
-        - '#Method Rector\\AttributeAwarePhpDoc\\AttributeAwareNodeFactory\\PhpDoc\\AttributeAwareTemplateTagValueNodeFactory\:\:create\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns Rector\\AttributeAwarePhpDoc\\Ast\\PhpDoc\\AttributeAwareTemplateTagValueNode#'
 
         # fixed in php-parser master
         - '#Method Rector\\Symfony\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
@@ -382,7 +380,6 @@ parameters:
                 # setter to avoid circular dependency in nested collector
                 - rules/NetteCodeQuality/NodeResolver/MethodNamesByInputNamesResolver.php
                 - packages/StaticTypeMapper/StaticTypeMapper.php
-                - packages/BetterPhpDocParser/Attributes/Ast/AttributeAwareNodeFactory.php
                 - packages/BetterPhpDocParser/PhpDocParser/BetterPhpDocParser.php
                 - packages/PHPStanStaticTypeMapper/PHPStanStaticTypeMapper.php
                 # refactor later
@@ -436,7 +433,7 @@ parameters:
         -
             message: '#"%s" in sprintf\(\) format must be quoted#'
             paths:
-                - packages/AttributeAwarePhpDoc/Ast/PhpDoc/VariadicAwareParamTagValueNode.php
+                - packages/BetterPhpDocParser/ValueObject/PhpDoc/VariadicAwareParamTagValueNode.php
 
         - '#Property Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap\:\:\$binaryOpToAssignClasses \(array<class\-string<PhpParser\\Node\\Expr\\BinaryOp\>, class\-string<PhpParser\\Node\\Expr\\BinaryOp\>\>\) does not accept array#'
 
@@ -587,9 +584,9 @@ parameters:
             path: packages/Testing/PhpConfigPrinter/config/php-config-printer-config.php
 
         # generics fails
-        - '#Method Rector\\BetterPhpDocParser\\Attributes\\Ast\\AttributeAwareNodeFactory\:\:createFromNode\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns PHPStan\\PhpDocParser\\Ast\\Node#'
-        - '#Method Rector\\AttributeAwarePhpDoc\\AttributeAwareNodeFactory\\Type\\AttributeAwareIntersectionTypeNodeFactory\:\:create\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareIntersectionTypeNode#'
         - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:findAllByType\(\) should return array<T of PHPStan\\PhpDocParser\\Ast\\Node\> but returns array<PHPStan\\PhpDocParser\\Ast\\Node\>#'
+        - '#Method Rector\\BetterPhpDocParser\\Attributes\\Ast\\PhpDocNodeMapper\:\:transform\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns PHPStan\\PhpDocParser\\Ast\\Node#'
+
 
         # PHP 7_4 literal syntax
         - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\|int\) does not accept string#'
@@ -597,3 +594,9 @@ parameters:
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\Printer\\WhitespaceDetector\:\:detectOldWhitespaces\(\)" is 20, keep it under 9#'
         - '#Method Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayTypeMapper\:\:narrowConstantArrayTypeOfUnionType\(\) should return PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode\|null but returns PHPStan\\PhpDocParser\\Ast\\Node#'
         - '#Method Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectTypeMapper\:\:mapToPHPStanPhpDocTypeNode\(\) should return PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode but returns PHPStan\\PhpDocParser\\Ast\\Node#'
+
+        -
+            # inlined plug and pass mapper, to avoid overly complexity
+            message: '#Cognitive complexity for "Rector\\BetterPhpDocParser\\Attributes\\Ast\\PhpDocNodeMapper\:\:transform\(\)" is 16, keep it under 9#'
+            paths:
+                - packages/BetterPhpDocParser/Attributes/Ast/PhpDocNodeMapper.php

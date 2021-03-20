@@ -8,25 +8,24 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\VariadicAwareParamTagValueNode;
-use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDocNodeMapper;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
 {
     /**
-     * @var AttributeAwareNodeFactory
+     * @var PhpDocNodeMapper
      */
     private $attributeAwareNodeFactory;
 
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-        $this->attributeAwareNodeFactory = $this->getService(AttributeAwareNodeFactory::class);
+        $this->attributeAwareNodeFactory = $this->getService(PhpDocNodeMapper::class);
     }
 
     public function testPropertyTag(): void

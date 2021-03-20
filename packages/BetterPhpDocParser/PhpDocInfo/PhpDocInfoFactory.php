@@ -12,7 +12,7 @@ use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
@@ -45,7 +45,7 @@ final class PhpDocInfoFactory
     private $staticTypeMapper;
 
     /**
-     * @var AttributeAwareNodeFactory
+     * @var PhpDocNodeMapper
      */
     private $attributeAwareNodeFactory;
 
@@ -65,7 +65,7 @@ final class PhpDocInfoFactory
     private $phpDocInfosByObjectHash = [];
 
     public function __construct(
-        AttributeAwareNodeFactory $attributeAwareNodeFactory,
+        PhpDocNodeMapper $attributeAwareNodeFactory,
         CurrentNodeProvider $currentNodeProvider,
         Lexer $lexer,
         BetterPhpDocParser $betterPhpDocParser,

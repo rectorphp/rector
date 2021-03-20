@@ -10,7 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class NonEmptyArrayTypeMapper implements TypeMapperInterface
@@ -28,7 +28,7 @@ final class NonEmptyArrayTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
-        return new AttributeAwareArrayTypeNode(new IdentifierTypeNode('mixed'));
+        return new SpacingAwareArrayTypeNode(new IdentifierTypeNode('mixed'));
     }
 
     /**

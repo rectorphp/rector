@@ -13,10 +13,10 @@ use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\DeadDocBlock\DeadVarTagValueNodeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -120,7 +120,7 @@ final class VarTagRemover
     {
         if ($varTagValueNode->type instanceof BracketsAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
-                if ($type instanceof AttributeAwareArrayTypeNode && $this->isArrayOfExistingClassNode($node, $type)) {
+                if ($type instanceof SpacingAwareArrayTypeNode && $this->isArrayOfExistingClassNode($node, $type)) {
                     return true;
                 }
             }
@@ -140,7 +140,7 @@ final class VarTagRemover
 
     private function isArrayOfExistingClassNode(
         Node $node,
-        AttributeAwareArrayTypeNode $attributeAwareArrayTypeNode
+        SpacingAwareArrayTypeNode $attributeAwareArrayTypeNode
     ): bool {
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
             $attributeAwareArrayTypeNode,

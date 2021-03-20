@@ -14,7 +14,7 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
-use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
@@ -54,7 +54,7 @@ final class BetterPhpDocParser extends PhpDocParser
     private $privatesAccessor;
 
     /**
-     * @var AttributeAwareNodeFactory
+     * @var PhpDocNodeMapper
      */
     private $attributeAwareNodeFactory;
 
@@ -85,7 +85,7 @@ final class BetterPhpDocParser extends PhpDocParser
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
-        AttributeAwareNodeFactory $attributeAwareNodeFactory,
+        PhpDocNodeMapper $attributeAwareNodeFactory,
         CurrentNodeProvider $currentNodeProvider,
         ClassAnnotationMatcher $classAnnotationMatcher,
         AnnotationContentResolver $annotationContentResolver,
