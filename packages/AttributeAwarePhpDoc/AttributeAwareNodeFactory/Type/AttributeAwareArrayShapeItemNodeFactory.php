@@ -6,12 +6,12 @@ namespace Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\Type;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayShapeItemNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\SpacingAwareArrayShapeItemNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
-use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
+use Rector\AttributeAwarePhpDoc\Contract\PhpDocNodeTransformerInterface;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 
-final class AttributeAwareArrayShapeItemNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
+final class AttributeAwareArrayShapeItemNodeFactory implements PhpDocNodeTransformerInterface, AttributeAwareNodeFactoryAwareInterface
 {
     /**
      * @var AttributeAwareNodeFactory
@@ -25,12 +25,12 @@ final class AttributeAwareArrayShapeItemNodeFactory implements AttributeNodeAwar
 
     /**
      * @param ArrayShapeItemNode $node
-     * @return AttributeAwareArrayShapeItemNode
+     * @return SpacingAwareArrayShapeItemNode
      */
-    public function create(Node $node, string $docContent): Node
+    public function transform(Node $node, string $docContent): Node
     {
-        $node->valueType = $this->attributeAwareNodeFactory->createFromNode($node->valueType, $docContent);
-        return new AttributeAwareArrayShapeItemNode($node->keyName, $node->optional, $node->valueType, $docContent);
+        $node->valueType = $this->attributeAwareNodeFactory->transform($node->valueType, $docContent);
+        return new SpacingAwareArrayShapeItemNode($node->keyName, $node->optional, $node->valueType, $docContent);
     }
 
     public function setAttributeAwareNodeFactory(AttributeAwareNodeFactory $attributeAwareNodeFactory): void

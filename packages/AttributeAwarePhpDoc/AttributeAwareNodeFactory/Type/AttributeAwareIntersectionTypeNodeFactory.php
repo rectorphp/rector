@@ -6,12 +6,12 @@ namespace Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\Type;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIntersectionTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\BracketsAwareIntersectionTypeNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
-use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
+use Rector\AttributeAwarePhpDoc\Contract\PhpDocNodeTransformerInterface;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 
-final class AttributeAwareIntersectionTypeNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
+final class AttributeAwareIntersectionTypeNodeFactory implements PhpDocNodeTransformerInterface, AttributeAwareNodeFactoryAwareInterface
 {
     /**
      * @var AttributeAwareNodeFactory
@@ -26,13 +26,13 @@ final class AttributeAwareIntersectionTypeNodeFactory implements AttributeNodeAw
     /**
      * @param IntersectionTypeNode $node
      */
-    public function create(Node $node, string $docContent): Node
+    public function transform(Node $node, string $docContent): Node
     {
         foreach ($node->types as $key => $intersectionedType) {
-            $node->types[$key] = $this->attributeAwareNodeFactory->createFromNode($intersectionedType, $docContent);
+            $node->types[$key] = $this->attributeAwareNodeFactory->transform($intersectionedType, $docContent);
         }
 
-        return new AttributeAwareIntersectionTypeNode($node->types);
+        return new BracketsAwareIntersectionTypeNode($node->types);
     }
 
     public function setAttributeAwareNodeFactory(AttributeAwareNodeFactory $attributeAwareNodeFactory): void

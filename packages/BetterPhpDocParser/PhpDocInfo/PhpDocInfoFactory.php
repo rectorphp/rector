@@ -186,7 +186,7 @@ final class PhpDocInfoFactory
         Node $node
     ): PhpDocInfo {
         /** @var PhpDocNode $phpDocNode */
-        $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $content);
+        $phpDocNode = $this->attributeAwareNodeFactory->transform($phpDocNode, $content);
 
         $phpDocInfo = new PhpDocInfo(
             $phpDocNode,

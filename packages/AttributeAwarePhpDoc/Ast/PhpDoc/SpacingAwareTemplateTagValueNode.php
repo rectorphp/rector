@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
-final class AttributeAwareTemplateTagValueNode extends TemplateTagValueNode
+final class SpacingAwareTemplateTagValueNode extends TemplateTagValueNode
 {
     /**
      * @var string

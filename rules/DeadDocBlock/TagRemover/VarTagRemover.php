@@ -14,7 +14,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\DeadDocBlock\DeadVarTagValueNodeAnalyzer;
@@ -118,7 +118,7 @@ final class VarTagRemover
      */
     private function isNonBasicArrayType(Node $node, VarTagValueNode $varTagValueNode): bool
     {
-        if ($varTagValueNode->type instanceof AttributeAwareUnionTypeNode) {
+        if ($varTagValueNode->type instanceof BracketsAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
                 if ($type instanceof AttributeAwareArrayTypeNode && $this->isArrayOfExistingClassNode($node, $type)) {
                     return true;

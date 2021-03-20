@@ -19,7 +19,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\BracketsAwareUnionTypeNode;
 use Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture\Nullable;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
@@ -112,7 +112,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         $unionTypesNodes = array_unique($unionTypesNodes);
-        return new AttributeAwareUnionTypeNode($unionTypesNodes);
+        return new BracketsAwareUnionTypeNode($unionTypesNodes);
     }
 
     /**

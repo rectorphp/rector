@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 
-final class AttributeAwareUnionTypeNode extends UnionTypeNode
+final class BracketsAwareUnionTypeNode extends UnionTypeNode
 {
     /**
      * @var string

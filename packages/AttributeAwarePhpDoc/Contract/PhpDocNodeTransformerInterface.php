@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory;
+namespace Rector\AttributeAwarePhpDoc\Contract;
 
 use PHPStan\PhpDocParser\Ast\Node;
 
-interface AttributeNodeAwareFactoryInterface
+interface PhpDocNodeTransformerInterface
 {
     public function isMatch(Node $node): bool;
 
@@ -15,5 +15,5 @@ interface AttributeNodeAwareFactoryInterface
      * @param T $node
      * @return T
      */
-    public function create(Node $node, string $docContent): Node;
+    public function transform(Node $node, string $docContent): Node;
 }

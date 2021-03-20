@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
-use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\Node as PhpDocNode;
+use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
@@ -29,6 +29,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticInstanceOf;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Symplify\SimplePhpDocParser\ValueObject\Ast\PhpDoc\SimplePhpDocNode;
 
 /**
  * @template TNode as \PHPStan\PhpDocParser\Ast\Node
@@ -63,12 +64,12 @@ final class PhpDocInfo
     private $tokens = [];
 
     /**
-     * @var PhpDocNode
+     * @var SimplePhpDocNode
      */
     private $phpDocNode;
 
     /**
-     * @var PhpDocNode
+     * @var SimplePhpDocNode
      */
     private $originalPhpDocNode;
 
@@ -78,7 +79,7 @@ final class PhpDocInfo
     private $staticTypeMapper;
 
     /**
-     * @var Node
+     * @var \PhpParser\Node
      */
     private $node;
 
@@ -110,7 +111,7 @@ final class PhpDocInfo
         array $tokens,
         string $originalContent,
         StaticTypeMapper $staticTypeMapper,
-        Node $node,
+        \PhpParser\Node $node,
         AnnotationNaming $annotationNaming,
         CurrentNodeProvider $currentNodeProvider,
         RectorChangeCollector $rectorChangeCollector
@@ -267,11 +268,11 @@ final class PhpDocInfo
     }
 
     /**
-     * @template T as \PHPStan\PhpDocParser\Ast\Node
-     * @param class-string<T> $type
-     * @return T|null
+     * @template TNode as \PHPStan\PhpDocParser\Ast\Node
+     * @param class-string<TNode> $type
+     * @return TNode|null
      */
-    public function getByType(string $type): ?PhpDocNode
+    public function getByType(string $type)
     {
         $this->ensureTypeIsTagValueNode($type, __METHOD__);
 
@@ -327,7 +328,7 @@ final class PhpDocInfo
             $foundTagsValueNodes[] = $phpDocChildNode->value;
         }
 
-        /** @var \PHPStan\PhpDocParser\Ast\Node[] $foundTagsValueNodes */
+        /** @var Node[] $foundTagsValueNodes */
         return $foundTagsValueNodes;
     }
 

@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIntersectionTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\BracketsAwareIntersectionTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 
@@ -48,7 +48,7 @@ final class IntersectionTypeMapper implements TypeMapperInterface
 
         $intersectionTypesNodes = array_unique($intersectionTypesNodes);
 
-        return new AttributeAwareIntersectionTypeNode($intersectionTypesNodes);
+        return new BracketsAwareIntersectionTypeNode($intersectionTypesNodes);
     }
 
     /**

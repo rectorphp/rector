@@ -8,10 +8,10 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
-use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
+use Rector\AttributeAwarePhpDoc\Contract\PhpDocNodeTransformerInterface;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 
-final class AttributeAwareArrayTypeNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
+final class AttributeAwareArrayTypeNodeFactory implements PhpDocNodeTransformerInterface, AttributeAwareNodeFactoryAwareInterface
 {
     /**
      * @var AttributeAwareNodeFactory
@@ -27,9 +27,9 @@ final class AttributeAwareArrayTypeNodeFactory implements AttributeNodeAwareFact
      * @param ArrayTypeNode $node
      * @return AttributeAwareArrayTypeNode
      */
-    public function create(Node $node, string $docContent): Node
+    public function transform(Node $node, string $docContent): Node
     {
-        $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type, $docContent);
+        $node->type = $this->attributeAwareNodeFactory->transform($node->type, $docContent);
 
         return new AttributeAwareArrayTypeNode($node->type);
     }

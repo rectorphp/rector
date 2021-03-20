@@ -10,7 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
-final class AttributeAwareCallableTypeNode extends CallableTypeNode
+final class SpacingAwareCallableTypeNode extends CallableTypeNode
 {
     use NodeAttributes;
 

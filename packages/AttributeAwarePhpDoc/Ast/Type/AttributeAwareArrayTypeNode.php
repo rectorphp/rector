@@ -29,7 +29,7 @@ final class AttributeAwareArrayTypeNode extends ArrayTypeNode
             return $this->printArrayType($this->type);
         }
 
-        if ($this->type instanceof AttributeAwareUnionTypeNode) {
+        if ($this->type instanceof BracketsAwareUnionTypeNode) {
             return $this->printUnionType($this->type);
         }
 
@@ -57,7 +57,7 @@ final class AttributeAwareArrayTypeNode extends ArrayTypeNode
         return implode('|', $singleTypesAsString);
     }
 
-    private function printUnionType(AttributeAwareUnionTypeNode $attributeAwareUnionTypeNode): string
+    private function printUnionType(BracketsAwareUnionTypeNode $attributeAwareUnionTypeNode): string
     {
         $unionedTypes = [];
 

@@ -11,7 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
-final class AttributeAwareArrayShapeItemNode extends ArrayShapeItemNode
+final class SpacingAwareArrayShapeItemNode extends ArrayShapeItemNode
 {
     /**
      * @var bool

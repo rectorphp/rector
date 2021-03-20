@@ -22,7 +22,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\BracketsAwareUnionTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
@@ -142,7 +142,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
 
         if (count($unionedArrayType) > 1) {
-            return new AttributeAwareArrayTypeNode(new AttributeAwareUnionTypeNode($unionedArrayType));
+            return new AttributeAwareArrayTypeNode(new BracketsAwareUnionTypeNode($unionedArrayType));
         }
 
         /** @var TypeNode $arrayType */

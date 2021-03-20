@@ -130,7 +130,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $phpDocNode = new PhpDocNode(array_values($children));
         $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
 
-        return $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
+        return $this->attributeAwareNodeFactory->transform($phpDocNode, $docContent);
     }
 
     public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
@@ -183,7 +183,7 @@ final class BetterPhpDocParser extends PhpDocParser
             $tagValueNode = parent::parseTagValue($tokenIterator, $tag);
         }
 
-        return $this->attributeAwareNodeFactory->createFromNode($tagValueNode, $docContent);
+        return $this->attributeAwareNodeFactory->transform($tagValueNode, $docContent);
     }
 
     /**
@@ -213,7 +213,7 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $startAndEnd = new StartAndEnd($tokenStart, $tokenEnd);
 
-        $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
+        $attributeAwareNode = $this->attributeAwareNodeFactory->transform($phpDocNode, $docContent);
         $attributeAwareNode->setAttribute(Attribute::START_END, $startAndEnd);
 
         return $attributeAwareNode;

@@ -6,7 +6,7 @@ namespace Rector\AttributeAwarePhpDoc\Ast\Type;
 
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 
-final class AttributeAwareIntersectionTypeNode extends IntersectionTypeNode
+final class BracketsAwareIntersectionTypeNode extends IntersectionTypeNode
 {
     public function __toString(): string
     {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\DependencyInjection\TypeAnalyzer;
 
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
@@ -24,13 +24,13 @@ final class InjectTagValueNodeToServiceTypeResolver
         $this->jmsdiTypeResolver = $jmsdiTypeResolver;
     }
 
-    public function resolve(Property $property, PhpDocInfo $phpDocInfo, PhpDocTagValueNode $phpDocTagValueNode): Type
+    public function resolve(Property $property, PhpDocInfo $phpDocInfo, Node $node): Type
     {
-        if ($phpDocTagValueNode instanceof JMSInjectTagValueNode) {
-            return $this->jmsdiTypeResolver->resolve($property, $phpDocTagValueNode);
+        if ($node instanceof JMSInjectTagValueNode) {
+            return $this->jmsdiTypeResolver->resolve($property, $node);
         }
 
-        if ($phpDocTagValueNode instanceof PHPDIInjectTagValueNode) {
+        if ($node instanceof PHPDIInjectTagValueNode) {
             return $phpDocInfo->getVarType();
         }
 

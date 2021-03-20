@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Tests\BetterPhpDocParser\Attributes\Ast;
 
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
@@ -30,9 +31,9 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
 
     public function testPropertyTag(): void
     {
-        $phpDocNode = $this->createPropertyDocNode();
+        $phpDocNode = $this->createParamDocNode();
 
-        $reprintedPhpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, '');
+        $reprintedPhpDocNode = $this->attributeAwareNodeFactory->transform($phpDocNode, '');
 
         $childNode = $reprintedPhpDocNode->children[0];
         $this->assertInstanceOf(PhpDocTagNode::class, $childNode);
@@ -41,17 +42,6 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
         /** @var PhpDocTagNode $childNode */
         $propertyTagValueNode = $childNode->value;
         $this->assertInstanceOf(VariadicAwareParamTagValueNode::class, $propertyTagValueNode);
-
-        // test nullable
-        /** @var PropertyTagValueNode $propertyTagValueNode */
-        $nullableTypeNode = $propertyTagValueNode->type;
-
-        $this->assertInstanceOf(NullableTypeNode::class, $nullableTypeNode);
-
-        // test type inside nullable
-        /** @var NullableTypeNode $nullableTypeNode */
-        $identifierTypeNode = $nullableTypeNode->type;
-        $this->assertInstanceOf(IdentifierTypeNode::class, $identifierTypeNode);
     }
 
     /**
@@ -67,12 +57,12 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
      * Creates doc block for:
      * @property string|null $name
      */
-    private function createPropertyDocNode(): PhpDocNode
+    private function createParamDocNode(): PhpDocNode
     {
         $nullableTypeNode = new NullableTypeNode(new IdentifierTypeNode('string'));
-        $propertyTagValueNode = new PropertyTagValueNode($nullableTypeNode, 'name', '');
+        $paramTagValueNode = new ParamTagValueNode($nullableTypeNode, true, 'name', '');
 
-        $children = [new PhpDocTagNode('@property', $propertyTagValueNode)];
+        $children = [new PhpDocTagNode('@param', $paramTagValueNode)];
 
         return new PhpDocNode($children);
     }
