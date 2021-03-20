@@ -1,14 +1,17 @@
 {
     "name": "rector/rector",
     "description": "Instant upgrade and refactoring of your PHP code",
+    "bin": [
+        "bin/rector"
+    ],
+    "license": "MIT",
+    "homepage": "https://getrector.org",
     "keywords": [
         "instant upgrades",
         "instant refactoring",
         "ast",
         "automated refactoring"
     ],
-    "homepage": "https://getrector.org",
-    "license": "MIT",
     "authors": [
         {
             "name": "Tomas Votruba",
@@ -20,9 +23,6 @@
             "email": "j.mikes@me.com",
             "homepage": "https://janmikes.cz"
         }
-    ],
-    "bin": [
-        "bin/rector"
     ],
     "require": {
         "php": "^7.3|^8.0",
@@ -145,6 +145,11 @@
             "vendor/bin/ecs check-markdown docs/rector_rules_overview.md --ansi --fix"
         ],
         "rector": "bin/rector process --ansi"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.10-dev"
+        }
     },
     "config": {
         "platform-check": false,
