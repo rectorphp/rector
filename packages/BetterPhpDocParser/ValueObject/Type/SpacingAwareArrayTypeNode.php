@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Ast\Type;
+namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
@@ -11,7 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
 
-final class AttributeAwareArrayTypeNode extends ArrayTypeNode
+final class SpacingAwareArrayTypeNode extends ArrayTypeNode
 {
     public function __toString(): string
     {
@@ -29,7 +29,7 @@ final class AttributeAwareArrayTypeNode extends ArrayTypeNode
             return $this->printArrayType($this->type);
         }
 
-        if ($this->type instanceof AttributeAwareUnionTypeNode) {
+        if ($this->type instanceof BracketsAwareUnionTypeNode) {
             return $this->printUnionType($this->type);
         }
 
@@ -57,15 +57,15 @@ final class AttributeAwareArrayTypeNode extends ArrayTypeNode
         return implode('|', $singleTypesAsString);
     }
 
-    private function printUnionType(AttributeAwareUnionTypeNode $attributeAwareUnionTypeNode): string
+    private function printUnionType(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode): string
     {
         $unionedTypes = [];
 
-        if ($attributeAwareUnionTypeNode->isWrappedWithBrackets()) {
-            return $attributeAwareUnionTypeNode . '[]';
+        if ($bracketsAwareUnionTypeNode->isWrappedWithBrackets()) {
+            return $bracketsAwareUnionTypeNode . '[]';
         }
 
-        foreach ($attributeAwareUnionTypeNode->types as $unionedType) {
+        foreach ($bracketsAwareUnionTypeNode->types as $unionedType) {
             $unionedTypes[] = $unionedType . '[]';
         }
 

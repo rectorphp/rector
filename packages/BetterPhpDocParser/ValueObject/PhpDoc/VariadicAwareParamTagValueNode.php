@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
+namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 
-final class AttributeAwareParamTagValueNode extends ParamTagValueNode
+final class VariadicAwareParamTagValueNode extends ParamTagValueNode
 {
     public function __toString(): string
     {

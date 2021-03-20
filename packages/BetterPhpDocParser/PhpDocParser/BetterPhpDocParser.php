@@ -14,14 +14,13 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
-use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\StringTagMatchingPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\MultiPhpDocNodeFactory;
+use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -55,9 +54,9 @@ final class BetterPhpDocParser extends PhpDocParser
     private $privatesAccessor;
 
     /**
-     * @var AttributeAwareNodeFactory
+     * @var PhpDocNodeMapper
      */
-    private $attributeAwareNodeFactory;
+    private $phpDocNodeMapper;
 
     /**
      * @var CurrentNodeProvider
@@ -86,7 +85,7 @@ final class BetterPhpDocParser extends PhpDocParser
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
-        AttributeAwareNodeFactory $attributeAwareNodeFactory,
+        PhpDocNodeMapper $phpDocNodeMapper,
         CurrentNodeProvider $currentNodeProvider,
         ClassAnnotationMatcher $classAnnotationMatcher,
         AnnotationContentResolver $annotationContentResolver,
@@ -99,16 +98,13 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $this->privatesCaller = new PrivatesCaller();
         $this->privatesAccessor = new PrivatesAccessor();
-        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
+        $this->phpDocNodeMapper = $phpDocNodeMapper;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->annotationContentResolver = $annotationContentResolver;
         $this->stringTagMatchingPhpDocNodeFactories = $stringTagMatchingPhpDocNodeFactories;
     }
 
-    /**
-     * @return AttributeAwarePhpDocNode|PhpDocNode
-     */
     public function parse(TokenIterator $tokenIterator): PhpDocNode
     {
         $originalTokenIterator = clone $tokenIterator;
@@ -134,7 +130,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $phpDocNode = new PhpDocNode(array_values($children));
         $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
 
-        return $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
+        return $this->phpDocNodeMapper->transform($phpDocNode, $docContent);
     }
 
     public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
@@ -187,7 +183,7 @@ final class BetterPhpDocParser extends PhpDocParser
             $tagValueNode = parent::parseTagValue($tokenIterator, $tag);
         }
 
-        return $this->attributeAwareNodeFactory->createFromNode($tagValueNode, $docContent);
+        return $this->phpDocNodeMapper->transform($tagValueNode, $docContent);
     }
 
     /**
@@ -217,10 +213,10 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $startAndEnd = new StartAndEnd($tokenStart, $tokenEnd);
 
-        $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
-        $attributeAwareNode->setAttribute(Attribute::START_END, $startAndEnd);
+        $transformedPhpDocNode = $this->phpDocNodeMapper->transform($phpDocNode, $docContent);
+        $transformedPhpDocNode->setAttribute(Attribute::START_END, $startAndEnd);
 
-        return $attributeAwareNode;
+        return $transformedPhpDocNode;
     }
 
     private function resolveTag(TokenIterator $tokenIterator): string

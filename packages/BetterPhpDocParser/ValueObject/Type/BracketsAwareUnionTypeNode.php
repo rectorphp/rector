@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Ast\Type;
+namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 
-final class AttributeAwareUnionTypeNode extends UnionTypeNode
+final class BracketsAwareUnionTypeNode extends UnionTypeNode
 {
     /**
      * @var string

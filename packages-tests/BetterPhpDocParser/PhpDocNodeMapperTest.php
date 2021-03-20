@@ -1,0 +1,58 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\Tests\BetterPhpDocParser;
+
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
+use Rector\BetterPhpDocParser\PhpDocNodeMapper;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
+use Rector\Core\HttpKernel\RectorKernel;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+
+final class PhpDocNodeMapperTest extends AbstractKernelTestCase
+{
+    /**
+     * @var PhpDocNodeMapper
+     */
+    private $phpDocNodeMapper;
+
+    protected function setUp(): void
+    {
+        $this->bootKernel(RectorKernel::class);
+        $this->phpDocNodeMapper = $this->getService(PhpDocNodeMapper::class);
+    }
+
+    public function testPropertyTag(): void
+    {
+        $phpDocNode = $this->createParamDocNode();
+
+        $reprintedPhpDocNode = $this->phpDocNodeMapper->transform($phpDocNode, '');
+
+        $childNode = $reprintedPhpDocNode->children[0];
+        $this->assertInstanceOf(PhpDocTagNode::class, $childNode);
+
+        // test param tag
+        /** @var PhpDocTagNode $childNode */
+        $propertyTagValueNode = $childNode->value;
+        $this->assertInstanceOf(VariadicAwareParamTagValueNode::class, $propertyTagValueNode);
+    }
+
+    /**
+     * Creates doc block for:
+     * @property string|null $name
+     */
+    private function createParamDocNode(): PhpDocNode
+    {
+        $nullableTypeNode = new NullableTypeNode(new IdentifierTypeNode('string'));
+        $paramTagValueNode = new ParamTagValueNode($nullableTypeNode, true, 'name', '');
+
+        $children = [new PhpDocTagNode('@param', $paramTagValueNode)];
+
+        return new PhpDocNode($children);
+    }
+}

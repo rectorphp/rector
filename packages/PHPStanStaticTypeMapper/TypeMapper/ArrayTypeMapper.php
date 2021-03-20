@@ -21,8 +21,8 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
@@ -107,7 +107,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType);
 
-        return new AttributeAwareArrayTypeNode($itemTypeNode);
+        return new SpacingAwareArrayTypeNode($itemTypeNode);
     }
 
     /**
@@ -142,12 +142,12 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
 
         if (count($unionedArrayType) > 1) {
-            return new AttributeAwareArrayTypeNode(new AttributeAwareUnionTypeNode($unionedArrayType));
+            return new SpacingAwareArrayTypeNode(new BracketsAwareUnionTypeNode($unionedArrayType));
         }
 
         /** @var TypeNode $arrayType */
         $arrayType = array_shift($unionedArrayType);
-        return new AttributeAwareArrayTypeNode($arrayType);
+        return new SpacingAwareArrayTypeNode($arrayType);
     }
 
     private function isGenericArrayCandidate(ArrayType $arrayType): bool
@@ -248,7 +248,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
             $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($itemType);
             if ($narrowedItemType instanceof ObjectType) {
                 $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
-                return new AttributeAwareArrayTypeNode($itemTypeNode);
+                return new SpacingAwareArrayTypeNode($itemTypeNode);
             }
 
             $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($itemType);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Ast\Type;
+namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
@@ -11,7 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
-final class AttributeAwareArrayShapeItemNode extends ArrayShapeItemNode
+final class SpacingAwareArrayShapeItemNode extends ArrayShapeItemNode
 {
     /**
      * @var bool

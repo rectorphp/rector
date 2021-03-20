@@ -55,6 +55,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         }
 
         if ($relationTagValueNode instanceof ToOneTagNodeInterface) {
+            /** @var JoinColumnTagValueNode $joinColumnTagValueNode */
             $joinColumnTagValueNode = $phpDocInfo->getByType(JoinColumnTagValueNode::class);
             return $this->processToOneRelation($relationTagValueNode, $joinColumnTagValueNode);
         }

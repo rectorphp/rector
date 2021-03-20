@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Ast\Type;
+namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
@@ -10,7 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
-final class AttributeAwareCallableTypeNode extends CallableTypeNode
+final class SpacingAwareCallableTypeNode extends CallableTypeNode
 {
     use NodeAttributes;
 

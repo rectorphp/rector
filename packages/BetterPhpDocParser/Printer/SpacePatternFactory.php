@@ -6,7 +6,7 @@ namespace Rector\BetterPhpDocParser\Printer;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
 
 final class SpacePatternFactory
 {
@@ -20,7 +20,7 @@ final class SpacePatternFactory
         $spacePattern = preg_quote($phpDocTagNode->name, '#') . '(?<space>\s+)';
 
         // we have to match exact @param space, in case of multiple @param s
-        if ($phpDocTagNode->value instanceof AttributeAwareParamTagValueNode) {
+        if ($phpDocTagNode->value instanceof VariadicAwareParamTagValueNode) {
             return $this->createSpacePatternForParamTagValueNode($phpDocTagNode->value, $spacePattern);
         }
 
@@ -40,20 +40,20 @@ final class SpacePatternFactory
     }
 
     private function createSpacePatternForParamTagValueNode(
-        AttributeAwareParamTagValueNode $attributeAwareParamTagValueNode,
+        VariadicAwareParamTagValueNode $variadicAwareParamTagValueNode,
         string $spacePattern
     ): string {
         // type could be changed, so better keep it here
         $spacePattern .= self::TYPE_PATTERN;
 
-        if ($attributeAwareParamTagValueNode->parameterName !== '') {
+        if ($variadicAwareParamTagValueNode->parameterName !== '') {
             $spacePattern .= '\s+';
 
-            if ($attributeAwareParamTagValueNode->isVariadic) {
+            if ($variadicAwareParamTagValueNode->isVariadic) {
                 $spacePattern .= '...';
             }
 
-            $spacePattern .= preg_quote($attributeAwareParamTagValueNode->parameterName, '#');
+            $spacePattern .= preg_quote($variadicAwareParamTagValueNode->parameterName, '#');
         }
 
         return '#' . $spacePattern . '#';

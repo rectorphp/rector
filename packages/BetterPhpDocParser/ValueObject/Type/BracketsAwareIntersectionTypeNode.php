@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Ast\Type;
+namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 
-final class AttributeAwareIntersectionTypeNode extends IntersectionTypeNode
+final class BracketsAwareIntersectionTypeNode extends IntersectionTypeNode
 {
     public function __toString(): string
     {

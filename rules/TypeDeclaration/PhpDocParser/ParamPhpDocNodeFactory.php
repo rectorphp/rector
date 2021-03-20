@@ -6,7 +6,7 @@ namespace Rector\TypeDeclaration\PhpDocParser;
 
 use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ParamPhpDocNodeFactory
@@ -21,9 +21,9 @@ final class ParamPhpDocNodeFactory
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function create(TypeNode $typeNode, Param $param): AttributeAwareParamTagValueNode
+    public function create(TypeNode $typeNode, Param $param): VariadicAwareParamTagValueNode
     {
-        return new AttributeAwareParamTagValueNode(
+        return new VariadicAwareParamTagValueNode(
             $typeNode,
             $param->variadic,
             '$' . $this->nodeNameResolver->getName($param),

@@ -38,10 +38,10 @@ final class PhpDocTypeRenamer
         Node $node,
         PseudoNamespaceToNamespace $pseudoNamespaceToNamespace
     ): void {
-        $attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
         $phpParserNode = $node;
 
-        $this->phpDocNodeTraverser->traverseWithCallable($attributeAwarePhpDocNode, '', function (
+        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (
             PhpDocParserNode $node
         ) use ($pseudoNamespaceToNamespace, $phpParserNode, $phpDocInfo): PhpDocParserNode {
             if (! $node instanceof TypeNode) {

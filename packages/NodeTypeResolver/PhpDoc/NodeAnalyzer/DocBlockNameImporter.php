@@ -59,9 +59,9 @@ final class DocBlockNameImporter
 
     public function importNames(PhpDocInfo $phpDocInfo, Node $phpParserNode): void
     {
-        $attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
 
-        $this->phpDocNodeTraverser->traverseWithCallable($attributeAwarePhpDocNode, '', function (
+        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (
             PhpDocParserNode $docNode
         ) use ($phpDocInfo, $phpParserNode): PhpDocParserNode {
             if (! $docNode instanceof IdentifierTypeNode) {
@@ -73,7 +73,7 @@ final class DocBlockNameImporter
                 return $docNode;
             }
 
-            $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES);
+            $importShortClasses = $this->parameterProvider->provideBoolParameter(Option::IMPORT_SHORT_CLASSES);
 
             // Importing root namespace classes (like \DateTime) is optional
             if (! $importShortClasses && substr_count($staticType->getClassName(), '\\') === 0) {
@@ -98,6 +98,7 @@ final class DocBlockNameImporter
         }
 
         // should skip because its already used
+
         if ($this->useNodesToAddCollector->isShortImported($node, $fullyQualifiedObjectType)) {
             if ($this->useNodesToAddCollector->isImportShortable($node, $fullyQualifiedObjectType)) {
                 $identifierTypeNode->name = $fullyQualifiedObjectType->getShortName();

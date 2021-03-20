@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
+namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
-final class AttributeAwareTemplateTagValueNode extends TemplateTagValueNode
+final class SpacingAwareTemplateTagValueNode extends TemplateTagValueNode
 {
     /**
      * @var string

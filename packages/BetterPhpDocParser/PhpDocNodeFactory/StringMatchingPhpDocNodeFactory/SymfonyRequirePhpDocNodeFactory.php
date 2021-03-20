@@ -6,8 +6,8 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\StringMatchingPhpDocNodeFa
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\SymfonyRequiredTagNode;
 use Rector\BetterPhpDocParser\Contract\StringTagMatchingPhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\SymfonyRequiredTagNode;
 
 final class SymfonyRequirePhpDocNodeFactory implements StringTagMatchingPhpDocNodeFactoryInterface
 {
