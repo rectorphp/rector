@@ -17,10 +17,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
-
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ClassNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\ValueObject\NodeTypes;
@@ -65,12 +63,12 @@ final class PhpDocInfo
     private $tokens = [];
 
     /**
-     * @var AttributeAwarePhpDocNode
+     * @var PhpDocNode
      */
     private $phpDocNode;
 
     /**
-     * @var AttributeAwarePhpDocNode
+     * @var PhpDocNode
      */
     private $originalPhpDocNode;
 
@@ -108,7 +106,7 @@ final class PhpDocInfo
      * @param mixed[] $tokens
      */
     public function __construct(
-        AttributeAwarePhpDocNode $attributeAwarePhpDocNode,
+        PhpDocNode $phpDocNode,
         array $tokens,
         string $originalContent,
         StaticTypeMapper $staticTypeMapper,
@@ -117,9 +115,9 @@ final class PhpDocInfo
         CurrentNodeProvider $currentNodeProvider,
         RectorChangeCollector $rectorChangeCollector
     ) {
-        $this->phpDocNode = $attributeAwarePhpDocNode;
+        $this->phpDocNode = $phpDocNode;
         $this->tokens = $tokens;
-        $this->originalPhpDocNode = clone $attributeAwarePhpDocNode;
+        $this->originalPhpDocNode = clone $phpDocNode;
         $this->originalContent = $originalContent;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->node = $node;
@@ -145,12 +143,12 @@ final class PhpDocInfo
         $this->addPhpDocTagNode($spacelessPhpDocTagNode);
     }
 
-    public function getPhpDocNode(): AttributeAwarePhpDocNode
+    public function getPhpDocNode(): PhpDocNode
     {
         return $this->phpDocNode;
     }
 
-    public function getOriginalPhpDocNode(): AttributeAwarePhpDocNode
+    public function getOriginalPhpDocNode(): PhpDocNode
     {
         return $this->originalPhpDocNode;
     }

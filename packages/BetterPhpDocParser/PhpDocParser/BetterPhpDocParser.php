@@ -14,7 +14,6 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
@@ -106,9 +105,6 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->stringTagMatchingPhpDocNodeFactories = $stringTagMatchingPhpDocNodeFactories;
     }
 
-    /**
-     * @return AttributeAwarePhpDocNode|PhpDocNode
-     */
     public function parse(TokenIterator $tokenIterator): PhpDocNode
     {
         $originalTokenIterator = clone $tokenIterator;

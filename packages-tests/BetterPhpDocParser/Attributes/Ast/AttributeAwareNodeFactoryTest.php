@@ -10,7 +10,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\VariadicAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
@@ -28,32 +28,19 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
         $this->attributeAwareNodeFactory = $this->getService(AttributeAwareNodeFactory::class);
     }
 
-    public function testPhpDocNodeAndChildren(): void
-    {
-        $phpDocNode = $this->createSomeTextDocNode();
-
-        $attributeAwarePhpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, '');
-        $this->assertInstanceOf(PhpDocNode::class, $attributeAwarePhpDocNode);
-        $this->assertInstanceOf(AttributeAwarePhpDocNode::class, $attributeAwarePhpDocNode);
-
-        $childNode = $attributeAwarePhpDocNode->children[0];
-
-        $this->assertInstanceOf(PhpDocTextNode::class, $childNode);
-    }
-
     public function testPropertyTag(): void
     {
         $phpDocNode = $this->createPropertyDocNode();
 
-        $attributeAwarePhpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, '');
+        $reprintedPhpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, '');
 
-        $childNode = $attributeAwarePhpDocNode->children[0];
+        $childNode = $reprintedPhpDocNode->children[0];
         $this->assertInstanceOf(PhpDocTagNode::class, $childNode);
 
         // test param tag
         /** @var PhpDocTagNode $childNode */
         $propertyTagValueNode = $childNode->value;
-        $this->assertInstanceOf(PropertyTagValueNode::class, $propertyTagValueNode);
+        $this->assertInstanceOf(VariadicAwareParamTagValueNode::class, $propertyTagValueNode);
 
         // test nullable
         /** @var PropertyTagValueNode $propertyTagValueNode */

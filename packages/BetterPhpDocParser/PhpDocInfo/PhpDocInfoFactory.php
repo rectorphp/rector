@@ -6,15 +6,14 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
@@ -118,7 +117,7 @@ final class PhpDocInfoFactory
             // create empty node
             $content = '';
             $tokens = [];
-            $phpDocNode = new AttributeAwarePhpDocNode([]);
+            $phpDocNode = new PhpDocNode([]);
         } else {
             $content = $docComment->getText();
             $tokens = $this->lexer->tokenize($content);
@@ -143,15 +142,14 @@ final class PhpDocInfoFactory
         /** needed for @see PhpDocNodeFactoryInterface */
         $this->currentNodeProvider->setNode($node);
 
-        $attributeAwarePhpDocNode = new AttributeAwarePhpDocNode([]);
-
-        return $this->createFromPhpDocNode($attributeAwarePhpDocNode, '', [], $node);
+        $phpDocNode = new PhpDocNode([]);
+        return $this->createFromPhpDocNode($phpDocNode, '', [], $node);
     }
 
     /**
      * @param mixed[][] $tokens
      */
-    private function parseTokensToPhpDocNode(array $tokens): AttributeAwarePhpDocNode
+    private function parseTokensToPhpDocNode(array $tokens): PhpDocNode
     {
         $tokenIterator = new TokenIterator($tokens);
 
@@ -161,20 +159,20 @@ final class PhpDocInfoFactory
     /**
      * Needed for printing
      */
-    private function setPositionOfLastToken(AttributeAwarePhpDocNode $attributeAwarePhpDocNode): void
+    private function setPositionOfLastToken(PhpDocNode $phpDocNode): void
     {
-        if ($attributeAwarePhpDocNode->children === []) {
+        if ($phpDocNode->children === []) {
             return;
         }
 
-        $phpDocChildNodes = $attributeAwarePhpDocNode->children;
+        $phpDocChildNodes = $phpDocNode->children;
         $lastChildNode = array_pop($phpDocChildNodes);
 
         /** @var StartAndEnd $startAndEnd */
         $startAndEnd = $lastChildNode->getAttribute(Attribute::START_END);
 
         if ($startAndEnd !== null) {
-            $attributeAwarePhpDocNode->setAttribute(Attribute::LAST_TOKEN_POSITION, $startAndEnd->getEnd());
+            $phpDocNode->setAttribute(Attribute::LAST_TOKEN_POSITION, $startAndEnd->getEnd());
         }
     }
 
@@ -182,19 +180,16 @@ final class PhpDocInfoFactory
      * @param mixed[] $tokens
      */
     private function createFromPhpDocNode(
-        AttributeAwarePhpDocNode $attributeAwarePhpDocNode,
+        PhpDocNode $phpDocNode,
         string $content,
         array $tokens,
         Node $node
     ): PhpDocInfo {
-        /** @var AttributeAwarePhpDocNode $attributeAwarePhpDocNode */
-        $attributeAwarePhpDocNode = $this->attributeAwareNodeFactory->createFromNode(
-            $attributeAwarePhpDocNode,
-            $content
-        );
+        /** @var PhpDocNode $phpDocNode */
+        $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $content);
 
         $phpDocInfo = new PhpDocInfo(
-            $attributeAwarePhpDocNode,
+            $phpDocNode,
             $tokens,
             $content,
             $this->staticTypeMapper,
