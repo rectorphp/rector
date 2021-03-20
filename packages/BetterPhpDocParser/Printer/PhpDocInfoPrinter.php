@@ -223,9 +223,6 @@ final class PhpDocInfoPrinter
 
         /** @var StartAndEnd|null $startAndEnd */
         $startAndEnd = $node->getAttribute(Attribute::START_END) ?: $startAndEnd;
-//        $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($node);
-
-
         if ($startAndEnd !== null) {
             $isLastToken = $nodeCount === $key;
 
