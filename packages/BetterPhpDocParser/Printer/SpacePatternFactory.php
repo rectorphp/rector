@@ -6,7 +6,11 @@ namespace Rector\BetterPhpDocParser\Printer;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+<<<<<<< HEAD
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
+=======
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\VariadicAwareParamTagValueNode;
+>>>>>>> e26c75d9e1... rename AttributeAwareParamTagValueNode to VariadicAwareParamTagValueNode
 
 final class SpacePatternFactory
 {
@@ -40,7 +44,11 @@ final class SpacePatternFactory
     }
 
     private function createSpacePatternForParamTagValueNode(
+<<<<<<< HEAD
         VariadicAwareParamTagValueNode $variadicAwareParamTagValueNode,
+=======
+        VariadicAwareParamTagValueNode $attributeAwareParamTagValueNode,
+>>>>>>> e26c75d9e1... rename AttributeAwareParamTagValueNode to VariadicAwareParamTagValueNode
         string $spacePattern
     ): string {
         // type could be changed, so better keep it here
