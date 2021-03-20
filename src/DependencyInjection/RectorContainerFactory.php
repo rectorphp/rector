@@ -10,6 +10,7 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\DependencyInjection\Container;
 use Symplify\PackageBuilder\Console\Input\StaticInputDetector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -28,6 +29,10 @@ final class RectorContainerFactory
         $environment = $this->createEnvironment($configFileInfos);
 
         // mt_rand is needed to invalidate container cache in case of class changes to be registered as services
+        if (StaticPHPUnitEnvironment::isPHPUnitRun() === false) {
+            $environment .= mt_rand(0, 10000);
+        }
+
         $rectorKernel = new RectorKernel($environment, $isDebug);
         if ($configFileInfos !== []) {
             $configFilePaths = $this->unpackRealPathsFromFileInfos($configFileInfos);
