@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\MockeryToProphecy\Collector\MockVariableCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -96,12 +97,21 @@ CODE_SAMPLE
         }
 
         $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node): ?MethodCall {
-            if (! $this->nodeNameResolver->isStaticCallNamed($node, 'Mockery', 'mock')) {
+            if (! $node instanceof StaticCall) {
                 return null;
             }
 
-            /** @var StaticCall $node */
+            $callerType = $this->nodeTypeResolver->resolve($node->class);
+            if (! $callerType->isSuperTypeOf(new ObjectType('Mockery'))->yes()) {
+                return null;
+            }
+
+            if (! $this->isName($node->name, 'mock')) {
+                return null;
+            }
+
             $collectedVariableTypesByNames = $this->mockVariableCollector->collectMockVariableName($node);
+
             $this->mockVariableTypesByNames = array_merge(
                 $this->mockVariableTypesByNames,
                 $collectedVariableTypesByNames

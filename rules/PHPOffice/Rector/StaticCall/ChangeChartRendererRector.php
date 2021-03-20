@@ -7,6 +7,7 @@ namespace Rector\PHPOffice\Rector\StaticCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -58,7 +59,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->nodeNameResolver->isStaticCallNamed($node, 'PHPExcel_Settings', 'setChartRenderer')) {
+        $callerType = $this->nodeTypeResolver->resolve($node->class);
+        if (! $callerType->isSuperTypeOf(new ObjectType('PHPExcel_Settings'))->yes()) {
+            return null;
+        }
+
+        if (! $this->nodeNameResolver->isName($node->name, 'setChartRenderer')) {
             return null;
         }
 

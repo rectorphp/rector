@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
@@ -23,6 +22,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
+use Rector\RemovingStatic\NodeAnalyzer\SetUpClassMethodUpdater;
 use Rector\RemovingStatic\NodeFactory\SelfContainerFactory;
 use Rector\RemovingStatic\NodeFactory\SetUpFactory;
 use Rector\RemovingStatic\ValueObject\PHPUnitClass;
@@ -75,18 +75,25 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector implem
      */
     private $selfContainerFactory;
 
+    /**
+     * @var SetUpClassMethodUpdater
+     */
+    private $setUpClassMethodUpdater;
+
     public function __construct(
         PropertyNaming $propertyNaming,
         ClassInsertManipulator $classInsertManipulator,
         SetUpClassMethodFactory $setUpClassMethodFactory,
         SetUpFactory $setUpFactory,
-        SelfContainerFactory $selfContainerFactory
+        SelfContainerFactory $selfContainerFactory,
+        SetUpClassMethodUpdater $setUpClassMethodUpdater
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->classInsertManipulator = $classInsertManipulator;
         $this->setUpClassMethodFactory = $setUpClassMethodFactory;
         $this->setUpFactory = $setUpFactory;
         $this->selfContainerFactory = $selfContainerFactory;
+        $this->setUpClassMethodUpdater = $setUpClassMethodUpdater;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -234,7 +241,11 @@ CODE_SAMPLE
 
             // get setup or create a setup add add it there
             if ($setupClassMethod !== null) {
-                $this->updateSetUpMethod($setupClassMethod, $parentSetUpStaticCallExpression, $assign);
+                $this->setUpClassMethodUpdater->updateSetUpMethod(
+                    $setupClassMethod,
+                    $parentSetUpStaticCallExpression,
+                    $assign
+                );
             } else {
                 $setUpMethod = $this->setUpClassMethodFactory->createSetUpMethod([$assign]);
                 $this->classInsertManipulator->addAsFirstMethod($class, $setUpMethod);
@@ -289,13 +300,14 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ObjectType[] $newProperties
+     * @param ObjectType[] $propertyTypes
      */
-    private function addNewPropertiesToClass(Class_ $class, array $newProperties): Class_
+    private function addNewPropertiesToClass(Class_ $class, array $propertyTypes): Class_
     {
         $properties = [];
-        foreach ($newProperties as $newProperty) {
-            $properties[] = $this->createPropertyFromType($newProperty);
+        foreach ($propertyTypes as $propertyType) {
+            $propertyName = $this->propertyNaming->fqnToVariableName($propertyType);
+            $properties[] = $this->nodeFactory->createPrivatePropertyFromNameAndType($propertyName, $propertyType);
         }
 
         // add property to the start of the class
@@ -314,43 +326,5 @@ CODE_SAMPLE
         $assign = new Assign($propertyFetch, $getMethodCall);
 
         return new Expression($assign);
-    }
-
-    private function updateSetUpMethod(
-        ClassMethod $setupClassMethod,
-        Expression $parentSetupStaticCall,
-        Expression $assign
-    ): void {
-        $parentSetUpStaticCallPosition = $this->getParentSetUpStaticCallPosition($setupClassMethod);
-        if ($parentSetUpStaticCallPosition === null) {
-            $setupClassMethod->stmts = array_merge([$parentSetupStaticCall, $assign], (array) $setupClassMethod->stmts);
-        } else {
-            assert($setupClassMethod->stmts !== null);
-            array_splice($setupClassMethod->stmts, $parentSetUpStaticCallPosition + 1, 0, [$assign]);
-        }
-    }
-
-    private function createPropertyFromType(ObjectType $objectType): Property
-    {
-        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-
-        return $this->nodeFactory->createPrivatePropertyFromNameAndType($propertyName, $objectType);
-    }
-
-    private function getParentSetUpStaticCallPosition(ClassMethod $setupClassMethod): ?int
-    {
-        foreach ((array) $setupClassMethod->stmts as $position => $methodStmt) {
-            if ($methodStmt instanceof Expression) {
-                $methodStmt = $methodStmt->expr;
-            }
-
-            if (! $this->nodeNameResolver->isStaticCallNamed($methodStmt, 'parent', MethodName::SET_UP)) {
-                continue;
-            }
-
-            return $position;
-        }
-
-        return null;
     }
 }

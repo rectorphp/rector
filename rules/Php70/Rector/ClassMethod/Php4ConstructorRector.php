@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php70\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -97,7 +99,7 @@ CODE_SAMPLE
             /** @var Expression $stmt */
             $stmt = $node->stmts[0];
 
-            if ($this->nodeNameResolver->isLocalMethodCallNamed($stmt->expr, MethodName::CONSTRUCT)) {
+            if ($this->isLocalMethodCallNamed($stmt->expr, MethodName::CONSTRUCT)) {
                 $this->removeNode($node);
 
                 return null;
@@ -203,5 +205,26 @@ CODE_SAMPLE
         }
 
         return $parentClassReflection->getName();
+    }
+
+    private function isLocalMethodCallNamed(Expr $expr, string $name): bool
+    {
+        if (! $expr instanceof MethodCall) {
+            return false;
+        }
+
+        if ($expr->var instanceof StaticCall) {
+            return false;
+        }
+
+        if ($expr->var instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $this->isName($expr->var, 'this')) {
+            return false;
+        }
+
+        return $this->isName($expr->name, $name);
     }
 }
