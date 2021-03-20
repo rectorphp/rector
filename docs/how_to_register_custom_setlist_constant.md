@@ -12,7 +12,7 @@ use Rector\Set\Contract\SetListInterface;
 
 class SetList implements SetListInterface
 {
-    public const MY_FRAMEWORK_20 = __DIR__ . '/../../../config/set/my-framework-10.php';
+    public const MY_FRAMEWORK_20 = __DIR__ . '/../../../config/set/my-framework-20.php';
 }
 ```
 
