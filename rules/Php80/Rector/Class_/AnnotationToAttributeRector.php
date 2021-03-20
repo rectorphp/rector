@@ -132,20 +132,18 @@ CODE_SAMPLE
 
         $hasNewAttrGroups = false;
 
-        foreach ($this->annotationsToAttributes as $annotationsToAttribute) {
-            $tagNodeType = $annotationsToAttribute->getTagNodeClass();
-            if (! $phpDocInfo->hasByType($tagNodeType)) {
+        foreach ($this->annotationsToAttributes as $annotationToAttribute) {
+            $tagNodeType = $annotationToAttribute->getTagNodeClass();
+            $phpDocTagNode = $phpDocInfo->getByType($tagNodeType);
+            if (! $phpDocTagNode instanceof \PHPStan\PhpDocParser\Ast\Node) {
                 continue;
             }
-
-            $phpDocTagNode = $phpDocInfo->getByType($tagNodeType);
 
             // 1. remove php-doc tag
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $phpDocTagNode);
 
             // 2. add attributes
-            $newAttrGroups = $this->phpAttributeGroupFactory->create($phpDocTagNode);
-            $node->attrGroups = array_merge($node->attrGroups, $newAttrGroups);
+            $node->attrGroups[] = $this->phpAttributeGroupFactory->create($phpDocTagNode, $annotationToAttribute);
 
             $hasNewAttrGroups = true;
         }

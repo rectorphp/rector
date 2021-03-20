@@ -74,6 +74,14 @@ abstract class AbstractTagValueNode implements PhpDocTagValueNode
     }
 
     /**
+     * @return mixed[]
+     */
+    public function getItemsWithoutDefaults(): array
+    {
+        return $this->filterOutMissingItems($this->items);
+    }
+
+    /**
      * @param mixed $value
      */
     public function changeItem(string $key, $value): void

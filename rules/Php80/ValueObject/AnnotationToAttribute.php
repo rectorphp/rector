@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Php80\ValueObject;
 
+use PHPStan\PhpDocParser\Ast\Node;
+
 final class AnnotationToAttribute
 {
     /**
-     * @var class-string<\PHPStan\PhpDocParser\Ast\Node>
+     * @var class-string<Node>
      */
     private $tagNodeClass;
 
@@ -17,7 +19,7 @@ final class AnnotationToAttribute
     private $attributeClass;
 
     /**
-     * @param class-string<\PHPStan\PhpDocParser\Ast\Node> $tagNodeClass
+     * @param class-string<Node> $tagNodeClass
      * @param class-string $attributeClass
      */
     public function __construct(string $tagNodeClass, string $attributeClass)
@@ -27,7 +29,7 @@ final class AnnotationToAttribute
     }
 
     /**
-     * @return class-string<\PHPStan\PhpDocParser\Ast\Node>
+     * @return class-string<Node>
      */
     public function getTagNodeClass(): string
     {

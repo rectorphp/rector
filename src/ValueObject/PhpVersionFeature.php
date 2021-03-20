@@ -191,7 +191,7 @@ final class PhpVersionFeature
 
     /**
      * @see https://wiki.php.net/rfc/attributes_v2
-     * @var string
+     * @var int
      */
     public const ATTRIBUTES = PhpVersion::PHP_80;
 }

@@ -9,56 +9,25 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\PhpDocParser\Ast\Node;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
+use Rector\Php80\ValueObject\AnnotationToAttribute;
 
 final class PhpAttributeGroupFactory
 {
-    /**
-     * @param PhpAttributableTagNodeInterface[] $phpAttributableTagNodes
-     * @return AttributeGroup[]
-     */
-    public function create(array $phpAttributableTagNodes): array
+    public function create(Node $node, AnnotationToAttribute $annotationToAttribute): AttributeGroup
     {
-        $attributeGroups = [];
-        foreach ($phpAttributableTagNodes as $phpAttributableTagNode) {
-            $currentAttributeGroups = $this->printPhpAttributableTagNode($phpAttributableTagNode);
-            $attributeGroups = array_merge($attributeGroups, $currentAttributeGroups);
+        $fullyQualified = new FullyQualified($annotationToAttribute->getAttributeClass());
+
+        if ($node instanceof AbstractTagValueNode) {
+            $args = $this->createArgsFromItems($node->getItemsWithoutDefaults());
+        } else {
+            $args = [];
         }
 
-        return $attributeGroups;
-    }
-
-    /**
-     * @return Arg[]
-     */
-    public function printItemsToAttributeArgs(PhpAttributableTagNodeInterface $phpAttributableTagNode): array
-    {
-        $items = $phpAttributableTagNode->getAttributableItems();
-        return $this->createArgsFromItems($items);
-    }
-
-    /**
-     * @return AttributeGroup[]
-     */
-    private function printPhpAttributableTagNode(PhpAttributableTagNodeInterface $phpAttributableTagNode): array
-    {
-        $args = $this->printItemsToAttributeArgs($phpAttributableTagNode);
-
-        $attributeClassName = $this->resolveAttributeClassName($phpAttributableTagNode);
-
-        $attributeGroups = [];
-        $attributeGroups[] = $this->createAttributeGroupFromNameAndArgs($attributeClassName, $args);
-
-        if ($phpAttributableTagNode instanceof ManyPhpAttributableTagNodeInterface) {
-            foreach ($phpAttributableTagNode->provide() as $shortName => $items) {
-                $args = $this->createArgsFromItems($items);
-                $name = new Name($shortName);
-                $attributeGroups[] = $this->createAttributeGroupFromNameAndArgs($name, $args);
-            }
-        }
-
-        return $attributeGroups;
+        $attribute = new Attribute($fullyQualified, $args);
+        return new AttributeGroup([$attribute]);
     }
 
     /**
@@ -89,24 +58,6 @@ final class PhpAttributeGroupFactory
         }
 
         return $args;
-    }
-
-    private function resolveAttributeClassName(PhpAttributableTagNodeInterface $phpAttributableTagNode): Name
-    {
-        if ($phpAttributableTagNode->getAttributeClassName() !== self::TO_BE_ANNOUNCED) {
-            return new FullyQualified($phpAttributableTagNode->getAttributeClassName());
-        }
-
-        return new Name($phpAttributableTagNode->getShortName());
-    }
-
-    /**
-     * @param Arg[] $args
-     */
-    private function createAttributeGroupFromNameAndArgs(Name $name, array $args): AttributeGroup
-    {
-        $attribute = new Attribute($name, $args);
-        return new AttributeGroup([$attribute]);
     }
 
     /**
