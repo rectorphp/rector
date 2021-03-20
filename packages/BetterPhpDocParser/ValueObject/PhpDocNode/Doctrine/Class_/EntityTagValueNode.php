@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_;
 
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
-use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 
-final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements PhpAttributableTagNodeInterface
+final class EntityTagValueNode extends AbstractDoctrineTagValueNode
 {
     /**
      * @var string
@@ -33,18 +31,5 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements P
     public function getShortName(): string
     {
         return '@ORM\Entity';
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function getAttributableItems(): array
-    {
-        return $this->filterOutMissingItems($this->items);
-    }
-
-    public function getAttributeClassName(): string
-    {
-        return PhpAttributeGroupFactory::TO_BE_ANNOUNCED;
     }
 }

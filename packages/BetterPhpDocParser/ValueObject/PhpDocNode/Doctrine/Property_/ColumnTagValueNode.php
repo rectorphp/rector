@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_;
 
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
-use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 
-final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements PhpAttributableTagNodeInterface
+final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
 {
     public function changeType(string $type): void
     {
@@ -36,10 +34,5 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements P
     public function getOptions(): array
     {
         return $this->items['options'] ?? [];
-    }
-
-    public function getAttributeClassName(): string
-    {
-        return PhpAttributeGroupFactory::TO_BE_ANNOUNCED;
     }
 }

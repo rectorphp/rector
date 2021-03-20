@@ -11,19 +11,9 @@ use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\PhpAttribute\Contract\ManyPhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
 final class PhpAttributeGroupFactory
 {
-    /**
-     * A dummy placeholder for annotation, that we know will be converted to attributes,
-     * but don't have specific attribute class yet.
-     *
-     * @var string
-     */
-    public const TO_BE_ANNOUNCED = 'TBA';
-
     /**
      * @param PhpAttributableTagNodeInterface[] $phpAttributableTagNodes
      * @return AttributeGroup[]

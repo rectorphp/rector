@@ -8,10 +8,8 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
 use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
-use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 
-final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implements TagAwareNodeInterface, PhpAttributableTagNodeInterface
+final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implements TagAwareNodeInterface
 {
     /**
      * @var string
@@ -63,10 +61,5 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
     public function changeShortName(string $shortName): void
     {
         $this->shortName = $shortName;
-    }
-
-    public function getAttributeClassName(): string
-    {
-        return PhpAttributeGroupFactory::TO_BE_ANNOUNCED;
     }
 }

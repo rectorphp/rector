@@ -6,13 +6,11 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
-use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
-use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
-final class GeneratedValueTagValueNode extends AbstractDoctrineTagValueNode implements PhpAttributableTagNodeInterface, SilentKeyNodeInterface
+final class GeneratedValueTagValueNode extends AbstractDoctrineTagValueNode implements SilentKeyNodeInterface
 {
     public function getShortName(): string
     {
@@ -22,10 +20,5 @@ final class GeneratedValueTagValueNode extends AbstractDoctrineTagValueNode impl
     public function getSilentKey(): string
     {
         return 'strategy';
-    }
-
-    public function getAttributeClassName(): string
-    {
-        return PhpAttributeGroupFactory::TO_BE_ANNOUNCED;
     }
 }

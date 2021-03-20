@@ -7,12 +7,11 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Con
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
-use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
-final class AssertEmailTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, PhpAttributableTagNodeInterface, SilentKeyNodeInterface
+final class AssertEmailTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface
 {
     public function getShortName(): string
     {
@@ -22,18 +21,5 @@ final class AssertEmailTagValueNode extends AbstractTagValueNode implements Shor
     public function getSilentKey(): string
     {
         return 'choices';
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function getAttributableItems(): array
-    {
-        return $this->filterOutMissingItems($this->items);
-    }
-
-    public function getAttributeClassName(): string
-    {
-        return 'Symfony\Component\Validator\Constraints\Email';
     }
 }

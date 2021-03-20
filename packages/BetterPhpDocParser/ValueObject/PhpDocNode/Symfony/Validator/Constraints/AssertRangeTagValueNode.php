@@ -6,25 +6,11 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Con
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
-use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
-final class AssertRangeTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, PhpAttributableTagNodeInterface
+final class AssertRangeTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
     public function getShortName(): string
     {
         return '@Assert\Range';
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function getAttributableItems(): array
-    {
-        return $this->filterOutMissingItems($this->items);
-    }
-
-    public function getAttributeClassName(): string
-    {
-        return 'Symfony\Component\Validator\Constraints\Range';
     }
 }
