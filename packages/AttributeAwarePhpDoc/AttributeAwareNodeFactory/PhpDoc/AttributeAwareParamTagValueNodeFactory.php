@@ -6,7 +6,7 @@ namespace Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\VariadicAwareParamTagValueNode;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
@@ -25,13 +25,13 @@ final class AttributeAwareParamTagValueNodeFactory implements AttributeNodeAware
 
     /**
      * @param ParamTagValueNode $node
-     * @return AttributeAwareParamTagValueNode
+     * @return VariadicAwareParamTagValueNode
      */
     public function create(Node $node, string $docContent): Node
     {
         $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type, $docContent);
 
-        return new AttributeAwareParamTagValueNode(
+        return new VariadicAwareParamTagValueNode(
             $node->type,
             $node->isVariadic,
             $node->parameterName,

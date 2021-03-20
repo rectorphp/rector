@@ -6,7 +6,7 @@ namespace Rector\BetterPhpDocParser\Printer;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\VariadicAwareParamTagValueNode;
 
 final class SpacePatternFactory
 {
@@ -20,7 +20,7 @@ final class SpacePatternFactory
         $spacePattern = preg_quote($phpDocTagNode->name, '#') . '(?<space>\s+)';
 
         // we have to match exact @param space, in case of multiple @param s
-        if ($phpDocTagNode->value instanceof AttributeAwareParamTagValueNode) {
+        if ($phpDocTagNode->value instanceof VariadicAwareParamTagValueNode) {
             return $this->createSpacePatternForParamTagValueNode($phpDocTagNode->value, $spacePattern);
         }
 
@@ -40,7 +40,7 @@ final class SpacePatternFactory
     }
 
     private function createSpacePatternForParamTagValueNode(
-        AttributeAwareParamTagValueNode $attributeAwareParamTagValueNode,
+        VariadicAwareParamTagValueNode $attributeAwareParamTagValueNode,
         string $spacePattern
     ): string {
         // type could be changed, so better keep it here
