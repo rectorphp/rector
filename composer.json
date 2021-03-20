@@ -148,7 +148,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.10-dev"
+            "dev-main": "0.10-dev"
         }
     },
     "config": {
