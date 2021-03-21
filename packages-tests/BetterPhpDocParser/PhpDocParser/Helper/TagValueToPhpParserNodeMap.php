@@ -21,10 +21,10 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\Generate
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\BlameableTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\SlugTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioMethodTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\Symfony\PhpDoc\Node\AssertChoiceTagValueNode;
 use Rector\Symfony\PhpDoc\Node\AssertTypeTagValueNode;
+use Rector\Symfony\PhpDoc\Node\Sensio\SensioMethodTagValueNode;
+use Rector\Symfony\PhpDoc\Node\Sensio\SensioTemplateTagValueNode;
 use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 
 final class TagValueToPhpParserNodeMap
@@ -36,9 +36,11 @@ final class TagValueToPhpParserNodeMap
         SymfonyRouteTagValueNode::class => ClassMethod::class,
         SlugTagValueNode::class => Property::class,
         BlameableTagValueNode::class => Property::class,
+
         // symfony/validation
         AssertChoiceTagValueNode::class => Property::class,
         AssertTypeTagValueNode::class => Property::class,
+
         // doctrine
         ColumnTagValueNode::class => Property::class,
         JoinTableTagValueNode::class => Property::class,
@@ -47,6 +49,7 @@ final class TagValueToPhpParserNodeMap
         CustomIdGeneratorTagValueNode::class => Property::class,
         GeneratedValueTagValueNode::class => Property::class,
         EmbeddedTagValueNode::class => Property::class,
+
         // special case for constants
         GenericTagValueNode::class => Property::class,
         SensioTemplateTagValueNode::class => Class_::class,

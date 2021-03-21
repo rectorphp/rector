@@ -1,6 +1,6 @@
 <?php
 
-use Rector\DeadDocBlock\Rector\ClassLike\RemoveAnnotationRector;
+use Rector\DeadCode\Rector\ClassLike\RemoveAnnotationRector;
 use Rector\Symfony\PhpDoc\Node\JMS\JMSInjectParamsTagValueNode;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
