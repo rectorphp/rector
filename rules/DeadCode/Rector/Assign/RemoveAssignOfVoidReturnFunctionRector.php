@@ -79,11 +79,13 @@ CODE_SAMPLE
         }
 
         $variable = $node->var;
-        $isVariableUsedNext = $this->betterNodeFinder->findFirstNext($node, function (Node $node) use ($variable): bool {
+        $isVariableUsedNext = $this->betterNodeFinder->findFirstNext($node, function (Node $node) use (
+            $variable
+        ): bool {
             return $this->nodeComparator->areNodesEqual($node, $variable);
         });
 
-        if ($isVariableUsedNext) {
+        if ($isVariableUsedNext !== null) {
             return null;
         }
 
