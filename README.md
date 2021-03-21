@@ -31,6 +31,7 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 
 <p align="center">
     <img src="/docs/images/php.png">
+    <img src="/docs/images/space.png" width=40>
     <img src="/docs/images/phpunit.png">
     <img src="/docs/images/space.png" width=40>
     <img src="/docs/images/symfony.png">
