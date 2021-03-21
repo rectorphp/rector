@@ -12,7 +12,7 @@ use PHPStan\Type\Type;
 interface PhpDocTypeMapperInterface
 {
     /**
-     * @return class-string<\PHPStan\PhpDocParser\Ast\Type\TypeNode>
+     * @return class-string<TypeNode>
      */
     public function getNodeType(): string;
 
