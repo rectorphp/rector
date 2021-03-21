@@ -71,8 +71,8 @@ final class RectorNodeTraverser extends NodeTraverser
         }
 
         // here we only traverse file node without children, to prevent duplicatd traversion
-        foreach ($this->visitors as $rector) {
-            $rector->enterNode($fileNode);
+        foreach ($this->visitors as $visitor) {
+            $visitor->enterNode($fileNode);
         }
 
         return [];
