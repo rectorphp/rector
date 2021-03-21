@@ -15,6 +15,7 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
+use Rector\BetterPhpDocParser\Contract\MultiPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
@@ -273,7 +274,7 @@ final class BetterPhpDocParser extends PhpDocParser
             return $phpDocNodeFactory->getClasses();
         }
 
-        if ($phpDocNodeFactory instanceof MultiPhpDocNodeFactory) {
+        if ($phpDocNodeFactory instanceof MultiPhpDocNodeFactoryInterface) {
             return $phpDocNodeFactory->getTagValueNodeClassesToAnnotationClasses();
         }
 

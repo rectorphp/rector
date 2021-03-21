@@ -14,6 +14,7 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
+use Rector\BetterPhpDocParser\Contract\MultiPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
 use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
@@ -52,7 +53,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioMethodTagValue
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 
-final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
+final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface, MultiPhpDocNodeFactoryInterface
 {
     /**
      * @var ArrayPartPhpDocTagPrinter
