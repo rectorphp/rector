@@ -15,7 +15,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Util\StaticInstanceOf;
+use Rector\Core\Util\StaticNodeInstanceOf;
 
 final class ContextAnalyzer
 {
@@ -49,7 +49,7 @@ final class ContextAnalyzer
             return false;
         }
 
-        return StaticInstanceOf::isOneOf($firstParent, self::LOOP_NODES);
+        return StaticNodeInstanceOf::isOneOf($firstParent, self::LOOP_NODES);
     }
 
     public function isInIf(Node $node): bool

@@ -14,6 +14,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class VariableNameResolver implements NodeNameResolverInterface
 {
+    /**
+     * @return class-string<Node>
+     */
     public function getNode(): string
     {
         return Variable::class;

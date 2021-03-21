@@ -12,6 +12,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class FunctionNameResolver implements NodeNameResolverInterface
 {
+    /**
+     * @return class-string<Node>
+     */
     public function getNode(): string
     {
         return Function_::class;

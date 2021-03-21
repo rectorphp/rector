@@ -27,7 +27,7 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
-use Rector\Core\Util\StaticInstanceOf;
+use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -307,7 +307,7 @@ final class ClassMethodAssignManipulator
             return false;
         }
 
-        if (StaticInstanceOf::isOneOf($node, [Arg::class, ClosureUse::class, Param::class])) {
+        if (StaticNodeInstanceOf::isOneOf($node, [Arg::class, ClosureUse::class, Param::class])) {
             return $node->byRef;
         }
 

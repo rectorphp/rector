@@ -16,7 +16,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Parser;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\Core\Util\StaticInstanceOf;
+use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 
 final class InlineCodeParser
@@ -91,7 +91,7 @@ final class InlineCodeParser
             return $this->stringify($expr->left) . $this->stringify($expr->right);
         }
 
-        if (StaticInstanceOf::isOneOf($expr, [Variable::class, PropertyFetch::class, StaticPropertyFetch::class])) {
+        if (StaticNodeInstanceOf::isOneOf($expr, [Variable::class, PropertyFetch::class, StaticPropertyFetch::class])) {
             return $this->betterStandardPrinter->print($expr);
         }
 

@@ -17,7 +17,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticInstanceOf;
+use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
@@ -138,7 +138,7 @@ CODE_SAMPLE
     private function refactorStmts(array $stmts): array
     {
         $this->traverseNodesWithCallable($stmts, function (Node $node): ?Node {
-            if (! StaticInstanceOf::isOneOf(
+            if (! StaticNodeInstanceOf::isOneOf(
                 $node,
                 [Name::class, Identifier::class, Property::class, FunctionLike::class])) {
                 return null;

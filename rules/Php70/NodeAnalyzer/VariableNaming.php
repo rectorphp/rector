@@ -25,7 +25,7 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\Util\StaticInstanceOf;
+use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Stringy\Stringy;
@@ -181,7 +181,7 @@ final class VariableNaming
             return $this->resolveFromPropertyFetch($node);
         }
 
-        if ($node !== null && StaticInstanceOf::isOneOf(
+        if ($node !== null && StaticNodeInstanceOf::isOneOf(
                 $node,
                 [MethodCall::class, NullsafeMethodCall::class, StaticCall::class])) {
 

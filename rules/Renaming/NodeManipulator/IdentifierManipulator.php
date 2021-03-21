@@ -12,7 +12,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Util\StaticInstanceOf;
+use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Webmozart\Assert\Assert;
 
@@ -81,7 +81,7 @@ final class IdentifierManipulator
      */
     private function resolveOldMethodName(Node $node): ?string
     {
-        if (StaticInstanceOf::isOneOf($node, [StaticCall::class, MethodCall::class])) {
+        if (StaticNodeInstanceOf::isOneOf($node, [StaticCall::class, MethodCall::class])) {
             return $this->nodeNameResolver->getName($node->name);
         }
 

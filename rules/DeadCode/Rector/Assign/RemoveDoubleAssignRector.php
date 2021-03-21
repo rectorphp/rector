@@ -15,7 +15,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticInstanceOf;
+use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -100,7 +100,7 @@ CODE_SAMPLE
 
     private function isCall(Expr $expr): bool
     {
-        return StaticInstanceOf::isOneOf($expr, [FuncCall::class, StaticCall::class, MethodCall::class]);
+        return StaticNodeInstanceOf::isOneOf($expr, [FuncCall::class, StaticCall::class, MethodCall::class]);
     }
 
     private function shouldSkipForDifferentScope(Assign $assign, Expression $expression): bool
