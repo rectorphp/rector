@@ -27,7 +27,7 @@ final class ScopeAwareNodeFinder
 
     /**
      * Find node based on $callable or null, when the nesting scope is broken
-     * @param class-string[] $allowedTypes
+     * @param array<class-string<\PhpParser\Node>> $allowedTypes
      */
     public function findParentType(Node $node, array $allowedTypes): ?Node
     {

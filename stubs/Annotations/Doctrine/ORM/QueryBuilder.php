@@ -8,7 +8,7 @@ if (class_exists('Doctrine\ORM\QueryBuilder')) {
     return;
 }
 
-final class QueryBuilder
+class QueryBuilder
 {
 
 }

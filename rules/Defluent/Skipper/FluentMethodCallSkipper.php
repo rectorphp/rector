@@ -23,18 +23,19 @@ final class FluentMethodCallSkipper
      * @var class-string[]
      */
     private const ALLOWED_FLUENT_TYPES = [
+        // symfony
         'Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator',
+        'Symfony\Component\Finder\Finder',
+        // doctrine
+        'Doctrine\ORM\QueryBuilder',
+        // nette
+        'Nette\Utils\Finder',
         'Nette\Forms\Controls\BaseControl',
         'Nette\DI\ContainerBuilder',
         'Nette\DI\Definitions\Definition',
         'Nette\DI\Definitions\ServiceDefinition',
         'PHPStan\Analyser\Scope',
-        'DateTime',
-        'Nette\Utils\DateTime',
         'DateTimeInterface',
-        '*Finder',
-        '*Builder',
-        '*Query',
     ];
 
     /**
@@ -103,17 +104,7 @@ final class FluentMethodCallSkipper
         }
 
         $calleeUniqueType = $this->resolveCalleeUniqueType($assignAndRootExpr, $calleeUniqueTypes);
-
-        $calleeObjectType = new ObjectType($calleeUniqueType);
-
-        foreach (self::ALLOWED_FLUENT_TYPES as $allowedFluentType) {
-            $allowedObjectType = new ObjectType($allowedFluentType);
-            if ($allowedObjectType->isSuperTypeOf($calleeObjectType)->yes()) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->isAllowedType($calleeUniqueType);
     }
 
     /**
