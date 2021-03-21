@@ -13,6 +13,9 @@ use PHPStan\Type\Type;
 
 interface TypeMapperInterface
 {
+    /**
+     * @return class-string<Type>
+     */
     public function getNodeClass(): string;
 
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode;

@@ -352,6 +352,9 @@ final class NodeTypeResolver
         return $this->isStaticType($defaultNodeValue, BooleanType::class);
     }
 
+    /**
+     * @return class-string
+     */
     public function getFullyQualifiedClassName(TypeWithClassName $typeWithClassName): string
     {
         if ($typeWithClassName instanceof ShortenedObjectType) {

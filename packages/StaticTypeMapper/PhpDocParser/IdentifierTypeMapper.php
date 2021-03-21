@@ -49,6 +49,9 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
 
+    /**
+     * @return class-string<TypeNode>
+     */
     public function getNodeType(): string
     {
         return IdentifierTypeNode::class;

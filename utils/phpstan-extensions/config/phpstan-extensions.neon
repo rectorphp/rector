@@ -1,4 +1,5 @@
 services:
+    - Rector\PHPStanExtensions\TypeAnalyzer\AllowedAutoloadedTypeAnalyzer
     - Rector\PHPStanExtensions\TypeResolver\GetNameMethodCallTypeResolver
 
     # $nodeFinder->findInstanceOf()
