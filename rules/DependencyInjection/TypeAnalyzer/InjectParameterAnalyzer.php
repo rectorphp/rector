@@ -6,7 +6,7 @@ namespace Rector\DependencyInjection\TypeAnalyzer;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
+use Rector\Symfony\PhpDoc\Node\JMS\JMSInjectTagValueNode;
 
 final class InjectParameterAnalyzer
 {

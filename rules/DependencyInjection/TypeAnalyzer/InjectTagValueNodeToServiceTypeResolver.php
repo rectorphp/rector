@@ -8,9 +8,9 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Symfony\PhpDoc\Node\JMS\JMSInjectTagValueNode;
 
 final class InjectTagValueNodeToServiceTypeResolver
 {

@@ -6,8 +6,8 @@ namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Symfony\PhpDoc\Node\AssertChoiceTagValueNode;
+use Rector\Symfony\PhpDoc\Node\JMS\SerializerTypeTagValueNode;
 
 final class PhpDocClassRenamer
 {

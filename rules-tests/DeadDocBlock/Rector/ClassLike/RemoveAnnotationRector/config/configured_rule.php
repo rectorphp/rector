@@ -1,7 +1,7 @@
 <?php
 
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectParamsTagValueNode;
 use Rector\DeadDocBlock\Rector\ClassLike\RemoveAnnotationRector;
+use Rector\Symfony\PhpDoc\Node\JMS\JMSInjectParamsTagValueNode;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
