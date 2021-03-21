@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Defluent\Skipper;
 
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Type\ObjectType;
 use Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface;
 use Rector\Defluent\NodeAnalyzer\FluentCallStaticTypeResolver;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
@@ -19,7 +20,7 @@ final class FluentMethodCallSkipper
      * Skip query and builder
      * @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/ "When does a fluent interface make sense?
      *
-     * @var string[]
+     * @var class-string[]
      */
     private const ALLOWED_FLUENT_TYPES = [
         'Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator',
@@ -56,23 +57,16 @@ final class FluentMethodCallSkipper
      */
     private $getterMethodCallAnalyzer;
 
-    /**
-     * @var StringMatcher
-     */
-    private $stringMatcher;
-
     public function __construct(
         FluentCallStaticTypeResolver $fluentCallStaticTypeResolver,
         SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer,
         FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
-        GetterMethodCallAnalyzer $getterMethodCallAnalyzer,
-        StringMatcher $stringMatcher
+        GetterMethodCallAnalyzer $getterMethodCallAnalyzer
     ) {
         $this->fluentCallStaticTypeResolver = $fluentCallStaticTypeResolver;
         $this->sameClassMethodCallAnalyzer = $sameClassMethodCallAnalyzer;
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
         $this->getterMethodCallAnalyzer = $getterMethodCallAnalyzer;
-        $this->stringMatcher = $stringMatcher;
     }
 
     public function shouldSkipRootMethodCall(MethodCall $methodCall): bool
@@ -95,8 +89,7 @@ final class FluentMethodCallSkipper
         }
 
         $calleeUniqueType = $this->resolveCalleeUniqueType($firstAssignFluentCall, $calleeUniqueTypes);
-
-        return $this->stringMatcher->isAllowedType($calleeUniqueType, self::ALLOWED_FLUENT_TYPES);
+        return $this->isAllowedType($calleeUniqueType);
     }
 
     /**
@@ -111,7 +104,16 @@ final class FluentMethodCallSkipper
 
         $calleeUniqueType = $this->resolveCalleeUniqueType($assignAndRootExpr, $calleeUniqueTypes);
 
-        return $this->stringMatcher->isAllowedType($calleeUniqueType, self::ALLOWED_FLUENT_TYPES);
+        $calleeObjectType = new ObjectType($calleeUniqueType);
+
+        foreach (self::ALLOWED_FLUENT_TYPES as $allowedFluentType) {
+            $allowedObjectType = new ObjectType($allowedFluentType);
+            if ($allowedObjectType->isSuperTypeOf($calleeObjectType)->yes()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -126,5 +128,19 @@ final class FluentMethodCallSkipper
         }
 
         return $calleeUniqueTypes[1] ?? $calleeUniqueTypes[0];
+    }
+
+    private function isAllowedType(string $class): bool
+    {
+        $objectType = new ObjectType($class);
+
+        foreach (self::ALLOWED_FLUENT_TYPES as $allowedFluentType) {
+            $allowedObjectType = new ObjectType($allowedFluentType);
+            if ($allowedObjectType->isSuperTypeOf($objectType)->yes()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

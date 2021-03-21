@@ -526,3 +526,9 @@ parameters:
 
         # first wave resolved, merge PR
 #        - '#Instead of "(.*?)" use ReflectionProvider service (.*?) for static reflection to work#'
+
+        # known internal types on correct location
+        -
+            message: '#Instead of "(.*?)" use ReflectionProvider service (.*?) for static reflection to work#'
+            paths:
+                - src/Application/RectorApplication.php
