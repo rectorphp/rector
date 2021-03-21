@@ -265,10 +265,12 @@ CODE_SAMPLE
      */
     private function isIterableType(Type $type): bool
     {
-        return $type instanceof IterableType || ($type instanceof ObjectType && is_a(
-            $type->getClassName(),
-            Traversable::class,
-            true
-        ));
+        if ($type instanceof IterableType) {
+            return true;
+        }
+
+        $traversableObjectType = new ObjectType('Traversable');
+        return $traversableObjectType->isSuperTypeOf($type)
+            ->yes();
     }
 }

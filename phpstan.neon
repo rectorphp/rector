@@ -519,3 +519,10 @@ parameters:
 
         # known types
         - '#Parameter \#1 \$node of method Rector\\Naming\\Naming\\VariableNaming\:\:resolveFromMethodCall\(\) expects PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\NullsafeMethodCall\|PhpParser\\Node\\Expr\\StaticCall, PhpParser\\Node given#'
+
+        -
+            message: '#Do not inherit from abstract class, better use composition#'
+            path: utils/phpstan-extensions/src/Rule/NoInstanceOfStaticReflectionRule.php
+
+        # first wave resolved, merge PR
+        - '#Instead of "(.*?)" use ReflectionProvider service (.*?) for static reflection to work#'
