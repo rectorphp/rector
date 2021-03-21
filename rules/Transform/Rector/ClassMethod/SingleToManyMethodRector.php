@@ -96,16 +96,16 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->singleToManyMethods as $singleToManyMethod) {
-            if (! $this->isObjectType($classLike, $singleToManyMethod->getObjectType())) {
+        foreach ($this->singleToManyMethods as $singleToManyMethods) {
+            if (! $this->isObjectType($classLike, $singleToManyMethods->getObjectType())) {
                 continue;
             }
 
-            if (! $this->isName($node, $singleToManyMethod->getSingleMethodName())) {
+            if (! $this->isName($node, $singleToManyMethods->getSingleMethodName())) {
                 continue;
             }
 
-            $node->name = new Identifier($singleToManyMethod->getManyMethodName());
+            $node->name = new Identifier($singleToManyMethods->getManyMethodName());
             $this->keepOldReturnTypeInDocBlock($node);
 
             $node->returnType = new Identifier('array');

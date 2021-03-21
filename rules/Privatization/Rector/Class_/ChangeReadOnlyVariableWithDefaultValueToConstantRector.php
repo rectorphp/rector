@@ -119,8 +119,8 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($readOnlyVariableAssigns as $readOnlyVariable) {
-            $methodName = $readOnlyVariable->getAttribute(AttributeKey::METHOD_NAME);
+        foreach ($readOnlyVariableAssigns as $readOnlyVariableAssign) {
+            $methodName = $readOnlyVariableAssign->getAttribute(AttributeKey::METHOD_NAME);
             if (! is_string($methodName)) {
                 throw new ShouldNotHappenException();
             }
@@ -166,13 +166,13 @@ CODE_SAMPLE
         $assignsByName = $this->collectAssignsByName($assigns);
         $assignsWithUniqueName = [];
         /** @var Assign[] $assignByName */
-        foreach ($assignsByName as $assignByName) {
-            $count = count($assignByName);
+        foreach ($assignsByName as $assigns) {
+            $count = is_countable($assigns) ? count($assigns) : 0;
             if ($count > 1) {
                 continue;
             }
 
-            $assignsWithUniqueName = array_merge($assignsWithUniqueName, $assignByName);
+            $assignsWithUniqueName = array_merge($assignsWithUniqueName, $assigns);
         }
 
         return $assignsWithUniqueName;
