@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\TypeAnalyzer;
 
 use PhpParser\Node;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -29,6 +26,11 @@ final class CountableTypeAnalyzer
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var ObjectType[]
+     */
+    private $countableObjectTypes = [];
+
     public function __construct(
         ArrayTypeAnalyzer $arrayTypeAnalyzer,
         NodeTypeResolver $nodeTypeResolver,
@@ -37,6 +39,12 @@ final class CountableTypeAnalyzer
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
         $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;
         $this->nodeTypeResolver = $nodeTypeResolver;
+
+        $this->countableObjectTypes = [
+            new ObjectType('Countable'),
+            new ObjectType('SimpleXMLElement'),
+            new ObjectType('ResourceBundle'),
+        ];
     }
 
     public function isCountableType(Node $node): bool
@@ -44,53 +52,12 @@ final class CountableTypeAnalyzer
         $nodeType = $this->nodeTypeResolver->resolve($node);
         $nodeType = $this->pregMatchTypeCorrector->correct($node, $nodeType);
 
-        if ($this->isCountableObjectType($nodeType)) {
-            return true;
+        foreach ($this->countableObjectTypes as $countableObjectType) {
+            if ($countableObjectType->isSuperTypeOf($nodeType)->yes()) {
+                return true;
+            }
         }
 
         return $this->arrayTypeAnalyzer->isArrayType($node);
-    }
-
-    private function isCountableObjectType(Type $type): bool
-    {
-        $countableObjectTypes = [
-            new ObjectType('Countable'),
-            new ObjectType('SimpleXMLElement'),
-            new ObjectType('ResourceBundle'),
-        ];
-
-        if ($type instanceof UnionType) {
-            return $this->isCountableUnionType($type, $countableObjectTypes);
-        }
-
-        if ($type instanceof ObjectType) {
-            foreach ($countableObjectTypes as $countableObjectType) {
-                if (! is_a($type->getClassName(), $countableObjectType->getClassName(), true)) {
-                    continue;
-                }
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param ObjectType[] $countableObjectTypes
-     */
-    private function isCountableUnionType(UnionType $unionType, array $countableObjectTypes): bool
-    {
-        if ($unionType->isSubTypeOf(new NullType())->yes()) {
-            return false;
-        }
-
-        foreach ($countableObjectTypes as $countableObjectType) {
-            if ($unionType->isSuperTypeOf($countableObjectType)->yes()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

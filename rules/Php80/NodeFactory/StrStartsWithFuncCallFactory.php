@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Php80\NodeFactory;
 
-use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -16,7 +16,7 @@ final class StrStartsWithFuncCallFactory
     /**
      * @return FuncCall|BooleanNot
      */
-    public function createStrStartsWith(StrStartsWith $strStartsWith): Node
+    public function createStrStartsWith(StrStartsWith $strStartsWith): Expr
     {
         $args = [new Arg($strStartsWith->getHaystackExpr()), new Arg($strStartsWith->getNeedleExpr())];
 

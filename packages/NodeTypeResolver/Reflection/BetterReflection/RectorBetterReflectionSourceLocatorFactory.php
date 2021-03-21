@@ -6,7 +6,6 @@ namespace Rector\NodeTypeResolver\Reflection\BetterReflection;
 
 use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use PHPStan\BetterReflection\SourceLocator\Type\MemoizingSourceLocator;
-use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\Reflection\BetterReflection\BetterReflectionSourceLocatorFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 
@@ -30,7 +29,7 @@ final class RectorBetterReflectionSourceLocatorFactory
         $this->intermediateSourceLocator = $intermediateSourceLocator;
     }
 
-    public function create(): SourceLocator
+    public function create(): MemoizingSourceLocator
     {
         $phpStanSourceLocator = $this->betterReflectionSourceLocatorFactory->create();
 

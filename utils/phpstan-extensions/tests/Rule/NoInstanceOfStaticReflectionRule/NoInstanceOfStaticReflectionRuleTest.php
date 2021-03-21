@@ -36,6 +36,7 @@ final class NoInstanceOfStaticReflectionRuleTest extends AbstractServiceAwareRul
         yield [__DIR__ . '/Fixture/SkipArrayClassString.php', []];
         yield [__DIR__ . '/Fixture/SkipReflection.php', []];
         yield [__DIR__ . '/Fixture/SkipDateTime.php', []];
+        yield [__DIR__ . '/Fixture/SkipTypesArray.php', []];
     }
 
     protected function getRule(): Rule

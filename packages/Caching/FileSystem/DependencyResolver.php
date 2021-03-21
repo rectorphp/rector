@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Caching\FileSystem;
 
 use PhpParser\Node;
-use PHPStan\Analyser\Scope;
+use PHPStan\Analyser\MutatingScope;
 use PHPStan\Dependency\DependencyResolver as PHPStanDependencyResolver;
 use PHPStan\File\FileHelper;
 use Rector\Core\Configuration\Configuration;
@@ -40,7 +40,7 @@ final class DependencyResolver
     /**
      * @return string[]
      */
-    public function resolveDependencies(Node $node, Scope $scope): array
+    public function resolveDependencies(Node $node, MutatingScope $mutatingScope): array
     {
         $fileInfos = $this->configuration->getFileInfos();
 
@@ -51,7 +51,7 @@ final class DependencyResolver
 
         $dependencyFiles = [];
 
-        $nodeDependencies = $this->phpStanDependencyResolver->resolveDependencies($node, $scope);
+        $nodeDependencies = $this->phpStanDependencyResolver->resolveDependencies($node, $mutatingScope);
         foreach ($nodeDependencies as $nodeDependency) {
             $dependencyFile = $nodeDependency->getFileName();
             if (! $dependencyFile) {
@@ -59,7 +59,7 @@ final class DependencyResolver
             }
 
             $dependencyFile = $this->fileHelper->normalizePath($dependencyFile);
-            if ($scope->getFile() === $dependencyFile) {
+            if ($mutatingScope->getFile() === $dependencyFile) {
                 continue;
             }
 

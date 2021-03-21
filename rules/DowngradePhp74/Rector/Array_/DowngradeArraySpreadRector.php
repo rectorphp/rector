@@ -118,7 +118,7 @@ CODE_SAMPLE
         return false;
     }
 
-    private function refactorNode(Array_ $array): Node
+    private function refactorNode(Array_ $array): FuncCall
     {
         $newItems = $this->createArrayItems($array);
         // Replace this array node with an `array_merge`

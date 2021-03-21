@@ -75,7 +75,7 @@ final class VariableNodeUse
         return $this->type === $type;
     }
 
-    public function getVariableNode(): Node
+    public function getVariableNode(): Variable
     {
         return $this->variable;
     }

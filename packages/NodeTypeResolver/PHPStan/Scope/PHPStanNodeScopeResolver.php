@@ -195,14 +195,14 @@ final class PHPStanNodeScopeResolver
         return $scope->enterClass($classReflection);
     }
 
-    private function resolveDependentFiles(Node $node, Scope $scope): void
+    private function resolveDependentFiles(Node $node, MutatingScope $mutatingScope): void
     {
         if (! $this->configuration->isCacheEnabled()) {
             return;
         }
 
         try {
-            $dependentFiles = $this->dependencyResolver->resolveDependencies($node, $scope);
+            $dependentFiles = $this->dependencyResolver->resolveDependencies($node, $mutatingScope);
             foreach ($dependentFiles as $dependentFile) {
                 $this->dependentFiles[] = $dependentFile;
             }

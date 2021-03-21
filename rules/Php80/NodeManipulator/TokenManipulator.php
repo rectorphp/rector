@@ -336,7 +336,7 @@ final class TokenManipulator
         return false;
     }
 
-    private function matchParentNodeInCaseOfIdenticalTrue(FuncCall $funcCall): Node
+    private function matchParentNodeInCaseOfIdenticalTrue(FuncCall $funcCall): Expr
     {
         $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Identical) {

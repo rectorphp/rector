@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
+use PHPStan\Type\SubtractableType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -57,7 +57,7 @@ final class EntityObjectTypeResolver
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function resolveFromRepositoryClass(Class_ $repositoryClass): Type
+    public function resolveFromRepositoryClass(Class_ $repositoryClass): SubtractableType
     {
         $entityType = $this->resolveFromParentConstruct($repositoryClass);
         if (! $entityType instanceof MixedType) {
@@ -77,7 +77,7 @@ final class EntityObjectTypeResolver
         return new MixedType();
     }
 
-    private function resolveFromGetterReturnType(Class_ $repositoryClass): Type
+    private function resolveFromGetterReturnType(Class_ $repositoryClass): SubtractableType
     {
         foreach ($repositoryClass->getMethods() as $classMethod) {
             if (! $classMethod->isPublic()) {
@@ -98,7 +98,7 @@ final class EntityObjectTypeResolver
         return new MixedType();
     }
 
-    private function resolveFromMatchingEntityAnnotation(Class_ $repositoryClass): Type
+    private function resolveFromMatchingEntityAnnotation(Class_ $repositoryClass): SubtractableType
     {
         $repositoryClassName = $repositoryClass->getAttribute(AttributeKey::CLASS_NAME);
 
@@ -133,7 +133,7 @@ final class EntityObjectTypeResolver
         return new MixedType();
     }
 
-    private function resolveFromParentConstruct(Class_ $class): Type
+    private function resolveFromParentConstruct(Class_ $class): SubtractableType
     {
         $constructorClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if (! $constructorClassMethod instanceof ClassMethod) {
