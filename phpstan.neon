@@ -525,4 +525,4 @@ parameters:
             path: utils/phpstan-extensions/src/Rule/NoInstanceOfStaticReflectionRule.php
 
         # first wave resolved, merge PR
-        - '#Instead of "(.*?)" use ReflectionProvider service (.*?) for static reflection to work#'
+#        - '#Instead of "(.*?)" use ReflectionProvider service (.*?) for static reflection to work#'
