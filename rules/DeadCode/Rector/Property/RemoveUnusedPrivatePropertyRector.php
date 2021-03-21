@@ -95,6 +95,20 @@ CODE_SAMPLE
 
         /** @var Class_|Interface_|Trait_|null $classLike */
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        return ! $classLike instanceof Class_;
+        if (! $classLike instanceof Class_) {
+            return true;
+        }
+
+        $className = $this->nodeNameResolver->getName($classLike);
+        if ($className === null) {
+            return true;
+        }
+
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return true;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
+        return $classReflection->hasMethod('__get');
     }
 }
