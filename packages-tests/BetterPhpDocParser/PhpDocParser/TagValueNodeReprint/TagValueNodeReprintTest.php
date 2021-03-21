@@ -20,6 +20,8 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\BlameableTagValueNode
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\SlugTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioMethodTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioTemplateTagValueNode;
+use Rector\Symfony\PhpDoc\Node\AssertChoiceTagValueNode;
+use Rector\Symfony\PhpDoc\Node\AssertTypeTagValueNode;
 use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 use Rector\Tests\BetterPhpDocParser\PhpDocParser\AbstractPhpDocInfoTest;
 use Symplify\SmartFileSystem\SmartFileInfo;

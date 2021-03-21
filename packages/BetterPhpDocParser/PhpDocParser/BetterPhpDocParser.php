@@ -269,12 +269,12 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     private function resolvePhpDocNodeFactoryClasses(PhpDocNodeFactoryInterface $phpDocNodeFactory): array
     {
-        if ($phpDocNodeFactory instanceof SpecificPhpDocNodeFactoryInterface) {
-            return $phpDocNodeFactory->getClasses();
-        }
-
         if ($phpDocNodeFactory instanceof MultiPhpDocNodeFactoryInterface) {
             return $phpDocNodeFactory->getTagValueNodeClassesToAnnotationClasses();
+        }
+
+        if ($phpDocNodeFactory instanceof SpecificPhpDocNodeFactoryInterface) {
+            return $phpDocNodeFactory->getClasses();
         }
 
         throw new ShouldNotHappenException();
