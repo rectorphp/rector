@@ -17,4 +17,9 @@ class SkipMagicCall
         echo $name;
         var_dump($params);
     }
+
+    public function execute()
+    {
+        $this->__call('test', []);
+    }
 }
