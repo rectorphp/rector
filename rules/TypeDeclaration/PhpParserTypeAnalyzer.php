@@ -9,25 +9,25 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType;
-use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class PhpParserTypeAnalyzer
 {
     /**
-     * @var NodeNameResolver
+     * @var StaticTypeMapper
      */
-    private $nodeNameResolver;
+    private $staticTypeMapper;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(StaticTypeMapper $staticTypeMapper)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     /**
      * @param Name|NullableType|UnionType|Identifier $possibleSubtype
      * @param Name|NullableType|UnionType|Identifier $possibleParentType
      */
-    public function isSubtypeOf(Node $possibleSubtype, Node $possibleParentType): bool
+    public function isCovariantSubtypeOf(Node $possibleSubtype, Node $possibleParentType): bool
     {
         // skip until PHP 8 is out
         if ($this->isUnionType($possibleSubtype, $possibleParentType)) {
@@ -36,7 +36,7 @@ final class PhpParserTypeAnalyzer
 
         // possible - https://3v4l.org/ZuJCh
         if ($possibleSubtype instanceof NullableType && ! $possibleParentType instanceof NullableType) {
-            return $this->isSubtypeOf($possibleSubtype->type, $possibleParentType);
+            return $this->isCovariantSubtypeOf($possibleSubtype->type, $possibleParentType);
         }
 
         // not possible - https://3v4l.org/iNDTc
@@ -44,25 +44,11 @@ final class PhpParserTypeAnalyzer
             return false;
         }
 
-        // unwrap nullable types
-        $possibleParentType = $this->unwrapNullableAndToString($possibleParentType);
-        $possibleSubtype = $this->unwrapNullableAndToString($possibleSubtype);
+        $subtypeType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($possibleParentType);
+        $parentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($possibleSubtype);
 
-        if (is_a($possibleSubtype, $possibleParentType, true)) {
-            return true;
-        }
-
-        if ($this->isTraversableOrIterableSubtype($possibleSubtype, $possibleParentType)) {
-            return true;
-        }
-
-        if ($possibleParentType === $possibleSubtype) {
-            return true;
-        }
-        if (! ctype_upper($possibleSubtype[0])) {
-            return false;
-        }
-        return $possibleParentType === 'object';
+        return $parentType->isSuperTypeOf($subtypeType)
+            ->yes();
     }
 
     private function isUnionType(Node $possibleSubtype, Node $possibleParentType): bool
@@ -72,27 +58,5 @@ final class PhpParserTypeAnalyzer
         }
 
         return $possibleParentType instanceof UnionType;
-    }
-
-    private function unwrapNullableAndToString(Node $node): string
-    {
-        if (! $node instanceof NullableType) {
-            return $this->nodeNameResolver->getName($node);
-        }
-
-        return $this->nodeNameResolver->getName($node->type);
-    }
-
-    private function isTraversableOrIterableSubtype(string $possibleSubtype, string $possibleParentType): bool
-    {
-        if (in_array($possibleSubtype, ['array', 'Traversable'], true) && $possibleParentType === 'iterable') {
-            return true;
-        }
-
-        if (! in_array($possibleSubtype, ['array', 'ArrayIterator'], true)) {
-            return false;
-        }
-
-        return $possibleParentType === 'countable';
     }
 }

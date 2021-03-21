@@ -163,6 +163,7 @@ CODE_SAMPLE
         }
 
         $currentReturnType = $phpDocInfo->getReturnType();
+
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType(
             $currentReturnType,
             $inferredReturnType

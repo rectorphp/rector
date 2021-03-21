@@ -309,15 +309,6 @@ final class UnionTypeMapper implements TypeMapperInterface
         return null;
     }
 
-    private function areTypeWithClassNamesRelated(TypeWithClassName $firstType, TypeWithClassName $secondType): bool
-    {
-        if (is_a($firstType->getClassName(), $secondType->getClassName(), true)) {
-            return true;
-        }
-
-        return is_a($secondType->getClassName(), $firstType->getClassName(), true);
-    }
-
     private function matchTwoObjectTypes(UnionType $unionType): ?TypeWithClassName
     {
         /** @var TypeWithClassName $unionedType */
@@ -333,6 +324,16 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         return null;
+    }
+
+    private function areTypeWithClassNamesRelated(TypeWithClassName $firstType, TypeWithClassName $secondType): bool
+    {
+        if ($firstType->accepts($secondType, false)->yes()) {
+            return true;
+        }
+
+        return $secondType->accepts($firstType, false)
+            ->yes();
     }
 
     private function correctObjectType(TypeWithClassName $typeWithClassName): TypeWithClassName

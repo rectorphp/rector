@@ -336,10 +336,6 @@ parameters:
         - '#Method (.*?) should return (.*?)\|null but returns PhpParser\\Node\|null#'
         - '#Method (.*?) should return array<T of PhpParser\\Node\> but returns array<PhpParser\\Node\>#'
 
-#        - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<PhpParser\\Node\>\:\:findFirst\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
-        - '#Parameter \#2 \$type of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder<T of PhpParser\\Node\>\:\:findInstanceOfName\(\) expects class\-string<T of PhpParser\\Node\>, string given#'
-#        - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findVariableOfName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns T of PhpParser\\Node\|null#'
-
         # fixed in php-parser master
         - '#Parameter \#4 \$classWithConstants of class Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant constructor expects class\-string, string given#'
 
@@ -431,7 +427,6 @@ parameters:
                  - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
                  - packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php
                  - packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php
-                 - packages/BetterPhpDocParser/Printer/MultilineSpaceFormatPreserver.php
 
         -
             message: '#Instead of "ReflectionClass" class/interface use "PHPStan\\Reflection\\ClassReflection"#'
@@ -473,7 +468,6 @@ parameters:
             paths:
                 - src/Console/Command/ProcessCommand.php
 
-        - '#Cognitive complexity for "Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector\:\:refactor\(\)" is 10, keep it under 9#'
         - '#Parameter \#2 \$returnedStrictTypeNode of method Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector\:\:refactorSingleReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType, PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PHPStan\\Type\\UnionType given#'
         - '#Method Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeTrailingCommasInParamUseRector\:\:processUses\(\) should return PhpParser\\Node\\Expr\\Closure but returns PhpParser\\Node#'
         - '#Cognitive complexity for "Rector\\NodeTypeResolver\\NodeTypeResolver\:\:getStaticType\(\)" is 11, keep it under 9#'
@@ -525,7 +519,7 @@ parameters:
             path: utils/phpstan-extensions/src/Rule/NoInstanceOfStaticReflectionRule.php
 
         # first wave resolved, merge PR
-        - '#Instead of "(.*?)" use ReflectionProvider service (.*?) for static reflection to work#'
+#        - '#Instead of "(.*?)" use ReflectionProvider service (.*?) for static reflection to work#'
 
         # known internal types on correct location
         -

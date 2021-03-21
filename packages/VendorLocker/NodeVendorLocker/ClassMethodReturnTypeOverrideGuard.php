@@ -17,8 +17,6 @@ use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
-use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
@@ -119,11 +117,8 @@ final class ClassMethodReturnTypeOverrideGuard
             return false;
         }
 
-        if ($oldType->isSuperTypeOf($newType)->yes()) {
-            return true;
-        }
-
-        return $this->isArrayMutualType($newType, $oldType);
+        return $oldType->isSuperTypeOf($newType)
+            ->yes();
     }
 
     private function shouldSkipChaoticClassMethods(ClassMethod $classMethod): bool
@@ -158,46 +153,6 @@ final class ClassMethodReturnTypeOverrideGuard
         }
 
         return false;
-    }
-
-    private function isArrayMutualType(Type $newType, Type $oldType): bool
-    {
-        if (! $newType instanceof ArrayType) {
-            return false;
-        }
-
-        if (! $oldType instanceof ArrayType) {
-            return false;
-        }
-
-        $oldTypeWithClassName = $oldType->getItemType();
-        if (! $oldTypeWithClassName instanceof TypeWithClassName) {
-            return false;
-        }
-
-        $arrayItemType = $newType->getItemType();
-        if (! $arrayItemType instanceof UnionType) {
-            return false;
-        }
-
-        $isMatchingClassTypes = false;
-
-        foreach ($arrayItemType->getTypes() as $newUnionedType) {
-            if (! $newUnionedType instanceof TypeWithClassName) {
-                return false;
-            }
-
-            $oldClass = $this->nodeTypeResolver->getFullyQualifiedClassName($oldTypeWithClassName);
-            $newClass = $this->nodeTypeResolver->getFullyQualifiedClassName($newUnionedType);
-
-            if (is_a($oldClass, $newClass, true) || is_a($newClass, $oldClass, true)) {
-                $isMatchingClassTypes = true;
-            } else {
-                return false;
-            }
-        }
-
-        return $isMatchingClassTypes;
     }
 
     private function hasClassMethodExprReturn(ClassMethod $classMethod): bool
