@@ -145,10 +145,7 @@ CODE_SAMPLE
 
         /** @var Expression $methodStmt */
         foreach ($classMethod->stmts as $methodStmt) {
-            if ($methodStmt instanceof Expression) {
-                $methodStmt = $methodStmt->expr;
-            }
-
+            $methodStmt = $methodStmt->expr;
             if (! $methodStmt instanceof StaticCall) {
                 continue;
             }

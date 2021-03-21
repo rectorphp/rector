@@ -23,7 +23,11 @@ final class AllowedAutoloadedTypeAnalyzer
     /**
      * @var array<class-string>
      */
-    private const ALLOWED_CLASSES = [DateTimeInterface::class, 'Symplify\SmartFileSystem\SmartFileInfo'];
+    private const ALLOWED_CLASSES = [
+        DateTimeInterface::class,
+        'Symplify\SmartFileSystem\SmartFileInfo',
+        'Symplify\SetConfigResolver\ValueObject\Set',
+    ];
 
     public function isAllowedType(Type $type): bool
     {

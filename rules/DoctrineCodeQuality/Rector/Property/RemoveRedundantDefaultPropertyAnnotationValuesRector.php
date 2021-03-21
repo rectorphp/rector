@@ -104,10 +104,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Property) {
-            $this->refactorPropertyAnnotations($node);
-        }
-
+        $this->refactorPropertyAnnotations($node);
         return $node;
     }
 

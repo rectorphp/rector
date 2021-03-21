@@ -216,11 +216,11 @@ final class MethodReflectionProvider
 
         foreach ($classes as $class) {
             $classReflection = $this->reflectionProvider->getClass($class);
-            $methodReflection = $classReflection->getMethod($methodName, $scope);
-
-            if ($methodReflection instanceof MethodReflection) {
-                return $methodReflection;
+            if (! $classReflection->hasMethod($methodName)) {
+                continue;
             }
+
+            return $classReflection->getMethod($methodName, $scope);
         }
 
         return null;

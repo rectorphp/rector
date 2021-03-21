@@ -28,7 +28,6 @@ use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\ThisType;
@@ -304,16 +303,9 @@ final class NodeTypeResolver
         return is_a($this->resolve($node), $staticTypeClass);
     }
 
-    public function isNullableObjectType(Node $node): bool
-    {
-        return $this->isNullableTypeOfSpecificType($node, ObjectType::class);
-    }
-
-    public function isNullableArrayType(Node $node): bool
-    {
-        return $this->isNullableTypeOfSpecificType($node, ArrayType::class);
-    }
-
+    /**
+     * @param class-string<Type> $desiredType
+     */
     public function isNullableTypeOfSpecificType(Node $node, string $desiredType): bool
     {
         $nodeType = $this->resolve($node);
@@ -321,7 +313,7 @@ final class NodeTypeResolver
             return false;
         }
 
-        if ($nodeType->isSuperTypeOf(new NullType())->no()) {
+        if (! TypeCombinator::containsNull($nodeType)) {
             return false;
         }
 
@@ -539,12 +531,9 @@ final class NodeTypeResolver
         }
 
         $classReflection = $this->reflectionProvider->getClass($resolvedObjectType->getClassName());
-
-        if ($classReflection instanceof ClassReflection) {
-            foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
-                if ($ancestorClassReflection->hasTraitUse($requiredObjectType->getClassName())) {
-                    return true;
-                }
+        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
+            if ($ancestorClassReflection->hasTraitUse($requiredObjectType->getClassName())) {
+                return true;
             }
         }
 

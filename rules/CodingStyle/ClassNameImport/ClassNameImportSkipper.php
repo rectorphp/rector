@@ -56,14 +56,11 @@ final class ClassNameImportSkipper
         $uses = (array) $name->getAttribute(AttributeKey::USE_NODES);
 
         foreach ($uses as $use) {
-            $useUses = $use->uses;
-            foreach ($useUses as $useUse) {
-                if (! $useUse->name instanceof Name) {
-                    continue;
-                }
+            foreach ($use->uses as $useUse) {
                 if ($useUse->name->getLast() !== $name->getLast()) {
                     continue;
                 }
+
                 return true;
             }
         }

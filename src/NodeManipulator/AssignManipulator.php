@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
 use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
@@ -142,7 +143,7 @@ final class AssignManipulator
     }
 
     /**
-     * @return PropertyFetch[]
+     * @return array<PropertyFetch|StaticPropertyFetch>
      */
     public function resolveAssignsToLocalPropertyFetches(FunctionLike $functionLike): array
     {

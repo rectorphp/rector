@@ -19,6 +19,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
+ * @see https://github.com/rectorphp/rector/issues/5906
+ *
  * @see \Rector\PHPStanExtensions\Tests\Rule\NoInstanceOfStaticReflectionRule\NoInstanceOfStaticReflectionRuleTest
  */
 final class NoInstanceOfStaticReflectionRule extends AbstractSymplifyRule implements Rule

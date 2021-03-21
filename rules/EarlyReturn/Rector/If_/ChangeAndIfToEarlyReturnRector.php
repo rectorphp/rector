@@ -139,10 +139,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($ifNextReturn->expr instanceof Expr) {
-            $this->addNodeAfterNode(new Return_(), $node);
-        }
-
+        $this->addNodeAfterNode(new Return_(), $node);
         return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
     }
 

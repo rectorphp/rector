@@ -24,6 +24,7 @@ use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
@@ -152,7 +153,7 @@ CODE_SAMPLE
             return $this->resolveFloat($isNegated, $expr);
         }
 
-        if ($this->nodeTypeResolver->isNullableObjectType($expr)) {
+        if ($this->nodeTypeResolver->isNullableTypeOfSpecificType($expr, ObjectType::class)) {
             return $this->resolveNullable($isNegated, $expr);
         }
 

@@ -439,7 +439,7 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
-     * @param Node[] $nodes
+     * @param array<Node|null> $nodes
      */
     private function moveCommentsFromAttributeObjectToCommentsAttribute(array $nodes): void
     {

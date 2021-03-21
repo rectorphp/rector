@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DoctrineCodeQuality\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
@@ -203,10 +202,6 @@ CODE_SAMPLE
     {
         $propertyFetches = $this->assignManipulator->resolveAssignsToLocalPropertyFetches($classMethod);
         if (count($propertyFetches) !== 1) {
-            return null;
-        }
-
-        if (! $propertyFetches[0] instanceof PropertyFetch) {
             return null;
         }
 

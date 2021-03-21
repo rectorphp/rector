@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\Encapsed;
@@ -113,10 +112,6 @@ CODE_SAMPLE
 
         $refactored = $this->anonymousFunctionFactory->create($params, $stmts, null);
         foreach ($refactored->uses as $key => $use) {
-            if (! $use->var instanceof Variable) {
-                continue;
-            }
-
             $variableName = $this->getName($use->var);
             if ($variableName === null) {
                 continue;
@@ -146,7 +141,6 @@ CODE_SAMPLE
         /** @var Assign $assign */
         $assign = $expression->expr;
 
-        /** @var Closure $function */
         $function = $assign->expr;
         if (! $function instanceof Closure) {
             throw new ShouldNotHappenException();

@@ -96,20 +96,16 @@ CODE_SAMPLE
             return $this->refactorMethodCall($node);
         }
 
-        if ($node instanceof String_) {
-            if ($node->expr instanceof MethodCall) {
-                return $this->refactorIfHasReturnTypeWasCalled($node->expr);
-            }
-
-            if ($node->expr instanceof Variable && $this->isObjectType(
-                $node->expr,
-                new ObjectType('ReflectionType')
-            )) {
-                return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
-            }
+        if ($node->expr instanceof MethodCall) {
+            return $this->refactorIfHasReturnTypeWasCalled($node->expr);
         }
-
-        return null;
+        if (! $node->expr instanceof Variable) {
+            return null;
+        }
+        if (! $this->isObjectType($node->expr, new ObjectType('ReflectionType'))) {
+            return null;
+        }
+        return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
     }
 
     private function refactorMethodCall(MethodCall $methodCall): ?Node

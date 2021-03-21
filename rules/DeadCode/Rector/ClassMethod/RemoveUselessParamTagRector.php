@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DeadDocBlock\Rector\ClassMethod\RemoveUselessParamTagRector\RemoveUselessParamTagRectorTest
+ * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector\RemoveUselessParamTagRectorTest
  */
 final class RemoveUselessParamTagRector extends AbstractRector
 {

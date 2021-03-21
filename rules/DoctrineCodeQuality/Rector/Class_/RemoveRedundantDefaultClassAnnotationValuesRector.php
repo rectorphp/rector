@@ -72,9 +72,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Class_) {
-            $this->refactorClassAnnotations($node);
-        }
+        $this->refactorClassAnnotations($node);
 
         return $node;
     }

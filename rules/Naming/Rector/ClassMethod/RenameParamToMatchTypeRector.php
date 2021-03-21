@@ -129,11 +129,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $matchTypeParamRenamerRename = $this->paramRenamer->rename($paramRename);
-            if (! $matchTypeParamRenamerRename instanceof Param) {
-                continue;
-            }
-
+            $this->paramRenamer->rename($paramRename);
             $this->hasChanged = true;
         }
 
