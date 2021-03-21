@@ -6,7 +6,6 @@ namespace Rector\CodeQualityStrict\TypeAnalyzer;
 
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 final class SubTypeAnalyzer
 {
@@ -20,14 +19,12 @@ final class SubTypeAnalyzer
             return false;
         }
 
-        $checkedClassName = $checkedType instanceof ShortenedObjectType ? $checkedType->getFullyQualifiedName() : $checkedType->getClassName();
-        $mainClassName = $mainType instanceof ShortenedObjectType ? $mainType->getFullyQualifiedName() : $mainType->getClassName();
-
-        if (is_a($checkedClassName, $mainClassName, true)) {
+        // parent type to all objects
+        if ($mainType->getClassName() === 'stdClass') {
             return true;
         }
 
-        // child of every object
-        return $mainClassName === 'stdClass';
+        return $mainType->isSuperTypeOf($checkedType)
+            ->yes();
     }
 }

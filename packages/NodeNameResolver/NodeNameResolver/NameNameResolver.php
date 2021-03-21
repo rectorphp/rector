@@ -23,6 +23,9 @@ final class NameNameResolver implements NodeNameResolverInterface
         $this->funcCallNameResolver = $funcCallNameResolver;
     }
 
+    /**
+     * @return class-string<Node>
+     */
     public function getNode(): string
     {
         return Name::class;

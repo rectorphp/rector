@@ -24,6 +24,9 @@ final class FuncCallNameResolver implements NodeNameResolverInterface
         $this->reflectionProvider = $reflectionProvider;
     }
 
+    /**
+     * @return class-string<Node>
+     */
     public function getNode(): string
     {
         return FuncCall::class;

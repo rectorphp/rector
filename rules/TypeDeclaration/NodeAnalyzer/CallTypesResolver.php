@@ -133,7 +133,7 @@ final class CallTypesResolver
                 return $type;
             }
 
-            if (! is_a($firstUnionedType->getClassName(), $unionedType->getClassName(), true)) {
+            if ($unionedType->isSuperTypeOf($firstUnionedType)->yes()) {
                 return $type;
             }
         }

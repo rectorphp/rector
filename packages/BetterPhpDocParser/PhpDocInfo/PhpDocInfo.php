@@ -26,7 +26,6 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Util\StaticInstanceOf;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 /**
@@ -486,16 +485,21 @@ final class PhpDocInfo
         return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($phpDocTagValueNode, $this->node);
     }
 
+    /**
+     * @param class-string $type
+     */
     private function ensureTypeIsTagValueNode(string $type, string $location): void
     {
-        /** @var array<class-string> $desiredTypes */
+        /** @var array<class-string<\PhpParser\Node>> $desiredTypes */
         $desiredTypes = array_merge([
             PhpDocTagValueNode::class,
             PhpDocTagNode::class,
         ], NodeTypes::TYPE_AWARE_NODES);
 
-        if (StaticInstanceOf::isOneOf($type, $desiredTypes)) {
-            return;
+        foreach ($desiredTypes as $desiredType) {
+            if (is_a($type, $desiredType, true)) {
+                return;
+            }
         }
 
         throw new ShouldNotHappenException(sprintf(
@@ -509,7 +513,8 @@ final class PhpDocInfo
     private function resolveNameForPhpDocTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): string
     {
         foreach (self::TAGS_TYPES_TO_NAMES as $tagValueNodeType => $name) {
-            if ($phpDocTagValueNode instanceof $tagValueNodeType) {
+            /** @var class-string<PhpDocTagNode> $tagValueNodeType */
+            if (is_a($phpDocTagValueNode, $tagValueNodeType, true)) {
                 return $name;
             }
         }
