@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadDocBlock\Rector\ClassLike;
+namespace Rector\DeadCode\Rector\ClassLike;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;

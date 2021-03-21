@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadDocBlock\TagRemover;
+namespace Rector\DeadCode\PhpDoc\TagRemover;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
@@ -17,7 +17,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
-use Rector\DeadDocBlock\DeadVarTagValueNodeAnalyzer;
+use Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;

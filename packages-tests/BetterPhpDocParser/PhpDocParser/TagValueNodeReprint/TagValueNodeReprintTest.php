@@ -18,10 +18,10 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\Generate
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\BlameableTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\SlugTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioMethodTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\Symfony\PhpDoc\Node\AssertChoiceTagValueNode;
 use Rector\Symfony\PhpDoc\Node\AssertTypeTagValueNode;
+use Rector\Symfony\PhpDoc\Node\Sensio\SensioMethodTagValueNode;
+use Rector\Symfony\PhpDoc\Node\Sensio\SensioTemplateTagValueNode;
 use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 use Rector\Tests\BetterPhpDocParser\PhpDocParser\AbstractPhpDocInfoTest;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -60,9 +60,12 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
         return [
             BlameableTagValueNode::class => __DIR__ . '/Fixture/Blameable',
             SlugTagValueNode::class => __DIR__ . '/Fixture/Gedmo',
+
+            // symfony
             AssertChoiceTagValueNode::class => __DIR__ . '/Fixture/AssertChoice',
             AssertTypeTagValueNode::class => __DIR__ . '/Fixture/AssertType',
             SymfonyRouteTagValueNode::class => __DIR__ . '/Fixture/SymfonyRoute',
+
             // Doctrine
             ColumnTagValueNode::class => __DIR__ . '/Fixture/DoctrineColumn',
             JoinTableTagValueNode::class => __DIR__ . '/Fixture/DoctrineJoinTable',
@@ -71,10 +74,12 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
             CustomIdGeneratorTagValueNode::class => __DIR__ . '/Fixture/DoctrineCustomIdGenerator',
             GeneratedValueTagValueNode::class => __DIR__ . '/Fixture/DoctrineGeneratedValue',
             EmbeddedTagValueNode::class => __DIR__ . '/Fixture/DoctrineEmbedded',
+
             // special case
-            GenericTagValueNode::class => __DIR__ . '/Fixture/ConstantReference',
             SensioTemplateTagValueNode::class => __DIR__ . '/Fixture/SensioTemplate',
             SensioMethodTagValueNode::class => __DIR__ . '/Fixture/SensioMethod',
+
+            GenericTagValueNode::class => __DIR__ . '/Fixture/ConstantReference',
             TemplateTagValueNode::class => __DIR__ . '/Fixture/Native/Template',
             VarTagValueNode::class => __DIR__ . '/Fixture/Native/VarTag',
         ];

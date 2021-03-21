@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadDocBlock\Rector\Property;
+namespace Rector\DeadCode\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadDocBlock\TagRemover\VarTagRemover;
+use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 

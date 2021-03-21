@@ -13,7 +13,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadDocBlock\TagRemover\ParamTagRemover;
+use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;

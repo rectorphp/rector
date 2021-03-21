@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadDocBlock\Rector\ClassMethod;
+namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadDocBlock\DeadParamTagValueNodeAnalyzer;
+use Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadDocBlock\TagRemover;
+namespace Rector\DeadCode\PhpDoc\TagRemover;
 
 use PhpParser\Node\FunctionLike;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use Rector\DeadDocBlock\DeadParamTagValueNodeAnalyzer;
+use Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;
 
 final class ParamTagRemover
 {

@@ -4041,10 +4041,10 @@ Remove annotation by names
 
 :wrench: **configure it!**
 
-- class: [`Rector\DeadDocBlock\Rector\ClassLike\RemoveAnnotationRector`](../rules/DeadDocBlock/Rector/ClassLike/RemoveAnnotationRector.php)
+- class: [`Rector\DeadCode\Rector\ClassLike\RemoveAnnotationRector`](../rules/DeadDocBlock/Rector/ClassLike/RemoveAnnotationRector.php)
 
 ```php
-use Rector\DeadDocBlock\Rector\ClassLike\RemoveAnnotationRector;
+use Rector\DeadCode\Rector\ClassLike\RemoveAnnotationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -4074,7 +4074,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Removes non-existing `@var` annotations above the code
 
-- class: [`Rector\DeadDocBlock\Rector\Node\RemoveNonExistingVarAnnotationRector`](../rules/DeadDocBlock/Rector/Node/RemoveNonExistingVarAnnotationRector.php)
+- class: [`Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector`](../rules/DeadDocBlock/Rector/Node/RemoveNonExistingVarAnnotationRector.php)
 
 ```diff
  class SomeClass
@@ -4093,7 +4093,7 @@ Removes non-existing `@var` annotations above the code
 
 Remove `@param` docblock with same type as parameter type
 
-- class: [`Rector\DeadDocBlock\Rector\ClassMethod\RemoveUselessParamTagRector`](../rules/DeadDocBlock/Rector/ClassMethod/RemoveUselessParamTagRector.php)
+- class: [`Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector`](../rules/DeadDocBlock/Rector/ClassMethod/RemoveUselessParamTagRector.php)
 
 ```diff
  class SomeClass
@@ -4114,7 +4114,7 @@ Remove `@param` docblock with same type as parameter type
 
 Remove `@return` docblock with same type as defined in PHP
 
-- class: [`Rector\DeadDocBlock\Rector\ClassMethod\RemoveUselessReturnTagRector`](../rules/DeadDocBlock/Rector/ClassMethod/RemoveUselessReturnTagRector.php)
+- class: [`Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector`](../rules/DeadDocBlock/Rector/ClassMethod/RemoveUselessReturnTagRector.php)
 
 ```diff
  use stdClass;
@@ -4136,7 +4136,7 @@ Remove `@return` docblock with same type as defined in PHP
 
 Remove unused `@var` annotation for properties
 
-- class: [`Rector\DeadDocBlock\Rector\Property\RemoveUselessVarTagRector`](../rules/DeadDocBlock/Rector/Property/RemoveUselessVarTagRector.php)
+- class: [`Rector\DeadCode\Rector\Property\RemoveUselessVarTagRector`](../rules/DeadDocBlock/Rector/Property/RemoveUselessVarTagRector.php)
 
 ```diff
  final class SomeClass

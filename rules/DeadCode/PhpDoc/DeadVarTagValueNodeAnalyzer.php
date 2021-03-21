@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadDocBlock;
+namespace Rector\DeadCode\PhpDoc;
 
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
