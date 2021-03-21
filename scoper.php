@@ -65,11 +65,6 @@ return [
 
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
         function (string $filePath, string $prefix, string $content): string {
-            // skip vendor
-            if (Strings::contains($filePath, 'vendor/')) {
-                return $content;
-            }
-
             // skip bin/rector.php for composer autoload class
             if (Strings::endsWith($filePath, 'bin/rector.php')) {
                 return $content;
