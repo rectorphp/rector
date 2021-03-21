@@ -78,6 +78,15 @@ CODE_SAMPLE
             return null;
         }
 
+        $variable = $node->var;
+        $isVariableUsedNext = $this->betterNodeFinder->findFirstNext($node, function (Node $node) use ($variable): bool {
+            return $this->nodeComparator->areNodesEqual($node, $variable);
+        });
+
+        if ($isVariableUsedNext) {
+            return null;
+        }
+
         return $node->expr;
     }
 }
