@@ -439,12 +439,16 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
-     * @param Node[] $nodes
+     * @param array<Node|null> $nodes
      */
     private function moveCommentsFromAttributeObjectToCommentsAttribute(array $nodes): void
     {
         // move phpdoc from node to "comment" attribute
         foreach ($nodes as $node) {
+            if (! $node instanceof Node) {
+                continue;
+            }
+
             $this->docBlockUpdater->updateNodeWithPhpDocInfo($node);
         }
     }

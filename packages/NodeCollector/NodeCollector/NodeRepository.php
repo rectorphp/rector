@@ -18,6 +18,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
@@ -573,9 +574,14 @@ final class NodeRepository
         return $constructorClassMethod;
     }
 
-    public function findPropertyByPropertyFetch(PropertyFetch $propertyFetch): ?Property
+    /**
+     * @param PropertyFetch|StaticPropertyFetch $expr
+     */
+    public function findPropertyByPropertyFetch(Expr $expr): ?Property
     {
-        $propertyCallerType = $this->nodeTypeResolver->getStaticType($propertyFetch->var);
+        $propertyCaller = $expr instanceof StaticPropertyFetch ? $expr->class : $expr->var;
+
+        $propertyCallerType = $this->nodeTypeResolver->getStaticType($propertyCaller);
         if (! $propertyCallerType instanceof TypeWithClassName) {
             return null;
         }
@@ -586,7 +592,7 @@ final class NodeRepository
             return null;
         }
 
-        $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
+        $propertyName = $this->nodeNameResolver->getName($expr->name);
         if ($propertyName === null) {
             return null;
         }
