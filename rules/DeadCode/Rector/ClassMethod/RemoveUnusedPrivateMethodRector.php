@@ -108,6 +108,10 @@ CODE_SAMPLE
         }
 
         // skip magic methods - @see https://www.php.net/manual/en/language.oop5.magic.php
-        return $classMethod->isMagic();
+        if ($classMethod->isMagic()) {
+            return true;
+        }
+
+        return $classReflection->hasMethod('__call');
     }
 }
