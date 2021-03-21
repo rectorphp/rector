@@ -51,11 +51,6 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPDI\PHPDIInjectTagValueNo
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioMethodTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioTemplateTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertChoiceTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertEmailTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertRangeTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertTypeTagValueNode;
 
 final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
 {
@@ -94,13 +89,6 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             IdTagValueNode::class => 'Doctrine\ORM\Mapping\Id',
             GeneratedValueTagValueNode::class => 'Doctrine\ORM\Mapping\GeneratedValue',
             JoinColumnTagValueNode::class => 'Doctrine\ORM\Mapping\JoinColumn',
-            // symfony/http-kernel
-            SymfonyRouteTagValueNode::class => 'Symfony\Component\Routing\Annotation\Route',
-            // symfony/validator
-            AssertRangeTagValueNode::class => 'Symfony\Component\Validator\Constraints\Range',
-            AssertTypeTagValueNode::class => 'Symfony\Component\Validator\Constraints\Type',
-            AssertChoiceTagValueNode::class => 'Symfony\Component\Validator\Constraints\Choice',
-            AssertEmailTagValueNode::class => 'Symfony\Component\Validator\Constraints\Email',
             // gedmo
             LocaleTagValueNode::class => 'Gedmo\Mapping\Annotation\Locale',
             BlameableTagValueNode::class => 'Gedmo\Mapping\Annotation\Blameable',
