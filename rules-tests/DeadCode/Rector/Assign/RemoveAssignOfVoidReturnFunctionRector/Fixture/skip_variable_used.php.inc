@@ -8,7 +8,6 @@ class VariableUsedOutsideMethod
 {
     public function run()
     {
-        $value = 1;
         $value = $this->getOne();
     }
 
@@ -31,7 +30,6 @@ class VariableUsedOutsideMethod
 {
     public function run()
     {
-        $value = 1;
         $this->getOne();
     }
 
