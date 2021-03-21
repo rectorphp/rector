@@ -104,15 +104,8 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             TranslatableTagValueNode::class => 'Gedmo\Mapping\Annotation\Translatable',
             LoggableTagValueNode::class => 'Gedmo\Mapping\Annotation\Loggable',
             TreeTagValueNode::class => 'Gedmo\Mapping\Annotation\Tree',
-            // Sensio
-            SensioTemplateTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template',
-            SensioMethodTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method',
-            SensioRouteTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route',
 
             // JMS
-            JMSInjectParamsTagValueNode::class => 'JMS\DiExtraBundle\Annotation\InjectParams',
-            JMSServiceValueNode::class => 'JMS\DiExtraBundle\Annotation\Service',
-            SerializerTypeTagValueNode::class => 'JMS\Serializer\Annotation\Type',
             PHPDIInjectTagValueNode::class => 'DI\Annotation\Inject',
 
             // Doctrine
