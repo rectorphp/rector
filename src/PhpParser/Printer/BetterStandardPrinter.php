@@ -445,10 +445,6 @@ final class BetterStandardPrinter extends Standard
     {
         // move phpdoc from node to "comment" attribute
         foreach ($nodes as $node) {
-            if (! $node instanceof Node) {
-                continue;
-            }
-
             $this->docBlockUpdater->updateNodeWithPhpDocInfo($node);
         }
     }

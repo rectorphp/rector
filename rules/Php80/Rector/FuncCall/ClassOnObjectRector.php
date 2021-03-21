@@ -66,10 +66,6 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $node instanceof FuncCall) {
-            return null;
-        }
-
         if (! $this->nodeNameResolver->isName($node, 'get_class')) {
             return null;
         }

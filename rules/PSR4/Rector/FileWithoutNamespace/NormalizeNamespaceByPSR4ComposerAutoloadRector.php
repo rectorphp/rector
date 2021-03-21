@@ -101,10 +101,8 @@ CODE_SAMPLE
             return $this->refactorFileWithoutNamespace($node, $expectedNamespace);
         }
 
-        if ($node instanceof Namespace_) {
-            $node->name = new Name($expectedNamespace);
-            $this->makeNamesFullyQualified($node->stmts);
-        }
+        $node->name = new Name($expectedNamespace);
+        $this->makeNamesFullyQualified($node->stmts);
 
         return $node;
     }

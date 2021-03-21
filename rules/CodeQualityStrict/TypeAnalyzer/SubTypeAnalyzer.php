@@ -21,7 +21,6 @@ final class SubTypeAnalyzer
         }
 
         $checkedClassName = $checkedType instanceof ShortenedObjectType ? $checkedType->getFullyQualifiedName() : $checkedType->getClassName();
-
         $mainClassName = $mainType instanceof ShortenedObjectType ? $mainType->getFullyQualifiedName() : $mainType->getClassName();
 
         if (is_a($checkedClassName, $mainClassName, true)) {

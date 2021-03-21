@@ -105,7 +105,7 @@ CODE_SAMPLE
             return $this->castToArray($countedNode, $node);
         }
 
-        if ($this->nodeTypeResolver->isNullableArrayType($countedNode)) {
+        if ($this->nodeTypeResolver->isNullableTypeOfSpecificType($countedNode, ArrayType::class)) {
             return $this->castToArray($countedNode, $node);
         }
 

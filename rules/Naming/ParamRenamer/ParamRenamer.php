@@ -29,7 +29,7 @@ final class ParamRenamer
         $this->propertyDocBlockManipulator = $propertyDocBlockManipulator;
     }
 
-    public function rename(ParamRename $paramRename): Param
+    public function rename(ParamRename $paramRename): void
     {
         // 1. rename param
         $paramRename->getVariable()
@@ -45,6 +45,5 @@ final class ParamRenamer
 
         // 3. rename @param variable in docblock too
         $this->propertyDocBlockManipulator->renameParameterNameInDocBlock($paramRename);
-        return $paramRename->getParam();
     }
 }

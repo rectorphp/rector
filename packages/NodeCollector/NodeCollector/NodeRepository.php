@@ -886,10 +886,6 @@ final class NodeRepository
         }
 
         $classReflection = $this->reflectionProvider->getClass($typeWithClassName->getClassName());
-        if (! $classReflection instanceof ClassReflection) {
-            return;
-        }
-
         foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
             $this->callsByTypeAndMethod[$ancestorClassReflection->getName()][$methodName][] = $node;
         }
