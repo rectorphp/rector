@@ -30,7 +30,7 @@ final class ConcatManipulator
         $this->nodeComparator = $nodeComparator;
     }
 
-    public function getFirstConcatItem(Concat $concat): Node
+    public function getFirstConcatItem(Concat $concat): Expr
     {
         // go to the deep, until there is no concat
         while ($concat->left instanceof Concat) {
@@ -40,7 +40,7 @@ final class ConcatManipulator
         return $concat->left;
     }
 
-    public function removeFirstItemFromConcat(Concat $concat): Node
+    public function removeFirstItemFromConcat(Concat $concat): Expr
     {
         // just 2 items, return right one
         if (! $concat->left instanceof Concat) {

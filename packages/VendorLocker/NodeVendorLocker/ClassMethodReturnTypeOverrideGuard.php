@@ -22,7 +22,6 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class ClassMethodReturnTypeOverrideGuard
 {
@@ -37,11 +36,6 @@ final class ClassMethodReturnTypeOverrideGuard
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
 
     /**
      * @var ReflectionProvider
@@ -60,13 +54,11 @@ final class ClassMethodReturnTypeOverrideGuard
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver,
         ReflectionProvider $reflectionProvider,
         FamilyRelationsAnalyzer $familyRelationsAnalyzer,
         BetterNodeFinder $betterNodeFinder
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -113,7 +105,7 @@ final class ClassMethodReturnTypeOverrideGuard
         }
 
         // new generic string type is more advanced than old array type
-        if ($oldType instanceof ArrayType && $newType instanceof ArrayType && ($oldType->getItemType() instanceof StringType && $newType->getItemType() instanceof GenericClassStringType)) {
+        if ($this->isFirstArrayTypeMoreAdvanced($oldType, $newType)) {
             return false;
         }
 
@@ -164,5 +156,22 @@ final class ClassMethodReturnTypeOverrideGuard
 
             return $node->expr instanceof Expr;
         });
+    }
+
+    private function isFirstArrayTypeMoreAdvanced(Type $oldType, Type $newType): bool
+    {
+        if (! $oldType instanceof ArrayType) {
+            return false;
+        }
+
+        if (! $newType instanceof ArrayType) {
+            return false;
+        }
+
+        if (! $oldType->getItemType() instanceof StringType) {
+            return false;
+        }
+
+        return $newType->getItemType() instanceof GenericClassStringType;
     }
 }

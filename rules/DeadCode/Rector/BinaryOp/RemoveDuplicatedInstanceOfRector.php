@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\BinaryOp;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\NodeAnalyzer\InstanceOfUniqueKeyResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,9 +18,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDuplicatedInstanceOfRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var InstanceOfUniqueKeyResolver
      */
-    private $duplicatedInstanceOfs = [];
+    private $instanceOfUniqueKeyResolver;
+
+    public function __construct(InstanceOfUniqueKeyResolver $instanceOfUniqueKeyResolver)
+    {
+        $this->instanceOfUniqueKeyResolver = $instanceOfUniqueKeyResolver;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -65,97 +69,41 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->resolveDuplicatedInstancesOf($node);
-        if ($this->duplicatedInstanceOfs === []) {
+        $duplicatedInstanceOfs = $this->resolveDuplicatedInstancesOf($node);
+        if ($duplicatedInstanceOfs === []) {
             return null;
         }
 
-        return $this->traverseBinaryOpAndRemoveDuplicatedInstanceOfs($node);
+        $this->removeNodes($duplicatedInstanceOfs);
+
+        return $node;
     }
 
-    private function resolveDuplicatedInstancesOf(BinaryOp $binaryOp): void
+    /**
+     * @return Instanceof_[]
+     */
+    private function resolveDuplicatedInstancesOf(BinaryOp $binaryOp): array
     {
-        $this->duplicatedInstanceOfs = [];
+        $duplicatedInstanceOfs = [];
 
         /** @var Instanceof_[] $instanceOfs */
-        $instanceOfs = $this->betterNodeFinder->findInstanceOf([$binaryOp], Instanceof_::class);
+        $instanceOfs = $this->betterNodeFinder->findInstanceOf($binaryOp, Instanceof_::class);
 
-        $instanceOfsByClass = [];
+        $uniqueInstanceOfKeys = [];
         foreach ($instanceOfs as $instanceOf) {
-            $variableClassKey = $this->createUniqueKeyForInstanceOf($instanceOf);
-            if ($variableClassKey === null) {
+            $uniqueKey = $this->instanceOfUniqueKeyResolver->resolve($instanceOf);
+            if ($uniqueKey === null) {
                 continue;
             }
 
-            $instanceOfsByClass[$variableClassKey][] = $instanceOf;
-        }
-
-        foreach ($instanceOfsByClass as $variableClassKey => $instanceOfs) {
-            if (count($instanceOfs) < 2) {
-                unset($instanceOfsByClass[$variableClassKey]);
-            }
-        }
-
-        $this->duplicatedInstanceOfs = array_keys($instanceOfsByClass);
-    }
-
-    private function traverseBinaryOpAndRemoveDuplicatedInstanceOfs(BinaryOp $binaryOp): Node
-    {
-        $this->traverseNodesWithCallable([&$binaryOp], function (Node $node): ?Node {
-            if (! $node instanceof BinaryOp) {
-                return null;
+            // already present before → duplicated
+            if (in_array($uniqueKey, $uniqueInstanceOfKeys, true)) {
+                $duplicatedInstanceOfs[] = $instanceOf;
             }
 
-            if ($node->left instanceof Instanceof_) {
-                return $this->processBinaryWithFirstInstaneOf($node->left, $node->right);
-            }
-
-            if ($node->right instanceof Instanceof_) {
-                return $this->processBinaryWithFirstInstaneOf($node->right, $node->left);
-            }
-
-            return null;
-        });
-
-        return $binaryOp;
-    }
-
-    private function createUniqueKeyForInstanceOf(Instanceof_ $instanceof): ?string
-    {
-        if (! $instanceof->expr instanceof Variable) {
-            return null;
-        }
-        $variableName = $this->getName($instanceof->expr);
-        if ($variableName === null) {
-            return null;
+            $uniqueInstanceOfKeys[] = $uniqueKey;
         }
 
-        $className = $this->getName($instanceof->class);
-        if ($className === null) {
-            return null;
-        }
-
-        return $variableName . '_' . $className;
-    }
-
-    private function processBinaryWithFirstInstaneOf(Instanceof_ $instanceof, Expr $otherExpr): ?Expr
-    {
-        $variableClassKey = $this->createUniqueKeyForInstanceOf($instanceof);
-
-        if (! in_array($variableClassKey, $this->duplicatedInstanceOfs, true)) {
-            return null;
-        }
-
-        // remove just once
-        $this->removeClassFromDuplicatedInstanceOfs($variableClassKey);
-
-        // remove left instanceof
-        return $otherExpr;
-    }
-
-    private function removeClassFromDuplicatedInstanceOfs(string $variableClassKey): void
-    {
-        // remove just once
-        unset($this->duplicatedInstanceOfs[array_search($variableClassKey, $this->duplicatedInstanceOfs, true)]);
+        return $duplicatedInstanceOfs;
     }
 }

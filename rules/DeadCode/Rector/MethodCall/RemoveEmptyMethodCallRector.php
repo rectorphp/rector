@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
@@ -140,7 +141,7 @@ CODE_SAMPLE
         return count((array) $classMethod->stmts) !== 0;
     }
 
-    private function processArrowFunction(ArrowFunction $arrowFunction, MethodCall $methodCall): Node
+    private function processArrowFunction(ArrowFunction $arrowFunction, MethodCall $methodCall): Expr
     {
         $parentOfParent = $arrowFunction->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentOfParent instanceof Expression) {

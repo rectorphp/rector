@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Core\DependencyInjection;
 
-use Psr\Container\ContainerInterface;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symplify\PackageBuilder\Console\Input\StaticInputDetector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

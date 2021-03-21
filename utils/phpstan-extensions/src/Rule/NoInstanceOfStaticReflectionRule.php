@@ -110,6 +110,7 @@ CODE_SAMPLE
         }
 
         $typeArgValue = $node->args[1]->value;
+
         return $scope->getType($typeArgValue);
     }
 }

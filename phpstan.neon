@@ -513,13 +513,14 @@ parameters:
 
         # known types
         - '#Parameter \#1 \$node of method Rector\\Naming\\Naming\\VariableNaming\:\:resolveFromMethodCall\(\) expects PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\NullsafeMethodCall\|PhpParser\\Node\\Expr\\StaticCall, PhpParser\\Node given#'
+        - '#Class with base "DependencyResolver" name is already used in "PHPStan\\Dependency\\DependencyResolver", "Rector\\Caching\\FileSystem\\DependencyResolver"\. Use unique name to make classes easy to recognize#'
 
         -
             message: '#Do not inherit from abstract class, better use composition#'
             path: utils/phpstan-extensions/src/Rule/NoInstanceOfStaticReflectionRule.php
 
         # first wave resolved, merge PR
-#        - '#Instead of "(.*?)" use ReflectionProvider service (.*?) for static reflection to work#'
+        - '#Instead of "(.*?)" use ReflectionProvider service (.*?) for static reflection to work#'
 
         # known internal types on correct location
         -

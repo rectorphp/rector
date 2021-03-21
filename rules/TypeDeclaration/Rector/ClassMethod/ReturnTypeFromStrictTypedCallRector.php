@@ -132,7 +132,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    private function processSingleUnionType(Node $node, UnionType $unionType, NullableType $nullableType): Node
+    private function processSingleUnionType(Node $node, UnionType $unionType, NullableType $nullableType): FunctionLike
     {
         $types = $unionType->getTypes();
         $returnType = $types[0] instanceof ObjectType && $types[1] instanceof NullType
@@ -250,7 +250,7 @@ CODE_SAMPLE
         Return_ $return,
         Node $returnedStrictTypeNode,
         FunctionLike $functionLike
-    ): Node {
+    ): FunctionLike {
         $resolvedType = $this->nodeTypeResolver->resolve($return);
 
         if ($resolvedType instanceof UnionType) {

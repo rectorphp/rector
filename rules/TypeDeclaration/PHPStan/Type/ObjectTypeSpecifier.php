@@ -14,6 +14,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\SubtractableType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
@@ -35,7 +36,7 @@ final class ObjectTypeSpecifier
     /**
      * @return AliasedObjectType|FullyQualifiedObjectType|ObjectType|MixedType
      */
-    public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType): Type
+    public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType): SubtractableType
     {
         /** @var Use_[]|null $uses */
         $uses = $node->getAttribute(AttributeKey::USE_NODES);

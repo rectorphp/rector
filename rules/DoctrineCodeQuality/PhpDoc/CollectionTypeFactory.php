@@ -8,7 +8,6 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
@@ -22,7 +21,7 @@ final class CollectionTypeFactory
         return new UnionType([$genericType, $arrayType]);
     }
 
-    private function createGenericObjectType(FullyQualifiedObjectType $fullyQualifiedObjectType): Type
+    private function createGenericObjectType(FullyQualifiedObjectType $fullyQualifiedObjectType): GenericObjectType
     {
         $genericTypes = [new IntegerType(), $fullyQualifiedObjectType];
 

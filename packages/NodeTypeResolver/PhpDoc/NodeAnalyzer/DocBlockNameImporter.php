@@ -89,7 +89,7 @@ final class DocBlockNameImporter
         Node $node,
         IdentifierTypeNode $identifierTypeNode,
         FullyQualifiedObjectType $fullyQualifiedObjectType
-    ): PhpDocParserNode {
+    ): IdentifierTypeNode {
         if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType(
             $node,
             $fullyQualifiedObjectType

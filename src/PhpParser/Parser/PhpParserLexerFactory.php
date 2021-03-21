@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\Parser;
 
-use PhpParser\Lexer;
 use PhpParser\Lexer\Emulative;
 
 /**
@@ -13,7 +12,7 @@ use PhpParser\Lexer\Emulative;
  */
 final class PhpParserLexerFactory
 {
-    public function create(): Lexer
+    public function create(): Emulative
     {
         return new Emulative([
             'usedAttributes' => ['comments', 'startLine', 'endLine', 'startTokenPos', 'endTokenPos'],
