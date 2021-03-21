@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -339,6 +340,10 @@ final class BetterNodeFinder
         }
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof FunctionLike) {
+            return null;
+        }
+
         if ($parent instanceof Node) {
             return $this->findFirstNext($parent, $filter);
         }
