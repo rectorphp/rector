@@ -9,7 +9,7 @@ class VariableUsedOutsideMethod
     public function run()
     {
         $value = 1;
-        $value = $this->getOne();;
+        $value = $this->getOne();
     }
 
     private function getOne(): void
@@ -32,7 +32,7 @@ class VariableUsedOutsideMethod
     public function run()
     {
         $value = 1;
-        $this->getOne();;
+        $this->getOne();
     }
 
     private function getOne(): void
