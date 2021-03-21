@@ -9,6 +9,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Set\Contract\SetListInterface;
 use Rector\Set\ValueObject\DowngradeSetList;
 use Rector\Set\ValueObject\SetList;
+use Rector\Symfony\Set\SymfonySetList;
 use ReflectionClass;
 use Stringy\Stringy;
 use Symplify\SetConfigResolver\Exception\SetNotFoundException;

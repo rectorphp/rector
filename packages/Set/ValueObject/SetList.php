@@ -10,9 +10,9 @@ use Rector\Nette\Set\KdybySetList;
 use Rector\Nette\Set\NetteSetList;
 use Rector\PHPUnit\Sets\PHPUnitSetList;
 use Rector\Set\Contract\SetListInterface;
-use Rector\Set\SwiftmailerSetList;
-use Rector\Set\SymfonySetList;
-use Rector\Set\TwigSetList;
+use Rector\Symfony\Set\SwiftmailerSetList;
+use Rector\Symfony\Set\SymfonySetList;
+use Rector\Symfony\Set\TwigSetList;
 
 final class SetList implements SetListInterface
 {

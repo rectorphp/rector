@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\SymfonyRequiredTagNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertEmailTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertRangeTagValueNode;
 use Rector\Nette\PhpDoc\Node\NetteCrossOriginTagNode;
 use Rector\Nette\PhpDoc\Node\NetteInjectTagNode;
 use Rector\Nette\PhpDoc\Node\NettePersistentTagNode;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\Symfony\PhpDoc\Node\AssertEmailTagValueNode;
+use Rector\Symfony\PhpDoc\Node\AssertRangeTagValueNode;
+use Rector\Symfony\PhpDoc\Node\SymfonyRequiredTagNode;
+use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 

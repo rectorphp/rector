@@ -6,7 +6,7 @@ namespace Rector\NetteToSymfony\Routing;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
+use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 
 final class ExplicitRouteAnnotationDecorator
 {
