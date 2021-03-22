@@ -33,8 +33,12 @@ final class PropertyTypeVendorLockResolver
 
     public function isVendorLocked(Property $property): bool
     {
-        /** @var Scope $scope */
+        /** @var Scope|null $scope */
         $scope = $property->getAttribute(AttributeKey::SCOPE);
+
+        if($scope === null) {
+            return false;
+        }
 
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
