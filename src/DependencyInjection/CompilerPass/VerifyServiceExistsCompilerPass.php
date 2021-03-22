@@ -29,8 +29,6 @@ final class VerifyServiceExistsCompilerPass implements CompilerPassInterface
                     sprintf('Rector rule %s not found, please verify that the rule exists', $class)
                 );
             }
-
-            $definition->setPublic(true);
         }
     }
 }
