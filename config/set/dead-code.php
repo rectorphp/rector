@@ -13,7 +13,6 @@ use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector;
-use Rector\DeadCode\Rector\ClassMethod\RemoveDeadRecursiveClassMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
@@ -91,7 +90,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveUnusedFunctionRector::class);
     $services->set(RemoveUnusedNonEmptyArrayBeforeForeachRector::class);
     $services->set(RemoveAssignOfVoidReturnFunctionRector::class);
-    $services->set(RemoveDeadRecursiveClassMethodRector::class);
     $services->set(RemoveEmptyMethodCallRector::class);
     $services->set(RemoveDeadConditionAboveReturnRector::class);
     $services->set(RemoveUnusedConstructorParamRector::class);

@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector\PrivatizeLocalClassConstantRectorTest
  */
-final class PrivatizeLocalClassConstantRector extends AbstractRector implements ZeroCacheRectorInterface
+final class  extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
      * @var string
