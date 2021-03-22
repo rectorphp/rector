@@ -153,7 +153,8 @@ final class TypeFactory
 
         foreach ($flattenItemTypes as $position => $nestedFlattenItemType) {
             /** @var Type|null $nestedFlattenKeyType */
-            $nestedFlattenKeyType = $flattenKeyTypes[$position];
+            $nestedFlattenKeyType = $flattenKeyTypes[$position] ?? null;
+
             if ($nestedFlattenKeyType === null) {
                 $nestedFlattenKeyType = new MixedType();
             }
