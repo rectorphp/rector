@@ -113,9 +113,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
             new MergeImportedRectorConfigureCallValuesCompilerPass($this->configureCallValuesCollector)
         );
 
-        $containerBuilder->addCompilerPass(
-            new VerifyRectorServiceExistsCompilerPass()
-        );
+        $containerBuilder->addCompilerPass(new VerifyRectorServiceExistsCompilerPass());
     }
 
     /**
