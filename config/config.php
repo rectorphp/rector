@@ -17,12 +17,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/../vendor/rector/rector-nette/config/config.php', null, 'not_found');
     $containerConfigurator->import(__DIR__ . '/../vendor/rector/rector-laravel/config/config.php', null, 'not_found');
     $containerConfigurator->import(__DIR__ . '/../vendor/rector/rector-phpunit/config/config.php', null, 'not_found');
+    $containerConfigurator->import(__DIR__ . '/../vendor/rector/rector-cakephp/config/config.php', null, 'not_found');
+    $containerConfigurator->import(__DIR__ . '/../vendor/rector/rector-doctrine/config/config.php', null, 'not_found');
 
     // rector sub-package
     $containerConfigurator->import(__DIR__ . '/../../rector-symfony/config/config.php', null, 'not_found');
     $containerConfigurator->import(__DIR__ . '/../../rector-nette/config/config.php', null, 'not_found');
     $containerConfigurator->import(__DIR__ . '/../../rector-laravel/config/config.php', null, 'not_found');
     $containerConfigurator->import(__DIR__ . '/../../rector-phpunit/config/config.php', null, 'not_found');
+    $containerConfigurator->import(__DIR__ . '/../../rector-cakephp/config/config.php', null, 'not_found');
+    $containerConfigurator->import(__DIR__ . '/../../rector-doctrine/config/config.php', null, 'not_found');
 
     // only for dev
     if (class_exists(RectorGeneratorBundle::class)) {
