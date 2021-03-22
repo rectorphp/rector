@@ -62,7 +62,7 @@ jobs:
                 with:
                     repository: rector/rector-prefixed
                     path: remote-repository
-                    token: ${{ secrets.GITHUB_TOKEN }}
+                    token: ${{ secrets.ACCESS_TOKEN }}
 
             -
                 run: cp -a rector-prefixed-downgraded/. remote-repository
