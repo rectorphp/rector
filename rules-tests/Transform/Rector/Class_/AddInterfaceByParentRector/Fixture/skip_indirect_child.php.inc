@@ -4,7 +4,7 @@ namespace Rector\Tests\Transform\Rector\Class_\AddInterfaceByParentRector\Fixtur
 
 use Rector\Tests\Transform\Rector\Class_\AddInterfaceByParentRector\Source\SomeParentChild;
 
-class SkipExisting extends SomeParentChild
+class SkipIndirectChild extends SomeParentChild
 {
 
 }
