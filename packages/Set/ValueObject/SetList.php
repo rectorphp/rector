@@ -179,7 +179,7 @@ final class SetList implements SetListInterface
     public const DOCTRINE_GEDMO_TO_KNPLABS = DoctrineSetList::DOCTRINE_GEDMO_TO_KNPLABS;
 
     /**
-      * @deprecated
+     * @deprecated
       @see Use DoctrineSetList instead
      * @var string
      */
