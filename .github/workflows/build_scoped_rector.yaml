@@ -70,7 +70,7 @@ jobs:
                 if: "!startsWith(github.ref, 'refs/tags/')"
                 run: |
                     git add .
-                    git commit -m "Updated Rector to commit ${{ github.event.after }}" -m "${{ steps.git-log.outputs.log }}"
+                    git commit -m "Updated Rector to commit ${{ github.event.after }}"
                     git push --quiet origin main
 
             # 7.B publish it to remote repository with tag
@@ -80,7 +80,7 @@ jobs:
                 if: "startsWith(github.ref, 'refs/tags/')"
                 run: |
                     git add .
-                    git commit -m "Rector ${GITHUB_REF#refs/tags/}" -m "${{ steps.git-log.outputs.log }}"
+                    git commit -m "Rector ${GITHUB_REF#refs/tags/}"
                     git push --quiet origin main
                     git tag ${GITHUB_REF#refs/tags/} -m "${GITHUB_REF#refs/tags/}"
                     git push --quiet origin ${GITHUB_REF#refs/tags/}
