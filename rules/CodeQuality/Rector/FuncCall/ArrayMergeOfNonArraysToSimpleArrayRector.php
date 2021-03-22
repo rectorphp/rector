@@ -75,10 +75,7 @@ CODE_SAMPLE
 
         $array = new Array_();
         foreach ($node->args as $arg) {
-            /** @var Array_ $nestedArrayItem */
             $nestedArrayItem = $arg->value;
-
-            // skip
             if (! $nestedArrayItem instanceof Array_) {
                 return null;
             }

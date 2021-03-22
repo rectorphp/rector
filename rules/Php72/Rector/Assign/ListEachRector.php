@@ -91,9 +91,6 @@ CODE_SAMPLE
             $currentFuncCall = $this->nodeFactory->createFuncCall('current', $eachFuncCall->args);
 
             $secondArrayItem = $listNode->items[1];
-            if (! $secondArrayItem instanceof ArrayItem) {
-                throw new ShouldNotHappenException();
-            }
             return new Assign($secondArrayItem->value, $currentFuncCall);
         }
 

@@ -65,8 +65,8 @@ return [
 
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
         function (string $filePath, string $prefix, string $content): string {
-            // skip vendor
-            if (Strings::contains($filePath, 'vendor/')) {
+            // skip vendor, expect rector packages
+            if (Strings::contains($filePath, 'vendor/') && ! Strings::contains($filePath, 'vendor/rector')) {
                 return $content;
             }
 

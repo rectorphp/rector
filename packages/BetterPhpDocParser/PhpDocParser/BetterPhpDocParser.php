@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -15,11 +16,11 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
+use Rector\BetterPhpDocParser\Contract\MultiPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\StringTagMatchingPhpDocNodeFactoryInterface;
-use Rector\BetterPhpDocParser\PhpDocNodeFactory\MultiPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -127,7 +128,7 @@ final class BetterPhpDocParser extends PhpDocParser
         // might be in the middle of annotations
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_CLOSE_PHPDOC);
 
-        $phpDocNode = new PhpDocNode(array_values($children));
+        $phpDocNode = new PhpDocNode($children);
         $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
 
         return $this->phpDocNodeMapper->transform($phpDocNode, $docContent);
@@ -199,14 +200,14 @@ final class BetterPhpDocParser extends PhpDocParser
         }
     }
 
-    private function parseChildAndStoreItsPositions(TokenIterator $tokenIterator): Node
+    private function parseChildAndStoreItsPositions(TokenIterator $tokenIterator): PhpDocChildNode
     {
         $originalTokenIterator = clone $tokenIterator;
         $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
 
         $tokenStart = $this->getTokenIteratorIndex($tokenIterator);
 
-        /** @var PhpDocNode $phpDocNode */
+        /** @var PhpDocChildNode $phpDocNode */
         $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', [$tokenIterator]);
 
         $tokenEnd = $this->resolveTokenEnd($tokenIterator);
@@ -269,12 +270,12 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     private function resolvePhpDocNodeFactoryClasses(PhpDocNodeFactoryInterface $phpDocNodeFactory): array
     {
-        if ($phpDocNodeFactory instanceof SpecificPhpDocNodeFactoryInterface) {
-            return $phpDocNodeFactory->getClasses();
+        if ($phpDocNodeFactory instanceof MultiPhpDocNodeFactoryInterface) {
+            return $phpDocNodeFactory->getTagValueNodeClassesToAnnotationClasses();
         }
 
-        if ($phpDocNodeFactory instanceof MultiPhpDocNodeFactory) {
-            return $phpDocNodeFactory->getTagValueNodeClassesToAnnotationClasses();
+        if ($phpDocNodeFactory instanceof SpecificPhpDocNodeFactoryInterface) {
+            return $phpDocNodeFactory->getClasses();
         }
 
         throw new ShouldNotHappenException();

@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Type\MixedType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\DeadDocBlock\TagRemover\ParamTagRemover;
+use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator;

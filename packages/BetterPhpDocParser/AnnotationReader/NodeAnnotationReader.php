@@ -163,6 +163,7 @@ final class NodeAnnotationReader
 
     /**
      * @param object[] $annotations
+     * @param class-string $annotationClassName
      */
     private function matchNextAnnotation(array $annotations, string $annotationClassName, Node $node): ?object
     {

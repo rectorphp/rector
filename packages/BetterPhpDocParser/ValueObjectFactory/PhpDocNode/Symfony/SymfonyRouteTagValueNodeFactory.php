@@ -6,7 +6,7 @@ namespace Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony;
 
 use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
 use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
+use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 
 final class SymfonyRouteTagValueNodeFactory
 {

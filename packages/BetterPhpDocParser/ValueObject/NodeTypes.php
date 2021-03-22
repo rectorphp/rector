@@ -10,11 +10,11 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\SerializerTypeTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertChoiceTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertEmailTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertRangeTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Property_\OneToManyTagValueNode;
+use Rector\Symfony\PhpDoc\Node\AssertChoiceTagValueNode;
+use Rector\Symfony\PhpDoc\Node\AssertEmailTagValueNode;
+use Rector\Symfony\PhpDoc\Node\AssertRangeTagValueNode;
+use Rector\Symfony\PhpDoc\Node\JMS\SerializerTypeTagValueNode;
 
 final class NodeTypes
 {

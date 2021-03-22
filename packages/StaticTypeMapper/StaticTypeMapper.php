@@ -19,7 +19,6 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
-use Rector\Core\Util\StaticInstanceOf;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
@@ -99,11 +98,16 @@ final class StaticTypeMapper
 
             return $this->phpDocTypeMapper->mapToPHPStanType($phpDocTagValueNode->bound, $node, $nameScope);
         }
-
-        if (StaticInstanceOf::isOneOf(
-            $phpDocTagValueNode,
-            [ReturnTagValueNode::class, ParamTagValueNode::class, VarTagValueNode::class, ThrowsTagValueNode::class]
-        )) {
+        if ($phpDocTagValueNode instanceof ReturnTagValueNode) {
+            return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
+        }
+        if ($phpDocTagValueNode instanceof ParamTagValueNode) {
+            return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
+        }
+        if ($phpDocTagValueNode instanceof VarTagValueNode) {
+            return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
+        }
+        if ($phpDocTagValueNode instanceof ThrowsTagValueNode) {
             return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
         }
 

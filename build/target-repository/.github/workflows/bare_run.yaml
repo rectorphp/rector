@@ -1,6 +1,10 @@
 name: Bare Run
 
-on: [pull_request, push]
+on:
+    pull_request: null
+    push:
+        branches:
+            - main
 
 jobs:
     bare_run:

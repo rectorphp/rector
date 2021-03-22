@@ -422,7 +422,7 @@ final class IfManipulator
         return is_a($stmts[0], $desiredType);
     }
 
-    private function getIfCondVar(If_ $if): Node
+    private function getIfCondVar(If_ $if): Expr
     {
         /** @var Identical|NotIdentical $ifCond */
         $ifCond = $if->cond;

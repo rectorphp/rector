@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Util\StaticInstanceOf;
+use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 
@@ -128,7 +128,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
 
     private function resolveNearestExpressionPosition(Node $node): string
     {
-        if (StaticInstanceOf::isOneOf($node, [Expression::class, Stmt::class])) {
+        if (StaticNodeInstanceOf::isOneOf($node, [Expression::class, Stmt::class])) {
             return spl_object_hash($node);
         }
 

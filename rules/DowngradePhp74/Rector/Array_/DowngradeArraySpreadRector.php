@@ -118,7 +118,7 @@ CODE_SAMPLE
         return false;
     }
 
-    private function refactorNode(Array_ $array): Node
+    private function refactorNode(Array_ $array): FuncCall
     {
         $newItems = $this->createArrayItems($array);
         // Replace this array node with an `array_merge`
@@ -265,10 +265,12 @@ CODE_SAMPLE
      */
     private function isIterableType(Type $type): bool
     {
-        return $type instanceof IterableType || ($type instanceof ObjectType && is_a(
-            $type->getClassName(),
-            Traversable::class,
-            true
-        ));
+        if ($type instanceof IterableType) {
+            return true;
+        }
+
+        $traversableObjectType = new ObjectType('Traversable');
+        return $traversableObjectType->isSuperTypeOf($type)
+            ->yes();
     }
 }

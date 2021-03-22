@@ -27,7 +27,7 @@ final class ScopeAwareNodeFinder
 
     /**
      * Find node based on $callable or null, when the nesting scope is broken
-     * @param class-string[] $allowedTypes
+     * @param array<class-string<Node>> $allowedTypes
      */
     public function findParentType(Node $node, array $allowedTypes): ?Node
     {
@@ -48,10 +48,11 @@ final class ScopeAwareNodeFinder
 
     /**
      * Find node based on $callable or null, when the nesting scope is broken
-     * @param class-string[] $allowedTypes
+     * @param array<class-string<Node>> $allowedTypes
      */
     public function findParent(Node $node, callable $callable, array $allowedTypes): ?Node
     {
+        /** @var array<class-string<Node>> $parentNestingBreakTypes */
         $parentNestingBreakTypes = array_diff(ControlStructure::BREAKING_SCOPE_NODE_TYPES, $allowedTypes);
 
         $this->isBreakingNodeFoundFirst = false;

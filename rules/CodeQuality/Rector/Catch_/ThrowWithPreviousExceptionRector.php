@@ -16,13 +16,13 @@ use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Throwable;
 
 /**
  * @see https://github.com/thecodingmachine/phpstan-strict-rules/blob/e3d746a61d38993ca2bc2e2fcda7012150de120c/src/Rules/Exceptions/ThrowMustBundlePreviousExceptionRule.php#L83
@@ -186,7 +186,8 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! is_a($parameterType->getClassName(), Throwable::class, true)) {
+            $objectType = new ObjectType('Throwable');
+            if ($objectType->isSuperTypeOf($parameterType)->no()) {
                 continue;
             }
 

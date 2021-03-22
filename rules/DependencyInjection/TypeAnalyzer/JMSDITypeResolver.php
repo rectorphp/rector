@@ -10,10 +10,10 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\DataProvider\ServiceMapProvider;
+use Rector\Symfony\PhpDoc\Node\JMS\JMSInjectTagValueNode;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class JMSDITypeResolver

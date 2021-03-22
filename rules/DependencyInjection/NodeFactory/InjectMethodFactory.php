@@ -8,12 +8,12 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\SymfonyRequiredTagNode;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\FrameworkName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\Symfony\PhpDoc\Node\SymfonyRequiredTagNode;
 use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 

@@ -16,7 +16,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\MagicPropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticInstanceOf;
+use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -117,7 +117,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Assign) {
-            if (StaticInstanceOf::isOneOf($node->var, [PropertyFetch::class, StaticPropertyFetch::class])) {
+            if (StaticNodeInstanceOf::isOneOf($node->var, [PropertyFetch::class, StaticPropertyFetch::class])) {
                 return $this->processMagicSet($node);
             }
             return null;

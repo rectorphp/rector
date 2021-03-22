@@ -33,7 +33,9 @@ final class ActiveRectorsProvider
     }
 
     /**
-     * @return RectorInterface[]
+     * @template T as RectorInterface
+     * @param class-string<T> $type
+     * @return array<T>
      */
     public function provideByType(string $type): array
     {

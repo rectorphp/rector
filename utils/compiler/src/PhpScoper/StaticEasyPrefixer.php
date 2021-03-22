@@ -17,6 +17,8 @@ final class StaticEasyPrefixer
         'Doctrine\Inflector\Inflector',
         // for ocramius versions - https://github.com/rectorphp/rector/runs/2089178426
         'Composer\InstalledVersions',
+        // for SmartFileInfo
+        'Symplify\SmartFileSystem\SmartFileInfo',
     ];
 
     /**

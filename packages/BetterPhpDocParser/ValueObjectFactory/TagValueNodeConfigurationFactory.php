@@ -6,12 +6,12 @@ namespace Rector\BetterPhpDocParser\ValueObjectFactory;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineTagNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioRouteTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
+use Rector\Doctrine\Contract\PhpDoc\Node\DoctrineTagNodeInterface;
+use Rector\Symfony\PhpDoc\Node\Sensio\SensioRouteTagValueNode;
+use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 use Symplify\PackageBuilder\Php\TypeChecker;
 
 /**

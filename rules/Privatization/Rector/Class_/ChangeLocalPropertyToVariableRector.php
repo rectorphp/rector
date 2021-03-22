@@ -18,7 +18,7 @@ use PhpParser\NodeTraverser;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticInstanceOf;
+use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeReplacer\PropertyFetchWithVariableReplacer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -222,7 +222,7 @@ CODE_SAMPLE
 
     private function isScopeChangingNode(Node $node): bool
     {
-        return StaticInstanceOf::isOneOf($node, self::SCOPE_CHANGING_NODE_TYPES);
+        return StaticNodeInstanceOf::isOneOf($node, self::SCOPE_CHANGING_NODE_TYPES);
     }
 
     private function refactorIf(If_ $if, string $privatePropertyName): ?bool

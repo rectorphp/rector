@@ -12,20 +12,20 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EmbeddedTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\TableTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\CustomIdGeneratorTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\BlameableTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Gedmo\SlugTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioMethodTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioTemplateTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertChoiceTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\Validator\Constraints\AssertTypeTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Class_\EmbeddedTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Class_\EntityTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Class_\TableTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Gedmo\BlameableTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Gedmo\SlugTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Property_\ColumnTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Property_\CustomIdGeneratorTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Property_\GeneratedValueTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Property_\JoinTableTagValueNode;
+use Rector\Symfony\PhpDoc\Node\AssertChoiceTagValueNode;
+use Rector\Symfony\PhpDoc\Node\AssertTypeTagValueNode;
+use Rector\Symfony\PhpDoc\Node\Sensio\SensioMethodTagValueNode;
+use Rector\Symfony\PhpDoc\Node\Sensio\SensioTemplateTagValueNode;
+use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 
 final class TagValueToPhpParserNodeMap
 {
@@ -36,9 +36,11 @@ final class TagValueToPhpParserNodeMap
         SymfonyRouteTagValueNode::class => ClassMethod::class,
         SlugTagValueNode::class => Property::class,
         BlameableTagValueNode::class => Property::class,
+
         // symfony/validation
         AssertChoiceTagValueNode::class => Property::class,
         AssertTypeTagValueNode::class => Property::class,
+
         // doctrine
         ColumnTagValueNode::class => Property::class,
         JoinTableTagValueNode::class => Property::class,
@@ -47,6 +49,7 @@ final class TagValueToPhpParserNodeMap
         CustomIdGeneratorTagValueNode::class => Property::class,
         GeneratedValueTagValueNode::class => Property::class,
         EmbeddedTagValueNode::class => Property::class,
+
         // special case for constants
         GenericTagValueNode::class => Property::class,
         SensioTemplateTagValueNode::class => Class_::class,

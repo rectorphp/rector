@@ -10,6 +10,9 @@ use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 
 final class EmptyNameResolver implements NodeNameResolverInterface
 {
+    /**
+     * @return class-string<Node>
+     */
     public function getNode(): string
     {
         return Empty_::class;

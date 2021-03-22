@@ -24,6 +24,9 @@ final class ClassConstFetchNameResolver implements NodeNameResolverInterface
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
+    /**
+     * @return class-string<Node>
+     */
     public function getNode(): string
     {
         return ClassConstFetch::class;

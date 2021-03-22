@@ -31,9 +31,11 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 
 <p align="center">
     <img src="/docs/images/php.png">
-    <img src="/docs/images/space.png" width=40>
+    <img src="/docs/images/space.png" width=30>
+    <img src="/docs/images/phpunit.png">
+    <img src="/docs/images/space.png" width=30>
     <img src="/docs/images/symfony.png">
-    <img src="/docs/images/space.png" width=40>
+    <img src="/docs/images/space.png" width=30>
     <a href="https://github.com/palantirnet/drupal-rector">
         <img src="/docs/images/drupal.png" alt="Drupal Rector rules">
     </a>
@@ -41,7 +43,7 @@ It supports all versions of PHP from 5.3 and major open-source projects:
     <img src="/docs/images/space.png" height=15>
     <br>
     <img src="/docs/images/cakephp.png">
-    <img src="/docs/images/space.png" width=40>
+    <img src="/docs/images/space.png" width=30>
     <a href="https://github.com/sabbelasichon/typo3-rector">
         <img src="/docs/images/typo3.png">
     </a>

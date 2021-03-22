@@ -6,6 +6,9 @@ use Rector\Tests\Transform\Rector\ClassMethod\SingleToManyMethodRector\Source\On
 
 class MultiReturn implements OneToManyInterface
 {
+    /**
+     * @return class-string<\PhpParser\Node>
+     */
     public function getNode(): string
     {
         if (true) {

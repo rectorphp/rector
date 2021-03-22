@@ -19,7 +19,7 @@ use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadDocBlock\TagRemover\ReturnTagRemover;
+use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer;
@@ -163,6 +163,7 @@ CODE_SAMPLE
         }
 
         $currentReturnType = $phpDocInfo->getReturnType();
+
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType(
             $currentReturnType,
             $inferredReturnType

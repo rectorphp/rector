@@ -167,6 +167,7 @@ final class ParsedNodeCollector
     public function isCollectableNode(Node $node): bool
     {
         foreach (self::COLLECTABLE_NODE_TYPES as $collectableNodeType) {
+            /** @var class-string<Node> $collectableNodeType */
             if (is_a($node, $collectableNodeType, true)) {
                 return true;
             }

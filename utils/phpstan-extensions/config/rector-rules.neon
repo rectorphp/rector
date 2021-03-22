@@ -1,5 +1,9 @@
 services:
     -
+        class: Rector\PHPStanExtensions\Rule\NoInstanceOfStaticReflectionRule
+        tags: [phpstan.rules.rule]
+
+    -
         class: Symplify\PHPStanRules\ObjectCalisthenics\Rules\NoChainMethodCallRule
         tags: [phpstan.rules.rule]
         arguments:
@@ -13,9 +17,7 @@ services:
             allowedParentTypes:
                 - Rector\Utils\DoctrineAnnotationParserSyncer\FileSyncer\AbstractClassSyncer
                 - PhpParser\NodeAbstract
-                - PHPStan\Type\BooleanType
-                - PHPStan\Type\ObjectType
-                - PHPStan\Type\StaticType
+                - PHPStan\Type\Type
                 - Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory
                 - PHPStan\PhpDocParser\Parser\PhpDocParser
                 - Rector\PostRector\Rector\AbstractPostRector
