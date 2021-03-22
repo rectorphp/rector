@@ -56,7 +56,14 @@ jobs:
             # 5. copy repository meta files
             -   run: cp -R build/target-repository/. rector-prefixed-downgraded
 
-            # 6. publish it to remote repository without tag
+            # 6. setup git
+            -
+                working-directory: rector-prefixed-downgraded
+                run: |
+                    git config user.email "tomas.vot@gmail.com"
+                    git config user.name "Tomas Votruba"
+
+            # 7.A publish it to remote repository without tag
             -
                 name: "Commit Prefixed - main"
                 working-directory: rector-prefixed-downgraded
@@ -66,7 +73,7 @@ jobs:
                     git commit -m "Updated Rector to commit ${{ github.event.after }}" -m "${{ steps.git-log.outputs.log }}"
                     git push --quiet origin main
 
-            # 7. publish it to remote repository with tag
+            # 7.B publish it to remote repository with tag
             -
                 name: "Commit Prefixed - tag"
                 working-directory: rector-prefixed-downgraded
