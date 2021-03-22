@@ -10,7 +10,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-final class VerifyServiceExistsCompilerPass implements CompilerPassInterface
+final class VerifyRectorServiceExistsCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $containerBuilder): void
     {
