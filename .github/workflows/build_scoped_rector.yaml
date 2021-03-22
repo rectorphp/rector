@@ -60,7 +60,7 @@ jobs:
             -
                 uses: "actions/checkout@v2"
                 with:
-                    repository: rector/rector-prefixed
+                    repository: rectorphp/rector-prefixed
                     path: remote-repository
                     token: ${{ secrets.ACCESS_TOKEN }}
 
