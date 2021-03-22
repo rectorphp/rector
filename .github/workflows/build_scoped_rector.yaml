@@ -81,7 +81,7 @@ jobs:
                 if: "!startsWith(github.ref, 'refs/tags/')"
                 run: |
                     git add --all
-                    git commit -m "$(git show -s --format=%B ${GITHUB_SHA::8})"
+                    git commit -m "Updated Rector to commit ${{ github.event.after }}"
                     git push --quiet origin main
 
             # 8.B publish it to remote repository with tag
