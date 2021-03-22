@@ -15,6 +15,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
+/**
+ * @see \Rector\Tests\Transform\Rector\Class_\AddInterfaceByParentRector\AddInterfaceByParentRectorTest
+ */
 final class AddInterfaceByParentRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**

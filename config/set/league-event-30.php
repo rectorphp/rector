@@ -40,6 +40,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new MethodCallRename('League\Event\EventInterface', 'getName', 'eventName'),
                 new MethodCallRename('League\Event\EmitterInterface', 'emit', 'dispatch'),
                 new MethodCallRename('League\Event\EmitterInterface', 'addListener', 'subscribeTo'),
+                new MethodCallRename('League\Event\EmitterInterface', 'addOneTimeListener', 'subscribeOneTo'),
+                new MethodCallRename('League\Event\EmitterInterface', 'useListenerProvider', 'subscribeListenersFrom'),
                 new MethodCallRename('League\Event\ListenerInterface', 'handle', '__invoke'),
             ]),
         ]]);
@@ -68,7 +70,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'League\Event\Emitter' => 'League\Event\EventDispatcher',
-                'League\Event\ListenerInterface' => 'League\Event\Listener'
+                'League\Event\ListenerInterface' => 'League\Event\Listener',
+                'League\Event\GeneratorInterface' => 'League\Event\EventGenerator',
+                'League\Event\ListenerProviderInterface' => 'League\Event\ListenerSubscriber',
+                'League\Event\ListenerAcceptorInterface' => 'League\Event\ListenerRegistry',
             ],
         ]]);
 
