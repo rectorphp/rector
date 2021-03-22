@@ -16,6 +16,7 @@ use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class ClassMethodExternalCallNodeAnalyzer
 {
@@ -44,22 +45,37 @@ final class ClassMethodExternalCallNodeAnalyzer
      */
     private $reflectionProvider;
 
+    /**
+     * @var PrivatesAccessor
+     */
+    private $privatesAccessor;
+
     public function __construct(
         EventSubscriberMethodNamesResolver $eventSubscriberMethodNamesResolver,
         NodeRepository $nodeRepository,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider,
+        PrivatesAccessor $privatesAccessor
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->eventSubscriberMethodNamesResolver = $eventSubscriberMethodNamesResolver;
         $this->nodeRepository = $nodeRepository;
         $this->reflectionProvider = $reflectionProvider;
+        $this->privatesAccessor = $privatesAccessor;
     }
 
     public function hasExternalCall(ClassMethod $classMethod): bool
     {
+        $classReflections = $this->privatesAccessor->getPrivateProperty($this->reflectionProvider, 'classes');
+        dump(count($classReflections));
+        dump($this->reflectionProvider);
+        die;
+
+        dump($classMethod);
+        die;
+
         $methodCalls = $this->nodeRepository->findCallsByClassMethod($classMethod);
 
         /** @var string $methodName */
