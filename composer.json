@@ -46,7 +46,7 @@
         "rector/rector-laravel": "^0.10.0",
         "rector/rector-cakephp": "^0.10.0",
         "rector/rector-phpunit": "^0.10.0",
-        "rector/rector-doctrine": "dev-main",
+        "rector/rector-doctrine": "^0.10.0",
         "sebastian/diff": "^4.0.4",
         "symfony/console": "^4.4.8|^5.1",
         "symfony/dependency-injection": "^5.1",
