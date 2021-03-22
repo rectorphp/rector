@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Tests\BetterPhpDocParser\ValueObjectFactory;
 
 use Iterator;
-use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Doctrine\ColumnTagValueNodeFactory;
 use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory;
 use Rector\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactory;
 use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Doctrine\PhpDoc\NodeFactory\Property_\ColumnTagValueNodeFactory;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class TagValueNodeConfigurationFactoryTest extends AbstractKernelTestCase
