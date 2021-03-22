@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
-use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Application\ActiveRectorsProvider;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
@@ -104,23 +103,6 @@ final class RectorNodeTraverser extends NodeTraverser
     {
         $this->prepareNodeVisitors();
         return count($this->visitors);
-    }
-
-    public function hasZeroCacheRectors(): bool
-    {
-        $this->prepareNodeVisitors();
-        return (bool) $this->getZeroCacheRectorCount();
-    }
-
-    public function getZeroCacheRectorCount(): int
-    {
-        $this->prepareNodeVisitors();
-
-        $zeroCacheRectors = array_filter($this->allPhpRectors, function (PhpRectorInterface $phpRector): bool {
-            return $phpRector instanceof ZeroCacheRectorInterface;
-        });
-
-        return count($zeroCacheRectors);
     }
 
     private function hasFileNodeRectorsEnabled(): bool

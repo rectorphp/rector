@@ -234,8 +234,6 @@ final class ProcessCommand extends Command
         $composerJsonFilePath = getcwd() . '/composer.json';
         $this->composerProcessor->process($composerJsonFilePath);
 
-        $this->reportZeroCacheRectorsCondition();
-
         // report diffs and errors
         $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
 
@@ -280,32 +278,6 @@ final class ProcessCommand extends Command
         if ($optionClearCache) {
             $this->changedFilesDetector->clear();
         }
-    }
-
-    private function reportZeroCacheRectorsCondition(): void
-    {
-        if (! $this->configuration->isCacheEnabled()) {
-            return;
-        }
-
-        if ($this->configuration->shouldClearCache()) {
-            return;
-        }
-
-        if (! $this->rectorNodeTraverser->hasZeroCacheRectors()) {
-            return;
-        }
-
-        if ($this->configuration->shouldHideClutter()) {
-            return;
-        }
-
-        $message = sprintf(
-            'Ruleset contains %d rules that need "--clear-cache" option to analyse full project',
-            $this->rectorNodeTraverser->getZeroCacheRectorCount()
-        );
-
-        $this->symfonyStyle->note($message);
     }
 
     private function invalidateAffectedCacheFiles(): void
