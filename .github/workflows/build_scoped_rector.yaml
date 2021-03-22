@@ -69,6 +69,12 @@ jobs:
                     user-name: "kaizen-ci"
                     user-email: "info@kaizen-ci.org"
 
+            # get the tag
+            -
+                id: tag_value
+                run: |
+                    echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+
             # 7. publish it to remote repository with tag
             -
                 uses: symplify/github-action-monorepo-split@1.1
@@ -79,6 +85,6 @@ jobs:
                     package-directory: 'rector-prefixed-downgraded'
                     split-repository-organization: 'rectorphp'
                     split-repository-name: 'rector-prefixed'
-                    tag: ${GITHUB_REF#refs/tags/}
+                    tag: ${{ steps.tag_value.outputs.SOURCE_TAG }}
                     user-name: "kaizen-ci"
                     user-email: "info@kaizen-ci.org"
