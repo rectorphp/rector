@@ -56,27 +56,38 @@ jobs:
             # 5. copy repository meta files
             -   run: cp -R build/target-repository/. rector-prefixed-downgraded
 
-            # 6. setup git
+            # 6. clone remote repository, so we can push it
             -
-                working-directory: rector-prefixed-downgraded
+                uses: "actions/checkout@v2"
+                with:
+                    repository: rector/rector-prefixed
+                    path: remote-repository
+                    token: ${{ secrets.GITHUB_TOKEN }}
+
+            -
+                run: cp -a rector-prefixed-downgraded/. remote-repository
+
+            # 7. setup git
+            -
+                working-directory: remote-repository
                 run: |
                     git config user.email "tomas.vot@gmail.com"
                     git config user.name "Tomas Votruba"
 
-            # 7.A publish it to remote repository without tag
+            # 8.A publish it to remote repository without tag
             -
                 name: "Commit Prefixed - main"
-                working-directory: rector-prefixed-downgraded
+                working-directory: remote-repository
                 if: "!startsWith(github.ref, 'refs/tags/')"
                 run: |
                     git add --all
                     git commit -m "Updated Rector to commit ${{ github.event.after }}"
                     git push --quiet origin main
 
-            # 7.B publish it to remote repository with tag
+            # 8.B publish it to remote repository with tag
             -
                 name: "Commit Prefixed - tag"
-                working-directory: rector-prefixed-downgraded
+                working-directory: remote-repository
                 if: "startsWith(github.ref, 'refs/tags/')"
                 run: |
                     git add --all
