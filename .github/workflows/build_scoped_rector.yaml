@@ -65,8 +65,10 @@ jobs:
                     path: remote-repository
                     token: ${{ secrets.ACCESS_TOKEN }}
 
-            -
-                run: cp -a rector-prefixed-downgraded/. remote-repository
+            # remove remote files, to avoid piling up dead code in remote repository
+            -   run: rm -rf remote-repository/config remote-repository/src remote-repository/rules remote-repository/packages
+
+            -   run: cp -a rector-prefixed-downgraded/. remote-repository
 
             # 7. setup git
             -
