@@ -30,7 +30,6 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
@@ -786,24 +785,6 @@ final class NodeRepository
                 $this->callsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
             }
         }
-    }
-
-    /**
-     * @param class-string[] $classTypes
-     * @return ClassReflection[]
-     */
-    private function resolveClassReflectionsFromClassTypes(array $classTypes): array
-    {
-        $classReflections = [];
-        foreach ($classTypes as $classType) {
-            if (! $this->reflectionProvider->hasClass($classType)) {
-                continue;
-            }
-
-            $classReflections[] = $this->reflectionProvider->getClass($classType);
-        }
-
-        return $classReflections;
     }
 
     /**
