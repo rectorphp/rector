@@ -15,11 +15,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractRectorTestCase
 {
     /**
-     * @var RenameClassRector
-     */
-    private $renameClassRector;
-
-    /**
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
@@ -40,9 +35,9 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractRectorT
         $configFileInfos = $rectorConfigsResolver->resolveFromConfigFileInfo(new SmartFileInfo($config));
 
         $this->bootKernelWithConfigs(RectorKernel::class, $configFileInfos);
-        $this->renameClassRector = $this->getService(RenameClassRector::class);
 
-        $oldToNewClasses = $this->privatesAccessor->getPrivateProperty($this->renameClassRector, 'oldToNewClasses');
+        $renameClassRector = $this->getService(RenameClassRector::class);
+        $oldToNewClasses = $this->privatesAccessor->getPrivateProperty($renameClassRector, 'oldToNewClasses');
 
         $this->assertSame($expectedConfiguration, $oldToNewClasses);
     }

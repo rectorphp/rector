@@ -99,11 +99,6 @@ final class NodeRepository
     private $parsedPropertyFetchNodeCollector;
 
     /**
-     * @var ParsedClassConstFetchNodeCollector
-     */
-    private $parsedClassConstFetchNodeCollector;
-
-    /**
      * @var ParsedNodeCollector
      */
     private $parsedNodeCollector;
@@ -132,7 +127,6 @@ final class NodeRepository
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
         NodeNameResolver $nodeNameResolver,
-        ParsedClassConstFetchNodeCollector $parsedClassConstFetchNodeCollector,
         ParsedNodeCollector $parsedNodeCollector,
         TypeUnwrapper $typeUnwrapper,
         ReflectionProvider $reflectionProvider,
@@ -141,7 +135,6 @@ final class NodeRepository
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
         $this->parsedPropertyFetchNodeCollector = $parsedPropertyFetchNodeCollector;
-        $this->parsedClassConstFetchNodeCollector = $parsedClassConstFetchNodeCollector;
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->reflectionProvider = $reflectionProvider;
@@ -358,52 +351,6 @@ final class NodeRepository
         /** @var string $method */
         $method = $classMethod->getAttribute(AttributeKey::METHOD_NAME);
         return $this->findCallsByClassAndMethod($class, $method);
-    }
-
-    /**
-     * @return ClassReflection[]
-     */
-    public function findDirectClassConstantFetches(ClassReflection $classReflection, string $desiredConstantName): array
-    {
-        $classConstantFetchByClassAndName = $this->parsedClassConstFetchNodeCollector->getClassConstantFetchByClassAndName();
-        $classTypes = $classConstantFetchByClassAndName[$classReflection->getName()][$desiredConstantName] ?? [];
-
-        return $this->resolveClassReflectionsFromClassTypes($classTypes);
-    }
-
-    /**
-     * @return ClassReflection[]
-     */
-    public function findIndirectClassConstantFetches(
-        ClassReflection $classReflection,
-        string $desiredConstantName
-    ): array {
-        $classConstantFetchByClassAndName = $this->parsedClassConstFetchNodeCollector->getClassConstantFetchByClassAndName();
-
-        foreach ($classConstantFetchByClassAndName as $className => $classesByConstantName) {
-            if (! $this->reflectionProvider->hasClass($className)) {
-                return [];
-            }
-
-            $currentClassReflection = $this->reflectionProvider->getClass($className);
-            if (! isset($classesByConstantName[$desiredConstantName])) {
-                continue;
-            }
-
-            if (! $classReflection->isSubclassOf($currentClassReflection->getName()) &&
-                ! $currentClassReflection->isSubclassOf($classReflection->getName())) {
-                continue;
-            }
-
-            // include child usages and parent usages
-            if ($currentClassReflection->getName() === $classReflection->getName()) {
-                continue;
-            }
-
-            return $this->resolveClassReflectionsFromClassTypes($classesByConstantName[$desiredConstantName]);
-        }
-
-        return [];
     }
 
     public function hasClassChildren(Class_ $desiredClass): bool

@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\ApiPhpDocTagNode;
 use Rector\Core\NodeManipulator\ClassConstManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -91,27 +92,22 @@ CODE_SAMPLE
             return null;
         }
 
+        $classObjectType = new ObjectType($classReflection->getName());
+
+        /** @var ClassConstFetch[] $classConstFetches */
         $classConstFetches = $this->betterNodeFinder->findInstanceOf($classLike->stmts, ClassConstFetch::class);
         foreach ($classConstFetches as $classConstFetch) {
-            dump($classConstFetch);
-            dump($node);
-        }
+            if (! $this->nodeNameResolver->areNamesEqual($classConstFetch->name, $node->consts[0]->name)) {
+                continue;
+            }
 
-//
-//        $directUsingClassReflections = $this->nodeRepository->findDirectClassConstantFetches(
-//            $classReflection,
-//            $constant
-//        );
-//
-//        $indirectUsingClassReflections = $this->nodeRepository->findIndirectClassConstantFetches(
-//            $classReflection,
-//            $constant
-//        );
-//
-//        $usingClassReflections = array_merge($directUsingClassReflections, $indirectUsingClassReflections);
-//        if ($usingClassReflections !== []) {
-//            return null;
-//        }
+            $constFetchClassType = $this->nodeTypeResolver->resolve($classConstFetch->class);
+
+            // constant is used!
+            if ($constFetchClassType->isSuperTypeOf($classObjectType)->yes()) {
+                return null;
+            }
+        }
 
         $this->removeNode($node);
 
