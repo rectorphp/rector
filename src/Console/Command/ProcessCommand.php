@@ -333,9 +333,7 @@ final class ProcessCommand extends Command
             }
 
             try {
-                (static function (string $bootstrapFile): void {
-                    require_once $bootstrapFile;
-                })($bootstrapFile);
+                require_once $bootstrapFile;
             } catch (Throwable $throwable) {
                 $errorMessage = sprintf(
                     '"%s" thrown in "%s" on line %d while loading bootstrap file %s: %s',
