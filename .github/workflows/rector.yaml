@@ -25,10 +25,8 @@ jobs:
             fail-fast: false
             matrix:
                 directories:
-                    - packages
-                    - packages-tests
-                    - src
-                    - tests
+                    - src tests
+                    - packages packages-tests
                     - rules
                     - rules-tests
 
@@ -54,17 +52,6 @@ jobs:
                     # PHP 7.3 is required, so Rector's code is PHP 7.3 compatible even after refactoring
                     php-version: 7.3
                     coverage: none
-
-            -   uses: actions/cache@v2.1.4
-                env:
-                    cache-name: rector-container-cache
-                with:
-                    path: tmp
-                    key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('${{ matrix.directories }}') }}
-                    restore-keys: |
-                        ${{ runner.os }}-build-${{ env.cache-name }}-
-                        ${{ runner.os }}-build-
-                        ${{ runner.os }}-
 
             -   run: composer install --no-progress --ansi
 
