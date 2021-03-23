@@ -1,4 +1,5 @@
 # builds the content of https://github.com/rectorphp/rector-prefixed
+# inspiration from https://github.com/phpstan/phpstan-src/blob/master/.github/workflows/phar.yml
 name: Build Scoped Rector
 
 on:
@@ -74,6 +75,12 @@ jobs:
                     git config user.email "tomas.vot@gmail.com"
                     git config user.name "Tomas Votruba"
 
+            # commit metadata
+            -
+                name: "Get Git log"
+                id: git-log
+                run: echo ::set-output name=log::$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='%H %s' | sed -e 's/^/https:\/\/github.com\/rectorphp\/rector\/commit\//')
+
             # 8.A publish it to remote repository without tag
             -
                 name: "Commit Prefixed - main"
@@ -81,7 +88,7 @@ jobs:
                 if: "!startsWith(github.ref, 'refs/tags/')"
                 run: |
                     git add --all
-                    git commit -m "Updated Rector to commit ${{ github.event.after }}"
+                    git commit -m "Updated Rector to commit ${{ github.event.after }}" -m "${{ steps.git-log.outputs.log }}"
                     git push --quiet origin main
 
             # 8.B publish it to remote repository with tag
@@ -91,7 +98,7 @@ jobs:
                 if: "startsWith(github.ref, 'refs/tags/')"
                 run: |
                     git add --all
-                    git commit -m "Rector ${GITHUB_REF#refs/tags/}"
+                    git commit -m "Rector ${GITHUB_REF#refs/tags/}" -m "${{ steps.git-log.outputs.log }}"
                     git push --quiet origin main
                     git tag ${GITHUB_REF#refs/tags/} -m "${GITHUB_REF#refs/tags/}"
                     git push --quiet origin ${GITHUB_REF#refs/tags/}
