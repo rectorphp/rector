@@ -41,6 +41,9 @@ final class LocalChildClass extends AbstractLocalParentClass
     {
     }
 
+    /**
+     * @param int $number
+     */
     public function changeToo(int $number)
     {
     }

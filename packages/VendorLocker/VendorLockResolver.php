@@ -46,13 +46,13 @@ final class VendorLockResolver
         $this->classMethodVendorLockResolver = $classMethodVendorLockResolver;
     }
 
-    public function isClassMethodParamLockedIn(Node $node, int $paramPosition): bool
+    public function isClassMethodParamLockedIn(Node $node): bool
     {
         if (! $node instanceof ClassMethod) {
             return false;
         }
 
-        return $this->classMethodParamVendorLockResolver->isVendorLocked($node, $paramPosition);
+        return $this->classMethodParamVendorLockResolver->isVendorLocked($node);
     }
 
     public function isReturnChangeVendorLockedIn(ClassMethod $classMethod): bool

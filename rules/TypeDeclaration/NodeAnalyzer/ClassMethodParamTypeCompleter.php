@@ -74,7 +74,7 @@ final class ClassMethodParamTypeCompleter
             return true;
         }
 
-        if ($this->classMethodParamVendorLockResolver->isVendorLocked($classMethod, $position)) {
+        if ($this->classMethodParamVendorLockResolver->isVendorLocked($classMethod)) {
             return true;
         }
 
