@@ -179,4 +179,15 @@ final class ErrorAndDiffCollector
             $this->errors[] = new RectorError($fileInfo, $throwable->getMessage(), $throwable->getCode());
         }
     }
+
+    public function hasErrors(SmartFileInfo $phpFileInfo): bool
+    {
+        foreach ($this->errors as $error) {
+            if ($error->getFileInfo() === $phpFileInfo) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
