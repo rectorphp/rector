@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\VendorLocker\NodeVendorLocker;
 
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -19,19 +17,17 @@ final class ClassMethodParamVendorLockResolver
      */
     private $nodeNameResolver;
 
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeRepository = $nodeRepository;
     }
 
-    public function isVendorLocked(ClassMethod $classMethod, int $paramPosition): bool
+    public function isVendorLocked(ClassMethod $classMethod): bool
     {
+        if ($classMethod->isMagic()) {
+            return true;
+        }
+
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             return false;
@@ -42,10 +38,6 @@ final class ClassMethodParamVendorLockResolver
             return false;
         }
 
-        if ($classMethod->isMagic()) {
-            return true;
-        }
-
         $methodName = $this->nodeNameResolver->getName($classMethod);
         foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
             // skip self
@@ -53,23 +45,10 @@ final class ClassMethodParamVendorLockResolver
                 continue;
             }
 
-            if (! $ancestorClassReflection->hasNativeMethod($methodName)) {
-                continue;
-            }
-
-            // class is vendor, its locking us
-            $classLike = $this->nodeRepository->findClassLike($ancestorClassReflection->getName());
-            if (! $classLike instanceof ClassLike) {
+            // parent type
+            if ($ancestorClassReflection->hasNativeMethod($methodName)) {
                 return true;
             }
-
-            $classMethod = $classLike->getMethod($methodName);
-            if (! $classMethod instanceof ClassMethod) {
-                continue;
-            }
-
-            $paramType = $classMethod->params[$paramPosition]->type;
-            return $paramType !== null;
         }
 
         return false;
