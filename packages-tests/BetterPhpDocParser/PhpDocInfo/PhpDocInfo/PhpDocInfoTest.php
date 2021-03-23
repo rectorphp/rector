@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 
 use PhpParser\Comment\Doc;
-use PhpParser\Node;
 use PhpParser\Node\Stmt\Nop;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -27,11 +26,6 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
      * @var PhpDocInfoPrinter
      */
     private $phpDocInfoPrinter;
-
-    /**
-     * @var Node
-     */
-    private $node;
 
     /**
      * @var SmartFileSystem
@@ -86,9 +80,9 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
         $phpDocInfoFactory = $this->getService(PhpDocInfoFactory::class);
         $phpDocContent = $this->smartFileSystem->readFile($path);
 
-        $this->node = new Nop();
-        $this->node->setDocComment(new Doc($phpDocContent));
+        $nop = new Nop();
+        $nop->setDocComment(new Doc($phpDocContent));
 
-        return $phpDocInfoFactory->createFromNode($this->node);
+        return $phpDocInfoFactory->createFromNode($nop);
     }
 }

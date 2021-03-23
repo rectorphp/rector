@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
-use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Application\ActiveRectorsProvider;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
@@ -35,17 +34,11 @@ final class RectorNodeTraverser extends NodeTraverser
     private $currentFileInfoProvider;
 
     /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
      * @var bool
      */
     private $areNodeVisitorsPrepared = false;
 
     public function __construct(
-        Configuration $configuration,
         ActiveRectorsProvider $activeRectorsProvider,
         NodeFinder $nodeFinder,
         CurrentFileInfoProvider $currentFileInfoProvider
@@ -56,7 +49,6 @@ final class RectorNodeTraverser extends NodeTraverser
         $this->allPhpRectors = $phpRectors;
         $this->nodeFinder = $nodeFinder;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
-        $this->configuration = $configuration;
     }
 
     /**
@@ -106,23 +98,6 @@ final class RectorNodeTraverser extends NodeTraverser
         return count($this->visitors);
     }
 
-    public function hasZeroCacheRectors(): bool
-    {
-        $this->prepareNodeVisitors();
-        return (bool) $this->getZeroCacheRectorCount();
-    }
-
-    public function getZeroCacheRectorCount(): int
-    {
-        $this->prepareNodeVisitors();
-
-        $zeroCacheRectors = array_filter($this->allPhpRectors, function (PhpRectorInterface $phpRector): bool {
-            return $phpRector instanceof ZeroCacheRectorInterface;
-        });
-
-        return count($zeroCacheRectors);
-    }
-
     private function hasFileNodeRectorsEnabled(): bool
     {
         foreach ($this->visitors as $visitor) {
@@ -151,10 +126,6 @@ final class RectorNodeTraverser extends NodeTraverser
         }
 
         foreach ($this->allPhpRectors as $allPhpRector) {
-            if ($this->configuration->isCacheEnabled() && ! $this->configuration->shouldClearCache() && $allPhpRector instanceof ZeroCacheRectorInterface) {
-                continue;
-            }
-
             $this->addVisitor($allPhpRector);
         }
 

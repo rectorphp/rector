@@ -17,7 +17,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\FileSystem\PhpFilesFinder;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
-use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symfony\Component\Console\Application;
@@ -64,11 +63,6 @@ final class ProcessCommand extends Command
     private $outputFormatterCollector;
 
     /**
-     * @var RectorNodeTraverser
-     */
-    private $rectorNodeTraverser;
-
-    /**
      * @var NonPhpFileProcessor
      */
     private $nonPhpFileProcessor;
@@ -112,7 +106,6 @@ final class ProcessCommand extends Command
         NonPhpFileProcessor $nonPhpFileProcessor,
         OutputFormatterCollector $outputFormatterCollector,
         RectorApplication $rectorApplication,
-        RectorNodeTraverser $rectorNodeTraverser,
         SymfonyStyle $symfonyStyle,
         ComposerProcessor $composerProcessor,
         PhpFilesFinder $phpFilesFinder,
@@ -125,7 +118,6 @@ final class ProcessCommand extends Command
         $this->configuration = $configuration;
         $this->rectorApplication = $rectorApplication;
         $this->outputFormatterCollector = $outputFormatterCollector;
-        $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->nonPhpFileProcessor = $nonPhpFileProcessor;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->symfonyStyle = $symfonyStyle;
@@ -234,8 +226,6 @@ final class ProcessCommand extends Command
         $composerJsonFilePath = getcwd() . '/composer.json';
         $this->composerProcessor->process($composerJsonFilePath);
 
-        $this->reportZeroCacheRectorsCondition();
-
         // report diffs and errors
         $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
 
@@ -280,32 +270,6 @@ final class ProcessCommand extends Command
         if ($optionClearCache) {
             $this->changedFilesDetector->clear();
         }
-    }
-
-    private function reportZeroCacheRectorsCondition(): void
-    {
-        if (! $this->configuration->isCacheEnabled()) {
-            return;
-        }
-
-        if ($this->configuration->shouldClearCache()) {
-            return;
-        }
-
-        if (! $this->rectorNodeTraverser->hasZeroCacheRectors()) {
-            return;
-        }
-
-        if ($this->configuration->shouldHideClutter()) {
-            return;
-        }
-
-        $message = sprintf(
-            'Ruleset contains %d rules that need "--clear-cache" option to analyse full project',
-            $this->rectorNodeTraverser->getZeroCacheRectorCount()
-        );
-
-        $this->symfonyStyle->note($message);
     }
 
     private function invalidateAffectedCacheFiles(): void

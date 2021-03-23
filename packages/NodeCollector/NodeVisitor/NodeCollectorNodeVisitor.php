@@ -7,7 +7,6 @@ namespace Rector\NodeCollector\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeCollector\NodeCollector\ParsedClassConstFetchNodeCollector;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeCollector\NodeCollector\ParsedPropertyFetchNodeCollector;
 
@@ -28,13 +27,7 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
      */
     private $parsedPropertyFetchNodeCollector;
 
-    /**
-     * @var ParsedClassConstFetchNodeCollector
-     */
-    private $parsedClassConstFetchNodeCollector;
-
     public function __construct(
-        ParsedClassConstFetchNodeCollector $parsedClassConstFetchNodeCollector,
         NodeRepository $nodeRepository,
         ParsedNodeCollector $parsedNodeCollector,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector
@@ -42,7 +35,6 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
         $this->nodeRepository = $nodeRepository;
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->parsedPropertyFetchNodeCollector = $parsedPropertyFetchNodeCollector;
-        $this->parsedClassConstFetchNodeCollector = $parsedClassConstFetchNodeCollector;
     }
 
     public function enterNode(Node $node)
@@ -53,7 +45,6 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
 
         $this->nodeRepository->collect($node);
         $this->parsedPropertyFetchNodeCollector->collect($node);
-        $this->parsedClassConstFetchNodeCollector->collect($node);
 
         return null;
     }

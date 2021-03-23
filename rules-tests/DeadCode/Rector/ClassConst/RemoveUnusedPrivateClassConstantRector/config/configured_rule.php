@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Rector\Privatization\Rector\Class_\ChangeLocalPropertyToVariableRector;
+use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(ChangeLocalPropertyToVariableRector::class);
+    $services->set(RemoveUnusedPrivateClassConstantRector::class);
 };
