@@ -34,17 +34,11 @@ final class RectorNodeTraverser extends NodeTraverser
     private $currentFileInfoProvider;
 
     /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
      * @var bool
      */
     private $areNodeVisitorsPrepared = false;
 
     public function __construct(
-        Configuration $configuration,
         ActiveRectorsProvider $activeRectorsProvider,
         NodeFinder $nodeFinder,
         CurrentFileInfoProvider $currentFileInfoProvider
@@ -55,7 +49,6 @@ final class RectorNodeTraverser extends NodeTraverser
         $this->allPhpRectors = $phpRectors;
         $this->nodeFinder = $nodeFinder;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
-        $this->configuration = $configuration;
     }
 
     /**
