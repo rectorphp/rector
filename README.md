@@ -9,7 +9,7 @@ Rector helps you with 2 areas - major code changes and in daily work.
 - Do you have a legacy code base? Do you want to have that latest version of PHP or your favorite framework?
  → **Rector gets you there with instant upgrade**.
 
- <br>
+<br>
 
 - Do you have code quality you need, but struggle to keep it with new developers in your team? Do you wish to have  code-reviews for each member of your team, but don't have time for it?
 → **Add Rector to you CI and let it fix your code for you. Get [instant feedback](https://tomasvotruba.com/blog/2020/01/13/why-is-first-instant-feedback-crucial-to-developers/) after each commit.**
@@ -157,12 +157,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // paths to refactor; solid alternative to CLI arguments
     $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests']);
 
-    // Rector relies on autoload setup of your project; Composer autoload is included by default; to add more:
+    // Rector is static reflection to load code without running it - see https://phpstan.org/blog/zero-config-analysis-with-static-reflection
     $parameters->set(Option::AUTOLOAD_PATHS, [
         // autoload specific file
-        __DIR__ . '/vendor/squizlabs/php_codesniffer/autoload.php',
+        __DIR__ . '/file-with-functions.php',
         // or full directory
-        __DIR__ . '/vendor/project-without-composer',
+        __DIR__ . '/project-without-composer',
+    ]);
+
+    // do you need to include constants, class aliases or custom autoloader? files listed will be executed
+    $parameters->set(Option::BOOTSTRAP_FILES, [
+        __DIR__ . '/constants.php',
+        __DIR__ . '/project/special/autoload.php',
     ]);
 
     // is your PHP version different from the one your refactor to? [default: your PHP version], uses PHP_VERSION_ID format
