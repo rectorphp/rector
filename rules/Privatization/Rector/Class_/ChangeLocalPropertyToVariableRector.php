@@ -149,9 +149,9 @@ CODE_SAMPLE
 
         foreach ($privatePropertyNames as $privatePropertyName) {
             foreach ($class->getMethods() as $classMethod) {
-                // constructor injection
+                // assigned in constructor injection → skip
                 if ($this->isName($classMethod, MethodName::CONSTRUCT)) {
-                    continue;
+                    return [];
                 }
 
                 if (! $this->propertyFetchAnalyzer->containsLocalPropertyFetchName(
@@ -267,6 +267,7 @@ CODE_SAMPLE
 
             return NodeTraverser::STOP_TRAVERSAL;
         });
+
         return $isPropertyChanging;
     }
 }

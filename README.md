@@ -32,9 +32,9 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 <p align="center">
     <img src="/docs/images/php.png">
     <img src="/docs/images/space.png" width=30>
-    <img src="/docs/images/phpunit.png">
+    <a href="https://github.com/rectorphp/rector-phpunit"><img src="/docs/images/phpunit.png"></a>
     <img src="/docs/images/space.png" width=30>
-    <img src="/docs/images/symfony.png">
+    <a href="https://github.com/rectorphp/rector-symfony"><img src="/docs/images/symfony.png"></a>
     <img src="/docs/images/space.png" width=30>
     <a href="https://github.com/palantirnet/drupal-rector">
         <img src="/docs/images/drupal.png" alt="Drupal Rector rules">
@@ -42,7 +42,7 @@ It supports all versions of PHP from 5.3 and major open-source projects:
     <br>
     <img src="/docs/images/space.png" height=15>
     <br>
-    <img src="/docs/images/cakephp.png">
+    <a href="https://github.com/rectorphp/rector-cakephp"><img src="/docs/images/cakephp.png"></a>
     <img src="/docs/images/space.png" width=30>
     <a href="https://github.com/sabbelasichon/typo3-rector">
         <img src="/docs/images/typo3.png">
@@ -64,7 +64,7 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 
 ## Documentation
 
-- [Explore 660+ Rector Rules](/docs/rector_rules_overview.md)
+- [Explore 450+ Rector Rules](/docs/rector_rules_overview.md)
 - [How Does Rector Work?](/docs/how_it_works.md)
 - [PHP Parser Nodes](https://github.com/rectorphp/php-parser-nodes-docs/)
 
