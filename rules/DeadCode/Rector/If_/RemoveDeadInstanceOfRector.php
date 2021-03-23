@@ -8,8 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Analyser\Scope;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -72,6 +74,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+
+        // a trait
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
         if (! $this->ifManipulator->isIfWithoutElseAndElseIfs($node)) {
             return null;
         }
