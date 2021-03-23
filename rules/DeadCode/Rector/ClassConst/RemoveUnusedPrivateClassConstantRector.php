@@ -88,7 +88,7 @@ CODE_SAMPLE
         }
 
         $classLike = $this->nodeRepository->findClassLike($classReflection->getName());
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 
