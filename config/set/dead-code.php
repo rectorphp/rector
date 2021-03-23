@@ -58,10 +58,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveUnusedForeachKeyRector::class);
     $services->set(RemoveParentCallWithoutParentRector::class);
     $services->set(RemoveEmptyClassMethodRector::class);
-    $services->set(RemoveUnusedPrivatePropertyRector::class);
     $services->set(RemoveDoubleAssignRector::class);
     $services->set(SimplifyMirrorAssignRector::class);
     $services->set(RemoveOverriddenValuesRector::class);
+    $services->set(RemoveUnusedPrivatePropertyRector::class);
     $services->set(RemoveUnusedPrivateConstantRector::class);
     $services->set(RemoveUnusedPrivateMethodRector::class);
     $services->set(RemoveCodeAfterReturnRector::class);

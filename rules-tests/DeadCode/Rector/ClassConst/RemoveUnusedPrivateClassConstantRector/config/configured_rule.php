@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
+use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(RemoveUnusedClassConstantRector::class);
+    $services->set(RemoveUnusedPrivateClassConstantRector::class);
 };

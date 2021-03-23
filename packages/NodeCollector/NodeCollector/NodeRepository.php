@@ -67,11 +67,6 @@ final class NodeRepository
     private $functionsByName = [];
 
     /**
-     * @var array<string, FuncCall[]>
-     */
-    private $funcCallsByName = [];
-
-    /**
      * @var array<class-string, array<array<MethodCall|StaticCall>>>
      */
     private $callsByTypeAndMethod = [];
@@ -173,11 +168,6 @@ final class NodeRepository
         if ($node instanceof Function_) {
             $functionName = $this->nodeNameResolver->getName($node);
             $this->functionsByName[$functionName] = $node;
-        }
-
-        if ($node instanceof FuncCall) {
-            $functionName = $this->nodeNameResolver->getName($node);
-            $this->funcCallsByName[$functionName][] = $node;
         }
 
         if ($node instanceof Attribute) {
@@ -295,11 +285,6 @@ final class NodeRepository
         }
 
         return null;
-    }
-
-    public function isFunctionUsed(string $functionName): bool
-    {
-        return isset($this->funcCallsByName[$functionName]);
     }
 
     /**

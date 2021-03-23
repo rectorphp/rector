@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\ClassConst;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\ShouldNotHappenException;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\ApiPhpDocTagNode;
 use Rector\Core\NodeManipulator\ClassConstManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -18,9 +18,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector\RemoveUnusedClassConstantRectorTest
+ * @see \Rector\Tests\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector\RemoveUnusedPrivateClassConstantRectorTest
  */
-final class RemoveUnusedClassConstantRector extends AbstractRector
+final class RemoveUnusedPrivateClassConstantRector extends AbstractRector
 {
     /**
      * @var ClassConstManipulator
@@ -76,39 +76,42 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Scope $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
 
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
-            throw new ShouldNotHappenException();
-        }
-
-        $nodeRepositoryFindInterface = $this->nodeRepository->findInterface($classReflection->getName());
-
-        // 0. constants declared in interfaces have to be public
-        if ($nodeRepositoryFindInterface !== null) {
-            $this->visibilityManipulator->makePublic($node);
-            return $node;
-        }
-
-        /** @var string $constant */
-        $constant = $this->getName($node);
-
-        $directUsingClassReflections = $this->nodeRepository->findDirectClassConstantFetches(
-            $classReflection,
-            $constant
-        );
-
-        $indirectUsingClassReflections = $this->nodeRepository->findIndirectClassConstantFetches(
-            $classReflection,
-            $constant
-        );
-
-        $usingClassReflections = array_merge($directUsingClassReflections, $indirectUsingClassReflections);
-        if ($usingClassReflections !== []) {
             return null;
         }
+
+        $classLike = $this->nodeRepository->findClassLike($classReflection->getName());
+        if ($classLike === null) {
+            return null;
+        }
+
+        $classConstFetches = $this->betterNodeFinder->findInstanceOf($classLike->stmts, ClassConstFetch::class);
+        foreach ($classConstFetches as $classConstFetch) {
+            dump($classConstFetch);
+            dump($node);
+        }
+
+//
+//        $directUsingClassReflections = $this->nodeRepository->findDirectClassConstantFetches(
+//            $classReflection,
+//            $constant
+//        );
+//
+//        $indirectUsingClassReflections = $this->nodeRepository->findIndirectClassConstantFetches(
+//            $classReflection,
+//            $constant
+//        );
+//
+//        $usingClassReflections = array_merge($directUsingClassReflections, $indirectUsingClassReflections);
+//        if ($usingClassReflections !== []) {
+//            return null;
+//        }
 
         $this->removeNode($node);
 
@@ -117,7 +120,7 @@ CODE_SAMPLE
 
     private function shouldSkip(ClassConst $classConst): bool
     {
-        if ($this->isOpenSourceProjectType()) {
+        if (! $classConst->isPrivate()) {
             return true;
         }
 
