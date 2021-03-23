@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Set\ValueObject;
 
-use Rector\CakePHP\Sets\CakePHPSetList;
+use Rector\CakePHP\Set\CakePHPSetList;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Laravel\Set\LaravelSetList;
 use Rector\Nette\Set\KdybySetList;
 use Rector\Nette\Set\NetteSetList;
-use Rector\PHPUnit\Sets\PHPUnitSetList;
+use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\Contract\SetListInterface;
 use Rector\Symfony\Set\SwiftmailerSetList;
 use Rector\Symfony\Set\SymfonySetList;
