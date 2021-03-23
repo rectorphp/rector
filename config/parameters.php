@@ -14,6 +14,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::FILE_EXTENSIONS, ['php']);
     $parameters->set(Option::AUTOLOAD_PATHS, []);
 
+    // these files will be executed, useful e.g. for constant definitions
+    $parameters->set(Option::BOOTSTRAP_FILES, []);
+
     // FQN class importing
     $parameters->set(Option::AUTO_IMPORT_NAMES, false);
     $parameters->set(Option::IMPORT_SHORT_CLASSES, true);

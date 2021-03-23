@@ -87,9 +87,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RemoveInterfacesRector::class)
         ->call('configure', [[
-            RemoveInterfacesRector::INTERFACES_TO_REMOVE => [
-                'League\Event\EventInterface',
-            ]
+            RemoveInterfacesRector::INTERFACES_TO_REMOVE => ['League\Event\EventInterface'],
         ]]);
 
     $services->set(RemoveParentRector::class)
@@ -98,6 +96,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'League\Event\AbstractEvent',
                 'League\Event\Event',
                 'League\Event\AbstractListener',
-            ]
+            ],
         ]]);
 };
