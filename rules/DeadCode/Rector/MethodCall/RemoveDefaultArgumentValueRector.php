@@ -172,12 +172,7 @@ CODE_SAMPLE
             if ($this->nodeComparator->areNodesEqual($defaultValues[$key], $arg->value)) {
                 $keysToRemove[] = $key;
             } else {
-                $lastKeyToKeep = end($keysToKeep) ?: 0;
-                $key = $key > $lastKeyToKeep + 1
-                    ? $lastKeyToKeep + 1
-                    : $key;
-
-                $keysToKeep[] = $key;
+                $keysToKeep = $this->appendKeysToKeep($keysToKeep, $key);
             }
         }
 
@@ -194,6 +189,22 @@ CODE_SAMPLE
             return $keysToRemove;
         }
         return [];
+    }
+
+    /**
+     * @param int[] $keysToKeep
+     * @return int[]
+     */
+    private function appendKeysToKeep(array $keysToKeep, int $key): array
+    {
+        $lastKeyToKeep = end($keysToKeep) ?: 0;
+        $key = $key > $lastKeyToKeep + 1
+            ? $lastKeyToKeep + 1
+            : $key;
+
+        $keysToKeep[] = $key;
+
+        return $keysToKeep;
     }
 
     /**
