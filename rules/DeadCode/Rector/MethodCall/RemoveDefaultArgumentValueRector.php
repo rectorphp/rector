@@ -161,7 +161,6 @@ CODE_SAMPLE
     {
         $keysToRemove = [];
         $keysToKeep = [];
-        $totalArgs = count($node->args);
 
         /** @var int $key */
         foreach ($node->args as $key => $arg) {
@@ -174,7 +173,7 @@ CODE_SAMPLE
                 $keysToRemove[] = $key;
             } else {
                 $keysToKeep[] = $key;
-                $keysToKeep   = $this->ensureNoJumpKeysToKeep($keysToKeep, $key, $totalArgs);
+                $keysToKeep   = $this->ensureNoJumpKeysToKeep($keysToKeep, $key);
             }
         }
 
@@ -215,11 +214,11 @@ CODE_SAMPLE
      *
      * @return int[]
      */
-    private function ensureNoJumpKeysToKeep(array $keysToKeep, int $key, int $totalArgs): array
+    private function ensureNoJumpKeysToKeep(array $keysToKeep, int $key): array
     {
-        for ($i = 1; $i < $totalArgs; ++$i) {
+        for ($i = 1; $i < $key; ++$i) {
             if (isset($keysToKeep[$key - $i]) && $keysToKeep[$key - $i] !== $key - $i) {
-                $replacement = $key - 1;
+                $replacement = $key - $i;
                 array_splice($keysToKeep, $key - $i, 0, [$replacement]);
             }
         }
