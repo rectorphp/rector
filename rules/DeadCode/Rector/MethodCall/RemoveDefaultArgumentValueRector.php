@@ -178,12 +178,7 @@ CODE_SAMPLE
             }
         }
 
-        foreach (array_values($keysToRemove) as $key => $keyToRemove) {
-            if (in_array($keyToRemove, $keysToKeep, true)) {
-                unset($keysToRemove[$key]);
-            }
-        }
-
+        $keysToRemove = $this->cleanKeysToRemove($keysToRemove, $keysToKeep);
         if ($keysToRemove === []) {
             return [];
         }
@@ -198,11 +193,34 @@ CODE_SAMPLE
         return [];
     }
 
-    private function ensureNoJumpKeysToKeep(array $keysToKeep, int $key, int $totalArgs)
+    /**
+     * @param int[] $keysToRemove
+     * @param int[] $keysToKeep
+     *
+     * @return int[]
+     */
+    private function cleanKeysToRemove(array $keysToRemove, array $keysToKeep): array
     {
-        for ($i = 1; $i < $totalArgs; $i++) {
+        foreach (array_values($keysToRemove) as $key => $keyToRemove) {
+            if (in_array($keyToRemove, $keysToKeep, true)) {
+                unset($keysToRemove[$key]);
+            }
+        }
+
+        return $keysToRemove;
+    }
+
+    /**
+     * @param int[] $keysToKeep
+     *
+     * @return int[]
+     */
+    private function ensureNoJumpKeysToKeep(array $keysToKeep, int $key, int $totalArgs): array
+    {
+        for ($i = 1; $i < $totalArgs; ++$i) {
             if (isset($keysToKeep[$key - $i]) && $keysToKeep[$key - $i] !== $key - $i) {
-                array_splice($keysToKeep, $key - $i, 0, $key - $i);
+                $replacement = $key - 1;
+                array_splice($keysToKeep, $key - $i, 0, [$replacement]);
             }
         }
 
