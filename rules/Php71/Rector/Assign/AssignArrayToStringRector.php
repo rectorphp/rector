@@ -105,9 +105,17 @@ CODE_SAMPLE
             return $node;
         }
 
+        $isFoundPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use ($variable): bool {
+            return $this->nodeComparator->areNodesEqual($node, $variable);
+        });
+
+        if (! $isFoundPrev) {
+            return null;
+        }
+
         // there is "$string[] = ...;", which would cause error in PHP 7+
         // fallback - if no array init found, retype to (array)
-        $assign = new Assign($arrayDimFetchNode->var, new ArrayCast($arrayDimFetchNode->var));
+        $assign = new Assign($variable, new ArrayCast($variable));
         $this->addNodeAfterNode(clone $node, $node);
 
         return $assign;
