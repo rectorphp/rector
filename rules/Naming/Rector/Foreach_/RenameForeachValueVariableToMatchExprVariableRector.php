@@ -99,11 +99,11 @@ CODE_SAMPLE
         }
 
         $singularValueVarName = $this->inflectorSingularResolver->resolve($exprName);
-        if ($this->shouldSkip($valueVarName, $singularValueVarName, $node)) {
+        if ($singularValueVarName === $exprName) {
             return null;
         }
 
-        if ($singularValueVarName === '') {
+        if ($this->shouldSkip($valueVarName, $singularValueVarName, $node)) {
             return null;
         }
 
