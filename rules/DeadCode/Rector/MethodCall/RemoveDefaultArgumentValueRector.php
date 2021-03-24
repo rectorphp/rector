@@ -172,8 +172,12 @@ CODE_SAMPLE
             if ($this->nodeComparator->areNodesEqual($defaultValues[$key], $arg->value)) {
                 $keysToRemove[] = $key;
             } else {
+                $lastKeyToKeep = end($keysToKeep) ?? 0;
+                $key = $key > $lastKeyToKeep + 1
+                    ? $lastKeyToKeep + 1
+                    : $key;
+
                 $keysToKeep[] = $key;
-                $keysToKeep   = $this->ensureNoJumpKeysToKeep($keysToKeep, $key);
             }
         }
 
@@ -200,29 +204,12 @@ CODE_SAMPLE
      */
     private function cleanKeysToRemove(array $keysToRemove, array $keysToKeep): array
     {
-        foreach (array_values($keysToRemove) as $key => $keyToRemove) {
+        foreach ($keysToRemove as $key => $keyToRemove) {
             if (in_array($keyToRemove, $keysToKeep, true)) {
                 unset($keysToRemove[$key]);
             }
         }
 
         return $keysToRemove;
-    }
-
-    /**
-     * @param int[] $keysToKeep
-     *
-     * @return int[]
-     */
-    private function ensureNoJumpKeysToKeep(array $keysToKeep, int $key): array
-    {
-        for ($i = 1; $i < $key; ++$i) {
-            if (isset($keysToKeep[$key - $i]) && $keysToKeep[$key - $i] !== $key - $i) {
-                $replacement = $key - $i;
-                array_splice($keysToKeep, $key - $i, 0, [$replacement]);
-            }
-        }
-
-        return $keysToKeep;
     }
 }
