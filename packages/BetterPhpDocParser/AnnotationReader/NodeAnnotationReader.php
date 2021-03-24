@@ -28,240 +28,235 @@ use Throwable;
 
 final class NodeAnnotationReader
 {
-    /**
-     * @var string[]
-     */
-    private $alreadyProvidedAnnotations = [];
-
-    /**
-     * @var Reader
-     */
-    private $reader;
+//    /**
+//     * @var string[]
+//     */
+//    private $alreadyProvidedAnnotations = [];
+//
+//    /**
+//     * @var Reader
+//     */
+//    private $reader;
 
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
 
-    /**
-     * @var ConstantReferenceIdentifierRestorer
-     */
-    private $constantReferenceIdentifierRestorer;
+//
+//    /**
+//     * @var ConstantReferenceIdentifierRestorer
+//     */
+//    private $constantReferenceIdentifierRestorer;
 
     /**
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    /**
-     * @var PhpDocParser
-     */
-    private $phpDocParser;
-    /**
-     * @var BetterPhpDocParser
-     */
-    private $betterPhpDocParser;
-    /**
-     * @var Lexer
-     */
-    private $lexer;
 
-    public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        ReflectionProvider $reflectionProvider
-    ) {
+//
+//    /**
+//     * @var PhpDocParser
+//     */
+//    private $phpDocParser;
+//
+//    /**
+//     * @var BetterPhpDocParser
+//     */
+//    private $betterPhpDocParser;
+//
+//    /**
+//     * @var Lexer
+//     */
+//    private $lexer;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
+    {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
 
     public function readAnnotation(Node $node, string $annotationClass): ?object
     {
+        throw new ShouldNotHappenException('Use direct phpstan/phpdoc-parser instead of doctrine/annotations');
 
-        $docComment = $node->getDocComment();
-        if ($docComment === null) {
-            return null;
-        }
-
-        dump($docComment);
-        die;
-
-        $phpDocNode = $this->parseTokensToPhpDocNode($docComment->getText());
-        dump($phpDocNode);
-
-        dump($node);
-        dump($annotationClass);
-        die;
-
-        if ($node instanceof Property) {
-            return $this->readPropertyAnnotation($node, $annotationClass);
-        }
-
-        if ($node instanceof ClassMethod) {
-            return $this->readMethodAnnotation($node, $annotationClass);
-        }
-
-        if ($node instanceof Class_) {
-            return $this->readClassAnnotation($node, $annotationClass);
-        }
-
-        return null;
+//        $docComment = $node->getDocComment();
+//        if ($docComment === null) {
+//            return null;
+//        }
+//
+//        $phpDocNode = $this->parseTokensToPhpDocNode($docComment->getText());
+//        if ($node instanceof Property) {
+//            return $this->readPropertyAnnotation($node, $annotationClass);
+//        }
+//
+//        if ($node instanceof ClassMethod) {
+//            return $this->readMethodAnnotation($node, $annotationClass);
+//        }
+//
+//        if ($node instanceof Class_) {
+//            return $this->readClassAnnotation($node, $annotationClass);
+//        }
+//
+//        return null;
     }
 
-    public function readClassAnnotation(Class_ $class, string $annotationClassName): ?object
-    {
-        $classReflection = $this->createClassReflectionFromNode($class);
-        $nativeClassReflection = $classReflection->getNativeReflection();
+//    public function readClassAnnotation(Class_ $class, string $annotationClassName): ?object
+//    {
+//        $classReflection = $this->createClassReflectionFromNode($class);
+//        $nativeClassReflection = $classReflection->getNativeReflection();
+//
+//        try {
+//            // covers cases like https://github.com/rectorphp/rector/issues/3046
+//
+//            /** @var object[] $classAnnotations */
+//            $classAnnotations = $this->reader->getClassAnnotations($nativeClassReflection);
+//            return $this->matchNextAnnotation($classAnnotations, $annotationClassName, $class);
+//        } catch (AnnotationException $annotationException) {
+//            // unable to load
+//            return null;
+//        }
+//    }
 
-        try {
-            // covers cases like https://github.com/rectorphp/rector/issues/3046
+//    public function readPropertyAnnotation(Property $property, string $annotationClassName): ?object
+//    {
+//        $reflectionProperty = $this->getNativePropertyReflection($property);
+//        if (! $reflectionProperty instanceof ReflectionProperty) {
+//            throw new ShouldNotHappenException();
+//        }
+//
+//        try {
+//            // covers cases like https://github.com/rectorphp/rector/issues/3046
+//
+//            /** @var object[] $propertyAnnotations */
+//            $propertyAnnotations = $this->reader->getPropertyAnnotations($reflectionProperty);
+//            return $this->matchNextAnnotation($propertyAnnotations, $annotationClassName, $property);
+//        } catch (AnnotationException $annotationException) {
+//            // unable to load
+//            return null;
+//        }
+//    }
 
-            /** @var object[] $classAnnotations */
-            $classAnnotations = $this->reader->getClassAnnotations($nativeClassReflection);
-            return $this->matchNextAnnotation($classAnnotations, $annotationClassName, $class);
-        } catch (AnnotationException $annotationException) {
-            // unable to load
-            return null;
-        }
-    }
+//    private function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName): ?object
+//    {
+//        /** @var string $className */
+//        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+//
+//        /** @var string $methodName */
+//        $methodName = $this->nodeNameResolver->getName($classMethod);
+//
+//        $reflectionMethod = $this->resolveNativeClassMethodReflection($className, $methodName);
+//
+//        try {
+//            // covers cases like https://github.com/rectorphp/rector/issues/3046
+//
+//            /** @var object[] $methodAnnotations */
+//            $methodAnnotations = $this->reader->getMethodAnnotations($reflectionMethod);
+//
+//            foreach ($methodAnnotations as $methodAnnotation) {
+//                if (! is_a($methodAnnotation, $annotationClassName, true)) {
+//                    continue;
+//                }
+//
+//                $objectHash = md5(spl_object_hash($classMethod) . serialize($methodAnnotation));
+//                if (in_array($objectHash, $this->alreadyProvidedAnnotations, true)) {
+//                    continue;
+//                }
+//
+//                $this->alreadyProvidedAnnotations[] = $objectHash;
+//                $this->constantReferenceIdentifierRestorer->restoreObject($methodAnnotation);
+//
+//                return $methodAnnotation;
+//            }
+//        } catch (AnnotationException $annotationException) {
+//            // unable to load
+//            return null;
+//        }
+//
+//        return null;
+//    }
 
-    public function readPropertyAnnotation(Property $property, string $annotationClassName): ?object
-    {
-        $reflectionProperty = $this->getNativePropertyReflection($property);
-        if (! $reflectionProperty instanceof ReflectionProperty) {
-            throw new ShouldNotHappenException();
-        }
-
-        try {
-            // covers cases like https://github.com/rectorphp/rector/issues/3046
-
-            /** @var object[] $propertyAnnotations */
-            $propertyAnnotations = $this->reader->getPropertyAnnotations($reflectionProperty);
-            return $this->matchNextAnnotation($propertyAnnotations, $annotationClassName, $property);
-        } catch (AnnotationException $annotationException) {
-            // unable to load
-            return null;
-        }
-    }
-
-    private function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName): ?object
-    {
-        /** @var string $className */
-        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-
-        /** @var string $methodName */
-        $methodName = $this->nodeNameResolver->getName($classMethod);
-
-        $reflectionMethod = $this->resolveNativeClassMethodReflection($className, $methodName);
-
-        try {
-            // covers cases like https://github.com/rectorphp/rector/issues/3046
-
-            /** @var object[] $methodAnnotations */
-            $methodAnnotations = $this->reader->getMethodAnnotations($reflectionMethod);
-
-            foreach ($methodAnnotations as $methodAnnotation) {
-                if (! is_a($methodAnnotation, $annotationClassName, true)) {
-                    continue;
-                }
-
-                $objectHash = md5(spl_object_hash($classMethod) . serialize($methodAnnotation));
-                if (in_array($objectHash, $this->alreadyProvidedAnnotations, true)) {
-                    continue;
-                }
-
-                $this->alreadyProvidedAnnotations[] = $objectHash;
-                $this->constantReferenceIdentifierRestorer->restoreObject($methodAnnotation);
-
-                return $methodAnnotation;
-            }
-        } catch (AnnotationException $annotationException) {
-            // unable to load
-            return null;
-        }
-
-        return null;
-    }
-
-    private function createClassReflectionFromNode(Class_ $class): ClassReflection
-    {
-        /** @var string $className */
-        $className = $this->nodeNameResolver->getName($class);
-
-        // covers cases like https://github.com/rectorphp/rector/issues/3230#issuecomment-683317288
-        return $this->reflectionProvider->getClass($className);
-    }
-
-    /**
-     * @param object[] $annotations
-     * @param class-string $annotationClassName
-     */
-    private function matchNextAnnotation(array $annotations, string $annotationClassName, Node $node): ?object
-    {
-        foreach ($annotations as $annotation) {
-            if (! is_a($annotation, $annotationClassName, true)) {
-                continue;
-            }
-
-            $objectHash = md5(spl_object_hash($node) . serialize($annotation));
-            if (in_array($objectHash, $this->alreadyProvidedAnnotations, true)) {
-                continue;
-            }
-
-            $this->alreadyProvidedAnnotations[] = $objectHash;
-            $this->constantReferenceIdentifierRestorer->restoreObject($annotation);
-
-            return $annotation;
-        }
-
-        return null;
-    }
-
-    private function getNativePropertyReflection(Property $property): ?ReflectionProperty
-    {
-        /** @var string $propertyName */
-        $propertyName = $this->nodeNameResolver->getName($property);
-
-        /** @var string|null $className */
-        $className = $property->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            // probably fresh node
-            return null;
-        }
-
-        if (! $this->reflectionProvider->hasClass($className)) {
-            // probably fresh node
-            return null;
-        }
-
-        try {
-            $classReflection = $this->reflectionProvider->getClass($className);
-            $scope = $property->getAttribute(AttributeKey::SCOPE);
-
-            $propertyReflection = $classReflection->getProperty($propertyName, $scope);
-            if ($propertyReflection instanceof PhpPropertyReflection) {
-                return $propertyReflection->getNativeReflection();
-            }
-        } catch (Throwable $throwable) {
-            // in case of PHPUnit property or just-added property
-            return null;
-        }
-    }
-
-    private function resolveNativeClassMethodReflection(string $className, string $methodName): ReflectionMethod
-    {
-        if (! $this->reflectionProvider->hasClass($className)) {
-            throw new ShouldNotHappenException();
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($className);
-        $reflectionClass = $classReflection->getNativeReflection();
-
-        return $reflectionClass->getMethod($methodName);
-    }
-
-    private function parseTokensToPhpDocNode(string $docContent): PhpDocNode
-    {
-        $tokens = $this->lexer->tokenize($docContent);
-        $tokenIterator = new TokenIterator($tokens);
-        return $this->betterPhpDocParser->parse($tokenIterator);
-    }
+//    private function createClassReflectionFromNode(Class_ $class): ClassReflection
+//    {
+//        /** @var string $className */
+//        $className = $this->nodeNameResolver->getName($class);
+//
+//        // covers cases like https://github.com/rectorphp/rector/issues/3230#issuecomment-683317288
+//        return $this->reflectionProvider->getClass($className);
+//    }
+//
+//    /**
+//     * @param object[] $annotations
+//     * @param class-string $annotationClassName
+//     */
+//    private function matchNextAnnotation(array $annotations, string $annotationClassName, Node $node): ?object
+//    {
+//        foreach ($annotations as $annotation) {
+//            if (! is_a($annotation, $annotationClassName, true)) {
+//                continue;
+//            }
+//
+//            $objectHash = md5(spl_object_hash($node) . serialize($annotation));
+//            if (in_array($objectHash, $this->alreadyProvidedAnnotations, true)) {
+//                continue;
+//            }
+//
+//            $this->alreadyProvidedAnnotations[] = $objectHash;
+//            $this->constantReferenceIdentifierRestorer->restoreObject($annotation);
+//
+//            return $annotation;
+//        }
+//
+//        return null;
+//    }
+//
+//    private function getNativePropertyReflection(Property $property): ?ReflectionProperty
+//    {
+//        /** @var string $propertyName */
+//        $propertyName = $this->nodeNameResolver->getName($property);
+//
+//        /** @var string|null $className */
+//        $className = $property->getAttribute(AttributeKey::CLASS_NAME);
+//        if ($className === null) {
+//            // probably fresh node
+//            return null;
+//        }
+//
+//        if (! $this->reflectionProvider->hasClass($className)) {
+//            // probably fresh node
+//            return null;
+//        }
+//
+//        try {
+//            $classReflection = $this->reflectionProvider->getClass($className);
+//            $scope = $property->getAttribute(AttributeKey::SCOPE);
+//
+//            $propertyReflection = $classReflection->getProperty($propertyName, $scope);
+//            if ($propertyReflection instanceof PhpPropertyReflection) {
+//                return $propertyReflection->getNativeReflection();
+//            }
+//        } catch (Throwable $throwable) {
+//            // in case of PHPUnit property or just-added property
+//            return null;
+//        }
+//    }
+//
+//    private function resolveNativeClassMethodReflection(string $className, string $methodName): ReflectionMethod
+//    {
+//        if (! $this->reflectionProvider->hasClass($className)) {
+//            throw new ShouldNotHappenException();
+//        }
+//
+//        $classReflection = $this->reflectionProvider->getClass($className);
+//        $reflectionClass = $classReflection->getNativeReflection();
+//
+//        return $reflectionClass->getMethod($methodName);
+//    }
+//
+//    private function parseTokensToPhpDocNode(string $docContent): PhpDocNode
+//    {
+//        $tokens = $this->lexer->tokenize($docContent);
+//        $tokenIterator = new TokenIterator($tokens);
+//        return $this->betterPhpDocParser->parse($tokenIterator);
+//    }
 }

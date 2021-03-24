@@ -13,10 +13,11 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Doctrine\PhpDoc\Node\Property_\ColumnTagValueNode;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\PhpDoc\ShortClassExpander;
 
 final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInterface
 {
@@ -43,8 +44,16 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
      */
     private $phpDocInfoFactory;
 
-    public function __construct(TypeFactory $typeFactory, PhpDocInfoFactory $phpDocInfoFactory)
-    {
+    /**
+     * @var ShortClassExpander
+     */
+    private $annotationClassResolver;
+
+    public function __construct(
+        TypeFactory $typeFactory,
+        PhpDocInfoFactory $phpDocInfoFactory,
+        ShortClassExpander $annotationClassResolver
+    ) {
         $this->typeFactory = $typeFactory;
 
         $this->doctrineTypeToScalarType = [
@@ -83,19 +92,21 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
             'time' => new ObjectType(self::DATE_TIME_INTERFACE),
             'year' => new ObjectType(self::DATE_TIME_INTERFACE),
         ];
+
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->annotationClassResolver = $annotationClassResolver;
     }
 
     public function inferProperty(Property $property): Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
-        $doctrineColumnTagValueNode = $phpDocInfo->getByType(ColumnTagValueNode::class);
-        if (! $doctrineColumnTagValueNode instanceof ColumnTagValueNode) {
+        $doctrineColumnTagValueNode = $phpDocInfo->getByType('Doctrine\ORM\Mapping\Column');
+        if (! $doctrineColumnTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return new MixedType();
         }
 
-        $type = $doctrineColumnTagValueNode->getType();
+        $type = $doctrineColumnTagValueNode->getValueWithoutQuotes('type');
         if ($type === null) {
             return new MixedType();
         }
@@ -107,8 +118,10 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
 
         $types = [$scalarType];
 
+        $isNullable = $doctrineColumnTagValueNode->getValue('nullable');
+
         // is nullable?
-        if ($doctrineColumnTagValueNode->isNullable()) {
+        if ($isNullable === true) {
             $types[] = new NullType();
         }
 

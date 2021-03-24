@@ -30,6 +30,7 @@ use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ClassNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
+<<<<<<< HEAD
 use Rector\BetterPhpDocParser\ValueObject\NodeTypes;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
@@ -45,6 +46,12 @@ use Rector\Doctrine\PhpDoc\Node\Property_\ColumnTagValueNode;
 use Rector\Doctrine\PhpDoc\Node\Property_\CustomIdGeneratorTagValueNode;
 use Rector\Doctrine\PhpDoc\Node\Property_\GeneratedValueTagValueNode;
 use Rector\Doctrine\PhpDoc\Node\Property_\JoinTableTagValueNode;
+=======
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Core\Configuration\CurrentNodeProvider;
+use Rector\Core\Exception\NotImplementedYetException;
+>>>>>>> 4100b04a63... Refactor doctrine/annotation parser to static reflection with phpdoc-parser
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\PhpDoc\Node\AssertChoiceTagValueNode;
 use Rector\Symfony\PhpDoc\Node\AssertTypeTagValueNode;
@@ -291,13 +298,27 @@ final class PhpDocInfo
     }
 
     /**
-     * @param class-string<TNode> $type
+     * @param array<class-string<TNode|class-string>> $types
+     * @return TNode|null
+     */
+    public function getByTypes(array $types)
+    {
+        foreach ($types as $type) {
+            $phpDocNode = $this->getByType($type);
+            if ($phpDocNode !== null) {
+                return $phpDocNode;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param class-string<TNode|class-string> $type
      * @return TNode|null
      */
     public function getByType(string $type)
     {
-        $this->ensureTypeIsTagValueNode($type, __METHOD__);
-
         foreach ($this->phpDocNode->children as $phpDocChildNode) {
             if (is_a($phpDocChildNode, $type, true)) {
                 return $phpDocChildNode;
@@ -305,6 +326,13 @@ final class PhpDocInfo
 
             if (! $phpDocChildNode instanceof PhpDocTagNode) {
                 continue;
+            }
+
+            // new approach
+            if ($phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode) {
+                if ($phpDocChildNode->value->getTagClass() === $type) {
+                    return $phpDocChildNode->value;
+                }
             }
 
             if (! is_a($phpDocChildNode->value, $type, true)) {
@@ -324,7 +352,7 @@ final class PhpDocInfo
      */
     public function findAllByType(string $type): array
     {
-        $this->ensureTypeIsTagValueNode($type, __METHOD__);
+//        $this->ensureTypeIsTagValueNode($type, __METHOD__);
 
         $foundTagsValueNodes = [];
 
@@ -360,8 +388,6 @@ final class PhpDocInfo
      */
     public function removeByType(string $type): void
     {
-        $this->ensureTypeIsTagValueNode($type, __METHOD__);
-
         foreach ($this->phpDocNode->children as $key => $phpDocChildNode) {
             if (is_a($phpDocChildNode, $type, true)) {
                 unset($this->phpDocNode->children[$key]);
@@ -502,6 +528,7 @@ final class PhpDocInfo
         return $methodTagNames;
     }
 
+<<<<<<< HEAD
     public function hasByAnnotationClass(string $annotationClass): bool
     {
         $tagValueNodes = $this->findAllByType(AbstractTagValueNode::class);
@@ -548,6 +575,36 @@ final class PhpDocInfo
     }
 
     private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): Type
+=======
+    /**
+     * Looking for class-based annotations from doctrine/annotation
+     * @param string $name Full string, or mask string, e.g. "Doctrine\*"
+     */
+    public function hasTagClassNamed(string $name): bool
+>>>>>>> 4100b04a63... Refactor doctrine/annotation parser to static reflection with phpdoc-parser
+    {
+        foreach ($this->phpDocNode->children as $phpDocChildNode) {
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
+            }
+
+            if (! $phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode) {
+                continue;
+            }
+
+            if ($phpDocChildNode->value->getTagClass() === $name) {
+                return true;
+            }
+
+            if (fnmatch($name, $phpDocChildNode->value->getTagClass(), FNM_NOESCAPE)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): Type
     {
         if ($phpDocTagValueNode === null) {
             return new MixedType();
@@ -556,30 +613,32 @@ final class PhpDocInfo
         return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($phpDocTagValueNode, $this->node);
     }
 
-    /**
-     * @param class-string $type
-     */
-    private function ensureTypeIsTagValueNode(string $type, string $location): void
-    {
-        /** @var array<class-string<\PhpParser\Node>> $desiredTypes */
-        $desiredTypes = array_merge([
-            PhpDocTagValueNode::class,
-            PhpDocTagNode::class,
-        ], NodeTypes::TYPE_AWARE_NODES);
+//    /**
+//     * @param class-string $phpDocTagValueNode
+//     */
+//    private function ensureTypeIsTagValueNode(string $type, string $location): void
+//    {
+//        /** @var array<class-string<\PhpParser\Node>> $desiredTypes */
+//        $desiredTypes = array_merge([
+//            PhpDocTagValueNode::class,
+//            PhpDocTagNode::class,
+//        ], NodeTypes::TYPE_AWARE_NODES);
+//
+//        foreach ($desiredTypes as $desiredType) {
+//            if (is_a($type, $desiredType, true)) {
+//                return;
+//            }
+//        }
+//
+//        throw new ShouldNotHappenException(sprintf(
+//            'Type "%s" passed to "%s()" method must be child of "%s"',
+//            $type,
+//            $location,
+//            PhpDocTagValueNode::class
 
-        foreach ($desiredTypes as $desiredType) {
-            if (is_a($type, $desiredType, true)) {
-                return;
-            }
-        }
+//        ));
 
-        throw new ShouldNotHappenException(sprintf(
-            'Type "%s" passed to "%s()" method must be child of "%s"',
-            $type,
-            $location,
-            PhpDocTagValueNode::class
-        ));
-    }
+//    }
 
     private function resolveNameForPhpDocTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): string
     {

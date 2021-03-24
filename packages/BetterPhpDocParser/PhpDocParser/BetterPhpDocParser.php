@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -21,6 +22,7 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\StringTagMatchingPhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -80,6 +82,11 @@ final class BetterPhpDocParser extends PhpDocParser
     private $stringTagMatchingPhpDocNodeFactories = [];
 
     /**
+     * @var Lexer
+     */
+    private $lexer;
+
+    /**
      * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
      * @param StringTagMatchingPhpDocNodeFactoryInterface[] $stringTagMatchingPhpDocNodeFactories
      */
@@ -90,6 +97,7 @@ final class BetterPhpDocParser extends PhpDocParser
         CurrentNodeProvider $currentNodeProvider,
         ClassAnnotationMatcher $classAnnotationMatcher,
         AnnotationContentResolver $annotationContentResolver,
+        Lexer $lexer,
         array $phpDocNodeFactories = [],
         array $stringTagMatchingPhpDocNodeFactories = []
     ) {
@@ -104,6 +112,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->annotationContentResolver = $annotationContentResolver;
         $this->stringTagMatchingPhpDocNodeFactories = $stringTagMatchingPhpDocNodeFactories;
+        $this->lexer = $lexer;
     }
 
     public function parse(TokenIterator $tokenIterator): PhpDocNode
@@ -111,7 +120,6 @@ final class BetterPhpDocParser extends PhpDocParser
         $originalTokenIterator = clone $tokenIterator;
 
         $tokenIterator->consumeTokenType(Lexer::TOKEN_OPEN_PHPDOC);
-
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
 
         $children = [];
@@ -164,19 +172,30 @@ final class BetterPhpDocParser extends PhpDocParser
         // class-annotation
         $phpDocNodeFactory = $this->matchTagToPhpDocNodeFactory($tag);
 
-        dump($phpDocNodeFactory);
-        die;
-
         if ($phpDocNodeFactory !== null) {
             $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
                 $tag,
                 $currentPhpNode
             );
 
-            $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens(
-                $currentPhpNode,
-                $tokenIterator,
-                $fullyQualifiedAnnotationClass
+            $phpDocTagValueNode = parent::parseTagValue($tokenIterator, $tag);
+            if (! $phpDocTagValueNode instanceof GenericTagValueNode) {
+                throw new ShouldNotHappenException();
+            }
+
+            // @todo parse this part to array of items
+            $tokens = $this->lexer->tokenize($phpDocTagValueNode->value);
+            $nestedTokenIterator = new TokenIterator($tokens);
+
+            $values = $this->resolveAnnotationMethodCall($nestedTokenIterator);
+
+            // https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L742
+            // @todo mimic this behavior in phpdoc-parser :)
+
+            return new DoctrineAnnotationTagValueNode(
+                $fullyQualifiedAnnotationClass,
+                $phpDocTagValueNode->value,
+                $values
             );
         }
 
@@ -338,5 +357,81 @@ final class BetterPhpDocParser extends PhpDocParser
         }
 
         return null;
+    }
+
+    /**
+     * mimics: https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1024-L1041
+     * @return array<mixed, mixed>
+     */
+    private function resolveAnnotationMethodCall(TokenIterator $tokenIterator): array
+    {
+        if (! $tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_PARENTHESES)) {
+            return [];
+        }
+
+        $tokenIterator->consumeTokenType(Lexer::TOKEN_OPEN_PARENTHESES);
+
+        // empty ()
+        if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_PARENTHESES)) {
+            return [];
+        }
+
+        return $this->resolveAnnotationValues($tokenIterator);
+    }
+
+    /**
+     * @see https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1051-L1079
+     * @return array<mixed, mixed>
+     */
+    private function resolveAnnotationValues(TokenIterator $tokenIterator): array
+    {
+        $values = $this->resolveAnnotationValue($tokenIterator);
+
+        while ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_COMMA)) {
+            $tokenIterator->next();
+
+            $nestedValues = $this->resolveAnnotationValue($tokenIterator);
+            $values = array_merge($values, $nestedValues);
+        }
+
+        return $values;
+    }
+
+    /**
+     * @see https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1215-L1224
+     * @return mixed
+     */
+    private function resolveAnnotationValue(TokenIterator $tokenIterator)
+    {
+        // is equal value or plain value?
+        $keyValue = $tokenIterator->currentTokenValue();
+        $tokenIterator->next();
+
+        if (! $tokenIterator->isCurrentTokenType(Lexer::TOKEN_EQUAL)) {
+            // 1. plain value - mimics https://github.com/doctrine/annotations/blob/0cb0cd2950a5c6cdbf22adbe2bfd5fd1ea68588f/lib/Doctrine/Common/Annotations/DocParser.php#L1234-L1282
+            $tokenIterator->next();
+            return $keyValue;
+        }
+
+        // 2. assign key = value - mimics FieldAssignment() https://github.com/doctrine/annotations/blob/0cb0cd2950a5c6cdbf22adbe2bfd5fd1ea68588f/lib/Doctrine/Common/Annotations/DocParser.php#L1291-L1303
+        $tokenIterator->consumeTokenType(Lexer::TOKEN_EQUAL);
+
+        $currentTokenValue = $tokenIterator->currentTokenValue();
+
+        // normalize value
+        if ($currentTokenValue === 'false') {
+            $currentTokenValue = false;
+        }
+
+        if ($currentTokenValue === 'true') {
+            $currentTokenValue = true;
+        }
+
+        $tokenIterator->next();
+
+        return [
+            // plain token value
+            $keyValue => $currentTokenValue,
+        ];
     }
 }
