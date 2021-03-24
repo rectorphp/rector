@@ -106,14 +106,7 @@ CODE_SAMPLE
             return $node;
         }
 
-        $variableMethodNode = $variable->getAttribute(AttributeKey::METHOD_NODE);
-        $isFoundPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use ($variable, $variableMethodNode): bool {
-            $nodeMethodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
-
-            if ($variableMethodNode !== $nodeMethodNode) {
-                return false;
-            }
-
+        $isFoundPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use ($variable): bool {
             return $this->nodeComparator->areNodesEqual($node, $variable);
         });
 
