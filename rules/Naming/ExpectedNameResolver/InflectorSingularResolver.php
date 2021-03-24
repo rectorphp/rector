@@ -64,6 +64,10 @@ final class InflectorSingularResolver
             $singularValueVarName .= $this->inflector->singularize($camelCase['camelcase']);
         }
 
+        if ($singularValueVarName === '') {
+            return $currentName;
+        }
+
         $singularValueVarName = $singularValueVarName === $currentName
             ? self::SINGLE . ucfirst($singularValueVarName)
             : $singularValueVarName;
