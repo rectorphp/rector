@@ -103,6 +103,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($singularValueVarName === '') {
+            return null;
+        }
+
         return $this->processRename($node, $valueVarName, $singularValueVarName);
     }
 
