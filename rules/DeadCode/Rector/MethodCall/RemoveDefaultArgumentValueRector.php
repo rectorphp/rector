@@ -172,7 +172,7 @@ CODE_SAMPLE
             if ($this->nodeComparator->areNodesEqual($defaultValues[$key], $arg->value)) {
                 $keysToRemove[] = $key;
             } else {
-                $lastKeyToKeep = end($keysToKeep) ?? 0;
+                $lastKeyToKeep = end($keysToKeep) ?: 0;
                 $key = $key > $lastKeyToKeep + 1
                     ? $lastKeyToKeep + 1
                     : $key;
