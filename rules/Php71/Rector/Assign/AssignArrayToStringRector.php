@@ -22,6 +22,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php71\NodeFinder\EmptyStringDefaultPropertyFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -105,7 +106,14 @@ CODE_SAMPLE
             return $node;
         }
 
-        $isFoundPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use ($variable): bool {
+        $variableMethodNode = $variable->getAttribute(AttributeKey::METHOD_NODE);
+        $isFoundPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use ($variable, $variableMethodNode): bool {
+            $nodeMethodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
+
+            if ($variableMethodNode !== $nodeMethodNode) {
+                return false;
+            }
+
             return $this->nodeComparator->areNodesEqual($node, $variable);
         });
 
