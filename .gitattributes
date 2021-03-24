@@ -36,7 +36,6 @@ scoper.php export-ignore
 .github export-ignore
 .dockerignore export-ignore
 CONTRIBUTING.md export-ignore
-README.md export-ignore
 CHANGELOG.md export-ignore
 
 # testing Windows spaces - https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
