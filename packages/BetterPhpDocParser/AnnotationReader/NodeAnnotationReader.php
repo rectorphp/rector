@@ -10,9 +10,14 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\PhpDocParser;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\DoctrineAnnotationGenerated\PhpDocNode\ConstantReferenceIdentifierRestorer;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -47,21 +52,45 @@ final class NodeAnnotationReader
      * @var ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var PhpDocParser
+     */
+    private $phpDocParser;
+    /**
+     * @var BetterPhpDocParser
+     */
+    private $betterPhpDocParser;
+    /**
+     * @var Lexer
+     */
+    private $lexer;
 
     public function __construct(
-        ConstantReferenceIdentifierRestorer $constantReferenceIdentifierRestorer,
         NodeNameResolver $nodeNameResolver,
-        Reader $reader,
         ReflectionProvider $reflectionProvider
     ) {
-        $this->reader = $reader;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->constantReferenceIdentifierRestorer = $constantReferenceIdentifierRestorer;
         $this->reflectionProvider = $reflectionProvider;
     }
 
     public function readAnnotation(Node $node, string $annotationClass): ?object
     {
+
+        $docComment = $node->getDocComment();
+        if ($docComment === null) {
+            return null;
+        }
+
+        dump($docComment);
+        die;
+
+        $phpDocNode = $this->parseTokensToPhpDocNode($docComment->getText());
+        dump($phpDocNode);
+
+        dump($node);
+        dump($annotationClass);
+        die;
+
         if ($node instanceof Property) {
             return $this->readPropertyAnnotation($node, $annotationClass);
         }
@@ -227,5 +256,12 @@ final class NodeAnnotationReader
         $reflectionClass = $classReflection->getNativeReflection();
 
         return $reflectionClass->getMethod($methodName);
+    }
+
+    private function parseTokensToPhpDocNode(string $docContent): PhpDocNode
+    {
+        $tokens = $this->lexer->tokenize($docContent);
+        $tokenIterator = new TokenIterator($tokens);
+        return $this->betterPhpDocParser->parse($tokenIterator);
     }
 }

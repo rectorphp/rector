@@ -163,6 +163,10 @@ final class BetterPhpDocParser extends PhpDocParser
 
         // class-annotation
         $phpDocNodeFactory = $this->matchTagToPhpDocNodeFactory($tag);
+
+        dump($phpDocNodeFactory);
+        die;
+
         if ($phpDocNodeFactory !== null) {
             $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
                 $tag,

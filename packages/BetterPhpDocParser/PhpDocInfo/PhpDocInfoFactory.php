@@ -152,7 +152,6 @@ final class PhpDocInfoFactory
     private function parseTokensToPhpDocNode(array $tokens): PhpDocNode
     {
         $tokenIterator = new TokenIterator($tokens);
-
         return $this->betterPhpDocParser->parse($tokenIterator);
     }
 
