@@ -30,13 +30,12 @@ full_build.sh export-ignore
 Dockerfile export-ignore
 UPGRADE_09.md export-ignore
 rule-doc-generator.php export-ignore
-docs export-ignore
+docs/images export-ignore
 scoper.php export-ignore
 .docker export-ignore
 .github export-ignore
 .dockerignore export-ignore
 CONTRIBUTING.md export-ignore
-README.md export-ignore
 CHANGELOG.md export-ignore
 
 # testing Windows spaces - https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
