@@ -168,7 +168,12 @@ CODE_SAMPLE
 
         $string->value = Strings::replace($value, self::INNER_REGEX, function (array $match): string {
             $innerPattern = $match['content'];
-            $innerPattern = str_replace($this->delimiter, '\\' . $this->delimiter, $innerPattern);
+            $positionDelimiter = strpos($innerPattern, $this->delimiter);
+            $lengthInnerPattern = strlen($innerPattern);
+
+            if ($positionDelimiter > 0 && $positionDelimiter < $lengthInnerPattern) {
+                $innerPattern = str_replace($this->delimiter, '\\' . $this->delimiter, $innerPattern);
+            }
 
             // change delimiter
             if (strlen($innerPattern) > 2 && $innerPattern[0] === $innerPattern[strlen($innerPattern) - 1]) {
