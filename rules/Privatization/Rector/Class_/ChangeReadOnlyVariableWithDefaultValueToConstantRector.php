@@ -166,7 +166,7 @@ CODE_SAMPLE
         $assignsByName = $this->collectAssignsByName($assigns);
         $assignsWithUniqueName = [];
         foreach ($assignsByName as $assigns) {
-            $count = is_countable($assigns) ? count($assigns) : 0;
+            $count = count($assigns);
             if ($count > 1) {
                 continue;
             }
