@@ -34,9 +34,9 @@ final class NameRenamer
      */
     public function renameNameNode(array $usedNameNodes, string $lastName): void
     {
-        foreach ($usedNameNodes as $nameAndParent) {
-            $parentNode = $nameAndParent->getParentNode();
-            $usedName = $nameAndParent->getNameNode();
+        foreach ($usedNameNodes as $usedNameNode) {
+            $parentNode = $usedNameNode->getParentNode();
+            $usedName = $usedNameNode->getNameNode();
 
             if ($parentNode instanceof TraitUse) {
                 $this->renameTraitUse($lastName, $parentNode, $usedName);

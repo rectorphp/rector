@@ -17,9 +17,9 @@ final class TypeInfererSorter
     {
         $sortedTypeInferers = [];
 
-        foreach ($priorityAwareTypeInferers as $propertyTypeInferer) {
-            $this->ensurePriorityIsUnique($sortedTypeInferers, $propertyTypeInferer);
-            $sortedTypeInferers[$propertyTypeInferer->getPriority()] = $propertyTypeInferer;
+        foreach ($priorityAwareTypeInferers as $priorityAwareTypeInferer) {
+            $this->ensurePriorityIsUnique($sortedTypeInferers, $priorityAwareTypeInferer);
+            $sortedTypeInferers[$priorityAwareTypeInferer->getPriority()] = $priorityAwareTypeInferer;
         }
 
         krsort($sortedTypeInferers);

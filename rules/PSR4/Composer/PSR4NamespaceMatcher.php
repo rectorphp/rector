@@ -44,13 +44,13 @@ final class PSR4NamespaceMatcher implements PSR4AutoloadNamespaceMatcherInterfac
             // remove extra slash
             $paths = is_array($path) ? $path : [$path];
 
-            foreach ($paths as $singlePath) {
-                $singlePath = rtrim($singlePath, '/');
-                if (! Strings::startsWith($smartFileInfo->getRelativeDirectoryPath(), $singlePath)) {
+            foreach ($paths as $path) {
+                $path = rtrim($path, '/');
+                if (! Strings::startsWith($smartFileInfo->getRelativeDirectoryPath(), $path)) {
                     continue;
                 }
 
-                $expectedNamespace = $namespace . $this->resolveExtraNamespace($smartFileInfo, $singlePath);
+                $expectedNamespace = $namespace . $this->resolveExtraNamespace($smartFileInfo, $path);
 
                 return rtrim($expectedNamespace, '\\');
             }

@@ -478,8 +478,8 @@ final class NodeFactory
     public function createUsesFromNames(array $names): array
     {
         $uses = [];
-        foreach ($names as $resolvedName) {
-            $useUse = new UseUse(new Name($resolvedName));
+        foreach ($names as $name) {
+            $useUse = new UseUse(new Name($name));
             $uses[] = new Use_([$useUse]);
         }
 
