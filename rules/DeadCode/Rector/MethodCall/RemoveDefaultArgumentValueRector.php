@@ -113,7 +113,9 @@ CODE_SAMPLE
         }
 
         foreach ($keysToRemove as $keyToRemove) {
-            $this->nodeRemover->removeArg($node, $keyToRemove);
+            if (isset($defaultValues[$keyToRemove])) {
+                $this->nodeRemover->removeArg($node, $keyToRemove);
+            }
         }
 
         return $node;

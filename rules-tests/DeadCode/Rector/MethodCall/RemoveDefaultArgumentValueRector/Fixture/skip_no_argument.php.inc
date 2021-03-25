@@ -2,8 +2,8 @@
 
 namespace Rector\Tests\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector\Fixture;
 
-function skipNoArgument()
+function SkipNoArgument()
 {
 }
 
-skipNoArgument();
+SkipNoArgument();
