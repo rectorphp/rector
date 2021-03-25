@@ -178,6 +178,10 @@ CODE_SAMPLE
         $startremove = (end($keysToKeep) ?: 0) + 1;
         $maxKey      = count($node->args) - 1;
 
+        if ($maxKey > 0 && $maxKey < $startremove) {
+            return [];
+        }
+
         return range($startremove, $maxKey);
     }
 }
