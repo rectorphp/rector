@@ -37,6 +37,7 @@ scoper.php export-ignore
 .dockerignore export-ignore
 CONTRIBUTING.md export-ignore
 CHANGELOG.md export-ignore
+phpstan-for-rector.neon export-ignore
 
 # testing Windows spaces - https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
 packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/FixtureBasic/with_spac.txt text eol=crlf
