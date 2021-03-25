@@ -177,10 +177,15 @@ CODE_SAMPLE
             }
         }
 
-        $startremove = (end($keysToKeep) ?: 0) + 1;
-        $maxKey      = count($node->args) - 1;
+        $lastKeyToKeep = end($keysToKeep);
+        $maxKey = count($node->args) - 1;
 
-        if ($maxKey > 0 && $maxKey < $startremove) {
+        if ($lastKeyToKeep === false) {
+            return range(0, $maxKey);
+        }
+
+        $startremove = $lastKeyToKeep + 1;
+        if ($maxKey < $startremove) {
             return [];
         }
 
