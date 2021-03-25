@@ -160,8 +160,8 @@ CODE_SAMPLE
             return;
         }
 
-        foreach ($this->constructorInjectionObjectTypes as $typesToConstructorInjection) {
-            if (! $this->isObjectType($assign->expr, $typesToConstructorInjection)) {
+        foreach ($this->constructorInjectionObjectTypes as $constructorInjectionObjectType) {
+            if (! $this->isObjectType($assign->expr, $constructorInjectionObjectType)) {
                 continue;
             }
 
