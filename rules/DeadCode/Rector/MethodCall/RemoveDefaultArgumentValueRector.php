@@ -159,7 +159,6 @@ CODE_SAMPLE
      */
     private function resolveKeysToRemove(Node $node, array $defaultValues): array
     {
-        $keysToRemove = [];
         $keysToKeep = [];
 
         /** @var int $key */
@@ -169,58 +168,22 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->nodeComparator->areNodesEqual($defaultValues[$key], $arg->value)) {
-                $keysToRemove[] = $key;
-            } else {
-                $keysToKeep = $this->appendKeysToKeep($keysToKeep, $key);
+            if (! $this->nodeComparator->areNodesEqual($defaultValues[$key], $arg->value)) {
+                $keysToKeep[] = $key;
             }
         }
 
-        $keysToRemove = $this->cleanKeysToRemove($keysToRemove, $keysToKeep);
-        if ($keysToRemove === []) {
+        $startremove = end($keysToKeep) + 1;
+
+        if ($startremove === 1) {
+            return [0];
+        }
+
+        $maxKey = count($node->args) - 1;
+        if ($maxKey < $startremove) {
             return [];
         }
-        if ($keysToKeep === []) {
-            /** @var int[] $keysToRemove */
-            return $keysToRemove;
-        }
-        if (max($keysToKeep) <= max($keysToRemove)) {
-            /** @var int[] $keysToRemove */
-            return $keysToRemove;
-        }
-        return [];
-    }
 
-    /**
-     * @param int[] $keysToKeep
-     * @return int[]
-     */
-    private function appendKeysToKeep(array $keysToKeep, int $key): array
-    {
-        $lastKeyToKeep = end($keysToKeep) ?: 0;
-        $key = $key > $lastKeyToKeep + 1
-            ? $lastKeyToKeep + 1
-            : $key;
-
-        $keysToKeep[] = $key;
-
-        return $keysToKeep;
-    }
-
-    /**
-     * @param int[] $keysToRemove
-     * @param int[] $keysToKeep
-     *
-     * @return int[]
-     */
-    private function cleanKeysToRemove(array $keysToRemove, array $keysToKeep): array
-    {
-        foreach ($keysToRemove as $key => $keyToRemove) {
-            if (in_array($keyToRemove, $keysToKeep, true)) {
-                unset($keysToRemove[$key]);
-            }
-        }
-
-        return $keysToRemove;
+        return range($startremove, $maxKey);
     }
 }
