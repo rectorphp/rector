@@ -122,7 +122,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
 ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
-    new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
+    new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, 'SomeType', null),
     ]),
 ]]);
 };
@@ -150,7 +150,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
 ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
-    new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null),
+    new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, 'SomeType', null),
     ]),
 ]]);
 };
