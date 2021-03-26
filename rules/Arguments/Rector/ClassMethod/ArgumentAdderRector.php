@@ -56,7 +56,7 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     {
         $exampleConfiguration = [
             self::ADDED_ARGUMENTS => [
-                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType'),
+                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, 'SomeType'),
             ],
         ];
 
