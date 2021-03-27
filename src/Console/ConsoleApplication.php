@@ -65,7 +65,11 @@ final class ConsoleApplication extends Application
         if ($newWorkDir !== '') {
             $oldWorkingDir = getcwd();
             chdir($newWorkDir);
-            $output->isDebug() && $output->writeln('Changed CWD form ' . $oldWorkingDir . ' to ' . getcwd());
+
+            if ($output->isDebug()) {
+                $message = sprintf('Changed working directory from "%s" to "%s"', $oldWorkingDir, getcwd());
+                $output->writeln($message);
+            }
         }
 
         // skip in this case, since generate content must be clear from meta-info
