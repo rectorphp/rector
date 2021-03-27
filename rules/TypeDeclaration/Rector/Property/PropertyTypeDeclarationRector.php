@@ -12,6 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Type\NullType;
 
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\PropertyTypeDeclarationRectorTest
@@ -98,6 +99,10 @@ CODE_SAMPLE
 
         $type = $this->propertyTypeInferer->inferProperty($node);
         if ($type instanceof MixedType) {
+            return null;
+        }
+
+        if (! $node->isPrivate() && $type instanceof NullType) {
             return null;
         }
 
