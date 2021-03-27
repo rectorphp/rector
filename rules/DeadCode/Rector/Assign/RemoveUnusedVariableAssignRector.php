@@ -69,7 +69,7 @@ CODE_SAMPLE
 
         // variable is used
         $variableUsages = $this->findVariableUsages($classMethod, $node);
-        if ($variableUsages === [] || count($variableUsages) >= 2) {
+        if ($variableUsages !== []) {
             return null;
         }
 
@@ -87,14 +87,14 @@ CODE_SAMPLE
      */
     private function findVariableUsages(FunctionLike $functionLike, Assign $assign): array
     {
-        return $this->betterNodeFinder->find((array) $functionLike->getStmts(), function (Node $node) use (
+        return $this->betterNodeFinder->find($functionLike, function (Node $node) use (
             $assign
         ): bool {
             if (! $node instanceof Variable) {
                 return false;
             }
 
-            return $this->nodeComparator->areNodesEqual($assign->var, $node);
+            return $this->nodeComparator->areNodesEqual($assign->var, $node) && $assign->var !== $node;
         });
     }
 }
