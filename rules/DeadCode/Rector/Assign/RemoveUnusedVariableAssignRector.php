@@ -69,7 +69,7 @@ CODE_SAMPLE
 
         // variable is used
         $variableUsages = $this->findVariableUsages($classMethod, $node);
-        if ($variableUsages !== []) {
+        if ($variableUsages === [] || count($variableUsages) >= 2) {
             return null;
         }
 
@@ -94,7 +94,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $this->nodeComparator->areNodesEqual($assign->var, $node) && $assign->var !== $node;
+            return $this->nodeComparator->areNodesEqual($assign->var, $node);
         });
     }
 }
