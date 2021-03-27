@@ -69,8 +69,7 @@ CODE_SAMPLE
         }
 
         // variable is used
-        $variableUsages = $this->findVariableUsages($classMethod, $node);
-        if ($variableUsages === [] || count($variableUsages) > 1) {
+        if ($this->isUsed($node)) {
             return null;
         }
 
@@ -84,26 +83,37 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Variable[]
+     * @return bool
      */
-    private function findVariableUsages(FunctionLike $functionLike, Assign $assign): array
+    private function isUsed(Assign $assign): bool
     {
-        return $this->betterNodeFinder->find($functionLike, function (Node $node) use (
-            $assign
-        ): bool {
+        $variable = $assign->var;
+        $isUsedPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($assign, function (Node $node) use ($variable): bool {
+            if ($node instanceof MethodCall) {
+                $node = $node->var;
+            }
+
             if (! $node instanceof Variable) {
                 return false;
             }
 
-            $inNextMethodCall = (bool) $this->betterNodeFinder->findFirstNext($node, function (Node $n) use ($assign) {
-                return $n instanceof MethodCall && $this->nodeComparator->areNodesEqual($n->var, $assign->var);
-            });
+            return $this->isName($variable, (string) $this->getName($node));
+        });
 
-            if ($inNextMethodCall) {
-                return true;
+        if ($isUsedPrev) {
+            return true;
+        }
+
+        return (bool) $this->betterNodeFinder->findFirstNext($assign, function (Node $node) use ($variable): bool {
+            if ($node instanceof MethodCall) {
+                $node = $node->var;
             }
 
-            return $this->isName($assign->var, (string) $this->getName($node));
+            if (! $node instanceof Variable) {
+                return false;
+            }
+
+            return $this->isName($variable, (string) $this->getName($node));
         });
     }
 }
