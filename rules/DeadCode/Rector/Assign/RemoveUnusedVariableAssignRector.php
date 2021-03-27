@@ -81,13 +81,12 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @return bool
-     */
     private function isUsed(Assign $assign): bool
     {
         $variable = $assign->var;
-        $isUsedPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($assign, function (Node $node) use ($variable): bool {
+        $isUsedPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($assign, function (Node $node) use (
+            $variable
+        ): bool {
             return $this->isVariableNamed($node, $variable);
         });
 
