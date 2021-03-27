@@ -6,7 +6,6 @@ namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
@@ -103,10 +102,6 @@ CODE_SAMPLE
 
     private function isUsedIn(Node $node, Variable $variable): bool
     {
-        if ($node instanceof MethodCall) {
-            $node = $node->var;
-        }
-
         if (! $node instanceof Variable) {
             return false;
         }
