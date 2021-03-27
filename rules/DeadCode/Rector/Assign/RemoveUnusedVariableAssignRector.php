@@ -103,7 +103,7 @@ CODE_SAMPLE
         }
 
         $expr = $assign->expr;
-        if (! property_exists($expr, 'args')) {
+        if (! isset($expr->args)) {
             return false;
         }
 
