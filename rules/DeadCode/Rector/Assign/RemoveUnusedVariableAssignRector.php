@@ -94,8 +94,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            // skip assign value
-            return $assign->var !== $node;
+            return $this->nodeComparator->areNodesEqual($assign->var, $node) && $assign->var !== $node;
         });
     }
 }
