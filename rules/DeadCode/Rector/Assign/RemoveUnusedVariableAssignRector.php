@@ -88,7 +88,7 @@ CODE_SAMPLE
     {
         $variable = $assign->var;
         $isUsedPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($assign, function (Node $node) use ($variable): bool {
-            return $this->isUsedIn($node, $variable);
+            return $this->isVariableNamed($node, $variable);
         });
 
         if ($isUsedPrev) {
@@ -96,11 +96,11 @@ CODE_SAMPLE
         }
 
         return (bool) $this->betterNodeFinder->findFirstNext($assign, function (Node $node) use ($variable): bool {
-            return $this->isUsedIn($node, $variable);
+            return $this->isVariableNamed($node, $variable);
         });
     }
 
-    private function isUsedIn(Node $node, Variable $variable): bool
+    private function isVariableNamed(Node $node, Variable $variable): bool
     {
         if (! $node instanceof Variable) {
             return false;
