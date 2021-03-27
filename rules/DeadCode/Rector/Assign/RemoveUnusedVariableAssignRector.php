@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
@@ -69,7 +70,7 @@ CODE_SAMPLE
 
         // variable is used
         $variableUsages = $this->findVariableUsages($classMethod, $node);
-        if ($variableUsages !== []) {
+        if ($variableUsages === [] || count($variableUsages) > 1) {
             return null;
         }
 
@@ -94,7 +95,15 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $this->nodeComparator->areNodesEqual($assign->var, $node) && $assign->var !== $node;
+            $inNextMethodCall = (bool) $this->betterNodeFinder->findFirstNext($node, function (Node $n) use ($assign) {
+                return $n instanceof MethodCall && $this->nodeComparator->areNodesEqual($n->var, $assign->var);
+            });
+
+            if ($inNextMethodCall) {
+                return true;
+            }
+
+            return $this->isName($assign->var, (string) $this->getName($node));
         });
     }
 }
