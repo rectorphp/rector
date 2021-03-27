@@ -8,6 +8,6 @@ class SkipUsed
     {
         // run file node only if
         $fileNode = new FileNode($smartFileInfo, $parsedStmtsAndTokens->getNewStmts());
-        $result = $this->rectorNodeTraverser->traverseFileNode($fileNode);
+        $this->rectorNodeTraverser->traverseFileNode($fileNode);
     }
 }

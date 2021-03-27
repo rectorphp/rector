@@ -6,7 +6,7 @@ class SkipUsedArgs
 {
     public function run()
     {
-        function (Node $node) use ($expr, &$data) {
+        function (Node $node) use (&$data) {
             $data = rand(0,1);
         };
     }
