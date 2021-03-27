@@ -428,6 +428,7 @@ parameters:
                  - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
                  - packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php
                  - packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php
+                 - rules/DeadCode/Rector/Assign/RemoveUnusedVariableAssignRector.php #108
 
         -
             message: '#Instead of "ReflectionClass" class/interface use "PHPStan\\Reflection\\ClassReflection"#'

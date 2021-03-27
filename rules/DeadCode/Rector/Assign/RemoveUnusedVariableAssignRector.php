@@ -5,7 +5,13 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
@@ -104,8 +110,9 @@ CODE_SAMPLE
             return true;
         }
 
+        /** @var FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $expr  */
         $expr = $assign->expr;
-        if (! (property_exists($expr, 'args') && $expr->args !== null)) {
+        if (! $this->isCall($expr)) {
             return false;
         }
 
@@ -127,6 +134,11 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function isCall(Expr $expr) : bool
+    {
+        return $expr instanceof FuncCall || $expr instanceof MethodCall || $expr instanceof New_ || $expr instanceof NullsafeMethodCall || $expr instanceof StaticCall;
     }
 
     private function isVariableNamed(Node $node, Variable $variable): bool
