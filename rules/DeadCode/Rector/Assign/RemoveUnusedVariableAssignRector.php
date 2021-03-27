@@ -94,7 +94,9 @@ CODE_SAMPLE
             return true;
         }
 
-        $isUsedNext = (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use ($variable): bool {
+        $isUsedNext = (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
+            $variable
+        ): bool {
             return $this->isVariableNamed($node, $variable);
         });
 
@@ -103,7 +105,7 @@ CODE_SAMPLE
         }
 
         $expr = $assign->expr;
-        if (! isset($expr->args)) {
+        if (! (property_exists($expr, 'args') && $expr->args !== null)) {
             return false;
         }
 
@@ -114,7 +116,9 @@ CODE_SAMPLE
                 continue;
             }
 
-            $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode($assign, function (Node $node) use ($variable) :bool {
+            $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode($assign, function (Node $node) use (
+                $variable
+            ): bool {
                 return $node instanceof Assign && $this->isVariableNamed($node->var, $variable);
             });
             if ($previousAssign instanceof Assign) {
