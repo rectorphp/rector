@@ -63,12 +63,13 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $node->var instanceof Variable) {
+        $variable = $node->var;
+        if (! $variable instanceof Variable) {
             return null;
         }
 
         // variable is used
-        if ($this->isUsed($node)) {
+        if ($this->isUsed($variable)) {
             return null;
         }
 
@@ -81,10 +82,9 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isUsed(Assign $assign): bool
+    private function isUsed(Variable $variable): bool
     {
-        $variable = $assign->var;
-        $isUsedPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($assign, function (Node $node) use (
+        $isUsedPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use (
             $variable
         ): bool {
             return $this->isVariableNamed($node, $variable);
@@ -94,7 +94,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return (bool) $this->betterNodeFinder->findFirstNext($assign, function (Node $node) use ($variable): bool {
+        return (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use ($variable): bool {
             return $this->isVariableNamed($node, $variable);
         });
     }
