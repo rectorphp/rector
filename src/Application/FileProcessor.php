@@ -7,6 +7,7 @@ namespace Rector\Core\Application;
 use PhpParser\Lexer;
 use Rector\ChangesReporting\Collector\AffectedFilesCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\PhpParser\Parser\Parser;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
@@ -125,6 +126,10 @@ final class FileProcessor
         $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
 
         $this->currentFileInfoProvider->setCurrentStmts($parsedStmtsAndTokens->getNewStmts());
+
+        // run file node only if
+        $fileNode = new FileNode($smartFileInfo, $parsedStmtsAndTokens->getNewStmts());
+        $result = $this->rectorNodeTraverser->traverseFileNode($fileNode);
 
         $newStmts = $this->rectorNodeTraverser->traverse($parsedStmtsAndTokens->getNewStmts());
 
