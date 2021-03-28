@@ -7,6 +7,10 @@ namespace Rector\BetterPhpDocParser\Annotation;
 use Doctrine\Common\Annotations\Annotation;
 use Nette\Utils\Strings;
 
+/**
+ * @deprecated
+ * Only for BC with rector-doctrine package
+ */
 final class AnnotationItemsResolver
 {
     /**

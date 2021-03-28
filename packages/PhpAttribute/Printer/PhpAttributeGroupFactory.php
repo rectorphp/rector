@@ -11,17 +11,31 @@ use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\PhpDocParser\Ast\Node;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 
 final class PhpAttributeGroupFactory
 {
+    public function createFromSimpleTag(AnnotationToAttribute $annotationToAttribute): AttributeGroup
+    {
+        $fullyQualified = new FullyQualified($annotationToAttribute->getAttributeClass());
+        $attribute = new Attribute($fullyQualified);
+        return new AttributeGroup([$attribute]);
+    }
+
     public function create(Node $node, AnnotationToAttribute $annotationToAttribute): AttributeGroup
     {
         $fullyQualified = new FullyQualified($annotationToAttribute->getAttributeClass());
 
         if ($node instanceof AbstractTagValueNode) {
-            $args = $this->createArgsFromItems($node->getItemsWithoutDefaults());
+            if ($node instanceof DoctrineAnnotationTagValueNode) {
+                $values = $node->getValuesWithExplicitSilentAndWithoutQuotes();
+            } else {
+                $values = $node->getItemsWithoutDefaults();
+            }
+
+            $args = $this->createArgsFromItems($values);
         } else {
             $args = [];
         }

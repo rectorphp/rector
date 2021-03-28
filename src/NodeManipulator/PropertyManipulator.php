@@ -85,11 +85,7 @@ final class PropertyManipulator
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
-        if ($phpDocInfo->hasTagClassNamed('JMS\Serializer\Annotation\Type')) {
-            return true;
-        }
-
-        if ($phpDocInfo->hasTagClassNamed('Doctrine\ORM\*')) {
+        if ($phpDocInfo->hasByAnnotationClasses(['Doctrine\ORM\*', 'JMS\Serializer\Annotation\Type'])) {
             return true;
         }
 

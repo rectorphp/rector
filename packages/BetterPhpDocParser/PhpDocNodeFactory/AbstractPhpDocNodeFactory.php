@@ -10,8 +10,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\Annotation\AnnotationItemsResolver;
-use Rector\BetterPhpDocParser\AnnotationReader\NodeAnnotationReader;
 use Rector\BetterPhpDocParser\PhpDocParser\AnnotationContentResolver;
 use Rector\BetterPhpDocParser\ValueObject\AroundSpaces;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,19 +37,9 @@ abstract class AbstractPhpDocNodeFactory
     private const CLOSING_SPACE_REGEX = '#(?<closing_space>\s+)\}$#';
 
     /**
-     * @var NodeAnnotationReader
-     */
-    protected $nodeAnnotationReader;
-
-    /**
      * @var AnnotationContentResolver
      */
     protected $annotationContentResolver;
-
-    /**
-     * @var AnnotationItemsResolver
-     */
-    protected $annotationItemsResolver;
 
     /**
      * @var ObjectTypeSpecifier
@@ -67,15 +55,11 @@ abstract class AbstractPhpDocNodeFactory
      * @required
      */
     public function autowireAbstractPhpDocNodeFactory(
-        NodeAnnotationReader $nodeAnnotationReader,
         AnnotationContentResolver $annotationContentResolver,
-        AnnotationItemsResolver $annotationItemsResolver,
         ObjectTypeSpecifier $objectTypeSpecifier,
         ReflectionProvider $reflectionProvider
     ): void {
-        $this->nodeAnnotationReader = $nodeAnnotationReader;
         $this->annotationContentResolver = $annotationContentResolver;
-        $this->annotationItemsResolver = $annotationItemsResolver;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->reflectionProvider = $reflectionProvider;
     }

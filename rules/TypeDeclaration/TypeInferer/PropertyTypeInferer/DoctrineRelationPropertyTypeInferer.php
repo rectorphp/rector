@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
@@ -12,6 +11,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
@@ -39,21 +39,28 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
      */
     private $shortClassExpander;
 
+    /**
+     * @var ClassAnnotationMatcher
+     */
+    private $classAnnotationMatcher;
+
     public function __construct(
         TypeFactory $typeFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
-        ShortClassExpander $shortClassExpander
+        ShortClassExpander $shortClassExpander,
+        ClassAnnotationMatcher $classAnnotationMatcher
     ) {
         $this->typeFactory = $typeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->shortClassExpander = $shortClassExpander;
+        $this->classAnnotationMatcher = $classAnnotationMatcher;
     }
 
     public function inferProperty(Property $property): Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
-        $toManyRelationTagValueNode = $phpDocInfo->getByTypes([
+        $toManyRelationTagValueNode = $phpDocInfo->getByAnnotationClasses([
             'Doctrine\ORM\Mapping\OneToMany',
             'Doctrine\ORM\Mapping\ManyToMany',
         ]);
@@ -61,14 +68,14 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
             return $this->processToManyRelation($toManyRelationTagValueNode);
         }
 
-        $toOneRelationTagValueNode = $phpDocInfo->getByTypes([
+        $toOneRelationTagValueNode = $phpDocInfo->getByAnnotationClasses([
             'Doctrine\ORM\Mapping\ManyToOne',
             'Doctrine\ORM\Mapping\OneToOne',
         ]);
 
         if ($toOneRelationTagValueNode !== null) {
-            $joinColumnTagValueNode = $phpDocInfo->getByType('Doctrine\ORM\Mapping\JoinColumn');
-            return $this->processToOneRelation($toOneRelationTagValueNode, $joinColumnTagValueNode);
+            $joinColumnTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\ORM\Mapping\JoinColumn');
+            return $this->processToOneRelation($property, $toOneRelationTagValueNode, $joinColumnTagValueNode);
         }
 
         return new MixedType();
@@ -79,11 +86,11 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         return 2100;
     }
 
-    private function processToManyRelation(DoctrineAnnotationTagValueNode $toManyTagNode): Type
+    private function processToManyRelation(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode): Type
     {
         $types = [];
 
-        $targetEntity = $toManyTagNode->getValueWithoutQuotes('targetEntity');
+        $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
         if ($targetEntity) {
             $types[] = new ArrayType(new MixedType(), new FullyQualifiedObjectType($targetEntity));
         }
@@ -94,19 +101,22 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     }
 
     private function processToOneRelation(
-        DoctrineAnnotationTagValueNode $toOneTagNode,
-        ?DoctrineAnnotationTagValueNode $joinColumnTagValueNode
+        Property $property,
+        DoctrineAnnotationTagValueNode $toOneDoctrineAnnotationTagValueNode,
+        ?DoctrineAnnotationTagValueNode $joinDoctrineAnnotationTagValueNode
     ): Type {
-        $targetEntity = $toOneTagNode->getValueWithoutQuotes('targetEntity');
-
+        $targetEntity = $toOneDoctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
         if ($targetEntity === null) {
             return new MixedType();
         }
 
-        $types = [];
-        $types[] = new FullyQualifiedObjectType($targetEntity);
+        // resolve to FQN
+        $tagFullyQualifiedName = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($targetEntity, $property);
 
-        if ($this->shouldAddNullType($joinColumnTagValueNode)) {
+        $types = [];
+        $types[] = new FullyQualifiedObjectType($tagFullyQualifiedName);
+
+        if ($this->shouldAddNullType($joinDoctrineAnnotationTagValueNode)) {
             $types[] = new NullType();
         }
 

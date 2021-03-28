@@ -64,10 +64,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/packages/BetterPhpDocParser/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php',
         ],
 
-        # generated from /vendor
-        __DIR__ . '/packages/DoctrineAnnotationGenerated/ConstantPreservingDocParser.php',
-        __DIR__ . '/packages/DoctrineAnnotationGenerated/ConstantPreservingAnnotationReader.php',
-
         UnaryOperatorSpacesFixer::class,
 
         // buggy with specific markdown snippet file in docs/rules_overview.md

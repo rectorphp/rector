@@ -7,7 +7,6 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode;
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
 use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;

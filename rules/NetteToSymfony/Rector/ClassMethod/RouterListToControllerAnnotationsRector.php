@@ -307,7 +307,7 @@ CODE_SAMPLE
 
         // already has Route tag
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        return $phpDocInfo->hasByType(SymfonyRouteTagValueNode::class);
+        return $phpDocInfo->hasByAnnotationClass('Symfony\Component\Routing\Annotation\Route');
     }
 
     private function resolvePathFromClassAndMethodNodes(Class_ $class, ClassMethod $classMethod): string

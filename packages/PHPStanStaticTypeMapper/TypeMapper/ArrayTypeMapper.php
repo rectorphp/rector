@@ -15,6 +15,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Generic\GenericClassStringType;
+use PHPStan\Type\Generic\TemplateObjectType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
@@ -88,6 +89,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         $itemType = $type->getItemType();
+
         if ($itemType instanceof UnionType && ! $type instanceof ConstantArrayType) {
             return $this->createArrayTypeNodeFromUnionType($itemType);
         }
@@ -152,6 +154,10 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
     private function isGenericArrayCandidate(ArrayType $arrayType): bool
     {
+        if ($arrayType->getItemType() instanceof TemplateObjectType) {
+            return true;
+        }
+
         if ($arrayType->getKeyType() instanceof MixedType) {
             return false;
         }
@@ -278,9 +284,11 @@ final class ArrayTypeMapper implements TypeMapperInterface
         if ($arrayType->getKeyType() instanceof MixedType) {
             return $arrayType->getItemType() instanceof GenericClassStringType;
         }
+
         if ($arrayType->getKeyType() instanceof ConstantIntegerType) {
             return $arrayType->getItemType() instanceof GenericClassStringType;
         }
+
         return false;
     }
 }

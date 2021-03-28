@@ -22,6 +22,11 @@ final class TagValueNodePrinter
     public function makeKeysExplicit(array $items, TagValueNodeConfiguration $tagValueNodeConfiguration): array
     {
         foreach ($items as $key => $contentItem) {
+            // silent key, we don't know
+            if (is_int($key)) {
+                continue;
+            }
+
             if ($this->shouldSkipFromExplicitKey($contentItem, $key, $tagValueNodeConfiguration)) {
                 continue;
             }

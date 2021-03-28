@@ -26,7 +26,7 @@ final class PhpDocTagRemover
             }
 
             if ($phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode) {
-                $tagClass = $phpDocChildNode->value->getTagClass();
+                $tagClass = $phpDocChildNode->value->getAnnotationClass();
                 if ($tagClass === $name) {
                     unset($phpDocNode->children[$key]);
                     $phpDocInfo->markAsChanged();

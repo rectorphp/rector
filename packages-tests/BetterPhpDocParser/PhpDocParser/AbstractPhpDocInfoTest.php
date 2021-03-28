@@ -51,26 +51,29 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     }
 
     /**
-     * @param class-string<\PHPStan\PhpDocParser\Ast\Node> $tagValueNodeType
+     * @param class-string $annotationClass
+     * @param class-string<\PhpParser\Node> $nodeClass
      */
     protected function doTestPrintedPhpDocInfo(
         SmartFileInfo $smartFileInfo,
-        string $tagValueNodeType,
+        string $annotationClass,
         string $nodeClass
     ): void {
         $nodeWithPhpDocInfo = $this->parseFileAndGetFirstNodeOfType($smartFileInfo, $nodeClass);
 
         $docComment = $nodeWithPhpDocInfo->getDocComment();
         if (! $docComment instanceof Doc) {
-            throw new ShouldNotHappenException(sprintf('Doc comments for "%s" file cannot not be empty', $fileInfo));
+            throw new ShouldNotHappenException(sprintf(
+                'Doc comments for "%s" file cannot not be empty',
+                $smartFileInfo
+            ));
         }
 
         $originalDocCommentText = $docComment->getText();
         $printedPhpDocInfo = $this->printNodePhpDocInfoToString($nodeWithPhpDocInfo);
 
         $this->assertSame($originalDocCommentText, $printedPhpDocInfo);
-
-        $this->doTestContainsTagValueNodeType($nodeWithPhpDocInfo, $tagValueNodeType, $smartFileInfo);
+        $this->doTestContainsTagValueNodeType($nodeWithPhpDocInfo, $annotationClass, $smartFileInfo);
     }
 
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php'): Iterator
@@ -88,32 +91,37 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
      * @param class-string<T> $nodeType
      * @return T
      */
-    private function parseFileAndGetFirstNodeOfType(SmartFileInfo $fileInfo, string $nodeType): Node
+    private function parseFileAndGetFirstNodeOfType(SmartFileInfo $smartFileInfo, string $nodeType): Node
     {
-        $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($fileInfo);
+        $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($smartFileInfo);
 
-        $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, $nodeType);
-        if (! $namespace instanceof Node) {
-            throw new ShouldNotHappenException();
+        $node = $this->betterNodeFinder->findFirstInstanceOf($nodes, $nodeType);
+        if (! $node instanceof Node) {
+            throw new ShouldNotHappenException($smartFileInfo->getRealPath());
         }
 
-        return $namespace;
+        return $node;
     }
 
     private function printNodePhpDocInfoToString(Node $node): string
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $phpDocInfo->markAsChanged();
+
         return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
     }
 
     /**
-     * @param class-string<\PHPStan\PhpDocParser\Ast\Node> $tagValueNodeType
+     * @param class-string $annotationClass
      */
-    private function doTestContainsTagValueNodeType(Node $node, string $tagValueNodeType, SmartFileInfo $fileInfo): void
-    {
+    private function doTestContainsTagValueNodeType(
+        Node $node,
+        string $annotationClass,
+        SmartFileInfo $smartFileInfo
+    ): void {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        $hasByAnnotationClass = $phpDocInfo->hasByAnnotationClass($tagValueNodeType);
-        $this->assertTrue($hasByAnnotationClass, $fileInfo->getRelativeFilePathFromCwd());
+        $hasByAnnotationClass = $phpDocInfo->hasByAnnotationClass($annotationClass);
+        $this->assertTrue($hasByAnnotationClass, $smartFileInfo->getRelativeFilePathFromCwd());
     }
 }

@@ -17,7 +17,6 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
-use Rector\TypeDeclaration\PhpDoc\ShortClassExpander;
 
 final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInterface
 {
@@ -44,16 +43,8 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
      */
     private $phpDocInfoFactory;
 
-    /**
-     * @var ShortClassExpander
-     */
-    private $annotationClassResolver;
-
-    public function __construct(
-        TypeFactory $typeFactory,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        ShortClassExpander $annotationClassResolver
-    ) {
+    public function __construct(TypeFactory $typeFactory, PhpDocInfoFactory $phpDocInfoFactory)
+    {
         $this->typeFactory = $typeFactory;
 
         $this->doctrineTypeToScalarType = [
@@ -94,14 +85,13 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
         ];
 
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->annotationClassResolver = $annotationClassResolver;
     }
 
     public function inferProperty(Property $property): Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
-        $doctrineColumnTagValueNode = $phpDocInfo->getByType('Doctrine\ORM\Mapping\Column');
+        $doctrineColumnTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\ORM\Mapping\Column');
         if (! $doctrineColumnTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return new MixedType();
         }
