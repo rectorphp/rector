@@ -63,6 +63,27 @@ return [
             return Strings::replace($content, '#' . $prefix . '\\\\Composer\\\\InstalledVersions#', 'Composer\InstalledVersions');
         },
 
+        // fixes https://github.com/rectorphp/rector/issues/6007
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::contains($filePath, 'vendor/')) {
+                return $content;
+            }
+
+            // @see https://regex101.com/r/lBV8IO/2
+            $fqcnReservedPattern = sprintf('#(\\\\)?%s\\\\(parent|self|static)#m', $prefix);
+            $matches             = Strings::matchAll($content, $fqcnReservedPattern);
+
+            if (! $matches) {
+                return $content;
+            }
+
+            foreach ($matches as $match) {
+                $content = str_replace($match[0], $match[2], $content);
+            }
+
+            return $content;
+        },
+
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
         function (string $filePath, string $prefix, string $content): string {
             // skip vendor, expect rector packages
