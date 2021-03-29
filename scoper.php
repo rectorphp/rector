@@ -84,6 +84,18 @@ return [
             return $content;
         },
 
+        // fixes https://github.com/rectorphp/rector/issues/6010
+        function (string $filePath, string $prefix, string $content): string {
+            // @see https://regex101.com/r/bA1nQa/1
+            if (! Strings::match($filePath, '#vendor/symfony/polyfill-php\d{2}/Resources/stubs#')) {
+                return $content;
+            }
+
+            // @see https://regex101.com/r/x5Ukrx/1
+            $namespace = sprintf('#namespace %s;#m', $prefix);
+            return Strings::replace($content, $namespace);
+        },
+
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
         function (string $filePath, string $prefix, string $content): string {
             // skip vendor, expect rector packages
