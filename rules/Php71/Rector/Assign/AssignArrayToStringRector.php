@@ -105,7 +105,9 @@ CODE_SAMPLE
             return $node;
         }
 
-        $isFoundPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use ($variable): bool {
+        $isFoundPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use (
+            $variable
+        ): bool {
             return $this->nodeComparator->areNodesEqual($node, $variable);
         });
 
