@@ -136,8 +136,6 @@ CODE_SAMPLE
     {
         $newItems = [];
         $accumulatedItems = [];
-        /** @var Scope $nodeScope */
-        $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
         foreach ($array->items as $position => $item) {
             if ($item !== null && $item->unpack) {
                 // Spread operator found
