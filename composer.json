@@ -99,8 +99,7 @@
             "Rector\\Core\\Tests\\": "tests",
             "Rector\\RuleDocGenerator\\": "utils/rule-doc-generator/src",
             "Rector\\PHPStanExtensions\\": "utils/phpstan-extensions/src",
-            "Rector\\PHPStanExtensions\\Tests\\": "utils/phpstan-extensions/tests",
-            "Rector\\Utils\\DoctrineAnnotationParserSyncer\\": "utils/doctrine-annotation-parser-syncer/src"
+            "Rector\\PHPStanExtensions\\Tests\\": "utils/phpstan-extensions/tests"
         },
         "classmap": [
             "stubs/Annotations",
