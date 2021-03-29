@@ -65,6 +65,10 @@ return [
 
         // fixes https://github.com/rectorphp/rector/issues/6007
         function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::contains($filePath, 'vendor/')) {
+                return $content;
+            }
+
             // @see https://regex101.com/r/lBV8IO/2
             $fqcnReservedPattern = sprintf('#(\\\\)?%s\\\\(parent|self|static)#m', $prefix);
             $matches             = Strings::matchAll($content, $fqcnReservedPattern);
