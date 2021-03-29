@@ -273,7 +273,8 @@ CODE_SAMPLE
         $throwableType = new ObjectType('Throwable');
         $type = new ObjectType($class->toString());
 
-        return $throwableType->isSuperTypeOf($type)->yes();
+        return $throwableType->isSuperTypeOf($type)
+            ->yes();
     }
 
     private function hasCall(Node $node): bool

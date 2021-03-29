@@ -110,7 +110,7 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $expr  */
+        /** @var FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $expr */
         $expr = $assign->expr;
         if (! $this->isCall($expr)) {
             return false;
@@ -136,7 +136,7 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isCall(Expr $expr) : bool
+    private function isCall(Expr $expr): bool
     {
         return $expr instanceof FuncCall || $expr instanceof MethodCall || $expr instanceof New_ || $expr instanceof NullsafeMethodCall || $expr instanceof StaticCall;
     }
