@@ -36,6 +36,19 @@ final class Parser
     /**
      * @return Node[]
      */
+    public function parseContent(string $content): array
+    {
+        $nodes = $this->nikicParser->parse($content);
+        if ($nodes === null) {
+            $nodes = [];
+        }
+
+        return $nodes;
+    }
+
+    /**
+     * @return Node[]
+     */
     public function parseFileInfo(SmartFileInfo $smartFileInfo): array
     {
         $fileRealPath = $smartFileInfo->getRealPath();
