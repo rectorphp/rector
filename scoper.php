@@ -65,8 +65,8 @@ return [
 
         // fixes https://github.com/rectorphp/rector/issues/6007
         function (string $filePath, string $prefix, string $content): string {
-            // @see https://regex101.com/r/lBV8IO/1
-            $fqcnReservedPattern = sprintf('#%s\\\\(parent|self|static)#m', $prefix);
+            // @see https://regex101.com/r/lBV8IO/2
+            $fqcnReservedPattern = sprintf('#(\\\\)?%s\\\\(parent|self|static)#m', $prefix);
             $matches             = Strings::matchAll($content, $fqcnReservedPattern);
 
             if (! $matches) {
@@ -74,7 +74,7 @@ return [
             }
 
             foreach ($matches as $match) {
-                $content = str_replace($match[0], $match[1], $content);
+                $content = str_replace($match[0], $match[2], $content);
             }
 
             return $content;
