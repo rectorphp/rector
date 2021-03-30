@@ -5,83 +5,59 @@ declare(strict_types=1);
 namespace Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint;
 
 use Iterator;
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Class_\EmbeddedTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Class_\EntityTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Class_\TableTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Gedmo\BlameableTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Gedmo\SlugTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Property_\ColumnTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Property_\CustomIdGeneratorTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Property_\GeneratedValueTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Property_\JoinTableTagValueNode;
-use Rector\Symfony\PhpDoc\Node\AssertChoiceTagValueNode;
-use Rector\Symfony\PhpDoc\Node\AssertTypeTagValueNode;
-use Rector\Symfony\PhpDoc\Node\Sensio\SensioMethodTagValueNode;
-use Rector\Symfony\PhpDoc\Node\Sensio\SensioTemplateTagValueNode;
-use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 use Rector\Tests\BetterPhpDocParser\PhpDocParser\AbstractPhpDocInfoTest;
+use Symplify\EasyTesting\FixtureSplitter\TrioFixtureSplitter;
+use Symplify\EasyTesting\ValueObject\FixtureSplit\TrioContent;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
 {
     /**
      * @dataProvider provideData()
-     * @param class-string<Node> $tagValueNodeClass
      */
-    public function test(SmartFileInfo $fileInfo, string $tagValueNodeClass): void
+    public function test(SmartFileInfo $fixtureFileInfo): void
     {
-        $this->doTestPrintedPhpDocInfo($fileInfo, $tagValueNodeClass);
-    }
+        $trioFixtureSplitter = new TrioFixtureSplitter();
+        $trioContent = $trioFixtureSplitter->splitFileInfo($fixtureFileInfo);
 
-    /**
-     * @return Iterator<mixed[]>
-     */
-    public function provideData(): Iterator
-    {
-        foreach ($this->getDirectoriesByTagValueNodes() as $tagValueNode => $directory) {
-            $filesInDirectory = $this->findFilesFromDirectory($directory);
-            foreach ($filesInDirectory as $fileInDirectory) {
-                foreach ($fileInDirectory as $singleFileInDirectory) {
-                    yield [$singleFileInDirectory, $tagValueNode];
-                }
-            }
+        $nodeClass = trim($trioContent->getSecondValue());
+        $tagValueNodeClasses = $this->splitListByEOL($trioContent->getExpectedResult());
+
+        $fixtureFileInfo = $this->createFixtureFileInfo($trioContent, $fixtureFileInfo);
+        foreach ($tagValueNodeClasses as $tagValueNodeClass) {
+            $this->doTestPrintedPhpDocInfo($fixtureFileInfo, $tagValueNodeClass, $nodeClass);
         }
     }
 
     /**
-     * @return array<class-string, string>
+     * @return Iterator<SmartFileInfo>
      */
-    private function getDirectoriesByTagValueNodes(): array
+    public function provideData(): Iterator
     {
-        return [
-            BlameableTagValueNode::class => __DIR__ . '/Fixture/Blameable',
-            SlugTagValueNode::class => __DIR__ . '/Fixture/Gedmo',
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture', '*.php.inc');
+    }
 
-            // symfony
-            AssertChoiceTagValueNode::class => __DIR__ . '/Fixture/AssertChoice',
-            AssertTypeTagValueNode::class => __DIR__ . '/Fixture/AssertType',
-            SymfonyRouteTagValueNode::class => __DIR__ . '/Fixture/SymfonyRoute',
+    /**
+     * @return string[]
+     */
+    private function splitListByEOL(string $content): array
+    {
+        $trimmedContent = trim($content);
+        return explode(PHP_EOL, $trimmedContent);
+    }
 
-            // Doctrine
-            ColumnTagValueNode::class => __DIR__ . '/Fixture/DoctrineColumn',
-            JoinTableTagValueNode::class => __DIR__ . '/Fixture/DoctrineJoinTable',
-            EntityTagValueNode::class => __DIR__ . '/Fixture/DoctrineEntity',
-            TableTagValueNode::class => __DIR__ . '/Fixture/DoctrineTable',
-            CustomIdGeneratorTagValueNode::class => __DIR__ . '/Fixture/DoctrineCustomIdGenerator',
-            GeneratedValueTagValueNode::class => __DIR__ . '/Fixture/DoctrineGeneratedValue',
-            EmbeddedTagValueNode::class => __DIR__ . '/Fixture/DoctrineEmbedded',
+    private function createFixtureFileInfo(TrioContent $trioContent, SmartFileInfo $fixturefileInfo): SmartFileInfo
+    {
+        $temporaryFileName = sys_get_temp_dir() . '/rector/tests/' . $fixturefileInfo->getRelativePathname();
+        $firstValue = $trioContent->getFirstValue();
 
-            // special case
-            SensioTemplateTagValueNode::class => __DIR__ . '/Fixture/SensioTemplate',
-            SensioMethodTagValueNode::class => __DIR__ . '/Fixture/SensioMethod',
+        $smartFileSystem = new SmartFileSystem();
+        $smartFileSystem->dumpFile($temporaryFileName, $firstValue);
 
-            GenericTagValueNode::class => __DIR__ . '/Fixture/ConstantReference',
-            TemplateTagValueNode::class => __DIR__ . '/Fixture/Native/Template',
-            VarTagValueNode::class => __DIR__ . '/Fixture/Native/VarTag',
-        ];
+        // to make it doctrine/annotation parse-able
+        require_once $temporaryFileName;
+
+        return new SmartFileInfo($temporaryFileName);
     }
 }

@@ -4,6 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\CustomIdGenerator;
+use Doctrine\ORM\Mapping\Embedded;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\Table;
+use Gedmo\Mapping\Annotation\Blameable;
+use Gedmo\Mapping\Annotation\Slug;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -22,11 +31,28 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ClassNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\ValueObject\NodeTypes;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Doctrine\PhpDoc\Node\Class_\EmbeddedTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Class_\EntityTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Class_\TableTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Gedmo\BlameableTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Gedmo\SlugTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Property_\ColumnTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Property_\CustomIdGeneratorTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Property_\GeneratedValueTagValueNode;
+use Rector\Doctrine\PhpDoc\Node\Property_\JoinTableTagValueNode;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\Symfony\PhpDoc\Node\AssertChoiceTagValueNode;
+use Rector\Symfony\PhpDoc\Node\AssertTypeTagValueNode;
+use Rector\Symfony\PhpDoc\Node\Sensio\SensioMethodTagValueNode;
+use Rector\Symfony\PhpDoc\Node\Sensio\SensioTemplateTagValueNode;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Validator\Constraints\Choice;
 
 /**
  * @template TNode as \PHPStan\PhpDocParser\Ast\Node
@@ -474,6 +500,51 @@ final class PhpDocInfo
         }
 
         return $methodTagNames;
+    }
+
+    public function hasByAnnotationClass(string $annotationClass): bool
+    {
+        $tagValueNodes = $this->findAllByType(AbstractTagValueNode::class);
+        foreach ($tagValueNodes as $tagValueNode) {
+            // temporary hack
+            if ($tagValueNode instanceof CustomIdGeneratorTagValueNode) {
+                $tagClassName = CustomIdGenerator::class;
+            } elseif ($tagValueNode instanceof ColumnTagValueNode) {
+                $tagClassName = Column::class;
+            } elseif ($tagValueNode instanceof GeneratedValueTagValueNode) {
+                $tagClassName = GeneratedValue::class;
+            } elseif ($tagValueNode instanceof AssertChoiceTagValueNode) {
+                $tagClassName = Choice::class;
+            } elseif ($tagValueNode instanceof JoinTableTagValueNode) {
+                $tagClassName = JoinTable::class;
+            } elseif ($tagValueNode instanceof AssertTypeTagValueNode) {
+                $tagClassName = \Symfony\Component\Validator\Constraints\Type::class;
+            } elseif ($tagValueNode instanceof TableTagValueNode) {
+                $tagClassName = Table::class;
+            } elseif ($tagValueNode instanceof SlugTagValueNode) {
+                $tagClassName = Slug::class;
+            } elseif ($tagValueNode instanceof BlameableTagValueNode) {
+                $tagClassName = Blameable::class;
+            } elseif ($tagValueNode instanceof EntityTagValueNode) {
+                $tagClassName = Entity::class;
+            } elseif ($tagValueNode instanceof EmbeddedTagValueNode) {
+                $tagClassName = Embedded::class;
+            } elseif ($tagValueNode instanceof SensioMethodTagValueNode) {
+                $tagClassName = Method::class;
+            } elseif ($tagValueNode instanceof SensioTemplateTagValueNode) {
+                $tagClassName = Template::class;
+            } elseif (defined(get_class($tagValueNode) . '::CLASS_NAME')) {
+                $tagClassName = $tagValueNode::CLASS_NAME;
+            } else {
+                continue;
+            }
+
+            if ($tagClassName === $annotationClass) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): Type

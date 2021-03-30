@@ -527,3 +527,21 @@ parameters:
             paths:
                 - packages/BetterPhpDocParser/AnnotationReader/NodeAnnotationReader.php
                 - packages/BetterPhpDocParser/PhpDocNodeFactory/*NodeFactory.php
+
+        # temporary
+        -
+            message: '#Use explicit names over dynamic ones#'
+            paths:
+                -  packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php
+
+        -
+            message: '#Use non\-dynamic property on static call#'
+            paths:
+                - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php
+
+        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:hasByAnnotationClass\(\)" is 18, keep it under 9#'
+        - '#Access to undefined constant Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode\:\:CLASS_NAME#'
+        -
+            message: '#Class cognitive complexity is 59, keep it under 50#'
+            paths:
+                - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php
