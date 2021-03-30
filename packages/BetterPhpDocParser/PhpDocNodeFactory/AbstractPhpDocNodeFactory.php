@@ -39,7 +39,7 @@ abstract class AbstractPhpDocNodeFactory
     /**
      * @var AnnotationContentResolver
      */
-    protected $annotationContentResolver;
+    private $annotationContentResolver;
 
     /**
      * @var ObjectTypeSpecifier

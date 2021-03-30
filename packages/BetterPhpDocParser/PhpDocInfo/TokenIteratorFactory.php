@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
+use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 
 final class TokenIteratorFactory
 {
@@ -19,10 +19,9 @@ final class TokenIteratorFactory
         $this->lexer = $lexer;
     }
 
-    public function create(string $content): TokenIterator
+    public function create(string $content): BetterTokenIterator
     {
         $tokens = $this->lexer->tokenize($content);
-
-        return new TokenIterator($tokens);
+        return new BetterTokenIterator($tokens);
     }
 }

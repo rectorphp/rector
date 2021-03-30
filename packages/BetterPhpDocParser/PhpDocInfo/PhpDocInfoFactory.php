@@ -122,11 +122,12 @@ final class PhpDocInfoFactory
             $content = $docComment->getText();
             $tokens = $this->lexer->tokenize($content);
 
-            try {
-                $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
-            } catch (ParserException $parserException) {
-                return null;
-            }
+//            try {
+            $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
+//            } catch (ParserException $parserException) {
+//
+//                return null;
+//            }
 
             $this->setPositionOfLastToken($phpDocNode);
         }

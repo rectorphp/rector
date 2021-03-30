@@ -91,12 +91,12 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
-        $doctrineColumnTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\ORM\Mapping\Column');
-        if (! $doctrineColumnTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\ORM\Mapping\Column');
+        if (! $doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return new MixedType();
         }
 
-        $type = $doctrineColumnTagValueNode->getValueWithoutQuotes('type');
+        $type = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');
         if ($type === null) {
             return new MixedType();
         }
@@ -108,7 +108,7 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
 
         $types = [$scalarType];
 
-        $isNullable = $doctrineColumnTagValueNode->getValue('nullable');
+        $isNullable = $doctrineAnnotationTagValueNode->getValue('nullable');
 
         // is nullable?
         if ($isNullable === true) {

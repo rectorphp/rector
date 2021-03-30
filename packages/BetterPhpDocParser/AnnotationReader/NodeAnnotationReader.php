@@ -13,7 +13,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
  */
 final class NodeAnnotationReader
 {
-    public function readAnnotation(Node $node, string $annotationClass): ?object
+    public function readAnnotation(Node $node, string $annotationClass): void
     {
         $message = sprintf('Use "%s" directly', DoctrineAnnotationTagValueNode::class);
         throw new ShouldNotHappenException($message);

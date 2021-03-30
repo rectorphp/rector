@@ -534,3 +534,31 @@ parameters:
             path: packages/BetterPhpDocParser/PhpDoc/DoctrineAnnotationTagValueNode.php
 
         - '#Cognitive complexity for "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayTypeMapper\:\:isGenericArrayCandidate\(\)" is 10, keep it under 9#'
+
+        # mimics original doctrine/annotations parser, improve later when finished
+        -
+             message: '#Array destruct is not allowed\. Use value object to pass data instead#'
+             paths:
+                  - 'packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser.php'
+                  - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php
+
+        -
+            message: '#Use value object over return of values#'
+            paths:
+                - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser.php
+                - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php
+
+        -
+            message: '#Do not inherit from abstract class, better use composition#'
+            paths:
+                - packages/BetterPhpDocParser/ValueObject/Parser/BetterTokenIterator.php
+
+        -
+            message: '#\$this as argument is not allowed\. Refactor method to service composition#'
+            paths:
+                - packages/BetterPhpDocParser/ValueObject/Parser/BetterTokenIterator.php
+
+        -
+            message: '#Array with keys is not allowed\. Use value object to pass data instead#'
+            paths:
+                - rules/NetteToSymfony/Rector/ClassMethod/RouterListToControllerAnnotationsRector.php

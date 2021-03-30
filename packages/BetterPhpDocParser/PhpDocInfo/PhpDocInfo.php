@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
+use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -300,9 +301,9 @@ final class PhpDocInfo
     }
 
     /**
-     * @param class-string $class
+     * @param class-string $desiredClass
      */
-    public function getByAnnotationClass(string $class): ?DoctrineAnnotationTagValueNode
+    public function getByAnnotationClass(string $desiredClass): ?DoctrineAnnotationTagValueNode
     {
         foreach ($this->phpDocNode->children as $phpDocChildNode) {
             if (! $phpDocChildNode instanceof PhpDocTagNode) {
@@ -314,7 +315,14 @@ final class PhpDocInfo
                 continue;
             }
 
-            if ($phpDocChildNode->value->getAnnotationClass() === $class) {
+            $annotationClass = $phpDocChildNode->value->getAnnotationClass();
+
+            if ($annotationClass === $desiredClass) {
+                return $phpDocChildNode->value;
+            }
+
+            // fnmatch
+            if ($this->isFnmatch($annotationClass, $desiredClass)) {
                 return $phpDocChildNode->value;
             }
         }
@@ -513,5 +521,14 @@ final class PhpDocInfo
         }
 
         throw new NotImplementedYetException(get_class($phpDocTagValueNode));
+    }
+
+    private function isFnmatch(string $currentValue, string $desiredValue): bool
+    {
+        if (! Strings::contains($desiredValue, '*')) {
+            return false;
+        }
+
+        return fnmatch($desiredValue, $currentValue, FNM_NOESCAPE);
     }
 }

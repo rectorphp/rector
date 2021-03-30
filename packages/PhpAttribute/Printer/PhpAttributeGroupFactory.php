@@ -10,9 +10,7 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
-use PHPStan\PhpDocParser\Ast\Node;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 
 final class PhpAttributeGroupFactory
@@ -24,21 +22,14 @@ final class PhpAttributeGroupFactory
         return new AttributeGroup([$attribute]);
     }
 
-    public function create(Node $node, AnnotationToAttribute $annotationToAttribute): AttributeGroup
-    {
+    public function create(
+        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
+        AnnotationToAttribute $annotationToAttribute
+    ): AttributeGroup {
         $fullyQualified = new FullyQualified($annotationToAttribute->getAttributeClass());
 
-        if ($node instanceof AbstractTagValueNode) {
-            if ($node instanceof DoctrineAnnotationTagValueNode) {
-                $values = $node->getValuesWithExplicitSilentAndWithoutQuotes();
-            } else {
-                $values = $node->getItemsWithoutDefaults();
-            }
-
-            $args = $this->createArgsFromItems($values);
-        } else {
-            $args = [];
-        }
+        $values = $doctrineAnnotationTagValueNode->getValuesWithExplicitSilentAndWithoutQuotes();
+        $args = $this->createArgsFromItems($values);
 
         $attribute = new Attribute($fullyQualified, $args);
         return new AttributeGroup([$attribute]);

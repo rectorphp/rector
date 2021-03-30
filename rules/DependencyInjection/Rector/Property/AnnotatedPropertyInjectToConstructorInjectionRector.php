@@ -38,7 +38,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
     /**
-     * @var array<class-string>
+     * @var string[]
      */
     private const INJECT_ANNOTATION_CLASSES = ['JMS\DiExtraBundle\Annotation\Inject', 'DI\Annotation\Inject'];
 
@@ -147,7 +147,7 @@ CODE_SAMPLE
 
         foreach (self::INJECT_ANNOTATION_CLASSES as $injectAnnotationClass) {
             $injectTagNode = $phpDocInfo->getByAnnotationClass($injectAnnotationClass);
-            if ($injectTagNode === null) {
+            if (! $injectTagNode instanceof DoctrineAnnotationTagValueNode) {
                 continue;
             }
 

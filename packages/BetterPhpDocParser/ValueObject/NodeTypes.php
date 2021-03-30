@@ -25,7 +25,7 @@ final class NodeTypes
     ];
 
     /**
-     * @var array<class-string>
+     * @var string[]
      */
     public const TYPE_AWARE_DOCTRINE_ANNOTATION_CLASSES = [
         'JMS\Serializer\Annotation\Type',

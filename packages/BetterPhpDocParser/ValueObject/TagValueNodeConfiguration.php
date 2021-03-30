@@ -34,11 +34,6 @@ final class TagValueNodeConfiguration
     private $isSilentKeyExplicit = false;
 
     /**
-     * @var string
-     */
-    private $arrayEqualSign;
-
-    /**
      * @var array<string, bool>
      */
     private $keysByQuotedStatus = [];
@@ -54,11 +49,6 @@ final class TagValueNodeConfiguration
     private $orderedVisibleItems;
 
     /**
-     * @var string|null
-     */
-    private $silentKey;
-
-    /**
      * @param array<string, bool> $keysByQuotedStatus
      * @param string[] $orderedVisibleItems
      */
@@ -70,9 +60,7 @@ final class TagValueNodeConfiguration
         bool $hasOpeningBracket = false,
         bool $hasClosingBracket = false,
         array $keysByQuotedStatus = [],
-        ?string $silentKey = null,
-        bool $isSilentKeyExplicit = true,
-        string $arrayEqualSign = ':'
+        bool $isSilentKeyExplicit = true
     ) {
         $this->originalContent = $originalContent;
         $this->orderedVisibleItems = $orderedVisibleItems;
@@ -81,9 +69,7 @@ final class TagValueNodeConfiguration
         $this->hasOpeningBracket = $hasOpeningBracket;
         $this->hasClosingBracket = $hasClosingBracket;
         $this->keysByQuotedStatus = $keysByQuotedStatus;
-        $this->silentKey = $silentKey;
         $this->isSilentKeyExplicit = $isSilentKeyExplicit;
-        $this->arrayEqualSign = $arrayEqualSign;
     }
 
     public function getOriginalContent(): ?string
@@ -137,20 +123,6 @@ final class TagValueNodeConfiguration
         $this->isSilentKeyExplicit = $tagValueNodeConfiguration->isSilentKeyExplicit;
         $this->hasOpeningBracket = $tagValueNodeConfiguration->hasOpeningBracket;
         $this->hasClosingBracket = $tagValueNodeConfiguration->hasClosingBracket;
-    }
-
-    public function isSilentKeyAndImplicit(string $key): bool
-    {
-        if ($key !== $this->silentKey) {
-            return false;
-        }
-
-        return ! $this->isSilentKeyExplicit;
-    }
-
-    public function getArrayEqualSign(): string
-    {
-        return $this->arrayEqualSign;
     }
 
     public function originalContentContains(string $needle): bool

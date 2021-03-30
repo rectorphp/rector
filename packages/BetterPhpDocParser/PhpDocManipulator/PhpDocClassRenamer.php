@@ -104,7 +104,7 @@ final class PhpDocClassRenamer
                     continue;
                 }
 
-                $newContent = Strings::replace($className, '#\b' . preg_quote($oldClass) . '\b#', $newClass);
+                $newContent = Strings::replace($className, '#\b' . preg_quote($oldClass, '#') . '\b#', $newClass);
                 if ($newContent === $className) {
                     continue;
                 }

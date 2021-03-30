@@ -87,8 +87,6 @@ final class TagValueNodeConfigurationFactory
 
         $isSilentKeyExplicit = Strings::contains($originalContent, sprintf('%s=', $silentKey));
 
-        $arrayEqualSign = $this->resolveArraySeparatorSign($originalContent, $phpDocTagValueNode);
-
         return new TagValueNodeConfiguration(
             $originalContent,
             $orderedVisibleItems,
@@ -97,9 +95,7 @@ final class TagValueNodeConfigurationFactory
             $hasOpeningBracket,
             $hasClosingBracket,
             $keysByQuotedStatus,
-            $silentKey,
-            $isSilentKeyExplicit,
-            $arrayEqualSign
+            $isSilentKeyExplicit
         );
     }
 

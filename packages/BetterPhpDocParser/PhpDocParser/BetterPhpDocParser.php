@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use Nette\Utils\Strings;
+use PhpParser\Node as PhpParserNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -23,9 +24,9 @@ use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
 use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\StringTagMatchingPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
-use Rector\BetterPhpDocParser\Printer\TagValueNodePrinter;
 use Rector\BetterPhpDocParser\ValueObject\DoctrineAnnotation\SilentKeyMap;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -42,7 +43,7 @@ final class BetterPhpDocParser extends PhpDocParser
      * @var string
      * @see https://regex101.com/r/HlGzME/1
      */
-    private const SIMPLE_TAG_REGEX = '#@(var|param|return|throws|property|deprecated|var|param|template|extends|implements|use|return|throws|mixin|property|property|property|method|phpstan|phpstan)#';
+    private const SIMPLE_TAG_REGEX = '#@(var|param|return|throws|property|deprecated|var|param|template|extends|implements|use|return|throws|mixin|property|method|phpstan)#';
 
     /**
      * @var array<string, class-string>
@@ -92,24 +93,19 @@ final class BetterPhpDocParser extends PhpDocParser
     private $stringTagMatchingPhpDocNodeFactories = [];
 
     /**
-     * @var Lexer
-     */
-    private $lexer;
-
-    /**
      * @var ArrayPartPhpDocTagPrinter
      */
     private $arrayPartPhpDocTagPrinter;
 
     /**
-     * @var TagValueNodePrinter
-     */
-    private $tagValueNodePrinter;
-
-    /**
      * @var StaticDoctrineAnnotationParser
      */
     private $staticDoctrineAnnotationParser;
+
+    /**
+     * @var TokenIteratorFactory
+     */
+    private $tokenIteratorFactory;
 
     /**
      * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
@@ -123,9 +119,8 @@ final class BetterPhpDocParser extends PhpDocParser
         ClassAnnotationMatcher $classAnnotationMatcher,
         AnnotationContentResolver $annotationContentResolver,
         ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
-        TagValueNodePrinter $tagValueNodePrinter,
         StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser,
-        Lexer $lexer,
+        TokenIteratorFactory $tokenIteratorFactory,
         array $phpDocNodeFactories = [],
         array $stringTagMatchingPhpDocNodeFactories = []
     ) {
@@ -140,10 +135,9 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->annotationContentResolver = $annotationContentResolver;
         $this->stringTagMatchingPhpDocNodeFactories = $stringTagMatchingPhpDocNodeFactories;
-        $this->lexer = $lexer;
         $this->arrayPartPhpDocTagPrinter = $arrayPartPhpDocTagPrinter;
-        $this->tagValueNodePrinter = $tagValueNodePrinter;
         $this->staticDoctrineAnnotationParser = $staticDoctrineAnnotationParser;
+        $this->tokenIteratorFactory = $tokenIteratorFactory;
     }
 
     public function parse(TokenIterator $tokenIterator): PhpDocNode
@@ -194,7 +188,7 @@ final class BetterPhpDocParser extends PhpDocParser
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
         $currentPhpNode = $this->currentNodeProvider->getNode();
-        if (! $currentPhpNode instanceof \PhpParser\Node) {
+        if (! $currentPhpNode instanceof PhpParserNode) {
             throw new ShouldNotHappenException();
         }
 
@@ -219,9 +213,9 @@ final class BetterPhpDocParser extends PhpDocParser
                 }
 
                 // @todo parse this part to array of items
-                $tokens = $this->lexer->tokenize($phpDocTagValueNode->value);
-                $nestedTokenIterator = new TokenIterator($tokens);
+                $nestedTokenIterator = $this->tokenIteratorFactory->create($phpDocTagValueNode->value);
 
+                // @todo test from this
                 $values = $this->staticDoctrineAnnotationParser->resolveAnnotationMethodCall($nestedTokenIterator);
 
                 // https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L742
@@ -229,7 +223,6 @@ final class BetterPhpDocParser extends PhpDocParser
 
                 $tagValueNode = new DoctrineAnnotationTagValueNode(
                     $this->arrayPartPhpDocTagPrinter,
-                    $this->tagValueNodePrinter,
                     $fullyQualifiedAnnotationClass,
                     $phpDocTagValueNode->value,
                     $values,
@@ -315,7 +308,7 @@ final class BetterPhpDocParser extends PhpDocParser
     private function matchTagToPhpDocNodeFactory(string $tag): ?PhpDocNodeFactoryInterface
     {
         $currentPhpNode = $this->currentNodeProvider->getNode();
-        if (! $currentPhpNode instanceof \PhpParser\Node) {
+        if (! $currentPhpNode instanceof PhpParserNode) {
             throw new ShouldNotHappenException();
         }
 

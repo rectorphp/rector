@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
+use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
@@ -65,7 +66,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
             'Doctrine\ORM\Mapping\ManyToMany',
         ]);
         if ($toManyRelationTagValueNode !== null) {
-            return $this->processToManyRelation($toManyRelationTagValueNode);
+            return $this->processToManyRelation($property, $toManyRelationTagValueNode);
         }
 
         $toOneRelationTagValueNode = $phpDocInfo->getByAnnotationClasses([
@@ -74,8 +75,12 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         ]);
 
         if ($toOneRelationTagValueNode !== null) {
-            $joinColumnTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\ORM\Mapping\JoinColumn');
-            return $this->processToOneRelation($property, $toOneRelationTagValueNode, $joinColumnTagValueNode);
+            $joinDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\ORM\Mapping\JoinColumn');
+            return $this->processToOneRelation(
+                $property,
+                $toOneRelationTagValueNode,
+                $joinDoctrineAnnotationTagValueNode
+            );
         }
 
         return new MixedType();
@@ -86,13 +91,16 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         return 2100;
     }
 
-    private function processToManyRelation(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode): Type
-    {
+    private function processToManyRelation(
+        Property $property,
+        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
+    ): Type {
         $types = [];
 
         $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
         if ($targetEntity) {
-            $types[] = new ArrayType(new MixedType(), new FullyQualifiedObjectType($targetEntity));
+            $entityFullyQualifiedClass = $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);
+            $types[] = new ArrayType(new MixedType(), new FullyQualifiedObjectType($entityFullyQualifiedClass));
         }
 
         $types[] = new FullyQualifiedObjectType(self::COLLECTION_TYPE);
@@ -110,6 +118,10 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
             return new MixedType();
         }
 
+        if (Strings::endsWith($targetEntity, '::class')) {
+            $targetEntity = Strings::before($targetEntity, '::class');
+        }
+
         // resolve to FQN
         $tagFullyQualifiedName = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($targetEntity, $property);
 
@@ -123,13 +135,13 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
 
-    private function shouldAddNullType(?DoctrineAnnotationTagValueNode $joinColumnTagValueNode): bool
+    private function shouldAddNullType(?DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode): bool
     {
-        if ($joinColumnTagValueNode === null) {
+        if ($doctrineAnnotationTagValueNode === null) {
             return true;
         }
 
-        $isNullableValue = $joinColumnTagValueNode->getValue('nullable');
+        $isNullableValue = $doctrineAnnotationTagValueNode->getValue('nullable');
         return $isNullableValue === true;
     }
 }
