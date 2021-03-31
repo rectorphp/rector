@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp72\Rector\FunctionLike;
+namespace Rector\DowngradePhp72\Rector\Function_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Function_;
@@ -11,7 +11,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DowngradePhp72\Rector\FunctionLike\DowngradePregUnmatchedAsNullConstantRector\DowngradePregUnmatchedAsNullConstantRectorTest
+ * @see \Rector\Tests\DowngradePhp72\Rector\Function_\DowngradePregUnmatchedAsNullConstantRector\DowngradePregUnmatchedAsNullConstantRectorTest
  */
 final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
 {
