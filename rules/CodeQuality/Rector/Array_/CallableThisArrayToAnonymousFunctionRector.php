@@ -155,10 +155,13 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->isCallbackAtFunctionName($array, 'register_shutdown_function');
+        return $this->isCallbackAtFunctionNames($array, ['register_shutdown_function', 'forward_static_call']);
     }
 
-    private function isCallbackAtFunctionName(Array_ $array, string $functionName): bool
+    /**
+     * @param string[] $functionNames
+     */
+    private function isCallbackAtFunctionNames(Array_ $array, array $functionNames): bool
     {
         $parentNode = $array->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof Arg) {
@@ -170,6 +173,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isName($parentParentNode, $functionName);
+        return $this->isNames($parentParentNode, $functionNames);
     }
 }
