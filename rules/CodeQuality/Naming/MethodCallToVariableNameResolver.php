@@ -37,7 +37,7 @@ final class MethodCallToVariableNameResolver
      * @var string
      * @see https://regex101.com/r/TOPfAQ/1
      */
-    private const VALID_STRING_VARIABLE = '#^[a-z_]\w*$#';
+    private const VALID_STRING_VARIABLE_REGEX = '#^[a-z_]\w*$#';
 
     /**
      * @var NodeNameResolver
@@ -149,7 +149,7 @@ final class MethodCallToVariableNameResolver
 
     private function normalizeStringVariableName(string $string): string
     {
-        if (! Strings::match($string, self::VALID_STRING_VARIABLE)) {
+        if (! Strings::match($string, self::VALID_STRING_VARIABLE_REGEX)) {
             return '';
         }
 
