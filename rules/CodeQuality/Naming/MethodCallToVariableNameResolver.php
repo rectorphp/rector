@@ -34,6 +34,12 @@ final class MethodCallToVariableNameResolver
     private const SPACE_REGEX = '#\s+#';
 
     /**
+     * @var string
+     * @see https://regex101.com/r/TOPfAQ/1
+     */
+    private const VALID_STRING_VARIABLE = '#^[a-z_]\w*$#';
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -143,6 +149,10 @@ final class MethodCallToVariableNameResolver
 
     private function normalizeStringVariableName(string $string): string
     {
+        if (! Strings::match($string, self::VALID_STRING_VARIABLE)) {
+            return '';
+        }
+
         $get = str_ireplace('get', '', $string);
         $by = str_ireplace('by', '', $get);
 
