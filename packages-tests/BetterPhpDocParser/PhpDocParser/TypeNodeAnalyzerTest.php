@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Rector\Tests\BetterPhpDocParser\PhpDocParser;
 
 use Iterator;
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocParser\TypeNodeAnalyzer;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
@@ -31,24 +29,6 @@ final class TypeNodeAnalyzerTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
         $this->typeNodeAnalyzer = $this->getService(TypeNodeAnalyzer::class);
-    }
-
-    /**
-     * @dataProvider provideDataForArrayType()
-     */
-    public function testContainsArrayType(TypeNode $typeNode, bool $expectedContains): void
-    {
-        $containsArrayType = $this->typeNodeAnalyzer->containsArrayType($typeNode);
-        $this->assertSame($expectedContains, $containsArrayType);
-    }
-
-    public function provideDataForArrayType(): Iterator
-    {
-        $arrayTypeNode = new ArrayTypeNode(new IdentifierTypeNode(self::INT));
-
-        yield [new IdentifierTypeNode(self::INT), false];
-        yield [$arrayTypeNode, true];
-        yield [new UnionTypeNode([$arrayTypeNode]), true];
     }
 
     /**
