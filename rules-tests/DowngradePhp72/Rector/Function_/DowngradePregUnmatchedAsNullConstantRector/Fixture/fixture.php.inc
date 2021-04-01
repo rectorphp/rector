@@ -21,11 +21,13 @@ class Fixture
     public function run()
     {
         preg_match('/(a)(b)*(c)/', 'ac', $matches);
-        foreach ($matches as $key => $match) {
-            if ($match === '') {
-                $matches[$key] = null;
+        (function (&$matches) {
+            foreach ($matches as &$match) {
+                if ($match === '') {
+                    $match = null;
+                }
             }
-        }
+        })($matches);
     }
 }
 
