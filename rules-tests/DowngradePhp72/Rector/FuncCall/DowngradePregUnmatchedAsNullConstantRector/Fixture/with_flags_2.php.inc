@@ -2,11 +2,11 @@
 
 namespace Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector\Fixture;
 
-class WithFlags2
+class WithFlags
 {
     public function run()
     {
-        preg_match('/(a)(b)*(c)/', 'ac', $matches, $flags | PREG_UNMATCHED_AS_NULL | PREG_OFFSET_CAPTURE);
+        preg_match('/(a)(b)*(c)/', 'ac', $matches, $flags | PREG_OFFSET_CAPTURE | PREG_UNMATCHED_AS_NULL);
     }
 }
 
@@ -16,7 +16,7 @@ class WithFlags2
 
 namespace Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector\Fixture;
 
-class WithFlags2
+class WithFlags
 {
     public function run()
     {
