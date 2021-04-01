@@ -8,19 +8,19 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\NodeManipulator\IfManipulator;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\NodeFactory\UnwrapClosureFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector\DowngradePregUnmatchedAsNullConstantRectorTest
@@ -30,10 +30,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const REGEX_FUNCTION_NAMES = [
-        'preg_match',
-        'preg_match_all',
-    ];
+    private const REGEX_FUNCTION_NAMES = ['preg_match', 'preg_match_all'];
 
     /**
      * @var string
@@ -45,15 +42,9 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
      */
     private $ifManipulator;
 
-    /**
-     * @var UnwrapClosureFactory
-     */
-    private $unwrapClosureFactory;
-
     public function __construct(IfManipulator $ifManipulator, UnwrapClosureFactory $unwrapClosureFactory)
     {
         $this->ifManipulator = $ifManipulator;
-        $this->unwrapClosureFactory = $unwrapClosureFactory;
     }
 
     /**
@@ -101,62 +92,6 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         return $node;
     }
 
-    private function cleanBitWiseOrFlags(FuncCall $funcCall, BitwiseOr $bitwiseOr, ?Expr $expr = null)
-    {
-        if ($bitwiseOr->left instanceof BitwiseOr) {
-            if ($bitwiseOr->left->left instanceof ConstFetch && $this->isName($bitwiseOr->left->left, self::FLAG)) {
-                $bitwiseOr = new BitwiseOr($bitwiseOr->left->right, $bitwiseOr->right);
-            }
-
-            if ($bitwiseOr->left->right instanceof ConstFetch && $this->isName($bitwiseOr->left->right, self::FLAG)) {
-                $bitwiseOr = new BitwiseOr($bitwiseOr->left->left, $bitwiseOr->right);
-            }
-
-            if ($bitwiseOr->left instanceof BitwiseOr) {
-                return $this->cleanBitWiseOrFlags($funcCall, $bitwiseOr->left, $bitwiseOr->right);
-            }
-        }
-
-        if ($expr instanceof Expr) {
-            $bitwiseOr = new BitwiseOr($bitwiseOr, $expr);
-        }
-
-        if ($bitwiseOr instanceof BitWiseOr && $bitwiseOr->right instanceof ConstFetch && $this->isName($bitwiseOr->right, self::FLAG)) {
-            $bitwiseOr = $bitwiseOr->left;
-        }
-
-        if ($bitwiseOr instanceof BitWiseOr && $bitwiseOr->left instanceof ConstFetch && $this->isName($bitwiseOr->left, self::FLAG)) {
-            $bitwiseOr = $bitwiseOr->right;
-        }
-
-        $funcCall->args[3] = $bitwiseOr;
-   }
-
-    private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable): FuncCall
-    {
-        $closure                  = new Closure();
-        $variablePass             = new Variable('value');
-        $argClosure               = new Arg($variablePass);
-        $argClosure->byRef        = true;
-        $closure->params          = [$argClosure];
-
-        $assign = new Assign($variablePass, $this->nodeFactory->createNull());
-
-        $if = $this->ifManipulator->createIfExpr(
-            new Identical($variablePass, new String_('')),
-            new Expression($assign)
-        );
-
-        $closure->stmts[0]  = $if;
-
-        $arguments                = $this->nodeFactory->createArgs([$variable, $closure]);
-        $replaceEmptystringToNull = $this->nodeFactory->createFuncCall('array_walk_recursive', $arguments);
-
-        $this->addNodeAfterNode($replaceEmptystringToNull, $funcCall);
-
-        return $funcCall;
-    }
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -190,5 +125,70 @@ CODE_SAMPLE
                 ),
             ]
         );
+    }
+
+    /**
+     * @return mixed|void
+     */
+    private function cleanBitWiseOrFlags(FuncCall $funcCall, BitwiseOr $bitwiseOr, ?Expr $expr = null)
+    {
+        if ($bitwiseOr->left instanceof BitwiseOr) {
+            if ($bitwiseOr->left->left instanceof ConstFetch && $this->isName($bitwiseOr->left->left, self::FLAG)) {
+                $bitwiseOr = new BitwiseOr($bitwiseOr->left->right, $bitwiseOr->right);
+            }
+
+            if ($bitwiseOr->left->right instanceof ConstFetch && $this->isName($bitwiseOr->left->right, self::FLAG)) {
+                $bitwiseOr = new BitwiseOr($bitwiseOr->left->left, $bitwiseOr->right);
+            }
+
+            if ($bitwiseOr->left instanceof BitwiseOr) {
+                return $this->cleanBitWiseOrFlags($funcCall, $bitwiseOr->left, $bitwiseOr->right);
+            }
+        }
+
+        if ($expr instanceof Expr) {
+            $bitwiseOr = new BitwiseOr($bitwiseOr, $expr);
+        }
+
+        if ($bitwiseOr instanceof BitWiseOr && $bitwiseOr->right instanceof ConstFetch && $this->isName(
+            $bitwiseOr->right,
+            self::FLAG
+        )) {
+            $bitwiseOr = $bitwiseOr->left;
+        }
+
+        if ($bitwiseOr instanceof BitWiseOr && $bitwiseOr->left instanceof ConstFetch && $this->isName(
+            $bitwiseOr->left,
+            self::FLAG
+        )) {
+            $bitwiseOr = $bitwiseOr->right;
+        }
+
+        $funcCall->args[3] = $bitwiseOr;
+    }
+
+    private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable): FuncCall
+    {
+        $closure = new Closure();
+        $variablePass = new Variable('value');
+        $arg = new Arg($variablePass);
+        $arg->byRef = true;
+        $closure->params = [$arg];
+
+        $assign = new Assign($variablePass, $this->nodeFactory->createNull());
+
+        $if = $this->ifManipulator->createIfExpr(
+            new Identical($variablePass, new String_('')),
+            new Expression($assign)
+        );
+
+        $closure->stmts[0] = $if;
+
+        $arguments = $this->nodeFactory->createArgs([$variable, $closure]);
+        $replaceEmptystringToNull = $this->nodeFactory->createFuncCall('array_walk_recursive', $arguments);
+
+        $this->addNodeAfterNode($replaceEmptystringToNull, $funcCall);
+
+        return $funcCall;
     }
 }
