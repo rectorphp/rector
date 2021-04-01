@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
@@ -14,9 +15,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Transform\NodeFactory\UnwrapClosureFactory;
@@ -74,6 +75,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
 
         $flags = $args[3]->value;
         if ($flags instanceof BitwiseOr) {
+            $this->cleanBitWiseOrFlags($node, $flags);
             // handle piped flags here
             return $node;
         }
@@ -82,6 +84,22 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         $variable = $args[2]->value;
         return $this->handleEmptyStringToNullMatch($node, $variable);
     }
+
+    private function cleanBitWiseOrFlags(FuncCall $funcCall, BitwiseOr $bitwiseOr)
+    {
+        $exprBitWise = [];
+        while ($bitwiseOr->left instanceof BitwiseOr) {
+            $bitwiseOr->right = $bitwiseOr->left->right;
+            $bitwiseOr->left = $bitwiseOr->left->left;
+
+            if ($bitwiseOr->left instanceof ConstFetch && $this->isName($bitwiseOr->left, 'PREG_UNMATCHED_AS_NULL')) {
+                unset($bitwiseOr->left);
+            }
+
+            $exprBitWise[] = $bitwiseOr->left;
+            $exprBitWise[] = $bitwiseOr->right;
+        }
+   }
 
     private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable): FuncCall
     {
