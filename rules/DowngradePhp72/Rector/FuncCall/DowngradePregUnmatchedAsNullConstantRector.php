@@ -18,7 +18,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Transform\NodeFactory\UnwrapClosureFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -42,7 +41,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
      */
     private $ifManipulator;
 
-    public function __construct(IfManipulator $ifManipulator, UnwrapClosureFactory $unwrapClosureFactory)
+    public function __construct(IfManipulator $ifManipulator)
     {
         $this->ifManipulator = $ifManipulator;
     }
