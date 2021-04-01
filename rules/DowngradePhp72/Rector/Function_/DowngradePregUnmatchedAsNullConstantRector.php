@@ -53,13 +53,11 @@ class SomeClass
     public function run()
     {
         preg_match('/(a)(b)*(c)/', 'ac', $matches);
-        (function (&$matches) {
-            foreach ($matches as &$match) {
-                if ($match === '') {
-                    $match = null;
-                }
+        array_walk_recursive($matches, function (& $value) {
+            if ($value === '') {
+                $value = null;
             }
-        })($matches);
+        });
     }
 }
 CODE_SAMPLE
