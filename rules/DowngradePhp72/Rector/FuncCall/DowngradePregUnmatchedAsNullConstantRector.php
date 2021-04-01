@@ -74,15 +74,26 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         }
 
         $flags = $args[3]->value;
-        if ($flags instanceof BitwiseOr) {
-            $this->cleanBitWiseOrFlags($node, $flags);
-            // handle piped flags here
-            return $node;
-        }
-
         /** @var Variable $variable */
         $variable = $args[2]->value;
-        return $this->handleEmptyStringToNullMatch($node, $variable);
+
+        if ($flags instanceof BitwiseOr) {
+            $this->cleanBitWiseOrFlags($node, $flags);
+            return $this->handleEmptyStringToNullMatch($node, $variable);
+        }
+
+        if (! $flags instanceof ConstFetch) {
+            return null;
+        }
+
+        if (! $this->isName($flags, 'PREG_UNMATCHED_AS_NULL')) {
+            return null;
+        }
+
+        $node = $this->handleEmptyStringToNullMatch($node, $variable);
+        unset($node->args[3]);
+
+        return $node;
     }
 
     private function cleanBitWiseOrFlags(FuncCall $funcCall, BitwiseOr $bitwiseOr)
@@ -123,7 +134,6 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
 
         $this->addNodeAfterNode($replaceEmptystringToNull, $funcCall);
 
-        unset($funcCall->args[3]);
         return $funcCall;
     }
 
