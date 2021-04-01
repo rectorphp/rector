@@ -110,6 +110,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
 
             if ($bitwiseOr->left instanceof ConstFetch && $this->isName($bitwiseOr->left, self::FLAG)) {
                 unset($bitwiseOr->left);
+                //$bitwiseOr->left = $bitwiseOr->right;
             }
 
             $exprBitWise[] = $bitwiseOr->left;

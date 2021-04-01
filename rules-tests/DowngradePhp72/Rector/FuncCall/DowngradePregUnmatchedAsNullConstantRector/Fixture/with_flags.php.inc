@@ -6,7 +6,7 @@ class WithFlags2
 {
     public function run()
     {
-        preg_match('/(a)(b)*(c)/', 'ac', $matches, $flags | PREG_UNMATCHED_AS_NULL | PREG_OFFSET_CAPTURE);
+        preg_match('/(a)(b)*(c)/', 'ac', $matches, $flags | PREG_OFFSET_CAPTURE | PREG_UNMATCHED_AS_NULL);
     }
 }
 
