@@ -16,6 +16,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private const REGEX_FUNCTION_NAMES = [
+        'preg_match',
+        'preg_match_all',
+    ];
+
+    /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
@@ -28,6 +36,15 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->isNames($node, self::REGEX_FUNCTION_NAMES)) {
+            return null;
+        }
+
+        $args = $node->args;
+        if (! isset($args[3])) {
+            return null;
+        }
+
         return $node;
     }
 
