@@ -316,7 +316,6 @@ final class PhpDocInfo
             }
 
             $annotationClass = $phpDocChildNode->value->getAnnotationClass();
-
             if ($annotationClass === $desiredClass) {
                 return $phpDocChildNode->value;
             }

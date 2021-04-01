@@ -562,3 +562,9 @@ parameters:
             message: '#Array with keys is not allowed\. Use value object to pass data instead#'
             paths:
                 - rules/NetteToSymfony/Rector/ClassMethod/RouterListToControllerAnnotationsRector.php
+
+        # recurse
+        -
+            message: '#Do not use setter on a service#'
+            paths:
+                - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/PlainValueParser.php

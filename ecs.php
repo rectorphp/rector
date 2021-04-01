@@ -59,9 +59,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             '*TypeResolver*',
             '*NameResolver*',
             '*Mapper*',
+            // allowed @required
             __DIR__ . '/packages/StaticTypeMapper/Naming/NameScopeFactory.php',
             __DIR__ . '/packages/NodeTypeResolver/NodeTypeResolver.php',
             __DIR__ . '/packages/BetterPhpDocParser/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php',
+            __DIR__ . '/packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/PlainValueParser.php',
         ],
 
         UnaryOperatorSpacesFixer::class,

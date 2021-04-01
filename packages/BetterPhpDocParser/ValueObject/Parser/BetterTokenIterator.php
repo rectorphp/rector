@@ -25,6 +25,10 @@ final class BetterTokenIterator extends TokenIterator
 
     public function isNextTokenType(int $tokenType): bool
     {
+        if ($this->nextTokenType() === null) {
+            return false;
+        }
+
         return $this->nextTokenType() === $tokenType;
     }
 
@@ -41,9 +45,29 @@ final class BetterTokenIterator extends TokenIterator
         return $content;
     }
 
-    private function nextTokenType(): int
+    public function endsWithType(int $tokenType): bool
+    {
+        $privatesAccessor = new PrivatesAccessor();
+        $tokens = $privatesAccessor->getPrivateProperty($this, 'tokens');
+
+        $lastToken = array_pop($tokens);
+        return $lastToken[1] === $tokenType;
+    }
+
+    private function nextTokenType(): ?int
     {
         $this->pushSavePoint();
+
+        $privatesAccessor = new PrivatesAccessor();
+        $tokens = $privatesAccessor->getPrivateProperty($this, 'tokens');
+        $index = $privatesAccessor->getPrivateProperty($this, 'index');
+
+        // does next token exist?
+        $nextIndex = $index + 1;
+        if (! isset($tokens[$nextIndex])) {
+            return null;
+        }
+
         $this->next();
         $nextTokenType = $this->currentTokenType();
         $this->rollback();

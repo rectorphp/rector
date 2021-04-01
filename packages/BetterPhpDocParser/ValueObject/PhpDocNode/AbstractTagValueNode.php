@@ -6,11 +6,9 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode;
 
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
 use Rector\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Symplify\PackageBuilder\Php\TypeChecker;
 
 abstract class AbstractTagValueNode implements PhpDocTagValueNode
 {
@@ -27,20 +25,10 @@ abstract class AbstractTagValueNode implements PhpDocTagValueNode
     protected $tagValueNodeConfiguration;
 
     /**
-     * @var ArrayPartPhpDocTagPrinter
-     */
-    protected $arrayPartPhpDocTagPrinter;
-
-    /**
      * @param array<string, mixed> $items
      */
-    public function __construct(
-        ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
-        array $items = [],
-        ?string $originalContent = null
-    ) {
-        $this->arrayPartPhpDocTagPrinter = $arrayPartPhpDocTagPrinter;
-
+    public function __construct(array $items = [], ?string $originalContent = null)
+    {
         $this->items = $items;
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
@@ -65,7 +53,7 @@ abstract class AbstractTagValueNode implements PhpDocTagValueNode
 
     protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
     {
-        $tagValueNodeConfigurationFactory = new TagValueNodeConfigurationFactory(new TypeChecker());
+        $tagValueNodeConfigurationFactory = new TagValueNodeConfigurationFactory();
 
         // prevent override
         if ($this->tagValueNodeConfiguration !== null) {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -111,7 +112,7 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
         $isNullable = $doctrineAnnotationTagValueNode->getValue('nullable');
 
         // is nullable?
-        if ($isNullable === true) {
+        if ($isNullable instanceof ConstExprTrueNode) {
             $types[] = new NullType();
         }
 

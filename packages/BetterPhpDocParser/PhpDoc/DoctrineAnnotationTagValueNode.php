@@ -6,7 +6,6 @@ namespace Rector\BetterPhpDocParser\PhpDoc;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\Printer\ArrayPartPhpDocTagPrinter;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
 
 final class DoctrineAnnotationTagValueNode extends AbstractTagValueNode implements PhpDocTagValueNode
@@ -46,8 +45,6 @@ final class DoctrineAnnotationTagValueNode extends AbstractTagValueNode implemen
      * @param array<mixed, mixed> $values
      */
     public function __construct(
-        // printer services
-        ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
         // values
         string $annotationClass,
         ?string $docContent = null,
@@ -61,7 +58,6 @@ final class DoctrineAnnotationTagValueNode extends AbstractTagValueNode implemen
         $this->hasChanged = true;
 
         parent::__construct(
-            $arrayPartPhpDocTagPrinter,
             $values,
             $docContent
         );

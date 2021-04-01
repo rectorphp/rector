@@ -9,14 +9,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
-use Rector\Doctrine\Contract\PhpDoc\Node\DoctrineTagNodeInterface;
-use Rector\Symfony\PhpDoc\Node\Sensio\SensioRouteTagValueNode;
-use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
-use Symplify\PackageBuilder\Php\TypeChecker;
 
-/**
- * @see \Rector\Tests\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactoryTest
- */
 final class TagValueNodeConfigurationFactory
 {
     /**
@@ -42,22 +35,6 @@ final class TagValueNodeConfigurationFactory
      * @see https://regex101.com/r/nsFq7m/1
      */
     public const CLOSING_BRACKET_REGEX = '#\)$#';
-
-    /**
-     * @var string
-     * @see https://regex101.com/r/0KlSQv/1
-     */
-    public const ARRAY_COLON_SEPARATOR_REGEX = '#{([^{}]+)[:]([^{}]+)}#';
-
-    /**
-     * @var TypeChecker
-     */
-    private $typeChecker;
-
-    public function __construct(TypeChecker $typeChecker)
-    {
-        $this->typeChecker = $typeChecker;
-    }
 
     public function createFromOriginalContent(
         ?string $originalContent,
@@ -123,16 +100,6 @@ final class TagValueNodeConfigurationFactory
         return (bool) Strings::match($originalContent, $quotedArrayPattern);
     }
 
-    private function resolveArraySeparatorSign(string $originalContent, PhpDocTagValueNode $phpDocTagValueNode): string
-    {
-        $hasArrayColonSeparator = (bool) Strings::match($originalContent, self::ARRAY_COLON_SEPARATOR_REGEX);
-
-        if ($hasArrayColonSeparator) {
-            return ':';
-        }
-        return $this->resolveArrayEqualSignByPhpNodeClass($phpDocTagValueNode);
-    }
-
     private function createQuotedKeyPattern(?string $silentKey, string $key, string $escapedKey): string
     {
         if ($silentKey === $key) {
@@ -142,30 +109,5 @@ final class TagValueNodeConfigurationFactory
 
         // @see https://regex101.com/r/VgvK8C/3/
         return sprintf('#%s="#', $escapedKey);
-    }
-
-    /**
-     * Before:
-     * (options={"key":"value"})
-     *
-     * After:
-     * (options={"key"="value"})
-     *
-     * @see regex https://regex101.com/r/XfKi4A/1/
-     *
-     * @see https://github.com/rectorphp/rector/issues/3225
-     * @see https://github.com/rectorphp/rector/pull/3241
-     */
-    private function resolveArrayEqualSignByPhpNodeClass(PhpDocTagValueNode $phpDocTagValueNode): string
-    {
-        if ($this->typeChecker->isInstanceOf($phpDocTagValueNode, [
-            SymfonyRouteTagValueNode::class,
-            DoctrineTagNodeInterface::class,
-            SensioRouteTagValueNode::class,
-        ])) {
-            return '=';
-        }
-
-        return ':';
     }
 }

@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
@@ -142,6 +143,6 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         }
 
         $isNullableValue = $doctrineAnnotationTagValueNode->getValue('nullable');
-        return $isNullableValue === true;
+        return $isNullableValue instanceof ConstExprTrueNode;
     }
 }

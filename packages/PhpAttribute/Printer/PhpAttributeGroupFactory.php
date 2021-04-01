@@ -10,6 +10,10 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
+use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\Type\Constant\ConstantBooleanType;
+use PHPStan\Type\Constant\ConstantFloatType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 
@@ -52,6 +56,9 @@ final class PhpAttributeGroupFactory
         if ($this->isArrayArguments($items)) {
             foreach ($items as $key => $value) {
                 $argumentName = new Identifier($key);
+
+                $value = $this->normalizeNodeValue($value);
+
                 $value = BuilderHelpers::normalizeValue($value);
                 $args[] = new Arg($value, false, false, [], $argumentName);
             }
@@ -77,5 +84,30 @@ final class PhpAttributeGroupFactory
         }
 
         return false;
+    }
+
+    /**
+     * @param mixed $value
+     * @return bool|float|int|string
+     */
+    private function normalizeNodeValue($value)
+    {
+        if ($value instanceof ConstExprIntegerNode) {
+            return (int) $value->value;
+        }
+
+        if ($value instanceof ConstantFloatType) {
+            return (float) $value->getValue();
+        }
+
+        if ($value instanceof ConstantBooleanType) {
+            return (bool) $value->getValue();
+        }
+
+        if ($value instanceof Node) {
+            return (string) $value;
+        }
+
+        return $value;
     }
 }
