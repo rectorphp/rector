@@ -101,10 +101,24 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         return $node;
     }
 
-    private function cleanBitWiseOrFlags(FuncCall $funcCall, BitwiseOr $bitwiseOr)
+    private function cleanBitWiseOrFlags(FuncCall $funcCall, BitwiseOr $bitwiseOr, ?Expr $expr = null)
     {
         if ($bitwiseOr->left instanceof BitwiseOr) {
-            return $this->cleanBitWiseOrFlags($funcCall, $bitwiseOr->left);
+            if ($bitwiseOr->left->left instanceof ConstFetch && $this->isName($bitwiseOr->left->left, self::FLAG)) {
+                $bitwiseOr = new BitwiseOr($bitwiseOr->left->right, $bitwiseOr->right);
+            }
+
+            if ($bitwiseOr->left->right instanceof ConstFetch && $this->isName($bitwiseOr->left->right, self::FLAG)) {
+                $bitwiseOr = new BitwiseOr($bitwiseOr->left->left, $bitwiseOr->right);
+            }
+
+            if ($bitwiseOr->left instanceof BitwiseOr) {
+                return $this->cleanBitWiseOrFlags($funcCall, $bitwiseOr->left, $bitwiseOr->right);
+            }
+        }
+
+        if ($expr instanceof Expr) {
+            $bitwiseOr = new BitwiseOr($bitwiseOr, $expr);
         }
 
         if ($bitwiseOr instanceof BitWiseOr && $bitwiseOr->right instanceof ConstFetch && $this->isName($bitwiseOr->right, self::FLAG)) {
