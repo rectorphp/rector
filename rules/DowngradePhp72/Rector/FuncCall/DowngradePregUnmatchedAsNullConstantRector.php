@@ -10,6 +10,7 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 
 /**
@@ -60,6 +61,12 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
 
     private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable): FuncCall
     {
+        $closure                  = new Closure();
+        $arguments                = $this->nodeFactory->createArgs([$variable, $closure]);
+        $replaceEmptystringToNull = $this->nodeFactory->createFuncCall('array_walk_recursive', $arguments);
+
+        $this->addNodeAfterNode($replaceEmptystringToNull, $funcCall);
+
         return $funcCall;
     }
 
