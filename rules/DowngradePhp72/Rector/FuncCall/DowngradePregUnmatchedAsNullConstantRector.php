@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
+use PhpParser\Node\Expr\Variable;
 
 /**
  * @see \Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector\DowngradePregUnmatchedAsNullConstantRectorTest
@@ -36,7 +38,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isNames($node, self::REGEX_FUNCTION_NAMES)) {
+        if (! $this->isNames($node, self::REGEX_FUNCTION_NAMES)) {
             return null;
         }
 
@@ -46,9 +48,19 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         }
 
         $flags = $args[3]->value;
-        dump($flags);
+        if ($flags instanceof BitwiseOr) {
+            // handle piped flags here
+            return $node;
+        }
 
-        return $node;
+        /** @var Variable $variable */
+        $variable = $args[2]->value;
+        return $this->handleEmptyStringToNullMatch($node, $variable);
+    }
+
+    private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable): FuncCall
+    {
+        return $funcCall;
     }
 
     public function getRuleDefinition(): RuleDefinition
