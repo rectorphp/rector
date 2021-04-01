@@ -21,7 +21,7 @@ class WithFlags
     public function run()
     {
         preg_match('/(a)(b)*(c)/', 'ac', $matches, $flags);
-        array_walk_recursive($matches, function (& $value) {
+        array_walk_recursive($matches, function (&$value) {
             if ($value === '') {
                 $value = null;
             }

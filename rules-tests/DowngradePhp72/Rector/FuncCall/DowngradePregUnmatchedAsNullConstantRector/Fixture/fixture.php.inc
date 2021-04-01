@@ -21,7 +21,7 @@ class Fixture
     public function run()
     {
         preg_match('/(a)(b)*(c)/', 'ac', $matches);
-        array_walk_recursive($matches, function (& $value) {
+        array_walk_recursive($matches, function (&$value) {
             if ($value === '') {
                 $value = null;
             }

@@ -5,13 +5,21 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
+use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Expression;
+use Rector\Core\NodeManipulator\IfManipulator;
+use Rector\Transform\NodeFactory\UnwrapClosureFactory;
 
 /**
  * @see \Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector\DowngradePregUnmatchedAsNullConstantRectorTest
@@ -25,6 +33,22 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         'preg_match',
         'preg_match_all',
     ];
+
+    /**
+     * @var IfManipulator
+     */
+    private $ifManipulator;
+
+    /**
+     * @var UnwrapClosureFactory
+     */
+    private $unwrapClosureFactory;
+
+    public function __construct(IfManipulator $ifManipulator, UnwrapClosureFactory $unwrapClosureFactory)
+    {
+        $this->ifManipulator = $ifManipulator;
+        $this->unwrapClosureFactory = $unwrapClosureFactory;
+    }
 
     /**
      * @return array<class-string<Node>>
@@ -62,11 +86,26 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
     private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable): FuncCall
     {
         $closure                  = new Closure();
+        $variablePass             = new Variable('value');
+        $argClosure               = new Arg($variablePass);
+        $argClosure->byRef        = true;
+        $closure->params          = [$argClosure];
+
+        $assign = new Assign($variablePass, $this->nodeFactory->createNull());
+
+        $if = $this->ifManipulator->createIfExpr(
+            new Identical($variablePass, new String_('')),
+            new Expression($assign)
+        );
+
+        $closure->stmts[0]  = $if;
+
         $arguments                = $this->nodeFactory->createArgs([$variable, $closure]);
         $replaceEmptystringToNull = $this->nodeFactory->createFuncCall('array_walk_recursive', $arguments);
 
         $this->addNodeAfterNode($replaceEmptystringToNull, $funcCall);
 
+        unset($funcCall->args[3]);
         return $funcCall;
     }
 
@@ -92,7 +131,7 @@ class SomeClass
     public function run()
     {
         preg_match('/(a)(b)*(c)/', 'ac', $matches);
-        array_walk_recursive($matches, function (& $value) {
+        array_walk_recursive($matches, function (&$value) {
             if ($value === '') {
                 $value = null;
             }
