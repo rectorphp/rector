@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\DowngradePhp72\Rector\Function_\DowngradePregUnmatchedAsNullConstantRector\Fixture;
+namespace Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector\Fixture;
 
 class SkipNotRegexFunctions
 {

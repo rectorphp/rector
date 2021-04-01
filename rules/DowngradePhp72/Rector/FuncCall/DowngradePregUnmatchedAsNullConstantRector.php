@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp72\Rector\Function_;
+namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DowngradePhp72\Rector\Function_\DowngradePregUnmatchedAsNullConstantRector\DowngradePregUnmatchedAsNullConstantRectorTest
+ * @see \Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector\DowngradePregUnmatchedAsNullConstantRectorTest
  */
 final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
 {
@@ -28,11 +28,11 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [Function_::class];
+        return [FuncCall::class];
     }
 
     /**
-     * @param Function_ $node
+     * @param FuncCall $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -44,6 +44,9 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         if (! isset($args[3])) {
             return null;
         }
+
+        $flags = $args[3]->value;
+        dump($flags);
 
         return $node;
     }
