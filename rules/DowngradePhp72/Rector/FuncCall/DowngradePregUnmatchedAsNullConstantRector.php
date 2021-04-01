@@ -36,6 +36,11 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
     ];
 
     /**
+     * @var string
+     */
+    private const FLAG = 'PREG_UNMATCHED_AS_NULL';
+
+    /**
      * @var IfManipulator
      */
     private $ifManipulator;
@@ -78,7 +83,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         $variable = $args[2]->value;
 
         if ($flags instanceof BitwiseOr) {
-            $this->cleanBitWiseOrFlags($node, $flags);
+            $this->cleanBitWiseOrFlags($flags);
             return $this->handleEmptyStringToNullMatch($node, $variable);
         }
 
@@ -86,7 +91,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isName($flags, 'PREG_UNMATCHED_AS_NULL')) {
+        if (! $this->isName($flags, self::FLAG)) {
             return null;
         }
 
@@ -96,14 +101,14 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         return $node;
     }
 
-    private function cleanBitWiseOrFlags(FuncCall $funcCall, BitwiseOr $bitwiseOr)
+    private function cleanBitWiseOrFlags(BitwiseOr $bitwiseOr)
     {
         $exprBitWise = [];
         while ($bitwiseOr->left instanceof BitwiseOr) {
             $bitwiseOr->right = $bitwiseOr->left->right;
             $bitwiseOr->left = $bitwiseOr->left->left;
 
-            if ($bitwiseOr->left instanceof ConstFetch && $this->isName($bitwiseOr->left, 'PREG_UNMATCHED_AS_NULL')) {
+            if ($bitwiseOr->left instanceof ConstFetch && $this->isName($bitwiseOr->left, self::FLAG)) {
                 unset($bitwiseOr->left);
             }
 
