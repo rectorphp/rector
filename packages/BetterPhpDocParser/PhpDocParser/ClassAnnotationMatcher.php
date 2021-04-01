@@ -44,6 +44,7 @@ final class ClassAnnotationMatcher
         /** @var Use_[] $uses */
         $uses = (array) $node->getAttribute(AttributeKey::USE_NODES);
         $fullyQualifiedClass = $this->resolveFullyQualifiedClass($uses, $node, $tag);
+
         $this->fullyQualifiedNameByHash[$uniqueHash] = $fullyQualifiedClass;
 
         return $fullyQualifiedClass;
@@ -59,7 +60,6 @@ final class ClassAnnotationMatcher
             $namespace = $scope->getNamespace();
             if ($namespace !== null) {
                 $namespacedTag = $namespace . '\\' . $tag;
-
                 if ($this->reflectionProvider->hasClass($namespacedTag)) {
                     return $namespacedTag;
                 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
 
+use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
@@ -13,6 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\Core\Configuration\CurrentNodeProvider;
+use Rector\Core\Exception\ShouldNotHappenException;
 
 final class PlainValueParser
 {
@@ -88,10 +90,18 @@ final class PlainValueParser
             $annotationShortName = $currentTokenValue;
             $values = $this->staticDoctrineAnnotationParser->resolveAnnotationMethodCall($tokenIterator);
 
+            $currentNode = $this->currentNodeProvider->getNode();
+            if (! $currentNode instanceof Node) {
+                throw new ShouldNotHappenException();
+            }
+
             $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
                 $annotationShortName,
-                $this->currentNodeProvider->getNode()
+                $currentNode
             );
+
+            // keep the last ")"
+            $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_PARENTHESES);
 
             return new DoctrineAnnotationTagValueNode($fullyQualifiedAnnotationClass, $annotationShortName, $values);
         }

@@ -10,12 +10,12 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
+use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -144,7 +144,11 @@ final class PhpDocInfoFactory
         $this->currentNodeProvider->setNode($node);
 
         $phpDocNode = new PhpDocNode([]);
-        return $this->createFromPhpDocNode($phpDocNode, '', [], $node);
+        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, '', [], $node);
+
+        // multiline by default
+        $phpDocInfo->makeMultiLined();
+        return $phpDocInfo;
     }
 
     /**
@@ -152,7 +156,7 @@ final class PhpDocInfoFactory
      */
     private function parseTokensToPhpDocNode(array $tokens): PhpDocNode
     {
-        $tokenIterator = new TokenIterator($tokens);
+        $tokenIterator = new BetterTokenIterator($tokens);
         return $this->betterPhpDocParser->parse($tokenIterator);
     }
 

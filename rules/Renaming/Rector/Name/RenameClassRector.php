@@ -114,11 +114,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, mixed> $configuration
+     * @param array<string, array<string, string>> $configuration
      */
     public function configure(array $configuration): void
     {
         $this->oldToNewClasses = $configuration[self::OLD_TO_NEW_CLASSES] ?? [];
+
         if ($this->oldToNewClasses !== []) {
             $this->renamedClassesDataCollector->setOldToNewClasses($this->oldToNewClasses);
         }

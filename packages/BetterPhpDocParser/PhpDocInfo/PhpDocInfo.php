@@ -116,6 +116,11 @@ final class PhpDocInfo
         $this->tokens = $tokens;
         $this->originalPhpDocNode = clone $phpDocNode;
         $this->originalContent = $originalContent;
+
+        if ($this->originalContent !== null && ! Strings::match(trim($this->originalContent), "#\n#")) {
+            $this->isSingleLine = true;
+        }
+
         $this->staticTypeMapper = $staticTypeMapper;
         $this->node = $node;
         $this->annotationNaming = $annotationNaming;
@@ -499,6 +504,11 @@ final class PhpDocInfo
         }
 
         return $methodTagNames;
+    }
+
+    public function makeMultiLined(): void
+    {
+        $this->isSingleLine = false;
     }
 
     private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): Type

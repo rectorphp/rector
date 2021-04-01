@@ -19,8 +19,10 @@ use PHPStan\Dependency\DependencyResolver;
 use PHPStan\File\FileHelper;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
+use PHPStan\PhpDocParser\Parser\TypeParser;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
+use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
 use Rector\Caching\Cache\NetteCacheFactory;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
@@ -125,6 +127,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // type resolving
     $services->set(IntermediateSourceLocator::class);
+
+    $services->alias(TypeParser::class, BetterTypeParser::class);
 
     // PHPStan services
     $services->set(ReflectionProvider::class)

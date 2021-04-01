@@ -7,7 +7,9 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
@@ -61,6 +63,12 @@ final class DocBlockNameImporter
     {
         $phpDocNode = $phpDocInfo->getPhpDocNode();
 
+        // connect parents
+
+        if ($phpDocNode->children === []) {
+            return;
+        }
+
         $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (
             PhpDocParserNode $docNode
         ) use ($phpDocInfo, $phpParserNode): PhpDocParserNode {
@@ -98,11 +106,13 @@ final class DocBlockNameImporter
         }
 
         // should skip because its already used
-
         if ($this->useNodesToAddCollector->isShortImported($node, $fullyQualifiedObjectType)) {
             if ($this->useNodesToAddCollector->isImportShortable($node, $fullyQualifiedObjectType)) {
                 $identifierTypeNode->name = $fullyQualifiedObjectType->getShortName();
                 $phpDocInfo->markAsChanged();
+
+                // to invoke node override
+                $identifierTypeNode->setAttribute(PhpDocAttributeKey::START_AND_END, null);
             }
 
             return $identifierTypeNode;
@@ -112,6 +122,13 @@ final class DocBlockNameImporter
 
         $this->useNodesToAddCollector->addUseImport($node, $fullyQualifiedObjectType);
         $phpDocInfo->markAsChanged();
+
+        // mirror attributes
+        $parentTypeNode = $identifierTypeNode->getAttribute(PhpDocAttributeKey::PARENT);
+        if ($parentTypeNode instanceof TypeNode) {
+            $parentTypeNode->setAttribute(PhpDocAttributeKey::START_AND_END, null);
+            $shortenedIdentifierTypeNode->setAttribute(PhpDocAttributeKey::PARENT, $parentTypeNode);
+        }
 
         return $shortenedIdentifierTypeNode;
     }

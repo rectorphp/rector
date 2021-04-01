@@ -82,6 +82,10 @@ CODE_SAMPLE
 
         // iterate from bottom to up, so we can merge
         for ($i = $classMethodStatementCount - 1; $i >= 0; --$i) {
+            if (! isset($node->stmts[$i])) {
+                continue;
+            }
+
             /** @var Expression $stmt */
             $stmt = $node->stmts[$i];
             if ($this->shouldSkipPreviousStmt($node, $i, $stmt)) {

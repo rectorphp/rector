@@ -10,6 +10,26 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class BetterTokenIterator extends TokenIterator
 {
     /**
+     * @var string
+     */
+    private const TOKENS = 'tokens';
+
+    /**
+     * @var PrivatesAccessor
+     */
+    private $privatesAccessor;
+
+    /**
+     * @param array<int, mixed> $tokens
+     */
+    public function __construct(array $tokens, int $index = 0)
+    {
+        parent::__construct($tokens, $index);
+
+        $this->privatesAccessor = new PrivatesAccessor();
+    }
+
+    /**
      * @param int[] $types
      */
     public function isNextTokenTypes(array $types): bool
@@ -32,10 +52,30 @@ final class BetterTokenIterator extends TokenIterator
         return $this->nextTokenType() === $tokenType;
     }
 
+    public function printFromTo(int $from, int $to): string
+    {
+        $tokens = $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
+
+        $content = '';
+
+        foreach ($tokens as $key => $token) {
+            if ($key < $from) {
+                continue;
+            }
+
+            if ($key >= $to) {
+                continue;
+            }
+
+            $content .= $token[0];
+        }
+
+        return $content;
+    }
+
     public function print(): string
     {
-        $privatesAccessor = new PrivatesAccessor();
-        $tokens = $privatesAccessor->getPrivateProperty($this, 'tokens');
+        $tokens = $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
 
         $content = '';
         foreach ($tokens as $token) {
@@ -45,22 +85,12 @@ final class BetterTokenIterator extends TokenIterator
         return $content;
     }
 
-    public function endsWithType(int $tokenType): bool
-    {
-        $privatesAccessor = new PrivatesAccessor();
-        $tokens = $privatesAccessor->getPrivateProperty($this, 'tokens');
-
-        $lastToken = array_pop($tokens);
-        return $lastToken[1] === $tokenType;
-    }
-
-    private function nextTokenType(): ?int
+    public function nextTokenType(): ?int
     {
         $this->pushSavePoint();
 
-        $privatesAccessor = new PrivatesAccessor();
-        $tokens = $privatesAccessor->getPrivateProperty($this, 'tokens');
-        $index = $privatesAccessor->getPrivateProperty($this, 'index');
+        $tokens = $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
+        $index = $this->privatesAccessor->getPrivateProperty($this, 'index');
 
         // does next token exist?
         $nextIndex = $index + 1;
@@ -73,5 +103,10 @@ final class BetterTokenIterator extends TokenIterator
         $this->rollback();
 
         return $nextTokenType;
+    }
+
+    public function currentPosition(): int
+    {
+        return $this->privatesAccessor->getPrivateProperty($this, 'index');
     }
 }

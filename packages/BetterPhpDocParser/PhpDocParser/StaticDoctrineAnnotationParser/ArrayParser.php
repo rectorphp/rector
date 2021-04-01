@@ -55,7 +55,13 @@ final class ArrayParser
             $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
         }
 
-        $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET);
+        $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
+
+        // special case for nested doctrine annotations
+        if (! $tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_PARENTHESES)) {
+            $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET);
+        }
+
         return $this->createArrayFromValues($values);
     }
 

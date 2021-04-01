@@ -201,10 +201,12 @@ CODE_SAMPLE
             if ($childClassName === null) {
                 continue;
             }
+
             $childClassMethod = $this->nodeRepository->findClassMethod($childClassName, $methodName);
             if (! $childClassMethod instanceof ClassMethod) {
                 continue;
             }
+
             $this->removeParamTypeFromMethod($childClassLike, $position, $childClassMethod);
         }
     }

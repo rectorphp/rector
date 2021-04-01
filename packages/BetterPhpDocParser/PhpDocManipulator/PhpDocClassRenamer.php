@@ -9,6 +9,7 @@ use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 
 final class PhpDocClassRenamer
 {
@@ -60,6 +61,11 @@ final class PhpDocClassRenamer
             $assertChoiceTagValueNode->changeValue('callback', $callback);
             $phpDocInfo->markAsChanged();
             break;
+        }
+
+        if ($phpDocInfo->hasChanged()) {
+            // invoke override
+            $assertChoiceTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, null);
         }
     }
 
@@ -121,6 +127,11 @@ final class PhpDocClassRenamer
                 continue;
             }
         }
+
+        if ($phpDocInfo->hasChanged()) {
+            // invoke override
+            $doctrineAnnotationTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, null);
+        }
     }
 
     /**
@@ -153,6 +164,11 @@ final class PhpDocClassRenamer
 
             $doctrineAnnotationTagValueNode->changeValue($classKey, $newClass);
             $phpDocInfo->markAsChanged();
+        }
+
+        if ($phpDocInfo->hasChanged()) {
+            // invoke override
+            $doctrineAnnotationTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, null);
         }
     }
 }

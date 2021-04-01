@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDoc;
 
 use Nette\Utils\Strings;
+use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
 
@@ -162,9 +163,8 @@ final class DoctrineAnnotationTagValueNode extends AbstractTagValueNode implemen
     }
 
     /**
-     * @todo should be type of \PHPStan\PhpDocParser\Ast\Node
      * @param string|int $key
-     * @return mixed|null
+     * @return mixed|Node|null
      */
     public function getValue($key)
     {

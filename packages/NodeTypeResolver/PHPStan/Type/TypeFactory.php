@@ -12,13 +12,16 @@ use PHPStan\Type\Constant\ConstantFloatType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VerbosityLevel;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
@@ -70,6 +73,10 @@ final class TypeFactory
 
             if ($type instanceof ShortenedObjectType) {
                 $type = new FullyQualifiedObjectType($type->getFullyQualifiedName());
+            }
+
+            if ($type instanceof ObjectType && ! $type instanceof GenericObjectType && ! $type instanceof AliasedObjectType && $type->getClassName() !== 'Iterator') {
+                $type = new FullyQualifiedObjectType($type->getClassName());
             }
 
             $typeHash = md5($type->describe(VerbosityLevel::cache()));

@@ -568,3 +568,21 @@ parameters:
             message: '#Do not use setter on a service#'
             paths:
                 - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/PlainValueParser.php
+
+        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocParser\\DoctrineAnnotationDecorator\:\:mergeNestedDoctrineAnnotations\(\)" is \d+, keep it under 9#'
+
+        -
+            message: '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$value#'
+            paths:
+                -  packages/BetterPhpDocParser/PhpDocParser/DoctrineAnnotationDecorator.php
+
+        -
+            message: '#Do not inherit from abstract class, better use composition#'
+            paths:
+                - packages/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php
+
+
+        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\Printer\\PhpDocInfoPrinter\:\:printDocChildNode\(\)" is \d+, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocManipulator\\PhpDocClassRenamer\:\:processSerializerTypeTagValueNode\(\)" is 10, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocParser\\ParentNodeTraverser\:\:transform\(\)" is 12, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\NodeTypeResolver\\NodeTypeResolver\:\:resolve\(\)" is 18, keep it under 9#'

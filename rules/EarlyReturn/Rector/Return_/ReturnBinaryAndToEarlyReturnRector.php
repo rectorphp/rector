@@ -106,7 +106,10 @@ CODE_SAMPLE
             $this->addNodeBeforeNode($ifNegation, $node);
         }
 
-        $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($node->expr->right);
+        /** @var BooleanAnd $booleanAnd */
+        $booleanAnd = $node->expr;
+
+        $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($booleanAnd->right);
         $this->addNodeBeforeNode(new Return_($lastReturnExpr), $node);
         $this->removeNode($node);
 

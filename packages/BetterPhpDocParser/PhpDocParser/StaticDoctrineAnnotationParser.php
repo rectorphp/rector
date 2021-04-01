@@ -61,10 +61,6 @@ final class StaticDoctrineAnnotationParser
         // skips dummy tokens like newlines
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
 
-        // is equal value or plain value?
-//        $keyValue = $tokenIterator->currentTokenValue();
-//        $tokenIterator->next();
-
         // no assign
         if (! $tokenIterator->isNextTokenType(Lexer::TOKEN_EQUAL)) {
             // 1. plain value - mimics https://github.com/doctrine/annotations/blob/0cb0cd2950a5c6cdbf22adbe2bfd5fd1ea68588f/lib/Doctrine/Common/Annotations/DocParser.php#L1234-L1282

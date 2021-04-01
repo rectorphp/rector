@@ -97,11 +97,11 @@ final class PhpAttributeGroupFactory
         }
 
         if ($value instanceof ConstantFloatType) {
-            return (float) $value->getValue();
+            return $value->getValue();
         }
 
         if ($value instanceof ConstantBooleanType) {
-            return (bool) $value->getValue();
+            return $value->getValue();
         }
 
         if ($value instanceof Node) {

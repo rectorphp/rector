@@ -31,6 +31,7 @@ final class ExplicitRouteAnnotationDecorator
     ): void {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $phpDocInfo->addTagValueNode($doctrineAnnotationTagValueNode);
+        $phpDocInfo->makeMultiLined();
 
         $classMethod->setAttribute(self::HAS_ROUTE_ANNOTATION, true);
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\CallableType;
 use PHPStan\Type\MixedType;
@@ -45,7 +46,7 @@ final class ClassMethodParamTypeCompleter
             }
 
             $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($argumentStaticType);
-            if ($phpParserTypeNode === null) {
+            if (! $phpParserTypeNode instanceof Node) {
                 continue;
             }
 

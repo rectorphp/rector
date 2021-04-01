@@ -55,6 +55,7 @@ final class TagValueNodeReprintTest extends AbstractKernelTestCase
 
     /**
      * @dataProvider provideData()
+     * @dataProvider provideDataNested()
      */
     public function test(SmartFileInfo $fixtureFileInfo): void
     {
@@ -76,6 +77,14 @@ final class TagValueNodeReprintTest extends AbstractKernelTestCase
     public function provideData(): Iterator
     {
         return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture');
+    }
+
+    /**
+     * @return Iterator<SmartFileInfo>
+     */
+    public function provideDataNested(): Iterator
+    {
+        return StaticFixtureFinder::yieldDirectory(__DIR__ . '/FixtureNested');
     }
 
     /**
@@ -122,7 +131,7 @@ final class TagValueNodeReprintTest extends AbstractKernelTestCase
         $smartFileSystem->dumpFile($temporaryFileName, $firstValue);
 
         // to make it doctrine/annotation parse-able
-        require_once $temporaryFileName;
+        // require_once $temporaryFileName;
 
         return new SmartFileInfo($temporaryFileName);
     }
@@ -161,8 +170,8 @@ final class TagValueNodeReprintTest extends AbstractKernelTestCase
         SmartFileInfo $smartFileInfo
     ): void {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-
         $hasByAnnotationClass = $phpDocInfo->hasByAnnotationClass($annotationClass);
+
         $this->assertTrue($hasByAnnotationClass, $smartFileInfo->getRelativeFilePathFromCwd());
     }
 }
