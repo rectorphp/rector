@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\LeagueEvent\Rector;
+namespace Rector\LeagueEvent\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -16,6 +16,9 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
+/**
+ * @see \Rector\Tests\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector\DispatchStringToObjectRectorTest
+ */
 final class DispatchStringToObjectRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
@@ -25,6 +28,9 @@ final class DispatchStringToObjectRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 final class SomeClass
 {
+    /** @var \League\Event\EventDispatcher */
+    private $dispatcher;
+
     public function run()
     {
         $this->dispatcher->dispatch('my-event');
@@ -35,6 +41,9 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 final class SomeClass
 {
+    /** @var \League\Event\EventDispatcher */
+    private $dispatcher;
+
     public function run()
     {
         $this->dispatcher->dispatch(new class implements \League\Event\HasEventName
@@ -66,7 +75,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! ($this->isObjectType($node->var, new ObjectType('League\Event\EventDispatcher')) || $this->isObjectType($node->var, new ObjectType('League\Event\Emitter')))) {    // at this point $node->var should be League\Event\EventDispatcher because class rename was executed, but it is not for some reason (maybe some cache?)
+        if (! $this->isObjectType($node->var, new ObjectType('League\Event\EventDispatcher'))) {
             return null;
         }
 

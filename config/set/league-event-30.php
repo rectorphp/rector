@@ -8,7 +8,7 @@ use PHPStan\Type\VoidType;
 use Rector\Composer\Rector\ChangePackageVersionComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Core\Configuration\Option;
-use Rector\LeagueEvent\Rector\DispatchStringToObjectRector;
+use Rector\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector;
 use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
 use Rector\Removing\Rector\Class_\RemoveParentRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;

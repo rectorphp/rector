@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\LeagueEvent\Rector\DispatchStringToObjectRector;
+use Rector\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

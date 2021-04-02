@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\LeagueEvent\Rector\DispatchStringToObjectRector;
+namespace Rector\Tests\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
