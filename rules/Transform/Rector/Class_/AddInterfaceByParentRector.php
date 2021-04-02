@@ -70,6 +70,12 @@ CODE_SAMPLE
     {
         /** @var Scope $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+
+        // anonymous class has no scope
+        if ($scope === null) {
+            return null;
+        }
+
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             return null;
