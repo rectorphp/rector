@@ -1,4 +1,7 @@
 <?php
+
+namespace Rector\DowngradePhp72\Tests\Rector\ClassMethod\DowngradeParameterTypeWideningRector\Fixture;
+
 trait StreamDecoratorTrait
 {
     protected function createStream()
@@ -6,8 +9,6 @@ trait StreamDecoratorTrait
         // ...
     }
 }
-
-namespace Rector\DowngradePhp72\Tests\Rector\ClassMethod\DowngradeParameterTypeWideningRector\Fixture;
 
 class MultipartStream
 {
