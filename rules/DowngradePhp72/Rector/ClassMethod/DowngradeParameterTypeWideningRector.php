@@ -236,6 +236,10 @@ CODE_SAMPLE
         $parameterTypesByParentClassLikes = [];
 
         foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
+            if ($ancestorClassReflection->isTrait()) {
+                continue;
+            }
+
             if (! $ancestorClassReflection->hasMethod($methodName)) {
                 continue;
             }
