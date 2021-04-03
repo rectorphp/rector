@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Param;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
@@ -157,12 +158,15 @@ CODE_SAMPLE
         if (! $expr instanceof Ternary) {
             return false;
         }
+
         if (! $expr->if instanceof String_) {
             return false;
         }
+
         if (! $expr->else instanceof String_) {
             return false;
         }
+
         return in_array($expr->if->value, self::REGEX_FUNCTION_NAMES, true) && in_array(
             $expr->else->value,
             self::REGEX_FUNCTION_NAMES,
@@ -176,12 +180,16 @@ CODE_SAMPLE
     private function cleanBitWiseOrFlags(FuncCall $funcCall, BitwiseOr $bitwiseOr, ?Expr $expr = null)
     {
         if ($bitwiseOr->left instanceof BitwiseOr) {
-            if ($bitwiseOr->left->left instanceof ConstFetch && $this->isName($bitwiseOr->left->left, self::FLAG)) {
-                $bitwiseOr = new BitwiseOr($bitwiseOr->left->right, $bitwiseOr->right);
+            /** @var BitwiseOr $leftLeft */
+            $leftLeft = $bitwiseOr->left;
+            if ($leftLeft->left instanceof ConstFetch && $this->isName($leftLeft->left, self::FLAG)) {
+                $bitwiseOr = new BitwiseOr($leftLeft->right, $bitwiseOr->right);
             }
 
-            if ($bitwiseOr->left->right instanceof ConstFetch && $this->isName($bitwiseOr->left->right, self::FLAG)) {
-                $bitwiseOr = new BitwiseOr($bitwiseOr->left->left, $bitwiseOr->right);
+            /** @var BitwiseOr $leftRight */
+            $leftRight = $bitwiseOr->left;
+            if ($leftRight->right instanceof ConstFetch && $this->isName($leftRight->right, self::FLAG)) {
+                $bitwiseOr = new BitwiseOr($leftRight->left, $bitwiseOr->right);
             }
 
             if ($bitwiseOr->left instanceof BitwiseOr) {
@@ -193,6 +201,11 @@ CODE_SAMPLE
             $bitwiseOr = new BitwiseOr($bitwiseOr, $expr);
         }
 
+        $this->assignThirdArgsValue($funcCall, $bitwiseOr);
+    }
+
+    private function assignThirdArgsValue(FuncCall $funcCall, BitwiseOr $bitwiseOr): void
+    {
         if ($bitwiseOr instanceof BitWiseOr && $bitwiseOr->right instanceof ConstFetch && $this->isName(
             $bitwiseOr->right,
             self::FLAG
@@ -207,16 +220,16 @@ CODE_SAMPLE
             $bitwiseOr = $bitwiseOr->right;
         }
 
-        $funcCall->args[3] = $bitwiseOr;
+        $funcCall->args[3]->value = $bitwiseOr;
     }
 
     private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable): FuncCall
     {
         $closure = new Closure();
         $variablePass = new Variable('value');
-        $arg = new Arg($variablePass);
-        $arg->byRef = true;
-        $closure->params = [$arg];
+        $param = new Param($variablePass);
+        $param->byRef = true;
+        $closure->params = [$param];
 
         $assign = new Assign($variablePass, $this->nodeFactory->createNull());
 
