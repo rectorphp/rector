@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Param;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
@@ -16,10 +14,14 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
+use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -241,7 +243,32 @@ CODE_SAMPLE
         $arguments = $this->nodeFactory->createArgs([$variable, $closure]);
         $replaceEmptystringToNull = $this->nodeFactory->createFuncCall('array_walk_recursive', $arguments);
 
-        $this->addNodeAfterNode($replaceEmptystringToNull, $funcCall);
+        return $this->processReplace($funcCall, $replaceEmptystringToNull);
+    }
+
+    private function processReplace(FuncCall $funcCall, FuncCall $replaceEmptystringToNull): FuncCall
+    {
+        $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Expression) {
+            $this->addNodeAfterNode($replaceEmptystringToNull, $funcCall);
+            return $funcCall;
+        }
+
+        if (! $parent instanceof Identical) {
+            throw new NotImplementedYetException();
+        }
+
+        $if = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $if instanceof If_) {
+            throw new NotImplementedYetException();
+        }
+
+        if ($if->stmts !== []) {
+            $firstStmt = $if->stmts[0];
+            $this->addNodeBeforeNode($replaceEmptystringToNull, $firstStmt);
+        } else {
+            $if->stmts[0] = new Expression($replaceEmptystringToNull);
+        }
 
         return $funcCall;
     }
