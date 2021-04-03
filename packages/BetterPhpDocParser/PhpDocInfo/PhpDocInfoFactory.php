@@ -8,7 +8,6 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
@@ -122,13 +121,7 @@ final class PhpDocInfoFactory
             $content = $docComment->getText();
             $tokens = $this->lexer->tokenize($content);
 
-//            try {
             $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
-//            } catch (ParserException $parserException) {
-//
-//                return null;
-//            }
-
             $this->setPositionOfLastToken($phpDocNode);
         }
 

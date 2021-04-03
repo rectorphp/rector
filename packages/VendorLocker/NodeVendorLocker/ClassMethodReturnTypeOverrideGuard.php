@@ -169,10 +169,6 @@ final class ClassMethodReturnTypeOverrideGuard
             return false;
         }
 
-//        if (! $newType->getItemType() instanceof GenericClassStringType && ! $newType->getItemType() instanceof TemplateObjectType) {
-//            return false;
-//        }
-
         if (! $oldType->getItemType() instanceof StringType) {
             return false;
         }

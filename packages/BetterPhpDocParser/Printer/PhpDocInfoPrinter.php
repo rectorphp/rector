@@ -38,11 +38,6 @@ final class PhpDocInfoPrinter
      */
     private const MISSING_NEWLINE_REGEX = '#([^\s])\*/$#';
 
-//    /**
-//     * @var string
-//     */
-//    private const NEWLINE_ASTERISK = PHP_EOL . ' * ';
-
     /**
      * @var string
      * @see https://regex101.com/r/mVmOCY/2

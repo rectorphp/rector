@@ -130,9 +130,6 @@ final class TagValueNodeReprintTest extends AbstractKernelTestCase
         $smartFileSystem = new SmartFileSystem();
         $smartFileSystem->dumpFile($temporaryFileName, $firstValue);
 
-        // to make it doctrine/annotation parse-able
-        // require_once $temporaryFileName;
-
         return new SmartFileInfo($temporaryFileName);
     }
 

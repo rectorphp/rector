@@ -101,6 +101,7 @@ final class PlainValueParser
             );
 
             // keep the last ")"
+            $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
             $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_PARENTHESES);
 
             return new DoctrineAnnotationTagValueNode($fullyQualifiedAnnotationClass, $annotationShortName, $values);

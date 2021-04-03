@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject;
 
-use Nette\Utils\Strings;
-
 final class TagValueNodeConfiguration
 {
     /**
@@ -18,71 +16,12 @@ final class TagValueNodeConfiguration
      */
     private $hasNewlineBeforeClosing = false;
 
-    /**
-     * @var bool
-     */
-    private $hasOpeningBracket = false;
-
-    /**
-     * @var bool
-     */
-    private $hasClosingBracket = false;
-
-    /**
-     * @var bool
-     */
-    private $isSilentKeyExplicit = false;
-
-    /**
-     * @var array<string, bool>
-     */
-    private $keysByQuotedStatus = [];
-
-    /**
-     * @var string|null
-     */
-    private $originalContent;
-
-    /**
-     * @var string[]|null
-     */
-    private $orderedVisibleItems;
-
-    /**
-     * @param array<string, bool> $keysByQuotedStatus
-     * @param string[] $orderedVisibleItems
-     */
     public function __construct(
-        ?string $originalContent = null,
-        ?array $orderedVisibleItems = null,
         bool $hasNewlineAfterOpening = false,
-        bool $hasNewlineBeforeClosing = false,
-        bool $hasOpeningBracket = false,
-        bool $hasClosingBracket = false,
-        array $keysByQuotedStatus = [],
-        bool $isSilentKeyExplicit = true
+        bool $hasNewlineBeforeClosing = false
     ) {
-        $this->originalContent = $originalContent;
-        $this->orderedVisibleItems = $orderedVisibleItems;
         $this->hasNewlineAfterOpening = $hasNewlineAfterOpening;
         $this->hasNewlineBeforeClosing = $hasNewlineBeforeClosing;
-        $this->hasOpeningBracket = $hasOpeningBracket;
-        $this->hasClosingBracket = $hasClosingBracket;
-        $this->keysByQuotedStatus = $keysByQuotedStatus;
-        $this->isSilentKeyExplicit = $isSilentKeyExplicit;
-    }
-
-    public function getOriginalContent(): ?string
-    {
-        return $this->originalContent;
-    }
-
-    /**
-     * @return string[]|null
-     */
-    public function getOrderedVisibleItems(): ?array
-    {
-        return $this->orderedVisibleItems;
     }
 
     public function hasNewlineAfterOpening(): bool
@@ -93,44 +32,5 @@ final class TagValueNodeConfiguration
     public function hasNewlineBeforeClosing(): bool
     {
         return $this->hasNewlineBeforeClosing;
-    }
-
-    public function hasOpeningBracket(): bool
-    {
-        return $this->hasOpeningBracket;
-    }
-
-    public function hasClosingBracket(): bool
-    {
-        return $this->hasClosingBracket;
-    }
-
-    /**
-     * @return array<string, bool>
-     */
-    public function getKeysByQuotedStatus(): array
-    {
-        return $this->keysByQuotedStatus;
-    }
-
-    public function addOrderedVisibleItem(string $itemKey): void
-    {
-        $this->orderedVisibleItems[] = $itemKey;
-    }
-
-    public function mimic(self $tagValueNodeConfiguration): void
-    {
-        $this->isSilentKeyExplicit = $tagValueNodeConfiguration->isSilentKeyExplicit;
-        $this->hasOpeningBracket = $tagValueNodeConfiguration->hasOpeningBracket;
-        $this->hasClosingBracket = $tagValueNodeConfiguration->hasClosingBracket;
-    }
-
-    public function originalContentContains(string $needle): bool
-    {
-        if ($this->originalContent === null) {
-            return false;
-        }
-
-        return Strings::contains($this->originalContent, $needle);
     }
 }
