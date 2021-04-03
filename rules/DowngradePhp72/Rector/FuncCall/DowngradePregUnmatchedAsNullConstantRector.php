@@ -14,8 +14,11 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Exception\NotImplementedYetException;
@@ -55,14 +58,18 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class];
+        return [FuncCall::class, ClassConst::class];
     }
 
     /**
-     * @param FuncCall $node
+     * @param FuncCall|ClassConst $node
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node instanceof ClassConst) {
+            return $this->processsClassConst($node);
+        }
+
         if (! $this->isRegexFunctionNames($node)) {
             return null;
         }
@@ -93,6 +100,21 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         unset($node->args[3]);
 
         return $node;
+    }
+
+    private function processsClassConst(ClassConst $classConst): ClassConst
+    {
+        foreach ($classConst->consts as $key => $singleClassConst) {
+            if (! $singleClassConst->name instanceof Identifier) {
+                continue;
+            }
+
+            if ($singleClassConst->value instanceof ConstFetch && $this->isName($singleClassConst->value, self::FLAG)) {
+                $classConst->consts[$key]->value = new LNumber(512);
+            }
+        }
+
+        return $classConst;
     }
 
     public function getRuleDefinition(): RuleDefinition
