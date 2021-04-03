@@ -254,6 +254,10 @@ CODE_SAMPLE
             return $funcCall;
         }
 
+        if ($parent instanceof If_ && $parent->cond === $funcCall) {
+            return $this->processInIf($parent, $funcCall, $replaceEmptystringToNull);
+        }
+
         if (! $parent instanceof Identical) {
             throw new NotImplementedYetException();
         }
@@ -263,6 +267,11 @@ CODE_SAMPLE
             throw new NotImplementedYetException();
         }
 
+        return $this->processInIf($if, $funcCall, $replaceEmptystringToNull);
+    }
+
+    private function processInIf(If_ $if, FuncCall $funcCall, FuncCall $replaceEmptystringToNull): FuncCall
+    {
         if ($if->stmts !== []) {
             $firstStmt = $if->stmts[0];
             $this->addNodeBeforeNode($replaceEmptystringToNull, $firstStmt);
