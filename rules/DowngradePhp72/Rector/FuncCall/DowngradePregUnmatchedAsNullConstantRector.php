@@ -55,38 +55,6 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         return [FuncCall::class];
     }
 
-    private function isRegexFunctionNames(FuncCall $funcCall): bool
-    {
-        if ($this->isNames($funcCall, self::REGEX_FUNCTION_NAMES)) {
-            return true;
-        }
-
-        $variable = $funcCall->name;
-        if (! $variable instanceof Variable) {
-            return false;
-        }
-
-        /** @var Assign|null $assignExprVariable */
-        $assignExprVariable = $this->betterNodeFinder->findFirstPreviousOfNode($funcCall, function (Node $node) use ($variable): bool {
-            if (! $node instanceof Assign) {
-                return false;
-            }
-
-            return $this->nodeComparator->areNodesEqual($node->var, $variable);
-        });
-
-        if (! $assignExprVariable instanceof Assign) {
-            return false;
-        }
-
-        $expr = $assignExprVariable->expr;
-        if ($expr instanceof Ternary && $expr->if instanceof String_ && $expr->else instanceof String_) {
-            return in_array($expr->if->value, self::REGEX_FUNCTION_NAMES, true) && in_array($expr->else->value, self::REGEX_FUNCTION_NAMES, true);
-        }
-
-        return false;
-    }
-
     /**
      * @param FuncCall $node
      */
@@ -156,6 +124,49 @@ class SomeClass
 CODE_SAMPLE
                 ),
             ]
+        );
+    }
+
+    private function isRegexFunctionNames(FuncCall $funcCall): bool
+    {
+        if ($this->isNames($funcCall, self::REGEX_FUNCTION_NAMES)) {
+            return true;
+        }
+
+        $variable = $funcCall->name;
+        if (! $variable instanceof Variable) {
+            return false;
+        }
+
+        /** @var Assign|null $assignExprVariable */
+        $assignExprVariable = $this->betterNodeFinder->findFirstPreviousOfNode($funcCall, function (Node $node) use (
+            $variable
+        ): bool {
+            if (! $node instanceof Assign) {
+                return false;
+            }
+
+            return $this->nodeComparator->areNodesEqual($node->var, $variable);
+        });
+
+        if (! $assignExprVariable instanceof Assign) {
+            return false;
+        }
+
+        $expr = $assignExprVariable->expr;
+        if (! $expr instanceof Ternary) {
+            return false;
+        }
+        if (! $expr->if instanceof String_) {
+            return false;
+        }
+        if (! $expr->else instanceof String_) {
+            return false;
+        }
+        return in_array($expr->if->value, self::REGEX_FUNCTION_NAMES, true) && in_array(
+            $expr->else->value,
+            self::REGEX_FUNCTION_NAMES,
+            true
         );
     }
 
