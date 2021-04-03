@@ -174,10 +174,7 @@ CODE_SAMPLE
         );
     }
 
-    /**
-     * @return mixed|void
-     */
-    private function cleanBitWiseOrFlags(FuncCall $funcCall, BitwiseOr $bitwiseOr, ?Expr $expr = null)
+    private function cleanBitWiseOrFlags(FuncCall $funcCall, BitwiseOr $bitwiseOr, ?Expr $expr = null): void
     {
         if ($bitwiseOr->left instanceof BitwiseOr) {
             /** @var BitwiseOr $leftLeft */
@@ -193,7 +190,8 @@ CODE_SAMPLE
             }
 
             if ($bitwiseOr->left instanceof BitwiseOr) {
-                return $this->cleanBitWiseOrFlags($funcCall, $bitwiseOr->left, $bitwiseOr->right);
+                $this->cleanBitWiseOrFlags($funcCall, $bitwiseOr->left, $bitwiseOr->right);
+                return;
             }
         }
 
