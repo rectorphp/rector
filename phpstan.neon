@@ -339,11 +339,6 @@ parameters:
              paths:
                  - config/set/*
 
-        -
-            message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other. You have \d+ nesting.#'
-            paths:
-                - rules/LeagueEvent/Rector/MethodCall/DispatchStringToObjectRector.php
-
         - '#Class with base "FileNode" name is already used in "PHPStan\\Node\\FileNode", "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileNode"\. Use unique name to make classes easy to recognize#'
 
         # buggy phpstan clas-string

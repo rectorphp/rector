@@ -83,19 +83,21 @@ CODE_SAMPLE
             return null;
         }
 
+        $implements = [
+            new FullyQualified('League\Event\HasEventName')
+        ];
+        $statements = [
+            new ClassMethod('eventName', [
+                'flags' => Class_::MODIFIER_PUBLIC,
+                'returnType' => 'string',
+                'stmts' => [
+                    new Return_($node->args[0]->value),
+                ],
+            ]),
+        ];
         $node->args[0] = new Arg(new New_(new Class_(null, [
-            'implements' => [
-                new FullyQualified('League\Event\HasEventName')
-            ],
-            'stmts' => [
-                new ClassMethod('eventName', [
-                    'flags' => Class_::MODIFIER_PUBLIC,
-                    'returnType' => 'string',
-                    'stmts' => [
-                        new Return_($node->args[0]->value),
-                    ],
-                ]),
-            ]
+            'implements' => $implements,
+            'stmts' => $statements,
         ])));
 
         return $node;
