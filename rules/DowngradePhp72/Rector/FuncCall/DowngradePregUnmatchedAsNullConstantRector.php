@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
@@ -54,12 +55,44 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         return [FuncCall::class];
     }
 
+    private function isRegexFunctionNames(FuncCall $funcCall): bool
+    {
+        if ($this->isNames($funcCall, self::REGEX_FUNCTION_NAMES)) {
+            return true;
+        }
+
+        $variable = $funcCall->name;
+        if (! $variable instanceof Variable) {
+            return false;
+        }
+
+        /** @var Assign|null $assignExprVariable */
+        $assignExprVariable = $this->betterNodeFinder->findFirstPreviousOfNode($funcCall, function (Node $node) use ($variable): bool {
+            if (! $node instanceof Assign) {
+                return false;
+            }
+
+            return $this->nodeComparator->areNodesEqual($node->var, $variable);
+        });
+
+        if (! $assignExprVariable instanceof Assign) {
+            return false;
+        }
+
+        $expr = $assignExprVariable->expr;
+        if ($expr instanceof Ternary && $expr->if instanceof String_ && $expr->else instanceof String_) {
+            return in_array($expr->if->value, self::REGEX_FUNCTION_NAMES, true) && in_array($expr->else->value, self::REGEX_FUNCTION_NAMES, true);
+        }
+
+        return false;
+    }
+
     /**
      * @param FuncCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isNames($node, self::REGEX_FUNCTION_NAMES)) {
+        if (! $this->isRegexFunctionNames($node)) {
             return null;
         }
 
