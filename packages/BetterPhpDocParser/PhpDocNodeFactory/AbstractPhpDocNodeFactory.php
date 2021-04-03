@@ -7,10 +7,8 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\PhpDocParser\AnnotationContentResolver;
 use Rector\BetterPhpDocParser\ValueObject\AroundSpaces;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
@@ -37,11 +35,6 @@ abstract class AbstractPhpDocNodeFactory
     private const CLOSING_SPACE_REGEX = '#(?<closing_space>\s+)\}$#';
 
     /**
-     * @var AnnotationContentResolver
-     */
-    private $annotationContentResolver;
-
-    /**
      * @var ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;
@@ -55,18 +48,11 @@ abstract class AbstractPhpDocNodeFactory
      * @required
      */
     public function autowireAbstractPhpDocNodeFactory(
-        AnnotationContentResolver $annotationContentResolver,
         ObjectTypeSpecifier $objectTypeSpecifier,
         ReflectionProvider $reflectionProvider
     ): void {
-        $this->annotationContentResolver = $annotationContentResolver;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->reflectionProvider = $reflectionProvider;
-    }
-
-    protected function resolveContentFromTokenIterator(TokenIterator $tokenIterator): string
-    {
-        return $this->annotationContentResolver->resolveFromTokenIterator($tokenIterator);
     }
 
     protected function resolveFqnTargetEntity(string $targetEntity, Node $node): string

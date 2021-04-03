@@ -16,10 +16,8 @@ final class TagValueNodeConfiguration
      */
     private $hasNewlineBeforeClosing = false;
 
-    public function __construct(
-        bool $hasNewlineAfterOpening = false,
-        bool $hasNewlineBeforeClosing = false
-    ) {
+    public function __construct(bool $hasNewlineAfterOpening = false, bool $hasNewlineBeforeClosing = false)
+    {
         $this->hasNewlineAfterOpening = $hasNewlineAfterOpening;
         $this->hasNewlineBeforeClosing = $hasNewlineBeforeClosing;
     }

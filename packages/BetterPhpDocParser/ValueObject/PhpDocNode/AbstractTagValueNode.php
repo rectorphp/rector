@@ -60,6 +60,8 @@ abstract class AbstractTagValueNode implements PhpDocTagValueNode
             throw new ShouldNotHappenException();
         }
 
-        $this->tagValueNodeConfiguration = $tagValueNodeConfigurationFactory->createFromOriginalContent($originalContent);
+        $this->tagValueNodeConfiguration = $tagValueNodeConfigurationFactory->createFromOriginalContent(
+            $originalContent
+        );
     }
 }

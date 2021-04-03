@@ -46,7 +46,7 @@ parameters:
     scanDirectories:
         - stubs
 
-#    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: false
     checkGenericClassInNonGenericObjectType: false
 
     excludes_analyse:
@@ -58,10 +58,6 @@ parameters:
         - packages/Testing/PHPUnit/*.php
         - packages-tests/NodeVisitor/FunctionMethodAndClassNodeVisitor/FunctionMethodAndClassNodeVisitorTest.php
         - rules/DowngradePhp70/Rector/FunctionLike/AbstractDowngradeParamDeclarationRector.php
-
-        # generated files
-        - 'packages/DoctrineAnnotationGenerated/ConstantPreservingDocParser.php'
-        - 'packages/DoctrineAnnotationGenerated/ConstantPreservingAnnotationReader.php'
 
         - "*/Expected/*"
         # complex printer
@@ -97,11 +93,6 @@ parameters:
             message: "#in iterable type Iterator#"
             paths:
                 - *Test.php
-
-        -
-            message: "#^Cognitive complexity for \"Rector\\\\BetterPhpDocParser\\\\Printer\\\\WhitespaceDetector\\:\\:detectOldWhitespaces\\(\\)\" is (.*?), keep it under 9$#"
-            paths:
-                 - packages/BetterPhpDocParser/Printer/WhitespaceDetector.php
 
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$class#'
@@ -159,10 +150,6 @@ parameters:
                 -  rules/Php70/EregToPcreTransformer.php
 
         # symfony/console
-        -
-             message: '#Use explicit return value over magic &reference#'
-             path: 'rules/DeadCode/Rector/BinaryOp/RemoveDuplicatedInstanceOfRector.php'
-
         -
             message: '#Use value object over return of values#'
             path: 'rules/Php70/EregToPcreTransformer.php'
@@ -295,9 +282,6 @@ parameters:
              paths:
                 - packages/NodeCollector/NodeCollector/ParsedClassConstFetchNodeCollector.php
 
-        # @todo improvate later
-        - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$description#'
-
         -
             message: '#Unreachable statement \- code above always terminates#'
             paths:
@@ -352,10 +336,6 @@ parameters:
         - '#Class Rector\\NodeTypeResolver\\Tests\\PerNodeTypeResolver\\PropertyFetchTypeResolver\\Source\\IDontExist not found\.#'
         - '#Class A\\B\\C\\IDontExist not found\.#'
 
-        -
-            message: '#Use non\-dynamic property on static call#'
-            path: packages/BetterPhpDocParser/AnnotationReader/AnnotationReaderFactory.php #56
-
         - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\MultiPhpDocNodeFactory\:\:getTagValueNodeClassesToAnnotationClasses\(\) should return array<class\-string<Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode\>, class\-string<Doctrine\\ORM\\Mapping\\Annotation\>\> but returns array<string, string\>#'
         -
             message: '#Use value object over return of values#'
@@ -378,11 +358,6 @@ parameters:
 
         - '#Class with base "SetList" name is already used in "Symplify\\EasyCodingStandard\\ValueObject\\Set\\SetList", "Rector\\Set\\ValueObject\\SetList"\. Use unique name to make classes easy to recognize#'
         - '#Class with base "PhpVersion" name is already used in "PHPStan\\Php\\PhpVersion", "Rector\\Core\\ValueObject\\PhpVersion"\. Use unique name to make classes easy to recognize#'
-
-        -
-            message: '#Use local named constant instead of inline string for regex to explain meaning by constant name#'
-            paths:
-                - packages/BetterPhpDocParser/Printer/ArrayPartPhpDocTagPrinter.php
 
         -
             message: '#Do not use static property#'
@@ -529,23 +504,17 @@ parameters:
         # resolve later
         - '#Cognitive complexity for "Rector\\DependencyInjection\\Rector\\Property\\AnnotatedPropertyInjectToConstructorInjectionRector\:\:refactor\(\)" is 14, keep it under 9#'
 
-        -
-            message: '#Unreachable statement \- code above always terminates#'
-            path: packages/BetterPhpDocParser/PhpDoc/DoctrineAnnotationTagValueNode.php
-
         - '#Cognitive complexity for "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayTypeMapper\:\:isGenericArrayCandidate\(\)" is 10, keep it under 9#'
 
         # mimics original doctrine/annotations parser, improve later when finished
         -
              message: '#Array destruct is not allowed\. Use value object to pass data instead#'
              paths:
-                  - 'packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser.php'
                   - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php
 
         -
             message: '#Use value object over return of values#'
             paths:
-                - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser.php
                 - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php
 
         -
@@ -562,12 +531,6 @@ parameters:
             message: '#Array with keys is not allowed\. Use value object to pass data instead#'
             paths:
                 - rules/NetteToSymfony/Rector/ClassMethod/RouterListToControllerAnnotationsRector.php
-
-        # recurse
-        -
-            message: '#Do not use setter on a service#'
-            paths:
-                - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/PlainValueParser.php
 
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocParser\\DoctrineAnnotationDecorator\:\:mergeNestedDoctrineAnnotations\(\)" is \d+, keep it under 9#'
 
