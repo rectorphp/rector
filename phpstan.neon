@@ -585,4 +585,4 @@ parameters:
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\Printer\\PhpDocInfoPrinter\:\:printDocChildNode\(\)" is \d+, keep it under 9#'
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocManipulator\\PhpDocClassRenamer\:\:processSerializerTypeTagValueNode\(\)" is 10, keep it under 9#'
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocParser\\ParentNodeTraverser\:\:transform\(\)" is 12, keep it under 9#'
-        - '#Cognitive complexity for "Rector\\NodeTypeResolver\\NodeTypeResolver\:\:resolve\(\)" is 18, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\NodeTypeResolver\\NodeTypeResolver\:\:resolve\(\)" is \d+, keep it under 9#'

@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
@@ -179,12 +180,10 @@ final class NodeTypeResolver
 
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
-            if ($node instanceof ConstFetch) {
-                if ($node->name instanceof Node\Name) {
-                    $name = (string) $node->name;
-                    if (strtolower($name) === 'null') {
-                        return new NullType();
-                    }
+            if ($node instanceof ConstFetch && $node->name instanceof Name) {
+                $name = (string) $node->name;
+                if (strtolower($name) === 'null') {
+                    return new NullType();
                 }
             }
 
