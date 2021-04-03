@@ -14,7 +14,6 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
@@ -102,21 +101,6 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         return $node;
     }
 
-    private function processsClassConst(ClassConst $classConst): ClassConst
-    {
-        foreach ($classConst->consts as $key => $singleClassConst) {
-            if (! $singleClassConst->name instanceof Identifier) {
-                continue;
-            }
-
-            if ($singleClassConst->value instanceof ConstFetch && $this->isName($singleClassConst->value, self::FLAG)) {
-                $classConst->consts[$key]->value = new LNumber(512);
-            }
-        }
-
-        return $classConst;
-    }
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -150,6 +134,22 @@ CODE_SAMPLE
                 ),
             ]
         );
+    }
+
+    private function processsClassConst(ClassConst $classConst): ClassConst
+    {
+        foreach ($classConst->consts as $key => $singleClassConst) {
+            if (! $singleClassConst->value instanceof ConstFetch) {
+                continue;
+            }
+            if (! $this->isName($singleClassConst->value, self::FLAG)) {
+                continue;
+            }
+            $classConst->consts[$key]->value = new LNumber(512);
+            return $classConst;
+        }
+
+        return $classConst;
     }
 
     private function isRegexFunctionNames(FuncCall $funcCall): bool
