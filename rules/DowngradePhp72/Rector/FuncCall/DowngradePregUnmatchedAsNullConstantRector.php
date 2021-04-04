@@ -294,11 +294,22 @@ CODE_SAMPLE
 
     private function processInIf(If_ $if, FuncCall $funcCall, FuncCall $replaceEmptystringToNull): FuncCall
     {
-        if ($if->stmts !== []) {
-            $firstStmt = $if->stmts[0];
-            $this->addNodeBeforeNode($replaceEmptystringToNull, $firstStmt);
+        $cond = $if->cond;
+
+        if ($cond instanceof Identical) {
+            $valueCompare = $cond->left === $funcCall
+                ? $cond->right
+                : $cond->left;
+            if ($this->valueResolver->isFalse($valueCompare)) {
+                $this->addNodeAfterNode($replaceEmptystringToNull, $if);
+            }
         } else {
-            $if->stmts[0] = new Expression($replaceEmptystringToNull);
+            if ($if->stmts !== []) {
+                $firstStmt = $if->stmts[0];
+                $this->addNodeBeforeNode($replaceEmptystringToNull, $firstStmt);
+            } else {
+                $if->stmts[0] = new Expression($replaceEmptystringToNull);
+            }
         }
 
         return $funcCall;
