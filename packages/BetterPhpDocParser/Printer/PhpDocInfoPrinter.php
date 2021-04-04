@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
-use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -18,6 +17,7 @@ use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 
@@ -76,17 +76,7 @@ final class PhpDocInfoPrinter
     /**
      * @var int
      */
-    private $tokenCount;
-
-    /**
-     * @var int
-     */
     private $currentTokenPosition;
-
-    /**
-     * @var mixed[]
-     */
-    private $tokens = [];
 
     /**
      * @var StartAndEnd[]
@@ -112,6 +102,11 @@ final class PhpDocInfoPrinter
      * @var DocBlockInliner
      */
     private $docBlockInliner;
+
+    /**
+     * @var BetterTokenIterator
+     */
+    private $tokenIterator;
 
     public function __construct(EmptyPhpDocDetector $emptyPhpDocDetector, DocBlockInliner $docBlockInliner)
     {
@@ -155,10 +150,8 @@ final class PhpDocInfoPrinter
         }
 
         $this->phpDocNode = $phpDocInfo->getPhpDocNode();
-//        $this->tokens = $phpDocInfo->getTokens();
-
-        $this->tokenCount = $phpDocInfo->getTokenCount();
         $this->phpDocInfo = $phpDocInfo;
+        $this->tokenIterator = $phpDocInfo->getTokenIterator();
 
         $this->currentTokenPosition = 0;
         $this->removedNodePositions = [];
@@ -276,6 +269,7 @@ final class PhpDocInfoPrinter
 
             return rtrim($output);
         }
+
         if ($startAndEnd instanceof StartAndEnd) {
             $this->currentTokenPosition = $startAndEnd->getEnd();
         }
@@ -296,7 +290,7 @@ final class PhpDocInfoPrinter
             $lastTokenPosition = 1;
         }
 
-        return $this->addTokensFromTo($output, $lastTokenPosition, $this->tokenCount, true);
+        return $this->addTokensFromTo($output, $lastTokenPosition, $this->tokenIterator->count(), true);
     }
 
     private function addTokensFromTo(string $output, int $from, int $to, bool $shouldSkipEmptyLinesAbove): string
@@ -307,15 +301,17 @@ final class PhpDocInfoPrinter
             $positionJumpSet[$startAndEnd->getStart()] = $startAndEnd->getEnd();
         }
 
+        $tokens = $this->tokenIterator->getTokens();
+
         // include also space before, in case of inlined docs
-        if (isset($this->tokens[$from - 1]) && $this->tokens[$from - 1][1] === Lexer::TOKEN_HORIZONTAL_WS) {
+        if (isset($tokens[$from - 1]) && $tokens[$from - 1][1] === Lexer::TOKEN_HORIZONTAL_WS) {
             --$from;
         }
 
         // skip extra empty lines above if this is the last one
         if ($shouldSkipEmptyLinesAbove &&
-            Strings::contains($this->tokens[$from][0], PHP_EOL) &&
-            Strings::contains($this->tokens[$from + 1][0], PHP_EOL)
+            Strings::contains($tokens[$from][0], PHP_EOL) &&
+            Strings::contains($tokens[$from + 1][0], PHP_EOL)
         ) {
             ++$from;
         }
@@ -340,6 +336,8 @@ final class PhpDocInfoPrinter
 
         $lastEndPosition = null;
 
+        $tokens = $this->tokenIterator->getTokens();
+
         foreach ($removedNodes as $removedNode) {
             /** @var StartAndEnd $removedPhpDocNodeInfo */
             $removedPhpDocNodeInfo = $removedNode->getAttribute(Attribute::START_END);
@@ -347,8 +345,8 @@ final class PhpDocInfoPrinter
             // change start position to start of the line, so the whole line is removed
             $seekPosition = $removedPhpDocNodeInfo->getStart();
 
-            while ($seekPosition >= 0 && $this->tokens[$seekPosition][1] !== Lexer::TOKEN_HORIZONTAL_WS) {
-                if ($this->tokens[$seekPosition][1] === Lexer::TOKEN_PHPDOC_EOL) {
+            while ($seekPosition >= 0 && $tokens[$seekPosition][1] !== Lexer::TOKEN_HORIZONTAL_WS) {
+                if ($tokens[$seekPosition][1] === Lexer::TOKEN_PHPDOC_EOL) {
                     break;
                 }
 
@@ -376,13 +374,15 @@ final class PhpDocInfoPrinter
      */
     private function appendToOutput(string $output, int $from, int $to, array $positionJumpSet): string
     {
+        $tokens = $this->tokenIterator->getTokens();
+
         for ($i = $from; $i < $to; ++$i) {
             while (isset($positionJumpSet[$i])) {
                 $i = $positionJumpSet[$i];
-                continue;
+                continue 2;
             }
 
-            $output .= $this->tokens[$i][0] ?? '';
+            $output .= $tokens[$i][0] ?? '';
         }
 
         return $output;

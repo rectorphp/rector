@@ -10,6 +10,6 @@ final class CurlyListNode extends AbstractValuesAwareNode implements Node
 {
     public function __toString(): string
     {
-        return parent::printWithWrapper('{', '}');
+        return $this->printWithWrapper('{', '}');
     }
 }

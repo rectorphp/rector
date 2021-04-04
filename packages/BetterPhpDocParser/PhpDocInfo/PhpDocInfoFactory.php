@@ -138,7 +138,8 @@ final class PhpDocInfoFactory
         $this->currentNodeProvider->setNode($node);
 
         $phpDocNode = new PhpDocNode([]);
-        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, '', [], $node);
+        $betterTokenIterator = new BetterTokenIterator([]);
+        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, '', $betterTokenIterator, $node);
 
         // multiline by default
         $phpDocInfo->makeMultiLined();
