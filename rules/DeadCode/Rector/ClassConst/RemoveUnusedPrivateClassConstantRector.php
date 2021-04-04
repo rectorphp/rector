@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\ApiPhpDocTagNode;
 use Rector\Core\NodeManipulator\ClassConstManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -129,7 +128,7 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classConst);
-        if ($phpDocInfo->hasByType(ApiPhpDocTagNode::class)) {
+        if ($phpDocInfo->hasByName('api')) {
             return true;
         }
 
@@ -137,7 +136,7 @@ CODE_SAMPLE
 
         if ($classLike instanceof ClassLike) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classLike);
-            return $phpDocInfo->hasByType(ApiPhpDocTagNode::class);
+            return $phpDocInfo->hasByName('api');
         }
 
         return false;

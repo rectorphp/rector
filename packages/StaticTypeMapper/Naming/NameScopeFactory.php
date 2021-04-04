@@ -125,6 +125,7 @@ final class NameScopeFactory
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         $templateTypes = [];
+
         foreach ($phpDocInfo->getTemplateTagValueNodes() as $templateTagValueNode) {
             $phpstanType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($templateTagValueNode, $node);
             $templateTypes[$templateTagValueNode->name] = $phpstanType;

@@ -3,10 +3,9 @@
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
 use Doctrine\Common\Annotations\AnnotationException;
-use PhpParser\Node\Stmt\Class_;
 use stdClass;
 
-class SkipNonArrayVoid
+final class SkipNonArrayVoid
 {
     /**
      * @return stdClass|null

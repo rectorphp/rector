@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
+use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class AnnotationContentResolver
@@ -149,7 +150,7 @@ final class AnnotationContentResolver
         return Strings::replace($annotationContent, self::MULTILINE_COMENT_ASTERISK_REGEX, '$1$3');
     }
 
-    private function tryStartWithKey(string $name, bool $start, TokenIterator $localTokenIterator): bool
+    private function tryStartWithKey(string $name, bool $start, BetterTokenIterator $localTokenIterator): bool
     {
         if ($start) {
             return true;

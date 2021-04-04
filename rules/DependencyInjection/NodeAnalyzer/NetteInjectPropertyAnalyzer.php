@@ -8,9 +8,9 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\MethodName;
 use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
-use Rector\Nette\PhpDoc\Node\NetteInjectTagNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NetteInjectPropertyAnalyzer
@@ -25,10 +25,10 @@ final class NetteInjectPropertyAnalyzer
         $this->classChildAnalyzer = $classChildAnalyzer;
     }
 
-    public function detect(Property $property, PhpDocInfo $phpDocInfo): bool
+    public function canBeRefactored(Property $property, PhpDocInfo $phpDocInfo): bool
     {
-        if (! $phpDocInfo->hasByType(NetteInjectTagNode::class)) {
-            return false;
+        if (! $phpDocInfo->hasByName('inject')) {
+            throw new ShouldNotHappenException();
         }
 
         /** @var Scope $scope */

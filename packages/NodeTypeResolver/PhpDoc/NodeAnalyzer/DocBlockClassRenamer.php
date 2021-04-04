@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
@@ -72,8 +73,12 @@ final class DocBlockClassRenamer
                 }
 
                 $phpDocInfo->markAsChanged();
+                $newTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
 
-                return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
+                // mirror attributes
+                $newTypeNode->setAttribute(PhpDocAttributeKey::PARENT, $node->getAttribute(PhpDocAttributeKey::PARENT));
+
+                return $newTypeNode;
             }
         );
     }

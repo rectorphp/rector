@@ -143,7 +143,6 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-
         if ($this->shouldSkip($node, $phpDocInfo)) {
             return null;
         }

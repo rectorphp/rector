@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -18,7 +19,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
-use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -92,7 +92,7 @@ CODE_SAMPLE
                 , [
                     self::ANNOTATION_TO_ATTRIBUTE => [
                         new AnnotationToAttribute(
-                            SymfonyRouteTagValueNode::class,
+                            'Symfony\Component\Routing\Annotation\Route',
                             'Symfony\Component\Routing\Annotation\Route'
                         ),
                     ],
@@ -133,17 +133,32 @@ CODE_SAMPLE
         $hasNewAttrGroups = false;
 
         foreach ($this->annotationsToAttributes as $annotationToAttribute) {
-            $tagNodeType = $annotationToAttribute->getTagNodeClass();
-            $phpDocTagNode = $phpDocInfo->getByType($tagNodeType);
-            if (! $phpDocTagNode instanceof \PHPStan\PhpDocParser\Ast\Node) {
+            $tag = $annotationToAttribute->getTag();
+
+            // 1. simple doc tags
+            if ($phpDocInfo->hasByName($tag)) {
+                // 1. remove php-doc tag
+                $this->phpDocTagRemover->removeByName($phpDocInfo, $tag);
+
+                // 2. add attributes
+                $node->attrGroups[] = $this->phpAttributeGroupFactory->createFromSimpleTag($annotationToAttribute);
+
+                $hasNewAttrGroups = true;
+            }
+
+            $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass($tag);
+            if (! $doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
                 continue;
             }
 
             // 1. remove php-doc tag
-            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $phpDocTagNode);
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
 
             // 2. add attributes
-            $node->attrGroups[] = $this->phpAttributeGroupFactory->create($phpDocTagNode, $annotationToAttribute);
+            $node->attrGroups[] = $this->phpAttributeGroupFactory->create(
+                $doctrineAnnotationTagValueNode,
+                $annotationToAttribute
+            );
 
             $hasNewAttrGroups = true;
         }

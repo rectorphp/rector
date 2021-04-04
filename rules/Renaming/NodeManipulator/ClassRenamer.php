@@ -144,7 +144,9 @@ final class ClassRenamer
     private function refactorPhpDoc(Node $node, array $oldToNewClasses): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if (! $phpDocInfo->hasByTypes(NodeTypes::TYPE_AWARE_NODES)) {
+        if (! $phpDocInfo->hasByTypes(NodeTypes::TYPE_AWARE_NODES) && ! $phpDocInfo->hasByAnnotationClasses(
+            NodeTypes::TYPE_AWARE_DOCTRINE_ANNOTATION_CLASSES
+        )) {
             return;
         }
 
@@ -155,7 +157,7 @@ final class ClassRenamer
             $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldClassType, $newClassType, $node);
         }
 
-        $this->phpDocClassRenamer->changeTypeInAnnotationTypes($phpDocInfo, $oldToNewClasses);
+        $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $phpDocInfo, $oldToNewClasses);
     }
 
     /**

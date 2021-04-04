@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Contract;
 
-use Doctrine\ORM\Mapping\Annotation;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
-
+/**
+ * @deprecated Use DoctrineAnnotation parser instead
+ */
 interface MultiPhpDocNodeFactoryInterface
 {
     /**
-     * @return array<class-string<AbstractTagValueNode>, class-string<Annotation>>
+     * @return array<string, class-string>
      */
     public function getTagValueNodeClassesToAnnotationClasses(): array;
 }

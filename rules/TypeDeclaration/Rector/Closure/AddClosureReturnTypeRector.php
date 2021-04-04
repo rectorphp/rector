@@ -89,7 +89,7 @@ CODE_SAMPLE
         $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
 
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedReturnType);
-        if ($returnTypeNode === null) {
+        if (! $returnTypeNode instanceof Node) {
             return null;
         }
 

@@ -184,7 +184,7 @@ CODE_SAMPLE
         );
 
         // nothing to change in PHP code
-        if ($inferredReturnNode === null) {
+        if (! $inferredReturnNode instanceof Node) {
             return null;
         }
 

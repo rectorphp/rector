@@ -7,10 +7,12 @@ namespace Rector\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
@@ -28,6 +30,7 @@ use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\ThisType;
@@ -177,6 +180,13 @@ final class NodeTypeResolver
 
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
+            if ($node instanceof ConstFetch && $node->name instanceof Name) {
+                $name = (string) $node->name;
+                if (strtolower($name) === 'null') {
+                    return new NullType();
+                }
+            }
+
             return new MixedType();
         }
 
@@ -195,8 +205,8 @@ final class NodeTypeResolver
         }
 
         $type = $scope->getType($node);
-        // hot fix for phpstan not resolving chain method calls
 
+        // hot fix for phpstan not resolving chain method calls
         if (! $node instanceof MethodCall) {
             return $type;
         }

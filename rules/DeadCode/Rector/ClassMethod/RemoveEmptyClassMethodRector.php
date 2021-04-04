@@ -40,7 +40,7 @@ final class RemoveEmptyClassMethodRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Remove empty method calls not required by parents',
+            'Remove empty class methods not required by parents',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
