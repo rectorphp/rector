@@ -154,7 +154,7 @@ CODE_SAMPLE
             TypeKind::KIND_PROPERTY
         );
 
-        if ($propertyTypeNode === null) {
+        if (! $propertyTypeNode instanceof Node) {
             return null;
         }
 

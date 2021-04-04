@@ -128,7 +128,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->areVariablesEqual($node->cond, $this->firstValue, $this->secondValue)) {
+        /** @var Equal|Identical $condition */
+        $condition = $node->cond;
+
+        if (! $this->areVariablesEqual($condition, $this->firstValue, $this->secondValue)) {
             return null;
         }
 

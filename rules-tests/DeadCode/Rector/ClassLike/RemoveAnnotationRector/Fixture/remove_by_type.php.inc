@@ -8,8 +8,8 @@ final class RemoveByType
 {
     /**
      * @DI\InjectParams({
-     *     "subscribeService" = @DI\Inject("app.email.service.subscribe"),
-     *     "ipService" = @DI\Inject("app.util.service.ip")
+     *     "subscribeService" = 'some',
+     *     "ipService" = 'some'
      * })
      */
     public function __construct()

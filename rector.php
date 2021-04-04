@@ -10,6 +10,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
 use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector;
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
@@ -69,6 +70,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
 
     $parameters->set(Option::SKIP, [
+        // buggy in refactoring
+        AddSeeTestAnnotationRector::class,
+
         StringClassNameToClassConstantRector::class,
         // some classes in config might not exist without dev dependencies
         SplitStringClassConstantToClassConstFetchRector::class,
@@ -87,8 +91,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Source*/*',
         '*/Expected/*',
         '*/Expected*/*',
-
-        __DIR__ . '/packages/DoctrineAnnotationGenerated',
     ]);
 
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);

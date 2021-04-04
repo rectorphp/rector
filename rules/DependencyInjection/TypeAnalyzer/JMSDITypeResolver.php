@@ -9,11 +9,13 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\DataProvider\ServiceMapProvider;
-use Rector\Symfony\PhpDoc\Node\JMS\JMSInjectTagValueNode;
+use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class JMSDITypeResolver
@@ -38,42 +40,44 @@ final class JMSDITypeResolver
      */
     private $reflectionProvider;
 
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
     public function __construct(
         ErrorAndDiffCollector $errorAndDiffCollector,
         ServiceMapProvider $serviceMapProvider,
         PhpDocInfoFactory $phpDocInfoFactory,
-        ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->serviceMapProvider = $serviceMapProvider;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionProvider = $reflectionProvider;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function resolve(Property $property, JMSInjectTagValueNode $jmsInjectTagValueNode): Type
-    {
+    public function resolve(
+        Property $property,
+        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
+    ): Type {
         $serviceMap = $this->serviceMapProvider->provide();
 
-        $serviceName = $jmsInjectTagValueNode->getServiceName();
+        $serviceName = $doctrineAnnotationTagValueNode->getValueWithoutQuotes(
+            'serviceName'
+        ) ?: $doctrineAnnotationTagValueNode->getSilentValue() ?: $this->nodeNameResolver->getName($property);
 
         if ($serviceName) {
-            if ($this->reflectionProvider->hasClass($serviceName)) {
-                // single class service
-                return new ObjectType($serviceName);
-            }
-
-            // 2. service name
-            if ($serviceMap->hasService($serviceName)) {
-                $serviceType = $serviceMap->getServiceType($serviceName);
-                if ($serviceType !== null) {
-                    return $serviceType;
-                }
+            $serviceType = $this->resolveFromServiceName($serviceName, $serviceMap);
+            if (! $serviceType instanceof MixedType) {
+                return $serviceType;
             }
         }
 
         // 3. service is in @var annotation
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-
         $varType = $phpDocInfo->getVarType();
         if (! $varType instanceof MixedType) {
             return $varType;
@@ -101,5 +105,24 @@ final class JMSDITypeResolver
             $errorMessage,
             $fileInfo
         );
+    }
+
+    private function resolveFromServiceName(string $serviceName, ServiceMap $serviceMap): Type
+    {
+        // 1. service name-type
+        if ($this->reflectionProvider->hasClass($serviceName)) {
+            // single class service
+            return new ObjectType($serviceName);
+        }
+
+        // 2. service name
+        if ($serviceMap->hasService($serviceName)) {
+            $serviceType = $serviceMap->getServiceType($serviceName);
+            if ($serviceType !== null) {
+                return $serviceType;
+            }
+        }
+
+        return new MixedType();
     }
 }

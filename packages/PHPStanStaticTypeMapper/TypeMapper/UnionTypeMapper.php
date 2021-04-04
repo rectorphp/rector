@@ -144,7 +144,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         $nullabledTypeNode = $this->phpStanStaticTypeMapper->mapToPhpParserNode($nullabledType);
-        if ($nullabledTypeNode === null) {
+        if (! $nullabledTypeNode instanceof Node) {
             return null;
         }
 

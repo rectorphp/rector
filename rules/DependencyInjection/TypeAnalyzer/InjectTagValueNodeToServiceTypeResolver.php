@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Rector\DependencyInjection\TypeAnalyzer;
 
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Symfony\PhpDoc\Node\JMS\JMSInjectTagValueNode;
 
 final class InjectTagValueNodeToServiceTypeResolver
 {
@@ -24,13 +22,17 @@ final class InjectTagValueNodeToServiceTypeResolver
         $this->jmsdiTypeResolver = $jmsdiTypeResolver;
     }
 
-    public function resolve(Property $property, PhpDocInfo $phpDocInfo, Node $node): Type
-    {
-        if ($node instanceof JMSInjectTagValueNode) {
-            return $this->jmsdiTypeResolver->resolve($property, $node);
+    public function resolve(
+        Property $property,
+        PhpDocInfo $phpDocInfo,
+        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
+    ): Type {
+        // @see https://github.com/PHP-DI/PHP-DI/blob/master/src/Annotation/Inject.php
+        if ($doctrineAnnotationTagValueNode->getAnnotationClass() === 'JMS\DiExtraBundle\Annotation\Inject') {
+            return $this->jmsdiTypeResolver->resolve($property, $doctrineAnnotationTagValueNode);
         }
 
-        if ($node instanceof PHPDIInjectTagValueNode) {
+        if ($doctrineAnnotationTagValueNode->getAnnotationClass() === 'Inject') {
             return $phpDocInfo->getVarType();
         }
 
