@@ -136,6 +136,8 @@ final class PhpDocInfo
     public function addPhpDocTagNode(PhpDocChildNode $phpDocChildNode): void
     {
         $this->phpDocNode->children[] = $phpDocChildNode;
+        // to give node more space
+        $this->makeMultiLined();
         $this->markAsChanged();
     }
 
