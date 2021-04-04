@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp72\Rector\FuncCall;
 
+use Nette\NotImplementedException;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
@@ -280,11 +282,19 @@ CODE_SAMPLE
             return $this->processInIf($parent, $funcCall, $replaceEmptystringToNull);
         }
 
+        if (! $parent instanceof Node) {
+            throw new NotImplementedException();
+        }
+
+        $if = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof BooleanNot) {
+            return $this->processInIf($if, $funcCall, $replaceEmptystringToNull);
+        }
+
         if (! $parent instanceof Identical) {
             throw new NotImplementedYetException();
         }
 
-        $if = $parent->getAttribute(AttributeKey::PARENT_NODE);
         if (! $if instanceof If_) {
             throw new NotImplementedYetException();
         }
@@ -296,6 +306,15 @@ CODE_SAMPLE
     {
         $cond = $if->cond;
 
+        if (! $cond instanceof Identical && ! $cond instanceof BooleanNot) {
+            if ($if->stmts !== []) {
+                $firstStmt = $if->stmts[0];
+                $this->addNodeBeforeNode($replaceEmptystringToNull, $firstStmt);
+            } else {
+                $if->stmts[0] = new Expression($replaceEmptystringToNull);
+            }
+        }
+
         if ($cond instanceof Identical) {
             $valueCompare = $cond->left === $funcCall
                 ? $cond->right
@@ -303,13 +322,10 @@ CODE_SAMPLE
             if ($this->valueResolver->isFalse($valueCompare)) {
                 $this->addNodeAfterNode($replaceEmptystringToNull, $if);
             }
-        } else {
-            if ($if->stmts !== []) {
-                $firstStmt = $if->stmts[0];
-                $this->addNodeBeforeNode($replaceEmptystringToNull, $firstStmt);
-            } else {
-                $if->stmts[0] = new Expression($replaceEmptystringToNull);
-            }
+        }
+
+        if ($cond instanceof BooleanNot) {
+            $this->addNodeAfterNode($replaceEmptystringToNull, $if);
         }
 
         return $funcCall;
