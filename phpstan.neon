@@ -550,3 +550,8 @@ parameters:
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocManipulator\\PhpDocClassRenamer\:\:processSerializerTypeTagValueNode\(\)" is 10, keep it under 9#'
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocParser\\ParentNodeTraverser\:\:transform\(\)" is 12, keep it under 9#'
         - '#Cognitive complexity for "Rector\\NodeTypeResolver\\NodeTypeResolver\:\:resolve\(\)" is \d+, keep it under 9#'
+
+        -
+            message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
+            path: 'packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php'
+        - '#Class Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode not found#'

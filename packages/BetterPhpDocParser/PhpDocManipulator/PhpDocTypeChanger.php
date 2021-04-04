@@ -67,7 +67,6 @@ final class PhpDocTypeChanger
             // add completely new one
             $varTagValueNode = new VarTagValueNode($newPHPStanPhpDocType, '', '');
             $phpDocInfo->addTagValueNode($varTagValueNode);
-            $phpDocInfo->makeMultiLined();
         }
     }
 
@@ -90,7 +89,6 @@ final class PhpDocTypeChanger
             // add completely new one
             $returnTagValueNode = new ReturnTagValueNode($newPHPStanPhpDocType, '');
             $phpDocInfo->addTagValueNode($returnTagValueNode);
-            $phpDocInfo->makeMultiLined();
         }
     }
 
@@ -121,7 +119,6 @@ final class PhpDocTypeChanger
         } else {
             $paramTagValueNode = $this->paramPhpDocNodeFactory->create($phpDocType, $param);
             $phpDocInfo->addTagValueNode($paramTagValueNode);
-            $phpDocInfo->makeMultiLined();
         }
     }
 }
