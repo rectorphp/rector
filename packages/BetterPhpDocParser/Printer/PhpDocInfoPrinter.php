@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
-use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -89,11 +88,6 @@ final class PhpDocInfoPrinter
     private $tokens = [];
 
     /**
-     * @var StartAndEnd[]
-     */
-    private $removedNodePositions = [];
-
-    /**
      * @var PhpDocNode
      */
     private $phpDocNode;
@@ -113,10 +107,19 @@ final class PhpDocInfoPrinter
      */
     private $docBlockInliner;
 
-    public function __construct(EmptyPhpDocDetector $emptyPhpDocDetector, DocBlockInliner $docBlockInliner)
-    {
+    /**
+     * @var RemoveNodesStartAndEndResolver
+     */
+    private $removeNodesStartAndEndResolver;
+
+    public function __construct(
+        EmptyPhpDocDetector $emptyPhpDocDetector,
+        DocBlockInliner $docBlockInliner,
+        RemoveNodesStartAndEndResolver $removeNodesStartAndEndResolver
+    ) {
         $this->emptyPhpDocDetector = $emptyPhpDocDetector;
         $this->docBlockInliner = $docBlockInliner;
+        $this->removeNodesStartAndEndResolver = $removeNodesStartAndEndResolver;
     }
 
     public function printNew(PhpDocInfo $phpDocInfo): string
@@ -161,7 +164,6 @@ final class PhpDocInfoPrinter
         $this->phpDocInfo = $phpDocInfo;
 
         $this->currentTokenPosition = 0;
-        $this->removedNodePositions = [];
 
         $phpDocString = $this->printPhpDocNode($this->phpDocNode);
         $phpDocString = $this->removeExtraSpacesAfterAsterisk($phpDocString);
@@ -303,8 +305,15 @@ final class PhpDocInfoPrinter
     {
         // skip removed nodes
         $positionJumpSet = [];
-        foreach ($this->getRemovedNodesPositions() as $startAndEnd) {
-            $positionJumpSet[$startAndEnd->getStart()] = $startAndEnd->getEnd();
+
+        $removedStartAndEnds = $this->removeNodesStartAndEndResolver->resolve(
+            $this->phpDocInfo->getOriginalPhpDocNode(),
+            $this->phpDocNode,
+            $this->tokens
+        );
+
+        foreach ($removedStartAndEnds as $removedStartAndEnd) {
+            $positionJumpSet[$removedStartAndEnd->getStart()] = $removedStartAndEnd->getEnd();
         }
 
         // include also space before, in case of inlined docs
@@ -324,55 +333,7 @@ final class PhpDocInfoPrinter
     }
 
     /**
-     * @return StartAndEnd[]
-     */
-    private function getRemovedNodesPositions(): array
-    {
-        if ($this->removedNodePositions !== []) {
-            return $this->removedNodePositions;
-        }
-
-        $removedNodes = array_diff(
-            $this->phpDocInfo->getOriginalPhpDocNode()
-                ->children,
-            $this->phpDocNode->children
-        );
-
-        $lastEndPosition = null;
-
-        foreach ($removedNodes as $removedNode) {
-            /** @var StartAndEnd $removedPhpDocNodeInfo */
-            $removedPhpDocNodeInfo = $removedNode->getAttribute(Attribute::START_END);
-
-            // change start position to start of the line, so the whole line is removed
-            $seekPosition = $removedPhpDocNodeInfo->getStart();
-
-            while ($seekPosition >= 0 && $this->tokens[$seekPosition][1] !== Lexer::TOKEN_HORIZONTAL_WS) {
-                if ($this->tokens[$seekPosition][1] === Lexer::TOKEN_PHPDOC_EOL) {
-                    break;
-                }
-
-                // do not colide
-                if ($lastEndPosition < $seekPosition) {
-                    break;
-                }
-
-                --$seekPosition;
-            }
-
-            $lastEndPosition = $removedPhpDocNodeInfo->getEnd();
-
-            $this->removedNodePositions[] = new StartAndEnd(max(
-                0,
-                $seekPosition - 1
-            ), $removedPhpDocNodeInfo->getEnd());
-        }
-
-        return $this->removedNodePositions;
-    }
-
-    /**
-     * @param int[] $positionJumpSet
+     * @param array<int, int> $positionJumpSet
      */
     private function appendToOutput(string $output, int $from, int $to, array $positionJumpSet): string
     {
