@@ -24,11 +24,6 @@ abstract class AbstractValuesAwareNode implements Node
     private $values = [];
 
     /**
-     * @var bool
-     */
-    private $hasChanged = false;
-
-    /**
      * @param mixed[] $values
      */
     public function __construct(array $values)
@@ -56,7 +51,6 @@ abstract class AbstractValuesAwareNode implements Node
         }
 
         $this->values[$key] = $value;
-        $this->hasChanged = true;
     }
 
     public function printWithWrapper(string $leftWrapChar, string $rightWrapChar): string
