@@ -22,6 +22,7 @@ use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
@@ -53,11 +54,6 @@ final class PhpDocInfo
      * @var bool
      */
     private $isSingleLine = false;
-
-    /**
-     * @var mixed[]
-     */
-    private $tokens = [];
 
     /**
      * @var PhpDocNode
@@ -100,11 +96,13 @@ final class PhpDocInfo
     private $rectorChangeCollector;
 
     /**
-     * @param mixed[] $tokens
+     * @var BetterTokenIterator
      */
+    private $betterTokenIterator;
+
     public function __construct(
         PhpDocNode $phpDocNode,
-        array $tokens,
+        BetterTokenIterator $betterTokenIterator,
         string $originalContent,
         StaticTypeMapper $staticTypeMapper,
         \PhpParser\Node $node,
@@ -113,9 +111,9 @@ final class PhpDocInfo
         RectorChangeCollector $rectorChangeCollector
     ) {
         $this->phpDocNode = $phpDocNode;
-        $this->tokens = $tokens;
         $this->originalPhpDocNode = clone $phpDocNode;
         $this->originalContent = $originalContent;
+        $this->betterTokenIterator = $betterTokenIterator;
 
         if ($this->originalContent !== null && ! Strings::match(trim($this->originalContent), "#\n#")) {
             $this->isSingleLine = true;
@@ -155,17 +153,14 @@ final class PhpDocInfo
         return $this->originalPhpDocNode;
     }
 
-    /**
-     * @return mixed[]
-     */
-    public function getTokens(): array
-    {
-        return $this->tokens;
-    }
-
     public function getTokenCount(): int
     {
-        return count($this->tokens);
+        return $this->betterTokenIterator->count();
+    }
+
+    public function getTokenIterator(): BetterTokenIterator
+    {
+        return $this->betterTokenIterator;
     }
 
     public function getVarTagValueNode(): ?VarTagValueNode
@@ -427,7 +422,7 @@ final class PhpDocInfo
             return false;
         }
 
-        return $this->tokens === [];
+        return $this->getTokenCount() === 0;
     }
 
     public function makeSingleLined(): void

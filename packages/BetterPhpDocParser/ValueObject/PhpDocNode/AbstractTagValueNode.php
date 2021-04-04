@@ -51,7 +51,7 @@ abstract class AbstractTagValueNode implements PhpDocTagValueNode
         return $this->items;
     }
 
-    protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
+    private function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
     {
         $tagValueNodeConfigurationFactory = new TagValueNodeConfigurationFactory();
 

@@ -115,17 +115,18 @@ final class PhpDocInfoFactory
 
             // create empty node
             $content = '';
-            $tokens = [];
+            $betterTokenIterator = new BetterTokenIterator([]);
             $phpDocNode = new PhpDocNode([]);
         } else {
             $content = $docComment->getText();
             $tokens = $this->lexer->tokenize($content);
+            $betterTokenIterator = new BetterTokenIterator($tokens);
 
             $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
             $this->setPositionOfLastToken($phpDocNode);
         }
 
-        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, $content, $tokens, $node);
+        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, $content, $betterTokenIterator, $node);
         $this->phpDocInfosByObjectHash[$objectHash] = $phpDocInfo;
 
         return $phpDocInfo;
@@ -173,13 +174,10 @@ final class PhpDocInfoFactory
         }
     }
 
-    /**
-     * @param mixed[] $tokens
-     */
     private function createFromPhpDocNode(
         PhpDocNode $phpDocNode,
         string $content,
-        array $tokens,
+        BetterTokenIterator $betterTokenIterator,
         Node $node
     ): PhpDocInfo {
         /** @var PhpDocNode $phpDocNode */
@@ -187,7 +185,7 @@ final class PhpDocInfoFactory
 
         $phpDocInfo = new PhpDocInfo(
             $phpDocNode,
-            $tokens,
+            $betterTokenIterator,
             $content,
             $this->staticTypeMapper,
             $node,

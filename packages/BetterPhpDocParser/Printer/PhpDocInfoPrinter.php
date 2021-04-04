@@ -145,7 +145,7 @@ final class PhpDocInfoPrinter
      */
     public function printFormatPreserving(PhpDocInfo $phpDocInfo): string
     {
-        if ($phpDocInfo->getTokens() === []) {
+        if ($phpDocInfo->getTokenCount() === 0) {
             // completely new one, just print string version of it
             if ($phpDocInfo->getPhpDocNode()->children === []) {
                 return '';
@@ -155,7 +155,7 @@ final class PhpDocInfoPrinter
         }
 
         $this->phpDocNode = $phpDocInfo->getPhpDocNode();
-        $this->tokens = $phpDocInfo->getTokens();
+//        $this->tokens = $phpDocInfo->getTokens();
 
         $this->tokenCount = $phpDocInfo->getTokenCount();
         $this->phpDocInfo = $phpDocInfo;
