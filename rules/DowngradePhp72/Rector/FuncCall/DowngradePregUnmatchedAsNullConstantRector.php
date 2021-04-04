@@ -307,12 +307,7 @@ CODE_SAMPLE
         $cond = $if->cond;
 
         if (! $cond instanceof Identical && ! $cond instanceof BooleanNot) {
-            if ($if->stmts !== []) {
-                $firstStmt = $if->stmts[0];
-                $this->addNodeBeforeNode($replaceEmptystringToNull, $firstStmt);
-            } else {
-                $if->stmts[0] = new Expression($replaceEmptystringToNull);
-            }
+            $this->handleNotInIdenticalAndBooleanNot($if, $replaceEmptystringToNull);
         }
 
         if ($cond instanceof Identical) {
@@ -329,5 +324,15 @@ CODE_SAMPLE
         }
 
         return $funcCall;
+    }
+
+    private function handleNotInIdenticalAndBooleanNot(If_ $if, FuncCall $replaceEmptystringToNull): void
+    {
+        if ($if->stmts !== []) {
+            $firstStmt = $if->stmts[0];
+            $this->addNodeBeforeNode($replaceEmptystringToNull, $firstStmt);
+        } else {
+            $if->stmts[0] = new Expression($replaceEmptystringToNull);
+        }
     }
 }
