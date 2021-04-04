@@ -44,6 +44,6 @@ final class StartAndEnd
             return false;
         }
 
-        return $position <= $this->end;
+        return $position < $this->end;
     }
 }

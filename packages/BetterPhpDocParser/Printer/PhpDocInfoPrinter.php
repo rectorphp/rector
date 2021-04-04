@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
-use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -319,9 +318,9 @@ final class PhpDocInfoPrinter
             $this->tokens
         );
 
-//        foreach ($removedStartAndEnds as $startAndEnd) {
-//            $positionJumpSet[$startAndEnd->getStart()] = $startAndEnd->getEnd();
-//        }
+        foreach ($removedStartAndEnds as $startAndEnd) {
+            $positionJumpSet[$startAndEnd->getStart()] = $startAndEnd->getEnd();
+        }
 
         // include also space before, in case of inlined docs
         if (isset($this->tokens[$from - 1]) && $this->tokens[$from - 1][1] === Lexer::TOKEN_HORIZONTAL_WS) {
@@ -336,25 +335,19 @@ final class PhpDocInfoPrinter
             ++$from;
         }
 
-        return $this->appendToOutput($output, $from, $to, $removedStartAndEnds);
+        return $this->appendToOutput($output, $from, $to, $positionJumpSet);
     }
 
     /**
-     * @param StartAndEnd[] $positionJumpSet
+     * @param array<int, int> $positionJumpSet
      */
     private function appendToOutput(string $output, int $from, int $to, array $positionJumpSet): string
     {
         for ($i = $from; $i < $to; ++$i) {
-            foreach ($positionJumpSet as $startAndEnd) {
-                if ($startAndEnd->contains($i)) {
-                    continue 2;
-                }
+            while (isset($positionJumpSet[$i])) {
+                $i = $positionJumpSet[$i];
+                continue;
             }
-
-            //            while (isset($positionJumpSet[$i])) {
-//                $i = $positionJumpSet[$i];
-//                continue;
-//            }
 
             $output .= $this->tokens[$i][0] ?? '';
         }

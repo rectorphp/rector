@@ -18,9 +18,6 @@ final class RemoveNodesStartAndEndResolver
      */
     public function resolve(PhpDocNode $originalPhpDocNode, PhpDocNode $currentPhpDocNode, array $tokens): array
     {
-//        if ($this->removedNodePositions !== []) {
-//            return $this->removedNodePositions;
-//        }
         $removedNodePositions = [];
 
         /** @var PhpDocChildNode[] $removedChildNodes */
