@@ -88,11 +88,6 @@ final class PhpDocInfoPrinter
     private $tokens = [];
 
     /**
-     * @var StartAndEnd[]
-     */
-    private $removedNodePositions = [];
-
-    /**
      * @var PhpDocNode
      */
     private $phpDocNode;
@@ -169,7 +164,6 @@ final class PhpDocInfoPrinter
         $this->phpDocInfo = $phpDocInfo;
 
         $this->currentTokenPosition = 0;
-        $this->removedNodePositions = [];
 
         $phpDocString = $this->printPhpDocNode($this->phpDocNode);
         $phpDocString = $this->removeExtraSpacesAfterAsterisk($phpDocString);
@@ -318,8 +312,8 @@ final class PhpDocInfoPrinter
             $this->tokens
         );
 
-        foreach ($removedStartAndEnds as $startAndEnd) {
-            $positionJumpSet[$startAndEnd->getStart()] = $startAndEnd->getEnd();
+        foreach ($removedStartAndEnds as $removedStartAndEnd) {
+            $positionJumpSet[$removedStartAndEnd->getStart()] = $removedStartAndEnd->getEnd();
         }
 
         // include also space before, in case of inlined docs

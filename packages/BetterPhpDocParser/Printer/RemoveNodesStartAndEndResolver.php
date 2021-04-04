@@ -25,9 +25,9 @@ final class RemoveNodesStartAndEndResolver
 
         $lastEndPosition = null;
 
-        foreach ($removedChildNodes as $removedNode) {
+        foreach ($removedChildNodes as $removedChildNode) {
             /** @var StartAndEnd $removedPhpDocNodeInfo */
-            $removedPhpDocNodeInfo = $removedNode->getAttribute(Attribute::START_END);
+            $removedPhpDocNodeInfo = $removedChildNode->getAttribute(Attribute::START_END);
 
             // change start position to start of the line, so the whole line is removed
             $seekPosition = $removedPhpDocNodeInfo->getStart();
