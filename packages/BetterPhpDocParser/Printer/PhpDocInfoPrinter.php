@@ -250,8 +250,9 @@ final class PhpDocInfoPrinter
 
         $output = '';
         for ($i = $from; $i < $to; ++$i) {
-            foreach ($this->removedTokensStartsAndEnds as $removedTokensStartsAndEnd) {
-                if ($removedTokensStartsAndEnd->contains($i)) {
+            foreach ($this->removedTokensStartsAndEnds as $removedTokenStartAndEnd) {
+                $removedTokenStartAndEndContains = $removedTokenStartAndEnd->contains($i);
+                if ($removedTokenStartAndEndContains) {
                     continue 2;
                 }
             }
