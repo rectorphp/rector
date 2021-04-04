@@ -112,6 +112,11 @@ final class DoctrineAnnotationTagValueNode extends AbstractTagValueNode implemen
         return $this->values;
     }
 
+    public function removeValue(string $key): void
+    {
+        unset($this->values[$key]);
+    }
+
     /**
      * Useful for attributes
      * @return array<string, mixed>
