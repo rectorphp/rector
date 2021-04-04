@@ -19,14 +19,6 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
         $this->doComparePrintedFileEquals($docFileInfo, $docFileInfo);
     }
 
-    public function testRemoveSpace(): void
-    {
-        $this->doComparePrintedFileEquals(
-            new SmartFileInfo(__DIR__ . '/FixtureChanged/with_space.txt'),
-            new SmartFileInfo(__DIR__ . '/FixtureChangedExpected/with_space_expected.txt')
-        );
-    }
-
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureBasic', '*.txt');

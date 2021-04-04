@@ -37,4 +37,13 @@ final class StartAndEnd
     {
         return $this->end;
     }
+
+    public function contains(int $value): bool
+    {
+        if ($value < $this->start) {
+            return false;
+        }
+
+        return $value < $this->end;
+    }
 }

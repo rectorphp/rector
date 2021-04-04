@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
-use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -14,10 +13,10 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 
@@ -40,27 +39,15 @@ final class PhpDocInfoPrinter
 
     /**
      * @var string
-     * @see https://regex101.com/r/mVmOCY/2
-     */
-    private const OPENING_DOCBLOCK_REGEX = '#^(/\*\*)#';
-
-    /**
-     * @var string
      * @see https://regex101.com/r/5fJyws/1
      */
     private const CALLABLE_REGEX = '#callable(\s+)\(#';
 
-    /**
-     * @var string
-     * @see https://regex101.com/r/LLWiPl/1
-     */
-    private const DOCBLOCK_START_REGEX = '#^(\/\/|\/\*\*|\/\*|\#)#';
-
-    /**
-     * @var string
-     * @see https://regex101.com/r/hFwSMz/1
-     */
-    private const SPACE_AFTER_ASTERISK_REGEX = '#([^*])\*[ \t]+$#sm';
+//    /**
+//     * @var string
+//     * @see https://regex101.com/r/hFwSMz/1
+//     */
+//    private const SPACE_AFTER_ASTERISK_REGEX = '#([^*])\*[ \t]+$#sm';
 
     /**
      * @var string
@@ -72,26 +59,6 @@ final class PhpDocInfoPrinter
      * @var string
      */
     private const TAG_AND_SPACE_REGEX = '#(@.*?) \(#';
-
-    /**
-     * @var int
-     */
-    private $tokenCount;
-
-    /**
-     * @var int
-     */
-    private $currentTokenPosition;
-
-    /**
-     * @var mixed[]
-     */
-    private $tokens = [];
-
-    /**
-     * @var StartAndEnd[]
-     */
-    private $removedNodePositions = [];
 
     /**
      * @var PhpDocNode
@@ -113,10 +80,29 @@ final class PhpDocInfoPrinter
      */
     private $docBlockInliner;
 
-    public function __construct(EmptyPhpDocDetector $emptyPhpDocDetector, DocBlockInliner $docBlockInliner)
-    {
+    /**
+     * @var RemoveTokensPositionResolver
+     */
+    private $removeTokensPositionResolver;
+
+    /**
+     * @var StartAndEnd[]
+     */
+    private $removedTokensStartsAndEnds = [];
+
+    /**
+     * @var BetterTokenIterator
+     */
+    private $tokenIterator;
+
+    public function __construct(
+        EmptyPhpDocDetector $emptyPhpDocDetector,
+        DocBlockInliner $docBlockInliner,
+        RemoveTokensPositionResolver $removeTokensPositionResolver
+    ) {
         $this->emptyPhpDocDetector = $emptyPhpDocDetector;
         $this->docBlockInliner = $docBlockInliner;
+        $this->removeTokensPositionResolver = $removeTokensPositionResolver;
     }
 
     public function printNew(PhpDocInfo $phpDocInfo): string
@@ -145,7 +131,7 @@ final class PhpDocInfoPrinter
      */
     public function printFormatPreserving(PhpDocInfo $phpDocInfo): string
     {
-        if ($phpDocInfo->getTokens() === []) {
+        if ($phpDocInfo->getTokenCount() === 0) {
             // completely new one, just print string version of it
             if ($phpDocInfo->getPhpDocNode()->children === []) {
                 return '';
@@ -155,16 +141,11 @@ final class PhpDocInfoPrinter
         }
 
         $this->phpDocNode = $phpDocInfo->getPhpDocNode();
-        $this->tokens = $phpDocInfo->getTokens();
+        $this->tokenIterator = $phpDocInfo->getTokenIterator();
 
-        $this->tokenCount = $phpDocInfo->getTokenCount();
         $this->phpDocInfo = $phpDocInfo;
 
-        $this->currentTokenPosition = 0;
-        $this->removedNodePositions = [];
-
         $phpDocString = $this->printPhpDocNode($this->phpDocNode);
-        $phpDocString = $this->removeExtraSpacesAfterAsterisk($phpDocString);
 
         // hotfix of extra space with callable ()
         return Strings::replace($phpDocString, self::CALLABLE_REGEX, 'callable(');
@@ -177,47 +158,43 @@ final class PhpDocInfoPrinter
             return '';
         }
 
-        $this->currentTokenPosition = 0;
-
         $output = '';
 
-        // node output
-        $nodeCount = count($phpDocNode->children);
+        $previousEndTokenPosition = 0;
 
-        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
-            $output .= $this->printDocChildNode($phpDocChildNode, $key + 1, $nodeCount);
+        // prepare removed node positions
+        $this->removedTokensStartsAndEnds = $this->removeTokensPositionResolver->resolve(
+            $this->tokenIterator,
+            $this->phpDocInfo->getOriginalPhpDocNode(),
+            $this->phpDocNode
+        );
+
+        $firstTokenPosition = $this->resolveFirstTokenPosition($phpDocNode);
+
+        foreach ($phpDocNode->children as $phpDocChildNode) {
+            $startAndEnd = $phpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
+
+            // include intermezzo tokens
+            if ($startAndEnd instanceof StartAndEnd && $previousEndTokenPosition !== 0) {
+                $intermezzoContent = $this->addTokensFromTo($previousEndTokenPosition, $startAndEnd->getStart());
+                $output .= $intermezzoContent;
+            }
+
+            $childNodeContent = $this->printDocChildNode($phpDocChildNode);
+            $output .= $childNodeContent;
+            if ($startAndEnd instanceof StartAndEnd) {
+                $previousEndTokenPosition = $startAndEnd->getEnd();
+            }
         }
 
-        $output = $this->printEnd($output);
+        $startContent = $this->addTokensFromTo(0, $firstTokenPosition);
+        $endContent = $this->addTokensFromTo($previousEndTokenPosition, $this->tokenIterator->count());
 
-        // fix missing start
-        if (! Strings::match($output, self::DOCBLOCK_START_REGEX) && $output) {
-            $output = '/**' . $output;
-        }
-
-        // fix missing end
-        if (Strings::match($output, self::OPENING_DOCBLOCK_REGEX) && $output && ! Strings::match(
-            $output,
-            self::CLOSING_DOCBLOCK_REGEX
-        )) {
-            $output .= ' */';
-        }
-
-        return $output;
+        return $startContent . $output . $endContent;
     }
 
-    private function removeExtraSpacesAfterAsterisk(string $phpDocString): string
+    private function printDocChildNode(PhpDocChildNode $phpDocChildNode): string
     {
-        return Strings::replace($phpDocString, self::SPACE_AFTER_ASTERISK_REGEX, '$1*');
-    }
-
-    private function printDocChildNode(
-        PhpDocChildNode $phpDocChildNode,
-        int $key = 0,
-        int $nodeCount = 0
-    ): string {
-        $output = '';
-
         if ($phpDocChildNode instanceof PhpDocTagNode) {
             if ($phpDocChildNode->value instanceof ParamTagValueNode || $phpDocChildNode->value instanceof ThrowsTagValueNode || $phpDocChildNode->value instanceof VarTagValueNode || $phpDocChildNode->value instanceof ReturnTagValueNode || $phpDocChildNode->value instanceof PropertyTagValueNode) {
                 $typeNode = $phpDocChildNode->value->type;
@@ -225,12 +202,6 @@ final class PhpDocInfoPrinter
 
                 // the type has changed → reprint
                 if ($typeStartAndEnd === null) {
-                    $phpDocChildNodeStartEnd = $phpDocChildNode->getAttribute(Attribute::START_END);
-                    // bump the last position of token after just printed node
-                    if ($phpDocChildNodeStartEnd instanceof StartAndEnd) {
-                        $this->currentTokenPosition = $phpDocChildNodeStartEnd->getEnd();
-                    }
-
                     if ($this->phpDocInfo->isSingleLine()) {
                         return ' ' . $phpDocChildNode;
                     }
@@ -240,8 +211,8 @@ final class PhpDocInfoPrinter
             }
 
             if ($phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode) {
-                $startAndEnd = $phpDocChildNode->value->getAttribute(Attribute::START_END);
-                if ($startAndEnd === null) {
+                $valueStartAndEnd = $phpDocChildNode->value->getAttribute(Attribute::START_END);
+                if ($valueStartAndEnd === null) {
                     $printedNode = (string) $phpDocChildNode;
 
                     // remove extra space between tags
@@ -263,128 +234,45 @@ final class PhpDocInfoPrinter
         }
 
         if ($startAndEnd instanceof StartAndEnd && ! $shouldReprint) {
-            $isLastToken = $nodeCount === $key;
-
-            $output = $this->addTokensFromTo(
-                $output,
-                $this->currentTokenPosition,
-                $startAndEnd->getEnd(),
-                $isLastToken
-            );
-
-            $this->currentTokenPosition = $startAndEnd->getEnd();
-
-            return rtrim($output);
-        }
-        if ($startAndEnd instanceof StartAndEnd) {
-            $this->currentTokenPosition = $startAndEnd->getEnd();
+            return $this->addTokensFromTo($startAndEnd->getStart(), $startAndEnd->getEnd());
         }
 
         if ($this->phpDocInfo->isSingleLine()) {
-            return $output . ' ' . $phpDocChildNode;
+            return ' ' . $phpDocChildNode;
         }
 
-        return $output . self::NEWLINE_WITH_ASTERISK . $phpDocChildNode;
+        return self::NEWLINE_WITH_ASTERISK . $phpDocChildNode;
     }
 
-    private function printEnd(string $output): string
+    private function addTokensFromTo(int $from, int $to): string
     {
-        $lastTokenPosition = $this->phpDocNode->getAttribute(
-            Attribute::LAST_TOKEN_POSITION
-        ) ?: $this->currentTokenPosition;
-        if ($lastTokenPosition === 0) {
-            $lastTokenPosition = 1;
-        }
+        $tokens = $this->tokenIterator->getTokens();
 
-        return $this->addTokensFromTo($output, $lastTokenPosition, $this->tokenCount, true);
-    }
-
-    private function addTokensFromTo(string $output, int $from, int $to, bool $shouldSkipEmptyLinesAbove): string
-    {
-        // skip removed nodes
-        $positionJumpSet = [];
-        foreach ($this->getRemovedNodesPositions() as $startAndEnd) {
-            $positionJumpSet[$startAndEnd->getStart()] = $startAndEnd->getEnd();
-        }
-
-        // include also space before, in case of inlined docs
-        if (isset($this->tokens[$from - 1]) && $this->tokens[$from - 1][1] === Lexer::TOKEN_HORIZONTAL_WS) {
-            --$from;
-        }
-
-        // skip extra empty lines above if this is the last one
-        if ($shouldSkipEmptyLinesAbove &&
-            Strings::contains($this->tokens[$from][0], PHP_EOL) &&
-            Strings::contains($this->tokens[$from + 1][0], PHP_EOL)
-        ) {
-            ++$from;
-        }
-
-        return $this->appendToOutput($output, $from, $to, $positionJumpSet);
-    }
-
-    /**
-     * @return StartAndEnd[]
-     */
-    private function getRemovedNodesPositions(): array
-    {
-        if ($this->removedNodePositions !== []) {
-            return $this->removedNodePositions;
-        }
-
-        $removedNodes = array_diff(
-            $this->phpDocInfo->getOriginalPhpDocNode()
-                ->children,
-            $this->phpDocNode->children
-        );
-
-        $lastEndPosition = null;
-
-        foreach ($removedNodes as $removedNode) {
-            /** @var StartAndEnd $removedPhpDocNodeInfo */
-            $removedPhpDocNodeInfo = $removedNode->getAttribute(Attribute::START_END);
-
-            // change start position to start of the line, so the whole line is removed
-            $seekPosition = $removedPhpDocNodeInfo->getStart();
-
-            while ($seekPosition >= 0 && $this->tokens[$seekPosition][1] !== Lexer::TOKEN_HORIZONTAL_WS) {
-                if ($this->tokens[$seekPosition][1] === Lexer::TOKEN_PHPDOC_EOL) {
-                    break;
-                }
-
-                // do not colide
-                if ($lastEndPosition < $seekPosition) {
-                    break;
-                }
-
-                --$seekPosition;
-            }
-
-            $lastEndPosition = $removedPhpDocNodeInfo->getEnd();
-
-            $this->removedNodePositions[] = new StartAndEnd(max(
-                0,
-                $seekPosition - 1
-            ), $removedPhpDocNodeInfo->getEnd());
-        }
-
-        return $this->removedNodePositions;
-    }
-
-    /**
-     * @param int[] $positionJumpSet
-     */
-    private function appendToOutput(string $output, int $from, int $to, array $positionJumpSet): string
-    {
+        $output = '';
         for ($i = $from; $i < $to; ++$i) {
-            while (isset($positionJumpSet[$i])) {
-                $i = $positionJumpSet[$i];
-                continue;
+            foreach ($this->removedTokensStartsAndEnds as $removedTokensStartsAndEnd) {
+                if ($removedTokensStartsAndEnd->contains($i)) {
+                    continue 2;
+                }
             }
 
-            $output .= $this->tokens[$i][0] ?? '';
+            $output .= $tokens[$i][0] ?? '';
         }
 
         return $output;
+    }
+
+    private function resolveFirstTokenPosition(PhpDocNode $phpDocNode): int
+    {
+        foreach ($phpDocNode->children as $phpDocChildNode) {
+            $startAndEnd = $phpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
+            if (! $startAndEnd instanceof StartAndEnd) {
+                continue;
+            }
+
+            return $startAndEnd->getStart();
+        }
+
+        return 0;
     }
 }
