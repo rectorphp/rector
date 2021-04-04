@@ -128,7 +128,7 @@ CODE_SAMPLE
         // or one among the reserved identifiers ("static", "self", "iterable", etc)
         // To find out which is the case, check if this name exists as a class
         $parentReturnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parentReturnType);
-        if ($parentReturnTypeNode === null) {
+        if (! $parentReturnTypeNode instanceof Node) {
             return null;
         }
 

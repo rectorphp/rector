@@ -78,6 +78,7 @@ class SomeClass
      * @var int
      */
     public $value;
+
     public function set()
     {
         $this->value = 5;

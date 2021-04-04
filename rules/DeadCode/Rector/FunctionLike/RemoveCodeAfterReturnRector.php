@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -67,7 +68,12 @@ CODE_SAMPLE
         $isDeadAfterReturn = false;
         foreach ($node->stmts as $key => $stmt) {
             if ($isDeadAfterReturn) {
+                if (! isset($node->stmts[$key])) {
+                    throw new ShouldNotHappenException();
+                }
+
                 // keep comment
+                /** @var int $key */
                 if ($node->stmts[$key] instanceof Nop) {
                     continue;
                 }

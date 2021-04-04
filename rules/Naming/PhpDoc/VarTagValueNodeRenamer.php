@@ -6,6 +6,7 @@ namespace Rector\Naming\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 
 final class VarTagValueNodeRenamer
 {
@@ -24,6 +25,10 @@ final class VarTagValueNodeRenamer
         }
 
         $varTagValueNode->variableName = '$' . $expectedName;
+
+        // invoke node reprint - same as in php-parser
+        $varTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, null);
+
         $phpDocInfo->markAsChanged();
     }
 }

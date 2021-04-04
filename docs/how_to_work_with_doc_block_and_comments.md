@@ -67,7 +67,9 @@ var_dump($paramTypes);
 
 ## How to Get Class Annotation?
 
-Each class annotation has their own object to work with. E.g. to work with Doctrine entities:
+Doctrine class annotations are annotations based on [`doctrine/annotations`](https://github.com/doctrine/annotations/) package. They are classes that have `@annotation`. Most common are Doctrine entity, column, one to many etc., but also Symfony route or Symfony validation annotations.
+
+Let's look how to work one for Doctrine entity:
 
 ```php
 use Doctrine\ORM\Mapping as ORM;
@@ -80,17 +82,19 @@ class UserEntity
 }
 ```
 
-You can use `EntityTagValueNode` object:
-
 ```php
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 
 /** @var PhpDocInfo $phpDocInfo */
-$entityTagValueNode = $phpDocInfo->getByType(EntityTagValueNode::class);
-if (! $entityTagValueNode instanceof EntityTagValueNode) {
+$entityTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\ORM\Mapping\Entity');
+if (! $entityTagValueNode instanceof DoctrineAnnotationTagValueNode) {
     return null;
 }
 
-var_dump($entityTagValueNode->getShortName()); // "@ORM\Entity"
+$annotationClass = $entityTagValueNode->getAnnotationClass();
+var_dump($annotationClass); // "Doctrine\ORM\Mapping\Entity"
+
+$values = $entityTagValueNode->getValues();
+var_dump($values); // []
 ```

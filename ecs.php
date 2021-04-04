@@ -59,14 +59,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             '*TypeResolver*',
             '*NameResolver*',
             '*Mapper*',
+            // allowed @required
             __DIR__ . '/packages/StaticTypeMapper/Naming/NameScopeFactory.php',
             __DIR__ . '/packages/NodeTypeResolver/NodeTypeResolver.php',
             __DIR__ . '/packages/BetterPhpDocParser/PhpDocNodeFactory/AbstractPhpDocNodeFactory.php',
+            __DIR__ . '/packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/PlainValueParser.php',
         ],
-
-        # generated from /vendor
-        __DIR__ . '/packages/DoctrineAnnotationGenerated/ConstantPreservingDocParser.php',
-        __DIR__ . '/packages/DoctrineAnnotationGenerated/ConstantPreservingAnnotationReader.php',
 
         UnaryOperatorSpacesFixer::class,
 
@@ -87,6 +85,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         PhpUnitStrictFixer::class => [
             __DIR__ . '/packages-tests/BetterPhpDocParser/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php',
             __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',
+            __DIR__ . '/packages-tests/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/StaticDoctrineAnnotationParserTest.php',
             '*TypeResolverTest.php',
         ],
     ]);

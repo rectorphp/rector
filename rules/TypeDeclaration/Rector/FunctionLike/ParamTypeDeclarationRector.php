@@ -188,7 +188,7 @@ CODE_SAMPLE
             TypeKind::KIND_PARAM
         );
 
-        if ($paramTypeNode === null) {
+        if (! $paramTypeNode instanceof Node) {
             return;
         }
 

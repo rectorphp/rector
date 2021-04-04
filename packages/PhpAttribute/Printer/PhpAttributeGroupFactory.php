@@ -10,21 +10,30 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
 use PHPStan\PhpDocParser\Ast\Node;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
+use PHPStan\Type\Constant\ConstantBooleanType;
+use PHPStan\Type\Constant\ConstantFloatType;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 
 final class PhpAttributeGroupFactory
 {
-    public function create(Node $node, AnnotationToAttribute $annotationToAttribute): AttributeGroup
+    public function createFromSimpleTag(AnnotationToAttribute $annotationToAttribute): AttributeGroup
     {
         $fullyQualified = new FullyQualified($annotationToAttribute->getAttributeClass());
+        $attribute = new Attribute($fullyQualified);
+        return new AttributeGroup([$attribute]);
+    }
 
-        if ($node instanceof AbstractTagValueNode) {
-            $args = $this->createArgsFromItems($node->getItemsWithoutDefaults());
-        } else {
-            $args = [];
-        }
+    public function create(
+        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
+        AnnotationToAttribute $annotationToAttribute
+    ): AttributeGroup {
+        $fullyQualified = new FullyQualified($annotationToAttribute->getAttributeClass());
+
+        $values = $doctrineAnnotationTagValueNode->getValuesWithExplicitSilentAndWithoutQuotes();
+        $args = $this->createArgsFromItems($values);
 
         $attribute = new Attribute($fullyQualified, $args);
         return new AttributeGroup([$attribute]);
@@ -47,6 +56,9 @@ final class PhpAttributeGroupFactory
         if ($this->isArrayArguments($items)) {
             foreach ($items as $key => $value) {
                 $argumentName = new Identifier($key);
+
+                $value = $this->normalizeNodeValue($value);
+
                 $value = BuilderHelpers::normalizeValue($value);
                 $args[] = new Arg($value, false, false, [], $argumentName);
             }
@@ -72,5 +84,30 @@ final class PhpAttributeGroupFactory
         }
 
         return false;
+    }
+
+    /**
+     * @param mixed $value
+     * @return bool|float|int|string
+     */
+    private function normalizeNodeValue($value)
+    {
+        if ($value instanceof ConstExprIntegerNode) {
+            return (int) $value->value;
+        }
+
+        if ($value instanceof ConstantFloatType) {
+            return $value->getValue();
+        }
+
+        if ($value instanceof ConstantBooleanType) {
+            return $value->getValue();
+        }
+
+        if ($value instanceof Node) {
+            return (string) $value;
+        }
+
+        return $value;
     }
 }

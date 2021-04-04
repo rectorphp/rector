@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Composer\Semver\VersionParser;
-use Doctrine\Common\Annotations\Reader;
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\Rules\English\InflectorFactory;
 use Nette\Caching\Cache;
@@ -20,13 +19,14 @@ use PHPStan\Dependency\DependencyResolver;
 use PHPStan\File\FileHelper;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
+use PHPStan\PhpDocParser\Parser\TypeParser;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
+use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
 use Rector\Caching\Cache\NetteCacheFactory;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
-use Rector\DoctrineAnnotationGenerated\ConstantPreservingAnnotationReader;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
@@ -115,7 +115,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // phpdoc parser
     $services->set(\PHPStan\PhpDocParser\Lexer\Lexer::class);
     $services->alias(PhpDocParser::class, BetterPhpDocParser::class);
-    $services->alias(Reader::class, ConstantPreservingAnnotationReader::class);
 
     // cache
     $services->set(DependencyResolver::class)
@@ -128,6 +127,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // type resolving
     $services->set(IntermediateSourceLocator::class);
+
+    $services->alias(TypeParser::class, BetterTypeParser::class);
 
     // PHPStan services
     $services->set(ReflectionProvider::class)

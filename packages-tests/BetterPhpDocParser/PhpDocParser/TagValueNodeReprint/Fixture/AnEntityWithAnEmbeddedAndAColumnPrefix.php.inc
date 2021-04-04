@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\Fixture\DoctrineEmbedded;
+namespace Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 use Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\Source\Embeddable;

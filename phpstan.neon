@@ -59,10 +59,6 @@ parameters:
         - packages-tests/NodeVisitor/FunctionMethodAndClassNodeVisitor/FunctionMethodAndClassNodeVisitorTest.php
         - rules/DowngradePhp70/Rector/FunctionLike/AbstractDowngradeParamDeclarationRector.php
 
-        # generated files
-        - 'packages/DoctrineAnnotationGenerated/ConstantPreservingDocParser.php'
-        - 'packages/DoctrineAnnotationGenerated/ConstantPreservingAnnotationReader.php'
-
         - "*/Expected/*"
         # complex printer
         - '*tests/Rector/MethodCall/RenameMethodRector/**/SomeClass.php'
@@ -97,11 +93,6 @@ parameters:
             message: "#in iterable type Iterator#"
             paths:
                 - *Test.php
-
-        -
-            message: "#^Cognitive complexity for \"Rector\\\\BetterPhpDocParser\\\\Printer\\\\WhitespaceDetector\\:\\:detectOldWhitespaces\\(\\)\" is (.*?), keep it under 9$#"
-            paths:
-                 - packages/BetterPhpDocParser/Printer/WhitespaceDetector.php
 
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$class#'
@@ -161,10 +152,6 @@ parameters:
 
         # symfony/console
         -
-             message: '#Use explicit return value over magic &reference#'
-             path: 'rules/DeadCode/Rector/BinaryOp/RemoveDuplicatedInstanceOfRector.php'
-
-        -
             message: '#Use value object over return of values#'
             path: 'rules/Php70/EregToPcreTransformer.php'
 
@@ -182,11 +169,6 @@ parameters:
         - '#Use decoupled factory service to create "(.*?)" object#'
         - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
         - '#Do not use factory/method call in constructor\. Put factory in config and get service with dependency injection#'
-
-        -
-            message: '#Use explicit names over dynamic ones#'
-            paths:
-                - packages/DoctrineAnnotationGenerated/PhpDocNode/ConstantReferenceIdentifierRestorer.php # 61
 
         -
             message: '#"(getComments|getDocComment|setDocComment)\(\)" call on "PhpParser\\Node" type is not allowed#'
@@ -301,9 +283,6 @@ parameters:
              paths:
                 - packages/NodeCollector/NodeCollector/ParsedClassConstFetchNodeCollector.php
 
-        # @todo improvate later
-        - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$description#'
-
         -
             message: '#Unreachable statement \- code above always terminates#'
             paths:
@@ -358,10 +337,6 @@ parameters:
         - '#Class Rector\\NodeTypeResolver\\Tests\\PerNodeTypeResolver\\PropertyFetchTypeResolver\\Source\\IDontExist not found\.#'
         - '#Class A\\B\\C\\IDontExist not found\.#'
 
-        -
-            message: '#Use non\-dynamic property on static call#'
-            path: packages/BetterPhpDocParser/AnnotationReader/AnnotationReaderFactory.php #56
-
         - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\MultiPhpDocNodeFactory\:\:getTagValueNodeClassesToAnnotationClasses\(\) should return array<class\-string<Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode\>, class\-string<Doctrine\\ORM\\Mapping\\Annotation\>\> but returns array<string, string\>#'
         -
             message: '#Use value object over return of values#'
@@ -386,14 +361,8 @@ parameters:
         - '#Class with base "PhpVersion" name is already used in "PHPStan\\Php\\PhpVersion", "Rector\\Core\\ValueObject\\PhpVersion"\. Use unique name to make classes easy to recognize#'
 
         -
-            message: '#Use local named constant instead of inline string for regex to explain meaning by constant name#'
-            paths:
-                - packages/BetterPhpDocParser/Printer/ArrayPartPhpDocTagPrinter.php
-
-        -
             message: '#Do not use static property#'
             paths:
-                - packages/DoctrineAnnotationGenerated/DataCollector/ResolvedConstantStaticCollector.php
                 # tracy::$maxDepth
                 - tests/bootstrap.php
 
@@ -405,11 +374,6 @@ parameters:
                 - packages/BetterPhpDocParser/ValueObject/PhpDoc/VariadicAwareParamTagValueNode.php
 
         - '#Property Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap\:\:\$binaryOpToAssignClasses \(array<class\-string<PhpParser\\Node\\Expr\\BinaryOp\>, class\-string<PhpParser\\Node\\Expr\\BinaryOp\>\>\) does not accept array#'
-
-        -
-             message: '#Function "class_exists\(\)" cannot be used/left in the code#'
-             paths:
-                  - packages/BetterPhpDocParser/AnnotationReader/AnnotationReaderFactory.php
 
         -
              message: '#Function "property_exists\(\)" cannot be used/left in the code#'
@@ -431,13 +395,10 @@ parameters:
                  - packages/StaticTypeMapper/TypeFactory/UnionTypeFactory.php
                  - packages/Set/RectorSetProvider.php
 
-        - '#Method Rector\\TypeDeclaration\\PhpParserTypeAnalyzer\:\:unwrapNullableAndToString\(\) should return string but returns string\|null#'
-
         - '#Cognitive complexity for "Rector\\DeadCode\\UnusedNodeResolver\\ClassUnusedPrivateClassMethodResolver\:\:filterOutParentAbstractMethods\(\)" is 10, keep it under 9#'
 
         # known types
         - '#Call to an undefined method PHPStan\\Type\\ConstantType\:\:getValue\(\)#'
-        - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:getNativePropertyReflection\(\) should return ReflectionProperty\|null but return statement is missing#'
         - '#Parameter \#1 \$stmts of method Rector\\EarlyReturn\\Rector\\Return_\\PreparedValueToEarlyReturnRector\:\:collectIfs\(\) expects array<PhpParser\\Node\\Stmt\\If_\>, array<PhpParser\\Node\\Stmt\> given#'
         - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\If_\:\:\$stmts#'
 
@@ -490,7 +451,6 @@ parameters:
         - '#Cannot cast array<string\>\|string\|null to string#'
 
         # generics fails
-        - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:findAllByType\(\) should return array<T of PHPStan\\PhpDocParser\\Ast\\Node\> but returns array<PHPStan\\PhpDocParser\\Ast\\Node\>#'
         - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeMapper\:\:transform\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns PHPStan\\PhpDocParser\\Ast\\Node#'
 
 
@@ -526,7 +486,6 @@ parameters:
         -
             message: '#Instead of "instanceof/is_a\(\)" use ReflectionProvider service or "\(new ObjectType\(<desired_type\>\)\)\-\>isSuperTypeOf\(<element_type\>\)" for static reflection to work#'
             paths:
-                - packages/BetterPhpDocParser/AnnotationReader/NodeAnnotationReader.php
                 - packages/BetterPhpDocParser/PhpDocNodeFactory/*NodeFactory.php
 
         # temporary
@@ -540,9 +499,54 @@ parameters:
             paths:
                 - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php
 
-        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:hasByAnnotationClass\(\)" is 18, keep it under 9#'
-        - '#Access to undefined constant Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode\:\:CLASS_NAME#'
+        # known external class-strings
+        - '#Parameter (.*?) of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo<PHPStan\\PhpDocParser\\Ast\\Node\>\:\:(getByAnnotationClasses|hasByAnnotationClasses)\(\) expects array<class\-string\>, array<int, string\> given#'
+
+        # resolve later
+        - '#Cognitive complexity for "Rector\\DependencyInjection\\Rector\\Property\\AnnotatedPropertyInjectToConstructorInjectionRector\:\:refactor\(\)" is 14, keep it under 9#'
+
+        - '#Cognitive complexity for "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayTypeMapper\:\:isGenericArrayCandidate\(\)" is 10, keep it under 9#'
+
+        # mimics original doctrine/annotations parser, improve later when finished
         -
-            message: '#Class cognitive complexity is 59, keep it under 50#'
+             message: '#Array destruct is not allowed\. Use value object to pass data instead#'
+             paths:
+                  - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php
+
+        -
+            message: '#Use value object over return of values#'
             paths:
-                - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php
+                - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php
+
+        -
+            message: '#Do not inherit from abstract class, better use composition#'
+            paths:
+                - packages/BetterPhpDocParser/ValueObject/Parser/BetterTokenIterator.php
+
+        -
+            message: '#\$this as argument is not allowed\. Refactor method to service composition#'
+            paths:
+                - packages/BetterPhpDocParser/ValueObject/Parser/BetterTokenIterator.php
+
+        -
+            message: '#Array with keys is not allowed\. Use value object to pass data instead#'
+            paths:
+                - rules/NetteToSymfony/Rector/ClassMethod/RouterListToControllerAnnotationsRector.php
+
+        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocParser\\DoctrineAnnotationDecorator\:\:mergeNestedDoctrineAnnotations\(\)" is \d+, keep it under 9#'
+
+        -
+            message: '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$value#'
+            paths:
+                -  packages/BetterPhpDocParser/PhpDocParser/DoctrineAnnotationDecorator.php
+
+        -
+            message: '#Do not inherit from abstract class, better use composition#'
+            paths:
+                - packages/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php
+
+
+        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\Printer\\PhpDocInfoPrinter\:\:printDocChildNode\(\)" is \d+, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocManipulator\\PhpDocClassRenamer\:\:processSerializerTypeTagValueNode\(\)" is 10, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocParser\\ParentNodeTraverser\:\:transform\(\)" is 12, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\NodeTypeResolver\\NodeTypeResolver\:\:resolve\(\)" is \d+, keep it under 9#'

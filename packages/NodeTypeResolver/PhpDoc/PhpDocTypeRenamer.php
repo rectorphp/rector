@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
@@ -63,6 +64,8 @@ final class PhpDocTypeRenamer
             $node->name = $slashedName;
 
             $phpDocInfo->markAsChanged();
+            // invoke reprting
+            $node->setAttribute(PhpDocAttributeKey::START_AND_END, null);
 
             return $node;
         });

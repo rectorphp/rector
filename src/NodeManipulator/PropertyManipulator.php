@@ -18,11 +18,9 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
-use Rector\Doctrine\PhpDoc\Node\AbstractDoctrineTagValueNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
-use Rector\Symfony\PhpDoc\Node\JMS\SerializerTypeTagValueNode;
 use Symplify\PackageBuilder\Php\TypeChecker;
 
 /**
@@ -86,11 +84,7 @@ final class PropertyManipulator
     public function isPropertyUsedInReadContext(Property $property): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if ($phpDocInfo->hasByType(AbstractDoctrineTagValueNode::class)) {
-            return true;
-        }
-
-        if ($phpDocInfo->hasByType(SerializerTypeTagValueNode::class)) {
+        if ($phpDocInfo->hasByAnnotationClasses(['Doctrine\ORM\*', 'JMS\Serializer\Annotation\Type'])) {
             return true;
         }
 

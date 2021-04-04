@@ -42,6 +42,8 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\Node\UnionType;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -52,7 +54,6 @@ use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Nette\PhpDoc\Node\NetteInjectTagNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\ValueObject\PropertyMetadata;
@@ -266,7 +267,7 @@ final class NodeFactory
 
         // add @inject
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $phpDocInfo->addPhpDocTagNode(new NetteInjectTagNode());
+        $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('injet', new GenericTagValueNode('')));
 
         return $property;
     }

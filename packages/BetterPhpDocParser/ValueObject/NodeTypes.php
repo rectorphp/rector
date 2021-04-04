@@ -10,11 +10,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Property_\OneToManyTagValueNode;
-use Rector\Symfony\PhpDoc\Node\AssertChoiceTagValueNode;
-use Rector\Symfony\PhpDoc\Node\AssertEmailTagValueNode;
-use Rector\Symfony\PhpDoc\Node\AssertRangeTagValueNode;
-use Rector\Symfony\PhpDoc\Node\JMS\SerializerTypeTagValueNode;
 
 final class NodeTypes
 {
@@ -27,10 +22,16 @@ final class NodeTypes
         ReturnTagValueNode::class,
         ThrowsTagValueNode::class,
         PropertyTagValueNode::class,
-        SerializerTypeTagValueNode::class,
-        OneToManyTagValueNode::class,
-        AssertChoiceTagValueNode::class,
-        AssertEmailTagValueNode::class,
-        AssertRangeTagValueNode::class,
+    ];
+
+    /**
+     * @var string[]
+     */
+    public const TYPE_AWARE_DOCTRINE_ANNOTATION_CLASSES = [
+        'JMS\Serializer\Annotation\Type',
+        'Doctrine\ORM\Mapping\OneToMany',
+        'Symfony\Component\Validator\Constraints\Choice',
+        'Symfony\Component\Validator\Constraints\Email',
+        'Symfony\Component\Validator\Constraints\Range',
     ];
 }
