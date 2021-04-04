@@ -326,13 +326,13 @@ CODE_SAMPLE
         return $funcCall;
     }
 
-    private function handleNotInIdenticalAndBooleanNot(If_ $if, FuncCall $replaceEmptystringToNull): void
+    private function handleNotInIdenticalAndBooleanNot(If_ $if, FuncCall $funcCall): void
     {
         if ($if->stmts !== []) {
             $firstStmt = $if->stmts[0];
-            $this->addNodeBeforeNode($replaceEmptystringToNull, $firstStmt);
+            $this->addNodeBeforeNode($funcCall, $firstStmt);
         } else {
-            $if->stmts[0] = new Expression($replaceEmptystringToNull);
+            $if->stmts[0] = new Expression($funcCall);
         }
     }
 }
