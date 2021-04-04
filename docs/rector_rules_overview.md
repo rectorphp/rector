@@ -2288,7 +2288,7 @@ ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => ValueObjectInliner::in
 
 ### SplitDoubleAssignRector
 
-Split multiple inline assigns to each own lines default value, to prevent undefined array issues
+Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
 
 - class: [`Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`](../rules/CodingStyle/Rector/Assign/SplitDoubleAssignRector.php)
 
@@ -9300,7 +9300,7 @@ PHPUnitStaticToKernelTestCaseGetRector::STATIC_CLASS_TYPES => ['EntityFactory'],
 
 ### PassFactoryToUniqueObjectRector
 
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
 
 :wrench: **configure it!**
 
