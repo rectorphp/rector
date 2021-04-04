@@ -14,6 +14,7 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
 {
     /**
      * @requires PHP 7.4
+     *
      * @dataProvider provideData()
      * @param SmartFileInfo[] $extraFileInfos
      */
