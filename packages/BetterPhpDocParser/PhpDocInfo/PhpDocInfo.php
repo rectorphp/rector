@@ -277,7 +277,7 @@ final class PhpDocInfo
     }
 
     /**
-     * @param array<class-string> $classes
+     * @param string[] $classes
      */
     public function getByAnnotationClasses(array $classes): ?DoctrineAnnotationTagValueNode
     {
@@ -291,25 +291,21 @@ final class PhpDocInfo
         return null;
     }
 
-    /**
-     * @param class-string $class
-     */
+
     public function hasByAnnotationClass(string $class): bool
     {
         return $this->getByAnnotationClass($class) !== null;
     }
 
     /**
-     * @param array<class-string> $annotationsClasses
+     * @param string[] $annotationsClasses
      */
     public function hasByAnnotationClasses(array $annotationsClasses): bool
     {
         return $this->getByAnnotationClasses($annotationsClasses) !== null;
     }
 
-    /**
-     * @param class-string $desiredClass
-     */
+
     public function getByAnnotationClass(string $desiredClass): ?DoctrineAnnotationTagValueNode
     {
         foreach ($this->phpDocNode->children as $phpDocChildNode) {
