@@ -4,6 +4,7 @@ namespace Rector\LeagueEvent\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
@@ -70,36 +71,62 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $methodName = $this->getName($node->name);
-        if ($methodName !== 'dispatch') {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
-        if (! $this->isObjectType($node->var, new ObjectType('League\Event\EventDispatcher'))) {
-            return null;
+        return $this->updateNode($node);
+    }
+
+    private function shouldSkip(MethodCall $methodCall): bool
+    {
+        if (! $this->isNames($methodCall->name, ['dispatch', 'emit'])) {
+            return true;
         }
 
-        if (! $this->getStaticType($node->args[0]->value) instanceof StringType) {
-            return null;
+        if ($this->isObjectType($methodCall->var, new ObjectType('League\Event\EventDispatcher'))) {
+            return false;
         }
 
+        if ($this->isObjectType($methodCall->var, new ObjectType('League\Event\Emitter'))) {
+            return false;
+        }
+
+        if (! $this->getStaticType($methodCall->args[0]->value) instanceof StringType) {
+            return true;
+        }
+
+        return true;
+    }
+
+    private function updateNode(MethodCall $methodCall): MethodCall
+    {
+        $methodCall->args[0] = new Arg($this->createNewAnonymousEventClass($methodCall->args[0]->value));
+        return $methodCall;
+    }
+
+    private function createNewAnonymousEventClass(Expr $eventName): New_
+    {
         $implements = [
             new FullyQualified('League\Event\HasEventName')
         ];
-        $statements = [
+
+        return new New_(new Class_(null, [
+            'implements' => $implements,
+            'stmts' => $this->createAnonymousEventClassBody($eventName),
+        ]));
+    }
+
+    private function createAnonymousEventClassBody(Expr $eventName): array
+    {
+        return [
             new ClassMethod('eventName', [
                 'flags' => Class_::MODIFIER_PUBLIC,
                 'returnType' => 'string',
                 'stmts' => [
-                    new Return_($node->args[0]->value),
+                    new Return_($eventName),
                 ],
             ]),
         ];
-        $node->args[0] = new Arg(new New_(new Class_(null, [
-            'implements' => $implements,
-            'stmts' => $statements,
-        ])));
-
-        return $node;
     }
 }
