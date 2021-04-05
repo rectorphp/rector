@@ -46,7 +46,6 @@ use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
-use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
@@ -78,11 +77,6 @@ final class NodeTypeResolver
     private $genericClassStringTypeCorrector;
 
     /**
-     * @var UnionTypeFactory
-     */
-    private $unionTypeFactory;
-
-    /**
      * @var ReflectionProvider
      */
     private $reflectionProvider;
@@ -104,7 +98,6 @@ final class NodeTypeResolver
         ObjectTypeSpecifier $objectTypeSpecifier,
         ClassAnalyzer $classAnalyzer,
         GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
-        UnionTypeFactory $unionTypeFactory,
         ReflectionProvider $reflectionProvider,
         HasOffsetTypeCorrector $hasOffsetTypeCorrector,
         IdentifierTypeResolver $identifierTypeResolver,
@@ -117,7 +110,6 @@ final class NodeTypeResolver
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->classAnalyzer = $classAnalyzer;
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
-        $this->unionTypeFactory = $unionTypeFactory;
         $this->reflectionProvider = $reflectionProvider;
         $this->hasOffsetTypeCorrector = $hasOffsetTypeCorrector;
         $this->identifierTypeResolver = $identifierTypeResolver;
