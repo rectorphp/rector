@@ -7,6 +7,7 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -75,8 +76,12 @@ final class DocBlockClassRenamer
                 $phpDocInfo->markAsChanged();
                 $newTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
 
-                // mirror attributes
-                $newTypeNode->setAttribute(PhpDocAttributeKey::PARENT, $node->getAttribute(PhpDocAttributeKey::PARENT));
+                $parentType = $node->getAttribute(PhpDocAttributeKey::PARENT);
+                if ($parentType instanceof TypeNode) {
+                    $parentType->setAttribute(PhpDocAttributeKey::PARENT, null);
+                    // mirror attributes
+                    $newTypeNode->setAttribute(PhpDocAttributeKey::PARENT, $parentType);
+                }
 
                 return $newTypeNode;
             }
