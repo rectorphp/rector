@@ -551,5 +551,14 @@ parameters:
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             path: 'packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php'
+
         - '#Class Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode not found#'
         - '#Cognitive complexity for "Rector\\DependencyInjection\\Rector\\Property\\AnnotatedPropertyInjectToConstructorInjectionRector\:\:refactor\(\)" is \d+, keep it under 9#'
+
+        -
+            message: '#Do not inherit from abstract class, better use composition#'
+            path: packages/BetterPhpDocParser/PhpDocNodeVisitor/ParamPhpDocNodeVisitor.php
+
+        -
+            message: '#Do not inherit from abstract class, better use composition#'
+            path: packages/BetterPhpDocParser/PhpDocNodeVisitor/*PhpDocNodeVisitor.php

@@ -9,6 +9,7 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 
 final class BetterTypeParser extends TypeParser
@@ -35,7 +36,7 @@ final class BetterTypeParser extends TypeParser
         $endPosition = $betterTokenIterator->currentPosition();
 
         $startAndEnd = new StartAndEnd($startPosition, $endPosition);
-        $typeNode->setAttribute(StartAndEnd::class, $startAndEnd);
+        $typeNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
 
         return $typeNode;
     }

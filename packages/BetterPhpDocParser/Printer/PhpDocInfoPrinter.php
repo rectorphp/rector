@@ -14,7 +14,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
-use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
@@ -211,11 +210,11 @@ final class PhpDocInfoPrinter
         if ($phpDocChildNode instanceof PhpDocTagNode) {
             if ($phpDocChildNode->value instanceof ParamTagValueNode || $phpDocChildNode->value instanceof ThrowsTagValueNode || $phpDocChildNode->value instanceof VarTagValueNode || $phpDocChildNode->value instanceof ReturnTagValueNode || $phpDocChildNode->value instanceof PropertyTagValueNode) {
                 $typeNode = $phpDocChildNode->value->type;
-                $typeStartAndEnd = $typeNode->getAttribute(Attribute::START_END);
+                $typeStartAndEnd = $typeNode->getAttribute(PhpDocAttributeKey::START_AND_END);
 
                 // the type has changed → reprint
                 if ($typeStartAndEnd === null) {
-                    $phpDocChildNodeStartEnd = $phpDocChildNode->getAttribute(Attribute::START_END);
+                    $phpDocChildNodeStartEnd = $phpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
                     // bump the last position of token after just printed node
                     if ($phpDocChildNodeStartEnd instanceof StartAndEnd) {
                         $this->currentTokenPosition = $phpDocChildNodeStartEnd->getEnd();
@@ -230,7 +229,7 @@ final class PhpDocInfoPrinter
             }
 
             if ($phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode) {
-                $startAndEnd = $phpDocChildNode->value->getAttribute(Attribute::START_END);
+                $startAndEnd = $phpDocChildNode->value->getAttribute(PhpDocAttributeKey::START_AND_END);
                 if ($startAndEnd === null) {
                     $printedNode = $phpDocChildNode->name . $phpDocChildNode->value;
 
@@ -242,7 +241,7 @@ final class PhpDocInfoPrinter
         }
 
         /** @var StartAndEnd|null $startAndEnd */
-        $startAndEnd = $phpDocChildNode->getAttribute(Attribute::START_END);
+        $startAndEnd = $phpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
 
         $shouldReprint = false;
         if ($phpDocChildNode instanceof PhpDocTagNode) {
@@ -284,7 +283,7 @@ final class PhpDocInfoPrinter
     private function printEnd(string $output): string
     {
         $lastTokenPosition = $this->phpDocNode->getAttribute(
-            Attribute::LAST_TOKEN_POSITION
+            PhpDocAttributeKey::LAST_TOKEN_POSITION
         ) ?: $this->currentTokenPosition;
         if ($lastTokenPosition === 0) {
             $lastTokenPosition = 1;

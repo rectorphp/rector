@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor;
-use Symplify\SimplePhpDocParser\ValueObject\PhpDocAttributeKey;
 
 final class ParentNodeTraverser
 {
@@ -33,15 +31,9 @@ final class ParentNodeTraverser
     /**
      * Connects parent types with children types
      */
-    public function transform(PhpDocNode $phpDocNode): Node
+    public function transform(PhpDocNode $phpDocNode): void
     {
         $this->phpDocNodeTraverser->addPhpDocNodeVisitor($this->parentConnectingPhpDocNodeVisitor);
-
-        $phpDocNode = $this->phpDocNodeTraverser->traverse($phpDocNode);
-
-        dump($phpDocNode->children[0]->getAttribute(PhpDocAttributeKey::PARENT));
-        die;
-
-        return $node;
+        $this->phpDocNodeTraverser->traverse($phpDocNode);
     }
 }

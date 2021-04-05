@@ -27,13 +27,13 @@ final class PhpDocNodeMapperTest extends AbstractKernelTestCase
         $this->phpDocNodeMapper = $this->getService(PhpDocNodeMapper::class);
     }
 
-    public function testPropertyTag(): void
+    public function testParamTag(): void
     {
         $phpDocNode = $this->createParamDocNode();
 
-        $reprintedPhpDocNode = $this->phpDocNodeMapper->transform($phpDocNode);
+        $this->phpDocNodeMapper->transform($phpDocNode, []);
 
-        $childNode = $reprintedPhpDocNode->children[0];
+        $childNode = $phpDocNode->children[0];
         $this->assertInstanceOf(PhpDocTagNode::class, $childNode);
 
         // test param tag
