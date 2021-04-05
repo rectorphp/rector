@@ -57,9 +57,9 @@ final class TestModifyReprintTest extends AbstractKernelTestCase
         $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/FixtureModify/route_with_extra_methods.php.inc');
 
         $inputFileInfoAndExpected = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpected($fixtureFileInfo);
-        $smartFileInfo = $inputFileInfoAndExpected->getInputFileInfo();
+        $inputFileInfo = $inputFileInfoAndExpected->getInputFileInfo();
 
-        $phpDocInfo = $this->parseFileAndGetFirstNodeOfType($smartFileInfo, ClassMethod::class);
+        $phpDocInfo = $this->parseFileAndGetFirstNodeOfType($inputFileInfo, ClassMethod::class);
 
         /** @var DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode */
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
@@ -75,7 +75,7 @@ final class TestModifyReprintTest extends AbstractKernelTestCase
     }
 
     /**
-     * @param class-string<\PhpParser\Node> $nodeType
+     * @param class-string<Node> $nodeType
      */
     private function parseFileAndGetFirstNodeOfType(SmartFileInfo $smartFileInfo, string $nodeType): PhpDocInfo
     {
