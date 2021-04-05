@@ -43,7 +43,6 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
     public function testEmpty(SmartFileInfo $fileInfo): void
     {
         $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($fileInfo->getContents(), new Nop());
-
         $this->assertEmpty($this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
     }
 
@@ -55,7 +54,6 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
     private function doComparePrintedFileEquals(SmartFileInfo $inputFileInfo, SmartFileInfo $expectedFileInfo): void
     {
         $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($inputFileInfo->getContents(), new Nop());
-
         $printedDocComment = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
 
         $this->assertSame(

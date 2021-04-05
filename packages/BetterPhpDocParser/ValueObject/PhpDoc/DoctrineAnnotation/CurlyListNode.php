@@ -4,32 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation;
 
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\NodeAttributes;
-
-final class CurlyListNode implements Node
+final class CurlyListNode extends AbstractValuesAwareNode
 {
-    use NodeAttributes;
-
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
-    /**
-     * @param mixed[] $items
-     */
-    public function __construct(array $items)
-    {
-        $this->items = $items;
-    }
-
     public function __toString(): string
     {
         $itemContents = '';
-        $lastItemKey = array_key_last($this->items);
+        $lastItemKey = array_key_last($this->values);
 
-        foreach ($this->items as $key => $value) {
+        foreach ($this->values as $key => $value) {
             if (is_int($key)) {
                 $itemContents .= $this->stringifyValue($value);
             } else {

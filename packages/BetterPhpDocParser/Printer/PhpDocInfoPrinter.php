@@ -57,12 +57,6 @@ final class PhpDocInfoPrinter
 
     /**
      * @var string
-     * @see https://regex101.com/r/hFwSMz/1
-     */
-    private const SPACE_AFTER_ASTERISK_REGEX = '#([^*])\*[ \t]+$#sm';
-
-    /**
-     * @var string
      */
     private const NEWLINE_WITH_ASTERISK = PHP_EOL . ' * ';
 
@@ -166,7 +160,6 @@ final class PhpDocInfoPrinter
         $this->currentTokenPosition = 0;
 
         $phpDocString = $this->printPhpDocNode($this->phpDocNode);
-        $phpDocString = $this->removeExtraSpacesAfterAsterisk($phpDocString);
 
         // hotfix of extra space with callable ()
         return Strings::replace($phpDocString, self::CALLABLE_REGEX, 'callable(');
@@ -208,11 +201,6 @@ final class PhpDocInfoPrinter
         return $output;
     }
 
-    private function removeExtraSpacesAfterAsterisk(string $phpDocString): string
-    {
-        return Strings::replace($phpDocString, self::SPACE_AFTER_ASTERISK_REGEX, '$1*');
-    }
-
     private function printDocChildNode(
         PhpDocChildNode $phpDocChildNode,
         int $key = 0,
@@ -244,7 +232,7 @@ final class PhpDocInfoPrinter
             if ($phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode) {
                 $startAndEnd = $phpDocChildNode->value->getAttribute(Attribute::START_END);
                 if ($startAndEnd === null) {
-                    $printedNode = (string) $phpDocChildNode;
+                    $printedNode = $phpDocChildNode->name . $phpDocChildNode->value;
 
                     // remove extra space between tags
                     $printedNode = Strings::replace($printedNode, self::TAG_AND_SPACE_REGEX, '$1(');
@@ -267,6 +255,9 @@ final class PhpDocInfoPrinter
         if ($startAndEnd instanceof StartAndEnd && ! $shouldReprint) {
             $isLastToken = $nodeCount === $key;
 
+            // correct previously changed node
+            $this->correctPreviouslyReprintedFirstNode($key, $startAndEnd);
+
             $output = $this->addTokensFromTo(
                 $output,
                 $this->currentTokenPosition,
@@ -278,6 +269,7 @@ final class PhpDocInfoPrinter
 
             return rtrim($output);
         }
+
         if ($startAndEnd instanceof StartAndEnd) {
             $this->currentTokenPosition = $startAndEnd->getEnd();
         }
@@ -347,5 +339,30 @@ final class PhpDocInfoPrinter
         }
 
         return $output;
+    }
+
+    private function correctPreviouslyReprintedFirstNode(int $key, StartAndEnd $startAndEnd): void
+    {
+        if ($this->currentTokenPosition !== 0) {
+            return;
+        }
+
+        if ($key === 1) {
+            return;
+        }
+
+        $startTokenPosition = $startAndEnd->getStart();
+        $tokens = $this->phpDocInfo->getTokens();
+
+        if (! isset($tokens[$startTokenPosition - 1])) {
+            return;
+        }
+
+        $previousToken = $tokens[$startTokenPosition - 1];
+        if ($previousToken[1] === Lexer::TOKEN_PHPDOC_EOL) {
+            --$startTokenPosition;
+        }
+
+        $this->currentTokenPosition = $startTokenPosition;
     }
 }
