@@ -25,7 +25,7 @@ final class DispatchStringToObjectRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change string events to objects which implement \League\Event\HasEventName', [
+        return new RuleDefinition('Change string events to anonymous class which implement \League\Event\HasEventName', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass
