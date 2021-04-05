@@ -115,10 +115,11 @@ final class BetterPhpDocParser extends PhpDocParser
         $endPosition = $tokenIterator->currentTokenOffset();
 
         $startAndEnd = new StartAndEnd($startPosition, $endPosition);
-
         $tagValueNode->setAttribute(StartAndEnd::class, $startAndEnd);
 
-        return $this->phpDocNodeMapper->transform($tagValueNode, $tokenIterator->print());
+        return $tagValueNode;
+//
+//        return $this->phpDocNodeMapper->transform($tagValueNode, $tokenIterator->print());
     }
 
     private function parseChildAndStoreItsPositions(TokenIterator $tokenIterator): PhpDocChildNode
@@ -138,10 +139,10 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $startAndEnd = new StartAndEnd($tokenStart, $tokenEnd);
 
-        $transformedPhpDocNode = $this->phpDocNodeMapper->transform($phpDocNode, $docContent);
-        $transformedPhpDocNode->setAttribute(Attribute::START_END, $startAndEnd);
+        //$transformedPhpDocNode = $this->phpDocNodeMapper->transform($phpDocNode, $docContent);
+        $phpDocNode->setAttribute(Attribute::START_END, $startAndEnd);
 
-        return $transformedPhpDocNode;
+        return $phpDocNode;
     }
 
     private function resolveTag(BetterTokenIterator $tokenIterator): string

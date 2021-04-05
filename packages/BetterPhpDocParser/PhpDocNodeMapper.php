@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
@@ -54,19 +55,14 @@ final class PhpDocNodeMapper
         $this->parentNodeTraverser = $parentNodeTraverser;
     }
 
-    /**
-     * @template T of \PHPStan\PhpDocParser\Ast\Node
-     * @param T $node
-     * @return T
-     */
-    public function transform(Node $node, string $docContent): Node
+    public function transform(PhpDocNode $phpDocNode): Node
     {
-        $node = $this->parentNodeTraverser->transform($node, $docContent);
+        $phpDocNode = $this->parentNodeTraverser->transform($phpDocNode);
 
-        $betterTokenIterator = $this->tokenIteratorFactory->create($docContent);
+//        $betterTokenIterator = $this->tokenIteratorFactory->create($docContent);
 
         // connect parent types with children types
-        $transformingCallable = function (Node $node, string $docContent) use ($betterTokenIterator): Node {
+        $transformingCallable = function (Node $node, string $docContent) /*use ($betterTokenIterator)*/: Node {
             // narrow to node-specific doc content
             $startAndEnd = $node->getAttribute(StartAndEnd::class);
             if ($startAndEnd instanceof StartAndEnd) {
@@ -147,7 +143,7 @@ final class PhpDocNodeMapper
             return $node;
         };
 
-        return $this->phpDocNodeTraverser->traverseWithCallable($node, $docContent, $transformingCallable);
+        return $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, /*$docContent,*/ $transformingCallable);
     }
 
     private function mirrorAttributes(Node $oldNode, Node $newNode): void
