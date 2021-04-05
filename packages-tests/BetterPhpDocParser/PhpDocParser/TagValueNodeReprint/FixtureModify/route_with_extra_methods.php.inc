@@ -21,6 +21,6 @@ final class RouteName
 ?>
 -----
 /**
-     * @Route("/hello/", methods={"GET","HEAD"})
+ * @Route("/hello/", methods={"GET", "HEAD"})
      * @Template("some_path")
      */

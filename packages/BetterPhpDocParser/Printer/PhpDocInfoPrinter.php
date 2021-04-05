@@ -256,11 +256,7 @@ final class PhpDocInfoPrinter
             $isLastToken = $nodeCount === $key;
 
             // correct previously changed node
-            if ($this->currentTokenPosition === 0 && $key !== 1) {
-                $this->currentTokenPosition = $startAndEnd->getStart();
-//                dump($startAndEnd->getStart());
-//                die;
-            }
+            $this->correctPreviouslyReprintedFirstNode($key, $startAndEnd);
 
             $output = $this->addTokensFromTo(
                 $output,
@@ -343,5 +339,30 @@ final class PhpDocInfoPrinter
         }
 
         return $output;
+    }
+
+    private function correctPreviouslyReprintedFirstNode(int $key, StartAndEnd $startAndEnd): void
+    {
+        if ($this->currentTokenPosition !== 0) {
+            return;
+        }
+
+        if ($key === 1) {
+            return;
+        }
+
+        $startTokenPosition = $startAndEnd->getStart();
+        $tokens = $this->phpDocInfo->getTokens();
+
+        if (! isset($tokens[$startTokenPosition - 1])) {
+            return;
+        }
+
+        $previousToken = $tokens[$startTokenPosition - 1];
+        if ($previousToken[1] === Lexer::TOKEN_PHPDOC_EOL) {
+            --$startTokenPosition;
+        }
+
+        $this->currentTokenPosition = $startTokenPosition;
     }
 }
