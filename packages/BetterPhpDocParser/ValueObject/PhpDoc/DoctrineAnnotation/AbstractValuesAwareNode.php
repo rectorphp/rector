@@ -109,9 +109,11 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     public function changeValue(string $key, $value): void
     {
         // is quoted?
-        $isQuoted = (bool) Strings::match($this->values[$key], self::UNQUOTED_VALUE_REGEX);
-        if ($isQuoted) {
-            $value = '"' . $value . '"';
+        if (isset($this->values[$key])) {
+            $isQuoted = (bool) Strings::match($this->values[$key], self::UNQUOTED_VALUE_REGEX);
+            if ($isQuoted) {
+                $value = '"' . $value . '"';
+            }
         }
 
         $this->values[$key] = $value;
