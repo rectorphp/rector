@@ -502,9 +502,6 @@ parameters:
         # known external class-strings
         - '#Parameter (.*?) of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo<PHPStan\\PhpDocParser\\Ast\\Node\>\:\:(getByAnnotationClasses|hasByAnnotationClasses)\(\) expects array<class\-string\>, array<int, string\> given#'
 
-        # resolve later
-        - '#Cognitive complexity for "Rector\\DependencyInjection\\Rector\\Property\\AnnotatedPropertyInjectToConstructorInjectionRector\:\:refactor\(\)" is 14, keep it under 9#'
-
         - '#Cognitive complexity for "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayTypeMapper\:\:isGenericArrayCandidate\(\)" is 10, keep it under 9#'
 
         # mimics original doctrine/annotations parser, improve later when finished
@@ -555,3 +552,4 @@ parameters:
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             path: 'packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php'
         - '#Class Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode not found#'
+        - '#Cognitive complexity for "Rector\\DependencyInjection\\Rector\\Property\\AnnotatedPropertyInjectToConstructorInjectionRector\:\:refactor\(\)" is \d+, keep it under 9#'

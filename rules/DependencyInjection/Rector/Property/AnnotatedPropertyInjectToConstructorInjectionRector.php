@@ -17,10 +17,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DependencyInjection\NodeAnalyzer\NetteInjectPropertyAnalyzer;
-use Rector\DependencyInjection\TypeAnalyzer\InjectParameterAnalyzer;
 use Rector\DependencyInjection\TypeAnalyzer\InjectTagValueNodeToServiceTypeResolver;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
-use Rector\Nette\PhpDoc\Node\NetteInjectTagNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -53,11 +51,6 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
     private $phpDocTypeChanger;
 
     /**
-     * @var InjectParameterAnalyzer
-     */
-    private $injectParameterAnalyzer;
-
-    /**
      * @var InjectTagValueNodeToServiceTypeResolver
      */
     private $injectTagValueNodeToServiceTypeResolver;
@@ -74,7 +67,6 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
 
     public function __construct(
         PhpDocTypeChanger $phpDocTypeChanger,
-        InjectParameterAnalyzer $injectParameterAnalyzer,
         InjectTagValueNodeToServiceTypeResolver $injectTagValueNodeToServiceTypeResolver,
         PropertyUsageAnalyzer $propertyUsageAnalyzer,
         NetteInjectPropertyAnalyzer $netteInjectPropertyAnalyzer,
@@ -82,7 +74,6 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
     ) {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->injectParameterAnalyzer = $injectParameterAnalyzer;
         $this->injectTagValueNodeToServiceTypeResolver = $injectTagValueNodeToServiceTypeResolver;
         $this->netteInjectPropertyAnalyzer = $netteInjectPropertyAnalyzer;
         $this->phpDocTagRemover = $phpDocTagRemover;
@@ -157,10 +148,6 @@ CODE_SAMPLE
             }
 
             if ($serviceType instanceof MixedType) {
-                if ($this->injectParameterAnalyzer->isParameterInject($injectTagNode)) {
-                    continue;
-                }
-
                 $serviceType = $this->injectTagValueNodeToServiceTypeResolver->resolve(
                     $node,
                     $phpDocInfo,
@@ -206,7 +193,10 @@ CODE_SAMPLE
 
     private function refactorNetteInjectProperty(PhpDocInfo $phpDocInfo, Property $property): ?Property
     {
-        $phpDocInfo->removeByType(NetteInjectTagNode::class);
+        $injectTagNode = $phpDocInfo->getByName('inject');
+        if ($injectTagNode instanceof \PHPStan\PhpDocParser\Ast\Node) {
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $injectTagNode);
+        }
 
         if ($this->propertyUsageAnalyzer->isPropertyFetchedInChildClass($property)) {
             $this->visibilityManipulator->makeProtected($property);
