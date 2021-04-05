@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -117,6 +118,10 @@ CODE_SAMPLE
         ]));
     }
 
+    /**
+     * @param Expr $eventName
+     * @return Stmt[]
+     */
     private function createAnonymousEventClassBody(Expr $eventName): array
     {
         return [
