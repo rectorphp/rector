@@ -291,7 +291,6 @@ final class PhpDocInfo
         return null;
     }
 
-
     public function hasByAnnotationClass(string $class): bool
     {
         return $this->getByAnnotationClass($class) !== null;
@@ -304,7 +303,6 @@ final class PhpDocInfo
     {
         return $this->getByAnnotationClasses($annotationsClasses) !== null;
     }
-
 
     public function getByAnnotationClass(string $desiredClass): ?DoctrineAnnotationTagValueNode
     {
