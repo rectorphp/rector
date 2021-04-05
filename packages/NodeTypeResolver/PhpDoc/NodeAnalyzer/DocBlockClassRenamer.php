@@ -78,7 +78,7 @@ final class DocBlockClassRenamer
 
                 $parentType = $node->getAttribute(PhpDocAttributeKey::PARENT);
                 if ($parentType instanceof TypeNode) {
-                    $parentType->setAttribute(PhpDocAttributeKey::PARENT, null);
+                    $parentType->setAttribute(PhpDocAttributeKey::START_AND_END, null);
                     // mirror attributes
                     $newTypeNode->setAttribute(PhpDocAttributeKey::PARENT, $parentType);
                 }
