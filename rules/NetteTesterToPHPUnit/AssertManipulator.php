@@ -275,7 +275,6 @@ final class AssertManipulator
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $phpDocInfo->addPhpDocTagNode(new PHPUnitDoesNotPerformAssertionTagNode());
-        $phpDocInfo->makeMultiLined();
     }
 
     private function renameAssertMethod(StaticCall $staticCall): void

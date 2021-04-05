@@ -89,7 +89,6 @@ final class InjectMethodFactory
         if ($framework === FrameworkName::SYMFONY) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
             $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@required', new GenericTagValueNode('')));
-            $phpDocInfo->makeMultiLined();
         }
 
         return $classMethod;

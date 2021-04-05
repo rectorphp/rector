@@ -268,7 +268,6 @@ final class NodeFactory
         // add @inject
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@inject', new GenericTagValueNode('')));
-        $phpDocInfo->makeMultiLined();
 
         return $property;
     }

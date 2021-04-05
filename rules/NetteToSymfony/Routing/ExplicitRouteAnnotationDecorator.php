@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NetteToSymfony\Routing;
 
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 
@@ -30,8 +31,12 @@ final class ExplicitRouteAnnotationDecorator
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
     ): void {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $phpDocInfo->addTagValueNode($doctrineAnnotationTagValueNode);
-        $phpDocInfo->makeMultiLined();
+
+        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode(
+            '@\Symfony\Component\Routing\Annotation\Route',
+            $doctrineAnnotationTagValueNode
+        );
+        $phpDocInfo->addPhpDocTagNode($spacelessPhpDocTagNode);
 
         $classMethod->setAttribute(self::HAS_ROUTE_ANNOTATION, true);
     }

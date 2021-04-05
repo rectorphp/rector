@@ -244,7 +244,7 @@ final class PhpDocInfoPrinter
             if ($phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode) {
                 $startAndEnd = $phpDocChildNode->value->getAttribute(Attribute::START_END);
                 if ($startAndEnd === null) {
-                    $printedNode = (string) $phpDocChildNode;
+                    $printedNode = $phpDocChildNode->name . $phpDocChildNode->value;
 
                     // remove extra space between tags
                     $printedNode = Strings::replace($printedNode, self::TAG_AND_SPACE_REGEX, '$1(');
@@ -278,6 +278,7 @@ final class PhpDocInfoPrinter
 
             return rtrim($output);
         }
+
         if ($startAndEnd instanceof StartAndEnd) {
             $this->currentTokenPosition = $startAndEnd->getEnd();
         }
