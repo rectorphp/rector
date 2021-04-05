@@ -67,6 +67,15 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     public function removeValue(string $key): void
     {
         unset($this->values[$key]);
+        unset($this->values['"' . $key . '"']);
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getValues(): array
+    {
+        return $this->values;
     }
 
     /**
