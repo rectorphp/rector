@@ -236,7 +236,7 @@ CODE_SAMPLE
         return $className !== $types[0]->getClassName();
     }
 
-    private function removeAndReturn(Return_ $return, Expression $expression, Expr $expr, Type $type): Return_
+    private function removeAndReturn(Return_ $return, Expression $expression, Expr $expr, UnionType $type): Return_
     {
         $this->removeNode($return);
         $this->removeNode($expression);
