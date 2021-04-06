@@ -7,6 +7,7 @@ namespace Rector\EarlyReturn\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -89,6 +90,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isInstanceofCondOnly($node->cond)) {
+            return null;
+        }
+
         /** @var Return_ $return */
         $return = $node->stmts[0];
         $ifs = $this->createMultipleIfs($node->cond, $return, []);
@@ -142,5 +147,24 @@ CODE_SAMPLE
                 'stmts' => [$return],
             ]
         );
+    }
+
+    private function isInstanceofCondOnly(BooleanOr $booleanOr): bool
+    {
+        $currentNode = $booleanOr;
+
+        if ($currentNode->left instanceof BooleanOr) {
+            return $this->isInstanceofCondOnly($currentNode->left);
+        }
+
+        if ($currentNode->right instanceof BooleanOr) {
+            return $this->isInstanceofCondOnly($currentNode->right);
+        }
+
+        if (! $currentNode->right instanceof Instanceof_) {
+            return false;
+        }
+
+        return $currentNode->left instanceof Instanceof_;
     }
 }

@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -22,17 +21,12 @@ final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     private $staticTypeMapper;
 
     /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    /**
      * @var PseudoNamespaceToNamespace|null
      */
     private $pseudoNamespaceToNamespace;
 
     /**
-     * @var \PhpParser\Node
+     * @var \PhpParser\Node|null
      */
     private $currentPhpParserNode;
 

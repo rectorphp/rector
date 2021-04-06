@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PhpDoc;
 
+use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
@@ -23,7 +24,7 @@ final class PhpDocTypeRenamer
 
     public function changeUnderscoreType(
         PhpDocInfo $phpDocInfo,
-        \PhpParser\Node $node,
+        Node $node,
         PseudoNamespaceToNamespace $pseudoNamespaceToNamespace
     ): void {
         $phpDocNode = $phpDocInfo->getPhpDocNode();

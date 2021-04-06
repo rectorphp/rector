@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PhpDocNodeVisitor;
 
+use PhpParser\Node as PhpParserNode;
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
-use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
@@ -22,11 +24,6 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
-
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
 
     /**
      * @var ParameterProvider
@@ -44,7 +41,7 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     private $useNodesToAddCollector;
 
     /**
-     * @var \PhpParser\Node|null
+     * @var PhpParserNode|null
      */
     private $currentPhpParserNode;
 
@@ -81,31 +78,35 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             return null;
         }
 
-        $importShortClasses = $this->parameterProvider->provideBoolParameter(Option::IMPORT_SHORT_CLASSES);
-
         // Importing root namespace classes (like \DateTime) is optional
-        if (! $importShortClasses && substr_count($staticType->getClassName(), '\\') === 0) {
+        if ($this->shouldSkipShortClassName($staticType)) {
             return null;
         }
 
         return $this->processFqnNameImport($this->currentPhpParserNode, $node, $staticType);
     }
 
-    public function setCurrentNode(\PhpParser\Node $phpParserNode): void
+    public function setCurrentNode(PhpParserNode $phpParserNode): void
     {
         $this->currentPhpParserNode = $phpParserNode;
     }
 
     private function processFqnNameImport(
-        \PhpParser\Node $node,
+        PhpParserNode $node,
         IdentifierTypeNode $identifierTypeNode,
         FullyQualifiedObjectType $fullyQualifiedObjectType
-    ): IdentifierTypeNode {
+    ): ?IdentifierTypeNode {
         if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType(
             $node,
             $fullyQualifiedObjectType
         )) {
             return $identifierTypeNode;
+        }
+
+        $parent = $identifierTypeNode->getAttribute(PhpDocAttributeKey::PARENT);
+        if ($parent instanceof TemplateTagValueNode) {
+            // might break
+            return null;
         }
 
         // should skip because its already used
@@ -120,5 +121,15 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         $this->useNodesToAddCollector->addUseImport($node, $fullyQualifiedObjectType);
 
         return new IdentifierTypeNode($fullyQualifiedObjectType->getShortName());
+    }
+
+    private function shouldSkipShortClassName(FullyQualifiedObjectType $fullyQualifiedObjectType): bool
+    {
+        $importShortClasses = $this->parameterProvider->provideBoolParameter(Option::IMPORT_SHORT_CLASSES);
+        if ($importShortClasses) {
+            return false;
+        }
+
+        return substr_count($fullyQualifiedObjectType->getClassName(), '\\') === 0;
     }
 }

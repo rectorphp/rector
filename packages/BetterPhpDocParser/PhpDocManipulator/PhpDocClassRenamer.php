@@ -99,7 +99,6 @@ final class PhpDocClassRenamer
             if ($className) {
                 if ($className === $oldClass) {
                     $doctrineAnnotationTagValueNode->changeSilentValue($newClass);
-//                    $phpDocInfo->markAsChanged();
                     continue;
                 }
 

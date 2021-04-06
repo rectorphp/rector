@@ -15,7 +15,6 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
-use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
@@ -32,11 +31,6 @@ final class BetterPhpDocParser extends PhpDocParser
     private $privatesCaller;
 
     /**
-     * @var PhpDocNodeMapper
-     */
-    private $phpDocNodeMapper;
-
-    /**
      * @var DoctrineAnnotationDecorator
      */
     private $doctrineAnnotationDecorator;
@@ -49,14 +43,12 @@ final class BetterPhpDocParser extends PhpDocParser
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
-        PhpDocNodeMapper $phpDocNodeMapper,
         TokenIteratorFactory $tokenIteratorFactory,
         DoctrineAnnotationDecorator $doctrineAnnotationDecorator
     ) {
         parent::__construct($typeParser, $constExprParser);
 
         $this->privatesCaller = new PrivatesCaller();
-        $this->phpDocNodeMapper = $phpDocNodeMapper;
         $this->doctrineAnnotationDecorator = $doctrineAnnotationDecorator;
         $this->tokenIteratorFactory = $tokenIteratorFactory;
     }

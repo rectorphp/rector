@@ -491,11 +491,11 @@ final class PhpDocInfo
 
         // has a single node with missing start_end
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $changedPhpNodeVisitor = new ChangedPhpDocNodeVisitor();
-        $phpDocNodeTraverser->addPhpDocNodeVisitor($changedPhpNodeVisitor);
+        $changedPhpDocNodeVisitor = new ChangedPhpDocNodeVisitor();
+        $phpDocNodeTraverser->addPhpDocNodeVisitor($changedPhpDocNodeVisitor);
         $phpDocNodeTraverser->traverse($this->phpDocNode);
 
-        return $changedPhpNodeVisitor->hasChanged();
+        return $changedPhpDocNodeVisitor->hasChanged();
     }
 
     /**

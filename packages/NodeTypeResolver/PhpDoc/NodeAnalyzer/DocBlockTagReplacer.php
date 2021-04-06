@@ -38,8 +38,6 @@ final class DocBlockTagReplacer
 
             unset($phpDocNode->children[$key]);
             $phpDocNode->children[] = new PhpDocTagNode($newTag, new GenericTagValueNode(''));
-//
-//            $phpDocInfo->markAsChanged();
         }
     }
 }

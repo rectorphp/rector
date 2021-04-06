@@ -7,7 +7,6 @@ namespace Rector\BetterPhpDocParser;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
-use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
@@ -19,11 +18,6 @@ use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisi
  */
 final class PhpDocNodeMapper
 {
-    /**
-     * @var TokenIteratorFactory
-     */
-    private $tokenIteratorFactory;
-
     /**
      * @var PhpDocNodeVisitorInterface[]
      */
@@ -42,23 +36,21 @@ final class PhpDocNodeMapper
     /**
      * @var CloningPhpDocNodeVisitor
      */
-    private $cloningNodeVisitor;
+    private $cloningPhpDocNodeVisitor;
 
     /**
      * @param BasePhpDocNodeVisitorInterface[] $phpDocNodeVisitors
      */
     public function __construct(
-        TokenIteratorFactory $tokenIteratorFactory,
         CurrentTokenIteratorProvider $currentTokenIteratorProvider,
         ParentConnectingPhpDocNodeVisitor $parentConnectingPhpDocNodeVisitor,
-        CloningPhpDocNodeVisitor $cloningNodeVisitor,
+        CloningPhpDocNodeVisitor $cloningPhpDocNodeVisitor,
         array $phpDocNodeVisitors
     ) {
-        $this->tokenIteratorFactory = $tokenIteratorFactory;
         $this->phpDocNodeVisitors = $phpDocNodeVisitors;
         $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;
         $this->parentConnectingPhpDocNodeVisitor = $parentConnectingPhpDocNodeVisitor;
-        $this->cloningNodeVisitor = $cloningNodeVisitor;
+        $this->cloningPhpDocNodeVisitor = $cloningPhpDocNodeVisitor;
     }
 
     public function transform(PhpDocNode $phpDocNode, BetterTokenIterator $betterTokenIterator): void
@@ -70,7 +62,7 @@ final class PhpDocNodeMapper
         $parentPhpDocNodeTraverser->traverse($phpDocNode);
 
         $cloningPhpDocNodeTraverser = new PhpDocNodeTraverser();
-        $cloningPhpDocNodeTraverser->addPhpDocNodeVisitor($this->cloningNodeVisitor);
+        $cloningPhpDocNodeTraverser->addPhpDocNodeVisitor($this->cloningPhpDocNodeVisitor);
         $cloningPhpDocNodeTraverser->traverse($phpDocNode);
 
         $phpDocNodeTraverser = new PhpDocNodeTraverser();

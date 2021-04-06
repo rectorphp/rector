@@ -33,9 +33,9 @@ final class IntersectionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisi
             return null;
         }
 
-        $bracketsAwareUnionTypeNode = new BracketsAwareIntersectionTypeNode($node->types);
-        $this->attributeMirrorer->mirror($node, $bracketsAwareUnionTypeNode);
+        $bracketsAwareIntersectionTypeNode = new BracketsAwareIntersectionTypeNode($node->types);
+        $this->attributeMirrorer->mirror($node, $bracketsAwareIntersectionTypeNode);
 
-        return $bracketsAwareUnionTypeNode;
+        return $bracketsAwareIntersectionTypeNode;
     }
 }

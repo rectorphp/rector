@@ -53,7 +53,7 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         }
 
         $phpParserNode = $this->currentNodeProvider->getNode();
-        if ($phpParserNode === null) {
+        if (! $phpParserNode instanceof \PhpParser\Node) {
             throw new ShouldNotHappenException();
         }
 
