@@ -193,6 +193,10 @@ CODE_SAMPLE
         Expression $expression,
         Expr $expr
     ): ?Return_ {
+        if (count($types) > 2) {
+            return null;
+        }
+
         if ($types[0] instanceof FullyQualifiedObjectType && $types[1] instanceof NullType && $className === $types[0]->getClassName()) {
             return $this->removeAndReturn($return, $expression, $expr);
         }

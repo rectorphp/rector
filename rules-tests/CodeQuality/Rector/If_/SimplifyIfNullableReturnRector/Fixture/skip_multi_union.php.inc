@@ -6,7 +6,7 @@ final class SkipMultiUnion
 {
     public function run()
     {
-        /** @var \stdClass|\DateTime|null $value */
+        /** @var \stdClass|null|\DateTime $value */
         $value = $this->foo->bar();
         if (! $value instanceof \stdClass) {
             return null;
