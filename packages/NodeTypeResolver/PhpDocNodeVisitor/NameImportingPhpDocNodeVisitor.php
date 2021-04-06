@@ -92,12 +92,12 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     }
 
     private function processFqnNameImport(
-        PhpParserNode $node,
+        PhpParserNode $phpParserNode,
         IdentifierTypeNode $identifierTypeNode,
         FullyQualifiedObjectType $fullyQualifiedObjectType
     ): ?IdentifierTypeNode {
         if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType(
-            $node,
+            $phpParserNode,
             $fullyQualifiedObjectType
         )) {
             return $identifierTypeNode;
@@ -110,15 +110,15 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         }
 
         // should skip because its already used
-        if ($this->useNodesToAddCollector->isShortImported($node, $fullyQualifiedObjectType)) {
-            if ($this->useNodesToAddCollector->isImportShortable($node, $fullyQualifiedObjectType)) {
+        if ($this->useNodesToAddCollector->isShortImported($phpParserNode, $fullyQualifiedObjectType)) {
+            if ($this->useNodesToAddCollector->isImportShortable($phpParserNode, $fullyQualifiedObjectType)) {
                 return new IdentifierTypeNode($fullyQualifiedObjectType->getShortName());
             }
 
             return $identifierTypeNode;
         }
 
-        $this->useNodesToAddCollector->addUseImport($node, $fullyQualifiedObjectType);
+        $this->useNodesToAddCollector->addUseImport($phpParserNode, $fullyQualifiedObjectType);
 
         return new IdentifierTypeNode($fullyQualifiedObjectType->getShortName());
     }
