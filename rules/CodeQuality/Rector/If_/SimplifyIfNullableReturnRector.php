@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -111,10 +112,11 @@ CODE_SAMPLE
         }
 
         $previousAssign = $previous->expr;
-        if (! $previousAssign instanceof Assign && $this->nodeComparator->areNodesEqual(
-            $previousAssign->var,
-            $variable
-        )) {
+        if (! $previousAssign instanceof Assign) {
+            return null;
+        }
+
+        if ($this->nodeComparator->areNodesEqual($previousAssign->var, $variable)) {
             return null;
         }
 
@@ -124,13 +126,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $variableType = $this->nodeTypeResolver->resolve($previousAssign->var);
-        $exprType = $this->nodeTypeResolver->resolve($previousAssign->expr);
-
-        if ($exprType instanceof UnionType) {
-            $variableType = $exprType;
-        }
-
+        $variableType = $this->getVariableType($previousAssign);
         if (! $variableType instanceof UnionType) {
             return null;
         }
@@ -141,22 +137,48 @@ CODE_SAMPLE
         }
 
         $className = $class->toString();
+        return $this->processSimplifyNullableReturn($types, $className, $next, $previous, $previousAssign->expr);
+    }
+
+    private function getVariableType(Assign $assign): Type
+    {
+        $variableType = $this->nodeTypeResolver->resolve($assign->var);
+        $exprType = $this->nodeTypeResolver->resolve($assign->expr);
+
+        if ($exprType instanceof UnionType) {
+            $variableType = $exprType;
+        }
+
+        return $variableType;
+    }
+
+    /**
+     * @param Type[] $types
+     */
+    private function processSimplifyNullableReturn(
+        array $types,
+        string $className,
+        Return_ $return,
+        Expression $expression,
+        Expr $expr
+    ): ?Return_
+    {
         if ($types[0] instanceof FullyQualifiedObjectType && $types[1] instanceof NullType && $className === $types[0]->getClassName()) {
-            return $this->processSimplifyNullableReturn($next, $previous, $previousAssign->expr);
+            return $this->removeAndReturn($return, $expression, $expr);
         }
 
         if ($types[0] instanceof NullType && $types[1] instanceof FullyQualifiedObjectType && $className === $types[1]->getClassName()) {
-            return $this->processSimplifyNullableReturn($next, $previous, $previousAssign->expr);
+            return $this->removeAndReturn($return, $expression, $expr);
         }
 
         if ($types[0] instanceof ObjectType && $types[1] instanceof NullType && $className === $types[0]->getClassName()) {
-            return $this->processSimplifyNullableReturn($next, $previous, $previousAssign->expr);
+            return $this->removeAndReturn($return, $expression, $expr);
         }
 
         return null;
     }
 
-    private function processSimplifyNullableReturn(Return_ $return, Expression $expression, Expr $expr): Return_
+    private function removeAndReturn(Return_ $return, Expression $expression, Expr $expr): Return_
     {
         $this->removeNode($return);
         $this->removeNode($expression);
