@@ -20,6 +20,7 @@ use PHPStan\Type\UnionType;
 use Rector\CodeQuality\TypeResolver\AssignVariableTypeResolver;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -40,10 +41,16 @@ final class SimplifyIfNullableReturnRector extends AbstractRector
      */
     private $assignVariableTypeResolver;
 
-    public function __construct(IfManipulator $ifManipulator, AssignVariableTypeResolver $assignVariableTypeResolver)
+    /**
+     * @var VarTagRemover
+     */
+    private $varTagRemover;
+
+    public function __construct(IfManipulator $ifManipulator, AssignVariableTypeResolver $assignVariableTypeResolver, VarTagRemover $varTagRemover)
     {
         $this->ifManipulator = $ifManipulator;
         $this->assignVariableTypeResolver = $assignVariableTypeResolver;
+        $this->varTagRemover = $varTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -150,7 +157,7 @@ CODE_SAMPLE
         $className = $class->toString();
         $types = $variableType->getTypes();
 
-        return $this->processSimplifyNullableReturn($types, $className, $next, $previous, $previousAssign->expr);
+        return $this->processSimplifyNullableReturn($variableType, $types, $className, $next, $previous, $previousAssign->expr);
     }
 
     private function isIfStmtReturnIncorrect(Expr $expr, Expr $variable, Return_ $return): bool
@@ -187,6 +194,7 @@ CODE_SAMPLE
      * @param Type[] $types
      */
     private function processSimplifyNullableReturn(
+        UnionType $unionType,
         array $types,
         string $className,
         Return_ $return,
@@ -198,18 +206,18 @@ CODE_SAMPLE
         }
 
         if ($types[0] instanceof FullyQualifiedObjectType && $types[1] instanceof NullType && $className === $types[0]->getClassName()) {
-            return $this->removeAndReturn($return, $expression, $expr);
+            return $this->removeAndReturn($return, $expression, $expr, $unionType);
         }
 
         if ($types[0] instanceof NullType && $types[1] instanceof FullyQualifiedObjectType && $className === $types[1]->getClassName()) {
-            return $this->removeAndReturn($return, $expression, $expr);
+            return $this->removeAndReturn($return, $expression, $expr, $unionType);
         }
 
         if ($this->isNotTypedNullable($types, $className)) {
             return null;
         }
 
-        return $this->removeAndReturn($return, $expression, $expr);
+        return $this->removeAndReturn($return, $expression, $expr, $unionType);
     }
 
     /**
@@ -228,12 +236,16 @@ CODE_SAMPLE
         return $className !== $types[0]->getClassName();
     }
 
-    private function removeAndReturn(Return_ $return, Expression $expression, Expr $expr): Return_
+    private function removeAndReturn(Return_ $return, Expression $expression, Expr $expr, Type $type): Return_
     {
         $this->removeNode($return);
         $this->removeNode($expression);
 
-        return new Return_($expr);
+        $return = new Return_($expr);
+        $this->varTagRemover->removeVarPhpTagValueNodeIfNotComment($expression, $type);
+        $this->mirrorComments($return, $expression);
+
+        return $return;
     }
 
     private function shouldSkip(If_ $if): bool
