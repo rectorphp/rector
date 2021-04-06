@@ -2,17 +2,17 @@
 
 namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\Fixture;
 
-class Fixture
+class TruthyIf
 {
     public function run()
     {
         /** @var \stdClass|null $value */
         $value = $this->foo->bar();
-        if (! $value instanceof \stdClass) {
-            return null;
+        if ($value instanceof \stdClass) {
+            return $value;
         }
 
-        return $value;
+        return null;
     }
 }
 
@@ -22,11 +22,17 @@ class Fixture
 
 namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\Fixture;
 
-class Fixture
+class TruthyIf
 {
     public function run()
     {
-        return $this->foo->bar();
+        /** @var \stdClass|null $value */
+        $value = $this->foo->bar();
+        if ($value instanceof \stdClass) {
+            return $value;
+        }
+
+        return null;
     }
 }
 

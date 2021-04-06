@@ -2,14 +2,14 @@
 
 namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\Fixture;
 
-class Fixture
+class SkipNoReturn
 {
     public function run()
     {
         /** @var \stdClass|null $value */
         $value = $this->foo->bar();
         if (! $value instanceof \stdClass) {
-            return null;
+            echo 'statement';
         }
 
         return $value;
@@ -17,17 +17,4 @@ class Fixture
 }
 
 ?>
------
-<?php
 
-namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\Fixture;
-
-class Fixture
-{
-    public function run()
-    {
-        return $this->foo->bar();
-    }
-}
-
-?>
