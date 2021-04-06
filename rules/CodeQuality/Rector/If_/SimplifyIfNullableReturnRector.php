@@ -154,7 +154,11 @@ CODE_SAMPLE
 
     private function isIfStmtReturnCorrect(Expr $expr, Expr $variable, Return_ $return): bool
     {
-        if ($expr instanceof BooleanNot && $return->expr instanceof Expr && ! $this->valueResolver->isNull(
+        if (! $return->expr instanceof Expr) {
+            return false;
+        }
+
+        if ($expr instanceof BooleanNot && ! $this->valueResolver->isNull(
             $return->expr
         )) {
             return true;
@@ -165,11 +169,15 @@ CODE_SAMPLE
 
     private function isNextReturnCorrect(Expr $expr, Expr $variable, Return_ $return): bool
     {
+        if (! $return->expr instanceof Expr) {
+            return false;
+        }
+
         if ($expr instanceof BooleanNot && ! $this->nodeComparator->areNodesEqual($return->expr, $variable)) {
             return true;
         }
 
-        return $expr instanceof Instanceof_ && $return->expr instanceof Expr && ! $this->valueResolver->isNull(
+        return $expr instanceof Instanceof_ && ! $this->valueResolver->isNull(
             $return->expr
         );
     }
