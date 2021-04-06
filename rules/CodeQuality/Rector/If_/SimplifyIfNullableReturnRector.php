@@ -93,8 +93,10 @@ CODE_SAMPLE
             return true;
         }
 
-        $cond = $if->cond;
-        if ($cond instanceof BooleanNot) {
+        $cond   = $if->cond;
+        /** @var Return_ $return */
+        $return = $if->stmts[0];
+        if ($cond instanceof BooleanNot && ! $this->valueResolver->isNull($return->expr)) {
             return true;
         }
 
