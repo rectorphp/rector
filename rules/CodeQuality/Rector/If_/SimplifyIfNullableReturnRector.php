@@ -7,12 +7,10 @@ namespace Rector\CodeQuality\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -96,18 +94,13 @@ CODE_SAMPLE
             return true;
         }
 
-        $cond   = $if->cond;
+        $cond = $if->cond;
         /** @var Return_ $return */
         $return = $if->stmts[0];
 
         if ($cond instanceof BooleanNot && $this->valueResolver->isNull($return->expr)) {
             return true;
         }
-
-        if ($cond instanceof Instanceof_ && $this->valueResolver->isNull($return->expr)) {
-            return true;
-        }
-
-        return false;
+        return $cond instanceof Instanceof_ && $this->valueResolver->isNull($return->expr);
     }
 }
