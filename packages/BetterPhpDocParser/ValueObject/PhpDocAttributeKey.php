@@ -14,12 +14,12 @@ final class PhpDocAttributeKey
     /**
      * @var string
      */
-    public const PARENT = 'parent';
+    public const PARENT = \Symplify\SimplePhpDocParser\ValueObject\PhpDocAttributeKey::PARENT;
 
     /**
      * @var string
      */
-    public const LAST_TOKEN_POSITION = 'last_token_position';
+    public const LAST_PHP_DOC_TOKEN_POSITION = 'last_token_position';
 
     /**
      * @var string

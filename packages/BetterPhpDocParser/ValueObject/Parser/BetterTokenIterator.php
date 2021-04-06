@@ -56,7 +56,7 @@ final class BetterTokenIterator extends TokenIterator
 
     public function isTokenTypeOnPosition(int $tokenType, int $position): bool
     {
-        $tokens = $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
+        $tokens = $this->getTokens();
         $token = $tokens[$position] ?? null;
 
         if ($token === null) {
@@ -81,7 +81,7 @@ final class BetterTokenIterator extends TokenIterator
             throw new ShouldNotHappenException('Arguments are flipped');
         }
 
-        $tokens = $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
+        $tokens = $this->getTokens();
 
         $content = '';
 
@@ -102,10 +102,8 @@ final class BetterTokenIterator extends TokenIterator
 
     public function print(): string
     {
-        $tokens = $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
-
         $content = '';
-        foreach ($tokens as $token) {
+        foreach ($this->getTokens() as $token) {
             $content .= $token[0];
         }
 
@@ -116,7 +114,7 @@ final class BetterTokenIterator extends TokenIterator
     {
         $this->pushSavePoint();
 
-        $tokens = $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
+        $tokens = $this->getTokens();
         $index = $this->privatesAccessor->getPrivateProperty($this, self::INDEX);
 
         // does next token exist?
@@ -135,5 +133,18 @@ final class BetterTokenIterator extends TokenIterator
     public function currentPosition(): int
     {
         return $this->privatesAccessor->getPrivateProperty($this, self::INDEX);
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getTokens(): array
+    {
+        return $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
+    }
+
+    public function count(): int
+    {
+        return count($this->getTokens());
     }
 }

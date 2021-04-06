@@ -277,7 +277,7 @@ final class PhpDocInfoPrinter
     private function printEnd(string $output): string
     {
         $lastTokenPosition = $this->phpDocNode->getAttribute(
-            PhpDocAttributeKey::LAST_TOKEN_POSITION
+            PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION
         ) ?: $this->currentTokenPosition;
         if ($lastTokenPosition === 0) {
             $lastTokenPosition = 1;
@@ -294,7 +294,7 @@ final class PhpDocInfoPrinter
         $removedStartAndEnds = $this->removeNodesStartAndEndResolver->resolve(
             $this->phpDocInfo->getOriginalPhpDocNode(),
             $this->phpDocNode,
-            $this->tokens
+            $this->token
         );
 
         foreach ($removedStartAndEnds as $removedStartAndEnd) {
@@ -345,8 +345,8 @@ final class PhpDocInfoPrinter
         }
 
         $startTokenPosition = $startAndEnd->getStart();
-        $tokens = $this->phpDocInfo->getTokens();
 
+        $tokens = $this->phpDocInfo->getTokens();
         if (! isset($tokens[$startTokenPosition - 1])) {
             return;
         }
