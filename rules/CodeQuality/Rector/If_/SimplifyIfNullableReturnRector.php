@@ -138,6 +138,10 @@ CODE_SAMPLE
             return $this->processSimplifyNullableReturn($next, $previous, $previousAssign->expr);
         }
 
+        if ($types[0] instanceof NullType && $types[1] instanceof FullyQualifiedObjectType) {
+            return $this->processSimplifyNullableReturn($next, $previous, $previousAssign->expr);
+        }
+
         if ($types[0] instanceof ObjectType && $types[1] instanceof NullType) {
             return $this->processSimplifyNullableReturn($next, $previous, $previousAssign->expr);
         }
