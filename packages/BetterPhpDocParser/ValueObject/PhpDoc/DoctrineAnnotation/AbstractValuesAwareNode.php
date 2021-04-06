@@ -78,7 +78,7 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         unset($this->values[$quotedKey]);
 
         // invoke reprint
-        $this->setAttribute(PhpDocAttributeKey::START_AND_END, null);
+        $this->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
     }
 
     /**
@@ -119,7 +119,7 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         $this->values[$key] = $value;
 
         // invoke reprint
-        $this->setAttribute(PhpDocAttributeKey::START_AND_END, null);
+        $this->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
     }
 
     /**
@@ -149,6 +149,9 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
 
         $this->values[0] = $value;
         $this->hasChanged = true;
+
+        // invoke reprint
+        $this->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
     }
 
     /**

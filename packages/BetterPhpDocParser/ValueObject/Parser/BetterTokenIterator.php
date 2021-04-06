@@ -16,6 +16,11 @@ final class BetterTokenIterator extends TokenIterator
     private const TOKENS = 'tokens';
 
     /**
+     * @var string
+     */
+    private const INDEX = 'index';
+
+    /**
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
@@ -28,8 +33,8 @@ final class BetterTokenIterator extends TokenIterator
         $this->privatesAccessor = new PrivatesAccessor();
 
         if ($tokens === []) {
-            $this->privatesAccessor->setPrivateProperty($this, 'tokens', []);
-            $this->privatesAccessor->setPrivateProperty($this, 'index', 0);
+            $this->privatesAccessor->setPrivateProperty($this, self::TOKENS, []);
+            $this->privatesAccessor->setPrivateProperty($this, self::INDEX, 0);
         } else {
             parent::__construct($tokens, $index);
         }
@@ -47,6 +52,18 @@ final class BetterTokenIterator extends TokenIterator
         }
 
         return false;
+    }
+
+    public function isTokenTypeOnPosition(int $tokenType, int $position): bool
+    {
+        $tokens = $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
+        $token = $tokens[$position] ?? null;
+
+        if ($token === null) {
+            return false;
+        }
+
+        return $token[1] === $tokenType;
     }
 
     public function isNextTokenType(int $tokenType): bool
@@ -100,7 +117,7 @@ final class BetterTokenIterator extends TokenIterator
         $this->pushSavePoint();
 
         $tokens = $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
-        $index = $this->privatesAccessor->getPrivateProperty($this, 'index');
+        $index = $this->privatesAccessor->getPrivateProperty($this, self::INDEX);
 
         // does next token exist?
         $nextIndex = $index + 1;
@@ -117,6 +134,6 @@ final class BetterTokenIterator extends TokenIterator
 
     public function currentPosition(): int
     {
-        return $this->privatesAccessor->getPrivateProperty($this, 'index');
+        return $this->privatesAccessor->getPrivateProperty($this, self::INDEX);
     }
 }

@@ -19,13 +19,14 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
+use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 /**
  * @template TNode as \PHPStan\PhpDocParser\Ast\Node
@@ -138,13 +139,6 @@ final class PhpDocInfo
         $this->phpDocNode->children[] = $phpDocChildNode;
         // to give node more space
         $this->makeMultiLined();
-        $this->markAsChanged();
-    }
-
-    public function addTagValueNodeWithShortName(ShortNameAwareTagInterface $shortNameAwareTag): void
-    {
-        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode($shortNameAwareTag->getShortName(), $shortNameAwareTag);
-        $this->addPhpDocTagNode($spacelessPhpDocTagNode);
     }
 
     public function getPhpDocNode(): PhpDocNode
@@ -470,6 +464,11 @@ final class PhpDocInfo
         return $this->hasByNames(['inheritdoc', 'inheritDoc']);
     }
 
+    /**
+     * @deprecated
+     * Should be handled by attributes of phpdoc node - if stard_and_end is missing in one of nodes, it has been changed
+     * Similar to missing original node in php-aprser
+     */
     public function markAsChanged(): void
     {
         $this->hasChanged = true;
@@ -486,7 +485,17 @@ final class PhpDocInfo
             return true;
         }
 
-        return $this->hasChanged;
+        if ($this->hasChanged) {
+            return true;
+        }
+
+        // has a single node with missing start_end
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $changedPhpNodeVisitor = new ChangedPhpDocNodeVisitor();
+        $phpDocNodeTraverser->addPhpDocNodeVisitor($changedPhpNodeVisitor);
+        $phpDocNodeTraverser->traverse($this->phpDocNode);
+
+        return $changedPhpNodeVisitor->hasChanged();
     }
 
     /**

@@ -6,12 +6,23 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
+use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
-final class CallableTypePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
+final class CallableTypePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
 {
+    /**
+     * @var AttributeMirrorer
+     */
+    private $attributeMirrorer;
+
+    public function __construct(AttributeMirrorer $attributeMirrorer)
+    {
+        $this->attributeMirrorer = $attributeMirrorer;
+    }
+
     public function enterNode(Node $node): ?Node
     {
         if (! $node instanceof CallableTypeNode) {
@@ -28,8 +39,7 @@ final class CallableTypePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             $node->returnType
         );
 
-        $parent = $node->getAttribute(PhpDocAttributeKey::PARENT);
-        $spacingAwareCallableTypeNode->setAttribute(PhpDocAttributeKey::PARENT, $parent);
+        $this->attributeMirrorer->mirror($node, $spacingAwareCallableTypeNode);
 
         return $spacingAwareCallableTypeNode;
     }

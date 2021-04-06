@@ -9,12 +9,24 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 
 final class AttributeMirrorer
 {
+    /**
+     * @var string[]
+     */
+    private const ATTRIBUTES_TO_MIRROR = [
+        PhpDocAttributeKey::PARENT,
+        PhpDocAttributeKey::START_AND_END,
+        PhpDocAttributeKey::ORIG_NODE,
+    ];
+
     public function mirror(Node $oldNode, Node $newNode): void
     {
-        $parent = $oldNode->getAttribute(PhpDocAttributeKey::PARENT);
-        $newNode->setAttribute(PhpDocAttributeKey::PARENT, $parent);
+        foreach (self::ATTRIBUTES_TO_MIRROR as $attributeToMirror) {
+            if (! $oldNode->hasAttribute($attributeToMirror)) {
+                continue;
+            }
 
-        $startAndEnd = $oldNode->getAttribute(PhpDocAttributeKey::START_AND_END);
-        $newNode->setAttribute(PhpDocAttributeKey::PARENT, $startAndEnd);
+            $attributeValue = $oldNode->getAttribute($attributeToMirror);
+            $newNode->setAttribute($attributeToMirror, $attributeValue);
+        }
     }
 }

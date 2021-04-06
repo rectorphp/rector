@@ -12,6 +12,11 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class TokenIteratorFactory
 {
     /**
+     * @var string
+     */
+    private const INDEX = 'index';
+
+    /**
      * @var Lexer
      */
     private $lexer;
@@ -44,7 +49,7 @@ final class TokenIteratorFactory
 
         // keep original position
         $currentIndex = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'index');
-        $this->privatesAccessor->setPrivateProperty($betterTokenIterator, 'index', $currentIndex);
+        $this->privatesAccessor->setPrivateProperty($betterTokenIterator, self::INDEX, $currentIndex);
 
         return $betterTokenIterator;
     }

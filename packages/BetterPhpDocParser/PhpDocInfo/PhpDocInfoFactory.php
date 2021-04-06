@@ -183,7 +183,7 @@ final class PhpDocInfoFactory
         array $tokens,
         Node $node
     ): PhpDocInfo {
-        $this->phpDocNodeMapper->transform($phpDocNode, $tokens);
+        $this->phpDocNodeMapper->transform($phpDocNode, new BetterTokenIterator($tokens));
 
         $phpDocInfo = new PhpDocInfo(
             $phpDocNode,

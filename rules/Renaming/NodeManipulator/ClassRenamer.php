@@ -17,7 +17,6 @@ use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocClassRenamer;
 use Rector\BetterPhpDocParser\ValueObject\NodeTypes;
@@ -28,7 +27,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
@@ -150,12 +148,7 @@ final class ClassRenamer
             return;
         }
 
-        foreach ($oldToNewClasses as $oldClass => $newClass) {
-            $oldClassType = new ObjectType($oldClass);
-            $newClassType = new FullyQualifiedObjectType($newClass);
-
-            $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldClassType, $newClassType, $node);
-        }
+        $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldToNewClasses);
 
         $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $phpDocInfo, $oldToNewClasses);
     }

@@ -9,7 +9,6 @@ use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 
 final class PhpDocClassRenamer
 {
@@ -59,13 +58,7 @@ final class PhpDocClassRenamer
             $callback[0] = $newClass;
 
             $assertChoiceTagValueNode->changeValue('callback', $callback);
-            $phpDocInfo->markAsChanged();
             break;
-        }
-
-        if ($phpDocInfo->hasChanged()) {
-            // invoke override
-            $assertChoiceTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, null);
         }
     }
 
@@ -106,7 +99,7 @@ final class PhpDocClassRenamer
             if ($className) {
                 if ($className === $oldClass) {
                     $doctrineAnnotationTagValueNode->changeSilentValue($newClass);
-                    $phpDocInfo->markAsChanged();
+//                    $phpDocInfo->markAsChanged();
                     continue;
                 }
 
@@ -116,21 +109,14 @@ final class PhpDocClassRenamer
                 }
 
                 $doctrineAnnotationTagValueNode->changeSilentValue($newContent);
-                $phpDocInfo->markAsChanged();
                 continue;
             }
 
             $currentType = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');
             if ($currentType === $oldClass) {
                 $doctrineAnnotationTagValueNode->changeValue('type', $newClass);
-                $phpDocInfo->markAsChanged();
                 continue;
             }
-        }
-
-        if ($phpDocInfo->hasChanged()) {
-            // invoke override
-            $doctrineAnnotationTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, null);
         }
     }
 
@@ -163,12 +149,6 @@ final class PhpDocClassRenamer
             }
 
             $doctrineAnnotationTagValueNode->changeValue($classKey, $newClass);
-            $phpDocInfo->markAsChanged();
-        }
-
-        if ($phpDocInfo->hasChanged()) {
-            // invoke override
-            $doctrineAnnotationTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, null);
         }
     }
 }

@@ -16,8 +16,10 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
+use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfoPrinter\PhpDocInfoPrinterTest
@@ -105,14 +107,29 @@ final class PhpDocInfoPrinter
      */
     private $removeNodesStartAndEndResolver;
 
+    /**
+     * @var ChangedPhpDocNodeVisitor
+     */
+    private $changedPhpDocNodeVisitor;
+
+    /**
+     * @var PhpDocNodeTraverser
+     */
+    private $changedPhpdocNodeTraverser;
+
     public function __construct(
         EmptyPhpDocDetector $emptyPhpDocDetector,
         DocBlockInliner $docBlockInliner,
-        RemoveNodesStartAndEndResolver $removeNodesStartAndEndResolver
+        RemoveNodesStartAndEndResolver $removeNodesStartAndEndResolver,
+        ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor
     ) {
         $this->emptyPhpDocDetector = $emptyPhpDocDetector;
         $this->docBlockInliner = $docBlockInliner;
         $this->removeNodesStartAndEndResolver = $removeNodesStartAndEndResolver;
+        $this->changedPhpDocNodeVisitor = $changedPhpDocNodeVisitor;
+
+        $this->changedPhpdocNodeTraverser = new PhpDocNodeTraverser();
+        $this->changedPhpdocNodeTraverser->addPhpDocNodeVisitor($this->changedPhpDocNodeVisitor);
     }
 
     public function printNew(PhpDocInfo $phpDocInfo): string
@@ -171,8 +188,6 @@ final class PhpDocInfoPrinter
             return '';
         }
 
-        $this->currentTokenPosition = 0;
-
         $output = '';
 
         // node output
@@ -207,13 +222,12 @@ final class PhpDocInfoPrinter
     ): string {
         $output = '';
 
+        $shouldReprintChildNode = $this->shouldReprint($phpDocChildNode);
+
         if ($phpDocChildNode instanceof PhpDocTagNode) {
             if ($phpDocChildNode->value instanceof ParamTagValueNode || $phpDocChildNode->value instanceof ThrowsTagValueNode || $phpDocChildNode->value instanceof VarTagValueNode || $phpDocChildNode->value instanceof ReturnTagValueNode || $phpDocChildNode->value instanceof PropertyTagValueNode) {
-                $typeNode = $phpDocChildNode->value->type;
-                $typeStartAndEnd = $typeNode->getAttribute(PhpDocAttributeKey::START_AND_END);
-
                 // the type has changed → reprint
-                if ($typeStartAndEnd === null) {
+                if ($shouldReprintChildNode) {
                     $phpDocChildNodeStartEnd = $phpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
                     // bump the last position of token after just printed node
                     if ($phpDocChildNodeStartEnd instanceof StartAndEnd) {
@@ -243,15 +257,7 @@ final class PhpDocInfoPrinter
         /** @var StartAndEnd|null $startAndEnd */
         $startAndEnd = $phpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
 
-        $shouldReprint = false;
-        if ($phpDocChildNode instanceof PhpDocTagNode) {
-            $phpDocTagValueNodeStartAndEnd = $phpDocChildNode->value->getAttribute(PhpDocAttributeKey::START_AND_END);
-            if (! $phpDocTagValueNodeStartAndEnd instanceof StartAndEnd) {
-                $shouldReprint = true;
-            }
-        }
-
-        if ($startAndEnd instanceof StartAndEnd && ! $shouldReprint) {
+        if ($startAndEnd instanceof StartAndEnd && ! $shouldReprintChildNode) {
             $isLastToken = $nodeCount === $key;
 
             // correct previously changed node
@@ -363,5 +369,11 @@ final class PhpDocInfoPrinter
         }
 
         $this->currentTokenPosition = $startTokenPosition;
+    }
+
+    private function shouldReprint(PhpDocChildNode $phpDocChildNode): bool
+    {
+        $this->changedPhpdocNodeTraverser->traverse($phpDocChildNode);
+        return $this->changedPhpDocNodeVisitor->hasChanged();
     }
 }

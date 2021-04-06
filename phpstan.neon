@@ -557,8 +557,18 @@ parameters:
 
         -
             message: '#Do not inherit from abstract class, better use composition#'
-            path: packages/BetterPhpDocParser/PhpDocNodeVisitor/ParamPhpDocNodeVisitor.php
+            paths:
+                 - packages/BetterPhpDocParser/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
+                 - packages/NodeTypeResolver/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
+                 - packages/BetterPhpDocParser/PhpDocNodeVisitor/ChangedPhpNodeVisitor.php
 
         -
-            message: '#Do not inherit from abstract class, better use composition#'
-            path: packages/BetterPhpDocParser/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
+            message: '#Do not use setter on a service#'
+            paths:
+                 - packages/NodeTypeResolver/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
+
+        # known type
+        - '#Parameter \#3 \$pseudoNamespaceToNamespace of method Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\UnderscoreRenamePhpDocNodeVisitor\:\:shouldSkip\(\) expects Rector\\Renaming\\ValueObject\\PseudoNamespaceToNamespace, Rector\\Renaming\\ValueObject\\PseudoNamespaceToNamespace\|null given#'
+
+        # known types
+        - '#Parameter (.*?) expects PhpParser\\Node, PhpParser\\Node\|null given#'

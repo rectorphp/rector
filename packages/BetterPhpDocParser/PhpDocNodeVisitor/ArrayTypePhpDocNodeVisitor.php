@@ -7,10 +7,11 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
+use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
-final class ArrayTypePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
+final class ArrayTypePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
 {
     /**
      * @var AttributeMirrorer

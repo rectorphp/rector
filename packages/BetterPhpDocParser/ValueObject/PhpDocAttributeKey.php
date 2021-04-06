@@ -20,4 +20,9 @@ final class PhpDocAttributeKey
      * @var string
      */
     public const LAST_TOKEN_POSITION = 'last_token_position';
+
+    /**
+     * @var string
+     */
+    public const ORIG_NODE = 'orig_node';
 }

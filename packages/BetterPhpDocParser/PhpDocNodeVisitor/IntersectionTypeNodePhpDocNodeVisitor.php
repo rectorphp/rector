@@ -6,12 +6,23 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
+use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
 use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
-final class IntersectionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
+final class IntersectionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
 {
+    /**
+     * @var AttributeMirrorer
+     */
+    private $attributeMirrorer;
+
+    public function __construct(AttributeMirrorer $attributeMirrorer)
+    {
+        $this->attributeMirrorer = $attributeMirrorer;
+    }
+
     public function enterNode(Node $node): ?Node
     {
         if (! $node instanceof IntersectionTypeNode) {
@@ -23,9 +34,7 @@ final class IntersectionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisi
         }
 
         $bracketsAwareUnionTypeNode = new BracketsAwareIntersectionTypeNode($node->types);
-
-        $parent = $node->getAttribute(PhpDocAttributeKey::PARENT);
-        $bracketsAwareUnionTypeNode->setAttribute(PhpDocAttributeKey::PARENT, $parent);
+        $this->attributeMirrorer->mirror($node, $bracketsAwareUnionTypeNode);
 
         return $bracketsAwareUnionTypeNode;
     }

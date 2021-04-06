@@ -9,7 +9,7 @@ class SkipReturnClassString
 {
     /**
      * @return class-string[]
-      */
+     */
     public function getNodeTypes(): array
     {
         return [ClassMethod::class, Function_::class];

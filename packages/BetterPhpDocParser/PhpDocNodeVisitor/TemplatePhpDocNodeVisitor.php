@@ -6,6 +6,8 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
+use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
+use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\SpacingAwareTemplateTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
@@ -13,16 +15,24 @@ use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
-final class TemplatePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
+final class TemplatePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
 {
     /**
      * @var CurrentTokenIteratorProvider
      */
     private $currentTokenIteratorProvider;
 
-    public function __construct(CurrentTokenIteratorProvider $currentTokenIteratorProvider)
-    {
+    /**
+     * @var AttributeMirrorer
+     */
+    private $attributeMirrorer;
+
+    public function __construct(
+        CurrentTokenIteratorProvider $currentTokenIteratorProvider,
+        AttributeMirrorer $attributeMirrorer
+    ) {
         $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;
+        $this->attributeMirrorer = $attributeMirrorer;
     }
 
     public function enterNode(Node $node): ?Node
@@ -51,8 +61,7 @@ final class TemplatePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             $docContent
         );
 
-        $startAndEnd = $node->getAttribute(PhpDocAttributeKey::START_AND_END);
-        $spacingAwareTemplateTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
+        $this->attributeMirrorer->mirror($node, $spacingAwareTemplateTagValueNode);
 
         return $spacingAwareTemplateTagValueNode;
     }

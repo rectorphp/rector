@@ -27,8 +27,6 @@ final class VarTagValueNodeRenamer
         $varTagValueNode->variableName = '$' . $expectedName;
 
         // invoke node reprint - same as in php-parser
-        $varTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, null);
-
-        $phpDocInfo->markAsChanged();
+        $varTagValueNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
     }
 }

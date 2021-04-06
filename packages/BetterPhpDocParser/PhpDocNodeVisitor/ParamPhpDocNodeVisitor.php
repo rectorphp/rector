@@ -6,12 +6,23 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
+use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
-final class ParamPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
+final class ParamPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
 {
+    /**
+     * @var AttributeMirrorer
+     */
+    private $attributeMirrorer;
+
+    public function __construct(AttributeMirrorer $attributeMirrorer)
+    {
+        $this->attributeMirrorer = $attributeMirrorer;
+    }
+
     public function enterNode(Node $node): ?Node
     {
         if (! $node instanceof ParamTagValueNode) {
@@ -26,11 +37,7 @@ final class ParamPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             $node->type, $node->isVariadic, $node->parameterName, $node->description
         );
 
-        $parent = $node->getAttribute(PhpDocAttributeKey::PARENT);
-        $variadicAwareParamTagValueNode->setAttribute(PhpDocAttributeKey::PARENT, $parent);
-
-        $startAndEnd = $node->getAttribute(PhpDocAttributeKey::START_AND_END);
-        $variadicAwareParamTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
+        $this->attributeMirrorer->mirror($node, $variadicAwareParamTagValueNode);
 
         return $variadicAwareParamTagValueNode;
     }

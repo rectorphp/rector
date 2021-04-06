@@ -4,31 +4,24 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
-use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 
 final class BracketsAwareUnionTypeNode extends UnionTypeNode
 {
     /**
-     * @var string
-     * @see https://regex101.com/r/Hwk7Cg/1
-     */
-    private const BRACKET_WRAPPING_REGEX = '#^\((.*?)\)#';
-
-    /**
      * @var bool
      */
-    private $isWrappedWithBrackets = false;
+    private $isWrappedInBrackets = false;
 
     /**
      * @param TypeNode[] $types
      */
-    public function __construct(array $types, string $originalContent = '')
+    public function __construct(array $types, bool $isWrappedInBrackets = false)
     {
         parent::__construct($types);
 
-        $this->isWrappedWithBrackets = (bool) Strings::match($originalContent, self::BRACKET_WRAPPING_REGEX);
+        $this->isWrappedInBrackets = $isWrappedInBrackets;
     }
 
     /**
@@ -36,15 +29,15 @@ final class BracketsAwareUnionTypeNode extends UnionTypeNode
      */
     public function __toString(): string
     {
-        if (! $this->isWrappedWithBrackets) {
+        if (! $this->isWrappedInBrackets) {
             return implode('|', $this->types);
         }
 
         return '(' . implode('|', $this->types) . ')';
     }
 
-    public function isWrappedWithBrackets(): bool
+    public function isWrappedInBrackets(): bool
     {
-        return $this->isWrappedWithBrackets;
+        return $this->isWrappedInBrackets;
     }
 }
