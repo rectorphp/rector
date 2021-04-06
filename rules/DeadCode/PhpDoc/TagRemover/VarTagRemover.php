@@ -6,6 +6,7 @@ namespace Rector\DeadCode\PhpDoc\TagRemover;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
@@ -79,7 +80,7 @@ final class VarTagRemover
     }
 
     /**
-     * @param Property|Param $node
+     * @param Expression|Property|Param $node
      */
     public function removeVarPhpTagValueNodeIfNotComment(Node $node, Type $type): void
     {
