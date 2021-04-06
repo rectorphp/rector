@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -22,7 +22,7 @@ class SomeClass
 
 namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
