@@ -104,6 +104,16 @@ CODE_SAMPLE
         $variable = $instanceof->expr;
         $class = $instanceof->class;
 
+        /** @var Return_ $returnIfStmt */
+        $returnIfStmt = $node->stmts[0];
+        if ($cond instanceof BooleanNot && ! $this->valueResolver->isNull($returnIfStmt->expr)) {
+            return null;
+        }
+
+        if ($cond instanceof Instanceof_ && ! $this->nodeComparator->areNodesEqual($variable, $returnIfStmt->expr)) {
+            return null;
+        }
+
         if (! $class instanceof Name) {
             return null;
         }
