@@ -61,7 +61,7 @@ final class SpacingAwareArrayTypeNode extends ArrayTypeNode
     {
         $unionedTypes = [];
 
-        if ($bracketsAwareUnionTypeNode->isWrappedWithBrackets()) {
+        if ($bracketsAwareUnionTypeNode->isWrappedInBrackets()) {
             return $bracketsAwareUnionTypeNode . '[]';
         }
 

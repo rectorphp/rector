@@ -153,8 +153,6 @@ final class TagValueNodeReprintTest extends AbstractKernelTestCase
     private function printNodePhpDocInfoToString(Node $node): string
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $phpDocInfo->markAsChanged();
-
         return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
     }
 

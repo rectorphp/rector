@@ -8,15 +8,15 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
-use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
-use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -31,16 +31,6 @@ final class BetterPhpDocParser extends PhpDocParser
     private $privatesCaller;
 
     /**
-     * @var PhpDocNodeMapper
-     */
-    private $phpDocNodeMapper;
-
-    /**
-     * @var AnnotationContentResolver
-     */
-    private $annotationContentResolver;
-
-    /**
      * @var DoctrineAnnotationDecorator
      */
     private $doctrineAnnotationDecorator;
@@ -53,16 +43,12 @@ final class BetterPhpDocParser extends PhpDocParser
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
-        PhpDocNodeMapper $phpDocNodeMapper,
         TokenIteratorFactory $tokenIteratorFactory,
-        AnnotationContentResolver $annotationContentResolver,
         DoctrineAnnotationDecorator $doctrineAnnotationDecorator
     ) {
         parent::__construct($typeParser, $constExprParser);
 
         $this->privatesCaller = new PrivatesCaller();
-        $this->phpDocNodeMapper = $phpDocNodeMapper;
-        $this->annotationContentResolver = $annotationContentResolver;
         $this->doctrineAnnotationDecorator = $doctrineAnnotationDecorator;
         $this->tokenIteratorFactory = $tokenIteratorFactory;
     }
@@ -87,7 +73,6 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_CLOSE_PHPDOC);
 
         $phpDocNode = new PhpDocNode($children);
-
         // replace generic nodes with DoctrineAnnotations
         $this->doctrineAnnotationDecorator->decorate($phpDocNode);
 
@@ -110,38 +95,30 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
-        $startPosition = $tokenIterator->currentTokenOffset();
+        $startPosition = $tokenIterator->currentPosition();
         $tagValueNode = parent::parseTagValue($tokenIterator, $tag);
-        $endPosition = $tokenIterator->currentTokenOffset();
+        $endPosition = $tokenIterator->currentPosition();
 
         $startAndEnd = new StartAndEnd($startPosition, $endPosition);
+        $tagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
 
-        $tagValueNode->setAttribute(StartAndEnd::class, $startAndEnd);
-
-        return $this->phpDocNodeMapper->transform($tagValueNode, $tokenIterator->print());
+        return $tagValueNode;
     }
 
     private function parseChildAndStoreItsPositions(TokenIterator $tokenIterator): PhpDocChildNode
     {
-        $originalTokenIterator = clone $tokenIterator;
-        $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
+        $betterTokenIterator = $this->tokenIteratorFactory->createFromTokenIterator($tokenIterator);
 
-        if (! $tokenIterator instanceof BetterTokenIterator) {
-            $tokenIterator = $this->tokenIteratorFactory->createFromTokenIterator($tokenIterator);
-        }
+        $startPosition = $betterTokenIterator->currentPosition();
 
-        $tokenStart = $tokenIterator->currentPosition();
+        /** @var PhpDocTagNode|PhpDocTextNode $phpDocNode */
+        $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', [$betterTokenIterator]);
+        $endPosition = $betterTokenIterator->currentPosition();
 
-        /** @var PhpDocChildNode $phpDocNode */
-        $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', [$tokenIterator]);
-        $tokenEnd = $tokenIterator->currentPosition();
+        $startAndEnd = new StartAndEnd($startPosition, $endPosition);
+        $phpDocNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
 
-        $startAndEnd = new StartAndEnd($tokenStart, $tokenEnd);
-
-        $transformedPhpDocNode = $this->phpDocNodeMapper->transform($phpDocNode, $docContent);
-        $transformedPhpDocNode->setAttribute(Attribute::START_END, $startAndEnd);
-
-        return $transformedPhpDocNode;
+        return $phpDocNode;
     }
 
     private function resolveTag(BetterTokenIterator $tokenIterator): string

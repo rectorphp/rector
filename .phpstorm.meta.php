@@ -6,7 +6,34 @@ declare(strict_types=1);
 namespace PHPSTORM_META;
 
 // $container->get(Type::class) → instance of "Type"
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+
 override(\Psr\Container\ContainerInterface::get(0), type(0));
+
+expectedArguments(
+    \PHPStan\PhpDocParser\Ast\Node::getAttribute(),
+    0,
+    PhpDocAttributeKey::START_AND_END,
+    PhpDocAttributeKey::LAST_TOKEN_POSITION,
+    PhpDocAttributeKey::PARENT,
+);
+
+expectedArguments(
+    \PHPStan\PhpDocParser\Ast\Node::setAttribute(),
+    0,
+    PhpDocAttributeKey::START_AND_END,
+    PhpDocAttributeKey::LAST_TOKEN_POSITION,
+    PhpDocAttributeKey::PARENT,
+);
+
+expectedArguments(
+    \PHPStan\PhpDocParser\Ast\Node::hasAttribute(),
+    0,
+    PhpDocAttributeKey::START_AND_END,
+    PhpDocAttributeKey::LAST_TOKEN_POSITION,
+    PhpDocAttributeKey::PARENT,
+);
+
 
 // PhpStorm 2019.1 - add argument autocomplete
 // https://blog.jetbrains.com/phpstorm/2019/02/new-phpstorm-meta-php-features/

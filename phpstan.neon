@@ -551,5 +551,24 @@ parameters:
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             path: 'packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php'
+
         - '#Class Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode not found#'
         - '#Cognitive complexity for "Rector\\DependencyInjection\\Rector\\Property\\AnnotatedPropertyInjectToConstructorInjectionRector\:\:refactor\(\)" is \d+, keep it under 9#'
+
+        -
+            message: '#Do not inherit from abstract class, better use composition#'
+            paths:
+                 - packages/BetterPhpDocParser/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
+                 - packages/NodeTypeResolver/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
+                 - packages/BetterPhpDocParser/PhpDocNodeVisitor/ChangedPhpNodeVisitor.php
+
+        -
+            message: '#Do not use setter on a service#'
+            paths:
+                 - packages/NodeTypeResolver/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
+
+        # known type
+        - '#Parameter \#3 \$pseudoNamespaceToNamespace of method Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\UnderscoreRenamePhpDocNodeVisitor\:\:shouldSkip\(\) expects Rector\\Renaming\\ValueObject\\PseudoNamespaceToNamespace, Rector\\Renaming\\ValueObject\\PseudoNamespaceToNamespace\|null given#'
+
+        # known types
+        - '#Parameter (.*?) expects PhpParser\\Node, PhpParser\\Node\|null given#'

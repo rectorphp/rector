@@ -98,16 +98,8 @@ final class StaticTypeMapper
 
             return $this->phpDocTypeMapper->mapToPHPStanType($phpDocTagValueNode->bound, $node, $nameScope);
         }
-        if ($phpDocTagValueNode instanceof ReturnTagValueNode) {
-            return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
-        }
-        if ($phpDocTagValueNode instanceof ParamTagValueNode) {
-            return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
-        }
-        if ($phpDocTagValueNode instanceof VarTagValueNode) {
-            return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
-        }
-        if ($phpDocTagValueNode instanceof ThrowsTagValueNode) {
+
+        if ($phpDocTagValueNode instanceof ReturnTagValueNode || $phpDocTagValueNode instanceof ParamTagValueNode || $phpDocTagValueNode instanceof VarTagValueNode || $phpDocTagValueNode instanceof ThrowsTagValueNode) {
             return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
         }
 

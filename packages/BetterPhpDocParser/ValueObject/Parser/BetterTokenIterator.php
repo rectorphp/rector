@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\Parser;
 
 use PHPStan\PhpDocParser\Parser\TokenIterator;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class BetterTokenIterator extends TokenIterator
@@ -13,6 +14,11 @@ final class BetterTokenIterator extends TokenIterator
      * @var string
      */
     private const TOKENS = 'tokens';
+
+    /**
+     * @var string
+     */
+    private const INDEX = 'index';
 
     /**
      * @var PrivatesAccessor
@@ -24,9 +30,14 @@ final class BetterTokenIterator extends TokenIterator
      */
     public function __construct(array $tokens, int $index = 0)
     {
-        parent::__construct($tokens, $index);
-
         $this->privatesAccessor = new PrivatesAccessor();
+
+        if ($tokens === []) {
+            $this->privatesAccessor->setPrivateProperty($this, self::TOKENS, []);
+            $this->privatesAccessor->setPrivateProperty($this, self::INDEX, 0);
+        } else {
+            parent::__construct($tokens, $index);
+        }
     }
 
     /**
@@ -43,6 +54,18 @@ final class BetterTokenIterator extends TokenIterator
         return false;
     }
 
+    public function isTokenTypeOnPosition(int $tokenType, int $position): bool
+    {
+        $tokens = $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
+        $token = $tokens[$position] ?? null;
+
+        if ($token === null) {
+            return false;
+        }
+
+        return $token[1] === $tokenType;
+    }
+
     public function isNextTokenType(int $tokenType): bool
     {
         if ($this->nextTokenType() === null) {
@@ -54,6 +77,10 @@ final class BetterTokenIterator extends TokenIterator
 
     public function printFromTo(int $from, int $to): string
     {
+        if ($to < $from) {
+            throw new ShouldNotHappenException('Arguments are flipped');
+        }
+
         $tokens = $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
 
         $content = '';
@@ -90,7 +117,7 @@ final class BetterTokenIterator extends TokenIterator
         $this->pushSavePoint();
 
         $tokens = $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
-        $index = $this->privatesAccessor->getPrivateProperty($this, 'index');
+        $index = $this->privatesAccessor->getPrivateProperty($this, self::INDEX);
 
         // does next token exist?
         $nextIndex = $index + 1;
@@ -107,6 +134,6 @@ final class BetterTokenIterator extends TokenIterator
 
     public function currentPosition(): int
     {
-        return $this->privatesAccessor->getPrivateProperty($this, 'index');
+        return $this->privatesAccessor->getPrivateProperty($this, self::INDEX);
     }
 }
