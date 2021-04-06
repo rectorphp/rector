@@ -115,7 +115,7 @@ final class VarTagRemover
     }
 
     /**
-     * @param Param|Property $node
+     * @param Expression|Param|Property $node
      */
     private function isNonBasicArrayType(Node $node, VarTagValueNode $varTagValueNode): bool
     {
