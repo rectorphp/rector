@@ -17,6 +17,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\CodeQuality\TypeResolver\AssignVariableTypeResolver;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -34,9 +35,15 @@ final class SimplifyIfNullableReturnRector extends AbstractRector
      */
     private $ifManipulator;
 
-    public function __construct(IfManipulator $ifManipulator)
+    /**
+     * @var AssignVariableTypeResolver
+     */
+    private $assignVariableTypeResolver;
+
+    public function __construct(IfManipulator $ifManipulator, AssignVariableTypeResolver $assignVariableTypeResolver)
     {
         $this->ifManipulator = $ifManipulator;
+        $this->assignVariableTypeResolver = $assignVariableTypeResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -104,17 +111,14 @@ CODE_SAMPLE
         $variable = $instanceof->expr;
         $class = $instanceof->class;
 
+        if (! $class instanceof Name) {
+            return null;
+        }
+
         /** @var Return_ $returnIfStmt */
         $returnIfStmt = $node->stmts[0];
-        if ($cond instanceof BooleanNot && ! $this->valueResolver->isNull($returnIfStmt->expr)) {
-            return null;
-        }
 
-        if ($cond instanceof Instanceof_ && ! $this->nodeComparator->areNodesEqual($variable, $returnIfStmt->expr)) {
-            return null;
-        }
-
-        if (! $class instanceof Name) {
+        if ($this->isIfStmtReturnCorrect($cond, $variable, $returnIfStmt)) {
             return null;
         }
 
@@ -134,38 +138,40 @@ CODE_SAMPLE
 
         /** @var Return_ $next */
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if ($cond instanceof BooleanNot && ! $this->nodeComparator->areNodesEqual($next->expr, $variable)) {
+        if ($this->isNextReturnCorrect($cond, $variable, $next)) {
             return null;
         }
 
-        if ($cond instanceof Instanceof_ && ! $this->valueResolver->isNull($next->expr)) {
-            return null;
-        }
-
-        $variableType = $this->getVariableType($previousAssign);
+        $variableType = $this->assignVariableTypeResolver->resolve($previousAssign);
         if (! $variableType instanceof UnionType) {
             return null;
         }
 
-        $types = $variableType->getTypes();
-        if (count($types) > 2) {
-            return null;
-        }
-
         $className = $class->toString();
+        $types = $variableType->getTypes();
         return $this->processSimplifyNullableReturn($types, $className, $next, $previous, $previousAssign->expr);
     }
 
-    private function getVariableType(Assign $assign): Type
+    private function isIfStmtReturnCorrect(Expr $expr, Expr $variable, Return_ $return): bool
     {
-        $variableType = $this->nodeTypeResolver->resolve($assign->var);
-        $exprType = $this->nodeTypeResolver->resolve($assign->expr);
-
-        if ($exprType instanceof UnionType) {
-            $variableType = $exprType;
+        if ($expr instanceof BooleanNot && $return->expr instanceof Expr && ! $this->valueResolver->isNull(
+            $return->expr
+        )) {
+            return true;
         }
 
-        return $variableType;
+        return $expr instanceof Instanceof_ && ! $this->nodeComparator->areNodesEqual($variable, $return->expr);
+    }
+
+    private function isNextReturnCorrect(Expr $expr, Expr $variable, Return_ $return): bool
+    {
+        if ($expr instanceof BooleanNot && ! $this->nodeComparator->areNodesEqual($return->expr, $variable)) {
+            return true;
+        }
+
+        return $expr instanceof Instanceof_ && $return->expr instanceof Expr && ! $this->valueResolver->isNull(
+            $return->expr
+        );
     }
 
     /**
@@ -178,6 +184,10 @@ CODE_SAMPLE
         Expression $expression,
         Expr $expr
     ): ?Return_ {
+        if (count($types) > 2) {
+            return null;
+        }
+
         if ($types[0] instanceof FullyQualifiedObjectType && $types[1] instanceof NullType && $className === $types[0]->getClassName()) {
             return $this->removeAndReturn($return, $expression, $expr);
         }
@@ -185,16 +195,28 @@ CODE_SAMPLE
         if ($types[0] instanceof NullType && $types[1] instanceof FullyQualifiedObjectType && $className === $types[1]->getClassName()) {
             return $this->removeAndReturn($return, $expression, $expr);
         }
-        if (! $types[0] instanceof ObjectType) {
+
+        if ($this->isNotTypedNullable($types, $className)) {
             return null;
         }
-        if (! $types[1] instanceof NullType) {
-            return null;
-        }
-        if ($className !== $types[0]->getClassName()) {
-            return null;
-        }
+
         return $this->removeAndReturn($return, $expression, $expr);
+    }
+
+    /**
+     * @param Type[] $types
+     */
+    private function isNotTypedNullable(array $types, string $className): bool
+    {
+        if (! $types[0] instanceof ObjectType) {
+            return true;
+        }
+
+        if (! $types[1] instanceof NullType) {
+            return true;
+        }
+
+        return $className !== $types[0]->getClassName();
     }
 
     private function removeAndReturn(Return_ $return, Expression $expression, Expr $expr): Return_
