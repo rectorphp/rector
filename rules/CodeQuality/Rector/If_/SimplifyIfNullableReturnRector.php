@@ -46,7 +46,11 @@ final class SimplifyIfNullableReturnRector extends AbstractRector
      */
     private $varTagRemover;
 
-    public function __construct(IfManipulator $ifManipulator, AssignVariableTypeResolver $assignVariableTypeResolver, VarTagRemover $varTagRemover)
+    public function __construct(
+        IfManipulator $ifManipulator,
+        AssignVariableTypeResolver $assignVariableTypeResolver,
+        VarTagRemover $varTagRemover
+    )
     {
         $this->ifManipulator = $ifManipulator;
         $this->assignVariableTypeResolver = $assignVariableTypeResolver;
@@ -157,7 +161,14 @@ CODE_SAMPLE
         $className = $class->toString();
         $types = $variableType->getTypes();
 
-        return $this->processSimplifyNullableReturn($variableType, $types, $className, $next, $previous, $previousAssign->expr);
+        return $this->processSimplifyNullableReturn(
+            $variableType,
+            $types,
+            $className,
+            $next,
+            $previous,
+            $previousAssign->expr
+        );
     }
 
     private function isIfStmtReturnIncorrect(Expr $expr, Expr $variable, Return_ $return): bool
@@ -166,9 +177,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($expr instanceof BooleanNot && ! $this->valueResolver->isNull(
-            $return->expr
-        )) {
+        if ($expr instanceof BooleanNot && ! $this->valueResolver->isNull($return->expr)) {
             return true;
         }
 
@@ -185,9 +194,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return $expr instanceof Instanceof_ && ! $this->valueResolver->isNull(
-            $return->expr
-        );
+        return $expr instanceof Instanceof_ && ! $this->valueResolver->isNull($return->expr);
     }
 
     /**
@@ -236,13 +243,13 @@ CODE_SAMPLE
         return $className !== $types[0]->getClassName();
     }
 
-    private function removeAndReturn(Return_ $return, Expression $expression, Expr $expr, UnionType $type): Return_
+    private function removeAndReturn(Return_ $return, Expression $expression, Expr $expr, UnionType $unionType): Return_
     {
         $this->removeNode($return);
         $this->removeNode($expression);
 
         $return = new Return_($expr);
-        $this->varTagRemover->removeVarPhpTagValueNodeIfNotComment($expression, $type);
+        $this->varTagRemover->removeVarPhpTagValueNodeIfNotComment($expression, $unionType);
         $this->mirrorComments($return, $expression);
 
         return $return;
