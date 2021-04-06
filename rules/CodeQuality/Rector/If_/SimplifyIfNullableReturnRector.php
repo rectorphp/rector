@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -21,7 +22,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PHPStan\Type\ObjectType;
 
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\SimplifyIfNullableReturnRectorTest
@@ -125,7 +125,7 @@ CODE_SAMPLE
         }
 
         $variableType = $this->nodeTypeResolver->resolve($previousAssign->var);
-        $exprType     = $this->nodeTypeResolver->resolve($previousAssign->expr);
+        $exprType = $this->nodeTypeResolver->resolve($previousAssign->expr);
 
         if ($exprType instanceof UnionType) {
             $variableType = $exprType;
