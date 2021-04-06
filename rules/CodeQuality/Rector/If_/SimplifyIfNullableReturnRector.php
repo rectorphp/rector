@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -99,11 +100,11 @@ CODE_SAMPLE
         /** @var Return_ $return */
         $return = $if->stmts[0];
 
-        if ($cond instanceof BooleanNot && ! $this->valueResolver->isNull($return->expr)) {
+        if ($cond instanceof BooleanNot && $this->valueResolver->isNull($return->expr)) {
             return true;
         }
 
-        if ($cond instanceof Variable && $this->valueResolver->isNull($return->expr)) {
+        if ($cond instanceof Instanceof_ && $this->valueResolver->isNull($return->expr)) {
             return true;
         }
 
