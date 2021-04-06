@@ -136,7 +136,7 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Node|null $next */
+        /** @var Return_ $next */
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
         if ($this->isNextReturnIncorrect($cond, $variable, $next)) {
             return null;
@@ -149,6 +149,7 @@ CODE_SAMPLE
 
         $className = $class->toString();
         $types = $variableType->getTypes();
+
         return $this->processSimplifyNullableReturn($types, $className, $next, $previous, $previousAssign->expr);
     }
 
@@ -167,12 +168,8 @@ CODE_SAMPLE
         return $expr instanceof Instanceof_ && ! $this->nodeComparator->areNodesEqual($variable, $return->expr);
     }
 
-    private function isNextReturnIncorrect(Expr $expr, Expr $variable, ?Node $return): bool
+    private function isNextReturnIncorrect(Expr $expr, Expr $variable, Return_ $return): bool
     {
-        if (! $return instanceof Return_) {
-            return true;
-        }
-
         if (! $return->expr instanceof Expr) {
             return true;
         }
@@ -196,10 +193,6 @@ CODE_SAMPLE
         Expression $expression,
         Expr $expr
     ): ?Return_ {
-        if (count($types) > 2) {
-            return null;
-        }
-
         if ($types[0] instanceof FullyQualifiedObjectType && $types[1] instanceof NullType && $className === $types[0]->getClassName()) {
             return $this->removeAndReturn($return, $expression, $expr);
         }
@@ -256,6 +249,10 @@ CODE_SAMPLE
         }
 
         $next = $if->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $next instanceof Node) {
+            return true;
+        }
+
         return ! $next instanceof Return_;
     }
 }
