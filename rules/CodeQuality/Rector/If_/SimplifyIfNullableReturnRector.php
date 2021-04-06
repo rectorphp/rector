@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -98,6 +99,11 @@ CODE_SAMPLE
         /** @var Instanceof_ $instanceof */
         $instanceof = $cond->expr;
         $variable = $instanceof->expr;
+        $class = $instanceof->class;
+
+        if (! $class instanceof Name) {
+            return null;
+        }
 
         $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
         if (! $previous instanceof Expression) {
@@ -134,15 +140,16 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($types[0] instanceof FullyQualifiedObjectType && $types[1] instanceof NullType) {
+        $className = $class->toString();
+        if ($types[0] instanceof FullyQualifiedObjectType && $types[1] instanceof NullType && $className === $types[0]->getClassName()) {
             return $this->processSimplifyNullableReturn($next, $previous, $previousAssign->expr);
         }
 
-        if ($types[0] instanceof NullType && $types[1] instanceof FullyQualifiedObjectType) {
+        if ($types[0] instanceof NullType && $types[1] instanceof FullyQualifiedObjectType && $className === $types[1]->getClassName()) {
             return $this->processSimplifyNullableReturn($next, $previous, $previousAssign->expr);
         }
 
-        if ($types[0] instanceof ObjectType && $types[1] instanceof NullType) {
+        if ($types[0] instanceof ObjectType && $types[1] instanceof NullType && $className === $types[0]->getClassName()) {
             return $this->processSimplifyNullableReturn($next, $previous, $previousAssign->expr);
         }
 
