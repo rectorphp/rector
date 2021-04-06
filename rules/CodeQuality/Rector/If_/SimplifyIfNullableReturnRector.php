@@ -95,10 +95,12 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var BooleanNot $cond */
+        /** @var BooleanNot|Instanceof_ $cond */
         $cond = $node->cond;
         /** @var Instanceof_ $instanceof */
-        $instanceof = $cond->expr;
+        $instanceof = $cond instanceof BooleanNot
+            ? $cond->expr
+            : $cond;
         $variable = $instanceof->expr;
         $class = $instanceof->class;
 
@@ -122,7 +124,11 @@ CODE_SAMPLE
 
         /** @var Return_ $next */
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $this->nodeComparator->areNodesEqual($next->expr, $variable)) {
+        if ($cond instanceof BooleanNot && ! $this->nodeComparator->areNodesEqual($next->expr, $variable)) {
+            return null;
+        }
+
+        if ($cond instanceof Instanceof_ && ! $this->valueResolver->isNull($next->expr)) {
             return null;
         }
 
@@ -198,7 +204,7 @@ CODE_SAMPLE
         $cond = $if->cond;
 
         if (! $cond instanceof BooleanNot) {
-            return true;
+            return ! $cond instanceof Instanceof_;
         }
 
         if (! $cond->expr instanceof Instanceof_) {
