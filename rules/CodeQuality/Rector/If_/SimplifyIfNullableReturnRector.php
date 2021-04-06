@@ -20,6 +20,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Type\ObjectType;
 
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\SimplifyIfNullableReturnRectorTest
@@ -118,6 +119,12 @@ CODE_SAMPLE
         }
 
         $variableType = $this->nodeTypeResolver->resolve($previousAssign->var);
+        $exprType     = $this->nodeTypeResolver->resolve($previousAssign->expr);
+
+        if ($exprType instanceof UnionType) {
+            $variableType = $exprType;
+        }
+
         if (! $variableType instanceof UnionType) {
             return null;
         }
@@ -128,6 +135,10 @@ CODE_SAMPLE
         }
 
         if ($types[0] instanceof FullyQualifiedObjectType && $types[1] instanceof NullType) {
+            return $this->processSimplifyNullableReturn($next, $previous, $previousAssign->expr);
+        }
+
+        if ($types[0] instanceof ObjectType && $types[1] instanceof NullType) {
             return $this->processSimplifyNullableReturn($next, $previous, $previousAssign->expr);
         }
 
