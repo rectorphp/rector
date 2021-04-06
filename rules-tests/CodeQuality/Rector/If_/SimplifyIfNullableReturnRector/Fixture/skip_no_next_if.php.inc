@@ -9,7 +9,7 @@ class SkipNoNextIf
         /** @var \stdClass|null $value */
         $value = $this->foo->bar();
         if (! $value instanceof \stdClass) {
-            return $value;
+            return null;
         }
     }
 }

@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -95,12 +96,16 @@ CODE_SAMPLE
         }
 
         $cond = $if->cond;
-        /** @var Return_ $return */
-        $return = $if->stmts[0];
 
-        if ($cond instanceof BooleanNot && $this->valueResolver->isNull($return->expr)) {
+        if (! $cond instanceof BooleanNot) {
             return true;
         }
-        return $cond instanceof Instanceof_ && $this->valueResolver->isNull($return->expr);
+
+        if (! $cond->expr instanceof Instanceof_) {
+            return true;
+        }
+
+        $next = $if->getAttribute(AttributeKey::NEXT_NODE);
+        return ! $next instanceof Return_;
     }
 }
