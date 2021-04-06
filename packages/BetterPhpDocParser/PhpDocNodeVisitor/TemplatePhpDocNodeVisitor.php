@@ -71,16 +71,16 @@ final class TemplatePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implemen
     {
         $partialTokens = $betterTokenIterator->partialTokens($startAndEnd->getStart(), $startAndEnd->getEnd());
 
-        foreach ($partialTokens as $token) {
-            if ($token[1] !== Lexer::TOKEN_IDENTIFIER) {
+        foreach ($partialTokens as $partialToken) {
+            if ($partialToken[1] !== Lexer::TOKEN_IDENTIFIER) {
                 continue;
             }
 
-            if (! in_array($token[0], ['as', 'of'], true)) {
+            if (! in_array($partialToken[0], ['as', 'of'], true)) {
                 continue;
             }
 
-            return $token[0];
+            return $partialToken[0];
         }
 
         return 'of';
