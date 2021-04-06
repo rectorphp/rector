@@ -242,17 +242,17 @@ CODE_SAMPLE
             return true;
         }
 
+        $next = $if->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $next instanceof Return_) {
+            return true;
+        }
+
         $cond = $if->cond;
 
         if (! $cond instanceof BooleanNot) {
             return ! $cond instanceof Instanceof_;
         }
 
-        if (! $cond->expr instanceof Instanceof_) {
-            return true;
-        }
-
-        $next = $if->getAttribute(AttributeKey::NEXT_NODE);
-        return ! $next instanceof Return_;
+        return ! $cond->expr instanceof Instanceof_;
     }
 }
