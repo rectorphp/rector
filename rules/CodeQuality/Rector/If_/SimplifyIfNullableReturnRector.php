@@ -118,7 +118,7 @@ CODE_SAMPLE
         /** @var Return_ $returnIfStmt */
         $returnIfStmt = $node->stmts[0];
 
-        if ($this->isIfStmtReturnCorrect($cond, $variable, $returnIfStmt)) {
+        if ($this->isIfStmtReturnInCorrect($cond, $variable, $returnIfStmt)) {
             return null;
         }
 
@@ -138,7 +138,7 @@ CODE_SAMPLE
 
         /** @var Return_ $next */
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if ($this->isNextReturnCorrect($cond, $variable, $next)) {
+        if ($this->isNextReturnInCorrect($cond, $variable, $next)) {
             return null;
         }
 
@@ -152,10 +152,10 @@ CODE_SAMPLE
         return $this->processSimplifyNullableReturn($types, $className, $next, $previous, $previousAssign->expr);
     }
 
-    private function isIfStmtReturnCorrect(Expr $expr, Expr $variable, Return_ $return): bool
+    private function isIfStmtReturnInCorrect(Expr $expr, Expr $variable, Return_ $return): bool
     {
         if (! $return->expr instanceof Expr) {
-            return false;
+            return true;
         }
 
         if ($expr instanceof BooleanNot && ! $this->valueResolver->isNull(
@@ -167,10 +167,10 @@ CODE_SAMPLE
         return $expr instanceof Instanceof_ && ! $this->nodeComparator->areNodesEqual($variable, $return->expr);
     }
 
-    private function isNextReturnCorrect(Expr $expr, Expr $variable, Return_ $return): bool
+    private function isNextReturnInCorrect(Expr $expr, Expr $variable, Return_ $return): bool
     {
         if (! $return->expr instanceof Expr) {
-            return false;
+            return true;
         }
 
         if ($expr instanceof BooleanNot && ! $this->nodeComparator->areNodesEqual($return->expr, $variable)) {
