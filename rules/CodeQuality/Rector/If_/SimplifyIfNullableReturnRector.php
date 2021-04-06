@@ -253,10 +253,6 @@ CODE_SAMPLE
         }
 
         $next = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $next instanceof Node) {
-            return true;
-        }
-
         return ! $next instanceof Return_;
     }
 }
