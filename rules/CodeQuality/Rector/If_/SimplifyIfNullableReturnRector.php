@@ -12,14 +12,14 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\NullType;
+use PHPStan\Type\UnionType;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PHPStan\Type\UnionType;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use PHPStan\Type\NullType;
 
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\SimplifyIfNullableReturnRectorTest
@@ -93,10 +93,10 @@ CODE_SAMPLE
         }
 
         /** @var BooleanNot $cond */
-        $cond     = $node->cond;
-        /** @var Instanceof_ $instanceof  */
+        $cond = $node->cond;
+        /** @var Instanceof_ $instanceof */
         $instanceof = $cond->expr;
-        $variable   = $instanceof->expr;
+        $variable = $instanceof->expr;
 
         $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
         if (! $previous instanceof Expression) {
@@ -104,7 +104,10 @@ CODE_SAMPLE
         }
 
         $previousAssign = $previous->expr;
-        if (! $previousAssign instanceof Assign && $this->nodeComparator->areNodesEqual($previousAssign->var, $variable)) {
+        if (! $previousAssign instanceof Assign && $this->nodeComparator->areNodesEqual(
+            $previousAssign->var,
+            $variable
+        )) {
             return null;
         }
 
