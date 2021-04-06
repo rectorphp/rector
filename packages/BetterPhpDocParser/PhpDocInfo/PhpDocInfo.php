@@ -16,12 +16,14 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
+use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
@@ -46,19 +48,9 @@ final class PhpDocInfo
     ];
 
     /**
-     * @var string
-     */
-    private $originalContent;
-
-    /**
      * @var bool
      */
     private $isSingleLine = false;
-
-    /**
-     * @var mixed[]
-     */
-    private $tokens = [];
 
     /**
      * @var PhpDocNode
@@ -101,12 +93,13 @@ final class PhpDocInfo
     private $rectorChangeCollector;
 
     /**
-     * @param mixed[] $tokens
+     * @var BetterTokenIterator
      */
+    private $betterTokenIterator;
+
     public function __construct(
         PhpDocNode $phpDocNode,
-        array $tokens,
-        string $originalContent,
+        BetterTokenIterator $betterTokenIterator,
         StaticTypeMapper $staticTypeMapper,
         \PhpParser\Node $node,
         AnnotationNaming $annotationNaming,
@@ -114,11 +107,10 @@ final class PhpDocInfo
         RectorChangeCollector $rectorChangeCollector
     ) {
         $this->phpDocNode = $phpDocNode;
-        $this->tokens = $tokens;
+        $this->betterTokenIterator = $betterTokenIterator;
         $this->originalPhpDocNode = clone $phpDocNode;
-        $this->originalContent = $originalContent;
 
-        if ($this->originalContent !== null && ! Strings::match(trim($this->originalContent), "#\n#")) {
+        if (! $betterTokenIterator->containsTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
             $this->isSingleLine = true;
         }
 
@@ -127,11 +119,6 @@ final class PhpDocInfo
         $this->annotationNaming = $annotationNaming;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->rectorChangeCollector = $rectorChangeCollector;
-    }
-
-    public function getOriginalContent(): string
-    {
-        return $this->originalContent;
     }
 
     public function addPhpDocTagNode(PhpDocChildNode $phpDocChildNode): void
@@ -156,12 +143,12 @@ final class PhpDocInfo
      */
     public function getTokens(): array
     {
-        return $this->tokens;
+        return $this->betterTokenIterator->getTokens();
     }
 
     public function getTokenCount(): int
     {
-        return count($this->tokens);
+        return $this->betterTokenIterator->count();
     }
 
     public function getVarTagValueNode(): ?VarTagValueNode
@@ -417,7 +404,7 @@ final class PhpDocInfo
             return false;
         }
 
-        return $this->tokens === [];
+        return $this->betterTokenIterator->count() === 0;
     }
 
     public function makeSingleLined(): void

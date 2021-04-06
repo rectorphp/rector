@@ -7,10 +7,10 @@ namespace Rector\BetterPhpDocParser;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
-use Rector\BetterPhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor;
 use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor;
 
 /**
