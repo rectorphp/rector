@@ -158,9 +158,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($expr instanceof BooleanNot && ! $this->valueResolver->isNull(
-            $return->expr
-        )) {
+        if ($expr instanceof BooleanNot && ! $this->valueResolver->isNull($return->expr)) {
             return true;
         }
 
@@ -177,9 +175,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return $expr instanceof Instanceof_ && ! $this->valueResolver->isNull(
-            $return->expr
-        );
+        return $expr instanceof Instanceof_ && ! $this->valueResolver->isNull($return->expr);
     }
 
     /**
