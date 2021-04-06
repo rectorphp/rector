@@ -91,13 +91,21 @@ CODE_SAMPLE
         $cond     = $node->cond;
         /** @var Instanceof_ $instanceof  */
         $instanceof = $cond->expr;
-        $variable = $instanceof->variable;
+        $variable   = $instanceof->expr;
 
         $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $node) use ($variable): bool {
             return $node instanceof Assign && $node->var === $variable;
         });
 
-        dump($previousAssign);
+        if ($previousAssign === null) {
+            return null;
+        }
+
+        /** @var Return_ $next */
+        $next = $node->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $this->nodeComparator->areNodesEqual($next->expr, $variable)) {
+            return null;
+        }
 
         return $node;
     }
