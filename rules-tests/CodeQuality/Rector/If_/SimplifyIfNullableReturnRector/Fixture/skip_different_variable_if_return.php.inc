@@ -2,14 +2,14 @@
 
 namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\Fixture;
 
-final class SkipDifferentVariableIfReturn
+final class SkipDifferentVariableIfReturnTruthy
 {
     public function run()
     {
         /** @var \stdClass|null $value */
         $value = $this->foo->bar();
 
-        if (! $value instanceof \stdClass) {
+        if ($value instanceof \stdClass) {
             return $abc;
         }
 
