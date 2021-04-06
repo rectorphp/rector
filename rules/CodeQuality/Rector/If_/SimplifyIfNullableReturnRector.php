@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Stmt\If_;
@@ -85,6 +86,18 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
+
+        /** @var BooleanNot $cond */
+        $cond     = $node->cond;
+        /** @var Instanceof_ $instanceof  */
+        $instanceof = $cond->expr;
+        $variable = $instanceof->variable;
+
+        $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $node) use ($variable): bool {
+            return $node instanceof Assign && $node->var === $variable;
+        });
+
+        dump($previousAssign);
 
         return $node;
     }
