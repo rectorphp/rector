@@ -116,7 +116,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->nodeComparator->areNodesEqual($previousAssign->var, $variable)) {
+        if (! $this->nodeComparator->areNodesEqual($previousAssign->var, $variable)) {
             return null;
         }
 
