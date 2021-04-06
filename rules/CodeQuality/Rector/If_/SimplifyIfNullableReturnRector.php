@@ -161,8 +161,7 @@ CODE_SAMPLE
         Return_ $return,
         Expression $expression,
         Expr $expr
-    ): ?Return_
-    {
+    ): ?Return_ {
         if ($types[0] instanceof FullyQualifiedObjectType && $types[1] instanceof NullType && $className === $types[0]->getClassName()) {
             return $this->removeAndReturn($return, $expression, $expr);
         }
@@ -170,12 +169,16 @@ CODE_SAMPLE
         if ($types[0] instanceof NullType && $types[1] instanceof FullyQualifiedObjectType && $className === $types[1]->getClassName()) {
             return $this->removeAndReturn($return, $expression, $expr);
         }
-
-        if ($types[0] instanceof ObjectType && $types[1] instanceof NullType && $className === $types[0]->getClassName()) {
-            return $this->removeAndReturn($return, $expression, $expr);
+        if (! $types[0] instanceof ObjectType) {
+            return null;
         }
-
-        return null;
+        if (! $types[1] instanceof NullType) {
+            return null;
+        }
+        if ($className !== $types[0]->getClassName()) {
+            return null;
+        }
+        return $this->removeAndReturn($return, $expression, $expr);
     }
 
     private function removeAndReturn(Return_ $return, Expression $expression, Expr $expr): Return_
