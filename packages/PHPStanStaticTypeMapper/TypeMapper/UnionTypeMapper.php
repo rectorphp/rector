@@ -299,14 +299,8 @@ final class UnionTypeMapper implements TypeMapperInterface
         if ($sharedTypeWithClassName instanceof TypeWithClassName) {
             return $this->correctObjectType($sharedTypeWithClassName);
         }
-
         // find least common denominator
-        $sharedObjectType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($unionType);
-        if ($sharedObjectType instanceof ObjectType) {
-            return $sharedObjectType;
-        }
-
-        return null;
+        return $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($unionType);
     }
 
     private function matchTwoObjectTypes(UnionType $unionType): ?TypeWithClassName
