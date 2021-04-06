@@ -147,4 +147,30 @@ final class BetterTokenIterator extends TokenIterator
     {
         return count($this->getTokens());
     }
+
+    /**
+     * @return mixed[]
+     */
+    public function partialTokens(int $start, int $end): array
+    {
+        $tokens = $this->getTokens();
+
+        $chunkTokens = [];
+        for ($i = $start; $i <= $end; ++$i) {
+            $chunkTokens[$i] = $tokens[$i];
+        }
+
+        return $chunkTokens;
+    }
+
+    public function containsTokenType(int $type): bool
+    {
+        foreach ($this->getTokens() as $token) {
+            if ($token[1] === $type) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

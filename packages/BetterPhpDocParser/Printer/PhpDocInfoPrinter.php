@@ -237,7 +237,7 @@ final class PhpDocInfoPrinter
             }
 
             if ($phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode && $shouldReprintChildNode) {
-                $printedNode = $phpDocChildNode->name . $phpDocChildNode->value;
+                $printedNode = (string) $phpDocChildNode;
 
                 // remove extra space between tags
                 $printedNode = Strings::replace($printedNode, self::TAG_AND_SPACE_REGEX, '$1(');
@@ -294,7 +294,7 @@ final class PhpDocInfoPrinter
         $removedStartAndEnds = $this->removeNodesStartAndEndResolver->resolve(
             $this->phpDocInfo->getOriginalPhpDocNode(),
             $this->phpDocNode,
-            $this->token
+            $this->tokens
         );
 
         foreach ($removedStartAndEnds as $removedStartAndEnd) {

@@ -16,6 +16,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
@@ -50,11 +51,6 @@ final class PhpDocInfo
      * @var bool
      */
     private $isSingleLine = false;
-
-    /**
-     * @var mixed[]
-     */
-    private $tokens = [];
 
     /**
      * @var PhpDocNode
@@ -104,7 +100,6 @@ final class PhpDocInfo
     public function __construct(
         PhpDocNode $phpDocNode,
         BetterTokenIterator $betterTokenIterator,
-        string $originalContent,
         StaticTypeMapper $staticTypeMapper,
         \PhpParser\Node $node,
         AnnotationNaming $annotationNaming,
@@ -115,7 +110,7 @@ final class PhpDocInfo
         $this->betterTokenIterator = $betterTokenIterator;
         $this->originalPhpDocNode = clone $phpDocNode;
 
-        if ($originalContent !== null && ! Strings::match(trim($originalContent), "#\n#")) {
+        if (! $betterTokenIterator->containsTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
             $this->isSingleLine = true;
         }
 
@@ -409,7 +404,7 @@ final class PhpDocInfo
             return false;
         }
 
-        return $this->tokens === [];
+        return $this->betterTokenIterator->count() === 0;
     }
 
     public function makeSingleLined(): void

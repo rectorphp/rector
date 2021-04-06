@@ -11,8 +11,8 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
@@ -29,9 +29,9 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     private $currentNodeProvider;
 
     /**
-     * @var array<string, string>
+     * @var OldToNewType[]
      */
-    private $oldToNewClasses = [];
+    private $oldToNewTypes = [];
 
     public function __construct(StaticTypeMapper $staticTypeMapper, CurrentNodeProvider $currentNodeProvider)
     {
@@ -41,7 +41,7 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 
     public function beforeTraverse(Node $node): void
     {
-        if ($this->oldToNewClasses === []) {
+        if ($this->oldToNewTypes === []) {
             throw new ShouldNotHappenException('Configure "$oldToNewClasses" first');
         }
     }
@@ -64,15 +64,12 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             $staticType = new ObjectType($staticType->getFullyQualifiedName());
         }
 
-        foreach ($this->oldToNewClasses as $oldClass => $newClass) {
-            $oldType = new ObjectType($oldClass);
-            $newType = new FullyQualifiedObjectType($newClass);
-
-            if (! $staticType->equals($oldType)) {
+        foreach ($this->oldToNewTypes as $oldToNewType) {
+            if (! $staticType->equals($oldToNewType->getOldType())) {
                 continue;
             }
 
-            $newTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
+            $newTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($oldToNewType->getNewType());
 
             $parentType = $node->getAttribute(PhpDocAttributeKey::PARENT);
             if ($parentType instanceof TypeNode) {
@@ -87,10 +84,10 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     }
 
     /**
-     * @param array<string, string> $oldToNewClasses
+     * @param OldToNewType[] $oldToNewTypes
      */
-    public function setOldToNewClasses(array $oldToNewClasses): void
+    public function setOldToNewTypes(array $oldToNewTypes): void
     {
-        $this->oldToNewClasses = $oldToNewClasses;
+        $this->oldToNewTypes = $oldToNewTypes;
     }
 }

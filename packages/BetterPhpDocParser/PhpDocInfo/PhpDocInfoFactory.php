@@ -123,10 +123,10 @@ final class PhpDocInfoFactory
             $tokenIterator = new BetterTokenIterator($tokens);
 
             $phpDocNode = $this->betterPhpDocParser->parse($tokenIterator);
-            $this->setPositionOfLastToken($phpDocNode, $tokenIterator);
+            $this->setPositionOfLastToken($phpDocNode);
         }
 
-        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, $content, $tokenIterator, $node);
+        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, $tokenIterator, $node);
         $this->phpDocInfosByObjectHash[$objectHash] = $phpDocInfo;
 
         return $phpDocInfo;
@@ -138,7 +138,7 @@ final class PhpDocInfoFactory
         $this->currentNodeProvider->setNode($node);
 
         $phpDocNode = new PhpDocNode([]);
-        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, '', new BetterTokenIterator([]), $node);
+        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, new BetterTokenIterator([]), $node);
 
         // multiline by default
         $phpDocInfo->makeMultiLined();
@@ -149,7 +149,7 @@ final class PhpDocInfoFactory
     /**
      * Needed for printing
      */
-    private function setPositionOfLastToken(PhpDocNode $phpDocNode, BetterTokenIterator $betterTokenIterator): void
+    private function setPositionOfLastToken(PhpDocNode $phpDocNode): void
     {
         if ($phpDocNode->children === []) {
             return;
@@ -165,12 +165,8 @@ final class PhpDocInfoFactory
         }
     }
 
-    /**
-     * @param mixed[] $betterTokenIterator
-     */
     private function createFromPhpDocNode(
         PhpDocNode $phpDocNode,
-        string $content,
         BetterTokenIterator $betterTokenIterator,
         Node $node
     ): PhpDocInfo {
@@ -179,7 +175,6 @@ final class PhpDocInfoFactory
         $phpDocInfo = new PhpDocInfo(
             $phpDocNode,
             $betterTokenIterator,
-            $content,
             $this->staticTypeMapper,
             $node,
             $this->annotationNaming,

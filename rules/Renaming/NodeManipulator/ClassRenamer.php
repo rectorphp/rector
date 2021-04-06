@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocClassRenamer;
 use Rector\BetterPhpDocParser\ValueObject\NodeTypes;
@@ -27,6 +28,8 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
+use Rector\NodeTypeResolver\ValueObject\OldToNewType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
@@ -116,7 +119,12 @@ final class ClassRenamer
      */
     public function renameNode(Node $node, array $oldToNewClasses): ?Node
     {
-        $this->refactorPhpDoc($node, $oldToNewClasses);
+        $oldToNewTypes = [];
+        foreach ($oldToNewClasses as $oldClass => $newClass) {
+            $oldToNewTypes[] = new OldToNewType(new ObjectType($oldClass), new FullyQualifiedObjectType($newClass));
+        }
+
+        $this->refactorPhpDoc($node, $oldToNewTypes, $oldToNewClasses);
 
         if ($node instanceof Name) {
             return $this->refactorName($node, $oldToNewClasses);
@@ -134,12 +142,10 @@ final class ClassRenamer
     }
 
     /**
-     * Replace types in @var/@param/@return/@throws,
-     * Doctrine @ORM entity targetClass, Serialize, Assert etc.
-     *
+     * @param OldToNewType[] $oldToNewTypes
      * @param array<string, string> $oldToNewClasses
      */
-    private function refactorPhpDoc(Node $node, array $oldToNewClasses): void
+    private function refactorPhpDoc(Node $node, array $oldToNewTypes, array $oldToNewClasses): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if (! $phpDocInfo->hasByTypes(NodeTypes::TYPE_AWARE_NODES) && ! $phpDocInfo->hasByAnnotationClasses(
@@ -148,7 +154,7 @@ final class ClassRenamer
             return;
         }
 
-        $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldToNewClasses);
+        $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldToNewTypes);
 
         $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $phpDocInfo, $oldToNewClasses);
     }

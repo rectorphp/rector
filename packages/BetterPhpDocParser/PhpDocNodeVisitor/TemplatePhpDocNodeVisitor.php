@@ -6,9 +6,11 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
+use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
+use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\SpacingAwareTemplateTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
@@ -52,17 +54,35 @@ final class TemplatePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implemen
             throw new ShouldNotHappenException();
         }
 
-        $docContent = $betterTokenIterator->printFromTo($startAndEnd->getStart(), $startAndEnd->getEnd());
-
+        $prepositions = $this->resolvePreposition($betterTokenIterator, $startAndEnd);
         $spacingAwareTemplateTagValueNode = new SpacingAwareTemplateTagValueNode(
             $node->name,
             $node->bound,
             $node->description,
-            $docContent
+            $prepositions
         );
 
         $this->attributeMirrorer->mirror($node, $spacingAwareTemplateTagValueNode);
 
         return $spacingAwareTemplateTagValueNode;
+    }
+
+    private function resolvePreposition(BetterTokenIterator $betterTokenIterator, StartAndEnd $startAndEnd): string
+    {
+        $partialTokens = $betterTokenIterator->partialTokens($startAndEnd->getStart(), $startAndEnd->getEnd());
+
+        foreach ($partialTokens as $token) {
+            if ($token[1] !== Lexer::TOKEN_IDENTIFIER) {
+                continue;
+            }
+
+            if (! in_array($token[0], ['as', 'of'], true)) {
+                continue;
+            }
+
+            return $token[0];
+        }
+
+        return 'of';
     }
 }

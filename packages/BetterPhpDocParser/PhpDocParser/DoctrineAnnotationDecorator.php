@@ -9,7 +9,9 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 use Rector\BetterPhpDocParser\ValueObject\DoctrineAnnotation\SilentKeyMap;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
@@ -45,16 +47,23 @@ final class DoctrineAnnotationDecorator
      */
     private $tokenIteratorFactory;
 
+    /**
+     * @var AttributeMirrorer
+     */
+    private $attributeMirrorer;
+
     public function __construct(
         CurrentNodeProvider $currentNodeProvider,
         ClassAnnotationMatcher $classAnnotationMatcher,
         StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser,
-        TokenIteratorFactory $tokenIteratorFactory
+        TokenIteratorFactory $tokenIteratorFactory,
+        AttributeMirrorer $attributeMirrorer
     ) {
         $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->staticDoctrineAnnotationParser = $staticDoctrineAnnotationParser;
         $this->tokenIteratorFactory = $tokenIteratorFactory;
+        $this->attributeMirrorer = $attributeMirrorer;
     }
 
     public function decorate(PhpDocNode $phpDocNode): void
@@ -67,7 +76,7 @@ final class DoctrineAnnotationDecorator
         // merge split doctrine nested tags
         $this->mergeNestedDoctrineAnnotations($phpDocNode);
 
-        foreach ($phpDocNode->children as $phpDocChildNode) {
+        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
             if (! $phpDocChildNode instanceof PhpDocTagNode) {
                 continue;
             }
@@ -104,7 +113,13 @@ final class DoctrineAnnotationDecorator
             );
             $doctrineAnnotationTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $formerStartEnd);
 
-            $phpDocChildNode->value = $doctrineAnnotationTagValueNode;
+            $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode(
+                $phpDocChildNode->name,
+                $doctrineAnnotationTagValueNode
+            );
+
+            $this->attributeMirrorer->mirror($phpDocChildNode, $spacelessPhpDocTagNode);
+            $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
         }
     }
 
