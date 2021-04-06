@@ -2,19 +2,18 @@
 
 namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\Fixture;
 
-final class SkipNoReturn
+final class SkipNotUnionType
 {
     public function run()
     {
-        /** @var \stdClass|null $value */
+        /** @var \stdClass $value */
         $value = $this->foo->bar();
         if (! $value instanceof \stdClass) {
-            echo 'statement';
+            return $value;
         }
 
-        return $value;
+        return null;
     }
 }
 
 ?>
-

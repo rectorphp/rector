@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\Fixture;
 
-class SkipFlipReturn
+final class SkipFlipReturn
 {
     public function run()
     {

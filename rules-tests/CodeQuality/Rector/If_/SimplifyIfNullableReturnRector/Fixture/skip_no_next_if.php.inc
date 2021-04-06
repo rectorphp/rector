@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\Fixture;
 
-class SkipNoNextIf
+final class SkipNoNextIf
 {
     public function run()
     {

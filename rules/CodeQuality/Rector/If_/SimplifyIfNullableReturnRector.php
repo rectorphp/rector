@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -15,6 +17,9 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Type\UnionType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use PHPStan\Type\NullType;
 
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\SimplifyIfNullableReturnRectorTest
@@ -93,11 +98,13 @@ CODE_SAMPLE
         $instanceof = $cond->expr;
         $variable   = $instanceof->expr;
 
-        $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $node) use ($variable): bool {
-            return $node instanceof Assign && $node->var === $variable;
-        });
+        $previous = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if (! $previous instanceof Expression) {
+            return null;
+        }
 
-        if ($previousAssign === null) {
+        $previousAssign = $previous->expr;
+        if (! $previousAssign instanceof Assign && $this->nodeComparator->areNodesEqual($previousAssign->var, $variable)) {
             return null;
         }
 
@@ -107,7 +114,29 @@ CODE_SAMPLE
             return null;
         }
 
-        return $node;
+        $variableType = $this->nodeTypeResolver->resolve($previousAssign->var);
+        if (! $variableType instanceof UnionType) {
+            return null;
+        }
+
+        $types = $variableType->getTypes();
+        if (count($types) > 2) {
+            return null;
+        }
+
+        if ($types[0] instanceof FullyQualifiedObjectType && $types[1] instanceof NullType) {
+            return $this->processSimplifyNullableReturn($next, $previous, $previousAssign->expr);
+        }
+
+        return null;
+    }
+
+    private function processSimplifyNullableReturn(Return_ $return, Expression $expression, Expr $expr): Return_
+    {
+        $this->removeNode($return);
+        $this->removeNode($expression);
+
+        return new Return_($expr);
     }
 
     private function shouldSkip(If_ $if): bool
