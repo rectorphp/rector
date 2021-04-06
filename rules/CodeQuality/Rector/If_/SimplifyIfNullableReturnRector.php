@@ -136,7 +136,7 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Node $next */
+        /** @var Node|null $next */
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
         if ($this->isNextReturnInCorrect($cond, $variable, $next)) {
             return null;
@@ -167,7 +167,7 @@ CODE_SAMPLE
         return $expr instanceof Instanceof_ && ! $this->nodeComparator->areNodesEqual($variable, $return->expr);
     }
 
-    private function isNextReturnInCorrect(Expr $expr, Expr $variable, Node $return): bool
+    private function isNextReturnInCorrect(Expr $expr, Expr $variable, ?Node $return): bool
     {
         if (! $return instanceof Return_) {
             return true;
