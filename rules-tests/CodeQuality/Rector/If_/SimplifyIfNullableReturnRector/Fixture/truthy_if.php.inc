@@ -26,13 +26,7 @@ class TruthyIf
 {
     public function run()
     {
-        /** @var \stdClass|null $value */
-        $value = $this->foo->bar();
-        if ($value instanceof \stdClass) {
-            return $value;
-        }
-
-        return null;
+        return $this->foo->bar();
     }
 }
 
