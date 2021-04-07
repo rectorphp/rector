@@ -50,8 +50,7 @@ final class SimplifyIfNullableReturnRector extends AbstractRector
         IfManipulator $ifManipulator,
         AssignVariableTypeResolver $assignVariableTypeResolver,
         VarTagRemover $varTagRemover
-    )
-    {
+    ) {
         $this->ifManipulator = $ifManipulator;
         $this->assignVariableTypeResolver = $assignVariableTypeResolver;
         $this->varTagRemover = $varTagRemover;
