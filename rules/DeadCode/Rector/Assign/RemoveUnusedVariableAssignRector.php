@@ -11,9 +11,11 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -143,6 +145,14 @@ CODE_SAMPLE
 
     private function isVariableNamed(Node $node, Variable $variable): bool
     {
+        if ($node instanceof MethodCall && $node->name instanceof Variable && is_string($node->name->name)) {
+            return $this->isName($variable, $node->name->name);
+        }
+
+        if ($node instanceof PropertyFetch && $node->name instanceof Variable && is_string($node->name->name)) {
+            return $this->isName($variable, $node->name->name);
+        }
+
         if (! $node instanceof Variable) {
             return false;
         }
