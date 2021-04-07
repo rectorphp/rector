@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Privatization\Rector\Class_\ChangeReadOnlyPropertyWithDefaultValueToConstantRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector\Fixture;
 
 class SkipReferenced
 {
