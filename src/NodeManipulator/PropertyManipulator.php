@@ -17,18 +17,18 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\MutatingScope;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
 use Symplify\PackageBuilder\Php\TypeChecker;
-use PHPStan\Analyser\MutatingScope;
-use PHPStan\Type\ThisType;
-use PHPStan\Type\ObjectType;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeNameResolver\NodeNameResolver;
 
 /**
  * "private $property"
@@ -181,13 +181,13 @@ final class PropertyManipulator
 
     private function isFoundByRefParam(MethodCall $methodCall): bool
     {
-        $scope  = $methodCall->getAttribute(AttributeKey::SCOPE);
+        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof MutatingScope) {
             return false;
         }
 
         $methodName = $this->nodeNameResolver->getName($methodCall->name);
-        $type       = $scope->getType($methodCall->var);
+        $type = $scope->getType($methodCall->var);
 
         if ($type instanceof ThisType) {
             $type = $type->getStaticObjectType();
