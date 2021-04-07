@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject;
 
+/**
+ * @deprecated This should be removed soon
+ */
 final class TagValueNodeConfiguration
 {
     /**
