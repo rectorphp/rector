@@ -9,9 +9,6 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
-use Rector\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactory;
-use Rector\Core\Exception\ShouldNotHappenException;
 
 abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
 {
@@ -39,11 +36,6 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     protected $silentKey;
 
     /**
-     * @var TagValueNodeConfiguration
-     */
-    protected $tagValueNodeConfiguration;
-
-    /**
      * @var string|null
      */
     protected $originalContent;
@@ -53,16 +45,9 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
      */
     public function __construct(array $values = [], ?string $originalContent = null, ?string $silentKey = null)
     {
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
-
         $this->values = $values;
         $this->originalContent = $originalContent;
         $this->silentKey = $silentKey;
-    }
-
-    public function getOriginalContent(): ?string
-    {
-        return $this->originalContent;
     }
 
     public function removeValue(string $key): void
@@ -186,20 +171,6 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         }
 
         return $explicitKeysValues;
-    }
-
-    protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
-    {
-        $tagValueNodeConfigurationFactory = new TagValueNodeConfigurationFactory();
-
-        // prevent override
-        if ($this->tagValueNodeConfiguration !== null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $this->tagValueNodeConfiguration = $tagValueNodeConfigurationFactory->createFromOriginalContent(
-            $originalContent
-        );
     }
 
     /**

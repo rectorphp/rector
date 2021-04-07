@@ -49,14 +49,7 @@ final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode
         }
 
         $itemContents = $this->printValuesContent($this->values);
-
-        // without modifications, @todo split into items if needed
-        return sprintf(
-            '(%s%s%s)',
-            $this->tagValueNodeConfiguration->hasNewlineBeforeClosing() ? PHP_EOL : '',
-            $itemContents,
-            $this->tagValueNodeConfiguration->hasNewlineAfterOpening() ? PHP_EOL : ''
-        );
+        return sprintf('(%s)', $itemContents);
     }
 
     public function getAnnotationClass(): string
