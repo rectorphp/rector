@@ -187,6 +187,10 @@ final class PropertyManipulator
         }
 
         $methodName = $this->nodeNameResolver->getName($methodCall->name);
+        if ($methodName === null) {
+            return false;
+        }
+
         $type = $scope->getType($methodCall->var);
 
         if ($type instanceof ThisType) {
