@@ -36,17 +36,11 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     protected $silentKey;
 
     /**
-     * @var string|null
-     */
-    protected $originalContent;
-
-    /**
      * @param mixed[] $values
      */
-    public function __construct(array $values = [], ?string $originalContent = null, ?string $silentKey = null)
+    public function __construct(array $values = [], ?string $silentKey = null)
     {
         $this->values = $values;
-        $this->originalContent = $originalContent;
         $this->silentKey = $silentKey;
     }
 
@@ -133,7 +127,6 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         }
 
         $this->values[0] = $value;
-        $this->hasChanged = true;
 
         // invoke reprint
         $this->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);

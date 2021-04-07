@@ -14,6 +14,11 @@ final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode
     private $annotationClass;
 
     /**
+     * @var string|null
+     */
+    private $originalContent;
+
+    /**
      * @param array<mixed, mixed> $values
      */
     public function __construct(
@@ -23,19 +28,15 @@ final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode
         array $values = [],
         ?string $silentKey = null
     ) {
-        $this->hasChanged = true;
         $this->annotationClass = $annotationClass;
+        $this->originalContent = $originalContent;
 
-        parent::__construct($values, $originalContent, $silentKey);
+        parent::__construct($values, $silentKey);
     }
 
     public function __toString(): string
     {
-        if (! $this->hasChanged) {
-            if ($this->originalContent === null) {
-                return '';
-            }
-
+        if (! $this->hasChanged && $this->originalContent !== null) {
             return $this->originalContent;
         }
 
