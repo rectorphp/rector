@@ -128,6 +128,8 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
 
         $this->values[0] = $value;
 
+        $this->hasChanged = true;
+
         // invoke reprint
         $this->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
     }
