@@ -81,13 +81,7 @@ class SomeClass
 {
     public function run()
     {
-        /** @var \stdClass|null $value */
-        $value = $this->foo->bar();
-        if (! $value instanceof \stdClass) {
-            return null;
-        }
-
-        return $value;
+        return $this->foo->bar();
     }
 }
 CODE_SAMPLE
