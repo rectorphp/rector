@@ -73,7 +73,7 @@
         "nette/forms": "^3.0",
         "phpstan/phpstan-nette": "^0.12.16",
         "phpunit/phpunit": "^9.5",
-        "rector/rector-generator": "^0.1.1",
+        "rector/rector-generator": "^0.1.5",
         "symplify/coding-standard": "^9.2.15",
         "symplify/easy-ci": "^9.2.15",
         "symplify/easy-coding-standard": "^9.2.15",
