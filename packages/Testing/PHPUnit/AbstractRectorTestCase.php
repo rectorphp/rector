@@ -224,7 +224,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
             // mimic post-rectors
             $changedContent = $this->fileProcessor->printToString($originalFileInfo);
         } elseif (Strings::match($originalFileInfo->getFilename(), StaticNonPhpFileSuffixes::getSuffixRegexPattern())) {
-            $changedContent = $this->nonPhpFileProcessor->processFileInfo($originalFileInfo);
+            $changedContent = $this->nonPhpFileProcessor->process($originalFileInfo);
         } else {
             $message = sprintf('Suffix "%s" is not supported yet', $originalFileInfo->getSuffix());
             throw new ShouldNotHappenException($message);

@@ -4,23 +4,17 @@ declare(strict_types=1);
 
 namespace Rector\Core\NonPhpFile;
 
-use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
+use Rector\Core\Contract\Processor\NonPhpFileProcessorInterface;
+use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameNonPhpTest
  */
-final class NonPhpFileProcessor
+final class NonPhpFileProcessor implements NonPhpFileProcessorInterface
 {
-    /**
-     * @var Configuration
-     */
-    private $configuration;
-
     /**
      * @var RenamedClassesDataCollector
      */
@@ -32,47 +26,21 @@ final class NonPhpFileProcessor
     private $renamedClassesCollector;
 
     /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    /**
      * @var NonPhpFileClassRenamer
      */
     private $nonPhpFileClassRenamer;
 
-    /**
-     * @var ErrorAndDiffCollector
-     */
-    private $errorAndDiffCollector;
-
     public function __construct(
         RenamedClassesDataCollector $renamedClassesDataCollector,
-        Configuration $configuration,
         RenamedClassesCollector $renamedClassesCollector,
-        SmartFileSystem $smartFileSystem,
-        NonPhpFileClassRenamer $nonPhpFileClassRenamer,
-        ErrorAndDiffCollector $errorAndDiffCollector
+        NonPhpFileClassRenamer $nonPhpFileClassRenamer
     ) {
-        $this->configuration = $configuration;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->renamedClassesCollector = $renamedClassesCollector;
-        $this->smartFileSystem = $smartFileSystem;
         $this->nonPhpFileClassRenamer = $nonPhpFileClassRenamer;
-        $this->errorAndDiffCollector = $errorAndDiffCollector;
     }
 
-    /**
-     * @param SmartFileInfo[] $nonPhpFileInfos
-     */
-    public function runOnFileInfos(array $nonPhpFileInfos): void
-    {
-        foreach ($nonPhpFileInfos as $nonPhpFileInfo) {
-            $this->processFileInfo($nonPhpFileInfo);
-        }
-    }
-
-    public function processFileInfo(SmartFileInfo $smartFileInfo): string
+    public function process(SmartFileInfo $smartFileInfo): ?string
     {
         $oldContents = $smartFileInfo->getContents();
 
@@ -85,23 +53,19 @@ final class NonPhpFileProcessor
 
         // nothing has changed
         if ($oldContents === $newContents) {
-            return $oldContents;
+            return null;
         }
-
-        $this->reportFileContentChange($smartFileInfo, $newContents, $oldContents);
 
         return $newContents;
     }
 
-    private function reportFileContentChange(
-        SmartFileInfo $smartFileInfo,
-        string $newContents,
-        string $oldContents
-    ): void {
-        $this->errorAndDiffCollector->addFileDiff($smartFileInfo, $newContents, $oldContents);
-        if (! $this->configuration->isDryRun()) {
-            $this->smartFileSystem->dumpFile($smartFileInfo->getRealPath(), $newContents);
-            $this->smartFileSystem->chmod($smartFileInfo->getRealPath(), $smartFileInfo->getPerms());
-        }
+    public function canProcess(SmartFileInfo $smartFileInfo): bool
+    {
+        return in_array($smartFileInfo->getExtension(), $this->allowedFileExtensions(), true);
+    }
+
+    public function allowedFileExtensions(): array
+    {
+        return StaticNonPhpFileSuffixes::SUFFIXES;
     }
 }
