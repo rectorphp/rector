@@ -77,10 +77,17 @@ final class BetterStandardPrinterTest extends AbstractKernelTestCase
 
     public function testYield(): void
     {
-        $printed = $this->betterStandardPrinter->print(new Yield_(new String_('value')));
-        $this->assertSame("yield 'value'", $printed);
+        $yield = new Yield_(new String_('value'));
+
+        $printed = $this->betterStandardPrinter->print($yield);
+        $this->assertSame("(yield 'value')", $printed);
 
         $printed = $this->betterStandardPrinter->print(new Yield_());
         $this->assertSame('yield', $printed);
+
+        $expression = new Expression($yield);
+        $yield->setAttribute(AttributeKey::PARENT_NODE, $expression);
+        $printed = $this->betterStandardPrinter->print($expression);
+        $this->assertSame("yield 'value';", $printed);
     }
 }

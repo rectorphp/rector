@@ -282,7 +282,7 @@ final class BetterStandardPrinter extends Standard
         }
 
         $parentNode = $yield->getAttribute(AttributeKey::PARENT_NODE);
-        $shouldAddBrackets = $parentNode instanceof Expression;
+        $shouldAddBrackets = ! $parentNode instanceof Expression;
 
         return sprintf(
             '%syield %s%s%s',

@@ -8,7 +8,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class AliasedObjectType extends ObjectType
 {
@@ -33,9 +32,6 @@ final class AliasedObjectType extends ObjectType
     {
         $name = new Name($this->fullyQualifiedClass);
         $useUse = new UseUse($name, $this->getClassName());
-
-        $name->setAttribute(AttributeKey::PARENT_NODE, $useUse);
-
         return new Use_([$useUse]);
     }
 
