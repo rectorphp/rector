@@ -185,17 +185,16 @@ final class ClassRenamer
         }
 
         $last = $name->getLast();
-        $newNameName = new FullyQualified($newName);
-        $newNameLastName = $newNameName->getLast();
+        $newFullyQualified = new FullyQualified($newName);
+        $newNameLastName = $newFullyQualified->getLast();
 
-        $importNames = $this->parameterProvider->provideParameter(Option::AUTO_IMPORT_NAMES);
-        if ($last === $newNameLastName && $importNames) {
+        $importNames = $this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES);
+
+        if ($this->shouldRemoveUseName($last, $newNameLastName, $importNames)) {
             $this->removeUseName($name);
         }
 
-        $name = new FullyQualified($newName);
-        $name->setAttribute(AttributeKey::PARENT_NODE, $parentNode);
-        return $name;
+        return new FullyQualified($newName);
     }
 
     private function removeUseName(Name $oldName): void
@@ -296,10 +295,7 @@ final class ClassRenamer
             $this->changeNameToFullyQualifiedName($classLike);
 
             $nameNode = new Name($newNamespacePart);
-            $namespace = new Namespace_($nameNode, [$classLike]);
-            $nameNode->setAttribute(AttributeKey::PARENT_NODE, $namespace);
-
-            return $namespace;
+            return new Namespace_($nameNode, [$classLike]);
         }
 
         return $classLike;
@@ -444,5 +440,10 @@ final class ClassRenamer
         }
 
         return true;
+    }
+
+    private function shouldRemoveUseName(string $last, string $newNameLastName, bool $importNames): bool
+    {
+        return $last === $newNameLastName && $importNames;
     }
 }

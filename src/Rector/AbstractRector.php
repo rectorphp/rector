@@ -309,7 +309,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // changed!
         if ($this->hasNodeChanged($originalNode, $node)) {
-            $this->mirrorAttributes($originalNodeWithAttributes, $node);
             $this->updateAttributes($node);
             $this->keepFileInfoAttribute($node, $originalNode);
             $this->rectorChangeCollector->notifyNodeFileInfo($node);
@@ -318,6 +317,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $nodeTraverser = new NodeTraverser();
             $nodeTraverser->addVisitor(new ParentConnectingVisitor());
             $nodeTraverser->traverse([$node]);
+
+            $this->mirrorAttributes($originalNodeWithAttributes, $node);
         }
 
         // if stmt ("$value;") was replaced by expr ("$value"), add the ending ";" (Expression) to prevent breaking the code
