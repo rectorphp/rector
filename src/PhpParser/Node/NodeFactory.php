@@ -263,12 +263,10 @@ final class NodeFactory
         $property = $propertyBuilder->getNode();
 
         $this->addPropertyType($property, $type);
-        $this->decorateParentPropertyProperty($property);
 
         // add @inject
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@inject', new GenericTagValueNode('')));
-        $phpDocInfo->makeMultiLined();
 
         return $property;
     }
@@ -280,8 +278,6 @@ final class NodeFactory
 
         $property = $propertyBuilder->getNode();
         $this->addPropertyType($property, $type);
-
-        $this->decorateParentPropertyProperty($property);
 
         return $property;
     }
@@ -317,11 +313,7 @@ final class NodeFactory
             $variable = new MethodCall($variable->var, $variable->name, $variable->args);
         }
 
-        $methodCallNode = $this->builderFactory->methodCall($variable, $method, $arguments);
-
-        $variable->setAttribute(AttributeKey::PARENT_NODE, $methodCallNode);
-
-        return $methodCallNode;
+        return $this->builderFactory->methodCall($variable, $method, $arguments);
     }
 
     /**
@@ -355,11 +347,7 @@ final class NodeFactory
         $propertyBuilder->makeStatic();
         $propertyBuilder->setDefault($node);
 
-        $property = $propertyBuilder->getNode();
-
-        $this->decorateParentPropertyProperty($property);
-
-        return $property;
+        return $propertyBuilder->getNode();
     }
 
     public function createProperty(string $name): Property
@@ -367,8 +355,6 @@ final class NodeFactory
         $propertyBuilder = new PropertyBuilder($name);
 
         $property = $propertyBuilder->getNode();
-        $this->decorateParentPropertyProperty($property);
-
         $this->phpDocInfoFactory->createFromNode($property);
 
         return $property;
@@ -380,7 +366,6 @@ final class NodeFactory
         $propertyBuilder->makePrivate();
 
         $property = $propertyBuilder->getNode();
-        $this->decorateParentPropertyProperty($property);
 
         $this->phpDocInfoFactory->createFromNode($property);
 
@@ -393,7 +378,6 @@ final class NodeFactory
         $propertyBuilder->makePublic();
 
         $property = $propertyBuilder->getNode();
-        $this->decorateParentPropertyProperty($property);
 
         $this->phpDocInfoFactory->createFromNode($property);
 
@@ -694,13 +678,6 @@ final class NodeFactory
         }
 
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
-    }
-
-    private function decorateParentPropertyProperty(Property $property): void
-    {
-        // complete property property parent, needed for other operations
-        $propertyProperty = $property->props[0];
-        $propertyProperty->setAttribute(AttributeKey::PARENT_NODE, $property);
     }
 
     /**

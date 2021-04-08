@@ -16,16 +16,19 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
+use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
+use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 /**
  * @template TNode as \PHPStan\PhpDocParser\Ast\Node
@@ -45,19 +48,9 @@ final class PhpDocInfo
     ];
 
     /**
-     * @var string
-     */
-    private $originalContent;
-
-    /**
      * @var bool
      */
     private $isSingleLine = false;
-
-    /**
-     * @var mixed[]
-     */
-    private $tokens = [];
 
     /**
      * @var PhpDocNode
@@ -100,12 +93,13 @@ final class PhpDocInfo
     private $rectorChangeCollector;
 
     /**
-     * @param mixed[] $tokens
+     * @var BetterTokenIterator
      */
+    private $betterTokenIterator;
+
     public function __construct(
         PhpDocNode $phpDocNode,
-        array $tokens,
-        string $originalContent,
+        BetterTokenIterator $betterTokenIterator,
         StaticTypeMapper $staticTypeMapper,
         \PhpParser\Node $node,
         AnnotationNaming $annotationNaming,
@@ -113,11 +107,10 @@ final class PhpDocInfo
         RectorChangeCollector $rectorChangeCollector
     ) {
         $this->phpDocNode = $phpDocNode;
-        $this->tokens = $tokens;
+        $this->betterTokenIterator = $betterTokenIterator;
         $this->originalPhpDocNode = clone $phpDocNode;
-        $this->originalContent = $originalContent;
 
-        if ($this->originalContent !== null && ! Strings::match(trim($this->originalContent), "#\n#")) {
+        if (! $betterTokenIterator->containsTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
             $this->isSingleLine = true;
         }
 
@@ -128,23 +121,11 @@ final class PhpDocInfo
         $this->rectorChangeCollector = $rectorChangeCollector;
     }
 
-    public function getOriginalContent(): string
-    {
-        return $this->originalContent;
-    }
-
     public function addPhpDocTagNode(PhpDocChildNode $phpDocChildNode): void
     {
         $this->phpDocNode->children[] = $phpDocChildNode;
         // to give node more space
         $this->makeMultiLined();
-        $this->markAsChanged();
-    }
-
-    public function addTagValueNodeWithShortName(ShortNameAwareTagInterface $shortNameAwareTag): void
-    {
-        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode($shortNameAwareTag->getShortName(), $shortNameAwareTag);
-        $this->addPhpDocTagNode($spacelessPhpDocTagNode);
     }
 
     public function getPhpDocNode(): PhpDocNode
@@ -162,12 +143,12 @@ final class PhpDocInfo
      */
     public function getTokens(): array
     {
-        return $this->tokens;
+        return $this->betterTokenIterator->getTokens();
     }
 
     public function getTokenCount(): int
     {
-        return count($this->tokens);
+        return $this->betterTokenIterator->count();
     }
 
     public function getVarTagValueNode(): ?VarTagValueNode
@@ -277,7 +258,7 @@ final class PhpDocInfo
     }
 
     /**
-     * @param array<class-string> $classes
+     * @param string[] $classes
      */
     public function getByAnnotationClasses(array $classes): ?DoctrineAnnotationTagValueNode
     {
@@ -291,25 +272,19 @@ final class PhpDocInfo
         return null;
     }
 
-    /**
-     * @param class-string $class
-     */
     public function hasByAnnotationClass(string $class): bool
     {
         return $this->getByAnnotationClass($class) !== null;
     }
 
     /**
-     * @param array<class-string> $annotationsClasses
+     * @param string[] $annotationsClasses
      */
     public function hasByAnnotationClasses(array $annotationsClasses): bool
     {
         return $this->getByAnnotationClasses($annotationsClasses) !== null;
     }
 
-    /**
-     * @param class-string $desiredClass
-     */
     public function getByAnnotationClass(string $desiredClass): ?DoctrineAnnotationTagValueNode
     {
         foreach ($this->phpDocNode->children as $phpDocChildNode) {
@@ -429,7 +404,7 @@ final class PhpDocInfo
             return false;
         }
 
-        return $this->tokens === [];
+        return $this->betterTokenIterator->count() === 0;
     }
 
     public function makeSingleLined(): void
@@ -476,6 +451,11 @@ final class PhpDocInfo
         return $this->hasByNames(['inheritdoc', 'inheritDoc']);
     }
 
+    /**
+     * @deprecated
+     * Should be handled by attributes of phpdoc node - if stard_and_end is missing in one of nodes, it has been changed
+     * Similar to missing original node in php-aprser
+     */
     public function markAsChanged(): void
     {
         $this->hasChanged = true;
@@ -492,7 +472,17 @@ final class PhpDocInfo
             return true;
         }
 
-        return $this->hasChanged;
+        if ($this->hasChanged) {
+            return true;
+        }
+
+        // has a single node with missing start_end
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $changedPhpDocNodeVisitor = new ChangedPhpDocNodeVisitor();
+        $phpDocNodeTraverser->addPhpDocNodeVisitor($changedPhpDocNodeVisitor);
+        $phpDocNodeTraverser->traverse($this->phpDocNode);
+
+        return $changedPhpDocNodeVisitor->hasChanged();
     }
 
     /**

@@ -311,8 +311,8 @@ CODE_SAMPLE
         if (! $this->isName($classMethod, '#^(render|action)#')) {
             return true;
         }
-        $hasRouteAnnotation = $classMethod->getAttribute(ExplicitRouteAnnotationDecorator::HAS_ROUTE_ANNOTATION);
 
+        $hasRouteAnnotation = $classMethod->getAttribute(ExplicitRouteAnnotationDecorator::HAS_ROUTE_ANNOTATION);
         if ($hasRouteAnnotation) {
             return true;
         }

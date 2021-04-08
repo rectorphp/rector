@@ -168,7 +168,6 @@ CODE_SAMPLE
             }
 
             $returnTagValueNode->type = $fullyQualifiedTypeNode;
-            $phpDocInfo->markAsChanged();
         }
     }
 }

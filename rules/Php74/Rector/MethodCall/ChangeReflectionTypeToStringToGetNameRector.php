@@ -190,12 +190,8 @@ CODE_SAMPLE
     private function refactorReflectionParameterGetName(MethodCall $methodCall): Ternary
     {
         $getNameMethodCall = $this->nodeFactory->createMethodCall($methodCall, self::GET_NAME);
-        $ternary = new Ternary($methodCall, $getNameMethodCall, $this->nodeFactory->createNull());
 
-        // to prevent looping
-        $methodCall->setAttribute(AttributeKey::PARENT_NODE, $ternary);
-
-        return $ternary;
+        return new Ternary($methodCall, $getNameMethodCall, $this->nodeFactory->createNull());
     }
 
     private function isReflectionFunctionAbstractGetReturnTypeMethodCall(MethodCall $methodCall): bool
@@ -215,11 +211,6 @@ CODE_SAMPLE
         }
 
         $getNameMethodCall = $this->nodeFactory->createMethodCall($methodCall, self::GET_NAME);
-        $ternary = new Ternary($methodCall, $getNameMethodCall, $this->nodeFactory->createNull());
-
-        // to prevent looping
-        $methodCall->setAttribute(AttributeKey::PARENT_NODE, $ternary);
-
-        return $ternary;
+        return new Ternary($methodCall, $getNameMethodCall, $this->nodeFactory->createNull());
     }
 }

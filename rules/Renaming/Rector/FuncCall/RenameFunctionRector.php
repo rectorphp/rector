@@ -64,8 +64,6 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
             }
 
             $node->name = $this->createName($newFunction);
-            // to keep relationship to parent
-            $node->name->setAttribute(AttributeKey::PARENT_NODE, $node);
             $node->name->setAttribute(AttributeKey::FILE_INFO, $node->getAttribute(AttributeKey::FILE_INFO));
 
             return $node;

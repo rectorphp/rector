@@ -7,6 +7,7 @@ namespace Rector\Core\NodeManipulator;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
@@ -14,10 +15,16 @@ use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\MutatingScope;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
@@ -63,6 +70,16 @@ final class PropertyManipulator
      */
     private $propertyFetchFinder;
 
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
         AssignManipulator $assignManipulator,
         BetterNodeFinder $betterNodeFinder,
@@ -70,7 +87,9 @@ final class PropertyManipulator
         ReadWritePropertyAnalyzer $readWritePropertyAnalyzer,
         PhpDocInfoFactory $phpDocInfoFactory,
         TypeChecker $typeChecker,
-        PropertyFetchFinder $propertyFetchFinder
+        PropertyFetchFinder $propertyFetchFinder,
+        NodeNameResolver $nodeNameResolver,
+        NodeRepository $nodeRepository
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->assignManipulator = $assignManipulator;
@@ -79,6 +98,8 @@ final class PropertyManipulator
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeChecker = $typeChecker;
         $this->propertyFetchFinder = $propertyFetchFinder;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function isPropertyUsedInReadContext(Property $property): bool
@@ -148,8 +169,54 @@ final class PropertyManipulator
             if (! $readArg) {
                 return true;
             }
+
+            $caller = $parent->getAttribute(AttributeKey::PARENT_NODE);
+            if ($caller instanceof MethodCall) {
+                return $this->isFoundByRefParam($caller);
+            }
         }
 
         return $this->assignManipulator->isLeftPartOfAssign($expr);
+    }
+
+    private function isFoundByRefParam(MethodCall $methodCall): bool
+    {
+        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof MutatingScope) {
+            return false;
+        }
+
+        $methodName = $this->nodeNameResolver->getName($methodCall->name);
+        if ($methodName === null) {
+            return false;
+        }
+
+        $type = $scope->getType($methodCall->var);
+
+        if ($type instanceof ThisType) {
+            $type = $type->getStaticObjectType();
+        }
+
+        if ($type instanceof ObjectType) {
+            $type = $type->getClassName();
+        }
+
+        if (! is_string($type)) {
+            return false;
+        }
+
+        $classMethod = $this->nodeRepository->findClassMethod($type, $methodName);
+        if (! $classMethod instanceof ClassMethod) {
+            return false;
+        }
+
+        $params = $classMethod->getParams();
+        foreach ($params as $param) {
+            if ($param->byRef) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

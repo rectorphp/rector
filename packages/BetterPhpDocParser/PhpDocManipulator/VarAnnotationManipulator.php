@@ -49,6 +49,7 @@ final class VarAnnotationManipulator
 
         $varTagValueNode = new VarTagValueNode($fullyQualifiedIdentifierTypeNode, '$' . $variableName, '');
         $phpDocInfo->addTagValueNode($varTagValueNode);
+        $phpDocInfo->makeSingleLined();
     }
 
     public function decorateNodeWithType(Node $node, Type $staticType): void

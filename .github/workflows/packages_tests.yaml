@@ -21,8 +21,7 @@ jobs:
             matrix:
                 package_name:
                     - rector-nette
-                    # skip until packages use new static doctrine annotation parser
-                    # rector-symfony
+                    - rector-symfony
                     - rector-laravel
                     - rector-phpunit
                     - rector-cakephp

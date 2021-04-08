@@ -150,10 +150,9 @@ CODE_SAMPLE
             foreach ($this->pseudoNamespacesToNamespaces as $pseudoNamespaceToNamespace) {
                 $this->phpDocTypeRenamer->changeUnderscoreType($phpDocInfo, $node, $pseudoNamespaceToNamespace);
             }
-            if ($node instanceof Name) {
-                return $this->processNameOrIdentifier($node);
-            }
-            if ($node instanceof Identifier) {
+
+            // @todo - update rule to allow for bool instanceof check
+            if ($node instanceof Name || $node instanceof Identifier) {
                 return $this->processNameOrIdentifier($node);
             }
 

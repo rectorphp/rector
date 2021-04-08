@@ -9,10 +9,12 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
+use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 use Rector\BetterPhpDocParser\ValueObject\DoctrineAnnotation\SilentKeyMap;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -45,16 +47,23 @@ final class DoctrineAnnotationDecorator
      */
     private $tokenIteratorFactory;
 
+    /**
+     * @var AttributeMirrorer
+     */
+    private $attributeMirrorer;
+
     public function __construct(
         CurrentNodeProvider $currentNodeProvider,
         ClassAnnotationMatcher $classAnnotationMatcher,
         StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser,
-        TokenIteratorFactory $tokenIteratorFactory
+        TokenIteratorFactory $tokenIteratorFactory,
+        AttributeMirrorer $attributeMirrorer
     ) {
         $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->staticDoctrineAnnotationParser = $staticDoctrineAnnotationParser;
         $this->tokenIteratorFactory = $tokenIteratorFactory;
+        $this->attributeMirrorer = $attributeMirrorer;
     }
 
     public function decorate(PhpDocNode $phpDocNode): void
@@ -67,7 +76,7 @@ final class DoctrineAnnotationDecorator
         // merge split doctrine nested tags
         $this->mergeNestedDoctrineAnnotations($phpDocNode);
 
-        foreach ($phpDocNode->children as $phpDocChildNode) {
+        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
             if (! $phpDocChildNode instanceof PhpDocTagNode) {
                 continue;
             }
@@ -94,7 +103,7 @@ final class DoctrineAnnotationDecorator
             // https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L742
             $values = $this->staticDoctrineAnnotationParser->resolveAnnotationMethodCall($nestedTokenIterator);
 
-            $formerStartEnd = $genericTagValueNode->getAttribute(Attribute::START_END);
+            $formerStartEnd = $genericTagValueNode->getAttribute(PhpDocAttributeKey::START_AND_END);
 
             $doctrineAnnotationTagValueNode = new DoctrineAnnotationTagValueNode(
                 $fullyQualifiedAnnotationClass,
@@ -102,9 +111,15 @@ final class DoctrineAnnotationDecorator
                 $values,
                 SilentKeyMap::CLASS_NAMES_TO_SILENT_KEYS[$fullyQualifiedAnnotationClass] ?? null
             );
-            $doctrineAnnotationTagValueNode->setAttribute(StartAndEnd::class, $formerStartEnd);
+            $doctrineAnnotationTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $formerStartEnd);
 
-            $phpDocChildNode->value = $doctrineAnnotationTagValueNode;
+            $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode(
+                $phpDocChildNode->name,
+                $doctrineAnnotationTagValueNode
+            );
+
+            $this->attributeMirrorer->mirror($phpDocChildNode, $spacelessPhpDocTagNode);
+            $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
         }
     }
 
@@ -146,13 +161,13 @@ final class DoctrineAnnotationDecorator
                 $genericTagValueNode->value .= PHP_EOL . $nextPhpDocChildNode->name . $nextPhpDocChildNode->value;
 
                 /** @var StartAndEnd $currentStartAndEnd */
-                $currentStartAndEnd = $phpDocChildNode->getAttribute(StartAndEnd::class);
+                $currentStartAndEnd = $phpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
 
                 /** @var StartAndEnd $nextStartAndEnd */
-                $nextStartAndEnd = $nextPhpDocChildNode->getAttribute(StartAndEnd::class);
+                $nextStartAndEnd = $nextPhpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
 
                 $startAndEnd = new StartAndEnd($currentStartAndEnd->getStart(), $nextStartAndEnd->getEnd());
-                $phpDocChildNode->setAttribute(StartAndEnd::class, $startAndEnd);
+                $phpDocChildNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
 
                 ++$key;
                 if (! isset($phpDocNode->children[$key])) {

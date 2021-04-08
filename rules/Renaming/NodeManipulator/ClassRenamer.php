@@ -28,6 +28,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
+use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -118,7 +119,12 @@ final class ClassRenamer
      */
     public function renameNode(Node $node, array $oldToNewClasses): ?Node
     {
-        $this->refactorPhpDoc($node, $oldToNewClasses);
+        $oldToNewTypes = [];
+        foreach ($oldToNewClasses as $oldClass => $newClass) {
+            $oldToNewTypes[] = new OldToNewType(new ObjectType($oldClass), new FullyQualifiedObjectType($newClass));
+        }
+
+        $this->refactorPhpDoc($node, $oldToNewTypes, $oldToNewClasses);
 
         if ($node instanceof Name) {
             return $this->refactorName($node, $oldToNewClasses);
@@ -136,12 +142,10 @@ final class ClassRenamer
     }
 
     /**
-     * Replace types in @var/@param/@return/@throws,
-     * Doctrine @ORM entity targetClass, Serialize, Assert etc.
-     *
+     * @param OldToNewType[] $oldToNewTypes
      * @param array<string, string> $oldToNewClasses
      */
-    private function refactorPhpDoc(Node $node, array $oldToNewClasses): void
+    private function refactorPhpDoc(Node $node, array $oldToNewTypes, array $oldToNewClasses): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if (! $phpDocInfo->hasByTypes(NodeTypes::TYPE_AWARE_NODES) && ! $phpDocInfo->hasByAnnotationClasses(
@@ -150,12 +154,7 @@ final class ClassRenamer
             return;
         }
 
-        foreach ($oldToNewClasses as $oldClass => $newClass) {
-            $oldClassType = new ObjectType($oldClass);
-            $newClassType = new FullyQualifiedObjectType($newClass);
-
-            $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldClassType, $newClassType, $node);
-        }
+        $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldToNewTypes);
 
         $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $phpDocInfo, $oldToNewClasses);
     }
@@ -186,17 +185,16 @@ final class ClassRenamer
         }
 
         $last = $name->getLast();
-        $newNameName = new FullyQualified($newName);
-        $newNameLastName = $newNameName->getLast();
+        $newFullyQualified = new FullyQualified($newName);
+        $newNameLastName = $newFullyQualified->getLast();
 
-        $importNames = $this->parameterProvider->provideParameter(Option::AUTO_IMPORT_NAMES);
-        if ($last === $newNameLastName && $importNames) {
+        $importNames = $this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES);
+
+        if ($this->shouldRemoveUseName($last, $newNameLastName, $importNames)) {
             $this->removeUseName($name);
         }
 
-        $name = new FullyQualified($newName);
-        $name->setAttribute(AttributeKey::PARENT_NODE, $parentNode);
-        return $name;
+        return new FullyQualified($newName);
     }
 
     private function removeUseName(Name $oldName): void
@@ -297,10 +295,7 @@ final class ClassRenamer
             $this->changeNameToFullyQualifiedName($classLike);
 
             $nameNode = new Name($newNamespacePart);
-            $namespace = new Namespace_($nameNode, [$classLike]);
-            $nameNode->setAttribute(AttributeKey::PARENT_NODE, $namespace);
-
-            return $namespace;
+            return new Namespace_($nameNode, [$classLike]);
         }
 
         return $classLike;
@@ -445,5 +440,10 @@ final class ClassRenamer
         }
 
         return true;
+    }
+
+    private function shouldRemoveUseName(string $last, string $newNameLastName, bool $importNames): bool
+    {
+        return $last === $newNameLastName && $importNames;
     }
 }

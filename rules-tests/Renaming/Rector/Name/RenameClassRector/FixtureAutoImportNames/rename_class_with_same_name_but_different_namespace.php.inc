@@ -12,6 +12,8 @@ $someService = new SomeServiceClass();
 
 namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\FixtureAutoImportNames;
 
-$someService = new \Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\SecondNamespace\SomeServiceClass();
+use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\SecondNamespace\SomeServiceClass;
+
+$someService = new SomeServiceClass();
 
 ?>
