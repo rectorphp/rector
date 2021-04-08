@@ -14,6 +14,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -311,6 +313,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $this->updateAttributes($node);
             $this->keepFileInfoAttribute($node, $originalNode);
             $this->rectorChangeCollector->notifyNodeFileInfo($node);
+
+            // update parents relations
+            $nodeTraverser = new NodeTraverser();
+            $nodeTraverser->addVisitor(new ParentConnectingVisitor());
+            $nodeTraverser->traverse([$node]);
         }
 
         // if stmt ("$value;") was replaced by expr ("$value"), add the ending ";" (Expression) to prevent breaking the code
