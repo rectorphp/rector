@@ -31,7 +31,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // only for dev
     // only for dev
     if (class_exists(RectorGeneratorBundle::class)) {
-        $containerConfigurator->import(__DIR__ . '/../vendor/rector/rector-generator/config/config.php', null, 'not_found');
+        $containerConfigurator->import(
+            __DIR__ . '/../vendor/rector/rector-generator/config/config.php',
+            null,
+            'not_found'
+        );
         // 3rd party dependency
         $containerConfigurator->import(__DIR__ . '/../../rector-generator/config/config.php', null, 'not_found');
     }
