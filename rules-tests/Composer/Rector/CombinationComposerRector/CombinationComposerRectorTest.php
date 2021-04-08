@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Tests\Composer\Rector\CombinationComposerRector;
 
 use Iterator;
-use Rector\Tests\Composer\Rector\AbstractComposerRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractComposerRectorTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

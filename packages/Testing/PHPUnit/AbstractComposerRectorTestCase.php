@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Composer\Rector;
+namespace Rector\Testing\PHPUnit;
 
 use Nette\Utils\Json;
 use Rector\Composer\Modifier\ComposerModifier;
