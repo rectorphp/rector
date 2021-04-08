@@ -11,6 +11,8 @@ interface NonPhpFileProcessorInterface
 
     public function canProcess(SmartFileInfo $smartFileInfo): bool;
 
+    public function transformOldContent(SmartFileInfo $smartFileInfo): string;
+
     /**
      * @return string[]
      */

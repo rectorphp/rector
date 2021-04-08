@@ -68,4 +68,9 @@ final class NonPhpFileProcessor implements NonPhpFileProcessorInterface
     {
         return StaticNonPhpFileSuffixes::SUFFIXES;
     }
+
+    public function transformOldContent(SmartFileInfo $smartFileInfo): string
+    {
+        return $smartFileInfo->getContents();
+    }
 }

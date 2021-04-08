@@ -7,7 +7,6 @@ namespace Rector\Core\Console\Command;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Composer\Processor\ComposerProcessor;
 use Rector\Core\Application\RectorApplication;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Configuration\Configuration;
@@ -27,6 +26,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 use Throwable;
 
@@ -66,11 +66,6 @@ final class ProcessCommand extends Command
      * @var SymfonyStyle
      */
     private $symfonyStyle;
-
-    /**
-     * @var ComposerProcessor
-     */
-    private $composerProcessor;
 
     /**
      * @var PhpFilesFinder
@@ -114,7 +109,6 @@ final class ProcessCommand extends Command
         OutputFormatterCollector $outputFormatterCollector,
         RectorApplication $rectorApplication,
         SymfonyStyle $symfonyStyle,
-        ComposerProcessor $composerProcessor,
         PhpFilesFinder $phpFilesFinder,
         MissingRectorRulesReporter $missingRectorRulesReporter,
         ParameterProvider $parameterProvider,
@@ -129,7 +123,6 @@ final class ProcessCommand extends Command
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->symfonyStyle = $symfonyStyle;
-        $this->composerProcessor = $composerProcessor;
         $this->phpFilesFinder = $phpFilesFinder;
         $this->missingRectorRulesReporter = $missingRectorRulesReporter;
         $this->nonPhpFileProcessors = $nonPhpFileProcessors;
@@ -225,10 +218,8 @@ final class ProcessCommand extends Command
         $this->configuration->setFileInfos($phpFileInfos);
         $this->rectorApplication->runOnPaths($paths);
 
-        $this->runNonPhpFileProcessors($paths);
-
-        $composerJsonFilePath = getcwd() . '/composer.json';
-        $this->composerProcessor->process($composerJsonFilePath);
+        $nonPhpFileInfos = $this->collectNonPhpFiles($paths);
+        $this->runNonPhpFileProcessors($nonPhpFileInfos);
 
         // report diffs and errors
         $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
@@ -318,18 +309,10 @@ final class ProcessCommand extends Command
     }
 
     /**
-     * @param string[] $paths
+     * @param SmartFileInfo[] $nonPhpFileInfos
      */
-    private function runNonPhpFileProcessors(array $paths): void
+    private function runNonPhpFileProcessors(array $nonPhpFileInfos): void
     {
-        $nonPhpFileExtensions = [];
-        foreach ($this->nonPhpFileProcessors as $nonPhpFileProcessor) {
-            $nonPhpFileExtensions = array_merge($nonPhpFileProcessor->allowedFileExtensions(), $nonPhpFileExtensions);
-        }
-        $nonPhpFileExtensions = array_unique($nonPhpFileExtensions);
-
-        $nonPhpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, $nonPhpFileExtensions);
-
         foreach ($nonPhpFileInfos as $nonPhpFileInfo) {
             foreach ($this->nonPhpFileProcessors as $nonPhpFileProcessor) {
                 if (! $nonPhpFileProcessor->canProcess($nonPhpFileInfo)) {
@@ -341,12 +324,36 @@ final class ProcessCommand extends Command
                     continue;
                 }
 
-                $this->errorAndDiffCollector->addFileDiff($nonPhpFileInfo, $newContent, $nonPhpFileInfo->getContents());
+                $oldContent = $nonPhpFileProcessor->transformOldContent($nonPhpFileInfo);
+
+                $this->errorAndDiffCollector->addFileDiff($nonPhpFileInfo, $newContent, $oldContent);
                 if (! $this->configuration->isDryRun()) {
                     $this->smartFileSystem->dumpFile($nonPhpFileInfo->getPathname(), $newContent);
                     $this->smartFileSystem->chmod($nonPhpFileInfo->getRealPath(), $nonPhpFileInfo->getPerms());
                 }
             }
         }
+    }
+
+    /**
+     * @param string[] $paths
+     * @return SmartFileInfo[]
+     */
+    private function collectNonPhpFiles(array $paths): array
+    {
+        $nonPhpFileExtensions = [];
+        foreach ($this->nonPhpFileProcessors as $nonPhpFileProcessor) {
+            $nonPhpFileExtensions = array_merge($nonPhpFileProcessor->allowedFileExtensions(), $nonPhpFileExtensions);
+        }
+        $nonPhpFileExtensions = array_unique($nonPhpFileExtensions);
+
+        $nonPhpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, $nonPhpFileExtensions);
+
+        $composerJsonFilePath = getcwd() . '/composer.json';
+        if ($this->smartFileSystem->exists($composerJsonFilePath)) {
+            $nonPhpFileInfos[] = new SmartFileInfo($composerJsonFilePath);
+        }
+
+        return $nonPhpFileInfos;
     }
 }
