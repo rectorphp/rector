@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Composer\Contract;
+namespace Rector\Testing\Contract;
 
 interface ConfigFileAwareInterface
 {

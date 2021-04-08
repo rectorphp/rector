@@ -7,7 +7,7 @@ namespace Rector\Testing\PHPUnit;
 use Nette\Utils\Json;
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Tests\Composer\Contract\ConfigFileAwareInterface;
+use Rector\Testing\Contract\ConfigFileAwareInterface;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
