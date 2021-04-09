@@ -14,7 +14,7 @@ final class NonPhpFileProcessorServiceTest extends AbstractRectorTestCase
     /**
      * @var NonPhpFileProcessorService
      */
-    private $subject;
+    private $nonPhpFileProcessorService;
 
     /**
      * @var ErrorAndDiffCollector
@@ -27,13 +27,14 @@ final class NonPhpFileProcessorServiceTest extends AbstractRectorTestCase
         /** @var Configuration $configuration */
         $configuration = $this->getService(Configuration::class);
         $configuration->setIsDryRun(true);
-        $this->subject = $this->getService(NonPhpFileProcessorService::class);
+
+        $this->nonPhpFileProcessorService = $this->getService(NonPhpFileProcessorService::class);
         $this->errorAndDiffCollector = $this->getService(ErrorAndDiffCollector::class);
     }
 
     public function test(): void
     {
-        $this->subject->runOnPaths($this->parameterProvider->provideParameter(Option::PATHS));
+        $this->nonPhpFileProcessorService->runOnPaths($this->parameterProvider->provideParameter(Option::PATHS));
         $fileDiffs = $this->errorAndDiffCollector->getFileDiffs();
         $this->assertCount(1, $fileDiffs);
     }

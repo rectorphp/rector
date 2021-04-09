@@ -13,7 +13,6 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\FileSystem\PhpFilesFinder;
 use Rector\Core\NonPhpFile\NonPhpFileProcessorService;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
@@ -30,11 +29,6 @@ use Throwable;
 
 final class ProcessCommand extends Command
 {
-    /**
-     * @var FilesFinder
-     */
-    private $filesFinder;
-
     /**
      * @var AdditionalAutoloader
      */
@@ -88,23 +82,21 @@ final class ProcessCommand extends Command
     /**
      * @var NonPhpFileProcessorService
      */
-    private $nonPhpFileProcessor;
+    private $nonPhpFileProcessorService;
 
     public function __construct(
         AdditionalAutoloader $additionalAutoloader,
         ChangedFilesDetector $changedFilesDetector,
         Configuration $configuration,
         ErrorAndDiffCollector $errorAndDiffCollector,
-        FilesFinder $filesFinder,
         OutputFormatterCollector $outputFormatterCollector,
         RectorApplication $rectorApplication,
         SymfonyStyle $symfonyStyle,
         PhpFilesFinder $phpFilesFinder,
         MissingRectorRulesReporter $missingRectorRulesReporter,
         ParameterProvider $parameterProvider,
-        NonPhpFileProcessorService $nonPhpFileProcessor
+        NonPhpFileProcessorService $nonPhpFileProcessorService
     ) {
-        $this->filesFinder = $filesFinder;
         $this->additionalAutoloader = $additionalAutoloader;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->configuration = $configuration;
@@ -117,7 +109,7 @@ final class ProcessCommand extends Command
 
         parent::__construct();
         $this->parameterProvider = $parameterProvider;
-        $this->nonPhpFileProcessor = $nonPhpFileProcessor;
+        $this->nonPhpFileProcessorService = $nonPhpFileProcessorService;
     }
 
     protected function configure(): void
@@ -205,7 +197,7 @@ final class ProcessCommand extends Command
 
         $this->configuration->setFileInfos($phpFileInfos);
         $this->rectorApplication->runOnPaths($paths);
-        $this->nonPhpFileProcessor->runOnPaths($paths);
+        $this->nonPhpFileProcessorService->runOnPaths($paths);
 
         // report diffs and errors
         $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
