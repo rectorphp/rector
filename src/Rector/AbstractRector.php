@@ -67,7 +67,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         AttributeKey::METHOD_NODE,
         AttributeKey::USE_NODES,
         AttributeKey::SCOPE,
-        AttributeKey::METHOD_NAME,
         AttributeKey::RESOLVED_NAME,
     ];
 

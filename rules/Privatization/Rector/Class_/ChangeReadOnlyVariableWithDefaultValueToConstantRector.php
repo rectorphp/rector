@@ -120,11 +120,12 @@ CODE_SAMPLE
         }
 
         foreach ($readOnlyVariableAssigns as $readOnlyVariableAssign) {
-            $methodName = $readOnlyVariableAssign->getAttribute(AttributeKey::METHOD_NAME);
-            if (! is_string($methodName)) {
+            $classMethod = $readOnlyVariableAssign->getAttribute(AttributeKey::METHOD_NODE);
+            if (! $classMethod instanceof ClassMethod) {
                 throw new ShouldNotHappenException();
             }
 
+            $methodName = $this->getName($classMethod);
             $classMethod = $node->getMethod($methodName);
             if (! $classMethod instanceof ClassMethod) {
                 throw new ShouldNotHappenException();

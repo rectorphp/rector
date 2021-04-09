@@ -15,11 +15,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     /**
      * @var string|null
      */
-    private $methodName;
-
-    /**
-     * @var string|null
-     */
     private $className;
 
     /**
@@ -50,7 +45,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     {
         $this->classLike = null;
         $this->className = null;
-        $this->methodName = null;
         $this->classMethod = null;
 
         return null;
@@ -73,7 +67,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
 
         if ($node instanceof ClassMethod) {
             $this->classMethod = array_pop($this->methodStack);
-            $this->methodName = (string) $this->methodName;
         }
 
         return null;
@@ -96,10 +89,8 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
             $this->methodStack[] = $this->classMethod;
 
             $this->classMethod = $node;
-            $this->methodName = (string) $node->name;
         }
 
-        $node->setAttribute(AttributeKey::METHOD_NAME, $this->methodName);
         $node->setAttribute(AttributeKey::METHOD_NODE, $this->classMethod);
     }
 
