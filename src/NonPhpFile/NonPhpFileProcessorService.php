@@ -7,6 +7,7 @@ use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\NonPhpFileProcessorInterface;
 use Rector\Core\FileSystem\FilesFinder;
+use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -15,7 +16,7 @@ final class NonPhpFileProcessorService
     /**
      * @var NonPhpFileProcessorInterface[]
      */
-    private $nonPhpFileProcessors;
+    private $nonPhpFileProcessors = [];
 
     /**
      * @var SmartFileSystem
@@ -75,7 +76,7 @@ final class NonPhpFileProcessorService
                 }
                 $nonPhpFileChange = $nonPhpFileProcessor->process($nonPhpFileInfo);
 
-                if ($nonPhpFileChange === null) {
+                if (! $nonPhpFileChange instanceof NonPhpFileChange) {
                     continue;
                 }
 
