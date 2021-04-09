@@ -28,8 +28,8 @@ final class DispatchStringToObjectRector extends AbstractRector
         return new RuleDefinition(
             'Change string events to anonymous class which implement \League\Event\HasEventName',
             [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     /** @var \League\Event\EventDispatcher */
@@ -41,8 +41,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     /** @var \League\Event\EventDispatcher */
@@ -60,9 +60,9 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        
-        ]);
+                ),
+
+            ]);
     }
 
     public function getNodeTypes(): array
