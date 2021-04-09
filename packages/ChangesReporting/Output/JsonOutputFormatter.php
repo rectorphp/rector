@@ -60,7 +60,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
             $errorsArray['file_diffs'][] = [
                 'file' => $relativeFilePath,
                 'diff' => $fileDiff->getDiff(),
-                'applied_rectors' => $fileDiff->getRectorClasses(),
+                'applied_rectors' => $fileDiff->getRectorClasses($this->configuration->shouldOutputChangelogUrl()),
             ];
 
             // for Rector CI

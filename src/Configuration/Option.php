@@ -157,4 +157,9 @@ final class Option
      * @var string
      */
     public const OPTION_NO_DIFFS = 'no-diffs';
+
+    /**
+     * @var string
+     */
+    public const OUTPUT_CHANGELOG_URL = 'output-changelog-url';
 }

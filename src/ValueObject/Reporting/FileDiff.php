@@ -75,11 +75,15 @@ final class FileDiff
     /**
      * @return string[]
      */
-    public function getRectorClasses(): array
+    public function getRectorClasses(bool $outputChangelogUrl): array
     {
         $rectorClasses = [];
         foreach ($this->rectorWithFileAndLineChanges as $rectorWithFileAndLineChange) {
-            $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClass();
+            if ($outputChangelogUrl) {
+                $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClass();
+            } else {
+                $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClassWithChangelogUrl();
+            }
         }
 
         $rectorClasses = array_unique($rectorClasses);
