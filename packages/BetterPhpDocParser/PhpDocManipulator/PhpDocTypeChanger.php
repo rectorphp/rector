@@ -33,14 +33,21 @@ final class PhpDocTypeChanger
      */
     private $paramPhpDocNodeFactory;
 
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
     public function __construct(
         StaticTypeMapper $staticTypeMapper,
         TypeComparator $typeComparator,
-        ParamPhpDocNodeFactory $paramPhpDocNodeFactory
+        ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function changeVarType(PhpDocInfo $phpDocInfo, Type $newType): void
@@ -71,6 +78,11 @@ final class PhpDocTypeChanger
 
     public function changeReturnType(PhpDocInfo $phpDocInfo, Type $newType): void
     {
+        // better not touch this, can crash
+        if ($phpDocInfo->hasInvalidTag('@return')) {
+            return;
+        }
+
         // make sure the tags are not identical, e.g imported class vs FQN class
         if ($this->typeComparator->areTypesEqual($phpDocInfo->getReturnType(), $newType)) {
             return;
@@ -87,6 +99,11 @@ final class PhpDocTypeChanger
             // add completely new one
             $returnTagValueNode = new ReturnTagValueNode($newPHPStanPhpDocType, '');
             $phpDocInfo->addTagValueNode($returnTagValueNode);
+
+            if ($phpDocInfo->hasInvalidTag('@return')) {
+                $returnInvalidTagValueNode = $phpDocInfo->getInvalidTag('@return');
+                $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $returnInvalidTagValueNode);
+            }
         }
     }
 

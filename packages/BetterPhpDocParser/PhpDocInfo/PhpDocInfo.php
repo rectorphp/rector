@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -415,6 +416,28 @@ final class PhpDocInfo
     public function isSingleLine(): bool
     {
         return $this->isSingleLine;
+    }
+
+    public function hasInvalidTag(string $name): bool
+    {
+        // fallback for invalid tag value node
+        foreach ($this->phpDocNode->children as $phpDocChildNode) {
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
+            }
+
+            if ($phpDocChildNode->name !== $name) {
+                continue;
+            }
+
+            if (! $phpDocChildNode->value instanceof InvalidTagValueNode) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     public function getReturnTagValue(): ?ReturnTagValueNode
