@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Rector\Composer\Processor;
 
-use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\Configuration\Configuration;
+use Rector\Core\Contract\Processor\NonPhpFileProcessorInterface;
+use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Symfony\Component\Process\Process;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class ComposerProcessor
+final class ComposerProcessorNonPhp implements NonPhpFileProcessorInterface
 {
     /**
      * @var string
@@ -32,75 +32,59 @@ final class ComposerProcessor
     private $composerJsonPrinter;
 
     /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
-     * @var ErrorAndDiffCollector
-     */
-    private $errorAndDiffCollector;
-
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    /**
      * @var ComposerModifier
      */
     private $composerModifier;
+
+    /**
+     * @var Configuration
+     */
+    private $configuration;
 
     public function __construct(
         ComposerJsonFactory $composerJsonFactory,
         ComposerJsonPrinter $composerJsonPrinter,
         Configuration $configuration,
-        ErrorAndDiffCollector $errorAndDiffCollector,
-        SmartFileSystem $smartFileSystem,
         ComposerModifier $composerModifier
     ) {
         $this->composerJsonFactory = $composerJsonFactory;
         $this->composerJsonPrinter = $composerJsonPrinter;
         $this->configuration = $configuration;
-        $this->errorAndDiffCollector = $errorAndDiffCollector;
-        $this->smartFileSystem = $smartFileSystem;
         $this->composerModifier = $composerModifier;
     }
 
-    public function process(string $composerJsonFilePath): void
+    public function process(SmartFileInfo $smartFileInfo): ?NonPhpFileChange
     {
-        if (! $this->smartFileSystem->exists($composerJsonFilePath)) {
-            return;
-        }
-
         // to avoid modification of file
         if (! $this->composerModifier->enabled()) {
-            return;
+            return null;
         }
 
-        $smartFileInfo = new SmartFileInfo($composerJsonFilePath);
         $composerJson = $this->composerJsonFactory->createFromFileInfo($smartFileInfo);
-
         $oldComposerJson = clone $composerJson;
         $this->composerModifier->modify($composerJson);
 
         // nothing has changed
         if ($oldComposerJson->getJsonArray() === $composerJson->getJsonArray()) {
-            return;
+            return null;
         }
 
-        $this->addComposerJsonFileDiff($oldComposerJson, $composerJson, $smartFileInfo);
+        $oldContent = $this->composerJsonPrinter->printToString($oldComposerJson);
+        $newContent = $this->composerJsonPrinter->printToString($composerJson);
+
         $this->reportFileContentChange($composerJson, $smartFileInfo);
+
+        return new NonPhpFileChange($oldContent, $newContent);
     }
 
-    private function addComposerJsonFileDiff(
-        ComposerJson $oldComposerJson,
-        ComposerJson $newComposerJson,
-        SmartFileInfo $smartFileInfo
-    ): void {
-        $newContents = $this->composerJsonPrinter->printToString($newComposerJson);
-        $oldContents = $this->composerJsonPrinter->printToString($oldComposerJson);
-        $this->errorAndDiffCollector->addFileDiff($smartFileInfo, $newContents, $oldContents);
+    public function supports(SmartFileInfo $smartFileInfo): bool
+    {
+        return $smartFileInfo->getRealPath() === getcwd() . '/composer.json';
+    }
+
+    public function getSupportedFileExtensions(): array
+    {
+        return ['json'];
     }
 
     private function reportFileContentChange(ComposerJson $composerJson, SmartFileInfo $smartFileInfo): void
