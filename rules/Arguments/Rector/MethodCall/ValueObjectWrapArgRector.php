@@ -79,16 +79,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->valueObjectWrapArgs as $valueObjectWrapArgs) {
-            $desiredArg = $this->matchArg($node, $valueObjectWrapArgs);
-            if ($desiredArg === null) {
+        foreach ($this->valueObjectWrapArgs as $valueObjectWrapArg) {
+            $desiredArg = $this->matchArg($node, $valueObjectWrapArg);
+            if (! $desiredArg instanceof Arg) {
                 continue;
             }
 
             $argValue = $desiredArg->value;
             $argValueType = $this->getStaticType($argValue);
 
-            $newObjectType = $valueObjectWrapArgs->getNewType();
+            $newObjectType = $valueObjectWrapArg->getNewType();
             if ($newObjectType->isSuperTypeOf($argValueType)->yes()) {
                 continue;
             }
@@ -116,8 +116,8 @@ CODE_SAMPLE
 
     private function wrapInNewWithType(ObjectType $newObjectType, Expr $expr): New_
     {
-        $className = new FullyQualified($newObjectType->getClassName());
-        return new New_($className, [new Arg($expr)]);
+        $fullyQualified = new FullyQualified($newObjectType->getClassName());
+        return new New_($fullyQualified, [new Arg($expr)]);
     }
 
     private function refactorArray(Arg $desiredArg, ObjectType $newObjectType, MethodCall $methodCall): ?MethodCall
@@ -137,16 +137,16 @@ CODE_SAMPLE
         return null;
     }
 
-    private function matchArg(MethodCall $methodCall, ValueObjectWrapArg $valueObjectWrapArgs): ?Arg
+    private function matchArg(MethodCall $methodCall, ValueObjectWrapArg $valueObjectWrapArg): ?Arg
     {
-        if (! $this->isObjectType($methodCall->var, $valueObjectWrapArgs->getObjectType())) {
+        if (! $this->isObjectType($methodCall->var, $valueObjectWrapArg->getObjectType())) {
             return null;
         }
 
-        if (! $this->isName($methodCall->name, $valueObjectWrapArgs->getMethodName())) {
+        if (! $this->isName($methodCall->name, $valueObjectWrapArg->getMethodName())) {
             return null;
         }
 
-        return $methodCall->args[$valueObjectWrapArgs->getArgPosition()] ?? null;
+        return $methodCall->args[$valueObjectWrapArg->getArgPosition()] ?? null;
     }
 }
