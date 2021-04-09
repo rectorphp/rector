@@ -52,6 +52,11 @@ final class PhpDocTypeChanger
 
     public function changeVarType(PhpDocInfo $phpDocInfo, Type $newType): void
     {
+        // better skip, could crash hard
+        if ($phpDocInfo->hasInvalidTag('@var')) {
+            return;
+        }
+
         // make sure the tags are not identical, e.g imported class vs FQN class
         if ($this->typeComparator->areTypesEqual($phpDocInfo->getVarType(), $newType)) {
             return;
@@ -99,16 +104,16 @@ final class PhpDocTypeChanger
             // add completely new one
             $returnTagValueNode = new ReturnTagValueNode($newPHPStanPhpDocType, '');
             $phpDocInfo->addTagValueNode($returnTagValueNode);
-
-            if ($phpDocInfo->hasInvalidTag('@return')) {
-                $returnInvalidTagValueNode = $phpDocInfo->getInvalidTag('@return');
-                $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $returnInvalidTagValueNode);
-            }
         }
     }
 
     public function changeParamType(PhpDocInfo $phpDocInfo, Type $newType, Param $param, string $paramName): void
     {
+        // better skip, could crash hard
+        if ($phpDocInfo->hasInvalidTag('@param')) {
+            return;
+        }
+
         $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
         $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
 
