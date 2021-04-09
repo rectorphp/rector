@@ -1,4 +1,26 @@
-# How to Upgrade From Rector 0.8 to 0.9
+# How to Upgrade from Rector 0.9 to 0.10 (2021-03)
+
+Use prepare Rector set to upgrade your code:
+
+```bash
+vendor/bin/rector process src --config vendor/rector/rector/upgrade/rector_010.php
+```
+
+Some changes have to be handled manually:
+
+## In Symfony project, clear `config/bundles.php`
+
+- drop `PhpConfigPrinterBundle` class
+
+## Removed Attributes
+
+- `getAttribute(AttributeKey::PARENT_CLASS_NAME)` → use `$scope->getClassReflection()` instead
+- `getAttribute(AttributeKey::NAMESPACE_NAME)` → use `$scope->getNamespace()` instead
+- `getAttribute(AttributeKey::NAMESPACE_NODE)` → use `$scope->getNamespace()` instead
+
+<br>
+
+# How to Upgrade From Rector 0.8 to 0.9 (2020-12)
 
 ## In Symfony project, clear `config/bundles.php`
 
