@@ -33,21 +33,14 @@ final class PhpDocTypeChanger
      */
     private $paramPhpDocNodeFactory;
 
-    /**
-     * @var PhpDocTagRemover
-     */
-    private $phpDocTagRemover;
-
     public function __construct(
         StaticTypeMapper $staticTypeMapper,
         TypeComparator $typeComparator,
-        ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
-        PhpDocTagRemover $phpDocTagRemover
+        ParamPhpDocNodeFactory $paramPhpDocNodeFactory
     ) {
         $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
-        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function changeVarType(PhpDocInfo $phpDocInfo, Type $newType): void
