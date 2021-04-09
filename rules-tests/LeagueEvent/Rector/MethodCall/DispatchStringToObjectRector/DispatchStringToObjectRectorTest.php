@@ -29,4 +29,3 @@ final class DispatchStringToObjectRectorTest extends AbstractRectorTestCase
         return __DIR__ . '/config/configured_rule.php';
     }
 }
-

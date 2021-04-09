@@ -25,7 +25,9 @@ final class DispatchStringToObjectRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change string events to anonymous class which implement \League\Event\HasEventName', [
+        return new RuleDefinition(
+            'Change string events to anonymous class which implement \League\Event\HasEventName',
+            [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass
@@ -58,7 +60,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-            )
+            ),
+        
         ]);
     }
 
@@ -85,11 +88,10 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isObjectType($methodCall->var, new ObjectType('League\Event\EventDispatcher'))) {
-            return false;
-        }
-
-        if ($this->isObjectType($methodCall->var, new ObjectType('League\Event\Emitter'))) {
+        if ($this->nodeTypeResolver->isObjectTypes($methodCall->var, [
+            new ObjectType('League\Event\EventDispatcher'),
+            new ObjectType('League\Event\Emitter'),
+        ])) {
             return false;
         }
 
@@ -108,9 +110,7 @@ CODE_SAMPLE
 
     private function createNewAnonymousEventClass(Expr $eventName): New_
     {
-        $implements = [
-            new FullyQualified('League\Event\HasEventName')
-        ];
+        $implements = [new FullyQualified('League\Event\HasEventName')];
 
         return new New_(new Class_(null, [
             'implements' => $implements,
@@ -119,7 +119,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Expr $eventName
      * @return Stmt[]
      */
     private function createAnonymousEventClassBody(Expr $eventName): array
@@ -128,9 +127,7 @@ CODE_SAMPLE
             new ClassMethod('eventName', [
                 'flags' => Class_::MODIFIER_PUBLIC,
                 'returnType' => 'string',
-                'stmts' => [
-                    new Return_($eventName),
-                ],
+                'stmts' => [new Return_($eventName)],
             ]),
         ];
     }
