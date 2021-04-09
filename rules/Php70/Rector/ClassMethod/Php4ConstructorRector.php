@@ -18,6 +18,7 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -27,6 +28,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class Php4ConstructorRector extends AbstractRector
 {
+    /**
+     * @var Php4ConstructorClassMethodAnalyzer
+     */
+    private $php4ConstructorClassMethodAnalyzer;
+
+    public function __construct(Php4ConstructorClassMethodAnalyzer $php4ConstructorClassMethodAnalyzer)
+    {
+        $this->php4ConstructorClassMethodAnalyzer = $php4ConstructorClassMethodAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -68,7 +79,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if (! $this->php4ConstructorClassMethodAnalyzer->detect($node)) {
             return null;
         }
 
@@ -81,9 +92,10 @@ CODE_SAMPLE
         $this->processClassMethodStatementsForParentConstructorCalls($node);
 
         // not PSR-4 constructor
-        if (! $this->isName($classLike, $this->getName($node))) {
+        if (! $this->nodeNameResolver->areNamesEqual($classLike, $node)) {
             return null;
         }
+
         $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
 
         // does it already have a __construct method?
@@ -96,8 +108,11 @@ CODE_SAMPLE
         }
 
         if (count($node->stmts) === 1) {
-            /** @var Expression $stmt */
+            /** @var Expression|Expr $stmt */
             $stmt = $node->stmts[0];
+            if (! $stmt instanceof Expression) {
+                return null;
+            }
 
             if ($this->isLocalMethodCallNamed($stmt->expr, MethodName::CONSTRUCT)) {
                 $this->removeNode($node);
@@ -109,42 +124,17 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkip(ClassMethod $classMethod): bool
-    {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return true;
-        }
-
-        // catch only classes without namespace
-        if ($scope->getNamespace() !== null) {
-            return true;
-        }
-
-        if ($classMethod->isAbstract()) {
-            return true;
-        }
-
-        if ($classMethod->isStatic()) {
-            return true;
-        }
-
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return true;
-        }
-
-        return $classReflection->isAnonymous();
-    }
-
     private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethod): void
     {
         if (! is_iterable($classMethod->stmts)) {
             return;
         }
 
-        /** @var Expression $methodStmt */
         foreach ($classMethod->stmts as $methodStmt) {
+            if (! $methodStmt instanceof Expression) {
+                continue;
+            }
+
             $methodStmt = $methodStmt->expr;
             if (! $methodStmt instanceof StaticCall) {
                 continue;
