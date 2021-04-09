@@ -3,18 +3,17 @@ declare(strict_types=1);
 
 namespace Rector\Core\Contract\Processor;
 
+use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 interface NonPhpFileProcessorInterface
 {
-    public function process(SmartFileInfo $smartFileInfo): ?string;
+    public function process(SmartFileInfo $smartFileInfo): ?NonPhpFileChange;
 
-    public function canProcess(SmartFileInfo $smartFileInfo): bool;
-
-    public function transformOldContent(SmartFileInfo $smartFileInfo): string;
+    public function supports(SmartFileInfo $smartFileInfo): bool;
 
     /**
      * @return string[]
      */
-    public function allowedFileExtensions(): array;
+    public function getSupportedFileExtensions(): array;
 }

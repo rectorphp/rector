@@ -7,13 +7,14 @@ namespace Rector\Composer\Processor;
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\NonPhpFileProcessorInterface;
+use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Symfony\Component\Process\Process;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ComposerProcessor implements NonPhpFileProcessorInterface
+final class ComposerProcessorNonPhp implements NonPhpFileProcessorInterface
 {
     /**
      * @var string
@@ -52,7 +53,7 @@ final class ComposerProcessor implements NonPhpFileProcessorInterface
         $this->composerModifier = $composerModifier;
     }
 
-    public function process(SmartFileInfo $smartFileInfo): ?string
+    public function process(SmartFileInfo $smartFileInfo): ?NonPhpFileChange
     {
         // to avoid modification of file
         if (! $this->composerModifier->enabled()) {
@@ -67,28 +68,23 @@ final class ComposerProcessor implements NonPhpFileProcessorInterface
         if ($oldComposerJson->getJsonArray() === $composerJson->getJsonArray()) {
             return null;
         }
+
+        $oldContent = $this->composerJsonPrinter->printToString($oldComposerJson);
         $newContent = $this->composerJsonPrinter->printToString($composerJson);
 
         $this->reportFileContentChange($composerJson, $smartFileInfo);
 
-        return $newContent;
+        return new NonPhpFileChange($oldContent, $newContent);
     }
 
-    public function canProcess(SmartFileInfo $smartFileInfo): bool
+    public function supports(SmartFileInfo $smartFileInfo): bool
     {
         return $smartFileInfo->getRealPath() === getcwd() . '/composer.json';
     }
 
-    public function allowedFileExtensions(): array
+    public function getSupportedFileExtensions(): array
     {
         return ['json'];
-    }
-
-    public function transformOldContent(SmartFileInfo $smartFileInfo): string
-    {
-        $oldComposerJson = $this->composerJsonFactory->createFromFileInfo($smartFileInfo);
-
-        return $this->composerJsonPrinter->printToString($oldComposerJson);
     }
 
     private function reportFileContentChange(ComposerJson $composerJson, SmartFileInfo $smartFileInfo): void

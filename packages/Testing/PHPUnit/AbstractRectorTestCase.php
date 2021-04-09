@@ -15,7 +15,7 @@ use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Core\NonPhpFile\NonPhpFileProcessor;
+use Rector\Core\NonPhpFile\NonPhpFileProcessorService;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
@@ -38,7 +38,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
     protected $fileProcessor;
 
     /**
-     * @var NonPhpFileProcessor
+     * @var FileProcessor
      */
     protected $nonPhpFileProcessor;
 
@@ -95,7 +95,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         $this->bootKernelWithConfigsAndStaticCache(RectorKernel::class, $configFileInfos);
 
         $this->fileProcessor = $this->getService(FileProcessor::class);
-        $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);
+        $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessorService::class);
         $this->parameterProvider = $this->getService(ParameterProvider::class);
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
         $this->dynamicSourceLocatorProvider = $this->getService(DynamicSourceLocatorProvider::class);
