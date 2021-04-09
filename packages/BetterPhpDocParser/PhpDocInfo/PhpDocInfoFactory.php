@@ -8,14 +8,13 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
+use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -116,22 +115,18 @@ final class PhpDocInfoFactory
 
             // create empty node
             $content = '';
-            $tokens = [];
+            $tokenIterator = new BetterTokenIterator([]);
             $phpDocNode = new PhpDocNode([]);
         } else {
             $content = $docComment->getText();
             $tokens = $this->lexer->tokenize($content);
+            $tokenIterator = new BetterTokenIterator($tokens);
 
-            try {
-                $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
-            } catch (ParserException $parserException) {
-                return null;
-            }
-
+            $phpDocNode = $this->betterPhpDocParser->parse($tokenIterator);
             $this->setPositionOfLastToken($phpDocNode);
         }
 
-        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, $content, $tokens, $node);
+        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, $tokenIterator, $node);
         $this->phpDocInfosByObjectHash[$objectHash] = $phpDocInfo;
 
         return $phpDocInfo;
@@ -143,17 +138,12 @@ final class PhpDocInfoFactory
         $this->currentNodeProvider->setNode($node);
 
         $phpDocNode = new PhpDocNode([]);
-        return $this->createFromPhpDocNode($phpDocNode, '', [], $node);
-    }
+        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, new BetterTokenIterator([]), $node);
 
-    /**
-     * @param mixed[][] $tokens
-     */
-    private function parseTokensToPhpDocNode(array $tokens): PhpDocNode
-    {
-        $tokenIterator = new TokenIterator($tokens);
+        // multiline by default
+        $phpDocInfo->makeMultiLined();
 
-        return $this->betterPhpDocParser->parse($tokenIterator);
+        return $phpDocInfo;
     }
 
     /**
@@ -168,30 +158,23 @@ final class PhpDocInfoFactory
         $phpDocChildNodes = $phpDocNode->children;
         $lastChildNode = array_pop($phpDocChildNodes);
 
-        /** @var StartAndEnd $startAndEnd */
-        $startAndEnd = $lastChildNode->getAttribute(Attribute::START_END);
+        $startAndEnd = $lastChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
 
-        if ($startAndEnd !== null) {
-            $phpDocNode->setAttribute(Attribute::LAST_TOKEN_POSITION, $startAndEnd->getEnd());
+        if ($startAndEnd instanceof StartAndEnd) {
+            $phpDocNode->setAttribute(PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION, $startAndEnd->getEnd());
         }
     }
 
-    /**
-     * @param mixed[] $tokens
-     */
     private function createFromPhpDocNode(
         PhpDocNode $phpDocNode,
-        string $content,
-        array $tokens,
+        BetterTokenIterator $betterTokenIterator,
         Node $node
     ): PhpDocInfo {
-        /** @var PhpDocNode $phpDocNode */
-        $phpDocNode = $this->phpDocNodeMapper->transform($phpDocNode, $content);
+        $this->phpDocNodeMapper->transform($phpDocNode, $betterTokenIterator);
 
         $phpDocInfo = new PhpDocInfo(
             $phpDocNode,
-            $tokens,
-            $content,
+            $betterTokenIterator,
             $this->staticTypeMapper,
             $node,
             $this->annotationNaming,

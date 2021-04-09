@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Acme\Bar\DoNotUpdateExistingTargetNamespace;
 use Manual\Twig\TwigFilter;
 use Rector\Renaming\Rector\Name\RenameClassRector;

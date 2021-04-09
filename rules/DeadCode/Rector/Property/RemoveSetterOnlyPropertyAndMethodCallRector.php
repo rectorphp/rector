@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractRector;
@@ -178,17 +179,17 @@ CODE_SAMPLE
         $classMethodsToCheck = [];
 
         foreach ($propertyFetches as $propertyFetch) {
-            $methodName = $propertyFetch->getAttribute(AttributeKey::METHOD_NAME);
-            // this rector does not remove empty constructors
-            if ($methodName === MethodName::CONSTRUCT) {
-                continue;
-            }
-
             $classMethod = $propertyFetch->getAttribute(AttributeKey::METHOD_NODE);
             if (! $classMethod instanceof ClassMethod) {
+                throw new ShouldNotHappenException();
+            }
+
+            // this rector does not remove empty constructors
+            if ($this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
                 continue;
             }
 
+            $methodName = $this->getName($classMethod);
             $classMethodsToCheck[$methodName] = $classMethod;
         }
 

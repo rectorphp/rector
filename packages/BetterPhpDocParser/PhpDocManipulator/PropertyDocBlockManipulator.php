@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\ParamRename;
 
@@ -35,7 +36,6 @@ final class PropertyDocBlockManipulator
         }
 
         $paramTagValueNode->parameterName = '$' . $renameValueObject->getExpectedName();
-
-        $phpDocInfo->markAsChanged();
+        $paramTagValueNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
     }
 }

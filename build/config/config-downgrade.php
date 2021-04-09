@@ -38,8 +38,8 @@ final class DowngradeRectorConfig
         '*/Test/*',
 
         // missing phpunit test case
-        'packages/Testing/PHPUnit/AbstractCommunityRectorTestCase.php',
         'packages/Testing/PHPUnit/AbstractRectorTestCase.php',
+        'packages/Testing/PHPUnit/AbstractComposerRectorTestCase.php',
 
         // only for dev
         'packages/Testing/PhpConfigPrinter/*',

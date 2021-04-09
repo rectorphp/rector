@@ -66,10 +66,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $booleanNot = new BooleanNot($node);
-        $node->setAttribute(AttributeKey::PARENT_NODE, $booleanNot);
-
-        return $booleanNot;
+        return new BooleanNot($node);
     }
 
     private function shouldSkip(FuncCall $funcCall): bool

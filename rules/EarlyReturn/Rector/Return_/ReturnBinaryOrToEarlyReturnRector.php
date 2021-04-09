@@ -95,7 +95,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $left = $node->expr->left;
+        /** @var BooleanOr $booleanOr */
+        $booleanOr = $node->expr;
+
+        $left = $booleanOr->left;
         $ifs = $this->createMultipleIfs($left, $node, []);
 
         if ($ifs === []) {
@@ -111,7 +114,7 @@ CODE_SAMPLE
             $this->addNodeBeforeNode($if, $node);
         }
 
-        $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($node->expr->right);
+        $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($booleanOr->right);
         $this->addNodeBeforeNode(new Return_($lastReturnExpr), $node);
         $this->removeNode($node);
 

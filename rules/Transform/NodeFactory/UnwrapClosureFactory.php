@@ -19,8 +19,6 @@ final class UnwrapClosureFactory
      */
     public function createAssign(Variable $resultVariable, Arg $arg): array
     {
-        $assignedExpr = null;
-
         $argValue = $arg->value;
 
         if ($argValue instanceof Closure) {

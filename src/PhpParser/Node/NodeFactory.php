@@ -42,6 +42,8 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\Node\UnionType;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -52,7 +54,6 @@ use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Nette\PhpDoc\Node\NetteInjectTagNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\ValueObject\PropertyMetadata;
@@ -262,11 +263,10 @@ final class NodeFactory
         $property = $propertyBuilder->getNode();
 
         $this->addPropertyType($property, $type);
-        $this->decorateParentPropertyProperty($property);
 
         // add @inject
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $phpDocInfo->addPhpDocTagNode(new NetteInjectTagNode());
+        $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@inject', new GenericTagValueNode('')));
 
         return $property;
     }
@@ -278,8 +278,6 @@ final class NodeFactory
 
         $property = $propertyBuilder->getNode();
         $this->addPropertyType($property, $type);
-
-        $this->decorateParentPropertyProperty($property);
 
         return $property;
     }
@@ -315,11 +313,7 @@ final class NodeFactory
             $variable = new MethodCall($variable->var, $variable->name, $variable->args);
         }
 
-        $methodCallNode = $this->builderFactory->methodCall($variable, $method, $arguments);
-
-        $variable->setAttribute(AttributeKey::PARENT_NODE, $methodCallNode);
-
-        return $methodCallNode;
+        return $this->builderFactory->methodCall($variable, $method, $arguments);
     }
 
     /**
@@ -353,11 +347,7 @@ final class NodeFactory
         $propertyBuilder->makeStatic();
         $propertyBuilder->setDefault($node);
 
-        $property = $propertyBuilder->getNode();
-
-        $this->decorateParentPropertyProperty($property);
-
-        return $property;
+        return $propertyBuilder->getNode();
     }
 
     public function createProperty(string $name): Property
@@ -365,8 +355,6 @@ final class NodeFactory
         $propertyBuilder = new PropertyBuilder($name);
 
         $property = $propertyBuilder->getNode();
-        $this->decorateParentPropertyProperty($property);
-
         $this->phpDocInfoFactory->createFromNode($property);
 
         return $property;
@@ -378,7 +366,6 @@ final class NodeFactory
         $propertyBuilder->makePrivate();
 
         $property = $propertyBuilder->getNode();
-        $this->decorateParentPropertyProperty($property);
 
         $this->phpDocInfoFactory->createFromNode($property);
 
@@ -391,7 +378,6 @@ final class NodeFactory
         $propertyBuilder->makePublic();
 
         $property = $propertyBuilder->getNode();
-        $this->decorateParentPropertyProperty($property);
 
         $this->phpDocInfoFactory->createFromNode($property);
 
@@ -478,8 +464,8 @@ final class NodeFactory
     public function createUsesFromNames(array $names): array
     {
         $uses = [];
-        foreach ($names as $resolvedName) {
-            $useUse = new UseUse(new Name($resolvedName));
+        foreach ($names as $name) {
+            $useUse = new UseUse(new Name($name));
             $uses[] = new Use_([$useUse]);
         }
 
@@ -692,13 +678,6 @@ final class NodeFactory
         }
 
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
-    }
-
-    private function decorateParentPropertyProperty(Property $property): void
-    {
-        // complete property property parent, needed for other operations
-        $propertyProperty = $property->props[0];
-        $propertyProperty->setAttribute(AttributeKey::PARENT_NODE, $property);
     }
 
     /**

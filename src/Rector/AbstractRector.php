@@ -14,6 +14,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -65,7 +67,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         AttributeKey::METHOD_NODE,
         AttributeKey::USE_NODES,
         AttributeKey::SCOPE,
-        AttributeKey::METHOD_NAME,
         AttributeKey::RESOLVED_NAME,
     ];
 
@@ -307,10 +308,16 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // changed!
         if ($this->hasNodeChanged($originalNode, $node)) {
-            $this->mirrorAttributes($originalNodeWithAttributes, $node);
             $this->updateAttributes($node);
             $this->keepFileInfoAttribute($node, $originalNode);
             $this->rectorChangeCollector->notifyNodeFileInfo($node);
+
+            // update parents relations
+            $nodeTraverser = new NodeTraverser();
+            $nodeTraverser->addVisitor(new ParentConnectingVisitor());
+            $nodeTraverser->traverse([$node]);
+
+            $this->mirrorAttributes($originalNodeWithAttributes, $node);
         }
 
         // if stmt ("$value;") was replaced by expr ("$value"), add the ending ";" (Expression) to prevent breaking the code

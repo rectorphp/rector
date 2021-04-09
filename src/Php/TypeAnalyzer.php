@@ -59,13 +59,13 @@ final class TypeAnalyzer
 
         $reservedTypes = array_merge($this->phpSupportedTypes, self::EXTRA_TYPES);
 
-        foreach ($types as $singleType) {
-            $singleType = strtolower($singleType);
+        foreach ($types as $type) {
+            $type = strtolower($type);
 
             // remove [] from arrays
-            $singleType = Strings::replace($singleType, self::SQUARE_BRACKET_REGEX, '');
+            $type = Strings::replace($type, self::SQUARE_BRACKET_REGEX, '');
 
-            if (in_array($singleType, $reservedTypes, true)) {
+            if (in_array($type, $reservedTypes, true)) {
                 return true;
             }
         }

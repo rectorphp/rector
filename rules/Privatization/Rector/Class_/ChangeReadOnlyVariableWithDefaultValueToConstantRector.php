@@ -119,12 +119,13 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($readOnlyVariableAssigns as $readOnlyVariable) {
-            $methodName = $readOnlyVariable->getAttribute(AttributeKey::METHOD_NAME);
-            if (! is_string($methodName)) {
+        foreach ($readOnlyVariableAssigns as $readOnlyVariableAssign) {
+            $classMethod = $readOnlyVariableAssign->getAttribute(AttributeKey::METHOD_NODE);
+            if (! $classMethod instanceof ClassMethod) {
                 throw new ShouldNotHappenException();
             }
 
+            $methodName = $this->getName($classMethod);
             $classMethod = $node->getMethod($methodName);
             if (! $classMethod instanceof ClassMethod) {
                 throw new ShouldNotHappenException();
@@ -165,14 +166,13 @@ CODE_SAMPLE
     {
         $assignsByName = $this->collectAssignsByName($assigns);
         $assignsWithUniqueName = [];
-        /** @var Assign[] $assignByName */
-        foreach ($assignsByName as $assignByName) {
-            $count = count($assignByName);
+        foreach ($assignsByName as $assigns) {
+            $count = count($assigns);
             if ($count > 1) {
                 continue;
             }
 
-            $assignsWithUniqueName = array_merge($assignsWithUniqueName, $assignByName);
+            $assignsWithUniqueName = array_merge($assignsWithUniqueName, $assigns);
         }
 
         return $assignsWithUniqueName;

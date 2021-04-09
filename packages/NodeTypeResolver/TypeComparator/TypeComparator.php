@@ -8,9 +8,12 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericClassStringType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
@@ -43,18 +46,25 @@ final class TypeComparator
      */
     private $scalarTypeComparator;
 
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
     public function __construct(
         TypeHasher $typeHasher,
         TypeNormalizer $typeNormalizer,
         StaticTypeMapper $staticTypeMapper,
         ArrayTypeComparator $arrayTypeComparator,
-        ScalarTypeComparator $scalarTypeComparator
+        ScalarTypeComparator $scalarTypeComparator,
+        TypeFactory $typeFactory
     ) {
         $this->typeHasher = $typeHasher;
         $this->typeNormalizer = $typeNormalizer;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->arrayTypeComparator = $arrayTypeComparator;
         $this->scalarTypeComparator = $scalarTypeComparator;
+        $this->typeFactory = $typeFactory;
     }
 
     public function areTypesEqual(Type $firstType, Type $secondType): bool
@@ -65,6 +75,10 @@ final class TypeComparator
 
         // aliases and types
         if ($this->areAliasedObjectMatchingFqnObject($firstType, $secondType)) {
+            return true;
+        }
+
+        if ($this->areArrayUnionConstantEqualTypes($firstType, $secondType)) {
             return true;
         }
 
@@ -170,5 +184,49 @@ final class TypeComparator
         }
 
         return false;
+    }
+
+    private function normalizeSingleUnionType(Type $type): Type
+    {
+        if ($type instanceof UnionType) {
+            $uniqueTypes = $this->typeFactory->uniquateTypes($type->getTypes());
+            if (count($uniqueTypes) === 1) {
+                return $uniqueTypes[0];
+            }
+        }
+
+        return $type;
+    }
+
+    private function areArrayUnionConstantEqualTypes(Type $firstType, Type $secondType): bool
+    {
+        if (! $firstType instanceof ArrayType) {
+            return false;
+        }
+
+        if (! $secondType instanceof ArrayType) {
+            return false;
+        }
+
+        $firstKeyType = $this->normalizeSingleUnionType($firstType->getKeyType());
+        $secondKeyType = $this->normalizeSingleUnionType($secondType->getKeyType());
+
+        // mixed and integer type are mutual replaceable in practise
+        if ($firstKeyType instanceof MixedType) {
+            $firstKeyType = new IntegerType();
+        }
+
+        if ($secondKeyType instanceof MixedType) {
+            $secondKeyType = new IntegerType();
+        }
+
+        if (! $this->areTypesEqual($firstKeyType, $secondKeyType)) {
+            return false;
+        }
+
+        $firstArrayType = $this->normalizeSingleUnionType($firstType->getItemType());
+        $secondArrayType = $this->normalizeSingleUnionType($secondType->getItemType());
+
+        return $this->areTypesEqual($firstArrayType, $secondArrayType);
     }
 }

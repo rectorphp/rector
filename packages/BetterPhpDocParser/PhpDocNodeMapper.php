@@ -4,22 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser;
 
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\SpacingAwareTemplateTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
-use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
-use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayShapeItemNode;
-use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
-use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
+use Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
+use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
+use Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor;
+use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor;
 
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocNodeMapperTest
@@ -27,58 +19,57 @@ use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class PhpDocNodeMapper
 {
     /**
-     * @var PhpDocNodeTraverser
+     * @var PhpDocNodeVisitorInterface[]
      */
-    private $phpDocNodeTraverser;
-
-    public function __construct(PhpDocNodeTraverser $phpDocNodeTraverser)
-    {
-        $this->phpDocNodeTraverser = $phpDocNodeTraverser;
-    }
+    private $phpDocNodeVisitors = [];
 
     /**
-     * @template T of \PHPStan\PhpDocParser\Ast\Node
-     * @param T $node
-     * @return T
+     * @var CurrentTokenIteratorProvider
      */
-    public function transform(Node $node, string $docContent): Node
+    private $currentTokenIteratorProvider;
+
+    /**
+     * @var ParentConnectingPhpDocNodeVisitor
+     */
+    private $parentConnectingPhpDocNodeVisitor;
+
+    /**
+     * @var CloningPhpDocNodeVisitor
+     */
+    private $cloningPhpDocNodeVisitor;
+
+    /**
+     * @param BasePhpDocNodeVisitorInterface[] $phpDocNodeVisitors
+     */
+    public function __construct(
+        CurrentTokenIteratorProvider $currentTokenIteratorProvider,
+        ParentConnectingPhpDocNodeVisitor $parentConnectingPhpDocNodeVisitor,
+        CloningPhpDocNodeVisitor $cloningPhpDocNodeVisitor,
+        array $phpDocNodeVisitors
+    ) {
+        $this->phpDocNodeVisitors = $phpDocNodeVisitors;
+        $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;
+        $this->parentConnectingPhpDocNodeVisitor = $parentConnectingPhpDocNodeVisitor;
+        $this->cloningPhpDocNodeVisitor = $cloningPhpDocNodeVisitor;
+    }
+
+    public function transform(PhpDocNode $phpDocNode, BetterTokenIterator $betterTokenIterator): void
     {
-        $transformingCallable = function (Node $node, string $docContent): Node {
-            if ($node instanceof IntersectionTypeNode && ! $node instanceof BracketsAwareIntersectionTypeNode) {
-                return new BracketsAwareIntersectionTypeNode($node->types);
-            }
+        $this->currentTokenIteratorProvider->setBetterTokenIterator($betterTokenIterator);
 
-            if ($node instanceof ArrayTypeNode && ! $node instanceof SpacingAwareArrayTypeNode) {
-                return new SpacingAwareArrayTypeNode($node->type);
-            }
+        $parentPhpDocNodeTraverser = new PhpDocNodeTraverser();
+        $parentPhpDocNodeTraverser->addPhpDocNodeVisitor($this->parentConnectingPhpDocNodeVisitor);
+        $parentPhpDocNodeTraverser->traverse($phpDocNode);
 
-            if ($node instanceof CallableTypeNode && ! $node instanceof SpacingAwareCallableTypeNode) {
-                return new SpacingAwareCallableTypeNode($node->identifier, $node->parameters, $node->returnType);
-            }
+        $cloningPhpDocNodeTraverser = new PhpDocNodeTraverser();
+        $cloningPhpDocNodeTraverser->addPhpDocNodeVisitor($this->cloningPhpDocNodeVisitor);
+        $cloningPhpDocNodeTraverser->traverse($phpDocNode);
 
-            if ($node instanceof UnionTypeNode && ! $node instanceof BracketsAwareUnionTypeNode) {
-                return new BracketsAwareUnionTypeNode($node->types, $docContent);
-            }
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {
+            $phpDocNodeTraverser->addPhpDocNodeVisitor($phpDocNodeVisitor);
+        }
 
-            if ($node instanceof ArrayShapeItemNode && ! $node instanceof SpacingAwareArrayShapeItemNode) {
-                return new SpacingAwareArrayShapeItemNode(
-                    $node->keyName, $node->optional, $node->valueType, $docContent
-                );
-            }
-
-            if ($node instanceof TemplateTagValueNode && ! $node instanceof SpacingAwareTemplateTagValueNode) {
-                return new SpacingAwareTemplateTagValueNode($node->name, $node->bound, $node->description, $docContent);
-            }
-
-            if ($node instanceof ParamTagValueNode && ! $node instanceof VariadicAwareParamTagValueNode) {
-                return new VariadicAwareParamTagValueNode(
-                    $node->type, $node->isVariadic, $node->parameterName, $node->description
-                );
-            }
-
-            return $node;
-        };
-
-        return $this->phpDocNodeTraverser->traverseWithCallable($node, $docContent, $transformingCallable);
+        $phpDocNodeTraverser->traverse($phpDocNode);
     }
 }

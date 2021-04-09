@@ -7,6 +7,7 @@ namespace Rector\TypeDeclaration\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
@@ -98,6 +99,10 @@ CODE_SAMPLE
 
         $type = $this->propertyTypeInferer->inferProperty($node);
         if ($type instanceof MixedType) {
+            return null;
+        }
+
+        if (! $node->isPrivate() && $type instanceof NullType) {
             return null;
         }
 

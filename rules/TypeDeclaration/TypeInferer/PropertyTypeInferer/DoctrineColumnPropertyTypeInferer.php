@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -13,8 +14,8 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Doctrine\PhpDoc\Node\Property_\ColumnTagValueNode;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 
@@ -83,6 +84,7 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
             'time' => new ObjectType(self::DATE_TIME_INTERFACE),
             'year' => new ObjectType(self::DATE_TIME_INTERFACE),
         ];
+
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
@@ -90,12 +92,12 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
-        $doctrineColumnTagValueNode = $phpDocInfo->getByType(ColumnTagValueNode::class);
-        if (! $doctrineColumnTagValueNode instanceof ColumnTagValueNode) {
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\ORM\Mapping\Column');
+        if (! $doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return new MixedType();
         }
 
-        $type = $doctrineColumnTagValueNode->getType();
+        $type = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');
         if ($type === null) {
             return new MixedType();
         }
@@ -107,8 +109,10 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
 
         $types = [$scalarType];
 
+        $isNullable = $doctrineAnnotationTagValueNode->getValue('nullable');
+
         // is nullable?
-        if ($doctrineColumnTagValueNode->isNullable()) {
+        if ($isNullable instanceof ConstExprTrueNode) {
             $types[] = new NullType();
         }
 

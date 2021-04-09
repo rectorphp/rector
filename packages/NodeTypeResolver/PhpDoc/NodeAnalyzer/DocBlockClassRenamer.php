@@ -4,77 +4,36 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
-use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor;
+use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 final class DocBlockClassRenamer
 {
     /**
-     * @var StaticTypeMapper
+     * @var ClassRenamePhpDocNodeVisitor
      */
-    private $staticTypeMapper;
+    private $classRenamePhpDocNodeVisitor;
 
-    /**
-     * @var PhpDocNodeTraverser
-     */
-    private $phpDocNodeTraverser;
-
-    public function __construct(PhpDocNodeTraverser $phpDocNodeTraverser, StaticTypeMapper $staticTypeMapper)
+    public function __construct(ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor)
     {
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->phpDocNodeTraverser = $phpDocNodeTraverser;
+        $this->classRenamePhpDocNodeVisitor = $classRenamePhpDocNodeVisitor;
     }
 
     /**
-     * @param Type[] $oldTypes
+     * @param OldToNewType[] $oldToNewTypes
      */
-    public function renamePhpDocTypes(
-        PhpDocInfo $phpDocInfo,
-        array $oldTypes,
-        Type $newType,
-        Node $phpParserNode
-    ): void {
-        foreach ($oldTypes as $oldType) {
-            $this->renamePhpDocType($phpDocInfo, $oldType, $newType, $phpParserNode);
+    public function renamePhpDocType(PhpDocInfo $phpDocInfo, array $oldToNewTypes): void
+    {
+        if ($oldToNewTypes === []) {
+            return;
         }
-    }
 
-    public function renamePhpDocType(
-        PhpDocInfo $phpDocInfo,
-        Type $oldType,
-        Type $newType,
-        Node $phpParserNode
-    ): void {
-        $this->phpDocNodeTraverser->traverseWithCallable(
-            $phpDocInfo->getPhpDocNode(),
-            '',
-            function (PhpDocParserNode $node) use ($phpDocInfo, $phpParserNode, $oldType, $newType): PhpDocParserNode {
-                if (! $node instanceof IdentifierTypeNode) {
-                    return $node;
-                }
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
 
-                $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($node, $phpParserNode);
-
-                // make sure to compare FQNs
-                if ($staticType instanceof ShortenedObjectType) {
-                    $staticType = new ObjectType($staticType->getFullyQualifiedName());
-                }
-
-                if (! $staticType->equals($oldType)) {
-                    return $node;
-                }
-
-                $phpDocInfo->markAsChanged();
-
-                return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
-            }
-        );
+        $this->classRenamePhpDocNodeVisitor->setOldToNewTypes($oldToNewTypes);
+        $phpDocNodeTraverser->addPhpDocNodeVisitor($this->classRenamePhpDocNodeVisitor);
+        $phpDocNodeTraverser->traverse($phpDocInfo->getPhpDocNode());
     }
 }

@@ -9,21 +9,17 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DependencyInjection\NodeAnalyzer\NetteInjectPropertyAnalyzer;
-use Rector\DependencyInjection\TypeAnalyzer\InjectParameterAnalyzer;
 use Rector\DependencyInjection\TypeAnalyzer\InjectTagValueNodeToServiceTypeResolver;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
-use Rector\Nette\PhpDoc\Node\NetteInjectTagNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Symfony\PhpDoc\Node\JMS\JMSInjectTagValueNode;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -40,9 +36,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
     /**
-     * @var array<class-string<ShortNameAwareTagInterface>>
+     * @var string[]
      */
-    private const INJECT_TAG_VALUE_NODE_TYPES = [PHPDIInjectTagValueNode::class, JMSInjectTagValueNode::class];
+    private const INJECT_ANNOTATION_CLASSES = ['JMS\DiExtraBundle\Annotation\Inject', 'DI\Annotation\Inject'];
 
     /**
      * @var PropertyUsageAnalyzer
@@ -53,11 +49,6 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      * @var PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-
-    /**
-     * @var InjectParameterAnalyzer
-     */
-    private $injectParameterAnalyzer;
 
     /**
      * @var InjectTagValueNodeToServiceTypeResolver
@@ -76,7 +67,6 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
 
     public function __construct(
         PhpDocTypeChanger $phpDocTypeChanger,
-        InjectParameterAnalyzer $injectParameterAnalyzer,
         InjectTagValueNodeToServiceTypeResolver $injectTagValueNodeToServiceTypeResolver,
         PropertyUsageAnalyzer $propertyUsageAnalyzer,
         NetteInjectPropertyAnalyzer $netteInjectPropertyAnalyzer,
@@ -84,7 +74,6 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
     ) {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->injectParameterAnalyzer = $injectParameterAnalyzer;
         $this->injectTagValueNodeToServiceTypeResolver = $injectTagValueNodeToServiceTypeResolver;
         $this->netteInjectPropertyAnalyzer = $netteInjectPropertyAnalyzer;
         $this->phpDocTagRemover = $phpDocTagRemover;
@@ -138,31 +127,39 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->netteInjectPropertyAnalyzer->detect($node, $phpDocInfo)) {
-            return $this->refactorNetteInjectProperty($phpDocInfo, $node);
+        if ($phpDocInfo->hasByName('inject')) {
+            if ($this->netteInjectPropertyAnalyzer->canBeRefactored($node, $phpDocInfo)) {
+                return $this->refactorNetteInjectProperty($phpDocInfo, $node);
+            }
+
+            // is not refactorable
+            return null;
         }
 
-        foreach (self::INJECT_TAG_VALUE_NODE_TYPES as $tagValueNodeType) {
-            $injectTagValueNode = $phpDocInfo->getByType($tagValueNodeType);
-            if (! $injectTagValueNode instanceof  \PHPStan\PhpDocParser\Ast\Node) {
+        foreach (self::INJECT_ANNOTATION_CLASSES as $injectAnnotationClass) {
+            $injectTagNode = $phpDocInfo->getByAnnotationClass($injectAnnotationClass);
+            if (! $injectTagNode instanceof DoctrineAnnotationTagValueNode) {
                 continue;
             }
 
-            if ($this->injectParameterAnalyzer->isParameterInject($injectTagValueNode)) {
-                return null;
+            $serviceType = new MixedType();
+            if ($injectTagNode !== null) {
+                $serviceType = $phpDocInfo->getVarType();
             }
 
-            $serviceType = $this->injectTagValueNodeToServiceTypeResolver->resolve(
-                $node,
-                $phpDocInfo,
-                $injectTagValueNode
-            );
+            if ($serviceType instanceof MixedType) {
+                $serviceType = $this->injectTagValueNodeToServiceTypeResolver->resolve(
+                    $node,
+                    $phpDocInfo,
+                    $injectTagNode
+                );
+            }
 
             if ($serviceType instanceof MixedType) {
                 return null;
             }
 
-            $this->refactorPropertyWithAnnotation($node, $serviceType, $injectTagValueNode);
+            $this->refactorPropertyWithAnnotation($node, $serviceType, $injectTagNode);
 
             if ($this->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
                 $this->removeNode($node);
@@ -178,13 +175,13 @@ CODE_SAMPLE
     private function refactorPropertyWithAnnotation(
         Property $property,
         Type $type,
-        \PHPStan\PhpDocParser\Ast\Node $tagValueNode
+        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
     ): void {
         $propertyName = $this->getName($property);
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
-        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $tagValueNode);
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
 
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
@@ -196,7 +193,10 @@ CODE_SAMPLE
 
     private function refactorNetteInjectProperty(PhpDocInfo $phpDocInfo, Property $property): ?Property
     {
-        $phpDocInfo->removeByType(NetteInjectTagNode::class);
+        $injectTagNode = $phpDocInfo->getByName('inject');
+        if ($injectTagNode instanceof \PHPStan\PhpDocParser\Ast\Node) {
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $injectTagNode);
+        }
 
         if ($this->propertyUsageAnalyzer->isPropertyFetchedInChildClass($property)) {
             $this->visibilityManipulator->makeProtected($property);

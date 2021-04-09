@@ -120,10 +120,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $return = new Return_($methodCall);
-            $methodCall->setAttribute(AttributeKey::PARENT_NODE, $return);
-
-            return $return;
+            return new Return_($methodCall);
         }
 
         return null;

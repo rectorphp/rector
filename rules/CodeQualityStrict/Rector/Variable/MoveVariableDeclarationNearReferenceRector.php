@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
@@ -25,6 +26,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -261,10 +263,24 @@ CODE_SAMPLE
         return false;
     }
 
+    private function isClassCallerThrowable(StaticCall $staticCall): bool
+    {
+        $class = $staticCall->class;
+        if (! $class instanceof Name) {
+            return false;
+        }
+
+        $throwableType = new ObjectType('Throwable');
+        $type = new ObjectType($class->toString());
+
+        return $throwableType->isSuperTypeOf($type)
+            ->yes();
+    }
+
     private function hasCall(Node $node): bool
     {
         return (bool) $this->betterNodeFinder->findFirst($node, function (Node $n): bool {
-            if ($n instanceof StaticCall) {
+            if ($n instanceof StaticCall && ! $this->isClassCallerThrowable($n)) {
                 return true;
             }
 

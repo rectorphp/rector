@@ -180,7 +180,7 @@ final class SetList implements SetListInterface
 
     /**
      * @deprecated
-      @see Use DoctrineSetList instead
+     * @see Use DoctrineSetList instead
      * @var string
      */
     public const DOCTRINE_REPOSITORY_AS_SERVICE = DoctrineSetList::DOCTRINE_REPOSITORY_AS_SERVICE;

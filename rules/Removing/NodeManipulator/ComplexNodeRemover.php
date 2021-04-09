@@ -167,8 +167,12 @@ final class ComplexNodeRemover
 
     private function removeConstructorDependency(Assign $assign): void
     {
-        $methodName = $assign->getAttribute(AttributeKey::METHOD_NAME);
-        if ($methodName !== MethodName::CONSTRUCT) {
+        $classMethod = $assign->getAttribute(AttributeKey::METHOD_NODE);
+        if (! $classMethod instanceof  ClassMethod) {
+            return;
+        }
+
+        if (! $this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
             return;
         }
 

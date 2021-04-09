@@ -115,9 +115,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->name = new Identifier($getterMethodName);
-
         $this->methodCallRenamer->updateClassMethodCalls($node, $getterMethodName);
+        $node->name = new Identifier($getterMethodName);
 
         return $node;
     }

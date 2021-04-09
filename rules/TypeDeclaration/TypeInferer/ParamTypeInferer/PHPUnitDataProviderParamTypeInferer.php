@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
+use Nette\Utils\Strings;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Yield_;
@@ -12,6 +13,8 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -22,11 +25,16 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\PHPUnit\PhpDoc\Node\PHPUnitDataProviderTagValueNode;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 
 final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInterface
 {
+    /**
+     * @see https://regex101.com/r/hW09Vt/1
+     * @var string
+     */
+    private const METHOD_NAME_REGEX = '#^(?<method_name>\w+)(\(\))?#';
+
     /**
      * @var BetterNodeFinder
      */
@@ -93,8 +101,8 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
     {
         $phpDocInfo = $this->getFunctionLikePhpDocInfo($param);
 
-        $phpUnitDataProviderTagValueNode = $phpDocInfo->getByType(PHPUnitDataProviderTagValueNode::class);
-        if (! $phpUnitDataProviderTagValueNode instanceof PHPUnitDataProviderTagValueNode) {
+        $phpDocTagNode = $phpDocInfo->getByName('@dataProvider');
+        if (! $phpDocTagNode instanceof PhpDocTagNode) {
             return null;
         }
 
@@ -103,7 +111,18 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
             return null;
         }
 
-        return $classLike->getMethod($phpUnitDataProviderTagValueNode->getMethodName());
+        if (! $phpDocTagNode->value instanceof GenericTagValueNode) {
+            return null;
+        }
+
+        $content = $phpDocTagNode->value->value;
+        $match = Strings::match($content, self::METHOD_NAME_REGEX);
+        if ($match === null) {
+            return null;
+        }
+
+        $methodName = $match['method_name'];
+        return $classLike->getMethod($methodName);
     }
 
     /**

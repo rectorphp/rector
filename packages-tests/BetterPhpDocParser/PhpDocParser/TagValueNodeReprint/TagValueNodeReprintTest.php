@@ -5,83 +5,168 @@ declare(strict_types=1);
 namespace Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint;
 
 use Iterator;
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Class_\EmbeddedTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Class_\EntityTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Class_\TableTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Gedmo\BlameableTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Gedmo\SlugTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Property_\ColumnTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Property_\CustomIdGeneratorTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Property_\GeneratedValueTagValueNode;
-use Rector\Doctrine\PhpDoc\Node\Property_\JoinTableTagValueNode;
-use Rector\Symfony\PhpDoc\Node\AssertChoiceTagValueNode;
-use Rector\Symfony\PhpDoc\Node\AssertTypeTagValueNode;
-use Rector\Symfony\PhpDoc\Node\Sensio\SensioMethodTagValueNode;
-use Rector\Symfony\PhpDoc\Node\Sensio\SensioTemplateTagValueNode;
-use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
-use Rector\Tests\BetterPhpDocParser\PhpDocParser\AbstractPhpDocInfoTest;
+use PhpParser\Comment\Doc;
+use PhpParser\Node;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\FileSystemRector\Parser\FileInfoParser;
+use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
+use Symplify\EasyTesting\FixtureSplitter\TrioFixtureSplitter;
+use Symplify\EasyTesting\ValueObject\FixtureSplit\TrioContent;
+use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
+final class TagValueNodeReprintTest extends AbstractKernelTestCase
 {
     /**
-     * @dataProvider provideData()
-     * @param class-string<Node> $tagValueNodeClass
+     * @var FileInfoParser
      */
-    public function test(SmartFileInfo $fileInfo, string $tagValueNodeClass): void
+    private $fileInfoParser;
+
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    /**
+     * @var PhpDocInfoPrinter
+     */
+    private $phpDocInfoPrinter;
+
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    protected function setUp(): void
     {
-        $this->doTestPrintedPhpDocInfo($fileInfo, $tagValueNodeClass);
+        $this->bootKernel(RectorKernel::class);
+
+        $this->fileInfoParser = $this->getService(FileInfoParser::class);
+
+        $this->betterNodeFinder = $this->getService(BetterNodeFinder::class);
+        $this->phpDocInfoPrinter = $this->getService(PhpDocInfoPrinter::class);
+        $this->phpDocInfoFactory = $this->getService(PhpDocInfoFactory::class);
     }
 
     /**
-     * @return Iterator<mixed[]>
+     * @dataProvider provideData()
+     * @dataProvider provideDataNested()
      */
-    public function provideData(): Iterator
+    public function test(SmartFileInfo $fixtureFileInfo): void
     {
-        foreach ($this->getDirectoriesByTagValueNodes() as $tagValueNode => $directory) {
-            $filesInDirectory = $this->findFilesFromDirectory($directory);
-            foreach ($filesInDirectory as $fileInDirectory) {
-                foreach ($fileInDirectory as $singleFileInDirectory) {
-                    yield [$singleFileInDirectory, $tagValueNode];
-                }
-            }
+        $trioFixtureSplitter = new TrioFixtureSplitter();
+        $trioContent = $trioFixtureSplitter->splitFileInfo($fixtureFileInfo);
+
+        $nodeClass = trim($trioContent->getSecondValue());
+        $tagValueNodeClasses = $this->splitListByEOL($trioContent->getExpectedResult());
+
+        $fixtureFileInfo = $this->createFixtureFileInfo($trioContent, $fixtureFileInfo);
+        foreach ($tagValueNodeClasses as $tagValueNodeClass) {
+            $this->doTestPrintedPhpDocInfo($fixtureFileInfo, $tagValueNodeClass, $nodeClass);
         }
     }
 
     /**
-     * @return array<class-string, string>
+     * @return Iterator<SmartFileInfo>
      */
-    private function getDirectoriesByTagValueNodes(): array
+    public function provideData(): Iterator
     {
-        return [
-            BlameableTagValueNode::class => __DIR__ . '/Fixture/Blameable',
-            SlugTagValueNode::class => __DIR__ . '/Fixture/Gedmo',
+        return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture');
+    }
 
-            // symfony
-            AssertChoiceTagValueNode::class => __DIR__ . '/Fixture/AssertChoice',
-            AssertTypeTagValueNode::class => __DIR__ . '/Fixture/AssertType',
-            SymfonyRouteTagValueNode::class => __DIR__ . '/Fixture/SymfonyRoute',
+    /**
+     * @return Iterator<SmartFileInfo>
+     */
+    public function provideDataNested(): Iterator
+    {
+        return StaticFixtureFinder::yieldDirectory(__DIR__ . '/FixtureNested');
+    }
 
-            // Doctrine
-            ColumnTagValueNode::class => __DIR__ . '/Fixture/DoctrineColumn',
-            JoinTableTagValueNode::class => __DIR__ . '/Fixture/DoctrineJoinTable',
-            EntityTagValueNode::class => __DIR__ . '/Fixture/DoctrineEntity',
-            TableTagValueNode::class => __DIR__ . '/Fixture/DoctrineTable',
-            CustomIdGeneratorTagValueNode::class => __DIR__ . '/Fixture/DoctrineCustomIdGenerator',
-            GeneratedValueTagValueNode::class => __DIR__ . '/Fixture/DoctrineGeneratedValue',
-            EmbeddedTagValueNode::class => __DIR__ . '/Fixture/DoctrineEmbedded',
+    /**
+     * @param class-string $annotationClass
+     * @param class-string<Node> $nodeClass
+     */
+    private function doTestPrintedPhpDocInfo(
+        SmartFileInfo $smartFileInfo,
+        string $annotationClass,
+        string $nodeClass
+    ): void {
+        $nodeWithPhpDocInfo = $this->parseFileAndGetFirstNodeOfType($smartFileInfo, $nodeClass);
 
-            // special case
-            SensioTemplateTagValueNode::class => __DIR__ . '/Fixture/SensioTemplate',
-            SensioMethodTagValueNode::class => __DIR__ . '/Fixture/SensioMethod',
+        $docComment = $nodeWithPhpDocInfo->getDocComment();
+        if (! $docComment instanceof Doc) {
+            throw new ShouldNotHappenException(sprintf(
+                'Doc comments for "%s" file cannot not be empty',
+                $smartFileInfo
+            ));
+        }
 
-            GenericTagValueNode::class => __DIR__ . '/Fixture/ConstantReference',
-            TemplateTagValueNode::class => __DIR__ . '/Fixture/Native/Template',
-            VarTagValueNode::class => __DIR__ . '/Fixture/Native/VarTag',
-        ];
+        $originalDocCommentText = $docComment->getText();
+        $printedPhpDocInfo = $this->printNodePhpDocInfoToString($nodeWithPhpDocInfo);
+
+        $this->assertSame($originalDocCommentText, $printedPhpDocInfo);
+        $this->doTestContainsTagValueNodeType($nodeWithPhpDocInfo, $annotationClass, $smartFileInfo);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function splitListByEOL(string $content): array
+    {
+        $trimmedContent = trim($content);
+        return explode(PHP_EOL, $trimmedContent);
+    }
+
+    private function createFixtureFileInfo(TrioContent $trioContent, SmartFileInfo $fixturefileInfo): SmartFileInfo
+    {
+        $temporaryFileName = sys_get_temp_dir() . '/rector/tests/' . $fixturefileInfo->getRelativePathname();
+        $firstValue = $trioContent->getFirstValue();
+
+        $smartFileSystem = new SmartFileSystem();
+        $smartFileSystem->dumpFile($temporaryFileName, $firstValue);
+
+        return new SmartFileInfo($temporaryFileName);
+    }
+
+    /**
+     * @template T as Node
+     * @param class-string<T> $nodeType
+     * @return T
+     */
+    private function parseFileAndGetFirstNodeOfType(SmartFileInfo $smartFileInfo, string $nodeType): Node
+    {
+        $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($smartFileInfo);
+
+        $node = $this->betterNodeFinder->findFirstInstanceOf($nodes, $nodeType);
+        if (! $node instanceof Node) {
+            throw new ShouldNotHappenException($smartFileInfo->getRealPath());
+        }
+
+        return $node;
+    }
+
+    private function printNodePhpDocInfoToString(Node $node): string
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+    }
+
+    /**
+     * @param class-string $annotationClass
+     */
+    private function doTestContainsTagValueNodeType(
+        Node $node,
+        string $annotationClass,
+        SmartFileInfo $smartFileInfo
+    ): void {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $hasByAnnotationClass = $phpDocInfo->hasByAnnotationClass($annotationClass);
+
+        $this->assertTrue($hasByAnnotationClass, $smartFileInfo->getRelativeFilePathFromCwd());
     }
 }

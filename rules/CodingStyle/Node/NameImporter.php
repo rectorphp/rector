@@ -9,7 +9,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Reflection\ReflectionProvider;
@@ -19,7 +18,6 @@ use Rector\Core\Configuration\Option;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
-use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -62,11 +60,6 @@ final class NameImporter
     private $useNodesToAddCollector;
 
     /**
-     * @var RenamedClassesCollector
-     */
-    private $renamedClassesCollector;
-
-    /**
      * @var ReflectionProvider
      */
     private $reflectionProvider;
@@ -76,7 +69,6 @@ final class NameImporter
         ClassNameImportSkipper $classNameImportSkipper,
         NodeNameResolver $nodeNameResolver,
         ParameterProvider $parameterProvider,
-        RenamedClassesCollector $renamedClassesCollector,
         StaticTypeMapper $staticTypeMapper,
         UseNodesToAddCollector $useNodesToAddCollector,
         ReflectionProvider $reflectionProvider
@@ -87,7 +79,6 @@ final class NameImporter
         $this->nodeNameResolver = $nodeNameResolver;
         $this->parameterProvider = $parameterProvider;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
-        $this->renamedClassesCollector = $renamedClassesCollector;
         $this->reflectionProvider = $reflectionProvider;
     }
 
@@ -130,10 +121,6 @@ final class NameImporter
         }
 
         if ($this->isFunctionOrConstantImportWithSingleName($name)) {
-            return true;
-        }
-
-        if ($this->isNonExistingClassLikeAndFunctionFullyQualifiedName($name)) {
             return true;
         }
 
@@ -219,29 +206,6 @@ final class NameImporter
         }
 
         return false;
-    }
-
-    private function isNonExistingClassLikeAndFunctionFullyQualifiedName(Name $name): bool
-    {
-        if (! $name instanceof FullyQualified) {
-            return false;
-        }
-
-        // can be also in to be renamed classes
-        $classOrFunctionName = $name->toString();
-
-        $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClasses();
-        if (in_array($classOrFunctionName, $oldToNewClasses, true)) {
-            return false;
-        }
-
-        // skip-non existing class-likes and functions
-        if ($this->reflectionProvider->hasClass($classOrFunctionName)) {
-            return false;
-        }
-
-        $parent = $name->getAttribute(AttributeKey::PARENT_NODE);
-        return ! $parent instanceof FuncCall;
     }
 
     private function addUseImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): void

@@ -12,12 +12,13 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NetteToSymfony\Routing\ExplicitRouteAnnotationDecorator;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
-use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -258,12 +259,22 @@ CODE_SAMPLE
         return $classNode->getMethod($routeInfo->getMethod());
     }
 
-    private function createSymfonyRoutePhpDocTagValueNode(RouteInfo $routeInfo): SymfonyRouteTagValueNode
+    private function createSymfonyRoutePhpDocTagValueNode(RouteInfo $routeInfo): DoctrineAnnotationTagValueNode
     {
-        return $this->symfonyRouteTagValueNodeFactory->createFromItems([
-            'path' => $routeInfo->getPath(),
-            'methods' => $routeInfo->getHttpMethods(),
-        ]);
+        $values = [
+            'path' => '"' . $routeInfo->getPath() . '"',
+        ];
+
+        if ($routeInfo->getHttpMethods() !== []) {
+            $httpMethods = [];
+            foreach ($routeInfo->getHttpMethods() as $httpMethod) {
+                $httpMethods[] = '"' . $httpMethod . '"';
+            }
+
+            $values['methods'] = new CurlyListNode($httpMethods);
+        }
+
+        return $this->symfonyRouteTagValueNodeFactory->createFromItems($values);
     }
 
     private function completeImplicitRoutes(): void
@@ -277,8 +288,9 @@ CODE_SAMPLE
                 }
 
                 $path = $this->resolvePathFromClassAndMethodNodes($presenterClass, $classMethod);
+
                 $symfonyRoutePhpDocTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems([
-                    'path' => $path,
+                    'path' => '"' . $path . '"',
                 ]);
 
                 $this->explicitRouteAnnotationDecorator->decorateClassMethodWithRouteAnnotation(
@@ -299,15 +311,15 @@ CODE_SAMPLE
         if (! $this->isName($classMethod, '#^(render|action)#')) {
             return true;
         }
-        $hasRouteAnnotation = $classMethod->getAttribute(ExplicitRouteAnnotationDecorator::HAS_ROUTE_ANNOTATION);
 
+        $hasRouteAnnotation = $classMethod->getAttribute(ExplicitRouteAnnotationDecorator::HAS_ROUTE_ANNOTATION);
         if ($hasRouteAnnotation) {
             return true;
         }
 
         // already has Route tag
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        return $phpDocInfo->hasByType(SymfonyRouteTagValueNode::class);
+        return $phpDocInfo->hasByAnnotationClass('Symfony\Component\Routing\Annotation\Route');
     }
 
     private function resolvePathFromClassAndMethodNodes(Class_ $class, ClassMethod $classMethod): string

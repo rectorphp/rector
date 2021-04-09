@@ -344,6 +344,10 @@ final class BetterNodeFinder
         }
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof FunctionLike) {
+            return null;
+        }
+
         if ($parent instanceof Node) {
             return $this->findFirstNext($parent, $filter);
         }

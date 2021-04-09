@@ -2,9 +2,7 @@
 
 namespace Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
 
-use Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProduct;
-
-class SkipIfHasParentWithConstructor extends ParentWithConstructor
+final class SkipIfHasParentWithConstructor extends ParentWithConstructor
 {
     /**
      * @var \Rector\Tests\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProduct
@@ -15,7 +13,7 @@ class SkipIfHasParentWithConstructor extends ParentWithConstructor
 
 class ParentWithConstructor
 {
-    public function __construct()
+    public function __construct($value = 100)
     {
     }
 }

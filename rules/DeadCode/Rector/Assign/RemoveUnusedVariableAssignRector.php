@@ -5,7 +5,14 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Else_;
@@ -65,13 +72,13 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $node->var instanceof Variable) {
+        $variable = $node->var;
+        if (! $variable instanceof Variable) {
             return null;
         }
 
         // variable is used
-        $variableUsages = $this->findVariableUsages($classMethod, $node);
-        if ($variableUsages !== []) {
+        if ($this->isUsed($node, $variable)) {
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             $ifNode = $parentNode->getAttribute(AttributeKey::NEXT_NODE);
 
@@ -92,21 +99,74 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @return Variable[]
-     */
-    private function findVariableUsages(FunctionLike $functionLike, Assign $assign): array
+    private function isUsed(Assign $assign, Variable $variable): bool
     {
-        return $this->betterNodeFinder->find((array) $functionLike->getStmts(), function (Node $node) use (
-            $assign
+        $isUsedPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use (
+            $variable
         ): bool {
-            if (! $node instanceof Variable) {
-                return false;
+            return $this->isVariableNamed($node, $variable);
+        });
+
+        if ($isUsedPrev) {
+            return true;
+        }
+
+        $isUsedNext = (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
+            $variable
+        ): bool {
+            return $this->isVariableNamed($node, $variable);
+        });
+
+        if ($isUsedNext) {
+            return true;
+        }
+
+        /** @var FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $expr */
+        $expr = $assign->expr;
+        if (! $this->isCall($expr)) {
+            return false;
+        }
+
+        $args = $expr->args;
+        foreach ($args as $arg) {
+            $variable = $arg->value;
+            if (! $variable instanceof Variable) {
+                continue;
             }
 
-            // skip assign value
-            return $assign->var !== $node;
-        });
+            $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode($assign, function (Node $node) use (
+                $variable
+            ): bool {
+                return $node instanceof Assign && $this->isVariableNamed($node->var, $variable);
+            });
+            if ($previousAssign instanceof Assign) {
+                return $this->isUsed($assign, $variable);
+            }
+        }
+
+        return false;
+    }
+
+    private function isCall(Expr $expr): bool
+    {
+        return $expr instanceof FuncCall || $expr instanceof MethodCall || $expr instanceof New_ || $expr instanceof NullsafeMethodCall || $expr instanceof StaticCall;
+    }
+
+    private function isVariableNamed(Node $node, Variable $variable): bool
+    {
+        if ($node instanceof MethodCall && $node->name instanceof Variable && is_string($node->name->name)) {
+            return $this->isName($variable, $node->name->name);
+        }
+
+        if ($node instanceof PropertyFetch && $node->name instanceof Variable && is_string($node->name->name)) {
+            return $this->isName($variable, $node->name->name);
+        }
+
+        if (! $node instanceof Variable) {
+            return false;
+        }
+
+        return $this->isName($variable, (string) $this->getName($node));
     }
 
     private function searchIfAndElseForVariableRedeclaration(Assign $node, If_ $ifNode): ?Node

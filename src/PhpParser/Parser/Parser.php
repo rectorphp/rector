@@ -13,7 +13,7 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 final class Parser
 {
     /**
-     * @var Stmt[][]
+     * @var array<string, Stmt[]>
      */
     private $nodesByFile = [];
 
