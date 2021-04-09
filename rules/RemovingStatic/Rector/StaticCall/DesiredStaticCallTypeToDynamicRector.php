@@ -97,8 +97,8 @@ CODE_SAMPLE
 
             $propertyName = $this->propertyNaming->fqnToVariableName($staticObjectType);
 
-            $currentMethodName = $node->getAttribute(AttributeKey::METHOD_NAME);
-            if ($currentMethodName === MethodName::CONSTRUCT) {
+            $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+            if ($this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
                 $propertyFetch = new Variable($propertyName);
             } else {
                 $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
