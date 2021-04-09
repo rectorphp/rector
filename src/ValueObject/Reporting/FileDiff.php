@@ -80,9 +80,9 @@ final class FileDiff
         $rectorClasses = [];
         foreach ($this->rectorWithFileAndLineChanges as $rectorWithFileAndLineChange) {
             if ($outputChangelogUrl) {
-                $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClass();
-            } else {
                 $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClassWithChangelogUrl();
+            } else {
+                $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClass();
             }
         }
 

@@ -566,3 +566,12 @@ parameters:
 
         # known types
         - '#Parameter (.*?) expects PhpParser\\Node, PhpParser\\Node\|null given#'
+
+        -
+            message: '#Instead of "ReflectionClass" class/interface use "PHPStan\\Reflection\\ClassReflection"#'
+            paths:
+                - packages/ChangesReporting/ValueObject/RectorWithFileAndLineChange.php
+        -
+            message: '#"%s" in sprintf\(\) format must be quoted#'
+            paths:
+                - packages/ChangesReporting/ValueObject/RectorWithFileAndLineChange.php
