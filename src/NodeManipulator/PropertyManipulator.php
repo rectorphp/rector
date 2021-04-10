@@ -22,7 +22,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
@@ -69,11 +68,6 @@ final class PropertyManipulator
     private $propertyFetchFinder;
 
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
      * @var NodeRepository
      */
     private $nodeRepository;
@@ -86,7 +80,6 @@ final class PropertyManipulator
         PhpDocInfoFactory $phpDocInfoFactory,
         TypeChecker $typeChecker,
         PropertyFetchFinder $propertyFetchFinder,
-        NodeNameResolver $nodeNameResolver,
         NodeRepository $nodeRepository
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
@@ -96,7 +89,6 @@ final class PropertyManipulator
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeChecker = $typeChecker;
         $this->propertyFetchFinder = $propertyFetchFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeRepository = $nodeRepository;
     }
 
