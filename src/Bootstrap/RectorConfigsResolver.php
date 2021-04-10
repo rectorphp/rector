@@ -59,11 +59,9 @@ final class RectorConfigsResolver
         $argvInput = new ArgvInput();
         $mainConfigFileInfo = $this->configResolver->resolveFromInputWithFallback($argvInput, ['rector.php']);
 
-        if ($mainConfigFileInfo === null) {
-            $configFileInfos = [];
-        } else {
-            $configFileInfos = $this->resolveFromConfigFileInfo($mainConfigFileInfo);
-        }
+        $configFileInfos = ! $mainConfigFileInfo instanceof SmartFileInfo ? [] : $this->resolveFromConfigFileInfo(
+            $mainConfigFileInfo
+        );
 
         $configFileInfos = $this->appendRectorRecipeConfig($argvInput, $configFileInfos);
 
