@@ -388,13 +388,6 @@ parameters:
                  - packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php
                  - packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php
 
-        -
-            message: '#Instead of "ReflectionClass" class/interface use "PHPStan\\Reflection\\ClassReflection"#'
-            paths:
-                # own classes
-                 - packages/StaticTypeMapper/TypeFactory/UnionTypeFactory.php
-                 - packages/Set/RectorSetProvider.php
-
         - '#Cognitive complexity for "Rector\\DeadCode\\UnusedNodeResolver\\ClassUnusedPrivateClassMethodResolver\:\:filterOutParentAbstractMethods\(\)" is 10, keep it under 9#'
 
         # known types
