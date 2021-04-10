@@ -5,7 +5,7 @@ namespace Rector\Core\NonPhpFile;
 
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\Contract\Processor\NonPhpFileProcessorInterface;
+use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -14,7 +14,7 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 final class NonPhpFileProcessorService
 {
     /**
-     * @var NonPhpFileProcessorInterface[]
+     * @var FileProcessorInterface[]
      */
     private $nonPhpFileProcessors = [];
 
@@ -39,7 +39,7 @@ final class NonPhpFileProcessorService
     private $filesFinder;
 
     /**
-     * @param NonPhpFileProcessorInterface[] $nonPhpFileProcessors
+     * @param FileProcessorInterface[] $nonPhpFileProcessors
      */
     public function __construct(
         FilesFinder $filesFinder,

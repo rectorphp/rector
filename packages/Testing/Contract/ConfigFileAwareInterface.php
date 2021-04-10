@@ -6,5 +6,5 @@ namespace Rector\Testing\Contract;
 
 interface ConfigFileAwareInterface
 {
-    public function provideConfigFile(): string;
+    public function provideConfigFilePath(): string;
 }
