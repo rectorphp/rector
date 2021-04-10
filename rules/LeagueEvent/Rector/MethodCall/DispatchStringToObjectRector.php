@@ -91,13 +91,10 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->nodeTypeResolver->isObjectTypes($methodCall->var, [
+        return ! $this->nodeTypeResolver->isObjectTypes($methodCall->var, [
             new ObjectType('League\Event\EventDispatcher'),
             new ObjectType('League\Event\Emitter'),
-        ])) {
-            return false;
-        }
-        return $this->getStaticType($methodCall->args[0]->value) instanceof StringType;
+        ]);
     }
 
     private function updateNode(MethodCall $methodCall): MethodCall
