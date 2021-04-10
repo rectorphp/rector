@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\Tests\Composer\Rector\RemovePackageComposerRector;
 
 use Iterator;
-use Rector\Testing\PHPUnit\AbstractComposerRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class RemovePackageComposerRectorTest extends AbstractComposerRectorTestCase
+final class RemovePackageComposerRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

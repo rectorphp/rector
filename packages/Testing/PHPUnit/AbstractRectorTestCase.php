@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
 use Iterator;
+use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
 use Psr\Container\ContainerInterface;
+use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
@@ -21,6 +23,7 @@ use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Contract\RectorTestInterface;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
+use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
@@ -72,6 +75,16 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
      */
     private $dynamicSourceLocatorProvider;
 
+    /**
+     * @var ComposerJsonFactory
+     */
+    private $composerJsonFactory;
+
+    /**
+     * @var ComposerModifier
+     */
+    private $composerModifier;
+
     protected function setUp(): void
     {
         // speed up
@@ -89,6 +102,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         $this->parameterProvider = $this->getService(ParameterProvider::class);
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
         $this->dynamicSourceLocatorProvider = $this->getService(DynamicSourceLocatorProvider::class);
+
+        $this->composerJsonFactory = $this->getService(ComposerJsonFactory::class);
+        $this->composerModifier = $this->getService(ComposerModifier::class);
 
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
@@ -111,23 +127,33 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
     protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo): void
     {
         $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
-            $fixtureFileInfo,
-            false
+            $fixtureFileInfo
         );
 
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
+        if ($inputFileInfo->getSuffix() === 'json') {
+            $inputFileInfoAndExpected = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpected($fixtureFileInfo);
 
-        // needed for PHPStan, because the analyzed file is just created in /temp - need for trait and similar deps
-        /** @var NodeScopeResolver $nodeScopeResolver */
-        $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
-        $nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
+            $composerJson = $this->composerJsonFactory->createFromFileInfo(
+                $inputFileInfoAndExpected->getInputFileInfo()
+            );
+            $this->composerModifier->modify($composerJson);
 
-        $this->dynamicSourceLocatorProvider->setFileInfo($inputFileInfo);
+            $changedComposerJson = Json::encode($composerJson->getJsonArray(), Json::PRETTY);
+            $this->assertJsonStringEqualsJsonString($inputFileInfoAndExpected->getExpected(), $changedComposerJson);
+        } else {
+            // needed for PHPStan, because the analyzed file is just created in /temp - need for trait and similar deps
+            /** @var NodeScopeResolver $nodeScopeResolver */
+            $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
+            $nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
 
-        $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
+            $this->dynamicSourceLocatorProvider->setFileInfo($inputFileInfo);
 
-        $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
-        $this->originalTempFileInfo = $inputFileInfo;
+            $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
+
+            $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
+            $this->originalTempFileInfo = $inputFileInfo;
+        }
     }
 
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
