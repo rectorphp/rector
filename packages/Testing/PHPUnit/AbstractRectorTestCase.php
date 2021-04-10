@@ -63,16 +63,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
     protected static $allRectorContainer;
 
     /**
-     * @var bool
-     */
-    private static $isInitialized = false;
-
-    /**
-     * @var RectorConfigsResolver
-     */
-    private static $rectorConfigsResolver;
-
-    /**
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
@@ -87,10 +77,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         // speed up
         @ini_set('memory_limit', '-1');
 
-        $this->initializeDependencies();
-
         $configFileInfo = new SmartFileInfo($this->provideConfigFilePath());
-        $configFileInfos = self::$rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
+        $rectorConfigsResolver = new RectorConfigsResolver();
+        $configFileInfos = $rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
 
         $this->bootKernelWithConfigsAndStaticCache(RectorKernel::class, $configFileInfos);
 
@@ -210,19 +199,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
     private function normalizeNewlines(string $string): string
     {
         return Strings::replace($string, '#\r\n|\r|\n#', "\n");
-    }
-
-    /**
-     * Static to avoid reboot on each data fixture
-     */
-    private function initializeDependencies(): void
-    {
-        if (self::$isInitialized) {
-            return;
-        }
-
-        self::$rectorConfigsResolver = new RectorConfigsResolver();
-        self::$isInitialized = true;
     }
 
     private function processFileInfo(SmartFileInfo $originalFileInfo): string
