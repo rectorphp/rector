@@ -105,7 +105,7 @@ final class PureFunctionDetector
         'bcdiv',
 
         // json
-        'json_last_error'
+        'json_last_error',
     ];
 
     /**
