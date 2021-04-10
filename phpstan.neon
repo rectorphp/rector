@@ -74,8 +74,6 @@ parameters:
         - tests/DependencyInjection/config
 
     ignoreErrors:
-        - '#Parameter \#1 \$children of class PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocNode constructor expects array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode\>, array<int, PHPStan\\PhpDocParser\\Ast\\Node\> given#'
-
         # PHP 7.4 1_000 support
         - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\) does not accept string#'
 
@@ -107,7 +105,6 @@ parameters:
         -
             message: '#Class cognitive complexity is \d+, keep it under \d+#'
             paths:
-                - packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php
                 - rules/Php70/EregToPcreTransformer.php
                 - packages/NodeCollector/NodeCollector/NodeRepository.php
                 - packages/NodeTypeResolver/NodeTypeResolver.php
@@ -279,11 +276,6 @@ parameters:
         - '#Instanceof between PhpParser\\Node\\Stmt and Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace will always evaluate to false#'
 
         -
-             message: '#Use value object over multi array assign#'
-             paths:
-                - packages/NodeCollector/NodeCollector/ParsedClassConstFetchNodeCollector.php
-
-        -
             message: '#Unreachable statement \- code above always terminates#'
             paths:
                 - bin/rector.php
@@ -330,17 +322,11 @@ parameters:
                 - src/Rector/AbstractRector.php
                 # setter to avoid circular dependency in nested collector
                 - packages/StaticTypeMapper/StaticTypeMapper.php
-                - packages/BetterPhpDocParser/PhpDocParser/BetterPhpDocParser.php
                 - packages/PHPStanStaticTypeMapper/PHPStanStaticTypeMapper.php
                 # refactor later
 
         - '#Class Rector\\NodeTypeResolver\\Tests\\PerNodeTypeResolver\\PropertyFetchTypeResolver\\Source\\IDontExist not found\.#'
         - '#Class A\\B\\C\\IDontExist not found\.#'
-
-        - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\MultiPhpDocNodeFactory\:\:getTagValueNodeClassesToAnnotationClasses\(\) should return array<class\-string<Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode\>, class\-string<Doctrine\\ORM\\Mapping\\Annotation\>\> but returns array<string, string\>#'
-        -
-            message: '#Use value object over return of values#'
-            path: packages/BetterPhpDocParser/PhpDocNodeFactory/MultiPhpDocNodeFactory.php
 
         -
             message: '#Use defined constant Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJsonSection\:\:REQUIRE over string require#'
@@ -352,10 +338,6 @@ parameters:
         - '#Class Acme\\Foo\\DoNotUpdateExistingTargetNamespace not found#'
 
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentType\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'
-
-        -
-            message: '#Namespace "Rector\\Composer\\Tests\\Rector" is only reserved for "Rector"\. Move the class somewhere else#'
-            path: rules-tests/Composer/Rector/AbstractComposerRectorTestCase.php
 
         - '#Class with base "SetList" name is already used in "Symplify\\EasyCodingStandard\\ValueObject\\Set\\SetList", "Rector\\Set\\ValueObject\\SetList"\. Use unique name to make classes easy to recognize#'
         - '#Class with base "PhpVersion" name is already used in "PHPStan\\Php\\PhpVersion", "Rector\\Core\\ValueObject\\PhpVersion"\. Use unique name to make classes easy to recognize#'
@@ -387,8 +369,6 @@ parameters:
                  - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
                  - packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php
                  - packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php
-
-        - '#Cognitive complexity for "Rector\\DeadCode\\UnusedNodeResolver\\ClassUnusedPrivateClassMethodResolver\:\:filterOutParentAbstractMethods\(\)" is 10, keep it under 9#'
 
         # known types
         - '#Call to an undefined method PHPStan\\Type\\ConstantType\:\:getValue\(\)#'
@@ -434,14 +414,11 @@ parameters:
             message: '#Use void instead of modify and return self object#'
             paths:
                 - '*Rector.php'
-                - '*NodeVisitor.php'
 
         -
             message: '#Cannot cast array<string\>\|string\|null to string#'
             paths:
                 - utils/compiler/src/Command/DowngradePathsCommand.php
-
-        - '#Cannot cast array<string\>\|string\|null to string#'
 
         # generics fails
         - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeMapper\:\:transform\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns PHPStan\\PhpDocParser\\Ast\\Node#'
@@ -450,13 +427,6 @@ parameters:
         # PHP 7_4 literal syntax
         - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\|int\) does not accept string#'
 
-        - '#Parameter \#1 \$keyName of method Rector\\BetterPhpDocParser\\ValueObject\\Type\\SpacingAwareArrayShapeItemNode\:\:createKeyWithSpacePattern\(\) expects PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null, PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null given#'
-
-        -
-            # inlined plug and pass mapper, to avoid overly complexity
-            message: '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocNodeMapper\:\:transform\(\)" is \d+, keep it under 9#'
-            paths:
-                - packages/BetterPhpDocParser/PhpDocNodeMapper.php
 
         - '#Unable to resolve the template type T in call to method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentTypes\(\)#'
 
@@ -476,28 +446,6 @@ parameters:
                 - src/Application/RectorApplication.php
                 - src/Console/Command/ProcessCommand.php
 
-        # annotations
-        -
-            message: '#Instead of "instanceof/is_a\(\)" use ReflectionProvider service or "\(new ObjectType\(<desired_type\>\)\)\-\>isSuperTypeOf\(<element_type\>\)" for static reflection to work#'
-            paths:
-                - packages/BetterPhpDocParser/PhpDocNodeFactory/*NodeFactory.php
-
-        # temporary
-        -
-            message: '#Use explicit names over dynamic ones#'
-            paths:
-                -  packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php
-
-        -
-            message: '#Use non\-dynamic property on static call#'
-            paths:
-                - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php
-
-        # known external class-strings
-        - '#Parameter (.*?) of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo<PHPStan\\PhpDocParser\\Ast\\Node\>\:\:(getByAnnotationClasses|hasByAnnotationClasses)\(\) expects array<class\-string\>, array<int, string\> given#'
-
-        - '#Cognitive complexity for "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayTypeMapper\:\:isGenericArrayCandidate\(\)" is 10, keep it under 9#'
-
         # mimics original doctrine/annotations parser, improve later when finished
         -
              message: '#Array destruct is not allowed\. Use value object to pass data instead#'
@@ -508,11 +456,6 @@ parameters:
             message: '#Use value object over return of values#'
             paths:
                 - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php
-
-        -
-            message: '#Do not inherit from abstract class, better use composition#'
-            paths:
-                - packages/BetterPhpDocParser/ValueObject/Parser/BetterTokenIterator.php
 
         -
             message: '#\$this as argument is not allowed\. Refactor method to service composition#'
@@ -531,30 +474,22 @@ parameters:
             paths:
                 -  packages/BetterPhpDocParser/PhpDocParser/DoctrineAnnotationDecorator.php
 
-        -
-            message: '#Do not inherit from abstract class, better use composition#'
-            paths:
-                - packages/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php
-
-
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\Printer\\PhpDocInfoPrinter\:\:printDocChildNode\(\)" is \d+, keep it under 9#'
-        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocManipulator\\PhpDocClassRenamer\:\:processSerializerTypeTagValueNode\(\)" is 10, keep it under 9#'
-        - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocParser\\ParentNodeTraverser\:\:transform\(\)" is 12, keep it under 9#'
         - '#Cognitive complexity for "Rector\\NodeTypeResolver\\NodeTypeResolver\:\:resolve\(\)" is \d+, keep it under 9#'
 
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             path: 'packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php'
 
-        - '#Class Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode not found#'
         - '#Cognitive complexity for "Rector\\DependencyInjection\\Rector\\Property\\AnnotatedPropertyInjectToConstructorInjectionRector\:\:refactor\(\)" is \d+, keep it under 9#'
 
         -
             message: '#Do not inherit from abstract class, better use composition#'
             paths:
-                 - packages/BetterPhpDocParser/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
                  - packages/NodeTypeResolver/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
-                 - packages/BetterPhpDocParser/PhpDocNodeVisitor/ChangedPhpNodeVisitor.php
+                 - packages/BetterPhpDocParser/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
+                 - packages/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php
+                 - packages/BetterPhpDocParser/ValueObject/Parser/BetterTokenIterator.php
 
         -
             message: '#Do not use setter on a service#'
@@ -568,23 +503,9 @@ parameters:
         - '#Parameter (.*?) expects PhpParser\\Node, PhpParser\\Node\|null given#'
 
         -
-            message: '#Instead of "new ClassReflection\(\)" use ReflectionProvider service or "\(new PHPStan\\Reflection\\ClassReflection\(<desired_type\>\)\)" for static reflection to work#'
-            paths:
-                -  packages/ChangesReporting/Annotation/AnnotationExtractor
-        -
-            message: '#"%s" in sprintf\(\) format must be quoted#'
-            paths:
-                - packages/ChangesReporting/ValueObject/RectorWithFileAndLineChange.php
-
-        -
             message: '#Class cognitive complexity is \d+, keep it under 50#'
             paths:
                  - packages/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php
-
-        -
-            message: '#Cognitive complexity for "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper\:\:mapToPhpParserNode\(\)" is 11, keep it under 9#'
-            paths:
-                - packages/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php
 
         - '#Cognitive complexity for "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper\:\:mapToPhpParserNode\(\)" is 10, keep it under 9#'
         - '#Method Rector\\NodeNameResolver\\NodeNameResolver\:\:matchRectorBacktraceCall\(\) return type has no value type specified in iterable type array#'
