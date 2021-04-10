@@ -80,17 +80,11 @@ final class Configuration
      */
     private $bootstrapConfigs;
 
-    /**
-     * @var bool
-     */
-    private $outputChangelogUrl;
-
     public function __construct(ParameterProvider $parameterProvider)
     {
         $this->isCacheEnabled = (bool) $parameterProvider->provideParameter(Option::ENABLE_CACHE);
         $this->fileExtensions = (array) $parameterProvider->provideParameter(Option::FILE_EXTENSIONS);
         $this->paths = (array) $parameterProvider->provideParameter(Option::PATHS);
-        $this->outputChangelogUrl = (bool) $parameterProvider->provideParameter(Option::OUTPUT_CHANGELOG_URL);
         $this->parameterProvider = $parameterProvider;
     }
 
@@ -147,11 +141,6 @@ final class Configuration
         }
 
         return $this->showProgressBar;
-    }
-
-    public function shouldOutputChangelogUrl(): bool
-    {
-        return $this->outputChangelogUrl;
     }
 
     public function getOutputFile(): ?string

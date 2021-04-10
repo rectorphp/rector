@@ -75,17 +75,53 @@ final class FileDiff
     /**
      * @return string[]
      */
-    public function getRectorClasses(bool $outputChangelogUrl): array
+    public function getRectorClasses(): array
     {
         $rectorClasses = [];
         foreach ($this->rectorWithFileAndLineChanges as $rectorWithFileAndLineChange) {
-            if ($outputChangelogUrl) {
-                $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClassWithChangelogUrl();
-            } else {
-                $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClass();
-            }
+            $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClass();
         }
 
+        return $this->sortClasses($rectorClasses);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getRectorClassesWithChangelogUrl(): array
+    {
+        $rectorClasses = [];
+        foreach ($this->rectorWithFileAndLineChanges as $rectorWithFileAndLineChange) {
+            $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClassWithChangelogUrl();
+        }
+
+        return $this->sortClasses($rectorClasses);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getRectorClassesWithChangelogUrlAndRectorClassAsKey(): array
+    {
+        $rectorClasses = [];
+        foreach ($this->rectorWithFileAndLineChanges as $rectorWithFileAndLineChange) {
+            if ($rectorWithFileAndLineChange->getChangelogUrl() !== null) {
+                $rectorClasses[$rectorWithFileAndLineChange->getRectorClass()] = $rectorWithFileAndLineChange->getChangelogUrl();
+            }
+        }
+        $rectorClasses = array_unique($rectorClasses);
+
+        ksort($rectorClasses);
+
+        return $rectorClasses;
+    }
+
+    /**
+     * @param string[] $rectorClasses
+     * @return string[]
+     */
+    private function sortClasses(array $rectorClasses): array
+    {
         $rectorClasses = array_unique($rectorClasses);
 
         sort($rectorClasses);

@@ -114,9 +114,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             if ($fileDiff->getRectorChanges() !== []) {
                 $this->symfonyStyle->writeln('<options=underscore>Applied rules:</>');
                 $this->symfonyStyle->newLine();
-                $this->symfonyStyle->listing(
-                    $fileDiff->getRectorClasses($this->configuration->shouldOutputChangelogUrl())
-                );
+                $this->symfonyStyle->listing($fileDiff->getRectorClassesWithChangelogUrl());
                 $this->symfonyStyle->newLine();
             }
         }

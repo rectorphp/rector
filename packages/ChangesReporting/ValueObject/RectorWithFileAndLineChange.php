@@ -45,27 +45,39 @@ final class RectorWithFileAndLineChange
     public function getRectorClassWithChangelogUrl(): string
     {
         $rectorClass = get_class($this->rector);
+        $changeLogUrl = $this->getChangelogUrl();
+
+        if ($changeLogUrl === null) {
+            return $rectorClass;
+        }
+
+        return sprintf('%s (%s)', $rectorClass, $changeLogUrl);
+    }
+
+    public function getChangelogUrl(): ?string
+    {
+        $rectorClass = get_class($this->rector);
 
         $rectorReflection = new ReflectionClass($rectorClass);
 
         $docComment = $rectorReflection->getDocComment();
 
         if (! is_string($docComment)) {
-            return $rectorClass;
+            return null;
         }
 
         $pattern = "#@link\s*(?<url>[a-zA-Z0-9, ()_].*)#";
         preg_match($pattern, $docComment, $matches);
 
         if (! array_key_exists('url', $matches)) {
-            return $rectorClass;
+            return null;
         }
 
         if (! filter_var($matches['url'], FILTER_VALIDATE_URL)) {
-            return $rectorClass;
+            return null;
         }
 
-        return sprintf('%s (%s)', $rectorClass, trim((string) $matches['url']));
+        return trim((string) $matches['url']);
     }
 
     public function getLine(): int

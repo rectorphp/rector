@@ -57,10 +57,13 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         foreach ($fileDiffs as $fileDiff) {
             $relativeFilePath = $fileDiff->getRelativeFilePath();
 
+            $appliedRectorsWithChangelog = $fileDiff->getRectorClassesWithChangelogUrlAndRectorClassAsKey();
+
             $errorsArray['file_diffs'][] = [
                 'file' => $relativeFilePath,
                 'diff' => $fileDiff->getDiff(),
-                'applied_rectors' => $fileDiff->getRectorClasses($this->configuration->shouldOutputChangelogUrl()),
+                'applied_rectors' => $fileDiff->getRectorClasses(),
+                'applied_rectors_with_changelog' => $appliedRectorsWithChangelog,
             ];
 
             // for Rector CI
