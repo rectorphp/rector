@@ -180,6 +180,9 @@ final class PropertyManipulator
         return $this->assignManipulator->isLeftPartOfAssign($expr);
     }
 
+    /**
+     * @param MethodCall|StaticCall $node
+     */
     private function isFoundByRefParam(Node $node): bool
     {
         $classMethod = $node instanceof MethodCall
