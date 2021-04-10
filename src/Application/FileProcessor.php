@@ -6,7 +6,6 @@ namespace Rector\Core\Application;
 
 use PhpParser\Lexer;
 use Rector\ChangesReporting\Collector\AffectedFilesCollector;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\PhpParser\Parser\Parser;
@@ -110,18 +109,13 @@ final class FileProcessor
      */
     public function printToString(SmartFileInfo $smartFileInfo): string
     {
-        $this->makeSureFileIsParsed($smartFileInfo);
-
         $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
-
         return $this->formatPerservingPrinter->printParsedStmstAndTokensToString($parsedStmtsAndTokens);
     }
 
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
-        $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
-
-        $this->makeSureFileIsParsed($smartFileInfo);
+        $this->parseFileInfoToLocalCache($smartFileInfo);
 
         $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
 
@@ -171,19 +165,5 @@ final class FileProcessor
         $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $smartFileInfo);
 
         return new ParsedStmtsAndTokens($newStmts, $oldStmts, $oldTokens);
-    }
-
-    private function makeSureFileIsParsed(SmartFileInfo $smartFileInfo): void
-    {
-        if ($this->tokensByFilePathStorage->hasForFileInfo($smartFileInfo)) {
-            return;
-        }
-
-        throw new ShouldNotHappenException(sprintf(
-            'File "%s" was not preparsed, so it cannot be printed.%sCheck "%s" method.',
-            $smartFileInfo->getRealPath(),
-            PHP_EOL,
-            self::class . '::parseFileInfoToLocalCache()'
-        ));
     }
 }

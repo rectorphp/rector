@@ -201,16 +201,15 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
             true
         )) {
             if ($extraFileInfos === []) {
-                $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
                 $this->fileProcessor->refactor($originalFileInfo);
                 $this->fileProcessor->postFileRefactor($originalFileInfo);
             } else {
                 $fileInfosToProcess = array_merge([$originalFileInfo], $extraFileInfos);
 
                 // life-cycle trio :)
-                foreach ($fileInfosToProcess as $fileInfoToProcess) {
-                    $this->fileProcessor->parseFileInfoToLocalCache($fileInfoToProcess);
-                }
+//                foreach ($fileInfosToProcess as $fileInfoToProcess) {
+//                    $this->fileProcessor->parseFileInfoToLocalCache($fileInfoToProcess);
+//                }
 
                 foreach ($fileInfosToProcess as $fileInfoToProcess) {
                     $this->fileProcessor->refactor($fileInfoToProcess);
