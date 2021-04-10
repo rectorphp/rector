@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,6 +27,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnusedVariableAssignRector extends AbstractRector
 {
+    /**
+     * @var ReservedKeywordAnalyzer
+     */
+    private $reservedKeywordAnalyzer;
+
+    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
+    {
+        $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused assigns to variables', [
@@ -82,6 +93,10 @@ CODE_SAMPLE
 
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof Expression) {
+            return null;
+        }
+
+        if (is_string($variable->name) && $this->reservedKeywordAnalyzer->isNativeVariable($variable->name)) {
             return null;
         }
 
