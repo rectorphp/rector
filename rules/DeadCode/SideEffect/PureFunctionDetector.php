@@ -100,6 +100,9 @@ final class PureFunctionDetector
 
         // ftp
         'ftp_close',
+
+        // json
+        'json_last_error'
     ];
 
     /**
