@@ -11,12 +11,12 @@ use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class NonPhpFileProcessorService
+final class FileProcessor
 {
     /**
      * @var FileProcessorInterface[]
      */
-    private $nonPhpFileProcessors = [];
+    private $fileProcessors = [];
 
     /**
      * @var SmartFileSystem
@@ -39,16 +39,20 @@ final class NonPhpFileProcessorService
     private $filesFinder;
 
     /**
+<<<<<<< HEAD:src/NonPhpFile/NonPhpFileProcessorService.php
      * @param FileProcessorInterface[] $nonPhpFileProcessors
+=======
+     * @param FileProcessorInterface[] $fileProcessors
+>>>>>>> 7bc65c3cc4... rename non-php file processor to file processor:src/NonPhpFile/FileProcessor.php
      */
     public function __construct(
         FilesFinder $filesFinder,
         ErrorAndDiffCollector $errorAndDiffCollector,
         Configuration $configuration,
         SmartFileSystem $smartFileSystem,
-        array $nonPhpFileProcessors = []
+        array $fileProcessors = []
     ) {
-        $this->nonPhpFileProcessors = $nonPhpFileProcessors;
+        $this->fileProcessors = $fileProcessors;
         $this->smartFileSystem = $smartFileSystem;
         $this->filesFinder = $filesFinder;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
@@ -70,12 +74,12 @@ final class NonPhpFileProcessorService
     private function runNonPhpFileProcessors(array $nonPhpFileInfos): void
     {
         foreach ($nonPhpFileInfos as $nonPhpFileInfo) {
-            foreach ($this->nonPhpFileProcessors as $nonPhpFileProcessor) {
+            foreach ($this->fileProcessors as $nonPhpFileProcessor) {
                 if (! $nonPhpFileProcessor->supports($nonPhpFileInfo)) {
                     continue;
                 }
-                $nonPhpFileChange = $nonPhpFileProcessor->process($nonPhpFileInfo);
 
+                $nonPhpFileChange = $nonPhpFileProcessor->process($nonPhpFileInfo);
                 if (! $nonPhpFileChange instanceof NonPhpFileChange) {
                     continue;
                 }
@@ -85,40 +89,49 @@ final class NonPhpFileProcessorService
                     $nonPhpFileChange->getNewContent(),
                     $nonPhpFileChange->getOldContent()
                 );
-                if (! $this->configuration->isDryRun()) {
-                    $this->smartFileSystem->dumpFile(
-                        $nonPhpFileInfo->getPathname(),
-                        $nonPhpFileChange->getNewContent()
-                    );
-                    $this->smartFileSystem->chmod($nonPhpFileInfo->getRealPath(), $nonPhpFileInfo->getPerms());
+
+                if ($this->configuration->isDryRun()) {
+                    return;
                 }
+
+                $this->smartFileSystem->dumpFile(
+                    $nonPhpFileInfo->getPathname(),
+                    $nonPhpFileChange->getNewContent()
+                );
+                $this->smartFileSystem->chmod($nonPhpFileInfo->getRealPath(), $nonPhpFileInfo->getPerms());
             }
         }
     }
 
     /**
      * @param string[] $paths
-     *
      * @return SmartFileInfo[]
      */
     private function collectNonPhpFiles(array $paths): array
     {
-        $nonPhpFileExtensions = [];
-        foreach ($this->nonPhpFileProcessors as $nonPhpFileProcessor) {
-            $nonPhpFileExtensions = array_merge(
-                $nonPhpFileProcessor->getSupportedFileExtensions(),
-                $nonPhpFileExtensions
-            );
-        }
-        $nonPhpFileExtensions = array_unique($nonPhpFileExtensions);
+        $fileExtensions = $this->resolveSupportedFileExtensions();
 
-        $nonPhpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, $nonPhpFileExtensions);
+        $fileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, $fileExtensions);
 
         $composerJsonFilePath = getcwd() . '/composer.json';
         if ($this->smartFileSystem->exists($composerJsonFilePath)) {
-            $nonPhpFileInfos[] = new SmartFileInfo($composerJsonFilePath);
+            $fileInfos[] = new SmartFileInfo($composerJsonFilePath);
         }
 
-        return $nonPhpFileInfos;
+        return $fileInfos;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveSupportedFileExtensions(): array
+    {
+        $fileExtensions = [];
+
+        foreach ($this->fileProcessors as $nonPhpFileProcessor) {
+            $fileExtensions = array_merge($nonPhpFileProcessor->getSupportedFileExtensions(), $fileExtensions);
+        }
+
+        return array_unique($fileExtensions);
     }
 }

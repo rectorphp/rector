@@ -14,7 +14,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\PhpFilesFinder;
-use Rector\Core\NonPhpFile\NonPhpFileProcessorService;
+use Rector\Core\NonPhpFile\FileProcessor;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -80,7 +80,7 @@ final class ProcessCommand extends Command
     private $parameterProvider;
 
     /**
-     * @var NonPhpFileProcessorService
+     * @var FileProcessor
      */
     private $nonPhpFileProcessorService;
 
@@ -95,7 +95,7 @@ final class ProcessCommand extends Command
         PhpFilesFinder $phpFilesFinder,
         MissingRectorRulesReporter $missingRectorRulesReporter,
         ParameterProvider $parameterProvider,
-        NonPhpFileProcessorService $nonPhpFileProcessorService
+        FileProcessor $nonPhpFileProcessorService
     ) {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
@@ -196,6 +196,7 @@ final class ProcessCommand extends Command
         }
 
         $this->configuration->setFileInfos($phpFileInfos);
+
         $this->rectorApplication->runOnPaths($paths);
         $this->nonPhpFileProcessorService->runOnPaths($paths);
 

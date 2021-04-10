@@ -15,6 +15,7 @@ use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
@@ -238,15 +239,18 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
             $this->fileProcessor->postFileRefactor($originalFileInfo);
 
             // mimic post-rectors
-            $changedContent = $this->fileProcessor->printToString($originalFileInfo);
+            return $this->fileProcessor->printToString($originalFileInfo);
         } elseif (Strings::match($originalFileInfo->getFilename(), StaticNonPhpFileSuffixes::getSuffixRegexPattern())) {
             $nonPhpFileChange = $this->nonPhpFileProcessor->process($originalFileInfo);
-
-            $changedContent = $nonPhpFileChange !== null ? $nonPhpFileChange->getNewContent() : '';
-        } else {
-            $message = sprintf('Suffix "%s" is not supported yet', $originalFileInfo->getSuffix());
-            throw new ShouldNotHappenException($message);
+            return $nonPhpFileChange !== null ? $nonPhpFileChange->getNewContent() : '';
         }
-        return $changedContent;
+
+        $message = sprintf(
+            'Suffix "%s" is not supported yet. Add a service that implements "%s" with support for it',
+            FileProcessorInterface::class,
+            $originalFileInfo->getSuffix()
+        );
+
+        throw new ShouldNotHappenException($message);
     }
 }
