@@ -6,7 +6,6 @@ namespace Rector\Core\NonPhpFile;
 
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
-use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -41,7 +40,7 @@ final class NonPhpFileProcessor implements FileProcessorInterface
         $this->nonPhpFileClassRenamer = $nonPhpFileClassRenamer;
     }
 
-    public function process(SmartFileInfo $smartFileInfo): ?NonPhpFileChange
+    public function process(SmartFileInfo $smartFileInfo): string
     {
         $oldContents = $smartFileInfo->getContents();
 
@@ -50,14 +49,7 @@ final class NonPhpFileProcessor implements FileProcessorInterface
             $this->renamedClassesCollector->getOldToNewClasses()
         );
 
-        $newContents = $this->nonPhpFileClassRenamer->renameClasses($oldContents, $classRenames);
-
-        // nothing has changed
-        if ($oldContents === $newContents) {
-            return null;
-        }
-
-        return new NonPhpFileChange($oldContents, $newContents);
+        return $this->nonPhpFileClassRenamer->renameClasses($oldContents, $classRenames);
     }
 
     public function supports(SmartFileInfo $smartFileInfo): bool

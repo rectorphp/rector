@@ -241,8 +241,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
             // mimic post-rectors
             return $this->fileProcessor->printToString($originalFileInfo);
         } elseif (Strings::match($originalFileInfo->getFilename(), StaticNonPhpFileSuffixes::getSuffixRegexPattern())) {
-            $nonPhpFileChange = $this->nonPhpFileProcessor->process($originalFileInfo);
-            return $nonPhpFileChange !== null ? $nonPhpFileChange->getNewContent() : '';
+            return $this->nonPhpFileProcessor->process($originalFileInfo);
         }
 
         $message = sprintf(

@@ -7,7 +7,6 @@ use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\FileSystem\FilesFinder;
-use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -64,8 +63,8 @@ final class FileProcessor
      */
     public function runOnPaths(array $paths): void
     {
-        $nonPhpFileInfos = $this->collectNonPhpFiles($paths);
-        $this->runNonPhpFileProcessors($nonPhpFileInfos);
+        $fileInfos = $this->findFileInfos($paths);
+        $this->runNonPhpFileProcessors($fileInfos);
     }
 
     /**
@@ -79,26 +78,19 @@ final class FileProcessor
                     continue;
                 }
 
-                $nonPhpFileChange = $nonPhpFileProcessor->process($nonPhpFileInfo);
-                if (! $nonPhpFileChange instanceof NonPhpFileChange) {
+                $oldContent = $nonPhpFileInfo->getContents();
+                $newContent = $nonPhpFileProcessor->process($nonPhpFileInfo);
+                if ($oldContent === $newContent) {
                     continue;
                 }
 
-                $this->errorAndDiffCollector->addFileDiff(
-                    $nonPhpFileInfo,
-                    $nonPhpFileChange->getNewContent(),
-                    $nonPhpFileChange->getOldContent()
-                );
+                $this->errorAndDiffCollector->addFileDiff($nonPhpFileInfo, $oldContent, $newContent);
 
                 if ($this->configuration->isDryRun()) {
                     return;
                 }
 
-                $this->smartFileSystem->dumpFile(
-                    $nonPhpFileInfo->getPathname(),
-                    $nonPhpFileChange->getNewContent()
-                );
-                $this->smartFileSystem->chmod($nonPhpFileInfo->getRealPath(), $nonPhpFileInfo->getPerms());
+                $this->dumpFileInfo($nonPhpFileInfo, $newContent);
             }
         }
     }
@@ -107,7 +99,7 @@ final class FileProcessor
      * @param string[] $paths
      * @return SmartFileInfo[]
      */
-    private function collectNonPhpFiles(array $paths): array
+    private function findFileInfos(array $paths): array
     {
         $fileExtensions = $this->resolveSupportedFileExtensions();
 
@@ -133,5 +125,11 @@ final class FileProcessor
         }
 
         return array_unique($fileExtensions);
+    }
+
+    private function dumpFileInfo(SmartFileInfo $nonPhpFileInfo, string $newContent): void
+    {
+        $this->smartFileSystem->dumpFile($nonPhpFileInfo->getPathname(), $newContent);
+        $this->smartFileSystem->chmod($nonPhpFileInfo->getRealPath(), $nonPhpFileInfo->getPerms());
     }
 }

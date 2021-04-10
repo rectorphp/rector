@@ -117,6 +117,7 @@ final class ErrorAndDiffCollector
             $this->consoleDiffer->diff($oldContent, $newContent),
             $rectorChanges
         );
+
         $this->fileDiffs[$smartFileInfo->getRealPath()] = $fileDiff;
     }
 

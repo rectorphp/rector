@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Composer\Processor;
 
 use Rector\Composer\Modifier\ComposerModifier;
+<<<<<<< HEAD
 <<<<<<< HEAD:rules/Composer/Processor/ComposerFileProcessor.php
 <<<<<<< HEAD
 <<<<<<< HEAD:rules/Composer/Processor/ComposerFileProcessor.php
@@ -21,6 +22,9 @@ use Rector\Core\Contract\Processor\NonPhpFileProcessorInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 >>>>>>> 4c28acbc66... rename ComposerProcessorNonPhp to ComposerFileProcessor:rules/Composer/Processor/ComposerProcessorNonPhp.php
 use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
+=======
+use Rector\Core\Contract\Processor\FileProcessorInterface;
+>>>>>>> ace1b5733a... make file processor always return string, handle diff outside
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -52,11 +56,11 @@ final class ComposerFileProcessor implements FileProcessorInterface
         $this->composerModifier = $composerModifier;
     }
 
-    public function process(SmartFileInfo $smartFileInfo): ?NonPhpFileChange
+    public function process(SmartFileInfo $smartFileInfo): string
     {
         // to avoid modification of file
         if (! $this->composerModifier->enabled()) {
-            return null;
+            return $smartFileInfo->getContents();
         }
 
         $composerJson = $this->composerJsonFactory->createFromFileInfo($smartFileInfo);
@@ -65,13 +69,17 @@ final class ComposerFileProcessor implements FileProcessorInterface
 
         // nothing has changed
         if ($oldComposerJson->getJsonArray() === $composerJson->getJsonArray()) {
-            return null;
+            return $smartFileInfo->getContents();
         }
 
+<<<<<<< HEAD
         $oldContent = $this->composerJsonPrinter->printToString($oldComposerJson);
         $newContent = $this->composerJsonPrinter->printToString($composerJson);
 
         return new NonPhpFileChange($oldContent, $newContent);
+=======
+        return $this->composerJsonPrinter->printToString($composerJson);
+>>>>>>> ace1b5733a... make file processor always return string, handle diff outside
     }
 
     public function supports(SmartFileInfo $smartFileInfo): bool
