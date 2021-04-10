@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://mobile.twitter.com/ivanhoe011/status/1246376872931401728
+ * @changelog https://mobile.twitter.com/ivanhoe011/status/1246376872931401728
  *
  * @see \Rector\Tests\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector\SplitListAssignToSeparateLineRectorTest
  */

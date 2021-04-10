@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
+ * @changelog https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
  *
  * @see \Rector\Tests\PhpSpecToPHPUnit\Rector\FileNode\RenameSpecFileToTestFileRector\RenameSpecFileToTestFileRectorTest
  */

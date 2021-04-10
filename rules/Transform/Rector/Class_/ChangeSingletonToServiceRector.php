@@ -16,8 +16,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://3v4l.org/lifbH
- * @see https://stackoverflow.com/a/203359/1348344
- * @see http://cleancode.blog/2017/07/20/how-to-avoid-many-instances-in-singleton-pattern/
+ * @changelog https://stackoverflow.com/a/203359/1348344
+ * @changelog http://cleancode.blog/2017/07/20/how-to-avoid-many-instances-in-singleton-pattern/
  * @see \Rector\Tests\Transform\Rector\Class_\ChangeSingletonToServiceRector\ChangeSingletonToServiceRectorTest
  */
 final class ChangeSingletonToServiceRector extends AbstractRector

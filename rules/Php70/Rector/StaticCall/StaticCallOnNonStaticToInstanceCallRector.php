@@ -22,10 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://thephp.cc/news/2017/07/dont-call-instance-methods-statically
- * @see https://3v4l.org/tQ32f
- * @see https://3v4l.org/jB9jn
- * @see https://stackoverflow.com/a/19694064/1348344
+ * @changelog https://thephp.cc/news/2017/07/dont-call-instance-methods-statically https://3v4l.org/tQ32f https://3v4l.org/jB9jn
  *
  * @see \Rector\Tests\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\StaticCallOnNonStaticToInstanceCallRectorTest
  */

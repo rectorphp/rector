@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://wiki.php.net/rfc/list_reference_assignment
+ * @changelog https://wiki.php.net/rfc/list_reference_assignment
  * @see \Rector\Tests\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector\DowngradeListReferenceAssignmentRectorTest
  */
 final class DowngradeListReferenceAssignmentRector extends AbstractRector

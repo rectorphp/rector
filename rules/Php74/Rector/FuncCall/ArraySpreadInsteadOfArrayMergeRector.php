@@ -23,8 +23,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://wiki.php.net/rfc/spread_operator_for_array
- * @see https://twitter.com/nikita_ppv/status/1126470222838366209
+ * @changelog https://wiki.php.net/rfc/spread_operator_for_array
+ *
  * @see \Rector\Tests\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\ArraySpreadInsteadOfArrayMergeRectorTest
  */
 final class ArraySpreadInsteadOfArrayMergeRector extends AbstractRector

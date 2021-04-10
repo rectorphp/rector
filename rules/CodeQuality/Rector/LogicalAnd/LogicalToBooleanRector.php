@@ -14,8 +14,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://stackoverflow.com/questions/5998309/logical-operators-or-or
- * @see https://stackoverflow.com/questions/9454870/php-xor-how-to-use-with-if
+ * @changelog https://stackoverflow.com/a/5998330/1348344
+ *
  * @see \Rector\Tests\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector\LogicalToBooleanRectorTest
  */
 final class LogicalToBooleanRector extends AbstractRector

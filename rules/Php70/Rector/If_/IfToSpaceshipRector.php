@@ -23,8 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://wiki.php.net/rfc/combined-comparison-operator
- * @see https://3v4l.org/LPbA0
+ * @changelog https://wiki.php.net/rfc/combined-comparison-operator https://3v4l.org/LPbA0
  *
  * @see \Rector\Tests\Php70\Rector\If_\IfToSpaceshipRector\IfToSpaceshipRectorTest
  */

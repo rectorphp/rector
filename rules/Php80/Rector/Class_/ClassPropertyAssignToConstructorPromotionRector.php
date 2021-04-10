@@ -21,8 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://wiki.php.net/rfc/constructor_promotion
- * @see https://github.com/php/php-src/pull/5291
+ * @changelog https://wiki.php.net/rfc/constructor_promotion https://github.com/php/php-src/pull/5291
  *
  * @see \Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\ClassPropertyAssignToConstructorPromotionRectorTest
  */
