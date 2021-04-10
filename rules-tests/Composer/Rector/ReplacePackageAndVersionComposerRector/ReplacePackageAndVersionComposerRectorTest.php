@@ -24,7 +24,7 @@ final class ReplacePackageAndVersionComposerRectorTest extends AbstractComposerR
         return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.json');
     }
 
-    public function provideConfigFile(): string
+    public function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/some_config.php';
     }

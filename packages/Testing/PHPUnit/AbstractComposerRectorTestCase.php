@@ -27,7 +27,7 @@ abstract class AbstractComposerRectorTestCase extends AbstractKernelTestCase imp
 
     protected function setUp(): void
     {
-        $this->bootKernelWithConfigs(RectorKernel::class, [$this->provideConfigFile()]);
+        $this->bootKernelWithConfigs(RectorKernel::class, [$this->provideConfigFilePath()]);
 
         $this->composerModifier = $this->getService(ComposerModifier::class);
         $this->composerJsonFactory = $this->getService(ComposerJsonFactory::class);
