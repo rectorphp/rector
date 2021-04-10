@@ -96,6 +96,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
 
         $this->fileProcessor = $this->getService(FileProcessor::class);
         $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);
+
         $this->parameterProvider = $this->getService(ParameterProvider::class);
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
         $this->dynamicSourceLocatorProvider = $this->getService(DynamicSourceLocatorProvider::class);
@@ -118,10 +119,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         return StaticFixtureFinder::yieldDirectoryExclusively($directory, $suffix);
     }
 
-    /**
-     * @param SmartFileInfo[] $extraFileInfos
-     */
-    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo, array $extraFileInfos = []): void
+    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo): void
     {
         $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
             $fixtureFileInfo,
@@ -139,7 +137,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
 
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
 
-        $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo, $extraFileInfos);
+        $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
         $this->originalTempFileInfo = $inputFileInfo;
     }
 
@@ -184,52 +182,14 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         return sys_get_temp_dir() . '/_temp_fixture_easy_testing';
     }
 
-    /**
-     * @param SmartFileInfo[] $extraFileInfos
-     */
     private function doTestFileMatchesExpectedContent(
         SmartFileInfo $originalFileInfo,
         SmartFileInfo $expectedFileInfo,
-        SmartFileInfo $fixtureFileInfo,
-        array $extraFileInfos = []
+        SmartFileInfo $fixtureFileInfo
     ): void {
         $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
-        if (! Strings::endsWith($originalFileInfo->getFilename(), '.blade.php') && in_array(
-            $originalFileInfo->getSuffix(),
-            ['php', 'phpt'],
-            true
-        )) {
-            if ($extraFileInfos === []) {
-                $this->fileProcessor->refactor($originalFileInfo);
-                $this->fileProcessor->postFileRefactor($originalFileInfo);
-            } else {
-                $fileInfosToProcess = array_merge([$originalFileInfo], $extraFileInfos);
-
-                // life-cycle trio :)
-//                foreach ($fileInfosToProcess as $fileInfoToProcess) {
-//                    $this->fileProcessor->parseFileInfoToLocalCache($fileInfoToProcess);
-//                }
-
-                foreach ($fileInfosToProcess as $fileInfoToProcess) {
-                    $this->fileProcessor->refactor($fileInfoToProcess);
-                }
-
-                foreach ($fileInfosToProcess as $fileInfoToProcess) {
-                    $this->fileProcessor->postFileRefactor($fileInfoToProcess);
-                }
-            }
-
-            // mimic post-rectors
-            $changedContent = $this->fileProcessor->printToString($originalFileInfo);
-        } elseif (Strings::match($originalFileInfo->getFilename(), StaticNonPhpFileSuffixes::getSuffixRegexPattern())) {
-            $nonPhpFileChange = $this->nonPhpFileProcessor->process($originalFileInfo);
-
-            $changedContent = $nonPhpFileChange !== null ? $nonPhpFileChange->getNewContent() : '';
-        } else {
-            $message = sprintf('Suffix "%s" is not supported yet', $originalFileInfo->getSuffix());
-            throw new ShouldNotHappenException($message);
-        }
+        $changedContent = $this->processFileInfo($originalFileInfo);
 
         $relativeFilePathFromCwd = $fixtureFileInfo->getRelativeFilePathFromCwd();
 
@@ -263,5 +223,28 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
 
         self::$rectorConfigsResolver = new RectorConfigsResolver();
         self::$isInitialized = true;
+    }
+
+    private function processFileInfo(SmartFileInfo $originalFileInfo): string
+    {
+        if (! Strings::endsWith($originalFileInfo->getFilename(), '.blade.php') && in_array(
+                $originalFileInfo->getSuffix(),
+                ['php', 'phpt'],
+                true
+            )) {
+            $this->fileProcessor->refactor($originalFileInfo);
+            $this->fileProcessor->postFileRefactor($originalFileInfo);
+
+            // mimic post-rectors
+            $changedContent = $this->fileProcessor->printToString($originalFileInfo);
+        } elseif (Strings::match($originalFileInfo->getFilename(), StaticNonPhpFileSuffixes::getSuffixRegexPattern())) {
+            $nonPhpFileChange = $this->nonPhpFileProcessor->process($originalFileInfo);
+
+            $changedContent = $nonPhpFileChange !== null ? $nonPhpFileChange->getNewContent() : '';
+        } else {
+            $message = sprintf('Suffix "%s" is not supported yet', $originalFileInfo->getSuffix());
+            throw new ShouldNotHappenException($message);
+        }
+        return $changedContent;
     }
 }

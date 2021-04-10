@@ -15,14 +15,12 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
     /**
      * @requires PHP 7.4
      * @dataProvider provideData()
-     * @param SmartFileInfo[] $extraFileInfos
      */
     public function test(
         SmartFileInfo $originalFileInfo,
-        ?AddedFileWithContent $expectedAddedFileWithContent,
-        array $extraFileInfos = []
+        ?AddedFileWithContent $expectedAddedFileWithContent
     ): void {
-        $this->doTestFileInfo($originalFileInfo, $extraFileInfos);
+        $this->doTestFileInfo($originalFileInfo);
 
         if ($expectedAddedFileWithContent !== null) {
             $this->assertFileWithContentWasAdded($expectedAddedFileWithContent);
@@ -38,20 +36,12 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
     {
         $smartFileSystem = new SmartFileSystem();
 
-        $extraFileInfos = [
-            new SmartFileInfo(__DIR__ . '/Source/RandomInterfaceUseCase.php'),
-            new SmartFileInfo(__DIR__ . '/Source/ValueObject/SameClassImplementEntity.php'),
-            new SmartFileInfo(__DIR__ . '/Source/Entity/RandomInterfaceUseCaseInTheSameNamespace.php'),
-        ];
-
         yield [
             new SmartFileInfo(__DIR__ . '/Source/Entity/RandomInterface.php'),
             new AddedFileWithContent(
                 $this->getFixtureTempDirectory() . '/Source/Contract/RandomInterface.php',
                 $smartFileSystem->readFile(__DIR__ . '/Expected/ExpectedRandomInterface.php')
             ),
-            // extra files
-            $extraFileInfos,
         ];
 
         // skip nette control factory
