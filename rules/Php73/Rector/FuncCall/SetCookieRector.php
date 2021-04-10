@@ -21,8 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php73\Rector\FuncCall\SetcookieRector\SetCookieRectorTest
  *
- * @see https://www.php.net/setcookie
- * @see https://wiki.php.net/rfc/same-site-cookie
+ * @changelog https://www.php.net/setcookie https://wiki.php.net/rfc/same-site-cookie
  */
 final class SetCookieRector extends AbstractRector
 {

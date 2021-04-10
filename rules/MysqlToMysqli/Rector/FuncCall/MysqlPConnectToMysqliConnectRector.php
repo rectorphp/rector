@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://stackoverflow.com/a/34041762/1348344
+ * @changelog https://stackoverflow.com/a/34041762/1348344
  * @see \Rector\Tests\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector\MysqlPConnectToMysqliConnectRectorTest
  */
 final class MysqlPConnectToMysqliConnectRector extends AbstractRector

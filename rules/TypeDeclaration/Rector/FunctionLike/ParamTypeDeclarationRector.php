@@ -25,10 +25,10 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://wiki.php.net/rfc/scalar_type_hints_v5
- * @see https://github.com/nikic/TypeUtil
- * @see https://github.com/nette/type-fixer
- * @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/3258
+ * @changelog https://wiki.php.net/rfc/scalar_type_hints_v5
+ * @changelog https://github.com/nikic/TypeUtil
+ * @changelog https://github.com/nette/type-fixer
+ * @changelog https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/3258
  *
  * @see \Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\ParamTypeDeclarationRectorTest
  */

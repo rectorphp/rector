@@ -13,8 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://robots.thoughtbot.com/clearer-conditionals-using-de-morgans-laws
- * @see https://stackoverflow.com/questions/20043664/de-morgans-law
+ * @changelog https://stackoverflow.com/questions/20043664/de-morgans-law
  * @see \Rector\Tests\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector\SimplifyDeMorganBinaryRectorTest
  */
 final class SimplifyDeMorganBinaryRector extends AbstractRector

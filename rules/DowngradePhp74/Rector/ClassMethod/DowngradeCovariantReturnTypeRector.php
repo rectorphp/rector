@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://www.php.net/manual/en/migration74.new-features.php#migration74.new-features.core.type-variance
+ * @changelog https://www.php.net/manual/en/migration74.new-features.php#migration74.new-features.core.type-variance
  *
  * @see \Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector\DowngradeCovariantReturnTypeRectorTest
  */
