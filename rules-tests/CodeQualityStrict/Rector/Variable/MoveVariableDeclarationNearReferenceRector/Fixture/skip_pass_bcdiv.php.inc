@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\CodeQualityStrict\Rector\Variable\MoveVariableDeclarationNearReferenceRector\Fixture;
 
-final class SkipBcscale
+final class SkipPassBcdiv
 {
     public function run($data, $options)
     {
