@@ -9,8 +9,6 @@ use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
-use Symplify\SetConfigResolver\Bootstrap\InvalidSetReporter;
-use Symplify\SetConfigResolver\Exception\SetNotFoundException;
 use Tracy\Debugger;
 
 // @ intentionally: continue anyway
@@ -46,10 +44,6 @@ try {
     $bootstrapConfigs = $rectorConfigsResolver->provide();
     $rectorContainerFactory = new RectorContainerFactory();
     $container = $rectorContainerFactory->createFromBootstrapConfigs($bootstrapConfigs);
-} catch (SetNotFoundException $setNotFoundException) {
-    $invalidSetReporter = new InvalidSetReporter();
-    $invalidSetReporter->report($setNotFoundException);
-    exit(ShellCode::ERROR);
 } catch (Throwable $throwable) {
     $symfonyStyle->error($throwable->getMessage());
     exit(ShellCode::ERROR);
