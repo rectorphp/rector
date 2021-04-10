@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
@@ -225,7 +224,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Identifier|Name|NullableType|PhpParserUnionType|null
+     * @return Name|NullableType|PhpParserUnionType|null
      */
     private function resolveFuncCallReturnNode(FuncCall $funcCall): ?Node
     {

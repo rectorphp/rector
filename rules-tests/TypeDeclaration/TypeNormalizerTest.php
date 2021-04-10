@@ -11,7 +11,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\TypeNormalizer;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
@@ -23,16 +23,16 @@ final class TypeNormalizerTest extends AbstractKernelTestCase
     private $typeNormalizer;
 
     /**
-     * @var StaticTypeMapper
+     * @var PHPStanStaticTypeMapper
      */
-    private $staticTypeMapper;
+    private $phpStanStaticTypeMapper;
 
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
 
         $this->typeNormalizer = $this->getService(TypeNormalizer::class);
-        $this->staticTypeMapper = $this->getService(StaticTypeMapper::class);
+        $this->phpStanStaticTypeMapper = $this->getService(PHPStanStaticTypeMapper::class);
     }
 
     /**
@@ -40,13 +40,10 @@ final class TypeNormalizerTest extends AbstractKernelTestCase
      */
     public function testNormalizeArrayOfUnionToUnionArray(ArrayType $arrayType, string $expectedDocString): void
     {
-        $arrayDocString = $this->staticTypeMapper->mapPHPStanTypeToDocString($arrayType);
-        $this->assertSame($expectedDocString, $arrayDocString);
-
         $unionType = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($arrayType);
         $this->assertInstanceOf(UnionType::class, $unionType);
 
-        $unionDocString = $this->staticTypeMapper->mapPHPStanTypeToDocString($unionType);
+        $unionDocString = $this->phpStanStaticTypeMapper->mapToDocString($unionType);
         $this->assertSame($expectedDocString, $unionDocString);
     }
 
