@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObject\Reporting;
 
+use Rector\ChangesReporting\Annotation\AnnotationExtractor;
 use Rector\ChangesReporting\ValueObject\RectorWithFileAndLineChange;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -82,6 +83,47 @@ final class FileDiff
             $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClass();
         }
 
+        return $this->sortClasses($rectorClasses);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getRectorClassesWithChangelogUrl(AnnotationExtractor $annotationExtractor): array
+    {
+        $rectorClasses = [];
+        foreach ($this->rectorWithFileAndLineChanges as $rectorWithFileAndLineChange) {
+            $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClassWithChangelogUrl($annotationExtractor);
+        }
+
+        return $this->sortClasses($rectorClasses);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getRectorClassesWithChangelogUrlAndRectorClassAsKey(AnnotationExtractor $annotationExtractor): array
+    {
+        $rectorClasses = [];
+        foreach ($this->rectorWithFileAndLineChanges as $rectorWithFileAndLineChange) {
+            $changelogUrl = $rectorWithFileAndLineChange->getChangelogUrl($annotationExtractor);
+            if ($changelogUrl !== null) {
+                $rectorClasses[$rectorWithFileAndLineChange->getRectorClass()] = $changelogUrl;
+            }
+        }
+        $rectorClasses = array_unique($rectorClasses);
+
+        ksort($rectorClasses);
+
+        return $rectorClasses;
+    }
+
+    /**
+     * @param string[] $rectorClasses
+     * @return string[]
+     */
+    private function sortClasses(array $rectorClasses): array
+    {
         $rectorClasses = array_unique($rectorClasses);
 
         sort($rectorClasses);

@@ -566,3 +566,12 @@ parameters:
 
         # known types
         - '#Parameter (.*?) expects PhpParser\\Node, PhpParser\\Node\|null given#'
+
+        -
+            message: '#Instead of "new ClassReflection\(\)" use ReflectionProvider service or "\(new PHPStan\\Reflection\\ClassReflection\(<desired_type\>\)\)" for static reflection to work#'
+            paths:
+                -  packages/ChangesReporting/Annotation/AnnotationExtractor
+        -
+            message: '#"%s" in sprintf\(\) format must be quoted#'
+            paths:
+                - packages/ChangesReporting/ValueObject/RectorWithFileAndLineChange.php

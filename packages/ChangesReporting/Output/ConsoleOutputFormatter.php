@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\ChangesReporting\Output;
 
 use Nette\Utils\Strings;
+use Rector\ChangesReporting\Annotation\AnnotationExtractor;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Configuration\Configuration;
@@ -44,14 +45,21 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var AnnotationExtractor
+     */
+    private $annotationExtractor;
+
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         Configuration $configuration,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        AnnotationExtractor $annotationExtractor
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->configuration = $configuration;
+        $this->annotationExtractor = $annotationExtractor;
     }
 
     public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
@@ -114,7 +122,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             if ($fileDiff->getRectorChanges() !== []) {
                 $this->symfonyStyle->writeln('<options=underscore>Applied rules:</>');
                 $this->symfonyStyle->newLine();
-                $this->symfonyStyle->listing($fileDiff->getRectorClasses());
+                $this->symfonyStyle->listing($fileDiff->getRectorClassesWithChangelogUrl($this->annotationExtractor));
                 $this->symfonyStyle->newLine();
             }
         }
