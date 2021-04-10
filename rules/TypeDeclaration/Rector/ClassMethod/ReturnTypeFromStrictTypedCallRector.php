@@ -229,11 +229,6 @@ CODE_SAMPLE
      */
     private function resolveFuncCallReturnNode(FuncCall $funcCall): ?Node
     {
-        $function = $this->nodeRepository->findFunctionByFuncCall($funcCall);
-        if ($function instanceof Function_) {
-            return $function->returnType;
-        }
-
         $returnType = $this->reflectionTypeResolver->resolveFuncCallReturnType($funcCall);
         if (! $returnType instanceof Type) {
             return null;
