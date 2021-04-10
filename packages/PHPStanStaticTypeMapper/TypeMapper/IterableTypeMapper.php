@@ -11,11 +11,8 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\Type;
-use PHPStan\Type\VerbosityLevel;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
-use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 
@@ -25,16 +22,6 @@ final class IterableTypeMapper implements TypeMapperInterface
      * @var PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
-
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    public function __construct(PhpVersionProvider $phpVersionProvider)
-    {
-        $this->phpVersionProvider = $phpVersionProvider;
-    }
 
     /**
      * @required
@@ -72,19 +59,6 @@ final class IterableTypeMapper implements TypeMapperInterface
     {
         return new Name('iterable');
     }
-
-//    /**
-//     * @param IterableType $unionTypeNode
-//     */
-//    public function mapToDocString(Type $type, ?Type $parentType = null): string
-//    {
-//        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
-//            // iterable type is better done in PHP code, than in doc
-//            return '';
-//        }
-//
-//        return $type->describe(VerbosityLevel::typeOnly());
-//    }
 
     private function convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes(
         UnionTypeNode $unionTypeNode

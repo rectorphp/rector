@@ -12,6 +12,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PhpParser\NodeAbstract;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
@@ -131,6 +132,13 @@ final class UnionTypeMapper implements TypeMapperInterface
             return new NullableType(new Name('bool'));
         }
 
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES) && $this->isFalseBoolUnion(
+            $type
+        )) {
+            // return new Bool
+            return new Name('bool');
+        }
+
         // special case for nullable
         $nullabledType = $this->matchTypeForNullableUnionType($type);
         if (! $nullabledType instanceof Type) {
@@ -158,24 +166,6 @@ final class UnionTypeMapper implements TypeMapperInterface
 
         return new NullableType($nullabledTypeNode);
     }
-
-//    /**
-//     * @param UnionType $unionType
-//     */
-//    public function mapToDocString(Type $type, ?Type $parentType = null): string
-//    {
-//        $docStrings = [];
-//
-//        foreach ($type->getTypes() as $unionedType) {
-//            $docStrings[] = $this->phpStanStaticTypeMapper->mapToDocString($unionedType);
-//        }
-//
-//        // remove empty values, e.g. void/iterable
-//        $docStrings = array_unique($docStrings);
-//        $docStrings = array_filter($docStrings);
-//
-//        return implode('|', $docStrings);
-//    }
 
     private function shouldSkipIterable(UnionType $unionType): bool
     {
@@ -341,5 +331,22 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         return $typeWithClassName;
+    }
+
+    private function isFalseBoolUnion(UnionType $unionType): bool
+    {
+        if (count($unionType->getTypes()) !== 2) {
+            return false;
+        }
+
+        foreach ($unionType->getTypes() as $unionedType) {
+            if ($unionedType instanceof ConstantBooleanType) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }

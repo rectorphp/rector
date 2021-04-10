@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
+use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableType;
@@ -19,8 +20,6 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 
-//use Rector\StaticTypeMapper\ValueObject\Type\FalseBooleanType;
-
 final class ScalarStringToTypeMapper
 {
     /**
@@ -30,8 +29,7 @@ final class ScalarStringToTypeMapper
         StringType::class => ['string'],
         FloatType::class => ['float', 'real', 'double'],
         IntegerType::class => ['int', 'integer'],
-        //        FalseBooleanType::class => ['false'],
-        BooleanType::class => ['true', 'bool', 'boolean'],
+        BooleanType::class => ['bool', 'boolean'],
         NullType::class => ['null'],
         VoidType::class => ['void'],
         ResourceType::class => ['resource'],
@@ -42,6 +40,14 @@ final class ScalarStringToTypeMapper
     public function mapScalarStringToType(string $scalarName): Type
     {
         $loweredScalarName = Strings::lower($scalarName);
+
+        if ($loweredScalarName === 'false') {
+            return new ConstantBooleanType(false);
+        }
+
+        if ($loweredScalarName === 'true') {
+            return new ConstantBooleanType(true);
+        }
 
         foreach (self::SCALAR_NAME_BY_TYPE as $objectType => $scalarNames) {
             if (! in_array($loweredScalarName, $scalarNames, true)) {

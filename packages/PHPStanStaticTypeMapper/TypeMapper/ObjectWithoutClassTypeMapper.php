@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Generic\TemplateObjectWithoutClassType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
-use PHPStan\Type\VerbosityLevel;
 use Rector\BetterPhpDocParser\ValueObject\Type\EmptyGenericTypeNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -73,11 +72,6 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface, PHPStan
 
         return new Name('object');
     }
-
-//    public function mapToDocString(Type $type, ?Type $parentType = null): string
-//    {
-//        return $type->describe(VerbosityLevel::typeOnly());
-//    }
 
     public function setPHPStanStaticTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {

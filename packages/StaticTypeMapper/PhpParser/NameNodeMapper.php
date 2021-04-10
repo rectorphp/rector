@@ -20,7 +20,6 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
-//use Rector\StaticTypeMapper\ValueObject\Type\FalseBooleanType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class NameNodeMapper implements PhpParserNodeMapperInterface
@@ -119,7 +118,6 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
 
         if ($name === 'false') {
             return new ConstantBooleanType(false);
-//            return new FalseBooleanType();
         }
 
         if ($name === 'bool') {

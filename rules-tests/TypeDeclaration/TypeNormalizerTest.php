@@ -11,7 +11,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\TypeNormalizer;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
@@ -22,17 +21,10 @@ final class TypeNormalizerTest extends AbstractKernelTestCase
      */
     private $typeNormalizer;
 
-    /**
-     * @var PHPStanStaticTypeMapper
-     */
-    private $phpStanStaticTypeMapper;
-
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-
         $this->typeNormalizer = $this->getService(TypeNormalizer::class);
-        $this->phpStanStaticTypeMapper = $this->getService(PHPStanStaticTypeMapper::class);
     }
 
     /**

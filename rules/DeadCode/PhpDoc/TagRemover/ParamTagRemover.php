@@ -38,6 +38,7 @@ final class ParamTagRemover
             // remove existing type
 
             $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
+
             if (! $paramTagValueNode instanceof ParamTagValueNode) {
                 continue;
             }

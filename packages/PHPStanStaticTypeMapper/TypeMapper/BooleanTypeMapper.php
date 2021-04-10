@@ -15,8 +15,6 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
-//use Rector\StaticTypeMapper\ValueObject\Type\FalseBooleanType;
-
 final class BooleanTypeMapper implements TypeMapperInterface
 {
     /**
@@ -65,31 +63,15 @@ final class BooleanTypeMapper implements TypeMapperInterface
         return new Name('bool');
     }
 
-//    /**
-//     * @param BooleanType $type
-//     */
-//    public function mapToDocString(Type $type, ?Type $parentType = null): string
-//    {
-//        if ($this->isFalseBooleanTypeWithUnion($type)) {
-//            return 'false';
-//        }
-//
-//        return 'bool';
-//    }
-
     private function isFalseBooleanTypeWithUnion(Type $type): bool
     {
         if (! $type instanceof ConstantBooleanType) {
             return false;
         }
 
-        if ($type->getValue() === true) {
+        if ($type->getValue()) {
             return false;
         }
-
-//        if (! $type instanceof FalseBooleanType) {
-//            return false;
-//        }
 
         return $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES);
     }

@@ -13,7 +13,6 @@ use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\VerbosityLevel;
 use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
@@ -62,14 +61,6 @@ final class ClassStringTypeMapper implements TypeMapperInterface, PHPStanStaticT
     {
         return null;
     }
-
-//    /**
-//     * @param ClassStringType $phpStanStaticTypeMapper
-//     */
-//    public function mapToDocString(Type $type, ?Type $parentType = null): string
-//    {
-//        return $type->describe(VerbosityLevel::typeOnly());
-//    }
 
     public function setPHPStanStaticTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {

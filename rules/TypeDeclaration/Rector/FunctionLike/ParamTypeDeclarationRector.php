@@ -188,8 +188,6 @@ CODE_SAMPLE
             TypeKind::KIND_PARAM
         );
 
-        dump($paramTypeNode);
-
         if (! $paramTypeNode instanceof Node) {
             return;
         }

@@ -26,7 +26,6 @@ use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
-use Rector\TypeDeclaration\TypeNormalizer;
 
 /**
  * @see \Rector\PHPStanStaticTypeMapper\Tests\TypeMapper\ArrayTypeMapperTest
@@ -42,11 +41,6 @@ final class ArrayTypeMapper implements TypeMapperInterface
      * @var PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
-
-//    /**
-//     * @var TypeNormalizer
-//     */
-//    private $typeNormalizer;
 
     /**
      * @var UnionTypeCommonTypeNarrower
@@ -64,12 +58,10 @@ final class ArrayTypeMapper implements TypeMapperInterface
      */
     public function autowireArrayTypeMapper(
         PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
-//        TypeNormalizer $typeNormalizer,
         UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
         ReflectionProvider $reflectionProvider
     ): void {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
-//        $this->typeNormalizer = $typeNormalizer;
         $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
         $this->reflectionProvider = $reflectionProvider;
     }
@@ -118,21 +110,6 @@ final class ArrayTypeMapper implements TypeMapperInterface
     {
         return new Name('array');
     }
-
-//    /**
-//     * @param ArrayType $unionType
-//     */
-//    public function mapToDocString(Type $type, ?Type $parentType = null): string
-//    {
-//        $itemType = $type->getItemType();
-//
-//        $normalizedType = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($type);
-//        if ($normalizedType instanceof UnionType) {
-//            return $this->mapArrayUnionTypeToDocString($type, $normalizedType);
-//        }
-//
-//        return $this->phpStanStaticTypeMapper->mapToDocString($itemType, $parentType) . '[]';
-//    }
 
     private function createArrayTypeNodeFromUnionType(UnionType $unionType): ArrayTypeNode
     {
@@ -216,23 +193,6 @@ final class ArrayTypeMapper implements TypeMapperInterface
         $identifierTypeNode->setAttribute(self::HAS_GENERIC_TYPE_PARENT, $withKey);
         return new GenericTypeNode($identifierTypeNode, $genericTypes);
     }
-
-//    private function mapArrayUnionTypeToDocString(ArrayType $arrayType, UnionType $unionType): string
-//    {
-//        $unionedTypesAsString = [];
-//
-//        foreach ($unionType->getTypes() as $unionedArrayItemType) {
-//            $unionedTypesAsString[] = $this->phpStanStaticTypeMapper->mapToDocString(
-//                $unionedArrayItemType,
-//                $arrayType
-//            );
-//        }
-//
-//        $unionedTypesAsString = array_values($unionedTypesAsString);
-//        $unionedTypesAsString = array_unique($unionedTypesAsString);
-//
-//        return implode('|', $unionedTypesAsString);
-//    }
 
     private function isIntegerKeyAndNonNestedArray(ArrayType $arrayType): bool
     {

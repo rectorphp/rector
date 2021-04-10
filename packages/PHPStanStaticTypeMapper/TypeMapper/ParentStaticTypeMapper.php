@@ -9,7 +9,6 @@ use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
-use PHPStan\Type\VerbosityLevel;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 
@@ -38,9 +37,4 @@ final class ParentStaticTypeMapper implements TypeMapperInterface
     {
         return new Name('parent');
     }
-
-//    public function mapToDocString(Type $type, ?Type $parentType = null): string
-//    {
-//        return $type->describe(VerbosityLevel::typeOnly());
-//    }
 }
