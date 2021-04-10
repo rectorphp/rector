@@ -59,22 +59,4 @@ final class IntersectionTypeMapper implements TypeMapperInterface
         // intersection types in PHP are not yet supported
         return null;
     }
-
-    /**
-     * @param IntersectionType $type
-     */
-    public function mapToDocString(Type $type, ?Type $parentType = null): string
-    {
-        $stringTypes = [];
-
-        foreach ($type->getTypes() as $unionedType) {
-            $stringTypes[] = $this->phpStanStaticTypeMapper->mapToDocString($unionedType);
-        }
-
-        // remove empty values, e.g. void/iterable
-        $stringTypes = array_unique($stringTypes);
-        $stringTypes = array_filter($stringTypes);
-
-        return implode('&', $stringTypes);
-    }
 }

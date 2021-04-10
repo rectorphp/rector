@@ -57,6 +57,6 @@ final class UnionTypeMapper implements PhpDocTypeMapperInterface
         }
 
         // to prevent missing class error, e.g. in tests
-        return $this->typeFactory->createMixedPassedOrUnionType($unionedTypes);
+        return $this->typeFactory->createMixedPassedOrUnionTypeAndKeepConstant($unionedTypes);
     }
 }

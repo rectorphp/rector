@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -176,16 +175,6 @@ final class NodeRepository
     public function findFunction(string $name): ?Function_
     {
         return $this->functionsByName[$name] ?? null;
-    }
-
-    public function findFunctionByFuncCall(FuncCall $funcCall): ?Function_
-    {
-        $functionName = $this->nodeNameResolver->getName($funcCall);
-        if ($functionName === null) {
-            return null;
-        }
-
-        return $this->findFunction($functionName);
     }
 
     /**

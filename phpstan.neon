@@ -575,3 +575,16 @@ parameters:
             message: '#"%s" in sprintf\(\) format must be quoted#'
             paths:
                 - packages/ChangesReporting/ValueObject/RectorWithFileAndLineChange.php
+
+        -
+            message: '#Class cognitive complexity is \d+, keep it under 50#'
+            paths:
+                 - packages/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php
+
+        -
+            message: '#Cognitive complexity for "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper\:\:mapToPhpParserNode\(\)" is 11, keep it under 9#'
+            paths:
+                - packages/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php
+
+        - '#Cognitive complexity for "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper\:\:mapToPhpParserNode\(\)" is 10, keep it under 9#'
+        - '#Method Rector\\NodeNameResolver\\NodeNameResolver\:\:matchRectorBacktraceCall\(\) return type has no value type specified in iterable type array#'
