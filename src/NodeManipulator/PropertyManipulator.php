@@ -182,33 +182,10 @@ final class PropertyManipulator
 
     private function isFoundByRefParam(Node $node): bool
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof MutatingScope) {
-            return false;
-        }
+        $classMethod = $node instanceof MethodCall
+            ? $this->nodeRepository->findClassMethodByMethodCall($node)
+            : $this->nodeRepository->findClassMethodByStaticCall($node);
 
-        $methodName = $this->nodeNameResolver->getName($node->name);
-        if ($methodName === null) {
-            return false;
-        }
-
-        $type = $node instanceof MethodCall
-            ? $scope->getType($node->var)
-            : $node->class->toString();
-
-        if ($type instanceof ThisType) {
-            $type = $type->getStaticObjectType();
-        }
-
-        if ($type instanceof ObjectType) {
-            $type = $type->getClassName();
-        }
-
-        if (! is_string($type)) {
-            return false;
-        }
-
-        $classMethod = $this->nodeRepository->findClassMethod($type, $methodName);
         if (! $classMethod instanceof ClassMethod) {
             return false;
         }
