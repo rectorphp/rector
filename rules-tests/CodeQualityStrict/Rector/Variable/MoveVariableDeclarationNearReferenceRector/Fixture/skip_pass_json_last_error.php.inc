@@ -8,8 +8,7 @@ final class SkipPassJsonLastError
     {
         $result = json_encode($data, $options, 512);
 
-        if (json_last_error())
-        {
+        if (json_last_error()) {
             throw new \Exception();
         }
 
