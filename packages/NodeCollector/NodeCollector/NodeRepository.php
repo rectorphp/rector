@@ -511,14 +511,6 @@ final class NodeRepository
         return $this->parsedNodeCollector->getClasses();
     }
 
-    /**
-     * @return New_[]
-     */
-    public function findNewsByClass(string $className): array
-    {
-        return $this->parsedNodeCollector->findNewsByClass($className);
-    }
-
     public function findClassConstant(string $className, string $constantName): ?ClassConst
     {
         return $this->parsedNodeCollector->findClassConstant($className, $constantName);

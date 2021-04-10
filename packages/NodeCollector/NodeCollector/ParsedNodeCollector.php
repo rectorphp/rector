@@ -213,24 +213,6 @@ final class ParsedNodeCollector
         }
     }
 
-    /**
-     * @return New_[]
-     */
-    public function findNewsByClass(string $className): array
-    {
-        $newsByClass = [];
-
-        foreach ($this->news as $new) {
-            if (! $this->nodeNameResolver->isName($new->class, $className)) {
-                continue;
-            }
-
-            $newsByClass[] = $new;
-        }
-
-        return $newsByClass;
-    }
-
     public function findClassConstByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
     {
         $className = $this->nodeNameResolver->getName($classConstFetch->class);
