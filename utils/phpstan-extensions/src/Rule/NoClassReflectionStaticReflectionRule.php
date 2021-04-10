@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace Rector\PHPStanExtensions\Rule;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Name;
+use PhpParser\Node\Expr\New_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
-use PHPStan\Type\Constant\ConstantStringType;
-use PHPStan\Type\Type;
 use Rector\PHPStanExtensions\TypeAnalyzer\AllowedAutoloadedTypeAnalyzer;
 use Symplify\Astral\Naming\SimpleNameResolver;
 use Symplify\PHPStanRules\Rules\AbstractSymplifyRule;
@@ -19,16 +15,14 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://github.com/rectorphp/rector/issues/5906
- *
- * @see \Rector\PHPStanExtensions\Tests\Rule\NoInstanceOfStaticReflectionRule\NoInstanceOfStaticReflectionRuleTest
+ * @see \Rector\PHPStanExtensions\Tests\Rule\NoClassReflectionStaticReflectionRule\NoClassReflectionStaticReflectionRuleTest
  */
-final class NoInstanceOfStaticReflectionRule extends AbstractSymplifyRule implements Rule
+final class NoClassReflectionStaticReflectionRule extends AbstractSymplifyRule implements Rule
 {
     /**
      * @var string
      */
-    public const ERROR_MESSAGE = 'Instead of "instanceof/is_a()" use ReflectionProvider service or "(new ObjectType(<desired_type>))->isSuperTypeOf(<element_type>)" for static reflection to work';
+    public const ERROR_MESSAGE = 'Instead of "new ClassReflection()" use ReflectionProvider service or "(new PHPStan\Reflection\ClassReflection(<desired_type>))" for static reflection to work';
 
     /**
      * @var AllowedAutoloadedTypeAnalyzer
@@ -53,19 +47,26 @@ final class NoInstanceOfStaticReflectionRule extends AbstractSymplifyRule implem
      */
     public function getNodeTypes(): array
     {
-        return [Instanceof_::class, FuncCall::class];
+        return [New_::class];
     }
 
     /**
-     * @param Instanceof_|FuncCall $node
+     * @param New_ $node
      * @return string[]
      */
     public function process(Node $node, Scope $scope): array
     {
-        $exprStaticType = $this->resolveExprStaticType($node, $scope);
-        if ($exprStaticType === null) {
+        if (count($node->args) !== 1) {
             return [];
         }
+
+        $className = $this->simpleNameResolver->getName($node->class);
+        if ($className !== 'ReflectionClass') {
+            return [];
+        }
+
+        $argValue = $node->args[0]->value;
+        $exprStaticType = $scope->getType($argValue);
 
         if ($this->allowedAutoloadedTypeAnalyzer->isAllowedType($exprStaticType)) {
             return [];
@@ -79,37 +80,15 @@ final class NoInstanceOfStaticReflectionRule extends AbstractSymplifyRule implem
         return new RuleDefinition(self::ERROR_MESSAGE, [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-return is_a($node, 'Command', true);
+$classReflection = new ClassReflection($someType);
 CODE_SAMPLE
             ,
                 <<<'CODE_SAMPLE'
-$nodeType = $scope->getType($node);
-$commandObjectType = new ObjectType('Command');
-
-return $commandObjectType->isSuperTypeOf($nodeType)->yes();
+if ($this->reflectionProvider->hasClass($someType)) {
+    $classReflection = $this->reflectionProvider->getClass($someType);
+}
 CODE_SAMPLE
             ),
         ]);
-    }
-
-    /**
-     * @param FuncCall|Instanceof_ $node
-     */
-    private function resolveExprStaticType(Node $node, Scope $scope): ?Type
-    {
-        if ($node instanceof Instanceof_) {
-            if ($node->class instanceof Name) {
-                return new ConstantStringType($node->class->toString());
-            }
-
-            return $scope->getType($node->class);
-        }
-
-        if (! $this->simpleNameResolver->isName($node, 'is_a')) {
-            return null;
-        }
-
-        $typeArgValue = $node->args[1]->value;
-        return $scope->getType($typeArgValue);
     }
 }
