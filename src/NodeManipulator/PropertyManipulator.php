@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
 use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -171,7 +172,7 @@ final class PropertyManipulator
             }
 
             $caller = $parent->getAttribute(AttributeKey::PARENT_NODE);
-            if ($caller instanceof MethodCall) {
+            if ($caller instanceof MethodCall || $caller instanceof StaticCall) {
                 return $this->isFoundByRefParam($caller);
             }
         }
@@ -179,19 +180,21 @@ final class PropertyManipulator
         return $this->assignManipulator->isLeftPartOfAssign($expr);
     }
 
-    private function isFoundByRefParam(MethodCall $methodCall): bool
+    private function isFoundByRefParam(Node $node): bool
     {
-        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof MutatingScope) {
             return false;
         }
 
-        $methodName = $this->nodeNameResolver->getName($methodCall->name);
+        $methodName = $this->nodeNameResolver->getName($node->name);
         if ($methodName === null) {
             return false;
         }
 
-        $type = $scope->getType($methodCall->var);
+        $type = $node instanceof MethodCall
+            ? $scope->getType($node->var)
+            : $node->class->toString();
 
         if ($type instanceof ThisType) {
             $type = $type->getStaticObjectType();
