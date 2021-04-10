@@ -25,6 +25,9 @@ final class RectorWithFileAndLineChangeTest extends TestCase
         );
     }
 
+    /**
+     * @return Iterator<string[]|RectorWithFileAndLineChange[]<class-string<RectorWithOutChangelog>>>
+     */
     public function rectorsWithFileAndLineChange(): Iterator
     {
         yield 'Rector with link' => [

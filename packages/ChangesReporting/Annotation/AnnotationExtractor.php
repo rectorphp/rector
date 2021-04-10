@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Rector\ChangesReporting\Annotation;
 
+use Nette\Utils\Strings;
 use ReflectionClass;
 
 final class AnnotationExtractor
@@ -12,16 +13,16 @@ final class AnnotationExtractor
      */
     public function extractAnnotationFromClass(string $className, string $annotation): ?string
     {
-        $classReflection = new ReflectionClass($className);
+        $reflectionClass = new ReflectionClass($className);
 
-        $docComment = $classReflection->getDocComment();
+        $docComment = $reflectionClass->getDocComment();
 
         if (! is_string($docComment)) {
             return null;
         }
 
-        $pattern = '#' . preg_quote($annotation) . '\s*(?<annotation>[a-zA-Z0-9, ()_].*)#';
-        preg_match($pattern, $docComment, $matches);
+        $pattern = '#' . preg_quote($annotation, '#') . '\s*(?<annotation>[a-zA-Z0-9, ()_].*)#';
+        $matches = Strings::match($docComment, $pattern);
 
         if (! array_key_exists('annotation', $matches)) {
             return null;
