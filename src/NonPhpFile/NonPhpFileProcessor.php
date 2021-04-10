@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\NonPhpFile;
 
 use Rector\Core\Configuration\RenamedClassesDataCollector;
-use Rector\Core\Contract\Processor\NonPhpFileProcessorInterface;
+use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\PSR4\Collector\RenamedClassesCollector;
@@ -14,7 +14,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameNonPhpTest
  */
-final class NonPhpFileProcessor implements NonPhpFileProcessorInterface
+final class NonPhpFileProcessor implements FileProcessorInterface
 {
     /**
      * @var RenamedClassesDataCollector

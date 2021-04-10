@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rector\Composer\Processor;
 
 use Rector\Composer\Modifier\ComposerModifier;
-use Rector\Core\Contract\Processor\NonPhpFileProcessorInterface;
+use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ComposerProcessorNonPhp implements NonPhpFileProcessorInterface
+final class ComposerFileProcessor implements FileProcessorInterface
 {
     /**
      * @var ComposerJsonFactory

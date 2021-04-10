@@ -6,7 +6,7 @@ namespace Rector\Core\Contract\Processor;
 use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-interface NonPhpFileProcessorInterface
+interface FileProcessorInterface
 {
     public function process(SmartFileInfo $smartFileInfo): ?NonPhpFileChange;
 
