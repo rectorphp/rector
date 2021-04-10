@@ -6,8 +6,8 @@ namespace Rector\Tests\ChangesReporting\Annotation;
 use Iterator;
 use PHPUnit\Framework\TestCase;
 use Rector\ChangesReporting\Annotation\AnnotationExtractor;
-use Rector\Tests\ChangesReporting\ValueObject\Source\RectorWithChangelog;
-use Rector\Tests\ChangesReporting\ValueObject\Source\RectorWithOutChangelog;
+use Rector\Tests\ChangesReporting\Annotation\AppliedRectorsChangelogResolver\Source\RectorWithChangelog;
+use Rector\Tests\ChangesReporting\Annotation\AppliedRectorsChangelogResolver\Source\RectorWithOutChangelog;
 
 final class AnnotationExtractorTest extends TestCase
 {

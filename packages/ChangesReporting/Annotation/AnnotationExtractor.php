@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Rector\ChangesReporting\Annotation;
 
 use Nette\Utils\Strings;
+use Rector\Core\Contract\Rector\RectorInterface;
 use ReflectionClass;
 
 /**
@@ -12,7 +14,7 @@ use ReflectionClass;
 final class AnnotationExtractor
 {
     /**
-     * @param class-string<object> $className
+     * @param class-string<RectorInterface> $className
      */
     public function extractAnnotationFromClass(string $className, string $annotation): ?string
     {
@@ -26,7 +28,6 @@ final class AnnotationExtractor
         // @see https://regex101.com/r/oYGaWU/1
         $pattern = '#' . preg_quote($annotation, '#') . '\s+(?<content>.*?)$#m';
         $matches = Strings::match($docComment, $pattern);
-
         return $matches['content'] ?? null;
     }
 }

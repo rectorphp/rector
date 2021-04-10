@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\ChangesReporting\Output;
 
 use Nette\Utils\Json;
-use Rector\ChangesReporting\Annotation\AnnotationExtractor;
+use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Configuration\Configuration;
@@ -29,18 +29,18 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     private $smartFileSystem;
 
     /**
-     * @var AnnotationExtractor
+     * @var RectorsChangelogResolver
      */
-    private $annotationExtractor;
+    private $rectorsChangelogResolver;
 
     public function __construct(
         Configuration $configuration,
         SmartFileSystem $smartFileSystem,
-        AnnotationExtractor $annotationExtractor
+        RectorsChangelogResolver $rectorsChangelogResolver
     ) {
         $this->configuration = $configuration;
         $this->smartFileSystem = $smartFileSystem;
-        $this->annotationExtractor = $annotationExtractor;
+        $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
 
     public function getName(): string
@@ -67,9 +67,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         foreach ($fileDiffs as $fileDiff) {
             $relativeFilePath = $fileDiff->getRelativeFilePath();
 
-            $appliedRectorsWithChangelog = $fileDiff->getRectorClassesWithChangelogUrlAndRectorClassAsKey(
-                $this->annotationExtractor
-            );
+            $appliedRectorsWithChangelog = $this->rectorsChangelogResolver->resolve($fileDiff->getRectorClasses());
 
             $errorsArray['file_diffs'][] = [
                 'file' => $relativeFilePath,

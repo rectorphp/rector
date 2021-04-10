@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-
-namespace Rector\Tests\ChangesReporting\ValueObject\Source;
+namespace Rector\Tests\ChangesReporting\Annotation\AppliedRectorsChangelogResolver\Source;
 
 use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;

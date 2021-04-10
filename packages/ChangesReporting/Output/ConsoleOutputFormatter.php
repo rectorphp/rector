@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\ChangesReporting\Output;
 
 use Nette\Utils\Strings;
-use Rector\ChangesReporting\Annotation\AnnotationExtractor;
+use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Configuration\Configuration;
@@ -46,20 +46,20 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private $betterStandardPrinter;
 
     /**
-     * @var AnnotationExtractor
+     * @var RectorsChangelogResolver
      */
-    private $annotationExtractor;
+    private $rectorsChangelogResolver;
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         Configuration $configuration,
         SymfonyStyle $symfonyStyle,
-        AnnotationExtractor $annotationExtractor
+        RectorsChangelogResolver $rectorsChangelogResolver
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->configuration = $configuration;
-        $this->annotationExtractor = $annotationExtractor;
+        $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
 
     public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
@@ -119,10 +119,12 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             $this->symfonyStyle->writeln($fileDiff->getDiffConsoleFormatted());
             $this->symfonyStyle->newLine();
 
+            $rectorsChangelogsLines = $this->createRectorChangelogLines($fileDiff);
+
             if ($fileDiff->getRectorChanges() !== []) {
                 $this->symfonyStyle->writeln('<options=underscore>Applied rules:</>');
                 $this->symfonyStyle->newLine();
-                $this->symfonyStyle->listing($fileDiff->getRectorClassesWithChangelogUrl($this->annotationExtractor));
+                $this->symfonyStyle->listing($rectorsChangelogsLines);
                 $this->symfonyStyle->newLine();
             }
         }
@@ -231,5 +233,20 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             $changeCount > 1 ? 's' : '',
             $this->configuration->isDryRun() ? 'would have changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed'
         );
+    }
+
+    /**
+     * @return string[]
+     */
+    private function createRectorChangelogLines(FileDiff $fileDiff): array
+    {
+        $rectorsChangelogs = $this->rectorsChangelogResolver->resolveIncludingMissing($fileDiff->getRectorClasses());
+
+        $rectorsChangelogsLines = [];
+        foreach ($rectorsChangelogs as $rectorClass => $changelog) {
+            $rectorsChangelogsLines[] = $changelog === null ? $rectorClass : $rectorClass . ' ' . $changelog;
+        }
+
+        return $rectorsChangelogsLines;
     }
 }
