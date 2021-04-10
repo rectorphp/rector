@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Naming;
 
 use Nette\Utils\Strings;
-use Rector\Core\ValueObject\RenamedNamespace;
+use Rector\Renaming\ValueObject\RenamedNamespace;
 
 final class NamespaceMatcher
 {

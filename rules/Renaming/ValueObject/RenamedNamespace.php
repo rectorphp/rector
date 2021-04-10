@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\ValueObject;
+namespace Rector\Renaming\ValueObject;
 
 final class RenamedNamespace
 {
