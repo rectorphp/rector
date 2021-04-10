@@ -65,6 +65,9 @@ CODE_SAMPLE
             ]);
     }
 
+    /**
+     * @return array<class-string<Expr>>
+     */
     public function getNodeTypes(): array
     {
         return [MethodCall::class];
@@ -94,12 +97,7 @@ CODE_SAMPLE
         ])) {
             return false;
         }
-
-        if (! $this->getStaticType($methodCall->args[0]->value) instanceof StringType) {
-            return true;
-        }
-
-        return true;
+        return $this->getStaticType($methodCall->args[0]->value) instanceof StringType;
     }
 
     private function updateNode(MethodCall $methodCall): MethodCall
@@ -108,26 +106,26 @@ CODE_SAMPLE
         return $methodCall;
     }
 
-    private function createNewAnonymousEventClass(Expr $eventName): New_
+    private function createNewAnonymousEventClass(Expr $expr): New_
     {
         $implements = [new FullyQualified('League\Event\HasEventName')];
 
         return new New_(new Class_(null, [
             'implements' => $implements,
-            'stmts' => $this->createAnonymousEventClassBody($eventName),
+            'stmts' => $this->createAnonymousEventClassBody($expr),
         ]));
     }
 
     /**
      * @return Stmt[]
      */
-    private function createAnonymousEventClassBody(Expr $eventName): array
+    private function createAnonymousEventClassBody(Expr $expr): array
     {
         return [
             new ClassMethod('eventName', [
                 'flags' => Class_::MODIFIER_PUBLIC,
                 'returnType' => 'string',
-                'stmts' => [new Return_($eventName)],
+                'stmts' => [new Return_($expr)],
             ]),
         ];
     }
