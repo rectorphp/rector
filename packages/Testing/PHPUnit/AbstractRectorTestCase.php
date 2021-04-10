@@ -11,6 +11,7 @@ use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
 use Psr\Container\ContainerInterface;
 use Rector\Composer\Modifier\ComposerModifier;
+use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
@@ -20,6 +21,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Contract\RectorTestInterface;
@@ -86,6 +88,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
      */
     private $composerModifier;
 
+    /**
+     * @var ApplicationFileProcessor
+     */
+    private $applicationFileProcessor;
+
     protected function setUp(): void
     {
         // speed up
@@ -99,6 +106,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
 
         $this->fileProcessor = $this->getService(FileProcessor::class);
         $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);
+
+        $this->applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
 
         $this->parameterProvider = $this->getService(ParameterProvider::class);
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
@@ -230,6 +239,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
 
     private function processFileInfo(SmartFileInfo $originalFileInfo): string
     {
+        $file = new File($originalFileInfo, $originalFileInfo->getContents());
+
+        $this->applicationFileProcessor->run([$file]);
+
         if (! Strings::endsWith($originalFileInfo->getFilename(), '.blade.php') && in_array(
                 $originalFileInfo->getSuffix(),
                 ['php', 'phpt'],

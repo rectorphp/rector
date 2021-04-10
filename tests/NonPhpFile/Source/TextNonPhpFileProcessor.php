@@ -5,19 +5,23 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\NonPhpFile\Source;
 
 use Rector\Core\Contract\Processor\FileProcessorInterface;
+use Rector\Core\ValueObject\Application\File;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TextNonPhpFileProcessor implements FileProcessorInterface
 {
-    public function process(SmartFileInfo $smartFileInfo): string
+    public function process(File $file): void
     {
-        $oldContent = $smartFileInfo->getContents();
-        return str_replace('Foo', 'Bar', $oldContent);
+        $oldFileContent = $file->getFileContent();
+        $changedFileContent = str_replace('Foo', 'Bar', $oldFileContent);
+
+        $file->changeFileContent($changedFileContent);
     }
 
-    public function supports(SmartFileInfo $smartFileInfo): bool
+    public function supports(File $file): bool
     {
-        return in_array($smartFileInfo->getExtension(), $this->getSupportedFileExtensions());
+        $fileInfo = $file->getSmartFileInfo();
+        return $fileInfo->hasSuffixes($this->getSupportedFileExtensions());
     }
 
     public function getSupportedFileExtensions(): array

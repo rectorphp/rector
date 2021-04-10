@@ -175,6 +175,39 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
         $message = sprintf('%d nodes were removed', $errorAndDiffCollector->getRemovedNodeCount());
         $this->symfonyStyle->warning($message);
+<<<<<<< HEAD
+=======
+
+//        if ($this->symfonyStyle->isVeryVerbose()) {
+//            $i = 0;
+//            foreach ($errorAndDiffCollector->getRemovedNodes() as $removedNode) {
+//                /** @var SmartFileInfo $fileInfo */
+//                $fileInfo = $removedNode->getAttribute(AttributeKey::FILE_INFO);
+//                $message = sprintf(
+//                    '<options=bold>%d) %s:%d</>',
+//                    ++$i,
+//                    $fileInfo->getRelativeFilePath(),
+//                    $removedNode->getStartLine()
+//                );
+//
+//                $this->symfonyStyle->writeln($message);
+//
+//                $printedNode = $this->betterStandardPrinter->print($removedNode);
+//
+//                // color red + prefix with "-" to visually demonstrate removal
+//                $printedNode = '-' . Strings::replace($printedNode, '#\n#', "\n-");
+//                $printedNode = $this->colorTextToRed($printedNode);
+//
+//                $this->symfonyStyle->writeln($printedNode);
+//                $this->symfonyStyle->newLine(1);
+//            }
+//        }
+    }
+
+    private function colorTextToRed(string $text): string
+    {
+        return '<fg=red>' . $text . '</fg=red>';
+>>>>>>> 844a8ff0d8... fixup! fixup! fixup! fixup! fixup! add file
     }
 
     private function createSuccessMessage(ErrorAndDiffCollector $errorAndDiffCollector): string

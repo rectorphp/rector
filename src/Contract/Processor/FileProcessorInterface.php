@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Rector\Core\Contract\Processor;
 
-use Symplify\SmartFileSystem\SmartFileInfo;
+use Rector\Core\ValueObject\Application\File;
 
 interface FileProcessorInterface
 {
-    public function process(SmartFileInfo $smartFileInfo): string;
+    public function supports(File $file): bool;
 
-    public function supports(SmartFileInfo $smartFileInfo): bool;
+    public function process(File $file): void;
 
     /**
      * @return string[]

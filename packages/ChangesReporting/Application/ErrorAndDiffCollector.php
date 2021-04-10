@@ -102,7 +102,19 @@ final class ErrorAndDiffCollector
         return $this->nodesToRemoveCollector->getCount();
     }
 
+<<<<<<< HEAD
     public function addFileDiff(SmartFileInfo $smartFileInfo, string $newContent, string $oldContent): void
+=======
+    /**
+     * @return Node[]
+     */
+    public function getRemovedNodes(): array
+    {
+        return $this->nodesToRemoveCollector->getNodesToRemove();
+    }
+
+    public function addFileDiff(SmartFileInfo $smartFileInfo, string $oldContent, string $newContent): void
+>>>>>>> 6b328f9cd1... move FileProcessor to PhpFileProcessor
     {
         if ($newContent === $oldContent) {
             return;

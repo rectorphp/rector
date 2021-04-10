@@ -1,16 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Rector\Core\NonPhpFile;
+namespace Rector\Core\Application;
 
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\FileSystem\FilesFinder;
+use Rector\Core\ValueObject\Application\File;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class FileProcessor
+final class ApplicationFileProcessor
 {
     /**
      * @var FileProcessorInterface[]
@@ -38,11 +40,7 @@ final class FileProcessor
     private $filesFinder;
 
     /**
-<<<<<<< HEAD:src/NonPhpFile/NonPhpFileProcessorService.php
-     * @param FileProcessorInterface[] $nonPhpFileProcessors
-=======
      * @param FileProcessorInterface[] $fileProcessors
->>>>>>> 7bc65c3cc4... rename non-php file processor to file processor:src/NonPhpFile/FileProcessor.php
      */
     public function __construct(
         FilesFinder $filesFinder,
@@ -59,39 +57,34 @@ final class FileProcessor
     }
 
     /**
-     * @param string[] $paths
+     * @param File[] $files
      */
-    public function runOnPaths(array $paths): void
+    public function run(array $files): void
     {
-        $fileInfos = $this->findFileInfos($paths);
-        $this->runNonPhpFileProcessors($fileInfos);
-    }
+//        $newContent = null;
 
-    /**
-     * @param SmartFileInfo[] $nonPhpFileInfos
-     */
-    private function runNonPhpFileProcessors(array $nonPhpFileInfos): void
-    {
-        foreach ($nonPhpFileInfos as $nonPhpFileInfo) {
-            foreach ($this->fileProcessors as $nonPhpFileProcessor) {
-                if (! $nonPhpFileProcessor->supports($nonPhpFileInfo)) {
+        foreach ($files as $file) {
+            foreach ($this->fileProcessors as $fileProcessor) {
+                if (! $fileProcessor->supports($file)) {
                     continue;
                 }
 
-                $oldContent = $nonPhpFileInfo->getContents();
-                $newContent = $nonPhpFileProcessor->process($nonPhpFileInfo);
-                if ($oldContent === $newContent) {
-                    continue;
-                }
+                $fileProcessor->process($file);
+//                $smartFileInfo = $file->getSmartFileInfo();
+//                if ($smartFileInfo->getContents() === $newContent) {
+//                    continue;
+//                }
 
-                $this->errorAndDiffCollector->addFileDiff($nonPhpFileInfo, $oldContent, $newContent);
-
-                if ($this->configuration->isDryRun()) {
-                    return;
-                }
-
-                $this->dumpFileInfo($nonPhpFileInfo, $newContent);
+                // @todo run once in the end
+//                $this->errorAndDiffCollector->addFileDiff($smartFileInfo, $smartFileInfo->getContents(), $newContent);
             }
+
+            // has file changed?
+//            if (! $this->configuration->isDryRun() && $newContent !== null) {
+//                $this->dumpFileInfo($smartFileInfo, $newContent);
+//            }
+
+            $this->errorAndDiffCollector->addFileDiff($smartFileInfo, $smartFileInfo->getContents(), $newContent);
         }
     }
 
@@ -127,9 +120,9 @@ final class FileProcessor
         return array_unique($fileExtensions);
     }
 
-    private function dumpFileInfo(SmartFileInfo $nonPhpFileInfo, string $newContent): void
-    {
-        $this->smartFileSystem->dumpFile($nonPhpFileInfo->getPathname(), $newContent);
-        $this->smartFileSystem->chmod($nonPhpFileInfo->getRealPath(), $nonPhpFileInfo->getPerms());
-    }
+//    private function dumpFileInfo(SmartFileInfo $nonPhpFileInfo, string $newContent): void
+//    {
+//        $this->smartFileSystem->dumpFile($nonPhpFileInfo->getPathname(), $newContent);
+//        $this->smartFileSystem->chmod($nonPhpFileInfo->getRealPath(), $nonPhpFileInfo->getPerms());
+//    }
 }
