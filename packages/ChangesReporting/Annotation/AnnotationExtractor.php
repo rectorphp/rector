@@ -6,6 +6,9 @@ namespace Rector\ChangesReporting\Annotation;
 use Nette\Utils\Strings;
 use ReflectionClass;
 
+/**
+ * @see \Rector\Tests\ChangesReporting\Annotation\AnnotationExtractorTest
+ */
 final class AnnotationExtractor
 {
     /**
@@ -16,18 +19,17 @@ final class AnnotationExtractor
         $reflectionClass = new ReflectionClass($className);
 
         $docComment = $reflectionClass->getDocComment();
-
         if (! is_string($docComment)) {
             return null;
         }
 
-        $pattern = '#' . preg_quote($annotation, '#') . '\s*(?<annotation>[a-zA-Z0-9, ()_].*)#';
+        // @see https://regex101.com/r/oYGaWU/1
+        $pattern = '#' . preg_quote($annotation, '#') . '\s+(?<content>.*?)$#m';
         $matches = Strings::match($docComment, $pattern);
-
-        if (! array_key_exists('annotation', $matches)) {
+        if ($matches === false) {
             return null;
         }
 
-        return trim((string) $matches['annotation']);
+        return $matches['content'] ?? null;
     }
 }
