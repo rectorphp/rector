@@ -14,25 +14,25 @@ final class AnnotationExtractorTest extends TestCase
     /**
      * @var AnnotationExtractor
      */
-    private $subject;
+    private $annotationExtractor;
 
     protected function setUp(): void
     {
-        $this->subject = new AnnotationExtractor();
+        $this->annotationExtractor = new AnnotationExtractor();
     }
 
     public function extractAnnotationProvider(): Iterator
     {
-        $classWithChangeLog = new RectorWithChangelog();
-        $classWithoutChangeLog = new RectorWithOutChangelog();
+        $rectorWithChangelog = new RectorWithChangelog();
 
         yield 'Class with changelog annotation' => [
-            get_class($classWithChangeLog),
+            get_class($rectorWithChangelog),
             '@changelog',
             'https://github.com/rectorphp/rector/blob/master/docs/rector_rules_overview.md',
         ];
+        $rectorWithOutChangelog = new RectorWithOutChangelog();
 
-        yield 'Class without changelog annotation' => [get_class($classWithoutChangeLog), '@changelog', null];
+        yield 'Class without changelog annotation' => [get_class($rectorWithOutChangelog), '@changelog', null];
     }
 
     /**
@@ -40,7 +40,7 @@ final class AnnotationExtractorTest extends TestCase
      */
     public function testExtractAnnotationFromClass(string $className, string $annotation, ?string $expected): void
     {
-        $value = $this->subject->extractAnnotationFromClass($className, $annotation);
+        $value = $this->annotationExtractor->extractAnnotationFromClass($className, $annotation);
         $this->assertSame($expected, $value);
     }
 }
