@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace Rector\Composer\Processor;
 
 use Rector\Composer\Modifier\ComposerModifier;
+<<<<<<< HEAD:rules/Composer/Processor/ComposerFileProcessor.php
 use Rector\Core\Contract\Processor\FileProcessorInterface;
+=======
+use Rector\Core\Contract\Processor\NonPhpFileProcessorInterface;
+>>>>>>> c5a97bfaa0... cleanup compoesr update run:rules/Composer/Processor/ComposerProcessorNonPhp.php
 use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
