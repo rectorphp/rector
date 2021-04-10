@@ -466,7 +466,8 @@ parameters:
 
         -
             message: '#Do not inherit from abstract class, better use composition#'
-            path: utils/phpstan-extensions/src/Rule/NoInstanceOfStaticReflectionRule.php
+            paths:
+                 - utils/phpstan-extensions/src/Rule/*Rule.php
 
         # known internal types on correct location
         -

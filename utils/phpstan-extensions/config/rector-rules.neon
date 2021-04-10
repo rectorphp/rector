@@ -4,6 +4,10 @@ services:
         tags: [phpstan.rules.rule]
 
     -
+        class: Rector\PHPStanExtensions\Rule\NoClassReflectionStaticReflectionRule
+        tags: [phpstan.rules.rule]
+
+    -
         class: Symplify\PHPStanRules\ObjectCalisthenics\Rules\NoChainMethodCallRule
         tags: [phpstan.rules.rule]
         arguments:
