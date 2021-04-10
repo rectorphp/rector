@@ -7,7 +7,10 @@ namespace Rector\Tests\ChangesReporting\ValueObject\Source;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-final class RectorWithOutLink implements RectorInterface
+/**
+ * @changelog https://github.com/rectorphp/rector/blob/master/docs/rector_rules_overview.md
+ */
+final class RectorWithChangelog implements RectorInterface
 {
 
     public function getRuleDefinition(): RuleDefinition

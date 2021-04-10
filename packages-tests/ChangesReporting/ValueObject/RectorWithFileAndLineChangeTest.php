@@ -5,9 +5,10 @@ namespace Rector\Tests\ChangesReporting\ValueObject;
 
 use Iterator;
 use PHPUnit\Framework\TestCase;
+use Rector\ChangesReporting\Annotation\AnnotationExtractor;
 use Rector\ChangesReporting\ValueObject\RectorWithFileAndLineChange;
-use Rector\Tests\ChangesReporting\ValueObject\Source\RectorWithLink;
-use Rector\Tests\ChangesReporting\ValueObject\Source\RectorWithOutLink;
+use Rector\Tests\ChangesReporting\ValueObject\Source\RectorWithChangelog;
+use Rector\Tests\ChangesReporting\ValueObject\Source\RectorWithOutChangelog;
 
 final class RectorWithFileAndLineChangeTest extends TestCase
 {
@@ -17,21 +18,23 @@ final class RectorWithFileAndLineChangeTest extends TestCase
     public function testGetRectorClassWithChangelogUrl(
         string $expected,
         RectorWithFileAndLineChange $rectorWithFileAndLineChange
-    ): void
-    {
-        $this->assertSame($expected, $rectorWithFileAndLineChange->getRectorClassWithChangelogUrl());
+    ): void {
+        $this->assertSame(
+            $expected,
+            $rectorWithFileAndLineChange->getRectorClassWithChangelogUrl(new AnnotationExtractor())
+        );
     }
 
     public function rectorsWithFileAndLineChange(): Iterator
     {
         yield 'Rector with link' => [
-            'Rector\Tests\ChangesReporting\ValueObject\Source\RectorWithLink (https://github.com/rectorphp/rector/blob/master/docs/rector_rules_overview.md)',
-            new RectorWithFileAndLineChange(new RectorWithLink(), __DIR__ . '/Source/RectorWithLink.php', 1),
+            'Rector\Tests\ChangesReporting\ValueObject\Source\RectorWithChangelog (https://github.com/rectorphp/rector/blob/master/docs/rector_rules_overview.md)',
+            new RectorWithFileAndLineChange(new RectorWithChangelog(), __DIR__ . '/Source/RectorWithLink.php', 1),
         ];
 
         yield 'Rector without link' => [
-            'Rector\Tests\ChangesReporting\ValueObject\Source\RectorWithOutLink',
-            new RectorWithFileAndLineChange(new RectorWithOutLink(), __DIR__ . '/Source/RectorWithLink.php', 1),
+            'Rector\Tests\ChangesReporting\ValueObject\Source\RectorWithOutChangelog',
+            new RectorWithFileAndLineChange(new RectorWithOutChangelog(), __DIR__ . '/Source/RectorWithLink.php', 1),
         ];
     }
 }

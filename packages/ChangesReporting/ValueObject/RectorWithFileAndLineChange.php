@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\ChangesReporting\ValueObject;
 
+use Rector\ChangesReporting\Annotation\AnnotationExtractor;
 use Rector\Core\Contract\Rector\RectorInterface;
-use ReflectionClass;
 
 final class RectorWithFileAndLineChange
 {
@@ -42,10 +42,10 @@ final class RectorWithFileAndLineChange
         return get_class($this->rector);
     }
 
-    public function getRectorClassWithChangelogUrl(): string
+    public function getRectorClassWithChangelogUrl(AnnotationExtractor $annotationExtractor): string
     {
         $rectorClass = get_class($this->rector);
-        $changeLogUrl = $this->getChangelogUrl();
+        $changeLogUrl = $this->getChangelogUrl($annotationExtractor);
 
         if ($changeLogUrl === null) {
             return $rectorClass;
@@ -54,30 +54,11 @@ final class RectorWithFileAndLineChange
         return sprintf('%s (%s)', $rectorClass, $changeLogUrl);
     }
 
-    public function getChangelogUrl(): ?string
+    public function getChangelogUrl(AnnotationExtractor $annotationExtractor): ?string
     {
         $rectorClass = get_class($this->rector);
 
-        $rectorReflection = new ReflectionClass($rectorClass);
-
-        $docComment = $rectorReflection->getDocComment();
-
-        if (! is_string($docComment)) {
-            return null;
-        }
-
-        $pattern = "#@link\s*(?<url>[a-zA-Z0-9, ()_].*)#";
-        preg_match($pattern, $docComment, $matches);
-
-        if (! array_key_exists('url', $matches)) {
-            return null;
-        }
-
-        if (! filter_var($matches['url'], FILTER_VALIDATE_URL)) {
-            return null;
-        }
-
-        return trim((string) $matches['url']);
+        return $annotationExtractor->extractAnnotationFromClass($rectorClass, '@changelog');
     }
 
     public function getLine(): int
