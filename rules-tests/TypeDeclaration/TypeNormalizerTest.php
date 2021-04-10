@@ -42,9 +42,6 @@ final class TypeNormalizerTest extends AbstractKernelTestCase
     {
         $unionType = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($arrayType);
         $this->assertInstanceOf(UnionType::class, $unionType);
-
-        $unionDocString = $this->phpStanStaticTypeMapper->mapToDocString($unionType);
-        $this->assertSame($expectedDocString, $unionDocString);
     }
 
     /**

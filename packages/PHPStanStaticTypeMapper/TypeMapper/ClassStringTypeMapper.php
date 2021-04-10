@@ -63,13 +63,13 @@ final class ClassStringTypeMapper implements TypeMapperInterface, PHPStanStaticT
         return null;
     }
 
-    /**
-     * @param ClassStringType $type
-     */
-    public function mapToDocString(Type $type, ?Type $parentType = null): string
-    {
-        return $type->describe(VerbosityLevel::typeOnly());
-    }
+//    /**
+//     * @param ClassStringType $phpStanStaticTypeMapper
+//     */
+//    public function mapToDocString(Type $type, ?Type $parentType = null): string
+//    {
+//        return $type->describe(VerbosityLevel::typeOnly());
+//    }
 
     public function setPHPStanStaticTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {

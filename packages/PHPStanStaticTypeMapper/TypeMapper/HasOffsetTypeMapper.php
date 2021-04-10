@@ -39,11 +39,11 @@ final class HasOffsetTypeMapper implements TypeMapperInterface
         throw new ShouldNotHappenException();
     }
 
-    /**
-     * @param HasOffsetType $type
-     */
-    public function mapToDocString(Type $type, ?Type $parentType = null): string
-    {
-        return 'mixed[]';
-    }
+//    /**
+//     * @param HasOffsetType $type
+//     */
+//    public function mapToDocString(Type $type, ?Type $parentType = null): string
+//    {
+//        return 'mixed[]';
+//    }
 }

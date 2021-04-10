@@ -44,8 +44,8 @@ final class NullTypeMapper implements TypeMapperInterface
         return new Name('null');
     }
 
-    public function mapToDocString(Type $type, ?Type $parentType = null): string
-    {
-        return $type->describe(VerbosityLevel::typeOnly());
-    }
+//    public function mapToDocString(Type $type, ?Type $parentType = null): string
+//    {
+//        return $type->describe(VerbosityLevel::typeOnly());
+//    }
 }

@@ -60,10 +60,10 @@ final class ClosureTypeMapper implements TypeMapperInterface, PHPStanStaticTypeM
         return $this->callableTypeMapper->mapToPhpParserNode($type, $kind);
     }
 
-    public function mapToDocString(Type $type, ?Type $parentType = null): string
-    {
-        return '\\' . Closure::class;
-    }
+//    public function mapToDocString(Type $type, ?Type $parentType = null): string
+//    {
+//        return '\\' . Closure::class;
+//    }
 
     public function setPHPStanStaticTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {

@@ -18,7 +18,8 @@ use PHPStan\Type\ResourceType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
-use Rector\StaticTypeMapper\ValueObject\Type\FalseBooleanType;
+
+//use Rector\StaticTypeMapper\ValueObject\Type\FalseBooleanType;
 
 final class ScalarStringToTypeMapper
 {
@@ -29,7 +30,7 @@ final class ScalarStringToTypeMapper
         StringType::class => ['string'],
         FloatType::class => ['float', 'real', 'double'],
         IntegerType::class => ['int', 'integer'],
-        FalseBooleanType::class => ['false'],
+        //        FalseBooleanType::class => ['false'],
         BooleanType::class => ['true', 'bool', 'boolean'],
         NullType::class => ['null'],
         VoidType::class => ['void'],

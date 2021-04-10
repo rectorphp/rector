@@ -159,23 +159,23 @@ final class UnionTypeMapper implements TypeMapperInterface
         return new NullableType($nullabledTypeNode);
     }
 
-    /**
-     * @param UnionType $type
-     */
-    public function mapToDocString(Type $type, ?Type $parentType = null): string
-    {
-        $docStrings = [];
-
-        foreach ($type->getTypes() as $unionedType) {
-            $docStrings[] = $this->phpStanStaticTypeMapper->mapToDocString($unionedType);
-        }
-
-        // remove empty values, e.g. void/iterable
-        $docStrings = array_unique($docStrings);
-        $docStrings = array_filter($docStrings);
-
-        return implode('|', $docStrings);
-    }
+//    /**
+//     * @param UnionType $unionType
+//     */
+//    public function mapToDocString(Type $type, ?Type $parentType = null): string
+//    {
+//        $docStrings = [];
+//
+//        foreach ($type->getTypes() as $unionedType) {
+//            $docStrings[] = $this->phpStanStaticTypeMapper->mapToDocString($unionedType);
+//        }
+//
+//        // remove empty values, e.g. void/iterable
+//        $docStrings = array_unique($docStrings);
+//        $docStrings = array_filter($docStrings);
+//
+//        return implode('|', $docStrings);
+//    }
 
     private function shouldSkipIterable(UnionType $unionType): bool
     {
