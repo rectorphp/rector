@@ -26,9 +26,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://doc.nette.org/en/2.4/components
- * ↓
- * @see https://symfony.com/doc/current/controller.html
+ * @changelog https://doc.nette.org/en/2.4/components https://symfony.com/doc/current/controller.html
+ *
  * @see \Rector\Tests\NetteToSymfony\Rector\Class_\NetteControlToSymfonyControllerRector\NetteControlToSymfonyControllerRectorTest
  */
 final class NetteControlToSymfonyControllerRector extends AbstractRector

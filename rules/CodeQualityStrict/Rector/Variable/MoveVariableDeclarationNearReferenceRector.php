@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\CodeQualityStrict\Rector\Variable;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -28,6 +27,7 @@ use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\SideEffect\PureFunctionDetector;
 use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -43,9 +43,15 @@ final class MoveVariableDeclarationNearReferenceRector extends AbstractRector
      */
     private $scopeAwareNodeFinder;
 
-    public function __construct(ScopeAwareNodeFinder $scopeAwareNodeFinder)
+    /**
+     * @var PureFunctionDetector
+     */
+    private $pureFunctionDetector;
+
+    public function __construct(ScopeAwareNodeFinder $scopeAwareNodeFinder, PureFunctionDetector $pureFunctionDetector)
     {
         $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
+        $this->pureFunctionDetector = $pureFunctionDetector;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -297,7 +303,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            return Strings::startsWith($funcName, 'ob_');
+            return ! $this->pureFunctionDetector->detect($n);
         });
     }
 

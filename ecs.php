@@ -21,7 +21,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GeneralPhpdocAnnotationRemoveFixer::class)
         ->call('configure', [[
-            'annotations' => ['throws', 'author', 'package', 'group', 'required'],
+            'annotations' => [
+                'throws',
+                'author',
+                'package',
+                'group',
+                'required',
+                'phpstan-ignore-line',
+                'phpstan-ignore-next-line',
+            ],
         ]]);
 
     $services->set(NoSuperfluousPhpdocTagsFixer::class)

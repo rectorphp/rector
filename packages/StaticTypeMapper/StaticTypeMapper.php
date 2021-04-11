@@ -77,11 +77,6 @@ final class StaticTypeMapper
         return $this->phpStanStaticTypeMapper->mapToPhpParserNode($phpStanType, $kind);
     }
 
-    public function mapPHPStanTypeToDocString(Type $phpStanType, ?Type $parentType = null): string
-    {
-        return $this->phpStanStaticTypeMapper->mapToDocString($phpStanType, $parentType);
-    }
-
     public function mapPhpParserNodePHPStanType(Node $node): Type
     {
         return $this->phpParserNodeMapper->mapToPHPStanType($node);

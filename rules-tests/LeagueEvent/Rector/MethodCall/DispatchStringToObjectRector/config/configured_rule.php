@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Rector\Privatization\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
+use Rector\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(MakeUnusedClassesWithChildrenAbstractRector::class);
+    $services->set(DispatchStringToObjectRector::class);
 };

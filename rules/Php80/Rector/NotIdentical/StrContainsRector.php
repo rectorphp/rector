@@ -16,8 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://externals.io/message/108562
- * @see https://github.com/php/php-src/pull/5179
+ * @changelog https://externals.io/message/108562 https://github.com/php/php-src/pull/5179
  *
  * @see \Rector\Tests\Php80\Rector\NotIdentical\StrContainsRector\StrContainsRectorTest
  */

@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://github.com/php/php-src/pull/3941/files#diff-7e3a1a5df28a1cbd8c0fb6db68f243da
+ * @changelog https://github.com/php/php-src/pull/3941/files#diff-7e3a1a5df28a1cbd8c0fb6db68f243da
  * @see \Rector\Tests\Php74\Rector\Function_\ReservedFnFunctionRector\ReservedFnFunctionRectorTest
  */
 final class ReservedFnFunctionRector extends AbstractRector implements ConfigurableRectorInterface

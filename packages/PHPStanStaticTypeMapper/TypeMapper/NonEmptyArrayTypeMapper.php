@@ -38,12 +38,4 @@ final class NonEmptyArrayTypeMapper implements TypeMapperInterface
     {
         return new Name('array');
     }
-
-    /**
-     * @param NonEmptyArrayType $type
-     */
-    public function mapToDocString(Type $type, ?Type $parentType = null): string
-    {
-        return 'mixed[]';
-    }
 }

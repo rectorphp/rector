@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * Mostly mimics source from
- * @see https://github.com/phpstan/phpstan-src/blob/master/src/Rules/ClassCaseSensitivityCheck.php
+ * @changelog https://github.com/phpstan/phpstan-src/blob/master/src/Rules/ClassCaseSensitivityCheck.php
  *
  * @see \Rector\Tests\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector\FixClassCaseSensitivityNameRectorTest
  */

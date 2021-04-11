@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
-use PHPStan\Type\VerbosityLevel;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
@@ -62,13 +61,5 @@ final class StaticTypeMapper implements TypeMapperInterface
         }
 
         return null;
-    }
-
-    /**
-     * @param StaticType $type
-     */
-    public function mapToDocString(Type $type, ?Type $parentType = null): string
-    {
-        return $type->describe(VerbosityLevel::typeOnly());
     }
 }

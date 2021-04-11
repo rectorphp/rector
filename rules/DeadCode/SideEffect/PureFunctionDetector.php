@@ -100,6 +100,12 @@ final class PureFunctionDetector
 
         // ftp
         'ftp_close',
+
+        // bcmath
+        'bcscale', 'bcdiv',
+
+        // json
+        'json_encode', 'json_decode', 'json_last_error',
     ];
 
     /**

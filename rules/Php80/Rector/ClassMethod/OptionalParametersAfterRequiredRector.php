@@ -7,17 +7,19 @@ namespace Rector\Php80\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeResolver\ArgumentSorter;
 use Rector\Php80\NodeResolver\RequireOptionalParamResolver;
+use Rector\Php80\Reflection\MethodReflectionClassMethodResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://php.watch/versions/8.0#deprecate-required-param-after-optional
+ * @changelog https://php.watch/versions/8.0#deprecate-required-param-after-optional
  *
  * @see \Rector\Tests\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector\OptionalParametersAfterRequiredRectorTest
  */
@@ -33,12 +35,19 @@ final class OptionalParametersAfterRequiredRector extends AbstractRector
      */
     private $argumentSorter;
 
+    /**
+     * @var MethodReflectionClassMethodResolver
+     */
+    private $methodReflectionClassMethodResolver;
+
     public function __construct(
         RequireOptionalParamResolver $requireOptionalParamResolver,
-        ArgumentSorter $argumentSorter
+        ArgumentSorter $argumentSorter,
+        MethodReflectionClassMethodResolver $methodReflectionClassMethodResolver
     ) {
         $this->requireOptionalParamResolver = $requireOptionalParamResolver;
         $this->argumentSorter = $argumentSorter;
+        $this->methodReflectionClassMethodResolver = $methodReflectionClassMethodResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -114,23 +123,25 @@ CODE_SAMPLE
             return null;
         }
 
-        $constructorClassMethod = $this->nodeRepository->findClassMethodConstructorByNew($new);
-        if (! $constructorClassMethod instanceof ClassMethod) {
+        $newClassType = $this->nodeTypeResolver->resolve($new->class);
+        if (! $newClassType instanceof TypeWithClassName) {
             return null;
         }
 
-        // we need orignal node, as the order might have already hcanged
-        $originalClassMethod = $constructorClassMethod->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if (! $originalClassMethod instanceof ClassMethod) {
+        $classMethod = $this->methodReflectionClassMethodResolver->resolve(
+            $newClassType->getClassName(),
+            MethodName::CONSTRUCT
+        );
+        if (! $classMethod instanceof ClassMethod) {
             return null;
         }
 
-        $expectedOrderedParams = $this->requireOptionalParamResolver->resolve($originalClassMethod);
-        if ($expectedOrderedParams === $constructorClassMethod->getParams()) {
+        $expectedOrderedParams = $this->requireOptionalParamResolver->resolve($classMethod);
+        if ($expectedOrderedParams === $classMethod->getParams()) {
             return null;
         }
 
-        if (count($new->args) !== count($constructorClassMethod->getParams())) {
+        if (count($new->args) !== count($classMethod->getParams())) {
             return null;
         }
 
@@ -140,6 +151,7 @@ CODE_SAMPLE
         }
 
         $new->args = $newArgs;
+
         return $new;
     }
 

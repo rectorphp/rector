@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\CallableType;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\Type;
-use PHPStan\Type\VerbosityLevel;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
@@ -59,10 +58,5 @@ final class CallableTypeMapper implements TypeMapperInterface
         }
 
         return new Name('callable');
-    }
-
-    public function mapToDocString(Type $type, ?Type $parentType = null): string
-    {
-        return $type->describe(VerbosityLevel::typeOnly());
     }
 }

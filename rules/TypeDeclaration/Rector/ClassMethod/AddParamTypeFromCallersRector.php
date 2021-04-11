@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://github.com/symplify/phpstan-rules/blob/master/docs/rules_overview.md#checktypehintcallertyperule
+ * @changelog https://github.com/symplify/phpstan-rules/blob/master/docs/rules_overview.md#checktypehintcallertyperule
  *
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromCallersRector\AddParamTypeFromCallersRectorTest
  *

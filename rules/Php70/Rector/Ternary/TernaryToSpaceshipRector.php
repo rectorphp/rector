@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://wiki.php.net/rfc/combined-comparison-operator
+ * @changelog https://wiki.php.net/rfc/combined-comparison-operator
  * @see \Rector\Tests\Php70\Rector\Ternary\TernaryToSpaceshipRector\TernaryToSpaceshipRectorTest
  */
 final class TernaryToSpaceshipRector extends AbstractRector

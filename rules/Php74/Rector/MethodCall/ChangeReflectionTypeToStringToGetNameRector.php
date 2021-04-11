@@ -18,8 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://www.php.net/manual/en/reflectiontype.tostring.php
- * @see https://www.reddit.com/r/PHP/comments/apikof/whats_the_deal_with_reflectiontype/
+ * @changelog https://www.reddit.com/r/PHP/comments/apikof/whats_the_deal_with_reflectiontype/ https://www.php.net/manual/en/reflectiontype.tostring.php
+ *
  * @see https://3v4l.org/fYeif
  * @see https://3v4l.org/QeM6U
  *

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\NonPhpFile\Source;
 
 
-use Rector\Core\Contract\Processor\NonPhpFileProcessorInterface;
+use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class TextNonPhpFileProcessor implements NonPhpFileProcessorInterface
+final class TextNonPhpFileProcessor implements FileProcessorInterface
 {
 
     public function process(SmartFileInfo $smartFileInfo): ?NonPhpFileChange

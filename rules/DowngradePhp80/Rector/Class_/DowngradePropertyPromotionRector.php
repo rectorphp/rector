@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://wiki.php.net/rfc/constructor_promotion
+ * @changelog https://wiki.php.net/rfc/constructor_promotion
  *
  * @see \Rector\Tests\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector\DowngradePropertyPromotionRectorTest
  */

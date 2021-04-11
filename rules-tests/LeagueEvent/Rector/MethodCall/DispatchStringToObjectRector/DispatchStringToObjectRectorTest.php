@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Rector\Tests\Privatization\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
+namespace Rector\Tests\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class MakeUnusedClassesWithChildrenAbstractRectorTest extends AbstractRectorTestCase
+final class DispatchStringToObjectRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

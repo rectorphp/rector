@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\ChangesReporting\Application;
 
-use PhpParser\Node;
 use PHPStan\AnalysedCodeException;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
@@ -101,14 +100,6 @@ final class ErrorAndDiffCollector
     public function getRemovedNodeCount(): int
     {
         return $this->nodesToRemoveCollector->getCount();
-    }
-
-    /**
-     * @return Node[]
-     */
-    public function getRemovedNodes(): array
-    {
-        return $this->nodesToRemoveCollector->getNodesToRemove();
     }
 
     public function addFileDiff(SmartFileInfo $smartFileInfo, string $newContent, string $oldContent): void

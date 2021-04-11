@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
 use Iterator;
+use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
 use Psr\Container\ContainerInterface;
+use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
@@ -21,6 +23,7 @@ use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Contract\RectorTestInterface;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
+use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
@@ -63,16 +66,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
     protected static $allRectorContainer;
 
     /**
-     * @var bool
-     */
-    private static $isInitialized = false;
-
-    /**
-     * @var RectorConfigsResolver
-     */
-    private static $rectorConfigsResolver;
-
-    /**
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
@@ -82,23 +75,36 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
      */
     private $dynamicSourceLocatorProvider;
 
+    /**
+     * @var ComposerJsonFactory
+     */
+    private $composerJsonFactory;
+
+    /**
+     * @var ComposerModifier
+     */
+    private $composerModifier;
+
     protected function setUp(): void
     {
         // speed up
         @ini_set('memory_limit', '-1');
 
-        $this->initializeDependencies();
-
         $configFileInfo = new SmartFileInfo($this->provideConfigFilePath());
-        $configFileInfos = self::$rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
+        $rectorConfigsResolver = new RectorConfigsResolver();
+        $configFileInfos = $rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
 
         $this->bootKernelWithConfigsAndStaticCache(RectorKernel::class, $configFileInfos);
 
         $this->fileProcessor = $this->getService(FileProcessor::class);
         $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);
+
         $this->parameterProvider = $this->getService(ParameterProvider::class);
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
         $this->dynamicSourceLocatorProvider = $this->getService(DynamicSourceLocatorProvider::class);
+
+        $this->composerJsonFactory = $this->getService(ComposerJsonFactory::class);
+        $this->composerModifier = $this->getService(ComposerModifier::class);
 
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
@@ -118,29 +124,36 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         return StaticFixtureFinder::yieldDirectoryExclusively($directory, $suffix);
     }
 
-    /**
-     * @param SmartFileInfo[] $extraFileInfos
-     */
-    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo, array $extraFileInfos = []): void
+    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo): void
     {
         $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
-            $fixtureFileInfo,
-            false
+            $fixtureFileInfo
         );
 
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
+        if ($inputFileInfo->getSuffix() === 'json') {
+            $inputFileInfoAndExpected = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpected($fixtureFileInfo);
 
-        // needed for PHPStan, because the analyzed file is just created in /temp - need for trait and similar deps
-        /** @var NodeScopeResolver $nodeScopeResolver */
-        $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
-        $nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
+            $composerJson = $this->composerJsonFactory->createFromFileInfo(
+                $inputFileInfoAndExpected->getInputFileInfo()
+            );
+            $this->composerModifier->modify($composerJson);
 
-        $this->dynamicSourceLocatorProvider->setFileInfo($inputFileInfo);
+            $changedComposerJson = Json::encode($composerJson->getJsonArray(), Json::PRETTY);
+            $this->assertJsonStringEqualsJsonString($inputFileInfoAndExpected->getExpected(), $changedComposerJson);
+        } else {
+            // needed for PHPStan, because the analyzed file is just created in /temp - need for trait and similar deps
+            /** @var NodeScopeResolver $nodeScopeResolver */
+            $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
+            $nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
 
-        $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
+            $this->dynamicSourceLocatorProvider->setFileInfo($inputFileInfo);
 
-        $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo, $extraFileInfos);
-        $this->originalTempFileInfo = $inputFileInfo;
+            $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
+
+            $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
+            $this->originalTempFileInfo = $inputFileInfo;
+        }
     }
 
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
@@ -184,53 +197,14 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         return sys_get_temp_dir() . '/_temp_fixture_easy_testing';
     }
 
-    /**
-     * @param SmartFileInfo[] $extraFileInfos
-     */
     private function doTestFileMatchesExpectedContent(
         SmartFileInfo $originalFileInfo,
         SmartFileInfo $expectedFileInfo,
-        SmartFileInfo $fixtureFileInfo,
-        array $extraFileInfos = []
+        SmartFileInfo $fixtureFileInfo
     ): void {
         $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
-        if (! Strings::endsWith($originalFileInfo->getFilename(), '.blade.php') && in_array(
-            $originalFileInfo->getSuffix(),
-            ['php', 'phpt'],
-            true
-        )) {
-            if ($extraFileInfos === []) {
-                $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
-                $this->fileProcessor->refactor($originalFileInfo);
-                $this->fileProcessor->postFileRefactor($originalFileInfo);
-            } else {
-                $fileInfosToProcess = array_merge([$originalFileInfo], $extraFileInfos);
-
-                // life-cycle trio :)
-                foreach ($fileInfosToProcess as $fileInfoToProcess) {
-                    $this->fileProcessor->parseFileInfoToLocalCache($fileInfoToProcess);
-                }
-
-                foreach ($fileInfosToProcess as $fileInfoToProcess) {
-                    $this->fileProcessor->refactor($fileInfoToProcess);
-                }
-
-                foreach ($fileInfosToProcess as $fileInfoToProcess) {
-                    $this->fileProcessor->postFileRefactor($fileInfoToProcess);
-                }
-            }
-
-            // mimic post-rectors
-            $changedContent = $this->fileProcessor->printToString($originalFileInfo);
-        } elseif (Strings::match($originalFileInfo->getFilename(), StaticNonPhpFileSuffixes::getSuffixRegexPattern())) {
-            $nonPhpFileChange = $this->nonPhpFileProcessor->process($originalFileInfo);
-
-            $changedContent = $nonPhpFileChange !== null ? $nonPhpFileChange->getNewContent() : '';
-        } else {
-            $message = sprintf('Suffix "%s" is not supported yet', $originalFileInfo->getSuffix());
-            throw new ShouldNotHappenException($message);
-        }
+        $changedContent = $this->processFileInfo($originalFileInfo);
 
         $relativeFilePathFromCwd = $fixtureFileInfo->getRelativeFilePathFromCwd();
 
@@ -253,16 +227,26 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         return Strings::replace($string, '#\r\n|\r|\n#', "\n");
     }
 
-    /**
-     * Static to avoid reboot on each data fixture
-     */
-    private function initializeDependencies(): void
+    private function processFileInfo(SmartFileInfo $originalFileInfo): string
     {
-        if (self::$isInitialized) {
-            return;
-        }
+        if (! Strings::endsWith($originalFileInfo->getFilename(), '.blade.php') && in_array(
+                $originalFileInfo->getSuffix(),
+                ['php', 'phpt'],
+                true
+            )) {
+            $this->fileProcessor->refactor($originalFileInfo);
+            $this->fileProcessor->postFileRefactor($originalFileInfo);
 
-        self::$rectorConfigsResolver = new RectorConfigsResolver();
-        self::$isInitialized = true;
+            // mimic post-rectors
+            $changedContent = $this->fileProcessor->printToString($originalFileInfo);
+        } elseif (Strings::match($originalFileInfo->getFilename(), StaticNonPhpFileSuffixes::getSuffixRegexPattern())) {
+            $nonPhpFileChange = $this->nonPhpFileProcessor->process($originalFileInfo);
+
+            $changedContent = $nonPhpFileChange !== null ? $nonPhpFileChange->getNewContent() : '';
+        } else {
+            $message = sprintf('Suffix "%s" is not supported yet', $originalFileInfo->getSuffix());
+            throw new ShouldNotHappenException($message);
+        }
+        return $changedContent;
     }
 }

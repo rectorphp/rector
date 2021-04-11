@@ -10,17 +10,12 @@ use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -40,7 +35,6 @@ use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -113,11 +107,6 @@ final class NodeRepository
     private $attributes = [];
 
     /**
-     * @var array<string, Name[]>
-     */
-    private $names = [];
-
-    /**
      * @var ReflectionProvider
      */
     private $reflectionProvider;
@@ -166,26 +155,11 @@ final class NodeRepository
             $attributeClass = $this->nodeNameResolver->getName($node->name);
             $this->attributes[$attributeClass][] = $node;
         }
-
-        if ($node instanceof Name) {
-            $name = $this->nodeNameResolver->getName($node);
-            $this->names[$name][] = $node;
-        }
     }
 
     public function findFunction(string $name): ?Function_
     {
         return $this->functionsByName[$name] ?? null;
-    }
-
-    public function findFunctionByFuncCall(FuncCall $funcCall): ?Function_
-    {
-        $functionName = $this->nodeNameResolver->getName($funcCall);
-        if ($functionName === null) {
-            return null;
-        }
-
-        return $this->findFunction($functionName);
     }
 
     /**
@@ -205,33 +179,6 @@ final class NodeRepository
         return array_filter($calls, function (Node $node): bool {
             return $node instanceof StaticCall;
         });
-    }
-
-    /**
-     * @return ClassMethod[]
-     */
-    public function findClassMethodByTypeAndMethod(string $desiredType, string $desiredMethodName): array
-    {
-        $classMethods = [];
-
-        foreach ($this->classMethodsByType as $className => $classMethodByMethodName) {
-            if (! $this->reflectionProvider->hasClass($className)) {
-                continue;
-            }
-
-            $classReflection = $this->reflectionProvider->getClass($className);
-            if (! $classReflection->isSubclassOf($desiredType)) {
-                continue;
-            }
-
-            if (! isset($classMethodByMethodName[$desiredMethodName])) {
-                continue;
-            }
-
-            $classMethods[] = $classMethodByMethodName[$desiredMethodName];
-        }
-
-        return $classMethods;
     }
 
     public function findClassMethodByStaticCall(StaticCall $staticCall): ?ClassMethod
@@ -478,33 +425,6 @@ final class NodeRepository
     }
 
     /**
-     * @return Name[]
-     */
-    public function findNames(string $name): array
-    {
-        return $this->names[$name] ?? [];
-    }
-
-    public function findClassMethodConstructorByNew(New_ $new): ?ClassMethod
-    {
-        $className = $this->nodeTypeResolver->resolve($new->class);
-        if (! $className instanceof TypeWithClassName) {
-            return null;
-        }
-
-        $constructorClassMethod = $this->findClassMethod($className->getClassName(), MethodName::CONSTRUCT);
-        if (! $constructorClassMethod instanceof ClassMethod) {
-            return null;
-        }
-
-        if ($constructorClassMethod->getParams() === []) {
-            return null;
-        }
-
-        return $constructorClassMethod;
-    }
-
-    /**
      * @param PropertyFetch|StaticPropertyFetch $expr
      */
     public function findPropertyByPropertyFetch(Expr $expr): ?Property
@@ -538,14 +458,6 @@ final class NodeRepository
         return $this->parsedNodeCollector->getClasses();
     }
 
-    /**
-     * @return New_[]
-     */
-    public function findNewsByClass(string $className): array
-    {
-        return $this->parsedNodeCollector->findNewsByClass($className);
-    }
-
     public function findClassConstant(string $className, string $constantName): ?ClassConst
     {
         return $this->parsedNodeCollector->findClassConstant($className, $constantName);
@@ -562,35 +474,11 @@ final class NodeRepository
     }
 
     /**
-     * @return Param[]
-     */
-    public function getParams(): array
-    {
-        return $this->parsedNodeCollector->getParams();
-    }
-
-    /**
-     * @return New_[]
-     */
-    public function getNews(): array
-    {
-        return $this->parsedNodeCollector->getNews();
-    }
-
-    /**
      * @return StaticCall[]
      */
     public function getStaticCalls(): array
     {
         return $this->parsedNodeCollector->getStaticCalls();
-    }
-
-    /**
-     * @return ClassConstFetch[]
-     */
-    public function getClassConstFetches(): array
-    {
-        return $this->parsedNodeCollector->getClassConstFetches();
     }
 
     public function resolveCallerClassName(MethodCall $methodCall): ?string
@@ -602,26 +490,6 @@ final class NodeRepository
         }
 
         return $callerObjectType->getClassName();
-    }
-
-    /**
-     * @return Expr[]
-     */
-    public function findBooleanAndConditions(BooleanAnd $booleanAnd): array
-    {
-        $conditions = [];
-        while ($booleanAnd instanceof BinaryOp) {
-            $conditions[] = $booleanAnd->right;
-            $booleanAnd = $booleanAnd->left;
-
-            if (! $booleanAnd instanceof BooleanAnd) {
-                $conditions[] = $booleanAnd;
-                break;
-            }
-        }
-
-        krsort($conditions);
-        return $conditions;
     }
 
     public function findClassLike(string $classLikeName): ?ClassLike

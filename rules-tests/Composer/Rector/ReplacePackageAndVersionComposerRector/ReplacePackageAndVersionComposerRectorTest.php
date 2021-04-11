@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\Tests\Composer\Rector\ReplacePackageAndVersionComposerRector;
 
 use Iterator;
-use Rector\Testing\PHPUnit\AbstractComposerRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ReplacePackageAndVersionComposerRectorTest extends AbstractComposerRectorTestCase
+final class ReplacePackageAndVersionComposerRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -24,7 +24,7 @@ final class ReplacePackageAndVersionComposerRectorTest extends AbstractComposerR
         return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.json');
     }
 
-    public function provideConfigFile(): string
+    public function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/some_config.php';
     }

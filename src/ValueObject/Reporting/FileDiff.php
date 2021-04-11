@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\ValueObject\Reporting;
 
 use Rector\ChangesReporting\ValueObject\RectorWithFileAndLineChange;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileDiff
@@ -73,7 +74,7 @@ final class FileDiff
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<RectorInterface>>
      */
     public function getRectorClasses(): array
     {
@@ -82,8 +83,17 @@ final class FileDiff
             $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClass();
         }
 
-        $rectorClasses = array_unique($rectorClasses);
+        return $this->sortClasses($rectorClasses);
+    }
 
+    /**
+     * @template TType as object
+     * @param array<class-string<TType>> $rectorClasses
+     * @return array<class-string<TType>>
+     */
+    private function sortClasses(array $rectorClasses): array
+    {
+        $rectorClasses = array_unique($rectorClasses);
         sort($rectorClasses);
 
         return $rectorClasses;

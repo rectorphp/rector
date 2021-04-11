@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\EarlyReturn\NodeFactory\InvertedIfFactory;
+use Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer;
 use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -40,12 +41,21 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
      */
     private $contextAnalyzer;
 
-    public function __construct(IfManipulator $ifManipulator, InvertedIfFactory $invertedIfFactory,
-    ContextAnalyzer $contextAnalyzer)
-    {
+    /**
+     * @var BooleanAndAnalyzer
+     */
+    private $booleanAndAnalyzer;
+
+    public function __construct(
+        IfManipulator $ifManipulator,
+        InvertedIfFactory $invertedIfFactory,
+        ContextAnalyzer $contextAnalyzer,
+        BooleanAndAnalyzer $booleanAndAnalyzer
+    ) {
         $this->ifManipulator = $ifManipulator;
         $this->invertedIfFactory = $invertedIfFactory;
         $this->contextAnalyzer = $contextAnalyzer;
+        $this->booleanAndAnalyzer = $booleanAndAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -112,7 +122,7 @@ CODE_SAMPLE
 
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
-        $booleanAndConditions = $this->nodeRepository->findBooleanAndConditions($expr);
+        $booleanAndConditions = $this->booleanAndAnalyzer->findBooleanAndConditions($expr);
 
         if (! $ifNextReturn instanceof Return_) {
             $this->addNodeAfterNode($node->stmts[0], $node);

@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://wiki.php.net/rfc/add_str_starts_with_and_ends_with_functions
+ * @changelog https://wiki.php.net/rfc/add_str_starts_with_and_ends_with_functions
  *
  * @see https://3v4l.org/RQHB5 for weak compare
  * @see https://3v4l.org/AmLja for weak compare

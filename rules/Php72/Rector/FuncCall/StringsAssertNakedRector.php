@@ -15,8 +15,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://3v4l.org/lB5fR
- * @see https://github.com/simplesamlphp/simplesamlphp/pull/708/files
+ * @changelog https://github.com/simplesamlphp/simplesamlphp/pull/708/files
+ *
  * @see \Rector\Tests\Php72\Rector\FuncCall\StringsAssertNakedRector\StringsAssertNakedRectorTest
  */
 final class StringsAssertNakedRector extends AbstractRector

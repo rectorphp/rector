@@ -5,29 +5,22 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan;
 
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\BooleanType;
 use PHPStan\Type\ConstantType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use PHPStan\Type\UnionTypeHelper;
 use PHPStan\Type\VerbosityLevel;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 final class TypeHasher
 {
-    /**
-     * @var PHPStanStaticTypeMapper
-     */
-    private $phpStanStaticTypeMapper;
-
-    public function __construct(PHPStanStaticTypeMapper $phpStanStaticTypeMapper)
-    {
-        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
-    }
-
     public function areTypesEqual(Type $firstType, Type $secondType): bool
     {
         return $this->createTypeHash($firstType) === $this->createTypeHash($secondType);
@@ -45,7 +38,6 @@ final class TypeHasher
 
         if ($type instanceof GenericObjectType) {
             return $type->describe(VerbosityLevel::precise());
-            // return $this->phpStanStaticTypeMapper->mapToDocString($type);
         }
 
         if ($type instanceof TypeWithClassName) {
@@ -60,7 +52,7 @@ final class TypeHasher
             return $this->createUnionTypeHash($type);
         }
 
-        return $this->phpStanStaticTypeMapper->mapToDocString($type);
+        return $type->describe(VerbosityLevel::value());
     }
 
     private function resolveUniqueTypeWithClassNameHash(TypeWithClassName $typeWithClassName): string
@@ -78,14 +70,23 @@ final class TypeHasher
 
     private function createUnionTypeHash(UnionType $unionType): string
     {
-        $unionedTypesHashes = [];
-        foreach ($unionType->getTypes() as $unionedType) {
-            $unionedTypesHashes[] = $this->createTypeHash($unionedType);
+        $sortedTypes = UnionTypeHelper::sortTypes($unionType->getTypes());
+        $sortedUnionType = new UnionType($sortedTypes);
+
+        $booleanType = new BooleanType();
+        if ($booleanType->isSuperTypeOf($unionType)->yes()) {
+            return $booleanType->describe(VerbosityLevel::precise());
         }
 
-        sort($unionedTypesHashes);
-        $unionedTypesHashes = array_unique($unionedTypesHashes);
+        // change alias to non-alias
+        $sortedUnionType = TypeTraverser::map($sortedUnionType, function (Type $type, callable $callable): Type {
+            if (! $type instanceof AliasedObjectType) {
+                return $callable($type);
+            }
 
-        return implode('|', $unionedTypesHashes);
+            return new FullyQualifiedObjectType($type->getFullyQualifiedClass());
+        });
+
+        return $sortedUnionType->describe(VerbosityLevel::cache());
     }
 }
