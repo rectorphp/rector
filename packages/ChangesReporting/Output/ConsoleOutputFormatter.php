@@ -39,11 +39,6 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private $configuration;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;
@@ -55,7 +50,6 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         RectorsChangelogResolver $rectorsChangelogResolver
     ) {
         $this->symfonyStyle = $symfonyStyle;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->configuration = $configuration;
         $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
