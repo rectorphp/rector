@@ -10,8 +10,6 @@ use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -492,26 +490,6 @@ final class NodeRepository
         }
 
         return $callerObjectType->getClassName();
-    }
-
-    /**
-     * @return Expr[]
-     */
-    public function findBooleanAndConditions(BooleanAnd $booleanAnd): array
-    {
-        $conditions = [];
-        while ($booleanAnd instanceof BinaryOp) {
-            $conditions[] = $booleanAnd->right;
-            $booleanAnd = $booleanAnd->left;
-
-            if (! $booleanAnd instanceof BooleanAnd) {
-                $conditions[] = $booleanAnd;
-                break;
-            }
-        }
-
-        krsort($conditions);
-        return $conditions;
     }
 
     public function findClassLike(string $classLikeName): ?ClassLike
