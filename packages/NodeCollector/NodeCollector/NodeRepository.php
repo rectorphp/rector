@@ -14,7 +14,6 @@ use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -474,14 +473,6 @@ final class NodeRepository
     public function findByShortName(string $shortName): ?Class_
     {
         return $this->parsedNodeCollector->findByShortName($shortName);
-    }
-
-    /**
-     * @return New_[]
-     */
-    public function getNews(): array
-    {
-        return $this->parsedNodeCollector->getNews();
     }
 
     /**
