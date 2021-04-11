@@ -2,12 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Application;
+namespace Rector\Core\ValueObjectFactory\Application;
 
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\ValueObject\Application\File;
 
+/**
+ * @see \Rector\Core\ValueObject\Application\File
+ */
 final class FileFactory
 {
     /**

@@ -38,26 +38,14 @@ final class ComposerFileProcessor implements FileProcessorInterface
         $this->composerModifier = $composerModifier;
     }
 
-    public function process(File $file): void
+    /**
+     * @param File[] $files
+     */
+    public function process(array $files): void
     {
-        // to avoid modification of file
-        if (! $this->composerModifier->enabled()) {
-            return;
+        foreach ($files as $file) {
+            $this->processFile($file);
         }
-
-        $smartFileInfo = $file->getSmartFileInfo();
-        $composerJson = $this->composerJsonFactory->createFromFileInfo($smartFileInfo);
-
-        $oldComposerJson = clone $composerJson;
-        $this->composerModifier->modify($composerJson);
-
-        // nothing has changed
-        if ($oldComposerJson->getJsonArray() === $composerJson->getJsonArray()) {
-            return;
-        }
-
-        $changeFileContent = $this->composerJsonPrinter->printToString($composerJson);
-        $file->changeFileContent($changeFileContent);
     }
 
     public function supports(File $file): bool
@@ -77,5 +65,27 @@ final class ComposerFileProcessor implements FileProcessorInterface
     public function getSupportedFileExtensions(): array
     {
         return ['json'];
+    }
+
+    private function processFile(File $file): void
+    {
+        // to avoid modification of file
+        if (! $this->composerModifier->enabled()) {
+            return;
+        }
+
+        $smartFileInfo = $file->getSmartFileInfo();
+        $composerJson = $this->composerJsonFactory->createFromFileInfo($smartFileInfo);
+
+        $oldComposerJson = clone $composerJson;
+        $this->composerModifier->modify($composerJson);
+
+        // nothing has changed
+        if ($oldComposerJson->getJsonArray() === $composerJson->getJsonArray()) {
+            return;
+        }
+
+        $changeFileContent = $this->composerJsonPrinter->printToString($composerJson);
+        $file->changeFileContent($changeFileContent);
     }
 }

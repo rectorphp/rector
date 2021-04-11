@@ -122,20 +122,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         );
 
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
+        $this->originalTempFileInfo = $inputFileInfo;
 
-        if ($inputFileInfo->getSuffix() === 'json') {
-            $changedContent = $this->processFileInfo($inputFileInfo);
-            $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
-
-            $this->assertJsonStringEqualsJsonString($expectedFileInfo->getContents(), $changedContent);
-        } else {
-            $this->dynamicSourceLocatorProvider->setFileInfo($inputFileInfo);
-
-            $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
-
-            $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
-            $this->originalTempFileInfo = $inputFileInfo;
-        }
+        $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
+        $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
     }
 
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
@@ -210,6 +200,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
 
     private function processFileInfo(SmartFileInfo $fileInfo): string
     {
+        $this->dynamicSourceLocatorProvider->setFileInfo($fileInfo);
+
         // needed for PHPStan, because the analyzed file is just created in /temp - need for trait and similar deps
         /** @var NodeScopeResolver $nodeScopeResolver */
         $nodeScopeResolver = $this->getService(NodeScopeResolver::class);

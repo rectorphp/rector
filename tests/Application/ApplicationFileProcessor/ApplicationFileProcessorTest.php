@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\Application\ApplicationFileProcessor;
 
 use Rector\Core\Application\ApplicationFileProcessor;
-use Rector\Core\Application\FileFactory;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 

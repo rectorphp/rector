@@ -7,6 +7,9 @@ namespace Rector\Core\ValueObject\Application;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @see \Rector\Core\ValueObjectFactory\Application\FileFactory
+ */
 final class File
 {
     /**

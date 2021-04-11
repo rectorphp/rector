@@ -86,8 +86,9 @@ final class FileProcessor
         $this->tokensByFilePathStorage = $tokensByFilePathStorage;
     }
 
-    public function parseFileInfoToLocalCache(SmartFileInfo $smartFileInfo): void
+    public function parseFileInfoToLocalCache(File $file): void
     {
+        $smartFileInfo = $file->getSmartFileInfo();
         if ($this->tokensByFilePathStorage->hasForFileInfo($smartFileInfo)) {
             return;
         }
@@ -116,9 +117,9 @@ final class FileProcessor
 
     public function refactor(File $file): void
     {
-        $smartFileInfo = $file->getSmartFileInfo();
-        $this->parseFileInfoToLocalCache($smartFileInfo);
+        $this->parseFileInfoToLocalCache($file);
 
+        $smartFileInfo = $file->getSmartFileInfo();
         $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
 
         $this->currentFileInfoProvider->setCurrentStmts($parsedStmtsAndTokens->getNewStmts());
@@ -138,10 +139,12 @@ final class FileProcessor
         }
     }
 
-    public function postFileRefactor(SmartFileInfo $smartFileInfo): void
+    public function postFileRefactor(File $file): void
     {
+        $smartFileInfo = $file->getSmartFileInfo();
+
         if (! $this->tokensByFilePathStorage->hasForFileInfo($smartFileInfo)) {
-            $this->parseFileInfoToLocalCache($smartFileInfo);
+            $this->parseFileInfoToLocalCache($file);
         }
 
         $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);

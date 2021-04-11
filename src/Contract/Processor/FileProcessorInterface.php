@@ -9,7 +9,10 @@ interface FileProcessorInterface
 {
     public function supports(File $file): bool;
 
-    public function process(File $file): void;
+    /**
+     * @param File[] $files
+     */
+    public function process(array $files): void;
 
     /**
      * @return string[]

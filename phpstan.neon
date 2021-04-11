@@ -443,7 +443,6 @@ parameters:
         -
             message: '#Instead of "(.*?)" use ReflectionProvider service (.*?) for static reflection to work#'
             paths:
-                - src/Application/RectorApplication.php
                 - src/Console/Command/ProcessCommand.php
 
         # mimics original doctrine/annotations parser, improve later when finished

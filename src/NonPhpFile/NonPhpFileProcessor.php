@@ -40,18 +40,14 @@ final class NonPhpFileProcessor implements FileProcessorInterface
         $this->nonPhpFileClassRenamer = $nonPhpFileClassRenamer;
     }
 
-    public function process(File $file): void
+    /**
+     * @param File[] $files
+     */
+    public function process(array $files): void
     {
-        $fileInfo = $file->getSmartFileInfo();
-        $oldFileContents = $fileInfo->getContents();
-
-        $classRenames = array_merge(
-            $this->renamedClassesDataCollector->getOldToNewClasses(),
-            $this->renamedClassesCollector->getOldToNewClasses()
-        );
-
-        $changedFileContents = $this->nonPhpFileClassRenamer->renameClasses($oldFileContents, $classRenames);
-        $file->changeFileContent($changedFileContents);
+        foreach ($files as $file) {
+            $this->processFile($file);
+        }
     }
 
     public function supports(File $file): bool
@@ -63,5 +59,19 @@ final class NonPhpFileProcessor implements FileProcessorInterface
     public function getSupportedFileExtensions(): array
     {
         return StaticNonPhpFileSuffixes::SUFFIXES;
+    }
+
+    private function processFile(File $file): void
+    {
+        $fileInfo = $file->getSmartFileInfo();
+        $oldFileContents = $fileInfo->getContents();
+
+        $classRenames = array_merge(
+            $this->renamedClassesDataCollector->getOldToNewClasses(),
+            $this->renamedClassesCollector->getOldToNewClasses()
+        );
+
+        $changedFileContents = $this->nonPhpFileClassRenamer->renameClasses($oldFileContents, $classRenames);
+        $file->changeFileContent($changedFileContents);
     }
 }

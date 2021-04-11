@@ -53,8 +53,31 @@ final class ApplicationFileProcessor
     public function run(array $files): void
     {
         $this->processFiles($files);
+
         $this->fileDiffFileDecorator->decorate($files);
 
+        $this->printFiles($files);
+    }
+
+    /**
+     * @param File[] $files
+     */
+    private function processFiles(array $files): void
+    {
+        foreach ($this->fileProcessors as $fileProcessor) {
+            $supportedFiles = array_filter($files, function (File $file) use ($fileProcessor) {
+                return $fileProcessor->supports($file);
+            });
+
+            $fileProcessor->process($supportedFiles);
+        }
+    }
+
+    /**
+     * @param File[] $files
+     */
+    private function printFiles(array $files): void
+    {
         if ($this->configuration->isDryRun()) {
             return;
         }
@@ -65,22 +88,6 @@ final class ApplicationFileProcessor
             }
 
             $this->printFile($file);
-        }
-    }
-
-    /**
-     * @param File[] $files
-     */
-    private function processFiles(array $files): void
-    {
-        foreach ($files as $file) {
-            foreach ($this->fileProcessors as $fileProcessor) {
-                if (! $fileProcessor->supports($file)) {
-                    continue;
-                }
-
-                $fileProcessor->process($file);
-            }
         }
     }
 

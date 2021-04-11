@@ -7,14 +7,16 @@ namespace Rector\Core\Tests\Application\ApplicationFileProcessor\Source;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 
-final class TextNonPhpFileProcessor implements FileProcessorInterface
+final class TextFileProcessor implements FileProcessorInterface
 {
-    public function process(File $file): void
+    /**
+     * @param File[] $files
+     */
+    public function process(array $files): void
     {
-        $oldFileContent = $file->getFileContent();
-        $changedFileContent = str_replace('Foo', 'Bar', $oldFileContent);
-
-        $file->changeFileContent($changedFileContent);
+        foreach ($files as $file) {
+            $this->processFile($file);
+        }
     }
 
     public function supports(File $file): bool
@@ -29,5 +31,13 @@ final class TextNonPhpFileProcessor implements FileProcessorInterface
     public function getSupportedFileExtensions(): array
     {
         return ['txt'];
+    }
+
+    private function processFile($file): void
+    {
+        $oldFileContent = $file->getFileContent();
+        $changedFileContent = str_replace('Foo', 'Bar', $oldFileContent);
+
+        $file->changeFileContent($changedFileContent);
     }
 }

@@ -7,6 +7,7 @@ namespace Rector\ChangesReporting\Application;
 use PHPStan\AnalysedCodeException;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Error\ExceptionCorrector;
+use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Application\RectorError;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -72,10 +73,10 @@ final class ErrorAndDiffCollector
         return $this->nodesToRemoveCollector->getCount();
     }
 
-    public function addAutoloadError(AnalysedCodeException $analysedCodeException, SmartFileInfo $fileInfo): void
+    public function addAutoloadError(AnalysedCodeException $analysedCodeException, File $file): void
     {
         $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
-        $this->errors[] = new RectorError($fileInfo, $message);
+        $this->errors[] = new RectorError($file->getSmartFileInfo(), $message);
     }
 
     public function addErrorWithRectorClassMessageAndFileInfo(
@@ -96,10 +97,10 @@ final class ErrorAndDiffCollector
         }
     }
 
-    public function hasSmartFileErrors(SmartFileInfo $phpFileInfo): bool
+    public function hasSmartFileErrors(File $file): bool
     {
         foreach ($this->errors as $error) {
-            if ($error->getFileInfo() === $phpFileInfo) {
+            if ($error->getFileInfo() === $file->getSmartFileInfo()) {
                 return true;
             }
         }
