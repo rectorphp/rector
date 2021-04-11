@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace Rector\Core\NonPhpFile;
 
-use Rector\Core\Contract\Processor\NonPhpFileProcessorInterface;
+use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
 use Rector\Renaming\Configuration\MethodCallRenameCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -10,7 +11,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @todo maybe it should be in rector-nette package, this is just prototype
  */
-class NeonMethodCallRenamer implements NonPhpFileProcessorInterface
+class NeonMethodCallRenamer implements FileProcessorInterface
 {
     /**
      * @var MethodCallRenameCollector
