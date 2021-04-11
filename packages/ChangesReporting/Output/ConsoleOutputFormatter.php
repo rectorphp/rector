@@ -10,7 +10,6 @@ use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\Application\RectorError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -44,7 +43,6 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private $rectorsChangelogResolver;
 
     public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
         Configuration $configuration,
         SymfonyStyle $symfonyStyle,
         RectorsChangelogResolver $rectorsChangelogResolver
