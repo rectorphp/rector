@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\ChangesReporting\Application;
 
+use PhpParser\Node;
 use PHPStan\AnalysedCodeException;
-use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
-use Rector\Core\Differ\DefaultDiffer;
 use Rector\Core\Error\ExceptionCorrector;
+use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Application\RectorError;
-use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
-use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 
@@ -22,16 +21,6 @@ final class ErrorAndDiffCollector
      * @var RectorError[]
      */
     private $errors = [];
-
-    /**
-     * @var FileDiff[]
-     */
-    private $fileDiffs = [];
-
-    /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
 
     /**
      * @var ExceptionCorrector
@@ -49,29 +38,20 @@ final class ErrorAndDiffCollector
     private $nodesToRemoveCollector;
 
     /**
-     * @var ConsoleDiffer
+     * @var FileDiffFactory
      */
-    private $consoleDiffer;
-
-    /**
-     * @var DefaultDiffer
-     */
-    private $defaultDiffer;
+    private $fileDiffFactory;
 
     public function __construct(
         ExceptionCorrector $exceptionCorrector,
         NodesToRemoveCollector $nodesToRemoveCollector,
-        RectorChangeCollector $rectorChangeCollector,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        ConsoleDiffer $consoleDiffer,
-        DefaultDiffer $defaultDiffer
+        FileDiffFactory $fileDiffFactory
     ) {
-        $this->rectorChangeCollector = $rectorChangeCollector;
         $this->exceptionCorrector = $exceptionCorrector;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
-        $this->consoleDiffer = $consoleDiffer;
-        $this->defaultDiffer = $defaultDiffer;
+        $this->fileDiffFactory = $fileDiffFactory;
     }
 
     /**
@@ -87,7 +67,7 @@ final class ErrorAndDiffCollector
         return $this->removedAndAddedFilesCollector->getAffectedFilesCount();
     }
 
-    public function getAddFilesCount(): int
+    public function getAddedFilesCount(): int
     {
         return $this->removedAndAddedFilesCollector->getAddedFileCount();
     }
@@ -102,9 +82,6 @@ final class ErrorAndDiffCollector
         return $this->nodesToRemoveCollector->getCount();
     }
 
-<<<<<<< HEAD
-    public function addFileDiff(SmartFileInfo $smartFileInfo, string $newContent, string $oldContent): void
-=======
     /**
      * @return Node[]
      */
@@ -113,56 +90,45 @@ final class ErrorAndDiffCollector
         return $this->nodesToRemoveCollector->getNodesToRemove();
     }
 
-    public function addFileDiff(SmartFileInfo $smartFileInfo, string $oldContent, string $newContent): void
->>>>>>> 6b328f9cd1... move FileProcessor to PhpFileProcessor
+    public function addFileDiff(File $file, string $oldContent, string $newContent): void
     {
         if ($newContent === $oldContent) {
             return;
         }
 
-        $rectorChanges = $this->rectorChangeCollector->getRectorChangesByFileInfo($smartFileInfo);
-
-        // always keep the most recent diff
-        $fileDiff = new FileDiff(
-            $smartFileInfo,
-            $this->defaultDiffer->diff($oldContent, $newContent),
-            $this->consoleDiffer->diff($oldContent, $newContent),
-            $rectorChanges
-        );
-
-        $this->fileDiffs[$smartFileInfo->getRealPath()] = $fileDiff;
+        $fileDiff = $this->fileDiffFactory->createFileDiff($file, $oldContent, $newContent);
+        $file->setFileDiff($fileDiff);
     }
 
-    /**
-     * @return FileDiff[]
-     */
-    public function getFileDiffs(): array
-    {
-        return $this->fileDiffs;
-    }
+//    /**
+//     * @return FileDiff[]
+//     */
+//    public function getFileDiffs(): array
+//    {
+//        return $this->fileDiffs;
+//    }
 
-    /**
-     * @return SmartFileInfo[]
-     */
-    public function getAffectedFileInfos(): array
-    {
-        $fileInfos = [];
-        foreach ($this->fileDiffs as $fileDiff) {
-            $fileInfos[] = $fileDiff->getFileInfo();
-        }
+//    /**
+//     * @return SmartFileInfo[]
+//     */
+//    public function getAffectedFileInfos(): array
+//    {
+//        $fileInfos = [];
+//        foreach ($this->fileDiffs as $fileDiff) {
+//            $fileInfos[] = $fileDiff->getFileInfo();
+//        }
+//
+//        return array_unique($fileInfos);
+//    }
 
-        return array_unique($fileInfos);
-    }
-
-    public function getFileDiffsCount(): int
-    {
-        return count($this->fileDiffs);
-    }
+//    public function getFileDiffsCount(): int
+//    {
+//        return count($this->fileDiffs);
+//    }
 
     public function addAutoloadError(AnalysedCodeException $analysedCodeException, SmartFileInfo $fileInfo): void
     {
         $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
-
         $this->errors[] = new RectorError($fileInfo, $message);
     }
 

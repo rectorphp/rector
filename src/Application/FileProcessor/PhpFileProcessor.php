@@ -98,11 +98,10 @@ final class PhpFileProcessor implements FileProcessorInterface
 
     public function process(File $file): void
     {
-        return;
-
         $this->refactor($file);
         $this->postFileRefactor($file);
 
+        $smartFileInfo = $file->getSmartFileInfo();
         $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
 
         // @todo not printable yet..., wait for all the traverse
@@ -129,16 +128,15 @@ final class PhpFileProcessor implements FileProcessorInterface
         return $this->configuration->getFileExtensions();
     }
 
-    public function refactor(SmartFileInfo $smartFileInfo): void
+    public function refactor(File $file): void
     {
-        $this->parseFileInfoToLocalCache($smartFileInfo);
-
-        $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
+        $this->parseFileInfoToLocalCache($file->getSmartFileInfo());
+        $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($file->getSmartFileInfo());
 
         $this->currentFileInfoProvider->setCurrentStmts($parsedStmtsAndTokens->getNewStmts());
 
         // run file node only if
-        $fileNode = new FileNode($smartFileInfo, $parsedStmtsAndTokens->getNewStmts());
+        $fileNode = new FileNode($file->getSmartFileInfo(), $parsedStmtsAndTokens->getNewStmts());
         $this->rectorNodeTraverser->traverseFileNode($fileNode);
 
         $newStmts = $this->rectorNodeTraverser->traverse($parsedStmtsAndTokens->getNewStmts());
@@ -146,23 +144,23 @@ final class PhpFileProcessor implements FileProcessorInterface
         // this is needed for new tokens added in "afterTraverse()"
         $parsedStmtsAndTokens->updateNewStmts($newStmts);
 
-        $this->affectedFilesCollector->removeFromList($smartFileInfo);
+        $this->affectedFilesCollector->removeFromList($file);
         while ($otherTouchedFile = $this->affectedFilesCollector->getNext()) {
             $this->refactor($otherTouchedFile);
         }
     }
 
-    private function parseFileInfoToLocalCache(SmartFileInfo $smartFileInfo): void
+    private function parseFileInfoToLocalCache(SmartFileInfo $fileInfo): void
     {
-        if ($this->tokensByFilePathStorage->hasForFileInfo($smartFileInfo)) {
+        if ($this->tokensByFilePathStorage->hasForFileInfo($fileInfo)) {
             return;
         }
 
-        $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
+        $this->currentFileInfoProvider->setCurrentFileInfo($fileInfo);
 
         // store tokens by absolute path, so we don't have to print them right now
-        $parsedStmtsAndTokens = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
-        $this->tokensByFilePathStorage->addForRealPath($smartFileInfo, $parsedStmtsAndTokens);
+        $parsedStmtsAndTokens = $this->parseAndTraverseFileInfoToNodes($fileInfo);
+        $this->tokensByFilePathStorage->addForRealPath($fileInfo, $parsedStmtsAndTokens);
     }
 
     private function printToFile(SmartFileInfo $smartFileInfo): string
@@ -180,8 +178,10 @@ final class PhpFileProcessor implements FileProcessorInterface
         return $this->formatPerservingPrinter->printParsedStmstAndTokensToString($parsedStmtsAndTokens);
     }
 
-    private function postFileRefactor(SmartFileInfo $smartFileInfo): void
+    private function postFileRefactor(File $file): void
     {
+        $smartFileInfo = $file->getSmartFileInfo();
+
         if (! $this->tokensByFilePathStorage->hasForFileInfo($smartFileInfo)) {
             $this->parseFileInfoToLocalCache($smartFileInfo);
         }

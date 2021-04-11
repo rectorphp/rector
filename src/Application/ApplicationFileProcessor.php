@@ -7,9 +7,7 @@ namespace Rector\Core\Application;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
-use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\ValueObject\Application\File;
-use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ApplicationFileProcessor
@@ -35,15 +33,9 @@ final class ApplicationFileProcessor
     private $errorAndDiffCollector;
 
     /**
-     * @var FilesFinder
-     */
-    private $filesFinder;
-
-    /**
      * @param FileProcessorInterface[] $fileProcessors
      */
     public function __construct(
-        FilesFinder $filesFinder,
         ErrorAndDiffCollector $errorAndDiffCollector,
         Configuration $configuration,
         SmartFileSystem $smartFileSystem,
@@ -51,7 +43,6 @@ final class ApplicationFileProcessor
     ) {
         $this->fileProcessors = $fileProcessors;
         $this->smartFileSystem = $smartFileSystem;
-        $this->filesFinder = $filesFinder;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->configuration = $configuration;
     }
@@ -61,8 +52,37 @@ final class ApplicationFileProcessor
      */
     public function run(array $files): void
     {
-//        $newContent = null;
+        $this->processFiles($files);
 
+        foreach ($files as $file) {
+            if (! $file->hasChanged()) {
+                continue;
+            }
+
+            // decorate file diffs
+            $this->errorAndDiffCollector->addFileDiff($file, $file->getOriginalFileContent(), $file->getFileContent());
+
+            if ($this->configuration->isDryRun()) {
+                return;
+            }
+
+            $this->printFile($file);
+        }
+    }
+
+    private function printFile(File $file): void
+    {
+        $fileInfo = $file->getSmartFileInfo();
+
+        $this->smartFileSystem->dumpFile($fileInfo->getPathname(), $file->getFileContent());
+        $this->smartFileSystem->chmod($fileInfo->getRealPath(), $fileInfo->getPerms());
+    }
+
+    /**
+     * @param File[] $files
+     */
+    private function processFiles(array $files): void
+    {
         foreach ($files as $file) {
             foreach ($this->fileProcessors as $fileProcessor) {
                 if (! $fileProcessor->supports($file)) {
@@ -70,59 +90,7 @@ final class ApplicationFileProcessor
                 }
 
                 $fileProcessor->process($file);
-//                $smartFileInfo = $file->getSmartFileInfo();
-//                if ($smartFileInfo->getContents() === $newContent) {
-//                    continue;
-//                }
-
-                // @todo run once in the end
-//                $this->errorAndDiffCollector->addFileDiff($smartFileInfo, $smartFileInfo->getContents(), $newContent);
             }
-
-            // has file changed?
-//            if (! $this->configuration->isDryRun() && $newContent !== null) {
-//                $this->dumpFileInfo($smartFileInfo, $newContent);
-//            }
-
-            $this->errorAndDiffCollector->addFileDiff($smartFileInfo, $smartFileInfo->getContents(), $newContent);
         }
     }
-
-    /**
-     * @param string[] $paths
-     * @return SmartFileInfo[]
-     */
-    private function findFileInfos(array $paths): array
-    {
-        $fileExtensions = $this->resolveSupportedFileExtensions();
-
-        $fileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, $fileExtensions);
-
-        $composerJsonFilePath = getcwd() . '/composer.json';
-        if ($this->smartFileSystem->exists($composerJsonFilePath)) {
-            $fileInfos[] = new SmartFileInfo($composerJsonFilePath);
-        }
-
-        return $fileInfos;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolveSupportedFileExtensions(): array
-    {
-        $fileExtensions = [];
-
-        foreach ($this->fileProcessors as $nonPhpFileProcessor) {
-            $fileExtensions = array_merge($nonPhpFileProcessor->getSupportedFileExtensions(), $fileExtensions);
-        }
-
-        return array_unique($fileExtensions);
-    }
-
-//    private function dumpFileInfo(SmartFileInfo $nonPhpFileInfo, string $newContent): void
-//    {
-//        $this->smartFileSystem->dumpFile($nonPhpFileInfo->getPathname(), $newContent);
-//        $this->smartFileSystem->chmod($nonPhpFileInfo->getRealPath(), $nonPhpFileInfo->getPerms());
-//    }
 }

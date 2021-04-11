@@ -10,6 +10,7 @@ use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\PhpParser\Parser\Parser;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
+use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Application\ParsedStmtsAndTokens;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
@@ -113,8 +114,9 @@ final class FileProcessor
         return $this->formatPerservingPrinter->printParsedStmstAndTokensToString($parsedStmtsAndTokens);
     }
 
-    public function refactor(SmartFileInfo $smartFileInfo): void
+    public function refactor(File $file): void
     {
+        $smartFileInfo = $file->getSmartFileInfo();
         $this->parseFileInfoToLocalCache($smartFileInfo);
 
         $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
@@ -130,7 +132,7 @@ final class FileProcessor
         // this is needed for new tokens added in "afterTraverse()"
         $parsedStmtsAndTokens->updateNewStmts($newStmts);
 
-        $this->affectedFilesCollector->removeFromList($smartFileInfo);
+        $this->affectedFilesCollector->removeFromList($file);
         while ($otherTouchedFile = $this->affectedFilesCollector->getNext()) {
             $this->refactor($otherTouchedFile);
         }

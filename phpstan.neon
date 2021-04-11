@@ -509,3 +509,7 @@ parameters:
 
         - '#Cognitive complexity for "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper\:\:mapToPhpParserNode\(\)" is 10, keep it under 9#'
         - '#Method Rector\\NodeNameResolver\\NodeNameResolver\:\:matchRectorBacktraceCall\(\) return type has no value type specified in iterable type array#'
+        -
+            message: '#Do not inherit from abstract class, better use composition#'
+            paths:
+                -  src/PhpParser/Parser/FunctionLikeParser.php

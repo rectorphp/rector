@@ -7,13 +7,15 @@ namespace Rector\Core\Application;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\PostRunnerInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\FileSystem\PhpFilesFinder;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
+use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Reporting\FileDiff;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -94,14 +96,14 @@ final class RectorApplication
     private $privatesAccessor;
 
     /**
-     * @var PhpFilesFinder
-     */
-    private $phpFilesFinder;
-
-    /**
      * @var DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
+
+    /**
+     * @var FileDiffFactory
+     */
+    private $fileDiffFactory;
 
     /**
      * @param PostRunnerInterface[] $postRunners
@@ -115,8 +117,8 @@ final class RectorApplication
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         SymfonyStyle $symfonyStyle,
         PrivatesAccessor $privatesAccessor,
-        PhpFilesFinder $phpFilesFinder,
         DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator,
+        FileDiffFactory $fileDiffFactory,
         array $postRunners
     ) {
         $this->symfonyStyle = $symfonyStyle;
@@ -128,16 +130,16 @@ final class RectorApplication
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->privatesAccessor = $privatesAccessor;
         $this->postRunners = $postRunners;
-        $this->phpFilesFinder = $phpFilesFinder;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
+        $this->fileDiffFactory = $fileDiffFactory;
     }
 
     /**
      * @param string[] $paths
+     * @param SmartFileInfo[] $phpFileInfos
      */
-    public function runOnPaths(array $paths): void
+    public function runOnPaths(array $paths, array $phpFileInfos): void
     {
-        $phpFileInfos = $this->phpFilesFinder->findInPaths($paths);
         $fileCount = count($phpFileInfos);
         if ($fileCount === 0) {
             return;
@@ -234,8 +236,10 @@ final class RectorApplication
     private function refactorNodesWithRectors(array $phpFileInfos): void
     {
         foreach ($phpFileInfos as $phpFileInfo) {
-            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
-                $this->fileProcessor->refactor($smartFileInfo);
+            $file = new File($phpFileInfo, $phpFileInfo->getContents());
+
+            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo) use ($file): void {
+                $this->fileProcessor->refactor($file);
             }, 'refactoring');
         }
     }
@@ -253,7 +257,6 @@ final class RectorApplication
             $callback($smartFileInfo);
         } catch (AnalysedCodeException $analysedCodeException) {
             $this->notParsedFiles[] = $smartFileInfo;
-
             $this->errorAndDiffCollector->addAutoloadError($analysedCodeException, $smartFileInfo);
         } catch (Throwable $throwable) {
             if ($this->symfonyStyle->isVerbose()) {
@@ -271,12 +274,19 @@ final class RectorApplication
             return;
         }
 
-        $oldContents = $fileInfo->getContents();
+//        $oldContents = $fileInfo->getContents();
 
         $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString($fileInfo)
             : $this->fileProcessor->printToFile($fileInfo);
 
-        $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContents);
+        $file = new File($fileInfo, $fileInfo->getContents());
+        $file->changeFileContent($newContent);
+
+        $fileDiff = $this->fileDiffFactory->createFileDiff($file, $file->getOriginalFileContent(), $newContent);
+        if ($fileDiff instanceof FileDiff) {
+            $file->setFileDiff($fileDiff);
+        }
+//        $this->errorAndDiffCollector->addFileDiff($file, $newContent, $oldContents);
     }
 
     /**

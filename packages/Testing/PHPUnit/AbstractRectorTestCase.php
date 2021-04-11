@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
 use Iterator;
-use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -16,13 +15,11 @@ use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Contract\RectorTestInterface;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
@@ -141,16 +138,12 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         );
 
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
+
         if ($inputFileInfo->getSuffix() === 'json') {
-            $inputFileInfoAndExpected = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpected($fixtureFileInfo);
+            $changedContent = $this->processFileInfo($inputFileInfo);
+            $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
 
-            $composerJson = $this->composerJsonFactory->createFromFileInfo(
-                $inputFileInfoAndExpected->getInputFileInfo()
-            );
-            $this->composerModifier->modify($composerJson);
-
-            $changedComposerJson = Json::encode($composerJson->getJsonArray(), Json::PRETTY);
-            $this->assertJsonStringEqualsJsonString($inputFileInfoAndExpected->getExpected(), $changedComposerJson);
+            $this->assertJsonStringEqualsJsonString($expectedFileInfo->getContents(), $changedContent);
         } else {
             // needed for PHPStan, because the analyzed file is just created in /temp - need for trait and similar deps
             /** @var NodeScopeResolver $nodeScopeResolver */
@@ -215,7 +208,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
         $changedContent = $this->processFileInfo($originalFileInfo);
-
         $relativeFilePathFromCwd = $fixtureFileInfo->getRelativeFilePathFromCwd();
 
         try {
@@ -240,29 +232,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
     private function processFileInfo(SmartFileInfo $originalFileInfo): string
     {
         $file = new File($originalFileInfo, $originalFileInfo->getContents());
-
         $this->applicationFileProcessor->run([$file]);
 
-        if (! Strings::endsWith($originalFileInfo->getFilename(), '.blade.php') && in_array(
-                $originalFileInfo->getSuffix(),
-                ['php', 'phpt'],
-                true
-            )) {
-            $this->fileProcessor->refactor($originalFileInfo);
-            $this->fileProcessor->postFileRefactor($originalFileInfo);
-
-            // mimic post-rectors
-            return $this->fileProcessor->printToString($originalFileInfo);
-        } elseif (Strings::match($originalFileInfo->getFilename(), StaticNonPhpFileSuffixes::getSuffixRegexPattern())) {
-            return $this->nonPhpFileProcessor->process($originalFileInfo);
-        }
-
-        $message = sprintf(
-            'Suffix "%s" is not supported yet. Add a service that implements "%s" with support for it',
-            FileProcessorInterface::class,
-            $originalFileInfo->getSuffix()
-        );
-
-        throw new ShouldNotHappenException($message);
+        return $file->getFileContent();
     }
 }

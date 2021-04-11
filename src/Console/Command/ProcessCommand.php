@@ -8,8 +8,10 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\ApplicationFileProcessor;
+use Rector\Core\Application\FileFactory;
 use Rector\Core\Application\RectorApplication;
 use Rector\Core\Autoloading\AdditionalAutoloader;
+use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
@@ -22,10 +24,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Throwable;
 
 final class ProcessCommand extends Command
 {
@@ -55,11 +55,6 @@ final class ProcessCommand extends Command
     private $outputFormatterCollector;
 
     /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
      * @var PhpFilesFinder
      */
     private $phpFilesFinder;
@@ -74,15 +69,30 @@ final class ProcessCommand extends Command
      */
     private $missingRectorRulesReporter;
 
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
+//    /**
+//     * @var ParameterProvider
+//     */
+//    private $parameterProvider;
 
     /**
-     * @var \Rector\Core\Application\ApplicationFileProcessor
+     * @var ApplicationFileProcessor
      */
-    private $nonPhpFileProcessorService;
+    private $applicationFileProcessor;
+
+    /**
+     * @var FileFactory
+     */
+    private $fileFactory;
+
+    /**
+     * @var BootstrapFilesIncluder
+     */
+    private $bootstrapFilesIncluder;
+
+    /**
+     * @var \Rector\Core\ValueObjectFactory\ProcessResultFactory
+     */
+    private $processResultFactory;
 
     public function __construct(
         AdditionalAutoloader $additionalAutoloader,
@@ -91,11 +101,12 @@ final class ProcessCommand extends Command
         ErrorAndDiffCollector $errorAndDiffCollector,
         OutputFormatterCollector $outputFormatterCollector,
         RectorApplication $rectorApplication,
-        SymfonyStyle $symfonyStyle,
         PhpFilesFinder $phpFilesFinder,
         MissingRectorRulesReporter $missingRectorRulesReporter,
-        ParameterProvider $parameterProvider,
-        ApplicationFileProcessor $nonPhpFileProcessorService
+        ApplicationFileProcessor $applicationFileProcessor,
+        FileFactory $fileFactory,
+        BootstrapFilesIncluder $bootstrapFilesIncluder,
+        \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory
     ) {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
@@ -103,13 +114,14 @@ final class ProcessCommand extends Command
         $this->rectorApplication = $rectorApplication;
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->changedFilesDetector = $changedFilesDetector;
-        $this->symfonyStyle = $symfonyStyle;
         $this->phpFilesFinder = $phpFilesFinder;
         $this->missingRectorRulesReporter = $missingRectorRulesReporter;
 
         parent::__construct();
-        $this->parameterProvider = $parameterProvider;
-        $this->nonPhpFileProcessorService = $nonPhpFileProcessorService;
+        $this->applicationFileProcessor = $applicationFileProcessor;
+        $this->fileFactory = $fileFactory;
+        $this->bootstrapFilesIncluder = $bootstrapFilesIncluder;
+        $this->processResultFactory = $processResultFactory;
     }
 
     protected function configure(): void
@@ -186,41 +198,29 @@ final class ProcessCommand extends Command
         $phpFileInfos = $this->phpFilesFinder->findInPaths($paths);
 
         // register autoloaded and included files
-        $this->includeBootstrapFiles();
+        $this->bootstrapFilesIncluder->includeBootstrapFiles();
         $this->additionalAutoloader->autoloadWithInputAndSource($input);
 
-        if ($this->configuration->isCacheDebug()) {
-            $message = sprintf('[cache] %d files after cache filter', count($phpFileInfos));
-            $this->symfonyStyle->note($message);
-            $this->symfonyStyle->listing($phpFileInfos);
-        }
+        $this->rectorApplication->runOnPaths($paths, $phpFileInfos);
 
-        $this->configuration->setFileInfos($phpFileInfos);
+        $files = $this->fileFactory->createFromPaths($paths);
+        $this->applicationFileProcessor->run($files);
 
-        $this->rectorApplication->runOnPaths($paths);
-        $this->nonPhpFileProcessorService->run($paths);
+        // dump files and report file diffs
 
         // report diffs and errors
         $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
 
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
+
+        // here should be value obect factory
+
         $outputFormatter->report($this->errorAndDiffCollector);
 
         // invalidate affected files
         $this->invalidateAffectedCacheFiles();
 
-        // some errors were found → fail
-        if ($this->errorAndDiffCollector->getErrors() !== []) {
-            return ShellCode::ERROR;
-        }
-        // inverse error code for CI dry-run
-        if (! $this->configuration->isDryRun()) {
-            return ShellCode::SUCCESS;
-        }
-        if ($this->errorAndDiffCollector->getFileDiffsCount() === 0) {
-            return ShellCode::SUCCESS;
-        }
-        return ShellCode::ERROR;
+        return $this->resolveReturnCode();
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
@@ -257,33 +257,18 @@ final class ProcessCommand extends Command
         }
     }
 
-    /**
-     * Inspired by
-     * @see https://github.com/phpstan/phpstan-src/commit/aad1bf888ab7b5808898ee5fe2228bb8bb4e4cf1
-     */
-    private function includeBootstrapFiles(): void
+    private function resolveReturnCode(): int
     {
-        $bootstrapFiles = $this->parameterProvider->provideArrayParameter(Option::BOOTSTRAP_FILES);
-
-        foreach ($bootstrapFiles as $bootstrapFile) {
-            if (! is_file($bootstrapFile)) {
-                throw new ShouldNotHappenException('Bootstrap file %s does not exist.', $bootstrapFile);
-            }
-
-            try {
-                require_once $bootstrapFile;
-            } catch (Throwable $throwable) {
-                $errorMessage = sprintf(
-                    '"%s" thrown in "%s" on line %d while loading bootstrap file %s: %s',
-                    get_class($throwable),
-                    $throwable->getFile(),
-                    $throwable->getLine(),
-                    $bootstrapFile,
-                    $throwable->getMessage()
-                );
-
-                throw new ShouldNotHappenException($errorMessage);
-            }
+        // some errors were found → fail
+        if ($this->errorAndDiffCollector->getErrors() !== []) {
+            return ShellCode::ERROR;
         }
+
+        // inverse error code for CI dry-run
+        if (! $this->configuration->isDryRun()) {
+            return ShellCode::SUCCESS;
+        }
+
+        return $this->errorAndDiffCollector->getFileDiffsCount() === 0 ? ShellCode::SUCCESS : ShellCode::ERROR;
     }
 }

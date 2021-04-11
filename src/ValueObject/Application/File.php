@@ -18,10 +18,26 @@ final class File
      */
     private $fileContent;
 
+    /**
+     * @var bool
+     */
+    private $hasChanged = false;
+
+    /**
+     * @var string
+     */
+    private $originalFileContent;
+
+    /**
+     * @var \Rector\Core\ValueObject\Reporting\FileDiff|null
+     */
+    private $fileDiff;
+
     public function __construct(SmartFileInfo $smartFileInfo, string $fileContent)
     {
         $this->smartFileInfo = $smartFileInfo;
         $this->fileContent = $fileContent;
+        $this->originalFileContent = $fileContent;
     }
 
     public function getSmartFileInfo(): SmartFileInfo
@@ -34,8 +50,33 @@ final class File
         return $this->fileContent;
     }
 
-    public function changeFileContent(string $fileContent): void
+    public function changeFileContent(string $newFileContent): void
     {
-        $this->fileContent = $fileContent;
+        if ($this->fileContent === $newFileContent) {
+            return;
+        }
+
+        $this->fileContent = $newFileContent;
+        $this->hasChanged = true;
+    }
+
+    public function getOriginalFileContent(): string
+    {
+        return $this->originalFileContent;
+    }
+
+    public function hasChanged(): bool
+    {
+        return $this->hasChanged;
+    }
+
+    public function setFileDiff(\Rector\Core\ValueObject\Reporting\FileDiff $fileDiff): void
+    {
+        $this->fileDiff = $fileDiff;
+    }
+
+    public function getFileDiff(): ?\Rector\Core\ValueObject\Reporting\FileDiff
+    {
+        return $this->fileDiff;
     }
 }

@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\NonPhpFile\Source;
+namespace Rector\Core\Tests\Application\ApplicationFileProcessor\Source;
 
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TextNonPhpFileProcessor implements FileProcessorInterface
 {
@@ -24,6 +23,9 @@ final class TextNonPhpFileProcessor implements FileProcessorInterface
         return $fileInfo->hasSuffixes($this->getSupportedFileExtensions());
     }
 
+    /**
+     * @return string[]
+     */
     public function getSupportedFileExtensions(): array
     {
         return ['txt'];

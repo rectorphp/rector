@@ -7,6 +7,7 @@ namespace Rector\Composer\Application\FileProcessor;
 use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
 
@@ -62,6 +63,11 @@ final class ComposerFileProcessor implements FileProcessorInterface
     public function supports(File $file): bool
     {
         $fileInfo = $file->getSmartFileInfo();
+
+        if (StaticPHPUnitEnvironment::isPHPUnitRun() && $fileInfo->hasSuffixes(['json'])) {
+            return true;
+        }
+
         return $fileInfo->getRealPath() === getcwd() . '/composer.json';
     }
 
