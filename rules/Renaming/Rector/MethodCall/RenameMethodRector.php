@@ -17,6 +17,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Renaming\Configuration\MethodCallRenameCollector;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
@@ -44,9 +45,15 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
      */
     private $classManipulator;
 
-    public function __construct(ClassManipulator $classManipulator)
+    /**
+     * @var MethodCallRenameCollector
+     */
+    private $methodCallRenameCollector;
+
+    public function __construct(ClassManipulator $classManipulator, MethodCallRenameCollector $methodCallRenameCollector)
     {
         $this->classManipulator = $classManipulator;
+        $this->methodCallRenameCollector = $methodCallRenameCollector;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -130,6 +137,10 @@ CODE_SAMPLE
         Assert::allIsInstanceOf($methodCallRenames, MethodCallRenameInterface::class);
 
         $this->methodCallRenames = $methodCallRenames;
+
+        foreach ($methodCallRenames as $methodCallRename) {
+            $this->methodCallRenameCollector->addMethodCallRename($methodCallRename);
+        }
     }
 
     /**

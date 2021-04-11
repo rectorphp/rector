@@ -106,10 +106,9 @@ final class ProcessCommand extends Command
         $this->symfonyStyle = $symfonyStyle;
         $this->phpFilesFinder = $phpFilesFinder;
         $this->missingRectorRulesReporter = $missingRectorRulesReporter;
-
-        parent::__construct();
         $this->parameterProvider = $parameterProvider;
         $this->nonPhpFileProcessorService = $nonPhpFileProcessorService;
+        parent::__construct();
     }
 
     protected function configure(): void
