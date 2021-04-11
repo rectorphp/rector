@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Application;
 
-use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
@@ -28,23 +28,23 @@ final class ApplicationFileProcessor
     private $configuration;
 
     /**
-     * @var ErrorAndDiffCollector
+     * @var FileDiffFileDecorator
      */
-    private $errorAndDiffCollector;
+    private $fileDiffFileDecorator;
 
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
     public function __construct(
-        ErrorAndDiffCollector $errorAndDiffCollector,
         Configuration $configuration,
         SmartFileSystem $smartFileSystem,
+        FileDiffFileDecorator $fileDiffFileDecorator,
         array $fileProcessors = []
     ) {
         $this->fileProcessors = $fileProcessors;
         $this->smartFileSystem = $smartFileSystem;
-        $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->configuration = $configuration;
+        $this->fileDiffFileDecorator = $fileDiffFileDecorator;
     }
 
     /**
@@ -53,29 +53,19 @@ final class ApplicationFileProcessor
     public function run(array $files): void
     {
         $this->processFiles($files);
+        $this->fileDiffFileDecorator->decorate($files);
+
+        if ($this->configuration->isDryRun()) {
+            return;
+        }
 
         foreach ($files as $file) {
             if (! $file->hasChanged()) {
                 continue;
             }
 
-            // decorate file diffs
-            $this->errorAndDiffCollector->addFileDiff($file, $file->getOriginalFileContent(), $file->getFileContent());
-
-            if ($this->configuration->isDryRun()) {
-                return;
-            }
-
             $this->printFile($file);
         }
-    }
-
-    private function printFile(File $file): void
-    {
-        $fileInfo = $file->getSmartFileInfo();
-
-        $this->smartFileSystem->dumpFile($fileInfo->getPathname(), $file->getFileContent());
-        $this->smartFileSystem->chmod($fileInfo->getRealPath(), $fileInfo->getPerms());
     }
 
     /**
@@ -92,5 +82,13 @@ final class ApplicationFileProcessor
                 $fileProcessor->process($file);
             }
         }
+    }
+
+    private function printFile(File $file): void
+    {
+        $smartFileInfo = $file->getSmartFileInfo();
+
+        $this->smartFileSystem->dumpFile($smartFileInfo->getPathname(), $file->getFileContent());
+        $this->smartFileSystem->chmod($smartFileInfo->getRealPath(), $smartFileInfo->getPerms());
     }
 }

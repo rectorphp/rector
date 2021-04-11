@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObject\Application;
 
+use Rector\Core\ValueObject\Reporting\FileDiff;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class File
@@ -29,7 +30,7 @@ final class File
     private $originalFileContent;
 
     /**
-     * @var \Rector\Core\ValueObject\Reporting\FileDiff|null
+     * @var FileDiff|null
      */
     private $fileDiff;
 
@@ -70,12 +71,12 @@ final class File
         return $this->hasChanged;
     }
 
-    public function setFileDiff(\Rector\Core\ValueObject\Reporting\FileDiff $fileDiff): void
+    public function setFileDiff(FileDiff $fileDiff): void
     {
         $this->fileDiff = $fileDiff;
     }
 
-    public function getFileDiff(): ?\Rector\Core\ValueObject\Reporting\FileDiff
+    public function getFileDiff(): ?FileDiff
     {
         return $this->fileDiff;
     }

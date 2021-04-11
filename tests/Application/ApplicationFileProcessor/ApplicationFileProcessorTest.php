@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Core\Tests\Application\ApplicationFileProcessor;
 
-use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileFactory;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\ValueObjectFactory\ProcessResultFactory;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
 final class ApplicationFileProcessorTest extends AbstractKernelTestCase
@@ -19,14 +19,14 @@ final class ApplicationFileProcessorTest extends AbstractKernelTestCase
     private $applicationFileProcessor;
 
     /**
-     * @var ErrorAndDiffCollector
-     */
-    private $errorAndDiffCollector;
-
-    /**
      * @var FileFactory
      */
     private $fileFactory;
+
+    /**
+     * @var ProcessResultFactory
+     */
+    private $processResultFactory;
 
     protected function setUp(): void
     {
@@ -37,8 +37,8 @@ final class ApplicationFileProcessorTest extends AbstractKernelTestCase
         $configuration->setIsDryRun(true);
 
         $this->applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
-        $this->errorAndDiffCollector = $this->getService(ErrorAndDiffCollector::class);
         $this->fileFactory = $this->getService(FileFactory::class);
+        $this->processResultFactory = $this->getService(ProcessResultFactory::class);
     }
 
     public function test(): void
@@ -48,15 +48,7 @@ final class ApplicationFileProcessorTest extends AbstractKernelTestCase
 
         $this->applicationFileProcessor->run($files);
 
-        $fileDiffs = [];
-        foreach ($files as $file) {
-            if ($file->getFileDiff() === null) {
-                continue;
-            }
-
-            $fileDiffs[] = $fileDiffs;
-        }
-
-        $this->assertCount(1, $fileDiffs);
+        $processResult = $this->processResultFactory->create($files);
+        $this->assertCount(1, $processResult->getFileDiffs());
     }
 }

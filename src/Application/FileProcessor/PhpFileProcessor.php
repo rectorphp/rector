@@ -98,20 +98,25 @@ final class PhpFileProcessor implements FileProcessorInterface
 
     public function process(File $file): void
     {
+        // resolve later
         $this->refactor($file);
         $this->postFileRefactor($file);
 
         $smartFileInfo = $file->getSmartFileInfo();
         $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
 
-        // @todo not printable yet..., wait for all the traverse
-        $changedContent = $this->formatPerservingPrinter->printParsedStmstAndTokens(
-            $smartFileInfo,
-            $parsedStmtsAndTokens
-        );
-        $file->changeFileContent($changedContent);
+        if ($this->configuration->isDryRun()) {
+            $changedContent = $this->formatPerservingPrinter->printParsedStmstAndTokensToString(
+                $parsedStmtsAndTokens
+            );
+        } else {
+            $changedContent = $this->formatPerservingPrinter->printParsedStmstAndTokens(
+                $smartFileInfo,
+                $parsedStmtsAndTokens
+            );
+        }
 
-        // change content
+        $file->changeFileContent($changedContent);
     }
 
     public function supports(File $file): bool
@@ -128,7 +133,7 @@ final class PhpFileProcessor implements FileProcessorInterface
         return $this->configuration->getFileExtensions();
     }
 
-    public function refactor(File $file): void
+    private function refactor(File $file): void
     {
         $this->parseFileInfoToLocalCache($file->getSmartFileInfo());
         $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($file->getSmartFileInfo());
@@ -161,21 +166,6 @@ final class PhpFileProcessor implements FileProcessorInterface
         // store tokens by absolute path, so we don't have to print them right now
         $parsedStmtsAndTokens = $this->parseAndTraverseFileInfoToNodes($fileInfo);
         $this->tokensByFilePathStorage->addForRealPath($fileInfo, $parsedStmtsAndTokens);
-    }
-
-    private function printToFile(SmartFileInfo $smartFileInfo): string
-    {
-        $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
-        return $this->formatPerservingPrinter->printParsedStmstAndTokens($smartFileInfo, $parsedStmtsAndTokens);
-    }
-
-    /**
-     * See https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516.
-     */
-    private function printToString(SmartFileInfo $smartFileInfo): string
-    {
-        $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
-        return $this->formatPerservingPrinter->printParsedStmstAndTokensToString($parsedStmtsAndTokens);
     }
 
     private function postFileRefactor(File $file): void

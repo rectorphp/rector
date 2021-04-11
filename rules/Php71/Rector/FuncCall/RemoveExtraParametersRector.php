@@ -73,6 +73,10 @@ final class RemoveExtraParametersRector extends AbstractRector
         $maximumAllowedParameterCount = $this->resolveMaximumAllowedParameterCount($functionLikeReflection);
 
         $numberOfArguments = count($node->args);
+        if ($numberOfArguments <= $maximumAllowedParameterCount) {
+            return null;
+        }
+
         for ($i = $maximumAllowedParameterCount; $i <= $numberOfArguments; ++$i) {
             unset($node->args[$i]);
         }

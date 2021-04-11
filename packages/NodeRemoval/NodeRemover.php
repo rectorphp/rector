@@ -95,11 +95,7 @@ final class NodeRemover
      */
     public function removeParam(ClassMethod $classMethod, $keyOrParam): void
     {
-        if ($keyOrParam instanceof Param) {
-            $key = $keyOrParam->getAttribute(AttributeKey::PARAMETER_POSITION);
-        } else {
-            $key = $keyOrParam;
-        }
+        $key = $keyOrParam instanceof Param ? $keyOrParam->getAttribute(AttributeKey::PARAMETER_POSITION) : $keyOrParam;
 
         if ($classMethod->params === null) {
             throw new ShouldNotHappenException();

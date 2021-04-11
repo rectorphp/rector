@@ -7,15 +7,13 @@ namespace Rector\Core\Application;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
-use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
+use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\Contract\PostRunnerInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\Reporting\FileDiff;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -49,11 +47,6 @@ final class RectorApplication
      * @var SmartFileInfo[]
      */
     private $notParsedFiles = [];
-
-    /**
-     * @var PostRunnerInterface[]
-     */
-    private $postRunners = [];
 
     /**
      * @var SymfonyStyle
@@ -101,13 +94,10 @@ final class RectorApplication
     private $dynamicSourceLocatorDecorator;
 
     /**
-     * @var FileDiffFactory
+     * @var FileDiffFileDecorator
      */
-    private $fileDiffFactory;
+    private $fileDiffFileDecorator;
 
-    /**
-     * @param PostRunnerInterface[] $postRunners
-     */
     public function __construct(
         Configuration $configuration,
         ErrorAndDiffCollector $errorAndDiffCollector,
@@ -118,8 +108,7 @@ final class RectorApplication
         SymfonyStyle $symfonyStyle,
         PrivatesAccessor $privatesAccessor,
         DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator,
-        FileDiffFactory $fileDiffFactory,
-        array $postRunners
+        FileDiffFileDecorator $fileDiffFileDecorator
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
@@ -129,9 +118,8 @@ final class RectorApplication
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->privatesAccessor = $privatesAccessor;
-        $this->postRunners = $postRunners;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
-        $this->fileDiffFactory = $fileDiffFactory;
+        $this->fileDiffFileDecorator = $fileDiffFileDecorator;
     }
 
     /**
@@ -168,9 +156,9 @@ final class RectorApplication
 
         // 4. print to file or string
         foreach ($phpFileInfos as $phpFileInfo) {
-            // cannot print file with errors, as print would break everything to orignal nodes
-            if ($this->errorAndDiffCollector->hasErrors($phpFileInfo)) {
-                $this->advance($phpFileInfo, 'printing');
+            // cannot print file with errors, as print would break everything to original nodes
+            if ($this->errorAndDiffCollector->hasSmartFileErrors($phpFileInfo)) {
+                $this->advance($phpFileInfo, 'printing skipped due error');
                 continue;
             }
 
@@ -185,11 +173,6 @@ final class RectorApplication
 
         // 4. remove and add files
         $this->removedAndAddedFilesProcessor->run();
-
-        // 5. various extensions on finish
-        foreach ($this->postRunners as $postRunner) {
-            $postRunner->run();
-        }
     }
 
     private function prepareProgressBar(int $fileCount): void
@@ -274,19 +257,13 @@ final class RectorApplication
             return;
         }
 
-//        $oldContents = $fileInfo->getContents();
-
         $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString($fileInfo)
             : $this->fileProcessor->printToFile($fileInfo);
 
         $file = new File($fileInfo, $fileInfo->getContents());
         $file->changeFileContent($newContent);
 
-        $fileDiff = $this->fileDiffFactory->createFileDiff($file, $file->getOriginalFileContent(), $newContent);
-        if ($fileDiff instanceof FileDiff) {
-            $file->setFileDiff($fileDiff);
-        }
-//        $this->errorAndDiffCollector->addFileDiff($file, $newContent, $oldContents);
+        $this->fileDiffFileDecorator->decorate([$file]);
     }
 
     /**

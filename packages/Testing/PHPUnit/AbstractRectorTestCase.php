@@ -9,7 +9,6 @@ use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
 use Psr\Container\ContainerInterface;
-use Rector\Composer\Modifier\ComposerModifier;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
@@ -23,7 +22,6 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Contract\RectorTestInterface;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
-use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
@@ -76,16 +74,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
     private $dynamicSourceLocatorProvider;
 
     /**
-     * @var ComposerJsonFactory
-     */
-    private $composerJsonFactory;
-
-    /**
-     * @var ComposerModifier
-     */
-    private $composerModifier;
-
-    /**
      * @var ApplicationFileProcessor
      */
     private $applicationFileProcessor;
@@ -105,13 +93,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);
 
         $this->applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
-
         $this->parameterProvider = $this->getService(ParameterProvider::class);
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
         $this->dynamicSourceLocatorProvider = $this->getService(DynamicSourceLocatorProvider::class);
-
-        $this->composerJsonFactory = $this->getService(ComposerJsonFactory::class);
-        $this->composerModifier = $this->getService(ComposerModifier::class);
 
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
@@ -145,11 +129,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
 
             $this->assertJsonStringEqualsJsonString($expectedFileInfo->getContents(), $changedContent);
         } else {
-            // needed for PHPStan, because the analyzed file is just created in /temp - need for trait and similar deps
-            /** @var NodeScopeResolver $nodeScopeResolver */
-            $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
-            $nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
-
             $this->dynamicSourceLocatorProvider->setFileInfo($inputFileInfo);
 
             $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
@@ -229,9 +208,16 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         return Strings::replace($string, '#\r\n|\r|\n#', "\n");
     }
 
-    private function processFileInfo(SmartFileInfo $originalFileInfo): string
+    private function processFileInfo(SmartFileInfo $fileInfo): string
     {
-        $file = new File($originalFileInfo, $originalFileInfo->getContents());
+        // needed for PHPStan, because the analyzed file is just created in /temp - need for trait and similar deps
+        /** @var NodeScopeResolver $nodeScopeResolver */
+        $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
+        $nodeScopeResolver->setAnalysedFiles([$fileInfo->getRealPath()]);
+
+        $this->dynamicSourceLocatorProvider->setFileInfo($fileInfo);
+
+        $file = new File($fileInfo, $fileInfo->getContents());
         $this->applicationFileProcessor->run([$file]);
 
         return $file->getFileContent();
