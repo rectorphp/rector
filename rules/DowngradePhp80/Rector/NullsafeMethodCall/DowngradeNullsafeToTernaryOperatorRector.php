@@ -50,11 +50,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $temp_var = new Node\Expr\Variable('_');
+        $tempVar = new Node\Expr\Variable('_');
         $called = $node instanceof NullsafeMethodCall
-            ? new MethodCall($temp_var, $node->name, $node->args)
-            : new PropertyFetch($temp_var, $node->name);
+            ? new MethodCall($tempVar, $node->name, $node->args)
+            : new PropertyFetch($tempVar, $node->name);
 
-        return new Ternary(new Assign($temp_var, $node->var), $called, $this->nodeFactory->createNull());
+        return new Ternary(new Assign($tempVar, $node->var), $called, $this->nodeFactory->createNull());
     }
 }
