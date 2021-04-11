@@ -9,9 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
@@ -42,13 +40,10 @@ final class ParsedNodeCollector
         Trait_::class,
         ClassMethod::class,
         // simply collected
-        New_::class,
         StaticCall::class,
         MethodCall::class,
         // for array callable - [$this, 'someCall']
         Array_::class,
-        // for unused classes
-        Param::class,
     ];
 
     /**
@@ -75,21 +70,6 @@ final class ParsedNodeCollector
      * @var StaticCall[]
      */
     private $staticCalls = [];
-
-    /**
-     * @var New_[]
-     */
-    private $news = [];
-
-    /**
-     * @var Param[]
-     */
-    private $params = [];
-
-    /**
-     * @var ClassConstFetch[]
-     */
-    private $classConstFetches = [];
 
     /**
      * @var NodeNameResolver
@@ -197,20 +177,6 @@ final class ParsedNodeCollector
             $this->staticCalls[] = $node;
             return;
         }
-
-        if ($node instanceof New_) {
-            $this->news[] = $node;
-            return;
-        }
-
-        if ($node instanceof Param) {
-            $this->params[] = $node;
-            return;
-        }
-
-        if ($node instanceof ClassConstFetch) {
-            $this->classConstFetches[] = $node;
-        }
     }
 
     public function findClassConstByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
@@ -229,30 +195,6 @@ final class ParsedNodeCollector
         $constantName = $this->nodeNameResolver->getName($classConstFetch->name);
 
         return $this->findClassConstant($class, $constantName);
-    }
-
-    /**
-     * @return ClassConstFetch[]
-     */
-    public function getClassConstFetches(): array
-    {
-        return $this->classConstFetches;
-    }
-
-    /**
-     * @return Param[]
-     */
-    public function getParams(): array
-    {
-        return $this->params;
-    }
-
-    /**
-     * @return New_[]
-     */
-    public function getNews(): array
-    {
-        return $this->news;
     }
 
     /**
