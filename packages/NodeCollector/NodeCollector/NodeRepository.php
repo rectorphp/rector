@@ -19,7 +19,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -39,7 +38,6 @@ use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -112,11 +110,6 @@ final class NodeRepository
     private $attributes = [];
 
     /**
-     * @var array<string, Name[]>
-     */
-    private $names = [];
-
-    /**
      * @var ReflectionProvider
      */
     private $reflectionProvider;
@@ -164,11 +157,6 @@ final class NodeRepository
         if ($node instanceof Attribute) {
             $attributeClass = $this->nodeNameResolver->getName($node->name);
             $this->attributes[$attributeClass][] = $node;
-        }
-
-        if ($node instanceof Name) {
-            $name = $this->nodeNameResolver->getName($node);
-            $this->names[$name][] = $node;
         }
     }
 
@@ -440,33 +428,6 @@ final class NodeRepository
     }
 
     /**
-     * @return Name[]
-     */
-    public function findNames(string $name): array
-    {
-        return $this->names[$name] ?? [];
-    }
-
-    public function findClassMethodConstructorByNew(New_ $new): ?ClassMethod
-    {
-        $className = $this->nodeTypeResolver->resolve($new->class);
-        if (! $className instanceof TypeWithClassName) {
-            return null;
-        }
-
-        $constructorClassMethod = $this->findClassMethod($className->getClassName(), MethodName::CONSTRUCT);
-        if (! $constructorClassMethod instanceof ClassMethod) {
-            return null;
-        }
-
-        if ($constructorClassMethod->getParams() === []) {
-            return null;
-        }
-
-        return $constructorClassMethod;
-    }
-
-    /**
      * @param PropertyFetch|StaticPropertyFetch $expr
      */
     public function findPropertyByPropertyFetch(Expr $expr): ?Property
@@ -516,14 +477,6 @@ final class NodeRepository
     }
 
     /**
-     * @return Param[]
-     */
-    public function getParams(): array
-    {
-        return $this->parsedNodeCollector->getParams();
-    }
-
-    /**
      * @return New_[]
      */
     public function getNews(): array
@@ -537,14 +490,6 @@ final class NodeRepository
     public function getStaticCalls(): array
     {
         return $this->parsedNodeCollector->getStaticCalls();
-    }
-
-    /**
-     * @return ClassConstFetch[]
-     */
-    public function getClassConstFetches(): array
-    {
-        return $this->parsedNodeCollector->getClassConstFetches();
     }
 
     public function resolveCallerClassName(MethodCall $methodCall): ?string

@@ -47,8 +47,6 @@ final class ParsedNodeCollector
         MethodCall::class,
         // for array callable - [$this, 'someCall']
         Array_::class,
-        // for unused classes
-        Param::class,
     ];
 
     /**
@@ -80,16 +78,6 @@ final class ParsedNodeCollector
      * @var New_[]
      */
     private $news = [];
-
-    /**
-     * @var Param[]
-     */
-    private $params = [];
-
-    /**
-     * @var ClassConstFetch[]
-     */
-    private $classConstFetches = [];
 
     /**
      * @var NodeNameResolver
@@ -202,15 +190,6 @@ final class ParsedNodeCollector
             $this->news[] = $node;
             return;
         }
-
-        if ($node instanceof Param) {
-            $this->params[] = $node;
-            return;
-        }
-
-        if ($node instanceof ClassConstFetch) {
-            $this->classConstFetches[] = $node;
-        }
     }
 
     public function findClassConstByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
@@ -229,22 +208,6 @@ final class ParsedNodeCollector
         $constantName = $this->nodeNameResolver->getName($classConstFetch->name);
 
         return $this->findClassConstant($class, $constantName);
-    }
-
-    /**
-     * @return ClassConstFetch[]
-     */
-    public function getClassConstFetches(): array
-    {
-        return $this->classConstFetches;
-    }
-
-    /**
-     * @return Param[]
-     */
-    public function getParams(): array
-    {
-        return $this->params;
     }
 
     /**
