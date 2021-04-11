@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\NullsafeMethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
@@ -29,8 +30,8 @@ $dateAsString = $booking->startDate?->dateTimeString;
 CODE_SAMPLE
 ,
                 <<<'CODE_SAMPLE'
-$dateAsString = $booking->getStartDate() ? $booking->getStartDate()->asDateTimeString() : null;
-$dateAsString = $booking->startDate ? $booking->startDate->dateTimeString : null;
+$dateAsString = ($_ = $booking->getStartDate()) ? $_->asDateTimeString() : null;
+$dateAsString = ($_ = $booking->startDate) ? $_->dateTimeString : null;
 CODE_SAMPLE
             ),
         ]);
@@ -49,10 +50,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $temp_var = new Node\Expr\Variable('_');
         $called = $node instanceof NullsafeMethodCall
-            ? new MethodCall($node->var, $node->name, $node->args)
-            : new PropertyFetch($node->var, $node->name);
+            ? new MethodCall($temp_var, $node->name, $node->args)
+            : new PropertyFetch($temp_var, $node->name);
 
-        return new Ternary($node->var, $called, $this->nodeFactory->createNull());
+        return new Ternary(new Assign($temp_var, $node->var), $called, $this->nodeFactory->createNull());
     }
 }

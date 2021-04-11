@@ -4927,8 +4927,8 @@ Change nullsafe operator to ternary operator rector
 ```diff
 -$dateAsString = $booking->getStartDate()?->asDateTimeString();
 -$dateAsString = $booking->startDate?->dateTimeString;
-+$dateAsString = $booking->getStartDate() ? $booking->getStartDate()->asDateTimeString() : null;
-+$dateAsString = $booking->startDate ? $booking->startDate->dateTimeString : null;
++$dateAsString = ($_ = $booking->getStartDate()) ? $_->asDateTimeString() : null;
++$dateAsString = ($_ = $booking->startDate) ? $_->dateTimeString : null;
 ```
 
 <br>
