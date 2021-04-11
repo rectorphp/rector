@@ -13,9 +13,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\Application\RectorError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ConsoleOutputFormatter implements OutputFormatterInterface
 {
@@ -174,7 +172,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     {
         $regex = '#' . preg_quote(getcwd(), '#') . '/#';
         $errorMessage = Strings::replace($errorMessage, $regex, '');
-        return $errorMessage = Strings::replace($errorMessage, self::ON_LINE_REGEX, ':');
+        return Strings::replace($errorMessage, self::ON_LINE_REGEX, ':');
     }
 
     private function reportRemovedNodes(ErrorAndDiffCollector $errorAndDiffCollector): void
@@ -184,38 +182,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         }
 
         $message = sprintf('%d nodes were removed', $errorAndDiffCollector->getRemovedNodeCount());
-
         $this->symfonyStyle->warning($message);
-
-        if ($this->symfonyStyle->isVeryVerbose()) {
-            $i = 0;
-            foreach ($errorAndDiffCollector->getRemovedNodes() as $removedNode) {
-                /** @var SmartFileInfo $fileInfo */
-                $fileInfo = $removedNode->getAttribute(AttributeKey::FILE_INFO);
-                $message = sprintf(
-                    '<options=bold>%d) %s:%d</>',
-                    ++$i,
-                    $fileInfo->getRelativeFilePath(),
-                    $removedNode->getStartLine()
-                );
-
-                $this->symfonyStyle->writeln($message);
-
-                $printedNode = $this->betterStandardPrinter->print($removedNode);
-
-                // color red + prefix with "-" to visually demonstrate removal
-                $printedNode = '-' . Strings::replace($printedNode, '#\n#', "\n-");
-                $printedNode = $this->colorTextToRed($printedNode);
-
-                $this->symfonyStyle->writeln($printedNode);
-                $this->symfonyStyle->newLine(1);
-            }
-        }
-    }
-
-    private function colorTextToRed(string $text): string
-    {
-        return '<fg=red>' . $text . '</fg=red>';
     }
 
     private function createSuccessMessage(ErrorAndDiffCollector $errorAndDiffCollector): string
@@ -228,7 +195,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         }
 
         return sprintf(
-            '%d file%s %s by Rector.',
+            '%d file%s %s by Rector',
             $changeCount,
             $changeCount > 1 ? 's' : '',
             $this->configuration->isDryRun() ? 'would have changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed'
