@@ -280,6 +280,8 @@ parameters:
             paths:
                 - bin/rector.php
                 - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
+                - src/Application/FileProcessor/PhpFileProcessor.php
+                - tests/NonPhpFile/NeonMethodCallRenamer/NeonMethodCallRenamerTest.php
 
         -
             message: '#Function "class_exists\(\)" cannot be used/left in the code#'
@@ -512,8 +514,3 @@ parameters:
             message: '#Do not inherit from abstract class, better use composition#'
             paths:
                 - src/PhpParser/Parser/FunctionLikeParser.php
-
-        -
-            message: '#Unreachable statement \- code above always terminates#'
-            paths:
-                - src/Application/FileProcessor/PhpFileProcessor.php
