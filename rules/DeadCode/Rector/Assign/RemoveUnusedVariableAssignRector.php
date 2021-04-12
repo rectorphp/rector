@@ -15,8 +15,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -33,9 +33,18 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
      */
     private $reservedKeywordAnalyzer;
 
-    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
+    /**
+     * @var CompactFuncCallAnalyzer
+     */
+    private $compactFuncCallAnalyzer;
+
+    public function __construct(
+        ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
+        CompactFuncCallAnalyzer $compactFuncCallAnalyzer
+    )
     {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
+        $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -125,7 +134,7 @@ CODE_SAMPLE
             }
 
             if ($node instanceof FuncCall) {
-                return $this->isInCompact($node, $variable);
+                return $this->compactFuncCallAnalyzer->isInCompact($node, $variable);
             }
 
             return false;
@@ -163,31 +172,6 @@ CODE_SAMPLE
             });
             if ($previousAssign instanceof Assign) {
                 return $this->isUsed($assign, $variable);
-            }
-        }
-
-        return false;
-    }
-
-    private function isInCompact(FuncCall $funcCall, Variable $variable): bool
-    {
-        if (! $this->isName($funcCall, 'compact')) {
-            return false;
-        }
-
-        $variableName = $variable->name;
-        if (! is_string($variableName)) {
-            return false;
-        }
-
-        $args = $funcCall->args;
-        foreach ($args as $arg) {
-            if (! $arg->value instanceof String_) {
-                continue;
-            }
-
-            if ($arg->value->value === $variableName) {
-                return true;
             }
         }
 
