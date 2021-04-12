@@ -9,8 +9,10 @@ use Rector\CodingStyle\ValueObject\PreferenceSelfThis;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
+use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector;
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
@@ -44,16 +46,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::CODE_QUALITY,
         SetList::CODE_QUALITY_STRICT,
         SetList::DEAD_CODE,
-        SetList::NETTE_UTILS_CODE_QUALITY,
         SetList::PRIVATIZATION,
         SetList::NAMING,
         SetList::TYPE_DECLARATION,
-        SetList::PHPUNIT_CODE_QUALITY,
         SetList::PHP_71,
         SetList::PHP_72,
         SetList::PHP_73,
         SetList::EARLY_RETURN,
         SetList::TYPE_DECLARATION_STRICT,
+        NetteSetList::NETTE_UTILS_CODE_QUALITY,
+        PHPUnitSetList::PHPUNIT_CODE_QUALITY,
     ]);
 
     $parameters->set(Option::PATHS, [
