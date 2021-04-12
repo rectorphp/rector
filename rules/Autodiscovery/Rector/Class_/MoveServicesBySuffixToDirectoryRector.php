@@ -97,11 +97,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-//        $classLikes = $this->betterNodeFinder->findClassLikes($node);
-//        if ($classLikes === []) {
-//            return null;
-//        }
-
         $this->processGroupNamesBySuffix($this->file->getSmartFileInfo(), $this->file, $this->groupNamesBySuffix);
 
         return null;
