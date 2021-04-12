@@ -13,6 +13,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Printer\TokenAwarePrinter;
 use Rector\Core\ValueObject\Application\File;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -78,6 +79,11 @@ final class PhpFileProcessor implements FileProcessorInterface
      */
     private $fileDiffFileDecorator;
 
+    /**
+     * @var TokenAwarePrinter
+     */
+    private $tokenAwarePrinter;
+
     public function __construct(
         Configuration $configuration,
         ErrorAndDiffCollector $errorAndDiffCollector,
@@ -86,7 +92,8 @@ final class PhpFileProcessor implements FileProcessorInterface
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         SymfonyStyle $symfonyStyle,
         PrivatesAccessor $privatesAccessor,
-        FileDiffFileDecorator $fileDiffFileDecorator
+        FileDiffFileDecorator $fileDiffFileDecorator,
+        TokenAwarePrinter $tokenAwarePrinter
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
@@ -97,6 +104,7 @@ final class PhpFileProcessor implements FileProcessorInterface
         $this->privatesAccessor = $privatesAccessor;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
         $this->configuration = $configuration;
+        $this->tokenAwarePrinter = $tokenAwarePrinter;
     }
 
     /**
@@ -229,8 +237,8 @@ final class PhpFileProcessor implements FileProcessorInterface
             return;
         }
 
-        $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString($fileInfo)
-            : $this->fileProcessor->printToFile($fileInfo);
+        $newContent = $this->configuration->isDryRun() ? $this->tokenAwarePrinter->printToString($fileInfo)
+            : $this->tokenAwarePrinter->printToFile($fileInfo);
 
         $file->changeFileContent($newContent);
         $this->fileDiffFileDecorator->decorate([$file]);

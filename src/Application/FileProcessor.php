@@ -100,21 +100,6 @@ final class FileProcessor
         $this->tokensByFilePathStorage->addForRealPath($smartFileInfo, $parsedStmtsAndTokens);
     }
 
-    public function printToFile(SmartFileInfo $smartFileInfo): string
-    {
-        $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
-        return $this->formatPerservingPrinter->printParsedStmstAndTokens($smartFileInfo, $parsedStmtsAndTokens);
-    }
-
-    /**
-     * See https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516.
-     */
-    public function printToString(SmartFileInfo $smartFileInfo): string
-    {
-        $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
-        return $this->formatPerservingPrinter->printParsedStmstAndTokensToString($parsedStmtsAndTokens);
-    }
-
     public function refactor(File $file): void
     {
         $this->parseFileInfoToLocalCache($file);
