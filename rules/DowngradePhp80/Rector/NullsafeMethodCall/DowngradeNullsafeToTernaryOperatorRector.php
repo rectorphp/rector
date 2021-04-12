@@ -12,6 +12,8 @@ use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php70\NodeAnalyzer\VariableNaming;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -20,6 +22,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeNullsafeToTernaryOperatorRector extends AbstractRector
 {
+    /**
+     * @var VariableNaming
+     */
+    public $variableNaming;
+
+    public function __construct(VariableNaming $variableNaming)
+    {
+        $this->variableNaming = $variableNaming;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change nullsafe operator to ternary operator rector', [
@@ -50,7 +62,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $tempVar = new Node\Expr\Variable('_');
+        $tempVarName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($node->var, $node->getAttribute(AttributeKey::SCOPE), '_');
+        $tempVar = new Node\Expr\Variable($tempVarName);
         $called = $node instanceof NullsafeMethodCall
             ? new MethodCall($tempVar, $node->name, $node->args)
             : new PropertyFetch($tempVar, $node->name);
