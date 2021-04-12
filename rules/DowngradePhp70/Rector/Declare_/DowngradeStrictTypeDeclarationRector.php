@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\Declare_;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Declare_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -59,9 +58,6 @@ CODE_SAMPLE
         $declares = $declare->declares;
 
         foreach ($declares as $declare) {
-            if (! $declare->key instanceof Identifier) {
-                continue;
-            }
             if (! $this->isName($declare->key, 'strict_types')) {
                 continue;
             }
