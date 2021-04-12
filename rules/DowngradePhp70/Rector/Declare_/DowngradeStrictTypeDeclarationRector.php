@@ -58,10 +58,9 @@ CODE_SAMPLE
         $declares = $declare->declares;
 
         foreach ($declares as $declare) {
-            if (! $this->isName($declare->key, 'strict_types')) {
-                continue;
+            if ($this->isName($declare->key, 'strict_types')) {
+                return false;
             }
-            return false;
         }
 
         return true;
