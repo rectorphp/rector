@@ -36,13 +36,11 @@ final class MissingRectorRulesReporter
             return ! $rector instanceof PostRectorInterface;
         });
 
-        if ($activeRectors !== []) {
-            return null;
+        if ($activeRectors === []) {
+            $this->report();
         }
 
-        $this->report();
-
-        return ShellCode::ERROR;
+        return null;
     }
 
     public function report(): void
