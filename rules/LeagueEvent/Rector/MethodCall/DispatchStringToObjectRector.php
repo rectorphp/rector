@@ -120,7 +120,7 @@ CODE_SAMPLE
         return new New_(new Class_(null, [
             'implements' => $implements,
             'stmts' => $this->createAnonymousEventClassBody(),
-        ]), [$expr]);
+        ]), [new Arg($expr)]);
     }
 
     /**
@@ -132,8 +132,8 @@ CODE_SAMPLE
             new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('name')]),
             new ClassMethod('__construct', [
                 'flags' => Class_::MODIFIER_PUBLIC,
-                'params' => [new Param(new Variable('name'), null, 'string')],
-                'stmts' => [new Expression(new Assign(new Variable('this->name'), new Variable('name')))],
+                'params' => $this->createConstructParams(),
+                'stmts' => [new Expression($this->createConstructAssign())],
             ]),
             new ClassMethod('eventName', [
                 'flags' => Class_::MODIFIER_PUBLIC,
@@ -141,5 +141,20 @@ CODE_SAMPLE
                 'stmts' => [new Return_(new Variable('this->name'))],
             ]),
         ];
+    }
+
+    /**
+     * @return Param[]
+     */
+    private function createConstructParams(): array
+    {
+        return [
+            new Param(new Variable('name'), null, 'string')
+        ];
+    }
+
+    private function createConstructAssign(): Assign
+    {
+        return new Assign(new Variable('this->name'), new Variable('name'));
     }
 }
