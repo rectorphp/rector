@@ -20,7 +20,7 @@ final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractRec
         $this->doTestFileInfo($fixtureFileInfo);
 
         if ($expectedAddedFileWithContent !== null) {
-            $this->assertFileWithContentWasAdded($expectedAddedFileWithContent);
+            $this->assertFileWasAdded($expectedAddedFileWithContent);
         } else {
             $this->assertFileWasNotChanged($this->originalTempFileInfo);
         }

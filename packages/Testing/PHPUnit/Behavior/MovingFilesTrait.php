@@ -20,7 +20,7 @@ trait MovingFilesTrait
         $this->assertFalse($hasFileInfo);
     }
 
-    protected function assertFileWithContentWasAdded(AddedFileWithContent $addedFileWithContent): void
+    protected function assertFileWasAdded(AddedFileWithContent $addedFileWithContent): void
     {
         $this->assertFilesWereAdded([$addedFileWithContent]);
     }

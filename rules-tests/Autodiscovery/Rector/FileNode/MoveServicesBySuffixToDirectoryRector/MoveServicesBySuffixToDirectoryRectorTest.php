@@ -18,7 +18,7 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractRectorTest
     public function test(SmartFileInfo $originalFileInfo, AddedFileWithContent $expectedAddedFileWithContent): void
     {
         $this->doTestFileInfo($originalFileInfo);
-        $this->assertFileWithContentWasAdded($expectedAddedFileWithContent);
+        $this->assertFileWasAdded($expectedAddedFileWithContent);
     }
 
     /**
