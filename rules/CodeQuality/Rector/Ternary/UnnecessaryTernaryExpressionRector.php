@@ -97,21 +97,40 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
     private function processNonBinaryCondition(Expr $ifExpression, Expr $elseExpression, Expr $condition): ?Node
     {
         if ($this->valueResolver->isTrue($ifExpression) && $this->valueResolver->isFalse($elseExpression)) {
-            if ($this->nodeTypeResolver->isStaticType($condition, BooleanType::class)) {
-                return $condition;
-            }
+            return $this->processTrueIfExpressionWithFalseElseExpression($condition);
+        }
+        if (! $this->valueResolver->isFalse($ifExpression)) {
+            return null;
+        }
+        if (! $this->valueResolver->isTrue($elseExpression)) {
+            return null;
+        }
+        return $this->processFalseIfExpressionWithTrueElseExpression($condition);
+    }
 
-            return new Bool_($condition);
+    private function processTrueIfExpressionWithFalseElseExpression(Expr $expr): Expr
+    {
+        if ($this->nodeTypeResolver->isStaticType($expr, BooleanType::class)) {
+            return $expr;
         }
 
-        if ($this->valueResolver->isFalse($ifExpression) && $this->valueResolver->isTrue($elseExpression)) {
-            if ($this->nodeTypeResolver->isStaticType($condition, BooleanType::class)) {
-                return new BooleanNot($condition);
+        return new Bool_($expr);
+    }
+
+    private function processFalseIfExpressionWithTrueElseExpression(Expr $expr): Expr
+    {
+        if ($expr instanceof BooleanNot) {
+            if ($this->nodeTypeResolver->isStaticType($expr->expr, BooleanType::class)) {
+                return $expr->expr;
             }
 
-            return new BooleanNot(new Bool_($condition));
+            return new Bool_($expr->expr);
         }
 
-        return null;
+        if ($this->nodeTypeResolver->isStaticType($expr, BooleanType::class)) {
+            return new BooleanNot($expr);
+        }
+
+        return new BooleanNot(new Bool_($expr));
     }
 }
