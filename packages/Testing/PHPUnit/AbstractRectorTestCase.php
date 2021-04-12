@@ -13,6 +13,7 @@ use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
+use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
@@ -99,6 +100,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
 
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
+
+        /** @var Configuration $configuration */
+        $configuration = $this->getService(Configuration::class);
+        $configuration->setIsDryRun(true);
     }
 
     public function provideConfigFilePath(): string
