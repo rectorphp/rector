@@ -19,6 +19,13 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
     public function test(SmartFileInfo $originalFileInfo, array $expectedFilePathsWithContents): void
     {
         $this->doTestFileInfo($originalFileInfo);
+
+        $expectedFilesCount = count($expectedFilePathsWithContents);
+
+        $movedFiles = $this->removedAndAddedFilesCollector->getMovedFiles();
+        $movedFilesCount = count($movedFiles);
+        $this->assertSame($expectedFilesCount, $movedFilesCount);
+
         $this->assertFilesWereAdded($expectedFilePathsWithContents);
     }
 
