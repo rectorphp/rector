@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\Ternary;
 use PHPStan\Type\BooleanType;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -105,6 +106,14 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         }
 
         if ($this->valueResolver->isFalse($ifExpression) && $this->valueResolver->isTrue($elseExpression)) {
+            if ($condition instanceof BooleanNot) {
+                if ($this->nodeTypeResolver->isStaticType($condition->expr, BooleanType::class)) {
+                    return $condition->expr;
+                }
+
+                return new Bool_($condition->expr);
+            }
+
             if ($this->nodeTypeResolver->isStaticType($condition, BooleanType::class)) {
                 return new BooleanNot($condition);
             }
