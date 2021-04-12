@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp70\Rector\FuncCall;
+namespace Rector\DowngradePhp70\Rector\Declare_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Stmt\Declare_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DowngradePhp70\Rector\FuncCall\DowngradeStrictTypeDeclarationRector\DowngradeStrictTypeDeclarationRectorTest
+ * @see \Rector\Tests\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector\DowngradeStrictTypeDeclarationRectorTest
  */
 final class DowngradeStrictTypeDeclarationRector extends AbstractRector
 {
@@ -20,7 +22,7 @@ final class DowngradeStrictTypeDeclarationRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class];
+        return [Declare_::class];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -45,6 +47,24 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        dump($node);
+        if ($this->shouldSkip($node)) {
+            return null;
+        }
+
         return $node;
+    }
+
+    private function shouldSkip(FuncCall $funcCall): bool
+    {
+        if (! $this->isName($funcCall, 'declare')) {
+            return true;
+        }
+
+        $args   = $funcCall->args;
+        $assign = $args[0];
+
+        dump($assign);
+        return true;
     }
 }
