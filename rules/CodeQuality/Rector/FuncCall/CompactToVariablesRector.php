@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://stackoverflow.com/a/16319909/1348344
+ * @changelog https://stackoverflow.com/a/16319909/1348344
  * @see https://3v4l.org/8GJEs
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector\CompactToVariablesRectorTest
  */

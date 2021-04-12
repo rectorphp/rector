@@ -70,6 +70,7 @@ CODE_SAMPLE
     {
         /** @var Scope $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             return null;

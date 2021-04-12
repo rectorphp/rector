@@ -86,7 +86,11 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
 
         if ($flags instanceof BitwiseOr) {
             $this->cleanBitWiseOrFlags($node, $flags);
-            return $this->handleEmptyStringToNullMatch($node, $variable);
+            if (! $this->nodeComparator->areNodesEqual($flags, $node->args[3]->value)) {
+                return $this->handleEmptyStringToNullMatch($node, $variable);
+            }
+
+            return null;
         }
 
         if (! $flags instanceof ConstFetch) {

@@ -42,9 +42,4 @@ final class StrictMixedTypeMapper implements TypeMapperInterface
     {
         return new Name(self::MIXED);
     }
-
-    public function mapToDocString(Type $type, ?Type $parentType = null): string
-    {
-        return self::MIXED;
-    }
 }

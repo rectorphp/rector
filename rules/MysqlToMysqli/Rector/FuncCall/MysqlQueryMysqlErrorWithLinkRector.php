@@ -20,8 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://www.php.net/manual/en/mysqli.error.php
- * @see https://www.php.net/manual/en/mysqli.query.php
+ * @changelog https://www.php.net/manual/en/mysqli.error.php
  *
  * @see \Rector\Tests\MysqlToMysqli\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector\MysqlQueryMysqlErrorWithLinkRectorTest
  */

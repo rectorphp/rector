@@ -8,6 +8,7 @@ use PHPStan\Type\VoidType;
 use Rector\Composer\Rector\ChangePackageVersionComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Core\Configuration\Option;
+use Rector\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector;
 use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
 use Rector\Removing\Rector\Class_\RemoveParentRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -80,7 +81,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddInterfaceByParentRector::class)
         ->call('configure', [[
             AddInterfaceByParentRector::INTERFACE_BY_PARENT => [
-                'League\Event\AbstractEvent' => 'League\Event\HasEventName',
+                'League\Event\Event' => 'League\Event\HasEventName',
                 'League\Event\AbstractListener' => 'League\Event\Listener',
             ],
         ]]);
@@ -98,4 +99,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'League\Event\AbstractListener',
             ],
         ]]);
+
+    $services->set(DispatchStringToObjectRector::class);
 };

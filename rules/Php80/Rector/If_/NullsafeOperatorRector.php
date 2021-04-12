@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://wiki.php.net/rfc/nullsafe_operator
+ * @changelog https://wiki.php.net/rfc/nullsafe_operator
  * @see \Rector\Tests\Php80\Rector\If_\NullsafeOperatorRector\NullsafeOperatorRectorTest
  */
 final class NullsafeOperatorRector extends AbstractRector

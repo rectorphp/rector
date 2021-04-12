@@ -27,6 +27,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Traversable;
 
 /**
+ * @changelog https://wiki.php.net/rfc/spread_operator_for_array
+ *
  * @see \Rector\Tests\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector\DowngradeArraySpreadRectorTest
  */
 final class DowngradeArraySpreadRector extends AbstractRector
@@ -165,7 +167,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @see https://wiki.php.net/rfc/spread_operator_for_array
      * @param (ArrayItem|null)[] $items
      */
     private function createArrayMerge(Array_ $array, array $items): FuncCall

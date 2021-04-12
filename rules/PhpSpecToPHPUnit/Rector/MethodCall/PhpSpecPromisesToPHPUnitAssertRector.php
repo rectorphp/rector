@@ -30,9 +30,9 @@ use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUnitRector
 {
     /**
-     * @see https://github.com/phpspec/phpspec/blob/master/src/PhpSpec/Wrapper/Subject.php
+     * @changelog https://github.com/phpspec/phpspec/blob/master/src/PhpSpec/Wrapper/Subject.php
      * ↓
-     * @see https://phpunit.readthedocs.io/en/8.0/assertions.html
+     * @changelog https://phpunit.readthedocs.io/en/8.0/assertions.html
      * @var array<string, string[]>
      */
     private const NEW_METHOD_TO_OLD_METHODS = [
@@ -249,7 +249,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     }
 
     /**
-     * @see https://johannespichler.com/writing-custom-phpspec-matchers/
+     * @changelog https://johannespichler.com/writing-custom-phpspec-matchers/
      */
     private function processMatchersKeys(MethodCall $methodCall): void
     {

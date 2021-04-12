@@ -4,6 +4,10 @@ services:
         tags: [phpstan.rules.rule]
 
     -
+        class: Rector\PHPStanExtensions\Rule\NoClassReflectionStaticReflectionRule
+        tags: [phpstan.rules.rule]
+
+    -
         class: Symplify\PHPStanRules\ObjectCalisthenics\Rules\NoChainMethodCallRule
         tags: [phpstan.rules.rule]
         arguments:
@@ -23,7 +27,6 @@ services:
                 - Rector\PostRector\Rector\AbstractPostRector
                 # value objects
                 - Rector\Defluent\ValueObject\AbstractRootExpr
-                - Symplify\SetConfigResolver\Provider\AbstractSetProvider
             allowedDirectParentTypes:
                 - Rector\Core\Rector\AbstractRector
                 - Rector\Core\Rector\AbstractTemporaryRector
@@ -223,7 +226,6 @@ services:
                 PhpParser\Builder\Param: Rector\Core\PhpParser\Builder\ParamBuilder
                 PhpParser\Builder\Property: Rector\Core\PhpParser\Builder\PropertyBuilder
                 PhpParser\Builder\TraitUse: Rector\Core\PhpParser\Builder\TraitUseBuilder
-                ReflectionClass: PHPStan\Reflection\ClassReflection
                 ReflectionFunction: PHPStan\Reflection\FunctionReflection
 
     -

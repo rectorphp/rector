@@ -9,7 +9,7 @@ class StaticCallNextException
     function myMethod()
     {
         $var = do_something();
-        if (rand(0, 1)) {
+        if (mktime() === false) {
             throw MyException::notFound();
         }
         echo $var;
@@ -28,7 +28,7 @@ class StaticCallNextException
 {
     function myMethod()
     {
-        if (rand(0, 1)) {
+        if (mktime() === false) {
             throw MyException::notFound();
         }
         $var = do_something();

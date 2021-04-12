@@ -32,7 +32,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://www.php.net/manual/en/migration70.incompatible.php
+ * @changelog https://www.php.net/manual/en/migration70.incompatible.php
  *
  * @see \Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\NonVariableToVariableOnFunctionCallRectorTest
  */

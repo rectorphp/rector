@@ -13,8 +13,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
- * @see http://www.phpspec.net/en/stable/cookbook/construction.html
+ * @changelog https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
+ * @changelog http://www.phpspec.net/en/stable/cookbook/construction.html
  */
 abstract class AbstractPhpSpecToPHPUnitRector extends AbstractRector
 {

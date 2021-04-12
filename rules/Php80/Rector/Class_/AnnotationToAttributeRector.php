@@ -24,9 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see https://wiki.php.net/rfc/attributes_v2
- * @see https://wiki.php.net/rfc/shorter_attribute_syntax
- * @see https://wiki.php.net/rfc/shorter_attribute_syntax_change - FINAL #[...] syntax !
+ * @changelog https://wiki.php.net/rfc/attributes_v2 https://wiki.php.net/rfc/shorter_attribute_syntax https://wiki.php.net/rfc/shorter_attribute_syntax_change
  *
  * @see \Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\AnnotationToAttributeRectorTest
  */

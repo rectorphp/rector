@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector\ReplaceHttpServerVarsByServerRectorTest
- * @see https://blog.tigertech.net/posts/php-5-3-http-server-vars/
+ * @changelog https://blog.tigertech.net/posts/php-5-3-http-server-vars/
  */
 final class ReplaceHttpServerVarsByServerRector extends AbstractRector
 {

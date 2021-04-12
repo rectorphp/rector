@@ -20,13 +20,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://doc.nette.org/en/2.4/forms
- * ↓
- * @see https://symfony.com/doc/current/forms.html
+ * @changelog https://doc.nette.org/en/2.4/forms https://symfony.com/doc/current/forms.html
  *
- * @see https://github.com/nette/forms/blob/master/src/Forms/Container.php
- * ↓
- * @see https://github.com/symfony/symfony/tree/master/src/Symfony/Component/Form/Extension/Core/Type
  * @see \Rector\Tests\NetteToSymfony\Rector\MethodCall\NetteFormToSymfonyFormRector\NetteFormToSymfonyFormRectorTest
  */
 final class NetteFormToSymfonyFormRector extends AbstractRector

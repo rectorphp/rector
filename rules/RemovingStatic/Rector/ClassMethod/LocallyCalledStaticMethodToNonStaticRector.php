@@ -101,6 +101,7 @@ CODE_SAMPLE
         }
 
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             return null;

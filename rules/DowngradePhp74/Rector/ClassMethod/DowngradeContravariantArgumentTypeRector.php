@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://www.php.net/manual/en/language.oop5.variance.php#language.oop5.variance.contravariance
+ * @changelog https://www.php.net/manual/en/language.oop5.variance.php#language.oop5.variance.contravariance
  *
  * @see \Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector\DowngradeContravariantArgumentTypeRectorTest
  */

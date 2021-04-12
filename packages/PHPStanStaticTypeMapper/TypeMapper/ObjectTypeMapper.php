@@ -11,12 +11,10 @@ use PhpParser\Node\Name\FullyQualified;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\VerbosityLevel;
 use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
@@ -32,16 +30,6 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
      * @var PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
-    }
 
     /**
      * @return class-string<Type>
@@ -108,33 +96,6 @@ final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMa
         }
 
         return new Name('object');
-    }
-
-    /**
-     * @param ObjectType $type
-     */
-    public function mapToDocString(Type $type, ?Type $parentType = null): string
-    {
-        if ($type instanceof AliasedObjectType) {
-            // no preslash for alias
-            return $type->getClassName();
-        }
-
-        if ($type instanceof ShortenedObjectType) {
-            return '\\' . $type->getFullyQualifiedName();
-        }
-
-        if ($type instanceof FullyQualifiedObjectType) {
-            // always prefixed with \\
-            return '\\' . $type->getClassName();
-        }
-
-        if ($this->reflectionProvider->hasClass($type->getClassName())) {
-            // FQN by default
-            return '\\' . $type->describe(VerbosityLevel::typeOnly());
-        }
-
-        return $type->getClassName();
     }
 
     public function setPHPStanStaticTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void

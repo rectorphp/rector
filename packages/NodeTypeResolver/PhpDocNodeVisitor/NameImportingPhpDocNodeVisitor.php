@@ -112,7 +112,11 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         // should skip because its already used
         if ($this->useNodesToAddCollector->isShortImported($phpParserNode, $fullyQualifiedObjectType)) {
             if ($this->useNodesToAddCollector->isImportShortable($phpParserNode, $fullyQualifiedObjectType)) {
-                return new IdentifierTypeNode($fullyQualifiedObjectType->getShortName());
+                $newNode = new IdentifierTypeNode($fullyQualifiedObjectType->getShortName());
+                if ($newNode->name !== $identifierTypeNode->name) {
+                    return $newNode;
+                }
+                return $identifierTypeNode;
             }
 
             return $identifierTypeNode;
@@ -120,7 +124,11 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 
         $this->useNodesToAddCollector->addUseImport($phpParserNode, $fullyQualifiedObjectType);
 
-        return new IdentifierTypeNode($fullyQualifiedObjectType->getShortName());
+        $newNode = new IdentifierTypeNode($fullyQualifiedObjectType->getShortName());
+        if ($newNode->name !== $identifierTypeNode->name) {
+            return $newNode;
+        }
+        return $identifierTypeNode;
     }
 
     private function shouldSkipShortClassName(FullyQualifiedObjectType $fullyQualifiedObjectType): bool

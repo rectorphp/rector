@@ -67,6 +67,7 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         if (! $type instanceof MixedType) {
             return $type;
         }
+
         if ($type->isExplicitMixed()) {
             return $type;
         }

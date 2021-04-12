@@ -7,18 +7,15 @@ namespace Rector\Core\Console\Command;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Composer\Processor\ComposerProcessor;
 use Rector\Core\Application\RectorApplication;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\FileSystem\PhpFilesFinder;
-use Rector\Core\NonPhpFile\NonPhpFileProcessor;
+use Rector\Core\NonPhpFile\NonPhpFileProcessorService;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
-use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -32,11 +29,6 @@ use Throwable;
 
 final class ProcessCommand extends Command
 {
-    /**
-     * @var FilesFinder
-     */
-    private $filesFinder;
-
     /**
      * @var AdditionalAutoloader
      */
@@ -63,19 +55,9 @@ final class ProcessCommand extends Command
     private $outputFormatterCollector;
 
     /**
-     * @var NonPhpFileProcessor
-     */
-    private $nonPhpFileProcessor;
-
-    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
-
-    /**
-     * @var ComposerProcessor
-     */
-    private $composerProcessor;
 
     /**
      * @var PhpFilesFinder
@@ -97,36 +79,37 @@ final class ProcessCommand extends Command
      */
     private $parameterProvider;
 
+    /**
+     * @var NonPhpFileProcessorService
+     */
+    private $nonPhpFileProcessorService;
+
     public function __construct(
         AdditionalAutoloader $additionalAutoloader,
         ChangedFilesDetector $changedFilesDetector,
         Configuration $configuration,
         ErrorAndDiffCollector $errorAndDiffCollector,
-        FilesFinder $filesFinder,
-        NonPhpFileProcessor $nonPhpFileProcessor,
         OutputFormatterCollector $outputFormatterCollector,
         RectorApplication $rectorApplication,
         SymfonyStyle $symfonyStyle,
-        ComposerProcessor $composerProcessor,
         PhpFilesFinder $phpFilesFinder,
         MissingRectorRulesReporter $missingRectorRulesReporter,
-        ParameterProvider $parameterProvider
+        ParameterProvider $parameterProvider,
+        NonPhpFileProcessorService $nonPhpFileProcessorService
     ) {
-        $this->filesFinder = $filesFinder;
         $this->additionalAutoloader = $additionalAutoloader;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->configuration = $configuration;
         $this->rectorApplication = $rectorApplication;
         $this->outputFormatterCollector = $outputFormatterCollector;
-        $this->nonPhpFileProcessor = $nonPhpFileProcessor;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->symfonyStyle = $symfonyStyle;
-        $this->composerProcessor = $composerProcessor;
         $this->phpFilesFinder = $phpFilesFinder;
         $this->missingRectorRulesReporter = $missingRectorRulesReporter;
 
         parent::__construct();
         $this->parameterProvider = $parameterProvider;
+        $this->nonPhpFileProcessorService = $nonPhpFileProcessorService;
     }
 
     protected function configure(): void
@@ -214,17 +197,7 @@ final class ProcessCommand extends Command
 
         $this->configuration->setFileInfos($phpFileInfos);
         $this->rectorApplication->runOnPaths($paths);
-
-        // must run after PHP rectors, because they might change class names, and these class names must be changed in configs
-        $nonPhpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
-            $paths,
-            StaticNonPhpFileSuffixes::SUFFIXES
-        );
-
-        $this->nonPhpFileProcessor->runOnFileInfos($nonPhpFileInfos);
-
-        $composerJsonFilePath = getcwd() . '/composer.json';
-        $this->composerProcessor->process($composerJsonFilePath);
+        $this->nonPhpFileProcessorService->runOnPaths($paths);
 
         // report diffs and errors
         $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);

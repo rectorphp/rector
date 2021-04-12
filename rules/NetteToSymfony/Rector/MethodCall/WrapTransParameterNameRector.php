@@ -15,8 +15,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://symfony.com/doc/current/components/translation/usage.html#message-placeholders
- * @see https://github.com/Kdyby/Translation/blob/master/docs/en/index.md#placeholders
+ * @changelog https://symfony.com/doc/current/components/translation/usage.html#message-placeholders
+ * @changelog https://github.com/Kdyby/Translation/blob/master/docs/en/index.md#placeholders
  * https://github.com/Kdyby/Translation/blob/6b0721c767a7be7f15b2fb13c529bea8536230aa/src/Translator.php#L172
  * @see \Rector\Tests\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector\WrapTransParameterNameRectorTest
  */
