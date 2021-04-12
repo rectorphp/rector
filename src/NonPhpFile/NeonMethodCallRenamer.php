@@ -26,13 +26,15 @@ class NeonMethodCallRenamer implements FileProcessorInterface
 
         foreach ($this->methodCallRenameCollector->getMethodCallRenames() as $methodCallRename) {
             $oldObjectType = $methodCallRename->getOldObjectType();
+            $objectClassName = $oldObjectType->getClassName();
+            $className = str_replace('\\', '\\\\', $objectClassName);
 
-            $className = str_replace('\\', '\\\\', $oldObjectType->getClassName());
             $oldMethodName = $methodCallRename->getOldMethod();
+            $newMethodName = $methodCallRename->getNewMethod();
 
-            $pattern = '/\n(.*?)(class|factory): ' . $className . '\n\1setup:(.*?)- ' . $oldMethodName . '\(/s';
+            $pattern = '/\n(.*?)(class|factory): ' . $className . '(\n|\((.*?)\)\n)\1setup:(.*?)- ' . $oldMethodName . '\(/s';
             while (preg_match($pattern, $newContent, $matches)) {
-                $replacedMatch = str_replace($methodCallRename->getOldMethod(), $methodCallRename->getNewMethod(), $matches[0]);
+                $replacedMatch = str_replace($oldMethodName . '(', $newMethodName . '(', $matches[0]);
                 $newContent = str_replace($matches[0], $replacedMatch, $newContent);
             }
         }
