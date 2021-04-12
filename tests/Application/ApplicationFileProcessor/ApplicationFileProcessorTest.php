@@ -44,7 +44,7 @@ final class ApplicationFileProcessorTest extends AbstractKernelTestCase
     public function test(): void
     {
         $files = $this->fileFactory->createFromPaths([__DIR__ . '/Fixture']);
-        $this->assertCount(2, $files);
+        $this->assertCount(3, $files);
 
         $this->applicationFileProcessor->run($files);
 
