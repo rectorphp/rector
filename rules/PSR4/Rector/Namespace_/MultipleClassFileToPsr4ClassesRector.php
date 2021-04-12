@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
-use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
+use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
 use Rector\PSR4\NodeManipulator\NamespaceManipulator;
@@ -198,8 +198,10 @@ CODE_SAMPLE
 
         $fileDestination = $this->createClassLikeFileDestination($classLike, $smartFileInfo);
 
-        $movedFileWithNodes = new MovedFileWithNodes($nodesToPrint, $fileDestination, $smartFileInfo);
-        $this->removedAndAddedFilesCollector->addMovedFile($movedFileWithNodes);
+        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
+
+        $addedFileWithNodes = new AddedFileWithNodes($fileDestination, $nodesToPrint);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
     }
 
     private function createClassLikeFileDestination(ClassLike $classLike, SmartFileInfo $smartFileInfo): string

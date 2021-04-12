@@ -10,8 +10,8 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
-use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
-use Rector\FileSystemRector\ValueObjectFactory\MovedFileWithNodesFactory;
+use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
+use Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -34,16 +34,16 @@ final class MoveEntitiesToEntityDirectoryRector extends AbstractRector
     private $doctrineDocBlockResolver;
 
     /**
-     * @var MovedFileWithNodesFactory
+     * @var AddedFileWithNodesFactory
      */
-    private $movedFileWithNodesFactory;
+    private $addedFileWithNodesFactory;
 
     public function __construct(
         DoctrineDocBlockResolver $doctrineDocBlockResolver,
-        MovedFileWithNodesFactory $movedFileWithNodesFactory
+        AddedFileWithNodesFactory $addedFileWithNodesFactory
     ) {
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
-        $this->movedFileWithNodesFactory = $movedFileWithNodesFactory;
+        $this->addedFileWithNodesFactory = $addedFileWithNodesFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -106,16 +106,18 @@ CODE_SAMPLE
             return null;
         }
 
-        $movedFileWithNodes = $this->movedFileWithNodesFactory->createWithDesiredGroup(
+        $addedFileWithNodes = $this->addedFileWithNodesFactory->createWithDesiredGroup(
             $smartFileInfo,
             $node->stmts,
             'Entity'
         );
-        if (! $movedFileWithNodes instanceof MovedFileWithNodes) {
+
+        if (! $addedFileWithNodes instanceof AddedFileWithNodes) {
             return null;
         }
 
-        $this->removedAndAddedFilesCollector->addMovedFile($movedFileWithNodes);
+        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
 
         return null;
     }

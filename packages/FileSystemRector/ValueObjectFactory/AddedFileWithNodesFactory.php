@@ -12,11 +12,13 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Autodiscovery\Configuration\CategoryNamespaceProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
+use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
+use Rector\PSR4\Collector\RenamedClassesCollector;
+use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
 use Rector\PSR4\FileRelocationResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class MovedFileWithNodesFactory
+final class AddedFileWithNodesFactory
 {
     /**
      * @var BetterNodeFinder
@@ -33,14 +35,28 @@ final class MovedFileWithNodesFactory
      */
     private $categoryNamespaceProvider;
 
+    /**
+     * @var RenamedClassesCollector
+     */
+    private $renamedClassesCollector;
+
+    /**
+     * @var FileInfoDeletionAnalyzer
+     */
+    private $fileInfoDeletionAnalyzer;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         CategoryNamespaceProvider $categoryNamespaceProvider,
-        FileRelocationResolver $fileRelocationResolver
+        FileRelocationResolver $fileRelocationResolver,
+        RenamedClassesCollector $renamedClassesCollector,
+        FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->fileRelocationResolver = $fileRelocationResolver;
         $this->categoryNamespaceProvider = $categoryNamespaceProvider;
+        $this->renamedClassesCollector = $renamedClassesCollector;
+        $this->fileInfoDeletionAnalyzer = $fileInfoDeletionAnalyzer;
     }
 
     /**
@@ -50,23 +66,27 @@ final class MovedFileWithNodesFactory
         SmartFileInfo $oldFileInfo,
         array $nodes,
         string $desiredGroupName
-    ): ?MovedFileWithNodes {
+    ): ?AddedFileWithNodes {
         $currentNamespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
+
         // file without namespace → skip
         if (! $currentNamespace instanceof Namespace_) {
             return null;
         }
+
         if ($currentNamespace->name === null) {
             return null;
         }
 
         // is already in the right group
-        $currentNamespaceName = (string) $currentNamespace->name;
+        $currentNamespaceName = $currentNamespace->name->toString();
         if (Strings::endsWith($currentNamespaceName, '\\' . $desiredGroupName)) {
             return null;
         }
 
-        $oldClassName = $currentNamespaceName . '\\' . $oldFileInfo->getBasenameWithoutSuffix();
+        $oldClassName = $currentNamespaceName . '\\' . $this->fileInfoDeletionAnalyzer->clearNameFromTestingPrefix(
+            $oldFileInfo->getBasenameWithoutSuffix()
+        );
 
         // change namespace to new one
         $newNamespaceName = $this->createNewNamespaceName($desiredGroupName, $currentNamespace);
@@ -101,7 +121,9 @@ final class MovedFileWithNodesFactory
         $classLike = clone $classLike;
         $classLike->namespacedName = new FullyQualified($newClassName);
 
-        return new MovedFileWithNodes($nodes, $newFileDestination, $oldFileInfo, $oldClassName, $newClassName);
+        $this->renamedClassesCollector->addClassRename($oldClassName, $newClassName);
+
+        return new AddedFileWithNodes($newFileDestination, $nodes);
     }
 
     private function createNewNamespaceName(string $desiredGroupName, Namespace_ $currentNamespace): string
@@ -115,7 +137,10 @@ final class MovedFileWithNodesFactory
 
     private function createNewClassName(SmartFileInfo $smartFileInfo, string $newNamespaceName): string
     {
-        return $newNamespaceName . '\\' . $smartFileInfo->getBasenameWithoutSuffix();
+        $basename = $this->fileInfoDeletionAnalyzer->clearNameFromTestingPrefix(
+            $smartFileInfo->getBasenameWithoutSuffix()
+        );
+        return $newNamespaceName . '\\' . $basename;
     }
 
     /**
@@ -128,11 +153,7 @@ final class MovedFileWithNodesFactory
                 continue;
             }
 
-            // prevent namespace override
-            $node = clone $node;
-
             $node->name = new Name($newNamespaceName);
-            break;
         }
     }
 }

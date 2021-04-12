@@ -10,14 +10,12 @@ use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
 use Psr\Container\ContainerInterface;
 use Rector\Core\Application\ApplicationFileProcessor;
-use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
@@ -33,16 +31,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements RectorTestInterface
 {
     use MovingFilesTrait;
-
-    /**
-     * @var FileProcessor
-     */
-    protected $fileProcessor;
-
-    /**
-     * @var NonPhpFileProcessor
-     */
-    protected $nonPhpFileProcessor;
 
     /**
      * @var ParameterProvider
@@ -89,9 +77,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         $configFileInfos = $rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
 
         $this->bootKernelWithConfigsAndStaticCache(RectorKernel::class, $configFileInfos);
-
-        $this->fileProcessor = $this->getService(FileProcessor::class);
-        $this->nonPhpFileProcessor = $this->getService(NonPhpFileProcessor::class);
 
         $this->applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
         $this->parameterProvider = $this->getService(ParameterProvider::class);

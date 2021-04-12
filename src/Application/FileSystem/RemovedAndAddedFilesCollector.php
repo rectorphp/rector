@@ -5,12 +5,8 @@ declare(strict_types=1);
 namespace Rector\Core\Application\FileSystem;
 
 use Rector\FileSystemRector\Contract\AddedFileInterface;
-use Rector\FileSystemRector\Contract\MovedFileInterface;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
-use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
-use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
-use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemovedAndAddedFilesCollector
@@ -18,43 +14,16 @@ final class RemovedAndAddedFilesCollector
     /**
      * @var SmartFileInfo[]
      */
-    private $removedFiles = [];
+    private $removedFileInfos = [];
 
     /**
      * @var AddedFileInterface[]
      */
     private $addedFiles = [];
 
-    /**
-     * @var MovedFileInterface[]
-     */
-    private $movedFiles = [];
-
-    /**
-     * @var RenamedClassesCollector
-     */
-    private $renamedClassesCollector;
-
-    public function __construct(RenamedClassesCollector $renamedClassesCollector)
-    {
-        $this->renamedClassesCollector = $renamedClassesCollector;
-    }
-
     public function removeFile(SmartFileInfo $smartFileInfo): void
     {
-        $this->removedFiles[] = $smartFileInfo;
-    }
-
-    public function addMovedFile(MovedFileInterface $movedFile): void
-    {
-        if ($movedFile instanceof MovedFileWithNodes && $movedFile->hasClassRename()) {
-            $this->renamedClassesCollector->addClassRename(
-                $movedFile->getOldClassName(),
-                $movedFile->getNewClassName()
-            );
-        }
-
-        $this->movedFiles[] = $movedFile;
+        $this->removedFileInfos[] = $smartFileInfo;
     }
 
     /**
@@ -62,34 +31,13 @@ final class RemovedAndAddedFilesCollector
      */
     public function getRemovedFiles(): array
     {
-        return $this->removedFiles;
-    }
-
-    /**
-     * @return MovedFileInterface[]
-     */
-    public function getMovedFiles(): array
-    {
-        return $this->movedFiles;
-    }
-
-    public function getMovedFileByFileInfo(SmartFileInfo $smartFileInfo): ?MovedFileInterface
-    {
-        foreach ($this->movedFiles as $movedFile) {
-            if ($movedFile->getOldPathname() !== $smartFileInfo->getPathname()) {
-                continue;
-            }
-
-            return $movedFile;
-        }
-
-        return null;
+        return $this->removedFileInfos;
     }
 
     public function isFileRemoved(SmartFileInfo $smartFileInfo): bool
     {
-        foreach ($this->removedFiles as $removedFile) {
-            if ($removedFile->getPathname() !== $smartFileInfo->getPathname()) {
+        foreach ($this->removedFileInfos as $removedFileInfo) {
+            if ($removedFileInfo->getPathname() !== $smartFileInfo->getPathname()) {
                 continue;
             }
 
@@ -124,29 +72,9 @@ final class RemovedAndAddedFilesCollector
         });
     }
 
-    /**
-     * @return MovedFileWithNodes[]
-     */
-    public function getMovedFileWithNodes(): array
-    {
-        return array_filter($this->movedFiles, function (MovedFileInterface $movedFile): bool {
-            return $movedFile instanceof MovedFileWithNodes;
-        });
-    }
-
-    /**
-     * @return MovedFileWithContent[]
-     */
-    public function getMovedFileWithContent(): array
-    {
-        return array_filter($this->movedFiles, function (MovedFileInterface $movedFile): bool {
-            return $movedFile instanceof MovedFileWithContent;
-        });
-    }
-
     public function getAffectedFilesCount(): int
     {
-        return count($this->addedFiles) + count($this->movedFiles) + count($this->removedFiles);
+        return count($this->addedFiles) + count($this->removedFileInfos);
     }
 
     public function getAddedFileCount(): int
@@ -156,7 +84,7 @@ final class RemovedAndAddedFilesCollector
 
     public function getRemovedFilesCount(): int
     {
-        return count($this->removedFiles);
+        return count($this->removedFileInfos);
     }
 
     /**
@@ -165,7 +93,6 @@ final class RemovedAndAddedFilesCollector
     public function reset(): void
     {
         $this->addedFiles = [];
-        $this->removedFiles = [];
-        $this->movedFiles = [];
+        $this->removedFileInfos = [];
     }
 }

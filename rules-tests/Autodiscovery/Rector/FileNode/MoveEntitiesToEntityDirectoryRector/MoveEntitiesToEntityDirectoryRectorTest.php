@@ -33,7 +33,7 @@ final class MoveEntitiesToEntityDirectoryRectorTest extends AbstractRectorTestCa
         yield [
             new SmartFileInfo(__DIR__ . '/Source/Controller/RandomEntity.php'),
             new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/Entity/RandomEntity.php',
+                $this->getFixtureTempDirectory() . '/Entity/RandomEntity.php',
                 $smartFileSystem->readFile(__DIR__ . '/Expected/ExpectedRandomEntity.php')
             ),
         ];
