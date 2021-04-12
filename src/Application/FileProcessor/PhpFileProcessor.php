@@ -4,29 +4,19 @@ declare(strict_types=1);
 
 namespace Rector\Core\Application\FileProcessor;
 
-use PhpParser\Lexer;
 use PHPStan\AnalysedCodeException;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
-use Rector\ChangesReporting\Collector\AffectedFilesCollector;
 use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
-use Rector\Core\Application\TokensByFilePathStorage;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
-use Rector\Core\PhpParser\Parser\Parser;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\Application\ParsedStmtsAndTokens;
-use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
-use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use Rector\PostRector\Application\PostFileProcessor;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 
 final class PhpFileProcessor implements FileProcessorInterface
@@ -42,46 +32,6 @@ final class PhpFileProcessor implements FileProcessorInterface
      * @var int
      */
     private const PROGRESS_BAR_STEP_MULTIPLIER = 4;
-
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var Lexer
-     */
-    private $lexer;
-
-    /**
-     * @var RectorNodeTraverser
-     */
-    private $rectorNodeTraverser;
-
-    /**
-     * @var NodeScopeAndMetadataDecorator
-     */
-    private $nodeScopeAndMetadataDecorator;
-
-    /**
-     * @var CurrentFileInfoProvider
-     */
-    private $currentFileInfoProvider;
-
-    /**
-     * @var AffectedFilesCollector
-     */
-    private $affectedFilesCollector;
-
-    /**
-     * @var PostFileProcessor
-     */
-    private $postFileProcessor;
-
-    /**
-     * @var TokensByFilePathStorage
-     */
-    private $tokensByFilePathStorage;
 
     /**
      * @var Configuration
@@ -136,15 +86,7 @@ final class PhpFileProcessor implements FileProcessorInterface
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         SymfonyStyle $symfonyStyle,
         PrivatesAccessor $privatesAccessor,
-        FileDiffFileDecorator $fileDiffFileDecorator,
-        AffectedFilesCollector $affectedFilesCollector,
-        CurrentFileInfoProvider $currentFileInfoProvider,
-        Lexer $lexer,
-        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        Parser $parser,
-        PostFileProcessor $postFileProcessor,
-        RectorNodeTraverser $rectorNodeTraverser,
-        TokensByFilePathStorage $tokensByFilePathStorage
+        FileDiffFileDecorator $fileDiffFileDecorator
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
@@ -155,14 +97,6 @@ final class PhpFileProcessor implements FileProcessorInterface
         $this->privatesAccessor = $privatesAccessor;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
         $this->configuration = $configuration;
-        $this->parser = $parser;
-        $this->lexer = $lexer;
-        $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-        $this->currentFileInfoProvider = $currentFileInfoProvider;
-        $this->affectedFilesCollector = $affectedFilesCollector;
-        $this->postFileProcessor = $postFileProcessor;
-        $this->tokensByFilePathStorage = $tokensByFilePathStorage;
     }
 
     /**
@@ -332,32 +266,5 @@ final class PhpFileProcessor implements FileProcessorInterface
         } elseif ($this->configuration->shouldShowProgressBar()) {
             $this->symfonyStyle->progressAdvance();
         }
-    }
-
-    private function parseFileInfoToLocalCache(SmartFileInfo $fileInfo): void
-    {
-        if ($this->tokensByFilePathStorage->hasForFileInfo($fileInfo)) {
-            return;
-        }
-
-        $this->currentFileInfoProvider->setCurrentFileInfo($fileInfo);
-
-        // store tokens by absolute path, so we don't have to print them right now
-        $parsedStmtsAndTokens = $this->parseAndTraverseFileInfoToNodes($fileInfo);
-        $this->tokensByFilePathStorage->addForRealPath($fileInfo, $parsedStmtsAndTokens);
-    }
-
-    private function parseAndTraverseFileInfoToNodes(SmartFileInfo $smartFileInfo): ParsedStmtsAndTokens
-    {
-        $oldStmts = $this->parser->parseFileInfo($smartFileInfo);
-        $oldTokens = $this->lexer->getTokens();
-
-        // needed for \Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver
-        $parsedStmtsAndTokens = new ParsedStmtsAndTokens($oldStmts, $oldStmts, $oldTokens);
-        $this->tokensByFilePathStorage->addForRealPath($smartFileInfo, $parsedStmtsAndTokens);
-
-        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $smartFileInfo);
-
-        return new ParsedStmtsAndTokens($newStmts, $oldStmts, $oldTokens);
     }
 }

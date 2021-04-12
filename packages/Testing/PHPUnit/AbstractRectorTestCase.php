@@ -127,10 +127,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         );
 
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
-        $this->originalTempFileInfo = $inputFileInfo;
 
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
         $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
+
+        $this->originalTempFileInfo = $inputFileInfo;
     }
 
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
@@ -182,6 +183,12 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
         $changedContent = $this->processFileInfo($originalFileInfo);
+
+        // file is removed, we cannot compare it
+        if ($this->removedAndAddedFilesCollector->isFileRemoved($originalFileInfo)) {
+            return;
+        }
+
         $relativeFilePathFromCwd = $fixtureFileInfo->getRelativeFilePathFromCwd();
 
         try {
@@ -211,8 +218,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         /** @var NodeScopeResolver $nodeScopeResolver */
         $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
         $nodeScopeResolver->setAnalysedFiles([$fileInfo->getRealPath()]);
-
-        $this->dynamicSourceLocatorProvider->setFileInfo($fileInfo);
 
         $file = new File($fileInfo, $fileInfo->getContents());
         $this->applicationFileProcessor->run([$file]);

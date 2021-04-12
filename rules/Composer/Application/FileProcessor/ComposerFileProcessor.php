@@ -10,6 +10,7 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ComposerFileProcessor implements FileProcessorInterface
 {
@@ -89,8 +90,11 @@ final class ComposerFileProcessor implements FileProcessorInterface
         $file->changeFileContent($changeFileContent);
     }
 
-    private function isJsonInTests(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo): bool
+    private function isJsonInTests(SmartFileInfo $fileInfo): bool
     {
-        return StaticPHPUnitEnvironment::isPHPUnitRun() && $fileInfo->hasSuffixes(['json']);
+        if (! StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            return false;
+        }
+        return $fileInfo->hasSuffixes(['json']);
     }
 }

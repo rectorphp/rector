@@ -47,6 +47,7 @@ final class RectorNodeTraverser extends NodeTraverser
         $phpRectors = $activeRectorsProvider->provideByType(PhpRectorInterface::class);
 
         $this->phpRectors = $phpRectors;
+
         $this->nodeFinder = $nodeFinder;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
     }
