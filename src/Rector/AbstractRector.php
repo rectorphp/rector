@@ -7,7 +7,6 @@ namespace Rector\Core\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -410,15 +409,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
             $this->addNodeAfterNode($ifStmt, $node);
         }
-    }
-
-    protected function isOnClassMethodCall(MethodCall $methodCall, ObjectType $objectType, string $methodName): bool
-    {
-        if (! $this->isObjectType($methodCall->var, $objectType)) {
-            return false;
-        }
-
-        return $this->isName($methodCall->name, $methodName);
     }
 
     protected function isOpenSourceProjectType(): bool

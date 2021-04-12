@@ -70,7 +70,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isOnClassMethodCall($node, new ObjectType('Carbon\Carbon'), 'diffForHumans')) {
+        if (! $this->isObjectType($node->var, new ObjectType('Carbon\Carbon'))) {
+            return null;
+        }
+
+        if (! $this->isName($node->name, 'diffForHumans')) {
             return null;
         }
 
