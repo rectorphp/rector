@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace Rector\Core\NonPhpFile;
 
 use Rector\Core\Contract\Processor\FileProcessorInterface;
-use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
+use Rector\Core\ValueObject\Application\File;
 use Rector\Renaming\Configuration\MethodCallRenameCollector;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 class NeonMethodCallRenamer implements FileProcessorInterface
 {
@@ -20,10 +19,19 @@ class NeonMethodCallRenamer implements FileProcessorInterface
         $this->methodCallRenameCollector = $methodCallRenameCollector;
     }
 
-    public function process(SmartFileInfo $smartFileInfo): ?NonPhpFileChange
+    /**
+     * @param File[] $files
+     */
+    public function process(array $files): void
     {
-        $oldContent = $newContent = $smartFileInfo->getContents();
+        foreach ($files as $file) {
+            $this->processFile($file);
+        }
+    }
 
+    private function processFile(File $file): void
+    {
+        $content = $file->getFileContent();
         foreach ($this->methodCallRenameCollector->getMethodCallRenames() as $methodCallRename) {
             $oldObjectType = $methodCallRename->getOldObjectType();
             $objectClassName = $oldObjectType->getClassName();
@@ -33,18 +41,18 @@ class NeonMethodCallRenamer implements FileProcessorInterface
             $newMethodName = $methodCallRename->getNewMethod();
 
             $pattern = '/\n(.*?)(class|factory): ' . $className . '(\n|\((.*?)\)\n)\1setup:(.*?)- ' . $oldMethodName . '\(/s';
-            while (preg_match($pattern, $newContent, $matches)) {
+            while (preg_match($pattern, $content, $matches)) {
                 $replacedMatch = str_replace($oldMethodName . '(', $newMethodName . '(', $matches[0]);
-                $newContent = str_replace($matches[0], $replacedMatch, $newContent);
+                $content = str_replace($matches[0], $replacedMatch, $content);
             }
         }
-
-        return new NonPhpFileChange($oldContent, $newContent);
+        $file->changeFileContent($content);
     }
 
-    public function supports(SmartFileInfo $smartFileInfo): bool
+    public function supports(File $file): bool
     {
-        return in_array($smartFileInfo->getExtension(), $this->getSupportedFileExtensions());
+        $fileInfo = $file->getSmartFileInfo();
+        return $fileInfo->hasSuffixes($this->getSupportedFileExtensions());
     }
 
     public function getSupportedFileExtensions(): array
