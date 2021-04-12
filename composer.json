@@ -103,8 +103,8 @@
         "classmap": [
             "stubs/Annotations",
             "stubs/Nette",
-            "rules-tests/Autodiscovery/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
-            "rules-tests/Autodiscovery/Rector/FileNode/MoveServicesBySuffixToDirectoryRector/Expected",
+            "rules-tests/Autodiscovery/Rector/Class_/MoveServicesBySuffixToDirectoryRector/Expected",
+            "rules-tests/Autodiscovery/Rector/Interface_/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
             "rules-tests/CodingStyle/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source",
             "rules-tests/Renaming/Rector/Name/RenameClassRector/Source",
             "rules-tests/Renaming/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector/Source",

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\PostRector\Application;
 
-use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Logging\CurrentRectorProvider;
-use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
+use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\ValueObject\Application\File;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Symplify\Skipper\Skipper\Skipper;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PostFileProcessor
 {
@@ -26,33 +26,33 @@ final class PostFileProcessor
     private $skipper;
 
     /**
-     * @var CurrentFileInfoProvider
-     */
-    private $currentFileInfoProvider;
-
-    /**
      * @var CurrentRectorProvider
      */
     private $currentRectorProvider;
+
+    /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
 
     /**
      * @param PostRectorInterface[] $postRectors
      */
     public function __construct(
         Skipper $skipper,
-        CurrentFileInfoProvider $currentFileInfoProvider,
+        CurrentFileProvider $currentFileProvider,
         CurrentRectorProvider $currentRectorProvider,
         array $postRectors
     ) {
         $this->postRectors = $this->sortByPriority($postRectors);
         $this->skipper = $skipper;
-        $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->currentRectorProvider = $currentRectorProvider;
+        $this->currentFileProvider = $currentFileProvider;
     }
 
     /**
-     * @param Node[] $nodes
-     * @return Node[]
+     * @param Stmt[] $nodes
+     * @return Stmt[]
      */
     public function traverse(array $nodes): array
     {
@@ -94,11 +94,12 @@ final class PostFileProcessor
 
     private function shouldSkipPostRector(PostRectorInterface $postRector): bool
     {
-        $smartFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        if (! $smartFileInfo instanceof SmartFileInfo) {
+        $file = $this->currentFileProvider->getFile();
+        if (! $file instanceof File) {
             return false;
         }
 
+        $smartFileInfo = $file->getSmartFileInfo();
         return $this->skipper->shouldSkipElementAndFileInfo($postRector, $smartFileInfo);
     }
 }

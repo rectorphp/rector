@@ -99,10 +99,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $smartFileInfo = $node->getAttribute(SmartFileInfo::class);
-        if ($smartFileInfo === null) {
-            return null;
-        }
+        $smartFileInfo = $this->file->getSmartFileInfo();
 
         $shortClassName = $this->classNaming->getNameFromFileInfo($smartFileInfo);
         $class = $this->staticMethodClassFactory->createStaticMethodClass($shortClassName, $functions);

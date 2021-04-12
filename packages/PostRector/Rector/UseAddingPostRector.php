@@ -5,20 +5,18 @@ declare(strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Application\UseImportsAdder;
 use Rector\CodingStyle\Application\UseImportsRemover;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\Provider\CurrentFileProvider;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UseAddingPostRector extends AbstractPostRector
 {
@@ -47,18 +45,25 @@ final class UseAddingPostRector extends AbstractPostRector
      */
     private $useNodesToAddCollector;
 
+    /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         TypeFactory $typeFactory,
         UseImportsAdder $useImportsAdder,
         UseImportsRemover $useImportsRemover,
-        UseNodesToAddCollector $useNodesToAddCollector
+        UseNodesToAddCollector $useNodesToAddCollector,
+        CurrentFileProvider $currentFileProvider
     ) {
         $this->useImportsAdder = $useImportsAdder;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->useImportsRemover = $useImportsRemover;
         $this->typeFactory = $typeFactory;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
+        $this->currentFileProvider = $currentFileProvider;
     }
 
     /**
@@ -72,10 +77,8 @@ final class UseAddingPostRector extends AbstractPostRector
             return $nodes;
         }
 
-        $smartFileInfo = $this->getSmartFileInfo($nodes);
-        if (! $smartFileInfo instanceof SmartFileInfo) {
-            return $nodes;
-        }
+        $file = $this->currentFileProvider->getFile();
+        $smartFileInfo = $file->getSmartFileInfo();
 
         $useImportTypes = $this->useNodesToAddCollector->getObjectImportsByFileInfo($smartFileInfo);
         $functionUseImportTypes = $this->useNodesToAddCollector->getFunctionImportsByFileInfo($smartFileInfo);
@@ -147,22 +150,6 @@ class SomeClass
 CODE_SAMPLE
                 ), ]
         );
-    }
-
-    /**
-     * @param Node[] $nodes
-     */
-    private function getSmartFileInfo(array $nodes): ?SmartFileInfo
-    {
-        foreach ($nodes as $node) {
-            /** @var SmartFileInfo|null $smartFileInfo */
-            $smartFileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-            if ($smartFileInfo !== null) {
-                return $smartFileInfo;
-            }
-        }
-
-        return null;
     }
 
     /**

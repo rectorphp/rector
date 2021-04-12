@@ -121,10 +121,6 @@ CODE_SAMPLE
         }
 
         $fullyQualified = new FullyQualified($classLikeName);
-
-        /** @see \Rector\PostRector\Collector\UseNodesToAddCollector::isShortImported() */
-        $fullyQualified->setAttribute(AttributeKey::FILE_INFO, $node->getAttribute(AttributeKey::FILE_INFO));
-
         return new ClassConstFetch($fullyQualified, 'class');
     }
 

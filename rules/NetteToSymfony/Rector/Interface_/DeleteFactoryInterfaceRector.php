@@ -10,7 +10,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NetteToSymfony\NodeAnalyzer\NetteControlFactoryInterfaceAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Tests\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector\DeleteFactoryInterfaceFileSystemRectorTest
@@ -59,15 +58,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $smartFileInfo = $node->getAttribute(SmartFileInfo::class);
-        if ($smartFileInfo === null) {
-            return null;
-        }
-
         if (! $this->netteControlFactoryInterfaceAnalyzer->isComponentFactoryInterface($node)) {
             return null;
         }
 
+        $smartFileInfo = $this->file->getSmartFileInfo();
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
 
         return null;

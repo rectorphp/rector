@@ -6,10 +6,12 @@ namespace Rector\ChangesReporting\Collector;
 
 use PhpParser\Node;
 use Rector\ChangesReporting\ValueObject\RectorWithFileAndLineChange;
+use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Logging\CurrentRectorProvider;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\ValueObject\Application\File;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RectorChangeCollector
@@ -24,9 +26,17 @@ final class RectorChangeCollector
      */
     private $currentRectorProvider;
 
-    public function __construct(CurrentRectorProvider $currentRectorProvider)
-    {
+    /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
+
+    public function __construct(
+        CurrentRectorProvider $currentRectorProvider,
+        CurrentFileProvider $currentFileProvider
+    ) {
         $this->currentRectorProvider = $currentRectorProvider;
+        $this->currentFileProvider = $currentFileProvider;
     }
 
     /**
@@ -44,19 +54,26 @@ final class RectorChangeCollector
 
     public function notifyNodeFileInfo(Node $node): void
     {
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if (! $fileInfo instanceof SmartFileInfo) {
+        $file = $this->currentFileProvider->getFile();
+        if (! $file instanceof File) {
             // this file was changed before and this is a sub-new node
             // array Traverse to all new nodes would have to be used, but it's not worth the performance
             return;
         }
+
+        $smartFileInfo = $file->getSmartFileInfo();
 
         $currentRector = $this->currentRectorProvider->getCurrentRector();
         if (! $currentRector instanceof RectorInterface) {
             throw new ShouldNotHappenException();
         }
 
-        $this->addRectorClassWithLine($currentRector, $fileInfo, $node->getLine());
+        // @old
+        $this->addRectorClassWithLine($currentRector, $smartFileInfo, $node->getLine());
+
+        // @new
+        $rectorWithLineChange = new RectorWithLineChange($currentRector, $node->getLine());
+        $file->addRectorClassWithLine($rectorWithLineChange);
     }
 
     private function addRectorClassWithLine(RectorInterface $rector, SmartFileInfo $smartFileInfo, int $line): void

@@ -17,7 +17,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @todo move to symplify/skipper if grown enough
  * @see \Rector\Core\Tests\Exclusion\ExclusionManagerTest
  */
 final class ExclusionManager
@@ -36,23 +35,22 @@ final class ExclusionManager
     {
         if ($node instanceof PropertyProperty || $node instanceof Const_) {
             $node = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if (! $node instanceof Node) {
-                return false;
-            }
         }
 
         if ($this->hasNoRectorPhpDocTagMatch($node, $phpRector)) {
             return true;
         }
 
-        // recurse up until a Stmt node is found since it might contain a noRector
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($node instanceof Stmt) {
             return false;
         }
+
+        // recurse up until a Stmt node is found since it might contain a noRector
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode === null) {
             return false;
         }
+
         return $this->isNodeSkippedByRector($parentNode, $phpRector);
     }
 

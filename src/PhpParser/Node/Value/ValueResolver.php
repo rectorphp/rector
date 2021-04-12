@@ -18,10 +18,10 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ConstFetchAnalyzer;
+use Rector\Core\Provider\CurrentFileProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\Value\ValueResolverTest
@@ -53,16 +53,23 @@ final class ValueResolver
      */
     private $reflectionProvider;
 
+    /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         ConstFetchAnalyzer $constFetchAnalyzer,
-        ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider,
+        CurrentFileProvider $currentFileProvider
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->constFetchAnalyzer = $constFetchAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
+        $this->currentFileProvider = $currentFileProvider;
     }
 
     /**
@@ -244,22 +251,17 @@ final class ValueResolver
 
     private function resolveDirConstant(Dir $dir): string
     {
-        $fileInfo = $dir->getAttribute(AttributeKey::FILE_INFO);
-        if (! $fileInfo instanceof SmartFileInfo) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $fileInfo->getPath();
+        $file = $this->currentFileProvider->getFile();
+        $smartFileInfo = $file->getSmartFileInfo();
+        return $smartFileInfo->getPath();
     }
 
     private function resolveFileConstant(File $file): string
     {
-        $fileInfo = $file->getAttribute(AttributeKey::FILE_INFO);
-        if (! $fileInfo instanceof SmartFileInfo) {
-            throw new ShouldNotHappenException();
-        }
+        $file = $this->currentFileProvider->getFile();
 
-        return $fileInfo->getPathname();
+        $smartFileInfo = $file->getSmartFileInfo();
+        return $smartFileInfo->getPathname();
     }
 
     /**

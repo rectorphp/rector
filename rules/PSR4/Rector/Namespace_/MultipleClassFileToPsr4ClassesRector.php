@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
 use Rector\PSR4\NodeManipulator\NamespaceManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -116,8 +115,7 @@ CODE_SAMPLE
             return $nodeToReturn;
         }
 
-        /** @var SmartFileInfo $smartFileInfo */
-        $smartFileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        $smartFileInfo = $this->file->getSmartFileInfo();
 
         // 2. nothing to return - remove the file
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
@@ -143,7 +141,7 @@ CODE_SAMPLE
             $newNamespace->stmts[] = $classLike;
 
             // 1. is the class that will be kept in original file?
-            if ($this->fileInfoDeletionAnalyzer->isClassLikeAndFileInfoMatch($classLike)) {
+            if ($this->fileInfoDeletionAnalyzer->isClassLikeAndFileInfoMatch($this->file, $classLike)) {
                 $nodeToReturn = $newNamespace;
                 continue;
             }
@@ -164,7 +162,7 @@ CODE_SAMPLE
 
         foreach ($classLikes as $classLike) {
             // 1. is the class that will be kept in original file?
-            if ($this->fileInfoDeletionAnalyzer->isClassLikeAndFileInfoMatch($classLike)) {
+            if ($this->fileInfoDeletionAnalyzer->isClassLikeAndFileInfoMatch($this->file, $classLike)) {
                 $nodeToReturn = $fileWithoutNamespace;
                 continue;
             }
@@ -181,8 +179,7 @@ CODE_SAMPLE
      */
     private function printNewNodes(ClassLike $classLike, Node $mainNode): void
     {
-        /** @var SmartFileInfo $smartFileInfo */
-        $smartFileInfo = $mainNode->getAttribute(AttributeKey::FILE_INFO);
+        $smartFileInfo = $this->file->getSmartFileInfo();
 
         $declares = [];
         $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [Declare_::class]);

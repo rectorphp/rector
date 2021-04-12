@@ -6,8 +6,8 @@ namespace Rector\PSR4\FileInfoAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileInfoDeletionAnalyzer
 {
@@ -33,15 +33,14 @@ final class FileInfoDeletionAnalyzer
         $this->classNaming = $classNaming;
     }
 
-    public function isClassLikeAndFileInfoMatch(ClassLike $classLike): bool
+    public function isClassLikeAndFileInfoMatch(File $file, ClassLike $classLike): bool
     {
         $className = $this->nodeNameResolver->getName($classLike);
         if ($className === null) {
             return false;
         }
 
-        /** @var SmartFileInfo $smartFileInfo */
-        $smartFileInfo = $classLike->getAttribute(SmartFileInfo::class);
+        $smartFileInfo = $file->getSmartFileInfo();
 
         $baseFileName = $this->clearNameFromTestingPrefix($smartFileInfo->getBasenameWithoutSuffix());
         $classShortName = $this->classNaming->getShortName($className);

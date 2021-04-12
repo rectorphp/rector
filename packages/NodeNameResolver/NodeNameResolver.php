@@ -17,10 +17,11 @@ use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Util\StaticNodeInstanceOf;
+use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\Regex\RegexPatternDetector;
-use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NodeNameResolver
@@ -41,11 +42,6 @@ final class NodeNameResolver
     private $regexPatternDetector;
 
     /**
-     * @var CurrentFileInfoProvider
-     */
-    private $currentFileInfoProvider;
-
-    /**
      * @var ClassNaming
      */
     private $classNaming;
@@ -56,20 +52,25 @@ final class NodeNameResolver
     private $betterStandardPrinter;
 
     /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
+
+    /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
     public function __construct(
         RegexPatternDetector $regexPatternDetector,
         BetterStandardPrinter $betterStandardPrinter,
-        CurrentFileInfoProvider $currentFileInfoProvider,
+        CurrentFileProvider $currentFileProvider,
         ClassNaming $classNaming,
         array $nodeNameResolvers = []
     ) {
         $this->regexPatternDetector = $regexPatternDetector;
         $this->nodeNameResolvers = $nodeNameResolvers;
-        $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->classNaming = $classNaming;
+        $this->currentFileProvider = $currentFileProvider;
     }
 
     /**
@@ -228,15 +229,19 @@ final class NodeNameResolver
     {
         $message = sprintf('Pick more specific node than "%s", e.g. "$node->name"', get_class($node));
 
-        $fileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        if ($fileInfo instanceof SmartFileInfo) {
-            $message .= PHP_EOL . PHP_EOL;
-            $message .= sprintf(
-                'Caused in "%s" file on line %d on code "%s"',
-                $fileInfo->getRelativeFilePathFromCwd(),
-                $node->getStartLine(),
-                $this->betterStandardPrinter->print($node)
-            );
+        $file = $this->currentFileProvider->getFile();
+
+        if ($file instanceof File) {
+            $smartFileInfo = $file->getSmartFileInfo();
+            if ($smartFileInfo instanceof SmartFileInfo) {
+                $message .= PHP_EOL . PHP_EOL;
+                $message .= sprintf(
+                    'Caused in "%s" file on line %d on code "%s"',
+                    $smartFileInfo->getRelativeFilePathFromCwd(),
+                    $node->getStartLine(),
+                    $this->betterStandardPrinter->print($node)
+                );
+            }
         }
 
         $backtrace = debug_backtrace();
@@ -245,8 +250,8 @@ final class NodeNameResolver
         if ($rectorBacktrace) {
             // issues to find the file in prefixed
             if (file_exists($rectorBacktrace[self::FILE])) {
-                $fileInfo = new SmartFileInfo($rectorBacktrace[self::FILE]);
-                $fileAndLine = $fileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
+                $smartFileInfo = new SmartFileInfo($rectorBacktrace[self::FILE]);
+                $fileAndLine = $smartFileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
             } else {
                 $fileAndLine = $rectorBacktrace[self::FILE] . ':' . $rectorBacktrace['line'];
             }
