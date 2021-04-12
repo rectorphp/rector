@@ -1,10 +1,8 @@
 <?php
+
 declare(strict_types=1);
-
-namespace Rector\Tests\Autodiscovery\Rector\FileNode\MoveValueObjectsToValueObjectDirectoryRector\Expected\ValueObject;
-
+namespace Rector\Tests\Autodiscovery\Rector\FileNode\MoveValueObjectsToValueObjectDirectoryRector\Source\ValueObject;
 
 final class MeSearch
 {
-
 }

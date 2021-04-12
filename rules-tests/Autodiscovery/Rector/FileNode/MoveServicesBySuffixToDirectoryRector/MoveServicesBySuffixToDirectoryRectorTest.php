@@ -15,20 +15,14 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractRectorTest
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $originalFileInfo, ?AddedFileWithContent $expectedAddedFileWithContent): void
+    public function test(SmartFileInfo $originalFileInfo, AddedFileWithContent $expectedAddedFileWithContent): void
     {
         $this->doTestFileInfo($originalFileInfo);
-
-        if ($expectedAddedFileWithContent === null) {
-            // no change - file should have the original location
-            $this->assertFileWasNotChanged($this->originalTempFileInfo);
-        } else {
-            $this->assertFileWithContentWasAdded($expectedAddedFileWithContent);
-        }
+        $this->assertFileWasAdded($expectedAddedFileWithContent);
     }
 
     /**
-     * @return Iterator<mixed>
+     * @return Iterator<SmartFileInfo|AddedFileWithContent>
      */
     public function provideData(): Iterator
     {
@@ -37,7 +31,7 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractRectorTest
         yield [
             new SmartFileInfo(__DIR__ . '/Source/Entity/AppleRepository.php'),
             new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/Repository/AppleRepository.php',
+                $this->getFixtureTempDirectory() . '/Repository/AppleRepository.php',
                 $smartFileSystem->readFile(__DIR__ . '/Expected/Repository/ExpectedAppleRepository.php')
             ),
         ];
@@ -45,7 +39,7 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractRectorTest
         yield [
             new SmartFileInfo(__DIR__ . '/Source/Controller/BananaCommand.php'),
             new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/Command/BananaCommand.php',
+                $this->getFixtureTempDirectory() . '/Command/BananaCommand.php',
                 $smartFileSystem->readFile(__DIR__ . '/Expected/Command/ExpectedBananaCommand.php')
             ),
         ];
@@ -53,18 +47,15 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractRectorTest
         yield [
             new SmartFileInfo(__DIR__ . '/Source/Command/MissPlacedController.php'),
             new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/Controller/MissPlacedController.php',
+                $this->getFixtureTempDirectory() . '/Controller/MissPlacedController.php',
                 $smartFileSystem->readFile(__DIR__ . '/Expected/Controller/MissPlacedController.php')
             ),
         ];
 
-        // nothing changes
-        yield [new SmartFileInfo(__DIR__ . '/Source/Mapper/SkipCorrectMapper.php'), null];
-
         yield [
             new SmartFileInfo(__DIR__ . '/Source/Controller/Nested/AbstractBaseWithSpaceMapper.php'),
             new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/Mapper/Nested/AbstractBaseWithSpaceMapper.php',
+                $this->getFixtureTempDirectory() . '/Mapper/AbstractBaseWithSpaceMapper.php',
                 $smartFileSystem->readFile(__DIR__ . '/Expected/Mapper/Nested/AbstractBaseWithSpaceMapper.php.inc')
             ),
         ];
@@ -73,10 +64,30 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractRectorTest
         yield [
             new SmartFileInfo(__DIR__ . '/Source/Entity/UserMapper.php'),
             new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/Mapper/UserMapper.php',
+                $this->getFixtureTempDirectory() . '/Mapper/UserMapper.php',
                 $smartFileSystem->readFile(__DIR__ . '/Expected/Mapper/UserMapper.php.inc')
             ),
         ];
+    }
+
+    /**
+     * @dataProvider provideDataSkipped()
+     */
+    public function testSkipped(SmartFileInfo $originalFileInfo): void
+    {
+        $this->doTestFileInfo($originalFileInfo);
+
+        // no change - file should have the original location
+        $this->assertFileWasNotChanged($this->originalTempFileInfo);
+    }
+
+    /**
+     * @return Iterator<SmartFileInfo>
+     */
+    public function provideDataSkipped(): Iterator
+    {
+        // nothing changes
+        yield [new SmartFileInfo(__DIR__ . '/Source/Mapper/SkipCorrectMapper.php'), null];
     }
 
     public function provideConfigFilePath(): string

@@ -8,7 +8,8 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -28,6 +29,16 @@ final class RenameTesterTestToPHPUnitToTestFileRector extends AbstractRector
      * @see https://regex101.com/r/cOMZIj/1
      */
     private const PHPT_SUFFIX_REGEX = '#\.phpt$#';
+
+    /**
+     * @var FileInfoDeletionAnalyzer
+     */
+    private $fileInfoDeletionAnalyzer;
+
+    public function __construct(FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer)
+    {
+        $this->fileInfoDeletionAnalyzer = $fileInfoDeletionAnalyzer;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -68,8 +79,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $movedFileWithContent = new MovedFileWithContent($smartFileInfo, $newRealPath);
-        $this->removedAndAddedFilesCollector->addMovedFile($movedFileWithContent);
+        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
+
+        $addedFileWithContent = new AddedFileWithContent($newRealPath, $smartFileInfo->getContents());
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
 
         return null;
     }
@@ -78,6 +91,9 @@ CODE_SAMPLE
     {
         // file suffix
         $newRealPath = Strings::replace($oldRealPath, self::PHPT_SUFFIX_REGEX, '.php');
+
+        // cleanup tests prefix
+        $newRealPath = $this->fileInfoDeletionAnalyzer->clearNameFromTestingPrefix($newRealPath);
 
         // Test suffix
         if (! Strings::endsWith($newRealPath, 'Test.php')) {

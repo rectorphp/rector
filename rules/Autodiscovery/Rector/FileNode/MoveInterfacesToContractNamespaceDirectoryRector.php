@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
-use Rector\FileSystemRector\ValueObjectFactory\MovedFileWithNodesFactory;
+use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
+use Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory;
 use Rector\NetteToSymfony\NodeAnalyzer\NetteControlFactoryInterfaceAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -27,16 +27,16 @@ final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractRec
     private $netteControlFactoryInterfaceAnalyzer;
 
     /**
-     * @var MovedFileWithNodesFactory
+     * @var AddedFileWithNodesFactory
      */
-    private $movedFileWithNodesFactory;
+    private $addedFileWithNodesFactory;
 
     public function __construct(
         NetteControlFactoryInterfaceAnalyzer $netteControlFactoryInterfaceAnalyzer,
-        MovedFileWithNodesFactory $movedFileWithNodesFactory
+        AddedFileWithNodesFactory $addedFileWithNodesFactory
     ) {
         $this->netteControlFactoryInterfaceAnalyzer = $netteControlFactoryInterfaceAnalyzer;
-        $this->movedFileWithNodesFactory = $movedFileWithNodesFactory;
+        $this->addedFileWithNodesFactory = $addedFileWithNodesFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -88,16 +88,18 @@ CODE_SAMPLE
             return null;
         }
 
-        $movedFileWithNodes = $this->movedFileWithNodesFactory->createWithDesiredGroup(
+        $addedFileWithNodes = $this->addedFileWithNodesFactory->createWithDesiredGroup(
             $node->getFileInfo(),
             $node->stmts,
             'Contract'
         );
-        if (! $movedFileWithNodes instanceof MovedFileWithNodes) {
+
+        if (! $addedFileWithNodes instanceof AddedFileWithNodes) {
             return null;
         }
 
-        $this->removedAndAddedFilesCollector->addMovedFile($movedFileWithNodes);
+        $this->removedAndAddedFilesCollector->removeFile($node->getFileInfo());
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
 
         return null;
     }

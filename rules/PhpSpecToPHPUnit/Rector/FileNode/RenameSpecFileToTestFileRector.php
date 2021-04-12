@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\FileSystemRector\ValueObject\MovedFileWithContent;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -69,9 +69,12 @@ CODE_SAMPLE
             return null;
         }
 
+        $this->removedAndAddedFilesCollector->removeFile($fileInfo);
+
         $newPathName = $this->createPathName($oldPathname);
-        $movedFileWithContent = new MovedFileWithContent($fileInfo, $newPathName);
-        $this->removedAndAddedFilesCollector->addMovedFile($movedFileWithContent);
+        $addedFileWithContent = new AddedFileWithContent($newPathName, $fileInfo->getContents());
+
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
 
         return null;
     }

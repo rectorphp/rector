@@ -10,27 +10,22 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
+/**
+ * @requires PHP 7.4
+ */
 final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP 7.4
      * @dataProvider provideData()
      */
-    public function test(
-        SmartFileInfo $originalFileInfo,
-        ?AddedFileWithContent $expectedAddedFileWithContent
-    ): void {
+    public function test(SmartFileInfo $originalFileInfo, AddedFileWithContent $expectedAddedFileWithContent): void
+    {
         $this->doTestFileInfo($originalFileInfo);
-
-        if ($expectedAddedFileWithContent !== null) {
-            $this->assertFileWithContentWasAdded($expectedAddedFileWithContent);
-        } else {
-            $this->assertFileWasNotChanged($this->originalTempFileInfo);
-        }
+        $this->assertFileWasAdded($expectedAddedFileWithContent);
     }
 
     /**
-     * @return Iterator<mixed>
+     * @return Iterator<SmartFileInfo|AddedFileWithContent[]>
      */
     public function provideData(): Iterator
     {
@@ -39,34 +34,37 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
         yield [
             new SmartFileInfo(__DIR__ . '/Source/Entity/RandomInterface.php'),
             new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/Contract/RandomInterface.php',
+                $this->getFixtureTempDirectory() . '/Contract/RandomInterface.php',
                 $smartFileSystem->readFile(__DIR__ . '/Expected/ExpectedRandomInterface.php')
             ),
         ];
+    }
+
+    /**
+     * @dataProvider provideDataSkip()
+     */
+    public function testSkip(SmartFileInfo $originalFileInfo): void
+    {
+        $this->doTestFileInfo($originalFileInfo);
+        $this->assertFileWasNotChanged($this->originalTempFileInfo);
+    }
+
+    /**
+     * @return Iterator<SmartFileInfo>
+     */
+    public function provideDataSkip(): Iterator
+    {
+        // skip already in correct location
+        yield [new SmartFileInfo(__DIR__ . '/Source/Contract/KeepThisSomeInterface.php')];
+
+        // skip already in correct location
+        yield [new SmartFileInfo(__DIR__ . '/Source/Contract/Foo/KeepThisSomeInterface.php')];
 
         // skip nette control factory
-        yield [
-            new SmartFileInfo(__DIR__ . '/Source/Control/ControlFactory.php'),
-            new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/Control/ControlFactory.php',
-                $smartFileSystem->readFile(__DIR__ . '/Source/Control/ControlFactory.php')
-            ),
-        ];
+        yield [new SmartFileInfo(__DIR__ . '/Source/Control/ControlFactory.php')];
 
         // skip form control factory, even in docblock
-        yield [
-            new SmartFileInfo(__DIR__ . '/Source/Control/FormFactory.php'),
-            new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/Control/FormFactory.php',
-                $smartFileSystem->readFile(__DIR__ . '/Source/Control/FormFactory.php')
-            ),
-        ];
-
-        // skip already in correct location
-        yield [new SmartFileInfo(__DIR__ . '/Source/Contract/KeepThisSomeInterface.php'), null];
-
-        // skip already in correct location
-        yield [new SmartFileInfo(__DIR__ . '/Source/Contract/Foo/KeepThisSomeInterface.php'), null];
+        yield [new SmartFileInfo(__DIR__ . '/Source/Control/FormFactory.php')];
     }
 
     public function provideConfigFilePath(): string

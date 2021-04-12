@@ -13,8 +13,8 @@ use Rector\Autodiscovery\Analyzer\ValueObjectClassAnalyzer;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
-use Rector\FileSystemRector\ValueObjectFactory\MovedFileWithNodesFactory;
+use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
+use Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -66,9 +66,9 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
     private $suffixes = [];
 
     /**
-     * @var MovedFileWithNodesFactory
+     * @var AddedFileWithNodesFactory
      */
-    private $movedFileWithNodesFactory;
+    private $addedFileWithNodesFactory;
 
     /**
      * @var ValueObjectClassAnalyzer
@@ -76,10 +76,10 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
     private $valueObjectClassAnalyzer;
 
     public function __construct(
-        MovedFileWithNodesFactory $movedFileWithNodesFactory,
+        AddedFileWithNodesFactory $addedFileWithNodesFactory,
         ValueObjectClassAnalyzer $valueObjectClassAnalyzer
     ) {
-        $this->movedFileWithNodesFactory = $movedFileWithNodesFactory;
+        $this->addedFileWithNodesFactory = $addedFileWithNodesFactory;
         $this->valueObjectClassAnalyzer = $valueObjectClassAnalyzer;
     }
 
@@ -155,17 +155,19 @@ CODE_SAMPLE
         }
 
         $smartFileInfo = $node->getFileInfo();
-        $movedFileWithNodes = $this->movedFileWithNodesFactory->createWithDesiredGroup(
+
+        $addedFileWithNodes = $this->addedFileWithNodesFactory->createWithDesiredGroup(
             $smartFileInfo,
             $node->stmts,
             'ValueObject'
         );
 
-        if (! $movedFileWithNodes instanceof MovedFileWithNodes) {
+        if (! $addedFileWithNodes instanceof AddedFileWithNodes) {
             return null;
         }
 
-        $this->removedAndAddedFilesCollector->addMovedFile($movedFileWithNodes);
+        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
 
         return null;
     }

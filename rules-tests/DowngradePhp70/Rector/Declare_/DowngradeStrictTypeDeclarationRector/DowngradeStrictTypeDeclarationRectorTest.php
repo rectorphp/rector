@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\PhpSpecToPHPUnit\Rector\FileNode\RenameSpecFileToTestFileRector;
+namespace Rector\Tests\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class RenameSpecFileToTestFileRectorTest extends AbstractRectorTestCase
+final class DowngradeStrictTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -16,10 +16,6 @@ final class RenameSpecFileToTestFileRectorTest extends AbstractRectorTestCase
     public function test(SmartFileInfo $fileInfo): void
     {
         $this->doTestFileInfo($fileInfo);
-
-        // test file is moved
-        $isFileRemoved = $this->removedAndAddedFilesCollector->isFileRemoved($this->originalTempFileInfo);
-        $this->assertTrue($isFileRemoved);
     }
 
     /**
@@ -27,11 +23,11 @@ final class RenameSpecFileToTestFileRectorTest extends AbstractRectorTestCase
      */
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture', '*.php');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     public function provideConfigFilePath(): string
     {
-        return __DIR__ . '/config/configured_rule.php';
+        return __DIR__ . '/config/php_70.php';
     }
 }

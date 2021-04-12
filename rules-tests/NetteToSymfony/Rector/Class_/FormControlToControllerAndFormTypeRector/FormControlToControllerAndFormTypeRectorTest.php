@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Tests\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector;
 
 use Iterator;
+use Nette\Utils\FileSystem;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -13,13 +15,10 @@ final class FormControlToControllerAndFormTypeRectorTest extends AbstractRectorT
     /**
      * @dataProvider provideData()
      */
-    public function test(
-        SmartFileInfo $fileInfo,
-        string $expectedExtraFileName,
-        string $expectedExtraContentFilePath
-    ): void {
+    public function test(SmartFileInfo $fileInfo, AddedFileWithContent $expectedAddedFileWithContent): void
+    {
         $this->doTestFileInfo($fileInfo);
-        $this->doTestExtraFile($expectedExtraFileName, $expectedExtraContentFilePath);
+        $this->assertFileWasAdded($expectedAddedFileWithContent);
     }
 
     /**
@@ -29,8 +28,10 @@ final class FormControlToControllerAndFormTypeRectorTest extends AbstractRectorT
     {
         yield [
             new SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc'),
-            'src/Controller/SomeFormController.php',
-            __DIR__ . '/Source/extra_file.php',
+            new AddedFileWithContent(
+                'src/Controller/SomeFormController.php',
+                FileSystem::read(__DIR__ . '/Source/extra_file.php')
+            ),
         ];
     }
 

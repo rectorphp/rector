@@ -20,7 +20,7 @@ final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractRec
         $this->doTestFileInfo($fixtureFileInfo);
 
         if ($expectedAddedFileWithContent !== null) {
-            $this->assertFileWithContentWasAdded($expectedAddedFileWithContent);
+            $this->assertFileWasAdded($expectedAddedFileWithContent);
         } else {
             $this->assertFileWasNotChanged($this->originalTempFileInfo);
         }
@@ -36,7 +36,7 @@ final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractRec
         yield [
             new SmartFileInfo(__DIR__ . '/Source/Repository/PrimitiveValueObject.php'),
             new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/ValueObject/PrimitiveValueObject.php',
+                $this->getFixtureTempDirectory() . '/ValueObject/PrimitiveValueObject.php',
                 $smartFileSystem->readFile(__DIR__ . '/Expected/ValueObject/PrimitiveValueObject.php')
             ),
         ];
@@ -45,7 +45,7 @@ final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractRec
         yield [
             new SmartFileInfo(__DIR__ . '/Source/Command/SomeName.php'),
             new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/ValueObject/SomeName.php',
+                $this->getFixtureTempDirectory() . '/ValueObject/SomeName.php',
                 $smartFileSystem->readFile(__DIR__ . '/Expected/ValueObject/SomeName.php')
             ),
         ];
@@ -54,7 +54,7 @@ final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractRec
         yield [
             new SmartFileInfo(__DIR__ . '/Source/Command/MeSearch.php'),
             new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/Source/ValueObject/MeSearch.php',
+                $this->getFixtureTempDirectory() . '/ValueObject/MeSearch.php',
                 $smartFileSystem->readFile(__DIR__ . '/Expected/ValueObject/MeSearch.php')
             ),
         ];
