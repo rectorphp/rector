@@ -57,7 +57,7 @@ final class ComposerFileProcessor implements FileProcessorInterface
             return true;
         }
 
-        return $fileInfo->getRealPath() === getcwd() . '/composer.json';
+        return $fileInfo->getBasename() === 'composer.json';
     }
 
     /**
@@ -95,6 +95,7 @@ final class ComposerFileProcessor implements FileProcessorInterface
         if (! StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return false;
         }
+
         return $fileInfo->hasSuffixes(['json']);
     }
 }
