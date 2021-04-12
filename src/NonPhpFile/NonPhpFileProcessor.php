@@ -63,8 +63,7 @@ final class NonPhpFileProcessor implements FileProcessorInterface
 
     private function processFile(File $file): void
     {
-        $fileInfo = $file->getSmartFileInfo();
-        $oldFileContents = $fileInfo->getContents();
+        $oldFileContents = $file->getFileContent();
 
         $classRenames = array_merge(
             $this->renamedClassesDataCollector->getOldToNewClasses(),
