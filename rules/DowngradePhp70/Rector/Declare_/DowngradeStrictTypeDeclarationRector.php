@@ -7,6 +7,7 @@ namespace Rector\DowngradePhp70\Rector\Declare_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Declare_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -43,28 +44,28 @@ CODE_SAMPLE
     }
 
     /**
-     * @param FuncCall $node
+     * @param Declare_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        dump($node);
         if ($this->shouldSkip($node)) {
             return null;
         }
 
+        $this->removeNode($node);
         return $node;
     }
 
-    private function shouldSkip(FuncCall $funcCall): bool
+    private function shouldSkip(Declare_ $declare): bool
     {
-        if (! $this->isName($funcCall, 'declare')) {
-            return true;
+        $declares = $declare->declares;
+
+        foreach ($declares as $declare) {
+            if ($declare->key instanceof Identifier && $this->isName($declare->key, 'strict_types')) {
+                return false;
+            }
         }
 
-        $args   = $funcCall->args;
-        $assign = $args[0];
-
-        dump($assign);
         return true;
     }
 }
