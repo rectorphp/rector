@@ -99,37 +99,38 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         if ($this->valueResolver->isTrue($ifExpression) && $this->valueResolver->isFalse($elseExpression)) {
             return $this->processTrueIfExpressionWithFalseElseExpression($condition);
         }
-
-        if ($this->valueResolver->isFalse($ifExpression) && $this->valueResolver->isTrue($elseExpression)) {
-            return $this->processFalseIfExpressionWithTrueElseExpression($condition);
+        if (! $this->valueResolver->isFalse($ifExpression)) {
+            return null;
         }
-
-        return null;
+        if (! $this->valueResolver->isTrue($elseExpression)) {
+            return null;
+        }
+        return $this->processFalseIfExpressionWithTrueElseExpression($condition);
     }
 
-    private function processTrueIfExpressionWithFalseElseExpression(Expr $condition): Expr
+    private function processTrueIfExpressionWithFalseElseExpression(Expr $expr): Expr
     {
-        if ($this->nodeTypeResolver->isStaticType($condition, BooleanType::class)) {
-            return $condition;
+        if ($this->nodeTypeResolver->isStaticType($expr, BooleanType::class)) {
+            return $expr;
         }
 
-        return new Bool_($condition);
+        return new Bool_($expr);
     }
 
-    private function processFalseIfExpressionWithTrueElseExpression(Expr $condition): Expr
+    private function processFalseIfExpressionWithTrueElseExpression(Expr $expr): Expr
     {
-        if ($condition instanceof BooleanNot) {
-            if ($this->nodeTypeResolver->isStaticType($condition->expr, BooleanType::class)) {
-                return $condition->expr;
+        if ($expr instanceof BooleanNot) {
+            if ($this->nodeTypeResolver->isStaticType($expr->expr, BooleanType::class)) {
+                return $expr->expr;
             }
 
-            return new Bool_($condition->expr);
+            return new Bool_($expr->expr);
         }
 
-        if ($this->nodeTypeResolver->isStaticType($condition, BooleanType::class)) {
-            return new BooleanNot($condition);
+        if ($this->nodeTypeResolver->isStaticType($expr, BooleanType::class)) {
+            return new BooleanNot($expr);
         }
 
-        return new BooleanNot(new Bool_($condition));
+        return new BooleanNot(new Bool_($expr));
     }
 }
