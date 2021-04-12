@@ -141,6 +141,14 @@ CODE_SAMPLE
             return false;
         }
 
+        return $this->isUsedInAssignExpr($expr, $assign);
+    }
+
+    /**
+     * @param FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $expr
+     */
+    private function isUsedInAssignExpr(Expr $expr, Assign $assign): bool
+    {
         $args = $expr->args;
         foreach ($args as $arg) {
             $variable = $arg->value;
