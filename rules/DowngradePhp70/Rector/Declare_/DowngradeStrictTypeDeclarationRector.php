@@ -59,9 +59,13 @@ CODE_SAMPLE
         $declares = $declare->declares;
 
         foreach ($declares as $declare) {
-            if ($declare->key instanceof Identifier && $this->isName($declare->key, 'strict_types')) {
-                return false;
+            if (! $declare->key instanceof Identifier) {
+                continue;
             }
+            if (! $this->isName($declare->key, 'strict_types')) {
+                continue;
+            }
+            return false;
         }
 
         return true;
