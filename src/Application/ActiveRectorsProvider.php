@@ -49,26 +49,11 @@ final class ActiveRectorsProvider
      */
     public function provide(): array
     {
-        return $this->filterOutInternalRectorsAndSort($this->rectors);
-    }
+        sort($this->rectors);
 
-    /**
-     * @param RectorInterface[] $rectors
-     * @return RectorInterface[]
-     */
-    private function filterOutInternalRectorsAndSort(array $rectors): array
-    {
-        sort($rectors);
-
-        $rectors = array_filter($rectors, function (RectorInterface $rector): bool {
+        return array_filter($this->rectors, function (RectorInterface $rector): bool {
             // skip as internal and always run
             return ! $rector instanceof PostRectorInterface;
         });
-
-        usort($rectors, function (RectorInterface $firstRector, RectorInterface $secondRector): int {
-            return get_class($firstRector) <=> get_class($secondRector);
-        });
-
-        return $rectors;
     }
 }

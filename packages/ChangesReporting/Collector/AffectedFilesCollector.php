@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Rector\ChangesReporting\Collector;
 
-use Symplify\SmartFileSystem\SmartFileInfo;
+use Rector\Core\ValueObject\Application\File;
 
 final class AffectedFilesCollector
 {
     /**
-     * @var SmartFileInfo[]
+     * @var File[]
      */
     private $affectedFiles = [];
 
-    public function addFile(SmartFileInfo $fileInfo): void
+    public function addFile(File $file): void
     {
-        $this->affectedFiles[$fileInfo->getRealPath()] = $fileInfo;
+        $fileInfo = $file->getSmartFileInfo();
+        $this->affectedFiles[$fileInfo->getRealPath()] = $file;
     }
 
-    public function getNext(): ?SmartFileInfo
+    public function getNext(): ?File
     {
         if ($this->affectedFiles !== []) {
             return current($this->affectedFiles);
@@ -26,8 +27,9 @@ final class AffectedFilesCollector
         return null;
     }
 
-    public function removeFromList(SmartFileInfo $fileInfo): void
+    public function removeFromList(File $file): void
     {
+        $fileInfo = $file->getSmartFileInfo();
         unset($this->affectedFiles[$fileInfo->getRealPath()]);
     }
 }

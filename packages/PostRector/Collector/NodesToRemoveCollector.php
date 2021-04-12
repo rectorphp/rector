@@ -17,6 +17,7 @@ use Rector\ChangesReporting\Collector\AffectedFilesCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\ValueObject\Application\File;
 use Rector\NodeRemoval\BreakingRemovalGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
@@ -82,7 +83,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
         /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
         if ($fileInfo !== null) {
-            $this->affectedFilesCollector->addFile($fileInfo);
+            $this->affectedFilesCollector->addFile(new File($fileInfo, $fileInfo->getContents()));
         }
 
         /** @var Stmt $node */

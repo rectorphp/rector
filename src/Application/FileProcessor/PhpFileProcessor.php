@@ -2,34 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Application;
+namespace Rector\Core\Application\FileProcessor;
 
 use PHPStan\AnalysedCodeException;
-use PHPStan\Analyser\NodeScopeResolver;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
+use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\Contract\PostRunnerInterface;
+use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\FileSystem\PhpFilesFinder;
-use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
+use Rector\Core\ValueObject\Application\File;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 
-/**
- * Rector cycle has 3 steps:
- *
- * 1. parse all files to nodes
- *
- * 2. run Rectors on all files and their nodes
- *
- * 3. print changed content to file or to string diff with "--dry-run"
- */
-final class RectorApplication
+final class PhpFileProcessor implements FileProcessorInterface
 {
     /**
      * Why 4? One for each cycle, so user sees some activity all the time:
@@ -44,14 +34,14 @@ final class RectorApplication
     private const PROGRESS_BAR_STEP_MULTIPLIER = 4;
 
     /**
-     * @var SmartFileInfo[]
+     * @var Configuration
      */
-    private $notParsedFiles = [];
+    private $configuration;
 
     /**
-     * @var PostRunnerInterface[]
+     * @var File[]
      */
-    private $postRunners = [];
+    private $notParsedFiles = [];
 
     /**
      * @var SymfonyStyle
@@ -62,11 +52,6 @@ final class RectorApplication
      * @var ErrorAndDiffCollector
      */
     private $errorAndDiffCollector;
-
-    /**
-     * @var Configuration
-     */
-    private $configuration;
 
     /**
      * @var FileProcessor
@@ -84,40 +69,24 @@ final class RectorApplication
     private $removedAndAddedFilesProcessor;
 
     /**
-     * @var NodeScopeResolver
-     */
-    private $nodeScopeResolver;
-
-    /**
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
 
     /**
-     * @var PhpFilesFinder
+     * @var FileDiffFileDecorator
      */
-    private $phpFilesFinder;
+    private $fileDiffFileDecorator;
 
-    /**
-     * @var DynamicSourceLocatorDecorator
-     */
-    private $dynamicSourceLocatorDecorator;
-
-    /**
-     * @param PostRunnerInterface[] $postRunners
-     */
     public function __construct(
         Configuration $configuration,
         ErrorAndDiffCollector $errorAndDiffCollector,
         FileProcessor $fileProcessor,
-        NodeScopeResolver $nodeScopeResolver,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         SymfonyStyle $symfonyStyle,
         PrivatesAccessor $privatesAccessor,
-        PhpFilesFinder $phpFilesFinder,
-        DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator,
-        array $postRunners
+        FileDiffFileDecorator $fileDiffFileDecorator
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
@@ -125,55 +94,46 @@ final class RectorApplication
         $this->fileProcessor = $fileProcessor;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
-        $this->nodeScopeResolver = $nodeScopeResolver;
         $this->privatesAccessor = $privatesAccessor;
-        $this->postRunners = $postRunners;
-        $this->phpFilesFinder = $phpFilesFinder;
-        $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
+        $this->fileDiffFileDecorator = $fileDiffFileDecorator;
+        $this->configuration = $configuration;
     }
 
     /**
-     * @param string[] $paths
+     * @param File[] $files
      */
-    public function runOnPaths(array $paths): void
+    public function process(array $files): void
     {
-        $phpFileInfos = $this->phpFilesFinder->findInPaths($paths);
-        $fileCount = count($phpFileInfos);
+        $fileCount = count($files);
         if ($fileCount === 0) {
             return;
         }
 
         $this->prepareProgressBar($fileCount);
 
-        // PHPStan has to know about all files!
-        $this->configurePHPStanNodeScopeResolver($phpFileInfos);
-
-        // 0. add files and directories to static locator
-        $this->dynamicSourceLocatorDecorator->addPaths($paths);
-
         // 1. parse files to nodes
-        $this->parseFileInfosToNodes($phpFileInfos);
+        $this->parseFileInfosToNodes($files);
 
         // 2. change nodes with Rectors
-        $this->refactorNodesWithRectors($phpFileInfos);
+        $this->refactorNodesWithRectors($files);
 
         // 3. apply post rectors
-        foreach ($phpFileInfos as $phpFileInfo) {
-            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
-                $this->fileProcessor->postFileRefactor($smartFileInfo);
+        foreach ($files as $file) {
+            $this->tryCatchWrapper($file, function (File $file): void {
+                $this->fileProcessor->postFileRefactor($file);
             }, 'post rectors');
         }
 
         // 4. print to file or string
-        foreach ($phpFileInfos as $phpFileInfo) {
-            // cannot print file with errors, as print would break everything to orignal nodes
-            if ($this->errorAndDiffCollector->hasErrors($phpFileInfo)) {
-                $this->advance($phpFileInfo, 'printing');
+        foreach ($files as $file) {
+            // cannot print file with errors, as print would break everything to original nodes
+            if ($this->errorAndDiffCollector->hasSmartFileErrors($file)) {
+                $this->advance($file, 'printing skipped due error');
                 continue;
             }
 
-            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
-                $this->printFileInfo($smartFileInfo);
+            $this->tryCatchWrapper($file, function (File $file): void {
+                $this->printFileInfo($file);
             }, 'printing');
         }
 
@@ -183,11 +143,20 @@ final class RectorApplication
 
         // 4. remove and add files
         $this->removedAndAddedFilesProcessor->run();
+    }
 
-        // 5. various extensions on finish
-        foreach ($this->postRunners as $postRunner) {
-            $postRunner->run();
-        }
+    public function supports(File $file): bool
+    {
+        $fileInfo = $file->getSmartFileInfo();
+        return $fileInfo->hasSuffixes($this->getSupportedFileExtensions());
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSupportedFileExtensions(): array
+    {
+        return $this->configuration->getFileExtensions();
     }
 
     private function prepareProgressBar(int $fileCount): void
@@ -204,79 +173,67 @@ final class RectorApplication
     }
 
     /**
-     * @param SmartFileInfo[] $fileInfos
+     * @param File[] $files
      */
-    private function configurePHPStanNodeScopeResolver(array $fileInfos): void
+    private function parseFileInfosToNodes(array $files): void
     {
-        $filePaths = [];
-        foreach ($fileInfos as $fileInfo) {
-            $filePaths[] = $fileInfo->getPathname();
-        }
-
-        $this->nodeScopeResolver->setAnalysedFiles($filePaths);
-    }
-
-    /**
-     * @param SmartFileInfo[] $phpFileInfos
-     */
-    private function parseFileInfosToNodes(array $phpFileInfos): void
-    {
-        foreach ($phpFileInfos as $phpFileInfo) {
-            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
-                $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
+        foreach ($files as $file) {
+            $this->tryCatchWrapper($file, function (File $file): void {
+                $this->fileProcessor->parseFileInfoToLocalCache($file);
             }, 'parsing');
         }
     }
 
     /**
-     * @param SmartFileInfo[] $phpFileInfos
+     * @param File[] $files
      */
-    private function refactorNodesWithRectors(array $phpFileInfos): void
+    private function refactorNodesWithRectors(array $files): void
     {
-        foreach ($phpFileInfos as $phpFileInfo) {
-            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
-                $this->fileProcessor->refactor($smartFileInfo);
+        foreach ($files as $file) {
+            $this->tryCatchWrapper($file, function (File $file): void {
+                $this->fileProcessor->refactor($file);
             }, 'refactoring');
         }
     }
 
-    private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback, string $phase): void
+    private function tryCatchWrapper(File $file, callable $callback, string $phase): void
     {
-        $this->advance($smartFileInfo, $phase);
+        $this->advance($file, $phase);
 
         try {
-            if (in_array($smartFileInfo, $this->notParsedFiles, true)) {
+            if (in_array($file, $this->notParsedFiles, true)) {
                 // we cannot process this file
                 return;
             }
 
-            $callback($smartFileInfo);
+            $callback($file);
         } catch (AnalysedCodeException $analysedCodeException) {
-            $this->notParsedFiles[] = $smartFileInfo;
-
-            $this->errorAndDiffCollector->addAutoloadError($analysedCodeException, $smartFileInfo);
+            $this->notParsedFiles[] = $file;
+            $this->errorAndDiffCollector->addAutoloadError($analysedCodeException, $file);
         } catch (Throwable $throwable) {
             if ($this->symfonyStyle->isVerbose()) {
                 throw $throwable;
             }
 
-            $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $smartFileInfo);
+            $fileInfo = $file->getSmartFileInfo();
+            $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $fileInfo);
         }
     }
 
-    private function printFileInfo(SmartFileInfo $fileInfo): void
+    private function printFileInfo(File $file): void
     {
+        $fileInfo = $file->getSmartFileInfo();
+
         if ($this->removedAndAddedFilesCollector->isFileRemoved($fileInfo)) {
             // skip, because this file exists no more
             return;
         }
 
-        $oldContents = $fileInfo->getContents();
-
         $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString($fileInfo)
             : $this->fileProcessor->printToFile($fileInfo);
 
-        $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContents);
+        $file->changeFileContent($newContent);
+        $this->fileDiffFileDecorator->decorate([$file]);
     }
 
     /**
@@ -299,10 +256,11 @@ final class RectorApplication
         $progressBar->setRedrawFrequency($redrawFrequency);
     }
 
-    private function advance(SmartFileInfo $smartFileInfo, string $phase): void
+    private function advance(File $file, string $phase): void
     {
         if ($this->symfonyStyle->isVerbose()) {
-            $relativeFilePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
+            $fileInfo = $file->getSmartFileInfo();
+            $relativeFilePath = $fileInfo->getRelativeFilePathFromDirectory(getcwd());
             $message = sprintf('[%s] %s', $phase, $relativeFilePath);
             $this->symfonyStyle->writeln($message);
         } elseif ($this->configuration->shouldShowProgressBar()) {
