@@ -3,14 +3,16 @@ declare(strict_types=1);
 
 namespace Rector\Core\Contract\Processor;
 
-use Rector\Core\ValueObject\NonPhpFile\NonPhpFileChange;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use Rector\Core\ValueObject\Application\File;
 
 interface FileProcessorInterface
 {
-    public function process(SmartFileInfo $smartFileInfo): ?NonPhpFileChange;
+    public function supports(File $file): bool;
 
-    public function supports(SmartFileInfo $smartFileInfo): bool;
+    /**
+     * @param File[] $files
+     */
+    public function process(array $files): void;
 
     /**
      * @return string[]

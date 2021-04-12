@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Rector\ChangesReporting\Application;
 
 use PHPStan\AnalysedCodeException;
-use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
-use Rector\Core\Differ\DefaultDiffer;
 use Rector\Core\Error\ExceptionCorrector;
+use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Application\RectorError;
-use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
-use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 
@@ -22,16 +19,6 @@ final class ErrorAndDiffCollector
      * @var RectorError[]
      */
     private $errors = [];
-
-    /**
-     * @var FileDiff[]
-     */
-    private $fileDiffs = [];
-
-    /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
 
     /**
      * @var ExceptionCorrector
@@ -48,30 +35,14 @@ final class ErrorAndDiffCollector
      */
     private $nodesToRemoveCollector;
 
-    /**
-     * @var ConsoleDiffer
-     */
-    private $consoleDiffer;
-
-    /**
-     * @var DefaultDiffer
-     */
-    private $defaultDiffer;
-
     public function __construct(
         ExceptionCorrector $exceptionCorrector,
         NodesToRemoveCollector $nodesToRemoveCollector,
-        RectorChangeCollector $rectorChangeCollector,
-        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        ConsoleDiffer $consoleDiffer,
-        DefaultDiffer $defaultDiffer
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
     ) {
-        $this->rectorChangeCollector = $rectorChangeCollector;
         $this->exceptionCorrector = $exceptionCorrector;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
-        $this->consoleDiffer = $consoleDiffer;
-        $this->defaultDiffer = $defaultDiffer;
     }
 
     /**
@@ -87,7 +58,7 @@ final class ErrorAndDiffCollector
         return $this->removedAndAddedFilesCollector->getAffectedFilesCount();
     }
 
-    public function getAddFilesCount(): int
+    public function getAddedFilesCount(): int
     {
         return $this->removedAndAddedFilesCollector->getAddedFileCount();
     }
@@ -102,55 +73,10 @@ final class ErrorAndDiffCollector
         return $this->nodesToRemoveCollector->getCount();
     }
 
-    public function addFileDiff(SmartFileInfo $smartFileInfo, string $newContent, string $oldContent): void
-    {
-        if ($newContent === $oldContent) {
-            return;
-        }
-
-        $rectorChanges = $this->rectorChangeCollector->getRectorChangesByFileInfo($smartFileInfo);
-
-        // always keep the most recent diff
-        $fileDiff = new FileDiff(
-            $smartFileInfo,
-            $this->defaultDiffer->diff($oldContent, $newContent),
-            $this->consoleDiffer->diff($oldContent, $newContent),
-            $rectorChanges
-        );
-        $this->fileDiffs[$smartFileInfo->getRealPath()] = $fileDiff;
-    }
-
-    /**
-     * @return FileDiff[]
-     */
-    public function getFileDiffs(): array
-    {
-        return $this->fileDiffs;
-    }
-
-    /**
-     * @return SmartFileInfo[]
-     */
-    public function getAffectedFileInfos(): array
-    {
-        $fileInfos = [];
-        foreach ($this->fileDiffs as $fileDiff) {
-            $fileInfos[] = $fileDiff->getFileInfo();
-        }
-
-        return array_unique($fileInfos);
-    }
-
-    public function getFileDiffsCount(): int
-    {
-        return count($this->fileDiffs);
-    }
-
-    public function addAutoloadError(AnalysedCodeException $analysedCodeException, SmartFileInfo $fileInfo): void
+    public function addAutoloadError(AnalysedCodeException $analysedCodeException, File $file): void
     {
         $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
-
-        $this->errors[] = new RectorError($fileInfo, $message);
+        $this->errors[] = new RectorError($file->getSmartFileInfo(), $message);
     }
 
     public function addErrorWithRectorClassMessageAndFileInfo(
@@ -171,10 +97,10 @@ final class ErrorAndDiffCollector
         }
     }
 
-    public function hasErrors(SmartFileInfo $phpFileInfo): bool
+    public function hasSmartFileErrors(File $file): bool
     {
         foreach ($this->errors as $error) {
-            if ($error->getFileInfo() === $phpFileInfo) {
+            if ($error->getFileInfo() === $file->getSmartFileInfo()) {
                 return true;
             }
         }

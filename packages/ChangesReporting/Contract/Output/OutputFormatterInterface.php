@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\ChangesReporting\Contract\Output;
 
-use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\Core\ValueObject\ProcessResult;
 
 interface OutputFormatterInterface
 {
     public function getName(): string;
 
-    public function report(ErrorAndDiffCollector $errorAndDiffCollector): void;
+    public function report(ProcessResult $processResult): void;
 }
