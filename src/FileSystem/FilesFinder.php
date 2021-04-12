@@ -86,6 +86,11 @@ final class FilesFinder
             $smartFileInfos[] = new SmartFileInfo($file);
         }
 
+        $composerPath = getcwd() . '/composer.json';
+        if (file_exists($composerPath) && in_array('json', $suffixes, true)) {
+            $smartFileInfos[] = new SmartFileInfo($composerPath);
+        }
+
         $smartFileInfos = array_merge($smartFileInfos, $this->findInDirectories($directories, $suffixes));
         return $this->fileInfosBySourceAndSuffixes[$cacheKey] = $smartFileInfos;
     }
