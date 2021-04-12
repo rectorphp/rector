@@ -18,7 +18,7 @@ final class RenameTesterTestToPHPUnitToTestFileRectorTest extends AbstractRector
     public function test(SmartFileInfo $fixtureFileInfo, AddedFileWithContent $expectedAddedFileWithContent): void
     {
         $this->doTestFileInfo($fixtureFileInfo);
-        $this->assertFileWithContentWasAdded($expectedAddedFileWithContent);
+        $this->assertFileWasAdded($expectedAddedFileWithContent);
     }
 
     /**

@@ -20,7 +20,7 @@ final class MoveEntitiesToEntityDirectoryRectorTest extends AbstractRectorTestCa
         AddedFileWithContent $expectedAddedFileWithContent
     ): void {
         $this->doTestFileInfo($originalFileInfo);
-        $this->assertFileWithContentWasAdded($expectedAddedFileWithContent);
+        $this->assertFileWasAdded($expectedAddedFileWithContent);
     }
 
     /**
