@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Tests\Transform\Rector\FileWithoutNamespace\FunctionToStaticMethodRector;
 
 use Iterator;
+use Nette\Utils\FileSystem;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -20,7 +21,7 @@ final class FunctionToStaticMethodRectorTest extends AbstractRectorTestCase
 
         $addedFileWithContent = new AddedFileWithContent(
             $this->originalTempFileInfo->getRealPathDirectory() . '/StaticFunctions.php',
-            file_get_contents(__DIR__ . '/Source/ExpectedStaticFunctions.php')
+            FileSystem::read(__DIR__ . '/Source/ExpectedStaticFunctions.php')
         );
 
         $this->assertFileWasAdded($addedFileWithContent);
