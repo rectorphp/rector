@@ -52,7 +52,7 @@ final class ComposerFileProcessor implements FileProcessorInterface
     {
         $fileInfo = $file->getSmartFileInfo();
 
-        if (StaticPHPUnitEnvironment::isPHPUnitRun() && $fileInfo->hasSuffixes(['json'])) {
+        if ($this->isJsonInTests($fileInfo)) {
             return true;
         }
 
@@ -87,5 +87,10 @@ final class ComposerFileProcessor implements FileProcessorInterface
 
         $changeFileContent = $this->composerJsonPrinter->printToString($composerJson);
         $file->changeFileContent($changeFileContent);
+    }
+
+    private function isJsonInTests(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo): bool
+    {
+        return StaticPHPUnitEnvironment::isPHPUnitRun() && $fileInfo->hasSuffixes(['json']);
     }
 }

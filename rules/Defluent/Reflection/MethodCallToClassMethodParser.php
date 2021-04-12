@@ -32,18 +32,18 @@ final class MethodCallToClassMethodParser
     /**
      * @var FunctionLikeReflectionParser
      */
-    private $functionLikeParser;
+    private $functionLikeReflectionParser;
 
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         NodeNameResolver $nodeNameResolver,
         ReflectionProvider $reflectionProvider,
-        FunctionLikeReflectionParser $functionLikeParser
+        FunctionLikeReflectionParser $functionLikeReflectionParser
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
-        $this->functionLikeParser = $functionLikeParser;
+        $this->functionLikeReflectionParser = $functionLikeReflectionParser;
     }
 
     public function parseMethodCall(MethodCall $methodCall): ?ClassMethod
@@ -61,6 +61,6 @@ final class MethodCallToClassMethodParser
 
         $methodReflection = $callerClassReflection->getNativeMethod($methodName);
 
-        return $this->functionLikeParser->parseMethodReflection($methodReflection);
+        return $this->functionLikeReflectionParser->parseMethodReflection($methodReflection);
     }
 }
