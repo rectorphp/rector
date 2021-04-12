@@ -65,7 +65,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isOnClassMethodCall($node, new ObjectType('PHPExcel_Style_Conditional'), 'setCondition')) {
+        if (! $this->isObjectType($node->var, new ObjectType('PHPExcel_Style_Conditional'))) {
+            return null;
+        }
+
+        if (! $this->isName($node->name, 'setCondition')) {
             return null;
         }
 

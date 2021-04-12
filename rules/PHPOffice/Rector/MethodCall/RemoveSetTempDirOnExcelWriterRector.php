@@ -61,7 +61,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isOnClassMethodCall($node, new ObjectType('PHPExcel_Writer_Excel5'), 'setTempDir')) {
+        if (! $this->isObjectType($node->var, new ObjectType('PHPExcel_Writer_Excel5'))) {
+            return null;
+        }
+
+        if (! $this->isName($node->name, 'setTempDir')) {
             return null;
         }
 

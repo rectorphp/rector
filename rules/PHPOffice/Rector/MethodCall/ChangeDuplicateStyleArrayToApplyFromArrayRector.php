@@ -63,7 +63,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isOnClassMethodCall($node, new ObjectType('PHPExcel_Worksheet'), 'duplicateStyleArray')) {
+        if (! $this->isObjectType($node->var, new ObjectType('PHPExcel_Worksheet'))) {
+            return null;
+        }
+
+        if (! $this->nodeNameResolver->isName($node->name, 'duplicateStyleArray')) {
             return null;
         }
 
