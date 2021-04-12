@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Core\Tests\NonPhpFile\NeonMethodCallRenamer\Source;
+namespace Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\Source;
 
 interface ServiceInterface
 {

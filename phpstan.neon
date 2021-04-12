@@ -281,7 +281,7 @@ parameters:
                 - bin/rector.php
                 - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
                 - src/Application/FileProcessor/PhpFileProcessor.php
-                - tests/NonPhpFile/NeonMethodCallRenamer/NeonMethodCallRenamerTest.php
+                - tests/NonPhpFile/NetteDINeonMethodCallRenamer/NetteDINeonMethodCallRenamerTest.php
 
         -
             message: '#Function "class_exists\(\)" cannot be used/left in the code#'

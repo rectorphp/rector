@@ -7,7 +7,7 @@ use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Renaming\Configuration\MethodCallRenameCollector;
 
-class NeonMethodCallRenamer implements FileProcessorInterface
+class NetteDINeonMethodCallRenamer implements FileProcessorInterface
 {
     /**
      * @var MethodCallRenameCollector

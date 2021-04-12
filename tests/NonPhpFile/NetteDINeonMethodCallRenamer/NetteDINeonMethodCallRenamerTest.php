@@ -1,13 +1,13 @@
 <?php
 
-namespace Rector\Core\Tests\NonPhpFile\NeonMethodCallRenamer;
+namespace Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer;
 
 use Iterator;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Core\NonPhpFile\NeonMethodCallRenamer;
-use Rector\Core\Tests\NonPhpFile\NeonMethodCallRenamer\Source\FirstService;
-use Rector\Core\Tests\NonPhpFile\NeonMethodCallRenamer\Source\SecondService;
-use Rector\Core\Tests\NonPhpFile\NeonMethodCallRenamer\Source\ServiceInterface;
+use Rector\Core\NonPhpFile\NetteDINeonMethodCallRenamer;
+use Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\Source\FirstService;
+use Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\Source\SecondService;
+use Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\Source\ServiceInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Renaming\Configuration\MethodCallRenameCollector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -15,12 +15,12 @@ use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-class NeonMethodCallRenamerTest extends AbstractKernelTestCase
+class NetteDINeonMethodCallRenamerTest extends AbstractKernelTestCase
 {
     /**
-     * @var NeonMethodCallRenamer
+     * @var NetteDINeonMethodCallRenamer
      */
-    private $neonMethodCallRenamer;
+    private $netteDINeonMethodCallRenamer;
 
     /**
      * @var MethodCallRenameCollector
@@ -31,7 +31,7 @@ class NeonMethodCallRenamerTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->neonMethodCallRenamer = $this->getService(NeonMethodCallRenamer::class);
+        $this->netteDINeonMethodCallRenamer = $this->getService(NetteDINeonMethodCallRenamer::class);
         $this->methodCallRenameCollector = $this->getService(MethodCallRenameCollector::class);
     }
 
@@ -42,7 +42,7 @@ class NeonMethodCallRenamerTest extends AbstractKernelTestCase
     {
         $file = new File($fixtureFileInfo, $fixtureFileInfo->getContents());
         $oldContent = $file->getFileContent();
-        $this->neonMethodCallRenamer->process([$file]);
+        $this->netteDINeonMethodCallRenamer->process([$file]);
         $this->assertFalse($file->hasChanged());
         $this->assertEquals($oldContent, $file->getFileContent());
     }
@@ -59,17 +59,17 @@ class NeonMethodCallRenamerTest extends AbstractKernelTestCase
         );
 
         $file = new File($fixtureFileInfo, $fixtureFileInfo->getContents());
-        $this->neonMethodCallRenamer->process([$file]);
+        $this->netteDINeonMethodCallRenamer->process([$file]);
 
         $expected = "services:
     firstService:
-        factory: Rector\Core\Tests\NonPhpFile\NeonMethodCallRenamer\Source\FirstService
+        factory: Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\Source\FirstService
         setup:
             - addConfig('key1', 'value1')
             - addConfig('key2', 'value2')
 
     -
-        class: Rector\Core\Tests\NonPhpFile\NeonMethodCallRenamer\Source\SecondService('service-name')
+        class: Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\Source\SecondService('service-name')
         setup:
             - add('first-key', 'first-value')
             - add('second-key', 'second-value')
@@ -89,17 +89,17 @@ class NeonMethodCallRenamerTest extends AbstractKernelTestCase
         );
 
         $file = new File($fixtureFileInfo, $fixtureFileInfo->getContents());
-        $this->neonMethodCallRenamer->process([$file]);
+        $this->netteDINeonMethodCallRenamer->process([$file]);
 
         $expected = "services:
     firstService:
-        factory: Rector\Core\Tests\NonPhpFile\NeonMethodCallRenamer\Source\FirstService
+        factory: Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\Source\FirstService
         setup:
             - add('key1', 'value1')
             - add('key2', 'value2')
 
     -
-        class: Rector\Core\Tests\NonPhpFile\NeonMethodCallRenamer\Source\SecondService('service-name')
+        class: Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\Source\SecondService('service-name')
         setup:
             - addConfig('first-key', 'first-value')
             - addConfig('second-key', 'second-value')
@@ -121,17 +121,17 @@ class NeonMethodCallRenamerTest extends AbstractKernelTestCase
         );
 
         $file = new File($fixtureFileInfo, $fixtureFileInfo->getContents());
-        $this->neonMethodCallRenamer->process([$file]);
+        $this->netteDINeonMethodCallRenamer->process([$file]);
 
         $expected = "services:
     firstService:
-        factory: Rector\Core\Tests\NonPhpFile\NeonMethodCallRenamer\Source\FirstService
+        factory: Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\Source\FirstService
         setup:
             - addConfig('key1', 'value1')
             - addConfig('key2', 'value2')
 
     -
-        class: Rector\Core\Tests\NonPhpFile\NeonMethodCallRenamer\Source\SecondService('service-name')
+        class: Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\Source\SecondService('service-name')
         setup:
             - addConfig('first-key', 'first-value')
             - addConfig('second-key', 'second-value')
