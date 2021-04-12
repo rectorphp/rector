@@ -10,8 +10,8 @@ use Rector\Autodiscovery\FileLocation\ExpectedFileLocationResolver;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\FileSystemRector\ValueObject\MovedFileWithNodes;
-use Rector\FileSystemRector\ValueObjectFactory\MovedFileWithNodesFactory;
+use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
+use Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -21,7 +21,6 @@ use Webmozart\Assert\Assert;
  * Inspiration @see https://github.com/rectorphp/rector/pull/1865/files#diff-0d18e660cdb626958662641b491623f8
  *
  * @see \Rector\Tests\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector\MoveServicesBySuffixToDirectoryRectorTest
- * @see \Rector\Tests\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector\MutualRenameTest
  */
 final class MoveServicesBySuffixToDirectoryRector extends AbstractRector implements ConfigurableRectorInterface
 {
@@ -41,16 +40,16 @@ final class MoveServicesBySuffixToDirectoryRector extends AbstractRector impleme
     private $expectedFileLocationResolver;
 
     /**
-     * @var MovedFileWithNodesFactory
+     * @var AddedFileWithNodesFactory
      */
-    private $movedFileWithNodesFactory;
+    private $addedFileWithNodesFactory;
 
     public function __construct(
         ExpectedFileLocationResolver $expectedFileLocationResolver,
-        MovedFileWithNodesFactory $movedFileWithNodesFactory
+        AddedFileWithNodesFactory $addedFileWithNodesFactory
     ) {
         $this->expectedFileLocationResolver = $expectedFileLocationResolver;
-        $this->movedFileWithNodesFactory = $movedFileWithNodesFactory;
+        $this->addedFileWithNodesFactory = $addedFileWithNodesFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -99,6 +98,9 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, string[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $groupNamesBySuffix = $configuration[self::GROUP_NAMES_BY_SUFFIX] ?? [];
@@ -162,15 +164,17 @@ CODE_SAMPLE
 
     private function moveFileToGroupName(SmartFileInfo $fileInfo, FileNode $fileNode, string $desiredGroupName): void
     {
-        $movedFileWithNodes = $this->movedFileWithNodesFactory->createWithDesiredGroup(
+        $addedFileWithNodes = $this->addedFileWithNodesFactory->createWithDesiredGroup(
             $fileInfo,
             $fileNode->stmts,
             $desiredGroupName
         );
-        if (! $movedFileWithNodes instanceof MovedFileWithNodes) {
+
+        if (! $addedFileWithNodes instanceof AddedFileWithNodes) {
             return;
         }
 
-        $this->removedAndAddedFilesCollector->addMovedFile($movedFileWithNodes);
+        $this->removedAndAddedFilesCollector->removeFile($fileInfo);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
     }
 }

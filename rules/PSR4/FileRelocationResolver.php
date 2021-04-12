@@ -7,6 +7,7 @@ namespace Rector\PSR4;
 use Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -20,6 +21,16 @@ final class FileRelocationResolver
     private const NAMESPACE_SEPARATOR = '\\';
 
     /**
+     * @var FileInfoDeletionAnalyzer
+     */
+    private $fileInfoDeletionAnalyzer;
+
+    public function __construct(FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer)
+    {
+        $this->fileInfoDeletionAnalyzer = $fileInfoDeletionAnalyzer;
+    }
+
+    /**
      * @param string[] $groupNames
      */
     public function createNewFileDestination(
@@ -28,8 +39,8 @@ final class FileRelocationResolver
         array $groupNames
     ): string {
         $newDirectory = $this->resolveRootDirectory($smartFileInfo, $suffixName, $groupNames);
-
-        return $newDirectory . DIRECTORY_SEPARATOR . $smartFileInfo->getFilename();
+        $filename = $this->fileInfoDeletionAnalyzer->clearNameFromTestingPrefix($smartFileInfo->getFilename());
+        return $newDirectory . DIRECTORY_SEPARATOR . $filename;
     }
 
     /**
@@ -64,7 +75,12 @@ final class FileRelocationResolver
      */
     private function resolveRootDirectory(SmartFileInfo $smartFileInfo, string $suffixName, array $groupNames): string
     {
-        $currentTraversePath = dirname($smartFileInfo->getRelativeFilePath());
+        if (Strings::startsWith($smartFileInfo->getRealPathDirectory(), '/tmp')) {
+            $currentTraversePath = $smartFileInfo->getRealPathDirectory();
+        } else {
+            $currentTraversePath = $smartFileInfo->getRelativeDirectoryPath();
+        }
+
         $currentDirectoryParts = explode(DIRECTORY_SEPARATOR, $currentTraversePath);
 
         return $this->resolveNearestRootWithCategory(

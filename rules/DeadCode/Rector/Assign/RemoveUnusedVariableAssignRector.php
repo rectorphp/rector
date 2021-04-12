@@ -41,8 +41,7 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
     public function __construct(
         ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
         CompactFuncCallAnalyzer $compactFuncCallAnalyzer
-    )
-    {
+    ) {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
         $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
     }
