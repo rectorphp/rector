@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\Declare_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Declare_;
 use Rector\Core\Rector\AbstractRector;
