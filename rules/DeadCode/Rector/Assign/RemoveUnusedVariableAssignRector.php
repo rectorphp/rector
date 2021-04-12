@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
@@ -119,7 +120,15 @@ CODE_SAMPLE
         $isUsedNext = (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
             $variable
         ): bool {
-            return $this->isVariableNamed($node, $variable);
+            if ($this->isVariableNamed($node, $variable)) {
+                return true;
+            }
+
+            if ($node instanceof FuncCall) {
+                return $this->isInCompact($node, $variable);
+            }
+
+            return false;
         });
 
         if ($isUsedNext) {
@@ -146,6 +155,31 @@ CODE_SAMPLE
             });
             if ($previousAssign instanceof Assign) {
                 return $this->isUsed($assign, $variable);
+            }
+        }
+
+        return false;
+    }
+
+    private function isInCompact(FuncCall $funcCall, Variable $variable): bool
+    {
+        if (! $this->isName($funcCall, 'compact')) {
+            return false;
+        }
+
+        $variableName = $variable->name;
+        if (! is_string($variableName)) {
+            return false;
+        }
+
+        $args = $funcCall->args;
+        foreach ($args as $arg) {
+            if (! $arg->value instanceof String_) {
+                continue;
+            }
+
+            if ($arg->value->value === $variableName) {
+                return true;
             }
         }
 
