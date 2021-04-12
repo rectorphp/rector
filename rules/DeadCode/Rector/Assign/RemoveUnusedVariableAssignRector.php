@@ -15,10 +15,10 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\PhpParser\Comparing\ConditionSearcher;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -34,9 +34,15 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
      */
     private $reservedKeywordAnalyzer;
 
+    /**
+     * @var ConditionSearcher
+     */
+    private $conditionSearcher;
+
     public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
     {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
+        $this->conditionSearcher = new ConditionSearcher();
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -98,7 +104,11 @@ CODE_SAMPLE
                 return null;
             }
 
-            return $this->searchIfAndElseForVariableRedeclaration($node, $ifNode);
+            $nodeFound = $this->conditionSearcher->searchIfAndElseForVariableRedeclaration($node, $ifNode);
+            if ($nodeFound) {
+                $this->removeNode($node);
+                return $node;
+            }
         }
 
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
@@ -182,49 +192,5 @@ CODE_SAMPLE
         }
 
         return $this->isName($variable, (string) $this->getName($node));
-    }
-
-    private function searchIfAndElseForVariableRedeclaration(Assign $node, If_ $ifNode): ?Node
-    {
-        /** @var Variable $varNode */
-        $varNode = $node->var;
-
-        // search if for redeclaration of variable
-        /** @var Node\Stmt\Expression $statementIf */
-        foreach ($ifNode->stmts as $statementIf) {
-            if (! $statementIf->expr instanceof Assign) {
-                continue;
-            }
-
-            /** @var Variable $varIf */
-            $varIf = $statementIf->expr->var;
-            if ($varNode->name !== $varIf->name) {
-                continue;
-            }
-
-            $elseNode = $ifNode->else;
-            if (! $elseNode instanceof Else_) {
-                continue;
-            }
-
-            // search else for redeclaration of variable
-            /** @var Node\Stmt\Expression $statementElse */
-            foreach ($elseNode->stmts as $statementElse) {
-                if (! $statementElse->expr instanceof Assign) {
-                    continue;
-                }
-
-                /** @var Variable $varElse */
-                $varElse = $statementElse->expr->var;
-                if ($varNode->name !== $varElse->name) {
-                    continue;
-                }
-
-                $this->removeNode($node);
-                return $node;
-            }
-        }
-
-        return null;
     }
 }
