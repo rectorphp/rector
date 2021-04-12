@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -32,9 +33,18 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
      */
     private $reservedKeywordAnalyzer;
 
-    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
+    /**
+     * @var CompactFuncCallAnalyzer
+     */
+    private $compactFuncCallAnalyzer;
+
+    public function __construct(
+        ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
+        CompactFuncCallAnalyzer $compactFuncCallAnalyzer
+    )
     {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
+        $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -119,7 +129,15 @@ CODE_SAMPLE
         $isUsedNext = (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
             $variable
         ): bool {
-            return $this->isVariableNamed($node, $variable);
+            if ($this->isVariableNamed($node, $variable)) {
+                return true;
+            }
+
+            if ($node instanceof FuncCall) {
+                return $this->compactFuncCallAnalyzer->isInCompact($node, $variable);
+            }
+
+            return false;
         });
 
         if ($isUsedNext) {
@@ -132,6 +150,14 @@ CODE_SAMPLE
             return false;
         }
 
+        return $this->isUsedInAssignExpr($expr, $assign);
+    }
+
+    /**
+     * @param FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $expr
+     */
+    private function isUsedInAssignExpr(Expr $expr, Assign $assign): bool
+    {
         $args = $expr->args;
         foreach ($args as $arg) {
             $variable = $arg->value;
