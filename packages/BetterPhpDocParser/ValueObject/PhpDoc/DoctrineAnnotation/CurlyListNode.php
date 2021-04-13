@@ -39,6 +39,10 @@ final class CurlyListNode extends AbstractValuesAwareNode
             return 'true';
         }
 
+        if (is_array($value)) {
+            return implode(', ', $value);
+        }
+
         return (string) $value;
     }
 }

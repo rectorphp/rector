@@ -26,9 +26,14 @@ final class ArrayParser
      * Mimics https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1305-L1352
      * @return mixed[]
      */
-    public function parserArray(BetterTokenIterator $tokenIterator): array
+    public function parseCurlyArray(BetterTokenIterator $tokenIterator): array
     {
         $values = [];
+
+        // nothing
+        if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
+            return [];
+        }
 
         $tokenIterator->consumeTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET);
 
@@ -59,11 +64,6 @@ final class ArrayParser
 
         // special case for nested doctrine annotations
         if (! $tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_PARENTHESES)) {
-
-            dump($values);
-            dump($tokenIterator->currentTokenType());
-            dump($tokenIterator->currentTokenValue());
-
             $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET);
         }
 

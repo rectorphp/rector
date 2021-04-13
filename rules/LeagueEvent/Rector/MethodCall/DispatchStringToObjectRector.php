@@ -29,6 +29,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DispatchStringToObjectRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const STMTS = 'stmts';
+
+    /**
+     * @var string
+     */
+    private const NAME = 'name';
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -119,7 +129,7 @@ CODE_SAMPLE
 
         return new New_(new Class_(null, [
             'implements' => $implements,
-            'stmts' => $this->createAnonymousEventClassBody(),
+            self::STMTS => $this->createAnonymousEventClassBody(),
         ]), [new Arg($expr)]);
     }
 
@@ -129,16 +139,16 @@ CODE_SAMPLE
     private function createAnonymousEventClassBody(): array
     {
         return [
-            new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('name')]),
+            new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty(self::NAME)]),
             new ClassMethod('__construct', [
                 'flags' => Class_::MODIFIER_PUBLIC,
                 'params' => $this->createConstructParams(),
-                'stmts' => [new Expression($this->createConstructAssign())],
+                self::STMTS => [new Expression($this->createConstructAssign())],
             ]),
             new ClassMethod('eventName', [
                 'flags' => Class_::MODIFIER_PUBLIC,
                 'returnType' => 'string',
-                'stmts' => [new Return_(new Variable('this->name'))],
+                self::STMTS => [new Return_(new Variable('this->name'))],
             ]),
         ];
     }
@@ -148,13 +158,11 @@ CODE_SAMPLE
      */
     private function createConstructParams(): array
     {
-        return [
-            new Param(new Variable('name'), null, 'string')
-        ];
+        return [new Param(new Variable(self::NAME), null, 'string')];
     }
 
     private function createConstructAssign(): Assign
     {
-        return new Assign(new Variable('this->name'), new Variable('name'));
+        return new Assign(new Variable('this->name'), new Variable(self::NAME));
     }
 }

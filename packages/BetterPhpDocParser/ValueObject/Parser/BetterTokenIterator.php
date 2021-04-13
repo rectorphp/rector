@@ -126,17 +126,15 @@ final class BetterTokenIterator extends TokenIterator
 
     public function nextTokenType(): ?int
     {
-        $this->pushSavePoint();
-
         $tokens = $this->getTokens();
-        $index = $this->privatesAccessor->getPrivateProperty($this, self::INDEX);
 
         // does next token exist?
-        $nextIndex = $index + 1;
+        $nextIndex = $this->currentPosition() + 1;
         if (! isset($tokens[$nextIndex])) {
             return null;
         }
 
+        $this->pushSavePoint();
         $this->next();
         $nextTokenType = $this->currentTokenType();
         $this->rollback();

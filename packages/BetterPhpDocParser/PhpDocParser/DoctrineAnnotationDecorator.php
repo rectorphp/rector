@@ -22,12 +22,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class DoctrineAnnotationDecorator
 {
-//    /**
-//     * @see https://regex101.com/r/oqEvkJ/1
-//     * @var string
-//     */
-//    private const OPEN_ANNOTATION_SUFFIX_REGEX = '#(\{|[^)]\,)$#';
-
     /**
      * @var CurrentNodeProvider
      */
@@ -102,13 +96,7 @@ final class DoctrineAnnotationDecorator
 
             $genericTagValueNode = $phpDocChildNode->value;
 
-            /** @var GenericTagValueNode $currentGenericTagValueNode */
-            $currentGenericTagValueNode = $genericTagValueNode;
-
-//            dump($currentGenericTagValueNode->value);
-//            die;
-
-            while (isset($phpDocNode->children[$key])) { // Strings::match($currentGenericTagValueNode->value, self::OPEN_ANNOTATION_SUFFIX_REGEX)) {
+            while (isset($phpDocNode->children[$key])) {
                 ++$key;
 
                 // no more next nodes
