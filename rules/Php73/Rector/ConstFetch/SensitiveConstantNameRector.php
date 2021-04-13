@@ -83,6 +83,7 @@ final class SensitiveConstantNameRector extends AbstractRector
         'FALSE',
         'NULL',
     ];
+
     /**
      * @var ReflectionProvider
      */
