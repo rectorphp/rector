@@ -216,6 +216,10 @@ final class DoctrineAnnotationDecorator
         $openBracketCount = 0;
         $closeBracketCount = 0;
 
+        if ($composedContent === '') {
+            return true;
+        }
+
         do {
             if ($composedTokenIterator->isCurrentTokenTypes([
                 Lexer::TOKEN_OPEN_CURLY_BRACKET,
