@@ -65,6 +65,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->classAnalyzer->isAnonymousClass($node)) {
+            return null;
+        }
+
         return $node;
     }
 }
