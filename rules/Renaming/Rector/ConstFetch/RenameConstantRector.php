@@ -80,10 +80,10 @@ CODE_SAMPLE
             }
 
             $node->name = new Name($newConstant);
-            break;
+            return $node;
         }
 
-        return $node;
+        return null;
     }
 
     public function configure(array $configuration): void
