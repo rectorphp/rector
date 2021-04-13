@@ -149,6 +149,10 @@ final class DoctrineAnnotationDecorator
             $currentGenericTagValueNode = $genericTagValueNode;
 
             while (Strings::match($currentGenericTagValueNode->value, self::OPEN_ANNOTATION_SUFFIX_REGEX)) {
+                if (! isset($phpDocNode->children[$key + 1])) {
+                    break;
+                }
+
                 $nextPhpDocChildNode = $phpDocNode->children[$key + 1];
                 if (! $nextPhpDocChildNode instanceof PhpDocTagNode) {
                     continue;
