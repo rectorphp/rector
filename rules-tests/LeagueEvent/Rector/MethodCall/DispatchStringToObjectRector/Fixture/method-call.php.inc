@@ -2,14 +2,19 @@
 
 namespace Rector\Tests\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector\Fixture;
 
-class Fixture
+class MethodCall
 {
     /** @var \League\Event\EventDispatcher */
     private $dispatcher;
 
     public function run()
     {
-        $this->dispatcher->dispatch('my-event');
+        $this->dispatcher->dispatch($this->createEventName());
+    }
+
+    private function createEventName(): string
+    {
+        return 'my-event';
     }
 }
 
@@ -19,14 +24,14 @@ class Fixture
 
 namespace Rector\Tests\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector\Fixture;
 
-class Fixture
+class MethodCall
 {
     /** @var \League\Event\EventDispatcher */
     private $dispatcher;
 
     public function run()
     {
-        $this->dispatcher->dispatch(new class('my-event') implements \League\Event\HasEventName
+        $this->dispatcher->dispatch(new class($this->createEventName()) implements \League\Event\HasEventName
         {
             private $name;
             public function __construct(string $name)
@@ -38,6 +43,11 @@ class Fixture
                 return $this->name;
             }
         });
+    }
+
+    private function createEventName(): string
+    {
+        return 'my-event';
     }
 }
 
