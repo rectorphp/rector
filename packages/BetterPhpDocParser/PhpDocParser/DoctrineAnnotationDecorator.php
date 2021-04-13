@@ -215,7 +215,6 @@ final class DoctrineAnnotationDecorator
 
         $openBracketCount = 0;
         $closeBracketCount = 0;
-
         if ($composedContent === '') {
             return true;
         }
