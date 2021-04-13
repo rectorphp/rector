@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -84,16 +85,20 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function procesMoveAnonymousClass(Class_ $class, Class_ $classNode): Node
+    private function procesMoveAnonymousClass(Class_ $class, Class_ $classNode): Name
     {
         $class->name = new Identifier('Anonymous');
         $this->addNodesAfterNode([$class], $classNode);
 
         /** @var New_ $parent */
-        $parent    = $class->getAttribute(AttributeKey::PARENT_NODE);
-        $new       = new New_(new Name('Anonymous'));
-        $new->args = $parent->args;
+        $parent        = $class->getAttribute(AttributeKey::PARENT_NODE);
+        $argsString = '';
+        foreach ($parent->args as $arg) {
+            $argsString .= $this->betterStandardPrinter->print($arg);
+        }
 
-        return $class;
+        $parent->class = new Name(sprintf('Anonymous(%s)', $argsString));
+
+        return $parent->class;
     }
 }
