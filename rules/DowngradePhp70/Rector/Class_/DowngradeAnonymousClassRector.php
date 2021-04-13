@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
@@ -45,14 +46,17 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-class Anonymous
-{
-}
 class SomeClass
 {
     public function run()
     {
         return new Anonymous();
+    }
+}
+class Anonymous
+{
+    public function execute()
+    {
     }
 }
 CODE_SAMPLE
@@ -72,7 +76,7 @@ CODE_SAMPLE
 
         $classNode = $this->betterNodeFinder->findParentType($node, Class_::class);
         if ($classNode instanceof Class_) {
-            $this->procesMoveAnonymousClass($node, $classNode);
+            return $this->procesMoveAnonymousClass($node, $classNode);
         }
 
         return $node;
@@ -81,6 +85,8 @@ CODE_SAMPLE
     private function procesMoveAnonymousClass(Class_ $class, Class_ $classNode): void
     {
         $class->name = new Identifier('Anonymous');
-        $this->addNodeBeforeNode($class, $classNode);
+        $this->addNodesAfterNode([$class], $classNode);
+
+        $parent = $class->getAttribute(AttributeKey::PARENT_NODE);
     }
 }
