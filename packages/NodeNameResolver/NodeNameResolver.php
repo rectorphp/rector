@@ -37,7 +37,7 @@ final class NodeNameResolver
     private $classNaming;
 
     /**
-     * @var Error\InvalidNameNodeReporter
+     * @var InvalidNameNodeReporter
      */
     private $invalidNameNodeReporter;
 
