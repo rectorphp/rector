@@ -2,38 +2,58 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp70\Rector\Declare_;
+namespace Rector\DowngradePhp70\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector\DowngradeStrictTypeDeclarationRectorTest
+ * @see \Rector\Tests\DowngradePhp70\Rector\Class_\DowngradeAnonymousClassRector\DowngradeAnonymousClassRectorTest
  */
-final class DowngradeStrictTypeDeclarationRector extends AbstractRector
+final class DowngradeAnonymousClassRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
-        return [Declare_::class];
+        return [Class_::class];
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Remove the declare(strict_types=1)',
+            'Remove anonymous class',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-declare(strict_types=1);
+class SomeClass
+{
+    public function run()
+    {
+        return new class {
+            public function execute()
+            {
+            }
+        };
+    }
+}
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
+class Anonymous
+{
+}
+class SomeClass
+{
+    public function run()
+    {
+        return new Anonymous();
+    }
+}
 CODE_SAMPLE
                 ),
             ]
@@ -41,28 +61,10 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Declare_ $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
-            return null;
-        }
-
-        $this->removeNode($node);
         return $node;
-    }
-
-    private function shouldSkip(Declare_ $declare): bool
-    {
-        $declares = $declare->declares;
-
-        foreach ($declares as $declare) {
-            if ($this->isName($declare->key, 'strict_types')) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
