@@ -59,6 +59,11 @@ final class ArrayParser
 
         // special case for nested doctrine annotations
         if (! $tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_PARENTHESES)) {
+
+            dump($values);
+            dump($tokenIterator->currentTokenType());
+            dump($tokenIterator->currentTokenValue());
+
             $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET);
         }
 
