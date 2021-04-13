@@ -94,10 +94,12 @@ CODE_SAMPLE
         $parent        = $class->getAttribute(AttributeKey::PARENT_NODE);
         $argsString = '';
         foreach ($parent->args as $arg) {
-            $argsString .= $this->betterStandardPrinter->print($arg);
+            $argsString .= ', ' . $this->betterStandardPrinter->print($arg);
         }
+        $argsString = ltrim($argsString, ', ');
 
         $parent->class = new Name(sprintf('Anonymous(%s)', $argsString));
+        print_node($parent->class);
 
         return $parent->class;
     }
