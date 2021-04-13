@@ -13,7 +13,10 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
+use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
+use Rector\PostRector\Application\PostFileProcessor;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -78,15 +81,33 @@ final class PhpFileProcessor implements FileProcessorInterface
      */
     private $fileDiffFileDecorator;
 
+    /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
+
+    /**
+     * @var FormatPerservingPrinter
+     */
+    private $formatPerservingPrinter;
+
+    /**
+     * @var PostFileProcessor
+     */
+    private $postFileProcessor;
+
     public function __construct(
         Configuration $configuration,
+        FormatPerservingPrinter $formatPerservingPrinter,
         ErrorAndDiffCollector $errorAndDiffCollector,
         FileProcessor $fileProcessor,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         SymfonyStyle $symfonyStyle,
         PrivatesAccessor $privatesAccessor,
-        FileDiffFileDecorator $fileDiffFileDecorator
+        FileDiffFileDecorator $fileDiffFileDecorator,
+        CurrentFileProvider $currentFileProvider,
+        PostFileProcessor $postFileProcessor
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
@@ -97,6 +118,9 @@ final class PhpFileProcessor implements FileProcessorInterface
         $this->privatesAccessor = $privatesAccessor;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
         $this->configuration = $configuration;
+        $this->currentFileProvider = $currentFileProvider;
+        $this->formatPerservingPrinter = $formatPerservingPrinter;
+        $this->postFileProcessor = $postFileProcessor;
     }
 
     /**
@@ -112,20 +136,33 @@ final class PhpFileProcessor implements FileProcessorInterface
         $this->prepareProgressBar($fileCount);
 
         // 1. parse files to nodes
-        $this->parseFileInfosToNodes($files);
+        foreach ($files as $file) {
+            $this->currentFileProvider->setFile($file);
+
+            $this->tryCatchWrapper($file, function (File $file): void {
+                $this->fileProcessor->parseFileInfoToLocalCache($file);
+            }, 'parsing');
+        }
 
         // 2. change nodes with Rectors
         $this->refactorNodesWithRectors($files);
 
         // 3. apply post rectors
         foreach ($files as $file) {
+            $this->currentFileProvider->setFile($file);
+
             $this->tryCatchWrapper($file, function (File $file): void {
-                $this->fileProcessor->postFileRefactor($file);
+                $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
+
+                // this is needed for new tokens added in "afterTraverse()"
+                $file->changeNewStmts($newStmts);
             }, 'post rectors');
         }
 
         // 4. print to file or string
         foreach ($files as $file) {
+            $this->currentFileProvider->setFile($file);
+
             // cannot print file with errors, as print would break everything to original nodes
             if ($this->errorAndDiffCollector->hasSmartFileErrors($file)) {
                 $this->advance($file, 'printing skipped due error');
@@ -133,7 +170,7 @@ final class PhpFileProcessor implements FileProcessorInterface
             }
 
             $this->tryCatchWrapper($file, function (File $file): void {
-                $this->printFileInfo($file);
+                $this->printFile($file);
             }, 'printing');
         }
 
@@ -147,8 +184,8 @@ final class PhpFileProcessor implements FileProcessorInterface
 
     public function supports(File $file): bool
     {
-        $fileInfo = $file->getSmartFileInfo();
-        return $fileInfo->hasSuffixes($this->getSupportedFileExtensions());
+        $smartFileInfo = $file->getSmartFileInfo();
+        return $smartFileInfo->hasSuffixes($this->getSupportedFileExtensions());
     }
 
     /**
@@ -170,18 +207,6 @@ final class PhpFileProcessor implements FileProcessorInterface
         }
 
         $this->configureStepCount($fileCount);
-    }
-
-    /**
-     * @param File[] $files
-     */
-    private function parseFileInfosToNodes(array $files): void
-    {
-        foreach ($files as $file) {
-            $this->tryCatchWrapper($file, function (File $file): void {
-                $this->fileProcessor->parseFileInfoToLocalCache($file);
-            }, 'parsing');
-        }
     }
 
     /**
@@ -215,22 +240,22 @@ final class PhpFileProcessor implements FileProcessorInterface
                 throw $throwable;
             }
 
-            $fileInfo = $file->getSmartFileInfo();
-            $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $fileInfo);
+            $smartFileInfo = $file->getSmartFileInfo();
+            $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $smartFileInfo);
         }
     }
 
-    private function printFileInfo(File $file): void
+    private function printFile(File $file): void
     {
-        $fileInfo = $file->getSmartFileInfo();
-
-        if ($this->removedAndAddedFilesCollector->isFileRemoved($fileInfo)) {
+        $smartFileInfo = $file->getSmartFileInfo();
+        if ($this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo)) {
             // skip, because this file exists no more
             return;
         }
 
-        $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString($fileInfo)
-            : $this->fileProcessor->printToFile($fileInfo);
+        $newContent = $this->configuration->isDryRun() ? $this->formatPerservingPrinter->printParsedStmstAndTokensToString(
+            $file
+        ) : $this->formatPerservingPrinter->printParsedStmstAndTokens($file);
 
         $file->changeFileContent($newContent);
         $this->fileDiffFileDecorator->decorate([$file]);
@@ -259,8 +284,8 @@ final class PhpFileProcessor implements FileProcessorInterface
     private function advance(File $file, string $phase): void
     {
         if ($this->symfonyStyle->isVerbose()) {
-            $fileInfo = $file->getSmartFileInfo();
-            $relativeFilePath = $fileInfo->getRelativeFilePathFromDirectory(getcwd());
+            $smartFileInfo = $file->getSmartFileInfo();
+            $relativeFilePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
             $message = sprintf('[%s] %s', $phase, $relativeFilePath);
             $this->symfonyStyle->writeln($message);
         } elseif ($this->configuration->shouldShowProgressBar()) {

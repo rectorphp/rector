@@ -167,12 +167,15 @@ CODE_SAMPLE
             }
             return $binaryOp->right;
         }
+
         if (! $this->valueResolver->isValue($binaryOp->right, 0)) {
             return null;
         }
+
         if (! $this->nodeTypeResolver->isNumberType($binaryOp->left)) {
             return null;
         }
+
         return $binaryOp->left;
     }
 
@@ -187,12 +190,15 @@ CODE_SAMPLE
         ) && $this->nodeTypeResolver->isNumberType($binaryOp->right)) {
             return $binaryOp->right;
         }
+
         if (! $this->valueResolver->isValue($binaryOp->right, 1)) {
             return null;
         }
+
         if (! $this->nodeTypeResolver->isNumberType($binaryOp->left)) {
             return null;
         }
+
         return $binaryOp->left;
     }
 }

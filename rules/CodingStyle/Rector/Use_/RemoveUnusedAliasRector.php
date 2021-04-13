@@ -123,7 +123,7 @@ CODE_SAMPLE
         $this->resolvedNodeNames = $this->useManipulator->resolveUsedNameNodes($searchNode);
         $this->resolvedDocPossibleAliases = $this->docAliasResolver->resolve($searchNode);
 
-        $this->useNamesAliasToName = $this->useNameAliasToNameResolver->resolve($node);
+        $this->useNamesAliasToName = $this->useNameAliasToNameResolver->resolve($this->file, $node);
 
         // lowercase
         $this->resolvedDocPossibleAliases = $this->lowercaseArray($this->resolvedDocPossibleAliases);

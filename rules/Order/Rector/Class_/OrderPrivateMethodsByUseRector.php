@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Trait_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Order\StmtOrder;
 use Rector\Order\ValueObject\SortedClassMethodsAndOriginalClassMethods;
@@ -101,20 +100,16 @@ CODE_SAMPLE
         $sortedAndOriginalClassMethods = $this->getSortedAndOriginalClassMethods($node);
 
         // order is correct, nothing to change
-        if ($sortedAndOriginalClassMethods->hasOrderChanged()) {
+        if (! $sortedAndOriginalClassMethods->hasOrderChanged()) {
             return null;
         }
 
         // different private method count, one of them is dead probably
-        if (! $sortedAndOriginalClassMethods->hasIdenticalClassMethodCount()) {
-            return null;
-        }
-
         $attempt = 0;
         while (! $sortedAndOriginalClassMethods->hasOrderSame()) {
             ++$attempt;
             if ($attempt >= self::MAX_ATTEMPTS) {
-                throw new ShouldNotHappenException('Number of attempts to reorder the methods exceeded');
+                break;
             }
 
             $oldToNewKeys = $this->stmtOrder->createOldToNewKeys(
@@ -123,7 +118,6 @@ CODE_SAMPLE
             );
 
             $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
-
             $sortedAndOriginalClassMethods = $this->getSortedAndOriginalClassMethods($node);
         }
 

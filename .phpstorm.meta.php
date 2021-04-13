@@ -43,7 +43,6 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::SCOPE,
     \Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME,
-    \Rector\NodeTypeResolver\Node\AttributeKey::FILE_INFO,
     \Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE,
@@ -62,7 +61,6 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION,
-    \Rector\NodeTypeResolver\Node\AttributeKey::FILE_INFO,
 );
 
 expectedArguments(
@@ -71,7 +69,6 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::SCOPE,
     \Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME,
-    \Rector\NodeTypeResolver\Node\AttributeKey::FILE_INFO,
     \Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE,
@@ -90,7 +87,6 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION,
-    \Rector\NodeTypeResolver\Node\AttributeKey::FILE_INFO,
 );
 
 expectedArguments(

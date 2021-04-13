@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObject\Application;
 
+use PhpParser\Node\Stmt;
+use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -36,6 +39,26 @@ final class File
      * @var FileDiff|null
      */
     private $fileDiff;
+
+    /**
+     * @var Stmt[]
+     */
+    private $oldStmts = [];
+
+    /**
+     * @var Stmt[]
+     */
+    private $newStmts = [];
+
+    /**
+     * @var mixed[]
+     */
+    private $oldTokens = [];
+
+    /**
+     * @var RectorWithLineChange[]
+     */
+    private $rectorWithLineChanges = [];
 
     public function __construct(SmartFileInfo $smartFileInfo, string $fileContent)
     {
@@ -82,5 +105,66 @@ final class File
     public function getFileDiff(): ?FileDiff
     {
         return $this->fileDiff;
+    }
+
+    /**
+     * @param Stmt[] $newStmts
+     * @param Stmt[] $oldStmts
+     * @param mixed[] $oldTokens
+     */
+    public function hydrateStmtsAndTokens(array $newStmts, array $oldStmts, array $oldTokens): void
+    {
+        if ($this->oldStmts !== []) {
+            throw new ShouldNotHappenException('Double stmts override');
+        }
+
+        $this->oldStmts = $oldStmts;
+        $this->newStmts = $newStmts;
+        $this->oldTokens = $oldTokens;
+    }
+
+    /**
+     * @return Stmt[]
+     */
+    public function getOldStmts(): array
+    {
+        return $this->oldStmts;
+    }
+
+    /**
+     * @return Stmt[]
+     */
+    public function getNewStmts(): array
+    {
+        return $this->newStmts;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getOldTokens(): array
+    {
+        return $this->oldTokens;
+    }
+
+    /**
+     * @param Stmt[] $newStmts
+     */
+    public function changeNewStmts(array $newStmts): void
+    {
+        $this->newStmts = $newStmts;
+    }
+
+    public function addRectorClassWithLine(RectorWithLineChange $rectorWithLineChange): void
+    {
+        $this->rectorWithLineChanges[] = $rectorWithLineChange;
+    }
+
+    /**
+     * @return RectorWithLineChange[]
+     */
+    public function getRectorWithLineChanges(): array
+    {
+        return $this->rectorWithLineChanges;
     }
 }

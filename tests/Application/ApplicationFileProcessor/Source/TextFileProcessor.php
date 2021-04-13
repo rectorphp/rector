@@ -21,8 +21,8 @@ final class TextFileProcessor implements FileProcessorInterface
 
     public function supports(File $file): bool
     {
-        $fileInfo = $file->getSmartFileInfo();
-        return $fileInfo->hasSuffixes($this->getSupportedFileExtensions());
+        $smartFileInfo = $file->getSmartFileInfo();
+        return $smartFileInfo->hasSuffixes($this->getSupportedFileExtensions());
     }
 
     /**

@@ -302,7 +302,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Move entities to Entity namespace
 
-- class: [`Rector\Autodiscovery\Rector\FileNode\MoveEntitiesToEntityDirectoryRector`](../rules/Autodiscovery/Rector/FileNode/MoveEntitiesToEntityDirectoryRector.php)
+- class: [`Rector\Autodiscovery\Rector\Class_\MoveEntitiesToEntityDirectoryRector`](../rules/Autodiscovery/Rector/Class_/MoveEntitiesToEntityDirectoryRector.php)
 
 ```diff
 -// file: app/Controller/Product.php
@@ -327,7 +327,7 @@ Move entities to Entity namespace
 
 Move interface to "Contract" namespace
 
-- class: [`Rector\Autodiscovery\Rector\FileNode\MoveInterfacesToContractNamespaceDirectoryRector`](../rules/Autodiscovery/Rector/FileNode/MoveInterfacesToContractNamespaceDirectoryRector.php)
+- class: [`Rector\Autodiscovery\Rector\Interface_\MoveInterfacesToContractNamespaceDirectoryRector`](../rules/Autodiscovery/Rector/Class_/MoveInterfacesToContractNamespaceDirectoryRector.php)
 
 ```diff
 -// file: app/Exception/Rule.php
@@ -349,10 +349,10 @@ Move classes by their suffix to their own group/directory
 
 :wrench: **configure it!**
 
-- class: [`Rector\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector`](../rules/Autodiscovery/Rector/FileNode/MoveServicesBySuffixToDirectoryRector.php)
+- class: [`Rector\Autodiscovery\Rector\Class_\MoveServicesBySuffixToDirectoryRector`](../rules/Autodiscovery/Rector/Class_/MoveServicesBySuffixToDirectoryRector.php)
 
 ```php
-use Rector\Autodiscovery\Rector\FileNode\MoveServicesBySuffixToDirectoryRector;
+use Rector\Autodiscovery\Rector\Class_\MoveServicesBySuffixToDirectoryRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -387,10 +387,10 @@ Move value object to ValueObject namespace/directory
 
 :wrench: **configure it!**
 
-- class: [`Rector\Autodiscovery\Rector\FileNode\MoveValueObjectsToValueObjectDirectoryRector`](../rules/Autodiscovery/Rector/FileNode/MoveValueObjectsToValueObjectDirectoryRector.php)
+- class: [`Rector\Autodiscovery\Rector\Class_\MoveValueObjectsToValueObjectDirectoryRector`](../rules/Autodiscovery/Rector/Class_/MoveValueObjectsToValueObjectDirectoryRector.php)
 
 ```php
-use Rector\Autodiscovery\Rector\FileNode\MoveValueObjectsToValueObjectDirectoryRector;
+use Rector\Autodiscovery\Rector\Class_\MoveValueObjectsToValueObjectDirectoryRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -2244,7 +2244,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
                 TestCase::class => 'prefer_self',
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -2655,7 +2656,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             YieldClassMethodToArrayClassMethodRector::METHODS_BY_TYPE => [
                 'EventSubscriberInterface' => ['getSubscribedEvents'],
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -4116,7 +4118,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             AddMethodParentCallRector::METHODS_BY_PARENT_TYPES => [
                 'ParentClassWithNewConstructor' => '__construct',
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -7280,7 +7283,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ReservedObjectRector::RESERVED_KEYWORDS_TO_REPLACEMENTS => [
                 'ReservedObject' => 'SmartObject', 'Object' => 'AnotherSmartObject',
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -7871,7 +7875,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ReservedFnFunctionRector::RESERVED_NAMES_TO_NEW_ONES => [
                 'fn' => 'someFunctionName',
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -9675,7 +9680,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'App\SomeOldClass' => 'App\SomeNewClass',
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -9720,7 +9726,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameConstantRector::OLD_TO_NEW_CONSTANTS => [
                 'MYSQL_ASSOC' => 'MYSQLI_ASSOC', 'OLD_CONSTANT' => 'NEW_CONSTANT',
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -9759,7 +9766,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
                 'view' => 'Laravel\Templating\render',
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -9828,7 +9836,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameNamespaceRector::OLD_TO_NEW_NAMESPACES => [
                 'SomeOldNamespace' => 'SomeNewNamespace',
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -9958,7 +9967,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameStringRector::STRING_CHANGES => [
                 'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -10041,7 +10051,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             CompleteMissingDependencyInNewRector::CLASS_TO_INSTANTIATE_BY_TYPE => [
                 'RandomDependency' => 'RandomDependency',
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -10231,7 +10242,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             AddInterfaceByParentRector::INTERFACE_BY_PARENT => [
                 'SomeParent' => 'SomeInterface',
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -10267,7 +10279,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             AddInterfaceByTraitRector::INTERFACE_BY_TRAIT => [
                 'SomeTrait' => 'SomeInterface',
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -10515,7 +10528,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             FuncCallToConstFetchRector::FUNCTIONS_TO_CONSTANTS => [
                 'php_sapi_name' => 'PHP_SAPI',
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -10605,7 +10619,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             FuncCallToNewRector::FUNCTIONS_TO_NEWS => [
                 'collection' => ['Collection'],
 
-            ], ]]);
+            ]
+    ]]);
 };
 ```
 
@@ -10762,8 +10777,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MergeInterfacesRector::OLD_TO_NEW_INTERFACES => [
                 'SomeOldInterface' => 'SomeInterface',
-                
-            ], ]]);
+
+            ]
+    ]]);
 };
 ```
 
@@ -10833,8 +10849,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToPropertyFetchRector::METHOD_CALL_TO_PROPERTY_FETCHES => [
                 'someMethod' => 'someProperty',
-                
-            ], ]]);
+
+            ]
+    ]]);
 };
 ```
 
@@ -10872,8 +10889,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToReturnRector::METHOD_CALL_WRAPS => [
                 'SomeClass' => ['deny'],
-                
-            ], ]]);
+
+            ]
+    ]]);
 };
 ```
 
@@ -11140,8 +11158,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ParentClassToTraitsRector::PARENT_CLASS_TO_TRAITS => [
                 'Nette\Object' => ['Nette\SmartObject'],
-                
-            ], ]]);
+
+            ]
+    ]]);
 };
 ```
 
@@ -11612,8 +11631,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ToStringToMethodCallRector::METHOD_NAMES_BY_TYPE => [
                 'SomeObject' => 'getPath',
-                
-            ], ]]);
+
+            ]
+    ]]);
 };
 ```
 
@@ -12346,8 +12366,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ChangePropertyVisibilityRector::PROPERTY_TO_VISIBILITY_BY_CLASS => [
                 'FrameworkClass' => [
                     'someProperty' => 2,
-                    
-                    
+
+
                 ], ], ]]);
 };
 ```

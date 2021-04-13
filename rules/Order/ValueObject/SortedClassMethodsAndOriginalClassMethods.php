@@ -44,12 +44,7 @@ final class SortedClassMethodsAndOriginalClassMethods
 
     public function hasOrderChanged(): bool
     {
-        return $this->sortedClassMethods === $this->originalClassMethods;
-    }
-
-    public function hasIdenticalClassMethodCount(): bool
-    {
-        return count($this->sortedClassMethods) === count($this->originalClassMethods);
+        return $this->sortedClassMethods !== $this->originalClassMethods;
     }
 
     public function hasOrderSame(): bool

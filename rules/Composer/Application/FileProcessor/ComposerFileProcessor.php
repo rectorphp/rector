@@ -51,13 +51,13 @@ final class ComposerFileProcessor implements FileProcessorInterface
 
     public function supports(File $file): bool
     {
-        $fileInfo = $file->getSmartFileInfo();
+        $smartFileInfo = $file->getSmartFileInfo();
 
-        if ($this->isJsonInTests($fileInfo)) {
+        if ($this->isJsonInTests($smartFileInfo)) {
             return true;
         }
 
-        return $fileInfo->getBasename() === 'composer.json';
+        return $smartFileInfo->getBasename() === 'composer.json';
     }
 
     /**

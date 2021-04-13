@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Rector\Core\Application\FileDecorator;
 
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
+use Rector\Core\Contract\Application\FileDecoratorInterface;
 use Rector\Core\ValueObject\Application\File;
 
-final class FileDiffFileDecorator
+final class FileDiffFileDecorator implements FileDecoratorInterface
 {
     /**
      * @var FileDiffFactory
