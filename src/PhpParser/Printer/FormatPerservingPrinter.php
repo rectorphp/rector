@@ -39,7 +39,7 @@ final class FormatPerservingPrinter
      */
     public function printToFile(SmartFileInfo $fileInfo, array $newStmts, array $oldStmts, array $oldTokens): string
     {
-        $newContent = $this->printToString($newStmts, $oldStmts, $oldTokens);
+        $newContent = $this->betterStandardPrinter->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
 
         $this->smartFileSystem->dumpFile($fileInfo->getRealPath(), $newContent);
         $this->smartFileSystem->chmod($fileInfo->getRealPath(), $fileInfo->getPerms());
@@ -66,16 +66,6 @@ final class FormatPerservingPrinter
             $file->getOldStmts(),
             $file->getOldTokens()
         );
-    }
-
-    /**
-     * @param Node[] $newStmts
-     * @param Node[] $oldStmts
-     * @param Node[] $oldTokens
-     */
-    private function printToString(array $newStmts, array $oldStmts, array $oldTokens): string
-    {
-        return $this->betterStandardPrinter->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
     }
 
     /**
