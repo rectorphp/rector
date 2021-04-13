@@ -7,10 +7,10 @@ namespace Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\Fixtu
 use Annotation\NotFoundErrorResponse;
 use Annotation\OpenApi;
 
-final class AnEntityWithAnEmbedded
+final class AnEntityWithAnEmbeddedWithoutSpaces
 {
     /**
-     * @NotFoundErrorResponse( "collection" ) ,
+     * @NotFoundErrorResponse("collection"),
      *
      * @OpenApi("
      *      summary: Delete collection
