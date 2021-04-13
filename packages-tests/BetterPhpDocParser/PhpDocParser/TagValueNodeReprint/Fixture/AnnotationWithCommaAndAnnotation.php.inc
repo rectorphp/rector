@@ -10,7 +10,11 @@ use Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\Source\Embe
 final class AnEntityWithAnEmbedded
 {
     /**
-     * @ORM\Embedded(class="Embeddable"),
+     * @NotFoundErrorResponse("collection"),
+     *
+     * @OpenApi("
+     *      summary: Delete collection
+     * ")
      */
     private $embedded;
 }
