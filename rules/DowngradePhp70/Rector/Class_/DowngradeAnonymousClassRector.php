@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -69,6 +70,17 @@ CODE_SAMPLE
             return null;
         }
 
+        $classNode = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if ($classNode instanceof Class_) {
+            $this->procesMoveAnonymousClass($node, $classNode);
+        }
+
         return $node;
+    }
+
+    private function procesMoveAnonymousClass(Class_ $class, Class_ $classNode): void
+    {
+        $class->name = new Identifier('Anonymous');
+        $this->addNodeBeforeNode($class, $classNode);
     }
 }
