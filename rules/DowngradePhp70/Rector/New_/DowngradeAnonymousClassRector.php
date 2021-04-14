@@ -7,6 +7,7 @@ namespace Rector\DowngradePhp70\Rector\New_;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -18,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DowngradePhp70\Rector\Class_\DowngradeAnonymousClassRector\DowngradeAnonymousClassRectorTest
+ * @see \Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\DowngradeAnonymousClassRectorTest
  */
 final class DowngradeAnonymousClassRector extends AbstractRector
 {
@@ -111,7 +112,7 @@ CODE_SAMPLE
         $namespacedClassName = $this->getNamespacedClassName($namespace, $className);
 
         $count = 0;
-        while ($this->nodeRepository->findClass($namespacedClassName) || class_exists($namespacedClassName)) {
+        while ($this->nodeRepository->findClass($namespacedClassName)) {
             $className .= ++$count;
             $namespacedClassName = $this->getNamespacedClassName($namespace, $className);
         }
@@ -119,10 +120,12 @@ CODE_SAMPLE
         return ucfirst($className);
     }
 
-    private function processMoveAnonymousClassInClass(New_ $new, Class_ $class): New_
+    private function processMoveAnonymousClassInClass(New_ $new, Class_ $class): ?New_
     {
-        $namespacedClassName = $this->getName($class->namespacedName);
-        $shortClassName = $this->getName($class->name);
+        $namespacedClassName = (string) $this->getName($class->namespacedName);
+        /** @var Identifier $shortClassName */
+        $shortClassName = $class->name;
+        $shortClassName = (string) $this->getName($shortClassName);
         $namespace = $namespacedClassName === $shortClassName
             ? ''
             : Strings::substring($namespacedClassName, 0, - strlen($shortClassName) - 1);
@@ -131,10 +134,10 @@ CODE_SAMPLE
         return $this->processMove($new, $className, $class);
     }
 
-    private function processMoveAnonymousClassInFunction(New_ $new, Function_ $function): New_
+    private function processMoveAnonymousClassInFunction(New_ $new, Function_ $function): ?New_
     {
-        $namespacedFunctionName = $this->getName($function);
-        $shortFunctionName = $this->getName($function->name);
+        $namespacedFunctionName = (string) $this->getName($function);
+        $shortFunctionName = (string) $this->getName($function->name);
         $namespace = $namespacedFunctionName === $shortFunctionName
             ? ''
             : Strings::substring($namespacedFunctionName, 0, - strlen($shortFunctionName) - 1);
@@ -143,11 +146,11 @@ CODE_SAMPLE
         return $this->processMove($new, $className, $function);
     }
 
-    private function processMoveAnonymousClassInDirectCall(New_ $new, Stmt $stmt): New_
+    private function processMoveAnonymousClassInDirectCall(New_ $new, Stmt $stmt): ?New_
     {
         $parent = $stmt->getAttribute(AttributeKey::PARENT_NODE);
         $namespace = $parent instanceof Namespace_
-            ? $this->getName($parent->name)
+            ? (string) $this->getName($parent)
             : '';
         $suffix = $namespace === ''
             ? 'NotInfunctionNoNamespace'
@@ -158,10 +161,14 @@ CODE_SAMPLE
         return $this->processMove($new, $className, $stmt);
     }
 
-    private function processMove(New_ $new, string $className, Node $node): New_
+    private function processMove(New_ $new, string $className, Node $node): ?New_
     {
+        if (! $new->class instanceof Class_) {
+            return null;
+        }
+
         $class = new Class_(
-            new Name($className),
+            $className,
             [
                 'flags' => $new->class->flags,
                 'extends' => $new->class->extends,
