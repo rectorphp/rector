@@ -132,7 +132,7 @@ CODE_SAMPLE
         $namespacedFunctionName = $this->getName($function);
         $shortFunctionName      = $this->getName($function->name);
         $namespace              = $namespacedFunctionName === $shortFunctionName
-            ? null
+            ? ''
             : substr($namespacedFunctionName, 0, - strlen($shortFunctionName) - 1);
         $className           = $this->getClassName($namespace, $shortFunctionName);
 
