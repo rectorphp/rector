@@ -137,8 +137,6 @@ final class PhpFileProcessor implements FileProcessorInterface
 
         // 1. parse files to nodes
         foreach ($files as $file) {
-            $this->currentFileProvider->setFile($file);
-
             $this->tryCatchWrapper($file, function (File $file): void {
                 $this->fileProcessor->parseFileInfoToLocalCache($file);
             }, 'parsing');
@@ -149,8 +147,6 @@ final class PhpFileProcessor implements FileProcessorInterface
 
         // 3. apply post rectors
         foreach ($files as $file) {
-            $this->currentFileProvider->setFile($file);
-
             $this->tryCatchWrapper($file, function (File $file): void {
                 $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
 
@@ -215,6 +211,8 @@ final class PhpFileProcessor implements FileProcessorInterface
     private function refactorNodesWithRectors(array $files): void
     {
         foreach ($files as $file) {
+            $this->currentFileProvider->setFile($file);
+
             $this->tryCatchWrapper($file, function (File $file): void {
                 $this->fileProcessor->refactor($file);
             }, 'refactoring');
@@ -223,6 +221,8 @@ final class PhpFileProcessor implements FileProcessorInterface
 
     private function tryCatchWrapper(File $file, callable $callback, string $phase): void
     {
+        $this->currentFileProvider->setFile($file);
+
         $this->advance($file, $phase);
 
         try {
