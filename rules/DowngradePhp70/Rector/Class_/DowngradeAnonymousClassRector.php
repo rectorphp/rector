@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -85,13 +86,13 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function procesMoveAnonymousClass(Class_ $class, Class_ $classNode): Name
+    private function procesMoveAnonymousClass(Class_ $class, Class_ $classNode): Node
     {
-        /** @var New_ $parent */
-        $parent     = $class->getAttribute(AttributeKey::PARENT_NODE);
         $argsString = '';
-        foreach ($parent->args as $arg) {
-            $argsString .= ', ' . $this->betterStandardPrinter->print($arg);
+        $next = $class->getAttribute(AttributeKey::NEXT_NODE);
+        while ($next instanceof Arg) {
+            $argsString .= ', ' . $this->betterStandardPrinter->print($next);
+            $next        = $next->getAttribute(AttributeKey::NEXT_NODE);
         }
         $argsString = ltrim($argsString, ', ');
 
