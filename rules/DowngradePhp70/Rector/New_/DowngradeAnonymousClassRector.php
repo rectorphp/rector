@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\New_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -86,19 +82,19 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function procesMoveAnonymousClass(New_ $new, Class_ $classNode): void
+    private function procesMoveAnonymousClass(New_ $new, Class_ $class): void
     {
         $newClass = new Class_(
             new Name('Anonymous'),
             [
-                'flags'      => $new->class->flags,
-                'extends'    => $new->class->extends,
+                'flags' => $new->class->flags,
+                'extends' => $new->class->extends,
                 'implements' => $new->class->implements,
-                'stmts'      => $new->class->stmts,
+                'stmts' => $new->class->stmts,
                 'attrGroups' => $new->class->attrGroups,
             ]
         );
-        $this->addNodesAfterNode([$newClass], $classNode);
+        $this->addNodesAfterNode([$newClass], $class);
 
         $new = new New_(new Name('Anonymous'), $new->args);
     }
