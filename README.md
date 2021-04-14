@@ -18,7 +18,7 @@ Rector helps you with 2 areas - major code changes and in daily work.
 
 It's a tool that [we develop](https://getrector.org/) and share for free, so anyone can automate their refactoring.
 
-[Hire us](https://getrector.org/contact) to skip learning Rector, AST and nodes, to educate your team about Rectors benefits and to setup Rector in your project, so that you can enjoy the 300 % development speed :+1:
+[Hire us](https://getrector.org/contact) to speed up learning Rector, AST and nodes, to educate your team about Rectors benefits and to setup Rector in your project, so that you can enjoy the 300 % development speed :+1:
 
 <br>
 
