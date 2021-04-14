@@ -104,11 +104,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
         );
 
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
+        $this->originalTempFileInfo = $inputFileInfo;
 
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
         $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
-
-        $this->originalTempFileInfo = $inputFileInfo;
     }
 
     protected function getFixtureTempDirectory(): string

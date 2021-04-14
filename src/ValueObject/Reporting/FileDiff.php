@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObject\Reporting;
 
-use Rector\ChangesReporting\ValueObject\RectorWithFileAndLineChange;
+use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -21,9 +21,9 @@ final class FileDiff
     private $diffConsoleFormatted;
 
     /**
-     * @var RectorWithFileAndLineChange[]
+     * @var RectorWithLineChange[]
      */
-    private $rectorWithFileAndLineChanges = [];
+    private $rectorWithLineChanges = [];
 
     /**
      * @var SmartFileInfo
@@ -31,17 +31,17 @@ final class FileDiff
     private $smartFileInfo;
 
     /**
-     * @param RectorWithFileAndLineChange[] $rectorWithFileAndLineChanges
+     * @param RectorWithLineChange[] $rectorWithLineChanges
      */
     public function __construct(
         SmartFileInfo $smartFileInfo,
         string $diff,
         string $diffConsoleFormatted,
-        array $rectorWithFileAndLineChanges = []
+        array $rectorWithLineChanges = []
     ) {
         $this->smartFileInfo = $smartFileInfo;
         $this->diff = $diff;
-        $this->rectorWithFileAndLineChanges = $rectorWithFileAndLineChanges;
+        $this->rectorWithLineChanges = $rectorWithLineChanges;
         $this->diffConsoleFormatted = $diffConsoleFormatted;
     }
 
@@ -66,11 +66,11 @@ final class FileDiff
     }
 
     /**
-     * @return RectorWithFileAndLineChange[]
+     * @return RectorWithLineChange[]
      */
     public function getRectorChanges(): array
     {
-        return $this->rectorWithFileAndLineChanges;
+        return $this->rectorWithLineChanges;
     }
 
     /**
@@ -79,8 +79,8 @@ final class FileDiff
     public function getRectorClasses(): array
     {
         $rectorClasses = [];
-        foreach ($this->rectorWithFileAndLineChanges as $rectorWithFileAndLineChange) {
-            $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClass();
+        foreach ($this->rectorWithLineChanges as $rectorWithLineChange) {
+            $rectorClasses[] = $rectorWithLineChange->getRectorClass();
         }
 
         return $this->sortClasses($rectorClasses);

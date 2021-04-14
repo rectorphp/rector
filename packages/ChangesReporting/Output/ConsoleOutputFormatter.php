@@ -202,7 +202,8 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
         $rectorsChangelogsLines = [];
         foreach ($rectorsChangelogs as $rectorClass => $changelog) {
-            $rectorsChangelogsLines[] = $changelog === null ? $rectorClass : $rectorClass . ' (' . $changelog . ')';
+            $rectorShortClass = (string) Strings::after($rectorClass, '\\', -1);
+            $rectorsChangelogsLines[] = $changelog === null ? $rectorShortClass : $rectorShortClass . ' (' . $changelog . ')';
         }
 
         return $rectorsChangelogsLines;

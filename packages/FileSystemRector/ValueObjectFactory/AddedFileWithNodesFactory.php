@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Autodiscovery\Configuration\CategoryNamespaceProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\ValueObject\Application\File;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
@@ -59,15 +60,14 @@ final class AddedFileWithNodesFactory
         $this->fileInfoDeletionAnalyzer = $fileInfoDeletionAnalyzer;
     }
 
-    /**
-     * @param Node[] $nodes
-     */
     public function createWithDesiredGroup(
         SmartFileInfo $oldFileInfo,
-        array $nodes,
+        File $file,
         string $desiredGroupName
     ): ?AddedFileWithNodes {
-        $currentNamespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
+        $fileNodes = $file->getNewStmts();
+
+        $currentNamespace = $this->betterNodeFinder->findFirstInstanceOf($fileNodes, Namespace_::class);
 
         // file without namespace → skip
         if (! $currentNamespace instanceof Namespace_) {
@@ -102,7 +102,7 @@ final class AddedFileWithNodesFactory
         }
 
         // 1. rename namespace
-        $this->renameNamespace($nodes, $newNamespaceName);
+        $this->renameNamespace($file->getNewStmts(), $newNamespaceName);
 
         // 2. return changed nodes and new file destination
         $newFileDestination = $this->fileRelocationResolver->createNewFileDestination(
@@ -112,7 +112,7 @@ final class AddedFileWithNodesFactory
         );
 
         // 3. update fully qualifed name of the class like - will be used further
-        $classLike = $this->betterNodeFinder->findFirstInstanceOf($nodes, ClassLike::class);
+        $classLike = $this->betterNodeFinder->findFirstInstanceOf($fileNodes, ClassLike::class);
         if (! $classLike instanceof ClassLike) {
             return null;
         }
@@ -123,7 +123,7 @@ final class AddedFileWithNodesFactory
 
         $this->renamedClassesCollector->addClassRename($oldClassName, $newClassName);
 
-        return new AddedFileWithNodes($newFileDestination, $nodes);
+        return new AddedFileWithNodes($newFileDestination, $fileNodes);
     }
 
     private function createNewNamespaceName(string $desiredGroupName, Namespace_ $currentNamespace): string

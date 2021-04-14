@@ -10,7 +10,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Tests\Restoration\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector\UpdateFileNameByClassNameFileSystemRectorTest
@@ -58,10 +57,7 @@ CODE_SAMPLE
 
         $classShortName = $this->nodeNameResolver->getShortName($className);
 
-        $smartFileInfo = $node->getAttribute(SmartFileInfo::class);
-        if ($smartFileInfo === null) {
-            return null;
-        }
+        $smartFileInfo = $this->file->getSmartFileInfo();
 
         // matches
         if ($classShortName === $smartFileInfo->getBasenameWithoutSuffix()) {

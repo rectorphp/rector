@@ -200,9 +200,11 @@ CODE_SAMPLE
         if ($typeName === 'null') {
             return true;
         }
+
         if ($typeName === null) {
             return false;
         }
+
         if ($typeName === 'callable') {
             return true;
         }

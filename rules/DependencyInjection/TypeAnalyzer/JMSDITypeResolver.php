@@ -12,11 +12,12 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\ValueObject\Application\RectorError;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\RectorGenerator\Exception\ShouldNotHappenException;
 use Rector\Symfony\DataProvider\ServiceMapProvider;
 use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class JMSDITypeResolver
 {
@@ -45,18 +46,25 @@ final class JMSDITypeResolver
      */
     private $nodeNameResolver;
 
+    /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
+
     public function __construct(
         ErrorAndDiffCollector $errorAndDiffCollector,
         ServiceMapProvider $serviceMapProvider,
         PhpDocInfoFactory $phpDocInfoFactory,
         ReflectionProvider $reflectionProvider,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        CurrentFileProvider $currentFileProvider
     ) {
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->serviceMapProvider = $serviceMapProvider;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->currentFileProvider = $currentFileProvider;
     }
 
     public function resolve(
@@ -95,16 +103,15 @@ final class JMSDITypeResolver
             return;
         }
 
-        /** @var SmartFileInfo $fileInfo */
-        $fileInfo = $property->getAttribute(AttributeKey::FILE_INFO);
+        $file = $this->currentFileProvider->getFile();
+        if ($file === null) {
+            throw new ShouldNotHappenException();
+        }
 
         $errorMessage = sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName);
 
-        $this->errorAndDiffCollector->addErrorWithRectorClassMessageAndFileInfo(
-            self::class,
-            $errorMessage,
-            $fileInfo
-        );
+        $rectorError = new RectorError($errorMessage, $property->getLine());
+        $file->addRectorError($rectorError);
     }
 
     private function resolveFromServiceName(string $serviceName, ServiceMap $serviceMap): Type

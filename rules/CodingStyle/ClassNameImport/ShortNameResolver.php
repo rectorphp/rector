@@ -24,12 +24,11 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ShortNameResolver
 {
@@ -48,11 +47,6 @@ final class ShortNameResolver
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-
-    /**
-     * @var CurrentFileInfoProvider
-     */
-    private $currentFileInfoProvider;
 
     /**
      * @var PhpDocInfoFactory
@@ -81,7 +75,6 @@ final class ShortNameResolver
 
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        CurrentFileInfoProvider $currentFileInfoProvider,
         PhpDocInfoFactory $phpDocInfoFactory,
         NodeNameResolver $nodeNameResolver,
         NodeFinder $nodeFinder,
@@ -89,7 +82,6 @@ final class ShortNameResolver
         BetterNodeFinder $betterNodeFinder
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFinder = $nodeFinder;
@@ -100,18 +92,17 @@ final class ShortNameResolver
     /**
      * @return array<string, string>
      */
-    public function resolveForNode(Node $node): array
+    public function resolveForNode(File $file): array
     {
-        $realPath = $this->getNodeRealPath($node);
+        $smartFileInfo = $file->getSmartFileInfo();
+        $nodeRealPath = $smartFileInfo->getRealPath();
 
-        if (isset($this->shortNamesByFilePath[$realPath])) {
-            return $this->shortNamesByFilePath[$realPath];
+        if (isset($this->shortNamesByFilePath[$nodeRealPath])) {
+            return $this->shortNamesByFilePath[$nodeRealPath];
         }
 
-        $currentStmts = $this->currentFileInfoProvider->getCurrentStmts();
-
-        $shortNamesToFullyQualifiedNames = $this->resolveForStmts($currentStmts);
-        $this->shortNamesByFilePath[$realPath] = $shortNamesToFullyQualifiedNames;
+        $shortNamesToFullyQualifiedNames = $this->resolveForStmts($file->getNewStmts());
+        $this->shortNamesByFilePath[$nodeRealPath] = $shortNamesToFullyQualifiedNames;
 
         return $shortNamesToFullyQualifiedNames;
     }
@@ -137,22 +128,6 @@ final class ShortNameResolver
         }
 
         return array_unique($shortClassLikeNames);
-    }
-
-    private function getNodeRealPath(Node $node): ?string
-    {
-        /** @var SmartFileInfo|null $fileInfo */
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo !== null) {
-            return $fileInfo->getRealPath();
-        }
-
-        $smartFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        if ($smartFileInfo !== null) {
-            return $smartFileInfo->getRealPath();
-        }
-
-        return null;
     }
 
     /**

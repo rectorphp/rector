@@ -10,8 +10,6 @@ use Rector\Core\Error\ExceptionCorrector;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Application\RectorError;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
-use Symplify\SmartFileSystem\SmartFileInfo;
-use Throwable;
 
 final class ErrorAndDiffCollector
 {
@@ -76,35 +74,8 @@ final class ErrorAndDiffCollector
     public function addAutoloadError(AnalysedCodeException $analysedCodeException, File $file): void
     {
         $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
-        $this->errors[] = new RectorError($file->getSmartFileInfo(), $message);
-    }
+        $rectorError = new RectorError($message);
 
-    public function addErrorWithRectorClassMessageAndFileInfo(
-        string $rectorClass,
-        string $message,
-        SmartFileInfo $smartFileInfo
-    ): void {
-        $this->errors[] = new RectorError($smartFileInfo, $message, null, $rectorClass);
-    }
-
-    public function addThrowableWithFileInfo(Throwable $throwable, SmartFileInfo $fileInfo): void
-    {
-        $rectorClass = $this->exceptionCorrector->matchRectorClass($throwable);
-        if ($rectorClass) {
-            $this->addErrorWithRectorClassMessageAndFileInfo($rectorClass, $throwable->getMessage(), $fileInfo);
-        } else {
-            $this->errors[] = new RectorError($fileInfo, $throwable->getMessage(), $throwable->getCode());
-        }
-    }
-
-    public function hasSmartFileErrors(File $file): bool
-    {
-        foreach ($this->errors as $error) {
-            if ($error->getFileInfo() === $file->getSmartFileInfo()) {
-                return true;
-            }
-        }
-
-        return false;
+        $file->addRectorError($rectorError);
     }
 }

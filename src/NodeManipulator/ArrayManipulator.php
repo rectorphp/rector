@@ -82,6 +82,7 @@ final class ArrayManipulator
             if (! $removedArrayItem instanceof ArrayItem) {
                 continue;
             }
+
             // remove + recount for the printer
             unset($array->items[$i]);
 

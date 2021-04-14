@@ -23,7 +23,6 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
-use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\Printer\Whitespace\IndentCharacterDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -110,7 +109,7 @@ final class BetterStandardPrinter extends Standard
         $newStmts = $this->resolveNewStmts($stmts);
 
         // detect per print
-        $this->tabOrSpaceIndentCharacter = $this->indentCharacterDetector->detect($newStmts);
+        $this->tabOrSpaceIndentCharacter = $this->indentCharacterDetector->detect($origTokens);
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
 
@@ -154,11 +153,6 @@ final class BetterStandardPrinter extends Standard
         $content = $this->pStmts($fileWithoutNamespace->stmts, false);
 
         return ltrim($content);
-    }
-
-    public function pFileNode(FileNode $fileNode): string
-    {
-        return $this->pStmts($fileNode->stmts);
     }
 
     /**

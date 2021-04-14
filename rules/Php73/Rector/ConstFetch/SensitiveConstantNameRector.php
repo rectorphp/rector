@@ -6,8 +6,11 @@ namespace Rector\Php73\Rector\ConstFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -81,6 +84,16 @@ final class SensitiveConstantNameRector extends AbstractRector
         'NULL',
     ];
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -129,7 +142,8 @@ CODE_SAMPLE
         }
 
         // constant is defined in current lower/upper case
-        if (defined($constantName)) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($this->reflectionProvider->hasConstant(new Name($constantName), $scope)) {
             return null;
         }
 

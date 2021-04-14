@@ -52,8 +52,8 @@ final class NonPhpFileProcessor implements FileProcessorInterface
 
     public function supports(File $file): bool
     {
-        $fileInfo = $file->getSmartFileInfo();
-        return $fileInfo->hasSuffixes($this->getSupportedFileExtensions());
+        $smartFileInfo = $file->getSmartFileInfo();
+        return $smartFileInfo->hasSuffixes($this->getSupportedFileExtensions());
     }
 
     public function getSupportedFileExtensions(): array
@@ -63,15 +63,14 @@ final class NonPhpFileProcessor implements FileProcessorInterface
 
     private function processFile(File $file): void
     {
-        $fileInfo = $file->getSmartFileInfo();
-        $oldFileContents = $fileInfo->getContents();
+        $fileContent = $file->getFileContent();
 
         $classRenames = array_merge(
             $this->renamedClassesDataCollector->getOldToNewClasses(),
             $this->renamedClassesCollector->getOldToNewClasses()
         );
 
-        $changedFileContents = $this->nonPhpFileClassRenamer->renameClasses($oldFileContents, $classRenames);
+        $changedFileContents = $this->nonPhpFileClassRenamer->renameClasses($fileContent, $classRenames);
         $file->changeFileContent($changedFileContents);
     }
 }

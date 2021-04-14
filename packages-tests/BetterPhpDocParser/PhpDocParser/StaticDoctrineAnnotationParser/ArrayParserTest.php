@@ -38,7 +38,7 @@ final class ArrayParserTest extends AbstractKernelTestCase
     {
         $betterTokenIterator = $this->tokenIteratorFactory->create($docContent);
 
-        $array = $this->arrayParser->parserArray($betterTokenIterator);
+        $array = $this->arrayParser->parseCurlyArray($betterTokenIterator);
         $this->assertSame($expectedArray, $array);
     }
 

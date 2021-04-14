@@ -26,11 +26,16 @@ class Fixture
 
     public function run()
     {
-        $this->dispatcher->dispatch(new class implements \League\Event\HasEventName
+        $this->dispatcher->dispatch(new class('my-event') implements \League\Event\HasEventName
         {
+            private $name;
+            public function __construct(string $name)
+            {
+                $this->name = $name;
+            }
             public function eventName(): string
             {
-                return 'my-event';
+                return $this->name;
             }
         });
     }

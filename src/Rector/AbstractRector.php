@@ -7,7 +7,6 @@ namespace Rector\Core\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -25,6 +24,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
@@ -34,6 +34,8 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\ProjectType;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -49,7 +51,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\Skipper\Skipper\Skipper;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Testing\PHPUnit\AbstractRectorTestCase
@@ -63,7 +64,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         AttributeKey::PARENT_NODE,
         AttributeKey::CLASS_NODE,
         AttributeKey::CLASS_NAME,
-        AttributeKey::FILE_INFO,
         AttributeKey::METHOD_NODE,
         AttributeKey::USE_NODES,
         AttributeKey::SCOPE,
@@ -166,6 +166,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected $nodesToRemoveCollector;
 
     /**
+     * @var File
+     */
+    protected $file;
+
+    /**
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
@@ -206,6 +211,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $nodesToAddCollector;
 
     /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
+
+    /**
      * @required
      */
     public function autowireAbstractRector(
@@ -234,7 +244,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         ValueResolver $valueResolver,
         NodeRepository $nodeRepository,
         BetterNodeFinder $betterNodeFinder,
-        NodeComparator $nodeComparator
+        NodeComparator $nodeComparator,
+        CurrentFileProvider $currentFileProvider
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
@@ -262,6 +273,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->nodeRepository = $nodeRepository;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
+        $this->currentFileProvider = $currentFileProvider;
     }
 
     /**
@@ -270,6 +282,14 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     public function beforeTraverse(array $nodes): ?array
     {
         $this->previousAppliedClass = null;
+
+        // workaround for file around refactor()
+        $file = $this->currentFileProvider->getFile();
+        if (! $file instanceof File) {
+            throw new ShouldNotHappenException('File is missing');
+        }
+
+        $this->file = $file;
 
         return parent::beforeTraverse($nodes);
     }
@@ -284,20 +304,19 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return null;
         }
 
-        $this->currentRectorProvider->changeCurrentRector($this);
-        // for PHP doc info factory and change notifier
-        $this->currentNodeProvider->setNode($node);
-
-        // already removed
         if ($this->shouldSkipCurrentNode($node)) {
             return null;
         }
 
+        $this->currentRectorProvider->changeCurrentRector($this);
+        // for PHP doc info factory and change notifier
+        $this->currentNodeProvider->setNode($node);
+
         // show current Rector class on --debug
         $this->printDebugApplying();
 
+        $originalAttributes = $node->getAttributes();
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? clone $node;
-        $originalNodeWithAttributes = clone $node;
 
         $node = $this->refactor($node);
 
@@ -309,15 +328,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         // changed!
         if ($this->hasNodeChanged($originalNode, $node)) {
             $this->updateAttributes($node);
-            $this->keepFileInfoAttribute($node, $originalNode);
-            $this->rectorChangeCollector->notifyNodeFileInfo($node);
+
+            $this->rectorChangeCollector->notifyFileChange($this->file, $node, $this);
 
             // update parents relations
-            $nodeTraverser = new NodeTraverser();
-            $nodeTraverser->addVisitor(new ParentConnectingVisitor());
-            $nodeTraverser->traverse([$node]);
+            $this->connectParentNodes($node);
 
-            $this->mirrorAttributes($originalNodeWithAttributes, $node);
+            $this->mirrorAttributes($originalAttributes, $node);
         }
 
         // if stmt ("$value;") was replaced by expr ("$value"), add the ending ";" (Expression) to prevent breaking the code
@@ -412,15 +429,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
     }
 
-    protected function isOnClassMethodCall(MethodCall $methodCall, ObjectType $objectType, string $methodName): bool
-    {
-        if (! $this->isObjectType($methodCall->var, $objectType)) {
-            return false;
-        }
-
-        return $this->isName($methodCall->name, $methodName);
-    }
-
     protected function isOpenSourceProjectType(): bool
     {
         $projectType = $this->parameterProvider->provideStringParameter(Option::PROJECT_TYPE);
@@ -506,6 +514,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->nodeRemover->removeNodes($nodes);
     }
 
+    /**
+     * @param class-string<Node> $nodeClass
+     */
     private function isMatchingNodeType(string $nodeClass): bool
     {
         foreach ($this->getNodeTypes() as $nodeType) {
@@ -527,12 +538,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return true;
         }
 
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if (! $fileInfo instanceof SmartFileInfo) {
-            return false;
-        }
-
-        return $this->skipper->shouldSkipElementAndFileInfo($this, $fileInfo);
+        $smartFileInfo = $this->file->getSmartFileInfo();
+        return $this->skipper->shouldSkipElementAndFileInfo($this, $smartFileInfo);
     }
 
     private function printDebugApplying(): void
@@ -560,14 +567,17 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return ! $this->nodeComparator->areNodesEqual($originalNode, $node);
     }
 
-    private function mirrorAttributes(Node $oldNode, Node $newNode): void
+    /**
+     * @param array<string, mixed> $originalAttributes
+     */
+    private function mirrorAttributes(array $originalAttributes, Node $newNode): void
     {
-        foreach ($oldNode->getAttributes() as $attributeName => $oldNodeAttributeValue) {
+        foreach ($originalAttributes as $attributeName => $oldAttributeValue) {
             if (! in_array($attributeName, self::ATTRIBUTES_TO_MIRROR, true)) {
                 continue;
             }
 
-            $newNode->setAttribute($attributeName, $oldNodeAttributeValue);
+            $newNode->setAttribute($attributeName, $oldAttributeValue);
         }
     }
 
@@ -579,23 +589,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
     }
 
-    private function keepFileInfoAttribute(Node $node, Node $originalNode): void
-    {
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo instanceof SmartFileInfo) {
-            return;
-        }
-        $fileInfo = $originalNode->getAttribute(AttributeKey::FILE_INFO);
-
-        $originalParent = $originalNode->getAttribute(AttributeKey::PARENT_NODE);
-
-        if ($fileInfo !== null) {
-            $node->setAttribute(AttributeKey::FILE_INFO, $originalNode->getAttribute(AttributeKey::FILE_INFO));
-        } elseif ($originalParent instanceof Node) {
-            $node->setAttribute(AttributeKey::FILE_INFO, $originalParent->getAttribute(AttributeKey::FILE_INFO));
-        }
-    }
-
     private function isNameIdentical(Node $node, Node $originalNode): bool
     {
         if (! $originalNode instanceof Name) {
@@ -604,5 +597,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // names are the same
         return $this->nodeComparator->areNodesEqual($originalNode->getAttribute(AttributeKey::ORIGINAL_NAME), $node);
+    }
+
+    private function connectParentNodes(Node $node): void
+    {
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new ParentConnectingVisitor());
+        $nodeTraverser->traverse([$node]);
     }
 }

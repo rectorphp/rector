@@ -14,22 +14,13 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
+use Rector\NodeNameResolver\Error\InvalidNameNodeReporter;
 use Rector\NodeNameResolver\Regex\RegexPatternDetector;
-use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NodeNameResolver
 {
-    /**
-     * @var string
-     */
-    private const FILE = 'file';
-
     /**
      * @var NodeNameResolverInterface[]
      */
@@ -41,35 +32,28 @@ final class NodeNameResolver
     private $regexPatternDetector;
 
     /**
-     * @var CurrentFileInfoProvider
-     */
-    private $currentFileInfoProvider;
-
-    /**
      * @var ClassNaming
      */
     private $classNaming;
 
     /**
-     * @var BetterStandardPrinter
+     * @var InvalidNameNodeReporter
      */
-    private $betterStandardPrinter;
+    private $invalidNameNodeReporter;
 
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
     public function __construct(
         RegexPatternDetector $regexPatternDetector,
-        BetterStandardPrinter $betterStandardPrinter,
-        CurrentFileInfoProvider $currentFileInfoProvider,
         ClassNaming $classNaming,
+        InvalidNameNodeReporter $invalidNameNodeReporter,
         array $nodeNameResolvers = []
     ) {
         $this->regexPatternDetector = $regexPatternDetector;
         $this->nodeNameResolvers = $nodeNameResolvers;
-        $this->currentFileInfoProvider = $currentFileInfoProvider;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->classNaming = $classNaming;
+        $this->invalidNameNodeReporter = $invalidNameNodeReporter;
     }
 
     /**
@@ -115,7 +99,7 @@ final class NodeNameResolver
                 return null;
             }
 
-            $this->reportInvalidNodeForName($node);
+            $this->invalidNameNodeReporter->reportInvalidNodeForName($node);
         }
 
         foreach ($this->nodeNameResolvers as $nodeNameResolver) {
@@ -218,65 +202,15 @@ final class NodeNameResolver
 
     private function isCallOrIdentifier(Node $node): bool
     {
-        return StaticNodeInstanceOf::isOneOf($node, [MethodCall::class, StaticCall::class, Identifier::class]);
-    }
-
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    private function reportInvalidNodeForName(Node $node): void
-    {
-        $message = sprintf('Pick more specific node than "%s", e.g. "$node->name"', get_class($node));
-
-        $fileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        if ($fileInfo instanceof SmartFileInfo) {
-            $message .= PHP_EOL . PHP_EOL;
-            $message .= sprintf(
-                'Caused in "%s" file on line %d on code "%s"',
-                $fileInfo->getRelativeFilePathFromCwd(),
-                $node->getStartLine(),
-                $this->betterStandardPrinter->print($node)
-            );
+        if ($node instanceof MethodCall) {
+            return true;
         }
 
-        $backtrace = debug_backtrace();
-        $rectorBacktrace = $this->matchRectorBacktraceCall($backtrace);
-
-        if ($rectorBacktrace) {
-            // issues to find the file in prefixed
-            if (file_exists($rectorBacktrace[self::FILE])) {
-                $fileInfo = new SmartFileInfo($rectorBacktrace[self::FILE]);
-                $fileAndLine = $fileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
-            } else {
-                $fileAndLine = $rectorBacktrace[self::FILE] . ':' . $rectorBacktrace['line'];
-            }
-
-            $message .= PHP_EOL . PHP_EOL;
-            $message .= sprintf('Look at "%s"', $fileAndLine);
+        if ($node instanceof StaticCall) {
+            return true;
         }
 
-        throw new ShouldNotHappenException($message);
-    }
-
-    /**
-     * @param mixed[] $backtrace
-     */
-    private function matchRectorBacktraceCall(array $backtrace): ?array
-    {
-        foreach ($backtrace as $singleBacktrace) {
-            if (! isset($singleBacktrace['object'])) {
-                continue;
-            }
-
-            // match a Rector class
-            if (! is_a($singleBacktrace['object'], RectorInterface::class)) {
-                continue;
-            }
-
-            return $singleBacktrace;
-        }
-
-        return $backtrace[1] ?? null;
+        return $node instanceof Identifier;
     }
 
     private function isSingleName(Node $node, string $name): bool
