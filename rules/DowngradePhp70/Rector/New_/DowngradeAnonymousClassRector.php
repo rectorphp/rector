@@ -122,10 +122,11 @@ CODE_SAMPLE
 
     private function processMoveAnonymousClassInClass(New_ $new, Class_ $class): ?New_
     {
-        $namespacedClassName = (string) $this->getName($class->namespacedName);
+        $namespacedClassName = $this->getName($class->namespacedName);
         /** @var Identifier $shortClassName */
         $shortClassName = $class->name;
         $shortClassName = (string) $this->getName($shortClassName);
+
         $namespace = $namespacedClassName === $shortClassName
             ? ''
             : Strings::substring($namespacedClassName, 0, - strlen($shortClassName) - 1);
