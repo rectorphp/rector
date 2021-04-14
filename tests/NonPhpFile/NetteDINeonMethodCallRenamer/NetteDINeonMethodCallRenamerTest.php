@@ -15,7 +15,7 @@ use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-class NetteDINeonMethodCallRenamerTest extends AbstractKernelTestCase
+final class NetteDINeonMethodCallRenamerTest extends AbstractKernelTestCase
 {
     /**
      * @var NetteDINeonMethodCallRenamer

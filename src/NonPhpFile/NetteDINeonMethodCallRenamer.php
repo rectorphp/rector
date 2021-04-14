@@ -7,7 +7,10 @@ use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Renaming\Collector\MethodCallRenameCollector;
 
-class NetteDINeonMethodCallRenamer implements FileProcessorInterface
+/**
+ * @see \Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\NetteDINeonMethodCallRenamerTest
+ */
+final class NetteDINeonMethodCallRenamer implements FileProcessorInterface
 {
     /**
      * @var MethodCallRenameCollector
