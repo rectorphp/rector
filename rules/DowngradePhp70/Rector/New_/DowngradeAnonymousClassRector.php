@@ -88,14 +88,6 @@ CODE_SAMPLE
 
     private function procesMoveAnonymousClass(New_ $new, Class_ $classNode): void
     {
-//        $next = $class->getAttribute(AttributeKey::NEXT_NODE);
-
-        $args = [];
-        //while ($next instanceof Arg) {
-         //   $args[] = $next;
-          //  $next   = $next->getAttribute(AttributeKey::NEXT_NODE);
-       // }
-
         $newClass = new Class_(
             new Name('Anonymous'),
             [
@@ -107,7 +99,5 @@ CODE_SAMPLE
             ]
         );
         $this->addNodesAfterNode([$newClass], $classNode);
-
-        $new->class = new Name('Anonymous');
     }
 }
