@@ -89,11 +89,11 @@ CODE_SAMPLE
     {
         /** @var New_ $parent */
         $parent     = $class->getAttribute(AttributeKey::PARENT_NODE);
-        //$argsString = '';
-        //foreach ($parent->args as $arg) {
-         //   $argsString .= ', ' . $this->betterStandardPrinter->print($arg);
-       // }
-        //$argsString = ltrim($argsString, ', ');
+        $argsString = '';
+        foreach ($parent->args as $arg) {
+            $argsString .= ', ' . $this->betterStandardPrinter->print($arg);
+        }
+        $argsString = ltrim($argsString, ', ');
 
         $newClass = new Class_(
             new Name('Anonymous'),
@@ -106,8 +106,6 @@ CODE_SAMPLE
             ]
         );
         $this->addNodesAfterNode([$newClass], $classNode);
-
-        return new Name('Anonymous');
 
         return new Name(sprintf('Anonymous(%s)', $argsString));
     }
