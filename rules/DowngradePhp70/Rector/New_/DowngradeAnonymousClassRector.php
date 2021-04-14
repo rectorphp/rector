@@ -99,7 +99,9 @@ CODE_SAMPLE
     {
         $namespacedClassName = $this->getName($class->namespacedName);
         $shortClassName      = $this->getName($class->name);
-        $namespace           = substr($namespacedClassName, 0, - strlen($shortClassName) - 1);
+        $namespace           = $namespacedClassName === $shortClassName
+            ? null
+            : substr($namespacedClassName, 0, - strlen($shortClassName) - 1);
         $className           = self::CLASS_NAME;
         $namespacedClassName = $this->getNamespacedClassName($namespace, $className);
 
