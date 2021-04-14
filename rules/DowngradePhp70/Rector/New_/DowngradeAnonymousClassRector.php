@@ -97,13 +97,15 @@ CODE_SAMPLE
 
     private function procesMoveAnonymousClass(New_ $new, Class_ $class): New_
     {
-        $namespace           = $class->getAttribute(AttributeKey::NAMESPACED_NAME);
+        $namespacedClassName = $this->getName($class->namespacedName);
+        $shortClassName      = $this->getName($class->name);
+        $namespace           = substr($namespacedClassName, 0, - strlen($shortClassName) - 1);
         $className           = self::CLASS_NAME;
         $namespacedClassName = $this->getNamespacedClassName($namespace, $className);
 
         $count = 0;
-        while (class_exists($namespacedClassName)) {
-            $className           = $className . ++ $count;
+        while ($this->nodeRepository->findClass($namespacedClassName)) {
+            $className           = $className . ++$count;
             $namespacedClassName = $this->getNamespacedClassName($namespace, $className);
         }
 
