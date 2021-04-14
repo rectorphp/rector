@@ -4,20 +4,29 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObjectFactory;
 
-use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\ProcessResult;
+use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 final class ProcessResultFactory
 {
     /**
-     * @var ErrorAndDiffCollector
+     * @var RemovedAndAddedFilesCollector
      */
-    private $errorAndDiffCollector;
+    private $removedAndAddedFilesCollector;
 
-    public function __construct(ErrorAndDiffCollector $errorAndDiffCollector)
-    {
-        $this->errorAndDiffCollector = $errorAndDiffCollector;
+    /**
+     * @var NodesToRemoveCollector
+     */
+    private $nodesToRemoveCollector;
+
+    public function __construct(
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        NodesToRemoveCollector $nodesToRemoveCollector
+    ) {
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
 
     /**
@@ -40,9 +49,9 @@ final class ProcessResultFactory
         return new ProcessResult(
             $fileDiffs,
             $errors,
-            $this->errorAndDiffCollector->getAddedFilesCount(),
-            $this->errorAndDiffCollector->getRemovedFilesCount(),
-            $this->errorAndDiffCollector->getRemovedNodeCount(),
+            $this->removedAndAddedFilesCollector->getAddedFileCount(),
+            $this->removedAndAddedFilesCollector->getRemovedFilesCount(),
+            $this->nodesToRemoveCollector->getCount(),
         );
     }
 }

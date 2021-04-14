@@ -11,7 +11,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\RectorError;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -21,11 +20,6 @@ use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
 
 final class JMSDITypeResolver
 {
-    /**
-     * @var ErrorAndDiffCollector
-     */
-    private $errorAndDiffCollector;
-
     /**
      * @var ServiceMapProvider
      */
@@ -52,14 +46,12 @@ final class JMSDITypeResolver
     private $currentFileProvider;
 
     public function __construct(
-        ErrorAndDiffCollector $errorAndDiffCollector,
         ServiceMapProvider $serviceMapProvider,
         PhpDocInfoFactory $phpDocInfoFactory,
         ReflectionProvider $reflectionProvider,
         NodeNameResolver $nodeNameResolver,
         CurrentFileProvider $currentFileProvider
     ) {
-        $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->serviceMapProvider = $serviceMapProvider;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionProvider = $reflectionProvider;
