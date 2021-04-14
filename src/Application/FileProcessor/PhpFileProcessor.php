@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Application\FileProcessor;
 
 use PHPStan\AnalysedCodeException;
-use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
@@ -53,11 +53,6 @@ final class PhpFileProcessor implements FileProcessorInterface
     private $symfonyStyle;
 
     /**
-     * @var ErrorAndDiffCollector
-     */
-    private $errorAndDiffCollector;
-
-    /**
      * @var FileProcessor
      */
     private $fileProcessor;
@@ -97,10 +92,14 @@ final class PhpFileProcessor implements FileProcessorInterface
      */
     private $postFileProcessor;
 
+    /**
+     * @var ErrorFactory
+     */
+    private $errorFactory;
+
     public function __construct(
         Configuration $configuration,
         FormatPerservingPrinter $formatPerservingPrinter,
-        ErrorAndDiffCollector $errorAndDiffCollector,
         FileProcessor $fileProcessor,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
@@ -108,10 +107,10 @@ final class PhpFileProcessor implements FileProcessorInterface
         PrivatesAccessor $privatesAccessor,
         FileDiffFileDecorator $fileDiffFileDecorator,
         CurrentFileProvider $currentFileProvider,
-        PostFileProcessor $postFileProcessor
+        PostFileProcessor $postFileProcessor,
+        ErrorFactory $errorFactory
     ) {
         $this->symfonyStyle = $symfonyStyle;
-        $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->configuration = $configuration;
         $this->fileProcessor = $fileProcessor;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
@@ -122,6 +121,7 @@ final class PhpFileProcessor implements FileProcessorInterface
         $this->currentFileProvider = $currentFileProvider;
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->postFileProcessor = $postFileProcessor;
+        $this->errorFactory = $errorFactory;
     }
 
     /**
@@ -235,7 +235,8 @@ final class PhpFileProcessor implements FileProcessorInterface
             $callback($file);
         } catch (AnalysedCodeException $analysedCodeException) {
             $this->notParsedFiles[] = $file;
-            $this->errorAndDiffCollector->addAutoloadError($analysedCodeException, $file);
+            $error = $this->errorFactory->createAutoloadError($analysedCodeException);
+            $file->addRectorError($error);
         } catch (Throwable $throwable) {
             if ($this->symfonyStyle->isVerbose()) {
                 throw $throwable;
