@@ -150,6 +150,10 @@ CODE_SAMPLE
     private function processMoveAnonymousClassInDirectCall(New_ $new, Stmt $stmt): ?New_
     {
         $parent = $stmt->getAttribute(AttributeKey::PARENT_NODE);
+        while ($parent instanceof Node && ! $parent instanceof Namespace_) {
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
         $namespace = $parent instanceof Namespace_
             ? (string) $this->getName($parent)
             : '';
