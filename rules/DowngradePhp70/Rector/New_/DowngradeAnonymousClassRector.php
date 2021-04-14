@@ -99,5 +99,7 @@ CODE_SAMPLE
             ]
         );
         $this->addNodesAfterNode([$newClass], $classNode);
+
+        $new = new New_(new Name('Anonymous'), $new->args);
     }
 }
