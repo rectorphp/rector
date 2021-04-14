@@ -28,6 +28,9 @@ class Anonymous
 }
 class Anonymous1
 {
+    public function execute()
+    {
+    }
 }
 class ClassExists
 {

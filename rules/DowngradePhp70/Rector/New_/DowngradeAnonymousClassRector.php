@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,9 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeAnonymousClassRector extends AbstractRector
 {
     /**
-     * @var int
+     * @var string
      */
-    private $count = 0;
+    private const CLASS_NAME = 'Anonymous';
 
     /**
      * @return array<class-string<Node>>
@@ -87,10 +88,27 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function getNamespacedClassName(?string $namespace, string $className): string
+    {
+        return $namespace === null
+            ? $className
+            : $namespace . '\\' . $className;;
+    }
+
     private function procesMoveAnonymousClass(New_ $new, Class_ $class): New_
     {
+        $namespace           = $class->getAttribute(AttributeKey::NAMESPACED_NAME);
+        $className           = self::CLASS_NAME;
+        $namespacedClassName = $this->getNamespacedClassName($namespace, $className);
+
+        $count = 0;
+        while (class_exists($namespacedClassName)) {
+            $className           = $className . ++ $count;
+            $namespacedClassName = $this->getNamespacedClassName($namespace, $className);
+        }
+
         $newClass = new Class_(
-            new Name('Anonymous'),
+            new Name($className),
             [
                 'flags' => $new->class->flags,
                 'extends' => $new->class->extends,
@@ -101,6 +119,6 @@ CODE_SAMPLE
         );
         $this->addNodeBeforeNode($newClass, $class);
 
-        return new New_(new Name('Anonymous'), $new->args);
+        return new New_(new Name($className), $new->args);
     }
 }
