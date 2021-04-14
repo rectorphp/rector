@@ -109,6 +109,11 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->expr instanceof MethodCall || $node->expr instanceof StaticCall) {
+            // keep the expr, can have side effect
+            return $node->expr;
+        }
+
         $this->removeNode($node);
         return $node;
     }
