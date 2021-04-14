@@ -12,6 +12,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Application\RectorError;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\RectorGenerator\Exception\ShouldNotHappenException;
@@ -96,7 +97,7 @@ final class JMSDITypeResolver
         }
 
         $file = $this->currentFileProvider->getFile();
-        if ($file === null) {
+        if (! $file instanceof File) {
             throw new ShouldNotHappenException();
         }
 
