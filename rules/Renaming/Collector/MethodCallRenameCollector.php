@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Renaming\Configuration;
+namespace Rector\Renaming\Collector;
 
 use Rector\Renaming\Contract\MethodCallRenameInterface;
 

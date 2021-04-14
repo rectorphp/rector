@@ -9,7 +9,7 @@ use Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\Source\FirstServic
 use Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\Source\SecondService;
 use Rector\Core\Tests\NonPhpFile\NetteDINeonMethodCallRenamer\Source\ServiceInterface;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Renaming\Configuration\MethodCallRenameCollector;
+use Rector\Renaming\Collector\MethodCallRenameCollector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;

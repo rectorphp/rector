@@ -5,7 +5,7 @@ namespace Rector\Core\NonPhpFile;
 
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Renaming\Configuration\MethodCallRenameCollector;
+use Rector\Renaming\Collector\MethodCallRenameCollector;
 
 class NetteDINeonMethodCallRenamer implements FileProcessorInterface
 {
