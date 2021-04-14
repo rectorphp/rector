@@ -69,8 +69,6 @@
         "symplify/rule-doc-generator": "^9.2.16",
         "friendsofphp/php-cs-fixer": "^2.18.3",
         "nette/application": "^3.0.7",
-        "nette/di": "^3.0",
-        "nette/forms": "^3.0",
         "phpstan/phpstan-nette": "^0.12.16",
         "phpunit/phpunit": "^9.5",
         "rector/rector-generator": "^0.1.5",
@@ -114,7 +112,6 @@
         "files": [
             "stubs/Doctrine/Persistence/ObjectManager.php",
             "stubs/Doctrine/Common/Persistence/ObjectManager.php",
-            "vendor/nette/forms/src/Forms/Controls/SubmitButton.php",
             "rules-tests/Restoration/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php",
             "rules-tests/DeadCode/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",
             "rules-tests/Transform/Rector/FuncCall/FuncCallToMethodCallRector/Source/some_view_function.php",
