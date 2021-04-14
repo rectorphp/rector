@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp70\Rector\Class_;
+namespace Rector\DowngradePhp70\Rector\New_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -26,7 +26,7 @@ final class DowngradeAnonymousClassRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [Class_::class];
+        return [New_::class];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -70,11 +70,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Class_ $node
+     * @param New_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->classAnalyzer->isAnonymousClass($node)) {
+        if (! $this->classAnalyzer->isAnonymousClass($node->class)) {
             return null;
         }
 
@@ -86,28 +86,28 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function procesMoveAnonymousClass(Class_ $class, Class_ $classNode): Node
+    private function procesMoveAnonymousClass(New_ $new, Class_ $classNode): void
     {
-        $argsString = '';
-        $next = $class->getAttribute(AttributeKey::NEXT_NODE);
-        while ($next instanceof Arg) {
-            $argsString .= ', ' . $this->betterStandardPrinter->print($next);
-            $next        = $next->getAttribute(AttributeKey::NEXT_NODE);
-        }
-        $argsString = ltrim($argsString, ', ');
+//        $next = $class->getAttribute(AttributeKey::NEXT_NODE);
+
+        $args = [];
+        //while ($next instanceof Arg) {
+         //   $args[] = $next;
+          //  $next   = $next->getAttribute(AttributeKey::NEXT_NODE);
+       // }
 
         $newClass = new Class_(
             new Name('Anonymous'),
             [
-                'flags'      => $class->flags,
-                'extends'    => $class->extends,
-                'implements' => $class->implements,
-                'stmts'      => $class->stmts,
-                'attrGroups' => $class->attrGroups,
+                'flags'      => $new->class->flags,
+                'extends'    => $new->class->extends,
+                'implements' => $new->class->implements,
+                'stmts'      => $new->class->stmts,
+                'attrGroups' => $new->class->attrGroups,
             ]
         );
         $this->addNodesAfterNode([$newClass], $classNode);
 
-        return new Name(sprintf('Anonymous(%s)', $argsString));
+        $new->class = new Name('Anonymous');
     }
 }

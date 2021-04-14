@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\DowngradePhp70\Rector\Class_\DowngradeAnonymousClassRector;
+namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

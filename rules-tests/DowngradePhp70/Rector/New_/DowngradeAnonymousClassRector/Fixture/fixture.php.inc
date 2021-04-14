@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\DowngradePhp70\Rector\Class_\DowngradeAnonymousClassRector\Fixture;
+namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\Fixture;
 
 class SomeClass
 {
@@ -18,7 +18,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\DowngradePhp70\Rector\Class_\DowngradeAnonymousClassRector\Fixture;
+namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\Fixture;
 
 class SomeClass
 {
