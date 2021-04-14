@@ -2,9 +2,19 @@
 
 namespace Rector\Tests\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector\Fixture;
 
-declare(ticks=1);
+declare(strict_types=1);
 
-class SkipDifferentDeclare
+class Fixture
+{
+}
+
+?>
+-----
+<?php
+
+namespace Rector\Tests\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector\Fixture;
+
+class Fixture
 {
 }
 
