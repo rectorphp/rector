@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\Downgrade72\Rector\FuncCall\DowngradeStreamIsattyRector;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 use Rector\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector;
 use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector;
@@ -17,4 +18,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeObjectTypeDeclarationRector::class);
     $services->set(DowngradeParameterTypeWideningRector::class);
     $services->set(DowngradePregUnmatchedAsNullConstantRector::class);
+    $services->set(DowngradeStreamIsattyRector::class);
 };
