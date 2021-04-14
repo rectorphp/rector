@@ -39,15 +39,12 @@ final class FileDiffFactory
 
     public function createFileDiff(File $file, string $oldContent, string $newContent): FileDiff
     {
-        $smartFileInfo = $file->getSmartFileInfo();
-        $rectorChanges = $this->rectorChangeCollector->getRectorChangesByFileInfo($smartFileInfo);
-
         // always keep the most recent diff
         return new FileDiff(
-            $smartFileInfo,
+            $file->getSmartFileInfo(),
             $this->defaultDiffer->diff($oldContent, $newContent),
             $this->consoleDiffer->diff($oldContent, $newContent),
-            $rectorChanges
+            $file->getRectorWithLineChanges()
         );
     }
 }

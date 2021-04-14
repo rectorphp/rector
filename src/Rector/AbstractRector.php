@@ -328,7 +328,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         // changed!
         if ($this->hasNodeChanged($originalNode, $node)) {
             $this->updateAttributes($node);
-            $this->rectorChangeCollector->notifyNodeFileInfo($node);
+
+            $this->rectorChangeCollector->notifyFileChange($this->file, $node, $this);
 
             // update parents relations
             $this->connectParentNodes($node);

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Tests\ChangesReporting\Annotation\AppliedRectorsChangelogResolver;
 
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
-use Rector\ChangesReporting\ValueObject\RectorWithFileAndLineChange;
+use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Tests\ChangesReporting\Annotation\AppliedRectorsChangelogResolver\Source\RectorWithChangelog;
@@ -46,30 +46,12 @@ final class RectorsChangelogResolverTest extends AbstractKernelTestCase
     private function createFileDiff(): FileDiff
     {
         // This is by intention to test the array_unique functionality
-        $rectorWithFileAndLineChange1 = new RectorWithFileAndLineChange(
-            new RectorWithChangelog(),
-            __DIR__ . '/Source/RectorWithChangelog.php',
-            1
-        );
+        $rectorWithLineChange = new RectorWithLineChange(new RectorWithChangelog(), 1);
+        $rectorWithLineChange2 = new RectorWithLineChange(new RectorWithChangelog(), 1);
+        $rectorWithLineChange3 = new RectorWithLineChange(new RectorWithOutChangelog(), 1);
 
-        $rectorWithFileAndLineChange2 = new RectorWithFileAndLineChange(
-            new RectorWithChangelog(),
-            __DIR__ . '/Source/RectorWithChangelog.php',
-            1
-        );
+        $rectorWithLineChanges = [$rectorWithLineChange, $rectorWithLineChange2, $rectorWithLineChange3];
 
-        $rectorWithFileAndLineChange3 = new RectorWithFileAndLineChange(
-            new RectorWithOutChangelog(),
-            __DIR__ . '/Source/RectorWithOutChangelog.php',
-            1
-        );
-
-        $rectorWithFileAndLineChanges = [
-            $rectorWithFileAndLineChange1,
-            $rectorWithFileAndLineChange2,
-            $rectorWithFileAndLineChange3,
-        ];
-
-        return new FileDiff(new SmartFileInfo(__FILE__), 'foo', 'foo', $rectorWithFileAndLineChanges);
+        return new FileDiff(new SmartFileInfo(__FILE__), 'foo', 'foo', $rectorWithLineChanges);
     }
 }

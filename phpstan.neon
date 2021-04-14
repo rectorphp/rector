@@ -526,3 +526,7 @@ parameters:
         - '#Cannot call method getSmartFileInfo\(\) on Rector\\Core\\ValueObject\\Application\\File\|null#'
         - '#Class with base "Parser" name is already used in "Hoa\\Compiler\\Llk\\Parser", "Rector\\Core\\PhpParser\\Parser\\Parser"\. Use unique name to make classes easy to recognize#'
         - '#Parameter \#1 \$file of method Rector\\CodingStyle\\ClassNameImport\\ShortNameResolver\:\:resolveForNode\(\) expects Rector\\Core\\ValueObject\\Application\\File, Rector\\Core\\ValueObject\\Application\\File\|null given#'
+
+        -
+             message: '#\$this as argument is not allowed\. Refactor method to service composition#'
+             path: rules/TypeDeclaration/Rector/ClassMethod/ParamTypeFromStrictTypedPropertyRector.php
