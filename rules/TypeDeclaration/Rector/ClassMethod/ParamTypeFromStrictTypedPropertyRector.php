@@ -134,7 +134,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $this->rectorChangeCollector->notifyNodeFileInfo($node);
+            $this->rectorChangeCollector->notifyFileChange($this->file, $node, $this);
             $param->type = $singlePropertyTypeNode;
 
             return NodeTraverser::STOP_TRAVERSAL;
