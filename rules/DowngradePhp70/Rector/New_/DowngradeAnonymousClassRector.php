@@ -46,17 +46,17 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
+class Anonymous
+{
+    public function execute()
+    {
+    }
+}
 class SomeClass
 {
     public function run()
     {
         return new Anonymous();
-    }
-}
-class Anonymous
-{
-    public function execute()
-    {
     }
 }
 CODE_SAMPLE
@@ -94,7 +94,7 @@ CODE_SAMPLE
                 'attrGroups' => $new->class->attrGroups,
             ]
         );
-        $this->addNodesAfterNode([$newClass], $class);
+        $this->addNodeBeforeNode($newClass, $class);
 
         return new New_(new Name('Anonymous'), $new->args);
     }

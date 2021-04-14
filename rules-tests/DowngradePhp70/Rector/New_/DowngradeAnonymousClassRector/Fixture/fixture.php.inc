@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\Fixture;
 
-class SomeClass
+class Fixture
 {
     public function run()
     {
@@ -20,17 +20,17 @@ class SomeClass
 
 namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\Fixture;
 
-class SomeClass
-{
-    public function run()
-    {
-        return new Anonymous();
-    }
-}
 class Anonymous
 {
     public function execute()
     {
+    }
+}
+class Fixture
+{
+    public function run()
+    {
+        return new Anonymous();
     }
 }
 
