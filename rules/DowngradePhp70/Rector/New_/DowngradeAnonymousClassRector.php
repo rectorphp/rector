@@ -86,16 +86,16 @@ CODE_SAMPLE
 
         $classNode = $this->betterNodeFinder->findParentType($node, Class_::class);
         if ($classNode instanceof Class_) {
-            return $this->procesMoveAnonymousClassInClass($node, $classNode);
+            return $this->processMoveAnonymousClassInClass($node, $classNode);
         }
 
         $functionNode = $this->betterNodeFinder->findParentType($node, Function_::class);
         if ($functionNode instanceof Function_) {
-            return $this->procesMoveAnonymousClassInFunction($node, $functionNode);
+            return $this->processMoveAnonymousClassInFunction($node, $functionNode);
         }
 
         $statement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        return $this->procesMoveAnonymousClassInDirectCall($node, $statement);
+        return $this->processMoveAnonymousClassInDirectCall($node, $statement);
     }
 
     private function getNamespacedClassName(string $namespace, string $className): string
@@ -119,7 +119,7 @@ CODE_SAMPLE
         return ucfirst($className);
     }
 
-    private function procesMoveAnonymousClassInClass(New_ $new, Class_ $class): New_
+    private function processMoveAnonymousClassInClass(New_ $new, Class_ $class): New_
     {
         $namespacedClassName = $this->getName($class->namespacedName);
         $shortClassName = $this->getName($class->name);
@@ -131,7 +131,7 @@ CODE_SAMPLE
         return $this->processMove($new, $className, $class);
     }
 
-    private function procesMoveAnonymousClassInFunction(New_ $new, Function_ $function): New_
+    private function processMoveAnonymousClassInFunction(New_ $new, Function_ $function): New_
     {
         $namespacedFunctionName = $this->getName($function);
         $shortFunctionName = $this->getName($function->name);
@@ -143,7 +143,7 @@ CODE_SAMPLE
         return $this->processMove($new, $className, $function);
     }
 
-    private function procesMoveAnonymousClassInDirectCall(New_ $new, Stmt $stmt): New_
+    private function processMoveAnonymousClassInDirectCall(New_ $new, Stmt $stmt): New_
     {
         $parent = $stmt->getAttribute(AttributeKey::PARENT_NODE);
         $namespace = $parent instanceof Namespace_
