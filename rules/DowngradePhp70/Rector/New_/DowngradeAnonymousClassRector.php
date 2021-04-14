@@ -7,8 +7,10 @@ namespace Rector\DowngradePhp70\Rector\New_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -91,7 +93,8 @@ CODE_SAMPLE
             return $this->procesMoveAnonymousClassInFunction($node, $functionNode);
         }
 
-        return $node;
+        $statement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        return $this->procesMoveAnonymousClassInDirectCall($node, $statement);
     }
 
     private function getNamespacedClassName(string $namespace, string $className): string
@@ -112,7 +115,7 @@ CODE_SAMPLE
             $namespacedClassName = $this->getNamespacedClassName($namespace, $className);
         }
 
-        return $className;
+        return ucfirst($className);
     }
 
     private function procesMoveAnonymousClassInClass(New_ $new, Class_ $class): New_
@@ -137,6 +140,21 @@ CODE_SAMPLE
         $className           = $this->getClassName($namespace, $shortFunctionName);
 
         return $this->processMove($new, $className, $function);
+    }
+
+    private function procesMoveAnonymousClassInDirectCall(New_ $new, Stmt $stmt): New_
+    {
+        $parent    = $stmt->getAttribute(Attributekey::PARENT_NODE);
+        $namespace = $parent instanceof Namespace_
+            ? $this->getName($parent->name)
+            : '';
+        $suffix    = $namespace === ''
+            ? 'NotInfunctionNoNamespace'
+            : 'NotInFunction';
+
+        $className = $this->getClassName($namespace, $suffix);
+
+        return $this->processMove($new, $className, $stmt);
     }
 
     private function processMove(New_ $new, string $className, Node $node): New_
