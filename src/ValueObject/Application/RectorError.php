@@ -28,13 +28,8 @@ final class RectorError
      */
     private $rectorClass;
 
-    public function __construct(
-        SmartFileInfo $smartFileInfo,
-        string $message,
-        ?int $line = null,
-        ?string $rectorClass = null
-    ) {
-        $this->fileInfo = $smartFileInfo;
+    public function __construct(string $message, ?int $line = null, ?string $rectorClass = null)
+    {
         $this->message = $message;
         $this->line = $line;
         $this->rectorClass = $rectorClass;

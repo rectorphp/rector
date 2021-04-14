@@ -26,17 +26,20 @@ final class ProcessResultFactory
     public function create(array $files): ProcessResult
     {
         $fileDiffs = [];
+        $errors = [];
+
         foreach ($files as $file) {
             if ($file->getFileDiff() === null) {
                 continue;
             }
 
+            $errors = array_merge($errors, $file->getErrors());
             $fileDiffs[] = $file->getFileDiff();
         }
 
         return new ProcessResult(
             $fileDiffs,
-            $this->errorAndDiffCollector->getErrors(),
+            $errors,
             $this->errorAndDiffCollector->getAddedFilesCount(),
             $this->errorAndDiffCollector->getRemovedFilesCount(),
             $this->errorAndDiffCollector->getRemovedNodeCount(),
