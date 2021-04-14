@@ -46,11 +46,10 @@ final class RectorsChangelogResolverTest extends AbstractKernelTestCase
     private function createFileDiff(): FileDiff
     {
         // This is by intention to test the array_unique functionality
-        $rectorWithLineChange = new RectorWithLineChange(new RectorWithChangelog(), 1);
-        $rectorWithLineChange2 = new RectorWithLineChange(new RectorWithChangelog(), 1);
-        $rectorWithLineChange3 = new RectorWithLineChange(new RectorWithOutChangelog(), 1);
-
-        $rectorWithLineChanges = [$rectorWithLineChange, $rectorWithLineChange2, $rectorWithLineChange3];
+        $rectorWithLineChanges = [];
+        $rectorWithLineChanges[] = new RectorWithLineChange(new RectorWithChangelog(), 1);
+        $rectorWithLineChanges[] = new RectorWithLineChange(new RectorWithChangelog(), 1);
+        $rectorWithLineChanges[] = new RectorWithLineChange(new RectorWithOutChangelog(), 1);
 
         return new FileDiff(new SmartFileInfo(__FILE__), 'foo', 'foo', $rectorWithLineChanges);
     }
