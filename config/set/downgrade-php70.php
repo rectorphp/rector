@@ -6,6 +6,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeDeclarationRector;
+use Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -15,4 +16,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(DowngradeTypeDeclarationRector::class);
     $services->set(DowngradeStrictTypeDeclarationRector::class);
+    $services->set(DowngradeAnonymousClassRector::class);
 };
