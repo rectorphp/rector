@@ -82,7 +82,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function procesMoveAnonymousClass(New_ $new, Class_ $class): void
+    private function procesMoveAnonymousClass(New_ $new, Class_ $class): New_
     {
         $newClass = new Class_(
             new Name('Anonymous'),
@@ -96,6 +96,6 @@ CODE_SAMPLE
         );
         $this->addNodesAfterNode([$newClass], $class);
 
-        $new = new New_(new Name('Anonymous'), $new->args);
+        return new New_(new Name('Anonymous'), $new->args);
     }
 }
