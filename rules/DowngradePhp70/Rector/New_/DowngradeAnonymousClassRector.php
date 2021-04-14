@@ -18,6 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeAnonymousClassRector extends AbstractRector
 {
     /**
+     * @var int
+     */
+    private $count = 0;
+
+    /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
