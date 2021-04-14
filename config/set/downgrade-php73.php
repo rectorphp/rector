@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\Downgrade73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector;
 use Rector\DowngradePhp73\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector;
 use Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector;
 use Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector;
@@ -18,5 +19,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeFlexibleHeredocSyntaxRector::class);
     $services->set(DowngradeListReferenceAssignmentRector::class);
     $services->set(DowngradeTrailingCommasInFunctionCallsRector::class);
+    $services->set(DowngradeArrayKeyFirstLastRector::class);
     $services->set(SetCookieOptionsArrayToArgumentsRector::class);
 };

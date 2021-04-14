@@ -40,9 +40,6 @@ wget https://github.com/humbug/php-scoper/releases/download/0.14.0/php-scoper.ph
 php -d memory_limit=-1 php-scoper.phar add-prefix bin config src packages rules vendor composer.json --output-dir "../$RESULT_DIRECTORY" --config scoper.php --force --ansi --working-dir "$BUILD_DIRECTORY"
 
 
-# add polyfill for downgraded code
-composer require symfony/polyfill-php80 symfony/polyfill-php74 symfony/polyfill-php73 symfony/polyfill-php72 --update-no-dev --working-dir $RESULT_DIRECTORY --ansi
-
 note "Dumping Composer Autoload"
 composer dump-autoload --working-dir "$RESULT_DIRECTORY" --ansi --optimize --classmap-authoritative --no-dev
 
