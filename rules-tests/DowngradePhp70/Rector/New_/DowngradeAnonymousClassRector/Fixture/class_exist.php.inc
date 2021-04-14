@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\Fixture;
 
-class Anonymous
+class AnonymousFor_ClassExists
 {
 }
 class ClassExists
@@ -23,10 +23,10 @@ class ClassExists
 
 namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\Fixture;
 
-class Anonymous
+class AnonymousFor_ClassExists
 {
 }
-class Anonymous1
+class AnonymousFor_ClassExists1
 {
     public function execute()
     {
@@ -36,7 +36,7 @@ class ClassExists
 {
     public function run()
     {
-        return new Anonymous1();
+        return new AnonymousFor_ClassExists1();
     }
 }
 

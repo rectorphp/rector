@@ -2,16 +2,13 @@
 
 namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\Fixture;
 
-class Fixture
+function inFunction()
 {
-    public function run()
-    {
-        return new class {
+    return new class {
             public function execute()
             {
             }
-        };
-    }
+    };
 }
 
 ?>
@@ -20,18 +17,15 @@ class Fixture
 
 namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\Fixture;
 
-class AnonymousFor_Fixture
+class AnonymousFor_inFunction
 {
     public function execute()
     {
     }
 }
-class Fixture
+function inFunction()
 {
-    public function run()
-    {
-        return new AnonymousFor_Fixture();
-    }
+    return new AnonymousFor_inFunction();
 }
 
 ?>

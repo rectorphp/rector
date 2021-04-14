@@ -14,7 +14,7 @@ class NoNamespace
 -----
 <?php
 
-class Anonymous
+class AnonymousFor_NoNamespace
 {
     public function execute()
     {
@@ -24,6 +24,6 @@ class NoNamespace
 {
     public function run()
     {
-        return new Anonymous();
+        return new AnonymousFor_NoNamespace();
     }
 }
