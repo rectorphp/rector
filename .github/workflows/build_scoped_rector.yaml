@@ -52,7 +52,7 @@ jobs:
                     php-version: 7.1
                     coverage: none
             -   run: composer create-project php-parallel-lint/php-parallel-lint php-parallel-lint --ansi
-            -   run: php-parallel-lint/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/symfony/error-handler/Resources --exclude rector-prefixed-downgraded/vendor/symfony/http-kernel/Resources --exclude rector-prefixed-downgraded/vendor/rector/rector-nette/tests
+            -   run: php-parallel-lint/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/symfony/error-handler/Resources --exclude rector-prefixed-downgraded/vendor/symfony/http-kernel/Resources --exclude rector-prefixed-downgraded/vendor/rector/rector-nette/tests --exclude rector-prefixed-downgraded/vendor/symfony/polyfill-mbstring/bootstrap80.php
 
             # 5. copy repository meta files
             -   run: |
