@@ -10,12 +10,14 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseAnd;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\ErrorSuppress;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
@@ -33,6 +35,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeStreamIsattyRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const STAT = 'stat';
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade stream_isatty() function', [
@@ -69,7 +76,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return array<class-string<\PhpParser\Node>>
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
@@ -87,8 +94,8 @@ CODE_SAMPLE
 
         $if = $this->createIf($node->args[0]->value);
 
-        $function = new Expr\Closure();
-        $function->params[] = new Node\Param(new Variable('stream'));
+        $function = new Closure();
+        $function->params[] = new Param(new Variable('stream'));
         $function->stmts[] = $if;
 
         $posixIsatty = $this->nodeFactory->createFuncCall('posix_isatty', [$node->args[0]->value]);
@@ -108,12 +115,12 @@ CODE_SAMPLE
 
         $if = new If_($identical);
         $statAssign = new Assign(
-            new Variable('stat'),
+            new Variable(self::STAT),
             new ErrorSuppress($this->nodeFactory->createFuncCall('fstat', [$expr]))
         );
         $if->stmts[] = new Expression($statAssign);
 
-        $arrayDimFetch = new ArrayDimFetch(new Variable('stat'), new String_('mode'));
+        $arrayDimFetch = new ArrayDimFetch(new Variable(self::STAT), new String_('mode'));
         $bitwiseAnd = new BitwiseAnd(
             $arrayDimFetch,
             new LNumber(0170000, [
@@ -125,7 +132,7 @@ CODE_SAMPLE
             AttributeKey::KIND => LNumber::KIND_OCT,
         ]), $bitwiseAnd);
 
-        $ternary = new Ternary(new Variable('stat'), $identical, $this->nodeFactory->createFalse());
+        $ternary = new Ternary(new Variable(self::STAT), $identical, $this->nodeFactory->createFalse());
         $if->stmts[] = new Return_($ternary);
 
         return $if;
