@@ -70,6 +70,11 @@ CODE_SAMPLE
     {
         /** @var Scope $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+
+        if ($scope === null) {
+            var_dump('Newly created node has no scope');
+        }
+
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             return null;
