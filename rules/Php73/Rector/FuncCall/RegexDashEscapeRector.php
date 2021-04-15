@@ -21,6 +21,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RegexDashEscapeRector extends AbstractRector
 {
+
+    /**
+     * @var string
+     * @see https://regex101.com/r/BjKZFg/1
+     */
+    private const THREE_BACKSLASH_FOR_ESCAPE_NEXT = '#\\\\\\\[^\\\]#';
+
     /**
      * @var string
      * @see https://regex101.com/r/YgVJFp/1
@@ -86,6 +93,10 @@ CODE_SAMPLE
     private function escapeStringNode(String_ $string): void
     {
         $stringValue = $string->value;
+
+        if (Strings::match($stringValue, self::THREE_BACKSLASH_FOR_ESCAPE_NEXT)) {
+            return;
+        }
 
         if (Strings::match($stringValue, self::LEFT_HAND_UNESCAPED_DASH_REGEX)) {
             $string->value = Strings::replace($stringValue, self::LEFT_HAND_UNESCAPED_DASH_REGEX, '$1\-');
