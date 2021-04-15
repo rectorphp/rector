@@ -127,6 +127,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($this->classConstManipulator->hasClassConstFetch($classConst)) {
+            return true;
+        }
+
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classConst);
         if ($phpDocInfo->hasByName('api')) {
             return true;

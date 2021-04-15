@@ -960,8 +960,8 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 ### Changed
 
-- [#4420] [DeadCode] Make RemoveUnusedPrivateConstantRector skip enum
-- [#4419] [DeadCode] Make RemoveUnusedPrivateConstantRector skip enum
+- [#4420] [DeadCode] Make RemoveUnusedPrivateClassConstantRector skip enum
+- [#4419] [DeadCode] Make RemoveUnusedPrivateClassConstantRector skip enum
 
 ## [0.8.26] - 2020-10-15
 
@@ -3698,7 +3698,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 ### Changed
 
 - [#1748] [CodingStyle] Improve `NewlineBeforeNewAssignSetRector`
-- [#1697] [DeadCode] Allow static constant call on `RemoveUnusedPrivateConstantRector`, Thanks to [@ravanscafi]
+- [#1697] [DeadCode] Allow static constant call on `RemoveUnusedPrivateClassConstantRector`, Thanks to [@ravanscafi]
 - [#1719] Resolve anonymous class return type to object
 
 ### Fixed

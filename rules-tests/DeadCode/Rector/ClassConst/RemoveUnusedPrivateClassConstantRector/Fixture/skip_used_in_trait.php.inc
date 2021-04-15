@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector\Fixture;
+namespace Rector\Tests\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector\Fixture;
 
 final class SkipUsedInTrait
 {

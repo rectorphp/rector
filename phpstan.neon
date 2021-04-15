@@ -526,3 +526,7 @@ parameters:
         -
             message: '#\$this as argument is not allowed\. Refactor method to service composition#'
             path: rules/TypeDeclaration/Rector/ClassMethod/ParamTypeFromStrictTypedPropertyRector.php
+
+        -
+            message: '#Class cognitive complexity is 32, keep it under 30#'
+            path: rules/Privatization/Rector/Class_/ChangeLocalPropertyToVariableRector.php

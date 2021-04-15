@@ -10,7 +10,7 @@ use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
 use Rector\DeadCode\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector;
 use Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector;
 use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
-use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector;
+use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
@@ -62,7 +62,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SimplifyMirrorAssignRector::class);
     $services->set(RemoveOverriddenValuesRector::class);
     $services->set(RemoveUnusedPrivatePropertyRector::class);
-    $services->set(RemoveUnusedPrivateConstantRector::class);
+    $services->set(RemoveUnusedPrivateClassConstantRector::class);
     $services->set(RemoveUnusedPrivateMethodRector::class);
     $services->set(RemoveCodeAfterReturnRector::class);
     $services->set(RemoveDeadConstructorRector::class);

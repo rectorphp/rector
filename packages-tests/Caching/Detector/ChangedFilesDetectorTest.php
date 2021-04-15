@@ -42,7 +42,7 @@ final class ChangedFilesDetectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @param string[] $dependantFiles
+     * @param mixed[]|string[] $dependantFiles
      * @dataProvider provideData()
      */
     public function testGetDependentFileInfos(string $filePathName, array $dependantFiles): void
