@@ -23,6 +23,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -39,6 +40,16 @@ final class DowngradeStreamIsattyRector extends AbstractRector
      * @var string
      */
     private const STAT = 'stat';
+
+    /**
+     * @var InlineCodeParser
+     */
+    private $inlineCodeParser;
+
+    public function __construct(InlineCodeParser $inlineCodeParser)
+    {
+        $this->inlineCodeParser = $inlineCodeParser;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -92,7 +103,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $function = $this->createClosure($node);
+        $function = $this->createClosure();
         $assign = new Assign(new Variable('streamIsatty'), $function);
 
         $this->addNodeBeforeNode($assign, $node);
@@ -129,16 +140,13 @@ CODE_SAMPLE
         return $if;
     }
 
-    private function createClosure(FuncCall $funcCall): Closure
+    private function createClosure(): Closure
     {
-        $if = $this->createIf($funcCall->args[0]->value);
+        $stmts = $this->inlineCodeParser->parse(__DIR__ . '/../../snippet/isatty_closure.php.inc');
 
-        $function = new Closure();
-        $function->params[] = new Param(new Variable('stream'));
-        $function->stmts[] = $if;
+        /** @var Expression $expression */
+        $expression = $stmts[0];
 
-        $posixIsatty = $this->nodeFactory->createFuncCall('posix_isatty', [$funcCall->args[0]->value]);
-        $function->stmts[] = new Return_(new ErrorSuppress($posixIsatty));
-        return $function;
+        return $expression->expr;
     }
 }

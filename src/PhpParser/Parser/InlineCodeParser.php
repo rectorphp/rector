@@ -63,12 +63,16 @@ final class InlineCodeParser
      */
     public function parse(string $content): array
     {
+        // to cover files too
+        if (is_file($content)) {
+            $content = file_get_contents($content);
+        }
+
         // wrap code so php-parser can interpret it
-        $content = Strings::startsWith($content, '<?php ') ? $content : '<?php ' . $content;
-        $content = Strings::endsWith($content, ';') ? $content : $content . ';';
+        $content = Strings::match($content, '#^\<\?php\s+#') ? $content : '<?php ' . $content;
+        $content = Strings::match($content, '#;(\s+)?$#') ? $content : $content . ';';
 
         $nodes = (array) $this->parser->parse($content);
-
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromString($nodes);
     }
 
