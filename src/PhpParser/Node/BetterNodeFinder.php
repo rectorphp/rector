@@ -101,7 +101,7 @@ final class BetterNodeFinder
 
         do {
             foreach ($types as $type) {
-                if (is_a($node, $type, true)) {
+                if (is_a($parent, $type, true)) {
                     return $parent;
                 }
             }

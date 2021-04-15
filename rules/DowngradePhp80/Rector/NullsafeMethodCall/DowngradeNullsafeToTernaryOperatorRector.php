@@ -62,7 +62,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $tempVarName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($node->var, $node->getAttribute(AttributeKey::SCOPE), '_');
+        $tempVarName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
+            $node->var,
+            $node->getAttribute(AttributeKey::SCOPE),
+            '_'
+        );
         $tempVar = new Node\Expr\Variable($tempVarName);
         $called = $node instanceof NullsafeMethodCall
             ? new MethodCall($tempVar, $node->name, $node->args)

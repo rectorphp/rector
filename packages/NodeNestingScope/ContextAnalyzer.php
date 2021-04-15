@@ -49,7 +49,7 @@ final class ContextAnalyzer
         }
 
         foreach (self::LOOP_NODES as $type) {
-            if (is_a($node, $type, true)) {
+            if (is_a($firstParent, $type, true)) {
                 return true;
             }
         }
