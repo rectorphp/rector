@@ -65,7 +65,6 @@ class SomePresenter extends UI\Presenter
     {
         $form = new UI\Form;
         $form->addText('name', 'Name:');
-        $form->addPassword('password', 'Password:');
         $form->addSubmit('login', 'Sign up');
     }
 }
@@ -81,9 +80,6 @@ class SomePresenter extends UI\Presenter
         $form = $this->createFormBuilder();
         $form->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
             'label' => 'Name:'
-        ]);
-        $form->add('password', \Symfony\Component\Form\Extension\Core\Type\PasswordType::class, [
-            'label' => 'Password:'
         ]);
         $form->add('login', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, [
             'label' => 'Sign up'

@@ -20,7 +20,6 @@ use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\NodeManipulator\AssignManipulator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -103,9 +102,9 @@ final class ForAnalyzer
             return false;
         }
 
-        /** @var PreInc|PostInc $prePostInc */
         $prePostInc = $loopExprs[0];
-        if (StaticNodeInstanceOf::isOneOf($prePostInc, [PreInc::class, PostInc::class])) {
+
+        if ($prePostInc instanceof PreInc || $prePostInc instanceof PostInc) {
             return $this->nodeNameResolver->isName($prePostInc->var, $keyValueName);
         }
 

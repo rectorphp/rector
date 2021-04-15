@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-use Rector\NetteToSymfony\Rector\MethodCall\NetteFormToSymfonyFormRector;
+use Rector\Downgrade72\Rector\FuncCall\DowngradeStreamIsattyRector;
+
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(NetteFormToSymfonyFormRector::class);
+    $services->set(DowngradeStreamIsattyRector::class);
 };
