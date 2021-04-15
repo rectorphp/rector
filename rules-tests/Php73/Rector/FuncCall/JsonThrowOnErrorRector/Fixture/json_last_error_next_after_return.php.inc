@@ -2,10 +2,12 @@
 
 namespace Rector\Tests\Php73\Rector\FuncCall\JsonThrowOnErrorRector\Fixture;
 
-function JsonLastErrorNextAfterReturn()
+function JsonLastErrorNextAfterReturn($str)
 {
-    json_decode($str);
-    return;
+    if (rand(0, 1)) {
+        json_decode($str);
+        return;
+    }
 
     json_last_error();
     json_last_error_msg();
@@ -17,10 +19,12 @@ function JsonLastErrorNextAfterReturn()
 
 namespace Rector\Tests\Php73\Rector\FuncCall\JsonThrowOnErrorRector\Fixture;
 
-function JsonLastErrorNextAfterReturn()
+function JsonLastErrorNextAfterReturn($str)
 {
-    json_decode($str, null, 512, JSON_THROW_ON_ERROR);
-    return;
+    if (rand(0, 1)) {
+        json_decode($str, null, 512, JSON_THROW_ON_ERROR);
+        return;
+    }
 
     json_last_error();
     json_last_error_msg();

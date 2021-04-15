@@ -2,9 +2,12 @@
 
 namespace Rector\Tests\Php73\Rector\FuncCall\JsonThrowOnErrorRector\Fixture;
 
-function SkipJsonLastErrorNext2()
+function SkipJsonLastErrorNext3($str)
 {
-    json_decode($str);
+    if (rand(0, 1)) {
+        json_decode($str);
+    }
+
     json_last_error();
     json_last_error_msg();
 }
