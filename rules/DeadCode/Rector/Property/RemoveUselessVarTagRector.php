@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
+use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -69,6 +70,7 @@ CODE_SAMPLE
         $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);
 
         if ($phpDocInfo->hasChanged()) {
+            $this->file->addRectorClassWithLine(new RectorWithLineChange($this, $node->getLine()));
             return $node;
         }
 
