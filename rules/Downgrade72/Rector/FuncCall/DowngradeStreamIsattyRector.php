@@ -135,7 +135,7 @@ CODE_SAMPLE
         return $if;
     }
 
-    private function createClosure($node): Closure
+    private function createClosure(FuncCall $node): Closure
     {
         $if = $this->createIf($node->args[0]->value);
 
