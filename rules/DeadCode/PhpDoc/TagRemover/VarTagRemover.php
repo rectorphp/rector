@@ -124,10 +124,7 @@ final class VarTagRemover
                 if (! $type instanceof SpacingAwareArrayTypeNode) {
                     return false;
                 }
-                if (! $this->isArrayOfExistingClassNode($node, $type)) {
-                    return false;
-                }
-                return true;
+                return $this->isArrayOfExistingClassNode($node, $type);
             }
         }
 
