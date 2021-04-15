@@ -16,8 +16,8 @@ use PhpParser\Node\Stmt;
 use PhpParser\Parser;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class InlineCodeParser
 {
@@ -34,6 +34,18 @@ final class InlineCodeParser
     private const CURLY_BRACKET_WRAPPER_REGEX = "#'{(\\\$.*?)}'#";
 
     /**
+     * @var string
+     * @see https://regex101.com/r/TBlhoR/1
+     */
+    private const OPEN_PHP_TAG_REGEX = '#^\<\?php\s+#';
+
+    /**
+     * @var string
+     * @see https://regex101.com/r/TUWwKw/1/
+     */
+    private const ENDING_SEMI_COLON_REGEX = '#;(\s+)?$#';
+
+    /**
      * @var Parser
      */
     private $parser;
@@ -48,14 +60,21 @@ final class InlineCodeParser
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        Parser $parser
+        Parser $parser,
+        SmartFileSystem $smartFileSystem
     ) {
         $this->parser = $parser;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     /**
@@ -63,12 +82,16 @@ final class InlineCodeParser
      */
     public function parse(string $content): array
     {
+        // to cover files too
+        if (is_file($content)) {
+            $content = $this->smartFileSystem->readFile($content);
+        }
+
         // wrap code so php-parser can interpret it
-        $content = Strings::startsWith($content, '<?php ') ? $content : '<?php ' . $content;
-        $content = Strings::endsWith($content, ';') ? $content : $content . ';';
+        $content = Strings::match($content, self::OPEN_PHP_TAG_REGEX) ? $content : '<?php ' . $content;
+        $content = Strings::match($content, self::ENDING_SEMI_COLON_REGEX) ? $content : $content . ';';
 
         $nodes = (array) $this->parser->parse($content);
-
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromString($nodes);
     }
 
@@ -91,7 +114,7 @@ final class InlineCodeParser
             return $this->stringify($expr->left) . $this->stringify($expr->right);
         }
 
-        if (StaticNodeInstanceOf::isOneOf($expr, [Variable::class, PropertyFetch::class, StaticPropertyFetch::class])) {
+        if ($expr instanceof Variable || $expr instanceof PropertyFetch || $expr instanceof StaticPropertyFetch) {
             return $this->betterStandardPrinter->print($expr);
         }
 

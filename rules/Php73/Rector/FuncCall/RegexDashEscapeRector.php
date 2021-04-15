@@ -21,7 +21,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RegexDashEscapeRector extends AbstractRector
 {
-
     /**
      * @var string
      * @see https://regex101.com/r/iQbGgZ/1
