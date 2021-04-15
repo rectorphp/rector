@@ -16,9 +16,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
 use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
-use PhpParser\Node\Stmt\If_;
 use Rector\Core\PhpParser\Comparing\ConditionSearcher;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,7 +39,7 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
      * @var CompactFuncCallAnalyzer
      */
     private $compactFuncCallAnalyzer;
-  
+
     /**
      * @var ConditionSearcher
      */
@@ -99,7 +99,11 @@ CODE_SAMPLE
         }
 
         $variable = $node->var;
-        if (! $variable instanceof Variable || (is_string($variable->name) && $this->reservedKeywordAnalyzer->isNativeVariable($variable->name))) {
+        if (! $variable instanceof Variable || (is_string(
+            $variable->name
+        ) && $this->reservedKeywordAnalyzer->isNativeVariable(
+            $variable->name
+        ))) {
             return null;
         }
 
