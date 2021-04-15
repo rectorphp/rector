@@ -53,8 +53,7 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
     public function __construct(
         ClassManipulator $classManipulator,
         MethodCallRenameCollector $methodCallRenameCollector
-    )
-    {
+    ) {
         $this->classManipulator = $classManipulator;
         $this->methodCallRenameCollector = $methodCallRenameCollector;
     }

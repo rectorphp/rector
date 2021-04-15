@@ -3634,11 +3634,11 @@ Remove unused class constants
 
 <br>
 
-### RemoveUnusedPrivateConstantRector
+### RemoveUnusedPrivateClassConstantRector
 
 Remove unused private constant
 
-- class: [`Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector`](../rules/DeadCode/Rector/ClassConst/RemoveUnusedPrivateConstantRector.php)
+- class: [`Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector`](../rules/DeadCode/Rector/ClassConst/RemoveUnusedPrivateClassConstantRector.php)
 
 ```diff
  final class SomeController
