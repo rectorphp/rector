@@ -116,7 +116,6 @@
             "stubs/Doctrine/Common/Persistence/ObjectManager.php",
             "vendor/nette/forms/src/Forms/Controls/SubmitButton.php",
             "rules-tests/Restoration/Rector/Use_/RestoreFullyQualifiedNameRector/Source/ShortClassOnly.php",
-            "rules-tests/DeadCode/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",
             "rules-tests/Transform/Rector/FuncCall/FuncCallToMethodCallRector/Source/some_view_function.php",
             "rules-tests/TypeDeclaration/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php",
             "rules-tests/TypeDeclaration/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",

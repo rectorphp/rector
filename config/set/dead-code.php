@@ -33,7 +33,6 @@ use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
 use Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector;
 use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
 use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
-use Rector\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector;
 use Rector\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector;
 use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
 use Rector\DeadCode\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector;
@@ -69,7 +68,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveDeadReturnRector::class);
     $services->set(RemoveDeadIfForeachForRector::class);
     $services->set(RemoveAndTrueRector::class);
-    $services->set(RemoveDefaultArgumentValueRector::class);
     $services->set(RemoveConcatAutocastRector::class);
     $services->set(SimplifyUselessVariableRector::class);
     $services->set(RemoveDelegatingParentCallRector::class);

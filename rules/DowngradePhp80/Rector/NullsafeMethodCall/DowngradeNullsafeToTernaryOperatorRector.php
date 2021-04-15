@@ -68,6 +68,7 @@ CODE_SAMPLE
             $node->getAttribute(AttributeKey::SCOPE),
             '_'
         );
+
         $variable = new Variable($tempVarName);
         $called = $node instanceof NullsafeMethodCall
             ? new MethodCall($variable, $node->name, $node->args)
