@@ -9,9 +9,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\Provider\CurrentFileProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class FactoryClassPrinter
@@ -31,14 +31,21 @@ final class FactoryClassPrinter
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
+
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         SmartFileSystem $smartFileSystem,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        CurrentFileProvider $currentFileProvider
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->smartFileSystem = $smartFileSystem;
+        $this->currentFileProvider = $currentFileProvider;
     }
 
     public function printFactoryForClass(Class_ $factoryClass, Class_ $oldClass): void
@@ -61,12 +68,11 @@ final class FactoryClassPrinter
 
     private function createFactoryClassFilePath(Class_ $oldClass): string
     {
-        $classFileInfo = $oldClass->getAttribute(AttributeKey::FILE_INFO);
-        if (! $classFileInfo instanceof SmartFileInfo) {
-            throw new ShouldNotHappenException();
-        }
+        $file = $this->currentFileProvider->getFile();
 
-        $directoryPath = Strings::before($classFileInfo->getRealPath(), DIRECTORY_SEPARATOR, -1);
+        $smartFileInfo = $file->getSmartFileInfo();
+
+        $directoryPath = Strings::before($smartFileInfo->getRealPath(), DIRECTORY_SEPARATOR, -1);
         $resolvedOldClass = $this->nodeNameResolver->getName($oldClass);
         if ($resolvedOldClass === null) {
             throw new ShouldNotHappenException();

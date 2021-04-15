@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver;
 
-use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use Rector\NodeCollector\NodeVisitor\NodeCollectorNodeVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
@@ -47,11 +45,6 @@ final class NodeScopeAndMetadataDecorator
     private $statementNodeVisitor;
 
     /**
-     * @var FileInfoNodeVisitor
-     */
-    private $fileInfoNodeVisitor;
-
-    /**
      * @var NodeCollectorNodeVisitor
      */
     private $nodeCollectorNodeVisitor;
@@ -68,7 +61,6 @@ final class NodeScopeAndMetadataDecorator
 
     public function __construct(
         CloningVisitor $cloningVisitor,
-        FileInfoNodeVisitor $fileInfoNodeVisitor,
         FunctionMethodAndClassNodeVisitor $functionMethodAndClassNodeVisitor,
         NamespaceNodeVisitor $namespaceNodeVisitor,
         NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
@@ -82,17 +74,16 @@ final class NodeScopeAndMetadataDecorator
         $this->functionMethodAndClassNodeVisitor = $functionMethodAndClassNodeVisitor;
         $this->namespaceNodeVisitor = $namespaceNodeVisitor;
         $this->statementNodeVisitor = $statementNodeVisitor;
-        $this->fileInfoNodeVisitor = $fileInfoNodeVisitor;
         $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
         $this->nodeConnectingVisitor = $nodeConnectingVisitor;
         $this->functionLikeParamArgPositionNodeVisitor = $functionLikeParamArgPositionNodeVisitor;
     }
 
     /**
-     * @param Node[] $nodes
-     * @return Node[]
+     * @param Stmt[] $nodes
+     * @return Stmt[]
      */
-    public function decorateNodesFromFile(array $nodes, SmartFileInfo $smartFileInfo, bool $needsScope = false): array
+    public function decorateNodesFromFile(array $nodes, SmartFileInfo $smartFileInfo): array
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver(null, [
@@ -128,7 +119,6 @@ final class NodeScopeAndMetadataDecorator
         // this split is needed, so nodes have names, classes and namespaces
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->statementNodeVisitor);
-        $nodeTraverser->addVisitor($this->fileInfoNodeVisitor);
         $nodeTraverser->addVisitor($this->nodeCollectorNodeVisitor);
 
         return $nodeTraverser->traverse($nodes);

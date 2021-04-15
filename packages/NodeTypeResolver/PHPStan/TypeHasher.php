@@ -78,15 +78,20 @@ final class TypeHasher
             return $booleanType->describe(VerbosityLevel::precise());
         }
 
+        $normalizedUnionType = clone $sortedUnionType;
+
         // change alias to non-alias
-        $sortedUnionType = TypeTraverser::map($sortedUnionType, function (Type $type, callable $callable): Type {
-            if (! $type instanceof AliasedObjectType) {
-                return $callable($type);
+        $normalizedUnionType = TypeTraverser::map(
+            $normalizedUnionType,
+            function (Type $type, callable $callable): Type {
+                if (! $type instanceof AliasedObjectType) {
+                    return $callable($type);
+                }
+
+                return new FullyQualifiedObjectType($type->getFullyQualifiedClass());
             }
+        );
 
-            return new FullyQualifiedObjectType($type->getFullyQualifiedClass());
-        });
-
-        return $sortedUnionType->describe(VerbosityLevel::cache());
+        return $normalizedUnionType->describe(VerbosityLevel::cache());
     }
 }

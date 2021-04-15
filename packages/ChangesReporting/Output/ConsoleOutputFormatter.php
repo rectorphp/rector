@@ -6,11 +6,11 @@ namespace Rector\ChangesReporting\Output;
 
 use Nette\Utils\Strings;
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
-use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\Application\RectorError;
+use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -52,7 +52,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
 
-    public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
+    public function report(ProcessResult $processResult): void
     {
         if ($this->configuration->getOutputFile()) {
             $message = sprintf(
@@ -65,17 +65,17 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         }
 
         if ($this->configuration->shouldShowDiffs()) {
-            $this->reportFileDiffs($errorAndDiffCollector->getFileDiffs());
+            $this->reportFileDiffs($processResult->getFileDiffs());
         }
 
-        $this->reportErrors($errorAndDiffCollector->getErrors());
-        $this->reportRemovedFilesAndNodes($errorAndDiffCollector);
+        $this->reportErrors($processResult->getErrors());
+        $this->reportRemovedFilesAndNodes($processResult);
 
-        if ($errorAndDiffCollector->getErrors() !== []) {
+        if ($processResult->getErrors() !== []) {
             return;
         }
 
-        $message = $this->createSuccessMessage($errorAndDiffCollector);
+        $message = $this->createSuccessMessage($processResult);
         $this->symfonyStyle->success($message);
     }
 
@@ -145,19 +145,19 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         }
     }
 
-    private function reportRemovedFilesAndNodes(ErrorAndDiffCollector $errorAndDiffCollector): void
+    private function reportRemovedFilesAndNodes(ProcessResult $processResult): void
     {
-        if ($errorAndDiffCollector->getAddFilesCount() !== 0) {
-            $message = sprintf('%d files were added', $errorAndDiffCollector->getAddFilesCount());
+        if ($processResult->getAddedFilesCount() !== 0) {
+            $message = sprintf('%d files were added', $processResult->getAddedFilesCount());
             $this->symfonyStyle->note($message);
         }
 
-        if ($errorAndDiffCollector->getRemovedFilesCount() !== 0) {
-            $message = sprintf('%d files were removed', $errorAndDiffCollector->getRemovedFilesCount());
+        if ($processResult->getRemovedFilesCount() !== 0) {
+            $message = sprintf('%d files were removed', $processResult->getRemovedFilesCount());
             $this->symfonyStyle->note($message);
         }
 
-        $this->reportRemovedNodes($errorAndDiffCollector);
+        $this->reportRemovedNodes($processResult);
     }
 
     private function normalizePathsToRelativeWithLine(string $errorMessage): string
@@ -167,20 +167,19 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         return Strings::replace($errorMessage, self::ON_LINE_REGEX, ':');
     }
 
-    private function reportRemovedNodes(ErrorAndDiffCollector $errorAndDiffCollector): void
+    private function reportRemovedNodes(ProcessResult $processResult): void
     {
-        if ($errorAndDiffCollector->getRemovedNodeCount() === 0) {
+        if ($processResult->getRemovedNodeCount() === 0) {
             return;
         }
 
-        $message = sprintf('%d nodes were removed', $errorAndDiffCollector->getRemovedNodeCount());
+        $message = sprintf('%d nodes were removed', $processResult->getRemovedNodeCount());
         $this->symfonyStyle->warning($message);
     }
 
-    private function createSuccessMessage(ErrorAndDiffCollector $errorAndDiffCollector): string
+    private function createSuccessMessage(ProcessResult $processResult): string
     {
-        $changeCount = $errorAndDiffCollector->getFileDiffsCount()
-            + $errorAndDiffCollector->getRemovedAndAddedFilesCount();
+        $changeCount = count($processResult->getFileDiffs()) + $processResult->getRemovedAndAddedFilesCount();
 
         if ($changeCount === 0) {
             return 'Rector is done!';
@@ -203,7 +202,8 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
         $rectorsChangelogsLines = [];
         foreach ($rectorsChangelogs as $rectorClass => $changelog) {
-            $rectorsChangelogsLines[] = $changelog === null ? $rectorClass : $rectorClass . ' ' . $changelog;
+            $rectorShortClass = (string) Strings::after($rectorClass, '\\', -1);
+            $rectorsChangelogsLines[] = $changelog === null ? $rectorShortClass : $rectorShortClass . ' (' . $changelog . ')';
         }
 
         return $rectorsChangelogsLines;

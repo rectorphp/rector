@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 
 require __DIR__ . '/../vendor/autoload.php';
-
 /**
  * @param Node|Node[] $node
  */

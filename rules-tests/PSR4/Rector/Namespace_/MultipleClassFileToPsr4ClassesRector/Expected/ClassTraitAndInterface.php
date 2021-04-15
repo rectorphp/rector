@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-namespace Rector\Tests\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector\Expected;
+namespace Rector\Tests\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector\Fixture;
 
 final class ClassTraitAndInterface
 {

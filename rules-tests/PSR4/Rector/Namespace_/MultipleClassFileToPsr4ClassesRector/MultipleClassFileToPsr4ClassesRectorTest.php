@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Tests\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector;
 
 use Iterator;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -19,11 +18,10 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
      */
     public function test(SmartFileInfo $originalFileInfo, array $expectedFilePathsWithContents): void
     {
-        /** @var RemovedAndAddedFilesCollector $removedAndAddedFilesCollector */
-        $removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
-        $removedAndAddedFilesCollector->reset();
-
         $this->doTestFileInfo($originalFileInfo);
+
+        $this->assertCount($this->removedAndAddedFilesCollector->getAddedFileCount(), $expectedFilePathsWithContents);
+
         $this->assertFilesWereAdded($expectedFilePathsWithContents);
     }
 
@@ -76,20 +74,6 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
         ];
 
         yield [new SmartFileInfo(__DIR__ . '/Fixture/class_trait_and_interface.php.inc'), $filePathsWithContents];
-
-        // keep original class
-        yield [
-            new SmartFileInfo(__DIR__ . '/Fixture/some_class.php.inc'),
-            // extra files
-            [
-                new AddedFileWithContent(
-                    $this->getFixtureTempDirectory() . '/SomeClass_Exception.php',
-                    $smartFileSystem->readFile(__DIR__ . '/Expected/SomeClass_Exception.php')
-                ),
-            ],
-        ];
-
-        yield [new SmartFileInfo(__DIR__ . '/Fixture/skip_ready_exception.php.inc'), []];
     }
 
     public function provideConfigFilePath(): string

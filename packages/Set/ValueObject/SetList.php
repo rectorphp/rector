@@ -341,26 +341,31 @@ final class SetList implements SetListInterface
     public const NAMING = __DIR__ . '/../../../config/set/naming.php';
 
     /**
+     * @deprecated Use NetteSetList instead
      * @var string
      */
     public const NETTE_24 = NetteSetList::NETTE_24;
 
     /**
+     * @deprecated Use NetteSetList instead
      * @var string
      */
     public const NETTE_30 = NetteSetList::NETTE_30;
 
     /**
+     * @deprecated Use NetteSetList instead
      * @var string
      */
     public const NETTE_31 = NetteSetList::NETTE_31;
 
     /**
+     * @deprecated Use NetteSetList instead
      * @var string
      */
     public const NETTE_CODE_QUALITY = NetteSetList::NETTE_CODE_QUALITY;
 
     /**
+     * @deprecated Use NetteSetList instead
      * @var string
      */
     public const NETTE_UTILS_CODE_QUALITY = NetteSetList::NETTE_UTILS_CODE_QUALITY;

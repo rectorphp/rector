@@ -116,7 +116,7 @@ final class StaticDoctrineAnnotationParser
     private function parseValue(BetterTokenIterator $tokenIterator)
     {
         if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET)) {
-            $items = $this->arrayParser->parserArray($tokenIterator);
+            $items = $this->arrayParser->parseCurlyArray($tokenIterator);
             return new CurlyListNode($items);
         }
 

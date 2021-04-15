@@ -7,7 +7,7 @@ namespace Rector\Core\PhpParser\Printer;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\Core\ValueObject\Application\ParsedStmtsAndTokens;
+use Rector\Core\ValueObject\Application\File;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -39,7 +39,7 @@ final class FormatPerservingPrinter
      */
     public function printToFile(SmartFileInfo $fileInfo, array $newStmts, array $oldStmts, array $oldTokens): string
     {
-        $newContent = $this->printToString($newStmts, $oldStmts, $oldTokens);
+        $newContent = $this->betterStandardPrinter->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
 
         $this->smartFileSystem->dumpFile($fileInfo->getRealPath(), $newContent);
         $this->smartFileSystem->chmod($fileInfo->getRealPath(), $fileInfo->getPerms());
@@ -47,51 +47,39 @@ final class FormatPerservingPrinter
         return $newContent;
     }
 
-    /**
-     * @param Node[] $newStmts
-     * @param Node[] $oldStmts
-     * @param Node[] $oldTokens
-     */
-    public function printToString(array $newStmts, array $oldStmts, array $oldTokens): string
+    public function printParsedStmstAndTokensToString(File $file): string
     {
-        return $this->betterStandardPrinter->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
-    }
-
-    public function printParsedStmstAndTokensToString(ParsedStmtsAndTokens $parsedStmtsAndTokens): string
-    {
-        $newStmts = $this->resolveNewStmts($parsedStmtsAndTokens);
+        $newStmts = $this->resolveNewStmts($file);
 
         return $this->betterStandardPrinter->printFormatPreserving(
             $newStmts,
-            $parsedStmtsAndTokens->getOldStmts(),
-            $parsedStmtsAndTokens->getOldTokens()
+            $file->getOldStmts(),
+            $file->getOldTokens()
         );
     }
 
-    public function printParsedStmstAndTokens(
-        SmartFileInfo $smartFileInfo,
-        ParsedStmtsAndTokens $parsedStmtsAndTokens
-    ): string {
+    public function printParsedStmstAndTokens(File $file): string
+    {
         return $this->printToFile(
-            $smartFileInfo,
-            $parsedStmtsAndTokens->getNewStmts(),
-            $parsedStmtsAndTokens->getOldStmts(),
-            $parsedStmtsAndTokens->getOldTokens()
+            $file->getSmartFileInfo(),
+            $file->getNewStmts(),
+            $file->getOldStmts(),
+            $file->getOldTokens()
         );
     }
 
     /**
-     * @return Stmt[]|Node[]
+     * @return Stmt[]|mixed[]
      */
-    private function resolveNewStmts(ParsedStmtsAndTokens $parsedStmtsAndTokens): array
+    private function resolveNewStmts(File $file): array
     {
-        if (count($parsedStmtsAndTokens->getNewStmts()) === 1) {
-            $onlyStmt = $parsedStmtsAndTokens->getNewStmts()[0];
+        if (count($file->getNewStmts()) === 1) {
+            $onlyStmt = $file->getNewStmts()[0];
             if ($onlyStmt instanceof FileWithoutNamespace) {
                 return $onlyStmt->stmts;
             }
         }
 
-        return $parsedStmtsAndTokens->getNewStmts();
+        return $file->getNewStmts();
     }
 }

@@ -28,6 +28,7 @@ final class ChangeConditionalReturnedCellRector extends AbstractRector
     public function __construct()
     {
         $this->conditionalSetValues[] = new ConditionalSetValue('setCellValue', 'getCell', 'setValue', 2, false);
+
         $this->conditionalSetValues[] = new ConditionalSetValue(
             'setCellValueByColumnAndRow',
             'getCellByColumnAndRow',
@@ -124,8 +125,10 @@ CODE_SAMPLE
             $node->var = $getCellMethodCall;
             $node->args = $args;
             $node->name = new Identifier($conditionalSetValue->getNewSetMethod());
+
+            return $node;
         }
 
-        return $node;
+        return null;
     }
 }

@@ -443,7 +443,6 @@ parameters:
         -
             message: '#Instead of "(.*?)" use ReflectionProvider service (.*?) for static reflection to work#'
             paths:
-                - src/Application/RectorApplication.php
                 - src/Console/Command/ProcessCommand.php
 
         # mimics original doctrine/annotations parser, improve later when finished
@@ -509,3 +508,25 @@ parameters:
 
         - '#Cognitive complexity for "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper\:\:mapToPhpParserNode\(\)" is 10, keep it under 9#'
         - '#Method Rector\\NodeNameResolver\\NodeNameResolver\:\:matchRectorBacktraceCall\(\) return type has no value type specified in iterable type array#'
+        -
+            message: '#Do not inherit from abstract class, better use composition#'
+            paths:
+                - src/PhpParser/Parser/FunctionLikeParser.php
+
+        -
+            message: '#Unreachable statement \- code above always terminates#'
+            paths:
+                - src/Application/FileProcessor/PhpFileProcessor.php
+
+        -
+            message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
+            paths:
+                - src/Rector/AbstractRector.php
+
+        - '#Cannot call method getSmartFileInfo\(\) on Rector\\Core\\ValueObject\\Application\\File\|null#'
+        - '#Class with base "Parser" name is already used in "Hoa\\Compiler\\Llk\\Parser", "Rector\\Core\\PhpParser\\Parser\\Parser"\. Use unique name to make classes easy to recognize#'
+        - '#Parameter \#1 \$file of method Rector\\CodingStyle\\ClassNameImport\\ShortNameResolver\:\:resolveForNode\(\) expects Rector\\Core\\ValueObject\\Application\\File, Rector\\Core\\ValueObject\\Application\\File\|null given#'
+
+        -
+             message: '#\$this as argument is not allowed\. Refactor method to service composition#'
+             path: rules/TypeDeclaration/Rector/ClassMethod/ParamTypeFromStrictTypedPropertyRector.php

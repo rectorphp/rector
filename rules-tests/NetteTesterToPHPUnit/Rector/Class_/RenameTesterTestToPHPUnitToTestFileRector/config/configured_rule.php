@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Rector\NetteTesterToPHPUnit\Rector\Class_\RenameTesterTestToPHPUnitToTestFileRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+    $parameters->set(Option::FILE_EXTENSIONS, ['php', 'phpt']);
+
+    $services = $containerConfigurator->services();
+    $services->set(RenameTesterTestToPHPUnitToTestFileRector::class);
+};

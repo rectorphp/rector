@@ -4,24 +4,20 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\NodeTraverser;
 
-use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use Rector\Core\Application\ActiveRectorsProvider;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
-use Rector\Core\PhpParser\Node\CustomNode\FileNode;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class RectorNodeTraverser extends NodeTraverser
 {
     /**
      * @var PhpRectorInterface[]
      */
-    private $allPhpRectors = [];
+    private $phpRectors = [];
 
     /**
      * @var NodeFinder
@@ -29,50 +25,22 @@ final class RectorNodeTraverser extends NodeTraverser
     private $nodeFinder;
 
     /**
-     * @var CurrentFileInfoProvider
-     */
-    private $currentFileInfoProvider;
-
-    /**
      * @var bool
      */
     private $areNodeVisitorsPrepared = false;
 
-    public function __construct(
-        ActiveRectorsProvider $activeRectorsProvider,
-        NodeFinder $nodeFinder,
-        CurrentFileInfoProvider $currentFileInfoProvider
-    ) {
+    public function __construct(ActiveRectorsProvider $activeRectorsProvider, NodeFinder $nodeFinder)
+    {
         /** @var PhpRectorInterface[] $phpRectors */
         $phpRectors = $activeRectorsProvider->provideByType(PhpRectorInterface::class);
+        $this->phpRectors = $phpRectors;
 
-        $this->allPhpRectors = $phpRectors;
         $this->nodeFinder = $nodeFinder;
-        $this->currentFileInfoProvider = $currentFileInfoProvider;
     }
 
     /**
-     * @return Node[]
-     */
-    public function traverseFileNode(FileNode $fileNode): array
-    {
-        $this->prepareNodeVisitors();
-
-        if (! $this->hasFileNodeRectorsEnabled()) {
-            return [];
-        }
-
-        // here we only traverse file node without children, to prevent duplicatd traversion
-        foreach ($this->visitors as $visitor) {
-            $visitor->enterNode($fileNode);
-        }
-
-        return [];
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return Node[]
+     * @param Stmt[] $nodes
+     * @return Stmt[]
      */
     public function traverse(array $nodes): array
     {
@@ -81,36 +49,10 @@ final class RectorNodeTraverser extends NodeTraverser
         $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
         if (! $hasNamespace && $nodes !== []) {
             $fileWithoutNamespace = new FileWithoutNamespace($nodes);
-            $fileWithoutNamespace->setAttribute(
-                AttributeKey::FILE_INFO,
-                $this->currentFileInfoProvider->getSmartFileInfo()
-            );
-
             return parent::traverse([$fileWithoutNamespace]);
         }
 
         return parent::traverse($nodes);
-    }
-
-    public function getPhpRectorCount(): int
-    {
-        $this->prepareNodeVisitors();
-        return count($this->visitors);
-    }
-
-    private function hasFileNodeRectorsEnabled(): bool
-    {
-        foreach ($this->visitors as $visitor) {
-            if (! $visitor instanceof PhpRectorInterface) {
-                continue;
-            }
-
-            if (in_array(FileNode::class, $visitor->getNodeTypes(), true)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -125,8 +67,8 @@ final class RectorNodeTraverser extends NodeTraverser
             return;
         }
 
-        foreach ($this->allPhpRectors as $allPhpRector) {
-            $this->addVisitor($allPhpRector);
+        foreach ($this->phpRectors as $phpRector) {
+            $this->addVisitor($phpRector);
         }
 
         $this->areNodeVisitorsPrepared = true;

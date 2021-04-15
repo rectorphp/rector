@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 use PhpParser\Node;
 use Rector\CodingStyle\ClassNameImport\ShortNameResolver;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
+use Rector\Core\Provider\CurrentFileProvider;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 /**
@@ -25,15 +26,22 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements ClassNameImpor
      */
     private $shortNameResolver;
 
-    public function __construct(ShortNameResolver $shortNameResolver)
+    /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
+
+    public function __construct(ShortNameResolver $shortNameResolver, CurrentFileProvider $currentFileProvider)
     {
         $this->shortNameResolver = $shortNameResolver;
+        $this->currentFileProvider = $currentFileProvider;
     }
 
     public function shouldSkip(FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool
     {
         // "new X" or "X::static()"
-        $shortNamesToFullyQualifiedNames = $this->shortNameResolver->resolveForNode($node);
+        $file = $this->currentFileProvider->getFile();
+        $shortNamesToFullyQualifiedNames = $this->shortNameResolver->resolveForNode($file);
 
         foreach ($shortNamesToFullyQualifiedNames as $shortName => $fullyQualifiedName) {
             $shortNameLowered = strtolower($shortName);

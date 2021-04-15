@@ -17,6 +17,7 @@ use Rector\ChangesReporting\Collector\AffectedFilesCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Provider\CurrentFileProvider;
 use Rector\NodeRemoval\BreakingRemovalGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
@@ -49,16 +50,23 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
      */
     private $nodeComparator;
 
+    /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
+
     public function __construct(
         AffectedFilesCollector $affectedFilesCollector,
         BreakingRemovalGuard $breakingRemovalGuard,
         BetterNodeFinder $betterNodeFinder,
-        NodeComparator $nodeComparator
+        NodeComparator $nodeComparator,
+        CurrentFileProvider $currentFileProvider
     ) {
         $this->affectedFilesCollector = $affectedFilesCollector;
         $this->breakingRemovalGuard = $breakingRemovalGuard;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
+        $this->currentFileProvider = $currentFileProvider;
     }
 
     public function addNodeToRemove(Node $node): void
@@ -79,10 +87,11 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
             $this->breakingRemovalGuard->ensureNodeCanBeRemove($node);
         }
 
-        /** @var SmartFileInfo|null $fileInfo */
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo !== null) {
-            $this->affectedFilesCollector->addFile($fileInfo);
+        $file = $this->currentFileProvider->getFile();
+
+        // /** @var SmartFileInfo|null $fileInfo */
+        if ($file !== null) {
+            $this->affectedFilesCollector->addFile($file);
         }
 
         /** @var Stmt $node */

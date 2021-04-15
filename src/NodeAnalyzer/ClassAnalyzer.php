@@ -6,8 +6,10 @@ namespace Rector\Core\NodeAnalyzer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Class_;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ClassAnalyzer
 {
@@ -30,6 +32,11 @@ final class ClassAnalyzer
     public function isAnonymousClass(Node $node): bool
     {
         if (! $node instanceof Class_) {
+            return false;
+        }
+
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof New_) {
             return false;
         }
 

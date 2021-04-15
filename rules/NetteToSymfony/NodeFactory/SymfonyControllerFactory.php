@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\Namespace_;
 use PHPStan\Analyser\Scope;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SymfonyControllerFactory
 {
@@ -35,11 +34,6 @@ final class SymfonyControllerFactory
 
     public function createNamespace(Class_ $node, Class_ $formTypeClass): ?Namespace_
     {
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if (! $fileInfo instanceof SmartFileInfo) {
-            return null;
-        }
-
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             return null;

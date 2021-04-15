@@ -46,11 +46,6 @@ class MultipleRunsClass
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        $smartFileInfo = $classMethod->getAttribute(AttributeKey::FILE_INFO);
-        if ($this->isFileInfoMatch($smartFileInfo)) {
-            return true;
-        }
-
         if ($this->hasPrimitiveDataTypeParam($classMethod)) {
             return true;
         }
@@ -111,11 +106,6 @@ class MultipleRunsClass
     }
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        $smartFileInfo = $classMethod->getAttribute(AttributeKey::FILE_INFO);
-        if ($this->isFileInfoMatch($smartFileInfo)) {
-            return true;
-        }
-
         if ($this->hasPrimitiveDataTypeParam($classMethod)) {
             return true;
         }
@@ -135,16 +125,6 @@ class MultipleRunsClass
 
         return $params;
     }
-    private function isFileInfoMatch(SmartFileInfo $smartFileInfo): bool
-    {
-        foreach ($this->skipPatterns as $pattern) {
-            if (fnmatch($pattern, $smartFileInfo->getRelativeFilePath(), FNM_NOESCAPE)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     private function hasPrimitiveDataTypeParam(ClassMethod $classMethod): bool
     {
@@ -155,10 +135,20 @@ class MultipleRunsClass
     {
 
     }
-
     private function getParamType(Param $param)
     {
 
+    }
+
+    private function isFileInfoMatch(SmartFileInfo $smartFileInfo): bool
+    {
+        foreach ($this->skipPatterns as $pattern) {
+            if (fnmatch($pattern, $smartFileInfo->getRelativeFilePath(), FNM_NOESCAPE)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 

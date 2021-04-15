@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\PhpParser\Comparing\ConditionSearcher;
@@ -35,13 +36,21 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
     private $reservedKeywordAnalyzer;
 
     /**
+     * @var CompactFuncCallAnalyzer
+     */
+    private $compactFuncCallAnalyzer;
+  
+    /**
      * @var ConditionSearcher
      */
     private $conditionSearcher;
 
-    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
-    {
+    public function __construct(
+        ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
+        CompactFuncCallAnalyzer $compactFuncCallAnalyzer
+    ) {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
+        $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
         $this->conditionSearcher = new ConditionSearcher();
     }
 
@@ -120,6 +129,11 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->expr instanceof MethodCall || $node->expr instanceof StaticCall) {
+            // keep the expr, can have side effect
+            return $node->expr;
+        }
+
         $this->removeNode($node);
         return $node;
     }
@@ -139,7 +153,15 @@ CODE_SAMPLE
         $isUsedNext = (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
             $variable
         ): bool {
-            return $this->isVariableNamed($node, $variable);
+            if ($this->isVariableNamed($node, $variable)) {
+                return true;
+            }
+
+            if ($node instanceof FuncCall) {
+                return $this->compactFuncCallAnalyzer->isInCompact($node, $variable);
+            }
+
+            return false;
         });
 
         if ($isUsedNext) {
@@ -152,6 +174,14 @@ CODE_SAMPLE
             return false;
         }
 
+        return $this->isUsedInAssignExpr($expr, $assign);
+    }
+
+    /**
+     * @param FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $expr
+     */
+    private function isUsedInAssignExpr(Expr $expr, Assign $assign): bool
+    {
         $args = $expr->args;
         foreach ($args as $arg) {
             $variable = $arg->value;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\Parser;
 
-use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Parser as NikicParser;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -34,7 +33,7 @@ final class Parser
     }
 
     /**
-     * @return Node[]
+     * @return Stmt[]
      */
     public function parseFileInfo(SmartFileInfo $smartFileInfo): array
     {
