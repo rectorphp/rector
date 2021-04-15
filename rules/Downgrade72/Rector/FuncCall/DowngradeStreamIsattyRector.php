@@ -95,13 +95,7 @@ CODE_SAMPLE
         $function = $this->createClosure($node);
         $assign = new Assign(new Variable('streamIsatty'), $function);
 
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Return_) {
-            $this->addNodeBeforeNode($assign, $parent);
-        } else {
-            $this->addNodeBeforeNode($assign, $node);
-        }
-
+        $this->addNodeBeforeNode($assign, $node);
         return new FuncCall(new Variable('streamIsatty'), $node->args);
     }
 
