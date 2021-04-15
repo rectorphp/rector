@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\Util\StaticNodeInstanceOf;
@@ -335,6 +336,10 @@ final class BetterNodeFinder
     {
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
         if ($next instanceof Node) {
+            if ($next instanceof Return_ && $next->expr === null) {
+                return null;
+            }
+
             $found = $this->findFirst($next, $filter);
             if ($found instanceof Node) {
                 return $found;
@@ -344,7 +349,7 @@ final class BetterNodeFinder
         }
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof FunctionLike) {
+        if ($parent instanceof Return_ || $parent instanceof FunctionLike) {
             return null;
         }
 
