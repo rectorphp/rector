@@ -24,9 +24,11 @@ final class RegexDashEscapeRector extends AbstractRector
 
     /**
      * @var string
-     * @see https://regex101.com/r/1e3hoF/1
+     * @see https://regex101.com/r/iQbGgZ/1
+     *
+     * Use {2} as detected only 2 after $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern() call
      */
-    private const THREE_BACKSLASH_FOR_ESCAPE_NEXT_REGEX = '#(?<=[^\\\\])\\\\{3}(?=[^\\\\])#';
+    private const THREE_BACKSLASH_FOR_ESCAPE_NEXT_REGEX = '#(?<=[^\\\\])\\\\{2}(?=[^\\\\])#';
 
     /**
      * @var string
