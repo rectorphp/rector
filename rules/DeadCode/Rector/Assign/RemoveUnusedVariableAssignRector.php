@@ -99,7 +99,7 @@ CODE_SAMPLE
         }
 
         $variable = $node->var;
-        if (! $variable instanceof Variable) {
+        if (! $variable instanceof Variable || (is_string($variable->name) && $this->reservedKeywordAnalyzer->isNativeVariable($variable->name))) {
             return null;
         }
 
@@ -118,14 +118,12 @@ CODE_SAMPLE
                 $this->removeNode($node);
                 return $node;
             }
+
+            return null;
         }
 
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof Expression) {
-            return null;
-        }
-
-        if (is_string($variable->name) && $this->reservedKeywordAnalyzer->isNativeVariable($variable->name)) {
             return null;
         }
 
