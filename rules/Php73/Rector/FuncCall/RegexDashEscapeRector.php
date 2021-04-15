@@ -26,7 +26,7 @@ final class RegexDashEscapeRector extends AbstractRector
      * @var string
      * @see https://regex101.com/r/BjKZFg/1
      */
-    private const THREE_BACKSLASH_FOR_ESCAPE_NEXT = '#\\\\\\\[^\\\]#';
+    private const THREE_BACKSLASH_FOR_ESCAPE_NEXT_REGEX = '#\\\\\\\[^\\\]#';
 
     /**
      * @var string
@@ -94,8 +94,8 @@ CODE_SAMPLE
     {
         $stringValue = $string->value;
 
-        if (Strings::match($stringValue, self::THREE_BACKSLASH_FOR_ESCAPE_NEXT)) {
-            return;
+        if (Strings::match($stringValue, self::THREE_BACKSLASH_FOR_ESCAPE_NEXT_REGEX)) {
+            //return;
         }
 
         if (Strings::match($stringValue, self::LEFT_HAND_UNESCAPED_DASH_REGEX)) {

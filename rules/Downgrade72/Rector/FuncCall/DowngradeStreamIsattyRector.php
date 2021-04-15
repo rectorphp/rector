@@ -135,15 +135,15 @@ CODE_SAMPLE
         return $if;
     }
 
-    private function createClosure($node): Closure
+    private function createClosure(FuncCall $funcCall): Closure
     {
-        $if = $this->createIf($node->args[0]->value);
+        $if = $this->createIf($funcCall->args[0]->value);
 
         $function = new Closure();
         $function->params[] = new Param(new Variable('stream'));
         $function->stmts[] = $if;
 
-        $posixIsatty = $this->nodeFactory->createFuncCall('posix_isatty', [$node->args[0]->value]);
+        $posixIsatty = $this->nodeFactory->createFuncCall('posix_isatty', [$funcCall->args[0]->value]);
         $function->stmts[] = new Return_(new ErrorSuppress($posixIsatty));
         return $function;
     }
