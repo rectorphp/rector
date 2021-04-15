@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\NodeAnalyzer\VariableNaming;
@@ -25,7 +26,7 @@ final class DowngradeNullsafeToTernaryOperatorRector extends AbstractRector
     /**
      * @var VariableNaming
      */
-    public $variableNaming;
+    private $variableNaming;
 
     public function __construct(VariableNaming $variableNaming)
     {
@@ -67,11 +68,11 @@ CODE_SAMPLE
             $node->getAttribute(AttributeKey::SCOPE),
             '_'
         );
-        $tempVar = new Node\Expr\Variable($tempVarName);
+        $variable = new Variable($tempVarName);
         $called = $node instanceof NullsafeMethodCall
-            ? new MethodCall($tempVar, $node->name, $node->args)
-            : new PropertyFetch($tempVar, $node->name);
+            ? new MethodCall($variable, $node->name, $node->args)
+            : new PropertyFetch($variable, $node->name);
 
-        return new Ternary(new Assign($tempVar, $node->var), $called, $this->nodeFactory->createNull());
+        return new Ternary(new Assign($variable, $node->var), $called, $this->nodeFactory->createNull());
     }
 }

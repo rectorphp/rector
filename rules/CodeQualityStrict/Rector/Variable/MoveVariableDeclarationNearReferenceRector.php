@@ -249,10 +249,10 @@ CODE_SAMPLE
             foreach ($exprValues as $exprValue) {
                 $isReAssign = (bool) $this->betterNodeFinder->findFirst($next, function (Node $node): bool {
                     $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-                    $node = $this->mayBeArrayDimFetch($node);
                     if (! $parent instanceof Assign) {
                         return false;
                     }
+                    $node = $this->mayBeArrayDimFetch($node);
                     return (string) $this->getName($node) === (string) $this->getName($parent->var);
                 });
 

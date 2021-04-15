@@ -121,9 +121,13 @@ final class VarTagRemover
     {
         if ($varTagValueNode->type instanceof BracketsAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
-                if ($type instanceof SpacingAwareArrayTypeNode && $this->isArrayOfExistingClassNode($node, $type)) {
-                    return true;
+                if (! $type instanceof SpacingAwareArrayTypeNode) {
+                    return false;
                 }
+                if (! $this->isArrayOfExistingClassNode($node, $type)) {
+                    return false;
+                }
+                return true;
             }
         }
 
