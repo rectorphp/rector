@@ -21,6 +21,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RegexDashEscapeRector extends AbstractRector
 {
+
+    /**
+     * @var string
+     * @see https://regex101.com/r/iQbGgZ/1
+     *
+     * Use {2} as detected only 2 after $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern() call
+     */
+    private const THREE_BACKSLASH_FOR_ESCAPE_NEXT_REGEX = '#(?<=[^\\\\])\\\\{2}(?=[^\\\\])#';
+
     /**
      * @var string
      * @see https://regex101.com/r/YgVJFp/1
@@ -77,6 +86,10 @@ CODE_SAMPLE
         }
 
         foreach ($regexArguments as $regexArgument) {
+            if (Strings::match($regexArgument->value, self::THREE_BACKSLASH_FOR_ESCAPE_NEXT_REGEX)) {
+                continue;
+            }
+
             $this->escapeStringNode($regexArgument);
         }
 
