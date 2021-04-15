@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Php\TypeChecker;
@@ -101,8 +100,10 @@ final class BetterNodeFinder
         }
 
         do {
-            if (StaticNodeInstanceOf::isOneOf($parent, $types)) {
-                return $parent;
+            foreach ($types as $type) {
+                if (is_a($node, $type, true)) {
+                    return $parent;
+                }
             }
 
             if ($parent === null) {
