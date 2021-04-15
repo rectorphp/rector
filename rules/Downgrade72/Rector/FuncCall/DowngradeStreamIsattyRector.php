@@ -92,18 +92,15 @@ CODE_SAMPLE
             return null;
         }
 
-        $if = $this->createIf($node->args[0]->value);
-
-        $function = new Closure();
-        $function->params[] = new Param(new Variable('stream'));
-        $function->stmts[] = $if;
-
-        $posixIsatty = $this->nodeFactory->createFuncCall('posix_isatty', [$node->args[0]->value]);
-        $function->stmts[] = new Return_(new ErrorSuppress($posixIsatty));
-
+        $function = $this->createClosure($node);
         $assign = new Assign(new Variable('streamIsatty'), $function);
 
-        $this->addNodeBeforeNode($assign, $node);
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Return_) {
+            $this->addNodeBeforeNode($assign, $parent);
+        } else {
+            $this->addNodeBeforeNode($assign, $node);
+        }
 
         return new FuncCall(new Variable('streamIsatty'), $node->args);
     }
@@ -136,5 +133,18 @@ CODE_SAMPLE
         $if->stmts[] = new Return_($ternary);
 
         return $if;
+    }
+
+    private function createClosure($node): Closure
+    {
+        $if = $this->createIf($node->args[0]->value);
+
+        $function = new Closure();
+        $function->params[] = new Param(new Variable('stream'));
+        $function->stmts[] = $if;
+
+        $posixIsatty = $this->nodeFactory->createFuncCall('posix_isatty', [$node->args[0]->value]);
+        $function->stmts[] = new Return_(new ErrorSuppress($posixIsatty));
+        return $function;
     }
 }
