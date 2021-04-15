@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Php73\Rector\FuncCall\JsonThrowOnErrorRector\Fixture;
 
-function SkipJsonLastErrorNextAfterReturn()
+function JsonLastErrorNextAfterReturn()
 {
     json_decode($str);
     return;
@@ -17,7 +17,7 @@ function SkipJsonLastErrorNextAfterReturn()
 
 namespace Rector\Tests\Php73\Rector\FuncCall\JsonThrowOnErrorRector\Fixture;
 
-function SkipJsonLastErrorNextAfterReturn()
+function JsonLastErrorNextAfterReturn()
 {
     json_decode($str, null, 512, JSON_THROW_ON_ERROR);
     return;
