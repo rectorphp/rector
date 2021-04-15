@@ -18,6 +18,8 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
+use PhpParser\Node\Stmt\If_;
+use Rector\Core\PhpParser\Comparing\ConditionSearcher;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -37,6 +39,11 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
      * @var CompactFuncCallAnalyzer
      */
     private $compactFuncCallAnalyzer;
+  
+    /**
+     * @var ConditionSearcher
+     */
+    private $conditionSearcher;
 
     public function __construct(
         ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
@@ -44,6 +51,7 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
     ) {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
         $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
+        $this->conditionSearcher = new ConditionSearcher();
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -91,21 +99,31 @@ CODE_SAMPLE
         }
 
         $variable = $node->var;
-        if (! $variable instanceof Variable) {
+        if (! $variable instanceof Variable || (is_string($variable->name) && $this->reservedKeywordAnalyzer->isNativeVariable($variable->name))) {
             return null;
         }
 
         // variable is used
         if ($this->isUsed($node, $variable)) {
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            $ifNode = $parentNode->getAttribute(AttributeKey::NEXT_NODE);
+
+            // check if next node is if
+            if (! $ifNode instanceof If_) {
+                return null;
+            }
+
+            $nodeFound = $this->conditionSearcher->searchIfAndElseForVariableRedeclaration($node, $ifNode);
+            if ($nodeFound) {
+                $this->removeNode($node);
+                return $node;
+            }
+
             return null;
         }
 
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof Expression) {
-            return null;
-        }
-
-        if (is_string($variable->name) && $this->reservedKeywordAnalyzer->isNativeVariable($variable->name)) {
             return null;
         }
 
