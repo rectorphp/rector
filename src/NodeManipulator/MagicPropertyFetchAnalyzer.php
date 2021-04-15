@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ErrorType;
@@ -49,11 +51,11 @@ final class MagicPropertyFetchAnalyzer
     }
 
     /**
-     * @param PropertyFetch|Node\Expr\StaticPropertyFetch $propertyFetch
+     * @param PropertyFetch|Node\Expr\StaticPropertyFetch $expr
      */
-    public function isMagicOnType(Node\Expr $propertyFetch, Type $type): bool
+    public function isMagicOnType(Expr $expr, Type $type): bool
     {
-        $varNodeType = $this->nodeTypeResolver->resolve($propertyFetch);
+        $varNodeType = $this->nodeTypeResolver->resolve($expr);
 
         if ($varNodeType instanceof ErrorType) {
             return true;
@@ -67,28 +69,28 @@ final class MagicPropertyFetchAnalyzer
             return false;
         }
 
-        $nodeName = $this->nodeNameResolver->getName($propertyFetch->name);
+        $nodeName = $this->nodeNameResolver->getName($expr->name);
         if ($nodeName === null) {
             return false;
         }
 
-        return ! $this->hasPublicProperty($propertyFetch, $nodeName);
+        return ! $this->hasPublicProperty($expr, $nodeName);
     }
 
     /**
-     * @param PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
+     * @param PropertyFetch|StaticPropertyFetch $expr
      */
-    private function hasPublicProperty(Node\Expr $propertyFetch, string $propertyName): bool
+    private function hasPublicProperty(Expr $expr, string $propertyName): bool
     {
-        $scope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
+        $scope = $expr->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             throw new ShouldNotHappenException();
         }
 
-        if ($propertyFetch instanceof PropertyFetch) {
-            $propertyFetchType = $scope->getType($propertyFetch->var);
+        if ($expr instanceof PropertyFetch) {
+            $propertyFetchType = $scope->getType($expr->var);
         } else {
-            $propertyFetchType = $this->nodeTypeResolver->resolve($propertyFetch->class);
+            $propertyFetchType = $this->nodeTypeResolver->resolve($expr->class);
         }
 
         if (! $propertyFetchType instanceof TypeWithClassName) {

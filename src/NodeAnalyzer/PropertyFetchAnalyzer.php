@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -73,28 +74,25 @@ final class PropertyFetchAnalyzer
     }
 
     /**
-     * @param PropertyFetch|StaticPropertyFetch $propertyFetch
+     * @param PropertyFetch|StaticPropertyFetch $expr
      */
-    public function isPropertyToSelf(Node\Expr $propertyFetch): bool
+    public function isPropertyToSelf(Expr $expr): bool
     {
-        if ($propertyFetch instanceof PropertyFetch && ! $this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+        if ($expr instanceof PropertyFetch && ! $this->nodeNameResolver->isName($expr->var, 'this')) {
             return false;
         }
 
-        if ($propertyFetch instanceof StaticPropertyFetch && ! $this->nodeNameResolver->isName(
-            $propertyFetch->class,
-            'self'
-        )) {
+        if ($expr instanceof StaticPropertyFetch && ! $this->nodeNameResolver->isName($expr->class, 'self')) {
             return false;
         }
 
-        $classLike = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $expr->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
             return false;
         }
 
         foreach ($classLike->getProperties() as $property) {
-            if (! $this->nodeNameResolver->areNamesEqual($property->props[0], $propertyFetch)) {
+            if (! $this->nodeNameResolver->areNamesEqual($property->props[0], $expr)) {
                 continue;
             }
 
