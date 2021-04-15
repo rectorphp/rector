@@ -43,7 +43,7 @@ CODE_SAMPLE
 ,
                 <<<'CODE_SAMPLE'
 $dateAsString = ($bookingGetStartDate = $booking->getStartDate()) ? $bookingGetStartDate->asDateTimeString() : null;
-$dateAsString = ($_ = $booking->startDate) ? $_->dateTimeString : null;
+$dateAsString = ($bookingGetStartDate = $booking->startDate) ? $bookingGetStartDate->dateTimeString : null;
 CODE_SAMPLE
             ),
         ]);
