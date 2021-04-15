@@ -21,8 +21,8 @@ class MultipleCall
 {
     public function run($object)
     {
-        $result = ($object->multiple($args1) ? $object->multiple($args1)->call($args2) : null) ? ($object->multiple($args1) ? $object->multiple($args1)->call($args2) : null)->otherCall($args3) : null;
-        $result = (($object->multiple($args1) ? $object->multiple($args1)->call($args2) : null) ? ($object->multiple($args1) ? $object->multiple($args1)->call($args2) : null)->otherCall($args3) : null) ? (($object->multiple($args1) ? $object->multiple($args1)->call($args2) : null) ? ($object->multiple($args1) ? $object->multiple($args1)->call($args2) : null)->otherCall($args3) : null)->anotherCall($args4) : null;
+        $result = ($call = ($multiple = $object->multiple($args1)) ? $multiple->call($args2) : null) ? $call->otherCall($args3) : null;
+        $result = ($otherCall = ($call = ($multiple = $object->multiple($args1)) ? $multiple->call($args2) : null) ? $call->otherCall($args3) : null) ? $otherCall->anotherCall($args4) : null;
     }
 }
 
