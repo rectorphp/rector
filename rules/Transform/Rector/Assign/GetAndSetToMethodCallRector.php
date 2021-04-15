@@ -9,7 +9,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -17,8 +16,10 @@ use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\MagicPropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Transform\ValueObject\GetAndSetToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Transform\Rector\Assign\GetAndSetToMethodCallRector\GetAndSetToMethodCallRectorTest
@@ -31,14 +32,9 @@ final class GetAndSetToMethodCallRector extends AbstractRector implements Config
     public const TYPE_TO_METHOD_CALLS = 'type_to_method_calls';
 
     /**
-     * @var string
+     * @var GetAndSetToMethodCall[]
      */
-    private const GET = 'get';
-
-    /**
-     * @var string[][]
-     */
-    private $typeToMethodCalls = [];
+    private $getAndSetToMethodCalls = [];
 
     /**
      * @var PropertyFetchAnalyzer
@@ -74,28 +70,7 @@ CODE_SAMPLE
                 ,
                 [
                     self::TYPE_TO_METHOD_CALLS => [
-                        'SomeContainer' => [
-                            'set' => 'addService',
-                        ],
-                    ],
-                ]
-            ),
-            new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
-$container = new SomeContainer;
-$someService = $container->someService;
-CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
-$container = new SomeContainer;
-$someService = $container->getService("someService");
-CODE_SAMPLE
-                ,
-                [
-                    self::TYPE_TO_METHOD_CALLS => [
-                        'SomeContainer' => [
-                            self::GET => 'getService',
-                        ],
+                        new GetAndSetToMethodCall('SomeContainer', 'addService', 'getService'),
                     ],
                 ]
             ),
@@ -116,7 +91,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Assign) {
-            if ($node->var instanceof PropertyFetch || $node->var instanceof StaticPropertyFetch) {
+            if ($node->var instanceof PropertyFetch) {
                 return $this->processMagicSet($node->expr, $node->var);
             }
 
@@ -126,23 +101,30 @@ CODE_SAMPLE
         return $this->processPropertyFetch($node);
     }
 
+    /**
+     * @param array<string, GetAndSetToMethodCall[]> $configuration
+     */
     public function configure(array $configuration): void
     {
-        $this->typeToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? [];
+        $getAndSetToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? [];
+        Assert::allIsAOf($getAndSetToMethodCalls, GetAndSetToMethodCall::class);
+
+        $this->getAndSetToMethodCalls = $getAndSetToMethodCalls;
     }
 
-    /**
-     * @param PropertyFetch|StaticPropertyFetch $propertyFetch
-     */
-    private function processMagicSet(Expr $expr, Expr $propertyFetch): ?Node
+    private function processMagicSet(Expr $expr, PropertyFetch $propertyFetch): ?Node
     {
-        foreach ($this->typeToMethodCalls as $type => $transformation) {
-            $objectType = new ObjectType($type);
+        foreach ($this->getAndSetToMethodCalls as $getAndSetToMethodCall) {
+            $objectType = $getAndSetToMethodCall->getObjectType();
             if ($this->shouldSkipPropertyFetch($propertyFetch, $objectType)) {
                 continue;
             }
 
-            return $this->createMethodCallNodeFromAssignNode($propertyFetch, $expr, $transformation['set']);
+            return $this->createMethodCallNodeFromAssignNode(
+                $propertyFetch,
+                $expr,
+                $getAndSetToMethodCall->getSetMethod()
+            );
         }
 
         return null;
@@ -150,41 +132,36 @@ CODE_SAMPLE
 
     private function processPropertyFetch(PropertyFetch $propertyFetch): ?MethodCall
     {
-        foreach ($this->typeToMethodCalls as $type => $transformation) {
-            $objectType = new ObjectType($type);
-            if ($this->shouldSkipPropertyFetch($propertyFetch, $objectType)) {
+        $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
+
+        foreach ($this->getAndSetToMethodCalls as $getAndSetToMethodCall) {
+            if ($this->shouldSkipPropertyFetch($propertyFetch, $getAndSetToMethodCall->getObjectType())) {
                 continue;
             }
 
             // setter, skip
-            $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
             if (! $parentNode instanceof Assign) {
-                return $this->createMethodCallNodeFromPropertyFetchNode($propertyFetch, $transformation[self::GET]);
+                return $this->createMethodCallNodeFromPropertyFetchNode(
+                    $propertyFetch,
+                    $getAndSetToMethodCall->getGetMethod()
+                );
             }
+
             if ($parentNode->var !== $propertyFetch) {
-                return $this->createMethodCallNodeFromPropertyFetchNode($propertyFetch, $transformation[self::GET]);
+                return $this->createMethodCallNodeFromPropertyFetchNode(
+                    $propertyFetch,
+                    $getAndSetToMethodCall->getGetMethod()
+                );
             }
-            continue;
         }
 
         return null;
     }
 
-    /**
-     * @param StaticPropertyFetch|PropertyFetch $propertyFetch
-     */
-    private function shouldSkipPropertyFetch(Expr $propertyFetch, ObjectType $objectType): bool
+    private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch, ObjectType $objectType): bool
     {
-        if ($propertyFetch instanceof StaticPropertyFetch) {
-            if (! $this->isObjectType($propertyFetch->class, $objectType)) {
-                return true;
-            }
-        }
-
-        if ($propertyFetch instanceof PropertyFetch) {
-            if (! $this->isObjectType($propertyFetch->var, $objectType)) {
-                return true;
-            }
+        if (! $this->isObjectType($propertyFetch->var, $objectType)) {
+            return true;
         }
 
         if (! $this->magicPropertyFetchAnalyzer->isMagicOnType($propertyFetch, $objectType)) {
@@ -194,22 +171,13 @@ CODE_SAMPLE
         return $this->propertyFetchAnalyzer->isPropertyToSelf($propertyFetch);
     }
 
-    /**
-     * @param PropertyFetch|StaticPropertyFetch $propertyFetch
-     */
     private function createMethodCallNodeFromAssignNode(
-        Expr $propertyFetch,
+        PropertyFetch $propertyFetch,
         Expr $expr,
         string $method
     ): MethodCall {
-//        if ($propertyFetch instanceof PropertyFetch) {
-//            $variableNode = $propertyFetch->var;
-//        } else {
-//            $variableNode = $propertyFetch->class;
-//        }
-
         $propertyName = $this->getName($propertyFetch->name);
-        return $this->nodeFactory->createMethodCall($propertyFetch, $method, [$propertyName, $expr]);
+        return $this->nodeFactory->createMethodCall($propertyFetch->var, $method, [$propertyName, $expr]);
     }
 
     private function createMethodCallNodeFromPropertyFetchNode(

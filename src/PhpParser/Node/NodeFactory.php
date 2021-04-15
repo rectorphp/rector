@@ -292,7 +292,7 @@ final class NodeFactory
     }
 
     /**
-     * @param string|Expr|Name $variable
+     * @param string|Expr $variable
      * @param mixed[] $arguments
      */
     public function createMethodCall($variable, string $method, array $arguments = []): MethodCall

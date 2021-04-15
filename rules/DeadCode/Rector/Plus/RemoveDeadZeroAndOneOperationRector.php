@@ -139,7 +139,6 @@ CODE_SAMPLE
     private function processBinaryOp(Node $node): ?Expr
     {
         if ($node instanceof Plus || $node instanceof Minus) {
-            /** @var Plus|Minus $node */
             return $this->processBinaryPlusAndMinus($node);
         }
 
