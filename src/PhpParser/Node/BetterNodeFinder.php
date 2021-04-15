@@ -335,12 +335,14 @@ final class BetterNodeFinder
     public function findFirstNext(Node $node, callable $filter): ?Node
     {
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if ($next instanceof Return_ && $next->expr === null) {
-            return null;
-        }
+        if ($next instanceof Return_) {
+            if ($next->expr === null) {
+                return null;
+            }
 
-        if ($next instanceof Return_ && ! $this->findFirst($next->expr, $filter) instanceof Node) {
-            return null;
+            if (! $this->findFirst($next->expr, $filter) instanceof Node) {
+                return null;
+            }
         }
 
         if ($next instanceof Node) {
