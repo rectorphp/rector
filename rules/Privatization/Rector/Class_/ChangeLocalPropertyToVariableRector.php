@@ -6,7 +6,6 @@ namespace Rector\Privatization\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Privatization\NodeAnalyzer\PropertyFetchByMethodAnalyzer;
@@ -25,11 +24,6 @@ final class ChangeLocalPropertyToVariableRector extends AbstractRector
     private $classManipulator;
 
     /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    /**
      * @var PropertyFetchWithVariableReplacer
      */
     private $propertyFetchWithVariableReplacer;
@@ -41,12 +35,10 @@ final class ChangeLocalPropertyToVariableRector extends AbstractRector
 
     public function __construct(
         ClassManipulator $classManipulator,
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
         PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer,
         PropertyFetchByMethodAnalyzer $propertyFetchByMethodAnalyzer
     ) {
         $this->classManipulator = $classManipulator;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->propertyFetchWithVariableReplacer = $propertyFetchWithVariableReplacer;
         $this->propertyFetchByMethodAnalyzer = $propertyFetchByMethodAnalyzer;
     }

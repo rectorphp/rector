@@ -61,26 +61,23 @@ final class PropertyFetchByMethodAnalyzer
     {
         $propertyUsageByMethods = [];
 
-        foreach ($propertyNames as $privatePropertyName) {
+        foreach ($propertyNames as $propertyName) {
             foreach ($class->getMethods() as $classMethod) {
                 // assigned in constructor injection → skip
                 if ($this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
                     return [];
                 }
 
-                if (! $this->propertyFetchAnalyzer->containsLocalPropertyFetchName(
-                    $classMethod,
-                    $privatePropertyName
-                )) {
+                if (! $this->propertyFetchAnalyzer->containsLocalPropertyFetchName($classMethod, $propertyName)) {
                     continue;
                 }
 
-                if ($this->isPropertyChangingInMultipleMethodCalls($classMethod, $privatePropertyName)) {
+                if ($this->isPropertyChangingInMultipleMethodCalls($classMethod, $propertyName)) {
                     continue;
                 }
 
                 $classMethodName = $this->nodeNameResolver->getName($classMethod);
-                $propertyUsageByMethods[$privatePropertyName][] = $classMethodName;
+                $propertyUsageByMethods[$propertyName][] = $classMethodName;
             }
         }
 

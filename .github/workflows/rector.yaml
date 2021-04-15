@@ -25,10 +25,8 @@ jobs:
             fail-fast: false
             matrix:
                 directories:
-                    - src tests
-                    - packages packages-tests
+                    - src tests rules-tests packages packages-tests
                     - rules
-                    - rules-tests
 
         runs-on: ubuntu-latest
         steps:
