@@ -217,8 +217,8 @@ parameters:
 
         # @todo loop magic, resolve later
         -
-             message: '#Access to an undefined property PhpParser\\Node\:\:\$expr#'
-             paths:
+            message: '#Access to an undefined property PhpParser\\Node\:\:\$expr#'
+            paths:
                 - rules/Php80/Rector/If_/NullsafeOperatorRector.php
 
         - '#Method "evaluateBinaryToVersionCompareCondition\(\)" returns bool type, so the name should start with is/has/was#'
@@ -260,10 +260,10 @@ parameters:
 #        - '#Class "Rector\\Nette\\Rector\\Class_\\MoveFinalGetUserToCheckRequirementsClassMethodRector" is missing @see annotation with test case class reference#'
 
         -
-             message: '#Use `\$class\-\>namespaceName` instead of `\$class\-\>name` that only returns short class name#'
-             paths:
-                  - rules/CodingStyle/Naming/NameRenamer.php
-                  - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
+            message: '#Use `\$class\-\>namespaceName` instead of `\$class\-\>name` that only returns short class name#'
+            paths:
+                - rules/CodingStyle/Naming/NameRenamer.php
+                - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
 
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
@@ -280,6 +280,7 @@ parameters:
             paths:
                 - bin/rector.php
                 - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
+                - src/Application/FileProcessor/PhpFileProcessor.php
 
         -
             message: '#Function "class_exists\(\)" cannot be used/left in the code#'
@@ -307,9 +308,9 @@ parameters:
         - '#Parameter \#4 \$classWithConstants of class Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant constructor expects class\-string, string given#'
 
         -
-             message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\.#'
-             paths:
-                 - config/set/*
+            message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\.#'
+            paths:
+                - config/set/*
 
         - '#Class with base "FileNode" name is already used in "PHPStan\\Node\\FileNode", "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileNode"\. Use unique name to make classes easy to recognize#'
 
@@ -358,17 +359,17 @@ parameters:
         - '#Property Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap\:\:\$binaryOpToAssignClasses \(array<class\-string<PhpParser\\Node\\Expr\\BinaryOp\>, class\-string<PhpParser\\Node\\Expr\\BinaryOp\>\>\) does not accept array#'
 
         -
-             message: '#Function "property_exists\(\)" cannot be used/left in the code#'
-             paths:
-                 # on PhpParser Nodes
-                 - src/NodeManipulator/ClassMethodAssignManipulator.php
-                 - rules/Php80/Rector/If_/NullsafeOperatorRector.php
-                 - packages/NodeTypeResolver/NodeVisitor/FunctionMethodAndClassNodeVisitor.php
-                 - packages/NodeTypeResolver/NodeVisitor/StatementNodeVisitor.php
-                 - packages/NodeNameResolver/NodeNameResolver.php
-                 - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
-                 - packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php
-                 - packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php
+            message: '#Function "property_exists\(\)" cannot be used/left in the code#'
+            paths:
+                # on PhpParser Nodes
+                - src/NodeManipulator/ClassMethodAssignManipulator.php
+                - rules/Php80/Rector/If_/NullsafeOperatorRector.php
+                - packages/NodeTypeResolver/NodeVisitor/FunctionMethodAndClassNodeVisitor.php
+                - packages/NodeTypeResolver/NodeVisitor/StatementNodeVisitor.php
+                - packages/NodeNameResolver/NodeNameResolver.php
+                - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
+                - packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php
+                - packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php
 
         # known types
         - '#Call to an undefined method PHPStan\\Type\\ConstantType\:\:getValue\(\)#'
@@ -403,9 +404,9 @@ parameters:
         - '#Cognitive complexity for "Rector\\NodeTypeResolver\\NodeTypeResolver\:\:getStaticType\(\)" is 11, keep it under 9#'
 
         -
-             message: '#There should be no empty class#'
-             paths:
-                 - packages/StaticTypeMapper/ValueObject/Type/FullyQualifiedGenericObjectType.php
+            message: '#There should be no empty class#'
+            paths:
+                - packages/StaticTypeMapper/ValueObject/Type/FullyQualifiedGenericObjectType.php
 
         - '#(.*?) class\-string, string given#'
 
@@ -437,7 +438,7 @@ parameters:
         -
             message: '#Do not inherit from abstract class, better use composition#'
             paths:
-                 - utils/phpstan-extensions/src/Rule/*Rule.php
+                - utils/phpstan-extensions/src/Rule/*Rule.php
 
         # known internal types on correct location
         -
@@ -447,9 +448,9 @@ parameters:
 
         # mimics original doctrine/annotations parser, improve later when finished
         -
-             message: '#Array destruct is not allowed\. Use value object to pass data instead#'
-             paths:
-                  - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php
+            message: '#Array destruct is not allowed\. Use value object to pass data instead#'
+            paths:
+                - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php
 
         -
             message: '#Use value object over return of values#'
@@ -485,15 +486,15 @@ parameters:
         -
             message: '#Do not inherit from abstract class, better use composition#'
             paths:
-                 - packages/NodeTypeResolver/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
-                 - packages/BetterPhpDocParser/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
-                 - packages/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php
-                 - packages/BetterPhpDocParser/ValueObject/Parser/BetterTokenIterator.php
+                - packages/NodeTypeResolver/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
+                - packages/BetterPhpDocParser/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
+                - packages/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php
+                - packages/BetterPhpDocParser/ValueObject/Parser/BetterTokenIterator.php
 
         -
             message: '#Do not use setter on a service#'
             paths:
-                 - packages/NodeTypeResolver/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
+                - packages/NodeTypeResolver/PhpDocNodeVisitor/*PhpDocNodeVisitor.php
 
         # known type
         - '#Parameter \#3 \$pseudoNamespaceToNamespace of method Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\UnderscoreRenamePhpDocNodeVisitor\:\:shouldSkip\(\) expects Rector\\Renaming\\ValueObject\\PseudoNamespaceToNamespace, Rector\\Renaming\\ValueObject\\PseudoNamespaceToNamespace\|null given#'
@@ -504,7 +505,7 @@ parameters:
         -
             message: '#Class cognitive complexity is \d+, keep it under 50#'
             paths:
-                 - packages/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php
+                - packages/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php
 
         - '#Cognitive complexity for "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper\:\:mapToPhpParserNode\(\)" is 10, keep it under 9#'
         - '#Method Rector\\NodeNameResolver\\NodeNameResolver\:\:matchRectorBacktraceCall\(\) return type has no value type specified in iterable type array#'
@@ -512,11 +513,6 @@ parameters:
             message: '#Do not inherit from abstract class, better use composition#'
             paths:
                 - src/PhpParser/Parser/FunctionLikeParser.php
-
-        -
-            message: '#Unreachable statement \- code above always terminates#'
-            paths:
-                - src/Application/FileProcessor/PhpFileProcessor.php
 
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
@@ -528,5 +524,11 @@ parameters:
         - '#Parameter \#1 \$file of method Rector\\CodingStyle\\ClassNameImport\\ShortNameResolver\:\:resolveForNode\(\) expects Rector\\Core\\ValueObject\\Application\\File, Rector\\Core\\ValueObject\\Application\\File\|null given#'
 
         -
-             message: '#\$this as argument is not allowed\. Refactor method to service composition#'
-             path: rules/TypeDeclaration/Rector/ClassMethod/ParamTypeFromStrictTypedPropertyRector.php
+            message: '#\$this as argument is not allowed\. Refactor method to service composition#'
+            path: rules/TypeDeclaration/Rector/ClassMethod/ParamTypeFromStrictTypedPropertyRector.php
+
+        -
+            message: '#Class cognitive complexity is 32, keep it under 30#'
+            path: rules/Privatization/Rector/Class_/ChangeLocalPropertyToVariableRector.php
+
+        - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentTypes\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'

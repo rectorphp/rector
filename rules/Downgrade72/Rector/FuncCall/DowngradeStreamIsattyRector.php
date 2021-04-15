@@ -5,26 +5,15 @@ declare(strict_types=1);
 namespace Rector\Downgrade72\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\BinaryOp\BitwiseAnd;
-use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\ErrorSuppress;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
-use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -36,9 +25,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeStreamIsattyRector extends AbstractRector
 {
     /**
-     * @var string
+     * @var InlineCodeParser
      */
-    private const STAT = 'stat';
+    private $inlineCodeParser;
+
+    public function __construct(InlineCodeParser $inlineCodeParser)
+    {
+        $this->inlineCodeParser = $inlineCodeParser;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -92,59 +86,25 @@ CODE_SAMPLE
             return null;
         }
 
-        $function = $this->createClosure($node);
+        $function = $this->createClosure();
         $assign = new Assign(new Variable('streamIsatty'), $function);
 
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Return_) {
-            $this->addNodeBeforeNode($assign, $parent);
-        } else {
-            $this->addNodeBeforeNode($assign, $node);
-        }
-
+        $this->addNodeBeforeNode($assign, $node);
         return new FuncCall(new Variable('streamIsatty'), $node->args);
     }
 
-    private function createIf(Expr $expr): If_
+    private function createClosure(): Closure
     {
-        $constFetch = new ConstFetch(new FullyQualified('DIRECTORY_SEPARATOR'));
-        $identical = new Identical(new String_('\\'), $constFetch);
+        $stmts = $this->inlineCodeParser->parse(__DIR__ . '/../../snippet/isatty_closure.php.inc');
 
-        $if = new If_($identical);
-        $statAssign = new Assign(
-            new Variable(self::STAT),
-            new ErrorSuppress($this->nodeFactory->createFuncCall('fstat', [$expr]))
-        );
-        $if->stmts[] = new Expression($statAssign);
+        /** @var Expression $expression */
+        $expression = $stmts[0];
 
-        $arrayDimFetch = new ArrayDimFetch(new Variable(self::STAT), new String_('mode'));
-        $bitwiseAnd = new BitwiseAnd(
-            $arrayDimFetch,
-            new LNumber(0170000, [
-                AttributeKey::KIND => LNumber::KIND_OCT,
-            ])
-        );
+        $expr = $expression->expr;
+        if (! $expr instanceof Closure) {
+            throw new ShouldNotHappenException();
+        }
 
-        $identical = new Identical(new LNumber(020000, [
-            AttributeKey::KIND => LNumber::KIND_OCT,
-        ]), $bitwiseAnd);
-
-        $ternary = new Ternary(new Variable(self::STAT), $identical, $this->nodeFactory->createFalse());
-        $if->stmts[] = new Return_($ternary);
-
-        return $if;
-    }
-
-    private function createClosure(FuncCall $node): Closure
-    {
-        $if = $this->createIf($node->args[0]->value);
-
-        $function = new Closure();
-        $function->params[] = new Param(new Variable('stream'));
-        $function->stmts[] = $if;
-
-        $posixIsatty = $this->nodeFactory->createFuncCall('posix_isatty', [$node->args[0]->value]);
-        $function->stmts[] = new Return_(new ErrorSuppress($posixIsatty));
-        return $function;
+        return $expr;
     }
 }

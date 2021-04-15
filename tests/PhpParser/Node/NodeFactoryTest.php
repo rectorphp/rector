@@ -28,7 +28,7 @@ final class NodeFactoryTest extends AbstractKernelTestCase
     }
 
     /**
-     * @param mixed[] $inputArray
+     * @param int[]|array<string, int> $inputArray
      * @dataProvider provideDataForArray()
      */
     public function testCreateArray(array $inputArray, Array_ $expectedArrayNode): void

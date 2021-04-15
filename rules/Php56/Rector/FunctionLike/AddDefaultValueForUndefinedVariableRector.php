@@ -27,7 +27,6 @@ use PhpParser\Node\Stmt\Unset_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -213,7 +212,8 @@ CODE_SAMPLE
         )) {
             return true;
         }
-        if (StaticNodeInstanceOf::isOneOf($parentNode, [Unset_::class, UnsetCast::class])) {
+
+        if ($parentNode instanceof Unset_ || $parentNode instanceof UnsetCast) {
             return true;
         }
 
@@ -252,7 +252,11 @@ CODE_SAMPLE
 
     private function isListAssign(Node $node): bool
     {
-        $parentParentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        return StaticNodeInstanceOf::isOneOf($parentParentNode, [List_::class, Array_::class]);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof List_) {
+            return true;
+        }
+
+        return $parentNode instanceof Array_;
     }
 }

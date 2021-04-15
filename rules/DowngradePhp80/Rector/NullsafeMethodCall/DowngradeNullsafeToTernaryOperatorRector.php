@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\NullsafeMethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php70\NodeAnalyzer\VariableNaming;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,6 +23,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeNullsafeToTernaryOperatorRector extends AbstractRector
 {
+    /**
+     * @var VariableNaming
+     */
+    private $variableNaming;
+
+    public function __construct(VariableNaming $variableNaming)
+    {
+        $this->variableNaming = $variableNaming;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change nullsafe operator to ternary operator rector', [
@@ -29,8 +43,8 @@ $dateAsString = $booking->startDate?->dateTimeString;
 CODE_SAMPLE
 ,
                 <<<'CODE_SAMPLE'
-$dateAsString = $booking->getStartDate() ? $booking->getStartDate()->asDateTimeString() : null;
-$dateAsString = $booking->startDate ? $booking->startDate->dateTimeString : null;
+$dateAsString = ($bookingGetStartDate = $booking->getStartDate()) ? $bookingGetStartDate->asDateTimeString() : null;
+$dateAsString = ($bookingGetStartDate = $booking->startDate) ? $bookingGetStartDate->dateTimeString : null;
 CODE_SAMPLE
             ),
         ]);
@@ -49,10 +63,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $called = $node instanceof NullsafeMethodCall
-            ? new MethodCall($node->var, $node->name, $node->args)
-            : new PropertyFetch($node->var, $node->name);
+        $tempVarName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
+            $node->var,
+            $node->getAttribute(AttributeKey::SCOPE),
+            '_'
+        );
 
-        return new Ternary($node->var, $called, $this->nodeFactory->createNull());
+        $variable = new Variable($tempVarName);
+        $called = $node instanceof NullsafeMethodCall
+            ? new MethodCall($variable, $node->name, $node->args)
+            : new PropertyFetch($variable, $node->name);
+
+        return new Ternary(new Assign($variable, $node->var), $called, $this->nodeFactory->createNull());
     }
 }

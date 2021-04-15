@@ -35,7 +35,7 @@ CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
 json_encode($content, JSON_THROW_ON_ERROR);
-json_decode($json, null, null, JSON_THROW_ON_ERROR);
+json_decode($json, null, 512, JSON_THROW_ON_ERROR);
 CODE_SAMPLE
                 ),
             ]
@@ -59,6 +59,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->shouldSkip($node)) {
+            return null;
+        }
+
         if ($this->isName($node, 'json_encode')) {
             return $this->processJsonEncode($node);
         }
@@ -68,6 +72,21 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function shouldSkip(FuncCall $funcCall): bool
+    {
+        if (! $this->isNames($funcCall, ['json_encode', 'json_decode'])) {
+            return true;
+        }
+
+        return (bool) $this->betterNodeFinder->findFirstNext($funcCall, function (Node $node): bool {
+            if (! $node instanceof FuncCall) {
+                return false;
+            }
+
+            return $this->isNames($node, ['json_last_error', 'json_last_error_msg']);
+        });
     }
 
     private function processJsonEncode(FuncCall $funcCall): ?FuncCall
@@ -89,7 +108,7 @@ CODE_SAMPLE
 
         // set default to inter-args
         if (! isset($funcCall->args[1])) {
-            $funcCall->args[1] = new Arg($this->nodeFactory->createFalse());
+            $funcCall->args[1] = new Arg($this->nodeFactory->createNull());
         }
 
         if (! isset($funcCall->args[2])) {

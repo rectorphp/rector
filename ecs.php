@@ -11,6 +11,7 @@ use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
+use Symplify\CodingStandard\Fixer\Commenting\ParamReturnAndVarTagMalformsFixer;
 use Symplify\CodingStandard\Fixer\Commenting\RemoveCommentedCodeFixer;
 use Symplify\CodingStandard\Fixer\LineLength\DocBlockLineLengthFixer;
 use Symplify\EasyCodingStandard\ValueObject\Option;
@@ -60,6 +61,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Source/*',
         '*/Fixture/*',
         '*/Expected/*',
+
+        // fixed in master
+        ParamReturnAndVarTagMalformsFixer::class,
 
         GeneralPhpdocAnnotationRemoveFixer::class => [
             __DIR__ . '/src/Rector/AbstractRector.php',

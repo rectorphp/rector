@@ -18,7 +18,6 @@ use PhpParser\Node\Expr\BinaryOp\Mul;
 use PhpParser\Node\Expr\BinaryOp\Plus;
 use PhpParser\Node\Expr\UnaryMinus;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticNodeInstanceOf;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -139,8 +138,7 @@ CODE_SAMPLE
 
     private function processBinaryOp(Node $node): ?Expr
     {
-        if (StaticNodeInstanceOf::isOneOf($node, [Plus::class, Minus::class])) {
-            /** @var Plus|Minus $node */
+        if ($node instanceof Plus || $node instanceof Minus) {
             return $this->processBinaryPlusAndMinus($node);
         }
 

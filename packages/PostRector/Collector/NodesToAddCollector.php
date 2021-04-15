@@ -8,10 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Util\StaticNodeInstanceOf;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 
@@ -128,8 +128,13 @@ final class NodesToAddCollector implements NodeCollectorInterface
 
     private function resolveNearestExpressionPosition(Node $node): string
     {
-        if (StaticNodeInstanceOf::isOneOf($node, [Expression::class, Stmt::class])) {
+        if ($node instanceof Expression || $node instanceof Stmt) {
             return spl_object_hash($node);
+        }
+
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Return_) {
+            return spl_object_hash($parent);
         }
 
         $foundNode = $this->betterNodeFinder->findParentType($node, Expression::class);
