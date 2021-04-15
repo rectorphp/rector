@@ -527,8 +527,4 @@ parameters:
             message: '#\$this as argument is not allowed\. Refactor method to service composition#'
             path: rules/TypeDeclaration/Rector/ClassMethod/ParamTypeFromStrictTypedPropertyRector.php
 
-        -
-            message: '#Class cognitive complexity is 32, keep it under 30#'
-            path: rules/Privatization/Rector/Class_/ChangeLocalPropertyToVariableRector.php
-
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentTypes\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'

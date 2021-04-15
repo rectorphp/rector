@@ -262,6 +262,7 @@ CODE_SAMPLE
         ) && $this->valueResolver->isNull($expr->right)) {
             return true;
         }
+
         if (! $this->propertyFetchAnalyzer->isLocalPropertyOfNames($expr->right, $propertyNames)) {
             return false;
         }
