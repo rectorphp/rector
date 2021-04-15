@@ -72,9 +72,19 @@ final class PropertyFetchAnalyzer
         });
     }
 
-    public function isPropertyToSelf(PropertyFetch $propertyFetch): bool
+    /**
+     * @param PropertyFetch|StaticPropertyFetch $propertyFetch
+     */
+    public function isPropertyToSelf(Node\Expr $propertyFetch): bool
     {
-        if (! $this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+        if ($propertyFetch instanceof PropertyFetch && ! $this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+            return false;
+        }
+
+        if ($propertyFetch instanceof StaticPropertyFetch && ! $this->nodeNameResolver->isName(
+            $propertyFetch->class,
+            'self'
+        )) {
             return false;
         }
 

@@ -48,7 +48,10 @@ final class MagicPropertyFetchAnalyzer
         $this->reflectionProvider = $reflectionProvider;
     }
 
-    public function isMagicOnType(PropertyFetch $propertyFetch, Type $type): bool
+    /**
+     * @param PropertyFetch|Node\Expr\StaticPropertyFetch $propertyFetch
+     */
+    public function isMagicOnType(Node\Expr $propertyFetch, Type $type): bool
     {
         $varNodeType = $this->nodeTypeResolver->resolve($propertyFetch);
 
@@ -64,7 +67,7 @@ final class MagicPropertyFetchAnalyzer
             return false;
         }
 
-        $nodeName = $this->nodeNameResolver->getName($propertyFetch);
+        $nodeName = $this->nodeNameResolver->getName($propertyFetch->name);
         if ($nodeName === null) {
             return false;
         }
@@ -72,14 +75,22 @@ final class MagicPropertyFetchAnalyzer
         return ! $this->hasPublicProperty($propertyFetch, $nodeName);
     }
 
-    private function hasPublicProperty(PropertyFetch $propertyFetch, string $propertyName): bool
+    /**
+     * @param PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
+     */
+    private function hasPublicProperty(Node\Expr $propertyFetch, string $propertyName): bool
     {
         $scope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             throw new ShouldNotHappenException();
         }
 
-        $propertyFetchType = $scope->getType($propertyFetch->var);
+        if ($propertyFetch instanceof PropertyFetch) {
+            $propertyFetchType = $scope->getType($propertyFetch->var);
+        } else {
+            $propertyFetchType = $this->nodeTypeResolver->resolve($propertyFetch->class);
+        }
+
         if (! $propertyFetchType instanceof TypeWithClassName) {
             return false;
         }
@@ -95,7 +106,6 @@ final class MagicPropertyFetchAnalyzer
         }
 
         $propertyReflection = $classReflection->getProperty($propertyName, $scope);
-
         return $propertyReflection->isPublic();
     }
 }

@@ -23,6 +23,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -147,6 +148,11 @@ CODE_SAMPLE
         /** @var Expression $expression */
         $expression = $stmts[0];
 
-        return $expression->expr;
+        $expr = $expression->expr;
+        if (! $expr instanceof Closure) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $expr;
     }
 }
