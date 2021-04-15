@@ -137,9 +137,10 @@ CODE_SAMPLE
             $classConstConstsByValue[$position] = $constantValue;
         }
 
+        $arrayCountValue = array_count_values($classConstConstsByValue);
+
         // work only with unique constants
         foreach ($classConstConstsByValue as $position => $constantValue) {
-            $arrayCountValue = array_count_values($classConstConstsByValue);
             if ($arrayCountValue[$constantValue] > 1) {
                 unset($classConstConstsByValue[$position]);
             }
