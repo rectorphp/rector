@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Core\Configuration\Option;
 use Rector\Core\Tests\Application\ApplicationFileProcessor\Source\TextFileProcessor;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
