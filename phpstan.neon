@@ -286,6 +286,7 @@ parameters:
             message: '#Function "class_exists\(\)" cannot be used/left in the code#'
             paths:
                 - bin/rector.php
+                - src/Bootstrap/ExtensionConfigResolver.php
 
         -
             message: '#Do not use static property#'
@@ -528,3 +529,13 @@ parameters:
             path: rules/TypeDeclaration/Rector/ClassMethod/ParamTypeFromStrictTypedPropertyRector.php
 
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentTypes\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'
+
+        -
+             message: '#Parameter \#1\ $argument of class ReflectionClass constructor expects class-string<Rector\\RectorInstaller\\GeneratedConfig>|Rector\\RectorInstaller\\GeneratedConfig, string given.#'
+             paths:
+                 - src/Bootstrap/ExtensionConfigResolver.php
+
+        -
+             message: '#Cognitive complexity for "Rector\\Core\\Bootstrap\\ExtensionConfigResolver\:\:appendExtensionsConfig\(\)" is 13, keep it under 9#'
+             paths:
+                 - src/Bootstrap/ExtensionConfigResolver.php
