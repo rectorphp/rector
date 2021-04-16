@@ -6,8 +6,7 @@ class SkipVariableVariable
 {
     public function run($abcdef = 'foo')
     {
-        $value = 5;
-        $$abcdef = $value;
+        $$abcdef = 'test';
 
         return $foo;
     }
