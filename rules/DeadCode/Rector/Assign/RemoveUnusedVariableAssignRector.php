@@ -145,7 +145,13 @@ CODE_SAMPLE
         }
 
         $variable = $assign->var;
-        return ! $variable instanceof Variable;
+        if (! $variable instanceof Variable) {
+            return true;
+        }
+
+        return $variable->name instanceof Variable && (bool) $this->betterNodeFinder->findFirstNext($assign, function (Node $node): bool {
+            return $node instanceof Variable;
+        });
     }
 
     private function isUsed(Assign $assign, Variable $variable): bool
