@@ -100,11 +100,10 @@ CODE_SAMPLE
         }
 
         $variable = $node->var;
-        if (! $variable instanceof Variable || (is_string(
-            $variable->name
-        ) && $this->reservedKeywordAnalyzer->isNativeVariable(
-            $variable->name
-        ))) {
+        if (! $variable instanceof Variable) {
+            return null;
+        }
+        if (is_string($variable->name) && $this->reservedKeywordAnalyzer->isNativeVariable($variable->name)) {
             return null;
         }
 
