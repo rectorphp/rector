@@ -128,6 +128,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->var instanceof Variable && $node->var->name instanceof Variable) {
+            return null;
+        }
+
         if ($node->expr instanceof MethodCall || $node->expr instanceof StaticCall) {
             // keep the expr, can have side effect
             return $node->expr;
