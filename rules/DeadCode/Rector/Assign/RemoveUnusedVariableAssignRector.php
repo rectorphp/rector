@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
@@ -93,17 +94,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
-        if (! $classMethod instanceof FunctionLike) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
+        /** @var Variable $variable */
         $variable = $node->var;
-        if (! $variable instanceof Variable || (is_string(
-            $variable->name
-        ) && $this->reservedKeywordAnalyzer->isNativeVariable(
-            $variable->name
-        ))) {
+        if (is_string($variable->name) && $this->reservedKeywordAnalyzer->isNativeVariable($variable->name)) {
             return null;
         }
 
@@ -140,6 +137,17 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function shouldSkip(Assign $assign): bool
+    {
+        $classMethod = $assign->getAttribute(AttributeKey::METHOD_NODE);
+        if (! $classMethod instanceof FunctionLike) {
+            return true;
+        }
+
+        $variable = $assign->var;
+        return ! $variable instanceof Variable;
+    }
+
     private function isUsed(Assign $assign, Variable $variable): bool
     {
         $isUsedPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use (
@@ -152,21 +160,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $isUsedNext = (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
-            $variable
-        ): bool {
-            if ($this->isVariableNamed($node, $variable)) {
-                return true;
-            }
-
-            if ($node instanceof FuncCall) {
-                return $this->compactFuncCallAnalyzer->isInCompact($node, $variable);
-            }
-
-            return false;
-        });
-
-        if ($isUsedNext) {
+        if ($this->isUsedNext($variable)) {
             return true;
         }
 
@@ -177,6 +171,23 @@ CODE_SAMPLE
         }
 
         return $this->isUsedInAssignExpr($expr, $assign);
+    }
+
+    private function isUsedNext(Variable $variable): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
+            $variable
+        ): bool {
+            if ($this->isVariableNamed($node, $variable)) {
+                return true;
+            }
+
+            if ($node instanceof FuncCall) {
+                return $this->compactFuncCallAnalyzer->isInCompact($node, $variable);
+            }
+
+            return $node instanceof Include_;
+        });
     }
 
     /**
