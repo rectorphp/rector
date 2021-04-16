@@ -164,11 +164,7 @@ CODE_SAMPLE
                 return $this->compactFuncCallAnalyzer->isInCompact($node, $variable);
             }
 
-            if ($node instanceof Include_) {
-                return true;
-            }
-
-            return false;
+            return $node instanceof Include_;
         });
 
         if ($isUsedNext) {
