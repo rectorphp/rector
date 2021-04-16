@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
@@ -161,6 +162,10 @@ CODE_SAMPLE
 
             if ($node instanceof FuncCall) {
                 return $this->compactFuncCallAnalyzer->isInCompact($node, $variable);
+            }
+
+            if ($node instanceof Include_) {
+                return true;
             }
 
             return false;
