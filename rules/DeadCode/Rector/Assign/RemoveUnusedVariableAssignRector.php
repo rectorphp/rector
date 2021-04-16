@@ -94,15 +94,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
-        if (! $classMethod instanceof FunctionLike) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
+        /** @var Variable $variable */
         $variable = $node->var;
-        if (! $variable instanceof Variable) {
-            return null;
-        }
         if (is_string($variable->name) && $this->reservedKeywordAnalyzer->isNativeVariable($variable->name)) {
             return null;
         }
@@ -140,6 +137,17 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function shouldSkip(Assign $assign): bool
+    {
+        $classMethod = $assign->getAttribute(AttributeKey::METHOD_NODE);
+        if (! $classMethod instanceof FunctionLike) {
+            return true;
+        }
+
+        $variable = $assign->var;
+        return ! $variable instanceof Variable;
+    }
+
     private function isUsed(Assign $assign, Variable $variable): bool
     {
         $isUsedPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use (
@@ -152,7 +160,22 @@ CODE_SAMPLE
             return true;
         }
 
-        $isUsedNext = (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
+        if ($this->isUsedNext($variable)) {
+            return true;
+        }
+
+        /** @var FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $expr */
+        $expr = $assign->expr;
+        if (! $this->isCall($expr)) {
+            return false;
+        }
+
+        return $this->isUsedInAssignExpr($expr, $assign);
+    }
+
+    private function isUsedNext(Variable $variable): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
             $variable
         ): bool {
             if ($this->isVariableNamed($node, $variable)) {
@@ -165,18 +188,6 @@ CODE_SAMPLE
 
             return $node instanceof Include_;
         });
-
-        if ($isUsedNext) {
-            return true;
-        }
-
-        /** @var FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $expr */
-        $expr = $assign->expr;
-        if (! $this->isCall($expr)) {
-            return false;
-        }
-
-        return $this->isUsedInAssignExpr($expr, $assign);
     }
 
     /**
