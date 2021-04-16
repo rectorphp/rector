@@ -7,6 +7,7 @@ namespace Rector\CodeQuality\Rector\Assign;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -22,8 +23,14 @@ final class CombinedAssignRector extends AbstractRector
      */
     private $assignAndBinaryMap;
 
-    public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    public function __construct(AssignAndBinaryMap $assignAndBinaryMap, ReflectionProvider $reflectionProvider)
     {
+        $this->reflectionProvider = $reflectionProvider;
         $this->assignAndBinaryMap = $assignAndBinaryMap;
     }
 
@@ -48,6 +55,14 @@ final class CombinedAssignRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        try {
+            $class = $this->reflectionProvider->getClass("ClassWhichNeedsShouldTriggerAutoloading");
+        } catch (\Throwable $e) {
+            var_dump($e->getMessage());
+        }
+
+        var_dump($class);exit();
+
         if (! $node->expr instanceof BinaryOp) {
             return null;
         }
