@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -46,16 +47,23 @@ final class BetterNodeFinder
      */
     private $nodeComparator;
 
+    /**
+     * @var ClassAnalyzer
+     */
+    private $classAnalyzer;
+
     public function __construct(
         NodeFinder $nodeFinder,
         NodeNameResolver $nodeNameResolver,
         TypeChecker $typeChecker,
-        NodeComparator $nodeComparator
+        NodeComparator $nodeComparator,
+        ClassAnalyzer $classAnalyzer
     ) {
         $this->nodeFinder = $nodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->typeChecker = $typeChecker;
         $this->nodeComparator = $nodeComparator;
+        $this->classAnalyzer = $classAnalyzer;
     }
 
     /**
@@ -226,7 +234,7 @@ final class BetterNodeFinder
                 return false;
             }
             // skip anonymous classes
-            return ! ($node instanceof Class_ && $node->isAnonymous());
+            return ! ($node instanceof Class_ && $this->classAnalyzer->isAnonymousClass($node));
         });
     }
 
@@ -242,7 +250,7 @@ final class BetterNodeFinder
             }
 
             // skip anonymous classes
-            return ! ($node instanceof Class_ && $node->isAnonymous());
+            return ! ($node instanceof Class_ && $this->classAnalyzer->isAnonymousClass($node));
         });
     }
 
