@@ -63,11 +63,12 @@ final class ExtensionConfigResolver
             $extensionConfig['relative_install_path'],
             $includedFile
         );
-
-        if (file_exists($includedFilePath) && is_readable($includedFilePath)) {
-            return $includedFilePath;
+        if (! file_exists($includedFilePath)) {
+            return null;
         }
-
-        return null;
+        if (! is_readable($includedFilePath)) {
+            return null;
+        }
+        return $includedFilePath;
     }
 }
