@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -81,12 +82,19 @@ final class ParsedNodeCollector
      */
     private $parentClassScopeResolver;
 
+    /**
+     * @var ClassAnalyzer
+     */
+    private $classAnalyzer;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        ParentClassScopeResolver $parentClassScopeResolver
+        ParentClassScopeResolver $parentClassScopeResolver,
+        ClassAnalyzer $classAnalyzer
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->parentClassScopeResolver = $parentClassScopeResolver;
+        $this->classAnalyzer = $classAnalyzer;
     }
 
     /**
@@ -207,7 +215,7 @@ final class ParsedNodeCollector
 
     private function addClass(Class_ $class): void
     {
-        if ($this->isClassAnonymous($class)) {
+        if ($this->classAnalyzer->isAnonymousClass($class)) {
             return;
         }
 
@@ -260,20 +268,5 @@ final class ParsedNodeCollector
         }
 
         return $className;
-    }
-
-    private function isClassAnonymous(Class_ $class): bool
-    {
-        if ($class->isAnonymous()) {
-            return true;
-        }
-
-        $className = $this->nodeNameResolver->getName($class);
-        if ($className === null) {
-            return true;
-        }
-
-        // PHPStan polution
-        return Strings::startsWith($className, 'AnonymousClass');
     }
 }
