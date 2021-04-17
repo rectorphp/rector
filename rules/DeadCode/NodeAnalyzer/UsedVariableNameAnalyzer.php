@@ -24,10 +24,10 @@ final class UsedVariableNameAnalyzer
 
     public function isVariableNamed(Node $node, Variable $variable): bool
     {
-        if ($node instanceof MethodCall || $node instanceof PropertyFetch) {
-            if ($node->name instanceof Variable && is_string($node->name->name)) {
-                return $this->nodeNameResolver->isName($variable, $node->name->name);
-            }
+        if (($node instanceof MethodCall || $node instanceof PropertyFetch) && ($node->name instanceof Variable && is_string(
+            $node->name->name
+        ))) {
+            return $this->nodeNameResolver->isName($variable, $node->name->name);
         }
 
         if (! $node instanceof Variable) {
