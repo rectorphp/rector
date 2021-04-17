@@ -155,7 +155,7 @@ CODE_SAMPLE
         }
 
         if ($classLike->isAnonymous()) {
-            return null;
+            return true;
         }
 
         if ($this->nodeTypeResolver->isObjectTypes($classLike, $this->excludedObjectTypes)) {

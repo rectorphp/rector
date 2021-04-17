@@ -59,7 +59,7 @@ final class NewTypeResolver implements NodeTypeResolverInterface
             }
         }
 
-        $isAnonymousClass = $node->class->isAnonymous();
+        $isAnonymousClass = $node->class instanceof Class_ && $node->class->isAnonymous();
         if ($isAnonymousClass) {
             return $this->resolveAnonymousClassType($node);
         }
