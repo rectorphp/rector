@@ -86,7 +86,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->isAnonymous()) {
+        if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
         }
 
