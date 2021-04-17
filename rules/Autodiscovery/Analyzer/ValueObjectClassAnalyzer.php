@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -40,21 +41,28 @@ final class ValueObjectClassAnalyzer
      */
     private $nodeRepository;
 
+    /**
+     * @var ClassAnalyzer
+     */
+    private $classAnalyzer;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         PhpDocInfoFactory $phpDocInfoFactory,
-        NodeRepository $nodeRepository
+        NodeRepository $nodeRepository,
+        ClassAnalyzer $classAnalyzer
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeRepository = $nodeRepository;
+        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function isValueObjectClass(Class_ $class): bool
     {
-        if ($class->isAnonymous()) {
+        if ($this->classAnalyzer->isAnonymousClass($class)) {
             return false;
         }
 
