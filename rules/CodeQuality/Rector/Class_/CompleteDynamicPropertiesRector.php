@@ -36,8 +36,8 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
     private $localPropertyAnalyzer;
 
     /**
-      * @var ClassLikeAnalyzer
-      */
+     * @var ClassLikeAnalyzer
+     */
     private $classLikeAnalyzer;
 
     /**
