@@ -39,7 +39,6 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
@@ -67,11 +66,6 @@ final class NodeTypeResolver
     private $arrayTypeAnalyzer;
 
     /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
-    /**
      * @var GenericClassStringTypeCorrector
      */
     private $genericClassStringTypeCorrector;
@@ -96,7 +90,6 @@ final class NodeTypeResolver
      */
     public function __construct(
         ObjectTypeSpecifier $objectTypeSpecifier,
-        ClassAnalyzer $classAnalyzer,
         GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
         ReflectionProvider $reflectionProvider,
         HasOffsetTypeCorrector $hasOffsetTypeCorrector,
@@ -108,7 +101,6 @@ final class NodeTypeResolver
         }
 
         $this->objectTypeSpecifier = $objectTypeSpecifier;
-        $this->classAnalyzer = $classAnalyzer;
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
         $this->reflectionProvider = $reflectionProvider;
         $this->hasOffsetTypeCorrector = $hasOffsetTypeCorrector;
@@ -192,7 +184,7 @@ final class NodeTypeResolver
         }
 
         // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
-        if ($node instanceof New_ && $this->classAnalyzer->isAnonymousClass($node->class)) {
+        if ($node instanceof New_ && $node->class->isAnonymous()) {
             return new ObjectWithoutClassType();
         }
 

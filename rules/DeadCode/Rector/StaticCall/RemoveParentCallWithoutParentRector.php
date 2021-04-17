@@ -104,7 +104,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->classAnalyzer->isAnonymousClass($classLike)) {
+        if ($classLike instanceof Class_ && $classLike->isAnonymous()) {
             // currently the classMethodManipulator isn't able to find usages of anonymous classes
             return null;
         }

@@ -154,8 +154,8 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->classAnalyzer->isAnonymousClass($classLike)) {
-            return true;
+        if ($classLike->isAnonymous()) {
+            return null;
         }
 
         if ($this->nodeTypeResolver->isObjectTypes($classLike, $this->excludedObjectTypes)) {

@@ -13,7 +13,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
-use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -28,22 +27,15 @@ final class NewTypeResolver implements NodeTypeResolverInterface
     private $nodeNameResolver;
 
     /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
-    /**
      * @var UnionTypeFactory
      */
     private $unionTypeFactory;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        ClassAnalyzer $classAnalyzer,
         UnionTypeFactory $unionTypeFactory
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->classAnalyzer = $classAnalyzer;
         $this->unionTypeFactory = $unionTypeFactory;
     }
 
@@ -67,7 +59,7 @@ final class NewTypeResolver implements NodeTypeResolverInterface
             }
         }
 
-        $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node->class);
+        $isAnonymousClass = $node->class->isAnonymous();
         if ($isAnonymousClass) {
             return $this->resolveAnonymousClassType($node);
         }

@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
-use Rector\CodeQuality\NodeAnalyzer\ClassLikeAnalyzer;
 use Rector\CodeQuality\NodeAnalyzer\LocalPropertyAnalyzer;
 use Rector\CodeQuality\NodeFactory\MissingPropertiesFactory;
 use Rector\Core\Rector\AbstractRector;
@@ -36,11 +35,6 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
     private $localPropertyAnalyzer;
 
     /**
-     * @var ClassLikeAnalyzer
-     */
-    private $classLikeAnalyzer;
-
-    /**
      * @var ReflectionProvider
      */
     private $reflectionProvider;
@@ -48,12 +42,10 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
     public function __construct(
         MissingPropertiesFactory $missingPropertiesFactory,
         LocalPropertyAnalyzer $localPropertyAnalyzer,
-        ClassLikeAnalyzer $classLikeAnalyzer,
         ReflectionProvider $reflectionProvider
     ) {
         $this->missingPropertiesFactory = $missingPropertiesFactory;
         $this->localPropertyAnalyzer = $localPropertyAnalyzer;
-        $this->classLikeAnalyzer = $classLikeAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
     }
 
@@ -141,7 +133,7 @@ CODE_SAMPLE
 
     private function shouldSkipClass(Class_ $class): bool
     {
-        if ($this->classAnalyzer->isAnonymousClass($class)) {
+        if ($class->isAnonymous()) {
             return true;
         }
 

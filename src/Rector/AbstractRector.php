@@ -27,7 +27,6 @@ use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
-use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -136,11 +135,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected $betterNodeFinder;
 
     /**
-     * @var ClassAnalyzer
-     */
-    protected $classAnalyzer;
-
-    /**
      * @var NodeRemover
      */
     protected $nodeRemover;
@@ -238,7 +232,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         StaticTypeMapper $staticTypeMapper,
         ParameterProvider $parameterProvider,
         CurrentRectorProvider $currentRectorProvider,
-        ClassAnalyzer $classAnalyzer,
         CurrentNodeProvider $currentNodeProvider,
         Skipper $skipper,
         ValueResolver $valueResolver,
@@ -266,7 +259,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
         $this->currentRectorProvider = $currentRectorProvider;
-        $this->classAnalyzer = $classAnalyzer;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->skipper = $skipper;
         $this->valueResolver = $valueResolver;

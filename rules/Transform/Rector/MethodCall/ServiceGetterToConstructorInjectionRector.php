@@ -143,7 +143,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->classAnalyzer->isAnonymousClass($classLike)) {
+        if ($classLike instanceof Class_ && $classLike->isAnonymous()) {
             return null;
         }
 

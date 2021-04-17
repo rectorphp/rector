@@ -88,7 +88,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->classAnalyzer->isAnonymousClass($node)) {
+        if ($node->isAnonymous()) {
             return null;
         }
 
