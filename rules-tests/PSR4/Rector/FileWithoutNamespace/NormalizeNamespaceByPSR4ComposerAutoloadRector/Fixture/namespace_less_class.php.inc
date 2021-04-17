@@ -6,6 +6,8 @@ class NamespaceLessClass
 {
     public function someMethod()
     {
+        $parentClass = parent::someMethod();
+
         $someClass = new Rector\Tests\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\Source\SomeClass();
     }
 }
@@ -22,6 +24,8 @@ class NamespaceLessClass
 {
     public function someMethod()
     {
+        $parentClass = parent::someMethod();
+
         $someClass = new \Rector\Tests\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\Source\SomeClass();
     }
 }

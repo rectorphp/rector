@@ -100,7 +100,9 @@ CODE_SAMPLE
 
         /** @var Variable $variable */
         $variable = $node->var;
-        if (is_string($variable->name) && $this->reservedKeywordAnalyzer->isNativeVariable($variable->name)) {
+        if (! $variable instanceof Variable || (is_string(
+            $variable->name
+        ) && $this->reservedKeywordAnalyzer->isNativeVariable($variable->name))) {
             return null;
         }
 
@@ -149,9 +151,12 @@ CODE_SAMPLE
             return true;
         }
 
-        return $variable->name instanceof Variable && (bool) $this->betterNodeFinder->findFirstNext($assign, function (Node $node): bool {
-            return $node instanceof Variable;
-        });
+        return $variable->name instanceof Variable && (bool) $this->betterNodeFinder->findFirstNext(
+            $assign,
+            function (Node $node): bool {
+                return $node instanceof Variable;
+            }
+        );
     }
 
     private function isUsed(Assign $assign, Variable $variable): bool

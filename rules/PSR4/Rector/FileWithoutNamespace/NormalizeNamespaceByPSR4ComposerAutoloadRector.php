@@ -146,6 +146,10 @@ CODE_SAMPLE
                 return null;
             }
 
+            if ($this->nodeNameResolver->isNames($node, ['self', 'parent'])) {
+                return null;
+            }
+
             return new FullyQualified($this->getName($node));
         });
     }
