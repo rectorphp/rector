@@ -184,7 +184,7 @@ final class NodeTypeResolver
         }
 
         // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
-        if ($node instanceof New_ && $node->class instanceof Class_ && $node->isAnonymous()) {
+        if ($node instanceof New_ && $node->class instanceof Class_ && $node->class->isAnonymous()) {
             return new ObjectWithoutClassType();
         }
 
