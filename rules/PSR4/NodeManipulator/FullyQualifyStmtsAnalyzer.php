@@ -72,18 +72,27 @@ final class FullyQualifyStmtsAnalyzer
                 return null;
             }
 
-            $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parent instanceof ConstFetch) {
-                $scope = $node->getAttribute(AttributeKey::SCOPE);
-                if ($this->reflectionProvider->hasConstant($node, $scope)) {
-                    $constantReflection = $this->reflectionProvider->getConstant($node, $scope);
-                    if ($constantReflection instanceof RuntimeConstantReflection) {
-                        return null;
-                    }
-                }
+            if ($this->isNativeConstant($node)) {
+                return null;
             }
 
             return new FullyQualified($fullyQualifiedName);
         });
+    }
+
+    private function isNativeConstant(Name $name): bool
+    {
+        $parent = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof ConstFetch) {
+            return false;
+        }
+
+        $scope = $name->getAttribute(AttributeKey::SCOPE);
+        if (! $this->reflectionProvider->hasConstant($name, $scope)) {
+            return false;
+        }
+
+        $constantReflection = $this->reflectionProvider->getConstant($name, $scope);
+        return $constantReflection instanceof RuntimeConstantReflection;
     }
 }

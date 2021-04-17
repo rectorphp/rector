@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
@@ -22,6 +21,7 @@ use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Comparing\ConditionSearcher;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -46,13 +46,20 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
      */
     private $conditionSearcher;
 
+    /**
+     * @var UsedVariableNameAnalyzer
+     */
+    private $usedVariableNameAnalyzer;
+
     public function __construct(
         ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
-        CompactFuncCallAnalyzer $compactFuncCallAnalyzer
+        CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
+        UsedVariableNameAnalyzer $usedVariableNameAnalyzer
     ) {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
         $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
         $this->conditionSearcher = new ConditionSearcher();
+        $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -98,31 +105,19 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Variable $variable */
         $variable = $node->var;
-        if (! $variable instanceof Variable || (is_string(
-            $variable->name
-        ) && $this->reservedKeywordAnalyzer->isNativeVariable($variable->name))) {
+        if (! $variable instanceof Variable) {
+            return null;
+        }
+
+        $variableName = $this->getName($variable);
+        if ($variableName !== null && $this->reservedKeywordAnalyzer->isNativeVariable($variableName)) {
             return null;
         }
 
         // variable is used
         if ($this->isUsed($node, $variable)) {
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            $ifNode = $parentNode->getAttribute(AttributeKey::NEXT_NODE);
-
-            // check if next node is if
-            if (! $ifNode instanceof If_) {
-                return null;
-            }
-
-            $nodeFound = $this->conditionSearcher->searchIfAndElseForVariableRedeclaration($node, $ifNode);
-            if ($nodeFound) {
-                $this->removeNode($node);
-                return $node;
-            }
-
-            return null;
+            return $this->refactorUsedVariable($node);
         }
 
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
@@ -151,7 +146,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return $variable->name instanceof Variable && (bool) $this->betterNodeFinder->findFirstNext(
+        return $variable->name instanceof Variable && $this->betterNodeFinder->findFirstNext(
             $assign,
             function (Node $node): bool {
                 return $node instanceof Variable;
@@ -164,7 +159,7 @@ CODE_SAMPLE
         $isUsedPrev = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $node) use (
             $variable
         ): bool {
-            return $this->isVariableNamed($node, $variable);
+            return $this->usedVariableNameAnalyzer->isVariableNamed($node, $variable);
         });
 
         if ($isUsedPrev) {
@@ -189,7 +184,7 @@ CODE_SAMPLE
         return (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
             $variable
         ): bool {
-            if ($this->isVariableNamed($node, $variable)) {
+            if ($this->usedVariableNameAnalyzer->isVariableNamed($node, $variable)) {
                 return true;
             }
 
@@ -206,8 +201,7 @@ CODE_SAMPLE
      */
     private function isUsedInAssignExpr(Expr $expr, Assign $assign): bool
     {
-        $args = $expr->args;
-        foreach ($args as $arg) {
+        foreach ($expr->args as $arg) {
             $variable = $arg->value;
             if (! $variable instanceof Variable) {
                 continue;
@@ -216,8 +210,12 @@ CODE_SAMPLE
             $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode($assign, function (Node $node) use (
                 $variable
             ): bool {
-                return $node instanceof Assign && $this->isVariableNamed($node->var, $variable);
+                return $node instanceof Assign && $this->usedVariableNameAnalyzer->isVariableNamed(
+                    $node->var,
+                    $variable
+                );
             });
+
             if ($previousAssign instanceof Assign) {
                 return $this->isUsed($assign, $variable);
             }
@@ -231,20 +229,22 @@ CODE_SAMPLE
         return $expr instanceof FuncCall || $expr instanceof MethodCall || $expr instanceof New_ || $expr instanceof NullsafeMethodCall || $expr instanceof StaticCall;
     }
 
-    private function isVariableNamed(Node $node, Variable $variable): bool
+    private function refactorUsedVariable(Assign $assign): ?Assign
     {
-        if ($node instanceof MethodCall && $node->name instanceof Variable && is_string($node->name->name)) {
-            return $this->isName($variable, $node->name->name);
+        $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
+
+        $if = $parentNode->getAttribute(AttributeKey::NEXT_NODE);
+
+        // check if next node is if
+        if (! $if instanceof If_) {
+            return null;
         }
 
-        if ($node instanceof PropertyFetch && $node->name instanceof Variable && is_string($node->name->name)) {
-            return $this->isName($variable, $node->name->name);
+        if ($this->conditionSearcher->searchIfAndElseForVariableRedeclaration($assign, $if)) {
+            $this->removeNode($assign);
+            return $assign;
         }
 
-        if (! $node instanceof Variable) {
-            return false;
-        }
-
-        return $this->isName($variable, (string) $this->getName($node));
+        return null;
     }
 }

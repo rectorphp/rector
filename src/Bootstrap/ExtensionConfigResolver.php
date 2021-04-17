@@ -52,8 +52,7 @@ final class ExtensionConfigResolver
         array $extensionConfig,
         string $generatedConfigDirectory,
         string $includedFile
-    ): ?string
-    {
+    ): ?string {
         if (! isset($extensionConfig['relative_install_path'])) {
             return null;
         }
