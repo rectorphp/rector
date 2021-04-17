@@ -2,13 +2,19 @@
 
 declare(strict_types=1);
 
-class NamespaceLessClass
+final class NoPrefixConsts
 {
     public function someMethod()
     {
         $parentClass = parent::someMethod();
 
-        $someClass = new Rector\Tests\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\Source\SomeClass();
+        $value = true;
+        $value = FALSE;
+        $value = __DIR__;
+
+        $native = PREG_GREP_INVERT;
+
+        $localConstant = LOCAL_CONSTANT;
     }
 }
 
@@ -20,13 +26,19 @@ declare(strict_types=1);
 
 namespace Rector\Tests\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\Fixture;
 
-class NamespaceLessClass
+final class NoPrefixConsts
 {
     public function someMethod()
     {
         $parentClass = parent::someMethod();
 
-        $someClass = new \Rector\Tests\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\Source\SomeClass();
+        $value = true;
+        $value = FALSE;
+        $value = __DIR__;
+
+        $native = PREG_GREP_INVERT;
+
+        $localConstant = \LOCAL_CONSTANT;
     }
 }
 
