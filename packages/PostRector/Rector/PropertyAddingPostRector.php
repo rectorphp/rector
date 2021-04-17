@@ -6,6 +6,7 @@ namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\PostRector\Collector\PropertyToAddCollector;
@@ -38,16 +39,23 @@ final class PropertyAddingPostRector extends AbstractPostRector
      */
     private $netteInjectDetector;
 
+    /**
+     * @var ClassAnalyzer
+     */
+    private $classAnalyzer;
+
     public function __construct(
         ClassDependencyManipulator $classDependencyManipulator,
         ClassInsertManipulator $classInsertManipulator,
         NetteInjectDetector $netteInjectDetector,
-        PropertyToAddCollector $propertyToAddCollector
+        PropertyToAddCollector $propertyToAddCollector,
+        ClassAnalyzer $classAnalyzer
     ) {
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->classInsertManipulator = $classInsertManipulator;
         $this->propertyToAddCollector = $propertyToAddCollector;
         $this->netteInjectDetector = $netteInjectDetector;
+        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function getPriority(): int
@@ -60,7 +68,7 @@ final class PropertyAddingPostRector extends AbstractPostRector
         if (! $node instanceof Class_) {
             return null;
         }
-        if ($node->isAnonymous()) {
+        if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
         }
         $this->addConstants($node);
