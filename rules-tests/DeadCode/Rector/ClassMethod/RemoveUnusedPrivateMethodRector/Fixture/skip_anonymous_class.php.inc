@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
 
@@ -25,17 +26,23 @@ class SkipAnonymousClass
             private $classManipulator;
 
             /**
+             * @var ClassAnalyzer
+             */
+            private $classAnalyzer;
+
+            /**
              * @param VariableInfo[][] $propertiesByClass
              */
-            public function __construct(ClassManipulator $classManipulator, array $propertiesByClass)
+            public function __construct(ClassManipulator $classManipulator, array $propertiesByClass, ClassAnalyzer $classAnalyzer)
             {
                 $this->classManipulator = $classManipulator;
                 $this->propertiesByClass = $propertiesByClass;
+                $this->classAnalyzer = $classAnalyzer;
             }
 
             public function enterNode(Node $node): ?Node
             {
-                if (! $node instanceof Class_ || $node->isAnonymous()) {
+                if (! $node instanceof Class_ || $this->classAnalyzer->isAnonymousClass($node)) {
                     return null;
                 }
 

@@ -40,6 +40,10 @@ final class ClassAnalyzer
             return false;
         }
 
+        if ($node->isAnonymous()) {
+            return true;
+        }
+
         $className = $this->nodeNameResolver->getName($node);
         if ($className === null) {
             return true;
