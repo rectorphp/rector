@@ -1,4 +1,4 @@
-# 487 Rules Overview
+# 489 Rules Overview
 
 <br>
 
@@ -18,13 +18,17 @@
 
 - [Composer](#composer) (5)
 
-- [DeadCode](#deadcode) (48)
+- [DeadCode](#deadcode) (46)
 
 - [Defluent](#defluent) (9)
 
 - [DependencyInjection](#dependencyinjection) (5)
 
-- [DowngradePhp70](#downgradephp70) (1)
+- [Downgrade72](#downgrade72) (1)
+
+- [Downgrade73](#downgrade73) (1)
+
+- [DowngradePhp70](#downgradephp70) (3)
 
 - [DowngradePhp71](#downgradephp71) (7)
 
@@ -327,7 +331,7 @@ Move entities to Entity namespace
 
 Move interface to "Contract" namespace
 
-- class: [`Rector\Autodiscovery\Rector\Interface_\MoveInterfacesToContractNamespaceDirectoryRector`](../rules/Autodiscovery/Rector/Class_/MoveInterfacesToContractNamespaceDirectoryRector.php)
+- class: [`Rector\Autodiscovery\Rector\Interface_\MoveInterfacesToContractNamespaceDirectoryRector`](../rules/Autodiscovery/Rector/Interface_/MoveInterfacesToContractNamespaceDirectoryRector.php)
 
 ```diff
 -// file: app/Exception/Rule.php
@@ -2244,8 +2248,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
                 TestCase::class => 'prefer_self',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -2656,8 +2659,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             YieldClassMethodToArrayClassMethodRector::METHODS_BY_TYPE => [
                 'EventSubscriberInterface' => ['getSubscribedEvents'],
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -3216,37 +3218,6 @@ Remove operation with 1 and 0, that have no effect on the value
 
 <br>
 
-### RemoveDefaultArgumentValueRector
-
-Remove argument value, if it is the same as default value
-
-- class: [`Rector\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector`](../rules/DeadCode/Rector/MethodCall/RemoveDefaultArgumentValueRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $this->runWithDefault([]);
--        $card = self::runWithStaticDefault([]);
-+        $this->runWithDefault();
-+        $card = self::runWithStaticDefault();
-     }
-
-     public function runWithDefault($items = [])
-     {
-         return $items;
-     }
-
-     public function runStaticWithDefault($cards = [])
-     {
-         return $cards;
-     }
- }
-```
-
-<br>
-
 ### RemoveDelegatingParentCallRector
 
 Removed dead parent call, that does not change anything
@@ -3628,25 +3599,6 @@ Remove unused class constants
 -
      public function run()
      {
-     }
- }
-```
-
-<br>
-
-### RemoveUnusedPrivateClassConstantRector
-
-Remove unused private constant
-
-- class: [`Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector`](../rules/DeadCode/Rector/ClassConst/RemoveUnusedPrivateClassConstantRector.php)
-
-```diff
- final class SomeController
- {
--    private const SOME_CONSTANT = 5;
-     public function run()
-     {
-         return 5;
      }
  }
 ```
@@ -4118,8 +4070,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             AddMethodParentCallRector::METHODS_BY_PARENT_TYPES => [
                 'ParentClassWithNewConstructor' => '__construct',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -4249,7 +4200,97 @@ Turns variable in controller action to property fetch, as follow up to action in
 
 <br>
 
+## Downgrade72
+
+### DowngradeStreamIsattyRector
+
+Downgrade `stream_isatty()` function
+
+- class: [`Rector\Downgrade72\Rector\FuncCall\DowngradeStreamIsattyRector`](../rules/Downgrade72/Rector/FuncCall/DowngradeStreamIsattyRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($stream)
+     {
+-        $isStream = stream_isatty($stream);
++        if ('\\' === \DIRECTORY_SEPARATOR)
++            $stat = @fstat($stream);
++            // Check if formatted mode is S_IFCHR
++            $isStream = $stat ? 0020000 === ($stat['mode'] & 0170000) : false;
++        } else {
++            $isStream = @posix_isatty($stream)
++        }
+     }
+ }
+```
+
+<br>
+
+## Downgrade73
+
+### DowngradeArrayKeyFirstLastRector
+
+Downgrade `array_key_first()` and `array_key_last()` functions
+
+- class: [`Rector\Downgrade73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector`](../rules/Downgrade73/Rector/FuncCall/DowngradeArrayKeyFirstLastRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($items)
+     {
+-        $firstItemKey = array_key_first($items);
++        reset($items);
++        $firstItemKey = key($items);
+     }
+ }
+```
+
+<br>
+
 ## DowngradePhp70
+
+### DowngradeAnonymousClassRector
+
+Remove anonymous class
+
+- class: [`Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector`](../rules/DowngradePhp70/Rector/New_/DowngradeAnonymousClassRector.php)
+
+```diff
++class Anonymous
++{
++    public function execute()
++    {
++    }
++}
+ class SomeClass
+ {
+     public function run()
+     {
+-        return new class {
+-            public function execute()
+-            {
+-            }
+-        };
++        return new Anonymous();
+     }
+ }
+```
+
+<br>
+
+### DowngradeStrictTypeDeclarationRector
+
+Remove the declare(strict_types=1)
+
+- class: [`Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector`](../rules/DowngradePhp70/Rector/Declare_/DowngradeStrictTypeDeclarationRector.php)
+
+```diff
+-declare(strict_types=1);
+```
+
+<br>
 
 ### DowngradeTypeDeclarationRector
 
@@ -4930,8 +4971,8 @@ Change nullsafe operator to ternary operator rector
 ```diff
 -$dateAsString = $booking->getStartDate()?->asDateTimeString();
 -$dateAsString = $booking->startDate?->dateTimeString;
-+$dateAsString = ($_ = $booking->getStartDate()) ? $_->asDateTimeString() : null;
-+$dateAsString = ($_ = $booking->startDate) ? $_->dateTimeString : null;
++$dateAsString = ($bookingGetStartDate = $booking->getStartDate()) ? $bookingGetStartDate->asDateTimeString() : null;
++$dateAsString = ($bookingGetStartDate = $booking->startDate) ? $bookingGetStartDate->dateTimeString : null;
 ```
 
 <br>
@@ -5794,7 +5835,7 @@ Migrate Nette Tester test case to PHPUnit
 
 Rename "*.phpt" file to "*Test.php" file
 
-- class: [`Rector\NetteTesterToPHPUnit\Rector\FileNode\RenameTesterTestToPHPUnitToTestFileRector`](../rules/NetteTesterToPHPUnit/Rector/FileNode/RenameTesterTestToPHPUnitToTestFileRector.php)
+- class: [`Rector\NetteTesterToPHPUnit\Rector\Class_\RenameTesterTestToPHPUnitToTestFileRector`](../rules/NetteTesterToPHPUnit/Rector/Class_/RenameTesterTestToPHPUnitToTestFileRector.php)
 
 ```diff
 -// tests/SomeTestCase.phpt
@@ -5962,14 +6003,10 @@ Migrate Nette\Forms in Presenter to Symfony
      {
 -        $form = new UI\Form;
 -        $form->addText('name', 'Name:');
--        $form->addPassword('password', 'Password:');
 -        $form->addSubmit('login', 'Sign up');
 +        $form = $this->createFormBuilder();
 +        $form->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
 +            'label' => 'Name:'
-+        ]);
-+        $form->add('password', \Symfony\Component\Form\Extension\Core\Type\PasswordType::class, [
-+            'label' => 'Password:'
 +        ]);
 +        $form->add('login', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, [
 +            'label' => 'Sign up'
@@ -7283,8 +7320,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ReservedObjectRector::RESERVED_KEYWORDS_TO_REPLACEMENTS => [
                 'ReservedObject' => 'SmartObject', 'Object' => 'AnotherSmartObject',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -7529,7 +7565,7 @@ Adds JSON_THROW_ON_ERROR to `json_encode()` and `json_decode()` to throw JsonExc
 -json_encode($content);
 -json_decode($json);
 +json_encode($content, JSON_THROW_ON_ERROR);
-+json_decode($json, null, null, JSON_THROW_ON_ERROR);
++json_decode($json, null, 512, JSON_THROW_ON_ERROR);
 ```
 
 <br>
@@ -7875,8 +7911,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ReservedFnFunctionRector::RESERVED_NAMES_TO_NEW_ONES => [
                 'fn' => 'someFunctionName',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -8540,7 +8575,7 @@ Migrate PhpSpec behavior to PHPUnit test
 
 Rename "*Spec.php" file to "*Test.php" file
 
-- class: [`Rector\PhpSpecToPHPUnit\Rector\FileNode\RenameSpecFileToTestFileRector`](../rules/PhpSpecToPHPUnit/Rector/FileNode/RenameSpecFileToTestFileRector.php)
+- class: [`Rector\PhpSpecToPHPUnit\Rector\Class_\RenameSpecFileToTestFileRector`](../rules/PhpSpecToPHPUnit/Rector/Class_/RenameSpecFileToTestFileRector.php)
 
 ```diff
 -// tests/SomeSpec.php
@@ -9680,8 +9715,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'App\SomeOldClass' => 'App\SomeNewClass',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -9726,8 +9760,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameConstantRector::OLD_TO_NEW_CONSTANTS => [
                 'MYSQL_ASSOC' => 'MYSQLI_ASSOC', 'OLD_CONSTANT' => 'NEW_CONSTANT',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -9766,8 +9799,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
                 'view' => 'Laravel\Templating\render',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -9836,8 +9868,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameNamespaceRector::OLD_TO_NEW_NAMESPACES => [
                 'SomeOldNamespace' => 'SomeNewNamespace',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -9967,8 +9998,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameStringRector::STRING_CHANGES => [
                 'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -10051,8 +10081,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             CompleteMissingDependencyInNewRector::CLASS_TO_INSTANTIATE_BY_TYPE => [
                 'RandomDependency' => 'RandomDependency',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -10242,8 +10271,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             AddInterfaceByParentRector::INTERFACE_BY_PARENT => [
                 'SomeParent' => 'SomeInterface',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -10279,8 +10307,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             AddInterfaceByTraitRector::INTERFACE_BY_TRAIT => [
                 'SomeTrait' => 'SomeInterface',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -10528,8 +10555,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             FuncCallToConstFetchRector::FUNCTIONS_TO_CONSTANTS => [
                 'php_sapi_name' => 'PHP_SAPI',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -10619,8 +10645,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             FuncCallToNewRector::FUNCTIONS_TO_NEWS => [
                 'collection' => ['Collection'],
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -10705,18 +10730,19 @@ Turns defined `__get`/`__set` to specific method calls.
 
 ```php
 use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
+use Rector\Transform\ValueObject\GetAndSetToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(GetAndSetToMethodCallRector::class)
         ->call('configure', [[
-            GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
-                'SomeContainer' => [
-                    'set' => 'addService',
-
-                ], ], ]]);
+            GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => ValueObjectInliner::inline([
+                new GetAndSetToMethodCall('SomeContainer', 'addService', 'getService'),
+            ]),
+        ]]);
 };
 ```
 
@@ -10726,34 +10752,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  $container = new SomeContainer;
 -$container->someService = $someService;
 +$container->setService("someService", $someService);
-```
-
-<br>
-
-```php
-use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(GetAndSetToMethodCallRector::class)
-        ->call('configure', [[
-            GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
-                'SomeContainer' => [
-                    'get' => 'getService',
-
-
-                ], ], ]]);
-};
-```
-
-↓
-
-```diff
- $container = new SomeContainer;
--$someService = $container->someService;
-+$someService = $container->getService("someService");
 ```
 
 <br>
@@ -10778,8 +10776,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             MergeInterfacesRector::OLD_TO_NEW_INTERFACES => [
                 'SomeOldInterface' => 'SomeInterface',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -10850,8 +10847,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             MethodCallToPropertyFetchRector::METHOD_CALL_TO_PROPERTY_FETCHES => [
                 'someMethod' => 'someProperty',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -10890,8 +10886,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             MethodCallToReturnRector::METHOD_CALL_WRAPS => [
                 'SomeClass' => ['deny'],
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -11159,8 +11154,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ParentClassToTraitsRector::PARENT_CLASS_TO_TRAITS => [
                 'Nette\Object' => ['Nette\SmartObject'],
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -11632,8 +11626,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ToStringToMethodCallRector::METHOD_NAMES_BY_TYPE => [
                 'SomeObject' => 'getPath',
 
-            ]
-    ]]);
+            ], ]]);
 };
 ```
 
@@ -12366,7 +12359,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ChangePropertyVisibilityRector::PROPERTY_TO_VISIBILITY_BY_CLASS => [
                 'FrameworkClass' => [
                     'someProperty' => 2,
-
 
                 ], ], ]]);
 };
