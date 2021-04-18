@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
@@ -54,13 +53,14 @@ class SomeClass
 {
     public function run($stream)
     {
-        if ('\\' === \DIRECTORY_SEPARATOR)
-            $stat = @fstat($stream);
-            // Check if formatted mode is S_IFCHR
-            $isStream = $stat ? 0020000 === ($stat['mode'] & 0170000) : false;
-        } else {
-            $isStream = @posix_isatty($stream)
-        }
+        $streamIsatty = function ($stream) {
+            if ('\\' === \DIRECTORY_SEPARATOR) {
+                $stat = @fstat($stream);
+                return $stat ? 020000 === ($stat['mode'] & 0170000) : false;
+            }
+            return @posix_isatty($stream);
+        };
+        $isStream = $streamIsatty($stream);
     }
 }
 CODE_SAMPLE
