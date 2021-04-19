@@ -249,7 +249,7 @@ final class ValueResolver
         return $values;
     }
 
-    private function resolveDirConstant(Dir $dir): string
+    private function resolveDirConstant(): string
     {
         $file = $this->currentFileProvider->getFile();
         $smartFileInfo = $file->getSmartFileInfo();

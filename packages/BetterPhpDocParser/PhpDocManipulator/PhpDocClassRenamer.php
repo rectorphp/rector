@@ -125,8 +125,7 @@ final class PhpDocClassRenamer
     private function processDoctrineToMany(
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
         Node $node,
-        array $oldToNewClasses,
-        PhpDocInfo $phpDocInfo
+        array $oldToNewClasses
     ): void {
         if ($doctrineAnnotationTagValueNode->getAnnotationClass() === 'Doctrine\ORM\Mapping\Embedded') {
             $classKey = 'class';
