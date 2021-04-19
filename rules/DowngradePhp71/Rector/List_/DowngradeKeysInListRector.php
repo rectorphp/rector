@@ -134,11 +134,16 @@ CODE_SAMPLE
         return $assignExpression;
     }
 
-    private function getExpressionFromForeachValue(Foreach_ $foreach, ArrayItem $arrayItem): array
+    private function getExpressionFromForeachValue(Foreach_ $foreach, ArrayItem $arrayItem): Expression
     {
         $newValueVar       = $this->inflectorSingularResolver->resolve($this->getName($foreach->expr));
         $foreach->valueVar = new Variable($newValueVar);
 
-        return [];
+        return new Expression(
+            new Assign(
+                $arrayItem->value,
+                new ArrayDimFetch($foreach->valueVar, $arrayItem->key)
+            )
+        );
     }
 }
