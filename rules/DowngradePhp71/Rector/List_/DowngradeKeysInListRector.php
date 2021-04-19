@@ -69,7 +69,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Function_ $node
+     * @param List_ $node
      */
     public function refactor(Node $node): ?Node
     {
