@@ -11,7 +11,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DowngradePhp71\Rector\FunctionLike\DowngradeKeysInListRector\DowngradeKeysInListRectorTest
+ * @see \Rector\Tests\DowngradePhp71\Rector\Function_\DowngradeKeysInListRector\DowngradeKeysInListRectorTest
  */
 final class DowngradeKeysInListRector extends AbstractRector
 {
