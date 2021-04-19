@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Rector\List_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Expression;
@@ -15,8 +16,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
 
 /**
  * @see \Rector\Tests\DowngradePhp71\Rector\List_\DowngradeKeysInListRector\DowngradeKeysInListRectorTest
@@ -82,17 +81,22 @@ CODE_SAMPLE
         $assign = $node->getAttribute(AttributeKey::PARENT_NODE);
         $items = $node->items;
 
-        $countToBeChanged = 0;
+        $addedVariable = false;
         foreach ($items as $item) {
-            if ($item->key instanceof String_) {
+            if ($item instanceof ArrayItem && $item->key instanceof Expr) {
                 $this->processExtractToItsOwnVariable($node, $item, $assign);
-                ++$countToBeChanged;
+
+                // keyed and unkeyed cannot be mixed
+                // once there is non null key, it must be changeable
+                if (! $addedVariable) {
+                    $addedVariable = true;
+                }
             }
         }
 
         $parentExpression = $assign->getAttribute(AttributeKey::PARENT_NODE);
 
-        if ($countToBeChanged === count($items)) {
+        if ($addedVariable) {
             $this->removeNode($parentExpression);
         }
 
