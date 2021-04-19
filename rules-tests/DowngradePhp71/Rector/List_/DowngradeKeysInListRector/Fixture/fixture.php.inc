@@ -10,7 +10,6 @@ class Fixture
             ["id" => 1, "name" => 'Tom'],
             ["id" => 2, "name" => 'Fred'],
         ];
-
         list("id" => $id1, "name" => $name1) = $data[0];
     }
 }
@@ -29,9 +28,8 @@ class Fixture
             ["id" => 1, "name" => 'Tom'],
             ["id" => 2, "name" => 'Fred'],
         ];
-
-        $id1 = $data[0]['id'];
-        $name1 = $data[0]['name'];
+        $id1 = $data[0]["id"];
+        $name1 = $data[0]["name"];
     }
 }
 
