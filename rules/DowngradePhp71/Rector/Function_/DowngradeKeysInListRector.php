@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Rector\Function_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -78,6 +82,20 @@ CODE_SAMPLE
 
     private function shouldSkip(Function_ $function): bool
     {
-        return ! $this->isName($function, 'list');
+        if (! $this->isName($function, 'list')) {
+            return true;
+        }
+
+        $parent = $function->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Assign || $parent->var !== $function) {
+            throw new ShouldNotHappenException();
+        }
+
+        $expression = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $expression instanceof Expression) {
+            throw new ShouldNotHappenException();
+        }
+
+        return false;
     }
 }
