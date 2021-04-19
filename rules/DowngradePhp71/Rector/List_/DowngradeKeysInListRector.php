@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp71\Rector\Function_;
+namespace Rector\DowngradePhp71\Rector\List_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Expr\List_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DowngradePhp71\Rector\Function_\DowngradeKeysInListRector\DowngradeKeysInListRectorTest
+ * @see \Rector\Tests\DowngradePhp71\Rector\List_\DowngradeKeysInListRector\DowngradeKeysInListRectorTest
  */
 final class DowngradeKeysInListRector extends AbstractRector
 {
@@ -24,7 +24,7 @@ final class DowngradeKeysInListRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [Function_::class];
+        return [List_::class];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -73,19 +73,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
-            return null;
-        }
+        $this->verify($node);
 
         return $node;
     }
 
-    private function shouldSkip(Function_ $function): bool
+    private function verify(List_ $function): void
     {
-        if (! $this->isName($function, 'list')) {
-            return true;
-        }
-
         $parent = $function->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parent instanceof Assign || $parent->var !== $function) {
             throw new ShouldNotHappenException();
@@ -95,7 +89,5 @@ CODE_SAMPLE
         if (! $expression instanceof Expression) {
             throw new ShouldNotHappenException();
         }
-
-        return false;
     }
 }

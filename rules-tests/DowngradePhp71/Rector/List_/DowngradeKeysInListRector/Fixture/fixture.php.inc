@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\DowngradePhp71\Rector\Function_\DowngradeKeysInListRector\Fixture;
+namespace Rector\Tests\DowngradePhp71\Rector\List_\DowngradeKeysInListRector\Fixture;
 
 class Fixture
 {
@@ -19,7 +19,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Tests\DowngradePhp71\Rector\Function_\DowngradeKeysInListRector\Fixture;
+namespace Rector\Tests\DowngradePhp71\Rector\List_\DowngradeKeysInListRector\Fixture;
 
 class Fixture
 {
