@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use Rector\Php70\Exception\InvalidEregException;
 
 /**
- * @source https://gist.github.com/lifthrasiir/704754/7e486f43e62fd1c9d3669330c251f8ca4a59a3f8
+ * @changelog https://gist.github.com/lifthrasiir/704754/7e486f43e62fd1c9d3669330c251f8ca4a59a3f8
  *
  * @see \Rector\Tests\Php70\EregToPcreTransformerTest
  */
