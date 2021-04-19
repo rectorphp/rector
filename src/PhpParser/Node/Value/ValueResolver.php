@@ -199,7 +199,7 @@ final class ValueResolver
         $this->constExprEvaluator = new ConstExprEvaluator(function (Expr $expr) {
             if ($expr instanceof Dir) {
                 // __DIR__
-                return $this->resolveDirConstant($expr);
+                return $this->resolveDirConstant();
             }
 
             if ($expr instanceof File) {

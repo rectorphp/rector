@@ -80,7 +80,7 @@ final class PhpDocClassRenamer
             return;
         }
 
-        $this->processDoctrineToMany($doctrineAnnotationTagValueNode, $node, $oldToNewClasses, $phpDocInfo);
+        $this->processDoctrineToMany($doctrineAnnotationTagValueNode, $node, $oldToNewClasses);
     }
 
     /**
