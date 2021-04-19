@@ -170,7 +170,7 @@ CODE_SAMPLE
      */
     private function refactorParam(Param $param, FunctionLike $functionLike, int $position): void
     {
-        if ($this->shouldSkipParam($param, $functionLike, $position)) {
+        if ($this->shouldSkipParam($param, $functionLike)) {
             return;
         }
 

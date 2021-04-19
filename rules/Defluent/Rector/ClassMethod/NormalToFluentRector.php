@@ -88,7 +88,7 @@ CODE_SAMPLE
 
             /** @var Expression $stmt */
             $stmt = $node->stmts[$i];
-            if ($this->shouldSkipPreviousStmt($node, $i, $stmt)) {
+            if ($this->shouldSkipPreviousStmt($node, $i)) {
                 continue;
             }
 
