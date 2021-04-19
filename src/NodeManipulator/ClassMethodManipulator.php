@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
@@ -14,6 +15,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -37,14 +39,54 @@ final class ClassMethodManipulator
      */
     private $nodeNameResolver;
 
+    /**
+     * @var NodeComparator
+     */
+    private $nodeComparator;
+
+    /**
+     * @var FuncCallManipulator
+     */
+    private $funcCallManipulator;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        NodeComparator $nodeComparator,
+        FuncCallManipulator $funcCallManipulator
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeComparator = $nodeComparator;
+        $this->funcCallManipulator = $funcCallManipulator;
+    }
+
+    public function isParameterUsedInClassMethod(Param $param, ClassMethod $classMethod): bool
+    {
+        $isUsedDirectly = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
+            $param
+        ): bool {
+            return $this->nodeComparator->areNodesEqual($node, $param->var);
+        });
+
+        if ($isUsedDirectly) {
+            return true;
+        }
+
+        /** @var FuncCall[] $compactFuncCalls */
+        $compactFuncCalls = $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node): bool {
+            if (! $node instanceof FuncCall) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($node, 'compact');
+        });
+
+        $arguments = $this->funcCallManipulator->extractArgumentsFromCompactFuncCalls($compactFuncCalls);
+
+        return $this->nodeNameResolver->isNames($param, $arguments);
     }
 
     public function isNamedConstructor(ClassMethod $classMethod): bool

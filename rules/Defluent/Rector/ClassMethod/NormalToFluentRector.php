@@ -88,7 +88,7 @@ CODE_SAMPLE
 
             /** @var Expression $stmt */
             $stmt = $node->stmts[$i];
-            if ($this->shouldSkipPreviousStmt($node, $i, $stmt)) {
+            if ($this->shouldSkipPreviousStmt($node, $i)) {
                 continue;
             }
 
@@ -126,7 +126,7 @@ CODE_SAMPLE
         $this->callsToFluent = $callsToFluent;
     }
 
-    private function shouldSkipPreviousStmt(ClassMethod $classMethod, int $i, Expression $expression): bool
+    private function shouldSkipPreviousStmt(ClassMethod $classMethod, int $i): bool
     {
         // we look only for 2+ stmts
         if (! isset($classMethod->stmts[$i - 1])) {
