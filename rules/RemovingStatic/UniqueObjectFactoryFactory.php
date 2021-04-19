@@ -14,6 +14,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
@@ -105,6 +106,29 @@ final class UniqueObjectFactoryFactory
         return $factoryClassBuilder->getNode();
     }
 
+    /**
+     * @param Param[] $params
+     *
+     * @return Expression[]
+     */
+    public function createAssignsFromParams(array $params): array
+    {
+        $assigns = [];
+
+        /** @var Param $param */
+        foreach ($params as $param) {
+            $propertyFetch = new PropertyFetch(new Variable('this'), $param->var->name);
+            $assigns[] = new Assign($propertyFetch, new Variable($param->var->name));
+        }
+
+        $expressions = [];
+        foreach ($assigns as $assign) {
+            $expressions[] = new Expression($assign);
+        }
+
+        return $expressions;
+    }
+
     private function resolveClassShortName(string $name): string
     {
         if (Strings::contains($name, '\\')) {
@@ -189,23 +213,5 @@ final class UniqueObjectFactoryFactory
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $objectType);
 
         return $property;
-    }
-
-    /**
-     * @param Param[] $params
-     *
-     * @return Assign[]
-     */
-    private function createAssignsFromParams(array $params): array
-    {
-        $assigns = [];
-
-        /** @var Param $param */
-        foreach ($params as $param) {
-            $propertyFetch = new PropertyFetch(new Variable('this'), $param->var->name);
-            $assigns[] = new Assign($propertyFetch, new Variable($param->var->name));
-        }
-
-        return $assigns;
     }
 }

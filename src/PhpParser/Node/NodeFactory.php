@@ -56,6 +56,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
@@ -127,6 +128,11 @@ final class NodeFactory
      */
     private $currentNodeProvider;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         BuilderFactory $builderFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
@@ -134,7 +140,8 @@ final class NodeFactory
         StaticTypeMapper $staticTypeMapper,
         NodeNameResolver $nodeNameResolver,
         PhpDocTypeChanger $phpDocTypeChanger,
-        CurrentNodeProvider $currentNodeProvider
+        CurrentNodeProvider $currentNodeProvider,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->builderFactory = $builderFactory;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -143,6 +150,7 @@ final class NodeFactory
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->currentNodeProvider = $currentNodeProvider;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**
@@ -239,6 +247,22 @@ final class NodeFactory
         $methodBuilder->makePublic();
 
         return $methodBuilder->getNode();
+    }
+
+    /**
+     * @param Property[] $properties
+     * @return Param[]
+     */
+    public function createParamsFromProperties(array $properties): array
+    {
+        $params = [];
+        foreach ($properties as $property) {
+            $propertyName = $this->nodeNameResolver->getName($property);
+            $propertyType = $this->nodeTypeResolver->resolve($property);
+            $params[] = $this->createParamFromNameAndType($propertyName, $propertyType);
+        }
+
+        return $params;
     }
 
     public function createParamFromNameAndType(string $name, ?Type $type): Param
