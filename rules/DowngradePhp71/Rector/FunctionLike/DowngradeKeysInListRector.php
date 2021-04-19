@@ -69,6 +69,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->shouldSkip($node)) {
+            return null;
+        }
+
         return $node;
+    }
+
+    private function shouldSkip(Function_ $function): bool
+    {
+        return ! $this->isName($function, 'list');
     }
 }
