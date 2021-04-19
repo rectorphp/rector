@@ -10,18 +10,30 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Expr\List_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Foreach_;
+use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
 
 /**
  * @see \Rector\Tests\DowngradePhp71\Rector\List_\DowngradeKeysInListRector\DowngradeKeysInListRectorTest
  */
 final class DowngradeKeysInListRector extends AbstractRector
 {
+    /**
+     * @var InflectorSingularResolver
+     */
+    private $inflectorSingularResolver;
+
+    public function __construct(InflectorSingularResolver $inflectorSingularResolver)
+    {
+        $this->inflectorSingularResolver = $inflectorSingularResolver;
+    }
+
     /**
      * @return array<class-string<Node>>
      */
@@ -74,54 +86,59 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->verify($node);
-
-        $assign = $node->getAttribute(AttributeKey::PARENT_NODE);
-        $items = $node->items;
-
-        $addedVariable = false;
-        foreach ($items as $item) {
-            if ($item instanceof ArrayItem && $item->key instanceof Expr) {
-                $this->processExtractToItsOwnVariable($node, $item, $assign);
-
-                // keyed and unkeyed cannot be mixed
-                // once there is non null key, it must be changeable
-                if (! $addedVariable) {
-                    $addedVariable = true;
-                }
-            }
+        $parent           = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Node) {
+            return null;
         }
 
-        $parentExpression = $assign->getAttribute(AttributeKey::PARENT_NODE);
+        $parentExpression = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentExpression instanceof Node) {
+            return null;
+        }
 
-        if ($addedVariable) {
+        $assignExpression = $this->processExtractToItsOwnVariable($node, $parent, $parentExpression);
+
+        if ($assignExpression !== []) {
+            $this->addNodesBeforeNode($assignExpression, $node);
             $this->removeNode($parentExpression);
+
+            return $node;
         }
 
         return null;
     }
 
-    private function processExtractToItsOwnVariable(List_ $list, ArrayItem $arrayItem, Assign $assign): void
+    private function processExtractToItsOwnVariable(List_ $list, Node $parent, Node $parentExpression): array
     {
-        $assignExpression = new Expression(
-            new Assign(
-                $arrayItem->value,
-                new ArrayDimFetch($assign->expr, $arrayItem->key)
-            )
-        );
-        $this->addNodeBeforeNode($assignExpression, $list);
+        $items            = $list->items;
+        $assignExpression = [];
+
+        foreach ($items as $item) {
+            if ($item instanceof ArrayItem && $item->key instanceof Expr) {
+
+                if ($parentExpression instanceof Expression && $parent instanceof Assign && $parent->var === $list) {
+                    $assignExpression[] = new Expression(
+                        new Assign(
+                            $item->value,
+                            new ArrayDimFetch($parent->expr, $item->key)
+                        )
+                    );
+                }
+
+                if ($parent instanceof Foreach_ && $parent->valueVar === $list) {
+                    $assignExpression[] = $this->getExpressionFromForeachValue($parent, $item);
+                }
+            }
+        }
+
+        return $assignExpression;
     }
 
-    private function verify(List_ $list): void
+    private function getExpressionFromForeachValue(Foreach_ $foreach, ArrayItem $arrayItem): array
     {
-        $parent = $list->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Assign || $parent->var !== $list) {
-            throw new ShouldNotHappenException();
-        }
+        $newValueVar       = $this->inflectorSingularResolver->resolve($this->getName($foreach->expr));
+        $foreach->valueVar = new Variable($newValueVar);
 
-        $expression = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $expression instanceof Expression) {
-            throw new ShouldNotHappenException();
-        }
+        return [];
     }
 }
