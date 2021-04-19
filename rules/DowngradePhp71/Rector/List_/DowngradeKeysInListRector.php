@@ -30,7 +30,7 @@ final class DowngradeKeysInListRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Extract keys in list with its own variable assignment',
+            'Extract keys in list to its own variable assignment',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -75,7 +75,19 @@ CODE_SAMPLE
     {
         $this->verify($node);
 
-        return $node;
+        $items = $node->items;
+        foreach ($items as $item) {
+            if ($item->key !== null) {
+                return $this->processExtractToItsOwnVariable($node);
+            }
+        }
+
+        return null;
+    }
+
+    private function processExtractToItsOwnVariable(List_ $list): ?List_
+    {
+        return $list;
     }
 
     private function verify(List_ $function): void
