@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\DowngradePhp71\Rector\FunctionLike\DowngradeKeysInListRector;
+namespace Rector\Tests\DowngradePhp71\Rector\Function_\DowngradeKeysInListRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

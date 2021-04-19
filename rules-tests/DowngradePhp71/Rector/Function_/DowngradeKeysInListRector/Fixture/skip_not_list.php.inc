@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\DowngradePhp71\Rector\FunctionLike\DowngradeKeysInListRector\Fixture;
+namespace Rector\Tests\DowngradePhp71\Rector\Function_\DowngradeKeysInListRector\Fixture;
 
 class SkipNotList
 {

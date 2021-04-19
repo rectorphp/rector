@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp71\Rector\FunctionLike;
+namespace Rector\DowngradePhp71\Rector\Function_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Function_;
