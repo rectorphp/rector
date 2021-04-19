@@ -33,7 +33,7 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Conf
      *
      * For modifiers see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
      */
-    private const INNER_REGEX = '#(?<content>.*?)(?<close>[imsxeADSUXJu]*)$#';
+    private const INNER_REGEX = '#(?<content>.*?)(?<close>[imsxeADSUXJu]*)$#s';
 
     /**
      * All with pattern as 1st argument
