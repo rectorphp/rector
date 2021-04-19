@@ -205,7 +205,7 @@ CODE_SAMPLE
         $this->childParamPopulator->populateChildClassMethod($functionLike, $position, $inferedType);
     }
 
-    private function shouldSkipParam(Param $param, FunctionLike $functionLike, int $position): bool
+    private function shouldSkipParam(Param $param, FunctionLike $functionLike): bool
     {
         if ($param->variadic) {
             return true;
