@@ -7,17 +7,17 @@ namespace Rector\DowngradePhp71\Rector\List_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Expr\List_;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Foreach_;
-use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
 
 /**
  * @see \Rector\Tests\DowngradePhp71\Rector\List_\DowngradeKeysInListRector\DowngradeKeysInListRectorTest
@@ -86,7 +86,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $parent           = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parent instanceof Node) {
             return null;
         }
@@ -108,20 +108,19 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @return mixed[][]|Expression[]
+     */
     private function processExtractToItsOwnVariable(List_ $list, Node $parent, Node $parentExpression): array
     {
-        $items            = $list->items;
+        $items = $list->items;
         $assignExpression = [];
 
         foreach ($items as $item) {
             if ($item instanceof ArrayItem && $item->key instanceof Expr) {
-
                 if ($parentExpression instanceof Expression && $parent instanceof Assign && $parent->var === $list) {
                     $assignExpression[] = new Expression(
-                        new Assign(
-                            $item->value,
-                            new ArrayDimFetch($parent->expr, $item->key)
-                        )
+                        new Assign($item->value, new ArrayDimFetch($parent->expr, $item->key))
                     );
                 }
 
@@ -134,9 +133,12 @@ CODE_SAMPLE
         return $assignExpression;
     }
 
-    private function getExpressionFromForeachValue(Foreach_ $foreach, ArrayItem $arrayItem): array
+    /**
+     * @return mixed[]
+     */
+    private function getExpressionFromForeachValue(Foreach_ $foreach): array
     {
-        $newValueVar       = $this->inflectorSingularResolver->resolve($this->getName($foreach->expr));
+        $newValueVar = $this->inflectorSingularResolver->resolve($this->getName($foreach->expr));
         $foreach->valueVar = new Variable($newValueVar);
 
         return [];
