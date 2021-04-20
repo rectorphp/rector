@@ -110,7 +110,7 @@ CODE_SAMPLE
         }
 
         if ($parent instanceof Foreach_) {
-            $newValueVar      = $this->inflectorSingularResolver->resolve($this->getName($parent->expr));
+            $newValueVar      = $this->inflectorSingularResolver->resolve((string) $this->getName($parent->expr));
             $parent->valueVar = new Variable($newValueVar);
             $stmts            = $parent->stmts;
 
@@ -135,16 +135,23 @@ CODE_SAMPLE
         $assignExpressions = [];
 
         foreach ($items as $item) {
-            if ($item instanceof ArrayItem && $item->key instanceof String_) {
-                if ($parentExpression instanceof Expression && $parent instanceof Assign && $parent->var === $list) {
-                    $assignExpressions[] = new Expression(
-                        new Assign($item->value, new ArrayDimFetch($parent->expr, $item->key))
-                    );
-                }
+            /** keyed and not keyed cannot be mixed, return early */
+            if (! $item instanceof ArrayItem) {
+                return [];
+            }
 
-                if ($parent instanceof Foreach_ && $parent->valueVar === $list) {
-                    $assignExpressions[] = $this->getExpressionFromForeachValue($parent, $item);
-                }
+            if (! $item->key instanceof String_) {
+                return [];
+            }
+
+            if ($parentExpression instanceof Expression && $parent instanceof Assign && $parent->var === $list) {
+                $assignExpressions[] = new Expression(
+                    new Assign($item->value, new ArrayDimFetch($parent->expr, $item->key))
+                );
+            }
+
+            if ($parent instanceof Foreach_ && $parent->valueVar === $list) {
+                $assignExpressions[] = $this->getExpressionFromForeachValue($parent, $item);
             }
         }
 
@@ -153,8 +160,10 @@ CODE_SAMPLE
 
     private function getExpressionFromForeachValue(Foreach_ $foreach, ArrayItem $arrayItem): Expression
     {
-        $newValueVar    = $this->inflectorSingularResolver->resolve($this->getName($foreach->expr));
-        $assignVariable = new Variable($arrayItem->key->value);
+        $newValueVar    = $this->inflectorSingularResolver->resolve((string) $this->getName($foreach->expr));
+        /** @var String_ $string */
+        $string         = $arrayItem->key;
+        $assignVariable = new Variable($string->value);
         $assign         = new Assign($assignVariable, new ArrayDimFetch(new Variable($newValueVar), $arrayItem->key));
 
         return new Expression($assign);
