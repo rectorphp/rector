@@ -147,31 +147,4 @@ CODE_SAMPLE
 
         return $foreach;
     }
-
-    private function shouldSkip(string $valueVarName, string $singularValueVarName, Foreach_ $foreach): bool
-    {
-        $isUsedInStmts = (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (Node $node) use (
-            $singularValueVarName
-        ): bool {
-            if (! $node instanceof Variable) {
-                return false;
-            }
-
-            return $this->isName($node, $singularValueVarName);
-        });
-
-        if ($isUsedInStmts) {
-            return true;
-        }
-
-        return (bool) $this->betterNodeFinder->findFirstNext($foreach, function (Node $node) use (
-            $singularValueVarName
-        ): bool {
-            if (! $node instanceof Variable) {
-                return false;
-            }
-
-            return $this->isName($node, $singularValueVarName);
-        });
-    }
 }
