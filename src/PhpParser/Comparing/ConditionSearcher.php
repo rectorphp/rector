@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 
 final class ConditionSearcher
@@ -18,8 +19,11 @@ final class ConditionSearcher
         $varNode = $assign->var;
 
         // search if for redeclaration of variable
-        /** @var Node\Stmt\Expression $statementIf */
         foreach ($if->stmts as $statementIf) {
+            if (! $statementIf instanceof Expression) {
+                continue;
+            }
+
             if (! $statementIf->expr instanceof Assign) {
                 continue;
             }
@@ -44,7 +48,7 @@ final class ConditionSearcher
 
     private function searchElseForVariableRedeclaration(Assign $assign, Else_ $else): bool
     {
-        /** @var Node\Stmt\Expression $statementElse */
+        /** @var Expression $statementElse */
         foreach ($else->stmts as $statementElse) {
             if (! $statementElse->expr instanceof Assign) {
                 continue;
