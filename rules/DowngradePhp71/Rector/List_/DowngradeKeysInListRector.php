@@ -143,10 +143,12 @@ CODE_SAMPLE
 
         foreach ($items as $item) {
             /** keyed and not keyed cannot be mixed, return early */
-            if (! $item instanceof ArrayItem || (! $item->key instanceof String_ && ! $item->key instanceof Variable)) {
+            if (! $item instanceof ArrayItem) {
                 return [];
             }
-
+            if (! $item->key instanceof String_ && ! $item->key instanceof Variable) {
+                return [];
+            }
             if ($parentExpression instanceof Expression && $parent instanceof Assign && $parent->var === $list) {
                 $assignExpressions[] = new Expression(
                     new Assign($item->value, new ArrayDimFetch($parent->expr, $item->key))
