@@ -142,12 +142,8 @@ CODE_SAMPLE
         $assignExpressions = [];
 
         foreach ($items as $item) {
-            if (! $item instanceof ArrayItem) {
-                return [];
-            }
-
             /** keyed and not keyed cannot be mixed, return early */
-            if (! $item->key instanceof String_ && ! $item->key instanceof Variable) {
+            if (! $item instanceof ArrayItem || (! $item->key instanceof String_ && ! $item->key instanceof Variable)) {
                 return [];
             }
 
