@@ -74,7 +74,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
             return null;
         }
 
@@ -90,10 +90,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
-            $node->returnType = new Identifier('void');
-        }
-
+        $node->returnType = new Identifier('void');
         return $node;
     }
 }

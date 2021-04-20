@@ -41,6 +41,10 @@ final class SilentVoidResolver
             return false;
         }
 
+        if ($this->hasNeverType($functionLike)) {
+            return false;
+        }
+
         if ($this->betterNodeFinder->hasInstancesOf((array) $functionLike->stmts, [Yield_::class])) {
             return false;
         }
@@ -132,5 +136,14 @@ final class SilentVoidResolver
         }
 
         return true;
+    }
+
+    /**
+     * @see https://phpstan.org/writing-php-code/phpdoc-types#bottom-type
+     * @param ClassMethod|Closure|Function_ $functionLike
+     */
+    private function hasNeverType(FunctionLike $functionLike): bool
+    {
+        return $this->betterNodeFinder->hasInstancesOf($functionLike, [Throw_::class]);
     }
 }
