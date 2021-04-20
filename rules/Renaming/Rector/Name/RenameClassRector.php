@@ -30,7 +30,7 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
     public const OLD_TO_NEW_CLASSES = 'old_to_new_classes';
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private $oldToNewClasses = [];
 
@@ -118,10 +118,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $this->oldToNewClasses = $configuration[self::OLD_TO_NEW_CLASSES] ?? [];
+        $oldToNewClasses = $configuration[self::OLD_TO_NEW_CLASSES] ?? [];
 
-        if ($this->oldToNewClasses !== []) {
-            $this->renamedClassesDataCollector->addOldToNewClasses($this->oldToNewClasses);
-        }
+        $this->renamedClassesDataCollector->addOldToNewClasses($oldToNewClasses);
+        $this->oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
     }
 }
