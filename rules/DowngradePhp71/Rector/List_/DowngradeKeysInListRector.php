@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Rector\List_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
@@ -133,6 +134,11 @@ CODE_SAMPLE
         return null;
     }
 
+    private function isAllowedItemKey(?Expr $expr = null): bool
+    {
+        return $expr instanceof String_ || $expr instanceof Variable;
+    }
+
     /**
      * @return Expression[]
      */
@@ -142,13 +148,15 @@ CODE_SAMPLE
         $assignExpressions = [];
 
         foreach ($items as $item) {
-            /** keyed and not keyed cannot be mixed, return early */
             if (! $item instanceof ArrayItem) {
                 return [];
             }
-            if (! $item->key instanceof String_ && ! $item->key instanceof Variable) {
+
+            /** keyed and not keyed cannot be mixed, return early */
+            if (! $this->isAllowedItemKey($item->key)) {
                 return [];
             }
+
             if ($parentExpression instanceof Expression && $parent instanceof Assign && $parent->var === $list) {
                 $assignExpressions[] = new Expression(
                     new Assign($item->value, new ArrayDimFetch($parent->expr, $item->key))
