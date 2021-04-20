@@ -82,7 +82,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node instanceof ClassMethod && $node->isMagic()) {
+        if ($node instanceof ClassMethod && ($node->isMagic() || $node->isAbstract())) {
             return null;
         }
 
