@@ -41,7 +41,7 @@ jobs:
 
             # 2. downgrade rector
             -   run: |
-                    php -d memory_limit=-1 bin/rector process rector.php --config build/config/config-downgrade.php --working-dir rector-build --ansi
+                    php -d memory_limit=-1 bin/rector process bin rector.php --config build/config/config-downgrade.php --working-dir rector-build --ansi
                     sh build/downgrade-rector.sh rector-build
 
             # 3. prefix classes
