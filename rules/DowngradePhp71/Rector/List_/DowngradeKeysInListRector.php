@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
@@ -46,7 +47,7 @@ final class DowngradeKeysInListRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [List_::class];
+        return [List_::class, Array_::class];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -89,7 +90,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param List_ $node
+     * @param List_|Array_ $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -134,11 +135,12 @@ CODE_SAMPLE
     }
 
     /**
+     * @param List_|Array_ $node
      * @return Expression[]
      */
-    private function processExtractToItsOwnVariable(List_ $list, Node $parent, Node $parentExpression): array
+    private function processExtractToItsOwnVariable(Node $node, Node $parent, Node $parentExpression): array
     {
-        $items = $list->items;
+        $items = $node->items;
         $assignExpressions = [];
 
         foreach ($items as $item) {
@@ -151,7 +153,7 @@ CODE_SAMPLE
                 return [];
             }
 
-            if ($parentExpression instanceof Expression && $parent instanceof Assign && $parent->var === $list) {
+            if ($parentExpression instanceof Expression && $parent instanceof Assign && $parent->var === $node) {
                 $assignExpressions[] = new Expression(
                     new Assign($item->value, new ArrayDimFetch($parent->expr, $item->key))
                 );
@@ -161,7 +163,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($parent->valueVar !== $list) {
+            if ($parent->valueVar !== $node) {
                 continue;
             }
 
