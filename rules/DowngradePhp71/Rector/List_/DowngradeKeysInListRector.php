@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
@@ -117,7 +118,7 @@ CODE_SAMPLE
         $assignExpression = [];
 
         foreach ($items as $item) {
-            if ($item instanceof ArrayItem && $item->key instanceof Expr) {
+            if ($item instanceof ArrayItem && $item->key instanceof String_) {
                 if ($parentExpression instanceof Expression && $parent instanceof Assign && $parent->var === $list) {
                     $assignExpression[] = new Expression(
                         new Assign($item->value, new ArrayDimFetch($parent->expr, $item->key))
@@ -135,14 +136,10 @@ CODE_SAMPLE
 
     private function getExpressionFromForeachValue(Foreach_ $foreach, ArrayItem $arrayItem): Expression
     {
-        $newValueVar = $this->inflectorSingularResolver->resolve($this->getName($foreach->expr));
-        $foreach->valueVar = new Variable($newValueVar);
+        $newValueVar    = $this->inflectorSingularResolver->resolve($this->getName($foreach->expr));
+        $assignVariable = new Variable($arrayItem->key->value);
+        $assign         = new Assign($assignVariable, new ArrayDimFetch(new Variable($newValueVar), $arrayItem->key));
 
-        return new Expression(
-            new Assign(
-                $arrayItem->value,
-                new ArrayDimFetch($foreach->valueVar, $arrayItem->key)
-            )
-        );
+        return new Expression($assign);
     }
 }
