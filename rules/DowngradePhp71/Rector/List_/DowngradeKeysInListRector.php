@@ -135,11 +135,11 @@ CODE_SAMPLE
         $assignExpressions = [];
 
         foreach ($items as $item) {
-            /** keyed and not keyed cannot be mixed, return early */
             if (! $item instanceof ArrayItem) {
                 return [];
             }
 
+            /** keyed and not keyed cannot be mixed, return early */
             if (! $item->key instanceof String_) {
                 return [];
             }
