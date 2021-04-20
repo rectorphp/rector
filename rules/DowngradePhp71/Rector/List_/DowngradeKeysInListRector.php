@@ -120,7 +120,7 @@ CODE_SAMPLE
                 $this->addNodesBeforeNode($assignExpressions, $parent->stmts[0]);
             }
 
-            return $node;
+            return $parent->valueVar;
         }
 
         return null;
