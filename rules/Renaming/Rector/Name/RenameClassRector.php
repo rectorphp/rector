@@ -121,7 +121,7 @@ CODE_SAMPLE
         $this->oldToNewClasses = $configuration[self::OLD_TO_NEW_CLASSES] ?? [];
 
         if ($this->oldToNewClasses !== []) {
-            $this->renamedClassesDataCollector->setOldToNewClasses($this->oldToNewClasses);
+            $this->renamedClassesDataCollector->addOldToNewClasses($this->oldToNewClasses);
         }
     }
 }
