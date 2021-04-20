@@ -20,7 +20,7 @@ BUILD_DIRECTORY=$1
 echo "[NOTE] Running downgrade in '$BUILD_DIRECTORY' directory\n";
 
 # 3. provide directories to downgrade; includes the rector dirs
-directories=$(php -d memory_limit=-1 bin/rector downgrade-paths 7.1 --config build/config/config-downgrade.php --working-dir $BUILD_DIRECTORY --ansi)
+directories=$(php -d memory_limit=-1 bin/rector downgrade-paths 7.0 --config build/config/config-downgrade.php --working-dir $BUILD_DIRECTORY --ansi)
 
 # split array see https://stackoverflow.com/a/1407098/1348344
 export IFS=";"

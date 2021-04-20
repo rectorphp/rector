@@ -5,7 +5,7 @@
 
 Do you have conflicts on Rector install? You're in the right place. Prefixed Rector can [be installed even on very old Symfony](https://getrector.org/blog/2020/01/20/how-to-install-rector-despite-composer-conflicts).
 
-Do you have older PHP? Rector prefixed goes down to PHP 7.1, so you can install it even on older projects.
+Do you have older PHP? Rector prefixed goes down to PHP 7.0, so you can install it even on older projects.
 
 ## Install
 
