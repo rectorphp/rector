@@ -107,7 +107,10 @@ CODE_SAMPLE
         }
 
         $singularValueVarName = $this->inflectorSingularResolver->resolve($exprName);
-        if ($singularValueVarName === $exprName || $singularValueVarName === $valueVarName) {
+        if ($singularValueVarName === $exprName) {
+            return null;
+        }
+        if ($singularValueVarName === $valueVarName) {
             return null;
         }
 
