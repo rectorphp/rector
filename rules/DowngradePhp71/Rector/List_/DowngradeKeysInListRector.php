@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
+use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -29,9 +30,15 @@ final class DowngradeKeysInListRector extends AbstractRector
      */
     private $inflectorSingularResolver;
 
-    public function __construct(InflectorSingularResolver $inflectorSingularResolver)
+    /**
+     * @var ForeachAnalyzer
+     */
+    private $foreachAnalyzer;
+
+    public function __construct(InflectorSingularResolver $inflectorSingularResolver, ForeachAnalyzer $foreachAnalyzer)
     {
         $this->inflectorSingularResolver = $inflectorSingularResolver;
+        $this->foreachAnalyzer = $foreachAnalyzer;
     }
 
     /**
@@ -110,7 +117,7 @@ CODE_SAMPLE
         }
 
         if ($parent instanceof Foreach_) {
-            $newValueVar = $this->inflectorSingularResolver->resolve((string) $this->getName($parent->expr));
+            $newValueVar = $this->getNewValueVar($parent);
             $parent->valueVar = new Variable($newValueVar);
             $stmts = $parent->stmts;
 
@@ -166,10 +173,25 @@ CODE_SAMPLE
 
     private function getExpressionFromForeachValue(Foreach_ $foreach, String_ $string): Expression
     {
-        $newValueVar = $this->inflectorSingularResolver->resolve((string) $this->getName($foreach->expr));
+        $newValueVar = $this->getNewValueVar($foreach);
         $assignVariable = new Variable($string->value);
         $assign = new Assign($assignVariable, new ArrayDimFetch(new Variable($newValueVar), $string));
 
         return new Expression($assign);
+    }
+
+    private function getNewValueVar(Foreach_ $foreach, ?string $newValueVar = null): string
+    {
+        if ($newValueVar === null) {
+            $newValueVar = $this->inflectorSingularResolver->resolve((string) $this->getName($foreach->expr));
+        }
+
+        $count = 0;
+        if ($this->foreachAnalyzer->isValueVarUsed($foreach, $newValueVar)) {
+            $newValueVar = $newValueVar . ++$count;
+            return $this->getNewValueVar($foreach, $newValueVar);
+        }
+
+        return $newValueVar;
     }
 }
