@@ -147,7 +147,7 @@ CODE_SAMPLE
             }
 
             /** keyed and not keyed cannot be mixed, return early */
-            if (! $item->key instanceof String_) {
+            if (! $item->key instanceof String_ && ! $item->key instanceof Variable) {
                 return [];
             }
 
