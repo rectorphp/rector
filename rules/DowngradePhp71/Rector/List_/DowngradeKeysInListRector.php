@@ -188,7 +188,7 @@ CODE_SAMPLE
         $count = 0;
         if ($this->foreachAnalyzer->isValueVarUsed($foreach, $newValueVar)) {
             $newValueVar .= ++$count;
-            return $this->getNewValueVar($foreach, (string) $newValueVar);
+            return $this->getNewValueVar($foreach, $newValueVar);
         }
 
         return $newValueVar;
