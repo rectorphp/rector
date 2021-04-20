@@ -148,14 +148,16 @@ CODE_SAMPLE
                     new Assign($item->value, new ArrayDimFetch($parent->expr, $item->key))
                 );
             }
+
             if (! $parent instanceof Foreach_) {
                 continue;
             }
+
             if ($parent->valueVar !== $list) {
                 continue;
             }
+
             $assignExpressions[] = $this->getExpressionFromForeachValue($parent, $item);
-            return $assignExpressions;
         }
 
         return $assignExpressions;
