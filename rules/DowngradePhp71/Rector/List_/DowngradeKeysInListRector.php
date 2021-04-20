@@ -97,11 +97,28 @@ CODE_SAMPLE
             return null;
         }
 
-        $assignExpression = $this->processExtractToItsOwnVariable($node, $parent, $parentExpression);
+        $assignExpressions = $this->processExtractToItsOwnVariable($node, $parent, $parentExpression);
+        if ($assignExpressions === []) {
+            return null;
+        }
 
-        if ($assignExpression !== []) {
-            $this->addNodesBeforeNode($assignExpression, $node);
+        if ($parent instanceof Assign) {
+            $this->addNodesBeforeNode($assignExpressions, $node);
             $this->removeNode($parentExpression);
+
+            return $node;
+        }
+
+        if ($parent instanceof Foreach_) {
+            $newValueVar      = $this->inflectorSingularResolver->resolve($this->getName($parent->expr));
+            $parent->valueVar = $newValueVar;
+            $stmts            = $parent->stmts;
+
+            if ($stmts === []) {
+                $parent->stmts = $assignExpressions;
+            } else {
+                $this->addNodesBeforeNode($assignExpressions, $parent->stmts[0]);
+            }
 
             return $node;
         }
@@ -115,23 +132,23 @@ CODE_SAMPLE
     private function processExtractToItsOwnVariable(List_ $list, Node $parent, Node $parentExpression): array
     {
         $items = $list->items;
-        $assignExpression = [];
+        $assignExpressions = [];
 
         foreach ($items as $item) {
             if ($item instanceof ArrayItem && $item->key instanceof String_) {
                 if ($parentExpression instanceof Expression && $parent instanceof Assign && $parent->var === $list) {
-                    $assignExpression[] = new Expression(
+                    $assignExpressions[] = new Expression(
                         new Assign($item->value, new ArrayDimFetch($parent->expr, $item->key))
                     );
                 }
 
                 if ($parent instanceof Foreach_ && $parent->valueVar === $list) {
-                    $assignExpression[] = $this->getExpressionFromForeachValue($parent, $item);
+                    $assignExpressions[] = $this->getExpressionFromForeachValue($parent, $item);
                 }
             }
         }
 
-        return $assignExpression;
+        return $assignExpressions;
     }
 
     private function getExpressionFromForeachValue(Foreach_ $foreach, ArrayItem $arrayItem): Expression
