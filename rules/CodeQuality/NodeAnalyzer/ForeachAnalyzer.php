@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
@@ -38,16 +39,23 @@ final class ForeachAnalyzer
      */
     private $simpleCallableNodeTraverser;
 
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
     public function __construct(
         NodeComparator $nodeComparator,
         ForAnalyzer $forAnalyzer,
         NodeNameResolver $nodeNameResolver,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        BetterNodeFinder $betterNodeFinder
     ) {
         $this->nodeComparator = $nodeComparator;
         $this->forAnalyzer = $forAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**
@@ -123,5 +131,32 @@ final class ForeachAnalyzer
                 return $singleValue;
             }
         );
+    }
+
+    public function isValueVarUsed(Foreach_ $foreach, string $singularValueVarName): bool
+    {
+        $isUsedInStmts = (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (Node $node) use (
+            $singularValueVarName
+        ): bool {
+            if (! $node instanceof Variable) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($node, $singularValueVarName);
+        });
+
+        if ($isUsedInStmts) {
+            return true;
+        }
+
+        return (bool) $this->betterNodeFinder->findFirstNext($foreach, function (Node $node) use (
+            $singularValueVarName
+        ): bool {
+            if (! $node instanceof Variable) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($node, $singularValueVarName);
+        });
     }
 }

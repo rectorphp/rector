@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Type\ThisType;
+use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -25,9 +26,15 @@ final class RenameForeachValueVariableToMatchExprVariableRector extends Abstract
      */
     private $inflectorSingularResolver;
 
-    public function __construct(InflectorSingularResolver $inflectorSingularResolver)
+    /**
+     * @var ForeachAnalyzer
+     */
+    private $foreachAnalyzer;
+
+    public function __construct(InflectorSingularResolver $inflectorSingularResolver, ForeachAnalyzer $foreachAnalyzer)
     {
         $this->inflectorSingularResolver = $inflectorSingularResolver;
+        $this->foreachAnalyzer = $foreachAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -89,6 +96,7 @@ CODE_SAMPLE
         if ($exprName === null) {
             return null;
         }
+
         if ($node->keyVar instanceof Node) {
             return null;
         }
@@ -102,8 +110,11 @@ CODE_SAMPLE
         if ($singularValueVarName === $exprName) {
             return null;
         }
+        if ($singularValueVarName === $valueVarName) {
+            return null;
+        }
 
-        if ($this->shouldSkip($valueVarName, $singularValueVarName, $node)) {
+        if ($this->foreachAnalyzer->isValueVarUsed($node, $singularValueVarName)) {
             return null;
         }
 
@@ -138,36 +149,5 @@ CODE_SAMPLE
         });
 
         return $foreach;
-    }
-
-    private function shouldSkip(string $valueVarName, string $singularValueVarName, Foreach_ $foreach): bool
-    {
-        if ($singularValueVarName === $valueVarName) {
-            return true;
-        }
-
-        $isUsedInStmts = (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (Node $node) use (
-            $singularValueVarName
-        ): bool {
-            if (! $node instanceof Variable) {
-                return false;
-            }
-
-            return $this->isName($node, $singularValueVarName);
-        });
-
-        if ($isUsedInStmts) {
-            return true;
-        }
-
-        return (bool) $this->betterNodeFinder->findFirstNext($foreach, function (Node $node) use (
-            $singularValueVarName
-        ): bool {
-            if (! $node instanceof Variable) {
-                return false;
-            }
-
-            return $this->isName($node, $singularValueVarName);
-        });
     }
 }
