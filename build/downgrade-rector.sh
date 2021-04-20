@@ -30,7 +30,7 @@ for directory in $directories; do
     echo "[NOTE] Downgrading '$directory' directory\n"
 
     # --working-dir is needed, so "SKIP" parameter is applied in absolute path of nested directory
-    #php -d memory_limit=-1 bin/rector process $directory --config build/config/config-downgrade.php --working-dir $BUILD_DIRECTORY --ansi
+    php -d memory_limit=-1 bin/rector process $directory --config build/config/config-downgrade.php --working-dir $BUILD_DIRECTORY --ansi
 done
 
 # 5. downgrade rector.php config as well
