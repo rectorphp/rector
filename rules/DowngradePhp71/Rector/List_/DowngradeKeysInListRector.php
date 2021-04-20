@@ -102,6 +102,7 @@ CODE_SAMPLE
         }
 
         if ($parent instanceof Assign) {
+            $this->mirrorComments($assignExpressions[0], $parentExpression);
             $this->addNodesBeforeNode($assignExpressions, $node);
             $this->removeNode($parentExpression);
 
