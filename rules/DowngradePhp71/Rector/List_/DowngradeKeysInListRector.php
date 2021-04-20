@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
@@ -134,11 +133,6 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isAllowedItemKey(?Expr $expr = null): bool
-    {
-        return $expr instanceof String_ || $expr instanceof Variable;
-    }
-
     /**
      * @return Expression[]
      */
@@ -153,7 +147,7 @@ CODE_SAMPLE
             }
 
             /** keyed and not keyed cannot be mixed, return early */
-            if (! $this->isAllowedItemKey($item->key)) {
+            if (! $item->key instanceof Expr) {
                 return [];
             }
 
