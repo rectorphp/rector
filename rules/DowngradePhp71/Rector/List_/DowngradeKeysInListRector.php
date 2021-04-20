@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Rector\List_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
@@ -110,9 +109,9 @@ CODE_SAMPLE
         }
 
         if ($parent instanceof Foreach_) {
-            $newValueVar      = $this->inflectorSingularResolver->resolve((string) $this->getName($parent->expr));
+            $newValueVar = $this->inflectorSingularResolver->resolve((string) $this->getName($parent->expr));
             $parent->valueVar = new Variable($newValueVar);
-            $stmts            = $parent->stmts;
+            $stmts = $parent->stmts;
 
             if ($stmts === []) {
                 $parent->stmts = $assignExpressions;
@@ -149,10 +148,14 @@ CODE_SAMPLE
                     new Assign($item->value, new ArrayDimFetch($parent->expr, $item->key))
                 );
             }
-
-            if ($parent instanceof Foreach_ && $parent->valueVar === $list) {
-                $assignExpressions[] = $this->getExpressionFromForeachValue($parent, $item);
+            if (! $parent instanceof Foreach_) {
+                continue;
             }
+            if ($parent->valueVar !== $list) {
+                continue;
+            }
+            $assignExpressions[] = $this->getExpressionFromForeachValue($parent, $item);
+            return $assignExpressions;
         }
 
         return $assignExpressions;
@@ -160,11 +163,11 @@ CODE_SAMPLE
 
     private function getExpressionFromForeachValue(Foreach_ $foreach, ArrayItem $arrayItem): Expression
     {
-        $newValueVar    = $this->inflectorSingularResolver->resolve((string) $this->getName($foreach->expr));
+        $newValueVar = $this->inflectorSingularResolver->resolve((string) $this->getName($foreach->expr));
         /** @var String_ $string */
-        $string         = $arrayItem->key;
+        $string = $arrayItem->key;
         $assignVariable = new Variable($string->value);
-        $assign         = new Assign($assignVariable, new ArrayDimFetch(new Variable($newValueVar), $arrayItem->key));
+        $assign = new Assign($assignVariable, new ArrayDimFetch(new Variable($newValueVar), $arrayItem->key));
 
         return new Expression($assign);
     }
