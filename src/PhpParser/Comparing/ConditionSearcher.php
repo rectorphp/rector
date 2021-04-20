@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\Comparing;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Else_;
@@ -28,9 +27,12 @@ final class ConditionSearcher
                 continue;
             }
 
-            /** @var Variable $varIf */
-            $varIf = $statementIf->expr->var;
-            if ($varNode->name !== $varIf->name) {
+            $assignVar = $statementIf->expr->var;
+            if (! $assignVar instanceof Variable) {
+                continue;
+            }
+
+            if ($varNode->name !== $assignVar->name) {
                 continue;
             }
 
