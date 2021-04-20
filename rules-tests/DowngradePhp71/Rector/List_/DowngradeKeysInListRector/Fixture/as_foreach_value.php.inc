@@ -30,8 +30,8 @@ class AsForeachValue
             ["id" => 2, "name" => 'Fred'],
         ];
         foreach ($data as $singleData) {
-            $id = $singleData['id'];
-            $name = $singleData['name'];
+            $id = $singleData["id"];
+            $name = $singleData["name"];
         }
     }
 }

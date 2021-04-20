@@ -111,7 +111,7 @@ CODE_SAMPLE
 
         if ($parent instanceof Foreach_) {
             $newValueVar      = $this->inflectorSingularResolver->resolve($this->getName($parent->expr));
-            $parent->valueVar = $newValueVar;
+            $parent->valueVar = new Variable($newValueVar);
             $stmts            = $parent->stmts;
 
             if ($stmts === []) {
