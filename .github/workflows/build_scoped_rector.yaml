@@ -40,7 +40,9 @@ jobs:
             -  run: rm -rf rector-build/packages-tests rector-build/rules-tests rector-build/tests
 
             # 2. downgrade rector
-            -   run: sh build/downgrade-rector.sh rector-build
+            -   run: |
+                    php -d memory_limit=-1 bin/rector process rector.php --config build/config/config-downgrade.php --working-dir rector-build --ansi
+                    sh build/downgrade-rector.sh rector-build
 
             # 3. prefix classes
             -   run: sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
