@@ -37,15 +37,16 @@
         "nette/robot-loader": "^3.4",
         "nette/utils": "^3.2",
         "nikic/php-parser": "^4.10.4",
-        "phpstan/phpstan": "^0.12.83",
         "phpstan/phpdoc-parser": "^0.5.4",
+        "phpstan/phpstan": "^0.12.83",
         "phpstan/phpstan-phpunit": "^0.12.18",
-        "rector/rector-symfony": "^0.10.3",
-        "rector/rector-nette": "^0.10.5",
-        "rector/rector-laravel": "^0.10.1",
-        "rector/rector-cakephp": "^0.10.3",
-        "rector/rector-phpunit": "^0.10.6",
-        "rector/rector-doctrine": "^0.10.2",
+        "rector/rector-cakephp": "dev-main",
+        "rector/rector-doctrine": "dev-main",
+        "rector/rector-installer": "dev-main",
+        "rector/rector-laravel": "dev-main",
+        "rector/rector-nette": "dev-main",
+        "rector/rector-phpunit": "dev-main",
+        "rector/rector-symfony": "dev-main",
         "sebastian/diff": "^4.0.4",
         "symfony/console": "^4.4.8|^5.1",
         "symfony/dependency-injection": "^5.1",
@@ -73,7 +74,7 @@
         "nette/forms": "^3.0",
         "phpstan/phpstan-nette": "^0.12.16",
         "phpunit/phpunit": "^9.5",
-        "rector/rector-generator": "^0.1.5",
+        "rector/rector-generator": "dev-main",
         "symplify/coding-standard": "^9.2.16",
         "symplify/easy-ci": "^9.2.16",
         "symplify/easy-coding-standard": "^9.2.16",
@@ -153,5 +154,7 @@
     "config": {
         "sort-packages": true,
         "platform-check": false
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

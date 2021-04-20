@@ -11,11 +11,12 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ExtensionConfigResolver
 {
     /**
-     * @param SmartFileInfo[] $configFileInfos
      * @return SmartFileInfo[]
      */
-    public function appendExtensionsConfig(array $configFileInfos): array
+    public function provide(): array
     {
+        $configFileInfos = [];
+
         if (! class_exists('Rector\RectorInstaller\GeneratedConfig')) {
             return $configFileInfos;
         }

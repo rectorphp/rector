@@ -70,7 +70,6 @@ final class RectorConfigsResolver
         ) : [];
 
         $configFileInfos = $this->appendRectorRecipeConfig($argvInput, $configFileInfos);
-        $configFileInfos = $this->extensionConfigResolver->appendExtensionsConfig($configFileInfos);
 
         return new BootstrapConfigs($mainConfigFileInfo, $configFileInfos);
     }
