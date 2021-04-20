@@ -10,7 +10,7 @@ class AsForeachValueUsed
             ["id" => 1, "name" => 'Tom'],
             ["id" => 2, "name" => 'Fred'],
         ];
-        foreach ($data as list("id" => $id, "name" => $name)) {
+        foreach ($data as list("id" => $id1, "name" => $name1)) {
             echo $singleData;
         }
     }
@@ -31,8 +31,8 @@ class AsForeachValueUsed
             ["id" => 2, "name" => 'Fred'],
         ];
         foreach ($data as $singleData1) {
-            $id = $singleData1["id"];
-            $name = $singleData1["name"];
+            $id1 = $singleData1["id"];
+            $name1 = $singleData1["name"];
             echo $singleData;
         }
     }

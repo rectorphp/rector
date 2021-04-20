@@ -165,17 +165,16 @@ CODE_SAMPLE
                 continue;
             }
 
-            $assignExpressions[] = $this->getExpressionFromForeachValue($parent, $item->key);
+            $assignExpressions[] = $this->getExpressionFromForeachValue($parent, $item);
         }
 
         return $assignExpressions;
     }
 
-    private function getExpressionFromForeachValue(Foreach_ $foreach, String_ $string): Expression
+    private function getExpressionFromForeachValue(Foreach_ $foreach, ArrayItem $arrayItem): Expression
     {
         $newValueVar = $this->getNewValueVar($foreach);
-        $assignVariable = new Variable($string->value);
-        $assign = new Assign($assignVariable, new ArrayDimFetch(new Variable($newValueVar), $string));
+        $assign = new Assign($arrayItem->value, new ArrayDimFetch(new Variable($newValueVar), $arrayItem->key));
 
         return new Expression($assign);
     }
@@ -189,7 +188,7 @@ CODE_SAMPLE
         $count = 0;
         if ($this->foreachAnalyzer->isValueVarUsed($foreach, $newValueVar)) {
             $newValueVar .= ++$count;
-            return $this->getNewValueVar($foreach, $newValueVar);
+            return $this->getNewValueVar($foreach, (string) $newValueVar);
         }
 
         return $newValueVar;
