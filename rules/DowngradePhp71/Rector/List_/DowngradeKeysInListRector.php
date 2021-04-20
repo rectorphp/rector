@@ -157,19 +157,17 @@ CODE_SAMPLE
                 continue;
             }
 
-            $assignExpressions[] = $this->getExpressionFromForeachValue($parent, $item);
+            $assignExpressions[] = $this->getExpressionFromForeachValue($parent, $item->key);
         }
 
         return $assignExpressions;
     }
 
-    private function getExpressionFromForeachValue(Foreach_ $foreach, ArrayItem $arrayItem): Expression
+    private function getExpressionFromForeachValue(Foreach_ $foreach, String_ $string): Expression
     {
         $newValueVar = $this->inflectorSingularResolver->resolve((string) $this->getName($foreach->expr));
-        /** @var String_ $string */
-        $string = $arrayItem->key;
         $assignVariable = new Variable($string->value);
-        $assign = new Assign($assignVariable, new ArrayDimFetch(new Variable($newValueVar), $arrayItem->key));
+        $assign = new Assign($assignVariable, new ArrayDimFetch(new Variable($newValueVar), $string));
 
         return new Expression($assign);
     }
