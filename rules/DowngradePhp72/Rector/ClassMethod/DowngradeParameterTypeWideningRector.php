@@ -6,10 +6,12 @@ namespace Rector\DowngradePhp72\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
@@ -42,14 +44,21 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
      */
     private $typeFactory;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         PhpDocTypeChanger $phpDocTypeChanger,
         NativeTypeClassTreeResolver $nativeTypeClassTreeResolver,
-        TypeFactory $typeFactory
+        TypeFactory $typeFactory,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->nativeTypeClassTreeResolver = $nativeTypeClassTreeResolver;
         $this->typeFactory = $typeFactory;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -90,41 +99,41 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
 
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->isMagic()) {
-            return null;
+        $classMethods = $this->resolveClassAndUsedTraitClassMethods($node);
+
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+
+        foreach ($classMethods as $classMethod) {
+            $this->refactorClassMethod($classMethod, $scope);
         }
 
-        if ($node->params === []) {
-            return null;
-        }
-
-        foreach (array_keys($node->params) as $position) {
-            $this->refactorParamForSelfAndSiblings($node, (int) $position);
-        }
-
-        return null;
+        return $node;
     }
 
     /**
      * The topmost class is the source of truth, so we go only down to avoid up/down collission
      */
-    private function refactorParamForSelfAndSiblings(ClassMethod $classMethod, int $position): void
+    private function refactorParamForSelfAndSiblings(ClassMethod $classMethod, int $position, Scope $classScope): void
     {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            // possibly trait
-            return;
-        }
+//        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
 
-        $classReflection = $scope->getClassReflection();
+//        dump($scope);
+//        die;
+//
+//        if (! $scope instanceof Scope) {
+//            // possibly trait
+//            return;
+//        }
+
+        $classReflection = $classScope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             return;
         }
@@ -293,5 +302,41 @@ CODE_SAMPLE
             $this->removeParamTypeFromMethod($classLike, $position, $currentClassMethod);
             $this->removeParamTypeFromMethodForChildren($className, $methodName, $position);
         }
+    }
+
+    private function refactorClassMethod(ClassMethod $classMethod, Scope $classScope): void
+    {
+        if ($classMethod->isMagic()) {
+            return;
+        }
+
+        if ($classMethod->params === []) {
+            return;
+        }
+
+        foreach (array_keys($classMethod->params) as $position) {
+            $this->refactorParamForSelfAndSiblings($classMethod, (int) $position, $classScope);
+        }
+    }
+
+    /**
+     * @return ClassMethod[]
+     */
+    private function resolveClassAndUsedTraitClassMethods(Class_ $class): array
+    {
+        $classMethods = $class->getMethods();
+
+        $scope = $class->getAttribute(AttributeKey::SCOPE);
+        if ($scope instanceof Scope) {
+            $classReflection = $scope->getClassReflection();
+            if ($classReflection instanceof ClassReflection) {
+                foreach ($classReflection->getTraits() as $traitClassReflection) {
+                    $trait = $this->nodeRepository->findTrait($traitClassReflection->getName());
+                    $classMethods = array_merge($classMethods, $trait->getMethods());
+                }
+            }
+        }
+
+        return $classMethods;
     }
 }
