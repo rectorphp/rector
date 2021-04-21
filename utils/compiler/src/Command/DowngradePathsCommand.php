@@ -69,9 +69,13 @@ final class DowngradePathsCommand extends Command
             if (Strings::startsWith($downgradePath, 'vendor/psr')) {
                 unset($downgradePaths[$key]);
             }
+
+            if (Strings::startsWith($downgradePath, 'vendor/symfony/service-contracts')) {
+                unset($downgradePaths[$key]);
+            }
         }
 
-        $downgradePaths = array_merge(['vendor/symplify vendor/symfony vendor/psr vendor/nikic src packages'],
+        $downgradePaths = array_merge(['vendor/symplify vendor/symfony vendor/psr vendor/nikic src packages vendor/symfony/service-contracts'],
             $downgradePaths
         );
         $downgradePaths = array_values($downgradePaths);
