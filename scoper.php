@@ -84,10 +84,10 @@ return [
             return $content;
         },
 
-        // fixes https://github.com/rectorphp/rector/issues/6010
+        // fixes https://github.com/rectorphp/rector/issues/6010 + test case prefix
         function (string $filePath, string $prefix, string $content): string {
             // @see https://regex101.com/r/bA1nQa/1
-            if (! Strings::match($filePath, '#vendor/symfony/polyfill-php\d{2}/Resources/stubs#')) {
+            if (! Strings::match($filePath, '#vendor/symfony/polyfill-php\d{2}/Resources/stubs#') && ! Strings::endsWith($filePath, 'vendor/symplify/package-builder/src/Testing/AbstractKernelTestCase.php')) {
                 return $content;
             }
 
