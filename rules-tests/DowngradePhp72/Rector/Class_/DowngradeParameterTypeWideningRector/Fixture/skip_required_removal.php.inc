@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\Fixture;
+namespace Rector\Tests\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector\Fixture;
 
 use PhpParser\Node\Param;
 use PHPStan\Type\Type;
