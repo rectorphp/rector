@@ -42,11 +42,9 @@ final class DowngradePathsCommand extends Command
         $targetPhpVersion = (string) $input->getArgument(self::OPTION_PHP_VERSION);
 
         $downgradePaths = $this->whyNotVendorPackagesResolver->resolveFromPhpVersion($targetPhpVersion);
-
         $downgradePaths = array_values($downgradePaths);
 
-        $rulesPaths = $this->resolveRulesPaths();
-        $downgradePaths = array_merge($downgradePaths, $rulesPaths);
+        $downgradePaths = $this->normalizeSingleDirectoryNesting($downgradePaths);
 
         // make symplify grouped into 1 directory, to make covariance downgrade work with all dependent classes
         $rulesPaths = $this->resolveRulesPaths();
@@ -54,42 +52,14 @@ final class DowngradePathsCommand extends Command
 
         // make symplify grouped into 1 directory, to make covariance downgrade work with all dependent classes
         foreach ($downgradePaths as $key => $downgradePath) {
-            if (Strings::startsWith($downgradePath, 'vendor/symplify')) {
-                unset($downgradePaths[$key]);
-            }
-
-            if (Strings::startsWith($downgradePath, 'vendor/symfony')) {
-                unset($downgradePaths[$key]);
-            }
-
-            if (Strings::startsWith($downgradePath, 'vendor/nikic')) {
-                unset($downgradePaths[$key]);
-            }
-
-            if (Strings::startsWith($downgradePath, 'vendor/psr')) {
-                unset($downgradePaths[$key]);
-            }
-
-            if (Strings::startsWith($downgradePath, 'vendor/symfony/service-contracts')) {
-                unset($downgradePaths[$key]);
-            }
-
-            if (Strings::startsWith($downgradePath, 'vendor/doctrine')) {
-                unset($downgradePaths[$key]);
-            }
-
-            if (Strings::startsWith($downgradePath, 'vendor/nette')) {
+            if (in_array($downgradePath, ['vendor/symplify', 'vendor/symfony', 'vendor/nikic', 'vendor/psr'], true)) {
                 unset($downgradePaths[$key]);
             }
         }
 
         $downgradePaths = array_merge([
-            'vendor/symplify vendor/symfony vendor/psr vendor/nikic src packages vendor/symfony/service-contracts',
-            'vendor/doctrine',
-            'vendor/nette'
+            'vendor/symplify vendor/symfony vendor/nikic vendor/psr bin src packages rector.php',
         ], $downgradePaths);
-
-
 
         $downgradePaths = array_values($downgradePaths);
 
@@ -118,5 +88,22 @@ final class DowngradePathsCommand extends Command
         }
 
         return $rulesPaths;
+    }
+
+    /**
+     * @param string[] $downgradePaths
+     * @return string[]
+     */
+    private function normalizeSingleDirectoryNesting(array $downgradePaths): array
+    {
+        foreach ($downgradePaths as $key => $downgradePath) {
+            if (! Strings::startsWith($downgradePath, 'vendor/')) {
+                continue;
+            }
+
+            $downgradePaths[$key] = Strings::before($downgradePath, '/', 2);
+        }
+
+        return array_unique($downgradePaths);
     }
 }
