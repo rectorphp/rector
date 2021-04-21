@@ -85,7 +85,7 @@ return [
         },
 
         function (string $filePath, string $prefix, string $content): string {
-            if (Strings::endsWith($filePath, 'vendor/symplify/package-builder/src/Testing/AbstractKernelTestCase.php')) {
+            if (! Strings::endsWith($filePath, 'vendor/symplify/package-builder/src/Testing/AbstractKernelTestCase.php')) {
                 return $content;
             }
 
