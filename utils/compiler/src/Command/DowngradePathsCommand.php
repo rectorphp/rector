@@ -101,7 +101,7 @@ final class DowngradePathsCommand extends Command
                 continue;
             }
 
-            $downgradePaths[$key] = Strings::before($downgradePath, '/', 2);
+            $downgradePaths[$key] = (string) Strings::before($downgradePath, '/', 2);
         }
 
         return array_unique($downgradePaths);
