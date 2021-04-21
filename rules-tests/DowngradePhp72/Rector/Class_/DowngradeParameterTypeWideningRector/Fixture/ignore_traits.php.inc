@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp72\Tests\Rector\ClassMethod\DowngradeParameterTypeWideningRector\Fixture;
+namespace Rector\DowngradePhp72\Tests\Rector\Class_\DowngradeParameterTypeWideningRector\Fixture;
 
 trait StreamDecoratorTrait
 {

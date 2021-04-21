@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
+use Rector\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

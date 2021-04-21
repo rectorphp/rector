@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp72\Rector\ClassMethod;
+namespace Rector\DowngradePhp72\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
  * @see https://3v4l.org/fOgSE
  *
- * @see \Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\DowngradeParameterTypeWideningRectorTest
+ * @see \Rector\Tests\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector\DowngradeParameterTypeWideningRectorTest
  */
 final class DowngradeParameterTypeWideningRector extends AbstractRector
 {
@@ -49,16 +49,23 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
      */
     private $reflectionProvider;
 
+    /**
+     * @var \Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver
+     */
+    private $classLikeWithTraitsClassMethodResolver;
+
     public function __construct(
         PhpDocTypeChanger $phpDocTypeChanger,
         NativeTypeClassTreeResolver $nativeTypeClassTreeResolver,
         TypeFactory $typeFactory,
-        ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider,
+        \Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver
     ) {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->nativeTypeClassTreeResolver = $nativeTypeClassTreeResolver;
         $this->typeFactory = $typeFactory;
         $this->reflectionProvider = $reflectionProvider;
+        $this->classLikeWithTraitsClassMethodResolver = $classLikeWithTraitsClassMethodResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -90,7 +97,7 @@ class C implements A
     public function test(array $input){}
 }
 CODE_SAMPLE
-            ),
+                ),
             ]);
     }
 
@@ -107,10 +114,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classMethods = $this->resolveClassAndUsedTraitClassMethods($node);
+        $classMethods = $this->classLikeWithTraitsClassMethodResolver->resolve($node);
 
         $scope = $node->getAttribute(AttributeKey::SCOPE);
-
         foreach ($classMethods as $classMethod) {
             $this->refactorClassMethod($classMethod, $scope);
         }
@@ -123,16 +129,6 @@ CODE_SAMPLE
      */
     private function refactorParamForSelfAndSiblings(ClassMethod $classMethod, int $position, Scope $classScope): void
     {
-//        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-
-//        dump($scope);
-//        die;
-//
-//        if (! $scope instanceof Scope) {
-//            // possibly trait
-//            return;
-//        }
-
         $classReflection = $classScope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             return;
@@ -317,26 +313,5 @@ CODE_SAMPLE
         foreach (array_keys($classMethod->params) as $position) {
             $this->refactorParamForSelfAndSiblings($classMethod, (int) $position, $classScope);
         }
-    }
-
-    /**
-     * @return ClassMethod[]
-     */
-    private function resolveClassAndUsedTraitClassMethods(Class_ $class): array
-    {
-        $classMethods = $class->getMethods();
-
-        $scope = $class->getAttribute(AttributeKey::SCOPE);
-        if ($scope instanceof Scope) {
-            $classReflection = $scope->getClassReflection();
-            if ($classReflection instanceof ClassReflection) {
-                foreach ($classReflection->getTraits() as $traitClassReflection) {
-                    $trait = $this->nodeRepository->findTrait($traitClassReflection->getName());
-                    $classMethods = array_merge($classMethods, $trait->getMethods());
-                }
-            }
-        }
-
-        return $classMethods;
     }
 }
