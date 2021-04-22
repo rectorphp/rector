@@ -50,8 +50,11 @@ final class ConditionSearcher
 
     private function searchElseForVariableRedeclaration(Assign $assign, Else_ $else): bool
     {
-        /** @var Expression $statementElse */
         foreach ($else->stmts as $statementElse) {
+            if (! $statementElse instanceof Expression) {
+                continue;
+            }
+
             if (! $statementElse->expr instanceof Assign) {
                 continue;
             }
