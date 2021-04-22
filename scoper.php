@@ -104,7 +104,10 @@ return [
 
 
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/symplify/package-builder/src/Testing/AbstractKernelTestCase.php')) {
+            if (
+                ! Strings::endsWith($filePath, 'packages/Testing/PHPUnit/AbstractTestCase.php')
+                && ! Strings::endsWith($filePath, 'packages/Testing/PHPUnit/AbstractRectorTestCase.php')
+            ) {
                 return $content;
             }
 
@@ -113,19 +116,6 @@ return [
                 $content,
                 '#' . $prefix . '\\\\PHPUnit\\\\Framework\\\\TestCase#',
                 'PHPUnit\Framework\TestCase'
-            );
-        },
-
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'packages/Testing/PHPUnit/AbstractRectorTestCase.php')) {
-                return $content;
-            }
-
-            // un-prefix
-            return Strings::replace(
-                $content,
-                '#' . $prefix . '\\\\Symplify\\\\PackageBuilder\\\\Testing\\\\AbstractKernelTestCase#',
-                'Symplify\PackageBuilder\Testing\AbstractKernelTestCase'
             );
         },
 

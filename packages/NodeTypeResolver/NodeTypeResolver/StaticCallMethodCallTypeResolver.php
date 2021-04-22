@@ -74,11 +74,6 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
         }
 
         $nodeReturnType = $scope->getType($node);
-
-//        dump($node);
-//        dump($nodeReturnType);
-//        die;
-//
         if (! $nodeReturnType instanceof MixedType) {
             return $nodeReturnType;
         }
