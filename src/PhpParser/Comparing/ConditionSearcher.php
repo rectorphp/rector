@@ -20,7 +20,7 @@ final class ConditionSearcher
 
         // search if for redeclaration of variable
         foreach ($if->stmts as $statementIf) {
-            if ($statementIf instanceof Nop) { // Nop stmt doesn't has expr property
+            if (! $statementIf instanceof Expression) {
                 continue;
             }
 
@@ -53,7 +53,7 @@ final class ConditionSearcher
     {
         /** @var Expression $statementElse */
         foreach ($else->stmts as $statementElse) {
-            if ($statementElse instanceof Nop) { // Nop stmt doesn't has expr property
+            if (! $statementElse instanceof Expression) {
                 continue;
             }
 
