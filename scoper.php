@@ -153,11 +153,6 @@ return [
                 return $content;
             }
 
-            // skip scoper-autoload
-            if (Strings::endsWith($filePath, 'vendor/scoper-autoload.php')) {
-                return $content;
-            }
-
             return Unprefixer::unprefixQuoted($content, $prefix);
         },
 
