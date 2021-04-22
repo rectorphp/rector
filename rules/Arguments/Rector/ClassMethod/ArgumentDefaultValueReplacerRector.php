@@ -57,7 +57,7 @@ CODE_SAMPLE
                                 'someMethod',
                                 0,
                                 'SomeClass::OLD_CONSTANT',
-                                'false'
+                                false
                             ),
                         ],
                     ]
