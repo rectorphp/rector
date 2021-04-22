@@ -12,10 +12,9 @@ use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
-use Rector\Core\HttpKernel\RectorKernel;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class PhpDocNodeMapperTest extends AbstractKernelTestCase
+final class PhpDocNodeMapperTest extends AbstractTestCase
 {
     /**
      * @var PhpDocNodeMapper
@@ -24,7 +23,7 @@ final class PhpDocNodeMapperTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->phpDocNodeMapper = $this->getService(PhpDocNodeMapper::class);
     }
 

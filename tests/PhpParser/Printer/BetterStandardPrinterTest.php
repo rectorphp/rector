@@ -11,13 +11,12 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
-final class BetterStandardPrinterTest extends AbstractKernelTestCase
+final class BetterStandardPrinterTest extends AbstractTestCase
 {
     /**
      * @var BetterStandardPrinter
@@ -26,7 +25,7 @@ final class BetterStandardPrinterTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
     }
 

@@ -22,29 +22,34 @@ use Symfony\Component\HttpKernel\Kernel;
 use Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use Symplify\ComposerJsonManipulator\Bundle\ComposerJsonManipulatorBundle;
 use Symplify\ConsoleColorDiff\Bundle\ConsoleColorDiffBundle;
-use Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use Symplify\SimplePhpDocParser\Bundle\SimplePhpDocParserBundle;
 use Symplify\Skipper\Bundle\SkipperBundle;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @todo possibly remove symfony/http-kernel and use the container build only
  */
-final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterface
+final class RectorKernel extends Kernel
 {
     /**
-     * @var string[]
+     * @var SmartFileInfo[]
      */
-    private $configs = [];
+    private $configFileInfos = [];
 
     /**
      * @var ConfigureCallValuesCollector
      */
     private $configureCallValuesCollector;
 
-    public function __construct(string $environment, bool $debug)
+    /**
+     * @param SmartFileInfo[] $configFileInfos
+     */
+    public function __construct(string $environment, bool $debug, array $configFileInfos)
     {
         $this->configureCallValuesCollector = new ConfigureCallValuesCollector();
+        $this->configFileInfos = $configFileInfos;
+
         parent::__construct($environment, $debug);
     }
 
@@ -69,17 +74,9 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
     {
         $loader->load(__DIR__ . '/../../config/config.php');
 
-        foreach ($this->configs as $config) {
-            $loader->load($config);
+        foreach ($this->configFileInfos as $configFileInfo) {
+            $loader->load($configFileInfo->getRealPath());
         }
-    }
-
-    /**
-     * @param string[] $configs
-     */
-    public function setConfigs(array $configs): void
-    {
-        $this->configs = $configs;
     }
 
     /**

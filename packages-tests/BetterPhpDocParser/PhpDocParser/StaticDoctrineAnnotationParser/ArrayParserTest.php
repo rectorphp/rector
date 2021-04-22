@@ -7,10 +7,9 @@ namespace Rector\Tests\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationP
 use Iterator;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
-use Rector\Core\HttpKernel\RectorKernel;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class ArrayParserTest extends AbstractKernelTestCase
+final class ArrayParserTest extends AbstractTestCase
 {
     /**
      * @var ArrayParser
@@ -24,7 +23,7 @@ final class ArrayParserTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
 
         $this->arrayParser = $this->getService(ArrayParser::class);
         $this->tokenIteratorFactory = $this->getService(TokenIteratorFactory::class);

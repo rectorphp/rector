@@ -8,12 +8,11 @@ use Iterator;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Order\StmtOrder;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class StmtOrderTest extends AbstractKernelTestCase
+final class StmtOrderTest extends AbstractTestCase
 {
     /**
      * @var int[]
@@ -36,7 +35,7 @@ final class StmtOrderTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
 
         $this->stmtOrder = $this->getService(StmtOrder::class);
         $this->nodeNameResolver = $this->getService(NodeNameResolver::class);

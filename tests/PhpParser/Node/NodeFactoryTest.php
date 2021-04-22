@@ -9,11 +9,10 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class NodeFactoryTest extends AbstractKernelTestCase
+final class NodeFactoryTest extends AbstractTestCase
 {
     /**
      * @var NodeFactory
@@ -22,7 +21,7 @@ final class NodeFactoryTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
 
         $this->nodeFactory = $this->getService(NodeFactory::class);
     }

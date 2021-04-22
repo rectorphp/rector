@@ -10,17 +10,16 @@ use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FileSystemRector\Parser\FileInfoParser;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\EasyTesting\FixtureSplitter\TrioFixtureSplitter;
 use Symplify\EasyTesting\ValueObject\FixtureSplit\TrioContent;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class TagValueNodeReprintTest extends AbstractKernelTestCase
+final class TagValueNodeReprintTest extends AbstractTestCase
 {
     /**
      * @var FileInfoParser
@@ -44,7 +43,7 @@ final class TagValueNodeReprintTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
 
         $this->fileInfoParser = $this->getService(FileInfoParser::class);
 

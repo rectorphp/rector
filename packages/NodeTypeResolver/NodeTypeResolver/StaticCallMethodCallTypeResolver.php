@@ -61,12 +61,6 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
      */
     public function resolve(Node $node): Type
     {
-        if ($node instanceof MethodCall) {
-            $callerType = $this->nodeTypeResolver->resolve($node->var);
-        } else {
-            $callerType = $this->nodeTypeResolver->resolve($node->class);
-        }
-
         $methodName = $this->nodeNameResolver->getName($node->name);
 
         // no specific method found, return class types, e.g. <ClassType>::$method()
@@ -82,6 +76,12 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
         $nodeReturnType = $scope->getType($node);
         if (! $nodeReturnType instanceof MixedType) {
             return $nodeReturnType;
+        }
+
+        if ($node instanceof MethodCall) {
+            $callerType = $this->nodeTypeResolver->resolve($node->var);
+        } else {
+            $callerType = $this->nodeTypeResolver->resolve($node->class);
         }
 
         foreach ($callerType->getReferencedClasses() as $referencedClass) {

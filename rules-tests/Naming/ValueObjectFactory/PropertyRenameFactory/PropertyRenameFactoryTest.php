@@ -7,16 +7,15 @@ namespace Rector\Tests\Naming\ValueObjectFactory\PropertyRenameFactory;
 use Iterator;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class PropertyRenameFactoryTest extends AbstractKernelTestCase
+final class PropertyRenameFactoryTest extends AbstractTestCase
 {
     /**
      * @var PropertyRenameFactory
@@ -40,7 +39,7 @@ final class PropertyRenameFactoryTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
 
         $this->propertyRenameFactory = $this->getService(PropertyRenameFactory::class);
         $this->matchPropertyTypeExpectedNameResolver = $this->getService(

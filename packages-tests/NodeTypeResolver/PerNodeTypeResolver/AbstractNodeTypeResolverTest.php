@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Rector\Tests\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Rector\Testing\TestingParser\TestingParser;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
-abstract class AbstractNodeTypeResolverTest extends AbstractKernelTestCase
+abstract class AbstractNodeTypeResolverTest extends AbstractTestCase
 {
     /**
      * @var NodeTypeResolver
@@ -30,7 +29,7 @@ abstract class AbstractNodeTypeResolverTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
 
         $this->betterNodeFinder = $this->getService(BetterNodeFinder::class);
         $this->testingParser = $this->getService(TestingParser::class);

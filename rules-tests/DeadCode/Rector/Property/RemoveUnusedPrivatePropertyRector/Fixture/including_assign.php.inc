@@ -4,7 +4,7 @@ namespace Rector\Tests\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRecto
 
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
-final class IncludingAssign extends AbstractKernelTestCase
+final class IncludingAssign extends \Rector\Testing\PHPUnit\AbstractTestCase
 {
     private $someService;
 
@@ -22,7 +22,7 @@ namespace Rector\Tests\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRecto
 
 use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
-final class IncludingAssign extends AbstractKernelTestCase
+final class IncludingAssign extends \Rector\Testing\PHPUnit\AbstractTestCase
 {
     protected function setUp(): void
     {

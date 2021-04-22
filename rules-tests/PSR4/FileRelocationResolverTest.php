@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Rector\Tests\PSR4;
 
 use Iterator;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\PSR4\FileRelocationResolver;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Rector\Tests\PSR4\Source\SomeFile;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class FileRelocationResolverTest extends AbstractKernelTestCase
+final class FileRelocationResolverTest extends AbstractTestCase
 {
     /**
      * @var FileRelocationResolver
@@ -20,7 +19,7 @@ final class FileRelocationResolverTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
 
         $this->fileRelocationResolver = $this->getService(FileRelocationResolver::class);
     }

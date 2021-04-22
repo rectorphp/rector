@@ -229,10 +229,6 @@ final class NodeTypeResolver
         return $scope->getNativeType($expr);
     }
 
-    /**
-     * @deprecated
-     * Use @see NodeTypeResolver::resolve() instead
-     */
     public function getStaticType(Node $node): Type
     {
         if ($node instanceof Param) {

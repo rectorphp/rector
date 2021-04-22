@@ -9,12 +9,11 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Parser\SimplePhpParser;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class BetterNodeFinderTest extends AbstractKernelTestCase
+final class BetterNodeFinderTest extends AbstractTestCase
 {
     /**
      * @var Node[]
@@ -28,7 +27,7 @@ final class BetterNodeFinderTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
 
         $this->betterNodeFinder = $this->getService(BetterNodeFinder::class);
 

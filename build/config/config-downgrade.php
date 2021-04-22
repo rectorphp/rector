@@ -63,6 +63,5 @@ final class DowngradeRectorConfig
         'vendor/symfony/dependency-injection/ExpressionLanguage.php',
         'vendor/symfony/dependency-injection/ExpressionLanguageProvider.php',
         'vendor/symfony/var-dumper/Caster/*',
-        'vendor/symplify/package-builder/src/Testing/AbstractKernelTestCase.php',
     ];
 }

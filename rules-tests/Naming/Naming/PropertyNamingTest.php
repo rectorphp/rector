@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Rector\Tests\Naming\Naming;
 
 use Iterator;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class PropertyNamingTest extends AbstractKernelTestCase
+final class PropertyNamingTest extends AbstractTestCase
 {
     /**
      * @var PropertyNaming
@@ -19,7 +18,7 @@ final class PropertyNamingTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->propertyNaming = $this->getService(PropertyNaming::class);
     }
 

@@ -16,11 +16,10 @@ use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class StaticTypeMapperTest extends AbstractKernelTestCase
+final class StaticTypeMapperTest extends AbstractTestCase
 {
     /**
      * @var StaticTypeMapper
@@ -29,7 +28,7 @@ final class StaticTypeMapperTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
 
         $this->staticTypeMapper = $this->getService(StaticTypeMapper::class);
     }

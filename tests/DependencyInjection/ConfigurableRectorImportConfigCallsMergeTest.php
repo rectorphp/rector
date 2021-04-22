@@ -6,7 +6,6 @@ namespace Rector\Core\Tests\DependencyInjection;
 
 use Iterator;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -33,8 +32,7 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractRectorT
         $rectorConfigsResolver = new RectorConfigsResolver();
 
         $configFileInfos = $rectorConfigsResolver->resolveFromConfigFileInfo(new SmartFileInfo($config));
-
-        $this->bootKernelWithConfigs(RectorKernel::class, $configFileInfos);
+        $this->bootFromConfigFileInfos($configFileInfos);
 
         $renameClassRector = $this->getService(RenameClassRector::class);
         $oldToNewClasses = $this->privatesAccessor->getPrivateProperty($renameClassRector, 'oldToNewClasses');

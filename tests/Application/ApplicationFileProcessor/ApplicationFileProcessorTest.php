@@ -6,12 +6,12 @@ namespace Rector\Core\Tests\Application\ApplicationFileProcessor;
 
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ApplicationFileProcessorTest extends AbstractKernelTestCase
+final class ApplicationFileProcessorTest extends AbstractTestCase
 {
     /**
      * @var ApplicationFileProcessor
@@ -30,7 +30,7 @@ final class ApplicationFileProcessorTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernelWithConfigs(RectorKernel::class, [__DIR__ . '/config/configured_rule.php']);
+        $this->bootFromConfigFileInfos([new SmartFileInfo(__DIR__ . '/config/configured_rule.php')]);
 
         /** @var Configuration $configuration */
         $configuration = $this->getService(Configuration::class);

@@ -6,14 +6,13 @@ namespace Rector\Tests\Defluent\NodeFactory\FluentChainMethodCallRootExtractor;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallRootExtractor;
 use Rector\Defluent\ValueObject\AssignAndRootExpr;
 use Rector\Defluent\ValueObject\FluentCallsKind;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Rector\Testing\TestingParser\TestingParser;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
-final class FluentChainMethodCallRootExtractorTest extends AbstractKernelTestCase
+final class FluentChainMethodCallRootExtractorTest extends AbstractTestCase
 {
     /**
      * @var FluentChainMethodCallRootExtractor
@@ -27,7 +26,7 @@ final class FluentChainMethodCallRootExtractorTest extends AbstractKernelTestCas
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->fluentChainMethodCallRootExtractor = $this->getService(FluentChainMethodCallRootExtractor::class);
         $this->testingParser = $this->getService(TestingParser::class);
     }
