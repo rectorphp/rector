@@ -41,7 +41,7 @@ php -d memory_limit=-1 php-scoper.phar add-prefix bin config src packages rules 
 
 
 # note "Dumping Composer Autoload"
-# composer dump-autoload --working-dir "$RESULT_DIRECTORY" --ansi --optimize --classmap-authoritative --no-dev
+composer dump-autoload --working-dir "$RESULT_DIRECTORY" --ansi --classmap-authoritative --no-dev
 
 rm -rf "$BUILD_DIRECTORY"
 

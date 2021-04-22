@@ -43,7 +43,7 @@ RUN composer install --no-dev --ansi
 
 # Add source and generate full autoloader
 COPY . .
-#RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
+RUN composer dump-autoload --classmap-authoritative --no-dev
 
 RUN rm -f "phpstan-for-rector.neon" \
     && php -d memory_limit=-1 php-scoper.phar add-prefix bin config packages rules src templates vendor composer.json --output-dir /scoped --config scoper.php \
