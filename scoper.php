@@ -35,6 +35,10 @@ $timestamp = $dateTime->format('Ymd');
 return [
     ScoperOption::PREFIX => 'RectorPrefix' . $timestamp,
     ScoperOption::WHITELIST => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),
+    ScoperOption::FILES_WHITELIST => [
+        // composer versions
+        '../../vendor/composer/InstalledVersions.php'
+    ],
     ScoperOption::PATCHERS => [
         // [BEWARE] $filePath is absolute!
 
