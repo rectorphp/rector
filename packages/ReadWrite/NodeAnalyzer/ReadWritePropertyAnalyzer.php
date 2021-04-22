@@ -15,7 +15,7 @@ use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Unset_;
-use Rector\Core\Exception\Node\MissingParentNodeException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\AssignManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -65,7 +65,7 @@ final class ReadWritePropertyAnalyzer
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parent instanceof Node) {
-            throw new MissingParentNodeException();
+            throw new ShouldNotHappenException();
         }
 
         $parent = $this->unwrapPostPreIncDec($parent);
@@ -89,7 +89,7 @@ final class ReadWritePropertyAnalyzer
         if ($node instanceof PreInc || $node instanceof PreDec || $node instanceof PostInc || $node instanceof PostDec) {
             $node = $node->getAttribute(AttributeKey::PARENT_NODE);
             if (! $node instanceof Node) {
-                throw new MissingParentNodeException();
+                throw new ShouldNotHappenException();
             }
         }
 
@@ -105,7 +105,7 @@ final class ReadWritePropertyAnalyzer
     {
         $parentParent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentParent instanceof Node) {
-            throw new MissingParentNodeException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
 
         if (! $this->assignManipulator->isLeftPartOfAssign($arrayDimFetch)) {

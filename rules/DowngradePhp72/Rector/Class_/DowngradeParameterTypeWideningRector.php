@@ -13,7 +13,9 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\Application\File;
 use Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver;
 use Rector\DowngradePhp72\NodeAnalyzer\NativeTypeClassTreeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -186,6 +188,13 @@ CODE_SAMPLE
 
         // Remove the type
         $param->type = null;
+
+        // file from another file
+        $file = $param->getAttribute(AttributeKey::FILE);
+        if ($file instanceof File) {
+            $rectorWithLineChange = new RectorWithLineChange($this, $param->getLine());
+            $file->addRectorClassWithLine($rectorWithLineChange);
+        }
     }
 
     private function removeParamTypeFromMethodForChildren(

@@ -176,4 +176,12 @@ final class AttributeKey
      * @var string
      */
     public const FUNC_ARGS_TRAILING_COMMA = 'trailing_comma';
+
+    /**
+     * Contains current file object
+     * @see \Rector\Core\ValueObject\Application\File
+     *
+     * @var string
+     */
+    public const FILE = 'file';
 }

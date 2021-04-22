@@ -9,7 +9,9 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
+use Rector\Core\ValueObject\Application\File;
 use Rector\NodeCollector\NodeVisitor\NodeCollectorNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\FileNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
@@ -83,7 +85,7 @@ final class NodeScopeAndMetadataDecorator
      * @param Stmt[] $nodes
      * @return Stmt[]
      */
-    public function decorateNodesFromFile(array $nodes, SmartFileInfo $smartFileInfo): array
+    public function decorateNodesFromFile(File $file, array $nodes, SmartFileInfo $smartFileInfo): array
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver(null, [
@@ -113,6 +115,9 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
         $nodeTraverser->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
+
+        $fileNodeVisitor = new FileNodeVisitor($file);
+        $nodeTraverser->addVisitor($fileNodeVisitor);
 
         $nodes = $nodeTraverser->traverse($nodes);
 
