@@ -82,19 +82,24 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $hasChanged = false;
         foreach ($node->params as $param) {
-            $this->refactorParamType($param, $node);
+            if ($this->refactorParamType($param, $node)) {
+                $hasChanged = true;
+            }
         }
 
-        if (! $node->returnType instanceof NullableType) {
-            return null;
+        if ($node->returnType instanceof NullableType && $this->phpDocFromTypeDeclarationDecorator->decorateReturn(
+            $node
+        )) {
+            $hasChanged = true;
         }
 
-        if (! $this->phpDocFromTypeDeclarationDecorator->decorateReturn($node)) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
 
-        return $node;
+        return null;
     }
 
     private function isNullableParam(Param $param): bool
@@ -114,14 +119,16 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    private function refactorParamType(Param $param, FunctionLike $functionLike): void
+    private function refactorParamType(Param $param, FunctionLike $functionLike): bool
     {
         if (! $this->isNullableParam($param)) {
-            return;
+            return false;
         }
 
         $this->decorateWithDocBlock($functionLike, $param);
         $param->type = null;
+
+        return true;
     }
 
     /**
