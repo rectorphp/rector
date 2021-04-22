@@ -105,7 +105,7 @@ final class ReadWritePropertyAnalyzer
     {
         $parentParent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentParent instanceof Node) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
 
         if (! $this->assignManipulator->isLeftPartOfAssign($arrayDimFetch)) {
