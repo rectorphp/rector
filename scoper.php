@@ -70,7 +70,9 @@ return [
             }
 
             // see https://regex101.com/r/v8zRMm/1
-            return Strings::replace($content, '#' . $prefix . '\\\\Composer\\\\Plugin\\\\PluginInterface#', 'Composer\\Plugin\\PluginInterface');
+            $content = Strings::replace($content, '#' . $prefix . '\\\\Composer\\\\Plugin\\\\PluginInterface#', 'Composer\\Plugin\\PluginInterface');
+
+            return Strings::replace($content, '#' . $prefix . '\\\\Composer\\\\EventDispatcher\\\\EventSubscriberInterface#', 'Composer\\EventDispatcher\\EventSubscriberInterface');
         },
 
         // fixes https://github.com/rectorphp/rector/issues/6007
