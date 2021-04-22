@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -66,6 +67,15 @@ CODE_SAMPLE
         $funcCall = $this->nodeFactory->createFuncCall('is_array', [$arg]);
         $instanceOf = new Instanceof_($arg, new FullyQualified('Traversable'));
 
-        return new BooleanOr($funcCall, $instanceOf);
+        $booleanOr = new BooleanOr($funcCall, $instanceOf);
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $this->traverseNodesWithCallable($parent, function (Node $n) use ($node, $booleanOr) {
+            if ($n === $node) {
+                $n = $booleanOr;
+                return $n;
+            }
+        });
+
+        return null;
     }
 }
