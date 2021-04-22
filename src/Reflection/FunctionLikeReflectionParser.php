@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
 use PhpParser\Parser;
 use PHPStan\Reflection\MethodReflection;
+use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -62,7 +63,11 @@ class FunctionLikeReflectionParser
         }
 
         $nodes = (array) $this->parser->parse($fileContent);
-        $nodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($nodes, new SmartFileInfo($fileName));
+
+        $smartFileInfo = new SmartFileInfo($fileName);
+        $file = new File($smartFileInfo, $smartFileInfo->getContents());
+
+        $nodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes, $smartFileInfo);
 
         $class = $this->nodeFinder->findFirstInstanceOf($nodes, Class_::class);
         if (! $class instanceof Class_) {
