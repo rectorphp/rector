@@ -6,7 +6,7 @@ class Fixture
 {
     public function run($obj)
     {
-        return is_iterable($obj);
+        is_iterable($obj);
     }
 }
 
@@ -20,7 +20,7 @@ class Fixture
 {
     public function run($obj)
     {
-        return is_array($obj) || $obj instanceof \Traversable;
+        is_array($obj) || $obj instanceof \Traversable;
     }
 }
 
