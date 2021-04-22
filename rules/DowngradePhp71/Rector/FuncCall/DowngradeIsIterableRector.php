@@ -62,6 +62,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isName($node, 'is_iterable')) {
+            return null;
+        }
+
         /** @var mixed $arg */
         $arg = $node->args[0]->value;
         $funcCall = $this->nodeFactory->createFuncCall('is_array', [$arg]);
