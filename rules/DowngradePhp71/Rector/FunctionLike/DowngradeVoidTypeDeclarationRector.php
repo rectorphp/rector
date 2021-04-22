@@ -74,7 +74,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $voidType = new VoidType();
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $voidType);
+
+        if (! $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $voidType)) {
+            return null;
+        }
 
         return $node;
     }

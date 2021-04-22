@@ -95,7 +95,10 @@ CODE_SAMPLE
         }
 
         $thisType = new ThisType($classReflection);
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $thisType);
+
+        if (! $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $thisType)) {
+            return null;
+        }
 
         return $node;
     }

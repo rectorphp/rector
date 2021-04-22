@@ -90,7 +90,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturn($node);
+        if (! $this->phpDocFromTypeDeclarationDecorator->decorateReturn($node)) {
+            return null;
+        }
 
         return $node;
     }
