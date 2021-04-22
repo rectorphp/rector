@@ -26,16 +26,10 @@ final class RectorConfigsResolver
      */
     private $setConfigResolver;
 
-    /**
-     * @var ExtensionConfigResolver
-     */
-    private $extensionConfigResolver;
-
     public function __construct()
     {
         $this->setConfigResolver = new SetConfigResolver();
         $this->configResolver = new ConfigResolver();
-        $this->extensionConfigResolver = new ExtensionConfigResolver();
     }
 
     /**
