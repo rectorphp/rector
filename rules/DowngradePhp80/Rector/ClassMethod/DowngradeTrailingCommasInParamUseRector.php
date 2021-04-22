@@ -111,7 +111,7 @@ CODE_SAMPLE
         }
 
         if ($node instanceof Closure) {
-            $node = $this->processUses($node);
+            $this->processUses($node);
         }
 
         /** @var ClassMethod|Function_ $node */
@@ -130,13 +130,13 @@ CODE_SAMPLE
         return $this->cleanTrailingComma($node, $node->args);
     }
 
-    private function processUses(Closure $node): Closure
+    private function processUses(Closure $node): void
     {
         if ($node->uses === []) {
-            return $node;
+            return;
         }
 
-        return $this->cleanTrailingComma($node, $node->uses);
+        $this->cleanTrailingComma($node, $node->uses);
     }
 
     /**
