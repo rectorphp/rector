@@ -1,18 +1,18 @@
 <?php
 
-final class SomeContainer implements ContainerInterface
+final class AnotherContainer implements AnotherContainerInterface
 {
-    use ServiceLocatorTrait;
+    use AnotherServiceLocatorTrait;
 }
 
-trait ServiceLocatorTrait
+trait AnotherServiceLocatorTrait
 {
     public function get(string $name)
     {
     }
 }
 
-interface ContainerInterface
+interface AnotherContainerInterface
 {
     public function get($name);
 }
@@ -21,12 +21,12 @@ interface ContainerInterface
 -----
 <?php
 
-final class SomeContainer implements ContainerInterface
+final class AnotherContainer implements AnotherContainerInterface
 {
-    use ServiceLocatorTrait;
+    use AnotherServiceLocatorTrait;
 }
 
-trait ServiceLocatorTrait
+trait AnotherServiceLocatorTrait
 {
     /**
      * @param string $name
@@ -36,7 +36,7 @@ trait ServiceLocatorTrait
     }
 }
 
-interface ContainerInterface
+interface AnotherContainerInterface
 {
     public function get($name);
 }
