@@ -32,12 +32,6 @@ final class RectorChangeCollector
         $this->currentFileProvider = $currentFileProvider;
     }
 
-    public function notifyFileChange(File $file, Node $node, RectorInterface $rector): void
-    {
-        $rectorWithLineChange = new RectorWithLineChange($rector, $node->getLine());
-        $file->addRectorClassWithLine($rectorWithLineChange);
-    }
-
     public function notifyNodeFileInfo(Node $node): void
     {
         $file = $this->currentFileProvider->getFile();
