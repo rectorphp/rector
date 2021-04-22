@@ -107,7 +107,6 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             $this->symfonyStyle->writeln($message);
             $this->symfonyStyle->newLine();
             $this->symfonyStyle->writeln($fileDiff->getDiffConsoleFormatted());
-            $this->symfonyStyle->newLine();
 
             $rectorsChangelogsLines = $this->createRectorChangelogLines($fileDiff);
 
