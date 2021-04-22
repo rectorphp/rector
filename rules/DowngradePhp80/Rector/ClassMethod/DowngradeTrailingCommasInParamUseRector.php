@@ -154,13 +154,13 @@ CODE_SAMPLE
     /**
      * @param ClosureUse[]|Param[]|Arg[] $array
      */
-    private function cleanTrailingComma(Node $node, array $array): Node
+    private function cleanTrailingComma(Node $node, array $array): ?Node
     {
         $lastPosition = array_key_last($array);
 
         $last = $array[$lastPosition];
         if (! $this->followedByCommaAnalyzer->isFollowed($this->file, $last)) {
-            return $node;
+            return null;
         }
 
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);

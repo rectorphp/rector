@@ -82,7 +82,9 @@ CODE_SAMPLE
             $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $iterableType);
         }
 
-        $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $iterableType);
+        if (! $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $iterableType)) {
+            return null;
+        }
 
         return $node;
     }
