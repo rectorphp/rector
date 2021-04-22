@@ -19,6 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_70);
 
     $services = $containerConfigurator->services();
+
     $services->set(DowngradeNullableTypeDeclarationRector::class);
     $services->set(DowngradeVoidTypeDeclarationRector::class);
     $services->set(DowngradeClassConstantVisibilityRector::class);
