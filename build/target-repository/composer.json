@@ -9,6 +9,11 @@
         "php": "^7.0|^8.0",
         "phpstan/phpstan": "^0.12.83"
     },
+    "autoload-dev": {
+        "classmap": [
+            "build/target-repository/tests/Rector"
+        ]
+    },
     "extra": {
         "branch-alias": {
             "dev-main": "0.10-dev"
