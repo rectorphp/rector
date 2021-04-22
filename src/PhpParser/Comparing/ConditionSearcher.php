@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Nop;
 
 final class ConditionSearcher
 {
@@ -19,7 +20,7 @@ final class ConditionSearcher
 
         // search if for redeclaration of variable
         foreach ($if->stmts as $statementIf) {
-            if (! $statementIf instanceof Expression) {
+            if ($statementIf instanceof Nop) { // Nop stmt doesn't has expr property
                 continue;
             }
 
@@ -52,6 +53,10 @@ final class ConditionSearcher
     {
         /** @var Expression $statementElse */
         foreach ($else->stmts as $statementElse) {
+            if ($statementElse instanceof Nop) { // Nop stmt doesn't has expr property
+                continue;
+            }
+
             if (! $statementElse->expr instanceof Assign) {
                 continue;
             }
