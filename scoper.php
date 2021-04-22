@@ -60,7 +60,11 @@ return [
             }
 
             // see https://regex101.com/r/v8zRMm/1
-            return Strings::replace($content, '#' . $prefix . '\\\\Composer\\\\InstalledVersions#', 'Composer\InstalledVersions');
+            return Strings::replace(
+                $content, '
+                #' . $prefix . '\\\\Composer\\\\InstalledVersions#',
+                'Composer\InstalledVersions'
+            );
         },
 
         // un-prefix composer plugin
@@ -103,8 +107,8 @@ return [
             // un-prefix
             return Strings::replace(
                 $content,
-                sprintf('\\%s\\PHPUnit\\Framework\\TestCase', $prefix),
-                '\\PHPUnit\\Framework\\TestCase'
+                $prefix . '\\\\PHPUnit\\\\Framework\\\\TestCase',
+                'PHPUnit\Framework\TestCase'
             );
         },
 
@@ -116,8 +120,8 @@ return [
             // un-prefix
             return Strings::replace(
                 $content,
-                sprintf('\\%s\\Symplify\\PackageBuilder\\Testing\\AbstractKernelTestCase', $prefix),
-                '\\Symplify\\PackageBuilder\\Testing\\AbstractKernelTestCase'
+                $prefix . '\\\\Symplify\\PackageBuilder\\\\Testing\\\\AbstractKernelTestCase',
+                'Symplify\PackageBuilder\Testing\AbstractKernelTestCase'
             );
         },
 
