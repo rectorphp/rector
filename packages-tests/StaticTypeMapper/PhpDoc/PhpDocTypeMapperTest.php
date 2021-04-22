@@ -11,12 +11,11 @@ use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class PhpDocTypeMapperTest extends AbstractKernelTestCase
+final class PhpDocTypeMapperTest extends AbstractTestCase
 {
     /**
      * @var PhpDocTypeMapper
@@ -30,7 +29,7 @@ final class PhpDocTypeMapperTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->phpDocTypeMapper = $this->getService(PhpDocTypeMapper::class);
         $this->nameScopeFactory = $this->getService(NameScopeFactory::class);
     }

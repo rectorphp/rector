@@ -99,9 +99,7 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
 
         foreach ($localReturnNodes as $localReturnNode) {
             $returnedExprType = $this->nodeTypeResolver->getStaticType($localReturnNode);
-            $returnedExprType = $this->splArrayFixedTypeNarrower->narrow($returnedExprType);
-
-            $this->types[] = $returnedExprType;
+            $this->types[] = $this->splArrayFixedTypeNarrower->narrow($returnedExprType);
         }
 
         if ($hasSilentVoid) {

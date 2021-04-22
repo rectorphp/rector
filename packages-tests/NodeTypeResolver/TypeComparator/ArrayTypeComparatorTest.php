@@ -13,13 +13,12 @@ use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Rector\Tests\NodeTypeResolver\TypeComparator\Source\SomeGenericTypeObject;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
-final class ArrayTypeComparatorTest extends AbstractKernelTestCase
+final class ArrayTypeComparatorTest extends AbstractTestCase
 {
     /**
      * @var ArrayTypeComparator
@@ -28,7 +27,7 @@ final class ArrayTypeComparatorTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->arrayTypeComparator = $this->getService(ArrayTypeComparator::class);
     }
 

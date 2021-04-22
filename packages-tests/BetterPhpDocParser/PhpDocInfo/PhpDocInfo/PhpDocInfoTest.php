@@ -10,12 +10,11 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class PhpDocInfoTest extends AbstractKernelTestCase
+final class PhpDocInfoTest extends AbstractTestCase
 {
     /**
      * @var PhpDocInfo
@@ -39,7 +38,7 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
 
         $this->phpDocInfoPrinter = $this->getService(PhpDocInfoPrinter::class);
         $this->smartFileSystem = $this->getService(SmartFileSystem::class);

@@ -5,17 +5,16 @@ namespace Rector\Core\Tests\NonPhpFile\NonPhpFileClassRenamer;
 
 use Iterator;
 use Rector\Core\Configuration\Option;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileClassRenamer;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass;
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class NonPhpFileClassRenamerTest extends AbstractKernelTestCase
+final class NonPhpFileClassRenamerTest extends AbstractTestCase
 {
     /**
      * @var array<string, class-string>
@@ -40,7 +39,7 @@ final class NonPhpFileClassRenamerTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
 
         $this->nonPhpFileClassRenamer = $this->getService(NonPhpFileClassRenamer::class);
         $this->parameterProvider = $this->getService(ParameterProvider::class);

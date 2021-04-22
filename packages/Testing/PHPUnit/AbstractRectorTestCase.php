@@ -14,7 +14,6 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Contract\RectorTestInterface;
@@ -23,10 +22,9 @@ use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements RectorTestInterface
+abstract class AbstractRectorTestCase extends AbstractTestCase implements RectorTestInterface
 {
     use MovingFilesTrait;
 
@@ -67,9 +65,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase implements 
 
         $configFileInfo = new SmartFileInfo($this->provideConfigFilePath());
         $rectorConfigsResolver = new RectorConfigsResolver();
-        $configFileInfos = $rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
 
-        $this->bootKernelWithConfigsAndStaticCache(RectorKernel::class, $configFileInfos);
+        $configFileInfos = $rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
+        $this->bootFromConfigFileInfos($configFileInfos);
 
         $this->applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
         $this->parameterProvider = $this->getService(ParameterProvider::class);

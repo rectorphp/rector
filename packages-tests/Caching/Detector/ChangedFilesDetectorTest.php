@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Caching\Tests\Detector;
+namespace Rector\Tests\Caching\Detector;
 
 use Iterator;
 use Rector\Caching\Detector\ChangedFilesDetector;

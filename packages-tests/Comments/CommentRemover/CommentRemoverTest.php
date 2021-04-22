@@ -6,15 +6,14 @@ namespace Rector\Comments\Tests\CommentRemover;
 
 use Iterator;
 use Rector\Comments\CommentRemover;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\FileSystemRector\Parser\FileInfoParser;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\EasyTesting\StaticFixtureSplitter;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class CommentRemoverTest extends AbstractKernelTestCase
+final class CommentRemoverTest extends AbstractTestCase
 {
     /**
      * @var CommentRemover
@@ -33,7 +32,7 @@ final class CommentRemoverTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->commentRemover = $this->getService(CommentRemover::class);
         $this->fileInfoParser = $this->getService(FileInfoParser::class);
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);

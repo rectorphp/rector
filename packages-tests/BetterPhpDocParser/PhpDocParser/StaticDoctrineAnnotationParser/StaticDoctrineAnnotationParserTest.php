@@ -8,10 +8,9 @@ use Iterator;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
-use Rector\Core\HttpKernel\RectorKernel;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class StaticDoctrineAnnotationParserTest extends AbstractKernelTestCase
+final class StaticDoctrineAnnotationParserTest extends AbstractTestCase
 {
     /**
      * @var StaticDoctrineAnnotationParser
@@ -25,7 +24,7 @@ final class StaticDoctrineAnnotationParserTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
 
         $this->tokenIteratorFactory = $this->getService(TokenIteratorFactory::class);
         $this->staticDoctrineAnnotationParser = $this->getService(StaticDoctrineAnnotationParser::class);

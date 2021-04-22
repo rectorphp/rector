@@ -10,11 +10,10 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
-use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Rector\TypeDeclaration\TypeNormalizer;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 
-final class TypeNormalizerTest extends AbstractKernelTestCase
+final class TypeNormalizerTest extends AbstractTestCase
 {
     /**
      * @var TypeNormalizer
@@ -23,7 +22,7 @@ final class TypeNormalizerTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->typeNormalizer = $this->getService(TypeNormalizer::class);
     }
 

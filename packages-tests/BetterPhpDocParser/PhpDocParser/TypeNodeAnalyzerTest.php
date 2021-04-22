@@ -10,10 +10,9 @@ use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Rector\BetterPhpDocParser\PhpDocParser\TypeNodeAnalyzer;
-use Rector\Core\HttpKernel\RectorKernel;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class TypeNodeAnalyzerTest extends AbstractKernelTestCase
+final class TypeNodeAnalyzerTest extends AbstractTestCase
 {
     /**
      * @var string
@@ -27,7 +26,7 @@ final class TypeNodeAnalyzerTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->typeNodeAnalyzer = $this->getService(TypeNodeAnalyzer::class);
     }
 

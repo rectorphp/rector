@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
 
 use Iterator;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class ProjectComposerJsonPhpVersionResolverTest extends AbstractKernelTestCase
+final class ProjectComposerJsonPhpVersionResolverTest extends AbstractTestCase
 {
     /**
      * @var ProjectComposerJsonPhpVersionResolver
@@ -18,7 +17,7 @@ final class ProjectComposerJsonPhpVersionResolverTest extends AbstractKernelTest
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->projectComposerJsonPhpVersionResolver = $this->getService(ProjectComposerJsonPhpVersionResolver::class);
     }
 

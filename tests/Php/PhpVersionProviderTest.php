@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Core\Tests\Php;
 
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\Php\PhpVersionProvider;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class PhpVersionProviderTest extends AbstractKernelTestCase
+final class PhpVersionProviderTest extends AbstractTestCase
 {
     /**
      * @var PhpVersionProvider
@@ -17,7 +16,7 @@ final class PhpVersionProviderTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->phpVersionProvider = $this->getService(PhpVersionProvider::class);
     }
 

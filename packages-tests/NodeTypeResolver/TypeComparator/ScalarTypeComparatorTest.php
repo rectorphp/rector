@@ -9,11 +9,10 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\ClassStringType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class ScalarTypeComparatorTest extends AbstractKernelTestCase
+final class ScalarTypeComparatorTest extends AbstractTestCase
 {
     /**
      * @var ScalarTypeComparator
@@ -22,7 +21,7 @@ final class ScalarTypeComparatorTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->scalarTypeComparator = $this->getService(ScalarTypeComparator::class);
     }
 

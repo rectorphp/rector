@@ -33,15 +33,10 @@ final class RectorContainerFactory
             $environment .= mt_rand(0, 10000);
         }
 
-        $rectorKernel = new RectorKernel($environment, $isDebug);
-        if ($configFileInfos !== []) {
-            $configFilePaths = $this->unpackRealPathsFromFileInfos($configFileInfos);
-            $rectorKernel->setConfigs($configFilePaths);
-        }
-
         $phpStanStubLoader = new PHPStanStubLoader();
         $phpStanStubLoader->loadStubs();
 
+        $rectorKernel = new RectorKernel($environment, $isDebug, $configFileInfos);
         $rectorKernel->boot();
 
         return $rectorKernel->getContainer();
@@ -63,21 +58,6 @@ final class RectorContainerFactory
         $configuration->setBootstrapConfigs($bootstrapConfigs);
 
         return $container;
-    }
-
-    /**
-     * @param SmartFileInfo[] $configFileInfos
-     * @return string[]
-     */
-    private function unpackRealPathsFromFileInfos(array $configFileInfos): array
-    {
-        $configFilePaths = [];
-        foreach ($configFileInfos as $configFileInfo) {
-            // getRealPath() cannot be used, as it breaks in phar
-            $configFilePaths[] = $configFileInfo->getRealPath() ?: $configFileInfo->getPathname();
-        }
-
-        return $configFilePaths;
     }
 
     /**

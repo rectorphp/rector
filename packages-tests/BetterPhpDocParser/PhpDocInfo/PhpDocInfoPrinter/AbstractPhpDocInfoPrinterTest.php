@@ -10,12 +10,11 @@ use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-abstract class AbstractPhpDocInfoPrinterTest extends AbstractKernelTestCase
+abstract class AbstractPhpDocInfoPrinterTest extends AbstractTestCase
 {
     /**
      * @var PhpDocInfoPrinter
@@ -34,7 +33,7 @@ abstract class AbstractPhpDocInfoPrinterTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
 
         $this->phpDocInfoFactory = $this->getService(PhpDocInfoFactory::class);
         $this->phpDocInfoPrinter = $this->getService(PhpDocInfoPrinter::class);

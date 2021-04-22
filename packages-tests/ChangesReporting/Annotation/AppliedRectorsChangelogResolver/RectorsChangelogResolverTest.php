@@ -6,14 +6,13 @@ namespace Rector\Tests\ChangesReporting\Annotation\AppliedRectorsChangelogResolv
 
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\ValueObject\Reporting\FileDiff;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Rector\Tests\ChangesReporting\Annotation\AppliedRectorsChangelogResolver\Source\RectorWithChangelog;
 use Rector\Tests\ChangesReporting\Annotation\AppliedRectorsChangelogResolver\Source\RectorWithOutChangelog;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class RectorsChangelogResolverTest extends AbstractKernelTestCase
+final class RectorsChangelogResolverTest extends AbstractTestCase
 {
     /**
      * @var RectorsChangelogResolver
@@ -27,7 +26,7 @@ final class RectorsChangelogResolverTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->rectorsChangelogResolver = $this->getService(RectorsChangelogResolver::class);
 
         $this->fileDiff = $this->createFileDiff();

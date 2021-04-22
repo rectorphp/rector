@@ -9,12 +9,11 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Plus;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 
-final class ValueResolverTest extends AbstractKernelTestCase
+final class ValueResolverTest extends AbstractTestCase
 {
     /**
      * @var ValueResolver
@@ -23,7 +22,7 @@ final class ValueResolverTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->valueResolver = $this->getService(ValueResolver::class);
     }
 

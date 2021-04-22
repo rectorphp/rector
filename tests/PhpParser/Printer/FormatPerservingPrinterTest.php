@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Core\Tests\PhpParser\Printer;
 
-use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class FormatPerservingPrinterTest extends AbstractKernelTestCase
+final class FormatPerservingPrinterTest extends AbstractTestCase
 {
     /**
      * @var int
@@ -29,7 +28,7 @@ final class FormatPerservingPrinterTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernel(RectorKernel::class);
+        $this->boot();
         $this->formatPerservingPrinter = $this->getService(FormatPerservingPrinter::class);
         $this->smartFileSystem = $this->getService(SmartFileSystem::class);
     }

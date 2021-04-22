@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\FileSystem\FilesFinder\ExcludePaths;
 
 use Rector\Core\FileSystem\FilesFinder;
-use Rector\Core\HttpKernel\RectorKernel;
-use Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use Rector\Testing\PHPUnit\AbstractTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ExcludePathsTest extends AbstractKernelTestCase
+final class ExcludePathsTest extends AbstractTestCase
 {
     public function testShouldFail(): void
     {
-        $this->bootKernelWithConfigs(RectorKernel::class, [__DIR__ . '/config/config-with-excluded-paths.php']);
+        $this->bootFromConfigFileInfos([new SmartFileInfo(__DIR__ . '/config/config-with-excluded-paths.php')]);
 
         $filesFinder = $this->getService(FilesFinder::class);
 
