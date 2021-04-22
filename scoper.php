@@ -120,7 +120,7 @@ return [
             // un-prefix
             return Strings::replace(
                 $content,
-                '#' . $prefix . '\\\\Symplify\\PackageBuilder\\\\Testing\\\\AbstractKernelTestCase#',
+                '#' . $prefix . '\\\\Symplify\\\\PackageBuilder\\\\Testing\\\\AbstractKernelTestCase#',
                 'Symplify\PackageBuilder\Testing\AbstractKernelTestCase'
             );
         },
