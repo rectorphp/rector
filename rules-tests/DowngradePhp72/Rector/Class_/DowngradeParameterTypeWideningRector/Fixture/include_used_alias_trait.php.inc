@@ -1,6 +1,8 @@
 <?php
 
-final class SomeContainer implements ContainerInterface
+namespace Rector\Tests\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector\Fixture;
+
+final class SomeContainer implements AnyContainerInterface
 {
     use ServiceLocatorTrait;
 }
@@ -12,30 +14,7 @@ trait ServiceLocatorTrait
     }
 }
 
-interface ContainerInterface
+interface AnyContainerInterface
 {
     public function has(string $name);
 }
-
-?>
------
-<?php
-
-final class SomeContainer implements ContainerInterface
-{
-    use ServiceLocatorTrait;
-}
-
-trait ServiceLocatorTrait
-{
-    public function has(string $name)
-    {
-    }
-}
-
-interface ContainerInterface
-{
-    public function has(string $name);
-}
-
-?>

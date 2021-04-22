@@ -43,9 +43,11 @@ final class ClassLikeWithTraitsClassMethodResolver
 
         foreach ($classReflection->getTraits() as $traitClassReflection) {
             $trait = $this->nodeRepository->findTrait($traitClassReflection->getName());
-            if ($trait instanceof Trait_) {
-                $classMethods = array_merge($classMethods, $trait->getMethods());
+            if (! $trait instanceof Trait_) {
+                continue;
             }
+
+            $classMethods = array_merge($classMethods, $trait->getMethods());
         }
 
         return $classMethods;

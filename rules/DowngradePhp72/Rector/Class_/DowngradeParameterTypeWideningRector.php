@@ -11,13 +11,14 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\Application\File;
 use Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver;
-use Rector\DowngradePhp72\NodeAnalyzer\NativeTypeClassTreeResolver;
+use Rector\DowngradePhp72\NodeAnalyzer\ParentChildClassMethodTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -37,11 +38,6 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
     private $phpDocTypeChanger;
 
     /**
-     * @var NativeTypeClassTreeResolver
-     */
-    private $nativeTypeClassTreeResolver;
-
-    /**
      * @var TypeFactory
      */
     private $typeFactory;
@@ -51,16 +47,28 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
      */
     private $classLikeWithTraitsClassMethodResolver;
 
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    /**
+     * @var ParentChildClassMethodTypeResolver
+     */
+    private $parentChildClassMethodTypeResolver;
+
     public function __construct(
         PhpDocTypeChanger $phpDocTypeChanger,
-        NativeTypeClassTreeResolver $nativeTypeClassTreeResolver,
         TypeFactory $typeFactory,
-        ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver
+        ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver,
+        ReflectionProvider $reflectionProvider,
+        ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver
     ) {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->nativeTypeClassTreeResolver = $nativeTypeClassTreeResolver;
         $this->typeFactory = $typeFactory;
         $this->classLikeWithTraitsClassMethodResolver = $classLikeWithTraitsClassMethodResolver;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->parentChildClassMethodTypeResolver = $parentChildClassMethodTypeResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -122,16 +130,23 @@ CODE_SAMPLE
     /**
      * The topmost class is the source of truth, so we go only down to avoid up/down collission
      */
-    private function refactorParamForSelfAndSiblings(ClassMethod $classMethod, int $position, Scope $classScope): void
+    private function refactorParamForSelfAndSiblings(ClassMethod $classMethod, int $position, Scope $scope): void
     {
-        $classReflection = $classScope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($class === null) {
             return;
         }
 
-        if (count($classReflection->getAncestors()) === 1) {
+        $className = $this->getName($class);
+        if ($className === null) {
             return;
         }
+
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
 
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
@@ -139,16 +154,12 @@ CODE_SAMPLE
         // Remove the types in:
         // - all ancestors + their descendant classes
         // - all implemented interfaces + their implementing classes
-        $parameterTypesByParentClassLikes = $this->resolveParameterTypesByClassLike(
+        $parameterTypesByParentClassLikes = $this->parentChildClassMethodTypeResolver->resolve(
             $classReflection,
             $methodName,
-            $position
+            $position,
+            $scope
         );
-
-        // we need at least 2 methods to have a possible conflict
-        if (count($parameterTypesByParentClassLikes) < 2) {
-            return;
-        }
 
         $uniqueParameterTypes = $this->typeFactory->uniquateTypes($parameterTypesByParentClassLikes);
 
@@ -232,36 +243,6 @@ CODE_SAMPLE
         $paramName = $this->getName($param);
         $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $mappedCurrentParamType, $param, $paramName);
-    }
-
-    /**
-     * @return array<class-string, Type>
-     */
-    private function resolveParameterTypesByClassLike(
-        ClassReflection $classReflection,
-        string $methodName,
-        int $position
-    ): array {
-        $parameterTypesByParentClassLikes = [];
-
-        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
-            if ($ancestorClassReflection->isTrait()) {
-                continue;
-            }
-
-            if (! $ancestorClassReflection->hasMethod($methodName)) {
-                continue;
-            }
-
-            $parameterType = $this->nativeTypeClassTreeResolver->resolveParameterReflectionType(
-                $ancestorClassReflection,
-                $methodName,
-                $position
-            );
-            $parameterTypesByParentClassLikes[$ancestorClassReflection->getName()] = $parameterType;
-        }
-
-        return $parameterTypesByParentClassLikes;
     }
 
     private function refactorClassWithAncestorsAndChildren(
