@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\Type;
+use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\Reflection\ReflectionTypeResolver;
@@ -134,7 +135,9 @@ CODE_SAMPLE
                 return null;
             }
 
-            $this->rectorChangeCollector->notifyFileChange($this->file, $node, $this);
+            $rectorWithLineChange = new RectorWithLineChange($this, $node->getLine());
+            $this->file->addRectorClassWithLine($rectorWithLineChange);
+
             $param->type = $singlePropertyTypeNode;
 
             return NodeTraverser::STOP_TRAVERSAL;
