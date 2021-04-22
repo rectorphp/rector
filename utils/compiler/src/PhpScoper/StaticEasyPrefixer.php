@@ -21,6 +21,7 @@ final class StaticEasyPrefixer
         'Symplify\SmartFileSystem\SmartFileInfo',
         // for test case
         'Symplify\PackageBuilder\Testing\AbstractKernelTestCase',
+        'PHPUnit\Framework\TestCase',
     ];
 
     /**
