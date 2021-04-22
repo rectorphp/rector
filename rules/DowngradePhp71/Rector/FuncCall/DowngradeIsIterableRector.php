@@ -71,15 +71,6 @@ CODE_SAMPLE
         $funcCall = $this->nodeFactory->createFuncCall('is_array', [$arg]);
         $instanceOf = new Instanceof_($arg, new FullyQualified('Traversable'));
 
-        $booleanOr = new BooleanOr($funcCall, $instanceOf);
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        $this->traverseNodesWithCallable($parent, function (Node $n) use ($node, $booleanOr) {
-            if ($n === $node) {
-                $n = $booleanOr;
-                return $n;
-            }
-        });
-
-        return null;
+        return new BooleanOr($funcCall, $instanceOf);
     }
 }
