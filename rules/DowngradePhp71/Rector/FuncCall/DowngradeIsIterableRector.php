@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -58,6 +61,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return $node;
+        /** @var mixed $arg */
+        $arg = $node->args[0]->value;
+        $isArray = $this->nodeFactory->createFuncCall('is_array', [$arg]);
+        $instanceOf = new Instanceof_($arg, new FullyQualified('Traversable'));
+
+        return new BooleanOr($isArray, $instanceOf);
     }
 }
