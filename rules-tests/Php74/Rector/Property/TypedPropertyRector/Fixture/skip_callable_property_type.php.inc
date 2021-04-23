@@ -9,4 +9,3 @@ final class SkipCallablePropertyType
      */
     public $startDate;
 }
-?>

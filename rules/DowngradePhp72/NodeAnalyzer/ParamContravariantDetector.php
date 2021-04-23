@@ -7,6 +7,7 @@ namespace Rector\DowngradePhp72\NodeAnalyzer;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ParamContravariantDetector
@@ -16,9 +17,15 @@ final class ParamContravariantDetector
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function hasParentMethod(ClassMethod $classMethod, Scope $scope): bool
@@ -35,6 +42,26 @@ final class ParamContravariantDetector
 
             $classMethodName = $this->nodeNameResolver->getName($classMethod);
             if ($ancestorClassReflection->hasMethod($classMethodName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function hasChildMethod(ClassMethod $classMethod, Scope $classScope): bool
+    {
+        $classReflection = $classScope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+
+        $classLikes = $this->nodeRepository->findClassesAndInterfacesByType($classReflection->getName());
+        foreach ($classLikes as $classLike) {
+            $currentClassMethod = $classLike->getMethod($methodName);
+            if ($currentClassMethod !== null) {
                 return true;
             }
         }

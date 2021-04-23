@@ -7,7 +7,7 @@ interface KeepOriginalIfSharedType
     public function test(array $input);
 }
 
-final class UpdateBoth implements JustToBeSure
+final class UpdateBoth implements KeepOriginalIfSharedType
 {
     public function test(array $input)
     {

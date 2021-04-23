@@ -173,10 +173,10 @@ final class ValueResolver
             if ($node === null) {
                 return false;
             }
+
             if (! $this->isValue($node, $expectedValues[$i])) {
                 return false;
             }
-            continue;
         }
 
         return true;
