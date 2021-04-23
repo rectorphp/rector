@@ -9,6 +9,7 @@ use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\PSR4\Collector\RenamedClassesCollector;
+use Symplify\Skipper\Skipper\Skipper;
 
 /**
  * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameNonPhpTest
@@ -30,14 +31,21 @@ final class NonPhpFileProcessor implements FileProcessorInterface
      */
     private $nonPhpFileClassRenamer;
 
+    /**
+     * @var Skipper
+     */
+    private $skipper;
+
     public function __construct(
         RenamedClassesDataCollector $renamedClassesDataCollector,
         RenamedClassesCollector $renamedClassesCollector,
-        NonPhpFileClassRenamer $nonPhpFileClassRenamer
+        NonPhpFileClassRenamer $nonPhpFileClassRenamer,
+        Skipper $skipper
     ) {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->renamedClassesCollector = $renamedClassesCollector;
         $this->nonPhpFileClassRenamer = $nonPhpFileClassRenamer;
+        $this->skipper = $skipper;
     }
 
     /**
@@ -46,6 +54,9 @@ final class NonPhpFileProcessor implements FileProcessorInterface
     public function process(array $files): void
     {
         foreach ($files as $file) {
+            if ($this->skipper->shouldSkipFileInfo($file->getSmartFileInfo())) {
+                continue;
+            }
             $this->processFile($file);
         }
     }

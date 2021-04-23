@@ -32,16 +32,13 @@ final class ApplicationFileProcessor
      */
     private $fileDiffFileDecorator;
 
-    /**
-     * @param FileProcessorInterface[] $fileProcessors
-     */
     public function __construct(
         Configuration $configuration,
         SmartFileSystem $smartFileSystem,
         FileDiffFileDecorator $fileDiffFileDecorator,
-        array $fileProcessors = []
+        ActiveFileProcessorsProvider $activeFileProcessorsProvider
     ) {
-        $this->fileProcessors = $fileProcessors;
+        $this->fileProcessors = $activeFileProcessorsProvider->provide();
         $this->smartFileSystem = $smartFileSystem;
         $this->configuration = $configuration;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
