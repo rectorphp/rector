@@ -66,7 +66,7 @@ CODE_SAMPLE
             }
         }
 
-        if ($hasVariableBeenWrapped === false) {
+        if (! $hasVariableBeenWrapped) {
             return null;
         }
 

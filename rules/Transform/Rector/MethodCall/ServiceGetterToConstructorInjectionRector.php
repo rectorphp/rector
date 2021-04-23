@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -41,9 +42,15 @@ final class ServiceGetterToConstructorInjectionRector extends AbstractRector imp
      */
     private $propertyNaming;
 
-    public function __construct(PropertyNaming $propertyNaming)
+    /**
+     * @var ClassAnalyzer
+     */
+    private $classAnalyzer;
+
+    public function __construct(PropertyNaming $propertyNaming, ClassAnalyzer $classAnalyzer)
     {
         $this->propertyNaming = $propertyNaming;
+        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

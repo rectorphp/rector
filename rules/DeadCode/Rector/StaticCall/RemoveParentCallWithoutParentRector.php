@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
@@ -31,12 +32,19 @@ final class RemoveParentCallWithoutParentRector extends AbstractRector
      */
     private $parentClassScopeResolver;
 
+    /**
+     * @var ClassAnalyzer
+     */
+    private $classAnalyzer;
+
     public function __construct(
         ClassMethodManipulator $classMethodManipulator,
-        ParentClassScopeResolver $parentClassScopeResolver
+        ParentClassScopeResolver $parentClassScopeResolver,
+        ClassAnalyzer $classAnalyzer
     ) {
         $this->classMethodManipulator = $classMethodManipulator;
         $this->parentClassScopeResolver = $parentClassScopeResolver;
+        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

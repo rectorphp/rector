@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -29,7 +28,7 @@ use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
-use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\NodeAnalyzer\ChangedNodeAnalyzer;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -63,7 +62,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var string[]
      */
     private const ATTRIBUTES_TO_MIRROR = [
-        AttributeKey::PARENT_NODE,
         AttributeKey::CLASS_NODE,
         AttributeKey::CLASS_NAME,
         AttributeKey::METHOD_NODE,
@@ -136,11 +134,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var BetterNodeFinder
      */
     protected $betterNodeFinder;
-
-    /**
-     * @var ClassAnalyzer
-     */
-    protected $classAnalyzer;
 
     /**
      * @var NodeRemover
@@ -218,6 +211,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $currentFileProvider;
 
     /**
+     * @var ChangedNodeAnalyzer
+     */
+    private $changedNodeAnalyzer;
+
+    /**
      * @required
      */
     public function autowireAbstractRector(
@@ -240,14 +238,14 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         StaticTypeMapper $staticTypeMapper,
         ParameterProvider $parameterProvider,
         CurrentRectorProvider $currentRectorProvider,
-        ClassAnalyzer $classAnalyzer,
         CurrentNodeProvider $currentNodeProvider,
         Skipper $skipper,
         ValueResolver $valueResolver,
         NodeRepository $nodeRepository,
         BetterNodeFinder $betterNodeFinder,
         NodeComparator $nodeComparator,
-        CurrentFileProvider $currentFileProvider
+        CurrentFileProvider $currentFileProvider,
+        ChangedNodeAnalyzer $changedNodeAnalyzer
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
@@ -268,7 +266,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
         $this->currentRectorProvider = $currentRectorProvider;
-        $this->classAnalyzer = $classAnalyzer;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->skipper = $skipper;
         $this->valueResolver = $valueResolver;
@@ -276,6 +273,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
         $this->currentFileProvider = $currentFileProvider;
+        $this->changedNodeAnalyzer = $changedNodeAnalyzer;
     }
 
     /**
@@ -328,9 +326,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         // changed!
-        if ($this->hasNodeChanged($originalNode, $node)) {
-            $this->updateAttributes($node);
-
+        if ($this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
             $rectorWithLineChange = new RectorWithLineChange($this, $node->getLine());
             $this->file->addRectorClassWithLine($rectorWithLineChange);
 
@@ -439,17 +435,17 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @param Arg[] $newArgs
+     * @param Arg[] $currentArgs
      * @param Arg[] $appendingArgs
      * @return Arg[]
      */
-    protected function appendArgs(array $newArgs, array $appendingArgs): array
+    protected function appendArgs(array $currentArgs, array $appendingArgs): array
     {
         foreach ($appendingArgs as $appendingArg) {
-            $newArgs[] = new Arg($appendingArg->value);
+            $currentArgs[] = new Arg($appendingArg->value);
         }
 
-        return $newArgs;
+        return $currentArgs;
     }
 
     protected function unwrapExpression(Stmt $stmt): Node
@@ -561,30 +557,15 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->previousAppliedClass = static::class;
     }
 
-    private function hasNodeChanged(Node $originalNode, Node $node): bool
-    {
-        if ($this->isNameIdentical($node, $originalNode)) {
-            return false;
-        }
-
-        // @see https://github.com/rectorphp/rector/issues/6169 - special check, as php-parser skips brackets
-        if ($node instanceof Encapsed) {
-            foreach ($node->parts as $encapsedPart) {
-                $originalEncapsedPart = $encapsedPart->getAttribute(AttributeKey::ORIGINAL_NODE);
-                if ($originalEncapsedPart === null) {
-                    return true;
-                }
-            }
-        }
-
-        return ! $this->nodeComparator->areNodesEqual($originalNode, $node);
-    }
-
     /**
      * @param array<string, mixed> $originalAttributes
      */
     private function mirrorAttributes(array $originalAttributes, Node $newNode): void
     {
+        if ($newNode instanceof Name) {
+            $newNode->setAttribute(AttributeKey::RESOLVED_NAME, $newNode->toString());
+        }
+
         foreach ($originalAttributes as $attributeName => $oldAttributeValue) {
             if (! in_array($attributeName, self::ATTRIBUTES_TO_MIRROR, true)) {
                 continue;
@@ -592,24 +573,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
             $newNode->setAttribute($attributeName, $oldAttributeValue);
         }
-    }
-
-    private function updateAttributes(Node $node): void
-    {
-        // update Resolved name attribute if name is changed
-        if ($node instanceof Name) {
-            $node->setAttribute(AttributeKey::RESOLVED_NAME, $node->toString());
-        }
-    }
-
-    private function isNameIdentical(Node $node, Node $originalNode): bool
-    {
-        if (! $originalNode instanceof Name) {
-            return false;
-        }
-
-        // names are the same
-        return $this->nodeComparator->areNodesEqual($originalNode->getAttribute(AttributeKey::ORIGINAL_NAME), $node);
     }
 
     private function connectParentNodes(Node $node): void
