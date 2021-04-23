@@ -1,4 +1,4 @@
-name: Bare Run
+name: Simple Test
 
 on:
     pull_request: null
@@ -7,21 +7,16 @@ on:
             - main
 
 jobs:
-    bare_run:
+    simple_test:
         runs-on: ubuntu-latest
-
-        strategy:
-            fail-fast: false
-            matrix:
-                php_version: ['7.1', '7.2', '7.3', '7.4', '8.0']
-
         steps:
             -   uses: actions/checkout@v2
 
             -
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: ${{ matrix.php_version }}
+                    php-version: 7.4
                     coverage: none
 
-            -   run: php bin/rector list --ansi
+            -   run: composer require phpunit/phpunit --dev
+            -   run: vendor/bin/phpunit tests/Rector/RenameSimpleRectorTest.php
