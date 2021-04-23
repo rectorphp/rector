@@ -1,0 +1,28 @@
+name: Tests Debug
+
+on:
+    pull_request: null
+
+env:
+    # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
+    COMPOSER_ROOT_VERSION: "dev-main"
+
+jobs:
+    tests_debug:
+        runs-on: ubuntu-latest
+
+        name: PHP ${{ matrix.php }} tests for ${{ matrix.path }}
+        steps:
+            -   uses: actions/checkout@v2
+
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.4
+                    coverage: none
+
+            -   uses: "ramsey/composer-install@v1"
+
+            # this should pass :)
+            -   run: vendor/bin/phpunit rules-tests/DowngradePhp72/Rector/Class_/DowngradeParameterTypeWideningRector/DowngradeParameterTypeWideningRectorTest.php --filter test#6
+
