@@ -11,7 +11,6 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 # https://www.php.net/manual/en/book.gmagick.php → https://www.php.net/manual/en/book.imagick.php
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(RenameClassRector::class)
         ->call('configure', [[
             RenameClassRector::OLD_TO_NEW_CLASSES => [

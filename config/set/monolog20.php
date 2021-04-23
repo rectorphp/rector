@@ -10,7 +10,6 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 # https://github.com/Seldaek/monolog/commit/39f8a20e6dadc0194e846b254c5f23d1c732290b#diff-dce565f403e044caa5e6a0d988339430
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
             RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([

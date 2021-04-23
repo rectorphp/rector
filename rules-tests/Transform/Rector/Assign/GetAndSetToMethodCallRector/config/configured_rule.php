@@ -11,7 +11,6 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(GetAndSetToMethodCallRector::class)
         ->call('configure', [[
             GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => ValueObjectInliner::inline([

@@ -30,7 +30,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\String_;
@@ -41,7 +40,6 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
-use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\Generic\GenericObjectType;
@@ -400,10 +398,7 @@ final class NodeFactory
         return $this->createClassConstant($name, $value, Class_::MODIFIER_PUBLIC);
     }
 
-    /**
-     * @param Identifier|Name|NullableType|UnionType|null $typeNode
-     */
-    public function createGetterClassMethodFromNameAndType(string $propertyName, ?Node $typeNode): ClassMethod
+    public function createGetterClassMethod(string $propertyName, Type $type): ClassMethod
     {
         $getterMethod = 'get' . ucfirst($propertyName);
 
@@ -415,8 +410,30 @@ final class NodeFactory
         $return = new Return_($propertyFetch);
         $methodBuilder->addStmt($return);
 
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
         if ($typeNode !== null) {
             $methodBuilder->setReturnType($typeNode);
+        }
+
+        return $methodBuilder->getNode();
+    }
+
+    public function createSetterClassMethod(string $propertyName, Type $type): ClassMethod
+    {
+        $getterMethod = 'set' . ucfirst($propertyName);
+
+        $variable = new Variable($propertyName);
+
+        $methodBuilder = new MethodBuilder($getterMethod);
+        $methodBuilder->makePublic();
+        $methodBuilder->addParam(new Param($variable));
+
+        $propertyFetch = new PropertyFetch(new Variable(self::THIS), $propertyName);
+        $assign = new Assign($propertyFetch, $variable);
+        $methodBuilder->addStmt($assign);
+
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
+            $methodBuilder->setReturnType(new Name('void'));
         }
 
         return $methodBuilder->getNode();

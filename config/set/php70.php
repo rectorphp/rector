@@ -27,7 +27,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/mysql-to-mysqli.php');
 
     $services = $containerConfigurator->services();
-
     $services->set(Php4ConstructorRector::class);
 
     $services->set(TernaryToNullCoalescingRector::class);

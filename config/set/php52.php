@@ -11,7 +11,6 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(VarToPublicPropertyRector::class);
     $services->set(ContinueToBreakInSwitchRector::class);
 

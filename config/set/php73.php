@@ -16,7 +16,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(IsCountableRector::class);
     $services->set(ArrayKeyFirstLastRector::class);
     $services->set(SensitiveDefineRector::class);

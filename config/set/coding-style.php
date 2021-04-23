@@ -37,7 +37,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(PHPStormVarAnnotationRector::class);
     $services->set(NullableCompareToNullRector::class);
     $services->set(BinarySwitchToIfElseRector::class);
