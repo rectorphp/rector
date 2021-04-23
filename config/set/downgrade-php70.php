@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\DowngradePhp70\Rector\Coalesce\DowngradeNullCoalesceRector;
 use Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector;
@@ -17,4 +18,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeTypeDeclarationRector::class);
     $services->set(DowngradeStrictTypeDeclarationRector::class);
     $services->set(DowngradeAnonymousClassRector::class);
+    $services->set(DowngradeNullCoalesceRector::class);
 };
