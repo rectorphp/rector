@@ -461,8 +461,6 @@ final class NodeTypeResolver
         if (! $type->isSubTypeOf(new NonEmptyArrayType())->yes()) {
             return $type;
         }
-
-        $otherType = null;
         foreach ($type->getTypes() as $intersectionedType) {
             if ($intersectionedType instanceof NonEmptyArrayType) {
                 continue;

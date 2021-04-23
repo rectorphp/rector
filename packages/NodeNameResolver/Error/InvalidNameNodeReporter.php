@@ -66,7 +66,6 @@ final class InvalidNameNodeReporter
             // issues to find the file in prefixed
             if (file_exists($rectorBacktrace[self::FILE])) {
                 $smartFileInfo = new SmartFileInfo($rectorBacktrace[self::FILE]);
-                $fileAndLine = $smartFileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
             } else {
                 $fileAndLine = $rectorBacktrace[self::FILE] . ':' . $rectorBacktrace['line'];
             }

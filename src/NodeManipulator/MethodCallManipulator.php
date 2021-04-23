@@ -76,9 +76,6 @@ final class MethodCallManipulator
             $chainMethodCalls[] = $currentMethodCallee;
             $currentMethodCallee = $currentMethodCallee->var;
         }
-
-        // 2. collect on-same-variable calls
-        $onVariableMethodCalls = [];
         if ($currentMethodCallee instanceof Variable) {
             $onVariableMethodCalls = $this->findMethodCallsOnVariable($currentMethodCallee);
         }

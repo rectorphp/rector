@@ -177,7 +177,6 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
         if ($withKey) {
             $keyTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType->getKeyType());
-            $genericTypes = [$keyTypeNode, $itemTypeNode];
         } else {
             $genericTypes = [$itemTypeNode];
         }

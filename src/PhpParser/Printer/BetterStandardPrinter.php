@@ -350,8 +350,6 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pStmt_Class(Class_ $class): string
     {
-        $shouldReindex = false;
-
         foreach ($class->stmts as $key => $stmt) {
             // remove empty ones
             if ($stmt instanceof TraitUse && $stmt->traits === []) {

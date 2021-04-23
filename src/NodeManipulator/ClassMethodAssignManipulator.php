@@ -263,8 +263,6 @@ final class ClassMethodAssignManipulator
                 $referencedVariables[] = $variableName;
                 return null;
             }
-
-            $argumentPosition = null;
             if ($parentNode instanceof Arg) {
                 $argumentPosition = $parentNode->getAttribute(AttributeKey::ARGUMENT_POSITION);
                 $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);

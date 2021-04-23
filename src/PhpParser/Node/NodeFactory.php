@@ -600,8 +600,6 @@ final class NodeFactory
      */
     private function createArrayItem($item, $key = null): ArrayItem
     {
-        $arrayItem = null;
-
         if ($item instanceof Variable
             || $item instanceof MethodCall
             || $item instanceof StaticCall

@@ -133,7 +133,7 @@ final class ArrayTypeAnalyzer
 
         // also possible 3rd party vendor
         if ($node instanceof PropertyFetch) {
-            $propertyOwnerStaticType = $this->nodeTypeResolver->resolve($node->var);
+            $this->nodeTypeResolver->resolve($node->var);
         } else {
             $propertyOwnerStaticType = $this->nodeTypeResolver->resolve($node->class);
         }

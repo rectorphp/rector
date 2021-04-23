@@ -101,7 +101,6 @@ final class NodeScopeAndMetadataDecorator
 
         $preservingNameResolver = new NameResolver(null, [
             'preserveOriginalNames' => true,
-            // this option would override old non-fqn-namespaced nodes otherwise, so it needs to be disabled
             'replaceNodes' => false,
         ]);
 

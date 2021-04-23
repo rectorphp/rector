@@ -88,7 +88,7 @@ final class MagicPropertyFetchAnalyzer
         }
 
         if ($expr instanceof PropertyFetch) {
-            $propertyFetchType = $scope->getType($expr->var);
+            $scope->getType($expr->var);
         } else {
             $propertyFetchType = $this->nodeTypeResolver->resolve($expr->class);
         }

@@ -103,7 +103,7 @@ final class ValueResolver
 
         try {
             $constExprEvaluator = $this->getConstExprEvaluator();
-            $value = $constExprEvaluator->evaluateDirectly($expr);
+            $constExprEvaluator->evaluateDirectly($expr);
         } catch (ConstExprEvaluationException $constExprEvaluationException) {
             $value = null;
         }
@@ -235,7 +235,7 @@ final class ValueResolver
         $values = [];
         foreach ($constantArrayType->getValueTypes() as $i => $valueType) {
             if ($valueType instanceof ConstantArrayType) {
-                $value = $this->extractConstantArrayTypeValue($valueType);
+                $this->extractConstantArrayTypeValue($valueType);
             } elseif ($valueType instanceof ConstantScalarType) {
                 $value = $valueType->getValue();
             } else {

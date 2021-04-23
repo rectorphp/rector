@@ -13,7 +13,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionFunction;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class VariableToConstantGuard
@@ -91,7 +90,6 @@ final class VariableToConstantGuard
 
         // this is needed, as native function reflection does not have access to referenced parameters
         if ($functionReflection instanceof NativeFunctionReflection) {
-            $nativeFunctionReflection = new ReflectionFunction($functionReflection->getName());
         } else {
             $nativeFunctionReflection = $this->privatesAccessor->getPrivateProperty($functionReflection, 'reflection');
         }

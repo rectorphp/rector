@@ -128,7 +128,6 @@ final class PhpDocClassRenamer
         array $oldToNewClasses
     ): void {
         if ($doctrineAnnotationTagValueNode->getAnnotationClass() === 'Doctrine\ORM\Mapping\Embedded') {
-            $classKey = 'class';
         } else {
             $classKey = 'targetEntity';
         }

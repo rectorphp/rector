@@ -108,7 +108,6 @@ final class AssignManipulator
 
         // traverse up to array dim fetches
         if ($parent instanceof ArrayDimFetch) {
-            $previousParent = $parent;
             while ($parent instanceof ArrayDimFetch) {
                 $previousParent = $parent;
                 $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);

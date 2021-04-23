@@ -35,10 +35,6 @@ final class NonPhpFileClassRenamer
         foreach ($classRenames as $oldClass => $newClass) {
             // the old class is without slashes, it can make mess as similar to a word in the text, so we have to be more strict about it
             if (! Strings::contains($oldClass, '\\')) {
-                $oldClassRegex = self::STANDALONE_CLASS_PREFIX_REGEX . preg_quote(
-                    $oldClass,
-                    '#'
-                ) . self::STANDALONE_CLASS_SUFFIX_REGEX;
             } else {
                 $oldClassRegex = '#' . preg_quote($oldClass, '#') . '#';
             }

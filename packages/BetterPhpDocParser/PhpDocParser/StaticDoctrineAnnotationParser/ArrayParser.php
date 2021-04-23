@@ -84,7 +84,7 @@ final class ArrayParser
             $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_COLON);
 
             if ($tokenIterator->isNextTokenType(Lexer::TOKEN_IDENTIFIER)) {
-                $key = $this->plainValueParser->parseValue($tokenIterator);
+                $this->plainValueParser->parseValue($tokenIterator);
             } else {
                 $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_COMMA);
                 $key = $this->plainValueParser->parseValue($tokenIterator);

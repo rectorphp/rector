@@ -542,7 +542,7 @@ final class NodeRepository
     {
         // one node can be of multiple-class types
         if ($node instanceof MethodCall) {
-            $classType = $this->resolveNodeClassTypes($node->var);
+            $this->resolveNodeClassTypes($node->var);
         } else {
             /** @var StaticCall $node */
             $classType = $this->resolveNodeClassTypes($node->class);

@@ -112,11 +112,6 @@ final class PhpDocInfoFactory
             if ($node->getComments() !== []) {
                 return null;
             }
-
-            // create empty node
-            $content = '';
-            $tokenIterator = new BetterTokenIterator([]);
-            $phpDocNode = new PhpDocNode([]);
         } else {
             $content = $docComment->getText();
             $tokens = $this->lexer->tokenize($content);

@@ -16,9 +16,6 @@ final class DoctrineTypeAnalyzer
         if (! $type instanceof UnionType) {
             return false;
         }
-
-        $arrayType = null;
-        $hasDoctrineCollectionType = false;
         foreach ($type->getTypes() as $unionedType) {
             if ($this->isCollectionObjectType($unionedType)) {
                 $hasDoctrineCollectionType = true;

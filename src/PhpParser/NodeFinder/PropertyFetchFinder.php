@@ -56,17 +56,14 @@ final class PropertyFetchFinder
 
         $singleProperty = $property->props[0];
 
-        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->betterNodeFinder->find($classLikesToSearch, function (Node $node) use (
+        return $this->betterNodeFinder->find($classLikesToSearch, function (Node $node) use (
             $singleProperty,
             $classLikesToSearch
         ): bool {
-            // property + static fetch
             if (! $node instanceof PropertyFetch && ! $node instanceof StaticPropertyFetch) {
                 return false;
             }
 
-            // is it the name match?
             if (! $this->nodeNameResolver->areNamesEqual($node, $singleProperty)) {
                 return false;
             }
@@ -74,7 +71,5 @@ final class PropertyFetchFinder
             $currentClassLike = $node->getAttribute(AttributeKey::CLASS_NODE);
             return in_array($currentClassLike, $classLikesToSearch, true);
         });
-
-        return $propertyFetches;
     }
 }

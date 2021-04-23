@@ -108,7 +108,6 @@ final class NameScopeFactory
         $nodeTemplateTypes = $this->resolveTemplateTypesFromNode($node);
 
         $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        $classTemplateTypes = [];
         if ($class instanceof ClassLike) {
             $classTemplateTypes = $this->resolveTemplateTypesFromNode($class);
         }

@@ -11,7 +11,6 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantArrayTypeAndMethod;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
 use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface;
@@ -94,7 +93,6 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
             }
 
             $classReflection = $this->reflectionProvider->getClass($value);
-            $type = new ObjectType($classReflection->getName());
         } elseif ($objectWithoutClassType->isSuperTypeOf($classOrObjectType)->yes()) {
             $type = $classOrObjectType;
         } else {

@@ -23,7 +23,6 @@ final class BoolUnionTypeAnalyzer
 
     public function isNullableBoolUnionType(UnionType $unionType): bool
     {
-        $hasNullable = false;
         foreach ($unionType->getTypes() as $unionedType) {
             if ($unionedType instanceof NullType) {
                 $hasNullable = true;

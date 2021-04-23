@@ -117,7 +117,6 @@ final class NodeTransformer
 
     private function splitMessageAndArgs(FuncCall $sprintfFuncCall): ?SprintfStringAndArgs
     {
-        $stringArgument = null;
         $arrayItems = [];
         foreach ($sprintfFuncCall->args as $i => $arg) {
             if ($i === 0) {

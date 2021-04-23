@@ -32,7 +32,7 @@ final class ConsoleApplication extends Application
     public function __construct(Configuration $configuration, CommandNaming $commandNaming, array $commands = [])
     {
         try {
-            $version = $configuration->getPrettyVersion();
+            $configuration->getPrettyVersion();
         } catch (OutOfBoundsException $outOfBoundsException) {
             $version = 'Unknown';
         }
@@ -57,8 +57,6 @@ final class ConsoleApplication extends Application
             $xdebugHandler->check();
             unset($xdebugHandler);
         }
-
-        $shouldFollowByNewline = false;
 
         // switch working dir
         $newWorkDir = $this->getNewWorkingDir($input);
