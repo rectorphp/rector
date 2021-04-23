@@ -14,7 +14,7 @@ class B implements A
     }
 }
 
-class C implements A
+final class MostChild implements A
 {
     public function test(array $input)
     {
@@ -42,7 +42,7 @@ class B implements A
     }
 }
 
-class C implements A
+final class MostChild implements A
 {
     /**
      * @param mixed[] $input

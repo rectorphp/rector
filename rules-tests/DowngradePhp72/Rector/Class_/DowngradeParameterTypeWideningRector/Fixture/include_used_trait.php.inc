@@ -1,6 +1,8 @@
 <?php
 
-final class AnotherContainer implements AnotherContainerInterface
+namespace Rector\Tests\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector\Fixture;
+
+final class YetAnotherContainer implements AnotherContainerInterface
 {
     use AnotherServiceLocatorTrait;
 }
@@ -21,7 +23,9 @@ interface AnotherContainerInterface
 -----
 <?php
 
-final class AnotherContainer implements AnotherContainerInterface
+namespace Rector\Tests\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector\Fixture;
+
+final class YetAnotherContainer implements AnotherContainerInterface
 {
     use AnotherServiceLocatorTrait;
 }
