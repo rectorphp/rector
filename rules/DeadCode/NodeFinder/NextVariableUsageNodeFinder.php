@@ -6,10 +6,14 @@ namespace Rector\DeadCode\NodeFinder;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\NodeTraverser;
+use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -42,18 +46,32 @@ final class NextVariableUsageNodeFinder
      */
     private $nodeNameResolver;
 
+    /**
+     * @var UsedVariableNameAnalyzer
+     */
+    private $usedVariableNameAnalyzer;
+
+    /**
+     * @var CompactFuncCallAnalyzer
+     */
+    private $compactFuncCallAnalyzer;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         ParentScopeFinder $parentScopeFinder,
-        NodeComparator $nodeComparator
+        NodeComparator $nodeComparator,
+        UsedVariableNameAnalyzer $usedVariableNameAnalyzer,
+        CompactFuncCallAnalyzer $compactFuncCallAnalyzer
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->parentScopeFinder = $parentScopeFinder;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeComparator = $nodeComparator;
+        $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;
+        $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
     }
 
     public function find(Assign $assign): ?Node
@@ -67,7 +85,7 @@ final class NextVariableUsageNodeFinder
         $expr = $assign->var;
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $scopeNode->stmts, function (
             Node $currentNode
-        ) use ($expr, &$nextUsageOfVariable): ?int {
+        ) use ($expr, &$nextUsageOfVariable, &$flag): ?int {
             // used above the assign
             if ($currentNode->getStartTokenPos() < $expr->getStartTokenPos()) {
                 return null;
@@ -92,6 +110,23 @@ final class NextVariableUsageNodeFinder
 
             return NodeTraverser::STOP_TRAVERSAL;
         });
+
+        /** @var Node|null $nextUsageOfVariable */
+        if ($nextUsageOfVariable === null) {
+            return $this->betterNodeFinder->findFirstNext($expr, function (Node $node) use (
+                $assign, $expr
+            ): bool {
+                if ($this->usedVariableNameAnalyzer->isVariableNamed($node, $expr) && $this->hasInParentExpression($assign, $expr)) {
+                    return true;
+                }
+
+                if ($node instanceof FuncCall) {
+                    return $this->compactFuncCallAnalyzer->isInCompact($node, $expr);
+                }
+
+                return $node instanceof Include_;
+            });
+        }
 
         return $nextUsageOfVariable;
     }

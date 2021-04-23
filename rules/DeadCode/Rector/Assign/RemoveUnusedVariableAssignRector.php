@@ -22,6 +22,7 @@ use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Comparing\ConditionSearcher;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer;
+use Rector\DeadCode\NodeFinder\NextVariableUsageNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -51,15 +52,22 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
      */
     private $usedVariableNameAnalyzer;
 
+    /**
+     * @var NextVariableUsageNodeFinder
+     */
+    private $nextVariableUsageNodeFinder;
+
     public function __construct(
         ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
         CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
-        UsedVariableNameAnalyzer $usedVariableNameAnalyzer
+        UsedVariableNameAnalyzer $usedVariableNameAnalyzer,
+        NextVariableUsageNodeFinder $nextVariableUsageNodeFinder
     ) {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
         $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
         $this->conditionSearcher = new ConditionSearcher();
         $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;
+        $this->nextVariableUsageNodeFinder = $nextVariableUsageNodeFinder;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -166,7 +174,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isUsedNext($variable)) {
+        if ($this->nextVariableUsageNodeFinder->find($assign) instanceof Node) {
             return true;
         }
 
@@ -177,23 +185,6 @@ CODE_SAMPLE
         }
 
         return $this->isUsedInAssignExpr($expr, $assign);
-    }
-
-    private function isUsedNext(Variable $variable): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
-            $variable
-        ): bool {
-            if ($this->usedVariableNameAnalyzer->isVariableNamed($node, $variable)) {
-                return true;
-            }
-
-            if ($node instanceof FuncCall) {
-                return $this->compactFuncCallAnalyzer->isInCompact($node, $variable);
-            }
-
-            return $node instanceof Include_;
-        });
     }
 
     /**
