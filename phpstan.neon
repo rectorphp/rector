@@ -540,3 +540,6 @@ parameters:
             paths:
                 - rules/DowngradePhp72/NodeAnalyzer/ParamContravariantDetector.php
                 - rules/DowngradePhp72/Rector/Class_/DowngradeParameterTypeWideningRector.php
+
+        # doc typo in php-parser
+        - '#Parameter \#1 \$type of method PhpParser\\Builder\\FunctionLike\:\:setReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
