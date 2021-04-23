@@ -82,8 +82,6 @@ CODE_SAMPLE
     {
         $this->reset();
 
-        $hasChanged = false;
-
         foreach ((array) $node->stmts as $key => $stmt) {
             $currentStmtVariableName = $this->resolveCurrentStmtVariableName($stmt);
 

@@ -195,16 +195,12 @@ CODE_SAMPLE
                     return false;
                 }
 
-                /** @var FuncCall|StaticCall|MethodCall $node */
                 $passedNode = clone $node;
 
-                /** @var FuncCall|StaticCall|MethodCall $callNode */
                 $usedNode = clone $callNode;
 
-                /** @var FuncCall|StaticCall|MethodCall $passedNode */
                 $passedNode->args = [];
 
-                /** @var FuncCall|StaticCall|MethodCall $usedNode */
                 $usedNode->args = [];
 
                 return $this->nodeComparator->areNodesEqual($passedNode, $usedNode);

@@ -170,8 +170,6 @@ CODE_SAMPLE
     private function addChoiceTypeOptions(string $method, Array_ $optionsArray): void
     {
         if ($method === 'addSelect') {
-            $expanded = false;
-            $multiple = false;
         } elseif ($method === 'addRadioList') {
             $expanded = true;
             $multiple = false;

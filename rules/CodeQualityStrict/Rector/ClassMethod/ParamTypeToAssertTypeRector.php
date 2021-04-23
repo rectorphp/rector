@@ -182,7 +182,6 @@ CODE_SAMPLE
 
             if (count($classConstFetches) > 1) {
                 $arguments[] = $classConstFetches;
-                $methodName = 'isAnyOf';
             } else {
                 $arguments[] = $classConstFetches[0];
                 $methodName = 'isAOf';

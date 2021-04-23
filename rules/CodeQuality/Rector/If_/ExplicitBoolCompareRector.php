@@ -105,8 +105,6 @@ CODE_SAMPLE
         }
 
         if ($node->cond instanceof BooleanNot) {
-            $conditionNode = $node->cond->expr;
-            $isNegated = true;
         } else {
             $conditionNode = $node->cond;
             $isNegated = false;

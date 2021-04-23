@@ -79,7 +79,7 @@ final class CallTypesResolver
     private function resolveArgValueType(string $strictnessLevel, Arg $arg): Type
     {
         if ($strictnessLevel === TypeStrictness::STRICTNESS_TYPE_DECLARATION) {
-            $argValueType = $this->nodeTypeResolver->getNativeType($arg->value);
+            $this->nodeTypeResolver->getNativeType($arg->value);
         } else {
             $argValueType = $this->nodeTypeResolver->resolve($arg->value);
         }

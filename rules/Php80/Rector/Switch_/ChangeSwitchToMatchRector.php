@@ -118,8 +118,6 @@ CODE_SAMPLE
         }
 
         $this->assignExpr = null;
-
-        $isReturn = false;
         foreach ($condAndExprs as $condAndExpr) {
             if ($condAndExpr->getKind() === CondAndExpr::TYPE_RETURN) {
                 $isReturn = true;

@@ -35,8 +35,6 @@ final class UnusedParameterResolver
      */
     public function resolve(ClassMethod $classMethod): array
     {
-        $unusedParameters = [];
-
         foreach ($classMethod->params as $i => $param) {
             // skip property promotion
             /** @var Param $param */

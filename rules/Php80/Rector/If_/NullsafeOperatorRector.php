@@ -274,8 +274,6 @@ CODE_SAMPLE
             return $expr;
         }
 
-        $start = $prevIf;
-
         while ($prevIf instanceof Expression) {
             $expressionNode = $prevIf->expr;
             if (! $expressionNode instanceof Assign) {

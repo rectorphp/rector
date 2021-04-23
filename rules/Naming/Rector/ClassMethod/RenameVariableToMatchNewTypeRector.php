@@ -88,8 +88,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = false;
-
         $assignsOfNew = $this->getAssignsOfNew($node);
         foreach ($assignsOfNew as $assignOfNew) {
             $expectedName = $this->expectedNameResolver->resolveForAssignNew($assignOfNew);

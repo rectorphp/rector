@@ -128,8 +128,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $hasNewAttrGroups = false;
-
         foreach ($this->annotationsToAttributes as $annotationToAttribute) {
             $tag = $annotationToAttribute->getTag();
 

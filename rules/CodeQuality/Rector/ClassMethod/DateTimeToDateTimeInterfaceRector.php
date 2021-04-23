@@ -92,8 +92,6 @@ CODE_SAMPLE
         if (! $this->isAtLeastPhpVersion(PhpVersionFeature::DATE_TIME_INTERFACE)) {
             return null;
         }
-
-        $isModifiedNode = false;
         foreach ($node->getParams() as $param) {
             if (! $this->isObjectType($param, new ObjectType('DateTime'))) {
                 continue;

@@ -242,9 +242,6 @@ CODE_SAMPLE
         // replace slashes and dashes
         $value = Strings::replace($value, self::SLASH_AND_DASH_REGEX, self::UNDERSCORE);
 
-        // find beginning numbers
-        $beginningNumbers = '';
-
         $matches = Strings::match($value, '#(?<' . self::NUMBERS . '>[0-9]*)(?<' . self::VALUE . '>.*)#');
 
         if (isset($matches[self::NUMBERS])) {

@@ -165,7 +165,6 @@ CODE_SAMPLE
     private function fluentizeCollectedMethodCalls(ClassMethod $classMethod): void
     {
         $i = 0;
-        $fluentMethodCallIndex = null;
         $methodCallsToAdd = [];
         foreach ($this->collectedMethodCalls as $statementIndex => $methodCall) {
             if ($i === 0) {

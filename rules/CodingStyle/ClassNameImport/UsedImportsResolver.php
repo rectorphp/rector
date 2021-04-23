@@ -46,7 +46,6 @@ final class UsedImportsResolver
     public function resolveForNode(Node $node): array
     {
         if ($node instanceof Namespace_) {
-            $namespace = $node;
         } else {
             $namespace = $this->betterNodeFinder->findParentType($node, Namespace_::class);
         }

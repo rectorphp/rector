@@ -56,7 +56,6 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
     {
         $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $node,
-            // is_array(...)
             function (Node $node): bool {
                 if (! $node instanceof FuncCall) {
                     return false;

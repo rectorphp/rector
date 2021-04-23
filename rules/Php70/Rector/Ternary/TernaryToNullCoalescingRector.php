@@ -54,8 +54,6 @@ final class TernaryToNullCoalescingRector extends AbstractRector
         }
 
         if ($node->cond instanceof Identical) {
-            $checkedNode = $node->else;
-            $fallbackNode = $node->if;
         } elseif ($node->cond instanceof NotIdentical) {
             $checkedNode = $node->if;
             $fallbackNode = $node->else;

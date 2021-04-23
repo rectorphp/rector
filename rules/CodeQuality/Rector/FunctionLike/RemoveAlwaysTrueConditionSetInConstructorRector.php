@@ -113,8 +113,6 @@ CODE_SAMPLE
         if ($node->stmts === []) {
             return null;
         }
-
-        $haveNodeChanged = false;
         foreach ($node->stmts as $key => $stmt) {
             if ($stmt instanceof Expression) {
                 $stmt = $stmt->expr;
@@ -210,8 +208,6 @@ CODE_SAMPLE
 
     private function resolvePropertyTypeAfterConstructor(Class_ $class, string $propertyName): Type
     {
-        $propertyTypeFromConstructor = null;
-
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if ($constructClassMethod !== null) {
             $propertyTypeFromConstructor = $this->resolveAssignedTypeInStmtsByPropertyName(

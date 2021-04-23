@@ -38,8 +38,6 @@ final class ClassMethodParamTypeCompleter
      */
     public function complete(ClassMethod $classMethod, array $classParameterTypes): ?ClassMethod
     {
-        $hasChanged = false;
-
         foreach ($classParameterTypes as $position => $argumentStaticType) {
             if ($this->shouldSkipArgumentStaticType($classMethod, $argumentStaticType, $position)) {
                 continue;

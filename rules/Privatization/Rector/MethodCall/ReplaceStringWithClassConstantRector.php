@@ -90,8 +90,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $hasChanged = false;
-
         foreach ($this->replaceStringWithClassConstants as $replaceStringWithClassConstant) {
             $desiredArg = $this->matchArg($node, $replaceStringWithClassConstant);
             if (! $desiredArg instanceof Arg) {

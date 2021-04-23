@@ -55,7 +55,6 @@ final class FactoryClassPrinter
             $newNamespace = clone $parentNode;
             $newNamespace->stmts = [];
             $newNamespace->stmts[] = $factoryClass;
-            $nodeToPrint = $newNamespace;
         } else {
             $nodeToPrint = $factoryClass;
         }

@@ -136,7 +136,7 @@ CODE_SAMPLE
             );
 
             if ($staticCallToMethodCall->getMethodName() === '*') {
-                $methodName = $this->getName($node->name);
+                $this->getName($node->name);
             } else {
                 $methodName = $staticCallToMethodCall->getMethodName();
             }

@@ -52,7 +52,6 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $startTokenPos = $node->getStartTokenPos();
-        $hasVariableBeenWrapped = false;
 
         foreach ($node->parts as $index => $nodePart) {
             if ($nodePart instanceof Variable) {

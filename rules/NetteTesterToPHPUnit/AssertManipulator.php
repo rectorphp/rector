@@ -199,10 +199,6 @@ final class AssertManipulator
     private function processContainsCall(StaticCall $staticCall): void
     {
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($staticCall->args[1]->value)) {
-            $name = $this->nodeNameResolver->isName(
-                $staticCall->name,
-                self::CONTAINS
-            ) ? 'assertStringContainsString' : 'assertStringNotContainsString';
         } else {
             $name = $this->nodeNameResolver->isName(
                 $staticCall->name,
@@ -312,7 +308,6 @@ final class AssertManipulator
     private function refactorExpectExceptionCode(StaticCall $staticCall): void
     {
         if ($this->sholdBeStaticCall($staticCall)) {
-            $expectExceptionCode = new StaticCall(new Name(self::SELF), 'expectExceptionCode');
         } else {
             $expectExceptionCode = new MethodCall(new Variable(self::THIS), 'expectExceptionCode');
         }

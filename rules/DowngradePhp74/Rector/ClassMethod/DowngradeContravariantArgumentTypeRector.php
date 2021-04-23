@@ -158,7 +158,7 @@ CODE_SAMPLE
         if ($param->type instanceof NullableType) {
             /** @var NullableType $nullableType */
             $nullableType = $paramType;
-            $paramTypeName = $this->getName($nullableType->type);
+            $this->getName($nullableType->type);
         } else {
             $paramTypeName = $this->getName($paramType);
         }

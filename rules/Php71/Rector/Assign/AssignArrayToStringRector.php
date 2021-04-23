@@ -158,7 +158,6 @@ CODE_SAMPLE
                 return false;
             }
 
-            // we look for variable assign = string
             if (! $node->expr instanceof String_) {
                 return false;
             }

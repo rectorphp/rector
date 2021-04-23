@@ -114,8 +114,6 @@ CODE_SAMPLE
         $firstSpreadParamPosition = array_key_first($spreadParams);
         $variadicArgs = $this->resolveVariadicArgsByVariadicParams($methodCall, $firstSpreadParamPosition);
 
-        $hasUnpacked = false;
-
         foreach ($variadicArgs as $position => $variadicArg) {
             if ($variadicArg->unpack) {
                 $variadicArg->unpack = false;

@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
@@ -17,7 +16,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
-use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Comparing\ConditionSearcher;
 use Rector\Core\Rector\AbstractRector;
@@ -38,11 +36,6 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
     private $reservedKeywordAnalyzer;
 
     /**
-     * @var CompactFuncCallAnalyzer
-     */
-    private $compactFuncCallAnalyzer;
-
-    /**
      * @var ConditionSearcher
      */
     private $conditionSearcher;
@@ -59,12 +52,10 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
 
     public function __construct(
         ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
-        CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
         UsedVariableNameAnalyzer $usedVariableNameAnalyzer,
         NextVariableUsageNodeFinder $nextVariableUsageNodeFinder
     ) {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
-        $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
         $this->conditionSearcher = new ConditionSearcher();
         $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;
         $this->nextVariableUsageNodeFinder = $nextVariableUsageNodeFinder;
@@ -173,8 +164,9 @@ CODE_SAMPLE
         if ($isUsedPrev) {
             return true;
         }
+        $assignNode = $this->nextVariableUsageNodeFinder->find($assign);
 
-        if ($this->nextVariableUsageNodeFinder->find($assign) instanceof Node) {
+        if ($assignNode instanceof Node) {
             return true;
         }
 

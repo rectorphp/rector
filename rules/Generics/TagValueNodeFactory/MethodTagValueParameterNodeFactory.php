@@ -25,7 +25,6 @@ final class MethodTagValueParameterNodeFactory
     {
         $parameterType = $parameterReflection->getType();
         if ($parameterType instanceof MixedType && ! $parameterType->isExplicitMixed()) {
-            $parameterTypeNode = null;
         } else {
             $parameterTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($parameterType);
         }

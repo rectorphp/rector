@@ -186,7 +186,6 @@ CODE_SAMPLE
         }
 
         if ($node->left instanceof PropertyFetch && $this->valueResolver->isNull($node->right)) {
-            $propertyFetch = $node->left;
         } elseif ($node->right instanceof PropertyFetch && $this->valueResolver->isNull($node->left)) {
             $propertyFetch = $node->right;
         } else {

@@ -76,12 +76,12 @@ final class FileRelocationResolver
     private function resolveRootDirectory(SmartFileInfo $smartFileInfo, string $suffixName, array $groupNames): string
     {
         if (Strings::startsWith($smartFileInfo->getRealPathDirectory(), '/tmp')) {
-            $currentTraversePath = $smartFileInfo->getRealPathDirectory();
+            $smartFileInfo->getRealPathDirectory();
         } else {
-            $currentTraversePath = $smartFileInfo->getRelativeDirectoryPath();
+            $relativeDirectoryPath = $smartFileInfo->getRelativeDirectoryPath();
         }
 
-        $currentDirectoryParts = explode(DIRECTORY_SEPARATOR, $currentTraversePath);
+        $currentDirectoryParts = explode(DIRECTORY_SEPARATOR, $relativeDirectoryPath);
 
         return $this->resolveNearestRootWithCategory(
             $currentDirectoryParts,
@@ -104,7 +104,6 @@ final class FileRelocationResolver
         $reversedNameParts = array_reverse($nameParts);
 
         $removedParts = [];
-        $hasStopped = false;
 
         foreach ($reversedNameParts as $key => $reversedNamePart) {
             unset($reversedNameParts[$key]);

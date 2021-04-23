@@ -109,9 +109,6 @@ final class ConditionResolver
         if ($secondVersion === null) {
             return null;
         }
-
-        // includes compare sign as 3rd argument
-        $versionCompareSign = null;
         if (isset($funcCall->args[2])) {
             $versionCompareSign = $this->valueResolver->getValue($funcCall->args[2]->value);
         }

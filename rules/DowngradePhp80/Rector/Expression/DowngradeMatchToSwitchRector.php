@@ -109,8 +109,6 @@ CODE_SAMPLE
 
         foreach ($matchArms as $matchArm) {
             if (count((array) $matchArm->conds) > 1) {
-                $lastCase = null;
-
                 foreach ((array) $matchArm->conds as $matchArmCond) {
                     $lastCase = new Case_($matchArmCond);
                     $switchCases[] = $lastCase;

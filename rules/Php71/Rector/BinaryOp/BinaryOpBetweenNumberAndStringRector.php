@@ -101,8 +101,6 @@ CODE_SAMPLE
         if (! $expr instanceof Scalar && ! $expr instanceof Variable) {
             return false;
         }
-
-        $value = null;
         $exprStaticType = $this->getStaticType($expr);
 
         if ($expr instanceof String_) {

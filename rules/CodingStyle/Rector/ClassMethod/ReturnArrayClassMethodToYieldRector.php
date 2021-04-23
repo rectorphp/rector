@@ -109,7 +109,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = false;
         foreach ($this->methodsToYields as $methodToYield) {
             if (! $this->isObjectType($node, $methodToYield->getObjectType())) {
                 continue;

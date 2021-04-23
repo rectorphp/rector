@@ -109,7 +109,6 @@ CODE_SAMPLE
 
     private function getUppermostConcat(FuncCall $funcCall): ?Concat
     {
-        $upperMostConcat = null;
         $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         while ($parent instanceof Concat) {
             $upperMostConcat = $parent;

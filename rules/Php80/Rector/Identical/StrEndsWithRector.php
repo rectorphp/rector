@@ -84,8 +84,6 @@ CODE_SAMPLE
     private function refactorSubstr(BinaryOp $binaryOp): ?FuncCall
     {
         if ($binaryOp->left instanceof FuncCall && $this->isName($binaryOp->left, 'substr')) {
-            $substrFuncCall = $binaryOp->left;
-            $comparedNeedleExpr = $binaryOp->right;
         } elseif ($binaryOp->right instanceof FuncCall && $this->isName($binaryOp->right, 'substr')) {
             $substrFuncCall = $binaryOp->right;
             $comparedNeedleExpr = $binaryOp->left;

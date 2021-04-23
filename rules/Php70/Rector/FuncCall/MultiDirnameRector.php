@@ -60,7 +60,6 @@ final class MultiDirnameRector extends AbstractRector
         }
 
         $activeFuncCallNode = $node;
-        $lastFuncCallNode = $node;
 
         while ($activeFuncCallNode = $this->matchNestedDirnameFuncCall($activeFuncCallNode)) {
             $lastFuncCallNode = $activeFuncCallNode;

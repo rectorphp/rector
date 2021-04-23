@@ -114,7 +114,6 @@ CODE_SAMPLE
             [$mainPart, $decimalPart] = explode('.', $numericValueAsString);
 
             $chunks = $this->strSplitNegative($mainPart, self::GROUP_SIZE);
-            $literalSeparatedNumber = implode('_', $chunks) . '.' . $decimalPart;
         } else {
             $chunks = $this->strSplitNegative($numericValueAsString, self::GROUP_SIZE);
             $literalSeparatedNumber = implode('_', $chunks);

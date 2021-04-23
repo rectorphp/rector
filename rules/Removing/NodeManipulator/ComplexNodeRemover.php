@@ -96,8 +96,6 @@ final class ComplexNodeRemover
      */
     public function removePropertyAndUsages(Property $property, array $classMethodNamesToSkip = []): void
     {
-        $shouldKeepProperty = false;
-
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
 
         foreach ($propertyFetches as $propertyFetch) {

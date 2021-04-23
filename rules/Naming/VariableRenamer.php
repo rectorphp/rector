@@ -70,8 +70,6 @@ final class VariableRenamer
         string $oldName,
         string $expectedName
     ): void {
-        $isRenamingActive = false;
-
         if ($assign === null) {
             $isRenamingActive = true;
         }

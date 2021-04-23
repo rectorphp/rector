@@ -42,10 +42,7 @@ final class StmtOrder
         $oldKeys = array_values($newKeys);
         sort($oldKeys);
 
-        /** @var array<int, int> $oldToNewKeys */
-        $oldToNewKeys = array_combine($oldKeys, $newKeys);
-
-        return $oldToNewKeys;
+        return array_combine($oldKeys, $newKeys);
     }
 
     /**

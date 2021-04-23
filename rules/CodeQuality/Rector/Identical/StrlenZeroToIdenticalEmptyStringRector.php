@@ -60,7 +60,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $variable = null;
         if ($node->left instanceof FuncCall) {
             if (! $this->isName($node->left, 'strlen')) {
                 return null;

@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\Cast\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Trait_;
@@ -121,7 +120,6 @@ CODE_SAMPLE
         }
 
         if ($this->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE)) {
-            $conditionNode = new FuncCall(new Name('is_countable'), [new Arg($countedNode)]);
         } else {
             $instanceof = new Instanceof_($countedNode, new FullyQualified('Countable'));
             $conditionNode = new BooleanOr($this->nodeFactory->createFuncCall(

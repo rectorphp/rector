@@ -100,8 +100,6 @@ CODE_SAMPLE
         if (! $this->hasAtLeastTwoClassLikes($node)) {
             return null;
         }
-
-        $nodeToReturn = null;
         if ($node instanceof Namespace_) {
             $nodeToReturn = $this->refactorNamespace($node);
         }
@@ -134,8 +132,6 @@ CODE_SAMPLE
         $classLikes = $this->betterNodeFinder->findClassLikes($namespace->stmts);
 
         $this->namespaceManipulator->removeClassLikes($namespace);
-
-        $nodeToReturn = null;
         foreach ($classLikes as $classLike) {
             $newNamespace = clone $namespace;
             $newNamespace->stmts[] = $classLike;
@@ -158,8 +154,6 @@ CODE_SAMPLE
         /** @var ClassLike[] $classLikes */
         $classLikes = $this->betterNodeFinder->findClassLikes($fileWithoutNamespace->stmts);
 
-        $nodeToReturn = null;
-
         foreach ($classLikes as $classLike) {
             // 1. is the class that will be kept in original file?
             if ($this->fileInfoDeletionAnalyzer->isClassLikeAndFileInfoMatch($this->file, $classLike)) {
@@ -180,8 +174,6 @@ CODE_SAMPLE
     private function printNewNodes(ClassLike $classLike, Node $mainNode): void
     {
         $smartFileInfo = $this->file->getSmartFileInfo();
-
-        $declares = [];
         $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [Declare_::class]);
         if ($declare instanceof Declare_) {
             $declares = [$declare];

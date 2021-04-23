@@ -141,8 +141,6 @@ CODE_SAMPLE
             if (! $injectTagNode instanceof DoctrineAnnotationTagValueNode) {
                 continue;
             }
-
-            $serviceType = new MixedType();
             if ($injectTagNode !== null) {
                 $serviceType = $phpDocInfo->getVarType();
             }

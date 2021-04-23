@@ -153,7 +153,6 @@ CODE_SAMPLE
 
     private function processMysqlResult(Assign $assign, FuncCall $funcCall): FuncCall
     {
-        $fetchField = null;
         if (isset($funcCall->args[2])) {
             $fetchField = $funcCall->args[2]->value;
             unset($funcCall->args[2]);

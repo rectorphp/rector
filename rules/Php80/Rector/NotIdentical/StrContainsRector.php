@@ -97,10 +97,7 @@ CODE_SAMPLE
             if (! $this->isNames($expr->right, self::OLD_STR_NAMES)) {
                 return null;
             }
-
-            /** @var FuncCall $funcCall */
-            $funcCall = $expr->right;
-            return $funcCall;
+            return $expr->right;
         }
 
         if ($this->valueResolver->isFalse($expr->right)) {

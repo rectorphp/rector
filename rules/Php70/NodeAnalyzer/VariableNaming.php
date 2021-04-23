@@ -261,7 +261,7 @@ final class VariableNaming
     ): string {
         $argumentValue = $funcCall->args[0]->value;
         if ($argumentValue instanceof MethodCall || $argumentValue instanceof StaticCall) {
-            $name = $this->nodeNameResolver->getName($argumentValue->name);
+            $this->nodeNameResolver->getName($argumentValue->name);
         } else {
             $name = $this->nodeNameResolver->getName($argumentValue);
         }

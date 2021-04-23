@@ -54,7 +54,6 @@ final class ReturnFluentMethodCallFactory
         $lastMethodCall = $fluentMethodCalls->getRootMethodCall();
 
         if ($lastMethodCall->var instanceof PropertyFetch) {
-            $assignExpr = $lastMethodCall->var;
         } else {
             // we need a variable to assign the stuff into
             // the method call, does not belong to the

@@ -147,7 +147,6 @@ CODE_SAMPLE
         $identicalNode = $ifNode->cond;
 
         if ($this->nodeComparator->areNodesEqual($identicalNode->left, $foreach->keyVar)) {
-            $checkedNode = $identicalNode->right;
         } elseif ($this->nodeComparator->areNodesEqual($identicalNode->right, $foreach->keyVar)) {
             $checkedNode = $identicalNode->left;
         } else {
@@ -182,8 +181,6 @@ CODE_SAMPLE
         $identicalNode = $ifNode->cond;
 
         if ($this->nodeComparator->areNodesEqual($identicalNode->left, $foreach->keyVar)) {
-            $checkedNode = $assign->var;
-            $keyNode = $identicalNode->right;
         } elseif ($this->nodeComparator->areNodesEqual($identicalNode->right, $foreach->keyVar)) {
             $checkedNode = $assign->var;
             $keyNode = $identicalNode->left;

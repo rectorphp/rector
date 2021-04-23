@@ -82,7 +82,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = false;
         foreach ($node->params as $param) {
             if ($this->refactorParamType($param, $node)) {
                 $hasChanged = true;
