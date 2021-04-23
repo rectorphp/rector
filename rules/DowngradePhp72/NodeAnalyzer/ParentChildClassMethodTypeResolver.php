@@ -6,7 +6,10 @@ namespace Rector\DowngradePhp72\NodeAnalyzer;
 
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ParentChildClassMethodTypeResolver
 {
@@ -15,9 +18,31 @@ final class ParentChildClassMethodTypeResolver
      */
     private $nativeTypeClassTreeResolver;
 
-    public function __construct(NativeTypeClassTreeResolver $nativeTypeClassTreeResolver)
-    {
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(
+        NativeTypeClassTreeResolver $nativeTypeClassTreeResolver,
+        NodeRepository $nodeRepository,
+        ReflectionProvider $reflectionProvider,
+        NodeNameResolver $nodeNameResolver
+    ) {
         $this->nativeTypeClassTreeResolver = $nativeTypeClassTreeResolver;
+        $this->nodeRepository = $nodeRepository;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -26,14 +51,18 @@ final class ParentChildClassMethodTypeResolver
     public function resolve(
         ClassReflection $classReflection,
         string $methodName,
-        int $position,
+        int $paramPosition,
         Scope $scope
     ): array {
         $parameterTypesByClassName = [];
 
         // include types of class scope in case of trait
         if ($classReflection->isTrait()) {
-            $parameterTypesByInterfaceName = $this->resolveInterfaceTypeByClassName($scope, $methodName, $position);
+            $parameterTypesByInterfaceName = $this->resolveInterfaceTypeByClassName(
+                $scope,
+                $methodName,
+                $paramPosition
+            );
             $parameterTypesByClassName = array_merge($parameterTypesByClassName, $parameterTypesByInterfaceName);
         }
 
@@ -45,10 +74,24 @@ final class ParentChildClassMethodTypeResolver
             $parameterType = $this->nativeTypeClassTreeResolver->resolveParameterReflectionType(
                 $ancestorClassReflection,
                 $methodName,
-                $position
+                $paramPosition
             );
 
             $parameterTypesByClassName[$ancestorClassReflection->getName()] = $parameterType;
+
+            // collect other children
+            if ($ancestorClassReflection->isInterface()) {
+                // @otdo fix
+                $interfaceParameterTypesByClassName = $this->collectInterfaceImplenters(
+                    $ancestorClassReflection,
+                    $methodName,
+                    $paramPosition
+                );
+                $parameterTypesByClassName = array_merge(
+                    $parameterTypesByClassName,
+                    $interfaceParameterTypesByClassName
+                );
+            }
         }
 
         return $parameterTypesByClassName;
@@ -81,5 +124,45 @@ final class ParentChildClassMethodTypeResolver
         }
 
         return $typesByClassName;
+    }
+
+    /**
+     * @return array<class-string, Type>
+     */
+    private function collectInterfaceImplenters(
+        ClassReflection $ancestorClassReflection,
+        string $methodName,
+        int $paramPosition
+    ): array {
+        $parameterTypesByClassName = [];
+
+        $interfaceImplementerClassLikes = $this->nodeRepository->findClassesAndInterfacesByType(
+            $ancestorClassReflection->getName()
+        );
+
+        foreach ($interfaceImplementerClassLikes as $interfaceImplementerClassLike) {
+            $interfaceImplementerClassLikeName = $this->nodeNameResolver->getName($interfaceImplementerClassLike);
+            if ($interfaceImplementerClassLikeName === null) {
+                continue;
+            }
+
+            /** @var class-string $interfaceImplementerClassLikeName */
+            if (! $this->reflectionProvider->hasClass($interfaceImplementerClassLikeName)) {
+                continue;
+            }
+
+            $interfaceImplementerClassReflection = $this->reflectionProvider->getClass(
+                $interfaceImplementerClassLikeName
+            );
+            $parameterType = $this->nativeTypeClassTreeResolver->resolveParameterReflectionType(
+                $interfaceImplementerClassReflection,
+                $methodName,
+                $paramPosition
+            );
+
+            $parameterTypesByClassName[$interfaceImplementerClassLikeName] = $parameterType;
+        }
+
+        return $parameterTypesByClassName;
     }
 }
