@@ -67,11 +67,7 @@ CODE_SAMPLE
     {
         $args = [];
         foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
-                $args[] = null;
-            } else {
-                $args[] = new Arg($arrayItem->value);
-            }
+            $args[] = $arrayItem instanceof ArrayItem ? new Arg($arrayItem->value) : null;
         }
 
         return new FuncCall(new Name('list'), $args);
