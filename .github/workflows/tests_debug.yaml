@@ -24,5 +24,6 @@ jobs:
             -   uses: "ramsey/composer-install@v1"
 
             # this should pass :)
-            -   run: vendor/bin/phpunit rules-tests/DowngradePhp72/Rector/Class_/DowngradeParameterTypeWideningRector/DowngradeParameterTypeWideningRectorTest.php --filter test#6
+            -   run: vendor/bin/phpunit rules-tests/DowngradePhp72/Rector/Class_/DowngradeParameterTypeWideningRector/DowngradeParameterTypeWideningRectorTest.php --filter test#4-7
 
+            -   run: vendor/bin/phpunit rules-tests/DowngradePhp72/Rector/Class_/DowngradeParameterTypeWideningRector/DowngradeParameterTypeWideningRectorTest.php

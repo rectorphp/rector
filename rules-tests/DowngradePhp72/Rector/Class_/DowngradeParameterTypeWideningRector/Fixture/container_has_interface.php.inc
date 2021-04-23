@@ -7,14 +7,14 @@ interface SomeContainerInterface
     public function has(string $id);
 }
 
-class SomeContainer implements SomeContainerInterface
+final class SomeContainerBuilder extends SomeContainer
 {
     public function has($id)
     {
     }
 }
 
-final class SomeContainerBuilder extends SomeContainer
+class SomeContainer implements SomeContainerInterface
 {
     public function has($id)
     {
@@ -35,14 +35,14 @@ interface SomeContainerInterface
     public function has($id);
 }
 
-class SomeContainer implements SomeContainerInterface
+final class SomeContainerBuilder extends SomeContainer
 {
     public function has($id)
     {
     }
 }
 
-final class SomeContainerBuilder extends SomeContainer
+class SomeContainer implements SomeContainerInterface
 {
     public function has($id)
     {

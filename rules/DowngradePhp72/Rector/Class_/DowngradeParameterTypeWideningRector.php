@@ -12,13 +12,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\Application\File;
 use Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver;
 use Rector\DowngradePhp72\NodeAnalyzer\ParentChildClassMethodTypeResolver;
+use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -32,11 +31,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeParameterTypeWideningRector extends AbstractRector
 {
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
     /**
      * @var TypeFactory
      */
@@ -57,18 +51,23 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
      */
     private $parentChildClassMethodTypeResolver;
 
+    /**
+     * @var NativeParamToPhpDocDecorator
+     */
+    private $nativeParamToPhpDocDecorator;
+
     public function __construct(
-        PhpDocTypeChanger $phpDocTypeChanger,
         TypeFactory $typeFactory,
         ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver,
         ReflectionProvider $reflectionProvider,
-        ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver
+        ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver,
+        NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator
     ) {
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->typeFactory = $typeFactory;
         $this->classLikeWithTraitsClassMethodResolver = $classLikeWithTraitsClassMethodResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->parentChildClassMethodTypeResolver = $parentChildClassMethodTypeResolver;
+        $this->nativeParamToPhpDocDecorator = $nativeParamToPhpDocDecorator;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -120,6 +119,14 @@ CODE_SAMPLE
         $classMethods = $this->classLikeWithTraitsClassMethodResolver->resolve($node);
 
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
+        if ($this->isEmptyClassReflection($scope)) {
+            return null;
+        }
+
         foreach ($classMethods as $classMethod) {
             $this->refactorClassMethod($classMethod, $scope);
         }
@@ -195,7 +202,7 @@ CODE_SAMPLE
         }
 
         // Add the current type in the PHPDoc
-        $this->addPHPDocParamTypeToMethod($classMethod, $param);
+        $this->nativeParamToPhpDocDecorator->decorate($classMethod, $param);
 
         // Remove the type
         $param->type = null;
@@ -229,21 +236,21 @@ CODE_SAMPLE
         }
     }
 
-    /**
-     * Add the current param type in the PHPDoc
-     */
-    private function addPHPDocParamTypeToMethod(ClassMethod $classMethod, Param $param): void
-    {
-        if ($param->type === null) {
-            return;
-        }
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-
-        $paramName = $this->getName($param);
-        $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-        $this->phpDocTypeChanger->changeParamType($phpDocInfo, $mappedCurrentParamType, $param, $paramName);
-    }
+//    /**
+//     * Add the current param type in the PHPDoc
+//     */
+//    private function addPHPDocParamTypeToMethod(ClassMethod $classMethod, Param $param): void
+//    {
+//        if ($param->type === null) {
+//            return;
+//        }
+//
+//        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+//
+//        $paramName = $this->getName($param);
+//        $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+//        $this->phpDocTypeChanger->changeParamType($phpDocInfo, $mappedCurrentParamType, $param, $paramName);
+//    }
 
     private function refactorClassWithAncestorsAndChildren(
         ClassReflection $classReflection,
@@ -279,7 +286,7 @@ CODE_SAMPLE
              */
 
             $this->removeParamTypeFromMethod($classLike, $position, $currentClassMethod);
-            $this->removeParamTypeFromMethodForChildren($className, $methodName, $position);
+//            $this->removeParamTypeFromMethodForChildren($className, $methodName, $position);
         }
     }
 
@@ -296,5 +303,15 @@ CODE_SAMPLE
         foreach (array_keys($classMethod->params) as $position) {
             $this->refactorParamForSelfAndSiblings($classMethod, (int) $position, $classScope);
         }
+    }
+
+    private function isEmptyClassReflection(Scope $scope): bool
+    {
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return true;
+        }
+
+        return count($classReflection->getAncestors()) === 1;
     }
 }
