@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\DowngradePhp70\Rector\Coalesce\DowngradeNullCoalesceRectorTest;
+namespace Rector\Tests\DowngradePhp70\Rector\Coalesce\DowngradeNullCoalesceRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
