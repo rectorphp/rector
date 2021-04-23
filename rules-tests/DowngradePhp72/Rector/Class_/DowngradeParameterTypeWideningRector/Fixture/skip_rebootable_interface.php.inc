@@ -1,6 +1,6 @@
 <?php
 
-interface SkipRebootableInterface
+interface RebootableInterface
 {
     /**
      * @param string|null $warmupDir pass null to reboot in the regular build directory

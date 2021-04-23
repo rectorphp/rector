@@ -81,7 +81,6 @@ final class ParentChildClassMethodTypeResolver
 
             // collect other children
             if ($ancestorClassReflection->isInterface()) {
-                // @otdo fix
                 $interfaceParameterTypesByClassName = $this->collectInterfaceImplenters(
                     $ancestorClassReflection,
                     $methodName,

@@ -7,6 +7,7 @@ namespace Rector\DowngradePhp72\NodeAnalyzer;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
@@ -25,11 +26,12 @@ final class ClassLikeWithTraitsClassMethodResolver
     }
 
     /**
+     * @param Class_|Interface_ $classLike
      * @return ClassMethod[]
      */
-    public function resolve(Class_ $class): array
+    public function resolve(ClassLike $classLike): array
     {
-        $scope = $class->getAttribute(AttributeKey::SCOPE);
+        $scope = $classLike->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             return [];
         }
@@ -41,12 +43,12 @@ final class ClassLikeWithTraitsClassMethodResolver
 
         $classMethods = [];
         foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
-            $classLike = $this->nodeRepository->findClassLike($ancestorClassReflection->getName());
-            if (! $classLike instanceof ClassLike) {
+            $ancestorClassLike = $this->nodeRepository->findClassLike($ancestorClassReflection->getName());
+            if (! $ancestorClassLike instanceof ClassLike) {
                 continue;
             }
 
-            $classMethods = array_merge($classMethods, $classLike->getMethods());
+            $classMethods = array_merge($classMethods, $ancestorClassLike->getMethods());
         }
 
         return $classMethods;
