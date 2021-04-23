@@ -154,7 +154,7 @@ CODE_SAMPLE
     private function refactorClassMethod(ClassMethod $classMethod, Scope $scope): ?ClassMethod
     {
         $classReflection = $scope->getClassReflection();
-        if ($classReflection === null) {
+        if (! $classReflection instanceof ClassReflection) {
             return null;
         }
 
@@ -218,14 +218,8 @@ CODE_SAMPLE
         if ($classMethod->params === []) {
             return true;
         }
-
-        if ($this->paramContravariantDetector->hasParentMethod($classMethod, $classScope)) {
-            return false;
-        }
-
         // @todo - check for children too, maybe the type differts there
-
-        return true;
+        return ! $this->paramContravariantDetector->hasParentMethod($classMethod, $classScope);
     }
 
     private function isEmptyClassReflection(Scope $scope): bool

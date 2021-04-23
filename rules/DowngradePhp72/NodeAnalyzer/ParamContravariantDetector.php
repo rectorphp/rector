@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp72\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ParamContravariantDetector
@@ -23,7 +24,7 @@ final class ParamContravariantDetector
     public function hasParentMethod(ClassMethod $classMethod, Scope $scope): bool
     {
         $classReflection = $scope->getClassReflection();
-        if ($classReflection === null) {
+        if (! $classReflection instanceof ClassReflection) {
             return false;
         }
 

@@ -127,7 +127,7 @@ final class ParentChildClassMethodTypeResolver
     }
 
     /**
-     * @return array<class-string, \PHPStan\Type\Type>
+     * @return array<class-string, Type>
      */
     private function collectInterfaceImplenters(
         ClassReflection $ancestorClassReflection,
