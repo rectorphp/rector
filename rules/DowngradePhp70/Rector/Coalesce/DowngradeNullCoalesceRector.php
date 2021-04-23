@@ -6,6 +6,8 @@ namespace Rector\DowngradePhp70\Rector\Coalesce;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -46,6 +48,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return $node;
+        $if = $node->left;
+        $else = $node->right;
+
+        return new Ternary(new Isset_([$if]), $if, $else);
     }
 }
