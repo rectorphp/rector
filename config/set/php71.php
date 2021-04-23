@@ -13,7 +13,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(IsIterableRector::class);
     $services->set(MultiExceptionCatchRector::class);
     $services->set(AssignArrayToStringRector::class);

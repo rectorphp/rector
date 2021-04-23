@@ -27,7 +27,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/kdyby-to-symfony.php');
 
     $services = $containerConfigurator->services();
-
     $services->set(DeleteFactoryInterfaceRector::class);
     $services->set(FromHttpRequestGetHeaderToHeadersGetRector::class);
     $services->set(FromRequestGetParameterToAttributesGetRector::class);

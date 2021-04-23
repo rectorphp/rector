@@ -19,7 +19,6 @@ use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(GeneralPhpdocAnnotationRemoveFixer::class)
         ->call('configure', [[
             'annotations' => [

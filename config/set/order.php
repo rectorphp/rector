@@ -11,7 +11,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(OrderPrivateMethodsByUseRector::class);
     $services->set(OrderClassConstantsByIntegerValueRector::class);
     $services->set(OrderMethodsByVisibilityRector::class);

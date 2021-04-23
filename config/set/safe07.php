@@ -8,7 +8,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 # This file configures rector/rector:~0.7.0 to replace all PHP functions with their equivalent "safe" functions
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(RenameFunctionRector::class)
         ->call('configure', [[
             RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [

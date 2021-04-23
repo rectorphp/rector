@@ -28,7 +28,6 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 # inspired https://github.com/PHPOffice/PhpSpreadsheet/blob/87f71e1930b497b36e3b9b1522117dfa87096d2b/src/PhpSpreadsheet/Helper/Migrator.php
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(ChangeIOFactoryArgumentRector::class);
 
     $services->set(ChangeSearchLocationToRegisterReaderRector::class);

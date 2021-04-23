@@ -12,7 +12,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(PhpSpecMocksToPHPUnitMocksRector::class);
     $services->set(PhpSpecPromisesToPHPUnitAssertRector::class);
     $services->set(PhpSpecMethodToPHPUnitMethodRector::class);
