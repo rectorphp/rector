@@ -2,12 +2,12 @@
 
 namespace Rector\Tests\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector\Fixture;
 
-interface SomeInterface
+interface WhateverInterface
 {
     public function test(string $input);
 }
 
-abstract class AbstractSomeAncestorClass implements SomeInterface
+abstract class AbstractSomeAncestorClass implements WhateverInterface
 {
 }
 
@@ -25,7 +25,7 @@ class SomeChildClass extends AbstractSomeAncestorClass
 
 namespace Rector\Tests\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector\Fixture;
 
-interface SomeInterface
+interface WhateverInterface
 {
     /**
      * @param string $input
@@ -33,7 +33,7 @@ interface SomeInterface
     public function test($input);
 }
 
-abstract class AbstractSomeAncestorClass implements SomeInterface
+abstract class AbstractSomeAncestorClass implements WhateverInterface
 {
 }
 
