@@ -32,12 +32,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeParameterTypeWideningRector extends AbstractRector
 {
     /**
-     * Temporary workaround to refactor currently not processed class methods
-     * @var ClassMethod[]
-     */
-    private $changeClassMethods = [];
-
-    /**
      * @var ClassLikeWithTraitsClassMethodResolver
      */
     private $classLikeWithTraitsClassMethodResolver;
@@ -167,9 +161,9 @@ CODE_SAMPLE
         );
 
         // skip classes we cannot change
-        foreach ($parameterTypesByParentClassLikes as $className => $parameterType) {
+        foreach (array_keys($parameterTypesByParentClassLikes) as $className) {
             $classLike = $this->nodeRepository->findClassLike($className);
-            if ($classLike === null) {
+            if (! $classLike instanceof ClassLike) {
                 return;
             }
         }
@@ -252,14 +246,14 @@ CODE_SAMPLE
         string $methodName,
         int $paramPosition
     ): void {
-        foreach ($parameterTypesByParentClassLikes as $className => $parameterType) {
+        foreach (array_keys($parameterTypesByParentClassLikes) as $className) {
             $classLike = $this->nodeRepository->findClassLike($className);
-            if ($classLike === null) {
+            if (! $classLike instanceof ClassLike) {
                 continue;
             }
 
             $classMethod = $classLike->getMethod($methodName);
-            if ($classMethod === null) {
+            if (! $classMethod instanceof ClassMethod) {
                 continue;
             }
 
