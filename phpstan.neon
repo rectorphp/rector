@@ -536,6 +536,7 @@ parameters:
                  - src/Bootstrap/ExtensionConfigResolver.php
 
         -
-             message: '#Cognitive complexity for "Rector\\Core\\Bootstrap\\ExtensionConfigResolver\:\:appendExtensionsConfig\(\)" is 13, keep it under 9#'
-             paths:
-                 - src/Bootstrap/ExtensionConfigResolver.php
+            message: '#Assign in loop is not allowed#'
+            paths:
+                - rules/DowngradePhp72/NodeAnalyzer/ParamContravariantDetector.php
+                - rules/DowngradePhp72/Rector/Class_/DowngradeParameterTypeWideningRector.php

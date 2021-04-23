@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector\Fixture;
 
-interface JustToBeSure
+interface KeepOriginalIfSharedType
 {
     public function test(array $input);
 }
@@ -13,29 +13,3 @@ final class UpdateBoth implements JustToBeSure
     {
     }
 }
-
-?>
------
-<?php
-
-namespace Rector\Tests\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector\Fixture;
-
-interface JustToBeSure
-{
-    /**
-     * @param mixed[] $input
-     */
-    public function test($input);
-}
-
-final class UpdateBoth implements JustToBeSure
-{
-    /**
-     * @param mixed[] $input
-     */
-    public function test($input)
-    {
-    }
-}
-
-?>
