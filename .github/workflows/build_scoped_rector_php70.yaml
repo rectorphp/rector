@@ -1,0 +1,94 @@
+# builds the content of https://github.com/rectorphp/rector-prefixed
+# inspiration from https://github.com/phpstan/phpstan-src/blob/master/.github/workflows/phar.yml
+name: Build Scoped Rector PHP 7.0
+
+on:
+    push:
+        branches:
+            - main
+        tags:
+            - '*'
+
+env:
+    # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
+    COMPOSER_ROOT_VERSION: "dev-main"
+
+jobs:
+    build_scoped_rector_php70:
+        runs-on: ubuntu-latest
+        steps:
+            -
+                uses: actions/checkout@v2
+                with:
+                    fetch-depth: 0
+
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.3
+                    coverage: none
+
+                # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+            # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
+            -   run: composer install --no-dev --ansi
+
+            # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
+            -  run: rsync --exclude rector-build -av * rector-build --quiet
+            -  run: rm -rf rector-build/packages-tests rector-build/rules-tests rector-build/tests
+
+            # 2. downgrade rector
+            -   run: sh build/downgrade-rector.sh rector-build
+
+            # 3. prefix classes
+            -   run: sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
+
+            # 4. lint the code for PHP 7.0 - this must happen here, as setup-php allows only one PHP version switch: https://github.com/shivammathur/setup-php/issues/434
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.0
+                    coverage: none
+            -   run: composer create-project php-parallel-lint/php-parallel-lint php-parallel-lint --ansi
+            -   run: php-parallel-lint/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/symfony/error-handler/Resources --exclude rector-prefixed-downgraded/vendor/symfony/http-kernel/Resources --exclude rector-prefixed-downgraded/vendor/rector/rector-nette/tests --exclude rector-prefixed-downgraded/vendor/symfony/polyfill-mbstring/bootstrap80.php
+
+            # 5. copy repository meta files
+            -   run: |
+                    cp -R build/target-repository/. rector-prefixed-downgraded
+                    cp -R templates rector-prefixed-downgraded/
+
+            # 6. clone remote repository, so we can push it
+            -
+                uses: "actions/checkout@v2"
+                with:
+                    repository: rectorphp/rector-prefixed-php70
+                    path: remote-repository
+                    token: ${{ secrets.ACCESS_TOKEN }}
+
+            # remove remote files, to avoid piling up dead code in remote repository
+            -   run: rm -rf remote-repository/config remote-repository/src remote-repository/rules remote-repository/packages remote-repository/vendor
+
+            -   run: cp -a rector-prefixed-downgraded/. remote-repository
+
+            # 7. setup git
+            -
+                working-directory: remote-repository
+                run: |
+                    git config user.email "tomas.vot@gmail.com"
+                    git config user.name "Tomas Votruba"
+
+            # commit metadata
+            -
+                name: "Get Git log"
+                id: git-log
+                run: echo ::set-output name=log::$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='%H %s' | sed -e 's/^/https:\/\/github.com\/rectorphp\/rector\/commit\//')
+
+            -
+                name: "Commit Prefixed PHP 7.0 main"
+                working-directory: remote-repository
+                run: |
+                    git add --all
+                    git commit -m "Updated Rector to commit ${{ github.event.after }}" -m "${{ steps.git-log.outputs.log }}"
+                    git push --quiet origin main
