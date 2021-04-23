@@ -25,7 +25,15 @@ final class SymmetricArrayDestructuringToListRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Downgrade Symmetric array destructuring to list() function', [
-            new CodeSample('[$id1, $name1] = $data;', 'list($id1, $name1) = $data;'),
+            new CodeSample(
+<<<'CODE_SAMPLE'
+[$id1, $name1] = $data;
+CODE_SAMPLE
+                ,
+<<<'CODE_SAMPLE'
+list($id1, $name1) = $data;
+CODE_SAMPLE
+            ),
         ]);
     }
 
@@ -59,11 +67,7 @@ final class SymmetricArrayDestructuringToListRector extends AbstractRector
     {
         $args = [];
         foreach ($array->items as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
-                continue;
-            }
-
-            $args[] = new Arg($arrayItem->value);
+            $args[] = $arrayItem instanceof ArrayItem ? new Arg($arrayItem->value) : null;
         }
 
         return new FuncCall(new Name('list'), $args);
