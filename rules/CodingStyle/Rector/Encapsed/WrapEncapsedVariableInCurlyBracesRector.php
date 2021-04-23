@@ -61,7 +61,6 @@ CODE_SAMPLE
 
                 if ($previousNodeEndTokenPosition + 1 === $nodePart->getStartTokenPos()) {
                     $hasVariableBeenWrapped = true;
-
                     $node->parts[$index] = new Variable($nodePart->name);
                 }
             }

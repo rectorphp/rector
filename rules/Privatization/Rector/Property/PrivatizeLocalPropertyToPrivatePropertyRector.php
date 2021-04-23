@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VendorLocker\NodeVendorLocker\PropertyVisibilityVendorLockResolver;
@@ -41,14 +42,22 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
      */
     private $excludedObjectTypes = [];
 
-    public function __construct(PropertyVisibilityVendorLockResolver $propertyVisibilityVendorLockResolver)
-    {
+    /**
+     * @var ClassAnalyzer
+     */
+    private $classAnalyzer;
+
+    public function __construct(
+        PropertyVisibilityVendorLockResolver $propertyVisibilityVendorLockResolver,
+        ClassAnalyzer $classAnalyzer
+    ) {
         $this->propertyVisibilityVendorLockResolver = $propertyVisibilityVendorLockResolver;
 
         $this->excludedObjectTypes = [
             new ObjectType('PHPUnit\Framework\TestCase'),
             new ObjectType('PHP_CodeSniffer\Sniffs\Sniff'),
         ];
+        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

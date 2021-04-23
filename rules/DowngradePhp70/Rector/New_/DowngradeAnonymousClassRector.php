@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,6 +28,16 @@ final class DowngradeAnonymousClassRector extends AbstractRector
      * @var string
      */
     private const CLASS_NAME = 'AnonymousFor_';
+
+    /**
+     * @var ClassAnalyzer
+     */
+    private $classAnalyzer;
+
+    public function __construct(ClassAnalyzer $classAnalyzer)
+    {
+        $this->classAnalyzer = $classAnalyzer;
+    }
 
     /**
      * @return array<class-string<Node>>
