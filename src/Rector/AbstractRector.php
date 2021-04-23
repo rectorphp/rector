@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -564,6 +565,16 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     {
         if ($this->isNameIdentical($node, $originalNode)) {
             return false;
+        }
+
+        // @see https://github.com/rectorphp/rector/issues/6169 - special check, as php-parser skips brackets
+        if ($node instanceof Encapsed) {
+            foreach ($node->parts as $encapsedPart) {
+                $originalEncapsedPart = $encapsedPart->getAttribute(AttributeKey::ORIGINAL_NODE);
+                if ($originalEncapsedPart === null) {
+                    return true;
+                }
+            }
         }
 
         return ! $this->nodeComparator->areNodesEqual($originalNode, $node);
