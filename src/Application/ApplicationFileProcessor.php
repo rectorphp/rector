@@ -8,6 +8,7 @@ use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
+use Symplify\Skipper\Skipper\Skipper;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ApplicationFileProcessor
@@ -32,16 +33,23 @@ final class ApplicationFileProcessor
      */
     private $fileDiffFileDecorator;
 
+    /**
+     * @var Skipper
+     */
+    private $skipper;
+
     public function __construct(
         Configuration $configuration,
         SmartFileSystem $smartFileSystem,
         FileDiffFileDecorator $fileDiffFileDecorator,
-        ActiveFileProcessorsProvider $activeFileProcessorsProvider
+        ActiveFileProcessorsProvider $activeFileProcessorsProvider,
+        Skipper $skipper
     ) {
         $this->fileProcessors = $activeFileProcessorsProvider->provide();
         $this->smartFileSystem = $smartFileSystem;
         $this->configuration = $configuration;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
+        $this->skipper = $skipper;
     }
 
     /**
@@ -66,7 +74,11 @@ final class ApplicationFileProcessor
                 return $fileProcessor->supports($file);
             });
 
-            $fileProcessor->process($supportedFiles);
+            $appliedFiles = array_filter($supportedFiles, function (File $file): bool {
+                return ! $this->skipper->shouldSkipFileInfo($file->getSmartFileInfo());
+            });
+
+            $fileProcessor->process($appliedFiles);
         }
     }
 

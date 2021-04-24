@@ -10,7 +10,6 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
-use Symplify\Skipper\Skipper\Skipper;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ComposerFileProcessor implements FileProcessorInterface
@@ -30,21 +29,14 @@ final class ComposerFileProcessor implements FileProcessorInterface
      */
     private $composerModifier;
 
-    /**
-     * @var Skipper
-     */
-    private $skipper;
-
     public function __construct(
         ComposerJsonFactory $composerJsonFactory,
         ComposerJsonPrinter $composerJsonPrinter,
-        ComposerModifier $composerModifier,
-        Skipper $skipper
+        ComposerModifier $composerModifier
     ) {
         $this->composerJsonFactory = $composerJsonFactory;
         $this->composerJsonPrinter = $composerJsonPrinter;
         $this->composerModifier = $composerModifier;
-        $this->skipper = $skipper;
     }
 
     /**
@@ -53,9 +45,6 @@ final class ComposerFileProcessor implements FileProcessorInterface
     public function process(array $files): void
     {
         foreach ($files as $file) {
-            if ($this->skipper->shouldSkipFileInfo($file->getSmartFileInfo())) {
-                continue;
-            }
             $this->processFile($file);
         }
     }
