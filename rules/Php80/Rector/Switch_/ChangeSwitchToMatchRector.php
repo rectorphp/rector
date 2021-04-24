@@ -147,8 +147,8 @@ CODE_SAMPLE
 
     private function changeToAssign(Switch_ $switch, Match_ $match, Expr $assignExpr): Assign
     {
-        $prevInitializedAssign = $this->betterNodeFinder->findFirstPreviousOfNode($switch, function (Node $node): bool {
-            return $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $this->assignExpr);
+        $prevInitializedAssign = $this->betterNodeFinder->findFirstPreviousOfNode($switch, function (Node $node) use ($assignExpr): bool {
+            return $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $assignExpr);
         });
 
         $assign = new Assign($assignExpr, $match);
