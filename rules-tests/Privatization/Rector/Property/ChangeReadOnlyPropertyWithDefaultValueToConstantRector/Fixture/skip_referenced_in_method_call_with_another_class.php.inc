@@ -2,7 +2,12 @@
 
 namespace Rector\Tests\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector\Fixture;
 
-use Rector\Tests\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector\Source\ReferencedInMethodCall;
+class ReferencedInMethodCall
+{
+    public function process(array &$value)
+    {
+    }
+}
 
 class SkipReferencedInMethodCallWithAnotherClass
 {
