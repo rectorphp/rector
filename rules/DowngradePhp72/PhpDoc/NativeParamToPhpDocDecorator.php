@@ -7,6 +7,7 @@ namespace Rector\DowngradePhp72\PhpDoc;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\NullType;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
@@ -67,7 +68,9 @@ final class NativeParamToPhpDocDecorator
         $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
 
         // add default null type
-        if ($param->default !== null && $this->valueResolver->isNull($param->default)) {
+        if ($param->default !== null && $this->valueResolver->isNull($param->default) && ! TypeCombinator::containsNull(
+            $mappedCurrentParamType
+        )) {
             $mappedCurrentParamType = new UnionType([$mappedCurrentParamType, new NullType()]);
         }
 
