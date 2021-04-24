@@ -68,10 +68,10 @@ final class NativeParamToPhpDocDecorator
         $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
 
         // add default null type
-        if ($param->default !== null && $this->valueResolver->isNull($param->default)) {
-            if (! TypeCombinator::containsNull($mappedCurrentParamType)) {
-                $mappedCurrentParamType = new UnionType([$mappedCurrentParamType, new NullType()]);
-            }
+        if ($param->default !== null && $this->valueResolver->isNull($param->default) && ! TypeCombinator::containsNull(
+            $mappedCurrentParamType
+        )) {
+            $mappedCurrentParamType = new UnionType([$mappedCurrentParamType, new NullType()]);
         }
 
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $mappedCurrentParamType, $param, $paramName);
