@@ -111,7 +111,9 @@ CODE_SAMPLE
      */
     private function refactorParamTypes(FunctionLike $functionLike, PhpDocInfo $phpDocInfo): void
     {
-        if ($functionLike instanceof ClassMethod && $this->classMethodParamVendorLockResolver->isVendorLocked($functionLike)) {
+        if ($functionLike instanceof ClassMethod && $this->classMethodParamVendorLockResolver->isVendorLocked(
+            $functionLike
+        )) {
             return;
         }
 

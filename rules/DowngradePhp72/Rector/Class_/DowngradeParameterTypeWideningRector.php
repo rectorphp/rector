@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver;
 use Rector\DowngradePhp72\NodeAnalyzer\ParamContravariantDetector;
@@ -163,8 +164,10 @@ CODE_SAMPLE
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
         $hasChanged = false;
-        foreach ($classMethod->params as $param) {
-            $paramPosition = (int) $param->getAttribute(AttributeKey::ARGUMENT_POSITION);
+        foreach ($classMethod->params as $position => $param) {
+            if (! is_int($position)) {
+                throw new ShouldNotHappenException();
+            }
 
             // Resolve the types in:
             // - all ancestors + their descendant classes
@@ -172,7 +175,7 @@ CODE_SAMPLE
             $parameterTypesByParentClassLikes = $this->parentChildClassMethodTypeResolver->resolve(
                 $classReflection,
                 $methodName,
-                $paramPosition,
+                $position,
                 $scope
             );
 
