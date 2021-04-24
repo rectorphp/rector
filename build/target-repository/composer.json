@@ -9,6 +9,11 @@
         "php": "^7.1|^8.0",
         "phpstan/phpstan": "^0.12.83"
     },
+    "autoload": {
+        "files": [
+            "bootstrap.php"
+        ]
+    },
     "extra": {
         "branch-alias": {
             "dev-main": "0.10-dev"
