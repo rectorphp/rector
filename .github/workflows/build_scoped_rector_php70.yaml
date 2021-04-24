@@ -5,10 +5,9 @@ name: Build Scoped Rector PHP 7.0
 on:
     push:
         branches:
-            - never
-#            - main
-#        tags:
-#            - '*'
+            - main
+        tags:
+            - '*'
 
 env:
     # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
@@ -44,7 +43,7 @@ jobs:
             -   run: sh build/downgrade-rector.sh rector-build
 
             # 3. prefix classes
-            -   run: sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
+            -   run: sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded-php70
 
             # 4. lint the code for PHP 7.0 - this must happen here, as setup-php allows only one PHP version switch: https://github.com/shivammathur/setup-php/issues/434
             -
@@ -53,29 +52,29 @@ jobs:
                     php-version: 7.0
                     coverage: none
             -   run: composer create-project php-parallel-lint/php-parallel-lint php-parallel-lint --ansi
-            -   run: php-parallel-lint/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/symfony/error-handler/Resources --exclude rector-prefixed-downgraded/vendor/symfony/http-kernel/Resources --exclude rector-prefixed-downgraded/vendor/rector/rector-nette/tests --exclude rector-prefixed-downgraded/vendor/symfony/polyfill-mbstring/bootstrap80.php --exclude rector-prefixed-downgraded/vendor/symfony/string/Resources
+            -   run: php-parallel-lint/parallel-lint rector-prefixed-downgraded-php70 --exclude rector-prefixed-downgraded-php70/stubs --exclude rector-prefixed-downgraded-php70/vendor/symfony/error-handler/Resources --exclude rector-prefixed-downgraded-php70/vendor/symfony/http-kernel/Resources --exclude rector-prefixed-downgraded-php70/vendor/rector/rector-nette/tests --exclude rector-prefixed-downgraded-php70/vendor/symfony/polyfill-mbstring/bootstrap80.php --exclude rector-prefixed-downgraded-php70/vendor/tracy/tracy/examples
 
             # 5. copy repository meta files
             -   run: |
-                    cp -R build/target-repository/. rector-prefixed-downgraded
-                    cp -R templates rector-prefixed-downgraded/
+                    cp -R build/target-repository-php70/. rector-prefixed-downgraded-php70
+                    cp -R templates rector-prefixed-downgraded-php70/
 
             # 6. clone remote repository, so we can push it
             -
                 uses: "actions/checkout@v2"
                 with:
                     repository: rectorphp/rector-prefixed-php70
-                    path: remote-repository
+                    path: remote-repository-php70
                     token: ${{ secrets.ACCESS_TOKEN }}
 
             # remove remote files, to avoid piling up dead code in remote repository
-            -   run: rm -rf remote-repository/config remote-repository/src remote-repository/rules remote-repository/packages remote-repository/vendor
+            -   run: rm -rf remote-repository-php70/config remote-repository-php70/src remote-repository-php70/rules remote-repository-php70/packages remote-repository-php70/vendor
 
-            -   run: cp -a rector-prefixed-downgraded/. remote-repository
+            -   run: cp -a rector-prefixed-downgraded-php70/. remote-repository-php70
 
             # 7. setup git
             -
-                working-directory: remote-repository
+                working-directory: remote-repository-php70
                 run: |
                     git config user.email "tomas.vot@gmail.com"
                     git config user.name "Tomas Votruba"
@@ -86,10 +85,24 @@ jobs:
                 id: git-log
                 run: echo ::set-output name=log::$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='%H %s' | sed -e 's/^/https:\/\/github.com\/rectorphp\/rector\/commit\//')
 
+            # 8.A publish it to remote repository without tag
             -
-                name: "Commit Prefixed PHP 7.0 main"
-                working-directory: remote-repository
+                name: "Commit Prefixed - main"
+                working-directory: remote-repository-php70
+                if: "!startsWith(github.ref, 'refs/tags/')"
                 run: |
                     git add --all
                     git commit -m "Updated Rector to commit ${{ github.event.after }}" -m "${{ steps.git-log.outputs.log }}"
                     git push --quiet origin main
+
+            # 8.B publish it to remote repository with tag
+            -
+                name: "Commit Prefixed - tag"
+                working-directory: remote-repository-php70
+                if: "startsWith(github.ref, 'refs/tags/')"
+                run: |
+                    git add --all
+                    git commit -m "Rector ${GITHUB_REF#refs/tags/}" -m "${{ steps.git-log.outputs.log }}"
+                    git push --quiet origin main
+                    git tag ${GITHUB_REF#refs/tags/} -m "${GITHUB_REF#refs/tags/}"
+                    git push --quiet origin ${GITHUB_REF#refs/tags/}
