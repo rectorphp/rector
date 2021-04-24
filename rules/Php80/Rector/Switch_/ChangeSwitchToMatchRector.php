@@ -137,24 +137,33 @@ CODE_SAMPLE
         }
 
         if ($this->assignExpr) {
-            $prevInitializedAssign = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $node): bool {
-                return $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $this->assignExpr);
-            });
-
-            $assign = new Assign($this->assignExpr, $match);
-            if ($prevInitializedAssign instanceof Assign) {
-                $assign->expr->arms[] = new MatchArm([new Name('default')], $prevInitializedAssign->expr);
-
-                $parentAssign = $prevInitializedAssign->getAttribute(AttributeKey::PARENT_NODE);
-                if ($parentAssign instanceof Expression) {
-                    $this->removeNode($parentAssign);
-                }
-            }
-
-            return $assign;
+            /** @var Expr $assignExpr */
+            $assignExpr = $this->assignExpr;
+            return $this->changeToAssign($node, $match, $assignExpr);
         }
 
         return $match;
+    }
+
+    private function changeToAssign(Switch_ $switch, Match_ $match, Expr $assignExpr): Assign
+    {
+        $prevInitializedAssign = $this->betterNodeFinder->findFirstPreviousOfNode($switch, function (Node $node): bool {
+            return $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $this->assignExpr);
+        });
+
+        $assign = new Assign($assignExpr, $match);
+        if ($prevInitializedAssign instanceof Assign) {
+            /** @var Match_ $expr */
+            $expr = $assign->expr;
+            $expr->arms[] = new MatchArm(null, $prevInitializedAssign->expr);
+
+            $parentAssign = $prevInitializedAssign->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentAssign instanceof Expression) {
+                $this->removeNode($parentAssign);
+            }
+        }
+
+        return $assign;
     }
 
     private function shouldSkipSwitch(Switch_ $switch): bool
