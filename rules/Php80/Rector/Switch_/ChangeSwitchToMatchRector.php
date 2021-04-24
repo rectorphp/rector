@@ -9,10 +9,12 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\MatchArm;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\SwitchAnalyzer;
 use Rector\Php80\NodeResolver\SwitchExprsResolver;
 use Rector\Php80\ValueObject\CondAndExpr;
@@ -135,7 +137,21 @@ CODE_SAMPLE
         }
 
         if ($this->assignExpr) {
-            return new Assign($this->assignExpr, $match);
+            $prevInitializedAssign = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $node): bool {
+                return $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $this->assignExpr);
+            });
+
+            $assign = new Assign($this->assignExpr, $match);
+            if ($prevInitializedAssign instanceof Assign) {
+                $assign->expr->arms[] = new MatchArm([new Name('default')], $prevInitializedAssign->expr);
+
+                $parentAssign = $prevInitializedAssign->getAttribute(AttributeKey::PARENT_NODE);
+                if ($parentAssign instanceof Expression) {
+                    $this->removeNode($parentAssign);
+                }
+            }
+
+            return $assign;
         }
 
         return $match;
