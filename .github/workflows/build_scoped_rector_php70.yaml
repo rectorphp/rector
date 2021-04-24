@@ -4,7 +4,8 @@ name: Build Scoped Rector PHP 7.0
 
 on:
     push:
-#        branches:
+        branches:
+            - never
 #            - main
 #        tags:
 #            - '*'
