@@ -23,10 +23,10 @@ function print_node($node): void
     if (is_array($node)) {
         foreach ($node as $singleNode) {
             $printedContent = $standard->prettyPrint([$singleNode]);
-            dump($printedContent);
+            Dumper::dump($printedContent);
         }
     } else {
         $printedContent = $standard->prettyPrint([$node]);
-        dump($printedContent);
+        Dumper::dump($printedContent);
     }
 }
