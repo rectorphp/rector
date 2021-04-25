@@ -40,7 +40,7 @@ final class UnionTypesRector extends AbstractRector
     /**
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver|mixed
      */
-    public $classMethodParamVendorLockResolver;
+    private $classMethodParamVendorLockResolver;
 
     /**
      * @var ReturnTagRemover
@@ -52,28 +52,14 @@ final class UnionTypesRector extends AbstractRector
      */
     private $paramTagRemover;
 
-    /**
-     * @var ParamRenameFactory
-     */
-    private $paramRenameFactory;
-
-    /**
-     * @var PropertyDocBlockManipulator
-     */
-    private $propertyDocBlockManipulator;
-
     public function __construct(
         ReturnTagRemover $returnTagRemover,
         ParamTagRemover $paramTagRemover,
-        ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
-        ParamRenameFactory $paramRenameFactory,
-        PropertyDocBlockManipulator $propertyDocBlockManipulator
+        ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver
     ) {
         $this->returnTagRemover = $returnTagRemover;
         $this->paramTagRemover = $paramTagRemover;
         $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
-        $this->paramRenameFactory = $paramRenameFactory;
-        $this->propertyDocBlockManipulator = $propertyDocBlockManipulator;
     }
 
     public function getRuleDefinition(): RuleDefinition
