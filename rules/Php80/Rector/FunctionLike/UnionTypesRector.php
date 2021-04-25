@@ -124,7 +124,7 @@ CODE_SAMPLE
             return;
         }
 
-        foreach ($functionLike->getParams() as $key => $param) {
+        foreach ($functionLike->getParams() as $param) {
             if ($param->type !== null) {
                 continue;
             }
@@ -150,7 +150,8 @@ CODE_SAMPLE
         }
     }
 
-    private function changeObjectWithoutClassType(Param $param, UnionType $unionType): void {
+    private function changeObjectWithoutClassType(Param $param, UnionType $unionType): void
+    {
         if (! $this->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($unionType)) {
             return;
         }
