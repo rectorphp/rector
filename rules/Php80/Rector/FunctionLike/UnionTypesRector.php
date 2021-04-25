@@ -13,11 +13,11 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\UnionType;
-use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
@@ -25,13 +25,17 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 
 /**
  * @see \Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\UnionTypesRectorTest
  */
 final class UnionTypesRector extends AbstractRector
 {
+    /**
+     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver|mixed
+     */
+    public $classMethodParamVendorLockResolver;
+
     /**
      * @var ReturnTagRemover
      */
@@ -41,11 +45,6 @@ final class UnionTypesRector extends AbstractRector
      * @var ParamTagRemover
      */
     private $paramTagRemover;
-
-    /**
-     * @var PropertyDocBlockManipulator
-     */
-    private $propertyDocBlockManipulator;
 
     /**
      * @var PhpDocTypeChanger
@@ -125,9 +124,10 @@ CODE_SAMPLE
      */
     private function refactorParamTypes(FunctionLike $functionLike, PhpDocInfo $phpDocInfo): void
     {
-        if ($functionLike instanceof ClassMethod && $this->classMethodParamVendorLockResolver->isVendorLocked(
+        $classMethodParamVendorLockResolverIsVendorLocked = $this->classMethodParamVendorLockResolver->isVendorLocked(
             $functionLike
-        )) {
+        );
+        if ($functionLike instanceof ClassMethod && $classMethodParamVendorLockResolverIsVendorLocked) {
             return;
         }
 
@@ -190,7 +190,12 @@ CODE_SAMPLE
         return true;
     }
 
-    private function cleanParamObjectType(UnionType $unionType, PhpDocInfo $phpDocInfo, Param $param, string $paramName): void
+    private function cleanParamObjectType(
+        UnionType $unionType,
+        PhpDocInfo $phpDocInfo,
+        Param $param,
+        string $paramName
+    ): void
     {
         $types = $unionType->getTypes();
         foreach ($types as $key => $type) {
