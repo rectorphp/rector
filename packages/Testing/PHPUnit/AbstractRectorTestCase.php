@@ -11,6 +11,8 @@ use PHPUnit\Framework\ExpectationFailedException;
 use Psr\Container\ContainerInterface;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
+use Rector\Core\Autoloading\AdditionalAutoloader;
+use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
@@ -75,6 +77,14 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
 
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
+
+        /** @var AdditionalAutoloader $additionalAutoloader */
+        $additionalAutoloader = $this->getService(AdditionalAutoloader::class);
+        $additionalAutoloader->autoloadPaths();
+
+        /** @var BootstrapFilesIncluder $bootstrapFilesIncluder */
+        $bootstrapFilesIncluder = $this->getService(BootstrapFilesIncluder::class);
+        $bootstrapFilesIncluder->includeBootstrapFiles();
 
         /** @var Configuration $configuration */
         $configuration = $this->getService(Configuration::class);
