@@ -205,7 +205,7 @@ CODE_SAMPLE
 
         $resultType = rtrim($resultType, '|');
         $paramTagValueNodes = $phpDocInfo->getParamTagValueNodes();
-        $paramTagValueNodes[$key - 1]->type = new IdentifierTypeNode($resultType);
+        $paramTagValueNodes[$key]->type = new IdentifierTypeNode($resultType);
     }
 
     /**
