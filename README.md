@@ -74,6 +74,7 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 - [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
 - [Static Reflection and Autoload](/docs/static_reflection_and_autoload.md)
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
+- [How to Generate Configuration file](/docs/init_command.md)
 
 ### Contributing
 
