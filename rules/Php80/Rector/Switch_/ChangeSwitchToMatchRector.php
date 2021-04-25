@@ -9,10 +9,12 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\MatchArm;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\SwitchAnalyzer;
 use Rector\Php80\NodeResolver\SwitchExprsResolver;
 use Rector\Php80\ValueObject\CondAndExpr;
@@ -135,10 +137,33 @@ CODE_SAMPLE
         }
 
         if ($this->assignExpr) {
-            return new Assign($this->assignExpr, $match);
+            /** @var Expr $assignExpr */
+            $assignExpr = $this->assignExpr;
+            return $this->changeToAssign($node, $match, $assignExpr);
         }
 
         return $match;
+    }
+
+    private function changeToAssign(Switch_ $switch, Match_ $match, Expr $assignExpr): Assign
+    {
+        $prevInitializedAssign = $this->betterNodeFinder->findFirstPreviousOfNode($switch, function (Node $node) use ($assignExpr): bool {
+            return $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $assignExpr);
+        });
+
+        $assign = new Assign($assignExpr, $match);
+        if ($prevInitializedAssign instanceof Assign) {
+            /** @var Match_ $expr */
+            $expr = $assign->expr;
+            $expr->arms[] = new MatchArm(null, $prevInitializedAssign->expr);
+
+            $parentAssign = $prevInitializedAssign->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentAssign instanceof Expression) {
+                $this->removeNode($parentAssign);
+            }
+        }
+
+        return $assign;
     }
 
     private function shouldSkipSwitch(Switch_ $switch): bool
