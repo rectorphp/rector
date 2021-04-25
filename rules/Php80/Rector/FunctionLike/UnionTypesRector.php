@@ -14,19 +14,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
-use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
-use Rector\Naming\ValueObject\ParamRename;
-use Rector\Naming\ValueObjectFactory\ParamRenameFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -120,9 +113,7 @@ CODE_SAMPLE
 
     private function isVendorLocked(ClassMethod $classMethod): bool
     {
-        return $this->classMethodParamVendorLockResolver->isVendorLocked(
-            $classMethod
-        );
+        return $this->classMethodParamVendorLockResolver->isVendorLocked($classMethod);
     }
 
     /**
@@ -160,7 +151,12 @@ CODE_SAMPLE
         }
     }
 
-    private function changeObjectWithoutClassType(UnionType $unionType, Param $param, PhpDocInfo $phpDocInfo, int $key): void
+    private function changeObjectWithoutClassType(
+        UnionType $unionType,
+        Param $param,
+        PhpDocInfo $phpDocInfo,
+        int $key
+    ): void
     {
         if (! $this->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($unionType)) {
             return;
@@ -198,12 +194,7 @@ CODE_SAMPLE
         return true;
     }
 
-    private function cleanParamObjectType(
-        int $key,
-        UnionType $unionType,
-        PhpDocInfo $phpDocInfo
-    ): void
-    {
+    private function cleanParamObjectType(int $key, UnionType $unionType, PhpDocInfo $phpDocInfo): void {
         $types = $unionType->getTypes();
         $resultType = '';
         foreach ($types as $key => $type) {
@@ -212,7 +203,7 @@ CODE_SAMPLE
             }
         }
 
-        $resultType         = rtrim($resultType, '|');
+        $resultType = rtrim($resultType, '|');
         $paramTagValueNodes = $phpDocInfo->getParamTagValueNodes();
         $paramTagValueNodes[$key - 1]->type = new IdentifierTypeNode($resultType);
     }
