@@ -13,6 +13,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\UnionType;
@@ -30,7 +31,6 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
 /**
  * @see \Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\UnionTypesRectorTest
@@ -162,7 +162,7 @@ CODE_SAMPLE
                 }
 
                 $param->type = new Name('object');
-                $this->cleanParamObjectType($key, $paramType, $phpDocInfo, $param, $paramName);
+                $this->cleanParamObjectType($key, $paramType, $phpDocInfo);
                 continue;
             }
 
@@ -206,9 +206,7 @@ CODE_SAMPLE
     private function cleanParamObjectType(
         int $key,
         UnionType $unionType,
-        PhpDocInfo $phpDocInfo,
-        Param $param,
-        string $paramName
+        PhpDocInfo $phpDocInfo
     ): void
     {
         $types = $unionType->getTypes();
