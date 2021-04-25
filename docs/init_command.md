@@ -6,7 +6,7 @@ To start quickly you can run the init command
 vendor/bin/rector init
 ```
 
-This will create a `rector.php` if it doesn´t already exist in your root directory with some sensitive defaults.
+This will create a `rector.php` if it doesn´t already exist in your root directory with some sensitive defaults to start with.
 
 ```php
 // rector.php
@@ -27,10 +27,44 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```
 
 The init command takes an option called `--template-type`.
-If some other Rector extension like [rector-nette](https://github.com/rectorphp/rector-nette) or [rector-doctrine](https://github.com/rectorphp/rector-doctrine) provides such a custom template type you can specify it here:
+If some other Rector extension like [rector-nette](https://github.com/rectorphp/rector-nette) or [typo3-rector](https://github.com/sabbelasichon/typo3-rector) provides such a custom template type you can specify it here:
 
 ```bash
-vendor/bin/rector init --template-type=nette
+vendor/bin/rector init --template-type=typo3
+```
+
+The rector.php file for TYPO3 contains useful framework specific defaults to start from:
+
+```php
+use Ssch\TYPO3Rector\Set\Typo3SetList;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\PostRector\Rector\NameImportingPostRector;
+use Rector\Core\Configuration\Option;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    // get parameters
+    $parameters = $containerConfigurator->parameters();
+
+    $containerConfigurator->import(Typo3SetList::TYPO3_76);
+    $containerConfigurator->import(Typo3SetList::TYPO3_87);
+    $containerConfigurator->import(Typo3SetList::TYPO3_95);
+    $containerConfigurator->import(Typo3SetList::TYPO3_104);
+    $containerConfigurator->import(Typo3SetList::TYPO3_11);
+
+    $parameters->set(Option::SKIP, [
+        NameImportingPostRector::class => [
+            'ClassAliasMap.php',
+            'ext_localconf.php',
+            'ext_emconf.php',
+            'ext_tables.php',
+            __DIR__ . '/**/Configuration/TCA/*',
+            __DIR__ . '/**/Configuration/RequestMiddlewares.php',
+            __DIR__ . '/**/Configuration/Commands.php',
+            __DIR__ . '/**/Configuration/AjaxRoutes.php',
+            __DIR__ . '/**/Configuration/Extbase/Persistence/Classes.php',
+        ],
+    ]);
+};
 ```
 
 If you just want to use the default template provided by Rector you can omit the --template-type option.
