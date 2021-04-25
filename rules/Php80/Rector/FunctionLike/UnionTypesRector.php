@@ -31,7 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnionTypesRector extends AbstractRector
 {
     /**
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver
+     * @var ClassMethodParamVendorLockResolver
      */
     private $classMethodParamVendorLockResolver;
 
@@ -156,8 +156,7 @@ CODE_SAMPLE
         Param $param,
         PhpDocInfo $phpDocInfo,
         int $key
-    ): void
-    {
+    ): void {
         if (! $this->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($unionType)) {
             return;
         }
@@ -194,10 +193,11 @@ CODE_SAMPLE
         return true;
     }
 
-    private function cleanParamObjectType(int $key, UnionType $unionType, PhpDocInfo $phpDocInfo): void {
+    private function cleanParamObjectType(int $key, UnionType $unionType, PhpDocInfo $phpDocInfo): void
+    {
         $types = $unionType->getTypes();
         $resultType = '';
-        foreach ($types as $key => $type) {
+        foreach ($types as $type) {
             if ($type instanceof FullyQualifiedObjectType) {
                 $resultType .= $type->getClassName() . '|';
             }
