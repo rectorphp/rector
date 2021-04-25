@@ -38,7 +38,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnionTypesRector extends AbstractRector
 {
     /**
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver|mixed
+     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver
      */
     private $classMethodParamVendorLockResolver;
 
