@@ -161,5 +161,5 @@ final class Option
     /**
      * @var string
      */
-    public const TEMPLATE_TYPE = 'type';
+    public const TEMPLATE_TYPE = 'template-type';
 }
