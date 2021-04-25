@@ -132,15 +132,19 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function isVendorLocked(ClassMethod $classMethod): bool
+    {
+        return $this->classMethodParamVendorLockResolver->isVendorLocked(
+            $classMethod
+        );
+    }
+
     /**
      * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
      */
     private function refactorParamTypes(FunctionLike $functionLike, PhpDocInfo $phpDocInfo): void
     {
-        $classMethodParamVendorLockResolverIsVendorLocked = $this->classMethodParamVendorLockResolver->isVendorLocked(
-            $functionLike
-        );
-        if ($functionLike instanceof ClassMethod && $classMethodParamVendorLockResolverIsVendorLocked) {
+        if ($functionLike instanceof ClassMethod && $this->isVendorLocked($functionLike)) {
             return;
         }
 
@@ -157,12 +161,7 @@ CODE_SAMPLE
             }
 
             if ($this->hasObjectWithoutClassType($paramType)) {
-                if (! $this->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($paramType)) {
-                    continue;
-                }
-
-                $param->type = new Name('object');
-                $this->cleanParamObjectType($key, $paramType, $phpDocInfo);
+                $this->changeObjectWithoutClassType($paramType, $param, $phpDocInfo, $key);
                 continue;
             }
 
@@ -173,6 +172,16 @@ CODE_SAMPLE
 
             $param->type = $phpParserUnionType;
         }
+    }
+
+    private function changeObjectWithoutClassType(UnionType $unionType, Param $param, PhpDocInfo $phpDocInfo, int $key): void
+    {
+        if (! $this->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($unionType)) {
+            return;
+        }
+
+        $param->type = new Name('object');
+        $this->cleanParamObjectType($key, $unionType, $phpDocInfo);
     }
 
     private function hasObjectWithoutClassType(UnionType $unionType): bool
@@ -212,7 +221,7 @@ CODE_SAMPLE
         $types = $unionType->getTypes();
         $resultType = '';
         foreach ($types as $key => $type) {
-            if (! $type instanceof ObjectWithoutClassType) {
+            if ($type instanceof FullyQualifiedObjectType) {
                 $resultType .= $type->getClassName() . '|';
             }
         }
