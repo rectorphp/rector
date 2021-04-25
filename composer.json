@@ -159,8 +159,7 @@
     "repositories" : [
         {
             "type" : "vcs",
-            "url" : "https://github.com/phpstan/phpstan-src",
-            "no-api": true
+            "url" : "https://github.com/phpstan/phpstan-src"
         }
     ]
 }
