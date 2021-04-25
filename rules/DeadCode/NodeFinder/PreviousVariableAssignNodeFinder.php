@@ -40,7 +40,11 @@ final class PreviousVariableAssignNodeFinder
     public function find(Assign $assign): ?Node
     {
         $currentAssign = $assign;
+
         $variableName = $this->nodeNameResolver->getName($assign->var);
+        if ($variableName === null) {
+            return null;
+        }
 
         return $this->betterNodeFinder->findFirstPrevious($assign, function (Node $node) use (
             $variableName,

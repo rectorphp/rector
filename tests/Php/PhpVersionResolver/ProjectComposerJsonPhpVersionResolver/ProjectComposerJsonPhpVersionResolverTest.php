@@ -30,6 +30,9 @@ final class ProjectComposerJsonPhpVersionResolverTest extends AbstractTestCase
         $this->assertSame($expectedPhpVersion, $resolvePhpVersion);
     }
 
+    /**
+     * @return Iterator<array<string|int>>
+     */
     public function provideData(): Iterator
     {
         yield [__DIR__ . '/Fixture/some_composer.json', 70300];

@@ -63,6 +63,9 @@ final class NodeUsageFinder
     public function findVariableUsages(array $nodes, Variable $variable): array
     {
         $variableName = $this->nodeNameResolver->getName($variable);
+        if ($variableName === null) {
+            return [];
+        }
 
         return $this->betterNodeFinder->find($nodes, function (Node $node) use ($variable, $variableName): bool {
             if (! $node instanceof Variable) {

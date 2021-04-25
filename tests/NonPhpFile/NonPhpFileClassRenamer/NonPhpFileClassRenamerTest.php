@@ -62,6 +62,9 @@ final class NonPhpFileClassRenamerTest extends AbstractTestCase
         $this->assertSame($inputAndExpected->getExpected(), $changedContent);
     }
 
+    /**
+     * @return Iterator<array<int, SmartFileInfo>>
+     */
     public function provideData(): Iterator
     {
         return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*');

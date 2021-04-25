@@ -144,6 +144,9 @@ CODE_SAMPLE
         });
     }
 
+    /**
+     * @return Node\Identifier|Node\Name|UnionType|NullableType|null
+     */
     private function matchPropertySingleTypeNode(PropertyFetch $propertyFetch): ?Node
     {
         $property = $this->nodeRepository->findPropertyByPropertyFetch($propertyFetch);

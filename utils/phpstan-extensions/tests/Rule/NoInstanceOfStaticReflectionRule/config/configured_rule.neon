@@ -1,9 +1,0 @@
-includes:
-    - ../../../../../../vendor/symplify/phpstan-rules/config/services/services.neon
-
-services:
-    - Rector\PHPStanExtensions\TypeAnalyzer\AllowedAutoloadedTypeAnalyzer
-
-    -
-        class: Rector\PHPStanExtensions\Rule\NoInstanceOfStaticReflectionRule
-        tags: [phpstan.rules.rule]

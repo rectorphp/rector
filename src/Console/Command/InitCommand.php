@@ -36,7 +36,7 @@ final class InitCommand extends Command
     /**
      * @var TemplateResolverInterface[]
      */
-    private $templateResolvers;
+    private $templateResolvers = [];
 
     /**
      * @param TemplateResolverInterface[] $templateResolvers
