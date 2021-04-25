@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
@@ -19,6 +20,7 @@ use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Type\ObjectWithoutClassType;
 
 /**
  * @see \Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\UnionTypesRectorTest
@@ -129,6 +131,10 @@ CODE_SAMPLE
                 continue;
             }
 
+            if ($this->hasObjectWithoutClassType($paramType)) {
+                return;
+            }
+
             $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType);
             if (! $phpParserUnionType instanceof PhpParserUnionType) {
                 continue;
@@ -136,6 +142,18 @@ CODE_SAMPLE
 
             $param->type = $phpParserUnionType;
         }
+    }
+
+    private function hasObjectWithoutClassType(UnionType $unionType): bool
+    {
+        $types = $unionType->getTypes();
+        foreach ($types as $type) {
+            if ($type instanceof ObjectWithoutClassType) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
