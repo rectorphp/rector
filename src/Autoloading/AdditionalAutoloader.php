@@ -40,22 +40,12 @@ final class AdditionalAutoloader
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
     }
 
-    public function autoloadWithInputAndSource(InputInterface $input): void
+    public function autoloadInput(InputInterface $input): void
     {
-        if ($input->hasOption(Option::OPTION_AUTOLOAD_FILE)) {
-            $this->autoloadInputAutoloadFile($input);
-        }
-
-        $autoloadPaths = $this->parameterProvider->provideArrayParameter(Option::AUTOLOAD_PATHS);
-        if ($autoloadPaths === []) {
+        if (! $input->hasOption(Option::OPTION_AUTOLOAD_FILE)) {
             return;
         }
 
-        $this->dynamicSourceLocatorDecorator->addPaths($autoloadPaths);
-    }
-
-    private function autoloadInputAutoloadFile(InputInterface $input): void
-    {
         /** @var string|null $autoloadFile */
         $autoloadFile = $input->getOption(Option::OPTION_AUTOLOAD_FILE);
         if ($autoloadFile === null) {
@@ -64,5 +54,15 @@ final class AdditionalAutoloader
 
         $this->fileSystemGuard->ensureFileExists($autoloadFile, 'Extra autoload');
         $this->dynamicSourceLocatorDecorator->addPaths([$autoloadFile]);
+    }
+
+    public function autoloadPaths(): void
+    {
+        $autoloadPaths = $this->parameterProvider->provideArrayParameter(Option::AUTOLOAD_PATHS);
+        if ($autoloadPaths === []) {
+            return;
+        }
+
+        $this->dynamicSourceLocatorDecorator->addPaths($autoloadPaths);
     }
 }

@@ -9,7 +9,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\MatchArm;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
@@ -147,7 +146,9 @@ CODE_SAMPLE
 
     private function changeToAssign(Switch_ $switch, Match_ $match, Expr $assignExpr): Assign
     {
-        $prevInitializedAssign = $this->betterNodeFinder->findFirstPreviousOfNode($switch, function (Node $node) use ($assignExpr): bool {
+        $prevInitializedAssign = $this->betterNodeFinder->findFirstPreviousOfNode($switch, function (Node $node) use (
+            $assignExpr
+        ): bool {
             return $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $assignExpr);
         });
 

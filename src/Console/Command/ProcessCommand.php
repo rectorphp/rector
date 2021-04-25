@@ -202,7 +202,9 @@ final class ProcessCommand extends Command
 
         // register autoloaded and included files
         $this->bootstrapFilesIncluder->includeBootstrapFiles();
-        $this->additionalAutoloader->autoloadWithInputAndSource($input);
+
+        $this->additionalAutoloader->autoloadInput($input);
+        $this->additionalAutoloader->autoloadPaths();
 
         // PHPStan has to know about all files!
         $this->configurePHPStanNodeScopeResolver($phpFileInfos);
