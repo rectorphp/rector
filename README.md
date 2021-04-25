@@ -71,6 +71,7 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 ### Advanced
 
 - [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
+- [Static Reflection and Autoload](/docs/static_reflection_and_autoload.md)
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
 
 ### Contributing
@@ -87,7 +88,7 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 composer require rector/rector --dev
 ```
 
-- Having conflicts during `composer require`? → Use the [Rector Prefixed](https://github.com/rectorphp/rector-prefixed)
+- Having conflicts during `composer require`? → Use the [Rector Prefixed](https://github.com/rectorphp/rector-prefixed) with PHP 7.1+ version
 - Using a different PHP version than Rector supports? → Use the [Docker image](/docs/how_to_run_rector_in_docker.md)
 
 <br>
@@ -96,8 +97,8 @@ composer require rector/rector --dev
 
 There a 2 main ways to use Rector:
 
-- a *single rule*, to have the change under control - you can choose [from over 600 rules](/docs/rector_rules_overview.md)
-- or group of rules called *sets* - [pick from sets](/config/set)
+- a *single rule*, to have the change under control
+- or group of rules called *sets*
 
 To use them, create a `rector.php` in your root directory:
 
@@ -117,6 +118,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     // here we can define, what sets of rules will be applied
     $parameters = $containerConfigurator->parameters();
+
+    // tip: use "SetList" class to autocomplete sets
     $parameters->set(Option::SETS, [SetList::CODE_QUALITY]);
 
     // register single rule
@@ -124,8 +127,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(TypedPropertyRector::class);
 };
 ```
-
-<br>
 
 Then dry run Rector:
 
@@ -156,20 +157,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // paths to refactor; solid alternative to CLI arguments
     $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests']);
-
-    // Rector is static reflection to load code without running it - see https://phpstan.org/blog/zero-config-analysis-with-static-reflection
-    $parameters->set(Option::AUTOLOAD_PATHS, [
-        // autoload specific file
-        __DIR__ . '/file-with-functions.php',
-        // or full directory
-        __DIR__ . '/project-without-composer',
-    ]);
-
-    // do you need to include constants, class aliases or custom autoloader? files listed will be executed
-    $parameters->set(Option::BOOTSTRAP_FILES, [
-        __DIR__ . '/constants.php',
-        __DIR__ . '/project/special/autoload.php',
-    ]);
 
     // is your PHP version different from the one your refactor to? [default: your PHP version], uses PHP_VERSION_ID format
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_72);
