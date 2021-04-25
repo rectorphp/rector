@@ -53,7 +53,7 @@ final class AdditionalAutoloader
         }
 
         $this->fileSystemGuard->ensureFileExists($autoloadFile, 'Extra autoload');
-        $this->dynamicSourceLocatorDecorator->addPaths([$autoloadFile]);
+        require_once $autoloadFile;
     }
 
     public function autoloadPaths(): void
