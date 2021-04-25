@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\FunctionLike\UnionTypesRector\Fixture;
+namespace Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\Fixture;
 
 final class ObjectAndStringType
 {

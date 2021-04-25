@@ -8,18 +8,24 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Name;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\UnionType;
+use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 
 /**
  * @see \Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\UnionTypesRectorTest
@@ -37,18 +43,25 @@ final class UnionTypesRector extends AbstractRector
     private $paramTagRemover;
 
     /**
-     * @var ClassMethodParamVendorLockResolver
+     * @var PropertyDocBlockManipulator
      */
-    private $classMethodParamVendorLockResolver;
+    private $propertyDocBlockManipulator;
+
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
 
     public function __construct(
         ReturnTagRemover $returnTagRemover,
         ParamTagRemover $paramTagRemover,
-        ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver
+        ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
+        PhpDocTypeChanger $phpDocTypeChanger
     ) {
         $this->returnTagRemover = $returnTagRemover;
         $this->paramTagRemover = $paramTagRemover;
         $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -131,7 +144,13 @@ CODE_SAMPLE
             }
 
             if ($this->hasObjectWithoutClassType($paramType)) {
-                return;
+                if (! $this->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($paramType)) {
+                    continue;
+                }
+
+                $param->type = new Name('object');
+                $this->cleanParamObjectType($paramType, $phpDocInfo, $param, $paramName);
+                continue;
             }
 
             $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType);
@@ -153,6 +172,39 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType(UnionType $unionType): bool
+    {
+        $types = $unionType->getTypes();
+        foreach ($types as $type) {
+            if ($type instanceof ObjectWithoutClassType) {
+                continue;
+            }
+
+            if (! $type instanceof FullyQualifiedObjectType) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function cleanParamObjectType(UnionType $unionType, PhpDocInfo $phpDocInfo, Param $param, string $paramName): void
+    {
+        $types = $unionType->getTypes();
+        foreach ($types as $key => $type) {
+            if ($type instanceof ObjectWithoutClassType) {
+                unset($types[$key]);
+            }
+        }
+
+        $currentType = current($types);
+        $type = count($types) === 1
+            ? new ObjectType($currentType->getClassName())
+            : new UnionType($types);
+
+        $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
     }
 
     /**
