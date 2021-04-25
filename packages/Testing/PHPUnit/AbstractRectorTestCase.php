@@ -14,6 +14,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
+use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Contract\RectorTestInterface;
@@ -75,6 +76,12 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
 
         $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
         $this->removedAndAddedFilesCollector->reset();
+
+        $autoloadPaths = $this->parameterProvider->provideArrayParameter(Option::AUTOLOAD_PATHS);
+        if ($autoloadPaths !== []) {
+            $dynamicSourceLocatorDecorator = $this->getService(DynamicSourceLocatorDecorator::class);
+            $dynamicSourceLocatorDecorator->addPaths($autoloadPaths);
+        }
 
         /** @var Configuration $configuration */
         $configuration = $this->getService(Configuration::class);
