@@ -202,7 +202,7 @@ final class PropertyNaming
     private function resolveShortClassName(string $className): string
     {
         if (Strings::contains($className, '\\')) {
-            return Strings::after($className, '\\', -1);
+            return (string) Strings::after($className, '\\', -1);
         }
 
         return $className;

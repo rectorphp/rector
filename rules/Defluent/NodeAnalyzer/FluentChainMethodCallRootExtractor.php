@@ -88,13 +88,14 @@ final class FluentChainMethodCallRootExtractor
             if ($methodCall->var instanceof Variable || $methodCall->var instanceof PropertyFetch) {
                 return $this->createAssignAndRootExprForVariableOrPropertyFetch($methodCall);
             }
+
             if ($methodCall->var instanceof New_) {
                 // direct = no parent
                 if ($kind === FluentCallsKind::IN_ARGS) {
                     return $this->resolveKindInArgs($methodCall);
                 }
 
-                return $this->matchMethodCallOnNew($methodCall);
+                return $this->matchMethodCallOnNew($methodCall->var);
             }
         }
 
@@ -161,20 +162,20 @@ final class FluentChainMethodCallRootExtractor
         return new AssignAndRootExpr($methodCall->var, $methodCall->var, $silentVariable);
     }
 
-    private function matchMethodCallOnNew(MethodCall $methodCall): ?AssignAndRootExpr
+    private function matchMethodCallOnNew(New_ $new): ?AssignAndRootExpr
     {
         // we need assigned left variable here
         $previousAssignOrReturn = $this->betterNodeFinder->findFirstPreviousOfTypes(
-            $methodCall->var,
+            $new,
             [Assign::class, Return_::class]
         );
 
         if ($previousAssignOrReturn instanceof Assign) {
-            return new AssignAndRootExpr($previousAssignOrReturn->var, $methodCall->var);
+            return new AssignAndRootExpr($previousAssignOrReturn->var, $new);
         }
 
         if ($previousAssignOrReturn instanceof Return_) {
-            $className = $this->nodeNameResolver->getName($methodCall->var->class);
+            $className = $this->nodeNameResolver->getName($new->class);
             if ($className === null) {
                 return null;
             }
@@ -186,7 +187,7 @@ final class FluentChainMethodCallRootExtractor
             }
 
             $variable = new Variable($expectedName->getName());
-            return new AssignAndRootExpr($methodCall->var, $methodCall->var, $variable);
+            return new AssignAndRootExpr($new, $new, $variable);
         }
 
         // no assign, just standalone call

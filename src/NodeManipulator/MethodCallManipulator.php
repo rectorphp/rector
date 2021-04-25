@@ -124,6 +124,9 @@ final class MethodCallManipulator
         }
 
         $variableName = $this->nodeNameResolver->getName($variable);
+        if ($variableName === null) {
+            return [];
+        }
 
         return $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use (
             $variableName

@@ -9,10 +9,10 @@ parameters:
     featureToggles:
         disableRuntimeReflectionProvider: true
 
-services:
-    - PhpParser\NodeFinder
-
 includes:
-    - utils/phpstan-extensions/config/phpstan-extensions.neon
-    - vendor/symplify/astral/config/services.neon
+    - vendor/rector/rector-phpstan-rules/config/config.neon
     - vendor/symplify/phpstan-extensions/config/config.neon
+
+    - vendor/symplify/phpstan-rules/config/services/services.neon
+    - vendor/symplify/phpstan-rules/packages/object-calisthenics/config/object-calisthenics-services.neon
+    - vendor/symplify/phpstan-rules/packages/cognitive-complexity/config/cognitive-complexity-services.neon

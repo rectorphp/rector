@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-class FunctionLikeReflectionParser
+final class FunctionLikeReflectionParser
 {
     /**
      * @var Parser

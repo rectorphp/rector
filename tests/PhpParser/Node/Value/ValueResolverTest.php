@@ -36,6 +36,9 @@ final class ValueResolverTest extends AbstractTestCase
         $this->assertSame($expectedValue, $resolvedValue);
     }
 
+    /**
+     * @return Iterator<array<Expr|mixed>>
+     */
     public function dataProvider(): Iterator
     {
         $builderFactory = new BuilderFactory();

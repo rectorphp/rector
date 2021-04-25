@@ -1,16 +1,4 @@
 includes:
-    - utils/phpstan-extensions/config/phpstan-extensions.neon
-    - utils/phpstan-extensions/config/rector-rules.neon
-
-    # allows symplify error formatter
-    - vendor/symplify/phpstan-extensions/config/config.neon
-
-    # see https://github.com/symplify/coding-standard
-    # - vendor/symplify/phpstan-rules/config/configurable-rules.neon
-
-    - vendor/symplify/phpstan-rules/config/services/services.neon
-    - vendor/symplify/phpstan-rules/packages/cognitive-complexity/config/cognitive-complexity-services.neon
-
     - vendor/symplify/phpstan-rules/config/static-rules.neon
     - vendor/symplify/phpstan-rules/config/array-rules.neon
     - vendor/symplify/phpstan-rules/config/code-complexity-rules.neon
@@ -80,20 +68,8 @@ parameters:
         # mixed
         - '#Offset int\|string\|null does not exist on array<PhpParser\\Node\\Stmt>\|null#'
 
-
-        # broken
-        - '#Parameter \#2 \$name of method Rector\\NodeNameResolver\\NodeNameResolver\:\:isName\(\) expects string, string\|null given#'
-
-        # mostly strings in tests
-        - '#Method Rector\\Naming\\Naming\\PropertyNaming\:\:resolveShortClassName\(\) should return string but returns string\|null#'
-
-        -
-            message: "#in iterable type Iterator#"
-            paths:
-                - *Test.php
-
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
-        - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$class#'
+
         - '#Property PhpParser\\Node\\Stmt\\Namespace_\:\:\$stmts \(array<PhpParser\\Node\\Stmt\>\) does not accept array<PhpParser\\Node\>#'
 
         - '#Cognitive complexity for "Rector\\Php80\\NodeResolver\\SwitchExprsResolver\:\:resolve\(\)" is (.*?), keep it under 9#'
@@ -120,7 +96,6 @@ parameters:
         - '#Cognitive complexity for "Rector\\DeadCode\\NodeManipulator\\LivingCodeManipulator\:\:keepLivingCodeFromExpr\(\)" is \d+, keep it under 9#'
         - '#Cognitive complexity for "Rector\\Transform\\Rector\\Class_\\AddInterfaceByParentRector\:\:refactor\(\)" is \d+, keep it under 9#'
 
-        - '#Parameter \#1 \$type of method PhpParser\\Builder\\FunctionLike\:\:setReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
 
         - '#Parameter \#1 \$type of class PhpParser\\Node\\NullableType constructor expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
         - '#Parameter \#1 \$objectType of method Rector\\Naming\\Naming\\PropertyNaming\:\:fqnToVariableName\(\) expects PHPStan\\Type\\ObjectType\|string, PHPStan\\Type\\Type given#'
@@ -235,8 +210,6 @@ parameters:
 
         # false postives
         - '#Parameter \#2 \$right of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
-        - '#Parameter \#1 \$stmts of class Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace constructor expects array<PhpParser\\Node\\Stmt\>, array<PhpParser\\Node\> given#'
-
 
         -
             message: '#Call to function is_string\(\) with float will always evaluate to false#'
@@ -257,9 +230,6 @@ parameters:
 
         - '#PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable given#'
 
-        # unable to test, because the method is final
-#        - '#Class "Rector\\Nette\\Rector\\Class_\\MoveFinalGetUserToCheckRequirementsClassMethodRector" is missing @see annotation with test case class reference#'
-
         -
             message: '#Use `\$class\-\>namespaceName` instead of `\$class\-\>name` that only returns short class name#'
             paths:
@@ -271,7 +241,6 @@ parameters:
             paths:
                 - rules/Defluent/ValueObject/*
 
-
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
 
         - '#Instanceof between PhpParser\\Node\\Stmt and Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace will always evaluate to false#'
@@ -281,7 +250,6 @@ parameters:
             paths:
                 - bin/rector.php
                 - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
-                - src/Application/FileProcessor/PhpFileProcessor.php
 
         -
             message: '#Function "class_exists\(\)" cannot be used/left in the code#'
@@ -297,8 +265,7 @@ parameters:
         -
             message: '#There should be no empty class#'
             paths:
-                - packages/StaticTypeMapper/ValueObject/Type/ParentStaticType.php #9
-                - packages/StaticTypeMapper/ValueObject/Type/SelfObjectType.php #9
+                - packages/StaticTypeMapper/ValueObject/Type/*Type.php
 
         # generics nullable bugs
         - '#Method (.*?) should return T of PhpParser\\Node\|null but returns PhpParser\\Node\|null#'
@@ -308,13 +275,6 @@ parameters:
 
         # fixed in php-parser master
         - '#Parameter \#4 \$classWithConstants of class Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant constructor expects class\-string, string given#'
-
-        -
-            message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\.#'
-            paths:
-                - config/set/*
-
-        - '#Class with base "FileNode" name is already used in "PHPStan\\Node\\FileNode", "Rector\\Core\\PhpParser\\Node\\CustomNode\\FileNode"\. Use unique name to make classes easy to recognize#'
 
         # buggy phpstan clas-string
         - '#Method (.*?) should return class\-string but returns string#'
@@ -328,30 +288,13 @@ parameters:
                 - packages/PHPStanStaticTypeMapper/PHPStanStaticTypeMapper.php
                 # refactor later
 
-        - '#Class Rector\\NodeTypeResolver\\Tests\\PerNodeTypeResolver\\PropertyFetchTypeResolver\\Source\\IDontExist not found\.#'
-        - '#Class A\\B\\C\\IDontExist not found\.#'
-
         -
             message: '#Use defined constant Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJsonSection\:\:REQUIRE over string require#'
             paths:
                 # is "require" in PHP
                 - src/Php/ReservedKeywordAnalyzer.php
 
-        - '#Class Acme\\Bar\\DoNotUpdateExistingTargetNamespace not found#'
-        - '#Class Acme\\Foo\\DoNotUpdateExistingTargetNamespace not found#'
-
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentType\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'
-
-        - '#Class with base "SetList" name is already used in "Symplify\\EasyCodingStandard\\ValueObject\\Set\\SetList", "Rector\\Set\\ValueObject\\SetList"\. Use unique name to make classes easy to recognize#'
-        - '#Class with base "PhpVersion" name is already used in "PHPStan\\Php\\PhpVersion", "Rector\\Core\\ValueObject\\PhpVersion"\. Use unique name to make classes easy to recognize#'
-
-        -
-            message: '#Do not use static property#'
-            paths:
-                # tracy::$maxDepth
-                - tests/bootstrap.php
-
-        - '#Property PhpParser\\Node\\Param\:\:\$type \(PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\|null\) does not accept PhpParser\\Node#'
 
         -
             message: '#"%s" in sprintf\(\) format must be quoted#'
@@ -371,7 +314,6 @@ parameters:
                 - packages/NodeNameResolver/NodeNameResolver.php
                 - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
                 - packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php
-                - packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php
 
         # known types
         - '#Call to an undefined method PHPStan\\Type\\ConstantType\:\:getValue\(\)#'
@@ -402,13 +344,6 @@ parameters:
                 - src/Console/Command/ProcessCommand.php
 
         - '#Parameter \#2 \$returnedStrictTypeNode of method Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector\:\:refactorSingleReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType, PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PHPStan\\Type\\UnionType given#'
-        - '#Method Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeTrailingCommasInParamUseRector\:\:processUses\(\) should return PhpParser\\Node\\Expr\\Closure but returns PhpParser\\Node#'
-        - '#Cognitive complexity for "Rector\\NodeTypeResolver\\NodeTypeResolver\:\:getStaticType\(\)" is 11, keep it under 9#'
-
-        -
-            message: '#There should be no empty class#'
-            paths:
-                - packages/StaticTypeMapper/ValueObject/Type/FullyQualifiedGenericObjectType.php
 
         - '#(.*?) class\-string, string given#'
 
@@ -423,30 +358,11 @@ parameters:
             paths:
                 - utils/compiler/src/Command/DowngradePathsCommand.php
 
-        # generics fails
-        - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeMapper\:\:transform\(\) should return T of PHPStan\\PhpDocParser\\Ast\\Node but returns PHPStan\\PhpDocParser\\Ast\\Node#'
-
-
         # PHP 7_4 literal syntax
         - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\|int\) does not accept string#'
 
 
         - '#Unable to resolve the template type T in call to method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentTypes\(\)#'
-
-        # known types
-        - '#Parameter \#1 \$node of method Rector\\Naming\\Naming\\VariableNaming\:\:resolveFromMethodCall\(\) expects PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\NullsafeMethodCall\|PhpParser\\Node\\Expr\\StaticCall, PhpParser\\Node given#'
-        - '#Class with base "DependencyResolver" name is already used in "PHPStan\\Dependency\\DependencyResolver", "Rector\\Caching\\FileSystem\\DependencyResolver"\. Use unique name to make classes easy to recognize#'
-
-        -
-            message: '#Do not inherit from abstract class, better use composition#'
-            paths:
-                - utils/phpstan-extensions/src/Rule/*Rule.php
-
-        # known internal types on correct location
-        -
-            message: '#Instead of "(.*?)" use ReflectionProvider service (.*?) for static reflection to work#'
-            paths:
-                - src/Console/Command/ProcessCommand.php
 
         # mimics original doctrine/annotations parser, improve later when finished
         -
@@ -470,11 +386,6 @@ parameters:
                 - rules/NetteToSymfony/Rector/ClassMethod/RouterListToControllerAnnotationsRector.php
 
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocParser\\DoctrineAnnotationDecorator\:\:mergeNestedDoctrineAnnotations\(\)" is \d+, keep it under 9#'
-
-        -
-            message: '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$value#'
-            paths:
-                -  packages/BetterPhpDocParser/PhpDocParser/DoctrineAnnotationDecorator.php
 
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\Printer\\PhpDocInfoPrinter\:\:printDocChildNode\(\)" is \d+, keep it under 9#'
         - '#Cognitive complexity for "Rector\\NodeTypeResolver\\NodeTypeResolver\:\:resolve\(\)" is \d+, keep it under 9#'
@@ -510,11 +421,6 @@ parameters:
                 - packages/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php
 
         - '#Cognitive complexity for "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper\:\:mapToPhpParserNode\(\)" is 10, keep it under 9#'
-        - '#Method Rector\\NodeNameResolver\\NodeNameResolver\:\:matchRectorBacktraceCall\(\) return type has no value type specified in iterable type array#'
-        -
-            message: '#Do not inherit from abstract class, better use composition#'
-            paths:
-                - src/PhpParser/Parser/FunctionLikeParser.php
 
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
@@ -522,26 +428,22 @@ parameters:
                 - src/Rector/AbstractRector.php
 
         - '#Cannot call method getSmartFileInfo\(\) on Rector\\Core\\ValueObject\\Application\\File\|null#'
-        - '#Class with base "Parser" name is already used in "Hoa\\Compiler\\Llk\\Parser", "Rector\\Core\\PhpParser\\Parser\\Parser"\. Use unique name to make classes easy to recognize#'
         - '#Parameter \#1 \$file of method Rector\\CodingStyle\\ClassNameImport\\ShortNameResolver\:\:resolveForNode\(\) expects Rector\\Core\\ValueObject\\Application\\File, Rector\\Core\\ValueObject\\Application\\File\|null given#'
 
-        -
-            message: '#\$this as argument is not allowed\. Refactor method to service composition#'
-            path: rules/TypeDeclaration/Rector/ClassMethod/ParamTypeFromStrictTypedPropertyRector.php
-
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentTypes\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'
-
-        -
-             message: '#Parameter \#1\ $argument of class ReflectionClass constructor expects class-string<Rector\\RectorInstaller\\GeneratedConfig>|Rector\\RectorInstaller\\GeneratedConfig, string given.#'
-             paths:
-                 - src/Bootstrap/ExtensionConfigResolver.php
 
         -
             message: '#Assign in loop is not allowed#'
             paths:
                 - rules/DowngradePhp72/NodeAnalyzer/ParamContravariantDetector.php
-                - rules/DowngradePhp72/Rector/Class_/DowngradeParameterTypeWideningRector.php
 
         # doc typo in php-parser
-        - '#Parameter \#1 \$type of method PhpParser\\Builder\\FunctionLike\:\:setReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
         - '#Parameter \#2 \$args of class PhpParser\\Node\\Expr\\FuncCall constructor expects array<PhpParser\\Node\\Arg\>, array<int, PhpParser\\Node\\Arg\|null\> given#'
+
+        - '#Class with base "(.*?)" name is already used in "Symplify\\(.*?)", "Rector\\(.*?)"\. Use unique name to make classes easy to recognize#'
+
+        # php-parser bug
+        - '#Parameter \#1 \$type of method PhpParser\\Builder\\FunctionLike\:\:setReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
+
+        - '#Method Rector\\Core\\Tests\\DependencyInjection\\ConfigurableRectorImportConfigCallsMergeTest\:\:provideData\(\) return type has no value type specified in iterable type Iterator#'
+        - '#Class with base "PhpVersion" name is already used in "PHPStan\\Php\\PhpVersion", "Rector\\Core\\ValueObject\\PhpVersion"\. Use unique name to make classes easy to recognize#'
