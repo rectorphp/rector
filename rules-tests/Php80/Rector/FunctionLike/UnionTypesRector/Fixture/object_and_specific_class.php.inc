@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\Fixture;
 
-use Foo\Bar\Baz\DateTime;
+use DateTime;
 
 final class ObjectAndSpecificClass
 {
@@ -25,7 +25,7 @@ final class ObjectAndSpecificClass
 
 namespace Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\Fixture;
 
-use Foo\Bar\Baz\DateTime;
+use DateTime;
 
 final class ObjectAndSpecificClass
 {
