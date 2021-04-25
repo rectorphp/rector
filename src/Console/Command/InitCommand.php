@@ -59,7 +59,7 @@ final class InitCommand extends Command
         $this->setDescription('Generate rector.php configuration file');
         $this->addOption(
             Option::TEMPLATE_TYPE,
-            't',
+            null,
             InputOption::VALUE_OPTIONAL,
             'A template type like default, nette, doctrine etc.',
             'default'
