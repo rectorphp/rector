@@ -70,6 +70,7 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 
 ### Advanced
 
+- [Auto Import Names](/docs/auto_import_names.md)
 - [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
 - [Static Reflection and Autoload](/docs/static_reflection_and_autoload.md)
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
@@ -160,15 +161,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // is your PHP version different from the one your refactor to? [default: your PHP version], uses PHP_VERSION_ID format
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_72);
-
-    // auto import fully qualified class names? [default: false]
-    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
-
-    // skip root namespace classes, like \DateTime or \Exception [default: true]
-    $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
-
-    // skip classes used in PHP DocBlocks, like in /** @var \Some\Class */ [default: true]
-    $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
 
     // Run Rector only on changed files
     $parameters->set(Option::ENABLE_CACHE, true);
