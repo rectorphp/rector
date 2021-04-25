@@ -13,7 +13,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -138,7 +137,7 @@ CODE_SAMPLE
             }
 
             if ($this->hasObjectWithoutClassType($paramType)) {
-                $this->changeObjectWithoutClassType($paramType, $param, $phpDocInfo, $key);
+                $this->changeObjectWithoutClassType($param, $paramType);
                 continue;
             }
 
@@ -151,18 +150,12 @@ CODE_SAMPLE
         }
     }
 
-    private function changeObjectWithoutClassType(
-        UnionType $unionType,
-        Param $param,
-        PhpDocInfo $phpDocInfo,
-        int $key
-    ): void {
+    private function changeObjectWithoutClassType(Param $param, UnionType $unionType): void {
         if (! $this->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($unionType)) {
             return;
         }
 
         $param->type = new Name('object');
-        $this->cleanParamObjectType($key, $unionType, $phpDocInfo);
     }
 
     private function hasObjectWithoutClassType(UnionType $unionType): bool
@@ -191,21 +184,6 @@ CODE_SAMPLE
         }
 
         return true;
-    }
-
-    private function cleanParamObjectType(int $key, UnionType $unionType, PhpDocInfo $phpDocInfo): void
-    {
-        $types = $unionType->getTypes();
-        $resultType = '';
-        foreach ($types as $type) {
-            if ($type instanceof FullyQualifiedObjectType) {
-                $resultType .= $type->getClassName() . '|';
-            }
-        }
-
-        $resultType = rtrim($resultType, '|');
-        $paramTagValueNodes = $phpDocInfo->getParamTagValueNodes();
-        $paramTagValueNodes[$key]->type = new IdentifierTypeNode($resultType);
     }
 
     /**

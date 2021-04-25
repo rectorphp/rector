@@ -30,7 +30,7 @@ use DateTime;
 final class ObjectAndSpecificClass
 {
     /**
-     * @param DateTime $message
+     * @param object|DateTime $message
      */
     private function getMessage(object $message)
     {
