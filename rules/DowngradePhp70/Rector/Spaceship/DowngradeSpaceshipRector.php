@@ -64,8 +64,8 @@ $battleShipcompare = function ($left, $right) {
         return 0;
     }
     return $left < $right ? -1 : 1;
-});
-return $battleShipcompare;
+};
+return $battleShipcompare($a, $b);
 CODE_SAMPLE
                 ),
             ]
