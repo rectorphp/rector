@@ -99,13 +99,13 @@ CODE_SAMPLE
 
         $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         $variableAssign = $this->getVariableAssign($currentStatement);
-        $assignExpression = $this->getAssignExpression($currentStatement, $anonymousFunction, $variableAssign);
+        $assignExpression = $this->getAssignExpression($anonymousFunction, $variableAssign);
         $this->addNodeBeforeNode($assignExpression, $currentStatement);
 
         return new FuncCall($variableAssign, [new Arg($node->left), new Arg($node->right)]);
     }
 
-    private function getAssignExpression(Stmt $stmt, Closure $closure, Variable $variable): Expression
+    private function getAssignExpression(Closure $closure, Variable $variable): Expression
     {
         return new Expression(new Assign($variable, $closure));
     }
