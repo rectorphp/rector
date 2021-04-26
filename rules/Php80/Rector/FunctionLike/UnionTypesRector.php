@@ -8,14 +8,18 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Name;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,6 +30,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnionTypesRector extends AbstractRector
 {
     /**
+     * @var ClassMethodParamVendorLockResolver
+     */
+    private $classMethodParamVendorLockResolver;
+
+    /**
      * @var ReturnTagRemover
      */
     private $returnTagRemover;
@@ -34,11 +43,6 @@ final class UnionTypesRector extends AbstractRector
      * @var ParamTagRemover
      */
     private $paramTagRemover;
-
-    /**
-     * @var ClassMethodParamVendorLockResolver
-     */
-    private $classMethodParamVendorLockResolver;
 
     public function __construct(
         ReturnTagRemover $returnTagRemover,
@@ -106,14 +110,17 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function isVendorLocked(ClassMethod $classMethod): bool
+    {
+        return $this->classMethodParamVendorLockResolver->isVendorLocked($classMethod);
+    }
+
     /**
      * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
      */
     private function refactorParamTypes(FunctionLike $functionLike, PhpDocInfo $phpDocInfo): void
     {
-        if ($functionLike instanceof ClassMethod && $this->classMethodParamVendorLockResolver->isVendorLocked(
-            $functionLike
-        )) {
+        if ($functionLike instanceof ClassMethod && $this->isVendorLocked($functionLike)) {
             return;
         }
 
@@ -129,6 +136,11 @@ CODE_SAMPLE
                 continue;
             }
 
+            if ($this->hasObjectWithoutClassType($paramType)) {
+                $this->changeObjectWithoutClassType($param, $paramType);
+                continue;
+            }
+
             $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType);
             if (! $phpParserUnionType instanceof PhpParserUnionType) {
                 continue;
@@ -136,6 +148,43 @@ CODE_SAMPLE
 
             $param->type = $phpParserUnionType;
         }
+    }
+
+    private function changeObjectWithoutClassType(Param $param, UnionType $unionType): void
+    {
+        if (! $this->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($unionType)) {
+            return;
+        }
+
+        $param->type = new Name('object');
+    }
+
+    private function hasObjectWithoutClassType(UnionType $unionType): bool
+    {
+        $types = $unionType->getTypes();
+        foreach ($types as $type) {
+            if ($type instanceof ObjectWithoutClassType) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType(UnionType $unionType): bool
+    {
+        $types = $unionType->getTypes();
+        foreach ($types as $type) {
+            if ($type instanceof ObjectWithoutClassType) {
+                continue;
+            }
+
+            if (! $type instanceof FullyQualifiedObjectType) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
