@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp70\Rector\Spaceship;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -11,6 +12,7 @@ use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
@@ -30,6 +32,12 @@ final class DowngradeSpaceshipRector extends AbstractRector
      * @var IfManipulator
      */
     private $ifManipulator;
+
+    /**
+     * @var string
+     * @see https://regex101.com/r/QaAaWr/1
+     */
+    private const NAMESPACED_STRING_REGEX = '#\\\\#';
 
     public function __construct(IfManipulator $ifManipulator)
     {
@@ -72,10 +80,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $anonymousFunction = new Closure();
         $leftVariableParam = new Variable((string) $this->getName($node->left));
-        $leftParam = new Param($leftVariableParam);
         $rightVariableParam = new Variable((string) $this->getName($node->right));
+
+        if ($this->shouldSkip($leftVariableParam, $rightVariableParam)) {
+            return null;
+        }
+
+        $anonymousFunction = new Closure();
+        $leftParam = new Param($leftVariableParam);
         $rightParam = new Param($rightVariableParam);
         $anonymousFunction->params = [$leftParam, $rightParam];
 
@@ -92,5 +105,27 @@ CODE_SAMPLE
         $anonymousFunction->stmts[1] = new Return_($ternary);
 
         return new FuncCall($anonymousFunction, [new Arg($node->left), new Arg($node->right)]);
+    }
+
+    private function shouldSkip(Variable $left, Variable $right): bool
+    {
+        if ($this->nodeComparator->areNodesEqual($left, $right)) {
+            return true;
+        }
+
+        /** @var string $leftName */
+        $leftName = $left->name;
+        /** @var string $rightName */
+        $rightName = $right->name;
+
+        if (Strings::match($leftName, self::NAMESPACED_STRING_REGEX)) {
+            return true;
+        }
+
+        if (Strings::match($rightName, self::NAMESPACED_STRING_REGEX)) {
+            return true;
+        }
+
+        return false;
     }
 }
