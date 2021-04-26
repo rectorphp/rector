@@ -7,7 +7,7 @@ function getRand()
     return rand(1,100);
 }
 
-class SkipFuncCall
+class SkipFuncCallNamespaced
 {
     public function run()
     {
