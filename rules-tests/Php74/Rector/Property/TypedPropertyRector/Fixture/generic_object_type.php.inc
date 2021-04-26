@@ -1,10 +1,10 @@
 <?php
 
+namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+
 /**
  * @template T of object
  */
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
-
 final class GenericObjectType
 {
     /**
@@ -24,11 +24,11 @@ final class GenericObjectType
 -----
 <?php
 
+namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+
 /**
  * @template T of object
  */
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
-
 final class GenericObjectType
 {
     /**
