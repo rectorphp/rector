@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Reporting;
 
-use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\PostRector\Contract\Rector\PostRectorInterface;
+use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
 
@@ -17,26 +16,29 @@ final class MissingRectorRulesReporter
     private $symfonyStyle;
 
     /**
-     * @var RectorInterface[]
+     * @var FileProcessorInterface[]
      */
-    private $rectors = [];
+    private $fileProcessors;
 
     /**
-     * @param RectorInterface[] $rectors
+     * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(array $rectors, SymfonyStyle $symfonyStyle)
+    public function __construct(SymfonyStyle $symfonyStyle, array $fileProcessors)
     {
         $this->symfonyStyle = $symfonyStyle;
-        $this->rectors = $rectors;
+        $this->fileProcessors = $fileProcessors;
     }
 
     public function reportIfMissing(): ?int
     {
-        $activeRectors = array_filter($this->rectors, function (RectorInterface $rector): bool {
-            return ! $rector instanceof PostRectorInterface;
-        });
+        $activeFileProcessors = array_filter(
+            $this->fileProcessors,
+            function (FileProcessorInterface $fileProcessor): bool {
+                return $fileProcessor->isActive();
+            }
+        );
 
-        if ($activeRectors !== []) {
+        if ($activeFileProcessors !== []) {
             return null;
         }
 
@@ -52,12 +54,12 @@ final class MissingRectorRulesReporter
         $this->symfonyStyle->title('1. Add single rule to "rector.php"');
         $this->symfonyStyle->writeln('  $services = $containerConfigurator->services();');
         $this->symfonyStyle->writeln('  $services->set(...);');
-        $this->symfonyStyle->newLine(1);
+        $this->symfonyStyle->newLine();
 
         $this->symfonyStyle->title('2. Add set of rules to "rector.php"');
         $this->symfonyStyle->writeln('  $parameters = $containerConfigurator->parameters();');
         $this->symfonyStyle->writeln('  $parameters->set(Option::SETS, [...]);');
-        $this->symfonyStyle->newLine(1);
+        $this->symfonyStyle->newLine();
 
         $this->symfonyStyle->title('Missing "rector.php" in your project? Let Rector create it for you');
         $this->symfonyStyle->writeln('  vendor/bin/rector init');

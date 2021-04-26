@@ -19,4 +19,6 @@ interface FileProcessorInterface
      * @return string[]
      */
     public function getSupportedFileExtensions(): array;
+
+    public function isActive(): bool;
 }

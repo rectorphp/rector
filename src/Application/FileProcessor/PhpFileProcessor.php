@@ -12,12 +12,14 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Application\RectorError;
 use Rector\PostRector\Application\PostFileProcessor;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -86,7 +88,7 @@ final class PhpFileProcessor implements FileProcessorInterface
     /**
      * @var FormatPerservingPrinter
      */
-    private $formatPerservingPrinter;
+    private $formatPreservingPrinter;
 
     /**
      * @var PostFileProcessor
@@ -98,9 +100,17 @@ final class PhpFileProcessor implements FileProcessorInterface
      */
     private $errorFactory;
 
+    /**
+     * @var RectorInterface[]
+     */
+    private $rectors;
+
+    /**
+     * @param RectorInterface[] $rectors
+     */
     public function __construct(
         Configuration $configuration,
-        FormatPerservingPrinter $formatPerservingPrinter,
+        FormatPerservingPrinter $formatPreservingPrinter,
         FileProcessor $fileProcessor,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
@@ -109,7 +119,8 @@ final class PhpFileProcessor implements FileProcessorInterface
         FileDiffFileDecorator $fileDiffFileDecorator,
         CurrentFileProvider $currentFileProvider,
         PostFileProcessor $postFileProcessor,
-        ErrorFactory $errorFactory
+        ErrorFactory $errorFactory,
+        array $rectors
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->configuration = $configuration;
@@ -120,9 +131,10 @@ final class PhpFileProcessor implements FileProcessorInterface
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
         $this->configuration = $configuration;
         $this->currentFileProvider = $currentFileProvider;
-        $this->formatPerservingPrinter = $formatPerservingPrinter;
+        $this->formatPreservingPrinter = $formatPreservingPrinter;
         $this->postFileProcessor = $postFileProcessor;
         $this->errorFactory = $errorFactory;
+        $this->rectors = $rectors;
     }
 
     /**
@@ -194,6 +206,16 @@ final class PhpFileProcessor implements FileProcessorInterface
         return $this->configuration->getFileExtensions();
     }
 
+    public function isActive(): bool
+    {
+        $activeRectors = array_filter($this->rectors, function (RectorInterface $rector) {
+            // skip interface post rectors, that are always present
+            return ! $rector instanceof PostRectorInterface;
+        });
+
+        return count($activeRectors) > 0;
+    }
+
     private function prepareProgressBar(int $fileCount): void
     {
         if ($this->symfonyStyle->isVerbose()) {
@@ -256,9 +278,9 @@ final class PhpFileProcessor implements FileProcessorInterface
             return;
         }
 
-        $newContent = $this->configuration->isDryRun() ? $this->formatPerservingPrinter->printParsedStmstAndTokensToString(
+        $newContent = $this->configuration->isDryRun() ? $this->formatPreservingPrinter->printParsedStmstAndTokensToString(
             $file
-        ) : $this->formatPerservingPrinter->printParsedStmstAndTokens($file);
+        ) : $this->formatPreservingPrinter->printParsedStmstAndTokens($file);
 
         $file->changeFileContent($newContent);
         $this->fileDiffFileDecorator->decorate([$file]);

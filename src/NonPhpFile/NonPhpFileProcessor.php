@@ -57,6 +57,11 @@ final class NonPhpFileProcessor implements FileProcessorInterface
         return StaticNonPhpFileSuffixes::SUFFIXES;
     }
 
+    public function isActive(): bool
+    {
+        return count($this->nonPhpRectors) > 0;
+    }
+
     private function processFile(File $file): void
     {
         foreach ($this->nonPhpRectors as $nonPhpRector) {

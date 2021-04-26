@@ -75,6 +75,11 @@ final class ComposerFileProcessor implements FileProcessorInterface
         return ['json'];
     }
 
+    public function isActive(): bool
+    {
+        return count($this->composerRectors) > 0;
+    }
+
     private function processFile(File $file): void
     {
         // to avoid modification of file

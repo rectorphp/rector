@@ -52,4 +52,9 @@ final class TextFileProcessor implements FileProcessorInterface
     {
         return ['txt'];
     }
+
+    public function isActive(): bool
+    {
+        return count($this->textRectors) > 0;
+    }
 }
