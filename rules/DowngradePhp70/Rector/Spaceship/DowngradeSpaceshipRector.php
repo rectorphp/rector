@@ -35,12 +35,6 @@ final class DowngradeSpaceshipRector extends AbstractRector
      */
     private $ifManipulator;
 
-    /**
-     * @var string
-     * @see https://regex101.com/r/QaAaWr/1
-     */
-    private const NAMESPACED_STRING_REGEX = '#\\\\#';
-
     public function __construct(IfManipulator $ifManipulator)
     {
         $this->ifManipulator = $ifManipulator;
@@ -104,7 +98,7 @@ CODE_SAMPLE
         $anonymousFunction->stmts[1] = new Return_($ternary);
 
         $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        $variableAssign   = $this->getVariableAssign($currentStatement);
+        $variableAssign = $this->getVariableAssign($currentStatement);
         $assignExpression = $this->getAssignExpression($currentStatement, $anonymousFunction, $variableAssign);
         $this->addNodeBeforeNode($assignExpression, $currentStatement);
 
@@ -120,7 +114,9 @@ CODE_SAMPLE
     {
         $variable = new Variable($variableName);
 
-        $isFoundPrevious = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($stmt, function (Node $node) use ($variable): bool {
+        $isFoundPrevious = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($stmt, function (Node $node) use (
+            $variable
+        ): bool {
             return $node instanceof Variable && $this->nodeComparator->areNodesEqual($node, $variable);
         });
 
