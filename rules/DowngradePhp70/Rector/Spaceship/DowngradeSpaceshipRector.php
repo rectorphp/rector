@@ -73,17 +73,19 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $anonymousFunction = new Closure();
-        $leftParam = new Param(new Variable((string) $this->getName($node->left)));
-        $rightParam = new Param(new Variable((string) $this->getName($node->right)));
+        $leftVariableParam = new Variable((string) $this->getName($node->left));
+        $leftParam = new Param($leftVariableParam);
+        $rightVariableParam = new Variable((string) $this->getName($node->right));
+        $rightParam = new Param($rightVariableParam);
         $anonymousFunction->params = [$leftParam, $rightParam];
 
         $if = $this->ifManipulator->createIfExpr(
-            new Identical($node->left, $node->right),
+            new Identical($leftVariableParam, $rightVariableParam),
             new Return_(new LNumber(0))
         );
         $anonymousFunction->stmts[0] = $if;
 
-        $smaller = new Smaller($node->left, $node->right);
+        $smaller = new Smaller($leftVariableParam, $rightVariableParam);
         $ternaryIf = new LNumber(-1);
         $ternaryElse = new LNumber(1);
         $ternary = new Ternary($smaller, $ternaryIf, $ternaryElse);
