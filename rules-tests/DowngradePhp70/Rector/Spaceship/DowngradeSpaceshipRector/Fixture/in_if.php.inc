@@ -21,11 +21,11 @@ class InIf
 {
     public function run($a, $b)
     {
-        if ((function ($a, $b) {
-            if ($a === $b) {
+        if ((function ($left, $right) {
+            if ($left === $right) {
                 return 0;
             }
-            return $a < $b ? -1 : 1;
+            return $left < $right ? -1 : 1;
         })($a, $b)) {
         }
     }

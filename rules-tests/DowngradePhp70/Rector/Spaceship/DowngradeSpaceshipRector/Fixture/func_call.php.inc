@@ -30,11 +30,11 @@ class FuncCall
 {
     public function run()
     {
-        return (function ($a, $b) {
-            if ($a === $b) {
+        return (function ($left, $right) {
+            if ($left === $right) {
                 return 0;
             }
-            return $a < $b ? -1 : 1;
+            return $left < $right ? -1 : 1;
         })(getRand(), getRand());
     }
 }

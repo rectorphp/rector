@@ -61,11 +61,11 @@ return $a <=> $b;
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-return (function ($a, $a) {
-    if ($a === $b) {
+return (function ($left, $right) {
+    if ($left === $right) {
         return 0;
     }
-    return $a < $b ? -1 : 1;
+    return $left < $right ? -1 : 1;
 })($a, $b);
 CODE_SAMPLE
                 ),
@@ -78,8 +78,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $leftVariableParam = new Variable('a');
-        $rightVariableParam = new Variable('b');
+        $leftVariableParam = new Variable('left');
+        $rightVariableParam = new Variable('right');
 
         $anonymousFunction = new Closure();
         $leftParam = new Param($leftVariableParam);

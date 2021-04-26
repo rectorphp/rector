@@ -20,11 +20,11 @@ class UseEcho
 {
     public function run($a, $b)
     {
-        echo (function ($a, $b) {
-            if ($a === $b) {
+        echo (function ($left, $right) {
+            if ($left === $right) {
                 return 0;
             }
-            return $a < $b ? -1 : 1;
+            return $left < $right ? -1 : 1;
         })($a, $b);
     }
 }
