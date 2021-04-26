@@ -30,12 +30,13 @@ class FuncCall
 {
     public function run()
     {
-        return (function ($left, $right) {
+        $battleShipcompare = function ($left, $right) {
             if ($left === $right) {
                 return 0;
             }
             return $left < $right ? -1 : 1;
-        })(getRand(), getRand());
+        };
+        return $battleShipcompare(getRand(), getRand());
     }
 }
 

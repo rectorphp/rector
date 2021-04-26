@@ -21,12 +21,13 @@ class InIf
 {
     public function run($a, $b)
     {
-        if ((function ($left, $right) {
+        $battleShipcompare = function ($left, $right) {
             if ($left === $right) {
                 return 0;
             }
             return $left < $right ? -1 : 1;
-        })($a, $b)) {
+        };
+        if ($battleShipcompare($a, $b)) {
         }
     }
 }

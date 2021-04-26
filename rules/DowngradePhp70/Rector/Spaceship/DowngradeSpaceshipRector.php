@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp70\Rector\Spaceship;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
@@ -15,9 +16,12 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -61,12 +65,13 @@ return $a <=> $b;
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-return (function ($left, $right) {
+$battleShipcompare = function ($left, $right) {
     if ($left === $right) {
         return 0;
     }
     return $left < $right ? -1 : 1;
-})($a, $b);
+});
+return $battleShipcompare;
 CODE_SAMPLE
                 ),
             ]
@@ -98,6 +103,34 @@ CODE_SAMPLE
         $ternary = new Ternary($smaller, $ternaryIf, $ternaryElse);
         $anonymousFunction->stmts[1] = new Return_($ternary);
 
-        return new FuncCall($anonymousFunction, [new Arg($node->left), new Arg($node->right)]);
+        $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $variableAssign   = $this->getVariableAssign($currentStatement);
+        $assignExpression = $this->getAssignExpression($currentStatement, $anonymousFunction, $variableAssign);
+        $this->addNodeBeforeNode($assignExpression, $currentStatement);
+
+        return new FuncCall($variableAssign, [new Arg($node->left), new Arg($node->right)]);
+    }
+
+    private function getAssignExpression(Stmt $stmt, Closure $closure, Variable $variable): Expression
+    {
+        return new Expression(new Assign($variable, $closure));
+    }
+
+    private function getVariableAssign(Stmt $stmt, string $variableName = 'battleShipcompare'): Variable
+    {
+        $variable = new Variable($variableName);
+
+        $isFoundPrevious = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($stmt, function (Node $node) use ($variable): bool {
+            return $node instanceof Variable && $this->nodeComparator->areNodesEqual($node, $variable);
+        });
+
+        $count = 0;
+        if ($isFoundPrevious) {
+            ++$count;
+            $variableName .= (string) $count;
+            return $this->getVariableAssign($stmt, $variableName);
+        }
+
+        return $variable;
     }
 }

@@ -26,12 +26,13 @@ class StaticPropertyFetch2
 
     public function run()
     {
-        return (function ($left, $right) {
+        $battleShipcompare = function ($left, $right) {
             if ($left === $right) {
                 return 0;
             }
             return $left < $right ? -1 : 1;
-        })(StaticPropertyFetch2::$a, StaticPropertyFetch2::$b);
+        };
+        return $battleShipcompare(StaticPropertyFetch2::$a, StaticPropertyFetch2::$b);
     }
 }
 
