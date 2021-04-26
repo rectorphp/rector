@@ -75,7 +75,7 @@ CODE_SAMPLE
         $anonymousFunction = new Closure();
         $anonymousFunction->params = [
             new Param(new Variable((string) $this->getName($node->left))),
-            new Param(new Variable((string) $this->getName($node->right)))
+            new Param(new Variable((string) $this->getName($node->right))),
         ];
 
         $if = $this->ifManipulator->createIfExpr(
@@ -84,16 +84,9 @@ CODE_SAMPLE
         );
         $anonymousFunction->stmts[0] = $if;
 
-        $ternary = new Ternary(
-            new Smaller($node->left, $node->right),
-            new LNumber(-1),
-            new LNumber(1)
-        );
+        $ternary = new Ternary(new Smaller($node->left, $node->right), new LNumber(-1), new LNumber(1));
         $anonymousFunction->stmts[1] = new Return_($ternary);
 
-        return new FuncCall($anonymousFunction, [
-            new Arg($node->left),
-            new Arg($node->right)
-        ]);
+        return new FuncCall($anonymousFunction, [new Arg($node->left), new Arg($node->right)]);
     }
 }
