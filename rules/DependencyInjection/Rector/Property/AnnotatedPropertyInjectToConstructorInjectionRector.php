@@ -17,7 +17,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DependencyInjection\NodeAnalyzer\NetteInjectPropertyAnalyzer;
-use Rector\DependencyInjection\TypeAnalyzer\InjectTagValueNodeToServiceTypeResolver;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -38,7 +37,7 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
     /**
      * @var string[]
      */
-    private const INJECT_ANNOTATION_CLASSES = ['JMS\DiExtraBundle\Annotation\Inject', 'DI\Annotation\Inject'];
+    private const INJECT_ANNOTATION_CLASSES = ['DI\Annotation\Inject'];
 
     /**
      * @var PropertyUsageAnalyzer
@@ -49,11 +48,6 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      * @var PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-
-    /**
-     * @var InjectTagValueNodeToServiceTypeResolver
-     */
-    private $injectTagValueNodeToServiceTypeResolver;
 
     /**
      * @var NetteInjectPropertyAnalyzer
@@ -67,14 +61,12 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
 
     public function __construct(
         PhpDocTypeChanger $phpDocTypeChanger,
-        InjectTagValueNodeToServiceTypeResolver $injectTagValueNodeToServiceTypeResolver,
         PropertyUsageAnalyzer $propertyUsageAnalyzer,
         NetteInjectPropertyAnalyzer $netteInjectPropertyAnalyzer,
         PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->injectTagValueNodeToServiceTypeResolver = $injectTagValueNodeToServiceTypeResolver;
         $this->netteInjectPropertyAnalyzer = $netteInjectPropertyAnalyzer;
         $this->phpDocTagRemover = $phpDocTagRemover;
     }
@@ -145,14 +137,6 @@ CODE_SAMPLE
             $serviceType = new MixedType();
             if ($injectTagNode !== null) {
                 $serviceType = $phpDocInfo->getVarType();
-            }
-
-            if ($serviceType instanceof MixedType) {
-                $serviceType = $this->injectTagValueNodeToServiceTypeResolver->resolve(
-                    $node,
-                    $phpDocInfo,
-                    $injectTagNode
-                );
             }
 
             if ($serviceType instanceof MixedType) {
