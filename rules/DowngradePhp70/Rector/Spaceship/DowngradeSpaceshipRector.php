@@ -83,10 +83,10 @@ CODE_SAMPLE
         );
         $anonymousFunction->stmts[0] = $if;
 
-        $ternaryCond = new Smaller($node->left, $node->right);
+        $smaller = new Smaller($node->left, $node->right);
         $ternaryIf = new LNumber(-1);
         $ternaryElse = new LNumber(1);
-        $ternary = new Ternary($ternaryCond, $ternaryIf, $ternaryElse);
+        $ternary = new Ternary($smaller, $ternaryIf, $ternaryElse);
         $anonymousFunction->stmts[1] = new Return_($ternary);
 
         return new FuncCall($anonymousFunction, [new Arg($node->left), new Arg($node->right)]);
