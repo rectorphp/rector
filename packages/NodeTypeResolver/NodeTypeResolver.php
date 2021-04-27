@@ -38,6 +38,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -46,6 +47,7 @@ use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
+use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
@@ -92,6 +94,16 @@ final class NodeTypeResolver
     private $identifierTypeResolver;
 
     /**
+     * @var RenamedClassesCollector
+     */
+    private $renamedClassesCollector;
+
+    /**
+     * @var RenamedClassesDataCollector
+     */
+    private $renamedClassesDataCollector;
+
+    /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
     public function __construct(
@@ -101,6 +113,8 @@ final class NodeTypeResolver
         ReflectionProvider $reflectionProvider,
         HasOffsetTypeCorrector $hasOffsetTypeCorrector,
         IdentifierTypeResolver $identifierTypeResolver,
+        RenamedClassesCollector $renamedClassesCollector,
+        RenamedClassesDataCollector $renamedClassesDataCollector,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -113,6 +127,8 @@ final class NodeTypeResolver
         $this->reflectionProvider = $reflectionProvider;
         $this->hasOffsetTypeCorrector = $hasOffsetTypeCorrector;
         $this->identifierTypeResolver = $identifierTypeResolver;
+        $this->renamedClassesCollector = $renamedClassesCollector;
+        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
 
     /**
@@ -146,7 +162,6 @@ final class NodeTypeResolver
         }
 
         $resolvedType = $this->resolve($node);
-
         if ($resolvedType instanceof MixedType) {
             return false;
         }
@@ -156,7 +171,7 @@ final class NodeTypeResolver
         }
 
         if ($resolvedType instanceof ObjectType) {
-            return $this->isObjectTypeOfObjectType($resolvedType, $requiredObjectType);
+            return $this->resolveObjectType($resolvedType, $requiredObjectType);
         }
 
         return $this->isMatchingUnionType($resolvedType, $requiredObjectType);
@@ -438,7 +453,7 @@ final class NodeTypeResolver
     private function resolveByNodeTypeResolvers(Node $node): ?Type
     {
         foreach ($this->nodeTypeResolvers as $nodeClass => $nodeTypeResolver) {
-            if (! is_a($node, $nodeClass)) {
+            if (! is_a($node, $nodeClass, true)) {
                 continue;
             }
 
@@ -501,5 +516,18 @@ final class NodeTypeResolver
         }
 
         return $classReflection->isSubclassOf($requiredObjectType->getClassName());
+    }
+
+    private function resolveObjectType(ObjectType $resolvedObjectType, ObjectType $requiredObjectType): bool
+    {
+        $renamedObjectType = $this->renamedClassesDataCollector->matchClassName($resolvedObjectType);
+        if ($renamedObjectType instanceof ObjectType && $this->isObjectTypeOfObjectType(
+            $renamedObjectType,
+            $requiredObjectType
+        )) {
+            return true;
+        }
+
+        return $this->isObjectTypeOfObjectType($resolvedObjectType, $requiredObjectType);
     }
 }

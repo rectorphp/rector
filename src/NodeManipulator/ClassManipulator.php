@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -28,12 +27,20 @@ final class ClassManipulator
      * @var NodesToRemoveCollector
      */
     private $nodesToRemoveCollector;
+
+    /**
+     * @var ReflectionProvider
+     */
+    private $reflectionProvider;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        NodesToRemoveCollector $nodesToRemoveCollector
+        NodesToRemoveCollector $nodesToRemoveCollector,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -57,11 +64,11 @@ final class ClassManipulator
 
     public function hasParentMethodOrInterface(ObjectType $objectType, string $methodName): bool
     {
-        $classReflection = $objectType->getClassReflection();
-        if ($classReflection === null) {
+        if (! $this->reflectionProvider->hasClass($objectType->getClassName())) {
             return false;
         }
 
+        $classReflection = $this->reflectionProvider->getClass($objectType->getClassName());
         foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
             if ($classReflection === $ancestorClassReflection) {
                 continue;

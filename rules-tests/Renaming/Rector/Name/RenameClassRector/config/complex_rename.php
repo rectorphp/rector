@@ -26,7 +26,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
             RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
-                new MethodCallRename(NewClassWithNewMethod::class, 'someMethod', 'someNewMethod')
+                new MethodCallRename(NewClassWithNewMethod::class, 'someMethod', 'someNewMethod'),
             ]),
         ]]);
 };
