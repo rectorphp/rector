@@ -17,6 +17,7 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantFloatType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 
 final class PhpAttributeGroupFactory
@@ -35,6 +36,7 @@ final class PhpAttributeGroupFactory
         $fullyQualified = new FullyQualified($annotationToAttribute->getAttributeClass());
 
         $values = $doctrineAnnotationTagValueNode->getValuesWithExplicitSilentAndWithoutQuotes();
+
         $args = $this->createArgsFromItems($values);
 
         $attribute = new Attribute($fullyQualified, $args);
@@ -55,20 +57,14 @@ final class PhpAttributeGroupFactory
             unset($items[$silentKey]);
         }
 
-        if ($this->isArrayArguments($items)) {
-            foreach ($items as $key => $value) {
-                $argumentName = new Identifier($key);
+        foreach ($items as $key => $value) {
+            $value = $this->normalizeNodeValue($value);
+            $value = BuilderHelpers::normalizeValue($value);
 
-                $value = $this->normalizeNodeValue($value);
-
-                $value = BuilderHelpers::normalizeValue($value);
-                $args[] = new Arg($value, false, false, [], $argumentName);
-            }
-        } else {
-            foreach ($items as $item) {
-                $item = BuilderHelpers::normalizeValue($item);
-                $args[] = new Arg($item);
-            }
+            $args[] = $this->isArrayArguments($items)
+                ? new Arg($value, false, false, [], new Identifier($key))
+                : new Arg($value)
+                ;
         }
 
         return $args;
@@ -90,7 +86,7 @@ final class PhpAttributeGroupFactory
 
     /**
      * @param mixed $value
-     * @return bool|float|int|string
+     * @return bool|float|int|string|array<mixed>
      */
     private function normalizeNodeValue($value)
     {
@@ -112,6 +108,12 @@ final class PhpAttributeGroupFactory
 
         if ($value instanceof ConstExprFalseNode) {
             return false;
+        }
+
+        if ($value instanceof CurlyListNode) {
+            return array_map(function ($node) {
+                return $this->normalizeNodeValue($node);
+            }, $value->getValuesWithExplicitSilentAndWithoutQuotes());
         }
 
         if ($value instanceof Node) {

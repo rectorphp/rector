@@ -37,6 +37,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Symfony\Component\Validator\Constraints\NotBlank',
                     'Symfony\Component\Validator\Constraints\NotBlank'
                 ),
+                new AnnotationToAttribute(
+                    'Symfony\Component\Validator\Constraints\Choice',
+                    'Symfony\Component\Validator\Constraints\Choice'
+                ),
             ]),
         ]]);
 };
