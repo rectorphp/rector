@@ -33,6 +33,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Symfony\Component\Validator\Constraints\Range',
                     'Symfony\Component\Validator\Constraints\Range'
                 ),
+                new AnnotationToAttribute(
+                    'Symfony\Component\Validator\Constraints\NotBlank',
+                    'Symfony\Component\Validator\Constraints\NotBlank'
+                ),
             ]),
         ]]);
 };

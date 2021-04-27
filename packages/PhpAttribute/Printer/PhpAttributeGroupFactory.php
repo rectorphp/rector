@@ -10,7 +10,9 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantFloatType;
@@ -102,6 +104,14 @@ final class PhpAttributeGroupFactory
 
         if ($value instanceof ConstantBooleanType) {
             return $value->getValue();
+        }
+
+        if ($value instanceof ConstExprTrueNode) {
+            return true;
+        }
+
+        if ($value instanceof ConstExprFalseNode) {
+            return false;
         }
 
         if ($value instanceof Node) {
