@@ -6,6 +6,7 @@ namespace Rector\NodeCollector\NodeCollector;
 
 use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
+use PhpParser\Error;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
@@ -249,9 +250,17 @@ final class NodeRepository
             }
 
             $fileContent = $this->smartFileSystem->readfile($fileName);
-            $nodes = $this->parser->parse($fileContent);
+            try {
+                $nodes = $this->parser->parse($fileContent);
+                return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
+            } catch (Error $error) {
+                $isSyntaxError = Strings::contains($error->getMessage(), 'Syntax error');
+                if ($isSyntaxError) {
+                    return null;
+                }
 
-            return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
+                throw $error;
+            }
         }
 
         return null;
