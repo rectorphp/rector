@@ -17,6 +17,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ThisType;
+use PHPStan\Type\ObjectType;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
@@ -109,7 +110,7 @@ final class FunctionLikeReflectionParser
     }
 
     /**
-     * @param MethodCall|StaticCall $node
+     * @param MethodCall|StaticCall|Node $node
      */
     public function parseCaller(Node $node): ?ClassMethod
     {
@@ -117,12 +118,13 @@ final class FunctionLikeReflectionParser
             return null;
         }
 
+        /** @var ObjectType|ThisType $objectType */
         $objectType = $node instanceof MethodCall
             ? $this->nodeTypeResolver->resolve($node->var)
             : $this->nodeTypeResolver->resolve($node->class);
 
         if ($objectType instanceof ThisType) {
-            $objectType = $objectType->getStaticType();
+            $objectType = $objectType->getStaticObjectType();
         }
 
         $className = $objectType->getClassName();
@@ -131,7 +133,7 @@ final class FunctionLikeReflectionParser
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
-        $methodName = (string) $node->name;
+        $methodName = (string) $this->nodeNameResolver->getName($node->name);
         if (! $classReflection->hasMethod($methodName)) {
             return null;
         }
