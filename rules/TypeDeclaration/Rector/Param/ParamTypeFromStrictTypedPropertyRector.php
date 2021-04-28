@@ -12,6 +12,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
+use PHPStan\Analyser\Scope;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -99,6 +100,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $scope = $param->getAttribute(AttributeKey::SCOPE);
+
+        $paramName = $this->getName($param);
+        $originalParamType = $scope->getVariableType($paramName);
+
         /** @var Assign[] $assigns */
         $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->getStmts(), Assign::class);
         foreach ($assigns as $assign) {
@@ -108,6 +114,10 @@ CODE_SAMPLE
 
             if (! $assign->var instanceof PropertyFetch) {
                 continue;
+            }
+
+            if ($this->hasTypeChangedBeforeAssign($assign, $paramName, $originalParamType)) {
+                return null;
             }
 
             $singlePropertyTypeNode = $this->matchPropertySingleTypeNode($assign->var);
@@ -156,5 +166,15 @@ CODE_SAMPLE
         $typeNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         return $typeNode;
+    }
+
+    private function hasTypeChangedBeforeAssign(Assign $assign, string $paramName, Type $originalType): bool
+    {
+        $scope = $assign->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return false;
+        }
+        $currentParamType = $scope->getVariableType($paramName);
+        return ! $currentParamType->equals($originalType);
     }
 }
