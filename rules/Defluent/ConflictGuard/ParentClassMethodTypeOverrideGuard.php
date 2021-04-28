@@ -57,7 +57,7 @@ final class ParentClassMethodTypeOverrideGuard
         }
 
         $classReflection = $parentClassMethodReflection->getDeclaringClass();
-        return ! Strings::contains($classReflection->getFileName(), 'vendor');
+        return ! Strings::contains((string) $classReflection->getFileName(), 'vendor');
     }
 
     private function getParentClassMethod(ClassMethod $classMethod): ?MethodReflection

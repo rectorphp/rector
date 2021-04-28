@@ -248,9 +248,8 @@ final class NodeRepository
                 return null;
             }
 
-            /** @var string $fileContent */
             $fileContent = $this->smartFileSystem->readfile($fileName);
-            $nodes = $this->parser->parse($fileContent);
+            $nodes = $this->parser->parse((string) $fileContent);
 
             return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
         }
