@@ -126,6 +126,11 @@ CODE_SAMPLE
                 $isReturn = true;
                 break;
             }
+
+            $expr = $condAndExpr->getExpr();
+            if (! $expr instanceof Assign) {
+                return null;
+            }
         }
 
         $matchArms = $this->createMatchArmsFromCases($condAndExprs);
