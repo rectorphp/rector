@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeCollector\NodeCollector;
 
 use Nette\Utils\Arrays;
+use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
@@ -241,7 +242,7 @@ final class NodeRepository
             }
 
             /** @var string $fileContent */
-            $fileContent = file_get_contents($fileName);
+            $fileContent = FileSystem::read($fileName);
             $nodes = $this->parser->parse($fileContent);
 
             return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
@@ -531,15 +532,14 @@ final class NodeRepository
         ClassReflection $classReflection,
         string $className,
         string $methodName
-    ): ?ClassMethod
-    {
-        $nativeReflection = $classReflection->getNativeReflection();
-        $shortClassName = $nativeReflection->getShortName();
+    ): ?ClassMethod {
+        $reflectionClass = $classReflection->getNativeReflection();
+        $shortClassName = $reflectionClass->getShortName();
 
         foreach ($nodes as $node) {
             if ($node instanceof Namespace_) {
                 /** @var Stmt[] $nodeStmts */
-                $nodeStmts   = (array) $node->stmts;
+                $nodeStmts = $node->stmts;
                 $classMethod = $this->getClassMethodFromNodes($nodeStmts, $classReflection, $className, $methodName);
 
                 if ($classMethod instanceof ClassMethod) {
