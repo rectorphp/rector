@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -23,8 +24,10 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
+use PhpParser\Parser;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
@@ -41,6 +44,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use ReflectionClass;
 use ReflectionMethod;
 
 /**
@@ -111,6 +115,11 @@ final class NodeRepository
      */
     private $reflectionProvider;
 
+    /**
+     * @var Parser
+     */
+    private $parser;
+
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
@@ -118,7 +127,8 @@ final class NodeRepository
         ParsedNodeCollector $parsedNodeCollector,
         TypeUnwrapper $typeUnwrapper,
         ReflectionProvider $reflectionProvider,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        Parser $parser
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
@@ -127,6 +137,7 @@ final class NodeRepository
         $this->typeUnwrapper = $typeUnwrapper;
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->parser = $parser;
     }
 
     public function collect(Node $node): void
@@ -221,6 +232,13 @@ final class NodeRepository
             if (isset($this->classMethodsByType[$parentClassReflection->getName()][$methodName])) {
                 return $this->classMethodsByType[$parentClassReflection->getName()][$methodName];
             }
+        }
+
+        if (method_exists($className, $methodName)) {
+            $fileName = $classReflection->getFileName();
+            $nodes = $this->parser->parse(file_get_contents($fileName));
+
+            return $this->getClassMethodByNodes($nodes, $className, $methodName);
         }
 
         return null;
@@ -497,6 +515,38 @@ final class NodeRepository
         return $this->findClass($classLikeName) ?? $this->findInterface($classLikeName) ?? $this->findTrait(
             $classLikeName
         );
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    private function getClassMethodByNodes(array $nodes, string $className, string $methodName): ?ClassMethod
+    {
+        $reflectionClass = new ReflectionClass($className);
+        $shortClassName = $reflectionClass->getShortName();
+
+        foreach ($nodes as $node) {
+            if ($node instanceof Namespace_) {
+                $nodeStmts = $node->stmts;
+                return $this->getClassMethodByNodes($nodeStmts, $className, $methodName);
+            }
+
+            if ($node instanceof Class_) {
+                $identifier = $node->name;
+                if (! $identifier instanceof Identifier) {
+                    continue;
+                }
+
+                $name = $identifier->toString();
+                if ($name !== $shortClassName) {
+                    continue;
+                }
+
+                return $node->getMethod($methodName);
+            }
+        }
+
+        return null;
     }
 
     private function collectArray(Array_ $array): void
