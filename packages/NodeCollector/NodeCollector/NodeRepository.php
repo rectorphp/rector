@@ -16,7 +16,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -29,6 +28,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Parser;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
@@ -45,7 +45,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
-use PHPStan\Reflection\ClassReflection;
 use ReflectionMethod;
 
 /**
@@ -246,34 +245,6 @@ final class NodeRepository
             $nodes = $this->parser->parse($fileContent);
 
             return $this->getClassMethodByNodes($classReflection, (array) $nodes, $className, $methodName);
-        }
-
-        return null;
-    }
-
-    /**
-     * @param Stmt[] $nodes
-     */
-    private function getClassMethodByNodes(ClassReflection $classReflection, array $nodes, string $className, string $methodName): ?ClassMethod
-    {
-        $nativeReflection = $classReflection->getNativeReflection();
-        $shortClassName = $nativeReflection->getShortName();
-
-        foreach ($nodes as $node) {
-            if ($node instanceof Namespace_) {
-                /** @var Stmt[] $nodeStmts */
-                $nodeStmts = (array) $node->stmts;
-                return $this->getClassMethodByNodes($classReflection, $nodeStmts, $className, $methodName);
-            }
-
-            if ($node instanceof Class_) {
-                $name = (string) $this->nodeNameResolver->getName($node);
-                if ($name !== $shortClassName) {
-                    continue;
-                }
-
-                return $node->getMethod($methodName);
-            }
         }
 
         return null;
@@ -550,6 +521,39 @@ final class NodeRepository
         return $this->findClass($classLikeName) ?? $this->findInterface($classLikeName) ?? $this->findTrait(
             $classLikeName
         );
+    }
+
+    /**
+     * @param Stmt[] $nodes
+     */
+    private function getClassMethodByNodes(
+        ClassReflection $classReflection,
+        array $nodes,
+        string $className,
+        string $methodName
+    ): ?ClassMethod
+    {
+        $nativeReflection = $classReflection->getNativeReflection();
+        $shortClassName = $nativeReflection->getShortName();
+
+        foreach ($nodes as $node) {
+            if ($node instanceof Namespace_) {
+                /** @var Stmt[] $nodeStmts */
+                $nodeStmts = (array) $node->stmts;
+                return $this->getClassMethodByNodes($classReflection, $nodeStmts, $className, $methodName);
+            }
+
+            if ($node instanceof Class_) {
+                $name = (string) $this->nodeNameResolver->getName($node);
+                if ($name !== $shortClassName) {
+                    continue;
+                }
+
+                return $node->getMethod($methodName);
+            }
+        }
+
+        return null;
     }
 
     private function collectArray(Array_ $array): void
