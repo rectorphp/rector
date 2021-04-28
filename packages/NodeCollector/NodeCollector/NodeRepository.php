@@ -6,7 +6,6 @@ namespace Rector\NodeCollector\NodeCollector;
 
 use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
-use PhpParser\Error;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
@@ -244,22 +243,6 @@ final class NodeRepository
         }
 
         return $this->getClassMethodOutsideFile($classReflection, $className, $methodName);
-    }
-
-    private function getClassMethodOutsideFile(ClassReflection $classReflection, string $className, string $methodName): ?ClassMethod
-    {
-        if (! $classReflection->hasMethod($methodName) || $classReflection->isBuiltIn()) {
-            return null;
-        }
-
-        $fileName = $classReflection->getFileName();
-        if (! $fileName) {
-            return null;
-        }
-
-        $fileContent = $this->smartFileSystem->readfile($fileName);
-        $nodes = $this->parser->parse($fileContent);
-        return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
     }
 
     /**
@@ -533,6 +516,28 @@ final class NodeRepository
         return $this->findClass($classLikeName) ?? $this->findInterface($classLikeName) ?? $this->findTrait(
             $classLikeName
         );
+    }
+
+    private function getClassMethodOutsideFile(
+        ClassReflection $classReflection,
+        string $className,
+        string $methodName
+    ): ?ClassMethod
+    {
+        if (! $classReflection->hasMethod($methodName)) {
+            return null;
+        }
+        if ($classReflection->isBuiltIn()) {
+            return null;
+        }
+        $fileName = $classReflection->getFileName();
+        if (! $fileName) {
+            return null;
+        }
+
+        $fileContent = $this->smartFileSystem->readfile($fileName);
+        $nodes = $this->parser->parse($fileContent);
+        return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
     }
 
     /**
