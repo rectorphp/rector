@@ -139,10 +139,7 @@ CODE_SAMPLE
         Assert::allIsInstanceOf($methodCallRenames, MethodCallRenameInterface::class);
 
         $this->methodCallRenames = $methodCallRenames;
-
-        foreach ($methodCallRenames as $methodCallRename) {
-            $this->methodCallRenameCollector->addMethodCallRename($methodCallRename);
-        }
+        $this->methodCallRenameCollector->addMethodCallRenames($methodCallRenames);
     }
 
     /**

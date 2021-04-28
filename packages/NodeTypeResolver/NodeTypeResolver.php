@@ -38,6 +38,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -92,6 +93,11 @@ final class NodeTypeResolver
     private $identifierTypeResolver;
 
     /**
+     * @var RenamedClassesDataCollector
+     */
+    private $renamedClassesDataCollector;
+
+    /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
     public function __construct(
@@ -101,6 +107,7 @@ final class NodeTypeResolver
         ReflectionProvider $reflectionProvider,
         HasOffsetTypeCorrector $hasOffsetTypeCorrector,
         IdentifierTypeResolver $identifierTypeResolver,
+        RenamedClassesDataCollector $renamedClassesDataCollector,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -113,6 +120,7 @@ final class NodeTypeResolver
         $this->reflectionProvider = $reflectionProvider;
         $this->hasOffsetTypeCorrector = $hasOffsetTypeCorrector;
         $this->identifierTypeResolver = $identifierTypeResolver;
+        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
 
     /**
@@ -146,7 +154,6 @@ final class NodeTypeResolver
         }
 
         $resolvedType = $this->resolve($node);
-
         if ($resolvedType instanceof MixedType) {
             return false;
         }
@@ -156,7 +163,7 @@ final class NodeTypeResolver
         }
 
         if ($resolvedType instanceof ObjectType) {
-            return $this->isObjectTypeOfObjectType($resolvedType, $requiredObjectType);
+            return $this->resolveObjectType($resolvedType, $requiredObjectType);
         }
 
         return $this->isMatchingUnionType($resolvedType, $requiredObjectType);
@@ -438,7 +445,7 @@ final class NodeTypeResolver
     private function resolveByNodeTypeResolvers(Node $node): ?Type
     {
         foreach ($this->nodeTypeResolvers as $nodeClass => $nodeTypeResolver) {
-            if (! is_a($node, $nodeClass)) {
+            if (! is_a($node, $nodeClass, true)) {
                 continue;
             }
 
@@ -501,5 +508,17 @@ final class NodeTypeResolver
         }
 
         return $classReflection->isSubclassOf($requiredObjectType->getClassName());
+    }
+
+    private function resolveObjectType(ObjectType $resolvedObjectType, ObjectType $requiredObjectType): bool
+    {
+        $renamedObjectType = $this->renamedClassesDataCollector->matchClassName($resolvedObjectType);
+        if (! $renamedObjectType instanceof ObjectType) {
+            return $this->isObjectTypeOfObjectType($resolvedObjectType, $requiredObjectType);
+        }
+        if (! $this->isObjectTypeOfObjectType($renamedObjectType, $requiredObjectType)) {
+            return $this->isObjectTypeOfObjectType($resolvedObjectType, $requiredObjectType);
+        }
+        return true;
     }
 }

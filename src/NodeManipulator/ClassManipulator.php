@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -36,8 +35,8 @@ final class ClassManipulator
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        ReflectionProvider $reflectionProvider,
-        NodesToRemoveCollector $nodesToRemoveCollector
+        NodesToRemoveCollector $nodesToRemoveCollector,
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
@@ -70,11 +69,12 @@ final class ClassManipulator
         }
 
         $classReflection = $this->reflectionProvider->getClass($objectType->getClassName());
+        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
+            if ($classReflection === $ancestorClassReflection) {
+                continue;
+            }
 
-        /** @var ClassReflection[] $parentClassReflections */
-        $parentClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
-        foreach ($parentClassReflections as $parentClassReflection) {
-            if ($parentClassReflection->hasMethod($methodName)) {
+            if ($ancestorClassReflection->hasMethod($methodName)) {
                 return true;
             }
         }
@@ -92,27 +92,6 @@ final class ClassManipulator
         });
 
         return $this->nodeNameResolver->getNames($privateProperties);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getPublicMethodNames(Class_ $class): array
-    {
-        $publicMethodNames = [];
-        foreach ($class->getMethods() as $classMethod) {
-            if ($classMethod->isAbstract()) {
-                continue;
-            }
-
-            if ($classMethod->isAbstract()) {
-                continue;
-            }
-
-            $publicMethodNames[] = $this->nodeNameResolver->getName($classMethod);
-        }
-
-        return $publicMethodNames;
     }
 
     /**
