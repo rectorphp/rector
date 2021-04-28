@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
+use Rector\Core\Reflection\FunctionLikeReflectionParser;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
@@ -72,6 +73,11 @@ final class PropertyManipulator
      */
     private $nodeRepository;
 
+    /**
+     * @var FunctionLikeReflectionParser
+     */
+    private $functionLikeReflectionParser;
+
     public function __construct(
         AssignManipulator $assignManipulator,
         BetterNodeFinder $betterNodeFinder,
@@ -80,7 +86,8 @@ final class PropertyManipulator
         PhpDocInfoFactory $phpDocInfoFactory,
         TypeChecker $typeChecker,
         PropertyFetchFinder $propertyFetchFinder,
-        NodeRepository $nodeRepository
+        NodeRepository $nodeRepository,
+        FunctionLikeReflectionParser $functionLikeReflectionParser
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->assignManipulator = $assignManipulator;
@@ -90,6 +97,7 @@ final class PropertyManipulator
         $this->typeChecker = $typeChecker;
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->nodeRepository = $nodeRepository;
+        $this->functionLikeReflectionParser = $functionLikeReflectionParser;
     }
 
     public function isPropertyUsedInReadContext(Property $property): bool
@@ -177,6 +185,10 @@ final class PropertyManipulator
         $classMethod = $node instanceof MethodCall
             ? $this->nodeRepository->findClassMethodByMethodCall($node)
             : $this->nodeRepository->findClassMethodByStaticCall($node);
+
+        if (! $classMethod instanceof ClassMethod) {
+            $classMethod = $this->functionLikeReflectionParser->parseCaller($node);
+        }
 
         if (! $classMethod instanceof ClassMethod) {
             return false;
