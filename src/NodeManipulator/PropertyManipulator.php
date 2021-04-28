@@ -206,6 +206,10 @@ final class PropertyManipulator
             $classMethod = $this->functionLikeReflectionParser->parseCaller($node);
         }
 
+        if (! $classMethod instanceof ClassMethod) {
+            return false;
+        }
+
         $params = $classMethod->getParams();
         foreach ($params as $param) {
             if ($param->byRef) {
