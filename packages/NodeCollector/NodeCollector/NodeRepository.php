@@ -244,7 +244,7 @@ final class NodeRepository
             $fileContent = file_get_contents($fileName);
             $nodes = $this->parser->parse($fileContent);
 
-            return $this->getClassMethodByNodes($classReflection, (array) $nodes, $className, $methodName);
+            return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
         }
 
         return null;
@@ -526,9 +526,9 @@ final class NodeRepository
     /**
      * @param Stmt[] $nodes
      */
-    private function getClassMethodByNodes(
-        ClassReflection $classReflection,
+    private function getClassMethodFromNodes(
         array $nodes,
+        ClassReflection $classReflection,
         string $className,
         string $methodName
     ): ?ClassMethod
@@ -539,17 +539,29 @@ final class NodeRepository
         foreach ($nodes as $node) {
             if ($node instanceof Namespace_) {
                 /** @var Stmt[] $nodeStmts */
-                $nodeStmts = (array) $node->stmts;
-                return $this->getClassMethodByNodes($classReflection, $nodeStmts, $className, $methodName);
+                $nodeStmts   = (array) $node->stmts;
+                $classMethod = $this->getClassMethodFromNodes($nodeStmts, $classReflection, $className, $methodName);
+
+                if ($classMethod instanceof ClassMethod) {
+                    return $classMethod;
+                }
             }
 
-            if ($node instanceof Class_) {
-                $name = (string) $this->nodeNameResolver->getName($node);
-                if ($name !== $shortClassName) {
-                    continue;
-                }
+            $classMethod = $this->getClassMethod($node, $shortClassName, $methodName);
+            if ($classMethod instanceof ClassMethod) {
+                return $classMethod;
+            }
+        }
 
-                return $node->getMethod($methodName);
+        return null;
+    }
+
+    private function getClassMethod(Stmt $stmt, string $shortClassName, string $methodName): ?ClassMethod
+    {
+        if ($stmt instanceof Class_) {
+            $name = (string) $this->nodeNameResolver->getName($stmt);
+            if ($name === $shortClassName) {
+                return $stmt->getMethod($methodName);
             }
         }
 
