@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeCollector\NodeCollector;
 
 use Nette\Utils\Arrays;
-use Nette\Utils\FileSystem;
+use Symplify\SmartFileSystem\SmartFileSystem;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
@@ -242,7 +242,7 @@ final class NodeRepository
             }
 
             /** @var string $fileContent */
-            $fileContent = FileSystem::read($fileName);
+            $fileContent = SmartFileSystem::readfile($fileName);
             $nodes = $this->parser->parse($fileContent);
 
             return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
