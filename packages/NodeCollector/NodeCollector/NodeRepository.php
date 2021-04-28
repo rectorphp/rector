@@ -16,19 +16,15 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Parser;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
@@ -242,7 +238,7 @@ final class NodeRepository
             }
         }
 
-        return $this->getClassMethodOutsideFile($classReflection, $className, $methodName);
+        return null;
     }
 
     /**
@@ -516,72 +512,6 @@ final class NodeRepository
         return $this->findClass($classLikeName) ?? $this->findInterface($classLikeName) ?? $this->findTrait(
             $classLikeName
         );
-    }
-
-    private function getClassMethodOutsideFile(
-        ClassReflection $classReflection,
-        string $className,
-        string $methodName
-    ): ?ClassMethod
-    {
-        if (! $classReflection->hasMethod($methodName)) {
-            return null;
-        }
-        if ($classReflection->isBuiltIn()) {
-            return null;
-        }
-        $fileName = $classReflection->getFileName();
-        if (! $fileName) {
-            return null;
-        }
-
-        $fileContent = $this->smartFileSystem->readfile($fileName);
-        $nodes = $this->parser->parse($fileContent);
-        return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
-    }
-
-    /**
-     * @param Stmt[] $nodes
-     */
-    private function getClassMethodFromNodes(
-        array $nodes,
-        ClassReflection $classReflection,
-        string $className,
-        string $methodName
-    ): ?ClassMethod {
-        $reflectionClass = $classReflection->getNativeReflection();
-        $shortName = $reflectionClass->getShortName();
-
-        foreach ($nodes as $node) {
-            if ($node instanceof Namespace_) {
-                /** @var Stmt[] $nodeStmts */
-                $nodeStmts = $node->stmts;
-                $classMethod = $this->getClassMethodFromNodes($nodeStmts, $classReflection, $className, $methodName);
-
-                if ($classMethod instanceof ClassMethod) {
-                    return $classMethod;
-                }
-            }
-
-            $classMethod = $this->getClassMethod($node, $shortName, $methodName);
-            if ($classMethod instanceof ClassMethod) {
-                return $classMethod;
-            }
-        }
-
-        return null;
-    }
-
-    private function getClassMethod(Stmt $stmt, string $shortClassName, string $methodName): ?ClassMethod
-    {
-        if ($stmt instanceof Class_) {
-            $name = (string) $this->nodeNameResolver->getName($stmt);
-            if ($name === $shortClassName) {
-                return $stmt->getMethod($methodName);
-            }
-        }
-
-        return null;
     }
 
     private function collectArray(Array_ $array): void
