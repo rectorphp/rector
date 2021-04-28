@@ -12175,7 +12175,7 @@ Change `@param` types to type declarations if not a BC-break
 
 Add param type from `$param` set to typed property
 
-- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeFromStrictTypedPropertyRector`](../rules/TypeDeclaration/Rector/ClassMethod/ParamTypeFromStrictTypedPropertyRector.php)
+- class: [`Rector\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector`](../rules/TypeDeclaration/Rector/ClassMethod/ParamTypeFromStrictTypedPropertyRector.php)
 
 ```diff
  final class SomeClass
