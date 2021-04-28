@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NodeCollector\NodeCollector;
 
 use Nette\Utils\Arrays;
-use Symplify\SmartFileSystem\SmartFileSystem;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
@@ -47,6 +46,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use ReflectionMethod;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * This service contains all the parsed nodes. E.g. all the functions, method call, classes, static calls etc. It's
@@ -249,7 +249,7 @@ final class NodeRepository
             }
 
             $fileContent = $this->smartFileSystem->readfile($fileName);
-            $nodes = $this->parser->parse((string) $fileContent);
+            $nodes = $this->parser->parse($fileContent);
 
             return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
         }
