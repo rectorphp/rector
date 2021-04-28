@@ -24,7 +24,6 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\Parser;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
@@ -42,7 +41,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use ReflectionMethod;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * This service contains all the parsed nodes. E.g. all the functions, method call, classes, static calls etc. It's
@@ -112,16 +110,6 @@ final class NodeRepository
      */
     private $reflectionProvider;
 
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
@@ -129,9 +117,7 @@ final class NodeRepository
         ParsedNodeCollector $parsedNodeCollector,
         TypeUnwrapper $typeUnwrapper,
         ReflectionProvider $reflectionProvider,
-        NodeTypeResolver $nodeTypeResolver,
-        Parser $parser,
-        SmartFileSystem $smartFileSystem
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
@@ -140,8 +126,6 @@ final class NodeRepository
         $this->typeUnwrapper = $typeUnwrapper;
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->parser = $parser;
-        $this->smartFileSystem = $smartFileSystem;
     }
 
     public function collect(Node $node): void

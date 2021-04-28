@@ -18,14 +18,12 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Reflection\FunctionLikeReflectionParser;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
 use Symplify\PackageBuilder\Php\TypeChecker;
@@ -76,16 +74,6 @@ final class PropertyManipulator
     private $nodeRepository;
 
     /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
      * @var FunctionLikeReflectionParser
      */
     private $functionLikeReflectionParser;
@@ -99,8 +87,6 @@ final class PropertyManipulator
         TypeChecker $typeChecker,
         PropertyFetchFinder $propertyFetchFinder,
         NodeRepository $nodeRepository,
-        NodeTypeResolver $nodeTypeResolver,
-        ReflectionProvider $reflectionProvider,
         FunctionLikeReflectionParser $functionLikeReflectionParser
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
@@ -111,8 +97,6 @@ final class PropertyManipulator
         $this->typeChecker = $typeChecker;
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->nodeRepository = $nodeRepository;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->reflectionProvider = $reflectionProvider;
         $this->functionLikeReflectionParser = $functionLikeReflectionParser;
     }
 
