@@ -121,6 +121,11 @@ final class NodeRepository
      */
     private $parser;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
@@ -129,7 +134,8 @@ final class NodeRepository
         TypeUnwrapper $typeUnwrapper,
         ReflectionProvider $reflectionProvider,
         NodeTypeResolver $nodeTypeResolver,
-        Parser $parser
+        Parser $parser,
+        SmartFileSystem $smartFileSystem
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
@@ -139,6 +145,7 @@ final class NodeRepository
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->parser = $parser;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     public function collect(Node $node): void
@@ -242,7 +249,7 @@ final class NodeRepository
             }
 
             /** @var string $fileContent */
-            $fileContent = SmartFileSystem::readfile($fileName);
+            $fileContent = $this->smartFileSystem->readfile($fileName);
             $nodes = $this->parser->parse($fileContent);
 
             return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
