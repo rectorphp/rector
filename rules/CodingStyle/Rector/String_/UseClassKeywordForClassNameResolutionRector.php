@@ -110,12 +110,10 @@ CODE_SAMPLE
      */
     public function getParts(String_ $string, array $classNames): array
     {
-        $classNames = array_map(function (string $className): string {
-            return preg_quote($className);
-        }, $classNames);
+        $quotedClassNames = array_map('preg_quote', $classNames);
 
         // @see https://regex101.com/r/8nGS0F/1
-        $parts = Strings::split($string->value, '#(' . implode('|', $classNames) . ')#');
+        $parts = Strings::split($string->value, '#(' . implode('|', $quotedClassNames) . ')#');
 
         return array_filter($parts, function (string $className): bool {
             return $className !== '';

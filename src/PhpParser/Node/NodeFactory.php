@@ -652,10 +652,11 @@ final class NodeFactory
             return $arrayItem;
         }
 
+        $nodeClass = is_object($item) ? get_class($item) : $item;
         throw new NotImplementedYetException(sprintf(
             'Not implemented yet. Go to "%s()" and add check for "%s" node.',
             __METHOD__,
-            is_object($item) ? get_class($item) : $item
+            $nodeClass
         ));
     }
 

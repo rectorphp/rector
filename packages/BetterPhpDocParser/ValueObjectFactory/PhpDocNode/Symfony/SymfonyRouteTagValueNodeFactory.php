@@ -8,11 +8,6 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 
 final class SymfonyRouteTagValueNodeFactory
 {
-    public function create(): DoctrineAnnotationTagValueNode
-    {
-        return $this->createFromItems([]);
-    }
-
     /**
      * @param array<string, mixed> $items
      */

@@ -184,9 +184,7 @@ CODE_SAMPLE
      */
     private function lowercaseArray(array $values): array
     {
-        return array_map(function (string $value): string {
-            return strtolower($value);
-        }, $values);
+        return array_map('strtolower', $values);
     }
 
     private function shouldSkip(Use_ $use, Name $name, string $lastName, string $aliasName): bool
