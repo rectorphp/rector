@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Defluent\Rector\ClassMethod\ReturnThisRemoveRector\Fixture;
 
-use Rector\Tests\Defluent\Rector\ClassMethod\ReturnThisRemoveRector\Source\ParentInVendor;
+use Rector\Tests\Defluent\Rector\ClassMethod\ReturnThisRemoveRector\Source\vendor\ParentInVendor;
 
 class SkipParentInVendor extends ParentInVendor
 {

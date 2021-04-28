@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Defluent\ConflictGuard;
 
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -45,7 +46,17 @@ final class ParentClassMethodTypeOverrideGuard
         );
 
         // if null, we're unable to override → skip it
-        return $parentClassMethod !== null;
+        if (! $parentClassMethod instanceof ClassMethod) {
+            return false;
+        }
+
+        $class = $parentClassMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof Class_) {
+            return false;
+        }
+
+        $classReflection = $parentClassMethodReflection->getDeclaringClass();
+        return strpos($classReflection->getFileName(), 'vendor') === false;
     }
 
     private function getParentClassMethod(ClassMethod $classMethod): ?MethodReflection
