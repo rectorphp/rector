@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Defluent\ConflictGuard;
 
+use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
@@ -56,7 +57,7 @@ final class ParentClassMethodTypeOverrideGuard
         }
 
         $classReflection = $parentClassMethodReflection->getDeclaringClass();
-        return strpos($classReflection->getFileName(), 'vendor') === false;
+        return ! Strings::contains($classReflection->getFileName(), 'vendor');
     }
 
     private function getParentClassMethod(ClassMethod $classMethod): ?MethodReflection
