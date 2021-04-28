@@ -248,7 +248,7 @@ final class NodeRepository
 
     private function getClassMethodOutsideFile(ClassReflection $classReflection, string $className, string $methodName): ?ClassMethod
     {
-        if (! $classReflection->hasMethod($methodName)) {
+        if (! $classReflection->hasMethod($methodName) || $classReflection->isBuiltIn()) {
             return null;
         }
 
@@ -258,17 +258,8 @@ final class NodeRepository
         }
 
         $fileContent = $this->smartFileSystem->readfile($fileName);
-        try {
-            $nodes = $this->parser->parse($fileContent);
-            return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
-        } catch (Error $error) {
-            $isNotSyntaxError = ! Strings::contains($error->getMessage(), 'Syntax error');
-            if ($isNotSyntaxError) {
-                throw $error;
-            }
-        }
-
-        return null;
+        $nodes = $this->parser->parse($fileContent);
+        return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
     }
 
     /**
