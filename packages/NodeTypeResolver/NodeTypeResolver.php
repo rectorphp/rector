@@ -47,7 +47,6 @@ use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
-use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
@@ -94,11 +93,6 @@ final class NodeTypeResolver
     private $identifierTypeResolver;
 
     /**
-     * @var RenamedClassesCollector
-     */
-    private $renamedClassesCollector;
-
-    /**
      * @var RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
@@ -113,7 +107,6 @@ final class NodeTypeResolver
         ReflectionProvider $reflectionProvider,
         HasOffsetTypeCorrector $hasOffsetTypeCorrector,
         IdentifierTypeResolver $identifierTypeResolver,
-        RenamedClassesCollector $renamedClassesCollector,
         RenamedClassesDataCollector $renamedClassesDataCollector,
         array $nodeTypeResolvers
     ) {
@@ -127,7 +120,6 @@ final class NodeTypeResolver
         $this->reflectionProvider = $reflectionProvider;
         $this->hasOffsetTypeCorrector = $hasOffsetTypeCorrector;
         $this->identifierTypeResolver = $identifierTypeResolver;
-        $this->renamedClassesCollector = $renamedClassesCollector;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
 
@@ -521,13 +513,12 @@ final class NodeTypeResolver
     private function resolveObjectType(ObjectType $resolvedObjectType, ObjectType $requiredObjectType): bool
     {
         $renamedObjectType = $this->renamedClassesDataCollector->matchClassName($resolvedObjectType);
-        if ($renamedObjectType instanceof ObjectType && $this->isObjectTypeOfObjectType(
-            $renamedObjectType,
-            $requiredObjectType
-        )) {
-            return true;
+        if (! $renamedObjectType instanceof ObjectType) {
+            return $this->isObjectTypeOfObjectType($resolvedObjectType, $requiredObjectType);
         }
-
-        return $this->isObjectTypeOfObjectType($resolvedObjectType, $requiredObjectType);
+        if (! $this->isObjectTypeOfObjectType($renamedObjectType, $requiredObjectType)) {
+            return $this->isObjectTypeOfObjectType($resolvedObjectType, $requiredObjectType);
+        }
+        return true;
     }
 }
