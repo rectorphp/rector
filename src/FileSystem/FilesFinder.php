@@ -74,6 +74,7 @@ final class FilesFinder
     public function findInDirectoriesAndFiles(array $source, array $suffixes): array
     {
         $cacheKey = md5(serialize($source) . serialize($suffixes));
+
         if (isset($this->fileInfosBySourceAndSuffixes[$cacheKey])) {
             return $this->fileInfosBySourceAndSuffixes[$cacheKey];
         }

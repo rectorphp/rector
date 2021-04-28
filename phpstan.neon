@@ -446,3 +446,30 @@ parameters:
 
         - '#Method Rector\\Core\\Tests\\DependencyInjection\\ConfigurableRectorImportConfigCallsMergeTest\:\:provideData\(\) return type has no value type specified in iterable type Iterator#'
         - '#Class with base "PhpVersion" name is already used in "PHPStan\\Php\\PhpVersion", "Rector\\Core\\ValueObject\\PhpVersion"\. Use unique name to make classes easy to recognize#'
+
+        -
+            message: '#Use dependency injection instead of dependency juggling#'
+            path: src/HttpKernel/RectorKernel.php
+
+        -
+            message: '#Use separate function calls with readable variable names#'
+            path: src/FileSystem/FilesFinder.php
+
+        # fixed in dev-main
+        -
+            message: '#Use dependency injection instead of dependency juggling#'
+            paths:
+                 - src/Application/FileProcessor/PhpFileProcessor.php
+                 - rules/NetteToSymfony/Rector/ClassMethod/RouterListToControllerAnnotationsRector.php
+                 - packages/FamilyTree/Reflection/FamilyRelationsAnalyzer.php
+                 - packages/Caching/FileSystem/DependencyResolver.php
+                 - packages/BetterPhpDocParser/PhpDocNodeMapper.php
+                 - packages/NodeTypeResolver/NodeVisitor/FileNodeVisitor.php
+                 # hacking value object
+                 - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php
+                 # better reflection static design
+                 - packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider/DynamicSourceLocatorProvider.php
+
+        -
+            message: '#Use separate function calls with readable variable names#'
+            path: src/Application/ActiveRectorsProvider.php

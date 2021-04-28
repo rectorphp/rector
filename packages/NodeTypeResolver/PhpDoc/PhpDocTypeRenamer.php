@@ -6,9 +6,9 @@ namespace Rector\NodeTypeResolver\PhpDoc;
 
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\NodeTypeResolver\PhpDoc\PhpDocNodeTraverser\UnderscorePhpDocNodeTraverserFactory;
 use Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
-use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 final class PhpDocTypeRenamer
 {
@@ -17,9 +17,17 @@ final class PhpDocTypeRenamer
      */
     private $underscoreRenamePhpDocNodeVisitor;
 
-    public function __construct(UnderscoreRenamePhpDocNodeVisitor $underscoreRenamePhpDocNodeVisitor)
-    {
+    /**
+     * @var UnderscorePhpDocNodeTraverserFactory
+     */
+    private $underscorePhpDocNodeTraverserFactory;
+
+    public function __construct(
+        UnderscorePhpDocNodeTraverserFactory $underscorePhpDocNodeTraverserFactory,
+        UnderscoreRenamePhpDocNodeVisitor $underscoreRenamePhpDocNodeVisitor
+    ) {
         $this->underscoreRenamePhpDocNodeVisitor = $underscoreRenamePhpDocNodeVisitor;
+        $this->underscorePhpDocNodeTraverserFactory = $underscorePhpDocNodeTraverserFactory;
     }
 
     public function changeUnderscoreType(
@@ -29,11 +37,10 @@ final class PhpDocTypeRenamer
     ): void {
         $phpDocNode = $phpDocInfo->getPhpDocNode();
 
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
         $this->underscoreRenamePhpDocNodeVisitor->setPseudoNamespaceToNamespace($pseudoNamespaceToNamespace);
         $this->underscoreRenamePhpDocNodeVisitor->setCurrentPhpParserNode($node);
 
-        $phpDocNodeTraverser->addPhpDocNodeVisitor($this->underscoreRenamePhpDocNodeVisitor);
+        $phpDocNodeTraverser = $this->underscorePhpDocNodeTraverserFactory->create();
         $phpDocNodeTraverser->traverse($phpDocNode);
     }
 }
