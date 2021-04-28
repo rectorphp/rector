@@ -243,22 +243,27 @@ final class NodeRepository
             }
         }
 
-        if ($classReflection->hasMethod($methodName)) {
-            $fileName = $classReflection->getFileName();
-            if (! $fileName) {
-                return null;
-            }
+        return $this->getClassMethodOutsideFile($classReflection, $className, $methodName);
+    }
 
-            $fileContent = $this->smartFileSystem->readfile($fileName);
-            try {
-                $nodes = $this->parser->parse($fileContent);
-                return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
-            } catch (Error $error) {
-                $isSyntaxError = Strings::contains($error->getMessage(), 'Syntax error');
-                if ($isSyntaxError) {
-                    return null;
-                }
+    private function getClassMethodOutsideFile(ClassReflection $classReflection, string $className, string $methodName): ?ClassMethod
+    {
+        if (! $classReflection->hasMethod($methodName)) {
+            return null;
+        }
 
+        $fileName = $classReflection->getFileName();
+        if (! $fileName) {
+            return null;
+        }
+
+        $fileContent = $this->smartFileSystem->readfile($fileName);
+        try {
+            $nodes = $this->parser->parse($fileContent);
+            return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
+        } catch (Error $error) {
+            $isNotSyntaxError = ! Strings::contains($error->getMessage(), 'Syntax error');
+            if ($isNotSyntaxError) {
                 throw $error;
             }
         }
