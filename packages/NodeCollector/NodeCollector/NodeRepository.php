@@ -534,7 +534,7 @@ final class NodeRepository
         string $methodName
     ): ?ClassMethod {
         $reflectionClass = $classReflection->getNativeReflection();
-        $shortClassName = $reflectionClass->getShortName();
+        $shortName = $reflectionClass->getShortName();
 
         foreach ($nodes as $node) {
             if ($node instanceof Namespace_) {
@@ -547,7 +547,7 @@ final class NodeRepository
                 }
             }
 
-            $classMethod = $this->getClassMethod($node, $shortClassName, $methodName);
+            $classMethod = $this->getClassMethod($node, $shortName, $methodName);
             if ($classMethod instanceof ClassMethod) {
                 return $classMethod;
             }
