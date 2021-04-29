@@ -19,7 +19,6 @@ function buildPreloadScript(string $buildDirectory): void
         return;
     }
 
-    $preloadScript = $buildDirectory . '/preload.php';
     $template = <<<'php'
 <?php
 
@@ -31,6 +30,7 @@ php;
     if ($root === false) {
         return;
     }
+
     $output = '';
 
     $finder = (new Finder())
@@ -48,5 +48,5 @@ php;
         $output .= 'require_once __DIR__ . ' . var_export($path, true) . ';' . PHP_EOL;
     }
 
-    file_put_contents($preloadScript, sprintf($template, $output));
+    file_put_contents($buildDirectory . '/preload.php', sprintf($template, $output));
 }
