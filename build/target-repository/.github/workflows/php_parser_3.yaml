@@ -18,5 +18,5 @@ jobs:
                     coverage: none
 
             -   run: composer require nikic/php-parser:^3.1
-            -   run: composer require rector/rector-prefixed:^0.10
+            -   run: composer require rector/rector-prefixed:dev-main
             -   run: vendor/bin/rector list
