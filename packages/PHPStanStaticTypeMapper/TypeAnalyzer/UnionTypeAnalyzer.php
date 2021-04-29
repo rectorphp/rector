@@ -12,6 +12,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 use Traversable;
+use PHPStan\Type\ObjectWithoutClassType;
 
 final class UnionTypeAnalyzer
 {
@@ -57,5 +58,17 @@ final class UnionTypeAnalyzer
         }
 
         return true;
+    }
+
+    public function hasObjectWithoutClassType(UnionType $unionType): bool
+    {
+        $types = $unionType->getTypes();
+        foreach ($types as $type) {
+            if ($type instanceof ObjectWithoutClassType) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

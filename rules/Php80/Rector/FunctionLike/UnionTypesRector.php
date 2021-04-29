@@ -19,6 +19,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -44,14 +45,21 @@ final class UnionTypesRector extends AbstractRector
      */
     private $paramTagRemover;
 
+    /**
+     * @var UnionTypeAnalyzer
+     */
+    private $unionTypeAnalyzer;
+
     public function __construct(
         ReturnTagRemover $returnTagRemover,
         ParamTagRemover $paramTagRemover,
-        ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver
+        ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
+        UnionTypeAnalyzer $unionTypeAnalyzer
     ) {
         $this->returnTagRemover = $returnTagRemover;
         $this->paramTagRemover = $paramTagRemover;
         $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
+        $this->unionTypeAnalyzer = $unionTypeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -136,7 +144,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->hasObjectWithoutClassType($paramType)) {
+            if ($this->unionTypeAnalyzer->hasObjectWithoutClassType($paramType)) {
                 $this->changeObjectWithoutClassType($param, $paramType);
                 continue;
             }
@@ -157,18 +165,6 @@ CODE_SAMPLE
         }
 
         $param->type = new Name('object');
-    }
-
-    private function hasObjectWithoutClassType(UnionType $unionType): bool
-    {
-        $types = $unionType->getTypes();
-        foreach ($types as $type) {
-            if ($type instanceof ObjectWithoutClassType) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private function hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType(UnionType $unionType): bool
