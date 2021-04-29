@@ -13,6 +13,7 @@ use PHPStan\Type\UnionType;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 use Traversable;
 use PHPStan\Type\ObjectWithoutClassType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class UnionTypeAnalyzer
 {
@@ -70,5 +71,21 @@ final class UnionTypeAnalyzer
         }
 
         return false;
+    }
+
+    public function hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType(UnionType $unionType): bool
+    {
+        $types = $unionType->getTypes();
+        foreach ($types as $type) {
+            if ($type instanceof ObjectWithoutClassType) {
+                continue;
+            }
+
+            if (! $type instanceof FullyQualifiedObjectType) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -160,27 +160,11 @@ CODE_SAMPLE
 
     private function changeObjectWithoutClassType(Param $param, UnionType $unionType): void
     {
-        if (! $this->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($unionType)) {
+        if (! $this->unionTypeAnalyzer->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($unionType)) {
             return;
         }
 
         $param->type = new Name('object');
-    }
-
-    private function hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType(UnionType $unionType): bool
-    {
-        $types = $unionType->getTypes();
-        foreach ($types as $type) {
-            if ($type instanceof ObjectWithoutClassType) {
-                continue;
-            }
-
-            if (! $type instanceof FullyQualifiedObjectType) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**
