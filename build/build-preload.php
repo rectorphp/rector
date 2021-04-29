@@ -19,19 +19,16 @@ function buildPreloadScript(string $buildDirectory): void
         return;
     }
 
-    $template = <<<'php'
+    $preloadFileContent = <<<'php'
 <?php
 
 declare(strict_types = 1);
 
-%s
 php;
     $root = realpath(__DIR__ . '/..');
     if ($root === false) {
         return;
     }
-
-    $output = '';
 
     $finder = (new Finder())
         ->files()
@@ -45,8 +42,8 @@ php;
         }
 
         $path = substr($realPath, strlen($root));
-        $output .= 'require_once __DIR__ . ' . var_export($path, true) . ';' . PHP_EOL;
+        $preloadFileContent .= 'require_once __DIR__ . ' . var_export($path, true) . ';' . PHP_EOL;
     }
 
-    file_put_contents($buildDirectory . '/preload.php', sprintf($template, $output));
+    file_put_contents($buildDirectory . '/preload.php', $preloadFileContent);
 }
