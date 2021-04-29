@@ -30,6 +30,9 @@ $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-auto
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadFromCommandLine();
 
+// make local php-parser a priority to avoid conflict
+require_once __DIR__ . '/../preload.php';
+
 $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
 $symfonyStyle = $symfonyStyleFactory->create();
 
