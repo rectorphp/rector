@@ -15,8 +15,6 @@ final class StaticEasyPrefixer
         'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
         // this is not prefixed on few places by php-scoper by default, probably some bug
         'Doctrine\Inflector\Inflector',
-        // for ocramius versions - https://github.com/rectorphp/rector/runs/2089178426
-        'Composer\InstalledVersions',
         // for SmartFileInfo
         'Symplify\SmartFileSystem\SmartFileInfo',
     ];
