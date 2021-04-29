@@ -8,12 +8,12 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
-use Traversable;
-use PHPStan\Type\ObjectWithoutClassType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Traversable;
 
 final class UnionTypeAnalyzer
 {
