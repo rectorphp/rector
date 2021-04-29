@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\UnionType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -16,6 +21,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NarrowUnionTypeDocRector extends AbstractRector
 {
+    /**
+     * @var UnionTypeAnalyzer
+     */
+    private $unionTypeAnalyzer;
+
+    public function __construct(UnionTypeAnalyzer $unionTypeAnalyzer)
+    {
+        $this->unionTypeAnalyzer = $unionTypeAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes docblock by narrowing type', [
@@ -61,7 +76,7 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $params = $node->getParams();
 
-        foreach ($params as $param) {
+        foreach ($params as $key => $param) {
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
             $paramType = $phpDocInfo->getParamType($paramName);
@@ -69,8 +84,35 @@ CODE_SAMPLE
             if (! $paramType instanceof UnionType) {
                 continue;
             }
+
+            if ($this->unionTypeAnalyzer->hasObjectWithoutClassType($paramType)) {
+                $this->changeDocObjectWithoutClassType($paramType, $key, $phpDocInfo);
+                continue;
+            }
         }
 
         return $node;
+    }
+
+    private function changeDocObjectWithoutClassType(
+        UnionType $unionType,
+        int $key,
+        PhpDocInfo $phpDocInfo
+    ): void {
+        if (! $this->unionTypeAnalyzer->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($unionType)) {
+            return;
+        }
+
+        $types = $unionType->getTypes();
+        $resultType = '';
+        foreach ($types as $type) {
+            if (! $type instanceof ObjectWithoutClassType) {
+                $resultType .= $type->getClassName() . '|';
+            }
+        }
+
+        $resultType = rtrim($resultType, '|');
+        $paramTagValueNodes = $phpDocInfo->getParamTagValueNodes();
+        $paramTagValueNodes[$key]->type = new IdentifierTypeNode($resultType);
     }
 }
