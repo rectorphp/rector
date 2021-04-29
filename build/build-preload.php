@@ -4,6 +4,7 @@
 
 declare(strict_types=1);
 
+use Nette\Utils\Strings;
 use Symfony\Component\Finder\Finder;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -24,11 +25,8 @@ function buildPreloadScript(string $buildDirectory): void
 
 declare(strict_types = 1);
 
+
 php;
-    $root = realpath(__DIR__ . '/..');
-    if ($root === false) {
-        return;
-    }
 
     $finder = (new Finder())
         ->files()
@@ -41,8 +39,8 @@ php;
             continue;
         }
 
-        $path = substr($realPath, strlen($root));
-        $preloadFileContent .= 'require_once __DIR__ . ' . var_export($path, true) . ';' . PHP_EOL;
+        $filePath = ltrim($fileInfo->getPathname(), '.');
+        $preloadFileContent .= "require_once __DIR__ . '" . $filePath . "';" . PHP_EOL;
     }
 
     file_put_contents($buildDirectory . '/preload.php', $preloadFileContent);
