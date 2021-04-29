@@ -77,8 +77,9 @@ return [
                 return $content;
             }
 
+            // @see https://regex101.com/r/gLefQk/1
             return Strings::replace(
-                $content, '#\(\'rector/rector\'\)#',
+                $content, '#\(\'rector\/rector\'\)#',
                 "('rector/rector-prefixed')"
             );
         },
