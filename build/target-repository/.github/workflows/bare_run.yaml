@@ -24,4 +24,6 @@ jobs:
                     php-version: ${{ matrix.php_version }}
                     coverage: none
 
+            -   run: php bin/rector --version --ansi
+
             -   run: php bin/rector list --ansi
