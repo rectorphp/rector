@@ -85,7 +85,7 @@
         "symplify/rule-doc-generator": "^9.3"
     },
     "replace": {
-        "rector/rector-prefixed": "self.version"
+        "rector/rector": "self.version"
     },
     "autoload": {
         "psr-4": {
