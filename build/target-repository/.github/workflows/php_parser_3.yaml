@@ -17,6 +17,9 @@ jobs:
                     php-version: 7.1
                     coverage: none
 
-            -   run: composer require nikic/php-parser:^3.1
-            -   run: composer require rector/rector-prefixed:dev-main
-            -   run: vendor/bin/rector list
+            # wait for deploy to packagist
+            -   run: sleep 70
+
+            -   run: composer require nikic/php-parser:^3.1 --ansi
+            -   run: composer require rector/rector-prefixed:dev-main --dev --ansi
+            -   run: vendor/bin/rector list --ansi
