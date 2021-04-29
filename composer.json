@@ -32,7 +32,7 @@
         "composer/xdebug-handler": "^1.4|^2.0",
         "danielstjules/stringy": "^3.1",
         "doctrine/inflector": "^2.0",
-        "jean85/pretty-package-versions": "^1.5.1|^2.0.1",
+        "jean85/pretty-package-versions": "^1.6",
         "nette/caching": "^3.1",
         "nette/robot-loader": "^3.4",
         "nette/utils": "^3.2",
