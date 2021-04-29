@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -57,6 +58,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $params = $node->getParams();
+
+        foreach ($params as $param) {
+            /** @var string $paramName */
+            $paramName = $this->getName($param->var);
+            $paramType = $phpDocInfo->getParamType($paramName);
+
+            if (! $paramType instanceof UnionType) {
+                continue;
+            }
+        }
+
         return $node;
     }
 }
