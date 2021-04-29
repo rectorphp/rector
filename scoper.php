@@ -58,18 +58,30 @@ return [
 
         // fixes https://github.com/rectorphp/rector-prefixed/runs/2103759172
         // and https://github.com/rectorphp/rector-prefixed/blob/0cc433e746b645df5f905fa038573c3a1a9634f0/vendor/jean85/pretty-package-versions/src/PrettyVersions.php#L6
-//        function (string $filePath, string $prefix, string $content): string {
-//            if (! Strings::endsWith($filePath, 'vendor/jean85/pretty-package-versions/src/PrettyVersions.php')) {
-//                return $content;
-//            }
-//
-//            // see https://regex101.com/r/v8zRMm/1
-//            return Strings::replace(
-//                $content, '
-//                #' . $prefix . '\\\\Composer\\\\InstalledVersions#',
-//                'Composer\InstalledVersions'
-//            );
-//        },
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::endsWith($filePath, 'vendor/jean85/pretty-package-versions/src/PrettyVersions.php')) {
+                return $content;
+            }
+
+            // see https://regex101.com/r/v8zRMm/1
+            return Strings::replace(
+                $content, '
+                #' . $prefix . '\\\\Composer\\\\InstalledVersions#',
+                'Composer\InstalledVersions'
+            );
+        },
+
+        // get version for prefixed version
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::endsWith($filePath, 'src/Configuration/Configuration.php')) {
+                return $content;
+            }
+
+            return Strings::replace(
+                $content, '#\(\'rector/rector\'\)#',
+                "('rector/rector-prefixed')"
+            );
+        },
 
         // un-prefix composer plugin
         function (string $filePath, string $prefix, string $content): string {
