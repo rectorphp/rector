@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\UnionType;
+use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 /**
  * @see \Rector\Tests\CodeQuality\Rector\ClassMethod\NarrowUnionTypeDocRector\NarrowUnionTypeDocRectorTest
@@ -106,7 +107,7 @@ CODE_SAMPLE
         $types = $unionType->getTypes();
         $resultType = '';
         foreach ($types as $type) {
-            if (! $type instanceof ObjectWithoutClassType) {
+            if ($type instanceof FullyQualifiedObjectType) {
                 $resultType .= $type->getClassName() . '|';
             }
         }
