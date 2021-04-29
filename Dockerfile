@@ -46,7 +46,7 @@ COPY . .
 RUN composer dump-autoload --classmap-authoritative --no-dev
 
 RUN rm -f "phpstan-for-rector.neon" \
-    && php -d memory_limit=-1 php-scoper.phar add-prefix bin config packages rules src templates vendor composer.json --output-dir /scoped --config scoper.php \
+    && php -d memory_limit=-1 php-scoper.phar add-prefix preload.php bin config packages rules src templates vendor composer.json --output-dir /scoped --config scoper.php \
     && composer dump-autoload --optimize --classmap-authoritative --no-dev --working-dir /scoped
 
 # Build runtime image
