@@ -137,8 +137,8 @@ final class NodesToAddCollector implements NodeCollectorInterface
             return spl_object_hash($parent);
         }
 
-        $foundNode = $this->betterNodeFinder->findParentType($node, Expression::class);
-        if (! $foundNode instanceof Expression) {
+        $foundNode = $this->betterNodeFinder->findParentTypes($node, [Expression::class, Stmt::class]);
+        if ($foundNode === null) {
             $foundNode = $node;
         }
 
