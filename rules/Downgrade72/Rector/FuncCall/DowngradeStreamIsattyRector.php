@@ -90,6 +90,7 @@ CODE_SAMPLE
         $assign = new Assign(new Variable('streamIsatty'), $function);
 
         $this->addNodeBeforeNode($assign, $node);
+
         return new FuncCall(new Variable('streamIsatty'), $node->args);
     }
 
