@@ -56,10 +56,8 @@ return [
             return $content;
         },
 
-        // fixes https://github.com/rectorphp/rector-prefixed/runs/2103759172
-        // and https://github.com/rectorphp/rector-prefixed/blob/0cc433e746b645df5f905fa038573c3a1a9634f0/vendor/jean85/pretty-package-versions/src/PrettyVersions.php#L6
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/jean85/pretty-package-versions/src/PrettyVersions.php')) {
+            if (! Strings::endsWith($filePath, 'vendor/composer/package-versions-deprecated/src/PackageVersions/Versions.php')) {
                 return $content;
             }
 
