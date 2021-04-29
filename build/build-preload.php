@@ -39,7 +39,7 @@ php;
             continue;
         }
 
-        $filePath = ltrim($fileInfo->getPathname(), '.');
+        $filePath = '/vendor/' . Strings::after($realPath, 'vendor/');
         $preloadFileContent .= "require_once __DIR__ . '" . $filePath . "';" . PHP_EOL;
     }
 
