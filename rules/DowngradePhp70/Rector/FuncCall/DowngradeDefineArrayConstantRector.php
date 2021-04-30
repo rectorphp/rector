@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DowngradePhp70\Rector\Declare_\DowngradeDefineArrayConstantRector\DowngradeDefineArrayConstantRectorTest
+ * @see \Rector\Tests\DowngradePhp70\Rector\FuncCall\DowngradeDefineArrayConstantRector\DowngradeDefineArrayConstantRectorTest
  */
 final class DowngradeDefineArrayConstantRector extends AbstractRector
 {
@@ -65,7 +65,16 @@ CODE_SAMPLE
             return null;
         }
 
-        return new Const_(new Name('const ' . $node->args[0]->value->value), $node->args[1]->value);
+        $arg0 = $node->args[0]->value;
+        if (! $arg0 instanceof String_) {
+            return null;
+        }
+
+        $arg0value = $arg0->value;
+        /** @var Array_ $arg1Value */
+        $arg1Value = $node->args[1]->value;
+
+        return new Const_('const ' . $arg0value, $arg1Value);
     }
 
     private function shouldSkip(FuncCall $funcCall): bool
