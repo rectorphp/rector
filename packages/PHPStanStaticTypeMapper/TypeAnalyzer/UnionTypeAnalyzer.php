@@ -112,6 +112,6 @@ final class UnionTypeAnalyzer
             return false;
         }
 
-        return true;
+        return count($types) === 4;
     }
 }
