@@ -27,7 +27,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ProcessCommand extends Command
@@ -61,11 +60,6 @@ final class ProcessCommand extends Command
      * @var MissingRectorRulesReporter
      */
     private $missingRectorRulesReporter;
-
-//    /**
-//     * @var ParameterProvider
-//     */
-//    private $parameterProvider;
 
     /**
      * @var ApplicationFileProcessor
