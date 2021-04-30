@@ -88,16 +88,11 @@ CODE_SAMPLE
             return true;
         }
 
-        $methodNode = $funcCall->getAttribute(AttributeKey::METHOD_NODE);
-        if ($methodNode instanceof ClassMethod) {
-            return true;
-        }
-
         $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parent instanceof Expression || $parent->expr !== $funcCall) {
             return true;
         }
 
-        return (bool) $this->betterNodeFinder->findParentType($funcCall, Function_::class);
+        return (bool) $this->betterNodeFinder->findParentTypes($funcCall, [ClassMethod::class, Function_::class]);
     }
 }
