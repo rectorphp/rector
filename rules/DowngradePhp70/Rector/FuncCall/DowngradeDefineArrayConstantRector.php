@@ -94,7 +94,7 @@ CODE_SAMPLE
         }
 
         $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Expression) {
+        if (! $parent instanceof Expression || $parent->expr !== $funcCall) {
             return true;
         }
 
