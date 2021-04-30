@@ -13,13 +13,12 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
-use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -44,14 +43,21 @@ final class UnionTypesRector extends AbstractRector
      */
     private $paramTagRemover;
 
+    /**
+     * @var UnionTypeAnalyzer
+     */
+    private $unionTypeAnalyzer;
+
     public function __construct(
         ReturnTagRemover $returnTagRemover,
         ParamTagRemover $paramTagRemover,
-        ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver
+        ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
+        UnionTypeAnalyzer $unionTypeAnalyzer
     ) {
         $this->returnTagRemover = $returnTagRemover;
         $this->paramTagRemover = $paramTagRemover;
         $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
+        $this->unionTypeAnalyzer = $unionTypeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -136,7 +142,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->hasObjectWithoutClassType($paramType)) {
+            if ($this->unionTypeAnalyzer->hasObjectWithoutClassType($paramType)) {
                 $this->changeObjectWithoutClassType($param, $paramType);
                 continue;
             }
@@ -152,39 +158,11 @@ CODE_SAMPLE
 
     private function changeObjectWithoutClassType(Param $param, UnionType $unionType): void
     {
-        if (! $this->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($unionType)) {
+        if (! $this->unionTypeAnalyzer->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($unionType)) {
             return;
         }
 
         $param->type = new Name('object');
-    }
-
-    private function hasObjectWithoutClassType(UnionType $unionType): bool
-    {
-        $types = $unionType->getTypes();
-        foreach ($types as $type) {
-            if ($type instanceof ObjectWithoutClassType) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType(UnionType $unionType): bool
-    {
-        $types = $unionType->getTypes();
-        foreach ($types as $type) {
-            if ($type instanceof ObjectWithoutClassType) {
-                continue;
-            }
-
-            if (! $type instanceof FullyQualifiedObjectType) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**
