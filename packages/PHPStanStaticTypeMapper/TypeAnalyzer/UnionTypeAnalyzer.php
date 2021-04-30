@@ -96,6 +96,11 @@ final class UnionTypeAnalyzer
     public function isScalar(UnionType $unionType): bool
     {
         $types = $unionType->getTypes();
+
+        if (count($types) !== 4) {
+            return false;
+        }
+
         foreach ($types as $type) {
             if ($type instanceof StringType) {
                 continue;
