@@ -70,12 +70,10 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var String_ $arg0 */
         $arg0 = $funcCall->args[0]->value;
-        if (! $arg0 instanceof String_) {
-            return null;
-        }
-
         $arg0Value = $arg0->value;
+
         /** @var Array_ $arg1Value */
         $arg1Value = $funcCall->args[1]->value;
 
@@ -89,6 +87,10 @@ CODE_SAMPLE
         }
 
         $args = $funcCall->args;
+        if (! $args[0]->value instanceof String_) {
+            return true;
+        }
+
         if (! $args[1]->value instanceof Array_) {
             return true;
         }
