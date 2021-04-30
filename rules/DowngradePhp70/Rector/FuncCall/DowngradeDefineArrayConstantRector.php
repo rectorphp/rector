@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Const_;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Const_ as StmtConst_;
+use PhpParser\Node\Stmt\Expression;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Tests\DowngradePhp70\Rector\Declare_\DowngradeDefineArrayConstantRector\DowngradeDefineArrayConstantRectorTest
@@ -59,7 +64,22 @@ CODE_SAMPLE
             return null;
         }
 
-        return $node;
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Expression) {
+            return null;
+        }
+
+        $parent = new StmtConst_(
+            [
+                new Const_(
+                    new Name(
+                        $node->args[0]->value->value
+                    ),
+                    $node->args[1]->value
+                )
+            ]
+        );
+        return $parent->consts[0];
     }
 
     private function shouldSkip(FuncCall $funcCall): bool
