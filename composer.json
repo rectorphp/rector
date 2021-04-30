@@ -32,6 +32,8 @@
         "composer/xdebug-handler": "^2.0",
         "danielstjules/stringy": "^3.1",
         "doctrine/inflector": "^2.0",
+        "ergebnis/json-printer": "^3.1",
+        "idiosyncratic/editorconfig": "dev-master",
         "jean85/pretty-package-versions": "^1.6",
         "nette/caching": "^3.1",
         "nette/robot-loader": "^3.4",

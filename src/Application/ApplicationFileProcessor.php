@@ -33,18 +33,25 @@ final class ApplicationFileProcessor
     private $fileDiffFileDecorator;
 
     /**
+     * @var FileFormatter
+     */
+    private $fileFormatter;
+
+    /**
      * @param FileProcessorInterface[] $fileProcessors
      */
     public function __construct(
         Configuration $configuration,
         SmartFileSystem $smartFileSystem,
         FileDiffFileDecorator $fileDiffFileDecorator,
+        FileFormatter $fileFormatter,
         array $fileProcessors = []
     ) {
         $this->fileProcessors = $fileProcessors;
         $this->smartFileSystem = $smartFileSystem;
         $this->configuration = $configuration;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
+        $this->fileFormatter = $fileFormatter;
     }
 
     /**
@@ -53,6 +60,8 @@ final class ApplicationFileProcessor
     public function run(array $files): void
     {
         $this->processFiles($files);
+
+        $this->fileFormatter->format($files);
 
         $this->fileDiffFileDecorator->decorate($files);
 

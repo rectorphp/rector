@@ -1,0 +1,3 @@
+[composer.json]
+indent_size = 1
+indent_style = tab
