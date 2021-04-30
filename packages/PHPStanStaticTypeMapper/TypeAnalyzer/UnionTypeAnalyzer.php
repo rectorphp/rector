@@ -14,6 +14,10 @@ use PHPStan\Type\UnionType;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Traversable;
+use PHPStan\Type\StringType;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\BooleanType;
 
 final class UnionTypeAnalyzer
 {
@@ -103,8 +107,7 @@ final class UnionTypeAnalyzer
     {
         $types = $unionType->getTypes();
         foreach ($types as $type) {
-            $typeName = $type->toString();
-            if (! in_array($typeName, self::SCALAR_TYPES, true)) {
+            if (! $type instanceof StringType && ! $type instanceof FloatType && ! $type instanceof IntegerType && ! $type instanceof BooleanType) {
                 return false;
             }
         }

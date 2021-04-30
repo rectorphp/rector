@@ -84,6 +84,11 @@ CODE_SAMPLE
                 continue;
             }
 
+            if ($this->unionTypeAnalyzer->isScalar($paramType)) {
+                $this->changeDocObjectScalar($key, $phpDocInfo);
+                continue;
+            }
+
             if ($this->unionTypeAnalyzer->hasObjectWithoutClassType($paramType)) {
                 $this->changeDocObjectWithoutClassType($paramType, $key, $phpDocInfo);
                 continue;
@@ -113,5 +118,13 @@ CODE_SAMPLE
         $resultType = rtrim($resultType, '|');
         $paramTagValueNodes = $phpDocInfo->getParamTagValueNodes();
         $paramTagValueNodes[$key]->type = new IdentifierTypeNode($resultType);
+    }
+
+    private function changeDocObjectScalar(
+        int $key,
+        PhpDocInfo $phpDocInfo
+    ): void {
+        $paramTagValueNodes = $phpDocInfo->getParamTagValueNodes();
+        $paramTagValueNodes[$key]->type = new IdentifierTypeNode('scalar');
     }
 }

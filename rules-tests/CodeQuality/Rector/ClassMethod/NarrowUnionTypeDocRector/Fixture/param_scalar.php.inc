@@ -4,7 +4,7 @@ namespace Rector\Tests\CodeQuality\Rector\ClassMethod\NarrowUnionTypeDocRector\F
 
 class ParamScalar {
     /**
-     * @param int|string|bool|float
+     * @param int|string|bool|float $value
      */
     public function getMessage($value)
     {
@@ -19,7 +19,7 @@ namespace Rector\Tests\CodeQuality\Rector\ClassMethod\NarrowUnionTypeDocRector\F
 
 class ParamScalar {
     /**
-     * @param scalar
+     * @param scalar $value
      */
     public function getMessage($value)
     {
