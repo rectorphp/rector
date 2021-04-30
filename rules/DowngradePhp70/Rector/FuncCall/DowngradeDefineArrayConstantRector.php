@@ -70,11 +70,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $arg0value = $arg0->value;
+        $arg0Value = $arg0->value;
         /** @var Array_ $arg1Value */
         $arg1Value = $node->args[1]->value;
 
-        return new Const_('const ' . $arg0value, $arg1Value);
+        return new Const_('const ' . $arg0Value, $arg1Value);
     }
 
     private function shouldSkip(FuncCall $funcCall): bool
