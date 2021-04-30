@@ -64,22 +64,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Expression) {
-            return null;
-        }
-
-        $parent = new StmtConst_(
-            [
-                new Const_(
-                    new Name(
-                        $node->args[0]->value->value
-                    ),
-                    $node->args[1]->value
-                )
-            ]
+        return new Const_(
+            new Name(
+                'const ' . $node->args[0]->value->value
+            ),
+            $node->args[1]->value
         );
-        return $parent->consts[0];
     }
 
     private function shouldSkip(FuncCall $funcCall): bool
