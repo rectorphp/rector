@@ -97,9 +97,19 @@ final class UnionTypeAnalyzer
     {
         $types = $unionType->getTypes();
         foreach ($types as $type) {
-            if (! $type instanceof StringType && ! $type instanceof FloatType && ! $type instanceof IntegerType && ! $type instanceof BooleanType) {
-                return false;
+            if ($type instanceof StringType) {
+                continue;
             }
+            if ($type instanceof FloatType) {
+                continue;
+            }
+            if ($type instanceof IntegerType) {
+                continue;
+            }
+            if ($type instanceof BooleanType) {
+                continue;
+            }
+            return false;
         }
 
         return true;
