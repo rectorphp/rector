@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -80,6 +81,11 @@ CODE_SAMPLE
 
         $methodNode = $funcCall->getAttribute(AttributeKey::METHOD_NODE);
         if ($methodNode instanceof ClassMethod) {
+            return true;
+        }
+
+        $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Expression) {
             return true;
         }
 
