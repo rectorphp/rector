@@ -17,6 +17,16 @@ use Traversable;
 
 final class UnionTypeAnalyzer
 {
+    /**
+     * @var string[]
+     */
+    private const SCALAR_TYPES = [
+        'string',
+        'int',
+        'bool',
+        'float',
+    ];
+
     public function analyseForNullableAndIterable(UnionType $unionType): ?UnionTypeAnalysis
     {
         $isNullableType = false;
@@ -82,6 +92,19 @@ final class UnionTypeAnalyzer
             }
 
             if (! $type instanceof FullyQualifiedObjectType) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function isScalar(UnionType $unionType): bool
+    {
+        $types = $unionType->getTypes();
+        foreach ($types as $type) {
+            $typeName = $type->toString();
+            if (! in_array($typeName, self::SCALAR_TYPES, true)) {
                 return false;
             }
         }
