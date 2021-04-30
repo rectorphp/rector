@@ -27,7 +27,7 @@ final class DowngradeDefineArrayConstantRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class];
+        return [Expression::class];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -57,24 +57,30 @@ CODE_SAMPLE
     }
 
     /**
-     * @param FuncCall $node
+     * @param Expression $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if (! $node->expr instanceof FuncCall) {
             return null;
         }
 
-        $arg0 = $node->args[0]->value;
+        $funcCall = $node->expr;
+
+        if ($this->shouldSkip($funcCall)) {
+            return null;
+        }
+
+        $arg0 = $funcCall->args[0]->value;
         if (! $arg0 instanceof String_) {
             return null;
         }
 
         $arg0Value = $arg0->value;
         /** @var Array_ $arg1Value */
-        $arg1Value = $node->args[1]->value;
+        $arg1Value = $funcCall->args[1]->value;
 
-        return new Const_('const ' . $arg0Value, $arg1Value);
+        return new Node\Stmt\Const_([new Const_($arg0Value, $arg1Value)]);
     }
 
     private function shouldSkip(FuncCall $funcCall): bool
