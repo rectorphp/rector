@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\DowngradePhp70\Rector\FuncCall\DowngradeDefineArrayConstantRector\Fixture;
+namespace Rector\Tests\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector\Fixture;
 
 class SkipNotDefine
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp70\Rector\FuncCall;
+namespace Rector\DowngradePhp70\Rector\Expression;
 
 use PhpParser\Node;
 use PhpParser\Node\Const_;
@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -91,14 +90,6 @@ CODE_SAMPLE
 
         $args = $funcCall->args;
         if (! $args[1]->value instanceof Array_) {
-            return true;
-        }
-
-        $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Expression) {
-            return true;
-        }
-        if ($parent->expr !== $funcCall) {
             return true;
         }
 

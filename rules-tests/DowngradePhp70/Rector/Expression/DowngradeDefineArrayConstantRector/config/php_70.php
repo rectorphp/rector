@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\DowngradePhp70\Rector\FuncCall\DowngradeDefineArrayConstantRector;
+use Rector\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
