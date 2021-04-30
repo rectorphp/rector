@@ -95,7 +95,11 @@ CODE_SAMPLE
             }
         }
 
-        return $node;
+        if ($phpDocInfo->hasChanged()) {
+            return $node;
+        }
+
+        return null;
     }
 
     private function changeDocObjectWithoutClassType(
