@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DowngradePhp70\Rector\FuncCall\DowngradeDefineArrayConstantRector\DowngradeDefineArrayConstantRectorTest
+ * @see \Rector\Tests\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector\DowngradeDefineArrayConstantRectorTest
  */
 final class DowngradeDefineArrayConstantRector extends AbstractRector
 {
