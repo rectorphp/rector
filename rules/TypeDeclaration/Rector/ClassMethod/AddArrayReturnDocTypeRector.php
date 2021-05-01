@@ -20,6 +20,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer;
@@ -157,10 +158,6 @@ CODE_SAMPLE
             $node->returnType
         );
 
-        if ($this->detailedTypeAnalyzer->isTooDetailed($inferredReturnType)) {
-            return null;
-        }
-
         $currentReturnType = $phpDocInfo->getReturnType();
 
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType(
@@ -170,21 +167,19 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->shouldSkipType($inferredReturnType, $node, $phpDocInfo)) {
+        if ($this->shouldSkipType($inferredReturnType, $currentReturnType, $node, $phpDocInfo)) {
             return null;
         }
 
-        if ($inferredReturnType instanceof GenericObjectType && $currentReturnType instanceof MixedType) {
-            $types = $inferredReturnType->getTypes();
-            if ($types[0] instanceof MixedType && $types[1] instanceof ArrayType) {
-                return null;
-            }
+        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferredReturnType);
+
+        if ($phpDocInfo->hasChanged()) {
+            $node->setAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, true);
+            $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
+            return $node;
         }
 
-        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferredReturnType);
-        $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
-
-        return $node;
+        return null;
     }
 
     private function shouldSkip(ClassMethod $classMethod, PhpDocInfo $phpDocInfo): bool
@@ -214,8 +209,12 @@ CODE_SAMPLE
      * @todo merge to
      * @see \Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker
      */
-    private function shouldSkipType(Type $newType, ClassMethod $classMethod, PhpDocInfo $phpDocInfo): bool
-    {
+    private function shouldSkipType(
+        Type $newType,
+        Type $currentType,
+        ClassMethod $classMethod,
+        PhpDocInfo $phpDocInfo
+    ): bool {
         if ($newType instanceof ArrayType && $this->shouldSkipArrayType($newType, $classMethod, $phpDocInfo)) {
             return true;
         }
@@ -230,6 +229,10 @@ CODE_SAMPLE
         }
 
         if ($this->advancedArrayAnalyzer->isMoreSpecificArrayTypeOverride($newType, $classMethod, $phpDocInfo)) {
+            return true;
+        }
+
+        if ($this->isGenericTypeToMixedTypeOverride($newType, $currentType)) {
             return true;
         }
 
@@ -290,5 +293,17 @@ CODE_SAMPLE
         }
 
         return $this->advancedArrayAnalyzer->isMixedOfSpecificOverride($arrayType, $phpDocInfo);
+    }
+
+    private function isGenericTypeToMixedTypeOverride(Type $newType, Type $currentType): bool
+    {
+        if ($newType instanceof GenericObjectType && $currentType instanceof MixedType) {
+            $types = $newType->getTypes();
+            if ($types[0] instanceof MixedType && $types[1] instanceof ArrayType) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
