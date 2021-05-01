@@ -109,20 +109,22 @@ final class SilentVoidResolver
 
     private function isSwitchWithAlwaysReturn(Switch_ $switch): bool
     {
-        $casesWithReturn = 0;
-        foreach ($switch->cases as $case) {
-            foreach ($case->stmts as $caseStmt) {
-                if (! $caseStmt instanceof Return_) {
-                    continue;
-                }
+        $hasDefault = false;
 
-                ++$casesWithReturn;
-                break;
+        foreach ($switch->cases as $case) {
+            if ($case->cond === null) {
+                $hasDefault = true;
             }
         }
 
+        if (! $hasDefault) {
+            return false;
+        }
+
+        $casesWithReturnCount = $this->resolveReturnCount($switch);
+
         // has same amount of returns as switches
-        return count($switch->cases) === $casesWithReturn;
+        return count($switch->cases) === $casesWithReturnCount;
     }
 
     private function isTryCatchAlwaysReturn(TryCatch $tryCatch): bool
@@ -145,5 +147,23 @@ final class SilentVoidResolver
     private function hasNeverType(FunctionLike $functionLike): bool
     {
         return $this->betterNodeFinder->hasInstancesOf($functionLike, [Throw_::class]);
+    }
+
+    private function resolveReturnCount(Switch_ $switch): int
+    {
+        $casesWithReturnCount = 0;
+
+        foreach ($switch->cases as $case) {
+            foreach ($case->stmts as $caseStmt) {
+                if (! $caseStmt instanceof Return_) {
+                    continue;
+                }
+
+                ++$casesWithReturnCount;
+                break;
+            }
+        }
+
+        return $casesWithReturnCount;
     }
 }
