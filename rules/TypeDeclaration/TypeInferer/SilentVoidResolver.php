@@ -117,7 +117,7 @@ final class SilentVoidResolver
             }
         }
 
-        if ($hasDefault === false) {
+        if (! $hasDefault) {
             return false;
         }
 

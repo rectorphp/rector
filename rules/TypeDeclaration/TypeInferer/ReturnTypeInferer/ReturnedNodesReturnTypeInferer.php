@@ -176,7 +176,7 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
         }
 
         $classMethod = $this->nodeRepository->findClassMethodByMethodCall($return->expr);
-        if ($classMethod === null) {
+        if (! $classMethod instanceof ClassMethod) {
             return new MixedType();
         }
 
