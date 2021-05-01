@@ -59,8 +59,6 @@ final class ReturnTypeInferer
                 continue;
             }
 
-            dump(get_class($returnTypeInferer));
-
             $originalType = $returnTypeInferer->inferFunctionLike($functionLike);
             if ($originalType instanceof MixedType) {
                 continue;
