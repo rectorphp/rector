@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
@@ -100,10 +101,7 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
 
         foreach ($localReturnNodes as $localReturnNode) {
             $returnedExprType = $this->nodeTypeResolver->getStaticType($localReturnNode);
-
-            if ($returnedExprType instanceof MixedType) {
-                $returnedExprType = $this->inferFromReturnedMethodCall($localReturnNode);
-            }
+            $returnedExprType = $this->correctWithNestedType($returnedExprType, $localReturnNode, $functionLike);
 
             $types[] = $this->splArrayFixedTypeNarrower->narrow($returnedExprType);
         }
@@ -169,7 +167,7 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
         return $classLike->isAbstract();
     }
 
-    private function inferFromReturnedMethodCall(Return_ $return): Type
+    private function inferFromReturnedMethodCall(Return_ $return, FunctionLike $originalFunctionLike): Type
     {
         if (! $return->expr instanceof MethodCall) {
             return new MixedType();
@@ -180,6 +178,37 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
             return new MixedType();
         }
 
+        // avoid infinite looping over self call
+        if ($classMethod === $originalFunctionLike) {
+            return new MixedType();
+        }
+
         return $this->inferFunctionLike($classMethod);
+    }
+
+    private function isArrayTypeMixed(Type $type): bool
+    {
+        if (! $type instanceof ArrayType) {
+            return false;
+        }
+
+        if (! $type->getItemType() instanceof MixedType) {
+            return false;
+        }
+
+        return $type->getKeyType() instanceof MixedType;
+    }
+
+    private function correctWithNestedType(Type $resolvedType, Return_ $return, FunctionLike $functionLike): Type
+    {
+        if ($resolvedType instanceof MixedType || $this->isArrayTypeMixed($resolvedType)) {
+            $correctedType = $this->inferFromReturnedMethodCall($return, $functionLike);
+            // override only if has some extra value
+            if (! $correctedType instanceof MixedType) {
+                return $correctedType;
+            }
+        }
+
+        return $resolvedType;
     }
 }
