@@ -31,7 +31,7 @@ final class GenericClassStringTypeNormalizer
             }
 
             // skip string that look like classe
-            if (in_array($type->getValue(), ['error'], true)) {
+            if ($type->getValue() === 'error') {
                 return $callback($type);
             }
 
