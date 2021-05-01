@@ -30,6 +30,11 @@ final class GenericClassStringTypeNormalizer
                 return $callback($type);
             }
 
+            // skip string that look like classe
+            if (in_array($type->getValue(), ['error'], true)) {
+                return $callback($type);
+            }
+
             if (! $this->reflectionProvider->hasClass($type->getValue())) {
                 return $callback($type);
             }
