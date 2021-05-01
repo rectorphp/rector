@@ -31,7 +31,11 @@ final class GenericClassStringTypeNormalizer
             }
 
             // skip string that look like classe
+<<<<<<< HEAD
             if ($type->getValue() === 'error') {
+=======
+            if (in_array($type->getValue(), ['error'], true)) {
+>>>>>>> ca2d830a6 (exclude error string from class names)
                 return $callback($type);
             }
 
