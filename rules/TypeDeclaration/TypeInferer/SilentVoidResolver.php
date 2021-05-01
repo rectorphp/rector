@@ -114,6 +114,7 @@ final class SilentVoidResolver
         foreach ($switch->cases as $case) {
             if ($case->cond === null) {
                 $hasDefault = true;
+                break;
             }
         }
 
