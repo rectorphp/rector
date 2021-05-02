@@ -1,4 +1,4 @@
-# 493 Rules Overview
+# 495 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [Carbon](#carbon) (2)
 
-- [CodeQuality](#codequality) (66)
+- [CodeQuality](#codequality) (67)
 
 - [CodeQualityStrict](#codequalitystrict) (4)
 
@@ -22,13 +22,13 @@
 
 - [Defluent](#defluent) (9)
 
-- [DependencyInjection](#dependencyinjection) (5)
+- [DependencyInjection](#dependencyinjection) (4)
 
 - [Downgrade72](#downgrade72) (1)
 
 - [Downgrade73](#downgrade73) (1)
 
-- [DowngradePhp70](#downgradephp70) (4)
+- [DowngradePhp70](#downgradephp70) (6)
 
 - [DowngradePhp71](#downgradephp71) (9)
 
@@ -1132,6 +1132,26 @@ Change OR, AND to ||, && with more common understanding
 -if ($f = false or true) {
 +if (($f = false) || true) {
      return $f;
+ }
+```
+
+<br>
+
+### NarrowUnionTypeDocRector
+
+Changes docblock by narrowing type
+
+- class: [`Rector\CodeQuality\Rector\ClassMethod\NarrowUnionTypeDocRector`](../rules/CodeQuality/Rector/ClassMethod/NarrowUnionTypeDocRector.php)
+
+```diff
+ class SomeClass {
+     /**
+-     * @param object|DateTime $message
++     * @param DateTime $message
+      */
+     public function getMessage(object $message)
+     {
+     }
  }
 ```
 
@@ -4103,28 +4123,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
-### AnnotatedPropertyInjectToConstructorInjectionRector
-
-Turns properties with `@inject` to private properties and constructor injection
-
-- class: [`Rector\DependencyInjection\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector`](../rules/DependencyInjection/Rector/Property/AnnotatedPropertyInjectToConstructorInjectionRector.php)
-
-```diff
- /**
-  * @var SomeService
-- * @inject
-  */
--public $someService;
-+private $someService;
-+
-+public function __construct(SomeService $someService)
-+{
-+    $this->someService = $someService;
-+}
-```
-
-<br>
-
 ### MultiParentingToAbstractDependencyRector
 
 Move dependency passed to all children to parent as `@inject/@required` dependency
@@ -4294,6 +4292,24 @@ Remove anonymous class
 
 <br>
 
+### DowngradeDefineArrayConstantRector
+
+Change array contant definition via define to const
+
+- class: [`Rector\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector`](../rules/DowngradePhp70/Rector/Expression/DowngradeDefineArrayConstantRector.php)
+
+```diff
+-define('ANIMALS', [
++const ANIMALS = [
+     'dog',
+     'cat',
+     'bird'
+-]);
++];
+```
+
+<br>
+
 ### DowngradeNullCoalesceRector
 
 Change null coalesce to isset ternary check
@@ -4303,6 +4319,25 @@ Change null coalesce to isset ternary check
 ```diff
 -$username = $_GET['user'] ?? 'nobody';
 +$username = isset($_GET['user']) ? $_GET['user'] : 'nobody';
+```
+
+<br>
+
+### DowngradeSpaceshipRector
+
+Change spaceship with check equal, and ternary to result 0, -1, 1
+
+- class: [`Rector\DowngradePhp70\Rector\Spaceship\DowngradeSpaceshipRector`](../rules/DowngradePhp70/Rector/Spaceship/DowngradeSpaceshipRector.php)
+
+```diff
+-return $a <=> $b;
++$battleShipcompare = function ($left, $right) {
++    if ($left === $right) {
++        return 0;
++    }
++    return $left < $right ? -1 : 1;
++};
++return $battleShipcompare($a, $b);
 ```
 
 <br>
@@ -12175,7 +12210,7 @@ Change `@param` types to type declarations if not a BC-break
 
 Add param type from `$param` set to typed property
 
-- class: [`Rector\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector`](../rules/TypeDeclaration/Rector/ClassMethod/ParamTypeFromStrictTypedPropertyRector.php)
+- class: [`Rector\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector`](../rules/TypeDeclaration/Rector/Param/ParamTypeFromStrictTypedPropertyRector.php)
 
 ```diff
  final class SomeClass
