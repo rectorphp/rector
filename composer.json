@@ -63,8 +63,8 @@
         "symplify/skipper": "^9.3",
         "symplify/smart-file-system": "^9.3",
         "symplify/symfony-php-config": "^9.3",
-        "webmozart/assert": "^1.10",
-        "tracy/tracy": "^2.8"
+        "tracy/tracy": "^2.8",
+        "webmozart/assert": "^1.10"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.18.6",
