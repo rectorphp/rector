@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Scalar;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
@@ -63,19 +65,22 @@ CODE_SAMPLE
         /** @var Array_ $options */
         $options = $node->args[0]->value;
 
-        foreach ($options->items as $key => $option) {
+        foreach ($options->items as $option) {
+            if (! $option instanceof ArrayItem) {
+                return null;
+            }
+
             if (! $option->key instanceof String_) {
                 return null;
             }
 
-            if (! $option->value instanceof Scalar) {
+            if (! $this->valueResolver->isTrueOrFalse($option->value) && ! $option->value instanceof String_) {
                 return null;
             }
 
-            $iniSet = $this->nodeFactory->createFuncCall('ini_set', [
-                'session.' . $option->key->value,
-                $option->value->value,
-            ]);
+            $sessionKey = new String_('session.' . $option->key->value);
+            $funcName = new Name('ini_set');
+            $iniSet = new FuncCall($funcName, [new Arg($sessionKey), new Arg($option->value)]);
 
             $this->addNodeBeforeNode(new Expression($iniSet), $currentStatement);
         }
