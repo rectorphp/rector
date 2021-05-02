@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\Php81\Rector\Class_;
 
-use MyCLabs\Enum\Enum;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\Node\Stmt\Enum_;
-use PhpParser\Node\Stmt\EnumCase;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Php81\NodeFactory\EnumFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -23,6 +24,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MyCLabsClassToEnumRector extends AbstractRector
 {
+    /**
+     * @var EnumFactory
+     */
+    private $enumFactory;
+
+    public function __construct(EnumFactory $enumFactory)
+    {
+        $this->enumFactory = $enumFactory;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Refactor MyCLabs enum class to native Enum', [
@@ -55,37 +66,37 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Class_::class];
+        return [Class_::class, StaticCall::class];
     }
 
     /**
-     * @param Class_ $node
+     * @param Class_|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        // change the node
-        if (! $this->isObjectType($node, new ObjectType('MyCLabs\Enum\Enum'))) {
-            return null;
+        if ($node instanceof Class_) {
+            // change the node
+            if (! $this->isObjectType($node, new ObjectType('MyCLabs\Enum\Enum'))) {
+                return null;
+            }
+
+            return $this->enumFactory->createFromClass($node);
         }
 
-        $shortClassName = $this->nodeNameResolver->getShortName($node);
-        $enum = new Enum_($shortClassName);
+        if ($this->isObjectType($node->class, new ObjectType('MyCLabs\Enum\Enum'))) {
+            $className = $this->getName($node->class);
+            if ($className === null) {
+                return null;
+            }
 
-        // constant to cases
-        foreach ($node->getConstants() as $classConst) {
-            $enum->stmts[] = $this->createEnumCase($classConst);
+            $methodName = $this->getName($node->name);
+            if ($methodName === null) {
+                return null;
+            }
+
+            return new ClassConstFetch(new FullyQualified($className), new Identifier($methodName));
         }
 
-        return $enum;
-    }
-
-    private function createEnumCase(ClassConst $classConst): EnumCase
-    {
-        $constConst = $classConst->consts[0];
-        $enumCase = new EnumCase($constConst->name, $constConst->value);
-
-        $this->mirrorComments($enumCase, $classConst);
-
-        return $enumCase;
+        return null;
     }
 }
