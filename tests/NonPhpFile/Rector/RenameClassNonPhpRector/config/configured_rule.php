@@ -1,6 +1,8 @@
 <?php
 
-use Rector\Renaming\Rector\Name\RenameClassRector;
+declare(strict_types=1);
+
+use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass;
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -8,14 +10,15 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(RenameClassRector::class)
+    $services->set(RenameClassNonPhpRector::class)
         ->call('configure', [[
-            RenameClassRector::OLD_TO_NEW_CLASSES => [
+            RenameClassNonPhpRector::RENAME_CLASSES => [
+                'Session' => 'Illuminate\Support\Facades\Session',
                 OldClass::class => NewClass::class,
                 // Laravel
-                'Session' => 'Illuminate\Support\Facades\Session',
                 'Form' => 'Collective\Html\FormFacade',
                 'Html' => 'Collective\Html\HtmlFacade',
             ],
-        ]]);
+        ],
+        ]);
 };

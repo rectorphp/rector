@@ -6,11 +6,9 @@ use PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer;
-use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
 use Symplify\CodingStandard\Fixer\Commenting\ParamReturnAndVarTagMalformsFixer;
 use Symplify\CodingStandard\Fixer\Commenting\RemoveCommentedCodeFixer;
 use Symplify\CodingStandard\Fixer\LineLength\DocBlockLineLengthFixer;
@@ -77,10 +75,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
 
         UnaryOperatorSpacesFixer::class,
-
-        // buggy with specific markdown snippet file in docs/rules_overview.md
-        ArrayListItemNewlineFixer::class,
-        BlankLineAfterOpeningTagFixer::class,
 
         // buggy - @todo fix on Symplify master
         RemoveCommentedCodeFixer::class,
