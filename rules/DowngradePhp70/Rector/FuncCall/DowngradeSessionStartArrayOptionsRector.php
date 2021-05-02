@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp70\Rector\Expression;
+namespace Rector\DowngradePhp70\Rector\FuncCall;
 
 use PhpParser\Node;
 use Rector\Core\Rector\AbstractRector;
@@ -10,7 +10,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DowngradePhp70\Rector\Expression\DowngradeSessionStartArrayOptionsRector\DowngradeSessionStartArrayOptionsRectorTest
+ * @see \Rector\Tests\DowngradePhp70\Rector\FuncCall\DowngradeSessionStartArrayOptionsRector\DowngradeSessionStartArrayOptionsRectorTest
  */
 final class DowngradeSessionStartArrayOptionsRector extends AbstractRector
 {
@@ -19,7 +19,7 @@ final class DowngradeSessionStartArrayOptionsRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [Expression::class];
+        return [FuncCall::class];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -44,7 +44,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Expression $node
+     * @param FuncCall $node
      */
     public function refactor(Node $node): ?Node
     {
