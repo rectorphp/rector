@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\NonPhpFile;
 
+use Nette\Utils\Strings;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
 use Rector\Core\ValueObject\Application\File;
@@ -40,7 +41,15 @@ final class NonPhpFileProcessor implements FileProcessorInterface
     public function supports(File $file): bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
-        return $smartFileInfo->hasSuffixes($this->getSupportedFileExtensions());
+
+        // bug in path extension
+        foreach ($this->getSupportedFileExtensions() as $supportedFileExtension) {
+            if (Strings::endsWith($smartFileInfo->getPathname(), '.' . $supportedFileExtension)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getSupportedFileExtensions(): array
