@@ -69,6 +69,18 @@ return [
             );
         },
 
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::contains($filePath, 'vendor/composer/composer/')) {
+                return $content;
+            }
+
+            return Strings::replace(
+                $content, '
+                #' . $prefix . '\\\\Composer#',
+                'Composer'
+            );
+        },
+
         // get version for prefixed version
         function (string $filePath, string $prefix, string $content): string {
             if (! Strings::endsWith($filePath, 'src/Configuration/Configuration.php')) {

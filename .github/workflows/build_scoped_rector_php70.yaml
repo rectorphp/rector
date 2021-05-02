@@ -39,15 +39,13 @@ jobs:
 
             # 1. (a) copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
             -  run: rsync --exclude rector-build-php70 -av * rector-build-php70 --quiet
+            -  run: rm -rf rector-build-php70/packages-tests rector-build-php70/rules-tests rector-build-php70/tests
 
             # 2. downgrade rector
             -   run: sh build/downgrade-rector-php70.sh rector-build-php70
 
             # 3. prefix classes
             -   run: sh build/build-rector-scoped.sh rector-build-php70 rector-prefixed-downgraded-php70
-
-            # 1. (b) remove tests directory after run scoped
-            -  run: rm -rf rector-build-php70/packages-tests rector-build-php70/rules-tests rector-build-php70/tests
 
             # 4. lint the code for PHP 7.0 - this must happen here, as setup-php allows only one PHP version switch: https://github.com/shivammathur/setup-php/issues/434
             -
