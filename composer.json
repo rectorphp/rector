@@ -155,11 +155,5 @@
     "config": {
         "sort-packages": true,
         "platform-check": false
-    },
-    "repositories" : [
-        {
-            "type" : "vcs",
-            "url" : "https://github.com/phpstan/phpstan-src"
-        }
-    ]
+    }
 }
