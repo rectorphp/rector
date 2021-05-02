@@ -69,6 +69,18 @@ return [
             );
         },
 
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::contains($content, $prefix . '\Composer\Plugin')) {
+                return $content;
+            }
+
+            return Strings::replace(
+                $content, '
+                #' . $prefix . '\\\\Composer\\\\Plugin#',
+                'Composer\Plugin'
+            );
+        },
+
         // get version for prefixed version
         function (string $filePath, string $prefix, string $content): string {
             if (! Strings::endsWith($filePath, 'src/Configuration/Configuration.php')) {
