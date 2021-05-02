@@ -35,10 +35,6 @@ $timestamp = $dateTime->format('Ymd');
 return [
     ScoperOption::PREFIX => 'RectorPrefix' . $timestamp,
     ScoperOption::WHITELIST => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),
-//    ScoperOption::FILES_WHITELIST => [
-//        // composer versions
-//        '../../vendor/composer/InstalledVersions.php'
-//    ],
     ScoperOption::PATCHERS => [
         // [BEWARE] $filePath is absolute!
 
@@ -66,6 +62,15 @@ return [
                 $content, '
                 #' . $prefix . '\\\\Composer\\\\InstalledVersions#',
                 'Composer\InstalledVersions'
+            );
+        },
+
+        // unprefixed SmartFileInfo
+        function (string $filePath, string $prefix, string $content): string {
+            return Strings::replace(
+                $content, '
+                #' . $prefix . '\\\\Symplify\\\\SmartFileSystem\\\\SmartFileInfo#',
+                'Symplify\SmartFileSystem\SmartFileInfo'
             );
         },
 
