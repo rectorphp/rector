@@ -37,6 +37,7 @@ jobs:
                     composer install --no-dev --ansi
                     composer remove phpstan/phpstan
                     composer clear-cache
+                    composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
                     composer require phpstan/phpstan-src
 
             # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
