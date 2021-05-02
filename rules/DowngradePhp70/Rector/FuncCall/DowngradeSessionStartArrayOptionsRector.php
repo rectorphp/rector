@@ -7,7 +7,11 @@ namespace Rector\DowngradePhp70\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -54,12 +58,35 @@ CODE_SAMPLE
             return null;
         }
 
+        $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+
+        /** @var Array_ $options */
+        $options = $node->args[0]->value;
+
+        foreach ($options->items as $key => $option) {
+            if (! $option->key instanceof String_) {
+                return null;
+            }
+
+            if (! $option->value instanceof Scalar) {
+                return null;
+            }
+
+            $iniSet = $this->nodeFactory->createFuncCall('ini_set', [
+                'session.' . $option->key->value,
+                $option->value->value,
+            ]);
+
+            $this->addNodeBeforeNode(new Expression($iniSet), $currentStatement);
+        }
+
+        unset($node->args[0]);
         return $node;
     }
 
     private function shouldSkip(FuncCall $funcCall): bool
     {
-        if (! $this->isName($funcCall, 'session_array')) {
+        if (! $this->isName($funcCall, 'session_start')) {
             return true;
         }
 
