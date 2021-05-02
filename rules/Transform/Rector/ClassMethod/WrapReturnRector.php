@@ -94,6 +94,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param array<string, WrapReturn[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $typeMethodWraps = $configuration[self::TYPE_METHOD_WRAPS] ?? [];

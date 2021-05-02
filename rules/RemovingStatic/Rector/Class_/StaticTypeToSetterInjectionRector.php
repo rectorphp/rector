@@ -36,7 +36,7 @@ final class StaticTypeToSetterInjectionRector extends AbstractRector implements 
     public const STATIC_TYPES = 'static_types';
 
     /**
-     * @var string[]
+     * @var array<class-string|int, class-string>
      */
     private $staticTypes = [];
 
@@ -134,6 +134,9 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, array<class-string|int, class-string>> $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->staticTypes = $configuration[self::STATIC_TYPES] ?? [];

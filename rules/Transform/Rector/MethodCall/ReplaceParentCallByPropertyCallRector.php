@@ -91,6 +91,9 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, ReplaceParentCallByPropertyCall[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->parentCallToProperties = $configuration[self::PARENT_CALLS_TO_PROPERTIES] ?? [];

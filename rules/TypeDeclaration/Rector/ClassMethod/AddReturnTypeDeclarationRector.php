@@ -104,6 +104,9 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, AddReturnTypeDeclaration[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $methodReturnTypes = $configuration[self::METHOD_RETURN_TYPES] ?? [];

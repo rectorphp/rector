@@ -27,7 +27,7 @@ final class ReservedObjectRector extends AbstractRector implements ConfigurableR
     public const RESERVED_KEYWORDS_TO_REPLACEMENTS = 'reserved_keywords_to_replacements';
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private $reservedKeywordsToReplacements = [];
 
@@ -78,6 +78,9 @@ CODE_SAMPLE
         return $this->processName($node);
     }
 
+    /**
+     * @param array<string, array<string, string>> $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->reservedKeywordsToReplacements = $configuration[self::RESERVED_KEYWORDS_TO_REPLACEMENTS] ?? [];

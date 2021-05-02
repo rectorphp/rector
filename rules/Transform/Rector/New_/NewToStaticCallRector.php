@@ -87,6 +87,9 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, NewToStaticCall[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $typeToStaticCalls = $configuration[self::TYPE_TO_STATIC_CALLS] ?? [];

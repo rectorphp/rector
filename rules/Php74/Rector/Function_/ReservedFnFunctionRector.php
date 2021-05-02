@@ -104,6 +104,9 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, array<string, string>> $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->reservedNamesToNewOnes = $configuration[self::RESERVED_NAMES_TO_NEW_ONES] ?? [];

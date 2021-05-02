@@ -99,6 +99,9 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, string[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->traitsToRemove = $configuration[self::TRAITS_TO_REMOVE] ?? [];

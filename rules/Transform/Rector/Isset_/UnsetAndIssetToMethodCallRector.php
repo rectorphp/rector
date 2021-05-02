@@ -88,6 +88,9 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, UnsetAndIssetToMethodCall[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $issetUnsetToMethodCalls = $configuration[self::ISSET_UNSET_TO_METHOD_CALL] ?? [];

@@ -84,6 +84,9 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, MethodCallToAnotherMethodCallWithArguments[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $methodCallRenamesWithAddedArguments = $configuration[self::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS] ?? [];

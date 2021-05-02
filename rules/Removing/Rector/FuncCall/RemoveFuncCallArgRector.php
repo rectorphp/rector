@@ -80,6 +80,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param array<string, RemoveFuncCallArg[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $removedFunctionArguments = $configuration[self::REMOVED_FUNCTION_ARGUMENTS] ?? [];

@@ -117,6 +117,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param array<string, RenameAnnotation[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $renamedAnnotationsInTypes = $configuration[self::RENAMED_ANNOTATIONS_IN_TYPES] ?? [];
