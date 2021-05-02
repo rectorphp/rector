@@ -5,17 +5,37 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\Application\ApplicationFileProcessor\Source;
 
 use Rector\Core\Contract\Processor\FileProcessorInterface;
+use Rector\Core\Tests\Application\ApplicationFileProcessor\Source\Contract\TextRectorInterface;
 use Rector\Core\ValueObject\Application\File;
 
 final class TextFileProcessor implements FileProcessorInterface
 {
+    /**
+     * @var TextRectorInterface[]
+     */
+    private $textRectors;
+
+    /**
+     * @param TextRectorInterface[] $textRectors
+     */
+    public function __construct(array $textRectors)
+    {
+        $this->textRectors = $textRectors;
+    }
+
     /**
      * @param File[] $files
      */
     public function process(array $files): void
     {
         foreach ($files as $file) {
-            $this->processFile($file);
+            $fileContent = $file->getFileContent();
+
+            foreach ($this->textRectors as $textRector) {
+                $fileContent = $textRector->refactorContent($fileContent);
+            }
+
+            $file->changeFileContent($fileContent);
         }
     }
 
@@ -31,13 +51,5 @@ final class TextFileProcessor implements FileProcessorInterface
     public function getSupportedFileExtensions(): array
     {
         return ['txt'];
-    }
-
-    private function processFile($file): void
-    {
-        $oldFileContent = $file->getFileContent();
-        $changedFileContent = str_replace('Foo', 'Bar', $oldFileContent);
-
-        $file->changeFileContent($changedFileContent);
     }
 }
