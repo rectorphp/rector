@@ -35,7 +35,6 @@ jobs:
             # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
             -   run: |
                     composer install --no-dev --ansi
-                    composer remove phpstan/phpstan
                     composer clear-cache
                     composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
                     composer require phpstan/phpstan-src
