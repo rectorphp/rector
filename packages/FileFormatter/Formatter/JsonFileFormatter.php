@@ -1,18 +1,19 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Rector\Core\Formatter;
+namespace Rector\FileFormatter\Formatter;
 
 use Ergebnis\Json\Printer\Printer;
-use Rector\Core\Contract\Formatter\FormatterInterface;
+use Rector\Core\Contract\Formatter\FileFormatterInterface;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\EditorConfigConfiguration;
-use Rector\Core\ValueObjectFactory\EditorConfigConfigurationBuilder;
+use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
+use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 
 /**
  * @see \Rector\Core\Tests\Formatter\JsonFormatter\JsonFormatterTest
  */
-final class JsonFormatter implements FormatterInterface
+final class JsonFileFormatter implements FileFormatterInterface
 {
     /**
      * @var Printer
@@ -33,15 +34,15 @@ final class JsonFormatter implements FormatterInterface
 
     public function format(File $file, EditorConfigConfiguration $editorConfigConfiguration): void
     {
-        $newContent = $this->jsonPrinter->print(
+        $newFileContent = $this->jsonPrinter->print(
             $file->getFileContent(),
             $editorConfigConfiguration->getIndent(),
             $editorConfigConfiguration->getEndOfLine()
         );
 
-        $newContent .= $editorConfigConfiguration->getFinalNewline();
+        $newFileContent .= $editorConfigConfiguration->getFinalNewline();
 
-        $file->changeFileContent($newContent);
+        $file->changeFileContent($newFileContent);
     }
 
     public function createEditorConfigConfigurationBuilder(): EditorConfigConfigurationBuilder

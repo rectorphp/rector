@@ -1,0 +1,5 @@
+pets: [Cat, Dog]
+cars: [
+    Volvo,
+    Skoda,
+]

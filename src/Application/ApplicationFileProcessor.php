@@ -8,6 +8,7 @@ use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\FileFormatter\FileFormatter;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ApplicationFileProcessor

@@ -1,28 +1,29 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Formatter\JsonFormatter;
+namespace Rector\Tests\FileFormatter\Formatter\JsonFileFormatter;
 
 use Iterator;
-use Rector\Core\Formatter\JsonFormatter;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObjectFactory\EditorConfigConfigurationBuilder;
+use Rector\FileFormatter\Formatter\JsonFileFormatter;
+use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class JsonFormatterTest extends AbstractTestCase
+final class JsonFileFormatterTest extends AbstractTestCase
 {
     /**
-     * @var JsonFormatter
+     * @var JsonFileFormatter
      */
     private $jsonFormatter;
 
     protected function setUp(): void
     {
         $this->boot();
-        $this->jsonFormatter = $this->getService(JsonFormatter::class);
+        $this->jsonFormatter = $this->getService(JsonFileFormatter::class);
     }
 
     /**

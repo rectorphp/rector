@@ -23,15 +23,16 @@ use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use PHPStan\Reflection\ReflectionProvider;
+use PrettyXml\Formatter;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
 use Rector\Caching\Cache\NetteCacheFactory;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Contract\EditorConfig\EditorConfigParserInterface;
-use Rector\Core\EditorConfig\EditorConfigIdiosyncraticParser;
 use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
+use Rector\FileFormatter\EditorConfig\EditorConfigIdiosyncraticParser;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
@@ -153,5 +154,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(Printer::class);
     $services->set(EditorConfig::class);
+    $services->set(Formatter::class);
     $services->alias(EditorConfigParserInterface::class, EditorConfigIdiosyncraticParser::class);
 };

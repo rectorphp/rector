@@ -1,11 +1,11 @@
 <?php
 
-namespace Rector\Core\Tests\EditorConfig\EditorConfigIdiosyncraticParser;
+namespace Rector\Tests\FileFormatter\EditorConfig\EditorConfigIdiosyncraticParser;
 
 use Rector\Core\Contract\EditorConfig\EditorConfigParserInterface;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\EditorConfigConfiguration;
-use Rector\Core\ValueObjectFactory\EditorConfigConfigurationBuilder;
+use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
+use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

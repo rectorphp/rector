@@ -1,9 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Rector\Core\ValueObjectFactory;
+namespace Rector\FileFormatter\ValueObjectFactory;
 
-use Rector\Core\ValueObject\EditorConfigConfiguration;
+use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
 
 final class EditorConfigConfigurationBuilder
 {

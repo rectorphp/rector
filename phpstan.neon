@@ -447,8 +447,6 @@ parameters:
         - '#Method Rector\\Core\\Tests\\DependencyInjection\\ConfigurableRectorImportConfigCallsMergeTest\:\:provideData\(\) return type has no value type specified in iterable type Iterator#'
         - '#Class with base "PhpVersion" name is already used in "PHPStan\\Php\\PhpVersion", "Rector\\Core\\ValueObject\\PhpVersion"\. Use unique name to make classes easy to recognize#'
 
-        - '#Method Rector\\Core\\Tests\\Formatter\\JsonFormatter\\JsonFormatterTest\:\:provideData\(\) return type has no value type specified in iterable type Iterator#'
-
         -
             message: '#Use dependency injection instead of dependency juggling#'
             path: src/HttpKernel/RectorKernel.php

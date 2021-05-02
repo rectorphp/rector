@@ -1,13 +1,14 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Rector\Core\EditorConfig;
+namespace Rector\FileFormatter\EditorConfig;
 
 use Idiosyncratic\EditorConfig\EditorConfig;
 use Rector\Core\Contract\EditorConfig\EditorConfigParserInterface;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\EditorConfigConfiguration;
-use Rector\Core\ValueObjectFactory\EditorConfigConfigurationBuilder;
+use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
+use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 
 /**
  * @see \Rector\Core\Tests\EditorConfig\EditorConfigIdiosyncraticParser\EditorConfigIdiosyncraticParserTest

@@ -3,8 +3,8 @@
 namespace Rector\Core\Contract\EditorConfig;
 
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\EditorConfigConfiguration;
-use Rector\Core\ValueObjectFactory\EditorConfigConfigurationBuilder;
+use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
+use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 
 interface EditorConfigParserInterface
 {

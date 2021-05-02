@@ -1,11 +1,11 @@
 <?php
 
-namespace Rector\Core\Tests\ValueObject;
+namespace Rector\Tests\FileFormatter\ValueObject;
 
 use PHPUnit\Framework\TestCase;
 use Rector\Core\Exception\EditorConfigConfigurationException;
-use Rector\Core\ValueObject\EditorConfigConfiguration;
-use Rector\Core\ValueObjectFactory\EditorConfigConfigurationBuilder;
+use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
+use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 use Symplify\PackageBuilder\Configuration\StaticEolConfiguration;
 
 final class EditorConfigConfigurationTest extends TestCase

@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Rector\Core\ValueObject;
+namespace Rector\FileFormatter\ValueObject;
 
 use Rector\Core\Exception\EditorConfigConfigurationException;
 use Symplify\PackageBuilder\Configuration\StaticEolConfiguration;
@@ -46,6 +47,16 @@ final class EditorConfigConfiguration
      * @var array<int, string>
      */
     private const ALLOWED_INDENT_STYLE = [self::TAB, self::SPACE];
+
+    /**
+     * @var string
+     */
+    private const TAB_CHARACTER = "\t";
+
+    /**
+     * @var string
+     */
+    private const SPACE_CHARACTER = ' ';
 
     /**
      * @var string
@@ -110,7 +121,7 @@ final class EditorConfigConfiguration
 
     public function getIndentSize(): int
     {
-        return $this->indentSize;
+        return $this->isTab() ? $this->tabWidth : $this->indentSize;
     }
 
     public function getEndOfLine(): string
@@ -120,17 +131,17 @@ final class EditorConfigConfiguration
 
     public function getFinalNewline(): string
     {
-        return $this->insertFinalNewline ? StaticEolConfiguration::getEolChar() : '';
+        return $this->insertFinalNewline ? $this->endOfLine : '';
     }
 
     public function getIndent(): string
     {
-        $isTab = $this->isTab();
+        return str_pad('', $this->getIndentSize(), $this->getIndentStyleCharacter());
+    }
 
-        $indentSize = $isTab ? $this->tabWidth : $this->indentSize;
-        $indentChar = $isTab ? "\t" : ' ';
-
-        return str_pad('', $indentSize, $indentChar);
+    public function getIndentStyleCharacter(): string
+    {
+        return $this->isTab() ? self::TAB_CHARACTER : self::SPACE_CHARACTER;
     }
 
     private function isTab(): bool

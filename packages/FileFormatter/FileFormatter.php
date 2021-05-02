@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Rector\Core\Application;
+namespace Rector\FileFormatter;
 
 use Rector\Core\Contract\EditorConfig\EditorConfigParserInterface;
-use Rector\Core\Contract\Formatter\FormatterInterface;
+use Rector\Core\Contract\Formatter\FileFormatterInterface;
 use Rector\Core\ValueObject\Application\File;
 
 final class FileFormatter
@@ -15,12 +16,12 @@ final class FileFormatter
     private $editorConfigParser;
 
     /**
-     * @var FormatterInterface[]
+     * @var FileFormatterInterface[]
      */
     private $fileFormatters;
 
     /**
-     * @param FormatterInterface[] $fileFormatters
+     * @param FileFormatterInterface[] $fileFormatters
      */
     public function __construct(EditorConfigParserInterface $editorConfigParser, array $fileFormatters = [])
     {
@@ -34,7 +35,6 @@ final class FileFormatter
     public function format(array $files): void
     {
         foreach ($files as $file) {
-
             if (! $file->hasChanged()) {
                 continue;
             }
