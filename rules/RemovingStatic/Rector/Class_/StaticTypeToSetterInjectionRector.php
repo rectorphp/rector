@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\RemovingStatic\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
@@ -13,14 +12,11 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
-use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -163,14 +159,7 @@ CODE_SAMPLE
             }
 
             $variableName = $this->propertyNaming->fqnToVariableName($objectType);
-
-            $paramBuilder = new ParamBuilder($variableName);
-            $paramBuilder->setType(new FullyQualified($staticType));
-            $param = $paramBuilder->getNode();
-
-            $assign = $this->nodeFactory->createPropertyAssignment($variableName);
-
-            $setEntityFactoryMethod = $this->createSetEntityFactoryClassMethod($variableName, $param, $assign);
+            $setEntityFactoryMethod = $this->nodeFactory->createSetterClassMethod($variableName, $objectType);
 
             $entityFactoryProperty = $this->nodeFactory->createPrivateProperty($variableName);
 
@@ -192,21 +181,5 @@ CODE_SAMPLE
         }
 
         return $this->isObjectType($node->class, $objectType);
-    }
-
-    private function createSetEntityFactoryClassMethod(
-        string $variableName,
-        Param $param,
-        Assign $assign
-    ): ClassMethod {
-        $setMethodName = 'set' . ucfirst($variableName);
-
-        $setEntityFactoryMethodBuilder = new MethodBuilder($setMethodName);
-        $setEntityFactoryMethodBuilder->makePublic();
-        $setEntityFactoryMethodBuilder->addParam($param);
-        $setEntityFactoryMethodBuilder->setReturnType('void');
-        $setEntityFactoryMethodBuilder->addStmt($assign);
-
-        return $setEntityFactoryMethodBuilder->getNode();
     }
 }

@@ -400,9 +400,7 @@ final class NodeFactory
 
     public function createGetterClassMethod(string $propertyName, Type $type): ClassMethod
     {
-        $getterMethod = 'get' . ucfirst($propertyName);
-
-        $methodBuilder = new MethodBuilder($getterMethod);
+        $methodBuilder = new MethodBuilder('get' . ucfirst($propertyName));
         $methodBuilder->makePublic();
 
         $propertyFetch = new PropertyFetch(new Variable(self::THIS), $propertyName);
@@ -420,13 +418,13 @@ final class NodeFactory
 
     public function createSetterClassMethod(string $propertyName, Type $type): ClassMethod
     {
-        $getterMethod = 'set' . ucfirst($propertyName);
+        $methodBuilder = new MethodBuilder('set' . ucfirst($propertyName));
+        $methodBuilder->makePublic();
 
         $variable = new Variable($propertyName);
 
-        $methodBuilder = new MethodBuilder($getterMethod);
-        $methodBuilder->makePublic();
-        $methodBuilder->addParam(new Param($variable));
+        $param = $this->createParamWithType($variable, $type);
+        $methodBuilder->addParam($param);
 
         $propertyFetch = new PropertyFetch(new Variable(self::THIS), $propertyName);
         $assign = new Assign($propertyFetch, $variable);
@@ -752,5 +750,14 @@ final class NodeFactory
 
         /** @var BooleanAnd $booleanAnd */
         return $booleanAnd;
+    }
+
+    private function createParamWithType(Variable $variable, Type $type): Param
+    {
+        $param = new Param($variable);
+
+        $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
+        $param->type = $phpParserTypeNode;
+        return $param;
     }
 }
