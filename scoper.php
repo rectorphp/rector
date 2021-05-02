@@ -57,19 +57,6 @@ return [
         },
 
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/composer/package-versions-deprecated/src/PackageVersions/Versions.php')) {
-                return $content;
-            }
-
-            // see https://regex101.com/r/v8zRMm/1
-            return Strings::replace(
-                $content, '
-                #' . $prefix . '\\\\Composer\\\\InstalledVersions#',
-                'Composer\InstalledVersions'
-            );
-        },
-
-        function (string $filePath, string $prefix, string $content): string {
             if (! Strings::contains($content, $prefix . '\Composer\\')) {
                 return $content;
             }
