@@ -13,6 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\ValueObject\RenameStaticMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Renaming\Rector\StaticCall\RenameStaticMethodRector\RenameStaticMethodRectorTest
@@ -90,9 +91,14 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
         return null;
     }
 
+    /**
+     * @param array<string, RenameStaticMethod[]> $configuration
+     */
     public function configure(array $configuration): void
     {
-        $this->staticMethodRenames = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASSES] ?? [];
+        $oldToNewMethodsByClasses = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASSES];
+        Assert::allIsInstanceOf($oldToNewMethodsByClasses, RenameStaticMethod::class);
+        $this->staticMethodRenames = $oldToNewMethodsByClasses;
     }
 
     private function rename(StaticCall $staticCall, RenameStaticMethod $renameStaticMethod): StaticCall

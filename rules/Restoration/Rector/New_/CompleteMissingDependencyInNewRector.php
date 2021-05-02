@@ -127,6 +127,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param array<string, array<class-string, class-string>> $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->classToInstantiateByType = $configuration[self::CLASS_TO_INSTANTIATE_BY_TYPE] ?? [];

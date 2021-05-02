@@ -97,6 +97,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param array<string, ArgumentDefaultValueReplacer[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? [];

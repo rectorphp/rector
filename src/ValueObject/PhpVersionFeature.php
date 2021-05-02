@@ -194,4 +194,10 @@ final class PhpVersionFeature
      * @var int
      */
     public const ATTRIBUTES = PhpVersion::PHP_80;
+
+    /**
+     * @see https://wiki.php.net/rfc/noreturn_type
+     * @var int
+     */
+    public const NEVER_TYPE = PhpVersion::PHP_81;
 }

@@ -70,5 +70,11 @@ final class PhpVersion
      * @api
      * @var int
      */
+    public const PHP_81 = 81000;
+
+    /**
+     * @api
+     * @var int
+     */
     public const PHP_10 = 100000;
 }

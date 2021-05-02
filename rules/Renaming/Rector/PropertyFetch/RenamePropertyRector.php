@@ -73,6 +73,9 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
         return null;
     }
 
+    /**
+     * @param array<string, RenameProperty[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? [];

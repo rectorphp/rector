@@ -119,6 +119,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param array<string, NormalToFluent[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $callsToFluent = $configuration[self::CALLS_TO_FLUENT] ?? [];

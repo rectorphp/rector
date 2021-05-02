@@ -88,6 +88,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param array<string, StringToClassConstant[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $stringToClassConstants = $configuration[self::STRINGS_TO_CLASS_CONSTANTS] ?? [];

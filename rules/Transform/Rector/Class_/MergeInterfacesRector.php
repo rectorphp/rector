@@ -28,7 +28,7 @@ final class MergeInterfacesRector extends AbstractRector implements Configurable
     public const OLD_TO_NEW_INTERFACES = 'old_to_new_interfaces';
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private $oldToNewInterfaces = [];
 
@@ -89,6 +89,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param array<string, array<string, string>> $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->oldToNewInterfaces = $configuration[self::OLD_TO_NEW_INTERFACES] ?? [];

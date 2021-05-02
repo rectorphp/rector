@@ -124,6 +124,23 @@ final class BetterNodeFinder
 
     /**
      * @template T of Node
+     * @param array<class-string<T>> $types
+     * @param Node|Node[]|Stmt[] $nodes
+     * @return T[]
+     */
+    public function findInstancesOf($nodes, array $types): array
+    {
+        $foundInstances = [];
+        foreach ($types as $type) {
+            $currentFoundInstances = $this->findInstanceOf($nodes, $type);
+            $foundInstances = array_merge($foundInstances, $currentFoundInstances);
+        }
+
+        return $foundInstances;
+    }
+
+    /**
+     * @template T of Node
      * @param class-string<T> $type
      * @param Node|Node[]|Stmt[] $nodes
      * @return T[]

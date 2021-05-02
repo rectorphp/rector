@@ -112,6 +112,9 @@ CODE_SAMPLE
         return new MethodCall($arrayDimFetch->var, $dimFetchAssignToMethodCall->getAddMethod(), $node->expr->args);
     }
 
+    /**
+     * @param array<string, DimFetchAssignToMethodCall[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $dimFetchAssignToMethodCalls = $configuration[self::DIM_FETCH_ASSIGN_TO_METHOD_CALL] ?? [];

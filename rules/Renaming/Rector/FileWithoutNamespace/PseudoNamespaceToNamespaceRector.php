@@ -122,6 +122,9 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, PseudoNamespaceToNamespace[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? [];

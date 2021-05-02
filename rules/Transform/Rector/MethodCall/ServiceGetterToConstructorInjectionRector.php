@@ -176,6 +176,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param array<string, ServiceGetterToConstructorInjection[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? [];

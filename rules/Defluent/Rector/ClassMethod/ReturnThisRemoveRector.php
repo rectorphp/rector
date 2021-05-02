@@ -141,7 +141,7 @@ CODE_SAMPLE
 
     private function shouldSkip(Return_ $return, ClassMethod $classMethod): bool
     {
-        if (! $this->parentClassMethodTypeOverrideGuard->isReturnTypeChangeAllowed($classMethod)) {
+        if ($this->parentClassMethodTypeOverrideGuard->hasParentMethodOutsideVendor($classMethod)) {
             return true;
         }
 

@@ -30,7 +30,7 @@ final class AddMethodParentCallRector extends AbstractRector implements Configur
     /**
      * @var array<string, string>
      */
-    private $methodsByParentTypes = [];
+    private $methodByParentTypes = [];
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -90,7 +90,7 @@ CODE_SAMPLE
         /** @var string $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
-        foreach ($this->methodsByParentTypes as $type => $method) {
+        foreach ($this->methodByParentTypes as $type => $method) {
             if (! $this->isObjectType($classLike, new ObjectType($type))) {
                 continue;
             }
@@ -112,9 +112,12 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, array<string, string>> $configuration
+     */
     public function configure(array $configuration): void
     {
-        $this->methodsByParentTypes = $configuration[self::METHODS_BY_PARENT_TYPES] ?? [];
+        $this->methodByParentTypes = $configuration[self::METHODS_BY_PARENT_TYPES] ?? [];
     }
 
     private function shouldSkipMethod(ClassMethod $classMethod, string $method): bool
