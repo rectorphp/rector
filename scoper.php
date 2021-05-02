@@ -70,14 +70,14 @@ return [
         },
 
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::contains($filePath, 'vendor/composer/composer/')) {
+            if (! Strings::contains($content, $prefix . '\Composer\Plugin')) {
                 return $content;
             }
 
             return Strings::replace(
                 $content, '
-                #' . $prefix . '\\\\Composer#',
-                'Composer'
+                #' . $prefix . '\\\\Composer\\\\Plugin#',
+                'Composer\Plugin'
             );
         },
 
