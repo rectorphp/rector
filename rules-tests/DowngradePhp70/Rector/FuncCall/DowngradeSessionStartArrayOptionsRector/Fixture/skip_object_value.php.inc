@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DowngradePhp70\Rector\FuncCall\DowngradeSessionStartArrayOptionsRector\Fixture;
 
-class SkipNotScalarValue
+class SkipObjectValue
 {
     public function start()
     {
