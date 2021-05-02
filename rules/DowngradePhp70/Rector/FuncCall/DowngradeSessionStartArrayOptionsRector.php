@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
