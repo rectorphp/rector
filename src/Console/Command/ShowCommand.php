@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Rector\Core\Application\ActiveRectorsProvider;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,23 +22,23 @@ final class ShowCommand extends Command
     private $symfonyStyle;
 
     /**
-     * @var ActiveRectorsProvider
-     */
-    private $activeRectorsProvider;
-
-    /**
      * @var ParameterProvider
      */
     private $parameterProvider;
 
-    public function __construct(
-        SymfonyStyle $symfonyStyle,
-        ActiveRectorsProvider $activeRectorsProvider,
-        ParameterProvider $parameterProvider
-    ) {
+    /**
+     * @var RectorInterface[]
+     */
+    private $rectors = [];
+
+    /**
+     * @param RectorInterface[] $rectors
+     */
+    public function __construct(SymfonyStyle $symfonyStyle, ParameterProvider $parameterProvider, array $rectors)
+    {
         $this->symfonyStyle = $symfonyStyle;
-        $this->activeRectorsProvider = $activeRectorsProvider;
         $this->parameterProvider = $parameterProvider;
+        $this->rectors = $rectors;
 
         parent::__construct();
     }
@@ -58,15 +58,13 @@ final class ShowCommand extends Command
 
     private function reportLoadedRectors(): void
     {
-        $activeRectors = $this->activeRectorsProvider->provide();
-
-        $rectorCount = count($activeRectors);
+        $rectorCount = count($this->rectors);
 
         if ($rectorCount > 0) {
             $this->symfonyStyle->title('Loaded Rector rules');
 
-            foreach ($activeRectors as $activeRector) {
-                $this->symfonyStyle->writeln(' * ' . get_class($activeRector));
+            foreach ($this->rectors as $rector) {
+                $this->symfonyStyle->writeln(' * ' . get_class($rector));
             }
 
             $message = sprintf('%d loaded Rectors', $rectorCount);

@@ -8,6 +8,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
+use Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\VerifyRectorServiceExistsCompilerPass;
 use Rector\Core\DependencyInjection\Loader\ConfigurableCallValuesCollectingPhpFileLoader;
 use Symfony\Component\Config\Loader\DelegatingLoader;
@@ -99,6 +100,8 @@ final class RectorKernel extends Kernel
         // to fix reincluding files again
         $containerBuilder->setParameter('container.dumper.inline_class_loader', false);
 
+        // must run before AutowireArrayParameterCompilerPass, as the autowired array cannot contain removed services
+        $containerBuilder->addCompilerPass(new RemoveSkippedRectorsCompilerPass());
         $containerBuilder->addCompilerPass(new AutowireArrayParameterCompilerPass());
 
         // autowire Rectors by default (mainly for tests)
