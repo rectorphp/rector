@@ -58,7 +58,7 @@ final class ParentClassMethodTypeOverrideGuard
                 $parentClassMethodReflection
             );
 
-            if ($parentClassMethod === null) {
+            if (! $parentClassMethod instanceof ClassMethod) {
                 return true;
             }
         }
@@ -81,7 +81,7 @@ final class ParentClassMethodTypeOverrideGuard
         );
 
         // if null, we're unable to override → skip it
-        if ($parentClassMethod === null) {
+        if (! $parentClassMethod instanceof ClassMethod) {
             return true;
         }
 
