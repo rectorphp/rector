@@ -70,26 +70,14 @@ return [
         },
 
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::contains($content, $prefix . '\Composer\Plugin')) {
+            if (! Strings::contains($content, $prefix . '\Composer\\')) {
                 return $content;
             }
 
             return Strings::replace(
                 $content, '
-                #' . $prefix . '\\\\Composer\\\\Plugin#',
-                'Composer\Plugin'
-            );
-        },
-
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::contains($content, $prefix . '\Composer\EventDispatcher')) {
-                return $content;
-            }
-
-            return Strings::replace(
-                $content, '
-                #' . $prefix . '\\\\Composer\\\\EventDispatcher#',
-                'Composer\EventDispatcher'
+                #' . $prefix . '\\\\Composer\\\\#',
+                'Composer\\'
             );
         },
 
