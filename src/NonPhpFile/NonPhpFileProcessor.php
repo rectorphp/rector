@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Core\NonPhpFile;
 
-use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
+use Rector\Core\Contract\Rector\NonPhpRectorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
-use Rector\PSR4\Collector\RenamedClassesCollector;
 
 /**
  * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameNonPhpTest
@@ -16,28 +15,16 @@ use Rector\PSR4\Collector\RenamedClassesCollector;
 final class NonPhpFileProcessor implements FileProcessorInterface
 {
     /**
-     * @var RenamedClassesDataCollector
+     * @var NonPhpRectorInterface[]
      */
-    private $renamedClassesDataCollector;
+    private $nonPhpRectors = [];
 
     /**
-     * @var RenamedClassesCollector
+     * @param NonPhpRectorInterface[] $nonPhpRectors
      */
-    private $renamedClassesCollector;
-
-    /**
-     * @var NonPhpFileClassRenamer
-     */
-    private $nonPhpFileClassRenamer;
-
-    public function __construct(
-        RenamedClassesDataCollector $renamedClassesDataCollector,
-        RenamedClassesCollector $renamedClassesCollector,
-        NonPhpFileClassRenamer $nonPhpFileClassRenamer
-    ) {
-        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
-        $this->renamedClassesCollector = $renamedClassesCollector;
-        $this->nonPhpFileClassRenamer = $nonPhpFileClassRenamer;
+    public function __construct(array $nonPhpRectors)
+    {
+        $this->nonPhpRectors = $nonPhpRectors;
     }
 
     /**
@@ -63,14 +50,9 @@ final class NonPhpFileProcessor implements FileProcessorInterface
 
     private function processFile(File $file): void
     {
-        $fileContent = $file->getFileContent();
-
-        $classRenames = array_merge(
-            $this->renamedClassesDataCollector->getOldToNewClasses(),
-            $this->renamedClassesCollector->getOldToNewClasses()
-        );
-
-        $changedFileContents = $this->nonPhpFileClassRenamer->renameClasses($fileContent, $classRenames);
-        $file->changeFileContent($changedFileContents);
+        foreach ($this->nonPhpRectors as $nonPhpRector) {
+            $newFileContent = $nonPhpRector->refactorFileContent($file->getFileContent());
+            $file->changeFileContent($newFileContent);
+        }
     }
 }
