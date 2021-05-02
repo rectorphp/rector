@@ -25,6 +25,8 @@ final class YamlFileFormatter implements FileFormatterInterface
 
         $newFileContent = Yaml::dump($yaml, 99, $editorConfigConfiguration->getIndentSize());
 
+        $newFileContent .= $editorConfigConfiguration->getFinalNewline();
+
         $file->changeFileContent($newFileContent);
     }
 
@@ -33,8 +35,8 @@ final class YamlFileFormatter implements FileFormatterInterface
         $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
         $editorConfigConfigurationBuilder->withLineFeed();
         $editorConfigConfigurationBuilder->withSpace();
+        $editorConfigConfigurationBuilder->withoutFinalNewline();
         $editorConfigConfigurationBuilder->withIndentSize(2);
-        $editorConfigConfigurationBuilder->withFinalNewline();
 
         return $editorConfigConfigurationBuilder;
     }

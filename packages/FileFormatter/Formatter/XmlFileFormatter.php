@@ -35,6 +35,8 @@ final class XmlFileFormatter implements FileFormatterInterface
         $this->xmlFormatter->setIndentSize($editorConfigConfiguration->getIndentSize());
         $newFileContent = $this->xmlFormatter->format($file->getFileContent());
 
+        $newFileContent .= $editorConfigConfiguration->getFinalNewline();
+
         $file->changeFileContent($newFileContent);
     }
 

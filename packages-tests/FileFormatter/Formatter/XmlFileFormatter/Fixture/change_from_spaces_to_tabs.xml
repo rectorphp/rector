@@ -20,6 +20,6 @@
 		<price>44.95</price>
 		<publish_date>2000-10-01</publish_date>
 		<description>An in-depth look at creating applications
-			with XML.</description>
+		with XML.</description>
 	</book>
 </catalog>

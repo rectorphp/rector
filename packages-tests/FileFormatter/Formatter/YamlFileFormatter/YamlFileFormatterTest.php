@@ -49,7 +49,7 @@ final class YamlFileFormatterTest extends AbstractTestCase
         $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
         $editorConfigConfigurationBuilder->withSpace();
         $editorConfigConfigurationBuilder->withIndentSize(4);
-        $editorConfigConfigurationBuilder->withFinalNewline();
+        $editorConfigConfigurationBuilder->withoutFinalNewline();
         $editorConfigConfigurationBuilder->withLineFeed();
 
         $this->yamlFileFormatter->format($file, $editorConfigConfigurationBuilder->build());
