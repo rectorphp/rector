@@ -30,7 +30,11 @@ class Drupal
     public function run()
     {
         $replace = function ($m) {
+<<<<<<< HEAD
             $r = "{$m[1]}ecursion_features";
+=======
+            $r = "\x00{$m[1]}ecursion_features";
+>>>>>>> df2aaaa3c (add preload to test case)
             return 's:' . strlen($r . $m[2]) . ':"' . $r . $m[2] . '";';
         };
 

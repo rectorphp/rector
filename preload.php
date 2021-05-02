@@ -12,6 +12,10 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulat
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/KeywordEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/CoaleseEqualTokenEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/NullsafeTokenEmulator.php';
+<<<<<<< HEAD
+=======
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/EnumTokenEmulator.php';
+>>>>>>> df2aaaa3c (add preload to test case)
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/AttributeEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/Emulative.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder.php';
@@ -166,6 +170,10 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/ElseIf_
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Namespace_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Do_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Const_.php';
+<<<<<<< HEAD
+=======
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Enum_.php';
+>>>>>>> df2aaaa3c (add preload to test case)
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/ClassLike.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/ClassConst.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Finally_.php';
@@ -186,6 +194,10 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Declare
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/For_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Catch_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Echo_.php';
+<<<<<<< HEAD
+=======
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/EnumCase.php';
+>>>>>>> df2aaaa3c (add preload to test case)
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/FunctionLike.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Parser.php';
@@ -222,6 +234,10 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Function_
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Trait_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Property.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Namespace_.php';
+<<<<<<< HEAD
+=======
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/ClassConst.php';
+>>>>>>> df2aaaa3c (add preload to test case)
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Use_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Class_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Interface_.php';

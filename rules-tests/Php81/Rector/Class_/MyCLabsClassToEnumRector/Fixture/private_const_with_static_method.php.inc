@@ -4,14 +4,15 @@ namespace Rector\Tests\Php81\Rector\Class_\MyCLabsClassToEnumRector\Fixture;
 
 use MyCLabs\Enum\Enum;
 
-final class SomeClass extends Enum
+/**
+ * @method static PrivateConstWithStaticMethod VIDEO()
+ */
+final class PrivateConstWithStaticMethod extends Enum
 {
     /**
      * Some comment
      */
-    private const VIEW = 'view';
-
-    private const EDIT = 'edit';
+    private const VIDEO = 'video';
 }
 
 ?>
@@ -22,13 +23,12 @@ namespace Rector\Tests\Php81\Rector\Class_\MyCLabsClassToEnumRector\Fixture;
 
 use MyCLabs\Enum\Enum;
 
-enum SomeClass
+enum PrivateConstWithStaticMethod
 {
     /**
      * Some comment
      */
-    case VIEW = 'view';
-    case EDIT = 'edit';
+    case VIDEO = 'video';
 }
 
 ?>

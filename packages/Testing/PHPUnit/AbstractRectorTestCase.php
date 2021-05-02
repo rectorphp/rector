@@ -62,6 +62,9 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
 
     protected function setUp(): void
     {
+        // to give local php-parser priority over PHPStan
+        require __DIR__ . '/../../../preload.php';
+
         // speed up
         @ini_set('memory_limit', '-1');
 
