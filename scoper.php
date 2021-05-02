@@ -2,198 +2,99 @@
 
 declare(strict_types=1);
 
-use Nette\Utils\DateTime;
-use Nette\Utils\Strings;
-use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
-use Rector\Compiler\Unprefixer;
-use Rector\Compiler\ValueObject\ScoperOption;
+use PHPUnit\Framework\TestCase;
+use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
+use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
+use Rector\CodingStyle\ValueObject\PreferenceSelfThis;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersion;
+use Rector\Nette\Set\NetteSetList;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
+use Rector\PHPUnit\Set\PHPUnitSetList;
+use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector;
+use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
+use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
+use Rector\Set\ValueObject\SetList;
+use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
-require_once __DIR__ . '/vendor/autoload.php';
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
 
-// [BEWARE] this path is relative to the root and location of this file
-$filePathsToRemoveNamespace = [
-    // @see https://github.com/rectorphp/rector/issues/2852#issuecomment-586315588
-    'vendor/symfony/deprecation-contracts/function.php',
-    // it would make polyfill function work only with namespace = brokes
-    'vendor/symfony/polyfill-ctype/bootstrap.php',
-    'vendor/symfony/polyfill-intl-normalizer/bootstrap.php',
-    'vendor/symfony/polyfill-intl-grapheme/bootstrap.php',
-    'vendor/symfony/polyfill-mbstring/bootstrap.php',
-    'vendor/symfony/polyfill-php80/bootstrap.php',
-    'vendor/symfony/polyfill-php74/bootstrap.php',
-    'vendor/symfony/polyfill-php73/bootstrap.php',
-    'vendor/symfony/polyfill-php72/bootstrap.php',
-    'vendor/symfony/polyfill-uuid/bootstrap.php',
-];
+    $configuration = ValueObjectInliner::inline([
+        new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
+    ]);
+    $services->set(InferParamFromClassMethodReturnRector::class)
+        ->call('configure', [[
+            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => $configuration,
+        ]]);
 
-// remove phpstan, because it is already prefixed in its own scope
+    $services->set(PreferThisOrSelfMethodCallRector::class)
+        ->call('configure', [[
+            PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
+                TestCase::class => PreferenceSelfThis::PREFER_THIS,
+            ],
+        ]]);
 
-$dateTime = DateTime::from('now');
-$timestamp = $dateTime->format('Ymd');
+    $parameters = $containerConfigurator->parameters();
 
-// see https://github.com/humbug/php-scoper
-return [
-    ScoperOption::PREFIX => 'RectorPrefix' . $timestamp,
-    ScoperOption::WHITELIST => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),
-//    ScoperOption::FILES_WHITELIST => [
-//        // composer versions
-//        '../../vendor/composer/InstalledVersions.php'
-//    ],
-    ScoperOption::PATCHERS => [
-        // [BEWARE] $filePath is absolute!
+    $parameters->set(Option::SETS, [
+        SetList::CODING_STYLE,
+        SetList::CODE_QUALITY,
+        SetList::CODE_QUALITY_STRICT,
+        SetList::DEAD_CODE,
+        SetList::PRIVATIZATION,
+        SetList::NAMING,
+        SetList::TYPE_DECLARATION,
+        SetList::PHP_71,
+        SetList::PHP_72,
+        SetList::PHP_73,
+        SetList::EARLY_RETURN,
+        SetList::TYPE_DECLARATION_STRICT,
+        NetteSetList::NETTE_UTILS_CODE_QUALITY,
+        PHPUnitSetList::PHPUNIT_CODE_QUALITY,
+    ]);
 
-        // fixes https://github.com/rectorphp/rector-prefixed/runs/2143717534
-        function (string $filePath, string $prefix, string $content) use ($filePathsToRemoveNamespace): string {
-            // @see https://regex101.com/r/0jaVB1/1
-            $prefixedNamespacePattern = '#^namespace (.*?);$#m';
+    $parameters->set(Option::PATHS, [
+        __DIR__ . '/src',
+        __DIR__ . '/rules',
+        __DIR__ . '/rules-tests',
+        __DIR__ . '/packages',
+        __DIR__ . '/packages-tests',
+        __DIR__ . '/tests',
+        __DIR__ . '/utils',
+        __DIR__ . '/config/set',
+    ]);
 
-            foreach ($filePathsToRemoveNamespace as $filePathToRemoveNamespace) {
-                if (Strings::endsWith($filePath, $filePathToRemoveNamespace)) {
-                    return Strings::replace($content, $prefixedNamespacePattern, '');
-                }
-            }
+    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
 
-            return $content;
-        },
+    $parameters->set(Option::SKIP, [
+        // buggy in refactoring
+        AddSeeTestAnnotationRector::class,
 
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/composer/package-versions-deprecated/src/PackageVersions/Versions.php')) {
-                return $content;
-            }
+        StringClassNameToClassConstantRector::class,
+        // some classes in config might not exist without dev dependencies
+        SplitStringClassConstantToClassConstFetchRector::class,
 
-            // see https://regex101.com/r/v8zRMm/1
-            return Strings::replace(
-                $content, '
-                #' . $prefix . '\\\\Composer\\\\InstalledVersions#',
-                'Composer\InstalledVersions'
-            );
-        },
+        PrivatizeLocalPropertyToPrivatePropertyRector::class => [__DIR__ . '/src/Rector/AbstractRector.php'],
 
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::contains($content, $prefix . '\Composer\Plugin')) {
-                return $content;
-            }
+        ReturnTypeDeclarationRector::class => [
+            __DIR__ . '/packages/PHPStanStaticTypeMapper/TypeMapper/ArrayTypeMapper.php',
+            __DIR__ . '/packages/PHPStanStaticTypeMapper/TypeMapper/ObjectTypeMapper.php',
+        ],
 
-            return Strings::replace(
-                $content, '
-                #' . $prefix . '\\\\Composer\\\\Plugin#',
-                'Composer\Plugin'
-            );
-        },
+        // test paths
+        '*/Fixture/*',
+        '*/Fixture/*',
+        '*/Source/*',
+        '*/Source*/*',
+        '*/Expected/*',
+        '*/Expected*/*',
+    ]);
 
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::contains($content, $prefix . '\Composer\EventDispatcher')) {
-                return $content;
-            }
-
-            return Strings::replace(
-                $content, '
-                #' . $prefix . '\\\\Composer\\\\EventDispatcher#',
-                'Composer\EventDispatcher'
-            );
-        },
-
-        // get version for prefixed version
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'src/Configuration/Configuration.php')) {
-                return $content;
-            }
-
-            // @see https://regex101.com/r/gLefQk/1
-            return Strings::replace(
-                $content, '#\(\'rector\/rector\'\)#',
-                "('rector/rector-prefixed')"
-            );
-        },
-
-        // un-prefix composer plugin
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/rector/rector-installer/src/Plugin.php')) {
-                return $content;
-            }
-
-            // see https://regex101.com/r/v8zRMm/1
-            return Strings::replace($content, '#' . $prefix . '\\\\Composer\\\\#', 'Composer\\');
-        },
-
-        // fixes https://github.com/rectorphp/rector/issues/6007
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::contains($filePath, 'vendor/')) {
-                return $content;
-            }
-
-            // @see https://regex101.com/r/lBV8IO/2
-            $fqcnReservedPattern = sprintf('#(\\\\)?%s\\\\(parent|self|static)#m', $prefix);
-            $matches             = Strings::matchAll($content, $fqcnReservedPattern);
-
-            if (! $matches) {
-                return $content;
-            }
-
-            foreach ($matches as $match) {
-                $content = str_replace($match[0], $match[2], $content);
-            }
-
-            return $content;
-        },
-
-
-        function (string $filePath, string $prefix, string $content): string {
-            if (
-                ! Strings::endsWith($filePath, 'packages/Testing/PHPUnit/AbstractTestCase.php')
-                && ! Strings::endsWith($filePath, 'packages/Testing/PHPUnit/AbstractRectorTestCase.php')
-            ) {
-                return $content;
-            }
-
-            // un-prefix
-            return Strings::replace(
-                $content,
-                '#' . $prefix . '\\\\PHPUnit\\\\Framework\\\\TestCase#',
-                'PHPUnit\Framework\TestCase'
-            );
-        },
-
-        // fixes https://github.com/rectorphp/rector/issues/6010 + test case prefix
-        function (string $filePath, string $prefix, string $content): string {
-            // @see https://regex101.com/r/bA1nQa/1
-            if (! Strings::match($filePath, '#vendor/symfony/polyfill-php\d{2}/Resources/stubs#')) {
-                return $content;
-            }
-
-            // @see https://regex101.com/r/x5Ukrx/1
-            $namespace = sprintf('#namespace %s;#m', $prefix);
-            return Strings::replace($content, $namespace);
-        },
-
-        // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
-        function (string $filePath, string $prefix, string $content): string {
-            // skip vendor, expect rector packages
-            if (Strings::contains($filePath, 'vendor/') && ! Strings::contains($filePath, 'vendor/rector')) {
-                return $content;
-            }
-
-            // skip bin/rector.php for composer autoload class
-            if (Strings::endsWith($filePath, 'bin/rector.php')) {
-                return $content;
-            }
-
-            return Unprefixer::unprefixQuoted($content, $prefix);
-        },
-
-        // scoper missed PSR-4 autodiscovery in Symfony
-        function (string $filePath, string $prefix, string $content): string {
-            // scoper missed PSR-4 autodiscovery in Symfony
-            if (! Strings::endsWith($filePath, 'config.php') && ! Strings::endsWith($filePath, 'services.php')) {
-                return $content;
-            }
-
-            // skip "Rector\\" namespace
-            if (Strings::contains($content, '$services->load(\'Rector')) {
-                return $content;
-            }
-
-            return Strings::replace($content, '#services\->load\(\'#', 'services->load(\'' . $prefix . '\\');
-        },
-    ],
-];
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);
+    $parameters->set(Option::ENABLE_CACHE, true);
+};
