@@ -5,10 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php81\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
@@ -56,7 +52,6 @@ enum Action
     case EDIT = 'edit';
 }
 CODE_SAMPLE
-
             ),
         ]);
     }
@@ -66,37 +61,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Class_::class, StaticCall::class];
+        return [Class_::class];
     }
 
     /**
-     * @param Class_|StaticCall $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Class_) {
-            // change the node
-            if (! $this->isObjectType($node, new ObjectType('MyCLabs\Enum\Enum'))) {
-                return null;
-            }
-
-            return $this->enumFactory->createFromClass($node);
+        if (! $this->isObjectType($node, new ObjectType('MyCLabs\Enum\Enum'))) {
+            return null;
         }
 
-        if ($this->isObjectType($node->class, new ObjectType('MyCLabs\Enum\Enum'))) {
-            $className = $this->getName($node->class);
-            if ($className === null) {
-                return null;
-            }
-
-            $methodName = $this->getName($node->name);
-            if ($methodName === null) {
-                return null;
-            }
-
-            return new ClassConstFetch(new FullyQualified($className), new Identifier($methodName));
-        }
-
-        return null;
+        return $this->enumFactory->createFromClass($node);
     }
 }

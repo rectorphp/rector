@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Php81\Rector\Class_\MyCLabsClassToEnumRector\Source;
+namespace Rector\Tests\Php81\Rector\MethodCall\MyCLabsClassToEnumRector\Source;
 
 use MyCLabs\Enum\Enum;
 
 /**
- * @method VALUE()
+ * @method SomeEnum VALUE()
  */
 final class SomeEnum extends Enum
 {

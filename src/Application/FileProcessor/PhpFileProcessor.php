@@ -235,10 +235,7 @@ final class PhpFileProcessor implements FileProcessorInterface
 
             $callback($file);
         } catch (AnalysedCodeException $analysedCodeException) {
-<<<<<<< HEAD
             // inform about missing classes in tests
-=======
->>>>>>> 77c2285da (add EnumFactory)
             if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $analysedCodeException;
             }
