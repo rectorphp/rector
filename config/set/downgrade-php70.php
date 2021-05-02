@@ -7,6 +7,7 @@ use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp70\Rector\Coalesce\DowngradeNullCoalesceRector;
 use Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector;
+use Rector\DowngradePhp70\Rector\FuncCall\DowngradeSessionStartArrayOptionsRector;
 use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector;
 use Rector\DowngradePhp70\Rector\Spaceship\DowngradeSpaceshipRector;
@@ -23,4 +24,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeNullCoalesceRector::class);
     $services->set(DowngradeSpaceshipRector::class);
     $services->set(DowngradeDefineArrayConstantRector::class);
+    $services->set(DowngradeSessionStartArrayOptionsRector::class);
 };
