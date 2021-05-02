@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -49,6 +50,23 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->shouldSkip($node)) {
+            return null;
+        }
+
         return $node;
+    }
+
+    private function shouldSkip(FuncCall $funcCall): bool
+    {
+        if (! $this->isName($funcCall, 'session_array')) {
+            return true;
+        }
+
+        if (! isset($funcCall->args[0])) {
+            return true;
+        }
+
+        return ! $funcCall->args[0]->value instanceof Array_;
     }
 }
