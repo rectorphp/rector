@@ -30,6 +30,42 @@ final class ParentClassMethodTypeOverrideGuard
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
+    public function hasParentMethodOutsideVendor(ClassMethod $classMethod): bool
+    {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return false;
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        $methodName = $classMethod->name->toString();
+
+        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
+            if ($classReflection === $ancestorClassReflection) {
+                continue;
+            }
+
+            if (! $ancestorClassReflection->hasMethod($methodName)) {
+                continue;
+            }
+
+            $parentClassMethodReflection = $ancestorClassReflection->getMethod($methodName, $scope);
+            $parentClassMethod = $this->nodeRepository->findClassMethodByMethodReflection(
+                $parentClassMethodReflection
+            );
+
+            if ($parentClassMethod === null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function isReturnTypeChangeAllowed(ClassMethod $classMethod): bool
     {
         // make sure return type is not protected by parent contract
@@ -45,7 +81,11 @@ final class ParentClassMethodTypeOverrideGuard
         );
 
         // if null, we're unable to override → skip it
-        return $parentClassMethod !== null;
+        if ($parentClassMethod === null) {
+            return true;
+        }
+
+        return $parentClassMethod->returnType === null;
     }
 
     private function getParentClassMethod(ClassMethod $classMethod): ?MethodReflection
@@ -63,7 +103,11 @@ final class ParentClassMethodTypeOverrideGuard
             return null;
         }
 
-        foreach ($classReflection->getParents() as $parentClassReflection) {
+        foreach ($classReflection->getAncestors() as $parentClassReflection) {
+            if ($classReflection === $parentClassReflection) {
+                continue;
+            }
+
             if (! $parentClassReflection->hasMethod($methodName)) {
                 continue;
             }
