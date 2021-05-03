@@ -56,6 +56,6 @@ chmod 777 "$RESULT_DIRECTORY/bin/rector"
 chmod 777 "$RESULT_DIRECTORY/bin/rector.php"
 
 # after not used for scoping, remove composer/composer
-composer remove composer/composer --working-dir "$RESULT_DIRECTORY"
+rm -rf "$RESULT_DIRECTORY/vendor/composer/composer"
 
 note "Finished"
