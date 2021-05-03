@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector\Fixture;
 
-class MethodCall
+final class DispatcherCall
 {
     /** @var \League\Event\EventDispatcher */
     private $dispatcher;
@@ -24,7 +24,7 @@ class MethodCall
 
 namespace Rector\Tests\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector\Fixture;
 
-class MethodCall
+final class DispatcherCall
 {
     /** @var \League\Event\EventDispatcher */
     private $dispatcher;
