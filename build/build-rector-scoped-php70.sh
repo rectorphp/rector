@@ -39,6 +39,8 @@ wget https://github.com/humbug/php-scoper/releases/download/0.14.0/php-scoper.ph
 # Work around possible PHP memory limits
 php -d memory_limit=-1 php-scoper.phar add-prefix preload.php bin config src packages rules vendor composer.json --output-dir "../$RESULT_DIRECTORY" --config scoper-php70.php --force --ansi --working-dir "$BUILD_DIRECTORY"
 
+# after not used for scoping, remove composer/composer
+rm -rf "$RESULT_DIRECTORY/vendor/composer/composer"
 
 # note "Dumping Composer Autoload"
 composer dump-autoload --working-dir "$RESULT_DIRECTORY" --ansi --classmap-authoritative --no-dev
