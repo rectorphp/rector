@@ -55,6 +55,7 @@ jobs:
                     coverage: none
             -   run: |
                     cp -R rector-prefixed-downgraded-php70/vendor/rector/* vendor/rector/
+                    cp -R rector-prefixed-downgraded-php70/vendor/symfony/string/* vendor/symfony/string/
                     composer create-project php-parallel-lint/php-parallel-lint php-parallel-lint --ansi
 
             -   run: php-parallel-lint/parallel-lint rector-prefixed-downgraded-php70 --exclude rector-prefixed-downgraded-php70/stubs --exclude rector-prefixed-downgraded-php70/vendor/symfony/error-handler/Resources --exclude rector-prefixed-downgraded-php70/vendor/symfony/http-kernel/Resources --exclude rector-prefixed-downgraded-php70/vendor/rector/rector-nette/tests --exclude rector-prefixed-downgraded-php70/vendor/symfony/polyfill-mbstring/bootstrap80.php --exclude rector-prefixed-downgraded-php70/vendor/tracy/tracy/examples
