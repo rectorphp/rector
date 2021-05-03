@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
@@ -45,7 +46,7 @@ final class DowngradeNullableTypeDeclarationRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [Function_::class, ClassMethod::class];
+        return [Function_::class, ClassMethod::class, Closure::class];
     }
 
     public function getRuleDefinition(): RuleDefinition
