@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector\Fixture;
 
-class NullableOnClosureCall
+class NullableOnClosure
 {
     public function run()
     {
@@ -18,7 +18,7 @@ class NullableOnClosureCall
 
 namespace Rector\Tests\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector\Fixture;
 
-class NullableOnClosureCall
+class NullableOnClosure
 {
     public function run()
     {
