@@ -66,11 +66,11 @@ jobs:
                         --exclude rector-prefixed-downgraded-php70/vendor/rector/rector-nette/tests
                         --exclude rector-prefixed-downgraded-php70/vendor/symfony/polyfill-mbstring/bootstrap80.php
                         --exclude rector-prefixed-downgraded-php70/vendor/tracy/tracy/examples
-                        --exclude vendor/rector/rector-installer/tests
-                        --exclude vendor/symplify/smart-file-system/tests
-                        --exclude vendor/symfony/http-foundation/Session
-                        --exclude vendor/symfony/var-dumper
-                        --exclude vendor/nette/caching
+                        --exclude rector-prefixed-downgraded-php70/vendor/rector/rector-installer/tests
+                        --exclude rector-prefixed-downgraded-php70/vendor/symplify/smart-file-system/tests
+                        --exclude rector-prefixed-downgraded-php70/vendor/symfony/http-foundation/Session
+                        --exclude rector-prefixed-downgraded-php70/vendor/symfony/var-dumper
+                        --exclude rector-prefixed-downgraded-php70/vendor/nette/caching
 
             # 5. copy repository meta files
             -   run: |
