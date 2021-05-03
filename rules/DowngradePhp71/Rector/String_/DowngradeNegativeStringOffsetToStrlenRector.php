@@ -51,11 +51,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [String_::class, FuncCall::class, Variable::class, PropertyFetch::class, StaticPropertyFetch::class];
+        return [FuncCall::class, String_::class, Variable::class, PropertyFetch::class, StaticPropertyFetch::class];
     }
 
     /**
-     * @param String|FuncCall|Variable|PropertyFetch|StaticPropertyFetch $node
+     * @param FuncCall|String|Variable|PropertyFetch|StaticPropertyFetch $node
      */
     public function refactor(Node $node): ?Node
     {
