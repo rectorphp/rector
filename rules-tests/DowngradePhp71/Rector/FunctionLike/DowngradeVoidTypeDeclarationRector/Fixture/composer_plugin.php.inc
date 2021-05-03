@@ -56,6 +56,8 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         ];
     }
 }
+
+?>
 -----
 <?php
 
@@ -70,18 +72,30 @@ use Composer\Script\ScriptEvents;
 
 final class Plugin implements PluginInterface, EventSubscriberInterface
 {
+    /**
+     * @return void
+     */
     public function activate(Composer $composer, IOInterface $io)
     {
     }
 
+    /**
+     * @return void
+     */
     public function deactivate(Composer $composer, IOInterface $io)
     {
     }
 
+    /**
+     * @return void
+     */
     public function uninstall(Composer $composer, IOInterface $io)
     {
     }
 
+    /**
+     * @return void
+     */
     public function process(Event $event)
     {
         $io = $event->getIO();
