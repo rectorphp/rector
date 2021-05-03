@@ -63,13 +63,13 @@ CODE_SAMPLE
             return $this->processForFuncCall($node);
         }
 
-        return $this->processForStringOrVariable($node);
+        return $this->processForStringOrVariableOrProperty($node);
     }
 
     /**
-     * @param String_|Variable $expr
+     * @param String_|Variable|PropertyFetch|StaticPropertyFetch $expr
      */
-    private function processForStringOrVariable(Expr $expr): ?Expr
+    private function processForStringOrVariableOrProperty(Expr $expr): ?Expr
     {
         $nextNode = $expr->getAttribute(AttributeKey::NEXT_NODE);
         if (! $nextNode instanceof UnaryMinus) {
