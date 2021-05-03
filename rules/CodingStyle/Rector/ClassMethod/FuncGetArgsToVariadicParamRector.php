@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -67,7 +68,7 @@ CODE_SAMPLE
         }
 
         $assign = $this->matchFuncGetArgsVariableAssign($node);
-        if ($assign === null) {
+        if (! $assign instanceof Assign) {
             return null;
         }
 
@@ -91,7 +92,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    private function matchFuncGetArgsVariableAssign(Node\FunctionLike $functionLike): ?Assign
+    private function matchFuncGetArgsVariableAssign(FunctionLike $functionLike): ?Assign
     {
         /** @var Assign[] $assigns */
         $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Assign::class);
