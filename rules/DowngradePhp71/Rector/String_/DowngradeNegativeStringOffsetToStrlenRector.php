@@ -55,7 +55,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param FuncCall|String|Variable|PropertyFetch|StaticPropertyFetch $node
+     * @param FuncCall|String_|Variable|PropertyFetch|StaticPropertyFetch $node
      */
     public function refactor(Node $node): ?Node
     {
