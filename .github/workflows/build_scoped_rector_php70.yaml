@@ -1,11 +1,11 @@
-# builds the content of https://github.com/rectorphp/rector-prefixed
+# builds the content of https://github.com/rectorphp/rector-prefixed-php70
 # inspiration from https://github.com/phpstan/phpstan-src/blob/master/.github/workflows/phar.yml
 name: Build Scoped Rector PHP 7.0
 
 on:
     push:
         branches:
-            - never
+            - main
         tags:
             - '*'
 
@@ -33,12 +33,11 @@ jobs:
                     COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
             # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
-            -   run: |
-                    composer install --no-dev --ansi
-                    composer require composer/composer
+            -   run: composer install --no-dev --ansi
 
-            # 1. (a) copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
+            # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
             -  run: rsync --exclude rector-build-php70 -av * rector-build-php70 --quiet
+            -  run: rm -rf rector-build-php70/packages-tests rector-build-php70/rules-tests rector-build-php70/tests
 
             # 2. downgrade rector
             -   run: sh build/downgrade-rector-php70.sh rector-build-php70
