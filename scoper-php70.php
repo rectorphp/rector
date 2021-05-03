@@ -159,6 +159,18 @@ return [
             );
         },
 
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::contains($filePath, 'vendor/')) {
+                return $content;
+            }
+
+            // @see https://regex101.com/r/r3AJFl/1
+            return Strings::replace(
+                $content, '#\)\s{0,}:\s{0,}void#',
+                ")"
+            );
+        },
+
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
         function (string $filePath, string $prefix, string $content): string {
             // skip vendor, expect rector packages
