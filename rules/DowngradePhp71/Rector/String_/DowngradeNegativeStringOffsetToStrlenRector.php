@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp71\Rector\String_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\UnaryMinus;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -47,24 +51,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [String_::class, FuncCall::class];
+        return [FuncCall::class, String_::class, Variable::class, PropertyFetch::class, StaticPropertyFetch::class];
     }
 
     /**
-     * @param String_|FuncCall $node
+     * @param FuncCall|String_|Variable|PropertyFetch|StaticPropertyFetch $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof String_) {
-            return $this->processForString($node);
+        if ($node instanceof FuncCall) {
+            return $this->processForFuncCall($node);
         }
 
-        return $this->processForFuncCall($node);
+        return $this->processForStringOrVariableOrProperty($node);
     }
 
-    private function processForString(String_ $string): ?String_
+    /**
+     * @param String_|Variable|PropertyFetch|StaticPropertyFetch $expr
+     */
+    private function processForStringOrVariableOrProperty(Expr $expr): ?Expr
     {
-        $nextNode = $string->getAttribute(AttributeKey::NEXT_NODE);
+        $nextNode = $expr->getAttribute(AttributeKey::NEXT_NODE);
         if (! $nextNode instanceof UnaryMinus) {
             return null;
         }
@@ -80,10 +87,10 @@ CODE_SAMPLE
         /** @var UnaryMinus $dim */
         $dim = $parentOfNextNode->dim;
 
-        $strlenFuncCall = $this->nodeFactory->createFuncCall('strlen', [$string]);
+        $strlenFuncCall = $this->nodeFactory->createFuncCall('strlen', [$expr]);
         $parentOfNextNode->dim = new Minus($strlenFuncCall, $dim->expr);
 
-        return $string;
+        return $expr;
     }
 
     private function processForFuncCall(FuncCall $funcCall): ?FuncCall
