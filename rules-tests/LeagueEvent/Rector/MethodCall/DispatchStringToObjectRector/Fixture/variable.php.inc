@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector\Fixture;
 
-class Variable
+final class SomeVariable
 {
     /** @var \League\Event\EventDispatcher */
     private $dispatcher;
@@ -20,7 +20,7 @@ class Variable
 
 namespace Rector\Tests\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector\Fixture;
 
-class Variable
+final class SomeVariable
 {
     /** @var \League\Event\EventDispatcher */
     private $dispatcher;
