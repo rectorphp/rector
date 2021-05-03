@@ -22,9 +22,6 @@ class NullableOnClosureCall
 {
     public function run()
     {
-        /**
-         * @return int|null
-         */
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) use($propertyName, &$assignedParamName) {
             return null;
         });
