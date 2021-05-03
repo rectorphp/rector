@@ -68,7 +68,7 @@ jobs:
                         --exclude vendor/rector/rector-installer/tests \
                         --exclude vendor/symplify/smart-file-system/tests \
                         --exclude vendor/symfony/http-foundation/Session \
-                        --exclude vendor/symfony/var-dumper
+                        --exclude vendor/symfony/var-dumper \
                         --exclude vendor/nette/caching
 
             # 5. copy repository meta files
