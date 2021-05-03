@@ -147,6 +147,18 @@ return [
             return Strings::replace($content, $namespace);
         },
 
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::endsWith($filePath, 'vendor/symplify/autowire-array-parameter/src/Skipper/ParameterSkipper.php')) {
+                return $content;
+            }
+
+            // @see https://regex101.com/r/wcAbLf/1
+            return Strings::replace(
+                $content, '#((private|public|protected)\s+const)#',
+                "const"
+            );
+        },
+
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
         function (string $filePath, string $prefix, string $content): string {
             // skip vendor, expect rector packages
