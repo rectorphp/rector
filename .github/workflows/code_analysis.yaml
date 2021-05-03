@@ -15,7 +15,7 @@ jobs:
                 actions:
                     -
                         name: 'Composer Validate'
-                        run: composer validate --strict --ansi
+                        run: composer validate --ansi
 
                     -
                         name: 'Validate Max File Length'

@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DowngradePhp71\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector\Fixture;
 
-class Variable
+final class SomeVariable
 {
     public function run(string $var)
     {
@@ -16,7 +16,7 @@ class Variable
 
 namespace Rector\Tests\DowngradePhp71\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector\Fixture;
 
-class Variable
+final class SomeVariable
 {
     public function run(string $var)
     {

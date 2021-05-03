@@ -171,4 +171,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SingularSwitchToIfRector::class);
     $services->set(SimplifyIfNullableReturnRector::class);
     $services->set(NarrowUnionTypeDocRector::class);
+    $services->set(\Rector\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector::class);
 };

@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -65,6 +66,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_SPREAD)) {
+            return null;
+        }
+
         if (! $this->isName($node, 'call_user_func_array')) {
             return null;
         }
@@ -88,7 +93,7 @@ CODE_SAMPLE
     private function createFuncCall(Expr $expr, string $functionName): FuncCall
     {
         $args = [];
-        $args[] = new Arg($expr, false, true);
+        $args[] = $this->createUnpackedArg($expr);
 
         return $this->nodeFactory->createFuncCall($functionName, $args);
     }
@@ -118,9 +123,15 @@ CODE_SAMPLE
             $string = $secondItem->value;
             $methodName = $string->value;
 
-            return new MethodCall($firstItem->value, $methodName, [new Arg($secondExpr, false, true)]);
+            $arg = $this->createUnpackedArg($secondExpr);
+            return new MethodCall($firstItem->value, $methodName, [$arg]);
         }
 
         return null;
+    }
+
+    private function createUnpackedArg(Expr $expr): Arg
+    {
+        return new Arg($expr, false, true);
     }
 }

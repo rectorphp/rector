@@ -39,6 +39,9 @@ jobs:
                     php-version: 7.3
                     coverage: none
             -
+                run: composer require nikic/php-parser:4.10.4 --no-update
+
+            -
                 run: composer install --ansi
 
             -
