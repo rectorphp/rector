@@ -9,6 +9,8 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
@@ -49,7 +51,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [String_::class, FuncCall::class, Variable::class];
+        return [String_::class, FuncCall::class, Variable::class, PropertyFetch::class, StaticPropertyFetch::class];
     }
 
     /**
