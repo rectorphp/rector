@@ -1,5 +1,5 @@
 {
-    "name": "rector/rector-prefixed",
+    "name": "rector/rector-prefixed-php70",
     "description": "Prefixed and PHP 7.0 downgraded version of rector/rector",
     "license": "MIT",
     "bin": [
