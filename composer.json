@@ -29,7 +29,7 @@
         "ext-dom": "*",
         "ext-json": "*",
         "composer/semver": "^3.2",
-        "composer/xdebug-handler": "^1.4|^2.0",
+        "composer/xdebug-handler": "^2.0",
         "danielstjules/stringy": "^3.1",
         "doctrine/inflector": "^2.0",
         "jean85/pretty-package-versions": "^1.6",
@@ -38,7 +38,7 @@
         "nette/utils": "^3.2",
         "nikic/php-parser": "4.10.5",
         "phpstan/phpdoc-parser": "^0.5.4",
-        "phpstan/phpstan": "^0.12.83",
+        "phpstan/phpstan": "dev-master#7a8ebc3",
         "phpstan/phpstan-phpunit": "^0.12.18",
         "rector/rector-cakephp": "^0.10.4",
         "rector/rector-doctrine": "^0.10.6",
@@ -67,7 +67,7 @@
         "webmozart/assert": "^1.10"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.18.6",
+        "friendsofphp/php-cs-fixer": "^3.0",
         "nette/application": "^3.0.7",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
@@ -94,7 +94,8 @@
             "Rector\\Compiler\\": "utils/compiler/src"
         },
         "files": [
-            "src/functions/node_helper.php"
+            "src/functions/node_helper.php",
+            "src/constants.php"
         ]
     },
     "autoload-dev": {
@@ -155,5 +156,7 @@
     "config": {
         "sort-packages": true,
         "platform-check": false
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
