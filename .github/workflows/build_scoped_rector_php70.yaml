@@ -77,6 +77,14 @@ jobs:
             -   run: rm -rf remote-repository-php70/config remote-repository-php70/src remote-repository-php70/rules remote-repository-php70/packages remote-repository-php70/vendor
 
             -   run: cp -a rector-prefixed-downgraded-php70/. remote-repository-php70
+            -
+                working-directory: remote-repository-php70
+                run: |
+                    rm -rf vendor/phpstan/phpstan
+                    composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
+                    composer require phpstan/phpstan-src --ignore-platform-reqs
+                    sh build/downgrade-rector-php70.sh rector-build-php70/vendor/phpstan
+                    mv composer-move.json composer.json
 
             # 7. setup git
             -
