@@ -22,13 +22,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://www.php.net/manual/en/function.call-user-func-array.php#117655
  * @changelog https://3v4l.org/CBWt9
  *
- * @see \Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector\CallUserFuncCallToVariadicRectorTest
+ * @see \Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector\CallUserFuncArrayToVariadicRectorTest
  */
-final class CallUserFuncCallToVariadicRector extends AbstractRector
+final class CallUserFuncArrayToVariadicRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace call_user_func_call with variadic', [
+        return new RuleDefinition('Replace call_user_func_array() with variadic', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

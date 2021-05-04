@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector\Fixture;
 
 class SkipUnknownValue
 {
