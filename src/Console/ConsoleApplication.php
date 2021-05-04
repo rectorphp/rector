@@ -53,7 +53,7 @@ final class ConsoleApplication extends Application
         // @fixes https://github.com/rectorphp/rector/issues/2205
         $isXdebugAllowed = $input->hasParameterOption('--xdebug');
         if (! $isXdebugAllowed) {
-            $xdebugHandler = new XdebugHandler('rector', '--ansi');
+            $xdebugHandler = new XdebugHandler('rector');
             $xdebugHandler->check();
             unset($xdebugHandler);
         }
