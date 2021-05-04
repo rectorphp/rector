@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace Rector\FileFormatter\Formatter;
 
-use Ergebnis\Json\Printer\Printer;
-use Rector\Core\Contract\Formatter\FileFormatterInterface;
+use Ergebnis\Json\Printer\PrinterInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\FileFormatter\Contract\Formatter\FileFormatterInterface;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
+use Rector\FileFormatter\ValueObject\Indent;
 use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 
 /**
- * @see \Rector\Core\Tests\Formatter\JsonFormatter\JsonFormatterTest
+ * @see \Rector\Tests\FileFormatter\Formatter\JsonFileFormatter\JsonFileFormatterTest
  */
 final class JsonFileFormatter implements FileFormatterInterface
 {
     /**
-     * @var Printer
+     * @var PrinterInterface
      */
     private $jsonPrinter;
 
-    public function __construct(Printer $jsonPrinter)
+    public function __construct(PrinterInterface $jsonPrinter)
     {
         $this->jsonPrinter = $jsonPrinter;
     }
@@ -29,7 +30,7 @@ final class JsonFileFormatter implements FileFormatterInterface
     {
         $smartFileInfo = $file->getSmartFileInfo();
 
-        return in_array($smartFileInfo->getExtension(), ['json'], true);
+        return $smartFileInfo->getExtension() === 'json';
     }
 
     public function format(File $file, EditorConfigConfiguration $editorConfigConfiguration): void
@@ -37,7 +38,7 @@ final class JsonFileFormatter implements FileFormatterInterface
         $newFileContent = $this->jsonPrinter->print(
             $file->getFileContent(),
             $editorConfigConfiguration->getIndent(),
-            $editorConfigConfiguration->getEndOfLine()
+            $editorConfigConfiguration->getNewLine()
         );
 
         $newFileContent .= $editorConfigConfiguration->getFinalNewline();
@@ -45,13 +46,11 @@ final class JsonFileFormatter implements FileFormatterInterface
         $file->changeFileContent($newFileContent);
     }
 
-    public function createEditorConfigConfigurationBuilder(): EditorConfigConfigurationBuilder
+    public function createDefaultEditorConfigConfigurationBuilder(): EditorConfigConfigurationBuilder
     {
         $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
-        $editorConfigConfigurationBuilder->withLineFeed();
-        $editorConfigConfigurationBuilder->withSpace();
-        $editorConfigConfigurationBuilder->withIndentSize(4);
-        $editorConfigConfigurationBuilder->withFinalNewline();
+
+        $editorConfigConfigurationBuilder->withIndent(Indent::createSpaceWithSize(4));
 
         return $editorConfigConfigurationBuilder;
     }

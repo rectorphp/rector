@@ -6,6 +6,7 @@ use Composer\Semver\VersionParser;
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\Rules\English\InflectorFactory;
 use Ergebnis\Json\Printer\Printer;
+use Ergebnis\Json\Printer\PrinterInterface;
 use Idiosyncratic\EditorConfig\EditorConfig;
 use Nette\Caching\Cache;
 use PhpParser\BuilderFactory;
@@ -28,10 +29,10 @@ use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
 use Rector\Caching\Cache\NetteCacheFactory;
 use Rector\Core\Console\ConsoleApplication;
-use Rector\Core\Contract\EditorConfig\EditorConfigParserInterface;
 use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
+use Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface;
 use Rector\FileFormatter\EditorConfig\EditorConfigIdiosyncraticParser;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
@@ -153,7 +154,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->factory([service(PHPStanServicesFactory::class), 'createDynamicSourceLocatorProvider']);
 
     $services->set(Printer::class);
-    $services->set(EditorConfig::class);
+    $services->alias(PrinterInterface::class, Printer::class);
+
     $services->set(Formatter::class);
+
+    $services->set(EditorConfig::class);
+
     $services->alias(EditorConfigParserInterface::class, EditorConfigIdiosyncraticParser::class);
 };

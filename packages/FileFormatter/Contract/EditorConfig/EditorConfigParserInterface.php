@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Core\Contract\EditorConfig;
+namespace Rector\FileFormatter\Contract\EditorConfig;
 
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;

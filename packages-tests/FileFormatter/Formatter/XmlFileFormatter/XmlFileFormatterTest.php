@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\FileFormatter\Formatter\NeonFileFormatter;
+namespace Rector\Tests\FileFormatter\Formatter\XmlFileFormatter;
 
 use Iterator;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\Formatter\XmlFileFormatter;
+use Rector\FileFormatter\ValueObject\Indent;
 use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
@@ -34,6 +35,9 @@ final class XmlFileFormatterTest extends AbstractTestCase
         $this->doTestFileInfo($fileInfo);
     }
 
+    /**
+     * @return Iterator<array<int, SmartFileInfo>>
+     */
     public function provideData(): Iterator
     {
         return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.xml');
@@ -47,10 +51,7 @@ final class XmlFileFormatterTest extends AbstractTestCase
         $file = new File($inputFileInfo, $inputFileInfo->getContents());
 
         $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
-        $editorConfigConfigurationBuilder->withTab();
-        $editorConfigConfigurationBuilder->withTabWidth(1);
-        $editorConfigConfigurationBuilder->withFinalNewline();
-        $editorConfigConfigurationBuilder->withLineFeed();
+        $editorConfigConfigurationBuilder->withIndent(Indent::createTabWithSize(1));
 
         $this->xmlFileFormatter->format($file, $editorConfigConfigurationBuilder->build());
 

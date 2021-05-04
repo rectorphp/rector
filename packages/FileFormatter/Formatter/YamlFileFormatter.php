@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Rector\FileFormatter\Formatter;
 
-use Rector\Core\Contract\Formatter\FileFormatterInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\FileFormatter\Contract\Formatter\FileFormatterInterface;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
+use Rector\FileFormatter\ValueObject\Indent;
 use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * @see \Rector\Tests\FileFormatter\Formatter\YamlFileFormatter\YamlFileFormatterTest
+ */
 final class YamlFileFormatter implements FileFormatterInterface
 {
     public function supports(File $file): bool
@@ -30,13 +34,11 @@ final class YamlFileFormatter implements FileFormatterInterface
         $file->changeFileContent($newFileContent);
     }
 
-    public function createEditorConfigConfigurationBuilder(): EditorConfigConfigurationBuilder
+    public function createDefaultEditorConfigConfigurationBuilder(): EditorConfigConfigurationBuilder
     {
         $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
-        $editorConfigConfigurationBuilder->withLineFeed();
-        $editorConfigConfigurationBuilder->withSpace();
-        $editorConfigConfigurationBuilder->withoutFinalNewline();
-        $editorConfigConfigurationBuilder->withIndentSize(2);
+
+        $editorConfigConfigurationBuilder->withIndent(Indent::createSpaceWithSize(2));
 
         return $editorConfigConfigurationBuilder;
     }

@@ -7,6 +7,7 @@ namespace Rector\Tests\FileFormatter\Formatter\JsonFileFormatter;
 use Iterator;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\Formatter\JsonFileFormatter;
+use Rector\FileFormatter\ValueObject\Indent;
 use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
@@ -18,12 +19,12 @@ final class JsonFileFormatterTest extends AbstractTestCase
     /**
      * @var JsonFileFormatter
      */
-    private $jsonFormatter;
+    private $jsonFileFormatter;
 
     protected function setUp(): void
     {
         $this->boot();
-        $this->jsonFormatter = $this->getService(JsonFileFormatter::class);
+        $this->jsonFileFormatter = $this->getService(JsonFileFormatter::class);
     }
 
     /**
@@ -34,6 +35,9 @@ final class JsonFileFormatterTest extends AbstractTestCase
         $this->doTestFileInfo($fileInfo);
     }
 
+    /**
+     * @return Iterator<array<int, SmartFileInfo>>
+     */
     public function provideData(): Iterator
     {
         return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.json');
@@ -47,12 +51,9 @@ final class JsonFileFormatterTest extends AbstractTestCase
         $file = new File($inputFileInfo, $inputFileInfo->getContents());
 
         $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
-        $editorConfigConfigurationBuilder->withTab();
-        $editorConfigConfigurationBuilder->withTabWidth(1);
-        $editorConfigConfigurationBuilder->withFinalNewline();
-        $editorConfigConfigurationBuilder->withLineFeed();
+        $editorConfigConfigurationBuilder->withIndent(Indent::createTabWithSize(1));
 
-        $this->jsonFormatter->format($file, $editorConfigConfigurationBuilder->build());
+        $this->jsonFileFormatter->format($file, $editorConfigConfigurationBuilder->build());
 
         $this->assertSame($inputFileInfoAndExpected->getExpected(), $file->getFileContent());
     }

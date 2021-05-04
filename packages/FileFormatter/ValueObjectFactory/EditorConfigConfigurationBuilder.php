@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\FileFormatter\ValueObjectFactory;
 
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
+use Rector\FileFormatter\ValueObject\Indent;
+use Rector\FileFormatter\ValueObject\NewLine;
 
 final class EditorConfigConfigurationBuilder
 {
@@ -19,32 +21,41 @@ final class EditorConfigConfigurationBuilder
     private $indentSize;
 
     /**
-     * @var int
-     */
-    private $tabWidth;
-
-    /**
-     * @var string
-     */
-    private $endOfLine;
-
-    /**
      * @var bool
      */
-    private $insertFinalNewline;
+    private $insertFinalNewline = false;
+
+    /**
+     * @var NewLine
+     */
+    private $newLine;
 
     private function __construct()
     {
-        $this->indentStyle = EditorConfigConfiguration::SPACE;
+        $this->indentStyle = 'space';
         $this->indentSize = 2;
-        $this->tabWidth = 1;
-        $this->endOfLine = EditorConfigConfiguration::LINE_FEED;
+        $this->newLine = NewLine::fromEditorConfig('lf');
         $this->insertFinalNewline = true;
     }
 
     public static function anEditorConfigConfiguration(): self
     {
         return new self();
+    }
+
+    public function withNewLine(NewLine $newLine): self
+    {
+        $this->newLine = $newLine;
+
+        return $this;
+    }
+
+    public function withIndent(Indent $indent): self
+    {
+        $this->indentSize = $indent->getIndentSize();
+        $this->indentStyle = $indent->getIndentStyle();
+
+        return $this;
     }
 
     public function withIndentStyle(string $indentStyle): self
@@ -61,27 +72,6 @@ final class EditorConfigConfigurationBuilder
         return $this;
     }
 
-    public function withTabWidth(int $tabWidth): self
-    {
-        $this->tabWidth = $tabWidth;
-
-        return $this;
-    }
-
-    public function withEndOfLine(string $endOfLine): self
-    {
-        $this->endOfLine = $endOfLine;
-
-        return $this;
-    }
-
-    public function withFinalNewline(): self
-    {
-        $this->insertFinalNewline = true;
-
-        return $this;
-    }
-
     public function withInsertFinalNewline(bool $insertFinalNewline): self
     {
         $this->insertFinalNewline = $insertFinalNewline;
@@ -89,41 +79,20 @@ final class EditorConfigConfigurationBuilder
         return $this;
     }
 
-    public function withoutFinalNewline(): self
+    public function withEndOfLineFromEditorConfig(string $endOfLine): self
     {
-        $this->insertFinalNewline = false;
-
-        return $this;
-    }
-
-    public function withLineFeed(): self
-    {
-        $this->endOfLine = EditorConfigConfiguration::LINE_FEED;
-
-        return $this;
-    }
-
-    public function withSpace(): self
-    {
-        $this->indentStyle = EditorConfigConfiguration::SPACE;
-
-        return $this;
-    }
-
-    public function withTab(): self
-    {
-        $this->indentStyle = EditorConfigConfiguration::TAB;
+        $this->newLine = NewLine::fromEditorConfig($endOfLine);
 
         return $this;
     }
 
     public function build(): EditorConfigConfiguration
     {
+        $newLine = $this->newLine;
+
         return new EditorConfigConfiguration(
-            $this->indentStyle,
-            $this->indentSize,
-            $this->endOfLine,
-            $this->tabWidth,
+            Indent::fromSizeAndStyle($this->indentSize, $this->indentStyle),
+            $newLine,
             $this->insertFinalNewline
         );
     }

@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rector\FileFormatter\EditorConfig;
 
 use Idiosyncratic\EditorConfig\EditorConfig;
-use Rector\Core\Contract\EditorConfig\EditorConfigParserInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
 use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 
 /**
- * @see \Rector\Core\Tests\EditorConfig\EditorConfigIdiosyncraticParser\EditorConfigIdiosyncraticParserTest
+ * @see \Rector\Tests\FileFormatter\EditorConfig\EditorConfigIdiosyncraticParser\EditorConfigIdiosyncraticParserTest
  */
 final class EditorConfigIdiosyncraticParser implements EditorConfigParserInterface
 {
@@ -33,25 +33,31 @@ final class EditorConfigIdiosyncraticParser implements EditorConfigParserInterfa
         $configuration = $this->editorConfig->getConfigForPath($smartFileInfo->getRealPath());
 
         if (array_key_exists(self::INDENT_STYLE, $configuration)) {
-            $editorConfigConfigurationBuilder->withIndentStyle($configuration[self::INDENT_STYLE]->getValue());
+            $indentStyle = (string) $configuration[self::INDENT_STYLE]->getValue();
+
+            $editorConfigConfigurationBuilder->withIndentStyle($indentStyle);
         }
 
         if (array_key_exists(self::INDENT_SIZE, $configuration)) {
-            $editorConfigConfigurationBuilder->withIndentSize($configuration[self::INDENT_SIZE]->getValue());
+            $indentSize = (int) $configuration[self::INDENT_SIZE]->getValue();
+
+            $editorConfigConfigurationBuilder->withIndentSize($indentSize);
         }
 
         if (array_key_exists(self::END_OF_LINE, $configuration)) {
-            $editorConfigConfigurationBuilder->withEndOfLine($configuration[self::END_OF_LINE]->getValue());
+            $endOfLine = (string) $configuration[self::END_OF_LINE]->getValue();
+
+            $editorConfigConfigurationBuilder->withEndOfLineFromEditorConfig($endOfLine);
         }
 
         if (array_key_exists(self::INSERT_FINAL_NEWLINE, $configuration)) {
-            $editorConfigConfigurationBuilder->withInsertFinalNewline(
-                $configuration[self::INSERT_FINAL_NEWLINE]->getValue()
-            );
+            $insertFinalNewline = (bool) $configuration[self::INSERT_FINAL_NEWLINE]->getValue();
+
+            $editorConfigConfigurationBuilder->withInsertFinalNewline($insertFinalNewline);
         }
 
         if (array_key_exists(self::TAB_WIDTH, $configuration)) {
-            $editorConfigConfigurationBuilder->withTabWidth($configuration[self::TAB_WIDTH]->getValue());
+            $editorConfigConfigurationBuilder->withIndentSize($configuration[self::TAB_WIDTH]->getValue());
         }
 
         return $editorConfigConfigurationBuilder->build();

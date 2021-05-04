@@ -4,148 +4,60 @@ declare(strict_types=1);
 
 namespace Rector\FileFormatter\ValueObject;
 
-use Rector\Core\Exception\EditorConfigConfigurationException;
-use Symplify\PackageBuilder\Configuration\StaticEolConfiguration;
-
+/**
+ * @see \Rector\Tests\FileFormatter\ValueObject\EditorConfigConfigurationTest
+ */
 final class EditorConfigConfiguration
 {
     /**
-     * @var string
+     * @var NewLine
      */
-    public const LINE_FEED = 'lf';
-
-    /**
-     * @var string
-     */
-    public const CARRIAGE_RETURN = 'cr';
-
-    /**
-     * @var string
-     */
-    public const CARRIAGE_RETURN_LINE_FEED = 'crlf';
-
-    /**
-     * @var string
-     */
-    public const TAB = 'tab';
-
-    /**
-     * @var string
-     */
-    public const SPACE = 'space';
-
-    /**
-     * @var array<string, string>
-     */
-    private const ALLOWED_END_OF_LINE = [
-        self::LINE_FEED => "\n",
-        self::CARRIAGE_RETURN => "\r",
-        self::CARRIAGE_RETURN_LINE_FEED => "\r\n",
-    ];
-
-    /**
-     * @var array<int, string>
-     */
-    private const ALLOWED_INDENT_STYLE = [self::TAB, self::SPACE];
-
-    /**
-     * @var string
-     */
-    private const TAB_CHARACTER = "\t";
-
-    /**
-     * @var string
-     */
-    private const SPACE_CHARACTER = ' ';
-
-    /**
-     * @var string
-     */
-    private $indentStyle;
-
-    /**
-     * @var int
-     */
-    private $indentSize;
-
-    /**
-     * @var string
-     */
-    private $endOfLine;
-
-    /**
-     * @var int
-     */
-    private $tabWidth;
+    private $newLine;
 
     /**
      * @var bool
      */
-    private $insertFinalNewline;
+    private $insertFinalNewline = false;
 
-    public function __construct(
-        string $indentStyle,
-        int $indentSize,
-        string $endOfLine,
-        int $tabWidth,
-        bool $insertFinalNewline
-    ) {
-        if (! array_key_exists($endOfLine, self::ALLOWED_END_OF_LINE)) {
-            $allowedEndOfLineValues = array_keys(self::ALLOWED_END_OF_LINE);
-            throw new EditorConfigConfigurationException(sprintf(
-                'The endOfLine "%s" is not allowed. Allowed are "%s"',
-                $endOfLine,
-                implode(',', $allowedEndOfLineValues)
-            ));
-        }
+    /**
+     * @var Indent
+     */
+    private $indent;
 
-        if (! in_array($indentStyle, self::ALLOWED_INDENT_STYLE, true)) {
-            throw new EditorConfigConfigurationException(sprintf(
-                'The indentStyle "%s" is not allowed. Allowed are "%s"',
-                $endOfLine,
-                implode(',', self::ALLOWED_INDENT_STYLE)
-            ));
-        }
-
-        $this->indentStyle = $indentStyle;
-        $this->indentSize = $indentSize;
-        $this->endOfLine = self::ALLOWED_END_OF_LINE[$endOfLine];
-        $this->tabWidth = $tabWidth;
+    public function __construct(Indent $indent, NewLine $newLine, bool $insertFinalNewline)
+    {
+        $this->indent = $indent;
+        $this->newLine = $newLine;
         $this->insertFinalNewline = $insertFinalNewline;
     }
 
-    public function getIndentStyle(): string
+    public function getNewLine(): string
     {
-        return $this->indentStyle;
-    }
-
-    public function getIndentSize(): int
-    {
-        return $this->isTab() ? $this->tabWidth : $this->indentSize;
-    }
-
-    public function getEndOfLine(): string
-    {
-        return $this->endOfLine;
+        return $this->newLine->__toString();
     }
 
     public function getFinalNewline(): string
     {
-        return $this->insertFinalNewline ? $this->endOfLine : '';
+        return $this->insertFinalNewline ? $this->getNewLine() : '';
     }
 
     public function getIndent(): string
     {
-        return str_pad('', $this->getIndentSize(), $this->getIndentStyleCharacter());
+        return $this->indent->__toString();
     }
 
     public function getIndentStyleCharacter(): string
     {
-        return $this->isTab() ? self::TAB_CHARACTER : self::SPACE_CHARACTER;
+        return $this->indent->getIndentStyleCharacter();
     }
 
-    private function isTab(): bool
+    public function getIndentStyle(): string
     {
-        return $this->indentStyle === self::TAB;
+        return $this->indent->getIndentStyle();
+    }
+
+    public function getIndentSize(): int
+    {
+        return $this->indent->getIndentSize();
     }
 }

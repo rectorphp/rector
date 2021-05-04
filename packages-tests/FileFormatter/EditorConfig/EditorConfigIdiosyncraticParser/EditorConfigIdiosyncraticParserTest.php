@@ -2,9 +2,9 @@
 
 namespace Rector\Tests\FileFormatter\EditorConfig\EditorConfigIdiosyncraticParser;
 
-use Rector\Core\Contract\EditorConfig\EditorConfigParserInterface;
 use Rector\Core\ValueObject\Application\File;
-use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
+use Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface;
+use Rector\FileFormatter\ValueObject\Indent;
 use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -25,17 +25,18 @@ final class EditorConfigIdiosyncraticParserTest extends AbstractTestCase
     public function testComposerJsonFile(): void
     {
         $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
-        $editorConfigConfigurationBuilder->withIndentSize(20);
-        $editorConfigConfigurationBuilder->withSpace();
-        $editorConfigConfigurationBuilder->withLineFeed();
-        $editorConfigConfigurationBuilder->withFinalNewline();
+        $editorConfigConfigurationBuilder->withIndent(Indent::createSpaceWithSize(20));
 
         $composerJsonFile = new SmartFileInfo(__DIR__ . '/Fixture/composer.json');
-        $editorConfiguration = $this->editorConfigParser->extractConfigurationForFile(
-            new File($composerJsonFile, $composerJsonFile->getContents()),
+
+        $file = new File($composerJsonFile, $composerJsonFile->getContents());
+
+        $editorConfigConfiguration = $this->editorConfigParser->extractConfigurationForFile(
+            $file,
             $editorConfigConfigurationBuilder
         );
-        self::assertSame(EditorConfigConfiguration::TAB, $editorConfiguration->getIndentStyle());
-        self::assertSame(1, $editorConfiguration->getIndentSize());
+
+        $this->assertSame('tab', $editorConfigConfiguration->getIndentStyle());
+        $this->assertSame(1, $editorConfigConfiguration->getIndentSize());
     }
 }

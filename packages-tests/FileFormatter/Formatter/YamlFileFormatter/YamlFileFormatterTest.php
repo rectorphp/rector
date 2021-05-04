@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\FileFormatter\Formatter\NeonFileFormatter;
+namespace Rector\Tests\FileFormatter\Formatter\YamlFileFormatter;
 
 use Iterator;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\Formatter\YamlFileFormatter;
+use Rector\FileFormatter\ValueObject\Indent;
 use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
@@ -34,6 +35,9 @@ final class YamlFileFormatterTest extends AbstractTestCase
         $this->doTestFileInfo($fileInfo);
     }
 
+    /**
+     * @return Iterator<array<int, SmartFileInfo>>
+     */
     public function provideData(): Iterator
     {
         return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.yaml');
@@ -47,10 +51,8 @@ final class YamlFileFormatterTest extends AbstractTestCase
         $file = new File($inputFileInfo, $inputFileInfo->getContents());
 
         $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
-        $editorConfigConfigurationBuilder->withSpace();
-        $editorConfigConfigurationBuilder->withIndentSize(4);
-        $editorConfigConfigurationBuilder->withoutFinalNewline();
-        $editorConfigConfigurationBuilder->withLineFeed();
+        $editorConfigConfigurationBuilder->withIndent(Indent::createSpaceWithSize(4));
+        $editorConfigConfigurationBuilder->withInsertFinalNewline(false);
 
         $this->yamlFileFormatter->format($file, $editorConfigConfigurationBuilder->build());
 
