@@ -131,10 +131,10 @@ function should_include_preload(): bool
         return true;
     }
 
-    if (! file_exists(__DIR__ . '/../composer.json')) {
+    if (! file_exists(getcwd() . '/composer.json')) {
         return false;
     }
 
-    $composerJsonFileContent = file_get_contents(__DIR__ . '/../composer.json');
+    $composerJsonFileContent = file_get_contents(getcwd() . '/composer.json');
     return strpos($composerJsonFileContent, '"name": "rector/rector"') !== false;
 }
