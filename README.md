@@ -146,7 +146,7 @@ vendor/bin/rector process src
 
 <br>
 
-## Full Config Configuration
+## Configuration
 
 ```php
 // rector.php
@@ -168,25 +168,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // Path to phpstan with extensions, that PHPSTan in Rector uses to determine types
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, getcwd() . '/phpstan-for-config.neon');
-};
-```
-
-### Symfony Container
-
-To work with some Symfony rules, you now need to link your container XML file
-
-```php
-// rector.php
-use Rector\Core\Configuration\Option;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
-
-    $parameters->set(
-        Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
-        __DIR__ . '/var/cache/dev/AppKernelDevDebugContainer.xml'
-    );
 };
 ```
 
