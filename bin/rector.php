@@ -25,10 +25,12 @@ define('__RECTOR_RUNNING__', true);
 $autoloadIncluder = new AutoloadIncluder();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 
+// load local php-parser only in prefixed version
 if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php')) {
-    // make local php-parser a priority to avoid conflict
     require_once __DIR__ . '/../preload.php';
 }
+
+require_once __DIR__ . '/../src/constants.php';
 
 $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-autoload.php');
 
@@ -39,11 +41,6 @@ $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
 $symfonyStyle = $symfonyStyleFactory->create();
 
 $rectorConfigsResolver = new RectorConfigsResolver();
-
-// for simpler debugging output
-if (class_exists(Debugger::class)) {
-    Debugger::$maxDepth = 2;
-}
 
 try {
     $bootstrapConfigs = $rectorConfigsResolver->provide();

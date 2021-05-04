@@ -30,7 +30,7 @@ class Drupal
     public function run()
     {
         $replace = function ($m) {
-            $r = "\0{$m[1]}ecursion_features";
+            $r = "\x00{$m[1]}ecursion_features";
             return 's:' . strlen($r . $m[2]) . ':"' . $r . $m[2] . '";';
         };
 

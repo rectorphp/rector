@@ -21,7 +21,7 @@ class PregQuoted
     public function run($subject)
     {
         preg_replace_callback('/('.preg_quote("a", '/').')/', function ($matches) {
-            return strtoupper("\1");
+            return strtoupper("\x01");
         }, $subject);
     }
 }
