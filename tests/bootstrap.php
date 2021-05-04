@@ -12,5 +12,8 @@ error_reporting(E_ALL ^ E_DEPRECATED);
 // performance boost
 gc_disable();
 
+// make local php-parser a priority to avoid conflict
+require_once __DIR__ . '/../preload.php';
+
 $phpStanStubLoader = new PHPStanStubLoader();
 $phpStanStubLoader->loadStubs();
