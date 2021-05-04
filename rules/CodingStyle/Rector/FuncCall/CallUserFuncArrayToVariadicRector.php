@@ -8,11 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Scalar\String_;
+use Rector\CodingStyle\NodeFactory\ArrayCallableToMethodCallFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -22,13 +21,23 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://www.php.net/manual/en/function.call-user-func-array.php#117655
  * @changelog https://3v4l.org/CBWt9
  *
- * @see \Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector\CallUserFuncCallToVariadicRectorTest
+ * @see \Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector\CallUserFuncArrayToVariadicRectorTest
  */
-final class CallUserFuncCallToVariadicRector extends AbstractRector
+final class CallUserFuncArrayToVariadicRector extends AbstractRector
 {
+    /**
+     * @var ArrayCallableToMethodCallFactory
+     */
+    private $arrayCallableToMethodCallFactory;
+
+    public function __construct(ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory)
+    {
+        $this->arrayCallableToMethodCallFactory = $arrayCallableToMethodCallFactory;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace call_user_func_call with variadic', [
+        return new RuleDefinition('Replace call_user_func_array() with variadic', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
@@ -100,34 +109,13 @@ CODE_SAMPLE
 
     private function createMethodCall(Array_ $array, Expr $secondExpr): ?MethodCall
     {
-        if (count($array->items) !== 2) {
+        $methodCall = $this->arrayCallableToMethodCallFactory->create($array);
+        if (! $methodCall instanceof MethodCall) {
             return null;
         }
 
-        $firstItem = $array->items[0];
-        $secondItem = $array->items[1];
-
-        if (! $firstItem instanceof ArrayItem) {
-            return null;
-        }
-
-        if (! $secondItem instanceof ArrayItem) {
-            return null;
-        }
-
-        if ($firstItem->value instanceof PropertyFetch) {
-            if (! $secondItem->value instanceof String_) {
-                return null;
-            }
-
-            $string = $secondItem->value;
-            $methodName = $string->value;
-
-            $arg = $this->createUnpackedArg($secondExpr);
-            return new MethodCall($firstItem->value, $methodName, [$arg]);
-        }
-
-        return null;
+        $methodCall->args[] = $this->createUnpackedArg($secondExpr);
+        return $methodCall;
     }
 
     private function createUnpackedArg(Expr $expr): Arg

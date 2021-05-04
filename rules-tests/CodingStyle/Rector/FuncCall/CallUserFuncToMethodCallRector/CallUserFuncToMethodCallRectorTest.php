@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector;
+namespace Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncToMethodCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class CallUserFuncCallToVariadicRectorTest extends AbstractRectorTestCase
+final class CallUserFuncToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

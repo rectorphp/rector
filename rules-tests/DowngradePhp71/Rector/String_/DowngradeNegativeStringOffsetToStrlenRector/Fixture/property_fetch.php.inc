@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DowngradePhp71\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector\Fixture;
 
-class PropertyFetch
+final class SomePropertyFetch
 {
     private $var;
 
@@ -19,7 +19,7 @@ class PropertyFetch
 
 namespace Rector\Tests\DowngradePhp71\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector\Fixture;
 
-class PropertyFetch
+final class SomePropertyFetch
 {
     private $var;
 

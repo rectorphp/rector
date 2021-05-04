@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector\Fixture;
 
-use Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector\Source\Redirector;
+use Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector\Source\Redirector;
 
 final class ArrayLocalMethodWithReference
 {
@@ -24,9 +24,9 @@ final class ArrayLocalMethodWithReference
 -----
 <?php
 
-namespace Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector\Fixture;
+namespace Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector\Fixture;
 
-use Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector\Source\Redirector;
+use Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector\Source\Redirector;
 
 final class ArrayLocalMethodWithReference
 {

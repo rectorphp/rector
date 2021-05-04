@@ -15,7 +15,7 @@ use Rector\CodingStyle\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRect
 use Rector\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
-use Rector\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector;
+use Rector\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector;
@@ -60,7 +60,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddArrayDefaultToArrayPropertyRector::class);
     $services->set(AddFalseDefaultToBoolPropertyRector::class);
     $services->set(MakeInheritedMethodVisibilitySameAsParentRector::class);
-    $services->set(CallUserFuncCallToVariadicRector::class);
+    $services->set(CallUserFuncArrayToVariadicRector::class);
     $services->set(VersionCompareFuncCallToConstantRector::class);
     $services->set(UseMessageVariableForSprintfInSymfonyStyleRector::class);
 

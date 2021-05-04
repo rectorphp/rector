@@ -7,7 +7,7 @@ function getRand()
     return rand(1,100);
 }
 
-class FuncCall
+class SomeFuncCall
 {
     public function run()
     {
@@ -26,7 +26,7 @@ function getRand()
     return rand(1,100);
 }
 
-class FuncCall
+class SomeFuncCall
 {
     public function run()
     {
