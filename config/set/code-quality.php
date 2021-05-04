@@ -68,6 +68,8 @@ use Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
+use Rector\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector;
+use Rector\CodingStyle\Rector\FuncCall\CallUserFuncToMethodCallRector;
 use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
@@ -171,5 +173,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SingularSwitchToIfRector::class);
     $services->set(SimplifyIfNullableReturnRector::class);
     $services->set(NarrowUnionTypeDocRector::class);
-    $services->set(\Rector\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector::class);
+    $services->set(FuncGetArgsToVariadicParamRector::class);
+    $services->set(CallUserFuncToMethodCallRector::class);
 };
