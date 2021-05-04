@@ -196,7 +196,7 @@ Or with Xdebug:
 vendor/bin/rector process src/Controller --dry-run --xdebug
 ```
 
-To assist with simple debugging Rector provides a 2 helps to pretty-print AST-nodes:
+To assist with simple debugging Rector provides a 2 helpers to pretty-print AST-nodes:
 
 ```php
 use PhpParser\Node\Scalar\String_;
