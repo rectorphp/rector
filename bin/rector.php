@@ -25,9 +25,7 @@ define('__RECTOR_RUNNING__', true);
 $autoloadIncluder = new AutoloadIncluder();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 
-// load local php-parser only in prefixed version or development repository
-$isDevelopmentRepository = file_exists(__DIR__ . '/../.git');
-if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php') || $isDevelopmentRepository) {
+if (should_include_preload()) {
     require_once __DIR__ . '/../preload.php';
 }
 
@@ -123,4 +121,20 @@ final class AutoloadIncluder
 
         require_once $filePath;
     }
+}
+
+
+// load local php-parser only in prefixed version or development repository
+function should_include_preload(): bool
+{
+    if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php')) {
+        return true;
+    }
+
+    if (! file_exists(__DIR__ . '/../composer.json')) {
+        return false;
+    }
+
+    $composerJsonFileContent = file_get_contents(__DIR__ . '/../composer.json');
+    return strpos($composerJsonFileContent, '"name": "rector/rector"') !== false;
 }
