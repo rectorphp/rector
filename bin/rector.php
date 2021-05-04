@@ -9,7 +9,6 @@ use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
-use Tracy\Debugger;
 
 // @ intentionally: continue anyway
 @ini_set('memory_limit', '-1');
@@ -21,14 +20,16 @@ gc_disable();
 
 define('__RECTOR_RUNNING__', true);
 
+
 // Require Composer autoload.php
 $autoloadIncluder = new AutoloadIncluder();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 
-if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php')) {
-    // make local php-parser a priority to avoid conflict
+if (should_include_preload()) {
     require_once __DIR__ . '/../preload.php';
 }
+
+require_once __DIR__ . '/../src/constants.php';
 
 $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-autoload.php');
 
@@ -39,11 +40,6 @@ $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
 $symfonyStyle = $symfonyStyleFactory->create();
 
 $rectorConfigsResolver = new RectorConfigsResolver();
-
-// for simpler debugging output
-if (class_exists(Debugger::class)) {
-    Debugger::$maxDepth = 2;
-}
 
 try {
     $bootstrapConfigs = $rectorConfigsResolver->provide();
@@ -125,4 +121,20 @@ final class AutoloadIncluder
 
         require_once $filePath;
     }
+}
+
+
+// load local php-parser only in prefixed version or development repository
+function should_include_preload(): bool
+{
+    if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php')) {
+        return true;
+    }
+
+    if (! file_exists(__DIR__ . '/../composer.json')) {
+        return false;
+    }
+
+    $composerJsonFileContent = file_get_contents(__DIR__ . '/../composer.json');
+    return strpos($composerJsonFileContent, '"name": "rector/rector"') !== false;
 }

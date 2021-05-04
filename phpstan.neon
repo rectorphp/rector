@@ -473,3 +473,8 @@ parameters:
         -
             message: '#Use separate function calls with readable variable names#'
             path: src/Application/ActiveRectorsProvider.php
+
+        # skip for define()
+        -
+           message: '#Do not compare call directly, use a variable assign#'
+           path:  src/constants.php

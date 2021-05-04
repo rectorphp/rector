@@ -68,6 +68,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/Bootstrap',
             __DIR__ . '/../src/PhpParser/Node/CustomNode',
             __DIR__ . '/../src/functions',
+            __DIR__ . '/../src/constants.php',
         ]);
 
     $services->alias(SymfonyApplication::class, ConsoleApplication::class);
