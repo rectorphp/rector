@@ -9,7 +9,6 @@ use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
-use Tracy\Debugger;
 
 // @ intentionally: continue anyway
 @ini_set('memory_limit', '-1');
@@ -21,12 +20,14 @@ gc_disable();
 
 define('__RECTOR_RUNNING__', true);
 
+
 // Require Composer autoload.php
 $autoloadIncluder = new AutoloadIncluder();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 
-// load local php-parser only in prefixed version
-if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php')) {
+// load local php-parser only in prefixed version or development repository
+$isDevelopmentRepository = file_exists(__DIR__ . '/../.git');
+if (file_exists(__DIR__ . '/../vendor/scoper-autoload.php') || $isDevelopmentRepository) {
     require_once __DIR__ . '/../preload.php';
 }
 
