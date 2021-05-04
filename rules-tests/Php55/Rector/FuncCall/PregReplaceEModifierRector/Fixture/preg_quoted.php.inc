@@ -6,7 +6,7 @@ class PregQuoted
 {
     public function run($subject)
     {
-        preg_replace('/('.preg_quote("a", '/').')/e', 'strtoupper("\1")', $subject);
+        preg_replace('/('.preg_quote("a", '/').')/e', 'strtoupper("1")', $subject);
     }
 }
 
@@ -21,7 +21,7 @@ class PregQuoted
     public function run($subject)
     {
         preg_replace_callback('/('.preg_quote("a", '/').')/', function ($matches) {
-            return strtoupper("\x01");
+            return strtoupper("1");
         }, $subject);
     }
 }

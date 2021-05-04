@@ -8,7 +8,7 @@ class Drupal
     {
         $replace = create_function(
             '$m',
-            '$r="\x00{$m[1]}ecursion_features";
+            '$r="{$m[1]}ecursion_features";
             return \'s:\'.strlen($r.$m[2]).\':"\'.$r.$m[2].\'";\';'
         );
 
@@ -30,7 +30,7 @@ class Drupal
     public function run()
     {
         $replace = function ($m) {
-            $r = "\x00{$m[1]}ecursion_features";
+            $r = "{$m[1]}ecursion_features";
             return 's:' . strlen($r . $m[2]) . ':"' . $r . $m[2] . '";';
         };
 
