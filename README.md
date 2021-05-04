@@ -196,18 +196,20 @@ Or with Xdebug:
 vendor/bin/rector process src/Controller --dry-run --xdebug
 ```
 
-To assist with echo-style debugging rector provides a [`print_node()` helper](tests/debug_functions.php) method
-which is useful to pretty-print AST-nodes:
+To assist with simple debugging Rector provides a 2 helps to pretty-print AST-nodes:
 
 ```php
-/**
- * @param Class_ $node
- */
-public function refactor(Node $node): ?Node
-{
-    print_node($node);
-    die;
-}
+use PhpParser\Node\Scalar\String_;
+
+$node = new String_('hello world!');
+
+// prints node to string, as PHP code displays it
+print_node($node);
+
+// dump nested node object with nested properties
+dump_node($node);
+// 2nd argument is how deep the nesting is - this makes sure the dump is short and useful
+dump_node($node, 1);
 ```
 
 <br>
