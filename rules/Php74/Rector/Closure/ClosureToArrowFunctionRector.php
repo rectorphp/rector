@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Rector\Php74\Rector\Closure;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\ClosureUse;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Php74\NodeAnalyzer\ClosureArrowFunctionAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,6 +21,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ClosureToArrowFunctionRector extends AbstractRector
 {
+    /**
+     * @var ClosureArrowFunctionAnalyzer
+     */
+    private $closureArrowFunctionAnalyzer;
+
+    public function __construct(ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer)
+    {
+        $this->closureArrowFunctionAnalyzer = $closureArrowFunctionAnalyzer;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change closure to arrow function', [
@@ -68,21 +77,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($node->stmts) !== 1) {
-            return null;
-        }
-
-        if (! $node->stmts[0] instanceof Return_) {
-            return null;
-        }
-
-        /** @var Return_ $return */
-        $return = $node->stmts[0];
-        if ($return->expr === null) {
-            return null;
-        }
-
-        if ($this->shouldSkipForUsedReferencedValue($node, $return)) {
+        $returnExpr = $this->closureArrowFunctionAnalyzer->matchArrowFunctionExpr($node);
+        if (! $returnExpr instanceof Expr) {
             return null;
         }
 
@@ -91,53 +87,12 @@ CODE_SAMPLE
         $arrowFunction->returnType = $node->returnType;
         $arrowFunction->byRef = $node->byRef;
 
-        $arrowFunction->expr = $return->expr;
+        $arrowFunction->expr = $returnExpr;
 
         if ($node->static) {
             $arrowFunction->static = true;
         }
 
         return $arrowFunction;
-    }
-
-    private function shouldSkipForUsedReferencedValue(Closure $closure, Return_ $return): bool
-    {
-        if ($return->expr === null) {
-            return false;
-        }
-
-        $referencedValues = $this->resolveReferencedUseVariablesFromClosure($closure);
-        if ($referencedValues === []) {
-            return false;
-        }
-
-        return (bool) $this->betterNodeFinder->findFirst([$return->expr], function (Node $node) use (
-            $referencedValues
-        ): bool {
-            foreach ($referencedValues as $referencedValue) {
-                if ($this->nodeComparator->areNodesEqual($node, $referencedValue)) {
-                    return true;
-                }
-            }
-
-            return false;
-        });
-    }
-
-    /**
-     * @return Variable[]
-     */
-    private function resolveReferencedUseVariablesFromClosure(Closure $closure): array
-    {
-        $referencedValues = [];
-
-        /** @var ClosureUse $use */
-        foreach ($closure->uses as $use) {
-            if ($use->byRef) {
-                $referencedValues[] = $use->var;
-            }
-        }
-
-        return $referencedValues;
     }
 }

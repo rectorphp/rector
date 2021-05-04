@@ -175,4 +175,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NarrowUnionTypeDocRector::class);
     $services->set(FuncGetArgsToVariadicParamRector::class);
     $services->set(CallUserFuncToMethodCallRector::class);
+    $services->set(\Rector\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector::class);
 };

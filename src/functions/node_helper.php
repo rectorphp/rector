@@ -6,6 +6,12 @@ use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use Tracy\Dumper;
 
+function dn(Node $node, int $depth = 2): void
+{
+    dump_node($node, $depth);
+}
+
+
 function dump_node(Node $node, int $depth = 2): void
 {
     Dumper::dump($node, [

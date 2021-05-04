@@ -4,7 +4,7 @@ namespace Rector\Tests\Naming\Rector\Assign\RenameVariableToMatchMethodCallRetur
 
 use Rector\Tests\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Source\SameNameMethod;
 
-class ArrowFunction
+final class SomeArrowFunction
 {
     public function run(SameNameMethod $sameNameMethod)
     {
@@ -20,7 +20,7 @@ namespace Rector\Tests\Naming\Rector\Assign\RenameVariableToMatchMethodCallRetur
 
 use Rector\Tests\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Source\SameNameMethod;
 
-class ArrowFunction
+final class SomeArrowFunction
 {
     public function run(SameNameMethod $sameNameMethod)
     {
