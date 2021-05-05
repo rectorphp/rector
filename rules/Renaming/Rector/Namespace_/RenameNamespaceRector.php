@@ -11,6 +11,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\NamespaceMatcher;
@@ -27,10 +28,10 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
     /**
      * @var string
      */
-    public const OLD_TO_NEW_NAMESPACES = '$oldToNewNamespaces';
+    public const OLD_TO_NEW_NAMESPACES = 'old_to_new_namespaces';
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private $oldToNewNamespaces = [];
 
@@ -100,6 +101,16 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
             return $node;
         }
 
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        // already resolved above
+        if ($parent instanceof Namespace_) {
+            return null;
+        }
+
+        if ($parent instanceof UseUse && $parent->type === Use_::TYPE_UNKNOWN) {
+            return null;
+        }
+
         $newName = $this->isPartialNamespace($node) ? $this->resolvePartialNewName(
             $node,
             $renamedNamespaceValueObject
@@ -109,7 +120,7 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
     }
 
     /**
-     * @param mixed[] $configuration
+     * @param array<string, array<string, string>> $configuration
      */
     public function configure(array $configuration): void
     {

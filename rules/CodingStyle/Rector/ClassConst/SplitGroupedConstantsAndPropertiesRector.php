@@ -53,8 +53,9 @@ class SomeClass
     public $isIsThough;
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

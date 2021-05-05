@@ -216,6 +216,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $changedNodeAnalyzer;
 
     /**
+     * @var array<string, Node[]>
+     */
+    private $nodesToReturn = [];
+
+    /**
      * @required
      */
     public function autowireAbstractRector(
@@ -297,7 +302,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     /**
      * @return Expression|Node|Node[]|null
      */
-    final public function leaveNode(Node $node)
+    final public function enterNode(Node $node)
     {
         $nodeClass = get_class($node);
         if (! $this->isMatchingNodeType($nodeClass)) {
@@ -320,23 +325,26 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         $node = $this->refactor($node);
 
+        if (is_array($node)) {
+            $originalNodeHash = spl_object_hash($originalNode);
+            $this->nodesToReturn[$originalNodeHash] = $node;
+
+            // will be replaced in leaveNode() the original node must be passed
+            return $originalNode;
+        }
+
         // nothing to change → continue
-        if (! $node instanceof Node && ! is_array($node)) {
+        if (! $node instanceof Node) {
             return null;
         }
 
         // changed!
-        if (is_array($node) || $this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
+        if ($this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
             $rectorWithLineChange = new RectorWithLineChange($this, $originalNode->getLine());
             $this->file->addRectorClassWithLine($rectorWithLineChange);
 
             // update parents relations
             $this->connectParentNodes($node);
-
-            // single node replaced with multiple ones
-            if (is_array($node)) {
-                return $node;
-            }
 
             $this->mirrorAttributes($originalAttributes, $node);
         }
@@ -347,6 +355,14 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return $node;
+    }
+
+    public function leaveNode(Node $node)
+    {
+        $objectHash = spl_object_hash($node);
+
+        // update parents relations
+        return $this->nodesToReturn[$objectHash] ?? null;
     }
 
     protected function isName(Node $node, string $name): bool
@@ -585,11 +601,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     private function connectParentNodes($node): void
     {
-        if (! is_array($node)) {
-            $nodes = [$node];
-        } else {
-            $nodes = $node;
-        }
+        $nodes = is_array($node) ? $node : [$node];
 
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new ParentConnectingVisitor());
