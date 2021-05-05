@@ -39,6 +39,7 @@ jobs:
                     composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
                     rm -rf vendor/phpstan/phpstan
                     composer dump-autoload
+                    composer update composer/xdebug-handler:^1.3.0
                     composer require phpstan/phpstan-src:0.12.85
 
             # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
