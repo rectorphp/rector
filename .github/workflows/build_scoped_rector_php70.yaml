@@ -106,7 +106,7 @@ jobs:
                 with:
                     php-version: 7.3
                     coverage: none
-            -   run: sh build/downgrade-rector-php70.sh remote-repository-php70/vendor/phpstan
+            -   run: sh build/downgrade-rector-php70.sh remote-repository-php70/vendor
 
             -
                 name: Rollback composer.json
