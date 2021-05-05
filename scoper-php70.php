@@ -35,6 +35,9 @@ $timestamp = $dateTime->format('Ymd');
 return [
     ScoperOption::PREFIX => 'RectorPrefix' . $timestamp,
     ScoperOption::WHITELIST => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),
+    ScoperOption::FILES_WHITELIST => [
+        'vendor/composer/InstalledVersions.php',
+    ],
     ScoperOption::PATCHERS => [
         // [BEWARE] $filePath is absolute!
 
@@ -53,11 +56,7 @@ return [
         },
 
         function (string $filePath, string $prefix, string $content): string {
-            if (
-                ! Strings::endsWith($filePath, 'vendor/composer/package-versions-deprecated/src/PackageVersions/Versions.php')
-                &&
-                ! Strings::endsWith($filePath, 'vendor/composer/InstalledVersions.php')
-            ) {
+            if (! Strings::endsWith($filePath, 'vendor/composer/package-versions-deprecated/src/PackageVersions/Versions.php')) {
                 return $content;
             }
 
