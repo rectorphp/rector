@@ -53,7 +53,11 @@ return [
         },
 
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/composer/package-versions-deprecated/src/PackageVersions/Versions.php')) {
+            if (
+                ! Strings::endsWith($filePath, 'vendor/composer/package-versions-deprecated/src/PackageVersions/Versions.php')
+                &&
+                ! Strings::endsWith($filePath, 'vendor/composer/InstalledVersions.php')
+            ) {
                 return $content;
             }
 
