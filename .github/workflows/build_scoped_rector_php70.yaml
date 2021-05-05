@@ -47,6 +47,7 @@ jobs:
                     composer remove symplify/phpstan-rules --update-with-dependencies --dev
                     composer remove symplify/phpstan-extensions --update-with-dependencies --dev
                     composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
+                    rm composer.lock
                     composer require phpstan/phpstan-src:0.12.85
                     composer require composer/composer
                     composer install --no-dev --ansi
