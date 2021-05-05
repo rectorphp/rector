@@ -101,6 +101,7 @@ jobs:
                 run: composer require phpstan/phpstan-src --ignore-platform-reqs
 
             -
+                name: Downgrade phpstan
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.3
