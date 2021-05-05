@@ -25,4 +25,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeSpaceshipRector::class);
     $services->set(DowngradeDefineArrayConstantRector::class);
     $services->set(DowngradeSessionStartArrayOptionsRector::class);
+    $services->set(\Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector::class);
 };

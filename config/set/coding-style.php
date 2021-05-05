@@ -30,7 +30,7 @@ use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
 use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
 use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
 use Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector;
-use Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector;
+use Rector\CodingStyle\Rector\Use_\SeparateMultiUseImportsRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -72,7 +72,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ]]);
 
-    $services->set(SplitGroupedUseImportsRector::class);
+    $services->set(SeparateMultiUseImportsRector::class);
     $services->set(RemoveDoubleUnderscoreInMethodNameRector::class);
     $services->set(PostIncDecToPreIncDecRector::class);
     $services->set(UnSpreadOperatorRector::class);

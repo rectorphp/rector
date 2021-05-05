@@ -63,7 +63,6 @@ class SomeObject
     }
 }
 CODE_SAMPLE
-
             ),
         ]);
     }

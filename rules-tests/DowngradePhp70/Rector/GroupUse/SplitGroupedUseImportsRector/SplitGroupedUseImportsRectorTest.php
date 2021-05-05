@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector;
+namespace Rector\Tests\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

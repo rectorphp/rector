@@ -12,14 +12,14 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector\SplitGroupedUseImportsRectorTest
+ * @see \Rector\Tests\CodingStyle\Rector\Use_\SeparateMultiUseImportsRector\SeparateMultiUseImportsRectorTest
  */
-final class SplitGroupedUseImportsRector extends AbstractRector
+final class SeparateMultiUseImportsRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Split grouped use imports and trait statements to standalone lines',
+            'Split multi use imports and trait statements to standalone lines',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -41,8 +41,9 @@ class SomeClass
     use AnotherTrait;
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**
