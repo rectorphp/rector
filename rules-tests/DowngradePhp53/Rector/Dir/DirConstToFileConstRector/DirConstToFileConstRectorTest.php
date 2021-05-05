@@ -2,26 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Downgrade72\Rector\FuncCall\DowngradeStreamIsattyRector;
+namespace Rector\Tests\DowngradePhp53\Rector\Dir\DirConstToFileConstRector;
 
-use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradeStreamIsattyRectorTest extends AbstractRectorTestCase
+final class DirConstToFileConstRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $fileInfo): void
+    public function test(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo): void
     {
         $this->doTestFileInfo($fileInfo);
     }
 
-    /**
-     * @return Iterator<SmartFileInfo>
-     */
-    public function provideData(): Iterator
+    public function provideData(): \Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

@@ -26,7 +26,7 @@
 
 - [Downgrade72](#downgrade72) (1)
 
-- [Downgrade73](#downgrade73) (1)
+- [DowngradePhp73](#DowngradePhp73) (1)
 
 - [DowngradePhp70](#downgradephp70) (6)
 
@@ -4239,13 +4239,13 @@ Downgrade `stream_isatty()` function
 
 <br>
 
-## Downgrade73
+## DowngradePhp73
 
 ### DowngradeArrayKeyFirstLastRector
 
 Downgrade `array_key_first()` and `array_key_last()` functions
 
-- class: [`Rector\Downgrade73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector`](../rules/Downgrade73/Rector/FuncCall/DowngradeArrayKeyFirstLastRector.php)
+- class: [`Rector\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector`](../rules/DowngradePhp73/Rector/FuncCall/DowngradeArrayKeyFirstLastRector.php)
 
 ```diff
  class SomeClass
