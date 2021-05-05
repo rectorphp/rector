@@ -103,7 +103,7 @@ jobs:
             -
                 name: Downgrade vendor/phpstan
                 working-directory: remote-repository-php70
-                run: sh build/downgrade-rector-php70.sh rector-build-php70/vendor/phpstan
+                run: sh ../build/downgrade-rector-php70.sh rector-build-php70/vendor/phpstan
 
             -
                 name: Rollback composer.json
