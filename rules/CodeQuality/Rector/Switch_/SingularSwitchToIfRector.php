@@ -77,8 +77,9 @@ CODE_SAMPLE
 
     /**
      * @param Switch_ $node
+     * @return Node\Stmt[]|If_|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node)
     {
         if (count($node->cases) !== 1) {
             return null;
@@ -88,9 +89,7 @@ CODE_SAMPLE
 
         // only default → basically unwrap
         if ($onlyCase->cond === null) {
-            $this->addNodesAfterNode($onlyCase->stmts, $node);
-            $this->removeNode($node);
-            return null;
+            return $onlyCase->stmts;
         }
 
         $if = new If_(new Identical($node->cond, $onlyCase->cond));

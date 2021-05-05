@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\TryCatch;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\TryCatch;
@@ -59,8 +60,9 @@ CODE_SAMPLE
 
     /**
      * @param TryCatch $node
+     * @return Stmt[]|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node)
     {
         if (count($node->catches) !== 1) {
             return null;
@@ -85,10 +87,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->addNodesAfterNode($node->stmts, $node);
-
-        $this->removeNode($node);
-
-        return null;
+        return $node->stmts;
     }
 }

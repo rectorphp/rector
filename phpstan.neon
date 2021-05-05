@@ -482,3 +482,7 @@ parameters:
         -
             message: '#Method call on new expression is not allowed#'
             path: utils/compiler/src/Command/DowngradePathsCommand.php
+
+        -
+            message: '#Use value object over return of values#'
+            path: rules/EarlyReturn/Rector/If_/ChangeNestedIfsToEarlyReturnRector.php

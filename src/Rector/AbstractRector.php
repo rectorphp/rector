@@ -479,6 +479,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
+     * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
      * @param Node[] $newNodes
      */
     protected function addNodesAfterNode(array $newNodes, Node $positionNode): void
@@ -494,6 +495,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->nodesToAddCollector->addNodesBeforeNode($newNodes, $positionNode);
     }
 
+    /**
+     * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
+     */
     protected function addNodeAfterNode(Node $newNode, Node $positionNode): void
     {
         $this->nodesToAddCollector->addNodeAfterNode($newNode, $positionNode);

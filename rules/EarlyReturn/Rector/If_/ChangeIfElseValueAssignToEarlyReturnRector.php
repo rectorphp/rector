@@ -129,7 +129,6 @@ CODE_SAMPLE
 
         $node->else = null;
         $this->addNodesAfterNode($elseStmts, $node);
-
         $this->removeNode($nextNode);
 
         return $node;
