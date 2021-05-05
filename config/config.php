@@ -12,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/services-packages.php');
     $containerConfigurator->import(__DIR__ . '/parameters.php');
 
-    $extensionConfigResolver = new ExtensionConfigResolver();
+    $extensionConfigResolver = new ExtensionConfigResolver(__DIR__);
     $extensionConfigFiles = $extensionConfigResolver->provide();
     foreach ($extensionConfigFiles as $extensionConfigFile) {
         $containerConfigurator->import($extensionConfigFile->getRealPath());

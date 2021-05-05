@@ -11,11 +11,49 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ExtensionConfigResolver
 {
     /**
-     * @return SmartFileInfo[]
+     * @var array<int, string>
+     */
+    private const DEFAULT_EXTENSIONS = [
+        'rector-symfony',
+        'rector-nette',
+        'rector-laravel',
+        'rector-phpunit',
+        'rector-cakephp',
+        'rector-doctrine',
+    ];
+
+    /**
+     * @var array<string, SmartFileInfo>
+     */
+    private $defaultConfigFileInfos;
+
+    public function __construct(string $configDirectoryPath)
+    {
+        $defaultConfigFileInfos = [];
+        foreach (self::DEFAULT_EXTENSIONS as $defaultExtension) {
+            $rectorRoot = $configDirectoryPath . sprintf('/../vendor/rector/%s/config/config.php', $defaultExtension);
+            $rectorSubPackage = $configDirectoryPath . sprintf('/../../%s/config/config.php', $defaultExtension);
+
+            foreach ([$rectorRoot, $rectorSubPackage] as $possibleFilePath) {
+                if (! file_exists($possibleFilePath)) {
+                    continue;
+                }
+
+                $packageName = sprintf('rector/%s', $defaultExtension);
+
+                $defaultConfigFileInfos[$packageName] = new SmartFileInfo($possibleFilePath);
+            }
+        }
+
+        $this->defaultConfigFileInfos = $defaultConfigFileInfos;
+    }
+
+    /**
+     * @return array<string, SmartFileInfo>
      */
     public function provide(): array
     {
-        $configFileInfos = [];
+        $configFileInfos = $this->defaultConfigFileInfos;
 
         if (! class_exists('Rector\RectorInstaller\GeneratedConfig')) {
             return $configFileInfos;
@@ -27,7 +65,7 @@ final class ExtensionConfigResolver
         }
 
         $generatedConfigDirectory = dirname($generatedConfigReflectionClass->getFileName());
-        foreach (GeneratedConfig::EXTENSIONS as $extensionConfig) {
+        foreach (GeneratedConfig::EXTENSIONS as $extensionKey => $extensionConfig) {
             foreach ($extensionConfig['extra']['includes'] ?? [] as $includedFile) {
                 $includedFilePath = $this->resolveIncludeFilePath(
                     $extensionConfig,
@@ -39,7 +77,7 @@ final class ExtensionConfigResolver
                     $includedFilePath = sprintf('%s/%s', $extensionConfig['install_path'], $includedFile);
                 }
 
-                $configFileInfos[] = new SmartFileInfo($includedFilePath);
+                $configFileInfos[$extensionKey] = new SmartFileInfo($includedFilePath);
             }
         }
 
