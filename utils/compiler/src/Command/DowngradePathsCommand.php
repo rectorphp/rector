@@ -33,6 +33,7 @@ final class DowngradePathsCommand extends Command
             'config',
             'vendor/symfony vendor/psr',
             'vendor/symplify vendor/nikic bin src packages rector.php',
+            'rules',
         ], $downgradePaths);
 
         $downgradePaths = array_values($downgradePaths);
@@ -53,7 +54,7 @@ final class DowngradePathsCommand extends Command
         $finder = (new Finder())->directories()
             ->in(__DIR__ . '/../../../..')
             ->depth(2)
-            ->path('#(vendor|rules)\/#')
+            ->path('#(vendor)\/#')
             ->sortByName();
 
         $directoryPaths = [];
