@@ -42,13 +42,13 @@ final class DowngradePathsCommand extends Command
     {
         $finder = (new Finder())->directories()
             ->in(__DIR__ . '/../../../..')
-            ->depth(2)
-            ->path('#(vendor)\/#')
+            ->depth(1)
+            ->path('#(vendor)\/(.*?)#')
             ->sortByName();
 
         $directoryPaths = [];
         foreach ($finder->getIterator() as $fileInfo) {
-            $directoryPaths[] = $fileInfo->getRelativePath();
+            $directoryPaths[] = $fileInfo->getRelativePathname();
         }
 
         $directoryPaths = array_unique($directoryPaths);
