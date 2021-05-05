@@ -1,0 +1,16 @@
+{
+    "name": "rector/rector-prefixed-php70",
+    "description": "Prefixed and PHP 7.0 downgraded version of rector/rector",
+    "license": "MIT",
+    "bin": [
+        "bin/rector"
+    ],
+    "require": {
+        "php": "^7.0|^8.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.10-dev"
+        }
+    }
+}
