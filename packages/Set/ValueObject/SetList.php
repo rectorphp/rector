@@ -373,26 +373,6 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    public const NETTE_CONTROL_TO_SYMFONY_CONTROLLER = __DIR__ . '/../../../config/set/nette-control-to-symfony-controller.php';
-
-    /**
-     * @var string
-     */
-    public const NETTE_FORMS_TO_SYMFONY = __DIR__ . '/../../../config/set/nette-forms-to-symfony.php';
-
-    /**
-     * @var string
-     */
-    public const NETTE_TESTER_TO_PHPUNIT = __DIR__ . '/../../../config/set/nette-tester-to-phpunit.php';
-
-    /**
-     * @var string
-     */
-    public const NETTE_TO_SYMFONY = __DIR__ . '/../../../config/set/nette-to-symfony.php';
-
-    /**
-     * @var string
-     */
     public const ORDER = __DIR__ . '/../../../config/set/order.php';
 
     /**

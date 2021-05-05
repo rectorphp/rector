@@ -235,6 +235,11 @@ final class PhpFileProcessor implements FileProcessorInterface
 
             $callback($file);
         } catch (AnalysedCodeException $analysedCodeException) {
+            // inform about missing classes in tests
+            if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+                throw $analysedCodeException;
+            }
+
             $this->notParsedFiles[] = $file;
             $error = $this->errorFactory->createAutoloadError($analysedCodeException);
             $file->addRectorError($error);
