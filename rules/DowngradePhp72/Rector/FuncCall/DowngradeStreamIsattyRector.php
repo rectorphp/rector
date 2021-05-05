@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Downgrade72\Rector\FuncCall;
+namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symfony/polyfill/commit/cc2bf55accd32b989348e2039e8c91cde46aebed
  *
- * @see \Rector\Tests\Downgrade72\Rector\FuncCall\DowngradeStreamIsattyRector\DowngradeStreamIsattyRectorTest
+ * @see \Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector\DowngradeStreamIsattyRectorTest
  */
 final class DowngradeStreamIsattyRector extends AbstractRector
 {
@@ -64,7 +64,6 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-
             ),
         ]);
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Downgrade73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector;
+namespace Rector\Tests\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

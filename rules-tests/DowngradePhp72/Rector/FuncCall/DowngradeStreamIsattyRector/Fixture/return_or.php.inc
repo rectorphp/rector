@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Downgrade72\Rector\FuncCall\DowngradeStreamIsattyRector\Fixture;
+namespace Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector\Fixture;
 
 final class UnionOr
 {
@@ -25,7 +25,7 @@ final class UnionOr
 -----
 <?php
 
-namespace Rector\Tests\Downgrade72\Rector\FuncCall\DowngradeStreamIsattyRector\Fixture;
+namespace Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector\Fixture;
 
 final class UnionOr
 {

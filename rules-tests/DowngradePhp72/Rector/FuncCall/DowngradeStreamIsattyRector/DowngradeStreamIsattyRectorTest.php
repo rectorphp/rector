@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Downgrade72\Rector\FuncCall\DowngradeStreamIsattyRector;
+namespace Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

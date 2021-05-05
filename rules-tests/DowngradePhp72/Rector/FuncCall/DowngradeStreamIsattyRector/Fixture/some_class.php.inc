@@ -1,12 +1,12 @@
 <?php
 
-namespace Rector\Tests\Downgrade72\Rector\FuncCall\DowngradeStreamIsattyRector\Fixture;
+namespace Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector\Fixture;
 
 class SomeClass
 {
     public function run($stream)
     {
-        return stream_isatty($stream);
+        $isStream = stream_isatty($stream);
     }
 }
 
@@ -14,7 +14,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Downgrade72\Rector\FuncCall\DowngradeStreamIsattyRector\Fixture;
+namespace Rector\Tests\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector\Fixture;
 
 class SomeClass
 {
@@ -27,7 +27,7 @@ class SomeClass
             }
             return @posix_isatty($stream);
         };
-        return $streamIsatty($stream);
+        $isStream = $streamIsatty($stream);
     }
 }
 

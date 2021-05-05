@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Downgrade73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector\Fixture;
+namespace Rector\Tests\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector\Fixture;
 
 class SomeClass
 {
@@ -14,7 +14,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Downgrade73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector\Fixture;
+namespace Rector\Tests\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector\Fixture;
 
 class SomeClass
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Downgrade72\Rector\FuncCall\DowngradeStreamIsattyRector;
+use Rector\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
