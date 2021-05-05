@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
+use Rector\DowngradePhp53\Rector\Dir\DirConstToFileConstRector;
+
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(Rector\DowngradePhp53\Rector\Dir\DirConstToFileConstRector::class);
+    $services->set(DirConstToFileConstRector::class);
 };
