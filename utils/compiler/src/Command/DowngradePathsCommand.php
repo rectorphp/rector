@@ -21,11 +21,18 @@ final class DowngradePathsCommand extends Command
     {
         $downgradePaths = $this->findVendorAndRulePaths();
 
+        foreach ($downgradePaths as $key => $downgradePath) {
+            if (in_array($downgradePath, ['vendor/symplify', 'vendor/symfony', 'vendor/nikic', 'vendor/psr'], true)) {
+                unset($downgradePaths[$key]);
+            }
+        }
+
         $downgradePaths = array_merge([
             // must be separated to cover container get() trait + psr container contract get()
             'config',
+            'vendor/symfony vendor/psr',
+            'vendor/symplify vendor/nikic bin src packages rector.php',
             'rules',
-            'bin src packages rector.php',
         ], $downgradePaths);
 
         // bash format
