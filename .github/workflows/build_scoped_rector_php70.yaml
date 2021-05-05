@@ -34,13 +34,12 @@ jobs:
 
             # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
             -   run: |
+                    composer require phpstan/phpstan-src:0.12.85
                     composer require composer/composer
+                    rm -rf vendor/phpstan/phpstan
                     composer install --no-dev --ansi
                     composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
-                    rm -rf vendor/phpstan/phpstan
                     composer dump-autoload
-                    composer update composer/xdebug-handler:^1.3.0
-                    composer require phpstan/phpstan-src:0.12.85
 
             # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
             -  run: rsync --exclude rector-build-php70 -av * rector-build-php70 --quiet
