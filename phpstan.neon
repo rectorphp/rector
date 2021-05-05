@@ -478,3 +478,7 @@ parameters:
         -
            message: '#Do not compare call directly, use a variable assign#'
            path:  src/constants.php
+
+        -
+            message: '#Method call on new expression is not allowed#'
+            path: utils/compiler/src/Command/DowngradePathsCommand.php
