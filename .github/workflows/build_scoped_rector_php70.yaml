@@ -101,8 +101,11 @@ jobs:
                 run: composer require phpstan/phpstan-src --ignore-platform-reqs
 
             -
-                name: Downgrade vendor/phpstan
-                run: sh build/downgrade-rector-php70.sh remote-repository-php70/vendor/phpstan
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.3
+                    coverage: none
+            -   run: sh build/downgrade-rector-php70.sh remote-repository-php70/vendor/phpstan
 
             -
                 name: Rollback composer.json
