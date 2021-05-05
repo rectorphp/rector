@@ -38,8 +38,6 @@
         "nette/utils": "^3.2",
         "nikic/php-parser": "4.10.4",
         "phpstan/phpdoc-parser": "^0.5.4",
-        "phpstan/phpstan": "0.12.85",
-        "phpstan/phpstan-phpunit": "^0.12.18",
         "rector/rector-cakephp": "^0.10.4",
         "rector/rector-doctrine": "^0.10.6",
         "rector/rector-installer": "^0.10.0",
@@ -67,21 +65,13 @@
         "webmozart/assert": "^1.10"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.0",
         "nette/application": "^3.0.7",
         "nette/di": "^3.0",
         "nette/forms": "^3.0",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan-nette": "^0.12.16",
         "phpunit/phpunit": "^9.5",
         "rector/rector-generator": "^0.1.7",
-        "rector/rector-phpstan-rules": "^0.1",
-        "symplify/coding-standard": "^9.3",
         "symplify/easy-ci": "^9.3",
-        "symplify/easy-coding-standard": "^9.3",
         "symplify/easy-testing": "^9.3",
-        "symplify/phpstan-extensions": "^9.3",
-        "symplify/phpstan-rules": "^9.3",
         "symplify/rule-doc-generator": "^9.3"
     },
     "replace": {
