@@ -101,7 +101,7 @@ final class ContextAnalyzer
                     continue;
                 }
 
-                $hasAssign = (bool) $this->betterNodeFinder->findInstanceOf($if->stmts[0], Assign::class);
+                $hasAssign = (bool) $this->betterNodeFinder->findInstanceOf((array) $if->stmts, Assign::class);
                 if (! $hasAssign) {
                     continue;
                 }
