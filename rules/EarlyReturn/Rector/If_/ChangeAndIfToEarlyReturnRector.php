@@ -21,6 +21,7 @@ use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Type\ObjectType;
 
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector\ChangeAndIfToEarlyReturnRectorTest
@@ -264,7 +265,7 @@ CODE_SAMPLE
         $loopNodes = $this->contextAnalyzer->getLoopNodes();
 
         foreach ($loopNodes as $loopNode) {
-            if (is_a($parent, $loopNode, true)) {
+            if ($this->isObjectType($parent, new ObjectType($loopNode))) {
                 $next = $parent->getAttribute(AttributeKey::NEXT_NODE);
                 if ($next instanceof Node) {
                     if ($next instanceof Return_ && $next->expr === null) {
