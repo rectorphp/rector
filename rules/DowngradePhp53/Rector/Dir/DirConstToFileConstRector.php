@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp53\Rector\Dir;
 
 use PhpParser\Node;
+use PhpParser\Node\Scalar\MagicConst\Dir;
+use PhpParser\Node\Scalar\MagicConst\File;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -45,18 +47,18 @@ CODE_SAMPLE
     }
 
     /**
-     * @return array<class-string<\PhpParser\Node>>
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
-        return [\PhpParser\Node\Scalar\MagicConst\Dir::class];
+        return [Dir::class];
     }
 
     /**
-     * @param \PhpParser\Node\Scalar\MagicConst\Dir $node
+     * @param Dir $node
      */
     public function refactor(Node $node): ?Node
     {
-        return $this->nodeFactory->createFuncCall('dirname', [new Node\Scalar\MagicConst\File()]);
+        return $this->nodeFactory->createFuncCall('dirname', [new File()]);
     }
 }
