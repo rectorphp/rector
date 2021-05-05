@@ -22,24 +22,24 @@ final class DowngradePathsCommand extends Command
         $downgradePaths = $this->findVendorAndRulePaths();
 
         // make symplify grouped into 1 directory, to make covariance downgrade work with all dependent classes
-        foreach ($downgradePaths as $key => $downgradePath) {
-            if (in_array($downgradePath, ['vendor/symplify', 'vendor/symfony', 'vendor/nikic', 'vendor/psr'], true)) {
-                unset($downgradePaths[$key]);
-            }
-        }
+//        foreach ($downgradePaths as $key => $downgradePath) {
+//            if (in_array($downgradePath, ['vendor/symplify', 'vendor/symfony', 'vendor/nikic', 'vendor/psr'], true)) {
+//                unset($downgradePaths[$key]);
+//            }
+//        }
 
         $downgradePaths = array_merge([
             // must be separated to cover container get() trait + psr container contract get()
             'config',
-            'vendor/symfony vendor/psr',
-            'vendor/symplify vendor/nikic bin src packages rector.php',
+            'bin src packages rector.php',
             'rules',
         ], $downgradePaths);
 
-        $downgradePaths = array_values($downgradePaths);
+//        $downgradePaths = array_values($downgradePaths);
 
         // bash format
         $downgradePathsLine = implode(';', $downgradePaths);
+
 
         echo $downgradePathsLine . PHP_EOL;
 
