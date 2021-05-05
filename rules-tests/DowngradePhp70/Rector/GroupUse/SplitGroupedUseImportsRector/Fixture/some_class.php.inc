@@ -2,10 +2,14 @@
 
 namespace Rector\Tests\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector\Fixture;
 
-use SomeNamespace{
+use SomeNamespace\{
     First,
     Second
 };
+
+class SomeClass
+{
+}
 
 ?>
 -----
@@ -15,5 +19,8 @@ namespace Rector\Tests\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRect
 
 use SomeNamespace\First;
 use SomeNamespace\Second;
+class SomeClass
+{
+}
 
 ?>

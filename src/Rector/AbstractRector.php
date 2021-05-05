@@ -295,9 +295,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @return Expression|Node|null
+     * @return Expression|Node|Node[]|null
      */
-    final public function enterNode(Node $node)
+    final public function leaveNode(Node $node)
     {
         $nodeClass = get_class($node);
         if (! $this->isMatchingNodeType($nodeClass)) {
@@ -321,17 +321,22 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $node = $this->refactor($node);
 
         // nothing to change → continue
-        if (! $node instanceof Node) {
+        if (! $node instanceof Node && ! is_array($node)) {
             return null;
         }
 
         // changed!
-        if ($this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
-            $rectorWithLineChange = new RectorWithLineChange($this, $node->getLine());
+        if (is_array($node) || $this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
+            $rectorWithLineChange = new RectorWithLineChange($this, $originalNode->getLine());
             $this->file->addRectorClassWithLine($rectorWithLineChange);
 
             // update parents relations
             $this->connectParentNodes($node);
+
+            // single node replaced with multiple ones
+            if (is_array($node)) {
+                return $node;
+            }
 
             $this->mirrorAttributes($originalAttributes, $node);
         }
@@ -575,10 +580,19 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
     }
 
-    private function connectParentNodes(Node $node): void
+    /**
+     * @param Node|Node[] $node
+     */
+    private function connectParentNodes($node): void
     {
+        if (! is_array($node)) {
+            $nodes = [$node];
+        } else {
+            $nodes = $node;
+        }
+
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new ParentConnectingVisitor());
-        $nodeTraverser->traverse([$node]);
+        $nodeTraverser->traverse($nodes);
     }
 }

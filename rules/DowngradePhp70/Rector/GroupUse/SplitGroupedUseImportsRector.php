@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\GroupUse;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\GroupUse;
+use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -21,7 +24,7 @@ final class SplitGroupedUseImportsRector extends AbstractRector
         return new RuleDefinition('Refactor grouped use imports to standalone lines', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-use SomeNamespace{
+use SomeNamespace\{
     First,
     Second
 };
@@ -37,20 +40,27 @@ CODE_SAMPLE
     }
 
     /**
-     * @return array<class-string<\PhpParser\Node>>
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
-        return [\PhpParser\Node\Stmt\GroupUse::class];
+        return [GroupUse::class];
     }
 
     /**
-     * @param \PhpParser\Node\Stmt\GroupUse $node
+     * @param GroupUse $node
+     * @return Use_[]|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node)
     {
-        // change the node
+        $prefix = $this->getName($node->prefix);
 
-        return $node;
+        $uses = [];
+        foreach ($node->uses as $useUse) {
+            $useUse->name = new Name($prefix . '\\' . $this->getName($useUse->name));
+            $uses[] = new Use_([$useUse], $node->type);
+        }
+
+        return $uses;
     }
 }
