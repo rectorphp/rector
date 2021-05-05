@@ -36,6 +36,12 @@ jobs:
             -   run: |
                     composer require composer/composer
                     composer install --no-dev --ansi
+                    composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
+                    composer config minimum-stability dev
+                    composer config prefer-stable true
+                    rm -rf vendor/phpstan/phpstan
+                    composer dump-autoload
+                    composer require phpstan/phpstan-src
 
             # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
             -  run: rsync --exclude rector-build-php70 -av * rector-build-php70 --quiet
@@ -77,42 +83,6 @@ jobs:
             -   run: rm -rf remote-repository-php70/config remote-repository-php70/src remote-repository-php70/rules remote-repository-php70/packages remote-repository-php70/upgrade remote-repository-php70/vendor
 
             -   run: cp -a rector-prefixed-downgraded-php70/. remote-repository-php70
-
-            -
-                name: Remove vendor/phpstan/phpstan
-                working-directory: remote-repository-php70
-                run: rm -rf vendor/phpstan/phpstan
-
-            -
-                name: Ensure autoload updated
-                working-directory: remote-repository-php70
-                run: composer dump-autoload
-
-            -
-                name: Register phpstan-src repo, set stability config
-                working-directory: remote-repository-php70
-                run: |
-                    composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
-                    composer config minimum-stability dev
-                    composer config prefer-stable true
-            -
-                name: Require phpstan-src with ignore platform as in PHP 7.0
-                working-directory: remote-repository-php70
-                run: composer require phpstan/phpstan-src --ignore-platform-reqs
-
-            -
-                name: Downgrade phpstan
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: 7.3
-                    coverage: none
-            -   run: sh build/downgrade-rector-php70.sh remote-repository-php70/vendor
-
-            -
-                name: Rollback composer.json
-                working-directory: remote-repository-php70
-                run: mv composer-move.json composer.json
-
 
             # 7. setup git
             -
