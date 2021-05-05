@@ -89,10 +89,12 @@ jobs:
                 run: composer dump-autoload
 
             -
-                name: Register phpstan-src repo
+                name: Register phpstan-src repo, set stability config
                 working-directory: remote-repository-php70
-                run: composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
-
+                run: |
+                    composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
+                    composer config minimum-stability dev
+                    composer config prefer-stable true
             -
                 name: Require phpstan-src with ignore platform as in PHP 7.0
                 working-directory: remote-repository-php70
