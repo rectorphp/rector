@@ -6,7 +6,6 @@ namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
@@ -21,7 +20,6 @@ use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PHPStan\Type\ObjectType;
 
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector\ChangeAndIfToEarlyReturnRectorTest
@@ -262,25 +260,6 @@ CODE_SAMPLE
             return $this->isLastIfOrBeforeLastReturn($parent);
         }
 
-        $loopNodes = $this->contextAnalyzer->getLoopNodes();
-
-        foreach ($loopNodes as $loopNode) {
-            if ($this->isObjectType($parent, new ObjectType($loopNode))) {
-                $next = $parent->getAttribute(AttributeKey::NEXT_NODE);
-                if ($next instanceof Node) {
-                    if ($next instanceof Return_ && $next->expr === null) {
-                        continue;
-                    }
-
-                    if (! (bool) $this->betterNodeFinder->findInstanceOf($if->stmts[0], Assign::class)) {
-                        continue;
-                    }
-
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return ! $this->contextAnalyzer->isHasAssignWithIndirectReturn($parent, $if);
     }
 }
