@@ -2,15 +2,15 @@
 
 namespace Rector\Tests\Transform\Rector\Assign\DimFetchAssignToMethodCallRector\Fixture;
 
-use Nette\Application\Routers\Route;
-use Nette\Application\Routers\RouteList;
+use Rector\Tests\Transform\Rector\Assign\DimFetchAssignToMethodCallRector\Source\SomeRoute;
+use Rector\Tests\Transform\Rector\Assign\DimFetchAssignToMethodCallRector\Source\SomeRouteList;
 
-class RouterFactory
+final class RouterFactory
 {
     public static function createRouter()
     {
-        $routeList = new RouteList();
-        $routeList[] = new Route('<module>/<presenter>/<action>[/<id>]', 'Homepage:default');
+        $routeList = new SomeRouteList();
+        $routeList[] = new SomeRoute('<module>/<presenter>/<action>[/<id>]', 'Homepage:default');
         return $routeList;
     }
 }
@@ -21,14 +21,14 @@ class RouterFactory
 
 namespace Rector\Tests\Transform\Rector\Assign\DimFetchAssignToMethodCallRector\Fixture;
 
-use Nette\Application\Routers\Route;
-use Nette\Application\Routers\RouteList;
+use Rector\Tests\Transform\Rector\Assign\DimFetchAssignToMethodCallRector\Source\SomeRoute;
+use Rector\Tests\Transform\Rector\Assign\DimFetchAssignToMethodCallRector\Source\SomeRouteList;
 
-class RouterFactory
+final class RouterFactory
 {
     public static function createRouter()
     {
-        $routeList = new RouteList();
+        $routeList = new SomeRouteList();
         $routeList->addRoute('<module>/<presenter>/<action>[/<id>]', 'Homepage:default');
         return $routeList;
     }
