@@ -34,6 +34,8 @@ jobs:
 
             # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
             -   run: |
+                    composer remove friendsofphp/php-cs-fixer --dev
+                    composer remove symplify/easy-coding-standard --dev
                     composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
                     composer require phpstan/phpstan-src:0.12.85
                     composer require composer/composer
