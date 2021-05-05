@@ -48,7 +48,6 @@ jobs:
                     composer remove symplify/phpstan-extensions --update-with-dependencies --dev
                     composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
                     composer require phpstan/phpstan-src:0.12.85
-                    composer require composer remove phpstan/phpstan-phpunit
                     composer require composer/composer
                     composer install --no-dev --ansi
 
