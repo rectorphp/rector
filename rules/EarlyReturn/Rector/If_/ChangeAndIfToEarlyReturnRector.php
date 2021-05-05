@@ -6,6 +6,7 @@ namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
@@ -258,6 +259,25 @@ CODE_SAMPLE
         $parent = $if->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof If_) {
             return $this->isLastIfOrBeforeLastReturn($parent);
+        }
+
+        $loopNodes = $this->contextAnalyzer->getLoopNodes();
+
+        foreach ($loopNodes as $loopNode) {
+            if (is_a($parent, $loopNode, true)) {
+                $next = $parent->getAttribute(AttributeKey::NEXT_NODE);
+                if ($next instanceof Node) {
+                    if ($next instanceof Return_ && $next->expr === null) {
+                        continue;
+                    }
+
+                    if (! (bool) $this->betterNodeFinder->findInstanceOf($if->stmts[0], Assign::class)) {
+                        continue;
+                    }
+
+                    return false;
+                }
+            }
         }
 
         return true;

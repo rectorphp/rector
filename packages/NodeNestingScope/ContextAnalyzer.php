@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 
@@ -27,7 +26,7 @@ final class ContextAnalyzer
     /**
      * @var array<class-string<Stmt>>
      */
-    private const LOOP_NODES = [For_::class, Foreach_::class, While_::class, Do_::class, Switch_::class];
+    private const LOOP_NODES = [For_::class, Foreach_::class, While_::class, Do_::class];
 
     /**
      * @var BetterNodeFinder
@@ -37,6 +36,14 @@ final class ContextAnalyzer
     public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getLoopNodes(): array
+    {
+        return self::LOOP_NODES;
     }
 
     public function isInLoop(Node $node): bool
