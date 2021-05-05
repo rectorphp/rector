@@ -31,11 +31,6 @@ export IFS=";"
 
 # 4. downgrade the directories
 for directory in $directories; do
-    echo "[NOTE] Will downgrade '$directory' directory\n"
-done
-
-# 4. downgrade the directories
-for directory in $directories; do
     echo "[NOTE] Downgrading '$directory' directory\n"
 
     # --working-dir is needed, so "SKIP" parameter is applied in absolute path of nested directory
