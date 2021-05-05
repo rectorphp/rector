@@ -22,6 +22,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    var_dump('xxx');
+
     $services = $containerConfigurator->services();
 
     $configuration = ValueObjectInliner::inline([
