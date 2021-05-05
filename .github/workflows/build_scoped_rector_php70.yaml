@@ -37,6 +37,7 @@ jobs:
                     composer remove symplify/easy-coding-standard --dev
                     composer remove symplify/coding-standard --dev --update-with-dependencies
                     composer remove friendsofphp/php-cs-fixer --dev --update-with-dependencies
+                    rm composer.lock
                     composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
                     composer require phpstan/phpstan-src:0.12.85
                     composer require composer/composer
