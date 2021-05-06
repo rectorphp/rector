@@ -24,6 +24,7 @@ use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Type\Generic\TemplateType;
 
 /**
  * @changelog https://wiki.php.net/rfc/typed_properties_v2#proposal
@@ -147,6 +148,17 @@ CODE_SAMPLE
         $varType = $this->propertyTypeInferer->inferProperty($node);
         if ($varType instanceof MixedType) {
             return null;
+        }
+
+        if ($varType instanceof UnionType) {
+            $types = $varType->getTypes();
+            if ($types[0] instanceof TemplateType) {
+                $node->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
+                    $types[0]->getBound(),
+                    TypeKind::KIND_PROPERTY
+                );
+                return $node;
+            }
         }
 
         $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
