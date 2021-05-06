@@ -25,7 +25,6 @@ class DropWithEmptyFinally
 {
     public function run()
     {
-        // some code
 
     }
 }

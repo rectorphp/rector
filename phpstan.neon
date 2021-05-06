@@ -485,4 +485,6 @@ parameters:
 
         -
             message: '#Use value object over return of values#'
-            path: rules/EarlyReturn/Rector/If_/ChangeNestedIfsToEarlyReturnRector.php
+            paths:
+                 - rules/EarlyReturn/Rector/If_/ChangeNestedIfsToEarlyReturnRector.php
+                 - rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php

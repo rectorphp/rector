@@ -56,7 +56,7 @@ CODE_SAMPLE
 
     /**
      * @param Use_|TraitUse $node
-     * @return Node|Node[]|null
+     * @return Use_[]|TraitUse[]|null
      */
     public function refactor(Node $node)
     {
