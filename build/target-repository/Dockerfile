@@ -51,9 +51,6 @@ ENTRYPOINT [ "rector" ]
 VOLUME ["/project"]
 WORKDIR "/project"
 
-COPY --from=build . /rector
-RUN chmod +x /rector/bin/rector
-
 RUN mkdir -p /tmp/opcache \
     && /rector/bin/rector list \
     && chmod 777 -R /tmp
