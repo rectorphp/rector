@@ -108,8 +108,9 @@ CODE_SAMPLE
 
     /**
      * @param If_ $node
+     * @return Node|Node[]|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node)
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -155,8 +156,9 @@ CODE_SAMPLE
 
     /**
      * @param Expr[] $conditions
+     * @return If_|Node[]
      */
-    private function processReplaceIfs(If_ $node, array $conditions, Return_ $ifNextReturnClone): If_
+    private function processReplaceIfs(If_ $node, array $conditions, Return_ $ifNextReturnClone)
     {
         $ifs = $this->invertedIfFactory->createFromConditions($node, $conditions, $ifNextReturnClone);
         $this->mirrorComments($ifs[0], $node);
@@ -168,7 +170,7 @@ CODE_SAMPLE
         $this->removeNode($node);
 
         if (! $node->stmts[0] instanceof Return_ && $ifNextReturnClone->expr instanceof Expr) {
-            $this->addNodeAfterNode($ifNextReturnClone, $node);
+            return [$node, $ifNextReturnClone];
         }
 
         return $node;

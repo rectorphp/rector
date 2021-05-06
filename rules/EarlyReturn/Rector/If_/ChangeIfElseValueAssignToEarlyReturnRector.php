@@ -6,6 +6,7 @@ namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -86,8 +87,9 @@ CODE_SAMPLE
 
     /**
      * @param If_ $node
+     * @return Stmt[]|Node|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node)
     {
         $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
         if (! $nextNode instanceof Return_) {
@@ -128,10 +130,8 @@ CODE_SAMPLE
         $elseStmts[$lastElseStmtKey] = $return;
 
         $node->else = null;
-        $this->addNodesAfterNode($elseStmts, $node);
-
         $this->removeNode($nextNode);
 
-        return $node;
+        return array_merge([$node], $elseStmts);
     }
 }

@@ -91,8 +91,9 @@ CODE_SAMPLE
 
     /**
      * @param MethodCall $node
+     * @return Node|Node[]|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node)
     {
         foreach ($this->callableInMethodCallToVariable as $singleCallableInMethodCallToVariable) {
             if (! $this->isObjectType($node->var, $singleCallableInMethodCallToVariable->getObjectType())) {
@@ -123,12 +124,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param mixed[] $configuration
+     * @param array<string, CallableInMethodCallToVariable[]> $configuration
      */
     public function configure(array $configuration): void
     {
         $callableInMethodCallToVariable = $configuration[self::CALLABLE_IN_METHOD_CALL_TO_VARIABLE] ?? [];
         Assert::allIsInstanceOf($callableInMethodCallToVariable, CallableInMethodCallToVariable::class);
+
         $this->callableInMethodCallToVariable = $callableInMethodCallToVariable;
     }
 }

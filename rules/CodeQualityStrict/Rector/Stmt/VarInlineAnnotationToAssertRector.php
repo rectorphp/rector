@@ -65,8 +65,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**
@@ -79,8 +80,9 @@ CODE_SAMPLE
 
     /**
      * @param Stmt $node
+     * @return Node|Node[]|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node)
     {
         // skip properties
         if ($node instanceof Property) {
@@ -170,7 +172,10 @@ CODE_SAMPLE
         return $stmt;
     }
 
-    private function refactorAlreadyCreatedNode(Stmt $stmt, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
+    /**
+     * @return Node[]|null
+     */
+    private function refactorAlreadyCreatedNode(Stmt $stmt, PhpDocInfo $phpDocInfo, Variable $variable): ?array
     {
         $varTagValue = $phpDocInfo->getVarTagValueNode();
         if (! $varTagValue instanceof VarTagValueNode) {
@@ -187,9 +192,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->addNodeAfterNode($assertFuncCall, $stmt);
-
-        return $stmt;
+        return [$stmt, new Expression($assertFuncCall)];
     }
 
     private function createFuncCallBasedOnType(Type $type, Variable $variable): ?FuncCall

@@ -9,6 +9,7 @@ use Rector\CodingStyle\ValueObject\PreferenceSelfThis;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
@@ -78,6 +79,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         StringClassNameToClassConstantRector::class,
         // some classes in config might not exist without dev dependencies
         SplitStringClassConstantToClassConstFetchRector::class,
+
+        RemoveUnreachableStatementRector::class => [
+            __DIR__ . '/rules/Php70/Rector/FuncCall/MultiDirnameRector.php',
+        ],
 
         PrivatizeLocalPropertyToPrivatePropertyRector::class => [__DIR__ . '/src/Rector/AbstractRector.php'],
 

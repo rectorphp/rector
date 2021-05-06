@@ -68,8 +68,9 @@ CODE_SAMPLE
 
     /**
      * @param ClassConst|Property $node
+     * @return Node|Node[]|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node)
     {
         if ($node instanceof ClassConst) {
             if (count($node->consts) < 2) {
@@ -84,9 +85,8 @@ CODE_SAMPLE
             $node->consts = [$firstConst];
 
             $nextClassConsts = $this->createNextClassConsts($allConsts, $node);
-            $this->addNodesAfterNode($nextClassConsts, $node);
 
-            return $node;
+            return array_merge([$node], $nextClassConsts);
         }
 
         if (count($node->props) < 2) {
@@ -98,12 +98,12 @@ CODE_SAMPLE
         $firstPropertyProperty = array_shift($allProperties);
         $node->props = [$firstPropertyProperty];
 
+        $nextProperties = [];
         foreach ($allProperties as $allProperty) {
-            $nextProperty = new Property($node->flags, [$allProperty], $node->getAttributes());
-            $this->addNodeAfterNode($nextProperty, $node);
+            $nextProperties[] = new Property($node->flags, [$allProperty], $node->getAttributes());
         }
 
-        return $node;
+        return array_merge([$node], $nextProperties);
     }
 
     /**

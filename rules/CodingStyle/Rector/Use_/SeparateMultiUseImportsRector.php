@@ -56,45 +56,48 @@ CODE_SAMPLE
 
     /**
      * @param Use_|TraitUse $node
+     * @return Use_[]|TraitUse[]|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?array
     {
         if ($node instanceof Use_) {
-            $this->refactorUseImport($node);
+            return $this->refactorUseImport($node);
         }
 
-        if ($node instanceof TraitUse) {
-            $this->refactorTraitUse($node);
-        }
-
-        return null;
+        return $this->refactorTraitUse($node);
     }
 
-    private function refactorUseImport(Use_ $use): void
+    /**
+     * @return Use_[]|null $use
+     */
+    private function refactorUseImport(Use_ $use): ?array
     {
         if (count($use->uses) < 2) {
-            return;
+            return null;
         }
 
+        $uses = [];
         foreach ($use->uses as $singleUse) {
-            $separatedUse = new Use_([$singleUse]);
-            $this->addNodeAfterNode($separatedUse, $use);
+            $uses[] = new Use_([$singleUse]);
         }
 
-        $this->removeNode($use);
+        return $uses;
     }
 
-    private function refactorTraitUse(TraitUse $traitUse): void
+    /**
+     * @return TraitUse[]|null
+     */
+    private function refactorTraitUse(TraitUse $traitUse): ?array
     {
         if (count($traitUse->traits) < 2) {
-            return;
+            return null;
         }
 
+        $traitUses = [];
         foreach ($traitUse->traits as $singleTraitUse) {
-            $separatedTraitUse = new TraitUse([$singleTraitUse]);
-            $this->addNodeAfterNode($separatedTraitUse, $traitUse);
+            $traitUses[] = new TraitUse([$singleTraitUse]);
         }
 
-        $this->removeNode($traitUse);
+        return $traitUses;
     }
 }
