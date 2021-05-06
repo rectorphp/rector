@@ -488,3 +488,5 @@ parameters:
             paths:
                  - rules/EarlyReturn/Rector/If_/ChangeNestedIfsToEarlyReturnRector.php
                  - rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php
+
+        - '#Class with base "PhpVersionFactory" name is already used in "PHPStan\\Php\\PhpVersionFactory", "Rector\\Core\\Util\\PhpVersionFactory"\. Use unique name to make classes easy to recognize#'
