@@ -46,5 +46,8 @@ VOLUME ["/project"]
 WORKDIR "/project"
 
 RUN mkdir -p /tmp/opcache
+
+RUN chmod +x /rector/bin/rector
 RUN /rector/bin/rector list
+
 RUN chmod 777 -R /tmp
