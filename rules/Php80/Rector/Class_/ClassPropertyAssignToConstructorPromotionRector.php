@@ -9,7 +9,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -42,21 +42,14 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      */
     private $varTagRemover;
 
-    /**
-     * @var PhpDocTagRemover
-     */
-    private $phpDocTagRemover;
-
     public function __construct(
         PromotedPropertyResolver $promotedPropertyResolver,
         VariableRenamer $variableRenamer,
-        VarTagRemover $varTagRemover,
-        PhpDocTagRemover $phpDocTagRemover
+        VarTagRemover $varTagRemover
     ) {
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->variableRenamer = $variableRenamer;
         $this->varTagRemover = $varTagRemover;
-        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -136,13 +129,11 @@ CODE_SAMPLE
 
             $paramTagValueNode = $classMethodPhpDocInfo->getParamTagValueNodeByName($paramName);
 
-            if ($paramTagValueNode === null) {
+            if (! $paramTagValueNode instanceof ParamTagValueNode) {
                 $this->decorateParamWithPropertyPhpDocInfo($property, $param);
-            } else {
-                if ($paramTagValueNode->parameterName !== '$' . $propertyName) {
-                    $paramTagValueNode->parameterName = '$' . $propertyName;
-                    $paramTagValueNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
-                }
+            } elseif ($paramTagValueNode->parameterName !== '$' . $propertyName) {
+                $paramTagValueNode->parameterName = '$' . $propertyName;
+                $paramTagValueNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
             }
 
             // property name has higher priority
