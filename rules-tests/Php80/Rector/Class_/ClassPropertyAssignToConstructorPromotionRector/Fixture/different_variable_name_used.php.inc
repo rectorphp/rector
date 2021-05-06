@@ -26,12 +26,10 @@ namespace Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromo
 
 class DifferentVariableNameUsed
 {
-    public function __construct(
-        /**
-         * @var int
-         */
-        private $ID
-    )
+    /**
+     * @param int $ID
+     */
+    public function __construct(private $ID)
     {
     }
 }
