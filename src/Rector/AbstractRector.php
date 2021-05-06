@@ -329,7 +329,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $originalNodeHash = spl_object_hash($originalNode);
             $this->nodesToReturn[$originalNodeHash] = $node;
 
-            if (count($node)) {
+            if (($node !== []) > 0) {
                 $firstNodeKey = array_key_first($node);
                 $this->mirrorComments($node[$firstNodeKey], $originalNode);
             }
