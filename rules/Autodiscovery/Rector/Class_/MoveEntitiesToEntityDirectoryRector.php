@@ -49,7 +49,7 @@ final class MoveEntitiesToEntityDirectoryRector extends AbstractRector
     {
         return new RuleDefinition('Move entities to Entity namespace', [
             new CodeSample(
-            <<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 // file: app/Controller/Product.php
 
 namespace App\Controller;
@@ -64,7 +64,7 @@ class Product
 }
 CODE_SAMPLE
             ,
-            <<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 // file: app/Entity/Product.php
 
 namespace App\Entity;
@@ -78,7 +78,7 @@ class Product
 {
 }
 CODE_SAMPLE
-        ),
+            ),
         ]);
     }
 

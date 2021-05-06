@@ -44,8 +44,9 @@ $someClass = new SomeClass;
 
 property_exists($someClass, 'value');
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

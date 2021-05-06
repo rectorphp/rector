@@ -39,7 +39,7 @@ final class ReturnThisRemoveRector extends AbstractRector
             'Removes "return $this;" from *fluent interfaces* for specified classes.',
             [
                 new CodeSample(
-                        <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class SomeExampleClass
 {
     public function someFunction()
@@ -66,8 +66,9 @@ class SomeExampleClass
     }
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

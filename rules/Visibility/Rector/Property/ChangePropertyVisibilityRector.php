@@ -36,7 +36,7 @@ final class ChangePropertyVisibilityRector extends AbstractRector implements Con
             'Change visibility of property from parent class.',
             [
                 new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class FrameworkClass
 {
     protected $someProperty;
@@ -48,7 +48,7 @@ class MyClass extends FrameworkClass
 }
 CODE_SAMPLE
                                 ,
-                <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class FrameworkClass
 {
     protected $someProperty;
@@ -60,14 +60,14 @@ class MyClass extends FrameworkClass
 }
 CODE_SAMPLE
                                 ,
-                                [
-                                    self::PROPERTY_TO_VISIBILITY_BY_CLASS => [
-                                        'FrameworkClass' => [
-                                            'someProperty' => Visibility::PROTECTED,
-                                        ],
-                                    ],
-                                ]
-                            ),
+                    [
+                        self::PROPERTY_TO_VISIBILITY_BY_CLASS => [
+                            'FrameworkClass' => [
+                                'someProperty' => Visibility::PROTECTED,
+                            ],
+                        ],
+                    ]
+                ),
             ]
         );
     }

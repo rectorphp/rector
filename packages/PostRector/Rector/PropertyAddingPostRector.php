@@ -80,8 +80,10 @@ final class PropertyAddingPostRector extends AbstractPostRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add dependency properties', [
-            new CodeSample(
+        return new RuleDefinition(
+            'Add dependency properties',
+            [
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -91,7 +93,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
+                        ,
                     <<<'CODE_SAMPLE'
 class SomeClass
 {

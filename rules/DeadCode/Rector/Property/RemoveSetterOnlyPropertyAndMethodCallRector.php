@@ -100,8 +100,9 @@ class ActiveOnlySetter
     }
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

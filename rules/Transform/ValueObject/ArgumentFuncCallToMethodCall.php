@@ -27,7 +27,10 @@ final class ArgumentFuncCallToMethodCall
     private $methodIfArgs;
 
     public function __construct(
-        string $function, string $class, ?string $methodIfArgs = null, ?string $methodIfNoArgs = null
+        string $function,
+        string $class,
+        ?string $methodIfArgs = null,
+        ?string $methodIfNoArgs = null
     ) {
         $this->function = $function;
         $this->class = $class;

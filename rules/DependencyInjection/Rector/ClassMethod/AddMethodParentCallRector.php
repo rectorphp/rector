@@ -59,7 +59,8 @@ class SunshineCommand extends ParentClassWithNewConstructor
     }
 }
 CODE_SAMPLE
-                    , [
+                    ,
+                    [
                         self::METHODS_BY_PARENT_TYPES => [
                             'ParentClassWithNewConstructor' => MethodName::CONSTRUCT,
                         ],

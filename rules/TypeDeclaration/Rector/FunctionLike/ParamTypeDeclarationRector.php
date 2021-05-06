@@ -141,8 +141,9 @@ final class ChildClass extends ParentClass
     }
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

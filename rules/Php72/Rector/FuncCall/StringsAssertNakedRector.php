@@ -52,8 +52,9 @@ function nakedAssert()
     assert(true === true);
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

@@ -34,12 +34,12 @@ final class PropertyAssignToMethodCallRector extends AbstractRector implements C
     {
         return new RuleDefinition('Turns property assign of specific type and property name to method call', [
             new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
 $someObject->oldProperty = false;
 CODE_SAMPLE
                 ,
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
 $someObject->newMethodCall(false);
 CODE_SAMPLE

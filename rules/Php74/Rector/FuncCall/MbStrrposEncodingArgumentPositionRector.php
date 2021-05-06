@@ -24,7 +24,8 @@ final class MbStrrposEncodingArgumentPositionRector extends AbstractRector
     {
         return new RuleDefinition(
             'Change mb_strrpos() encoding argument position',
-            [new CodeSample('mb_strrpos($text, "abc", "UTF-8");', 'mb_strrpos($text, "abc", 0, "UTF-8");')]);
+            [new CodeSample('mb_strrpos($text, "abc", "UTF-8");', 'mb_strrpos($text, "abc", 0, "UTF-8");')]
+        );
     }
 
     /**

@@ -19,7 +19,8 @@ final class SimplifyInArrayValuesRector extends AbstractRector
     {
         return new RuleDefinition(
             'Removes unneeded array_values() in in_array() call',
-            [new CodeSample('in_array("key", array_values($array), true);', 'in_array("key", $array, true);')]);
+            [new CodeSample('in_array("key", array_values($array), true);', 'in_array("key", $array, true);')]
+        );
     }
 
     /**

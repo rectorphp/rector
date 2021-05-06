@@ -77,7 +77,8 @@ final class InArgFluentChainMethodCallToStandaloneMethodCallRector extends Abstr
         return new RuleDefinition(
             'Turns fluent interface calls to classic ones.',
             [
-                new CodeSample(<<<'CODE_SAMPLE'
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class UsedAsParameter
 {
     public function someFunction(FluentClass $someClass)
@@ -91,7 +92,8 @@ class UsedAsParameter
 }
 
 CODE_SAMPLE
-                , <<<'CODE_SAMPLE'
+                ,
+                    <<<'CODE_SAMPLE'
 class UsedAsParameter
 {
     public function someFunction(FluentClass $someClass)
@@ -106,9 +108,10 @@ class UsedAsParameter
     }
 }
 CODE_SAMPLE
-        ),
+                ),
 
-            ]);
+            ]
+        );
     }
 
     /**
@@ -145,7 +148,8 @@ CODE_SAMPLE
         }
 
         $assignAndRootExprAndNodesToAdd = $this->assignAndRootExprAndNodesToAddMatcher->match(
-            $node, FluentCallsKind::IN_ARGS
+            $node,
+            FluentCallsKind::IN_ARGS
         );
 
         if (! $assignAndRootExprAndNodesToAdd instanceof AssignAndRootExprAndNodesToAdd) {

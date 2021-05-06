@@ -84,16 +84,18 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            , [
-                self::STATIC_CALLS_TO_METHOD_CALLS => [
-                    new StaticCallToMethodCall(
-                        'Nette\Utils\FileSystem',
-                        'write',
-                        'Symplify\SmartFileSystem\SmartFileSystem',
-                        'dumpFile'
-                    ),
-                ],
-            ]),
+            ,
+                [
+                    self::STATIC_CALLS_TO_METHOD_CALLS => [
+                        new StaticCallToMethodCall(
+                            'Nette\Utils\FileSystem',
+                            'write',
+                            'Symplify\SmartFileSystem\SmartFileSystem',
+                            'dumpFile'
+                        ),
+                    ],
+                ]
+            ),
         ]);
     }
 

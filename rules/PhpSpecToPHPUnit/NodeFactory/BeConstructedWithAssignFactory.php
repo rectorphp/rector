@@ -34,10 +34,11 @@ final class BeConstructedWithAssignFactory
      */
     private $nodeFactory;
 
-    public function __construct(NodeNameResolver $nodeNameResolver,
-    ValueResolver $valueResolver,
-    NodeFactory $nodeFactory)
-    {
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        ValueResolver $valueResolver,
+        NodeFactory $nodeFactory
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
         $this->nodeFactory = $nodeFactory;

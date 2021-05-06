@@ -66,7 +66,6 @@ final class SomeClass
     private const PRIVATE_CONST = 'private';
 }
 CODE_SAMPLE
-
             ),
         ]);
     }

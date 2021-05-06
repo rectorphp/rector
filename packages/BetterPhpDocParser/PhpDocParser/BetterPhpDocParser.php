@@ -63,8 +63,8 @@ final class BetterPhpDocParser extends PhpDocParser
             $children[] = $this->parseChildAndStoreItsPositions($tokenIterator);
 
             while ($tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL) && ! $tokenIterator->isCurrentTokenType(
-                    Lexer::TOKEN_CLOSE_PHPDOC
-                )) {
+                Lexer::TOKEN_CLOSE_PHPDOC
+            )) {
                 $children[] = $this->parseChildAndStoreItsPositions($tokenIterator);
             }
         }

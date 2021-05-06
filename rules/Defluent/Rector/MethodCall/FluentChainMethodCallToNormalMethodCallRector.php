@@ -68,8 +68,9 @@ $someClass = new SomeClass();
 $someClass->someFunction();
 $someClass->otherFunction();
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

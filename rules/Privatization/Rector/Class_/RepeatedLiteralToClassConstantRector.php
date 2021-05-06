@@ -262,7 +262,6 @@ CODE_SAMPLE
             function (string $value): string {
                 return StaticRectorStrings::camelCaseToUnderscore($value);
             },
-
             $parts
         );
 

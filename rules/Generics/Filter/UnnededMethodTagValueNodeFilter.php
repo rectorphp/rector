@@ -72,7 +72,8 @@ final class UnnededMethodTagValueNodeFilter
      * @return MethodTagValueNode[]
      */
     private function filterOutImplementedClassMethods(
-        array $methodTagValueNodes, ClassReflection $classReflection,
+        array $methodTagValueNodes,
+        ClassReflection $classReflection,
         Scope $scope
     ): array {
         $filteredMethodTagValueNodes = [];

@@ -36,24 +36,26 @@ final class ReservedObjectRector extends AbstractRector implements ConfigurableR
         return new RuleDefinition(
             'Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configured',
             [
-                new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+                new ConfiguredCodeSample(
+                    <<<'CODE_SAMPLE'
 class Object
 {
 }
 CODE_SAMPLE
-                                , <<<'CODE_SAMPLE'
+                                ,
+                    <<<'CODE_SAMPLE'
 class SmartObject
 {
 }
 CODE_SAMPLE
                             ,
-                            [
-                                self::RESERVED_KEYWORDS_TO_REPLACEMENTS => [
-                                    'ReservedObject' => 'SmartObject',
-                                    'Object' => 'AnotherSmartObject',
-                                ],
-                            ]
-                            ),
+                    [
+                        self::RESERVED_KEYWORDS_TO_REPLACEMENTS => [
+                            'ReservedObject' => 'SmartObject',
+                            'Object' => 'AnotherSmartObject',
+                        ],
+                    ]
+                ),
             ]
         );
     }

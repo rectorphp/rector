@@ -26,11 +26,11 @@ final class SymmetricArrayDestructuringToListRector extends AbstractRector
     {
         return new RuleDefinition('Downgrade Symmetric array destructuring to list() function', [
             new CodeSample(
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 [$id1, $name1] = $data;
 CODE_SAMPLE
                 ,
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 list($id1, $name1) = $data;
 CODE_SAMPLE
             ),

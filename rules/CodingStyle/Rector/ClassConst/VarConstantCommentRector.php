@@ -63,8 +63,9 @@ class SomeClass
     const HI = 'hi';
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

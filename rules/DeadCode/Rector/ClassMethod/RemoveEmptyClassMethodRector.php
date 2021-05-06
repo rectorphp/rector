@@ -57,8 +57,9 @@ class OrphanClass
 {
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

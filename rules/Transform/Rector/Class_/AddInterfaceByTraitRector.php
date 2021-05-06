@@ -47,11 +47,13 @@ class SomeClass implements SomeInterface
     use SomeTrait;
 }
 CODE_SAMPLE
-            , [
-                self::INTERFACE_BY_TRAIT => [
-                    'SomeTrait' => 'SomeInterface',
-                ],
-            ]),
+            ,
+                [
+                    self::INTERFACE_BY_TRAIT => [
+                        'SomeTrait' => 'SomeInterface',
+                    ],
+                ]
+            ),
         ]);
     }
 

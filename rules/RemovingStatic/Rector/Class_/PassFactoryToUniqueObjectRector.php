@@ -78,9 +78,11 @@ final class PassFactoryToUniqueObjectRector extends AbstractRector implements Co
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Convert new X/Static::call() to factories in entities, pass them via constructor to each other', [
-            new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Convert new X/Static::call() to factories in entities, pass them via constructor to each other',
+            [
+                new ConfiguredCodeSample(
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -99,8 +101,8 @@ class AnotherClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(AnotherClassFactory $anotherClassFactory)
@@ -145,11 +147,11 @@ final class AnotherClassFactory
     }
 }
 CODE_SAMPLE
-                ,
-                [
-                    self::TYPES_TO_SERVICES => ['StaticClass'],
-                ]
-            ), ]
+                    ,
+                    [
+                        self::TYPES_TO_SERVICES => ['StaticClass'],
+                    ]
+                ), ]
         );
     }
 

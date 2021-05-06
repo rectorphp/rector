@@ -62,8 +62,9 @@ class SomeClass
     const MODE_OFF = 2;
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

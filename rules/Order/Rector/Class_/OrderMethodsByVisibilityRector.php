@@ -95,7 +95,6 @@ class SomeClass
     private function privateFunctionName();
 }
 CODE_SAMPLE
-
             ),
         ]);
     }

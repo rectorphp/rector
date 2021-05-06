@@ -26,7 +26,7 @@ final class MultiExceptionCatchRector extends AbstractRector
             'Changes multi catch of same exception to single one | separated.',
             [
                 new CodeSample(
-<<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 try {
     // Some code...
 } catch (ExceptionType1 $exception) {
@@ -36,7 +36,7 @@ try {
 }
 CODE_SAMPLE
                     ,
-<<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 try {
    // Some code...
 } catch (ExceptionType1 | ExceptionType2 $exception) {

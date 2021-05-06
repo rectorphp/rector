@@ -16,7 +16,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             NetteServiceDefinition::class,
             'setInject',
             'addTag',
-            ['inject']),
+            ['inject']
+        ),
     ]);
 
     $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)

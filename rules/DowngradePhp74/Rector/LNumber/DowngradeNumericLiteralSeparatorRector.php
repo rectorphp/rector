@@ -37,7 +37,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-<<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -47,8 +47,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

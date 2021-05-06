@@ -59,10 +59,10 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-            [
-                self::VALUE_OBJECT_WRAP_ARGS => [new ValueObjectWrapArg('SomeClass', 'someMethod', 0, 'Number')],
-            ]
-        ),
+                [
+                    self::VALUE_OBJECT_WRAP_ARGS => [new ValueObjectWrapArg('SomeClass', 'someMethod', 0, 'Number')],
+                ]
+            ),
         ]);
     }
 

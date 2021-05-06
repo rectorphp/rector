@@ -52,11 +52,13 @@ final class AssignArrayToStringRector extends AbstractRector
     {
         return new RuleDefinition(
             'String cannot be turned into array by assignment anymore',
-            [new CodeSample(<<<'CODE_SAMPLE'
+            [new CodeSample(
+                <<<'CODE_SAMPLE'
 $string = '';
 $string[] = 1;
 CODE_SAMPLE
-                , <<<'CODE_SAMPLE'
+                ,
+                <<<'CODE_SAMPLE'
 $string = [];
 $string[] = 1;
 CODE_SAMPLE

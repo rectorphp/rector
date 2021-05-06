@@ -64,13 +64,13 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
     {
         return new RuleDefinition('Replaces defined Pseudo_Namespaces by Namespace\Ones.', [
             new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 /** @var Some_Chicken $someService */
 $someService = new Some_Chicken;
 $someClassToKeep = new Some_Class_To_Keep;
 CODE_SAMPLE
                 ,
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 /** @var Some\Chicken $someService */
 $someService = new Some\Chicken;
 $someClassToKeep = new Some_Class_To_Keep;

@@ -34,7 +34,10 @@ final class ParamPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements 
         }
 
         $variadicAwareParamTagValueNode = new VariadicAwareParamTagValueNode(
-            $node->type, $node->isVariadic, $node->parameterName, $node->description
+            $node->type,
+            $node->isVariadic,
+            $node->parameterName,
+            $node->description
         );
 
         $this->attributeMirrorer->mirror($node, $variadicAwareParamTagValueNode);

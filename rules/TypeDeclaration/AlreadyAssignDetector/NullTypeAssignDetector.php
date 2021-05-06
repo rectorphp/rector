@@ -64,7 +64,8 @@ final class NullTypeAssignDetector
         $needsNullType = null;
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike->stmts, function (Node $node) use (
-            $propertyName, &$needsNullType
+            $propertyName,
+            &$needsNullType
         ): ?int {
             $expr = $this->matchAssignExprToPropertyName($node, $propertyName);
             if (! $expr instanceof Expr) {

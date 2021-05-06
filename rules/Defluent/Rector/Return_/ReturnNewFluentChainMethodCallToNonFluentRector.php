@@ -67,8 +67,9 @@ $someClass->someFunction();
 $someClass->otherFunction();
 return $someClass;
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

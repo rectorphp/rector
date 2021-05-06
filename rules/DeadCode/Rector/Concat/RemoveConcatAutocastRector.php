@@ -42,8 +42,9 @@ class SomeConcatingClass
     }
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

@@ -41,7 +41,7 @@ final class ExprBoolCaster
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         TypeUnwrapper $typeUnwrapper,
-                                StaticTypeAnalyzer $staticTypeAnalyzer,
+        StaticTypeAnalyzer $staticTypeAnalyzer,
         NodeFactory $nodeFactory
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;

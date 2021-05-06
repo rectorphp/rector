@@ -127,8 +127,10 @@ final class UseAddingPostRector extends AbstractPostRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add unique use imports collected during Rector run', [
-            new CodeSample(
+        return new RuleDefinition(
+            'Add unique use imports collected during Rector run',
+            [
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -137,7 +139,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
+                        ,
                     <<<'CODE_SAMPLE'
 use App\AnotherClass;
 

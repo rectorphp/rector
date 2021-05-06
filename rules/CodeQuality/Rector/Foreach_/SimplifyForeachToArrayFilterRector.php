@@ -44,8 +44,9 @@ CODE_SAMPLE
 $possibleDirectories = [];
 $directories = array_filter($possibleDirectories, 'file_exists');
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

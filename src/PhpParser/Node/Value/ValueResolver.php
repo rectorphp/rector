@@ -185,9 +185,9 @@ final class ValueResolver
     private function processConcat(Concat $concat, bool $resolvedClassReference): string
     {
         return $this->getValue($concat->left, $resolvedClassReference) . $this->getValue(
-                $concat->right,
-                $resolvedClassReference
-            );
+            $concat->right,
+            $resolvedClassReference
+        );
     }
 
     private function getConstExprEvaluator(): ConstExprEvaluator

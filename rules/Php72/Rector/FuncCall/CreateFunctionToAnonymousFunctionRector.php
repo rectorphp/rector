@@ -84,8 +84,9 @@ class ClassWithCreateFunction
     }
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

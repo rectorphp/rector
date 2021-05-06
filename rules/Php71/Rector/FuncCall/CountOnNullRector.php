@@ -60,12 +60,12 @@ final class CountOnNullRector extends AbstractRector
         return new RuleDefinition(
             'Changes count() on null to safe ternary check',
             [new CodeSample(
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 $values = null;
 $count = count($values);
 CODE_SAMPLE
                 ,
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 $values = null;
 $count = count((array) $values);
 CODE_SAMPLE

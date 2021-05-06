@@ -73,8 +73,9 @@ if ($condition === null) {
     return $var;
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

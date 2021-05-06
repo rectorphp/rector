@@ -53,7 +53,6 @@ final class SomeClass
     public function functionName();
 }
 CODE_SAMPLE
-
             ),
         ]);
     }

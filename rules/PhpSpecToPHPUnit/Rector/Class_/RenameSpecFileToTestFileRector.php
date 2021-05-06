@@ -44,8 +44,9 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 // tests/SomeTest.php
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

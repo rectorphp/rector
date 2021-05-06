@@ -8,10 +8,12 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(CompleteImportForPartialAnnotationRector::class)
-        ->call('configure', [[
-            CompleteImportForPartialAnnotationRector::USE_IMPORTS_TO_RESTORE => ValueObjectInliner::inline([
-                new CompleteImportForPartialAnnotation('Doctrine\ORM\Mapping', 'ORM'),
-            ]),
-        ]]
-    );
+        ->call(
+            'configure',
+            [[
+                CompleteImportForPartialAnnotationRector::USE_IMPORTS_TO_RESTORE => ValueObjectInliner::inline([
+                    new CompleteImportForPartialAnnotation('Doctrine\ORM\Mapping', 'ORM'),
+                ]),
+            ]]
+        );
 };

@@ -67,7 +67,6 @@ final class SomeClass
     private $privateProperty;
 }
 CODE_SAMPLE
-
             ),
         ]);
     }

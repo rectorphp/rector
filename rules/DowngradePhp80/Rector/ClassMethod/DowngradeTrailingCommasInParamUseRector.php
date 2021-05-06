@@ -39,7 +39,8 @@ final class DowngradeTrailingCommasInParamUseRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Remove trailing commas in param or use list', [
+            'Remove trailing commas in param or use list',
+            [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
@@ -58,7 +59,8 @@ function inFunction(string $value1, string $value2,)
 {
 }
 CODE_SAMPLE
-                    , <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(string $value1, string $value2)

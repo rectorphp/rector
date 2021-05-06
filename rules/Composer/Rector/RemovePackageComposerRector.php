@@ -46,7 +46,8 @@ CODE_SAMPLE
 {
 }
 CODE_SAMPLE
-            , [
+            ,
+            [
                 self::PACKAGE_NAMES => ['symfony/console'],
             ]
         ),

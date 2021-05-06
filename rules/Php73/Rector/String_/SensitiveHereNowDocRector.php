@@ -45,8 +45,9 @@ $value = <<<A_WRAP
     A
 A_WRAP
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

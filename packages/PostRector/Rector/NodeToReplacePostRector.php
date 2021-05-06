@@ -39,8 +39,10 @@ final class NodeToReplacePostRector extends AbstractPostRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replaces nodes on weird positions', [
-            new CodeSample(
+        return new RuleDefinition(
+            'Replaces nodes on weird positions',
+            [
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -50,7 +52,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
+                        ,
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -60,7 +62,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ), ]
+                ), ]
         );
     }
 }

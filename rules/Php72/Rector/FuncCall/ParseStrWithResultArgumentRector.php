@@ -35,8 +35,9 @@ CODE_SAMPLE
 parse_str($this->query, $result);
 $data = $result;
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

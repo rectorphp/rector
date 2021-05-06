@@ -19,7 +19,8 @@ final class StrictArraySearchRector extends AbstractRector
     {
         return new RuleDefinition(
             'Makes array_search search for identical elements',
-            [new CodeSample('array_search($value, $items);', 'array_search($value, $items, true);')]);
+            [new CodeSample('array_search($value, $items);', 'array_search($value, $items, true);')]
+        );
     }
 
     /**

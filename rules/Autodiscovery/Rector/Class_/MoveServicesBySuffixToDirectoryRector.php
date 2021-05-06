@@ -57,7 +57,7 @@ final class MoveServicesBySuffixToDirectoryRector extends AbstractRector impleme
     {
         return new RuleDefinition('Move classes by their suffix to their own group/directory', [
             new ConfiguredCodeSample(
-                        <<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 // file: app/Entity/ProductRepository.php
 
 namespace App/Entity;
@@ -67,7 +67,7 @@ class ProductRepository
 }
 CODE_SAMPLE
                         ,
-                        <<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 // file: app/Repository/ProductRepository.php
 
 namespace App/Repository;
@@ -77,10 +77,10 @@ class ProductRepository
 }
 CODE_SAMPLE
                         ,
-                        [
-                            self::GROUP_NAMES_BY_SUFFIX => ['Repository'],
-                        ]
-                    ),
+                [
+                    self::GROUP_NAMES_BY_SUFFIX => ['Repository'],
+                ]
+            ),
         ]);
     }
 

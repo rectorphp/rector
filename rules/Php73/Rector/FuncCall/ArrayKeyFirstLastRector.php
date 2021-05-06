@@ -69,12 +69,12 @@ $firstKey = array_key_first($items);
 CODE_SAMPLE
                 ),
                 new CodeSample(
-<<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 end($items);
 $lastKey = key($items);
 CODE_SAMPLE
                     ,
-<<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 $lastKey = array_key_last($items);
 CODE_SAMPLE
                 ),

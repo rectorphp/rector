@@ -49,19 +49,21 @@ final class RemoveFuncCallRector extends AbstractRector implements ConfigurableR
                 ]),
             ],
         ];
-        return new RuleDefinition('Remove ini_get by configuration', [
-            new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Remove ini_get by configuration',
+            [
+                new ConfiguredCodeSample(
+                    <<<'CODE_SAMPLE'
 ini_get('y2k_compliance');
 ini_get('keep_me');
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 ini_get('keep_me');
 CODE_SAMPLE
-                ,
-                $configuration
-            ), ]
+                    ,
+                    $configuration
+                ), ]
         );
     }
 

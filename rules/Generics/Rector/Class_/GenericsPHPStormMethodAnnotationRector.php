@@ -110,7 +110,8 @@ final class AndroidDeviceRepository extends AbstractRepository
 }
 CODE_SAMPLE
                 ),
-            ]);
+            ]
+        );
     }
 
     /**

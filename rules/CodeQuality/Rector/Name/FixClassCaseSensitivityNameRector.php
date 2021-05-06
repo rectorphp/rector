@@ -67,8 +67,9 @@ final class AnotherClass
 {
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

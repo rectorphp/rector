@@ -62,8 +62,9 @@ class SomeClass implements Stringable
     }
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

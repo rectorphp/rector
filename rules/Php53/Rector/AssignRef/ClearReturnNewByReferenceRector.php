@@ -31,8 +31,9 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 $assign = new Value;
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

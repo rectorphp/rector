@@ -35,8 +35,9 @@ CODE_SAMPLE
 $incompleteObject = new __PHP_Incomplete_Class;
 $isObject = ! is_object($incompleteObject);
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

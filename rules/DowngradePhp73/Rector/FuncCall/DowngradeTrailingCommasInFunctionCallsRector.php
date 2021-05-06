@@ -32,7 +32,8 @@ final class DowngradeTrailingCommasInFunctionCallsRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Remove trailing commas in function calls', [
+            'Remove trailing commas in function calls',
+            [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 class SomeClass
@@ -46,7 +47,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                    , <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(string $value)

@@ -41,7 +41,6 @@ function run(...$args)
 {
 }
 CODE_SAMPLE
-
             ),
         ]);
     }

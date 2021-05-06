@@ -30,7 +30,8 @@ final class ReplaceParentCallByPropertyCallRector extends AbstractRector impleme
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Changes method calls in child of specific types to defined property method call', [
+            'Changes method calls in child of specific types to defined property method call',
+            [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 final class SomeClass

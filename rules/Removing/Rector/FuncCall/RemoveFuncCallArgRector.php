@@ -33,16 +33,18 @@ final class RemoveFuncCallArgRector extends AbstractRector implements Configurab
     {
         return new RuleDefinition('Remove argument by position by function name', [
             new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 remove_last_arg(1, 2);
 CODE_SAMPLE
                 ,
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 remove_last_arg(1);
 CODE_SAMPLE
-                , [
+                ,
+                [
                     self::REMOVED_FUNCTION_ARGUMENTS => [new RemoveFuncCallArg('remove_last_arg', 1)],
-                ]),
+                ]
+            ),
         ]);
     }
 

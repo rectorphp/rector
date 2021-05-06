@@ -31,7 +31,7 @@ final class MethodCallToPropertyFetchRector extends AbstractRector implements Co
     {
         return new RuleDefinition('Turns method call "$this->something()" to property fetch "$this->something"', [
             new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -41,7 +41,7 @@ class SomeClass
 }
 CODE_SAMPLE
                 ,
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()

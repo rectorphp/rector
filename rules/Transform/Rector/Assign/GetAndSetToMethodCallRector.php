@@ -58,12 +58,12 @@ final class GetAndSetToMethodCallRector extends AbstractRector implements Config
     {
         return new RuleDefinition('Turns defined `__get`/`__set` to specific method calls.', [
             new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 $container = new SomeContainer;
 $container->someService = $someService;
 CODE_SAMPLE
                 ,
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 $container = new SomeContainer;
 $container->setService("someService", $someService);
 CODE_SAMPLE

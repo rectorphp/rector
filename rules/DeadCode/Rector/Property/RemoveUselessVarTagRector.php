@@ -48,7 +48,6 @@ final class SomeClass
     public string $name = 'name';
 }
 CODE_SAMPLE
-
             ),
         ]);
     }

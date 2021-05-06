@@ -96,11 +96,11 @@ final class PropertyFetchByMethodAnalyzer
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->getStmts(),
             function (Node $node) use (
-            &$isPropertyChanging,
-            $propertyName,
-            &$isPropertyReadInIf,
-            &$isIfFollowedByAssign
-        ): ?int {
+                &$isPropertyChanging,
+                $propertyName,
+                &$isPropertyReadInIf,
+                &$isIfFollowedByAssign
+            ): ?int {
                 if ($isPropertyReadInIf) {
                     if (! $this->propertyFetchAnalyzer->isLocalPropertyOfNames($node, [$propertyName])) {
                         return null;

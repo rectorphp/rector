@@ -65,11 +65,13 @@ class SomeClass
 }
 CODE_SAMPLE
 
-            , [
-                self::METHOD_CALL_WRAPS => [
-                    'SomeClass' => ['deny'],
-                ],
-            ]),
+            ,
+                [
+                    self::METHOD_CALL_WRAPS => [
+                        'SomeClass' => ['deny'],
+                    ],
+                ]
+            ),
         ]);
     }
 

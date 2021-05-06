@@ -21,8 +21,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $services->set(VariableMethodCallToServiceCallRector::class)
-        ->call('configure', [[
-            VariableMethodCallToServiceCallRector::VARIABLE_METHOD_CALLS_TO_SERVICE_CALLS => $configuration,
-        ]]
-    );
+        ->call(
+            'configure',
+            [[
+                VariableMethodCallToServiceCallRector::VARIABLE_METHOD_CALLS_TO_SERVICE_CALLS => $configuration,
+            ]]
+        );
 };

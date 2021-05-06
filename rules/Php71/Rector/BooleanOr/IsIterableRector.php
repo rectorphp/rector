@@ -41,7 +41,8 @@ final class IsIterableRector extends AbstractRector
     {
         return new RuleDefinition(
             'Changes is_array + Traversable check to is_iterable',
-            [new CodeSample('is_array($foo) || $foo instanceof Traversable;', 'is_iterable($foo);')]);
+            [new CodeSample('is_array($foo) || $foo instanceof Traversable;', 'is_iterable($foo);')]
+        );
     }
 
     /**

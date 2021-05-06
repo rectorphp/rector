@@ -58,12 +58,8 @@ final class IdentifierManipulator
     {
         Assert::isAnyOf(
             $node,
-            [ClassConstFetch::class,
-                MethodCall::class,
-                PropertyFetch::class,
-                StaticCall::class,
-                ClassMethod::class,
-            ]);
+            [ClassConstFetch::class, MethodCall::class, PropertyFetch::class, StaticCall::class, ClassMethod::class]
+        );
 
         $name = $this->nodeNameResolver->getName($node);
         if ($name === null) {

@@ -60,24 +60,27 @@ final class RenameClassNonPhpRector implements NonPhpRectorInterface, Configurab
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Change class names and just renamed classes in non-PHP files, NEON, YAML, TWIG, LATTE, blade etc. mostly with regular expressions', [
+            'Change class names and just renamed classes in non-PHP files, NEON, YAML, TWIG, LATTE, blade etc. mostly with regular expressions',
+            [
                 new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 services:
     - SomeOldClass
 CODE_SAMPLE
-                , <<<'CODE_SAMPLE'
+                ,
+                    <<<'CODE_SAMPLE'
 services:
     - SomeNewClass
 CODE_SAMPLE
                 ,
-                [
-                    self::RENAME_CLASSES => [
-                        'SomeOldClass' => 'SomeNewClass',
-                    ],
-                ]
-            ),
-            ]);
+                    [
+                        self::RENAME_CLASSES => [
+                            'SomeOldClass' => 'SomeNewClass',
+                        ],
+                    ]
+                ),
+            ]
+        );
     }
 
     public function refactorFileContent(string $fileContent): string

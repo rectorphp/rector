@@ -42,7 +42,7 @@ final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractRec
     {
         return new RuleDefinition('Move interface to "Contract" namespace', [
             new CodeSample(
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 // file: app/Exception/Rule.php
 
 namespace App\Exception;
@@ -52,7 +52,7 @@ interface Rule
 }
 CODE_SAMPLE
             ,
-            <<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 // file: app/Contract/Rule.php
 
 namespace App\Contract;
@@ -61,7 +61,7 @@ interface Rule
 {
 }
 CODE_SAMPLE
-        ),
+            ),
         ]);
     }
 

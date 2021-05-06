@@ -65,9 +65,11 @@ final class NodeAddingPostRector extends AbstractPostRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add nodes on weird positions', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'Add nodes on weird positions',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -76,8 +78,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -88,7 +90,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ), ]
+                ), ]
         );
     }
 }

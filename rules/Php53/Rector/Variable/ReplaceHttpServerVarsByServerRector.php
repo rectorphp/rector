@@ -33,7 +33,8 @@ final class ReplaceHttpServerVarsByServerRector extends AbstractRector
     {
         return new RuleDefinition(
             'Rename old $HTTP_* variable names to new replacements',
-            [new CodeSample('$serverVars = $HTTP_SERVER_VARS;', '$serverVars = $_SERVER;')]);
+            [new CodeSample('$serverVars = $HTTP_SERVER_VARS;', '$serverVars = $_SERVER;')]
+        );
     }
 
     /**
