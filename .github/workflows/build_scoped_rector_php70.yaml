@@ -36,8 +36,6 @@ jobs:
             -   run: |
                     composer remove phpstan/phpstan --no-update
 
-                    rm composer.lock
-
                     composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src --ansi
                     composer require phpstan/phpstan-src:0.12.85 --no-update --ansi
 
