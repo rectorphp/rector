@@ -28,12 +28,6 @@ RUN apt-get update && apt-get install -y \
         opcache \
         zip
 
-COPY --from=composer:2.0.9 /usr/bin/composer /usr/bin/composer
-ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1 COMPOSER_NO_INTERACTION=1
-
-# This is to make parsing version possible
-COPY .git .git
-
 # Add source
 COPY . .
 
