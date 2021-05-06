@@ -34,25 +34,23 @@ jobs:
 
             # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
             -   run: |
-                    composer remove symplify/easy-coding-standard --dev
-                    composer remove symplify/coding-standard --dev --update-with-dependencies
-                    composer remove friendsofphp/php-cs-fixer --dev --update-with-dependencies
+                    composer remove symplify/easy-coding-standard --dev --ansi
+                    composer remove symplify/coding-standard --dev --update-with-dependencies --ansi
                     rm composer.lock
-                    composer remove composer/xdebug-handler
-                    composer require composer/xdebug-handler:^1.3.0
-                    composer remove phpstan/extension-installer --update-with-dependencies --dev
-                    composer remove phpstan/phpstan-nette --update-with-dependencies --dev
-                    composer remove phpstan/phpstan-phpunit --update-with-dependencies
-                    composer remove rector/rector-phpstan-rules --update-with-dependencies --dev
-                    composer remove symplify/phpstan-rules --update-with-dependencies --dev
-                    composer remove symplify/phpstan-extensions --update-with-dependencies --dev
-                    composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src
+                    composer remove phpstan/extension-installer --update-with-dependencies --dev --ansi
+                    composer remove phpstan/phpstan-nette --update-with-dependencies --dev --ansi
+                    composer remove phpstan/phpstan-phpunit --update-with-dependencies --dev --ansi
+                    composer remove rector/rector-phpstan-rules --update-with-dependencies --dev --ansi
+                    composer remove symplify/phpstan-rules --update-with-dependencies --dev --ansi
+                    composer remove symplify/phpstan-extensions --update-with-dependencies --dev --ansi
 
                     rm composer.lock
 
-                    composer require phpstan/phpstan-src:0.12.85 --no-update
-                    composer require jetbrains/phpstorm-stubs dev-master#0a73df114cdea7f30c8b5f6fbfbf8e6839a89e88 --no-update
-                    composer require composer/composer --no-update
+                    composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src --ansi
+                    composer require phpstan/phpstan-src:0.12.85 --no-update --ansi
+
+                    composer require jetbrains/phpstorm-stubs dev-master#0a73df114cdea7f30c8b5f6fbfbf8e6839a89e88 --no-update --ansi
+                    composer require composer/composer --no-update --ansi
 
                     composer install --no-dev --ansi
 
