@@ -142,11 +142,6 @@ final class Option
     /**
      * @var string
      */
-    public const FIX = 'fix';
-
-    /**
-     * @var string
-     */
     public const PHPSTAN_FOR_RECTOR_PATH = 'phpstan_for_rector_path';
 
     /**
