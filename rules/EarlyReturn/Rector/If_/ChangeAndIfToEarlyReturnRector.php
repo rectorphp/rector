@@ -260,6 +260,6 @@ CODE_SAMPLE
             return $this->isLastIfOrBeforeLastReturn($parent);
         }
 
-        return true;
+        return ! $this->contextAnalyzer->isHasAssignWithIndirectReturn($parent, $if);
     }
 }
