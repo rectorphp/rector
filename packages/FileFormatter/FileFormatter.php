@@ -39,8 +39,8 @@ final class FileFormatter
     public function __construct(
         EditorConfigParserInterface $editorConfigParser,
         ParameterProvider $parameterProvider,
-        array $fileFormatters = [])
-    {
+        array $fileFormatters = []
+    ) {
         $this->editorConfigParser = $editorConfigParser;
         $this->fileFormatters = $fileFormatters;
         $this->parameterProvider = $parameterProvider;
