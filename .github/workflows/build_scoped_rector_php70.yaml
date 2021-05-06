@@ -49,7 +49,7 @@ jobs:
             -  run: rm -rf rector-build-php70/packages-tests rector-build-php70/rules-tests rector-build-php70/tests
 
             # this must run
-            -  run: bin/rector list
+            -  run: bin/rector list --debug
 
             # 2. downgrade rector
             -   run: sh build/downgrade-rector-php70.sh rector-build-php70
