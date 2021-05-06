@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
 
 FROM base as build
 
-WORKDIR /build
+WORKDIR /rector
 
 # Install php extensions
 RUN apt-get update && apt-get install -y \
@@ -45,6 +45,6 @@ ENTRYPOINT [ "rector" ]
 VOLUME ["/project"]
 WORKDIR "/project"
 
-RUN mkdir -p /tmp/opcache \
-    && /rector/bin/rector list \
-    && chmod 777 -R /tmp
+RUN mkdir -p /tmp/opcache
+RUN /rector/bin/rector list
+RUN chmod 777 -R /tmp
