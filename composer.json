@@ -6,24 +6,6 @@
     ],
     "license": "MIT",
     "homepage": "https://getrector.org",
-    "keywords": [
-        "instant upgrades",
-        "instant refactoring",
-        "ast",
-        "automated refactoring"
-    ],
-    "authors": [
-        {
-            "name": "Tomas Votruba",
-            "email": "tomas.vot@gmail.com",
-            "homepage": "https://tomasvotruba.com"
-        },
-        {
-            "name": "Jan Mikes",
-            "email": "j.mikes@me.com",
-            "homepage": "https://janmikes.cz"
-        }
-    ],
     "require": {
         "php": "^7.3|^8.0",
         "ext-dom": "*",
