@@ -23,6 +23,9 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+    $parameters->set(Option::SETS, [SetList::NAMING]);
+
     // include sets
     $containerConfigurator->import(SetList::CODING_STYLE);
     $containerConfigurator->import(SetList::CODE_QUALITY);

@@ -11,7 +11,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class ShowCommand extends Command
 {
@@ -21,11 +20,6 @@ final class ShowCommand extends Command
     private $symfonyStyle;
 
     /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
      * @var RectorInterface[]
      */
     private $rectors = [];
@@ -33,10 +27,9 @@ final class ShowCommand extends Command
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(SymfonyStyle $symfonyStyle, ParameterProvider $parameterProvider, array $rectors)
+    public function __construct(SymfonyStyle $symfonyStyle, array $rectors)
     {
         $this->symfonyStyle = $symfonyStyle;
-        $this->parameterProvider = $parameterProvider;
         $this->rectors = $rectors;
 
         parent::__construct();
