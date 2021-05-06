@@ -10,7 +10,6 @@ phpstan.neon
 rector.php
 phpunit.xml
 ecs.php
-changelog-linker.php
 phpstan-for-rector.neon
 
 LICENSE
