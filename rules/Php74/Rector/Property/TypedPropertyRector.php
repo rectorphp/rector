@@ -10,6 +10,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
@@ -24,7 +25,6 @@ use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PHPStan\Type\Generic\TemplateType;
 
 /**
  * @changelog https://wiki.php.net/rfc/typed_properties_v2#proposal
@@ -183,6 +183,11 @@ CODE_SAMPLE
         return $node;
     }
 
+    public function configure(array $configuration): void
+    {
+        $this->classLikeTypeOnly = $configuration[self::CLASS_LIKE_TYPE_ONLY] ?? false;
+    }
+
     /**
      * @param Name|NullableType|PhpParserUnionType $propertyTypeNode
      */
@@ -199,11 +204,6 @@ CODE_SAMPLE
         }
 
         return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
-    }
-
-    public function configure(array $configuration): void
-    {
-        $this->classLikeTypeOnly = $configuration[self::CLASS_LIKE_TYPE_ONLY] ?? false;
     }
 
     /**
