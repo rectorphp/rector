@@ -69,9 +69,6 @@
         "webmozart/assert": "^1.10"
     },
     "require-dev": {
-        "nette/application": "^3.0.7",
-        "nette/di": "^3.0",
-        "nette/forms": "^3.0",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-nette": "^0.12.16",
         "phpunit/phpunit": "^9.5",
@@ -118,7 +115,6 @@
         "files": [
             "stubs/Doctrine/Persistence/ObjectManager.php",
             "stubs/Doctrine/Common/Persistence/ObjectManager.php",
-            "vendor/nette/forms/src/Forms/Controls/SubmitButton.php",
             "rules-tests/Transform/Rector/FuncCall/FuncCallToMethodCallRector/Source/some_view_function.php",
             "rules-tests/TypeDeclaration/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php",
             "rules-tests/TypeDeclaration/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php"
