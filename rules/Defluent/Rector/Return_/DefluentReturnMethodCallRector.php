@@ -7,6 +7,7 @@ namespace Rector\Defluent\Rector\Return_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
@@ -33,18 +34,21 @@ final class DefluentReturnMethodCallRector extends AbstractRector
         return new RuleDefinition(
             'Turns return of fluent, to standalone call line and return of value',
             [
-                new CodeSample(<<<'CODE_SAMPLE'
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 return $someClass->someFunction();
 CODE_SAMPLE
-                , <<<'CODE_SAMPLE'
+                ,
+                    <<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 $someClass->someFunction();
 return $someClass;
 CODE_SAMPLE
-        ),
+                ),
 
-            ]);
+            ]
+        );
     }
 
     /**
@@ -57,8 +61,9 @@ CODE_SAMPLE
 
     /**
      * @param Return_ $node
+     * @return null|Expression[]|Return_[]
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node)
     {
         if (! $node->expr instanceof MethodCall) {
             return null;
@@ -74,10 +79,7 @@ CODE_SAMPLE
         }
 
         $variableReturn = new Return_($methodCall->var);
-        $this->addNodesAfterNode([$methodCall, $variableReturn], $node);
 
-        $this->removeNode($node);
-
-        return null;
+        return [new Expression($methodCall), $variableReturn];
     }
 }

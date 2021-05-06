@@ -85,9 +85,8 @@ CODE_SAMPLE
             $node->consts = [$firstConst];
 
             $nextClassConsts = $this->createNextClassConsts($allConsts, $node);
-            $this->addNodesAfterNode($nextClassConsts, $node);
 
-            return $node;
+            return array_merge([$node], $nextClassConsts);
         }
 
         if (count($node->props) < 2) {

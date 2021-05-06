@@ -25,6 +25,7 @@ use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
 use Rector\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector;
 use Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector;
 use Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector;
+use Rector\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
 use Rector\CodeQuality\Rector\FuncCall\InArrayAndArrayKeysToArrayKeyExistsRector;
@@ -175,5 +176,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NarrowUnionTypeDocRector::class);
     $services->set(FuncGetArgsToVariadicParamRector::class);
     $services->set(CallUserFuncToMethodCallRector::class);
-    $services->set(\Rector\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector::class);
+    $services->set(CallUserFuncWithArrowFunctionToInlineRector::class);
 };

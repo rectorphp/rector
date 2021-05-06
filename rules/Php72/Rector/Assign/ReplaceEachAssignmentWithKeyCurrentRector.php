@@ -59,9 +59,8 @@ CODE_SAMPLE
 
     /**
      * @param Assign $node
-     * @return Node[]|Node|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -73,7 +72,11 @@ CODE_SAMPLE
 
         $assignVariable = $node->var;
 
-        return $this->createNewNodes($assignVariable, $eachedVariable);
+        $newNodes = $this->createNewNodes($assignVariable, $eachedVariable);
+        $this->addNodesAfterNode($newNodes, $node);
+        $this->removeNode($node);
+
+        return null;
     }
 
     private function shouldSkip(Assign $assign): bool

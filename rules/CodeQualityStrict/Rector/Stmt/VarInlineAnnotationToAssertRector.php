@@ -175,7 +175,7 @@ CODE_SAMPLE
     /**
      * @return Node[]|null
      */
-    private function refactorAlreadyCreatedNode(Stmt $stmt, PhpDocInfo $phpDocInfo, Variable $variable)
+    private function refactorAlreadyCreatedNode(Stmt $stmt, PhpDocInfo $phpDocInfo, Variable $variable): ?array
     {
         $varTagValue = $phpDocInfo->getVarTagValueNode();
         if (! $varTagValue instanceof VarTagValueNode) {

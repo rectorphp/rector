@@ -108,7 +108,7 @@ CODE_SAMPLE
 
     /**
      * @param If_ $node
-     * @retur Node|Node[]|null
+     * @return Node|Node[]|null
      */
     public function refactor(Node $node)
     {

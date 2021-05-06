@@ -58,7 +58,7 @@ CODE_SAMPLE
      * @param Use_|TraitUse $node
      * @return Use_[]|TraitUse[]|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?array
     {
         if ($node instanceof Use_) {
             return $this->refactorUseImport($node);
@@ -70,7 +70,7 @@ CODE_SAMPLE
     /**
      * @return Use_[]|null $use
      */
-    private function refactorUseImport(Use_ $use)
+    private function refactorUseImport(Use_ $use): ?array
     {
         if (count($use->uses) < 2) {
             return null;
@@ -87,7 +87,7 @@ CODE_SAMPLE
     /**
      * @return TraitUse[]|null
      */
-    private function refactorTraitUse(TraitUse $traitUse)
+    private function refactorTraitUse(TraitUse $traitUse): ?array
     {
         if (count($traitUse->traits) < 2) {
             return null;
