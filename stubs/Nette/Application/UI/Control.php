@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Nette\Application\UI;
 
-if (class_exists('Nette\Application\UI\Form')) {
+if (class_exists('Nette\Application\UI\Control')) {
     return;
 }
 
-class Form
+class Control
 {
+
 }

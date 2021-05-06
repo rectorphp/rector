@@ -8,6 +8,6 @@ if (class_exists('Nette\Application\UI\Presenter')) {
     return;
 }
 
-final class Presenter
+class Presenter
 {
 }
