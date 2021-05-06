@@ -32,6 +32,8 @@
         "composer/xdebug-handler": "^2.0",
         "danielstjules/stringy": "^3.1",
         "doctrine/inflector": "^2.0",
+        "ergebnis/json-printer": "^3.1",
+        "idiosyncratic/editorconfig": "^0.1.0",
         "jean85/pretty-package-versions": "^1.6",
         "nette/caching": "^3.1",
         "nette/utils": "^3.2",
@@ -48,6 +50,7 @@
         "rector/rector-phpunit": "^0.10.8",
         "rector/rector-symfony": "^0.10.5",
         "sebastian/diff": "^4.0.4",
+        "shanethehat/pretty-xml": "^1.0",
         "symfony/console": "^4.4.8|^5.1",
         "symfony/dependency-injection": "^5.1",
         "symfony/finder": "^4.4.8|^5.1",
@@ -153,7 +156,5 @@
     "config": {
         "sort-packages": true,
         "platform-check": false
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }

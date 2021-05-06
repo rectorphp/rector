@@ -5,6 +5,9 @@ declare(strict_types=1);
 use Composer\Semver\VersionParser;
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\Rules\English\InflectorFactory;
+use Ergebnis\Json\Printer\Printer;
+use Ergebnis\Json\Printer\PrinterInterface;
+use Idiosyncratic\EditorConfig\EditorConfig;
 use Nette\Caching\Cache;
 use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
@@ -21,6 +24,7 @@ use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use PHPStan\Reflection\ReflectionProvider;
+use PrettyXml\Formatter;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
 use Rector\Caching\Cache\NetteCacheFactory;
@@ -28,6 +32,8 @@ use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
+use Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface;
+use Rector\FileFormatter\EditorConfig\EditorConfigIdiosyncraticParser;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
@@ -146,4 +152,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->factory([service(PHPStanServicesFactory::class), 'createTypeNodeResolver']);
     $services->set(DynamicSourceLocatorProvider::class)
         ->factory([service(PHPStanServicesFactory::class), 'createDynamicSourceLocatorProvider']);
+
+    $services->set(Printer::class);
+    $services->alias(PrinterInterface::class, Printer::class);
+
+    $services->set(Formatter::class);
+
+    $services->set(EditorConfig::class);
+
+    $services->alias(EditorConfigParserInterface::class, EditorConfigIdiosyncraticParser::class);
 };

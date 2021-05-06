@@ -8,6 +8,7 @@ use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\FileFormatter\FileFormatter;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ApplicationFileProcessor
@@ -33,18 +34,25 @@ final class ApplicationFileProcessor
     private $fileDiffFileDecorator;
 
     /**
+     * @var FileFormatter
+     */
+    private $fileFormatter;
+
+    /**
      * @param FileProcessorInterface[] $fileProcessors
      */
     public function __construct(
         Configuration $configuration,
         SmartFileSystem $smartFileSystem,
         FileDiffFileDecorator $fileDiffFileDecorator,
+        FileFormatter $fileFormatter,
         array $fileProcessors = []
     ) {
         $this->fileProcessors = $fileProcessors;
         $this->smartFileSystem = $smartFileSystem;
         $this->configuration = $configuration;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
+        $this->fileFormatter = $fileFormatter;
     }
 
     /**
@@ -53,6 +61,8 @@ final class ApplicationFileProcessor
     public function run(array $files): void
     {
         $this->processFiles($files);
+
+        $this->fileFormatter->format($files);
 
         $this->fileDiffFileDecorator->decorate($files);
 
