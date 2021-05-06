@@ -170,17 +170,7 @@ CODE_SAMPLE
             return null;
         }
 
-        // is not class-type and should be skipped
-        if ($this->shouldSkipNonClassLikeType($propertyTypeNode)) {
-            return null;
-        }
-
-        // false positive
-        if ($propertyTypeNode instanceof Name && $this->isName($propertyTypeNode, 'mixed')) {
-            return null;
-        }
-
-        if ($this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($node)) {
+        if ($this->isNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node)) {
             return null;
         }
 
@@ -191,6 +181,24 @@ CODE_SAMPLE
         $node->type = $propertyTypeNode;
 
         return $node;
+    }
+
+    /**
+     * @param Name|NullableType|PhpParserUnionType $propertyTypeNode
+     */
+    private function isNonClassLikeTypeOrMixedOrVendorLockedIn(Node $propertyTypeNode, Property $property): bool
+    {
+        // is not class-type and should be skipped
+        if ($this->shouldSkipNonClassLikeType($propertyTypeNode)) {
+            return true;
+        }
+
+        // false positive
+        if ($propertyTypeNode instanceof Name && $this->isName($propertyTypeNode, 'mixed')) {
+            return true;
+        }
+
+        return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
     }
 
     public function configure(array $configuration): void
