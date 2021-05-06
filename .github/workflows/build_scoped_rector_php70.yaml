@@ -33,16 +33,15 @@ jobs:
                     COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
             # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
-            -   run: |
-                    composer remove phpstan/phpstan --no-update
+            -   run: composer install --no-dev --ansi
 
-                    composer config repositories.phpstan/phpstan-src vcs https://github.com/phpstan/phpstan-src --ansi
-                    composer require phpstan/phpstan-src:0.12.85 --no-update --ansi
+            -   run: wget https://github.com/box-project/box/releases/download/3.12.2/box.phar -N --no-verbose
 
-                    composer require jetbrains/phpstorm-stubs dev-master#0a73df114cdea7f30c8b5f6fbfbf8e6839a89e88 --no-update --ansi
-                    composer require composer/composer --no-update --ansi
+            # extra content of phpstan.phar to vendor/phpstan/phpstan-extracted
+            -   run: php box.phar extract vendor/phpstan/phpstan/phpstan.phar vendor/phpstan/phpstan-extracted
 
-                    composer install --no-dev --ansi
+            # original phpstan/phpstan is now duplicated, we don't need it now
+            -   run: composer remove phpstan/phpstan
 
             # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
             -  run: rsync --exclude rector-build-php70 -av * rector-build-php70 --quiet
