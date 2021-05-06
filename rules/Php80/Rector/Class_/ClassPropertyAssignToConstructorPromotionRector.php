@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -42,21 +42,14 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      */
     private $varTagRemover;
 
-    /**
-     * @var PhpDocTagRemover
-     */
-    private $phpDocTagRemover;
-
     public function __construct(
         PromotedPropertyResolver $promotedPropertyResolver,
         VariableRenamer $variableRenamer,
-        VarTagRemover $varTagRemover,
-        PhpDocTagRemover $phpDocTagRemover
+        VarTagRemover $varTagRemover
     ) {
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->variableRenamer = $variableRenamer;
         $this->varTagRemover = $varTagRemover;
-        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -86,7 +79,8 @@ class SomeClass
 }
 CODE_SAMPLE
                 ),
-            ]);
+            ]
+        );
     }
 
     /**
@@ -110,6 +104,8 @@ CODE_SAMPLE
         /** @var ClassMethod $constructClassMethod */
         $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
 
+        $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($constructClassMethod);
+
         foreach ($promotionCandidates as $promotionCandidate) {
             // does property have some useful annotations?
             $property = $promotionCandidate->getProperty();
@@ -123,22 +119,28 @@ CODE_SAMPLE
             $this->removeNode($promotionCandidate->getAssign());
 
             $property = $promotionCandidate->getProperty();
-            $this->decorateParamWithPropertyPhpDocInfo($property, $param);
+            $paramName = $this->getName($param);
 
+            // rename also following calls
+            $propertyName = $this->getName($property->props[0]);
             /** @var string $oldName */
             $oldName = $this->getName($param->var);
+            $this->variableRenamer->renameVariableInFunctionLike($constructClassMethod, null, $oldName, $propertyName);
+
+            $paramTagValueNode = $classMethodPhpDocInfo->getParamTagValueNodeByName($paramName);
+
+            if (! $paramTagValueNode instanceof ParamTagValueNode) {
+                $this->decorateParamWithPropertyPhpDocInfo($property, $param);
+            } elseif ($paramTagValueNode->parameterName !== '$' . $propertyName) {
+                $paramTagValueNode->parameterName = '$' . $propertyName;
+                $paramTagValueNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
+            }
 
             // property name has higher priority
             $propertyName = $this->getName($property);
             $param->var->name = $propertyName;
             $param->flags = $property->flags;
             $this->processNullableType($property, $param);
-
-            // rename also following calls
-            $propertyName = $this->getName($property->props[0]);
-            $this->variableRenamer->renameVariableInFunctionLike($constructClassMethod, null, $oldName, $propertyName);
-
-            $this->removeClassMethodParam($constructClassMethod, $oldName);
         }
 
         return $node;
@@ -166,17 +168,5 @@ CODE_SAMPLE
 
         $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         $this->varTagRemover->removeVarPhpTagValueNodeIfNotComment($param, $paramType);
-    }
-
-    private function removeClassMethodParam(ClassMethod $classMethod, string $paramName): void
-    {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-
-        $paramTagValueByName = $phpDocInfo->getParamTagValueByName($paramName);
-        if (! $paramTagValueByName instanceof ParamTagValueNode) {
-            return;
-        }
-
-        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueByName);
     }
 }
