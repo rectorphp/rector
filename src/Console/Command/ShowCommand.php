@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Symfony\Component\Console\Command\Command;
@@ -12,8 +11,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ShowCommand extends Command
 {
@@ -23,11 +20,6 @@ final class ShowCommand extends Command
     private $symfonyStyle;
 
     /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
      * @var RectorInterface[]
      */
     private $rectors = [];
@@ -35,10 +27,9 @@ final class ShowCommand extends Command
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(SymfonyStyle $symfonyStyle, ParameterProvider $parameterProvider, array $rectors)
+    public function __construct(SymfonyStyle $symfonyStyle, array $rectors)
     {
         $this->symfonyStyle = $symfonyStyle;
-        $this->parameterProvider = $parameterProvider;
         $this->rectors = $rectors;
 
         parent::__construct();
@@ -52,7 +43,6 @@ final class ShowCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->reportLoadedRectors();
-        $this->reportLoadedSets();
 
         return ShellCode::SUCCESS;
     }
@@ -82,29 +72,5 @@ final class ShowCommand extends Command
             );
             $this->symfonyStyle->warning($warningMessage);
         }
-    }
-
-    private function reportLoadedSets(): void
-    {
-        $sets = (array) $this->parameterProvider->provideParameter(Option::SETS);
-        if ($sets === []) {
-            return;
-        }
-
-        $this->symfonyStyle->newLine(2);
-        $this->symfonyStyle->title('Loaded Sets');
-
-        sort($sets);
-
-        $setFilePaths = [];
-        foreach ($sets as $set) {
-            $setFileInfo = new SmartFileInfo($set);
-            $setFilePaths[] = $setFileInfo->getRelativeFilePathFromCwd();
-        }
-
-        $this->symfonyStyle->listing($setFilePaths);
-
-        $message = sprintf('%d loaded sets', count($sets));
-        $this->symfonyStyle->success($message);
     }
 }

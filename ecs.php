@@ -52,7 +52,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/config/set',
     ]);
 
-    $parameters->set(Option::SETS, [SetList::PSR_12, SetList::SYMPLIFY, SetList::COMMON, SetList::CLEAN_CODE]);
+    $containerConfigurator->import(SetList::PSR_12);
+    $containerConfigurator->import(SetList::SYMPLIFY);
+    $containerConfigurator->import(SetList::COMMON);
+    $containerConfigurator->import(SetList::CLEAN_CODE);
 
     $parameters->set(Option::SKIP, [
         '*/Source/*',
