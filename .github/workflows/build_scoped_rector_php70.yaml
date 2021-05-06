@@ -34,15 +34,7 @@ jobs:
 
             # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
             -   run: |
-                    composer remove symplify/easy-coding-standard --dev --ansi
-                    composer remove symplify/coding-standard --dev --update-with-dependencies --ansi
-                    rm composer.lock
-                    composer remove phpstan/extension-installer --update-with-dependencies --dev --ansi
-                    composer remove phpstan/phpstan-nette --update-with-dependencies --dev --ansi
-                    composer remove phpstan/phpstan-phpunit --update-with-dependencies --dev --ansi
-                    composer remove rector/rector-phpstan-rules --update-with-dependencies --dev --ansi
-                    composer remove symplify/phpstan-rules --update-with-dependencies --dev --ansi
-                    composer remove symplify/phpstan-extensions --update-with-dependencies --dev --ansi
+                    composer remove phpstan/phpstan --no-update
 
                     rm composer.lock
 
