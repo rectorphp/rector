@@ -80,6 +80,8 @@ final class FilesFinder
         }
 
         $files = $this->fileSystemFilter->filterFiles($source);
+        $files = array_merge($files, $this->filesystemTweaker->resolveFilesWithFnmatch($source));
+
         $directories = $this->fileSystemFilter->filterDirectories($source);
 
         $smartFileInfos = [];

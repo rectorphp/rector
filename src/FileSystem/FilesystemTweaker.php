@@ -23,6 +23,7 @@ final class FilesystemTweaker
      * This will turn paths like "src/Symfony/Component/*\/Tests" to existing directory paths
      *
      * @param string[] $directories
+     *
      * @return string[]
      */
     public function resolveDirectoriesWithFnmatch(array $directories): array
@@ -41,6 +42,38 @@ final class FilesystemTweaker
         }
 
         return $absoluteDirectories;
+    }
+
+    /**
+     * This will turn paths like "src/Symfony/Component/**\/some.php" to existing file paths
+     *
+     * @param string[] $filesAndDirectories
+     *
+     * @return string[]
+     */
+    public function resolveFilesWithFnmatch(array $filesAndDirectories): array
+    {
+        $files = [];
+
+        foreach ($filesAndDirectories as $filesAndDirectory) {
+            if (! Strings::contains($filesAndDirectory, '*')) {
+                continue;
+            }
+
+            foreach ((array) glob($filesAndDirectory) as $foundPath) {
+                if (! is_string($foundPath)) {
+                    continue;
+                }
+
+                if (! is_file($foundPath)) {
+                    continue;
+                }
+
+                $files[] = $foundPath;
+            }
+        }
+
+        return array_values($files);
     }
 
     /**
