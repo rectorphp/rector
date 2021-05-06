@@ -25,7 +25,12 @@ define('__RECTOR_RUNNING__', true);
 $autoloadIncluder = new AutoloadIncluder();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 
-if (should_include_preload()) {
+
+// load extracted PHPStan with its own preload.php
+$extractedPhpstanAutoload = __DIR__ . '/../vendor/phpstan/phpstan-extracted/vendor/autoload.php';
+if (file_exists($extractedPhpstanAutoload)) {
+    require_once $extractedPhpstanAutoload;
+} elseif (should_include_preload()) {
     require_once __DIR__ . '/../preload.php';
 }
 

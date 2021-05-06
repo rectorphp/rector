@@ -40,8 +40,15 @@ jobs:
             # extra content of phpstan.phar to vendor/phpstan/phpstan-extracted
             -   run: php box.phar extract vendor/phpstan/phpstan/phpstan.phar vendor/phpstan/phpstan-extracted
 
-            # original phpstan/phpstan is now duplicated, we don't need it now
-            -   run: composer remove phpstan/phpstan
+            # "composer remove phpstan/phpstan" original phpstan/phpstan is now duplicated, we don't need it now -required by phpstan extensions, cannot be removed like this
+
+            # to avoid double packing the same code
+            -   run: rm -rf vendor/bin/phpstan
+            -   run: rm -rf vendor/phpstan/phpstan/phpstan.phar
+            -   run: rm phpstan-for-rector.neon
+
+            # THIS MUST WORK
+            -   run: bin/rector downgrade-paths
 
             # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
             -  run: rsync --exclude rector-build-php70 -av * rector-build-php70 --quiet
