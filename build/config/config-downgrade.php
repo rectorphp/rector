@@ -25,12 +25,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan-for-downgrade.neon');
 
-    $parameters->set(Option::SETS, [
-        DowngradeSetList::PHP_80,
-        DowngradeSetList::PHP_74,
-        DowngradeSetList::PHP_73,
-        DowngradeSetList::PHP_72,
-    ]);
+    $containerConfigurator->import(DowngradeSetList::PHP_80);
+    $containerConfigurator->import(DowngradeSetList::PHP_74);
+    $containerConfigurator->import(DowngradeSetList::PHP_73);
+    $containerConfigurator->import(DowngradeSetList::PHP_72);
 };
 
 /**

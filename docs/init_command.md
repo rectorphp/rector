@@ -17,8 +17,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     // here we can define, what sets of rules will be applied
-    $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::SETS, [SetList::CODE_QUALITY]);
+    $containerConfigurator->import(SetList::CODE_QUALITY);
 
     // register single rule
     $services = $containerConfigurator->services();

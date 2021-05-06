@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Configuration\Option;
+use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Set\ValueObject\SetList;
+use Rector\Symfony\Set\TwigSetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
-
-    $parameters->set(Option::SETS, [SetList::PHPUNIT_60, SetList::TWIG_20]);
+    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_60);
+    $containerConfigurator->import(TwigSetList::TWIG_20);
 
     $services = $containerConfigurator->services();
     $services->set(RenameClassRector::class)
