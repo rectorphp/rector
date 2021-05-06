@@ -29,7 +29,6 @@ use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
 use Rector\Caching\Cache\NetteCacheFactory;
 use Rector\Core\Console\ConsoleApplication;
-use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
 use Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface;
@@ -137,9 +136,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // type resolving
     $services->set(IntermediateSourceLocator::class);
     $services->alias(TypeParser::class, BetterTypeParser::class);
-
-    // non php changes
-    $services->set(RenameClassNonPhpRector::class);
 
     // PHPStan services
     $services->set(ReflectionProvider::class)
