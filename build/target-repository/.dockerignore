@@ -10,7 +10,6 @@ phpstan.neon
 rector.php
 phpunit.xml
 ecs.php
-phpstan-for-rector.neon
 
 LICENSE
 
@@ -24,9 +23,6 @@ Dockerfile
 docker-compose.yml
 docker-compose.dist.yml
 
-/vendor
 /docs
-/rector-nested/
-/rector-scoped/
 
 *.phar
