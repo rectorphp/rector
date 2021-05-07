@@ -43,7 +43,7 @@ jobs:
             # "composer remove phpstan/phpstan" original phpstan/phpstan is now duplicated, we don't need it now -required by phpstan extensions, cannot be removed like this
 
             # to avoid double packing the same code
-            -   run: rm -rf vendor/bin/phpstan
+            -   run: rm -rf vendor/bin/phpstan vendor/phpstan/phpstan/bootstrap.php
             -   run: rm -rf vendor/phpstan/phpstan/phpstan.phar
             -   run: rm phpstan-for-rector.neon
 
