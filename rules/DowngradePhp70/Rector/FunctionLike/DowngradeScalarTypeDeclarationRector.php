@@ -9,15 +9,16 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\CallableType;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Tests\DowngradePhp70\Rector\FunctionLike\DowngradeTypeDeclarationRector\DowngradeTypeDeclarationRectorTest
+ * @see \Rector\Tests\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector\DowngradeScalarTypeDeclarationRectorTest
  */
-final class DowngradeTypeDeclarationRector extends AbstractRector
+final class DowngradeScalarTypeDeclarationRector extends AbstractRector
 {
     /**
      * @var PhpDocFromTypeDeclarationDecorator
@@ -78,7 +79,7 @@ CODE_SAMPLE
             $this->phpDocFromTypeDeclarationDecorator->decorateParam(
                 $param,
                 $node,
-                [ArrayType::class, CallableType::class]
+                [ArrayType::class, CallableType::class, TypeWithClassName::class]
             );
         }
 

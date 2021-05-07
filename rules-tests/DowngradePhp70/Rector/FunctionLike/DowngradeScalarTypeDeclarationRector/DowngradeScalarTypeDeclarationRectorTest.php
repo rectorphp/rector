@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\DowngradePhp70\Rector\FunctionLike\DowngradeTypeDeclarationRector;
+namespace Rector\Tests\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradeTypeDeclarationRectorTest extends AbstractRectorTestCase
+final class DowngradeScalarTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
