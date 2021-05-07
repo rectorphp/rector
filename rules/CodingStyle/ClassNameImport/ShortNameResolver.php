@@ -75,18 +75,25 @@ final class ShortNameResolver
 
     public function __construct(
         SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        PhpDocInfoFactory $phpDocInfoFactory,
         NodeNameResolver $nodeNameResolver,
         NodeFinder $nodeFinder,
         ReflectionProvider $reflectionProvider,
         BetterNodeFinder $betterNodeFinder
     ) {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFinder = $nodeFinder;
         $this->reflectionProvider = $reflectionProvider;
         $this->betterNodeFinder = $betterNodeFinder;
+    }
+
+    /**
+     * Avoids circular reference
+     * @required
+     */
+    public function autowireShortNameResolver(PhpDocInfoFactory $phpDocInfoFactory)
+    {
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
