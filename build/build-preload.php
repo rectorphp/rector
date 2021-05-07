@@ -31,7 +31,9 @@ php;
     $finder = (new Finder())
         ->files()
         ->name('*.php')
-        ->in($vendorDir . '/nikic/php-parser/lib/PhpParser');
+        ->in($vendorDir . '/nikic/php-parser/lib/PhpParser')
+        ->notPath('tests')
+        ->in($vendorDir . '/symplify');
 
     foreach ($finder->getIterator() as $fileInfo) {
         $realPath = $fileInfo->getRealPath();
