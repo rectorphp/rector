@@ -35,7 +35,7 @@ php;
         ->notPath('#\/tests\/#')
         ->notPath('#\/config\/#')
         ->notPath('#\/set\/#')
-        ->in($vendorDir . '/symplify');
+        ->in($vendorDir . '/symplify/symfony-php-config');
 
     foreach ($finder->getIterator() as $fileInfo) {
         $realPath = $fileInfo->getRealPath();
