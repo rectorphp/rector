@@ -68,6 +68,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         AttributeKey::USE_NODES,
         AttributeKey::SCOPE,
         AttributeKey::RESOLVED_NAME,
+        AttributeKey::PARENT_NODE,
     ];
 
     /**
@@ -350,7 +351,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
             // update parents relations
             $this->connectParentNodes($node);
-
             $this->mirrorAttributes($originalAttributes, $node);
         }
 

@@ -74,6 +74,7 @@ CODE_SAMPLE
     private function refactorArrayKeyFirst(FuncCall $funcCall): FuncCall
     {
         $array = $funcCall->args[0]->value;
+
         $resetFuncCall = $this->nodeFactory->createFuncCall('reset', [$array]);
         $this->addNodeBeforeNode($resetFuncCall, $funcCall);
 

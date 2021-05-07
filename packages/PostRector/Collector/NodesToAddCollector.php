@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 
@@ -37,10 +38,19 @@ final class NodesToAddCollector implements NodeCollectorInterface
      */
     private $rectorChangeCollector;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, RectorChangeCollector $rectorChangeCollector)
-    {
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        RectorChangeCollector $rectorChangeCollector,
+        BetterStandardPrinter $betterStandardPrinter
+    ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->rectorChangeCollector = $rectorChangeCollector;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     public function isActive(): bool
@@ -132,14 +142,22 @@ final class NodesToAddCollector implements NodeCollectorInterface
             return spl_object_hash($node);
         }
 
+        $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if ($currentStmt instanceof Stmt) {
+            return spl_object_hash($currentStmt);
+        }
+
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Return_) {
             return spl_object_hash($parent);
         }
 
         $foundNode = $this->betterNodeFinder->findParentTypes($node, [Expression::class, Stmt::class]);
-        if ($foundNode === null) {
-            $foundNode = $node;
+
+        if (! $foundNode instanceof Stmt) {
+            $printedNode = $this->betterStandardPrinter->print($node);
+            $errorMessage = sprintf('Could not find parent Stmt of "%s" node', $printedNode);
+            throw new ShouldNotHappenException($errorMessage);
         }
 
         return spl_object_hash($foundNode);
