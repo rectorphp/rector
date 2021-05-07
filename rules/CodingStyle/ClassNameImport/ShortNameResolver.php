@@ -91,7 +91,7 @@ final class ShortNameResolver
      * Avoids circular reference
      * @required
      */
-    public function autowireShortNameResolver(PhpDocInfoFactory $phpDocInfoFactory)
+    public function autowireShortNameResolver(PhpDocInfoFactory $phpDocInfoFactory): void
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }

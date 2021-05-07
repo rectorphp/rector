@@ -16,6 +16,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
+ * @changelog https://wiki.php.net/rfc/scalar_type_hints
+ *
  * @see \Rector\Tests\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector\DowngradeScalarTypeDeclarationRectorTest
  */
 final class DowngradeScalarTypeDeclarationRector extends AbstractRector
