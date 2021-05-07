@@ -22,7 +22,11 @@ final class DowngradePathsCommand extends Command
         $downgradePaths = $this->findVendorAndRulePaths();
 
         foreach ($downgradePaths as $key => $downgradePath) {
-            if (in_array($downgradePath, ['vendor/symplify', 'vendor/symfony', 'vendor/nikic', 'vendor/psr', 'vendor/phpstan'], true)) {
+            if (in_array(
+                $downgradePath,
+                ['vendor/symplify', 'vendor/symfony', 'vendor/nikic', 'vendor/psr', 'vendor/phpstan'],
+                true
+            )) {
                 unset($downgradePaths[$key]);
             }
         }
@@ -32,9 +36,12 @@ final class DowngradePathsCommand extends Command
             'config',
             'vendor/symfony vendor/psr',
             'vendor/symplify vendor/nikic bin src packages rector.php',
-            'vendor/phpstan/phpstan-extracted/vendor',
             'rules',
         ], $downgradePaths);
+
+        if (file_exists(getcwd() . '/vendor/phpstan/phpstan-extracted/vendor')) {
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor';
+        }
 
         // bash format
         $downgradePathsLine = implode(';', $downgradePaths);
