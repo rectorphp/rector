@@ -47,10 +47,7 @@ jobs:
             # the vendor/phpstan/phpstan/bootstrap.php is statically included by composer, so better add empty file
             -   run: echo "<?php " > vendor/phpstan/phpstan/bootstrap.php
             -   run: rm -rf vendor/phpstan/phpstan/phpstan.phar
-            -   run: rm phpstan-for-rector.neon
-
-            # THIS MUST WORK
-            -   run: bin/rector downgrade-paths
+            -   run: rm -rf phpstan-for-rector.neon
 
             # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
             -  run: rsync --exclude rector-build-php70 -av * rector-build-php70 --quiet
@@ -72,8 +69,9 @@ jobs:
                     php-version: 7.0
                     coverage: none
             -   run: |
-                    cp -R rector-prefixed-downgraded-php70/vendor/rector/* vendor/rector/
-                    cp -R rector-prefixed-downgraded-php70/vendor/symfony/string/* vendor/symfony/string/
+                    rm -rf vendor && mkdir -p vendor
+                    cp -R rector-prefixed-downgraded-php70/vendor/* vendor/
+                    rm -rf php-parallel-lint
                     composer create-project php-parallel-lint/php-parallel-lint php-parallel-lint --ansi
 
             -   run: php-parallel-lint/parallel-lint rector-prefixed-downgraded-php70 --exclude rector-prefixed-downgraded-php70/stubs --exclude rector-prefixed-downgraded-php70/vendor/symfony/error-handler/Resources --exclude rector-prefixed-downgraded-php70/vendor/symfony/http-kernel/Resources --exclude rector-prefixed-downgraded-php70/vendor/rector/rector-nette/tests --exclude rector-prefixed-downgraded-php70/vendor/symfony/polyfill-mbstring/bootstrap80.php --exclude rector-prefixed-downgraded-php70/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded-php70/vendor/rector/rector-installer/tests --exclude rector-prefixed-downgraded-php70/vendor/symplify/smart-file-system/tests --exclude rector-prefixed-downgraded-php70/vendor/symfony/http-foundation/Session --exclude rector-prefixed-downgraded-php70/vendor/symfony/var-dumper --exclude rector-prefixed-downgraded-php70/vendor/nette/caching --exclude rector-prefixed-downgraded-php70/vendor/rector/rector-nette/src/Rector/LNumber --exclude rector-prefixed-downgraded-php70/vendor/symfony/http-foundation/Test --exclude rector-prefixed-downgraded-php70/vendor/symplify/simple-php-doc-parser/tests --exclude rector-prefixed-downgraded-php70/vendor/tracy/tracy/src/Tracy/Bar/panels/info.panel.phtml --exclude rector-prefixed-downgraded-php70/vendor/symfony/string/Slugger/AsciiSlugger.php
