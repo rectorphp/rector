@@ -25,12 +25,6 @@ final class DowngradeAnonymousClassRector extends AbstractRector
     private const ANONYMOUS_CLASS_PREFIX = 'Anonymous__';
 
     /**
-     * @see https://regex101.com/r/kF3pRI/1
-     * @var string
-     */
-    private const TEST_PREFIX_REGEX = '#input_(\w[^_]+)_#';
-
-    /**
      * @var ClassAnalyzer
      */
     private $classAnalyzer;
