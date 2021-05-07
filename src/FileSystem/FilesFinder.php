@@ -9,6 +9,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 use Symplify\SmartFileSystem\FileSystemFilter;
+use Symplify\SmartFileSystem\FileSystemGuard;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -54,16 +55,23 @@ final class FilesFinder
      */
     private $skippedPathsResolver;
 
+    /**
+     * @var FileSystemGuard
+     */
+    private $fileSystemGuard;
+
     public function __construct(
         FilesystemTweaker $filesystemTweaker,
         FinderSanitizer $finderSanitizer,
         FileSystemFilter $fileSystemFilter,
-        SkippedPathsResolver $skippedPathsResolver
+        SkippedPathsResolver $skippedPathsResolver,
+        FileSystemGuard $fileSystemGuard
     ) {
         $this->filesystemTweaker = $filesystemTweaker;
         $this->finderSanitizer = $finderSanitizer;
         $this->fileSystemFilter = $fileSystemFilter;
         $this->skippedPathsResolver = $skippedPathsResolver;
+        $this->fileSystemGuard = $fileSystemGuard;
     }
 
     /**
@@ -79,10 +87,10 @@ final class FilesFinder
             return $this->fileInfosBySourceAndSuffixes[$cacheKey];
         }
 
-        $files = $this->fileSystemFilter->filterFiles($source);
-        $files = array_merge($files, $this->filesystemTweaker->resolveFilesWithFnmatch($source));
+        $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
 
-        $directories = $this->fileSystemFilter->filterDirectories($source);
+        $files = $this->fileSystemFilter->filterFiles($filesAndDirectories);
+        $directories = $this->fileSystemFilter->filterDirectories($filesAndDirectories);
 
         $smartFileInfos = [];
         foreach ($files as $file) {
@@ -104,11 +112,6 @@ final class FilesFinder
             return [];
         }
 
-        $absoluteDirectories = $this->filesystemTweaker->resolveDirectoriesWithFnmatch($directories);
-        if ($absoluteDirectories === []) {
-            return [];
-        }
-
         $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
 
         $finder = Finder::create()
@@ -116,7 +119,7 @@ final class FilesFinder
             ->files()
             // skip empty files
             ->size('> 0')
-            ->in($absoluteDirectories)
+            ->in($directories)
             ->name($suffixesPattern)
             ->sortByName();
 
