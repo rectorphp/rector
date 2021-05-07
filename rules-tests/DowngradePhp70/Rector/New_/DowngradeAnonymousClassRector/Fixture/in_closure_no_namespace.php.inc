@@ -13,13 +13,11 @@ function () {
 <?php
 
 function () {
-    class AnonymousFor_NotInfunctionNoNamespace
-    {
-        public function execute()
-        {
-        }
-    }
-    return new AnonymousFor_NotInfunctionNoNamespace();
+    return new Anonymous__%s__0();
 };
-
-?>
+class Anonymous__%s__0
+{
+    public function execute()
+    {
+    }
+}

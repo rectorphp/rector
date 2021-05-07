@@ -14,12 +14,10 @@ return new class {
 
 namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\Fixture;
 
-class AnonymousFor_NotInFunction
+return new Anonymous__%s__0();
+class Anonymous__%s__0
 {
     public function execute()
     {
     }
 }
-return new AnonymousFor_NotInFunction();
-
-?>

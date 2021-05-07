@@ -17,13 +17,11 @@ function () {
 namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\Fixture;
 
 function () {
-    class AnonymousFor_NotInFunction
-    {
-        public function execute()
-        {
-        }
-    }
-    return new AnonymousFor_NotInFunction();
+    return new Anonymous__%s__0();
 };
-
-?>
+class Anonymous__%s__0
+{
+    public function execute()
+    {
+    }
+}
