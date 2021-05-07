@@ -44,6 +44,8 @@ jobs:
 
             # to avoid double packing the same code
             -   run: rm -rf vendor/bin/phpstan vendor/phpstan/phpstan/bootstrap.php
+            # the vendor/phpstan/phpstan/bootstrap.php is statically included by composer, so better add empty file
+            -   run: echo "<?php " > vendor/phpstan/phpstan/bootstrap.php
             -   run: rm -rf vendor/phpstan/phpstan/phpstan.phar
             -   run: rm phpstan-for-rector.neon
 
