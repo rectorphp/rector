@@ -166,11 +166,7 @@ CODE_SAMPLE
             TypeKind::KIND_PROPERTY
         );
 
-        if (! $propertyTypeNode instanceof Node) {
-            return null;
-        }
-
-        if ($this->isNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node)) {
+        if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node)) {
             return null;
         }
 
@@ -189,10 +185,14 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Name|NullableType|PhpParserUnionType $node
+     * @param Name|NullableType|PhpParserUnionType|null $node
      */
-    private function isNonClassLikeTypeOrMixedOrVendorLockedIn(Node $node, Property $property): bool
+    private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn(?Node $node, Property $property): bool
     {
+        if (! $node instanceof Node) {
+            return true;
+        }
+
         // is not class-type and should be skipped
         if ($this->shouldSkipNonClassLikeType($node)) {
             return true;
