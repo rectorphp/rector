@@ -64,6 +64,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'mysql_numfields' => 'mysqli_num_fields',
                 'mysql_num_rows' => 'mysqli_num_rows',
                 'mysql_numrows' => 'mysqli_num_rows',
+                'mysql_error' => 'mysqli_error',
             ],
         ]]);
 
