@@ -11,10 +11,12 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -34,9 +36,17 @@ final class DowngradeAnonymousClassRector extends AbstractRector
      */
     private $classAnalyzer;
 
-    public function __construct(ClassAnalyzer $classAnalyzer)
-    {
+    /**
+     * @var ClassFromAnonymousFactory
+     */
+    private $classFromAnonymousFactory;
+
+    public function __construct(
+        ClassAnalyzer $classAnalyzer,
+        ClassFromAnonymousFactory $classFromAnonymousFactory
+    ) {
         $this->classAnalyzer = $classAnalyzer;
+        $this->classFromAnonymousFactory = $classFromAnonymousFactory;
     }
 
     /**
@@ -183,17 +193,14 @@ CODE_SAMPLE
             return null;
         }
 
-        $class = new Class_(
-            $className,
-            [
-                'flags' => $new->class->flags,
-                'extends' => $new->class->extends,
-                'implements' => $new->class->implements,
-                'stmts' => $new->class->stmts,
-                'attrGroups' => $new->class->attrGroups,
-            ]
-        );
-        $this->addNodeBeforeNode($class, $node);
+        $class = $this->classFromAnonymousFactory->create($className, $new->class);
+
+        $currentClass = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($currentClass instanceof ClassLike) {
+            $this->addNodeBeforeNode($class, $currentClass);
+        } else {
+            $this->addNodeBeforeNode($class, $node);
+        }
 
         return new New_(new Name($className), $new->args);
     }
