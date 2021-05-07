@@ -7,7 +7,6 @@ namespace Rector\DowngradePhp70\Rector\New_;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -106,9 +105,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $classNode = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if ($classNode instanceof Class_) {
-            return $this->processMoveAnonymousClassInClass($node, $classNode);
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
+        if ($classLike instanceof ClassLike) {
+            return $this->processMoveAnonymousClassInClass($node, $classLike);
         }
 
         $functionNode = $this->betterNodeFinder->findParentType($node, Function_::class);
@@ -141,19 +140,18 @@ CODE_SAMPLE
         return ucfirst($className);
     }
 
-    private function processMoveAnonymousClassInClass(New_ $new, Class_ $class): ?New_
+    private function processMoveAnonymousClassInClass(New_ $new, ClassLike $classLike): ?New_
     {
-        $namespacedClassName = $this->getName($class->namespacedName);
-        /** @var Identifier $shortClassName */
-        $shortClassName = $class->name;
-        $shortClassName = (string) $this->getName($shortClassName);
+        $namespacedClassName = $this->getName($classLike->namespacedName);
+
+        $shortClassName = $this->nodeNameResolver->getShortName($classLike->name);
 
         $namespace = $namespacedClassName === $shortClassName
             ? ''
             : Strings::substring($namespacedClassName, 0, - strlen($shortClassName) - 1);
         $className = $this->getClassName($namespace, $shortClassName);
 
-        return $this->processMove($new, $className, $class);
+        return $this->processMove($new, $className, $classLike);
     }
 
     private function processMoveAnonymousClassInFunction(New_ $new, Function_ $function): ?New_
