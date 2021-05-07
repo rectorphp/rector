@@ -6,8 +6,10 @@ namespace Rector\DowngradePhp70\Rector\Coalesce;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -51,6 +53,12 @@ CODE_SAMPLE
         $if = $node->left;
         $else = $node->right;
 
-        return new Ternary(new Isset_([$if]), $if, $else);
+        if ($if instanceof Variable || $if instanceof Node\Expr\ArrayDimFetch) {
+            $cond = new Isset_([$if]);
+        } else {
+            $cond = new NotIdentical($if, $this->nodeFactory->createNull());
+        }
+
+        return new Ternary($cond, $if, $else);
     }
 }
