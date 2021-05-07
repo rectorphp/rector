@@ -2,7 +2,7 @@
 
 namespace Rector\Core\Tests\Issues\Fixture;
 
-final class ArgvInput
+final class CoriantMixture
 {
     private function parseArgument(string $token, array $all)
     {
@@ -17,9 +17,12 @@ final class ArgvInput
 
 namespace Rector\Core\Tests\Issues\Fixture;
 
-final class ArgvInput
+final class CoriantMixture
 {
-    private function parseArgument(string $token, array $all)
+    /**
+     * @param string $token
+     */
+    private function parseArgument($token, array $all)
     {
         reset($all);
         if (($inputArgument = isset($all[$key = key($all)]) ? $all[$key = key($all)] : null) && 'command' === $inputArgument->getName()) {

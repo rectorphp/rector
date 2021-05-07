@@ -68,6 +68,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         AttributeKey::USE_NODES,
         AttributeKey::SCOPE,
         AttributeKey::RESOLVED_NAME,
+        AttributeKey::PARENT_NODE,
     ];
 
     /**
@@ -321,11 +322,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->printDebugApplying();
 
         $originalAttributes = $node->getAttributes();
-
-        print_node($node);
-        dump($node->hasAttribute(AttributeKey::ORIGINAL_NODE));
-        dump($node->getStartFilePos());
-
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? clone $node;
 
         $node = $this->refactor($node);
@@ -354,24 +350,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $this->file->addRectorClassWithLine($rectorWithLineChange);
 
             // update parents relations
-
-            $newParentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($newParentNode === null) {
-                // now null :/
-                dump($originalNode->getAttribute(AttributeKey::PARENT_NODE));
-                dump($originalNode->getAttribute(AttributeKey::ORIGINAL_NODE));
-                dump($originalNode->getStartFilePos());
-                dump($originalNode->getEndFilePos());
-//                die;
-
-                $originalParentNode = $originalNode->getAttribute(AttributeKey::PARENT_NODE);
-                $node->setAttribute(AttributeKey::PARENT_NODE, $originalParentNode);
-            }
-
             $this->connectParentNodes($node);
-//            dump($node->getAttributes());
-//            die;
-
             $this->mirrorAttributes($originalAttributes, $node);
         }
 
@@ -640,8 +619,5 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new ParentConnectingVisitor());
         $nodeTraverser->traverse($nodes);
-
-//        dump_node($nodes[0]);
-//        die;
     }
 }
