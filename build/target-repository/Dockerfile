@@ -40,6 +40,9 @@ COPY .docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 ENV PATH /rector/bin:$PATH
 
+# Add source
+COPY . /rector
+
 ENTRYPOINT [ "rector" ]
 
 VOLUME ["/project"]
@@ -50,4 +53,6 @@ RUN mkdir -p /tmp/opcache
 RUN chmod +x /rector/bin/rector
 RUN /rector/bin/rector list
 
-RUN chmod 777 -R /tmp
+RUN mkdir -p /tmp/opcache \
+    && /rector/bin/rector list \
+    && chmod 777 -R /tmp
