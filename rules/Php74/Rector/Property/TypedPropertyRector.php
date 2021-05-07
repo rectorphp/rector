@@ -197,13 +197,14 @@ CODE_SAMPLE
         if ($this->shouldSkipNonClassLikeType($propertyTypeNode)) {
             return true;
         }
-
         // false positive
-        if ($propertyTypeNode instanceof Name && $this->isName($propertyTypeNode, 'mixed')) {
-            return true;
+        if (! $propertyTypeNode instanceof Name) {
+            return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
         }
-
-        return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
+        if (! $this->isName($propertyTypeNode, 'mixed')) {
+            return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
+        }
+        return true;
     }
 
     /**
