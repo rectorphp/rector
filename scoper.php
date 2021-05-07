@@ -89,7 +89,7 @@ return [
 
         // un-prefix composer plugin
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/rector/rector-installer/src/Plugin.php')) {
+            if (! Strings::endsWith($filePath, 'vendor/rector/extension-installer/src/Plugin.php')) {
                 return $content;
             }
 
