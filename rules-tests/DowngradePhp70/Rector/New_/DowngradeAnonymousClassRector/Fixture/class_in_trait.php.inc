@@ -17,7 +17,7 @@ trait ClassInTrait
 
 namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\Fixture;
 
-class AnonymousFor_NotInFunction extends \InvalidArgumentException
+class AnonymousFor_ClassInTrait extends \InvalidArgumentException
 {
 }
 trait ClassInTrait
@@ -25,7 +25,7 @@ trait ClassInTrait
     public function run()
     {
         $message = 'error';
-        return new AnonymousFor_NotInFunction($message);
+        return new AnonymousFor_ClassInTrait($message);
     }
 }
 
