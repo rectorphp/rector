@@ -14,16 +14,16 @@ class NoNamespace
 -----
 <?php
 
-class AnonymousFor_NoNamespace
-{
-    public function execute()
-    {
-    }
-}
 class NoNamespace
 {
     public function run()
     {
-        return new AnonymousFor_NoNamespace();
+        return new Anonymous__%s__0();
+    }
+}
+class Anonymous__%s__0
+{
+    public function execute()
+    {
     }
 }

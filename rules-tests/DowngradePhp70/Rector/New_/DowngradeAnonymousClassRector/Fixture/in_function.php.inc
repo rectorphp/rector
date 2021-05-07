@@ -17,15 +17,13 @@ function inFunction()
 
 namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\Fixture;
 
-class AnonymousFor_inFunction
+function inFunction()
+{
+    return new Anonymous__%s__0();
+}
+class Anonymous__%s__0
 {
     public function execute()
     {
     }
 }
-function inFunction()
-{
-    return new AnonymousFor_inFunction();
-}
-
-?>

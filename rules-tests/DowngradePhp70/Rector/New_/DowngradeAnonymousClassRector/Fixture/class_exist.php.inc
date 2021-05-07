@@ -26,18 +26,16 @@ namespace Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\
 class AnonymousFor_ClassExists
 {
 }
-class AnonymousFor_ClassExists1
+class ClassExists
+{
+    public function run()
+    {
+        return new Anonymous__%s__0();
+    }
+}
+class Anonymous__%s__0
 {
     public function execute()
     {
     }
 }
-class ClassExists
-{
-    public function run()
-    {
-        return new AnonymousFor_ClassExists1();
-    }
-}
-
-?>

@@ -11,13 +11,13 @@ function inFunctionNoNamespace()
 -----
 <?php
 
-class AnonymousFor_inFunctionNoNamespace
+function inFunctionNoNamespace()
+{
+    return new Anonymous__%s__0();
+}
+class Anonymous__%s__0
 {
     public function execute()
     {
     }
-}
-function inFunctionNoNamespace()
-{
-    return new AnonymousFor_inFunctionNoNamespace();
 }

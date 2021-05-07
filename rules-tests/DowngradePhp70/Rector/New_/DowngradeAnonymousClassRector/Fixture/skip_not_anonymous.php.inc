@@ -13,5 +13,3 @@ class SkipNotAnonymous
         return new SomeClass($arg1, $arg2);
     }
 }
-
-?>
