@@ -32,7 +32,9 @@ php;
         ->files()
         ->name('*.php')
         ->in($vendorDir . '/nikic/php-parser/lib/PhpParser')
-        ->notPath('tests')
+        ->notPath('#\/tests\/#')
+        ->notPath('#\/config\/#')
+        ->notPath('#\/set\/#')
         ->in($vendorDir . '/symplify');
 
     foreach ($finder->getIterator() as $fileInfo) {
