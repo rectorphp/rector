@@ -189,21 +189,24 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Name|NullableType|PhpParserUnionType $propertyTypeNode
+     * @param Name|NullableType|PhpParserUnionType $node
      */
-    private function isNonClassLikeTypeOrMixedOrVendorLockedIn(Node $propertyTypeNode, Property $property): bool
+    private function isNonClassLikeTypeOrMixedOrVendorLockedIn(Node $node, Property $property): bool
     {
         // is not class-type and should be skipped
-        if ($this->shouldSkipNonClassLikeType($propertyTypeNode)) {
+        if ($this->shouldSkipNonClassLikeType($node)) {
             return true;
         }
+
         // false positive
-        if (! $propertyTypeNode instanceof Name) {
+        if (! $node instanceof Name) {
             return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
         }
-        if (! $this->isName($propertyTypeNode, 'mixed')) {
+
+        if (! $this->isName($node, 'mixed')) {
             return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
         }
+
         return true;
     }
 
