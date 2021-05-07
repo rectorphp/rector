@@ -118,7 +118,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param ClassMethod|Function_|Closure $functionLike
      */
     private function refactorParamType(Param $param, FunctionLike $functionLike): bool
     {
@@ -133,7 +133,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param ClassMethod|Function_|Closure $functionLike
      */
     private function decorateWithDocBlock(FunctionLike $functionLike, Param $param): void
     {
