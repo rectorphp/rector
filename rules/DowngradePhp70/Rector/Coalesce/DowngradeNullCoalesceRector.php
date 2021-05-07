@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\Coalesce;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Isset_;
@@ -53,7 +54,7 @@ CODE_SAMPLE
         $if = $node->left;
         $else = $node->right;
 
-        if ($if instanceof Variable || $if instanceof Node\Expr\ArrayDimFetch) {
+        if ($if instanceof Variable || $if instanceof ArrayDimFetch) {
             $cond = new Isset_([$if]);
         } else {
             $cond = new NotIdentical($if, $this->nodeFactory->createNull());
