@@ -34,6 +34,10 @@ final class DowngradePathsCommand extends Command
         $downgradePaths = array_merge([
             // must be separated to cover container get() trait + psr container contract get()
             'config',
+            'vendor/phpstan/phpdoc-parser/src',
+            'vendor/symfony/error-handler',
+            'vendor/symfony/dependency-injection',
+            'vendor/symfony/console',
             'vendor/symfony vendor/psr',
             'vendor/symplify vendor/nikic bin src packages rector.php',
             'rules',
@@ -41,6 +45,18 @@ final class DowngradePathsCommand extends Command
 
         if (file_exists(getcwd() . '/vendor/phpstan/phpstan-extracted/vendor')) {
             $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/src';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/phpstan/phpdoc-parser/src';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/ondrejmirtes/better-reflection/src';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/di/src';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/php-generator/src';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/utils/src';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/schema/src';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/finder/src';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/robot-loader/src';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/ondram/ci-detector/src';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/finder';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/console';
         }
 
         // bash format

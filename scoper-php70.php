@@ -77,6 +77,28 @@ return [
             );
         },
 
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::contains($filePath, 'vendor/')) {
+                return $content;
+            }
+
+            // see https://regex101.com/r/PDGN3K/1
+            $content = Strings::replace(
+                $content, '
+                #: \?\\\\.*#',
+                ''
+            );
+
+            // see https://regex101.com/r/P7nbpU/1
+            $content = Strings::replace(
+                $content, '
+                #\(\?\\.*\s+#',
+                '('
+            );
+
+            return $content;
+        },
+
         // get version for prefixed version
         function (string $filePath, string $prefix, string $content): string {
             if (! Strings::endsWith($filePath, 'src/Configuration/Configuration.php')) {
@@ -151,7 +173,7 @@ return [
         },
 
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/symplify/autowire-array-parameter/src/Skipper/ParameterSkipper.php')) {
+            if (! Strings::contains($filePath, 'vendor/')) {
                 return $content;
             }
 
