@@ -154,7 +154,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
 
         $foundNode = $this->betterNodeFinder->findParentTypes($node, [Expression::class, Stmt::class]);
 
-        if ($foundNode === null) {
+        if (! $foundNode instanceof Stmt) {
             $printedNode = $this->betterStandardPrinter->print($node);
             $errorMessage = sprintf('Could not find parent Stmt of "%s" node', $printedNode);
             throw new ShouldNotHappenException($errorMessage);
