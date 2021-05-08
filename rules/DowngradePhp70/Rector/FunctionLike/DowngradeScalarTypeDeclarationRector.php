@@ -98,7 +98,7 @@ CODE_SAMPLE
 
             $paramType = $this->getStaticType($param);
             if ($paramType instanceof StringType) {
-                return $this->decorateWithObjectType($param, $node);
+                $this->decorateWithObjectType($param, $node);
             }
         }
 
