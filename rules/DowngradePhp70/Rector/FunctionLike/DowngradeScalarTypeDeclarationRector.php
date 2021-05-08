@@ -7,9 +7,10 @@ namespace Rector\DowngradePhp70\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\CallableType;
-use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -81,7 +82,7 @@ CODE_SAMPLE
             $this->phpDocFromTypeDeclarationDecorator->decorateParam(
                 $param,
                 $node,
-                [ArrayType::class, CallableType::class, TypeWithClassName::class]
+                [StringType::class, IntegerType::class, BooleanType::class, FloatType::class]
             );
         }
 
