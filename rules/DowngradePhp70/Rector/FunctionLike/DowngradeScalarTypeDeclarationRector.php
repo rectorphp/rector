@@ -91,6 +91,10 @@ CODE_SAMPLE
     {
         $recastAssigns = [];
         foreach ($node->params as $param) {
+            if ($param->type === null) {
+                continue;
+            }
+
             $this->phpDocFromTypeDeclarationDecorator->decorateParam(
                 $param,
                 $node,
