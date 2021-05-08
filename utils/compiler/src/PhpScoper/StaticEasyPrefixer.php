@@ -10,7 +10,6 @@ final class StaticEasyPrefixer
      * @var string[]
      */
     public const EXCLUDED_CLASSES = [
-        'Symfony\Component\Console\Style\SymfonyStyle',
         // part of public interface of configs.php
         'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
         // this is not prefixed on few places by php-scoper by default, probably some bug
