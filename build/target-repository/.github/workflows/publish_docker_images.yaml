@@ -52,10 +52,10 @@ jobs:
                       DOCKER_TAG_ARG="$DOCKER_TAG_ARG --tag rector/rector:$ARG"
                   done
 
-                  docker buildx create --name builder-php8.0 --use
+                  docker buildx create --name builder-php8 --use
                   docker buildx build \
                         --progress plain \
-                        --cache-from=rector/rector:build-cache-php8.0 \
+                        --cache-from=rector/rector:build-cache-php8 \
                         --cache-to=type=registry,ref=rector/rector:build-cache-php8,mode=max,push=true \
                         --target rector \
                         --push \
