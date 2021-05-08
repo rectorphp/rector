@@ -6,6 +6,7 @@ class Fixture
 {
     public function run(string $value)
     {
+        return $value;
     }
 }
 
@@ -25,6 +26,7 @@ class Fixture
         if (is_object($value)) {
             $value = (string) $value;
         }
+        return $value;
     }
 }
 

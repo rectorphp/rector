@@ -92,16 +92,7 @@ CODE_SAMPLE
 
             $paramType = $this->getStaticType($param);
             if ($paramType instanceof StringType) {
-                // add possible object with __toString() re-type to keep original behavior
-                // @see https://twitter.com/VotrubaT/status/1390974218108538887
-
-                /** @var string $variableName */
-                $variableName = $this->getName($param->var);
-
-                $if = $this->createObjetVariableStringCast($variableName);
-                $node->stmts = array_merge([$if], (array) $node->stmts);
-
-                return $node;
+                return $this->decorateWithObjectType($param, $node);
             }
         }
 
@@ -121,5 +112,27 @@ CODE_SAMPLE
         $assign = new Assign($variable, new String_($variable));
         $if->stmts[] = new Expression($assign);
         return $if;
+    }
+
+    /**
+     * @param Function_|ClassMethod $functionLike
+     * @return Function_|ClassMethod
+     */
+    private function decorateWithObjectType(Node\Param $param, Node\FunctionLike $functionLike): Node\FunctionLike
+    {
+        if ($functionLike->stmts === null || $functionLike->stmts === []) {
+            return $functionLike;
+        }
+
+        // add possible object with __toString() re-type to keep original behavior
+        // @see https://twitter.com/VotrubaT/status/1390974218108538887
+
+        /** @var string $variableName */
+        $variableName = $this->getName($param->var);
+
+        $if = $this->createObjetVariableStringCast($variableName);
+        $functionLike->stmts = array_merge([$if], (array) $functionLike->stmts);
+
+        return $functionLike;
     }
 }
