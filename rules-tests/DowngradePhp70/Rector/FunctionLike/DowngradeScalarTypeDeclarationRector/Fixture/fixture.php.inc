@@ -23,9 +23,7 @@ class Fixture
      */
     public function run($value)
     {
-        if (is_object($value)) {
-            $value = (string) $value;
-        }
+        $value = (string) $value;
         return $value;
     }
 }

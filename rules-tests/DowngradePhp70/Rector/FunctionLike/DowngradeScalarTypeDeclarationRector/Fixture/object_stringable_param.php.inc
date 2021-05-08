@@ -23,9 +23,7 @@ final class ObjectStringableParam
      */
     public function hasDefinition($id)
     {
-        if (is_object($id)) {
-            $id = (string) $id;
-        }
+        $id = (string) $id;
         return $this->definitions[$id];
     }
 }
