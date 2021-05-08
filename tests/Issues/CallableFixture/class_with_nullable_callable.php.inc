@@ -4,14 +4,14 @@ namespace Rector\Tests\Issues\CallableFixture;
 
 final class StyleWithCallable implements InterfaceWithCallable
 {
-    public function ask($id = null)
+    public function ask(?string $default = null, $validator = null)
     {
     }
 }
 
 interface InterfaceWithCallable
 {
-    public function ask(callable $id = null);
+    public function ask(?string $default = null, callable $validator = null);
 }
 
 ?>
@@ -22,7 +22,10 @@ namespace Rector\Tests\Issues\CallableFixture;
 
 final class StyleWithCallable implements InterfaceWithCallable
 {
-    public function ask($id = null)
+    /**
+     * @param string|null $default
+     */
+    public function ask($default = null, $validator = null)
     {
     }
 }
@@ -30,9 +33,10 @@ final class StyleWithCallable implements InterfaceWithCallable
 interface InterfaceWithCallable
 {
     /**
-     * @param callable|null $id
+     * @param callable|null $validator
+     * @param string|null $default
      */
-    public function ask($id = null);
+    public function ask($default = null, $validator = null);
 }
 
 ?>
