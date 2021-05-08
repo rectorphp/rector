@@ -82,7 +82,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->phpDocFromTypeDeclarationDecorator->decorateParam($param, $node);
+            $this->phpDocFromTypeDeclarationDecorator->decorateParam($param, $node, [\PHPStan\Type\UnionType::class]);
         }
 
         if (! $node->returnType instanceof UnionType) {

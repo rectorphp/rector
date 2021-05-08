@@ -80,9 +80,9 @@ final class PhpDocFromTypeDeclarationDecorator
 
     /**
      * @param ClassMethod|Function_ $functionLike
-     * @param array<class-string<Type>> $excludedTypes
+     * @param array<class-string<Type>> $requiredTypes
      */
-    public function decorateParam(Param $param, FunctionLike $functionLike, array $excludedTypes = []): void
+    public function decorateParam(Param $param, FunctionLike $functionLike, array $requiredTypes): void
     {
         if ($param->type === null) {
             return;
@@ -90,10 +90,8 @@ final class PhpDocFromTypeDeclarationDecorator
 
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
 
-        foreach ($excludedTypes as $excludedType) {
-            if (is_a($type, $excludedType, true)) {
-                return;
-            }
+        if (! $this->isMatchingType($type, $requiredTypes)) {
+            return;
         }
 
         $this->moveParamTypeToParamDoc($functionLike, $param, $type);
@@ -157,5 +155,19 @@ final class PhpDocFromTypeDeclarationDecorator
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);
 
         $param->type = null;
+    }
+
+    /**
+     * @param array<class-string<Type>> $requiredTypes
+     */
+    private function isMatchingType(Type $type, array $requiredTypes): bool
+    {
+        foreach ($requiredTypes as $requiredType) {
+            if (is_a($type, $requiredType, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
