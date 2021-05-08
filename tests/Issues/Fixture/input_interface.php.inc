@@ -53,6 +53,9 @@ class ArgvInput extends Input
      */
     private function parseArgument($token, array $all)
     {
+        if (is_object($token)) {
+            $token = (string) $token;
+        }
         reset($all);
         if (($inputArgument = isset($all[$key = key($all)]) ? $all[$key = key($all)] : null) && 'command' === $inputArgument->getName()) {
         }
