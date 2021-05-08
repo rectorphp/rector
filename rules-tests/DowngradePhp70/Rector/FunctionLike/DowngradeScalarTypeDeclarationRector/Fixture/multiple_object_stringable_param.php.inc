@@ -24,12 +24,8 @@ final class MultipleObjectStringableParam
      */
     public function hasDefinition($id, $name)
     {
-        if (is_object($name)) {
-            $name = (string) $name;
-        }
-        if (is_object($id)) {
-            $id = (string) $id;
-        }
+        $id = (string) $id;
+        $name = (string) $name;
         return $this->definitions[$id] . $name;
     }
 }

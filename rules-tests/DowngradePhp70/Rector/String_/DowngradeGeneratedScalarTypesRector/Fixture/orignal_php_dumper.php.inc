@@ -59,9 +59,7 @@ $code = <<<'EOF'
  */
 public function getParameter($name)
 {
-    if (is_object($name)) {
-        $name = (string) $name;
-    }
+    $name = (string) $name;
     if (isset($this->buildParameters[$name])) {
         return $this->buildParameters[$name];
     }
@@ -75,12 +73,11 @@ public function getParameter($name)
 }
 /**
  * @param string $name
+ * @return bool
  */
-public function hasParameter($name): bool
+public function hasParameter($name)
 {
-    if (is_object($name)) {
-        $name = (string) $name;
-    }
+    $name = (string) $name;
     if (isset($this->buildParameters[$name])) {
         return true;
     }
@@ -92,9 +89,7 @@ public function hasParameter($name): bool
  */
 public function setParameter($name, $value)
 {
-    if (is_object($name)) {
-        $name = (string) $name;
-    }
+    $name = (string) $name;
     throw new LogicException('Impossible to call set() on a frozen ParameterBag.');
 }
 public function getParameterBag()

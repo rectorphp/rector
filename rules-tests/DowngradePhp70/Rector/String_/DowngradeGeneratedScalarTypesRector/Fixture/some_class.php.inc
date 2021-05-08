@@ -21,9 +21,7 @@ $code = <<<'EOF'
  */
 public function getParameter($name)
 {
-    if (is_object($name)) {
-        $name = (string) $name;
-    }
+    $name = (string) $name;
     return $name;
 }
 
