@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
@@ -118,12 +120,14 @@ CODE_SAMPLE
      * @param Function_|ClassMethod $functionLike
      * @return Function_|ClassMethod
      */
-    private function decorateWithObjectType(Node\Param $param, Node\FunctionLike $functionLike): Node\FunctionLike
+    private function decorateWithObjectType(Param $param, FunctionLike $functionLike): FunctionLike
     {
-        if ($functionLike->stmts === null || $functionLike->stmts === []) {
+        if ($functionLike->stmts === null) {
             return $functionLike;
         }
-
+        if ($functionLike->stmts === []) {
+            return $functionLike;
+        }
         // add possible object with __toString() re-type to keep original behavior
         // @see https://twitter.com/VotrubaT/status/1390974218108538887
 
