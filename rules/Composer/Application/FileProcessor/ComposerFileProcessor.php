@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Composer\Application\FileProcessor;
 
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
+use Rector\Core\Contract\Application\ApplicationProgressBarInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
@@ -45,13 +46,13 @@ final class ComposerFileProcessor implements FileProcessorInterface
     /**
      * @param File[] $files
      */
-    public function process(array $files): void
-    {
+    public function process(array $files, ApplicationProgressBarInterface $applicationProgressBar): void {
         if ($this->composerRectors === []) {
             return;
         }
 
         foreach ($files as $file) {
+            $applicationProgressBar->advance($file, static::class);
             $this->processFile($file);
         }
     }

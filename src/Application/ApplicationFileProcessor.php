@@ -6,6 +6,7 @@ namespace Rector\Core\Application;
 
 use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Configuration\Configuration;
+use Rector\Core\Contract\Application\ApplicationProgressBarInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\FileFormatter;
@@ -39,6 +40,11 @@ final class ApplicationFileProcessor
     private $fileFormatter;
 
     /**
+     * @var ApplicationProgressBarInterface
+     */
+    private $progressBar;
+
+    /**
      * @param FileProcessorInterface[] $fileProcessors
      */
     public function __construct(
@@ -46,6 +52,7 @@ final class ApplicationFileProcessor
         SmartFileSystem $smartFileSystem,
         FileDiffFileDecorator $fileDiffFileDecorator,
         FileFormatter $fileFormatter,
+        ApplicationProgressBarInterface $progressBar,
         array $fileProcessors = []
     ) {
         $this->fileProcessors = $fileProcessors;
@@ -53,6 +60,7 @@ final class ApplicationFileProcessor
         $this->configuration = $configuration;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
         $this->fileFormatter = $fileFormatter;
+        $this->progressBar = $progressBar;
     }
 
     /**
@@ -60,7 +68,13 @@ final class ApplicationFileProcessor
      */
     public function run(array $files): void
     {
+        $totalFileCount = count($files);
+
+        $this->progressBar->start($totalFileCount);
+
         $this->processFiles($files);
+
+        $this->progressBar->finish();
 
         $this->fileFormatter->format($files);
 
@@ -74,12 +88,14 @@ final class ApplicationFileProcessor
      */
     private function processFiles(array $files): void
     {
+        $applicationProgressBar = $this->progressBar;
+
         foreach ($this->fileProcessors as $fileProcessor) {
             $supportedFiles = array_filter($files, function (File $file) use ($fileProcessor): bool {
                 return $fileProcessor->supports($file);
             });
 
-            $fileProcessor->process($supportedFiles);
+            $fileProcessor->process($supportedFiles, $applicationProgressBar);
         }
     }
 

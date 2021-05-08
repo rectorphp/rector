@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Contract\Processor;
 
+use Rector\Core\Contract\Application\ApplicationProgressBarInterface;
 use Rector\Core\ValueObject\Application\File;
 
 interface FileProcessorInterface
@@ -13,7 +14,7 @@ interface FileProcessorInterface
     /**
      * @param File[] $files
      */
-    public function process(array $files): void;
+    public function process(array $files, ApplicationProgressBarInterface $applicationProgressBar): void;
 
     /**
      * @return string[]

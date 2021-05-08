@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Core\Tests\Application\ApplicationFileProcessor\Source;
 
+use Rector\Core\Application\ApplicationProgressBar;
+use Rector\Core\Contract\Application\ApplicationProgressBarInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Tests\Application\ApplicationFileProcessor\Source\Contract\TextRectorInterface;
 use Rector\Core\ValueObject\Application\File;
@@ -26,7 +28,7 @@ final class TextFileProcessor implements FileProcessorInterface
     /**
      * @param File[] $files
      */
-    public function process(array $files): void
+    public function process(array $files, ApplicationProgressBarInterface $applicationProgressBar): void
     {
         foreach ($files as $file) {
             $fileContent = $file->getFileContent();
