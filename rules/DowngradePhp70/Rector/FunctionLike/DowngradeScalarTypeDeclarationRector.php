@@ -111,7 +111,7 @@ CODE_SAMPLE
             $node->stmts = array_merge($recastAssigns, (array) $node->stmts);
         }
 
-        if (! $this->phpDocFromTypeDeclarationDecorator->decorateReturn($node)) {
+        if (! $this->phpDocFromTypeDeclarationDecorator->decorate($node)) {
             return null;
         }
 

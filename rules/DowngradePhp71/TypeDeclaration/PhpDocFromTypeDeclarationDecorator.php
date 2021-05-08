@@ -63,7 +63,7 @@ final class PhpDocFromTypeDeclarationDecorator
      * @param ClassMethod|Function_|Closure $functionLike
      * @return bool True if node was changed
      */
-    public function decorateReturn(FunctionLike $functionLike): bool
+    public function decorate(FunctionLike $functionLike): bool
     {
         if ($functionLike->returnType === null) {
             return false;
@@ -131,7 +131,7 @@ final class PhpDocFromTypeDeclarationDecorator
             return false;
         }
 
-        return $this->decorateReturn($functionLike);
+        return $this->decorate($functionLike);
     }
 
     private function isTypeMatchOrSubType(Node $typeNode, Type $requireType): bool

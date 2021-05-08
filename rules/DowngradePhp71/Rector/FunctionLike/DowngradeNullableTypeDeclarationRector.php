@@ -90,7 +90,7 @@ CODE_SAMPLE
             }
         }
 
-        if ($node->returnType instanceof NullableType && $this->phpDocFromTypeDeclarationDecorator->decorateReturn(
+        if ($node->returnType instanceof NullableType && $this->phpDocFromTypeDeclarationDecorator->decorate(
             $node
         )) {
             $hasChanged = true;
