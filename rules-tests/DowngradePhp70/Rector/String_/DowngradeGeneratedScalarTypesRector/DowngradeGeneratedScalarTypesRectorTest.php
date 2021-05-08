@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector;
+namespace Rector\Tests\DowngradePhp70\Rector\String_\DowngradeGeneratedScalarTypesRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class PhpSpecToPHPUnitRectorTest extends AbstractRectorTestCase
+final class DowngradeGeneratedScalarTypesRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -24,7 +23,7 @@ final class PhpSpecToPHPUnitRectorTest extends AbstractRectorTestCase
      */
     public function provideData(): Iterator
     {
-        return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     public function provideConfigFilePath(): string

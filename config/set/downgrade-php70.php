@@ -12,6 +12,7 @@ use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRect
 use Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector;
 use Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector;
 use Rector\DowngradePhp70\Rector\Spaceship\DowngradeSpaceshipRector;
+use Rector\DowngradePhp70\Rector\String_\DowngradeGeneratedScalarTypesRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -27,4 +28,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeDefineArrayConstantRector::class);
     $services->set(DowngradeSessionStartArrayOptionsRector::class);
     $services->set(SplitGroupedUseImportsRector::class);
+    $services->set(DowngradeGeneratedScalarTypesRector::class);
 };
