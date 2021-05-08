@@ -11,6 +11,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
+ * @changelog https://wiki.php.net/rfc/class_const_visibility
+ *
  * @see \Rector\Tests\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRectorTest
  */
 final class DowngradeClassConstantVisibilityRector extends AbstractRector
