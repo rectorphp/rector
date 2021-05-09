@@ -176,7 +176,7 @@ final class FilesFinder
 
         $files = [];
         foreach ($smartFileInfos as $smartFileInfo) {
-            $files[] = $smartFileInfo->getRelativeFilePathFromCwd();
+            $files[] = $smartFileInfo->getPathname();
         }
 
         return $files;
