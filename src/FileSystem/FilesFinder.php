@@ -81,7 +81,7 @@ final class FilesFinder
 
         $cacheKeyPHPSuffix = md5(serialize($source) . serialize(['php']));
 
-        if (isset($this->fileInfosBySourceAndSuffixes[$cacheKeyPHPSuffix])) {
+        if (count($suffixes) > 2 && isset($this->fileInfosBySourceAndSuffixes[$cacheKeyPHPSuffix])) {
             return $this->fileInfosBySourceAndSuffixes[$cacheKeyPHPSuffix];
         }
 
