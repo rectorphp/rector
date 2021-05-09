@@ -108,6 +108,10 @@ final class FilesFinder
         return $this->getSmartFileInfosFromStringFiles($files);
     }
 
+    /**
+     * @param string[] $files
+     * @return SmartFileInfo[]
+     */
     private function getSmartFileInfosFromStringFiles(array $files): array
     {
         $smartFileInfos = [];
@@ -118,6 +122,11 @@ final class FilesFinder
         return $smartFileInfos;
     }
 
+    /**
+     * @param string[] $source
+     * @param string[] $suffixes
+     * @return SmartFileInfo[]
+     */
     private function collectFileInfos(array $source, array $suffixes): array
     {
         $files = $this->fileSystemFilter->filterFiles($source);
