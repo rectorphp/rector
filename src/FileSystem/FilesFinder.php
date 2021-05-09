@@ -102,7 +102,11 @@ final class FilesFinder
         $files = $this->fileSystemFilter->filterFiles($source);
         $directories = $this->fileSystemFilter->filterDirectories($source);
 
-        $files = array_merge($files, $this->findInDirectories($directories, $suffixes));
+        /**
+         * @var string[] $filesInDirectories
+         */
+        $filesInDirectories = $this->findInDirectories($directories, $suffixes, false);
+        $files = array_merge($files, $filesInDirectories);
         $this->cache->save($cacheKey, $files);
 
         return $this->getSmartFileInfosFromStringFiles($files);
@@ -137,18 +141,19 @@ final class FilesFinder
             $smartFileInfos[] = new SmartFileInfo($file);
         }
 
-        return array_merge(
-            $smartFileInfos,
-            $this->getSmartFileInfosFromStringFiles($this->findInDirectories($directories, $suffixes))
-        );
+        /**
+         * @var SmartFileInfo[] $smartFileInfosInDirectories
+         */
+        $smartFileInfosInDirectories = $this->findInDirectories($directories, $suffixes);
+        return array_merge($smartFileInfos, $smartFileInfosInDirectories);
     }
 
     /**
      * @param string[] $directories
      * @param string[] $suffixes
-     * @return string[]
+     * @return string[]|SmartFileInfo[]
      */
-    private function findInDirectories(array $directories, array $suffixes): array
+    private function findInDirectories(array $directories, array $suffixes, bool $isSmartFileInfos = true): array
     {
         if ($directories === []) {
             return [];
@@ -173,6 +178,10 @@ final class FilesFinder
         $this->addFilterWithExcludedPaths($finder);
 
         $smartFileInfos = $this->finderSanitizer->sanitize($finder);
+
+        if ($isSmartFileInfos) {
+            return $smartFileInfos;
+        }
 
         $files = [];
         foreach ($smartFileInfos as $smartFileInfo) {
