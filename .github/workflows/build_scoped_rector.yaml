@@ -1,4 +1,4 @@
-# builds the content of https://github.com/rectorphp/rector-prefixed
+# builds the content of https://github.com/rectorphp/rector
 # inspiration from https://github.com/phpstan/phpstan-src/blob/master/.github/workflows/phar.yml
 name: Build Scoped Rector
 
@@ -63,7 +63,7 @@ jobs:
             -
                 uses: "actions/checkout@v2"
                 with:
-                    repository: rectorphp/rector-prefixed
+                    repository: rectorphp/rector
                     path: remote-repository
                     token: ${{ secrets.ACCESS_TOKEN }}
 
