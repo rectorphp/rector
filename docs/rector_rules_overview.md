@@ -1,4 +1,4 @@
-# 495 Rules Overview
+# 490 Rules Overview
 
 <br>
 
@@ -10,11 +10,11 @@
 
 - [Carbon](#carbon) (2)
 
-- [CodeQuality](#codequality) (67)
+- [CodeQuality](#codequality) (68)
 
 - [CodeQualityStrict](#codequalitystrict) (4)
 
-- [CodingStyle](#codingstyle) (36)
+- [CodingStyle](#codingstyle) (38)
 
 - [Composer](#composer) (5)
 
@@ -24,17 +24,15 @@
 
 - [DependencyInjection](#dependencyinjection) (4)
 
-- [Downgrade72](#downgrade72) (1)
+- [DowngradePhp53](#downgradephp53) (1)
 
-- [DowngradePhp73](#DowngradePhp73) (1)
-
-- [DowngradePhp70](#downgradephp70) (6)
+- [DowngradePhp70](#downgradephp70) (9)
 
 - [DowngradePhp71](#downgradephp71) (9)
 
-- [DowngradePhp72](#downgradephp72) (3)
+- [DowngradePhp72](#downgradephp72) (4)
 
-- [DowngradePhp73](#downgradephp73) (4)
+- [DowngradePhp73](#downgradephp73) (5)
 
 - [DowngradePhp74](#downgradephp74) (11)
 
@@ -51,10 +49,6 @@
 - [MysqlToMysqli](#mysqltomysqli) (4)
 
 - [Naming](#naming) (9)
-
-- [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
-
-- [NetteToSymfony](#nettetosymfony) (9)
 
 - [Order](#order) (6)
 
@@ -96,11 +90,11 @@
 
 - [Renaming](#renaming) (11)
 
-- [Restoration](#restoration) (8)
+- [Restoration](#restoration) (7)
 
 - [Transform](#transform) (36)
 
-- [TypeDeclaration](#typedeclaration) (18)
+- [TypeDeclaration](#typedeclaration) (19)
 
 - [Visibility](#visibility) (3)
 
@@ -396,11 +390,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
         ->call('configure', [[
-            MoveValueObjectsToValueObjectDirectoryRector::TYPES => [
-                'ValueObjectInterfaceClassName',
-            ], MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => [
-                'Search',
-            ], MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
+            MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
+            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
+            MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
         ]]);
 };
 ```
@@ -636,6 +628,25 @@ Negated identical boolean compare to not identical compare (does not apply to no
 +        var_dump($a !== $b); // true
 +        var_dump($a !== $b); // true
          var_dump($a !== $b); // true
+     }
+ }
+```
+
+<br>
+
+### CallUserFuncWithArrowFunctionToInlineRector
+
+Refactor `call_user_func()` with arrow function to direct call
+
+- class: [`Rector\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector`](../rules/CodeQuality/Rector/FuncCall/CallUserFuncWithArrowFunctionToInlineRector.php)
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        $result = \call_user_func(fn () => 100);
++        $result = 100;
      }
  }
 ```
@@ -1954,11 +1965,11 @@ Changes switch with 2 options to if-else
 
 <br>
 
-### CallUserFuncCallToVariadicRector
+### CallUserFuncArrayToVariadicRector
 
-Replace call_user_func_call with variadic
+Replace `call_user_func_array()` with variadic
 
-- class: [`Rector\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector`](../rules/CodingStyle/Rector/FuncCall/CallUserFuncCallToVariadicRector.php)
+- class: [`Rector\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector`](../rules/CodingStyle/Rector/FuncCall/CallUserFuncArrayToVariadicRector.php)
 
 ```diff
  class SomeClass
@@ -1967,6 +1978,25 @@ Replace call_user_func_call with variadic
      {
 -        call_user_func_array('some_function', $items);
 +        some_function(...$items);
+     }
+ }
+```
+
+<br>
+
+### CallUserFuncToMethodCallRector
+
+Refactor `call_user_func()` on known class method to a method call
+
+- class: [`Rector\CodingStyle\Rector\FuncCall\CallUserFuncToMethodCallRector`](../rules/CodingStyle/Rector/FuncCall/CallUserFuncToMethodCallRector.php)
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        $result = \call_user_func([$this->property, 'method'], $args);
++        $result = $this->property->method($args);
      }
  }
 ```
@@ -2109,6 +2139,22 @@ include/require should be followed by absolute path
 -        require 'autoload.php';
 +        require __DIR__ . '/autoload.php';
      }
+ }
+```
+
+<br>
+
+### FuncGetArgsToVariadicParamRector
+
+Refactor `func_get_args()` in to a variadic param
+
+- class: [`Rector\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector`](../rules/CodingStyle/Rector/ClassMethod/FuncGetArgsToVariadicParamRector.php)
+
+```diff
+-function run()
++function run(...$args)
+ {
+-    $args = \func_get_args();
  }
 ```
 
@@ -2379,6 +2425,27 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+### SeparateMultiUseImportsRector
+
+Split multi use imports and trait statements to standalone lines
+
+- class: [`Rector\CodingStyle\Rector\Use_\SeparateMultiUseImportsRector`](../rules/CodingStyle/Rector/Use_/SeparateMultiUseImportsRector.php)
+
+```diff
+-use A, B;
++use A;
++use B;
+
+ class SomeClass
+ {
+-    use SomeTrait, AnotherTrait;
++    use SomeTrait;
++    use AnotherTrait;
+ }
+```
+
+<br>
+
 ### SplitDoubleAssignRector
 
 Split multiple inline assigns to each own lines default value, to prevent undefined array issues
@@ -2422,27 +2489,6 @@ Separate constant and properties to own lines
 +     * @var string
 +     */
 +    public $isIsThough;
- }
-```
-
-<br>
-
-### SplitGroupedUseImportsRector
-
-Split grouped use imports and trait statements to standalone lines
-
-- class: [`Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector`](../rules/CodingStyle/Rector/Use_/SplitGroupedUseImportsRector.php)
-
-```diff
--use A, B;
-+use A;
-+use B;
-
- class SomeClass
- {
--    use SomeTrait, AnotherTrait;
-+    use SomeTrait;
-+    use AnotherTrait;
  }
 ```
 
@@ -4211,50 +4257,21 @@ Turns variable in controller action to property fetch, as follow up to action in
 
 <br>
 
-## Downgrade72
+## DowngradePhp53
 
-### DowngradeStreamIsattyRector
+### DirConstToFileConstRector
 
-Downgrade `stream_isatty()` function
+Refactor __DIR__ to dirname(__FILE__)
 
-- class: [`Rector\Downgrade72\Rector\FuncCall\DowngradeStreamIsattyRector`](../rules/Downgrade72/Rector/FuncCall/DowngradeStreamIsattyRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($stream)
-     {
--        $isStream = stream_isatty($stream);
-+        $streamIsatty = function ($stream) {
-+            if ('\\' === \DIRECTORY_SEPARATOR) {
-+                $stat = @fstat($stream);
-+                return $stat ? 020000 === ($stat['mode'] & 0170000) : false;
-+            }
-+            return @posix_isatty($stream);
-+        };
-+        $isStream = $streamIsatty($stream);
-     }
- }
-```
-
-<br>
-
-## DowngradePhp73
-
-### DowngradeArrayKeyFirstLastRector
-
-Downgrade `array_key_first()` and `array_key_last()` functions
-
-- class: [`Rector\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector`](../rules/DowngradePhp73/Rector/FuncCall/DowngradeArrayKeyFirstLastRector.php)
+- class: [`Rector\DowngradePhp53\Rector\Dir\DirConstToFileConstRector`](../rules/DowngradePhp53/Rector/Dir/DirConstToFileConstRector.php)
 
 ```diff
- class SomeClass
+ final class SomeClass
  {
-     public function run($items)
+     public function run()
      {
--        $firstItemKey = array_key_first($items);
-+        reset($items);
-+        $firstItemKey = key($items);
+-        return __DIR__;
++        return dirname(__FILE__);
      }
  }
 ```
@@ -4310,6 +4327,27 @@ Change array contant definition via define to const
 
 <br>
 
+### DowngradeGeneratedScalarTypesRector
+
+Refactor scalar types in PHP code in string snippets, e.g. generated container code from symfony/dependency-injection
+
+- class: [`Rector\DowngradePhp70\Rector\String_\DowngradeGeneratedScalarTypesRector`](../rules/DowngradePhp70/Rector/String_/DowngradeGeneratedScalarTypesRector.php)
+
+```diff
+ $code = <<<'EOF'
+-    public function getParameter(string $name)
++    /**
++     * @param string
++     */
++    public function getParameter($name)
+     {
+         return $name;
+     }
+ EOF;
+```
+
+<br>
+
 ### DowngradeNullCoalesceRector
 
 Change null coalesce to isset ternary check
@@ -4319,6 +4357,44 @@ Change null coalesce to isset ternary check
 ```diff
 -$username = $_GET['user'] ?? 'nobody';
 +$username = isset($_GET['user']) ? $_GET['user'] : 'nobody';
+```
+
+<br>
+
+### DowngradeScalarTypeDeclarationRector
+
+Remove the type params and return type, add `@param` and `@return` tags instead
+
+- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector`](../rules/DowngradePhp70/Rector/FunctionLike/DowngradeScalarTypeDeclarationRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public function run(string $input): string
++    /**
++     * @param string $input
++     * @return string
++     */
++    public function run($input)
+     {
+     }
+ }
+```
+
+<br>
+
+### DowngradeSessionStartArrayOptionsRector
+
+Move array option of session_start($options) to before statement's `ini_set()`
+
+- class: [`Rector\DowngradePhp70\Rector\FuncCall\DowngradeSessionStartArrayOptionsRector`](../rules/DowngradePhp70/Rector/FuncCall/DowngradeSessionStartArrayOptionsRector.php)
+
+```diff
+-session_start([
+-    'cache_limiter' => 'private',
+-]);
++ini_set('session.cache_limiter', 'private');
++session_start();
 ```
 
 <br>
@@ -4354,24 +4430,19 @@ Remove the declare(strict_types=1)
 
 <br>
 
-### DowngradeTypeDeclarationRector
+### SplitGroupedUseImportsRector
 
-Remove the type params and return type, add `@param` and `@return` tags instead
+Refactor grouped use imports to standalone lines
 
-- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeTypeDeclarationRector`](../rules/DowngradePhp70/Rector/FunctionLike/DowngradeTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector`](../rules/DowngradePhp70/Rector/GroupUse/SplitGroupedUseImportsRector.php)
 
 ```diff
- class SomeClass
- {
--    public function run(string $input): string
-+    /**
-+     * @param string $input
-+     * @return string
-+     */
-+    public function run($input)
-     {
-     }
- }
+-use SomeNamespace\{
+-    First,
+-    Second
+-};
++use SomeNamespace\First;
++use SomeNamespace\Second;
 ```
 
 <br>
@@ -4631,7 +4702,53 @@ Remove PREG_UNMATCHED_AS_NULL from preg_match and set null value on empty string
 
 <br>
 
+### DowngradeStreamIsattyRector
+
+Downgrade `stream_isatty()` function
+
+- class: [`Rector\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector`](../rules/DowngradePhp72/Rector/FuncCall/DowngradeStreamIsattyRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($stream)
+     {
+-        $isStream = stream_isatty($stream);
++        $streamIsatty = function ($stream) {
++            if ('\\' === \DIRECTORY_SEPARATOR) {
++                $stat = @fstat($stream);
++                return $stat ? 020000 === ($stat['mode'] & 0170000) : false;
++            }
++            return @posix_isatty($stream);
++        };
++        $isStream = $streamIsatty($stream);
+     }
+ }
+```
+
+<br>
+
 ## DowngradePhp73
+
+### DowngradeArrayKeyFirstLastRector
+
+Downgrade `array_key_first()` and `array_key_last()` functions
+
+- class: [`Rector\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector`](../rules/DowngradePhp73/Rector/FuncCall/DowngradeArrayKeyFirstLastRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($items)
+     {
+-        $firstItemKey = array_key_first($items);
++        reset($items);
++        $firstItemKey = key($items);
+     }
+ }
+```
+
+<br>
 
 ### DowngradeFlexibleHeredocSyntaxRector
 
@@ -5886,327 +6003,6 @@ Rename variable to match new ClassType
 
 <br>
 
-## NetteTesterToPHPUnit
-
-### NetteAssertToPHPUnitAssertRector
-
-Migrate Nette/Assert calls to PHPUnit
-
-- class: [`Rector\NetteTesterToPHPUnit\Rector\StaticCall\NetteAssertToPHPUnitAssertRector`](../rules/NetteTesterToPHPUnit/Rector/StaticCall/NetteAssertToPHPUnitAssertRector.php)
-
-```diff
- use Tester\Assert;
-
- function someStaticFunctions()
- {
--    Assert::true(10 == 5);
-+    \PHPUnit\Framework\Assert::assertTrue(10 == 5);
- }
-```
-
-<br>
-
-### NetteTesterClassToPHPUnitClassRector
-
-Migrate Nette Tester test case to PHPUnit
-
-- class: [`Rector\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector`](../rules/NetteTesterToPHPUnit/Rector/Class_/NetteTesterClassToPHPUnitClassRector.php)
-
-```diff
- namespace KdybyTests\Doctrine;
-
- use Tester\TestCase;
- use Tester\Assert;
-
--require_once __DIR__ . '/../bootstrap.php';
--
--class ExtensionTest extends TestCase
-+class ExtensionTest extends \PHPUnit\Framework\TestCase
- {
-     public function testFunctionality()
-     {
--        Assert::true($default instanceof Kdyby\Doctrine\EntityManager);
--        Assert::true(5);
--        Assert::same($container->getService('kdyby.doctrine.default.entityManager'), $default);
-+        $this->assertInstanceOf(\Kdyby\Doctrine\EntityManager::cllass, $default);
-+        $this->assertTrue(5);
-+        $this->same($container->getService('kdyby.doctrine.default.entityManager'), $default);
-     }
--}
--
--(new \ExtensionTest())->run();
-+}
-```
-
-<br>
-
-### RenameTesterTestToPHPUnitToTestFileRector
-
-Rename "*.phpt" file to "*Test.php" file
-
-- class: [`Rector\NetteTesterToPHPUnit\Rector\Class_\RenameTesterTestToPHPUnitToTestFileRector`](../rules/NetteTesterToPHPUnit/Rector/Class_/RenameTesterTestToPHPUnitToTestFileRector.php)
-
-```diff
--// tests/SomeTestCase.phpt
-+// tests/SomeTestCase.php
-```
-
-<br>
-
-## NetteToSymfony
-
-### DeleteFactoryInterfaceRector
-
-Interface factories are not needed in Symfony. Clear constructor injection is used instead
-
-- class: [`Rector\NetteToSymfony\Rector\Interface_\DeleteFactoryInterfaceRector`](../rules/NetteToSymfony/Rector/Interface_/DeleteFactoryInterfaceRector.php)
-
-```diff
--interface SomeControlFactoryInterface
--{
--    public function create();
--}
-```
-
-<br>
-
-### FormControlToControllerAndFormTypeRector
-
-Change Form that extends Control to Controller and decoupled FormType
-
-- class: [`Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector`](../rules/NetteToSymfony/Rector/Class_/FormControlToControllerAndFormTypeRector.php)
-
-```diff
--use Nette\Application\UI\Form;
--use Nette\Application\UI\Control;
--
--class SomeForm extends Control
-+class SomeFormController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
- {
--    public function createComponentForm()
-+    /**
-+     * @Route(...)
-+     */
-+    public function actionSomeForm(\Symfony\Component\HttpFoundation\Request $request): \Symfony\Component\HttpFoundation\Response
-     {
--        $form = new Form();
--        $form->addText('name', 'Your name');
-+        $form = $this->createForm(SomeFormType::class);
-+        $form->handleRequest($request);
-
--        $form->onSuccess[] = [$this, 'processForm'];
--    }
--
--    public function processForm(Form $form)
--    {
--        // process me
-+        if ($form->isSuccess() && $form->isValid()) {
-+            // process me
-+        }
-     }
- }
-```
-
-Extra file:
-
-```php
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-
-class SomeFormType extends AbstractType
-{
-    public function buildForm(FormBuilderInterface $formBuilder, array $options)
-    {
-        $formBuilder->add('name', TextType::class, [
-            'label' => 'Your name',
-        ]);
-    }
-}
-```
-
-<br>
-
-### FromHttpRequestGetHeaderToHeadersGetRector
-
-Changes `getHeader()` to `$request->headers->get()`
-
-- class: [`Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector`](../rules/NetteToSymfony/Rector/MethodCall/FromHttpRequestGetHeaderToHeadersGetRector.php)
-
-```diff
- use Nette\Request;
-
- final class SomeController
- {
-     public static function someAction(Request $request)
-     {
--        $header = $this->httpRequest->getHeader('x');
-+        $header = $request->headers->get('x');
-     }
- }
-```
-
-<br>
-
-### FromRequestGetParameterToAttributesGetRector
-
-Changes `"getParameter()"` to `"attributes->get()"` from Nette to Symfony
-
-- class: [`Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector`](../rules/NetteToSymfony/Rector/MethodCall/FromRequestGetParameterToAttributesGetRector.php)
-
-```diff
- use Nette\Request;
-
- final class SomeController
- {
-     public static function someAction(Request $request)
-     {
--        $value = $request->getParameter('abz');
-+        $value = $request->attribute->get('abz');
-     }
- }
-```
-
-<br>
-
-### NetteControlToSymfonyControllerRector
-
-Migrate Nette Component to Symfony Controller
-
-- class: [`Rector\NetteToSymfony\Rector\Class_\NetteControlToSymfonyControllerRector`](../rules/NetteToSymfony/Rector/Class_/NetteControlToSymfonyControllerRector.php)
-
-```diff
--use Nette\Application\UI\Control;
-+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-+use Symfony\Component\HttpFoundation\Response;
-
--class SomeControl extends Control
-+class SomeController extends AbstractController
- {
--    public function render()
--    {
--        $this->template->param = 'some value';
--        $this->template->render(__DIR__ . '/poll.latte');
--    }
-+     public function some(): Response
-+     {
-+         return $this->render(__DIR__ . '/poll.latte', ['param' => 'some value']);
-+     }
- }
-```
-
-<br>
-
-### NetteFormToSymfonyFormRector
-
-Migrate Nette\Forms in Presenter to Symfony
-
-- class: [`Rector\NetteToSymfony\Rector\MethodCall\NetteFormToSymfonyFormRector`](../rules/NetteToSymfony/Rector/MethodCall/NetteFormToSymfonyFormRector.php)
-
-```diff
- use Nette\Application\UI;
-
- class SomePresenter extends UI\Presenter
- {
-     public function someAction()
-     {
--        $form = new UI\Form;
--        $form->addText('name', 'Name:');
--        $form->addSubmit('login', 'Sign up');
-+        $form = $this->createFormBuilder();
-+        $form->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
-+            'label' => 'Name:'
-+        ]);
-+        $form->add('login', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, [
-+            'label' => 'Sign up'
-+        ]);
-     }
- }
-```
-
-<br>
-
-### RenameEventNamesInEventSubscriberRector
-
-Changes event names from Nette ones to Symfony ones
-
-- class: [`Rector\NetteToSymfony\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector`](../rules/NetteToSymfony/Rector/ClassMethod/RenameEventNamesInEventSubscriberRector.php)
-
-```diff
- use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
- final class SomeClass implements EventSubscriberInterface
- {
-     public static function getSubscribedEvents()
-     {
--        return ['nette.application' => 'someMethod'];
-+        return [\SymfonyEvents::KERNEL => 'someMethod'];
-     }
- }
-```
-
-<br>
-
-### RouterListToControllerAnnotationsRector
-
-Change new `Route()` from RouteFactory to `@Route` annotation above controller method
-
-- class: [`Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector`](../rules/NetteToSymfony/Rector/ClassMethod/RouterListToControllerAnnotationsRector.php)
-
-```diff
- final class RouterFactory
- {
-     public function create(): RouteList
-     {
-         $routeList = new RouteList();
-+
-+        // case of single action controller, usually get() or __invoke() method
-         $routeList[] = new Route('some-path', SomePresenter::class);
-
-         return $routeList;
-     }
- }
-
-+use Symfony\Component\Routing\Annotation\Route;
-+
- final class SomePresenter
- {
-+    /**
-+     * @Route(path="some-path")
-+     */
-     public function run()
-     {
-     }
- }
-```
-
-<br>
-
-### WrapTransParameterNameRector
-
-Adds %% to placeholder name of `trans()` method if missing
-
-- class: [`Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector`](../rules/NetteToSymfony/Rector/MethodCall/WrapTransParameterNameRector.php)
-
-```diff
- use Symfony\Component\Translation\Translator;
-
- final class SomeController
- {
-     public function run()
-     {
-         $translator = new Translator('');
-         $translated = $translator->trans(
-             'Hello %name%',
--            ['name' => $name]
-+            ['%name%' => $name]
-         );
-     }
- }
-```
-
-<br>
-
 ## Order
 
 ### OrderClassConstantsByIntegerValueRector
@@ -7427,7 +7223,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReservedObjectRector::class)
         ->call('configure', [[
             ReservedObjectRector::RESERVED_KEYWORDS_TO_REPLACEMENTS => [
-                'ReservedObject' => 'SmartObject', 'Object' => 'AnotherSmartObject',
+                'ReservedObject' => 'SmartObject',
+                'Object' => 'AnotherSmartObject',
 
             ], ]]);
 };
@@ -9867,7 +9664,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameConstantRector::class)
         ->call('configure', [[
             RenameConstantRector::OLD_TO_NEW_CONSTANTS => [
-                'MYSQL_ASSOC' => 'MYSQLI_ASSOC', 'OLD_CONSTANT' => 'NEW_CONSTANT',
+                'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
+                'OLD_CONSTANT' => 'NEW_CONSTANT',
 
             ], ]]);
 };
@@ -10319,23 +10117,6 @@ Remove final from Doctrine entities
   */
 -final class SomeClass
 +class SomeClass
- {
- }
-```
-
-<br>
-
-### RestoreFullyQualifiedNameRector
-
-Restore accidentally shortened class names to its fully qualified form.
-
-- class: [`Rector\Restoration\Rector\Use_\RestoreFullyQualifiedNameRector`](../rules/Restoration/Rector/Use_/RestoreFullyQualifiedNameRector.php)
-
-```diff
--use ShortClassOnly;
-+use App\Whatever\ShortClassOnly;
-
- class AnotherClass
  {
  }
 ```
@@ -12244,6 +12025,25 @@ Add `@var` to properties that are missing it
      public function run()
      {
          $this->value = 123;
+     }
+ }
+```
+
+<br>
+
+### ReturnNeverTypeRector
+
+Add "never" type for methods that never return anything
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnNeverTypeRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function run()
++    public function run(): never
+     {
+         throw new InvalidException();
      }
  }
 ```
