@@ -1,41 +1,34 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Php70\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-
 final class Php4ConstructorClassMethodAnalyzer
 {
-    public function detect(ClassMethod $classMethod): bool
+    public function detect(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
+        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return \false;
         }
-
         // catch only classes without namespace
         if ($scope->getNamespace() !== null) {
-            return false;
+            return \false;
         }
-
         if ($classMethod->isAbstract()) {
-            return false;
+            return \false;
         }
-
         if ($classMethod->isStatic()) {
-            return false;
+            return \false;
         }
-
         $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return false;
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            return \false;
         }
-
-        return ! $classReflection->isAnonymous();
+        return !$classReflection->isAnonymous();
     }
 }

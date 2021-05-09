@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
@@ -11,17 +10,14 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector\SimplifyIfElseWithSameContentRectorTest
  */
-final class SimplifyIfElseWithSameContentRector extends AbstractRector
+final class SimplifyIfElseWithSameContentRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove if/else if they have same content', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove if/else if they have same content', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -34,8 +30,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -44,59 +39,46 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [\PhpParser\Node\Stmt\If_::class];
     }
-
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->else === null) {
             return null;
         }
-
-        if (! $this->isIfWithConstantReturns($node)) {
+        if (!$this->isIfWithConstantReturns($node)) {
             return null;
         }
-
         foreach ($node->stmts as $stmt) {
             $this->addNodeBeforeNode($stmt, $node);
         }
-
         $this->removeNode($node);
-
         return $node;
     }
-
-    private function isIfWithConstantReturns(If_ $if): bool
+    private function isIfWithConstantReturns(\PhpParser\Node\Stmt\If_ $if) : bool
     {
         $possibleContents = [];
         $possibleContents[] = $this->print($if->stmts);
-
         foreach ($if->elseifs as $elseif) {
             $possibleContents[] = $this->print($elseif->stmts);
         }
-
         $else = $if->else;
-        if (! $else instanceof Else_) {
-            throw new ShouldNotHappenException();
+        if (!$else instanceof \PhpParser\Node\Stmt\Else_) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-
         $possibleContents[] = $this->print($else->stmts);
-
-        $uniqueContents = array_unique($possibleContents);
-
+        $uniqueContents = \array_unique($possibleContents);
         // only one content for all
-        return count($uniqueContents) === 1;
+        return \count($uniqueContents) === 1;
     }
 }

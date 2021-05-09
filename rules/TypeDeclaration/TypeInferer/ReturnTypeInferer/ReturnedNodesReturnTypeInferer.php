@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 use PhpParser\Node;
@@ -27,48 +26,35 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower;
-use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-
-final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
+use RectorPrefix20210509\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface
 {
     /**
      * @var SilentVoidResolver
      */
     private $silentVoidResolver;
-
     /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-
     /**
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-
     /**
      * @var TypeFactory
      */
     private $typeFactory;
-
     /**
      * @var SplArrayFixedTypeNarrower
      */
     private $splArrayFixedTypeNarrower;
-
     /**
      * @var NodeRepository
      */
     private $nodeRepository;
-
-    public function __construct(
-        SilentVoidResolver $silentVoidResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        TypeFactory $typeFactory,
-        SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
-        NodeRepository $nodeRepository
-    ) {
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\SilentVoidResolver $silentVoidResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20210509\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
+    {
         $this->silentVoidResolver = $silentVoidResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -76,139 +62,109 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
         $this->splArrayFixedTypeNarrower = $splArrayFixedTypeNarrower;
         $this->nodeRepository = $nodeRepository;
     }
-
     /**
      * @param ClassMethod|Closure|Function_ $functionLike
      */
-    public function inferFunctionLike(FunctionLike $functionLike): Type
+    public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
     {
         /** @var Class_|Trait_|Interface_|null $classLike */
-        $classLike = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if ($classLike === null) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
-
-        if ($functionLike instanceof ClassMethod && $classLike instanceof Interface_) {
-            return new MixedType();
+        if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $classLike instanceof \PhpParser\Node\Stmt\Interface_) {
+            return new \PHPStan\Type\MixedType();
         }
-
         $types = [];
-
         $localReturnNodes = $this->collectReturns($functionLike);
         if ($localReturnNodes === []) {
             return $this->resolveNoLocalReturnNodes($classLike, $functionLike);
         }
-
         foreach ($localReturnNodes as $localReturnNode) {
             $returnedExprType = $this->nodeTypeResolver->getStaticType($localReturnNode);
             $returnedExprType = $this->correctWithNestedType($returnedExprType, $localReturnNode, $functionLike);
-
             $types[] = $this->splArrayFixedTypeNarrower->narrow($returnedExprType);
         }
-
         if ($this->silentVoidResolver->hasSilentVoid($functionLike)) {
-            $types[] = new VoidType();
+            $types[] = new \PHPStan\Type\VoidType();
         }
-
         return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
-
-    public function getPriority(): int
+    public function getPriority() : int
     {
         return 1000;
     }
-
     /**
      * @return Return_[]
      */
-    private function collectReturns(FunctionLike $functionLike): array
+    private function collectReturns(\PhpParser\Node\FunctionLike $functionLike) : array
     {
         $returns = [];
-
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (
-            Node $node
-        ) use (&$returns): ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (\PhpParser\Node $node) use(&$returns) : ?int {
             // skip Return_ nodes in nested functions or switch statements
-            if ($node instanceof FunctionLike) {
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+            if ($node instanceof \PhpParser\Node\FunctionLike) {
+                return \PhpParser\NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
-
-            if (! $node instanceof Return_) {
+            if (!$node instanceof \PhpParser\Node\Stmt\Return_) {
                 return null;
             }
-
             $returns[] = $node;
-
             return null;
         });
-
         return $returns;
     }
-
-    private function resolveNoLocalReturnNodes(ClassLike $classLike, FunctionLike $functionLike): Type
+    private function resolveNoLocalReturnNodes(\PhpParser\Node\Stmt\ClassLike $classLike, \PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
     {
         // void type
-        if (! $this->isAbstractMethod($classLike, $functionLike)) {
-            return new VoidType();
+        if (!$this->isAbstractMethod($classLike, $functionLike)) {
+            return new \PHPStan\Type\VoidType();
         }
-
-        return new MixedType();
+        return new \PHPStan\Type\MixedType();
     }
-
-    private function isAbstractMethod(ClassLike $classLike, FunctionLike $functionLike): bool
+    private function isAbstractMethod(\PhpParser\Node\Stmt\ClassLike $classLike, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
-        if ($functionLike instanceof ClassMethod && $functionLike->isAbstract()) {
-            return true;
+        if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $functionLike->isAbstract()) {
+            return \true;
         }
-
-        if (! $classLike instanceof Class_) {
-            return false;
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+            return \false;
         }
         return $classLike->isAbstract();
     }
-
-    private function inferFromReturnedMethodCall(Return_ $return, FunctionLike $originalFunctionLike): Type
+    private function inferFromReturnedMethodCall(\PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node\FunctionLike $originalFunctionLike) : \PHPStan\Type\Type
     {
-        if (! $return->expr instanceof MethodCall) {
-            return new MixedType();
+        if (!$return->expr instanceof \PhpParser\Node\Expr\MethodCall) {
+            return new \PHPStan\Type\MixedType();
         }
-
         $classMethod = $this->nodeRepository->findClassMethodByMethodCall($return->expr);
-        if (! $classMethod instanceof ClassMethod) {
-            return new MixedType();
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return new \PHPStan\Type\MixedType();
         }
-
         // avoid infinite looping over self call
         if ($classMethod === $originalFunctionLike) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
-
         return $this->inferFunctionLike($classMethod);
     }
-
-    private function isArrayTypeMixed(Type $type): bool
+    private function isArrayTypeMixed(\PHPStan\Type\Type $type) : bool
     {
-        if (! $type instanceof ArrayType) {
-            return false;
+        if (!$type instanceof \PHPStan\Type\ArrayType) {
+            return \false;
         }
-
-        if (! $type->getItemType() instanceof MixedType) {
-            return false;
+        if (!$type->getItemType() instanceof \PHPStan\Type\MixedType) {
+            return \false;
         }
-
-        return $type->getKeyType() instanceof MixedType;
+        return $type->getKeyType() instanceof \PHPStan\Type\MixedType;
     }
-
-    private function correctWithNestedType(Type $resolvedType, Return_ $return, FunctionLike $functionLike): Type
+    private function correctWithNestedType(\PHPStan\Type\Type $resolvedType, \PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
     {
-        if ($resolvedType instanceof MixedType || $this->isArrayTypeMixed($resolvedType)) {
+        if ($resolvedType instanceof \PHPStan\Type\MixedType || $this->isArrayTypeMixed($resolvedType)) {
             $correctedType = $this->inferFromReturnedMethodCall($return, $functionLike);
             // override only if has some extra value
-            if (! $correctedType instanceof MixedType) {
+            if (!$correctedType instanceof \PHPStan\Type\MixedType) {
                 return $correctedType;
             }
         }
-
         return $resolvedType;
     }
 }

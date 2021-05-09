@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
@@ -20,42 +19,32 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
-
-final class CastTypeResolver implements NodeTypeResolverInterface
+final class CastTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
      * @var array<class-string<Node>, class-string<Type>>
      */
-    private const CAST_CLASS_TO_TYPE_MAP = [
-        Bool_::class => BooleanType::class,
-        String_::class => StringType::class,
-        Int_::class => IntegerType::class,
-        Double::class => FloatType::class,
-    ];
-
+    private const CAST_CLASS_TO_TYPE_MAP = [\PhpParser\Node\Expr\Cast\Bool_::class => \PHPStan\Type\BooleanType::class, \PhpParser\Node\Expr\Cast\String_::class => \PHPStan\Type\StringType::class, \PhpParser\Node\Expr\Cast\Int_::class => \PHPStan\Type\IntegerType::class, \PhpParser\Node\Expr\Cast\Double::class => \PHPStan\Type\FloatType::class];
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeClasses(): array
+    public function getNodeClasses() : array
     {
-        return [Cast::class];
+        return [\PhpParser\Node\Expr\Cast::class];
     }
-
     /**
      * @param Cast $node
      */
-    public function resolve(Node $node): Type
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         foreach (self::CAST_CLASS_TO_TYPE_MAP as $castClass => $typeClass) {
-            if (is_a($node, $castClass, true)) {
+            if (\is_a($node, $castClass, \true)) {
                 return new $typeClass();
             }
         }
-
-        if ($node instanceof Array_) {
-            return new ArrayType(new MixedType(), new MixedType());
+        if ($node instanceof \PhpParser\Node\Expr\Cast\Array_) {
+            return new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
         }
-
-        throw new NotImplementedYetException(get_class($node));
+        throw new \Rector\Core\Exception\NotImplementedYetException(\get_class($node));
     }
 }

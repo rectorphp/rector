@@ -1,25 +1,22 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Core\NonPhpFile;
 
-use Nette\Utils\Strings;
+use RectorPrefix20210509\Nette\Utils\Strings;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
-
 /**
  * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameNonPhpTest
  */
-final class NonPhpFileProcessor implements FileProcessorInterface
+final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
      * @var NonPhpRectorInterface[]
      */
     private $nonPhpRectors = [];
-
     /**
      * @param NonPhpRectorInterface[] $nonPhpRectors
      */
@@ -27,37 +24,31 @@ final class NonPhpFileProcessor implements FileProcessorInterface
     {
         $this->nonPhpRectors = $nonPhpRectors;
     }
-
     /**
      * @param File[] $files
      */
-    public function process(array $files): void
+    public function process(array $files) : void
     {
         foreach ($files as $file) {
             $this->processFile($file);
         }
     }
-
-    public function supports(File $file): bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
-
         // bug in path extension
         foreach ($this->getSupportedFileExtensions() as $supportedFileExtension) {
-            if (Strings::endsWith($smartFileInfo->getPathname(), '.' . $supportedFileExtension)) {
-                return true;
+            if (\RectorPrefix20210509\Nette\Utils\Strings::endsWith($smartFileInfo->getPathname(), '.' . $supportedFileExtension)) {
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
-    public function getSupportedFileExtensions(): array
+    public function getSupportedFileExtensions() : array
     {
-        return StaticNonPhpFileSuffixes::SUFFIXES;
+        return \Rector\Core\ValueObject\StaticNonPhpFileSuffixes::SUFFIXES;
     }
-
-    private function processFile(File $file): void
+    private function processFile(\Rector\Core\ValueObject\Application\File $file) : void
     {
         foreach ($this->nonPhpRectors as $nonPhpRector) {
             $newFileContent = $nonPhpRector->refactorFileContent($file->getFileContent());

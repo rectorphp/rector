@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Ternary;
 
 use PhpParser\Node;
@@ -10,19 +9,14 @@ use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector\SwitchNegatedTernaryRectorTest
  */
-final class SwitchNegatedTernaryRector extends AbstractRector
+final class SwitchNegatedTernaryRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Switch negated ternary condition rector',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Switch negated ternary condition rector', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(bool $upper, string $name)
@@ -33,8 +27,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(bool $upper, string $name)
@@ -45,35 +38,28 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Ternary::class];
+        return [\PhpParser\Node\Expr\Ternary::class];
     }
-
     /**
      * @param Ternary $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (! $node->cond instanceof BooleanNot) {
+        if (!$node->cond instanceof \PhpParser\Node\Expr\BooleanNot) {
             return null;
         }
-
         if ($node->if === null) {
             return null;
         }
-
         $node->cond = $node->cond->expr;
         [$node->if, $node->else] = [$node->else, $node->if];
-
         return $node;
     }
 }

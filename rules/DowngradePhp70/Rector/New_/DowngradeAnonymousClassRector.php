@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\DowngradePhp70\Rector\New_;
 
 use PhpParser\Node;
@@ -13,55 +12,42 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\DowngradeAnonymousClassRectorTest
  */
-final class DowngradeAnonymousClassRector extends AbstractRector
+final class DowngradeAnonymousClassRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
      */
     private const ANONYMOUS_CLASS_PREFIX = 'Anonymous__';
-
     /**
      * @var ClassAnalyzer
      */
     private $classAnalyzer;
-
     /**
      * @var ClassFromAnonymousFactory
      */
     private $classFromAnonymousFactory;
-
     /**
      * @var Class_[]
      */
     private $classes = [];
-
-    public function __construct(
-        ClassAnalyzer $classAnalyzer,
-        ClassFromAnonymousFactory $classFromAnonymousFactory
-    ) {
+    public function __construct(\Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory $classFromAnonymousFactory)
+    {
         $this->classAnalyzer = $classAnalyzer;
         $this->classFromAnonymousFactory = $classFromAnonymousFactory;
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [New_::class];
+        return [\PhpParser\Node\Expr\New_::class];
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Remove anonymous class',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove anonymous class', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -74,8 +60,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class Anonymous
 {
     public function execute()
@@ -90,21 +75,17 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @param Node[] $nodes
      * @return Node[]|null
      */
-    public function beforeTraverse(array $nodes): ?array
+    public function beforeTraverse(array $nodes) : ?array
     {
         $this->classes = [];
         return parent::beforeTraverse($nodes);
     }
-
     /**
      * @param Node[] $nodes
      * @return Node[]
@@ -114,33 +95,26 @@ CODE_SAMPLE
         if ($this->classes === []) {
             return $nodes;
         }
-
-        return array_merge($nodes, $this->classes);
+        return \array_merge($nodes, $this->classes);
     }
-
     /**
      * @param New_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (! $this->classAnalyzer->isAnonymousClass($node->class)) {
+        if (!$this->classAnalyzer->isAnonymousClass($node->class)) {
             return null;
         }
-
-        if (! $node->class instanceof Class_) {
+        if (!$node->class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
-
         $className = $this->createAnonymousClassName();
         $this->classes[] = $this->classFromAnonymousFactory->create($className, $node->class);
-
-        return new New_(new Name($className), $node->args);
+        return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name($className), $node->args);
     }
-
-    private function createAnonymousClassName(): string
+    private function createAnonymousClassName() : string
     {
         $fileInfo = $this->file->getSmartFileInfo();
-
-        return self::ANONYMOUS_CLASS_PREFIX . md5($fileInfo->getRealPath()) . '__' . count($this->classes);
+        return self::ANONYMOUS_CLASS_PREFIX . \md5($fileInfo->getRealPath()) . '__' . \count($this->classes);
     }
 }

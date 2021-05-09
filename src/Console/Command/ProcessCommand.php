@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
 use PHPStan\Analyser\NodeScopeResolver;
@@ -20,98 +19,72 @@ use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symplify\PackageBuilder\Console\ShellCode;
+use RectorPrefix20210509\Symfony\Component\Console\Application;
+use RectorPrefix20210509\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210509\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix20210509\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210509\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20210509\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210509\Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileInfo;
-
-final class ProcessCommand extends Command
+final class ProcessCommand extends \RectorPrefix20210509\Symfony\Component\Console\Command\Command
 {
     /**
      * @var AdditionalAutoloader
      */
     private $additionalAutoloader;
-
     /**
      * @var Configuration
      */
     private $configuration;
-
     /**
      * @var OutputFormatterCollector
      */
     private $outputFormatterCollector;
-
     /**
      * @var PhpFilesFinder
      */
     private $phpFilesFinder;
-
     /**
      * @var ChangedFilesDetector
      */
     private $changedFilesDetector;
-
     /**
      * @var MissingRectorRulesReporter
      */
     private $missingRectorRulesReporter;
-
     /**
      * @var ApplicationFileProcessor
      */
     private $applicationFileProcessor;
-
     /**
      * @var FileFactory
      */
     private $fileFactory;
-
     /**
      * @var BootstrapFilesIncluder
      */
     private $bootstrapFilesIncluder;
-
     /**
      * @var ProcessResultFactory
      */
     private $processResultFactory;
-
     /**
      * @var NodeScopeResolver
      */
     private $nodeScopeResolver;
-
     /**
      * @var DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
-
-    public function __construct(
-        AdditionalAutoloader $additionalAutoloader,
-        ChangedFilesDetector $changedFilesDetector,
-        Configuration $configuration,
-        OutputFormatterCollector $outputFormatterCollector,
-        PhpFilesFinder $phpFilesFinder,
-        MissingRectorRulesReporter $missingRectorRulesReporter,
-        ApplicationFileProcessor $applicationFileProcessor,
-        FileFactory $fileFactory,
-        BootstrapFilesIncluder $bootstrapFilesIncluder,
-        ProcessResultFactory $processResultFactory,
-        NodeScopeResolver $nodeScopeResolver,
-        DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator
-    ) {
+    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Configuration\Configuration $configuration, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \Rector\Core\FileSystem\PhpFilesFinder $phpFilesFinder, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
+    {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->configuration = $configuration;
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->phpFilesFinder = $phpFilesFinder;
         $this->missingRectorRulesReporter = $missingRectorRulesReporter;
-
         parent::__construct();
         $this->applicationFileProcessor = $applicationFileProcessor;
         $this->fileFactory = $fileFactory;
@@ -120,169 +93,100 @@ final class ProcessCommand extends Command
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
     }
-
-    protected function configure(): void
+    protected function configure() : void
     {
         $this->setDescription('Upgrade or refactor source code with provided rectors');
-
-        $this->addArgument(
-            Option::SOURCE,
-            InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
-            'Files or directories to be upgraded.'
-        );
-
-        $this->addOption(
-            Option::OPTION_DRY_RUN,
-            'n',
-            InputOption::VALUE_NONE,
-            'See diff of changes, do not save them to files.'
-        );
-
-        $this->addOption(
-            Option::OPTION_AUTOLOAD_FILE,
-            'a',
-            InputOption::VALUE_REQUIRED,
-            'File with extra autoload'
-        );
-
+        $this->addArgument(\Rector\Core\Configuration\Option::SOURCE, \RectorPrefix20210509\Symfony\Component\Console\Input\InputArgument::OPTIONAL | \RectorPrefix20210509\Symfony\Component\Console\Input\InputArgument::IS_ARRAY, 'Files or directories to be upgraded.');
+        $this->addOption(\Rector\Core\Configuration\Option::OPTION_DRY_RUN, 'n', \RectorPrefix20210509\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'See diff of changes, do not save them to files.');
+        $this->addOption(\Rector\Core\Configuration\Option::OPTION_AUTOLOAD_FILE, 'a', \RectorPrefix20210509\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'File with extra autoload');
         $names = $this->outputFormatterCollector->getNames();
-
-        $description = sprintf('Select output format: "%s".', implode('", "', $names));
-        $this->addOption(
-            Option::OPTION_OUTPUT_FORMAT,
-            'o',
-            InputOption::VALUE_OPTIONAL,
-            $description,
-            ConsoleOutputFormatter::NAME
-        );
-
-        $this->addOption(
-            Option::OPTION_NO_PROGRESS_BAR,
-            null,
-            InputOption::VALUE_NONE,
-            'Hide progress bar. Useful e.g. for nicer CI output.'
-        );
-
-        $this->addOption(
-            Option::OPTION_NO_DIFFS,
-            null,
-            InputOption::VALUE_NONE,
-            'Hide diffs of changed files. Useful e.g. for nicer CI output.'
-        );
-
-        $this->addOption(
-            Option::OPTION_OUTPUT_FILE,
-            null,
-            InputOption::VALUE_REQUIRED,
-            'Location for file to dump result in. Useful for Docker or automated processes'
-        );
-
-        $this->addOption(Option::CACHE_DEBUG, null, InputOption::VALUE_NONE, 'Debug changed file cache');
-        $this->addOption(Option::OPTION_CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear unchaged files cache');
+        $description = \sprintf('Select output format: "%s".', \implode('", "', $names));
+        $this->addOption(\Rector\Core\Configuration\Option::OPTION_OUTPUT_FORMAT, 'o', \RectorPrefix20210509\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, $description, \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
+        $this->addOption(\Rector\Core\Configuration\Option::OPTION_NO_PROGRESS_BAR, null, \RectorPrefix20210509\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Hide progress bar. Useful e.g. for nicer CI output.');
+        $this->addOption(\Rector\Core\Configuration\Option::OPTION_NO_DIFFS, null, \RectorPrefix20210509\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Hide diffs of changed files. Useful e.g. for nicer CI output.');
+        $this->addOption(\Rector\Core\Configuration\Option::OPTION_OUTPUT_FILE, null, \RectorPrefix20210509\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'Location for file to dump result in. Useful for Docker or automated processes');
+        $this->addOption(\Rector\Core\Configuration\Option::CACHE_DEBUG, null, \RectorPrefix20210509\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Debug changed file cache');
+        $this->addOption(\Rector\Core\Configuration\Option::OPTION_CLEAR_CACHE, null, \RectorPrefix20210509\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Clear unchaged files cache');
     }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(\RectorPrefix20210509\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210509\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $exitCode = $this->missingRectorRulesReporter->reportIfMissing();
         if ($exitCode !== null) {
             return $exitCode;
         }
-
         $this->configuration->resolveFromInput($input);
         $this->configuration->validateConfigParameters();
-
         $paths = $this->configuration->getPaths();
         $phpFileInfos = $this->phpFilesFinder->findInPaths($paths);
-
         // register autoloaded and included files
         $this->bootstrapFilesIncluder->includeBootstrapFiles();
-
         $this->additionalAutoloader->autoloadInput($input);
         $this->additionalAutoloader->autoloadPaths();
-
         // PHPStan has to know about all files!
         $this->configurePHPStanNodeScopeResolver($phpFileInfos);
-
         // 0. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
-
         $files = $this->fileFactory->createFromPaths($paths);
         $this->applicationFileProcessor->run($files);
-
         // report diffs and errors
-        $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
-
+        $outputFormat = (string) $input->getOption(\Rector\Core\Configuration\Option::OPTION_OUTPUT_FORMAT);
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
-
         // here should be value obect factory
         $processResult = $this->processResultFactory->create($files);
         $outputFormatter->report($processResult);
-
         // invalidate affected files
         $this->invalidateCacheChangedFiles($processResult);
-
         return $this->resolveReturnCode($processResult);
     }
-
-    protected function initialize(InputInterface $input, OutputInterface $output): void
+    protected function initialize(\RectorPrefix20210509\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210509\Symfony\Component\Console\Output\OutputInterface $output) : void
     {
         $application = $this->getApplication();
-        if (! $application instanceof Application) {
-            throw new ShouldNotHappenException();
+        if (!$application instanceof \RectorPrefix20210509\Symfony\Component\Console\Application) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-
-        $optionDebug = (bool) $input->getOption(Option::OPTION_DEBUG);
+        $optionDebug = (bool) $input->getOption(\Rector\Core\Configuration\Option::OPTION_DEBUG);
         if ($optionDebug) {
-            $application->setCatchExceptions(false);
-
+            $application->setCatchExceptions(\false);
             // clear cache
             $this->changedFilesDetector->clear();
             return;
         }
-
         // clear cache
-        $optionClearCache = (bool) $input->getOption(Option::OPTION_CLEAR_CACHE);
+        $optionClearCache = (bool) $input->getOption(\Rector\Core\Configuration\Option::OPTION_CLEAR_CACHE);
         if ($optionClearCache) {
             $this->changedFilesDetector->clear();
         }
     }
-
-    private function invalidateCacheChangedFiles(ProcessResult $processResult): void
+    private function invalidateCacheChangedFiles(\Rector\Core\ValueObject\ProcessResult $processResult) : void
     {
-        if (! $this->configuration->isCacheEnabled()) {
+        if (!$this->configuration->isCacheEnabled()) {
             return;
         }
-
         foreach ($processResult->getChangedFileInfos() as $changedFileInfo) {
             $this->changedFilesDetector->invalidateFile($changedFileInfo);
         }
     }
-
-    private function resolveReturnCode(ProcessResult $processResult): int
+    private function resolveReturnCode(\Rector\Core\ValueObject\ProcessResult $processResult) : int
     {
         // some errors were found → fail
         if ($processResult->getErrors() !== []) {
-            return ShellCode::ERROR;
+            return \RectorPrefix20210509\Symplify\PackageBuilder\Console\ShellCode::ERROR;
         }
-
         // inverse error code for CI dry-run
-        if (! $this->configuration->isDryRun()) {
-            return ShellCode::SUCCESS;
+        if (!$this->configuration->isDryRun()) {
+            return \RectorPrefix20210509\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
         }
-
-        return $processResult->getFileDiffs() === [] ? ShellCode::SUCCESS : ShellCode::ERROR;
+        return $processResult->getFileDiffs() === [] ? \RectorPrefix20210509\Symplify\PackageBuilder\Console\ShellCode::SUCCESS : \RectorPrefix20210509\Symplify\PackageBuilder\Console\ShellCode::ERROR;
     }
-
     /**
      * @param SmartFileInfo[] $fileInfos
      */
-    private function configurePHPStanNodeScopeResolver(array $fileInfos): void
+    private function configurePHPStanNodeScopeResolver(array $fileInfos) : void
     {
         $filePaths = [];
         foreach ($fileInfos as $fileInfo) {
             $filePaths[] = $fileInfo->getPathname();
         }
-
         $this->nodeScopeResolver->setAnalysedFiles($filePaths);
     }
 }

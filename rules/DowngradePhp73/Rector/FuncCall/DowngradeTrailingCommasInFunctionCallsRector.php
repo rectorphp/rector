@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\DowngradePhp73\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -13,29 +12,22 @@ use Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\DowngradePhp73\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector\DowngradeTrailingCommasInFunctionCallsRectorTest
  */
-final class DowngradeTrailingCommasInFunctionCallsRector extends AbstractRector
+final class DowngradeTrailingCommasInFunctionCallsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var FollowedByCommaAnalyzer
      */
     private $followedByCommaAnalyzer;
-
-    public function __construct(FollowedByCommaAnalyzer $followedByCommaAnalyzer)
+    public function __construct(\Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer $followedByCommaAnalyzer)
     {
         $this->followedByCommaAnalyzer = $followedByCommaAnalyzer;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Remove trailing commas in function calls',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove trailing commas in function calls', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(string $value)
@@ -47,8 +39,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(string $value)
@@ -60,37 +51,31 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [FuncCall::class, MethodCall::class, StaticCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
-
     /**
      * @param FuncCall|MethodCall|StaticCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->args) {
-            $lastArgumentPosition = array_key_last($node->args);
-
+            \end($node->args);
+            $lastArgumentPosition = \key($node->args);
             $last = $node->args[$lastArgumentPosition];
-            if (! $this->followedByCommaAnalyzer->isFollowed($this->file, $last)) {
+            if (!$this->followedByCommaAnalyzer->isFollowed($this->file, $last)) {
                 return null;
             }
-
             // remove comma
-            $last->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, false);
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $last->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::FUNC_ARGS_TRAILING_COMMA, \false);
+            $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
         }
-
         return $node;
     }
 }

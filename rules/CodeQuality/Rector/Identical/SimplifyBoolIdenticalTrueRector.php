@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
@@ -13,19 +12,14 @@ use PHPStan\Type\BooleanType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector\SimplifyBoolIdenticalTrueRectorTest
  */
-final class SimplifyBoolIdenticalTrueRector extends AbstractRector
+final class SimplifyBoolIdenticalTrueRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Symplify bool value compare to true or false',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Symplify bool value compare to true or false', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(bool $value, string $items)
@@ -35,8 +29,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(bool $value, string $items)
@@ -46,31 +39,24 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Identical::class, NotIdentical::class];
+        return [\PhpParser\Node\Expr\BinaryOp\Identical::class, \PhpParser\Node\Expr\BinaryOp\NotIdentical::class];
     }
-
     /**
      * @param Identical|NotIdentical $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($this->nodeTypeResolver->isStaticType(
-            $node->left,
-            BooleanType::class
-        ) && ! $this->valueResolver->isTrueOrFalse($node->left)) {
+        if ($this->nodeTypeResolver->isStaticType($node->left, \PHPStan\Type\BooleanType::class) && !$this->valueResolver->isTrueOrFalse($node->left)) {
             return $this->processBoolTypeToNotBool($node, $node->left, $node->right);
         }
-        if (! $this->nodeTypeResolver->isStaticType($node->right, BooleanType::class)) {
+        if (!$this->nodeTypeResolver->isStaticType($node->right, \PHPStan\Type\BooleanType::class)) {
             return null;
         }
         if ($this->valueResolver->isTrueOrFalse($node->right)) {
@@ -78,48 +64,38 @@ CODE_SAMPLE
         }
         return $this->processBoolTypeToNotBool($node, $node->right, $node->left);
     }
-
-    private function processBoolTypeToNotBool(Node $node, Expr $leftExpr, Expr $rightExpr): ?Expr
+    private function processBoolTypeToNotBool(\PhpParser\Node $node, \PhpParser\Node\Expr $leftExpr, \PhpParser\Node\Expr $rightExpr) : ?\PhpParser\Node\Expr
     {
-        if ($node instanceof Identical) {
+        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             return $this->refactorIdentical($leftExpr, $rightExpr);
         }
-
-        if ($node instanceof NotIdentical) {
+        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
             return $this->refactorNotIdentical($leftExpr, $rightExpr);
         }
-
         return null;
     }
-
-    private function refactorIdentical(Expr $leftExpr, Expr $rightExpr): ?Expr
+    private function refactorIdentical(\PhpParser\Node\Expr $leftExpr, \PhpParser\Node\Expr $rightExpr) : ?\PhpParser\Node\Expr
     {
         if ($this->valueResolver->isTrue($rightExpr)) {
             return $leftExpr;
         }
-
         if ($this->valueResolver->isFalse($rightExpr)) {
             // prevent !!
-            if ($leftExpr instanceof BooleanNot) {
+            if ($leftExpr instanceof \PhpParser\Node\Expr\BooleanNot) {
                 return $leftExpr->expr;
             }
-
-            return new BooleanNot($leftExpr);
+            return new \PhpParser\Node\Expr\BooleanNot($leftExpr);
         }
-
         return null;
     }
-
-    private function refactorNotIdentical(Expr $leftExpr, Expr $rightExpr): ?Expr
+    private function refactorNotIdentical(\PhpParser\Node\Expr $leftExpr, \PhpParser\Node\Expr $rightExpr) : ?\PhpParser\Node\Expr
     {
         if ($this->valueResolver->isFalse($rightExpr)) {
             return $leftExpr;
         }
-
         if ($this->valueResolver->isTrue($rightExpr)) {
-            return new BooleanNot($leftExpr);
+            return new \PhpParser\Node\Expr\BooleanNot($leftExpr);
         }
-
         return null;
     }
 }

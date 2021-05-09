@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
@@ -20,49 +19,37 @@ use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector\ChangeAndIfToEarlyReturnRectorTest
  */
-final class ChangeAndIfToEarlyReturnRector extends AbstractRector
+final class ChangeAndIfToEarlyReturnRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var IfManipulator
      */
     private $ifManipulator;
-
     /**
      * @var InvertedIfFactory
      */
     private $invertedIfFactory;
-
     /**
      * @var ContextAnalyzer
      */
     private $contextAnalyzer;
-
     /**
      * @var BooleanAndAnalyzer
      */
     private $booleanAndAnalyzer;
-
-    public function __construct(
-        IfManipulator $ifManipulator,
-        InvertedIfFactory $invertedIfFactory,
-        ContextAnalyzer $contextAnalyzer,
-        BooleanAndAnalyzer $booleanAndAnalyzer
-    ) {
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\EarlyReturn\NodeFactory\InvertedIfFactory $invertedIfFactory, \Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer, \Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer $booleanAndAnalyzer)
+    {
         $this->ifManipulator = $ifManipulator;
         $this->invertedIfFactory = $invertedIfFactory;
         $this->contextAnalyzer = $contextAnalyzer;
         $this->booleanAndAnalyzer = $booleanAndAnalyzer;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes if && to early return', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes if && to early return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function canDrive(Car $car)
@@ -75,9 +62,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function canDrive(Car $car)
@@ -94,174 +79,137 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [\PhpParser\Node\Stmt\If_::class];
     }
-
     /**
      * @param If_ $node
      * @return Node|Node[]|null
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-
         $ifNextReturn = $this->getIfNextReturn($node);
-        if ($ifNextReturn instanceof Return_ && $this->isIfStmtExprUsedInNextReturn($node, $ifNextReturn)) {
+        if ($ifNextReturn instanceof \PhpParser\Node\Stmt\Return_ && $this->isIfStmtExprUsedInNextReturn($node, $ifNextReturn)) {
             return null;
         }
-
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
         $booleanAndConditions = $this->booleanAndAnalyzer->findBooleanAndConditions($expr);
-
-        if (! $ifNextReturn instanceof Return_) {
+        if (!$ifNextReturn instanceof \PhpParser\Node\Stmt\Return_) {
             $this->addNodeAfterNode($node->stmts[0], $node);
-            return $this->processReplaceIfs($node, $booleanAndConditions, new Return_());
+            return $this->processReplaceIfs($node, $booleanAndConditions, new \PhpParser\Node\Stmt\Return_());
         }
-
-        if ($ifNextReturn instanceof Return_ && $ifNextReturn->expr instanceof BooleanAnd) {
+        if ($ifNextReturn instanceof \PhpParser\Node\Stmt\Return_ && $ifNextReturn->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
             return null;
         }
-
         $this->removeNode($ifNextReturn);
         $ifNextReturn = $node->stmts[0];
         $this->addNodeAfterNode($ifNextReturn, $node);
-
-        $ifNextReturnClone = $ifNextReturn instanceof Return_
-            ? clone $ifNextReturn
-            : new Return_();
-
-        if (! $this->contextAnalyzer->isInLoop($node)) {
+        $ifNextReturnClone = $ifNextReturn instanceof \PhpParser\Node\Stmt\Return_ ? clone $ifNextReturn : new \PhpParser\Node\Stmt\Return_();
+        if (!$this->contextAnalyzer->isInLoop($node)) {
             return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
         }
-
-        if (! $ifNextReturn instanceof Expression) {
+        if (!$ifNextReturn instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-
-        $this->addNodeAfterNode(new Return_(), $node);
+        $this->addNodeAfterNode(new \PhpParser\Node\Stmt\Return_(), $node);
         return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
     }
-
     /**
      * @param Expr[] $conditions
      * @return If_|Node[]
      */
-    private function processReplaceIfs(If_ $node, array $conditions, Return_ $ifNextReturnClone)
+    private function processReplaceIfs(\PhpParser\Node\Stmt\If_ $node, array $conditions, \PhpParser\Node\Stmt\Return_ $ifNextReturnClone)
     {
         $ifs = $this->invertedIfFactory->createFromConditions($node, $conditions, $ifNextReturnClone);
         $this->mirrorComments($ifs[0], $node);
-
         foreach ($ifs as $if) {
             $this->addNodeBeforeNode($if, $node);
         }
-
         $this->removeNode($node);
-
-        if (! $node->stmts[0] instanceof Return_ && $ifNextReturnClone->expr instanceof Expr) {
+        if (!$node->stmts[0] instanceof \PhpParser\Node\Stmt\Return_ && $ifNextReturnClone->expr instanceof \PhpParser\Node\Expr) {
             return [$node, $ifNextReturnClone];
         }
-
         return $node;
     }
-
-    private function shouldSkip(If_ $if): bool
+    private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
     {
-        if (! $this->ifManipulator->isIfWithOnlyOneStmt($if)) {
-            return true;
+        if (!$this->ifManipulator->isIfWithOnlyOneStmt($if)) {
+            return \true;
         }
-        if (! $if->cond instanceof BooleanAnd) {
-            return true;
+        if (!$if->cond instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
+            return \true;
         }
-        if (! $this->ifManipulator->isIfWithoutElseAndElseIfs($if)) {
-            return true;
+        if (!$this->ifManipulator->isIfWithoutElseAndElseIfs($if)) {
+            return \true;
         }
-
         if ($this->isParentIfReturnsVoidOrParentIfHasNextNode($if)) {
-            return true;
+            return \true;
         }
-
         if ($this->isNestedIfInLoop($if)) {
-            return true;
+            return \true;
         }
-
-        return ! $this->isLastIfOrBeforeLastReturn($if);
+        return !$this->isLastIfOrBeforeLastReturn($if);
     }
-
-    private function isIfStmtExprUsedInNextReturn(If_ $if, Return_ $return): bool
+    private function isIfStmtExprUsedInNextReturn(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Stmt\Return_ $return) : bool
     {
-        if (! $return->expr instanceof Expr) {
-            return false;
+        if (!$return->expr instanceof \PhpParser\Node\Expr) {
+            return \false;
         }
-
-        $ifExprs = $this->betterNodeFinder->findInstanceOf($if->stmts, Expr::class);
+        $ifExprs = $this->betterNodeFinder->findInstanceOf($if->stmts, \PhpParser\Node\Expr::class);
         foreach ($ifExprs as $ifExpr) {
-            $isExprFoundInReturn = (bool) $this->betterNodeFinder->findFirst($return->expr, function (Node $node) use (
-                $ifExpr
-            ): bool {
+            $isExprFoundInReturn = (bool) $this->betterNodeFinder->findFirst($return->expr, function (\PhpParser\Node $node) use($ifExpr) : bool {
                 return $this->nodeComparator->areNodesEqual($node, $ifExpr);
             });
             if ($isExprFoundInReturn) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
-    private function getIfNextReturn(If_ $if): ?Return_
+    private function getIfNextReturn(\PhpParser\Node\Stmt\If_ $if) : ?\PhpParser\Node\Stmt\Return_
     {
-        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $nextNode instanceof Return_) {
+        $nextNode = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof \PhpParser\Node\Stmt\Return_) {
             return null;
         }
-
         return $nextNode;
     }
-
-    private function isParentIfReturnsVoidOrParentIfHasNextNode(If_ $if): bool
+    private function isParentIfReturnsVoidOrParentIfHasNextNode(\PhpParser\Node\Stmt\If_ $if) : bool
     {
-        $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof If_) {
-            return false;
+        $parentNode = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node\Stmt\If_) {
+            return \false;
         }
-
-        $nextParent = $parentNode->getAttribute(AttributeKey::NEXT_NODE);
-        return $nextParent instanceof Node;
+        $nextParent = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        return $nextParent instanceof \PhpParser\Node;
     }
-
-    private function isNestedIfInLoop(If_ $if): bool
+    private function isNestedIfInLoop(\PhpParser\Node\Stmt\If_ $if) : bool
     {
-        if (! $this->contextAnalyzer->isInLoop($if)) {
-            return false;
+        if (!$this->contextAnalyzer->isInLoop($if)) {
+            return \false;
         }
-
-        return (bool) $this->betterNodeFinder->findParentTypes($if, [If_::class, Else_::class, ElseIf_::class]);
+        return (bool) $this->betterNodeFinder->findParentTypes($if, [\PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\Else_::class, \PhpParser\Node\Stmt\ElseIf_::class]);
     }
-
-    private function isLastIfOrBeforeLastReturn(If_ $if): bool
+    private function isLastIfOrBeforeLastReturn(\PhpParser\Node\Stmt\If_ $if) : bool
     {
-        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if ($nextNode instanceof Node) {
-            return $nextNode instanceof Return_;
+        $nextNode = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        if ($nextNode instanceof \PhpParser\Node) {
+            return $nextNode instanceof \PhpParser\Node\Stmt\Return_;
         }
-
-        $parent = $if->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof If_) {
+        $parent = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parent instanceof \PhpParser\Node\Stmt\If_) {
             return $this->isLastIfOrBeforeLastReturn($parent);
         }
-
-        return ! $this->contextAnalyzer->isHasAssignWithIndirectReturn($parent, $if);
+        return !$this->contextAnalyzer->isHasAssignWithIndirectReturn($parent, $if);
     }
 }

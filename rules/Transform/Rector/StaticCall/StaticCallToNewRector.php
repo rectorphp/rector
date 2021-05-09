@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Transform\Rector\StaticCall;
 
 use PhpParser\Node;
@@ -13,29 +12,24 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\StaticCallToNew;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @changelog https://github.com/symfony/symfony/pull/35308
  *
  * @see \Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\StaticCallToNewRectorTest
  */
-final class StaticCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
+final class StaticCallToNewRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
      */
     public const STATIC_CALLS_TO_NEWS = 'static_calls_to_news';
-
     /**
      * @var StaticCallToNew[]
      */
     private $staticCallsToNews = [];
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change static call to new instance', [
-            new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change static call to new instance', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -44,8 +38,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -54,51 +47,39 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                [
-                    self::STATIC_CALLS_TO_NEWS => [new StaticCallToNew('JsonResponse', 'create')],
-                ]
-            ),
-        ]);
+, [self::STATIC_CALLS_TO_NEWS => [new \Rector\Transform\ValueObject\StaticCallToNew('JsonResponse', 'create')]])]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
-
     /**
      * @param Node\Expr\StaticCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->staticCallsToNews as $staticCallToNews) {
-            if (! $this->isName($node->class, $staticCallToNews->getClass())) {
+            if (!$this->isName($node->class, $staticCallToNews->getClass())) {
                 continue;
             }
-
-            if (! $this->isName($node->name, $staticCallToNews->getMethod())) {
+            if (!$this->isName($node->name, $staticCallToNews->getMethod())) {
                 continue;
             }
-
             $class = $this->getName($node->class);
             if ($class === null) {
                 continue;
             }
-
-            return new New_(new FullyQualified($class));
+            return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($class));
         }
-
         return $node;
     }
-
     /**
      * @param array<string, StaticCallToNew[]> $configuration
      */
-    public function configure(array $configuration): void
+    public function configure(array $configuration) : void
     {
         $staticCallsToNews = $configuration[self::STATIC_CALLS_TO_NEWS] ?? [];
         $this->staticCallsToNews = $staticCallsToNews;

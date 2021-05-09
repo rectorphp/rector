@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Arguments\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -11,28 +10,23 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Webmozart\Assert\Assert;
-
+use RectorPrefix20210509\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector\SwapFuncCallArgumentsRectorTest
  */
-final class SwapFuncCallArgumentsRector extends AbstractRector implements ConfigurableRectorInterface
+final class SwapFuncCallArgumentsRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
      */
     public const FUNCTION_ARGUMENT_SWAPS = 'new_argument_positions_by_function_name';
-
     /**
      * @var SwapFuncCallArguments[]
      */
     private $functionArgumentSwaps = [];
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Swap arguments in function calls', [
-            new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Swap arguments in function calls', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($one, $two)
@@ -41,8 +35,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($one, $two)
@@ -51,58 +44,47 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                [
-                    self::FUNCTION_ARGUMENT_SWAPS => [new SwapFuncCallArguments('some_function', [1, 0])],
-                ]
-            ),
-        ]);
+, [self::FUNCTION_ARGUMENT_SWAPS => [new \Rector\Arguments\ValueObject\SwapFuncCallArguments('some_function', [1, 0])]])]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
-
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->functionArgumentSwaps as $functionArgumentSwap) {
-            if (! $this->isName($node, $functionArgumentSwap->getFunction())) {
+            if (!$this->isName($node, $functionArgumentSwap->getFunction())) {
                 continue;
             }
-
             $newArguments = [];
             foreach ($functionArgumentSwap->getOrder() as $oldPosition => $newPosition) {
-                if (! isset($node->args[$oldPosition])) {
+                if (!isset($node->args[$oldPosition])) {
                     continue;
                 }
-                if (! isset($node->args[$newPosition])) {
+                if (!isset($node->args[$newPosition])) {
                     continue;
                 }
                 $newArguments[$newPosition] = $node->args[$oldPosition];
             }
-
             foreach ($newArguments as $newPosition => $argument) {
                 $node->args[$newPosition] = $argument;
             }
         }
-
         return $node;
     }
-
     /**
      * @param array<string, SwapFuncCallArguments[]> $configuration
      */
-    public function configure(array $configuration): void
+    public function configure(array $configuration) : void
     {
         $functionArgumentSwaps = $configuration[self::FUNCTION_ARGUMENT_SWAPS] ?? [];
-        Assert::allIsInstanceOf($functionArgumentSwaps, SwapFuncCallArguments::class);
+        \RectorPrefix20210509\Webmozart\Assert\Assert::allIsInstanceOf($functionArgumentSwaps, \Rector\Arguments\ValueObject\SwapFuncCallArguments::class);
         $this->functionArgumentSwaps = $functionArgumentSwaps;
     }
 }

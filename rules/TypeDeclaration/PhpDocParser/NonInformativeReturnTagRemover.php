@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\TypeDeclaration\PhpDocParser;
 
-use Nette\Utils\Strings;
+use RectorPrefix20210509\Nette\Utils\Strings;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -30,225 +29,162 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use Symplify\PackageBuilder\Php\TypeChecker;
-
+use RectorPrefix20210509\Symplify\PackageBuilder\Php\TypeChecker;
 final class NonInformativeReturnTagRemover
 {
     /**
      * @var array<class-string<Type>, string[]>
      */
-    private const USELESS_DOC_NAMES_BY_TYPE_CLASS = [
-        IterableType::class => ['iterable'],
-        CallableType::class => ['callable'],
-        VoidType::class => ['void'],
-        ArrayType::class => ['array'],
-        SelfObjectType::class => ['self'],
-        ParentStaticType::class => ['parent'],
-        BooleanType::class => ['bool', 'boolean'],
-        ObjectWithoutClassType::class => ['object'],
-    ];
-
+    private const USELESS_DOC_NAMES_BY_TYPE_CLASS = [\PHPStan\Type\IterableType::class => ['iterable'], \PHPStan\Type\CallableType::class => ['callable'], \PHPStan\Type\VoidType::class => ['void'], \PHPStan\Type\ArrayType::class => ['array'], \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType::class => ['self'], \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType::class => ['parent'], \PHPStan\Type\BooleanType::class => ['bool', 'boolean'], \PHPStan\Type\ObjectWithoutClassType::class => ['object']];
     /**
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-
     /**
      * @var TypeChecker
      */
     private $typeChecker;
-
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, TypeChecker $typeChecker)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210509\Symplify\PackageBuilder\Php\TypeChecker $typeChecker)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeChecker = $typeChecker;
     }
-
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    public function removeReturnTagIfNotUseful(FunctionLike $functionLike): void
+    public function removeReturnTagIfNotUseful(\PhpParser\Node\FunctionLike $functionLike) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
-
         $returnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if (! $returnTagValueNode instanceof ReturnTagValueNode) {
+        if (!$returnTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode) {
             return;
         }
-
         // useful
         if ($returnTagValueNode->description !== '') {
             return;
         }
-
         $returnType = $phpDocInfo->getReturnType();
-
         // is bare type
-        if ($this->typeChecker->isInstanceOf($returnType, [FloatType::class, StringType::class, IntegerType::class])) {
-            $phpDocInfo->removeByType(ReturnTagValueNode::class);
+        if ($this->typeChecker->isInstanceOf($returnType, [\PHPStan\Type\FloatType::class, \PHPStan\Type\StringType::class, \PHPStan\Type\IntegerType::class])) {
+            $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode::class);
             return;
         }
-
         $this->removeNonUniqueUselessDocNames($returnType, $returnTagValueNode, $phpDocInfo);
         $this->removeShortObjectType($returnType, $returnTagValueNode, $phpDocInfo);
         $this->removeNullableType($returnType, $returnTagValueNode, $phpDocInfo);
         $this->removeFullyQualifiedObjectType($returnType, $returnTagValueNode, $phpDocInfo);
     }
-
-    private function removeNonUniqueUselessDocNames(
-        Type $returnType,
-        ReturnTagValueNode $returnTagValueNode,
-        PhpDocInfo $phpDocInfo
-    ): void {
+    private function removeNonUniqueUselessDocNames(\PHPStan\Type\Type $returnType, \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $returnTagValueNode, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
+    {
         foreach (self::USELESS_DOC_NAMES_BY_TYPE_CLASS as $typeClass => $uselessDocNames) {
-            if (! is_a($returnType, $typeClass, true)) {
+            if (!\is_a($returnType, $typeClass, \true)) {
                 continue;
             }
-
-            if (! $this->isIdentifierWithValues($returnTagValueNode->type, $uselessDocNames)) {
+            if (!$this->isIdentifierWithValues($returnTagValueNode->type, $uselessDocNames)) {
                 continue;
             }
-
-            $phpDocInfo->removeByType(ReturnTagValueNode::class);
+            $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode::class);
             return;
         }
     }
-
-    private function removeShortObjectType(
-        Type $returnType,
-        ReturnTagValueNode $returnTagValueNode,
-        PhpDocInfo $phpDocInfo
-    ): void {
-        if (! $returnType instanceof ShortenedObjectType) {
+    private function removeShortObjectType(\PHPStan\Type\Type $returnType, \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $returnTagValueNode, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
+    {
+        if (!$returnType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
             return;
         }
-
-        if (! $this->isIdentifierWithValues($returnTagValueNode->type, [$returnType->getShortName()])) {
+        if (!$this->isIdentifierWithValues($returnTagValueNode->type, [$returnType->getShortName()])) {
             return;
         }
-
-        $phpDocInfo->removeByType(ReturnTagValueNode::class);
+        $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode::class);
     }
-
-    private function removeNullableType(
-        Type $returnType,
-        ReturnTagValueNode $returnTagValueNode,
-        PhpDocInfo $phpDocInfo
-    ): void {
+    private function removeNullableType(\PHPStan\Type\Type $returnType, \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $returnTagValueNode, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
+    {
         $nullabledReturnType = $this->matchNullabledType($returnType);
-        if (! $nullabledReturnType instanceof Type) {
+        if (!$nullabledReturnType instanceof \PHPStan\Type\Type) {
             return;
         }
-
         $nullabledReturnTagValueNode = $this->matchNullabledReturnTagValueNode($returnTagValueNode);
-        if (! $nullabledReturnTagValueNode instanceof TypeNode) {
+        if (!$nullabledReturnTagValueNode instanceof \PHPStan\PhpDocParser\Ast\Type\TypeNode) {
             return;
         }
-
-        if (! $nullabledReturnType instanceof FullyQualifiedObjectType) {
+        if (!$nullabledReturnType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
             return;
         }
-
-        if (! $nullabledReturnTagValueNode instanceof IdentifierTypeNode) {
+        if (!$nullabledReturnTagValueNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
             return;
         }
-
-        if (! Strings::endsWith($nullabledReturnType->getClassName(), $nullabledReturnTagValueNode->name)) {
+        if (!\RectorPrefix20210509\Nette\Utils\Strings::endsWith($nullabledReturnType->getClassName(), $nullabledReturnTagValueNode->name)) {
             return;
         }
-
-        $phpDocInfo->removeByType(ReturnTagValueNode::class);
+        $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode::class);
     }
-
-    private function removeFullyQualifiedObjectType(
-        Type $returnType,
-        ReturnTagValueNode $returnTagValueNode,
-        PhpDocInfo $phpDocInfo
-    ): void {
-        if (! $returnType instanceof FullyQualifiedObjectType) {
+    private function removeFullyQualifiedObjectType(\PHPStan\Type\Type $returnType, \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $returnTagValueNode, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
+    {
+        if (!$returnType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
             return;
         }
-
-        if (! $returnTagValueNode->type instanceof IdentifierTypeNode) {
+        if (!$returnTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
             return;
         }
-
         $className = $returnType->getClassName();
         $returnTagValueNodeType = (string) $returnTagValueNode->type;
-
         if ($this->isClassNameAndPartMatch($className, $returnTagValueNodeType)) {
-            $phpDocInfo->removeByType(ReturnTagValueNode::class);
+            $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode::class);
         }
     }
-
     /**
      * @param string[] $values
      */
-    private function isIdentifierWithValues(TypeNode $typeNode, array $values): bool
+    private function isIdentifierWithValues(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, array $values) : bool
     {
-        if (! $typeNode instanceof IdentifierTypeNode) {
-            return false;
+        if (!$typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+            return \false;
         }
-
-        return in_array($typeNode->name, $values, true);
+        return \in_array($typeNode->name, $values, \true);
     }
-
-    private function matchNullabledType(Type $returnType): ?Type
+    private function matchNullabledType(\PHPStan\Type\Type $returnType) : ?\PHPStan\Type\Type
     {
-        if (! $returnType instanceof UnionType) {
+        if (!$returnType instanceof \PHPStan\Type\UnionType) {
             return null;
         }
-
-        if (! $returnType->isSuperTypeOf(new NullType())->yes()) {
+        if (!$returnType->isSuperTypeOf(new \PHPStan\Type\NullType())->yes()) {
             return null;
         }
-
-        if (count($returnType->getTypes()) !== 2) {
+        if (\count($returnType->getTypes()) !== 2) {
             return null;
         }
-
         foreach ($returnType->getTypes() as $unionedReturnType) {
-            if ($unionedReturnType instanceof NullType) {
+            if ($unionedReturnType instanceof \PHPStan\Type\NullType) {
                 continue;
             }
-
             return $unionedReturnType;
         }
-
         return null;
     }
-
-    private function matchNullabledReturnTagValueNode(ReturnTagValueNode $returnTagValueNode): ?TypeNode
+    private function matchNullabledReturnTagValueNode(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $returnTagValueNode) : ?\PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
-        if (! $returnTagValueNode->type instanceof UnionTypeNode) {
+        if (!$returnTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode) {
             return null;
         }
-
-        if (count($returnTagValueNode->type->types) !== 2) {
+        if (\count($returnTagValueNode->type->types) !== 2) {
             return null;
         }
-
         foreach ($returnTagValueNode->type->types as $unionedReturnTagValueNode) {
             if ($this->isIdentifierWithValues($unionedReturnTagValueNode, ['null'])) {
                 continue;
             }
-
             return $unionedReturnTagValueNode;
         }
-
         return null;
     }
-
-    private function isClassNameAndPartMatch(string $className, string $returnTagValueNodeType): bool
+    private function isClassNameAndPartMatch(string $className, string $returnTagValueNodeType) : bool
     {
         if ($className === $returnTagValueNodeType) {
-            return true;
+            return \true;
         }
-
         if ('\\' . $className === $returnTagValueNodeType) {
-            return true;
+            return \true;
         }
-
-        return Strings::endsWith($className, '\\' . $returnTagValueNodeType);
+        return \RectorPrefix20210509\Nette\Utils\Strings::endsWith($className, '\\' . $returnTagValueNodeType);
     }
 }

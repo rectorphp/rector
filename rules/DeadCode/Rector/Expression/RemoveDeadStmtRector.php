@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\DeadCode\Rector\Expression;
 
 use PhpParser\Node;
@@ -12,85 +11,66 @@ use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\DeadCode\Rector\Expression\RemoveDeadStmtRector\RemoveDeadStmtRectorTest
  */
-final class RemoveDeadStmtRector extends AbstractRector
+final class RemoveDeadStmtRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var LivingCodeManipulator
      */
     private $livingCodeManipulator;
-
-    public function __construct(LivingCodeManipulator $livingCodeManipulator)
+    public function __construct(\Rector\DeadCode\NodeManipulator\LivingCodeManipulator $livingCodeManipulator)
     {
         $this->livingCodeManipulator = $livingCodeManipulator;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Removes dead code statements', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes dead code statements', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $value = 5;
 $value;
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 $value = 5;
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Expression::class];
+        return [\PhpParser\Node\Stmt\Expression::class];
     }
-
     /**
      * @param Expression $node
      * @return Node[]|Node|null
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
         $livingCode = $this->livingCodeManipulator->keepLivingCodeFromExpr($node->expr);
         if ($livingCode === []) {
             return $this->removeNodeAndKeepComments($node);
         }
-
-        $firstExpr = array_shift($livingCode);
+        $firstExpr = \array_shift($livingCode);
         $node->expr = $firstExpr;
-
         $newNodes = [];
         foreach ($livingCode as $singleLivingCode) {
-            $newNodes[] = new Expression($singleLivingCode);
+            $newNodes[] = new \PhpParser\Node\Stmt\Expression($singleLivingCode);
         }
-
         $newNodes[] = $node;
-
         return $newNodes;
     }
-
-    private function removeNodeAndKeepComments(Expression $expression): ?Node
+    private function removeNodeAndKeepComments(\PhpParser\Node\Stmt\Expression $expression) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($expression);
-
         if ($expression->getComments() !== []) {
-            $nop = new Nop();
-            $nop->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
-
+            $nop = new \PhpParser\Node\Stmt\Nop();
+            $nop->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $phpDocInfo);
             $this->phpDocInfoFactory->createFromNode($nop);
-
             return $nop;
         }
-
         $this->removeNode($expression);
-
         return null;
     }
 }

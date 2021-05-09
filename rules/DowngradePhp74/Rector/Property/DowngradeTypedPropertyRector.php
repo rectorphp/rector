@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\DowngradePhp74\Rector\Property;
 
 use PhpParser\Node;
@@ -10,42 +9,35 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
  */
-final class DowngradeTypedPropertyRector extends AbstractRector
+final class DowngradeTypedPropertyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes property type definition from type definitions to `@var` annotations.', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes property type definition from type definitions to `@var` annotations.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private string $property;
 }
 CODE_SAMPLE
-,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -54,32 +46,26 @@ class SomeClass
     private $property;
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @param Property $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->type === null) {
             return null;
         }
-
         $this->decoratePropertyWithDocBlock($node, $node->type);
         $node->type = null;
-
         return $node;
     }
-
-    private function decoratePropertyWithDocBlock(Property $property, Node $typeNode): void
+    private function decoratePropertyWithDocBlock(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node $typeNode) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($phpDocInfo->getVarTagValueNode() !== null) {
             return;
         }
-
         $newType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $newType);
     }

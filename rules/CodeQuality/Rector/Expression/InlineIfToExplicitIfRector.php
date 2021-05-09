@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Expression;
 
 use PhpParser\Node;
@@ -17,29 +16,24 @@ use Rector\Core\NodeManipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see https://3v4l.org/dmHCC
  *
  * @see \Rector\Tests\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector\InlineIfToExplicitIfRectorTest
  */
-final class InlineIfToExplicitIfRector extends AbstractRector
+final class InlineIfToExplicitIfRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var BinaryOpManipulator
      */
     private $binaryOpManipulator;
-
-    public function __construct(BinaryOpManipulator $binaryOpManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\BinaryOpManipulator $binaryOpManipulator)
     {
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change inline if to explicit if', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change inline if to explicit if', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -50,8 +44,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -64,53 +57,43 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Expression::class];
+        return [\PhpParser\Node\Stmt\Expression::class];
     }
-
     /**
      * @param Expression $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node->expr instanceof BooleanAnd) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
             return $this->processExplicitIf($node);
         }
-        if ($node->expr instanceof BooleanOr) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             return $this->processExplicitIf($node);
         }
         return null;
     }
-
-    private function processExplicitIf(Expression $expression): ?Node
+    private function processExplicitIf(\PhpParser\Node\Stmt\Expression $expression) : ?\PhpParser\Node
     {
         /** @var BooleanAnd|BooleanOr $booleanExpr */
         $booleanExpr = $expression->expr;
-
         $leftStaticType = $this->getStaticType($booleanExpr->left);
-        if (! $leftStaticType instanceof BooleanType) {
+        if (!$leftStaticType instanceof \PHPStan\Type\BooleanType) {
             return null;
         }
-
-        if (! $booleanExpr->right instanceof Assign && ! $booleanExpr->right instanceof AssignOp) {
+        if (!$booleanExpr->right instanceof \PhpParser\Node\Expr\Assign && !$booleanExpr->right instanceof \PhpParser\Node\Expr\AssignOp) {
             return null;
         }
-
         /** @var Expr $expr */
-        $expr = $booleanExpr instanceof BooleanAnd
-            ? $booleanExpr->left
-            : $this->binaryOpManipulator->inverseNode($booleanExpr->left);
-        $if = new If_($expr);
-        $if->stmts[] = new Expression($booleanExpr->right);
-
+        $expr = $booleanExpr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd ? $booleanExpr->left : $this->binaryOpManipulator->inverseNode($booleanExpr->left);
+        $if = new \PhpParser\Node\Stmt\If_($expr);
+        $if->stmts[] = new \PhpParser\Node\Stmt\Expression($booleanExpr->right);
         $this->mirrorComments($if, $expression);
         return $if;
     }

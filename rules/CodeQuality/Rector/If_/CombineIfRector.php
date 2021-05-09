@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
@@ -11,27 +10,22 @@ use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\CombineIfRector\CombineIfRectorTest
  */
-final class CombineIfRector extends AbstractRector
+final class CombineIfRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var CommentsMerger
      */
     private $commentsMerger;
-
-    public function __construct(CommentsMerger $commentsMerger)
+    public function __construct(\Rector\BetterPhpDocParser\Comment\CommentsMerger $commentsMerger)
     {
         $this->commentsMerger = $commentsMerger;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Merges nested if statements', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Merges nested if statements', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -44,8 +38,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -56,59 +49,47 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [\PhpParser\Node\Stmt\If_::class];
     }
-
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-
         /** @var If_ $subIf */
         $subIf = $node->stmts[0];
-        $node->cond = new BooleanAnd($node->cond, $subIf->cond);
+        $node->cond = new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($node->cond, $subIf->cond);
         $node->stmts = $subIf->stmts;
-
         $this->commentsMerger->keepComments($node, [$subIf]);
-
         return $node;
     }
-
-    private function shouldSkip(If_ $if): bool
+    private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
     {
         if ($if->else !== null) {
-            return true;
+            return \true;
         }
-
-        if (count($if->stmts) !== 1) {
-            return true;
+        if (\count($if->stmts) !== 1) {
+            return \true;
         }
-
         if ($if->elseifs !== []) {
-            return true;
+            return \true;
         }
-
-        if (! $if->stmts[0] instanceof If_) {
-            return true;
+        if (!$if->stmts[0] instanceof \PhpParser\Node\Stmt\If_) {
+            return \true;
         }
-
         if ($if->stmts[0]->else !== null) {
-            return true;
+            return \true;
         }
-
         return (bool) $if->stmts[0]->elseifs;
     }
 }

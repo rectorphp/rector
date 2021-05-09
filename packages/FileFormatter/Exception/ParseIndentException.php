@@ -1,17 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\FileFormatter\Exception;
 
 use UnexpectedValueException;
-
-final class ParseIndentException extends UnexpectedValueException
+final class ParseIndentException extends \UnexpectedValueException
 {
-    public static function fromString(string $string): self
+    /**
+     * @return $this
+     */
+    public static function fromString(string $string)
     {
-        $message = sprintf('The content "%s" could not be parsed', $string);
-
+        $message = \sprintf('The content "%s" could not be parsed', $string);
         return new self($message);
     }
 }

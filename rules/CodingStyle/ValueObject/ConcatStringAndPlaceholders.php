@@ -1,23 +1,19 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodingStyle\ValueObject;
 
 use PhpParser\Node\Expr;
-
 final class ConcatStringAndPlaceholders
 {
     /**
      * @var string
      */
     private $content;
-
     /**
      * @var Expr[]
      */
     private $placeholderNodes = [];
-
     /**
      * @param Expr[] $placeholderNodes
      */
@@ -26,16 +22,14 @@ final class ConcatStringAndPlaceholders
         $this->content = $content;
         $this->placeholderNodes = $placeholderNodes;
     }
-
-    public function getContent(): string
+    public function getContent() : string
     {
         return $this->content;
     }
-
     /**
      * @return Expr[]
      */
-    public function getPlaceholderNodes(): array
+    public function getPlaceholderNodes() : array
     {
         return $this->placeholderNodes;
     }

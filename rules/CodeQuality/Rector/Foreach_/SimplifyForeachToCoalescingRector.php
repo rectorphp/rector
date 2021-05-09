@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Foreach_;
 
 use PhpParser\Node;
@@ -19,36 +18,28 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see https://3v4l.org/bfsdY
  *
  * @see \Rector\Tests\CodeQuality\Rector\Foreach_\SimplifyForeachToCoalescingRector\SimplifyForeachToCoalescingRectorTest
  */
-final class SimplifyForeachToCoalescingRector extends AbstractRector
+final class SimplifyForeachToCoalescingRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ForeachManipulator
      */
     private $foreachManipulator;
-
     /**
      * @var Return_|null
      */
     private $return;
-
-    public function __construct(ForeachManipulator $foreachManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\ForeachManipulator $foreachManipulator)
     {
         $this->foreachManipulator = $foreachManipulator;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Changes foreach that returns set value to ??',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes foreach that returns set value to ??', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 foreach ($this->oldToNewFunctions as $oldFunction => $newFunction) {
     if ($currentFunction === $oldFunction) {
         return $newFunction;
@@ -57,96 +48,76 @@ foreach ($this->oldToNewFunctions as $oldFunction => $newFunction) {
 
 return null;
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 return $this->oldToNewFunctions[$currentFunction] ?? null;
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Foreach_::class];
+        return [\PhpParser\Node\Stmt\Foreach_::class];
     }
-
     /**
      * @param Foreach_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::NULL_COALESCE)) {
+        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE)) {
             return null;
         }
-
         $this->return = null;
-
         if ($node->keyVar === null) {
             return null;
         }
-
         /** @var Return_|Assign|null $returnOrAssignNode */
         $returnOrAssignNode = $this->matchReturnOrAssignNode($node);
         if ($returnOrAssignNode === null) {
             return null;
         }
-
         // return $newValue;
         // we don't return the node value
-        if (! $this->nodeComparator->areNodesEqual($node->valueVar, $returnOrAssignNode->expr)) {
+        if (!$this->nodeComparator->areNodesEqual($node->valueVar, $returnOrAssignNode->expr)) {
             return null;
         }
-
-        if ($returnOrAssignNode instanceof Return_) {
+        if ($returnOrAssignNode instanceof \PhpParser\Node\Stmt\Return_) {
             return $this->processForeachNodeWithReturnInside($node, $returnOrAssignNode);
         }
-
         return $this->processForeachNodeWithAssignInside($node, $returnOrAssignNode);
     }
-
     /**
      * @return Assign|Return_|null
      */
-    private function matchReturnOrAssignNode(Foreach_ $foreach): ?Node
+    private function matchReturnOrAssignNode(\PhpParser\Node\Stmt\Foreach_ $foreach) : ?\PhpParser\Node
     {
-        return $this->foreachManipulator->matchOnlyStmt($foreach, function (Node $node): ?Node {
-            if (! $node instanceof If_) {
+        return $this->foreachManipulator->matchOnlyStmt($foreach, function (\PhpParser\Node $node) : ?Node {
+            if (!$node instanceof \PhpParser\Node\Stmt\If_) {
                 return null;
             }
-
-            if (! $node->cond instanceof Identical) {
+            if (!$node->cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
                 return null;
             }
-
-            if (count($node->stmts) !== 1) {
+            if (\count($node->stmts) !== 1) {
                 return null;
             }
-
-            $innerNode = $node->stmts[0] instanceof Expression ? $node->stmts[0]->expr : $node->stmts[0];
-            if ($innerNode instanceof Assign || $innerNode instanceof Return_) {
+            $innerNode = $node->stmts[0] instanceof \PhpParser\Node\Stmt\Expression ? $node->stmts[0]->expr : $node->stmts[0];
+            if ($innerNode instanceof \PhpParser\Node\Expr\Assign || $innerNode instanceof \PhpParser\Node\Stmt\Return_) {
                 return $innerNode;
             }
-
             return null;
         });
     }
-
-    private function processForeachNodeWithReturnInside(Foreach_ $foreach, Return_ $return): ?Node
+    private function processForeachNodeWithReturnInside(\PhpParser\Node\Stmt\Foreach_ $foreach, \PhpParser\Node\Stmt\Return_ $return) : ?\PhpParser\Node
     {
-        if (! $this->nodeComparator->areNodesEqual($foreach->valueVar, $return->expr)) {
+        if (!$this->nodeComparator->areNodesEqual($foreach->valueVar, $return->expr)) {
             return null;
         }
-
         /** @var If_ $ifNode */
         $ifNode = $foreach->stmts[0];
-
         /** @var Identical $identicalNode */
         $identicalNode = $ifNode->cond;
-
         if ($this->nodeComparator->areNodesEqual($identicalNode->left, $foreach->keyVar)) {
             $checkedNode = $identicalNode->right;
         } elseif ($this->nodeComparator->areNodesEqual($identicalNode->right, $foreach->keyVar)) {
@@ -154,34 +125,24 @@ CODE_SAMPLE
         } else {
             return null;
         }
-        $nextNode = $foreach->getAttribute(AttributeKey::NEXT_NODE);
-
+        $nextNode = $foreach->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
         // is next node Return?
-        if ($nextNode instanceof Return_) {
+        if ($nextNode instanceof \PhpParser\Node\Stmt\Return_) {
             $this->return = $nextNode;
             $this->removeNode($this->return);
         }
-
-        $coalesce = new Coalesce(new ArrayDimFetch(
-            $foreach->expr,
-            $checkedNode
-        ), $this->return && $this->return->expr !== null ? $this->return->expr : $checkedNode);
-
+        $coalesce = new \PhpParser\Node\Expr\BinaryOp\Coalesce(new \PhpParser\Node\Expr\ArrayDimFetch($foreach->expr, $checkedNode), $this->return && $this->return->expr !== null ? $this->return->expr : $checkedNode);
         if ($this->return !== null) {
-            return new Return_($coalesce);
+            return new \PhpParser\Node\Stmt\Return_($coalesce);
         }
-
         return null;
     }
-
-    private function processForeachNodeWithAssignInside(Foreach_ $foreach, Assign $assign): ?Node
+    private function processForeachNodeWithAssignInside(\PhpParser\Node\Stmt\Foreach_ $foreach, \PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node
     {
         /** @var If_ $ifNode */
         $ifNode = $foreach->stmts[0];
-
         /** @var Identical $identicalNode */
         $identicalNode = $ifNode->cond;
-
         if ($this->nodeComparator->areNodesEqual($identicalNode->left, $foreach->keyVar)) {
             $checkedNode = $assign->var;
             $keyNode = $identicalNode->right;
@@ -191,9 +152,7 @@ CODE_SAMPLE
         } else {
             return null;
         }
-
-        $arrayDimFetch = new ArrayDimFetch($foreach->expr, $keyNode);
-
-        return new Assign($checkedNode, new Coalesce($arrayDimFetch, $checkedNode));
+        $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($foreach->expr, $keyNode);
+        return new \PhpParser\Node\Expr\Assign($checkedNode, new \PhpParser\Node\Expr\BinaryOp\Coalesce($arrayDimFetch, $checkedNode));
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Renaming\ValueObject;
 
 final class PseudoNamespaceToNamespace
@@ -10,12 +9,10 @@ final class PseudoNamespaceToNamespace
      * @var string
      */
     private $namespacePrefix;
-
     /**
      * @var string[]
      */
     private $excludedClasses = [];
-
     /**
      * @param string[] $excludedClasses
      */
@@ -24,16 +21,14 @@ final class PseudoNamespaceToNamespace
         $this->namespacePrefix = $namespacePrefix;
         $this->excludedClasses = $excludedClasses;
     }
-
-    public function getNamespacePrefix(): string
+    public function getNamespacePrefix() : string
     {
         return $this->namespacePrefix;
     }
-
     /**
      * @return string[]
      */
-    public function getExcludedClasses(): array
+    public function getExcludedClasses() : array
     {
         return $this->excludedClasses;
     }

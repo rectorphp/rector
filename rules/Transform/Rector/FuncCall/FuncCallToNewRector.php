@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Transform\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -12,27 +11,22 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\Transform\Rector\FuncCall\FuncCallToNewRector\FuncCallToNewRectorTest
  */
-final class FuncCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
+final class FuncCallToNewRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
      */
     public const FUNCTIONS_TO_NEWS = 'functions_to_news';
-
     /**
      * @var string[]
      */
     private $functionToNew = [];
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change configured function calls to new Instance', [
-            new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change configured function calls to new Instance', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -41,8 +35,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -51,44 +44,32 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                [
-                    self::FUNCTIONS_TO_NEWS => [
-                        'collection' => ['Collection'],
-                    ],
-                ]
-            ),
-        ]);
+, [self::FUNCTIONS_TO_NEWS => ['collection' => ['Collection']]])]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
-
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->functionToNew as $function => $new) {
-            if (! $this->isName($node, $function)) {
+            if (!$this->isName($node, $function)) {
                 continue;
             }
-
-            return new New_(new FullyQualified($new), $node->args);
+            return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($new), $node->args);
         }
-
         return null;
     }
-
     /**
      * @param array<string, mixed> $configuration
      */
-    public function configure(array $configuration): void
+    public function configure(array $configuration) : void
     {
         $this->functionToNew = $configuration[self::FUNCTIONS_TO_NEWS] ?? [];
     }

@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 
 use PhpParser\Node;
 use Rector\CodingStyle\ClassNameImport\ShortNameResolver;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-
 /**
  * Prevents adding:
  *
@@ -18,28 +16,24 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
  *
  * class SomeClass {}
  */
-final class ClassLikeNameClassNameImportSkipVoter implements ClassNameImportSkipVoterInterface
+final class ClassLikeNameClassNameImportSkipVoter implements \Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface
 {
     /**
      * @var ShortNameResolver
      */
     private $shortNameResolver;
-
-    public function __construct(ShortNameResolver $shortNameResolver)
+    public function __construct(\Rector\CodingStyle\ClassNameImport\ShortNameResolver $shortNameResolver)
     {
         $this->shortNameResolver = $shortNameResolver;
     }
-
-    public function shouldSkip(FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool
+    public function shouldSkip(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, \PhpParser\Node $node) : bool
     {
         $classLikeNames = $this->shortNameResolver->resolveShortClassLikeNamesForNode($node);
-
         foreach ($classLikeNames as $classLikeName) {
-            if (strtolower($classLikeName) === $fullyQualifiedObjectType->getShortNameLowered()) {
-                return true;
+            if (\strtolower($classLikeName) === $fullyQualifiedObjectType->getShortNameLowered()) {
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
 }

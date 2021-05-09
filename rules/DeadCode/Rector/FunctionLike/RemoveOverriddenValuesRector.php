@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\DeadCode\Rector\FunctionLike;
 
 use PhpParser\Node;
@@ -16,44 +15,32 @@ use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\DeadCode\Rector\FunctionLike\RemoveOverriddenValuesRector\RemoveOverriddenValuesRectorTest
  */
-final class RemoveOverriddenValuesRector extends AbstractRector
+final class RemoveOverriddenValuesRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ContextAnalyzer
      */
     private $contextAnalyzer;
-
     /**
      * @var NodeByTypeAndPositionCollector
      */
     private $nodeByTypeAndPositionCollector;
-
     /**
      * @var VariableUseFinder
      */
     private $variableUseFinder;
-
-    public function __construct(
-        ContextAnalyzer $contextAnalyzer,
-        NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector,
-        VariableUseFinder $variableUseFinder
-    ) {
+    public function __construct(\Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer, \Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector, \Rector\DeadCode\NodeFinder\VariableUseFinder $variableUseFinder)
+    {
         $this->contextAnalyzer = $contextAnalyzer;
         $this->nodeByTypeAndPositionCollector = $nodeByTypeAndPositionCollector;
         $this->variableUseFinder = $variableUseFinder;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Remove initial assigns of overridden values',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove initial assigns of overridden values', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeController
 {
     public function run()
@@ -64,8 +51,7 @@ final class SomeController
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 final class SomeController
 {
     public function run()
@@ -75,83 +61,65 @@ final class SomeController
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [FunctionLike::class];
+        return [\PhpParser\Node\FunctionLike::class];
     }
-
     /**
      * @param FunctionLike $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         // 1. collect assigns
         $assignedVariables = $this->resolveAssignedVariables($node);
         $assignedVariableNames = $this->getNodeNames($assignedVariables);
-
         // 2. collect use of those variables
         $assignedVariablesUse = $this->variableUseFinder->resolveUsedVariables($node, $assignedVariables);
-
-        $nodesByTypeAndPosition = $this->nodeByTypeAndPositionCollector->collectNodesByTypeAndPosition(
-            $assignedVariables,
-            $assignedVariablesUse,
-            $node
-        );
-
+        $nodesByTypeAndPosition = $this->nodeByTypeAndPositionCollector->collectNodesByTypeAndPosition($assignedVariables, $assignedVariablesUse, $node);
         $nodesToRemove = $this->resolveNodesToRemove($assignedVariableNames, $nodesByTypeAndPosition);
         if ($nodesToRemove === []) {
             return null;
         }
-
         $this->removeNodes($nodesToRemove);
-
         return $node;
     }
-
     /**
      * @return Variable[]
      */
-    private function resolveAssignedVariables(FunctionLike $functionLike): array
+    private function resolveAssignedVariables(\PhpParser\Node\FunctionLike $functionLike) : array
     {
-        return $this->betterNodeFinder->find($functionLike, function (Node $node): bool {
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if (! $parentNode instanceof Assign) {
-                return false;
+        return $this->betterNodeFinder->find($functionLike, function (\PhpParser\Node $node) : bool {
+            $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if (!$parentNode instanceof \PhpParser\Node\Expr\Assign) {
+                return \false;
             }
-
-            if (! $node instanceof Variable) {
-                return false;
+            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
+                return \false;
             }
-
             // skin in if
             if ($this->contextAnalyzer->isInIf($node)) {
-                return false;
+                return \false;
             }
-
             // is variable on the left
             /** @var Assign $assignNode */
-            $assignNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            $assignNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             if ($assignNode->var !== $node) {
-                return false;
+                return \false;
             }
             // simple variable only
-            return is_string($node->name);
+            return \is_string($node->name);
         });
     }
-
     /**
      * @param Node[] $nodes
      * @return string[]
      */
-    private function getNodeNames(array $nodes): array
+    private function getNodeNames(array $nodes) : array
     {
         $nodeNames = [];
         foreach ($nodes as $node) {
@@ -160,35 +128,28 @@ CODE_SAMPLE
                 $nodeNames[] = $nodeName;
             }
         }
-
-        return array_unique($nodeNames);
+        return \array_unique($nodeNames);
     }
-
     /**
      * @param string[] $assignedVariableNames
      * @param VariableNodeUse[] $nodesByTypeAndPosition
      * @return Node[]
      */
-    private function resolveNodesToRemove(array $assignedVariableNames, array $nodesByTypeAndPosition): array
+    private function resolveNodesToRemove(array $assignedVariableNames, array $nodesByTypeAndPosition) : array
     {
         $nodesToRemove = [];
-
         foreach ($assignedVariableNames as $assignedVariableName) {
             $previousNode = null;
-
             foreach ($nodesByTypeAndPosition as $nodes) {
                 $variableNode = $nodes->getVariableNode();
-                $comments = $variableNode->getAttribute(AttributeKey::COMMENTS);
-
+                $comments = $variableNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS);
                 if ($comments !== null) {
                     continue;
                 }
                 $nodesIsName = $nodes->isName($assignedVariableName);
-
-                if (! $nodesIsName) {
+                if (!$nodesIsName) {
                     continue;
                 }
-
                 if ($this->isAssignNodeUsed($previousNode, $nodes)) {
                     // continue
                     // instant override → remove
@@ -196,63 +157,45 @@ CODE_SAMPLE
                     /** @var VariableNodeUse $previousNode */
                     $nodesToRemove[] = $previousNode->getParentNode();
                 }
-
                 $previousNode = $nodes;
             }
         }
-
         return $nodesToRemove;
     }
-
-    private function isAssignNodeUsed(
-        ?VariableNodeUse $previousNode,
-        VariableNodeUse $nodeByTypeAndPosition
-    ): bool {
+    private function isAssignNodeUsed(?\Rector\DeadCode\ValueObject\VariableNodeUse $previousNode, \Rector\DeadCode\ValueObject\VariableNodeUse $nodeByTypeAndPosition) : bool
+    {
         // this node was just used, skip to next one
-        if (! $previousNode instanceof VariableNodeUse) {
-            return false;
+        if (!$previousNode instanceof \Rector\DeadCode\ValueObject\VariableNodeUse) {
+            return \false;
         }
-
-        if (! $previousNode->isType(VariableNodeUse::TYPE_ASSIGN)) {
-            return false;
+        if (!$previousNode->isType(\Rector\DeadCode\ValueObject\VariableNodeUse::TYPE_ASSIGN)) {
+            return \false;
         }
-
-        return $nodeByTypeAndPosition->isType(VariableNodeUse::TYPE_USE);
+        return $nodeByTypeAndPosition->isType(\Rector\DeadCode\ValueObject\VariableNodeUse::TYPE_USE);
     }
-
-    private function shouldRemoveAssignNode(
-        ?VariableNodeUse $previousNode,
-        VariableNodeUse $nodeByTypeAndPosition
-    ): bool {
+    private function shouldRemoveAssignNode(?\Rector\DeadCode\ValueObject\VariableNodeUse $previousNode, \Rector\DeadCode\ValueObject\VariableNodeUse $nodeByTypeAndPosition) : bool
+    {
         if ($previousNode === null) {
-            return false;
+            return \false;
         }
-
-        if (! $previousNode->isType(VariableNodeUse::TYPE_ASSIGN)) {
-            return false;
+        if (!$previousNode->isType(\Rector\DeadCode\ValueObject\VariableNodeUse::TYPE_ASSIGN)) {
+            return \false;
         }
-
-        if (! $nodeByTypeAndPosition->isType(VariableNodeUse::TYPE_ASSIGN)) {
-            return false;
+        if (!$nodeByTypeAndPosition->isType(\Rector\DeadCode\ValueObject\VariableNodeUse::TYPE_ASSIGN)) {
+            return \false;
         }
-
         // check the nesting level, e.g. call in if/while/else etc.
         if ($previousNode->getNestingHash() !== $nodeByTypeAndPosition->getNestingHash()) {
-            return false;
+            return \false;
         }
-
         // check previous node doesn't contain the node on the right, e.g.
         // $someNode = 1;
         // $someNode = $someNode ?: 1;
         /** @var Assign $assignNode */
         $assignNode = $nodeByTypeAndPosition->getParentNode();
-
-        $isVariableAssigned = (bool) $this->betterNodeFinder->findFirst($assignNode->expr, function (Node $node) use (
-            $nodeByTypeAndPosition
-        ): bool {
+        $isVariableAssigned = (bool) $this->betterNodeFinder->findFirst($assignNode->expr, function (\PhpParser\Node $node) use($nodeByTypeAndPosition) : bool {
             return $this->nodeComparator->areNodesEqual($node, $nodeByTypeAndPosition->getVariableNode());
         });
-
-        return ! $isVariableAssigned;
+        return !$isVariableAssigned;
     }
 }

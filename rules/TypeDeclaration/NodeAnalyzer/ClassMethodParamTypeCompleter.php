@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -12,103 +11,78 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
-
 final class ClassMethodParamTypeCompleter
 {
     /**
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
-
     /**
      * @var ClassMethodParamVendorLockResolver
      */
     private $classMethodParamVendorLockResolver;
-
-    public function __construct(
-        StaticTypeMapper $staticTypeMapper,
-        ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver
-    ) {
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver)
+    {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
     }
-
     /**
      * @param array<int, Type> $classParameterTypes
      */
-    public function complete(ClassMethod $classMethod, array $classParameterTypes): ?ClassMethod
+    public function complete(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $classParameterTypes) : ?\PhpParser\Node\Stmt\ClassMethod
     {
-        $hasChanged = false;
-
+        $hasChanged = \false;
         foreach ($classParameterTypes as $position => $argumentStaticType) {
             if ($this->shouldSkipArgumentStaticType($classMethod, $argumentStaticType, $position)) {
                 continue;
             }
-
             $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($argumentStaticType);
-            if (! $phpParserTypeNode instanceof Node) {
+            if (!$phpParserTypeNode instanceof \PhpParser\Node) {
                 continue;
             }
-
             // update parameter
             $classMethod->params[$position]->type = $phpParserTypeNode;
-            $hasChanged = true;
+            $hasChanged = \true;
         }
-
         if ($hasChanged) {
             return $classMethod;
         }
-
         return null;
     }
-
-    private function shouldSkipArgumentStaticType(
-        ClassMethod $classMethod,
-        Type $argumentStaticType,
-        int $position
-    ): bool {
-        if ($argumentStaticType instanceof MixedType) {
-            return true;
+    private function shouldSkipArgumentStaticType(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\Type $argumentStaticType, int $position) : bool
+    {
+        if ($argumentStaticType instanceof \PHPStan\Type\MixedType) {
+            return \true;
         }
-
-        if (! isset($classMethod->params[$position])) {
-            return true;
+        if (!isset($classMethod->params[$position])) {
+            return \true;
         }
-
         if ($this->classMethodParamVendorLockResolver->isVendorLocked($classMethod)) {
-            return true;
+            return \true;
         }
-
         $parameter = $classMethod->params[$position];
         if ($parameter->type === null) {
-            return false;
+            return \false;
         }
-
         $parameterStaticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($parameter->type);
-
         if ($this->isClosureAndCallableType($parameterStaticType, $argumentStaticType)) {
-            return true;
+            return \true;
         }
-
         // already completed → skip
         return $parameterStaticType->equals($argumentStaticType);
     }
-
-    private function isClosureAndCallableType(Type $parameterStaticType, Type $argumentStaticType): bool
+    private function isClosureAndCallableType(\PHPStan\Type\Type $parameterStaticType, \PHPStan\Type\Type $argumentStaticType) : bool
     {
-        if ($parameterStaticType instanceof CallableType && $this->isClosureObjectType($argumentStaticType)) {
-            return true;
+        if ($parameterStaticType instanceof \PHPStan\Type\CallableType && $this->isClosureObjectType($argumentStaticType)) {
+            return \true;
         }
-
-        return $argumentStaticType instanceof CallableType && $this->isClosureObjectType($parameterStaticType);
+        return $argumentStaticType instanceof \PHPStan\Type\CallableType && $this->isClosureObjectType($parameterStaticType);
     }
-
-    private function isClosureObjectType(Type $type): bool
+    private function isClosureObjectType(\PHPStan\Type\Type $type) : bool
     {
-        if (! $type instanceof ObjectType) {
-            return false;
+        if (!$type instanceof \PHPStan\Type\ObjectType) {
+            return \false;
         }
-
         return $type->getClassName() === 'Closure';
     }
 }

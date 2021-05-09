@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Naming;
 
-use Doctrine\Inflector\Inflector;
-use Nette\Utils\Strings;
-
+use RectorPrefix20210509\Doctrine\Inflector\Inflector;
+use RectorPrefix20210509\Nette\Utils\Strings;
 final class RectorNamingInflector
 {
     /**
@@ -14,27 +12,22 @@ final class RectorNamingInflector
      * @see https://regex101.com/r/VqVvke/3
      */
     private const DATA_INFO_SUFFIX_REGEX = '#^(?<prefix>.+)(?<suffix>Data|Info)$#';
-
     /**
      * @var Inflector
      */
     private $inflector;
-
-    public function __construct(Inflector $inflector)
+    public function __construct(\RectorPrefix20210509\Doctrine\Inflector\Inflector $inflector)
     {
         $this->inflector = $inflector;
     }
-
-    public function singularize(string $name): string
+    public function singularize(string $name) : string
     {
-        $matches = Strings::match($name, self::DATA_INFO_SUFFIX_REGEX);
+        $matches = \RectorPrefix20210509\Nette\Utils\Strings::match($name, self::DATA_INFO_SUFFIX_REGEX);
         if ($matches === null) {
             return $this->inflector->singularize($name);
         }
-
         $singularized = $this->inflector->singularize($matches['prefix']);
         $uninflectable = $matches['suffix'];
-
         return $singularized . $uninflectable;
     }
 }

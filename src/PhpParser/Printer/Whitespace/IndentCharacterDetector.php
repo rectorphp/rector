@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Core\PhpParser\Printer\Whitespace;
 
-use Nette\Utils\Strings;
-
+use RectorPrefix20210509\Nette\Utils\Strings;
 final class IndentCharacterDetector
 {
     /**
@@ -15,17 +13,16 @@ final class IndentCharacterDetector
      *
      * @param mixed[] $tokens
      */
-    public function detect(array $tokens): string
+    public function detect(array $tokens) : string
     {
         foreach ($tokens as $token) {
-            if ($token[0] === T_WHITESPACE) {
+            if ($token[0] === \T_WHITESPACE) {
                 $tokenContent = $token[1];
-                if (Strings::matchAll($tokenContent, '#^\t#m')) {
+                if (\RectorPrefix20210509\Nette\Utils\Strings::matchAll($tokenContent, '#^\\t#m')) {
                     return "\t";
                 }
             }
         }
-
         // use space by default
         return ' ';
     }

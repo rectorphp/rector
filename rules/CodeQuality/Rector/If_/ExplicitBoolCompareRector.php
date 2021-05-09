@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
@@ -30,36 +29,30 @@ use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @changelog https://www.reddit.com/r/PHP/comments/aqk01p/is_there_a_situation_in_which_if_countarray_0/
  * @see https://3v4l.org/UCd1b
  *
  * @see \Rector\Tests\CodeQuality\Rector\If_\ExplicitBoolCompareRector\ExplicitBoolCompareRectorTest
  */
-final class ExplicitBoolCompareRector extends AbstractRector
+final class ExplicitBoolCompareRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var StringTypeAnalyzer
      */
     private $stringTypeAnalyzer;
-
     /**
      * @var ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
-
-    public function __construct(StringTypeAnalyzer $stringTypeAnalyzer, ArrayTypeAnalyzer $arrayTypeAnalyzer)
+    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer $stringTypeAnalyzer, \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer $arrayTypeAnalyzer)
     {
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Make if conditions more explicit', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Make if conditions more explicit', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeController
 {
     public function run($items)
@@ -70,8 +63,7 @@ final class SomeController
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 final class SomeController
 {
     public function run($items)
@@ -82,169 +74,134 @@ final class SomeController
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [If_::class, ElseIf_::class, Ternary::class];
+        return [\PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\ElseIf_::class, \PhpParser\Node\Expr\Ternary::class];
     }
-
     /**
      * @param If_|ElseIf_|Ternary $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         // skip short ternary
-        if ($node instanceof Ternary && $node->if === null) {
+        if ($node instanceof \PhpParser\Node\Expr\Ternary && $node->if === null) {
             return null;
         }
-
-        if ($node->cond instanceof BooleanNot) {
+        if ($node->cond instanceof \PhpParser\Node\Expr\BooleanNot) {
             $conditionNode = $node->cond->expr;
-            $isNegated = true;
+            $isNegated = \true;
         } else {
             $conditionNode = $node->cond;
-            $isNegated = false;
+            $isNegated = \false;
         }
-
-        if ($conditionNode instanceof Bool_) {
+        if ($conditionNode instanceof \PhpParser\Node\Expr\Cast\Bool_) {
             return null;
         }
-
         $conditionStaticType = $this->getStaticType($conditionNode);
-        if ($conditionStaticType instanceof BooleanType) {
+        if ($conditionStaticType instanceof \PHPStan\Type\BooleanType) {
             return null;
         }
-
         $newConditionNode = $this->resolveNewConditionNode($conditionNode, $isNegated);
-        if (! $newConditionNode instanceof BinaryOp) {
+        if (!$newConditionNode instanceof \PhpParser\Node\Expr\BinaryOp) {
             return null;
         }
-
         $node->cond = $newConditionNode;
-
         return $node;
     }
-
-    private function resolveNewConditionNode(Expr $expr, bool $isNegated): ?BinaryOp
+    private function resolveNewConditionNode(\PhpParser\Node\Expr $expr, bool $isNegated) : ?\PhpParser\Node\Expr\BinaryOp
     {
-        if ($expr instanceof FuncCall && $this->nodeNameResolver->isName($expr, 'count')) {
+        if ($expr instanceof \PhpParser\Node\Expr\FuncCall && $this->nodeNameResolver->isName($expr, 'count')) {
             return $this->resolveCount($isNegated, $expr);
         }
-
         if ($this->arrayTypeAnalyzer->isArrayType($expr)) {
             return $this->resolveArray($isNegated, $expr);
         }
-
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($expr)) {
             return $this->resolveString($isNegated, $expr);
         }
-
-        if ($this->nodeTypeResolver->isStaticType($expr, IntegerType::class)) {
+        if ($this->nodeTypeResolver->isStaticType($expr, \PHPStan\Type\IntegerType::class)) {
             return $this->resolveInteger($isNegated, $expr);
         }
-
-        if ($this->nodeTypeResolver->isStaticType($expr, FloatType::class)) {
+        if ($this->nodeTypeResolver->isStaticType($expr, \PHPStan\Type\FloatType::class)) {
             return $this->resolveFloat($isNegated, $expr);
         }
-
-        if ($this->nodeTypeResolver->isNullableTypeOfSpecificType($expr, ObjectType::class)) {
+        if ($this->nodeTypeResolver->isNullableTypeOfSpecificType($expr, \PHPStan\Type\ObjectType::class)) {
             return $this->resolveNullable($isNegated, $expr);
         }
-
         return null;
     }
-
     /**
      * @return Identical|Greater
      */
-    private function resolveCount(bool $isNegated, FuncCall $funcCall): BinaryOp
+    private function resolveCount(bool $isNegated, \PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\BinaryOp
     {
-        $lNumber = new LNumber(0);
-
+        $lNumber = new \PhpParser\Node\Scalar\LNumber(0);
         // compare === 0, assumption
         if ($isNegated) {
-            return new Identical($funcCall, $lNumber);
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($funcCall, $lNumber);
         }
-
-        return new Greater($funcCall, $lNumber);
+        return new \PhpParser\Node\Expr\BinaryOp\Greater($funcCall, $lNumber);
     }
-
     /**
      * @return Identical|NotIdentical
      */
-    private function resolveArray(bool $isNegated, Expr $expr): ?BinaryOp
+    private function resolveArray(bool $isNegated, \PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\BinaryOp
     {
-        if (! $expr instanceof Variable) {
+        if (!$expr instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
-
-        $array = new Array_([]);
-
+        $array = new \PhpParser\Node\Expr\Array_([]);
         // compare === []
         if ($isNegated) {
-            return new Identical($expr, $array);
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $array);
         }
-
-        return new NotIdentical($expr, $array);
+        return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $array);
     }
-
     /**
      * @return Identical|NotIdentical
      */
-    private function resolveString(bool $isNegated, Expr $expr): BinaryOp
+    private function resolveString(bool $isNegated, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\BinaryOp
     {
-        $string = new String_('');
-
+        $string = new \PhpParser\Node\Scalar\String_('');
         // compare === ''
         if ($isNegated) {
-            return new Identical($expr, $string);
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $string);
         }
-
-        return new NotIdentical($expr, $string);
+        return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $string);
     }
-
     /**
      * @return Identical|NotIdentical
      */
-    private function resolveInteger(bool $isNegated, Expr $expr): BinaryOp
+    private function resolveInteger(bool $isNegated, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\BinaryOp
     {
-        $lNumber = new LNumber(0);
-
+        $lNumber = new \PhpParser\Node\Scalar\LNumber(0);
         if ($isNegated) {
-            return new Identical($expr, $lNumber);
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $lNumber);
         }
-
-        return new NotIdentical($expr, $lNumber);
+        return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $lNumber);
     }
-
-    private function resolveFloat(bool $isNegated, Expr $expr): BinaryOp
+    private function resolveFloat(bool $isNegated, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\BinaryOp
     {
-        $dNumber = new DNumber(0.0);
-
+        $dNumber = new \PhpParser\Node\Scalar\DNumber(0.0);
         if ($isNegated) {
-            return new Identical($expr, $dNumber);
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $dNumber);
         }
-
-        return new NotIdentical($expr, $dNumber);
+        return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $dNumber);
     }
-
     /**
      * @return Identical|NotIdentical
      */
-    private function resolveNullable(bool $isNegated, Expr $expr): BinaryOp
+    private function resolveNullable(bool $isNegated, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\BinaryOp
     {
         $constFetch = $this->nodeFactory->createNull();
-
         if ($isNegated) {
-            return new Identical($expr, $constFetch);
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $constFetch);
         }
-
-        return new NotIdentical($expr, $constFetch);
+        return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $constFetch);
     }
 }

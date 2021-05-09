@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -18,19 +17,16 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see https://3v4l.org/RFYmn
  *
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\MakeInheritedMethodVisibilitySameAsParentRectorTest
  */
-final class MakeInheritedMethodVisibilitySameAsParentRector extends AbstractRector
+final class MakeInheritedMethodVisibilitySameAsParentRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Make method visibility same as parent one', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Make method visibility same as parent one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class ChildClass extends ParentClass
 {
     public function run()
@@ -45,8 +41,7 @@ class ParentClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class ChildClass extends ParentClass
 {
     protected function run()
@@ -61,163 +56,128 @@ class ParentClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
-
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             // possibly trait
             return null;
         }
-
         $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
-
         /** @var string $methodName */
         $methodName = $this->getName($node->name);
-
         foreach ($classReflection->getParents() as $parentClassReflection) {
-            if (! $parentClassReflection->hasMethod($methodName)) {
+            if (!$parentClassReflection->hasMethod($methodName)) {
                 continue;
             }
-
             $nativeClassReflection = $parentClassReflection->getNativeReflection();
-
             $parentReflectionMethod = $nativeClassReflection->getMethod($methodName);
             if ($this->isClassMethodCompatibleWithParentReflectionMethod($node, $parentReflectionMethod)) {
                 return null;
             }
-
             if ($this->isConstructorWithStaticFactory($node, $methodName)) {
                 return null;
             }
-
             $this->changeClassMethodVisibilityBasedOnReflectionMethod($node, $parentReflectionMethod);
-
             return $node;
         }
-
         return null;
     }
-
-    private function isClassMethodCompatibleWithParentReflectionMethod(
-        ClassMethod $classMethod,
-        ReflectionMethod $reflectionMethod
-    ): bool {
+    private function isClassMethodCompatibleWithParentReflectionMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \ReflectionMethod $reflectionMethod) : bool
+    {
         if ($reflectionMethod->isPublic() && $classMethod->isPublic()) {
-            return true;
+            return \true;
         }
-
         if ($reflectionMethod->isProtected() && $classMethod->isProtected()) {
-            return true;
+            return \true;
         }
-        if (! $reflectionMethod->isPrivate()) {
-            return false;
+        if (!$reflectionMethod->isPrivate()) {
+            return \false;
         }
         return $classMethod->isPrivate();
     }
-
     /**
      * Parent constructor visibility override is allowed only since PHP 7.2+
      * @see https://3v4l.org/RFYmn
      */
-    private function isConstructorWithStaticFactory(ClassMethod $classMethod, string $methodName): bool
+    private function isConstructorWithStaticFactory(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $methodName) : bool
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::PARENT_VISIBILITY_OVERRIDE)) {
-            return false;
+        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PARENT_VISIBILITY_OVERRIDE)) {
+            return \false;
         }
-
-        if ($methodName !== MethodName::CONSTRUCT) {
-            return false;
+        if ($methodName !== \Rector\Core\ValueObject\MethodName::CONSTRUCT) {
+            return \false;
         }
-
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
-            return false;
+        $classLike = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+            return \false;
         }
-
         foreach ($classLike->getMethods() as $iteratedClassMethod) {
-            if (! $iteratedClassMethod->isPublic()) {
+            if (!$iteratedClassMethod->isPublic()) {
                 continue;
             }
-
-            if (! $iteratedClassMethod->isStatic()) {
+            if (!$iteratedClassMethod->isStatic()) {
                 continue;
             }
-
             $isStaticSelfFactory = $this->isStaticNamedConstructor($iteratedClassMethod);
-
-            if (! $isStaticSelfFactory) {
+            if (!$isStaticSelfFactory) {
                 continue;
             }
-
-            return true;
+            return \true;
         }
-
-        return false;
+        return \false;
     }
-
-    private function changeClassMethodVisibilityBasedOnReflectionMethod(
-        ClassMethod $classMethod,
-        ReflectionMethod $reflectionMethod
-    ): void {
+    private function changeClassMethodVisibilityBasedOnReflectionMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \ReflectionMethod $reflectionMethod) : void
+    {
         if ($reflectionMethod->isPublic()) {
             $this->visibilityManipulator->makePublic($classMethod);
             return;
         }
-
         if ($reflectionMethod->isProtected()) {
             $this->visibilityManipulator->makeProtected($classMethod);
             return;
         }
-
         if ($reflectionMethod->isPrivate()) {
             $this->visibilityManipulator->makePrivate($classMethod);
             return;
         }
     }
-
     /**
      * Looks for:
      * public static someMethod() { return new self(); }
      * or
      * public static someMethod() { return new static(); }
      */
-    private function isStaticNamedConstructor(ClassMethod $classMethod): bool
+    private function isStaticNamedConstructor(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        if (! $classMethod->isPublic()) {
-            return false;
+        if (!$classMethod->isPublic()) {
+            return \false;
         }
-
-        if (! $classMethod->isStatic()) {
-            return false;
+        if (!$classMethod->isStatic()) {
+            return \false;
         }
-
-        return (bool) $this->betterNodeFinder->findFirst($classMethod, function (Node $node): bool {
-            if (! $node instanceof Return_) {
-                return false;
+        return (bool) $this->betterNodeFinder->findFirst($classMethod, function (\PhpParser\Node $node) : bool {
+            if (!$node instanceof \PhpParser\Node\Stmt\Return_) {
+                return \false;
             }
-
-            if (! $node->expr instanceof New_) {
-                return false;
+            if (!$node->expr instanceof \PhpParser\Node\Expr\New_) {
+                return \false;
             }
-
             return $this->isNames($node->expr->class, ['self', 'static']);
         });
     }

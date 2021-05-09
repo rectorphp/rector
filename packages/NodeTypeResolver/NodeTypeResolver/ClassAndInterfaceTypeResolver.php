@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
@@ -14,38 +13,33 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\ClassTypeResolverTest
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\InterfaceTypeResolverTest
  */
-final class ClassAndInterfaceTypeResolver implements NodeTypeResolverInterface
+final class ClassAndInterfaceTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeClasses(): array
+    public function getNodeClasses() : array
     {
-        return [Class_::class, Interface_::class];
+        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Interface_::class];
     }
-
     /**
      * @param Class_|Interface_ $node
      */
-    public function resolve(Node $node): Type
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-
-        if (! $scope instanceof Scope) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             // new node probably
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
-
         $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return new MixedType();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            return new \PHPStan\Type\MixedType();
         }
-
-        return new ObjectType($classReflection->getName(), null, $classReflection);
+        return new \PHPStan\Type\ObjectType($classReflection->getName(), null, $classReflection);
     }
 }

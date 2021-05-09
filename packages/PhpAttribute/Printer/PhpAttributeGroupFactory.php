@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\PhpAttribute\Printer;
 
 use PhpParser\BuilderHelpers;
@@ -19,107 +18,82 @@ use PHPStan\Type\Constant\ConstantFloatType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
-
 final class PhpAttributeGroupFactory
 {
-    public function createFromSimpleTag(AnnotationToAttribute $annotationToAttribute): AttributeGroup
+    public function createFromSimpleTag(\Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute) : \PhpParser\Node\AttributeGroup
     {
-        $fullyQualified = new FullyQualified($annotationToAttribute->getAttributeClass());
-        $attribute = new Attribute($fullyQualified);
-        return new AttributeGroup([$attribute]);
+        $fullyQualified = new \PhpParser\Node\Name\FullyQualified($annotationToAttribute->getAttributeClass());
+        $attribute = new \PhpParser\Node\Attribute($fullyQualified);
+        return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
-
-    public function create(
-        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
-        AnnotationToAttribute $annotationToAttribute
-    ): AttributeGroup {
-        $fullyQualified = new FullyQualified($annotationToAttribute->getAttributeClass());
-
+    public function create(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute) : \PhpParser\Node\AttributeGroup
+    {
+        $fullyQualified = new \PhpParser\Node\Name\FullyQualified($annotationToAttribute->getAttributeClass());
         $values = $doctrineAnnotationTagValueNode->getValuesWithExplicitSilentAndWithoutQuotes();
-
         $args = $this->createArgsFromItems($values);
-
-        $attribute = new Attribute($fullyQualified, $args);
-        return new AttributeGroup([$attribute]);
+        $attribute = new \PhpParser\Node\Attribute($fullyQualified, $args);
+        return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
-
     /**
      * @param mixed[] $items
      * @return Arg[]
      */
-    private function createArgsFromItems(array $items, ?string $silentKey = null): array
+    private function createArgsFromItems(array $items, ?string $silentKey = null) : array
     {
         $args = [];
-
         if ($silentKey !== null && isset($items[$silentKey])) {
-            $silentValue = BuilderHelpers::normalizeValue($items[$silentKey]);
-            $args[] = new Arg($silentValue);
+            $silentValue = \PhpParser\BuilderHelpers::normalizeValue($items[$silentKey]);
+            $args[] = new \PhpParser\Node\Arg($silentValue);
             unset($items[$silentKey]);
         }
-
         foreach ($items as $key => $value) {
             $value = $this->normalizeNodeValue($value);
-            $value = BuilderHelpers::normalizeValue($value);
-
-            $args[] = $this->isArrayArguments($items)
-                ? new Arg($value, false, false, [], new Identifier($key))
-                : new Arg($value)
-                ;
+            $value = \PhpParser\BuilderHelpers::normalizeValue($value);
+            $args[] = $this->isArrayArguments($items) ? new \PhpParser\Node\Arg($value, \false, \false, [], new \PhpParser\Node\Identifier($key)) : new \PhpParser\Node\Arg($value);
         }
-
         return $args;
     }
-
     /**
      * @param mixed[] $items
      */
-    private function isArrayArguments(array $items): bool
+    private function isArrayArguments(array $items) : bool
     {
-        foreach (array_keys($items) as $key) {
-            if (! is_int($key)) {
-                return true;
+        foreach (\array_keys($items) as $key) {
+            if (!\is_int($key)) {
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * @param mixed $value
      * @return bool|float|int|string|array<mixed>
      */
     private function normalizeNodeValue($value)
     {
-        if ($value instanceof ConstExprIntegerNode) {
+        if ($value instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode) {
             return (int) $value->value;
         }
-
-        if ($value instanceof ConstantFloatType) {
+        if ($value instanceof \PHPStan\Type\Constant\ConstantFloatType) {
             return $value->getValue();
         }
-
-        if ($value instanceof ConstantBooleanType) {
+        if ($value instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
             return $value->getValue();
         }
-
-        if ($value instanceof ConstExprTrueNode) {
-            return true;
+        if ($value instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode) {
+            return \true;
         }
-
-        if ($value instanceof ConstExprFalseNode) {
-            return false;
+        if ($value instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode) {
+            return \false;
         }
-
-        if ($value instanceof CurlyListNode) {
-            return array_map(function ($node) {
+        if ($value instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
+            return \array_map(function ($node) {
                 return $this->normalizeNodeValue($node);
             }, $value->getValuesWithExplicitSilentAndWithoutQuotes());
         }
-
-        if ($value instanceof Node) {
+        if ($value instanceof \PHPStan\PhpDocParser\Ast\Node) {
             return (string) $value;
         }
-
         return $value;
     }
 }

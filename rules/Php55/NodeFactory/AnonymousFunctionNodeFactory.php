@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Php55\NodeFactory;
 
-use Nette\Utils\Strings;
+use RectorPrefix20210509\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -17,69 +16,54 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Parser;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-
+use RectorPrefix20210509\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class AnonymousFunctionNodeFactory
 {
     /**
      * @var string
      * @see https://regex101.com/r/jkLLlM/2
      */
-    private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\d+)#';
-
+    private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\\d+)#';
     /**
      * @var Parser
      */
     private $parser;
-
     /**
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, Parser $parser)
+    public function __construct(\RectorPrefix20210509\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \PhpParser\Parser $parser)
     {
         $this->parser = $parser;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-
-    public function createAnonymousFunctionFromString(Expr $expr): ?Closure
+    public function createAnonymousFunctionFromString(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\Closure
     {
-        if (! $expr instanceof String_) {
+        if (!$expr instanceof \PhpParser\Node\Scalar\String_) {
             // not supported yet
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-
         $phpCode = '<?php ' . $expr->value . ';';
         $contentNodes = (array) $this->parser->parse($phpCode);
-
-        $anonymousFunction = new Closure();
-
+        $anonymousFunction = new \PhpParser\Node\Expr\Closure();
         $firstNode = $contentNodes[0] ?? null;
-        if (! $firstNode instanceof Expression) {
+        if (!$firstNode instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-
         $stmt = $firstNode->expr;
-
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node): Node {
-            if (! $node instanceof String_) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (\PhpParser\Node $node) : Node {
+            if (!$node instanceof \PhpParser\Node\Scalar\String_) {
                 return $node;
             }
-
-            $match = Strings::match($node->value, self::DIM_FETCH_REGEX);
-            if (! $match) {
+            $match = \RectorPrefix20210509\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
+            if (!$match) {
                 return $node;
             }
-
-            $matchesVariable = new Variable('matches');
-
-            return new ArrayDimFetch($matchesVariable, new LNumber((int) $match['number']));
+            $matchesVariable = new \PhpParser\Node\Expr\Variable('matches');
+            return new \PhpParser\Node\Expr\ArrayDimFetch($matchesVariable, new \PhpParser\Node\Scalar\LNumber((int) $match['number']));
         });
-
-        $anonymousFunction->stmts[] = new Return_($stmt);
-        $anonymousFunction->params[] = new Param(new Variable('matches'));
-
+        $anonymousFunction->stmts[] = new \PhpParser\Node\Stmt\Return_($stmt);
+        $anonymousFunction->params[] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable('matches'));
         return $anonymousFunction;
     }
 }

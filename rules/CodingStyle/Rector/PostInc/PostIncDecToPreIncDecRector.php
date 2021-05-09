@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\PostInc;
 
 use PhpParser\Node;
@@ -17,19 +16,14 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector\PostIncDecToPreIncDecRectorTest
  */
-final class PostIncDecToPreIncDecRector extends AbstractRector
+final class PostIncDecToPreIncDecRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Use ++$value or --$value  instead of `$value++` or `$value--`',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use ++$value or --$value  instead of `$value++` or `$value--`', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value = 1)
@@ -39,8 +33,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value = 1)
@@ -50,84 +43,72 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [PostInc::class, PostDec::class];
+        return [\PhpParser\Node\Expr\PostInc::class, \PhpParser\Node\Expr\PostDec::class];
     }
-
     /**
      * @param PostInc|PostDec $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($this->isAnExpression($parentNode)) {
             return $this->processPrePost($node);
         }
-
-        if ($parentNode instanceof ArrayDimFetch && $this->nodeComparator->areNodesEqual($parentNode->dim, $node)) {
+        if ($parentNode instanceof \PhpParser\Node\Expr\ArrayDimFetch && $this->nodeComparator->areNodesEqual($parentNode->dim, $node)) {
             return $this->processPreArray($node, $parentNode);
         }
-        if (! $parentNode instanceof For_) {
+        if (!$parentNode instanceof \PhpParser\Node\Stmt\For_) {
             return null;
         }
-        if (count($parentNode->loop) !== 1) {
+        if (\count($parentNode->loop) !== 1) {
             return null;
         }
-        if (! $this->nodeComparator->areNodesEqual($parentNode->loop[0], $node)) {
+        if (!$this->nodeComparator->areNodesEqual($parentNode->loop[0], $node)) {
             return null;
         }
         return $this->processPreFor($node, $parentNode);
     }
-
-    private function isAnExpression(?Node $node = null): bool
+    private function isAnExpression(?\PhpParser\Node $node = null) : bool
     {
-        if (! $node instanceof Node) {
-            return false;
+        if (!$node instanceof \PhpParser\Node) {
+            return \false;
         }
-        return $node instanceof Expression;
+        return $node instanceof \PhpParser\Node\Stmt\Expression;
     }
-
     /**
      * @param PostInc|PostDec $node
      */
-    private function processPrePost(Node $node): Expr
+    private function processPrePost(\PhpParser\Node $node) : \PhpParser\Node\Expr
     {
-        if ($node instanceof PostInc) {
-            return new PreInc($node->var);
+        if ($node instanceof \PhpParser\Node\Expr\PostInc) {
+            return new \PhpParser\Node\Expr\PreInc($node->var);
         }
-
-        return new PreDec($node->var);
+        return new \PhpParser\Node\Expr\PreDec($node->var);
     }
-
     /**
      * @param PostInc|PostDec $node
      */
-    private function processPreArray(Node $node, ArrayDimFetch $arrayDimFetch): ?Expr
+    private function processPreArray(\PhpParser\Node $node, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : ?\PhpParser\Node\Expr
     {
-        $parentOfArrayDimFetch = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $this->isAnExpression($parentOfArrayDimFetch)) {
+        $parentOfArrayDimFetch = $arrayDimFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$this->isAnExpression($parentOfArrayDimFetch)) {
             return null;
         }
-
         $arrayDimFetch->dim = $node->var;
         $this->addNodeAfterNode($this->processPrePost($node), $arrayDimFetch);
-
         return $arrayDimFetch->dim;
     }
-
     /**
      * @param PostInc|PostDec $node
      */
-    private function processPreFor(Node $node, For_ $for): Expr
+    private function processPreFor(\PhpParser\Node $node, \PhpParser\Node\Stmt\For_ $for) : \PhpParser\Node\Expr
     {
         $for->loop = [$this->processPrePost($node)];
         return $for->loop[0];

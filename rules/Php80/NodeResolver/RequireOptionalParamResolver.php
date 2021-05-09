@@ -1,20 +1,18 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Php80\NodeResolver;
 
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-
 final class RequireOptionalParamResolver
 {
     /**
      * @param ClassMethod $functionLike
      * @return Param[]
      */
-    public function resolve(FunctionLike $functionLike): array
+    public function resolve(\PhpParser\Node\FunctionLike $functionLike) : array
     {
         $optionalParams = [];
         $requireParams = [];
@@ -25,7 +23,6 @@ final class RequireOptionalParamResolver
                 $optionalParams[$position] = $param;
             }
         }
-
         return $requireParams + $optionalParams;
     }
 }

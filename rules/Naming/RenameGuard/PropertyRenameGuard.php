@@ -1,19 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Naming\RenameGuard;
 
 use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
-
 final class PropertyRenameGuard
 {
     /**
      * @var ConflictingNameGuardInterface[]
      */
     private $conflictingNameGuards = [];
-
     /**
      * @param ConflictingNameGuardInterface[] $conflictingNameGuards
      */
@@ -21,15 +18,13 @@ final class PropertyRenameGuard
     {
         $this->conflictingNameGuards = $conflictingNameGuards;
     }
-
-    public function shouldSkip(RenameValueObjectInterface $renameValueObject): bool
+    public function shouldSkip(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool
     {
         foreach ($this->conflictingNameGuards as $conflictingNameGuard) {
             if ($conflictingNameGuard->isConflicting($renameValueObject)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
 }

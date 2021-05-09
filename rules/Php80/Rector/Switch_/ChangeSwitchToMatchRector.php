@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Php80\Rector\Switch_;
 
 use PhpParser\Node;
@@ -19,41 +18,34 @@ use Rector\Php80\NodeResolver\SwitchExprsResolver;
 use Rector\Php80\ValueObject\CondAndExpr;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @changelog https://wiki.php.net/rfc/match_expression_v2
  * @see https://3v4l.org/572T5
  *
  * @see \Rector\Tests\Php80\Rector\Switch_\ChangeSwitchToMatchRector\ChangeSwitchToMatchRectorTest
  */
-final class ChangeSwitchToMatchRector extends AbstractRector
+final class ChangeSwitchToMatchRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var SwitchExprsResolver
      */
     private $switchExprsResolver;
-
     /**
      * @var SwitchAnalyzer
      */
     private $switchAnalyzer;
-
     /**
      * @var Expr|null
      */
     private $assignExpr;
-
-    public function __construct(SwitchExprsResolver $switchExprsResolver, SwitchAnalyzer $switchAnalyzer)
+    public function __construct(\Rector\Php80\NodeResolver\SwitchExprsResolver $switchExprsResolver, \Rector\Php80\NodeAnalyzer\SwitchAnalyzer $switchAnalyzer)
     {
         $this->switchExprsResolver = $switchExprsResolver;
         $this->switchAnalyzer = $switchAnalyzer;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change switch() to match()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change switch() to match()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -74,8 +66,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -88,158 +79,127 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Switch_::class];
+        return [\PhpParser\Node\Stmt\Switch_::class];
     }
-
     /**
      * @param Switch_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkipSwitch($node)) {
             return null;
         }
-
         $condAndExprs = $this->switchExprsResolver->resolve($node);
         if ($condAndExprs === []) {
             return null;
         }
-
-        if (! $this->haveCondAndExprsMatchPotential($condAndExprs)) {
+        if (!$this->haveCondAndExprsMatchPotential($condAndExprs)) {
             return null;
         }
-
         $this->assignExpr = null;
-
-        $isReturn = false;
+        $isReturn = \false;
         foreach ($condAndExprs as $condAndExpr) {
-            if ($condAndExpr->getKind() === CondAndExpr::TYPE_RETURN) {
-                $isReturn = true;
+            if ($condAndExpr->getKind() === \Rector\Php80\ValueObject\CondAndExpr::TYPE_RETURN) {
+                $isReturn = \true;
                 break;
             }
-
             $expr = $condAndExpr->getExpr();
-            if (! $expr instanceof Assign) {
+            if (!$expr instanceof \PhpParser\Node\Expr\Assign) {
                 return null;
             }
         }
-
         $matchArms = $this->createMatchArmsFromCases($condAndExprs);
-        $match = new Match_($node->cond, $matchArms);
-
+        $match = new \PhpParser\Node\Expr\Match_($node->cond, $matchArms);
         if ($isReturn) {
-            return new Return_($match);
+            return new \PhpParser\Node\Stmt\Return_($match);
         }
-
         if ($this->assignExpr) {
             /** @var Expr $assignExpr */
             $assignExpr = $this->assignExpr;
             return $this->changeToAssign($node, $match, $assignExpr);
         }
-
         return $match;
     }
-
-    private function changeToAssign(Switch_ $switch, Match_ $match, Expr $assignExpr): Assign
+    private function changeToAssign(\PhpParser\Node\Stmt\Switch_ $switch, \PhpParser\Node\Expr\Match_ $match, \PhpParser\Node\Expr $assignExpr) : \PhpParser\Node\Expr\Assign
     {
-        $prevInitializedAssign = $this->betterNodeFinder->findFirstPreviousOfNode($switch, function (Node $node) use (
-            $assignExpr
-        ): bool {
-            return $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $assignExpr);
+        $prevInitializedAssign = $this->betterNodeFinder->findFirstPreviousOfNode($switch, function (\PhpParser\Node $node) use($assignExpr) : bool {
+            return $node instanceof \PhpParser\Node\Expr\Assign && $this->nodeComparator->areNodesEqual($node->var, $assignExpr);
         });
-
-        $assign = new Assign($assignExpr, $match);
-        if ($prevInitializedAssign instanceof Assign) {
+        $assign = new \PhpParser\Node\Expr\Assign($assignExpr, $match);
+        if ($prevInitializedAssign instanceof \PhpParser\Node\Expr\Assign) {
             /** @var Match_ $expr */
             $expr = $assign->expr;
-            $expr->arms[] = new MatchArm(null, $prevInitializedAssign->expr);
-
-            $parentAssign = $prevInitializedAssign->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentAssign instanceof Expression) {
+            $expr->arms[] = new \PhpParser\Node\MatchArm(null, $prevInitializedAssign->expr);
+            $parentAssign = $prevInitializedAssign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if ($parentAssign instanceof \PhpParser\Node\Stmt\Expression) {
                 $this->removeNode($parentAssign);
             }
         }
-
         return $assign;
     }
-
-    private function shouldSkipSwitch(Switch_ $switch): bool
+    private function shouldSkipSwitch(\PhpParser\Node\Stmt\Switch_ $switch) : bool
     {
-        if (! $this->switchAnalyzer->hasEachCaseBreak($switch)) {
-            return true;
+        if (!$this->switchAnalyzer->hasEachCaseBreak($switch)) {
+            return \true;
         }
-
-        return ! $this->switchAnalyzer->hasEachCaseSingleStmt($switch);
+        return !$this->switchAnalyzer->hasEachCaseSingleStmt($switch);
     }
-
     /**
      * @param CondAndExpr[] $condAndExprs
      */
-    private function haveCondAndExprsMatchPotential(array $condAndExprs): bool
+    private function haveCondAndExprsMatchPotential(array $condAndExprs) : bool
     {
         $uniqueCondAndExprKinds = $this->resolveUniqueKinds($condAndExprs);
-        if (count($uniqueCondAndExprKinds) > 1) {
-            return false;
+        if (\count($uniqueCondAndExprKinds) > 1) {
+            return \false;
         }
-
         $assignVariableNames = [];
         foreach ($condAndExprs as $condAndExpr) {
             $expr = $condAndExpr->getExpr();
-            if (! $expr instanceof Assign) {
+            if (!$expr instanceof \PhpParser\Node\Expr\Assign) {
                 continue;
             }
-
             $assignVariableNames[] = $this->getName($expr->var);
         }
-
-        $assignVariableNames = array_unique($assignVariableNames);
-        return count($assignVariableNames) <= 1;
+        $assignVariableNames = \array_unique($assignVariableNames);
+        return \count($assignVariableNames) <= 1;
     }
-
     /**
      * @param CondAndExpr[] $condAndExprs
      * @return MatchArm[]
      */
-    private function createMatchArmsFromCases(array $condAndExprs): array
+    private function createMatchArmsFromCases(array $condAndExprs) : array
     {
         $matchArms = [];
         foreach ($condAndExprs as $condAndExpr) {
             $expr = $condAndExpr->getExpr();
-
-            if ($expr instanceof Assign) {
+            if ($expr instanceof \PhpParser\Node\Expr\Assign) {
                 $this->assignExpr = $expr->var;
                 $expr = $expr->expr;
             }
-
             $condExpr = $condAndExpr->getCondExpr();
-
-            $condList = $condExpr instanceof Expr ? [$condExpr] : null;
-            $matchArms[] = new MatchArm($condList, $expr);
+            $condList = $condExpr instanceof \PhpParser\Node\Expr ? [$condExpr] : null;
+            $matchArms[] = new \PhpParser\Node\MatchArm($condList, $expr);
         }
-
         return $matchArms;
     }
-
     /**
      * @param CondAndExpr[] $condAndExprs
      * @return string[]
      */
-    private function resolveUniqueKinds(array $condAndExprs): array
+    private function resolveUniqueKinds(array $condAndExprs) : array
     {
         $condAndExprKinds = [];
         foreach ($condAndExprs as $condAndExpr) {
             $condAndExprKinds[] = $condAndExpr->getKind();
         }
-
-        return array_unique($condAndExprKinds);
+        return \array_unique($condAndExprKinds);
     }
 }

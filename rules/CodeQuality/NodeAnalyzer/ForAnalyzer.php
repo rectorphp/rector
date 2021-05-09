@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodeQuality\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -22,196 +21,149 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-
 final class ForAnalyzer
 {
     /**
      * @var string
      */
     private const COUNT = 'count';
-
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-
     /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-
     /**
      * @var NodeComparator
      */
     private $nodeComparator;
-
     /**
      * @var AssignManipulator
      */
     private $assignManipulator;
-
-    public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        BetterNodeFinder $betterNodeFinder,
-        AssignManipulator $assignManipulator,
-        NodeComparator $nodeComparator
-    ) {
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->assignManipulator = $assignManipulator;
         $this->nodeComparator = $nodeComparator;
     }
-
     /**
      * @param Expr[] $condExprs
      */
-    public function isCondExprSmallerOrGreater(array $condExprs, string $keyValueName, string $countValueName): bool
+    public function isCondExprSmallerOrGreater(array $condExprs, string $keyValueName, string $countValueName) : bool
     {
         // $i < $count
-        if ($condExprs[0] instanceof Smaller) {
-            if (! $this->nodeNameResolver->isName($condExprs[0]->left, $keyValueName)) {
-                return false;
+        if ($condExprs[0] instanceof \PhpParser\Node\Expr\BinaryOp\Smaller) {
+            if (!$this->nodeNameResolver->isName($condExprs[0]->left, $keyValueName)) {
+                return \false;
             }
-
             return $this->nodeNameResolver->isName($condExprs[0]->right, $countValueName);
         }
-
         // $i > $count
-        if ($condExprs[0] instanceof Greater) {
-            if (! $this->nodeNameResolver->isName($condExprs[0]->left, $countValueName)) {
-                return false;
+        if ($condExprs[0] instanceof \PhpParser\Node\Expr\BinaryOp\Greater) {
+            if (!$this->nodeNameResolver->isName($condExprs[0]->left, $countValueName)) {
+                return \false;
             }
-
             return $this->nodeNameResolver->isName($condExprs[0]->right, $keyValueName);
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * @param Expr[] $loopExprs
      * $param
      */
-    public function isLoopMatch(array $loopExprs, ?string $keyValueName): bool
+    public function isLoopMatch(array $loopExprs, ?string $keyValueName) : bool
     {
-        if (count($loopExprs) !== 1) {
-            return false;
+        if (\count($loopExprs) !== 1) {
+            return \false;
         }
-
         if ($keyValueName === null) {
-            return false;
+            return \false;
         }
-
         $prePostInc = $loopExprs[0];
-
-        if ($prePostInc instanceof PreInc || $prePostInc instanceof PostInc) {
+        if ($prePostInc instanceof \PhpParser\Node\Expr\PreInc || $prePostInc instanceof \PhpParser\Node\Expr\PostInc) {
             return $this->nodeNameResolver->isName($prePostInc->var, $keyValueName);
         }
-
-        return false;
+        return \false;
     }
-
-    public function isCountValueVariableUsedInsideForStatements(For_ $for, ?Expr $expr): bool
+    public function isCountValueVariableUsedInsideForStatements(\PhpParser\Node\Stmt\For_ $for, ?\PhpParser\Node\Expr $expr) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst(
-            $for->stmts,
-            function (Node $node) use ($expr): bool {
-                return $this->nodeComparator->areNodesEqual($node, $expr);
+        return (bool) $this->betterNodeFinder->findFirst($for->stmts, function (\PhpParser\Node $node) use($expr) : bool {
+            return $this->nodeComparator->areNodesEqual($node, $expr);
+        });
+    }
+    public function isArrayWithKeyValueNameUnsetted(\PhpParser\Node\Stmt\For_ $for) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($for->stmts, function (\PhpParser\Node $node) : bool {
+            /** @var Node $parent */
+            $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if (!$parent instanceof \PhpParser\Node\Stmt\Unset_) {
+                return \false;
             }
-        );
+            return $node instanceof \PhpParser\Node\Expr\ArrayDimFetch;
+        });
     }
-
-    public function isArrayWithKeyValueNameUnsetted(For_ $for): bool
+    public function isAssignmentWithArrayDimFetchAsVariableInsideForStatements(\PhpParser\Node\Stmt\For_ $for, string $keyValueName) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst(
-            $for->stmts,
-            function (Node $node): bool {
-                /** @var Node $parent */
-                $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-                if (! $parent instanceof Unset_) {
-                    return false;
-                }
-                return $node instanceof ArrayDimFetch;
+        return (bool) $this->betterNodeFinder->findFirst($for->stmts, function (\PhpParser\Node $node) use($keyValueName) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+                return \false;
             }
-        );
-    }
-
-    public function isAssignmentWithArrayDimFetchAsVariableInsideForStatements(For_ $for, string $keyValueName): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst(
-            $for->stmts,
-            function (Node $node) use ($keyValueName): bool {
-                if (! $node instanceof Assign) {
-                    return false;
-                }
-
-                if (! $node->var instanceof ArrayDimFetch) {
-                    return false;
-                }
-
-                $arrayDimFetch = $node->var;
-                if ($arrayDimFetch->dim === null) {
-                    return false;
-                }
-
-                if (! $arrayDimFetch->dim instanceof Variable) {
-                    return false;
-                }
-
-                return $this->nodeNameResolver->isName($arrayDimFetch->dim, $keyValueName);
+            if (!$node->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+                return \false;
             }
-        );
+            $arrayDimFetch = $node->var;
+            if ($arrayDimFetch->dim === null) {
+                return \false;
+            }
+            if (!$arrayDimFetch->dim instanceof \PhpParser\Node\Expr\Variable) {
+                return \false;
+            }
+            return $this->nodeNameResolver->isName($arrayDimFetch->dim, $keyValueName);
+        });
     }
-
-    public function isValueVarUsedNext(For_ $for, string $iteratedVariableSingle): bool
+    public function isValueVarUsedNext(\PhpParser\Node\Stmt\For_ $for, string $iteratedVariableSingle) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstNext($for, function (Node $node) use (
-            $iteratedVariableSingle
-        ): bool {
-            if (! $node instanceof Variable) {
-                return false;
+        return (bool) $this->betterNodeFinder->findFirstNext($for, function (\PhpParser\Node $node) use($iteratedVariableSingle) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
+                return \false;
             }
             return $this->nodeNameResolver->isName($node, $iteratedVariableSingle);
         });
     }
-
     /**
      * @param Expr[] $condExprs
      */
-    public function isCondExprOneOrKeyValueNameNotNull(array $condExprs, ?string $keyValueName): bool
+    public function isCondExprOneOrKeyValueNameNotNull(array $condExprs, ?string $keyValueName) : bool
     {
-        if (count($condExprs) !== 1) {
-            return true;
+        if (\count($condExprs) !== 1) {
+            return \true;
         }
-
         return $keyValueName === null;
     }
-
-    public function isArrayDimFetchPartOfAssignOrArgParentCount(ArrayDimFetch $arrayDimFetch): bool
+    public function isArrayDimFetchPartOfAssignOrArgParentCount(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
     {
-        $parentNode = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Node) {
-            return false;
+        $parentNode = $arrayDimFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node) {
+            return \false;
         }
-
         if ($this->assignManipulator->isNodePartOfAssign($parentNode)) {
-            return true;
+            return \true;
         }
-
         return $this->isArgParentCount($parentNode);
     }
-
-    private function isArgParentCount(Node $node): bool
+    private function isArgParentCount(\PhpParser\Node $node) : bool
     {
-        if (! $node instanceof Arg) {
-            return false;
+        if (!$node instanceof \PhpParser\Node\Arg) {
+            return \false;
         }
-
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof FuncCall) {
-            return false;
+        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parent instanceof \PhpParser\Node\Expr\FuncCall) {
+            return \false;
         }
-
         return $this->nodeNameResolver->isName($parent, self::COUNT);
     }
 }

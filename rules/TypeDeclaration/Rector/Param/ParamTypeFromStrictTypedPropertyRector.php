@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Param;
 
 use PhpParser\Node;
@@ -21,27 +20,22 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Reflection\ReflectionTypeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector\ParamTypeFromStrictTypedPropertyRectorTest
  */
-final class ParamTypeFromStrictTypedPropertyRector extends AbstractRector
+final class ParamTypeFromStrictTypedPropertyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ReflectionTypeResolver
      */
     private $reflectionTypeResolver;
-
-    public function __construct(ReflectionTypeResolver $reflectionTypeResolver)
+    public function __construct(\Rector\TypeDeclaration\Reflection\ReflectionTypeResolver $reflectionTypeResolver)
     {
         $this->reflectionTypeResolver = $reflectionTypeResolver;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add param type from $param set to typed property', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add param type from $param set to typed property', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     private int $age;
@@ -52,9 +46,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private int $age;
@@ -65,135 +57,108 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Param::class];
+        return [\PhpParser\Node\Param::class];
     }
-
     /**
      * @param Param $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
+        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {
             return null;
         }
-
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof FunctionLike) {
+        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parent instanceof \PhpParser\Node\FunctionLike) {
             return null;
         }
-
         return $this->decorateParamWithType($parent, $node);
     }
-
-    public function decorateParamWithType(FunctionLike $functionLike, Param $param): ?Param
+    public function decorateParamWithType(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Param $param) : ?\PhpParser\Node\Param
     {
         if ($param->type !== null) {
             return null;
         }
-
         $originalParamType = $this->resolveParamOriginalType($param);
-
         $paramName = $this->getName($param);
-
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->getStmts(), Assign::class);
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->getStmts(), \PhpParser\Node\Expr\Assign::class);
         foreach ($assigns as $assign) {
-            if (! $this->nodeComparator->areNodesEqual($assign->expr, $param->var)) {
+            if (!$this->nodeComparator->areNodesEqual($assign->expr, $param->var)) {
                 continue;
             }
-
-            if (! $assign->var instanceof PropertyFetch) {
+            if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 continue;
             }
-
             if ($this->hasTypeChangedBeforeAssign($assign, $paramName, $originalParamType)) {
                 return null;
             }
-
             $singlePropertyTypeNode = $this->matchPropertySingleTypeNode($assign->var);
-            if (! $singlePropertyTypeNode instanceof Node) {
+            if (!$singlePropertyTypeNode instanceof \PhpParser\Node) {
                 return null;
             }
-
             $param->type = $singlePropertyTypeNode;
             return $param;
         }
-
         return null;
     }
-
     /**
      * @return Node\Identifier|Node\Name|UnionType|NullableType|null
      */
-    private function matchPropertySingleTypeNode(PropertyFetch $propertyFetch): ?Node
+    private function matchPropertySingleTypeNode(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node
     {
         $property = $this->nodeRepository->findPropertyByPropertyFetch($propertyFetch);
-        if (! $property instanceof Property) {
+        if (!$property instanceof \PhpParser\Node\Stmt\Property) {
             // code from /vendor
             $propertyFetchType = $this->reflectionTypeResolver->resolvePropertyFetchType($propertyFetch);
-            if (! $propertyFetchType instanceof Type) {
+            if (!$propertyFetchType instanceof \PHPStan\Type\Type) {
                 return null;
             }
-
             return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyFetchType);
         }
-
         if ($property->type === null) {
             return null;
         }
-
         // move type to param if not union type
-        if ($property->type instanceof UnionType) {
+        if ($property->type instanceof \PhpParser\Node\UnionType) {
             return null;
         }
-
-        if ($property->type instanceof NullableType) {
+        if ($property->type instanceof \PhpParser\Node\NullableType) {
             return null;
         }
-
         // needed to avoid reprinting original tokens bug
         $typeNode = clone $property->type;
-        $typeNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-
+        $typeNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
         return $typeNode;
     }
-
-    private function hasTypeChangedBeforeAssign(Assign $assign, string $paramName, Type $originalType): bool
+    private function hasTypeChangedBeforeAssign(\PhpParser\Node\Expr\Assign $assign, string $paramName, \PHPStan\Type\Type $originalType) : bool
     {
-        $scope = $assign->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
+        $scope = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return \false;
         }
-
-        if (! $scope->hasVariableType($paramName)->yes()) {
-            return false;
+        if (!$scope->hasVariableType($paramName)->yes()) {
+            return \false;
         }
-
         $currentParamType = $scope->getVariableType($paramName);
-        return ! $currentParamType->equals($originalType);
+        return !$currentParamType->equals($originalType);
     }
-
-    private function resolveParamOriginalType(Param $param): Type
+    private function resolveParamOriginalType(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {
-        $scope = $param->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return new MixedType();
+        $scope = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return new \PHPStan\Type\MixedType();
         }
-
         $paramName = $this->getName($param);
-        if (! $scope->hasVariableType($paramName)->yes()) {
-            return new MixedType();
+        if (!$scope->hasVariableType($paramName)->yes()) {
+            return new \PHPStan\Type\MixedType();
         }
-
         return $scope->getVariableType($paramName);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Comments\NodeDocBlock;
 
 use PhpParser\Comment\Doc;
@@ -9,65 +8,53 @@ use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-
 final class DocBlockUpdater
 {
     /**
      * @var string
      * @see https://regex101.com/r/VdaVGL/1
      */
-    public const SPACE_OR_ASTERISK_REGEX = '#(\s|\*)+#';
-
+    public const SPACE_OR_ASTERISK_REGEX = '#(\\s|\\*)+#';
     /**
      * @var PhpDocInfoPrinter
      */
     private $phpDocInfoPrinter;
-
-    public function __construct(PhpDocInfoPrinter $phpDocInfoPrinter)
+    public function __construct(\Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter $phpDocInfoPrinter)
     {
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
     }
-
-    public function updateNodeWithPhpDocInfo(Node $node): void
+    public function updateNodeWithPhpDocInfo(\PhpParser\Node $node) : void
     {
         // nothing to change? don't save it
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
+        $phpDocInfo = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO);
+        if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
             return;
         }
-
-        if (! $phpDocInfo->hasChanged()) {
+        if (!$phpDocInfo->hasChanged()) {
             return;
         }
-
         $phpDoc = $this->printPhpDocInfoToString($phpDocInfo);
-
         // make sure, that many separated comments are not removed
         if ($phpDoc === '') {
-            if (count($node->getComments()) > 1) {
+            if (\count($node->getComments()) > 1) {
                 foreach ($node->getComments() as $comment) {
-                    $phpDoc .= $comment->getText() . PHP_EOL;
+                    $phpDoc .= $comment->getText() . \PHP_EOL;
                 }
             }
-
             if ($phpDocInfo->getOriginalPhpDocNode()->children !== []) {
                 // all comments were removed → null
-                $node->setAttribute(AttributeKey::COMMENTS, null);
+                $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, null);
             }
-
             return;
         }
-
         // this is needed to remove duplicated // commentsAsText
-        $node->setDocComment(new Doc($phpDoc));
+        $node->setDocComment(new \PhpParser\Comment\Doc($phpDoc));
     }
-
-    private function printPhpDocInfoToString(PhpDocInfo $phpDocInfo): string
+    private function printPhpDocInfoToString(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : string
     {
         if ($phpDocInfo->isNewNode()) {
             return $this->phpDocInfoPrinter->printNew($phpDocInfo);
         }
-
         return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
     }
 }

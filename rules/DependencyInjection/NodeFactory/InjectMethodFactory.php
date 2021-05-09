@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\DependencyInjection\NodeFactory;
 
 use PhpParser\Node\Name\FullyQualified;
@@ -15,82 +14,61 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\FrameworkName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
-
+use RectorPrefix20210509\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20210509\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 final class InjectMethodFactory
 {
     /**
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-
     /**
      * @var PropertyNaming
      */
     private $propertyNaming;
-
     /**
      * @var ClassNaming
      */
     private $classNaming;
-
     /**
      * @var TypeFactory
      */
     private $typeFactory;
-
     /**
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    public function __construct(
-        ClassNaming $classNaming,
-        NodeFactory $nodeFactory,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        PropertyNaming $propertyNaming,
-        TypeFactory $typeFactory
-    ) {
+    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
+    {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->propertyNaming = $propertyNaming;
         $this->classNaming = $classNaming;
         $this->typeFactory = $typeFactory;
         $this->nodeFactory = $nodeFactory;
     }
-
     /**
      * @param ObjectType[] $objectTypes
      */
-    public function createFromTypes(array $objectTypes, string $className, string $framework): ClassMethod
+    public function createFromTypes(array $objectTypes, string $className, string $framework) : \PhpParser\Node\Stmt\ClassMethod
     {
         $objectTypes = $this->typeFactory->uniquateTypes($objectTypes);
-
         $shortClassName = $this->classNaming->getShortName($className);
-
-        $methodBuilder = new MethodBuilder('inject' . $shortClassName);
+        $methodBuilder = new \RectorPrefix20210509\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('inject' . $shortClassName);
         $methodBuilder->makePublic();
-
         foreach ($objectTypes as $objectType) {
             /** @var ObjectType $objectType */
             $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-
-            $paramBuilder = new ParamBuilder($propertyName);
-            $paramBuilder->setType(new FullyQualified($objectType->getClassName()));
+            $paramBuilder = new \RectorPrefix20210509\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($propertyName);
+            $paramBuilder->setType(new \PhpParser\Node\Name\FullyQualified($objectType->getClassName()));
             $methodBuilder->addParam($paramBuilder);
-
             $assign = $this->nodeFactory->createPropertyAssignment($propertyName);
-
             $methodBuilder->addStmt($assign);
         }
-
         $classMethod = $methodBuilder->getNode();
-
-        if ($framework === FrameworkName::SYMFONY) {
+        if ($framework === \Rector\Core\ValueObject\FrameworkName::SYMFONY) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-            $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@required', new GenericTagValueNode('')));
+            $phpDocInfo->addPhpDocTagNode(new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@required', new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode('')));
         }
-
         return $classMethod;
     }
 }

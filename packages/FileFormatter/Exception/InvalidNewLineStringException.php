@@ -1,19 +1,22 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\FileFormatter\Exception;
 
 use InvalidArgumentException;
-
-final class InvalidNewLineStringException extends InvalidArgumentException
+final class InvalidNewLineStringException extends \InvalidArgumentException
 {
-    public static function fromString(string $string): self
+    /**
+     * @return $this
+     */
+    public static function fromString(string $string)
     {
-        return new self(sprintf('"%s" is not a valid new-line character sequence.', $string));
+        return new self(\sprintf('"%s" is not a valid new-line character sequence.', $string));
     }
-
-    public static function create(string $message): self
+    /**
+     * @return $this
+     */
+    public static function create(string $message)
     {
         return new self($message);
     }

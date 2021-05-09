@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Type;
 
 use PHPStan\Type\ArrayType;
@@ -16,85 +15,68 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-
 final class StaticTypeAnalyzer
 {
-    public function isAlwaysTruableType(Type $type): bool
+    public function isAlwaysTruableType(\PHPStan\Type\Type $type) : bool
     {
-        if ($type instanceof MixedType) {
-            return false;
+        if ($type instanceof \PHPStan\Type\MixedType) {
+            return \false;
         }
-
-        if ($type instanceof ConstantArrayType) {
-            return true;
+        if ($type instanceof \PHPStan\Type\Constant\ConstantArrayType) {
+            return \true;
         }
-
-        if ($type instanceof ArrayType) {
+        if ($type instanceof \PHPStan\Type\ArrayType) {
             return $this->isAlwaysTruableArrayType($type);
         }
-
         if ($this->isNullable($type)) {
-            return false;
+            return \false;
         }
-
         // always trueish
-        if ($type instanceof ObjectType) {
-            return true;
+        if ($type instanceof \PHPStan\Type\ObjectType) {
+            return \true;
         }
-
-        if ($type instanceof ConstantScalarType && ! $type instanceof NullType) {
+        if ($type instanceof \PHPStan\Type\ConstantScalarType && !$type instanceof \PHPStan\Type\NullType) {
             return (bool) $type->getValue();
         }
-
         if ($this->isScalarType($type)) {
-            return false;
+            return \false;
         }
-
         return $this->isAlwaysTruableUnionType($type);
     }
-
-    private function isNullable(Type $type): bool
+    private function isNullable(\PHPStan\Type\Type $type) : bool
     {
-        if (! $type instanceof UnionType) {
-            return false;
+        if (!$type instanceof \PHPStan\Type\UnionType) {
+            return \false;
         }
-
         foreach ($type->getTypes() as $unionedType) {
-            if ($unionedType instanceof NullType) {
-                return true;
+            if ($unionedType instanceof \PHPStan\Type\NullType) {
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
-    private function isScalarType(Type $type): bool
+    private function isScalarType(\PHPStan\Type\Type $type) : bool
     {
-        if ($type instanceof NullType) {
-            return true;
+        if ($type instanceof \PHPStan\Type\NullType) {
+            return \true;
         }
-
-        return $type instanceof BooleanType || $type instanceof StringType || $type instanceof IntegerType || $type instanceof FloatType;
+        return $type instanceof \PHPStan\Type\BooleanType || $type instanceof \PHPStan\Type\StringType || $type instanceof \PHPStan\Type\IntegerType || $type instanceof \PHPStan\Type\FloatType;
     }
-
-    private function isAlwaysTruableUnionType(Type $type): bool
+    private function isAlwaysTruableUnionType(\PHPStan\Type\Type $type) : bool
     {
-        if (! $type instanceof UnionType) {
-            return false;
+        if (!$type instanceof \PHPStan\Type\UnionType) {
+            return \false;
         }
-
         foreach ($type->getTypes() as $unionedType) {
-            if (! $this->isAlwaysTruableType($unionedType)) {
-                return false;
+            if (!$this->isAlwaysTruableType($unionedType)) {
+                return \false;
             }
         }
-
-        return true;
+        return \true;
     }
-
-    private function isAlwaysTruableArrayType(ArrayType $arrayType): bool
+    private function isAlwaysTruableArrayType(\PHPStan\Type\ArrayType $arrayType) : bool
     {
         $itemType = $arrayType->getItemType();
-        return $itemType instanceof ConstantScalarType && $itemType->getValue();
+        return $itemType instanceof \PHPStan\Type\ConstantScalarType && $itemType->getValue();
     }
 }

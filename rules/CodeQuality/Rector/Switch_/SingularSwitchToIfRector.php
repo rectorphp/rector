@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Switch_;
 
 use PhpParser\Node;
@@ -12,27 +11,22 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\SwitchManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Switch_\SingularSwitchToIfRector\SingularSwitchToIfRectorTest
  */
-final class SingularSwitchToIfRector extends AbstractRector
+final class SingularSwitchToIfRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var SwitchManipulator
      */
     private $switchManipulator;
-
-    public function __construct(SwitchManipulator $switchManipulator)
+    public function __construct(\Rector\Renaming\NodeManipulator\SwitchManipulator $switchManipulator)
     {
         $this->switchManipulator = $switchManipulator;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change switch with only 1 check to if', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change switch with only 1 check to if', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeObject
 {
     public function run($value)
@@ -47,9 +41,7 @@ class SomeObject
     }
 }
 CODE_SAMPLE
-
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeObject
 {
     public function run($value)
@@ -63,38 +55,31 @@ class SomeObject
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Switch_::class];
+        return [\PhpParser\Node\Stmt\Switch_::class];
     }
-
     /**
      * @param Switch_ $node
      * @return Node\Stmt[]|If_|null
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
-        if (count($node->cases) !== 1) {
+        if (\count($node->cases) !== 1) {
             return null;
         }
-
         $onlyCase = $node->cases[0];
-
         // only default → basically unwrap
         if ($onlyCase->cond === null) {
             return $onlyCase->stmts;
         }
-
-        $if = new If_(new Identical($node->cond, $onlyCase->cond));
+        $if = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\Identical($node->cond, $onlyCase->cond));
         $if->stmts = $this->switchManipulator->removeBreakNodes($onlyCase->stmts);
-
         return $if;
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassConst;
 
 use PhpParser\Node;
@@ -12,19 +11,14 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector\SplitGroupedConstantsAndPropertiesRectorTest
  */
-final class SplitGroupedConstantsAndPropertiesRector extends AbstractRector
+final class SplitGroupedConstantsAndPropertiesRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Separate constant and properties to own lines',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Separate constant and properties to own lines', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     const HI = true, AHOJ = 'true';
@@ -35,8 +29,7 @@ class SomeClass
     public $isIt, $isIsThough;
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     const HI = true;
@@ -53,71 +46,56 @@ class SomeClass
     public $isIsThough;
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [ClassConst::class, Property::class];
+        return [\PhpParser\Node\Stmt\ClassConst::class, \PhpParser\Node\Stmt\Property::class];
     }
-
     /**
      * @param ClassConst|Property $node
      * @return Node|Node[]|null
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
-        if ($node instanceof ClassConst) {
-            if (count($node->consts) < 2) {
+        if ($node instanceof \PhpParser\Node\Stmt\ClassConst) {
+            if (\count($node->consts) < 2) {
                 return null;
             }
-
             /** @var Const_[] $allConsts */
             $allConsts = $node->consts;
-
             /** @var Const_ $firstConst */
-            $firstConst = array_shift($allConsts);
+            $firstConst = \array_shift($allConsts);
             $node->consts = [$firstConst];
-
             $nextClassConsts = $this->createNextClassConsts($allConsts, $node);
-
-            return array_merge([$node], $nextClassConsts);
+            return \array_merge([$node], $nextClassConsts);
         }
-
-        if (count($node->props) < 2) {
+        if (\count($node->props) < 2) {
             return null;
         }
-
         $allProperties = $node->props;
         /** @var PropertyProperty $firstPropertyProperty */
-        $firstPropertyProperty = array_shift($allProperties);
+        $firstPropertyProperty = \array_shift($allProperties);
         $node->props = [$firstPropertyProperty];
-
         $nextProperties = [];
         foreach ($allProperties as $allProperty) {
-            $nextProperties[] = new Property($node->flags, [$allProperty], $node->getAttributes());
+            $nextProperties[] = new \PhpParser\Node\Stmt\Property($node->flags, [$allProperty], $node->getAttributes());
         }
-
-        return array_merge([$node], $nextProperties);
+        return \array_merge([$node], $nextProperties);
     }
-
     /**
      * @param Const_[] $consts
      * @return ClassConst[]
      */
-    private function createNextClassConsts(array $consts, ClassConst $classConst): array
+    private function createNextClassConsts(array $consts, \PhpParser\Node\Stmt\ClassConst $classConst) : array
     {
         $decoratedConsts = [];
-
         foreach ($consts as $const) {
-            $decoratedConsts[] = new ClassConst([$const], $classConst->flags, $classConst->getAttributes());
+            $decoratedConsts[] = new \PhpParser\Node\Stmt\ClassConst([$const], $classConst->flags, $classConst->getAttributes());
         }
-
         return $decoratedConsts;
     }
 }

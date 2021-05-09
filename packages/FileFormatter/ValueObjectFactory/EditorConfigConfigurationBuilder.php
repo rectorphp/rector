@@ -1,99 +1,95 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\FileFormatter\ValueObjectFactory;
 
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
 use Rector\FileFormatter\ValueObject\Indent;
 use Rector\FileFormatter\ValueObject\NewLine;
-
 final class EditorConfigConfigurationBuilder
 {
     /**
      * @var string
      */
     private $indentStyle;
-
     /**
      * @var int
      */
     private $indentSize;
-
     /**
      * @var bool
      */
-    private $insertFinalNewline = false;
-
+    private $insertFinalNewline = \false;
     /**
      * @var NewLine
      */
     private $newLine;
-
     private function __construct()
     {
         $this->indentStyle = 'space';
         $this->indentSize = 2;
-        $this->newLine = NewLine::fromEditorConfig('lf');
-        $this->insertFinalNewline = true;
+        $this->newLine = \Rector\FileFormatter\ValueObject\NewLine::fromEditorConfig('lf');
+        $this->insertFinalNewline = \true;
     }
-
-    public static function anEditorConfigConfiguration(): self
+    /**
+     * @return $this
+     */
+    public static function anEditorConfigConfiguration()
     {
         return new self();
     }
-
-    public function withNewLine(NewLine $newLine): self
+    /**
+     * @return $this
+     */
+    public function withNewLine(\Rector\FileFormatter\ValueObject\NewLine $newLine)
     {
         $this->newLine = $newLine;
-
         return $this;
     }
-
-    public function withIndent(Indent $indent): self
+    /**
+     * @return $this
+     */
+    public function withIndent(\Rector\FileFormatter\ValueObject\Indent $indent)
     {
         $this->indentSize = $indent->getIndentSize();
         $this->indentStyle = $indent->getIndentStyle();
-
         return $this;
     }
-
-    public function withIndentStyle(string $indentStyle): self
+    /**
+     * @return $this
+     */
+    public function withIndentStyle(string $indentStyle)
     {
         $this->indentStyle = $indentStyle;
-
         return $this;
     }
-
-    public function withIndentSize(int $indentSize): self
+    /**
+     * @return $this
+     */
+    public function withIndentSize(int $indentSize)
     {
         $this->indentSize = $indentSize;
-
         return $this;
     }
-
-    public function withInsertFinalNewline(bool $insertFinalNewline): self
+    /**
+     * @return $this
+     */
+    public function withInsertFinalNewline(bool $insertFinalNewline)
     {
         $this->insertFinalNewline = $insertFinalNewline;
-
         return $this;
     }
-
-    public function withEndOfLineFromEditorConfig(string $endOfLine): self
+    /**
+     * @return $this
+     */
+    public function withEndOfLineFromEditorConfig(string $endOfLine)
     {
-        $this->newLine = NewLine::fromEditorConfig($endOfLine);
-
+        $this->newLine = \Rector\FileFormatter\ValueObject\NewLine::fromEditorConfig($endOfLine);
         return $this;
     }
-
-    public function build(): EditorConfigConfiguration
+    public function build() : \Rector\FileFormatter\ValueObject\EditorConfigConfiguration
     {
         $newLine = $this->newLine;
-
-        return new EditorConfigConfiguration(
-            Indent::fromSizeAndStyle($this->indentSize, $this->indentStyle),
-            $newLine,
-            $this->insertFinalNewline
-        );
+        return new \Rector\FileFormatter\ValueObject\EditorConfigConfiguration(\Rector\FileFormatter\ValueObject\Indent::fromSizeAndStyle($this->indentSize, $this->indentStyle), $newLine, $this->insertFinalNewline);
     }
 }

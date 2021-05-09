@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\PHPOffice\Rector\MethodCall;
 
 use PhpParser\Node;
@@ -15,21 +14,16 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @changelog https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#conditionalgetcondition
  *
  * @see \Rector\Tests\PHPOffice\Rector\MethodCall\ChangeConditionalGetConditionRector\ChangeConditionalGetConditionRectorTest
  */
-final class ChangeConditionalGetConditionRector extends AbstractRector
+final class ChangeConditionalGetConditionRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Change argument PHPExcel_Style_Conditional->getCondition() to getConditions()',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change argument PHPExcel_Style_Conditional->getCondition() to getConditions()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -39,8 +33,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -50,35 +43,28 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
-
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (! $this->isObjectType($node->var, new ObjectType('PHPExcel_Style_Conditional'))) {
+        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('PHPExcel_Style_Conditional'))) {
             return null;
         }
-
-        if (! $this->isName($node->name, 'getCondition')) {
+        if (!$this->isName($node->name, 'getCondition')) {
             return null;
         }
-
-        $node->name = new Identifier('getConditions');
-        $arrayDimFetch = new ArrayDimFetch($node, new LNumber(0));
-
-        return new Coalesce($arrayDimFetch, new String_(''));
+        $node->name = new \PhpParser\Node\Identifier('getConditions');
+        $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($node, new \PhpParser\Node\Scalar\LNumber(0));
+        return new \PhpParser\Node\Expr\BinaryOp\Coalesce($arrayDimFetch, new \PhpParser\Node\Scalar\String_(''));
     }
 }

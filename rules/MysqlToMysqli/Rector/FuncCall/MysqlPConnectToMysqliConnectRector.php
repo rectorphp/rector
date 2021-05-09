@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\MysqlToMysqli\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -13,20 +12,15 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @changelog https://stackoverflow.com/a/34041762/1348344
  * @see \Rector\Tests\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector\MysqlPConnectToMysqliConnectRectorTest
  */
-final class MysqlPConnectToMysqliConnectRector extends AbstractRector
+final class MysqlPConnectToMysqliConnectRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Replace mysql_pconnect() with mysqli_connect() with host p: prefix',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace mysql_pconnect() with mysqli_connect() with host p: prefix', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($host, $username, $password)
@@ -35,8 +29,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($host, $username, $password)
@@ -45,41 +38,32 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
-
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (! $this->isName($node, 'mysql_pconnect')) {
+        if (!$this->isName($node, 'mysql_pconnect')) {
             return null;
         }
-
-        $node->name = new Name('mysqli_connect');
-
+        $node->name = new \PhpParser\Node\Name('mysqli_connect');
         $node->args[0]->value = $this->joinStringWithNode('p:', $node->args[0]->value);
-
         return $node;
     }
-
-    private function joinStringWithNode(string $string, Expr $expr): Expr
+    private function joinStringWithNode(string $string, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr
     {
-        if ($expr instanceof String_) {
-            return new String_($string . $expr->value);
+        if ($expr instanceof \PhpParser\Node\Scalar\String_) {
+            return new \PhpParser\Node\Scalar\String_($string . $expr->value);
         }
-
-        return new Concat(new String_($string), $expr);
+        return new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Scalar\String_($string), $expr);
     }
 }

@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\Contract;
 
-use Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
-
-interface BasePhpDocNodeVisitorInterface extends PhpDocNodeVisitorInterface
+use RectorPrefix20210509\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
+interface BasePhpDocNodeVisitorInterface extends \RectorPrefix20210509\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface
 {
 }

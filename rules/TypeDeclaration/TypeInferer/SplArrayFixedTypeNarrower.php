@@ -1,44 +1,35 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-
 final class SplArrayFixedTypeNarrower
 {
-    public function narrow(Type $paramType): Type
+    public function narrow(\PHPStan\Type\Type $paramType) : \PHPStan\Type\Type
     {
-        if ($paramType->isSuperTypeOf(new ObjectType('SplArrayFixed'))->no()) {
+        if ($paramType->isSuperTypeOf(new \PHPStan\Type\ObjectType('SplArrayFixed'))->no()) {
             return $paramType;
         }
-
-        if (! $paramType instanceof TypeWithClassName) {
+        if (!$paramType instanceof \PHPStan\Type\TypeWithClassName) {
             return $paramType;
         }
-
-        if ($paramType instanceof GenericObjectType) {
+        if ($paramType instanceof \PHPStan\Type\Generic\GenericObjectType) {
             return $paramType;
         }
-
         $types = [];
-
-        if ($paramType->getClassName() === 'PhpCsFixer\Tokenizer\Tokens') {
-            $types[] = new ObjectType('PhpCsFixer\Tokenizer\Token');
+        if ($paramType->getClassName() === 'PhpCsFixer\\Tokenizer\\Tokens') {
+            $types[] = new \PHPStan\Type\ObjectType('PhpCsFixer\\Tokenizer\\Token');
         }
-
-        if ($paramType->getClassName() === 'PhpCsFixer\Doctrine\Annotation\Tokens') {
-            $types[] = new ObjectType('PhpCsFixer\Doctrine\Annotation\Token');
+        if ($paramType->getClassName() === 'PhpCsFixer\\Doctrine\\Annotation\\Tokens') {
+            $types[] = new \PHPStan\Type\ObjectType('PhpCsFixer\\Doctrine\\Annotation\\Token');
         }
-
         if ($types === []) {
             return $paramType;
         }
-
-        return new GenericObjectType($paramType->getClassName(), $types);
+        return new \PHPStan\Type\Generic\GenericObjectType($paramType->getClassName(), $types);
     }
 }

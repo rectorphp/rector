@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
@@ -9,38 +8,27 @@ use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
-use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-
-final class CallableTypePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
+use RectorPrefix20210509\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+final class CallableTypePhpDocNodeVisitor extends \RectorPrefix20210509\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
 {
     /**
      * @var AttributeMirrorer
      */
     private $attributeMirrorer;
-
-    public function __construct(AttributeMirrorer $attributeMirrorer)
+    public function __construct(\Rector\BetterPhpDocParser\Attributes\AttributeMirrorer $attributeMirrorer)
     {
         $this->attributeMirrorer = $attributeMirrorer;
     }
-
-    public function enterNode(Node $node): ?Node
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
-        if (! $node instanceof CallableTypeNode) {
+        if (!$node instanceof \PHPStan\PhpDocParser\Ast\Type\CallableTypeNode) {
             return null;
         }
-
-        if ($node instanceof SpacingAwareCallableTypeNode) {
+        if ($node instanceof \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode) {
             return null;
         }
-
-        $spacingAwareCallableTypeNode = new SpacingAwareCallableTypeNode(
-            $node->identifier,
-            $node->parameters,
-            $node->returnType
-        );
-
+        $spacingAwareCallableTypeNode = new \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode($node->identifier, $node->parameters, $node->returnType);
         $this->attributeMirrorer->mirror($node, $spacingAwareCallableTypeNode);
-
         return $spacingAwareCallableTypeNode;
     }
 }

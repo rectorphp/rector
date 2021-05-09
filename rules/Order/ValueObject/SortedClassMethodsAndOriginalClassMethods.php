@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Order\ValueObject;
 
 final class SortedClassMethodsAndOriginalClassMethods
@@ -10,12 +9,10 @@ final class SortedClassMethodsAndOriginalClassMethods
      * @var array<int, string>
      */
     private $sortedClassMethods = [];
-
     /**
      * @var array<int, string>
      */
     private $originalClassMethods = [];
-
     /**
      * @param array<int, string> $sortedClassMethods
      * @param array<int, string> $originalClassMethods
@@ -25,33 +22,28 @@ final class SortedClassMethodsAndOriginalClassMethods
         $this->sortedClassMethods = $sortedClassMethods;
         $this->originalClassMethods = $originalClassMethods;
     }
-
     /**
      * @return array<int, string>
      */
-    public function getSortedClassMethods(): array
+    public function getSortedClassMethods() : array
     {
         return $this->sortedClassMethods;
     }
-
     /**
      * @return array<int, string>
      */
-    public function getOriginalClassMethods(): array
+    public function getOriginalClassMethods() : array
     {
         return $this->originalClassMethods;
     }
-
-    public function hasOrderChanged(): bool
+    public function hasOrderChanged() : bool
     {
         return $this->sortedClassMethods !== $this->originalClassMethods;
     }
-
-    public function hasOrderSame(): bool
+    public function hasOrderSame() : bool
     {
-        $sortedClassMethodValues = array_values($this->sortedClassMethods);
-        $originalClassMethodValues = array_values($this->originalClassMethods);
-
+        $sortedClassMethodValues = \array_values($this->sortedClassMethods);
+        $originalClassMethodValues = \array_values($this->originalClassMethods);
         return $sortedClassMethodValues === $originalClassMethodValues;
     }
 }

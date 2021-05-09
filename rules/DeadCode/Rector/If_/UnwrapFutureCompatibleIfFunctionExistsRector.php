@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
@@ -15,35 +14,27 @@ use Rector\DeadCode\FeatureSupport\FunctionSupportResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector\UnwrapFutureCompatibleIfFunctionExistsRectorTest
  */
-final class UnwrapFutureCompatibleIfFunctionExistsRector extends AbstractRector
+final class UnwrapFutureCompatibleIfFunctionExistsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var IfManipulator
      */
     private $ifManipulator;
-
     /**
      * @var FunctionSupportResolver
      */
     private $functionSupportResolver;
-
-    public function __construct(FunctionSupportResolver $functionSupportResolver, IfManipulator $ifManipulator)
+    public function __construct(\Rector\DeadCode\FeatureSupport\FunctionSupportResolver $functionSupportResolver, \Rector\Core\NodeManipulator\IfManipulator $ifManipulator)
     {
         $this->ifManipulator = $ifManipulator;
         $this->functionSupportResolver = $functionSupportResolver;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Remove functions exists if with else for always existing',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove functions exists if with else for always existing', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -57,8 +48,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -68,59 +58,47 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [\PhpParser\Node\Stmt\If_::class];
     }
-
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-
         $match = $this->ifManipulator->isIfOrIfElseWithFunctionCondition($node, 'function_exists');
-        if (! $match) {
+        if (!$match) {
             return null;
         }
-
         /** @var FuncCall $funcCall */
         $funcCall = $node->cond;
-
         $functionToExistName = $this->valueResolver->getValue($funcCall->args[0]->value);
-        if (! is_string($functionToExistName)) {
+        if (!\is_string($functionToExistName)) {
             return null;
         }
-
-        if (! $this->functionSupportResolver->isFunctionSupported($functionToExistName)) {
+        if (!$this->functionSupportResolver->isFunctionSupported($functionToExistName)) {
             return null;
         }
-
         $this->unwrapStmts($node->stmts, $node);
         $this->removeNode($node);
-
         return null;
     }
-
-    private function shouldSkip(If_ $if): bool
+    private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
     {
-        $classLike = $if->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof ClassLike) {
-            return false;
+        $classLike = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+            return \false;
         }
-
         // skip rector rules, as they decided if function exists in that particular projects
-        return $this->isObjectType($classLike, new ObjectType('Rector\Core\Contract\Rector\RectorInterface'));
+        return $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Rector\\Core\\Contract\\Rector\\RectorInterface'));
     }
 }

@@ -1,28 +1,23 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use PHPStan\Type\ObjectType;
-
 final class GetAndSetToMethodCall
 {
     /**
      * @var class-string
      */
     private $classType;
-
     /**
      * @var string
      */
     private $getMethod;
-
     /**
      * @var string
      */
     private $setMethod;
-
     /**
      * @param class-string $classType
      */
@@ -32,19 +27,16 @@ final class GetAndSetToMethodCall
         $this->getMethod = $getMethod;
         $this->setMethod = $setMethod;
     }
-
-    public function getGetMethod(): string
+    public function getGetMethod() : string
     {
         return $this->getMethod;
     }
-
-    public function getSetMethod(): string
+    public function getSetMethod() : string
     {
         return $this->setMethod;
     }
-
-    public function getObjectType(): ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->classType);
+        return new \PHPStan\Type\ObjectType($this->classType);
     }
 }

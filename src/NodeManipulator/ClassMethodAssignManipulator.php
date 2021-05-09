@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
@@ -29,59 +28,43 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-
+use RectorPrefix20210509\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ClassMethodAssignManipulator
 {
     /**
      * @var VariableManipulator
      */
     private $variableManipulator;
-
     /**
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-
     /**
      * @var NodeFactory
      */
     private $nodeFactory;
-
     /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-
     /**
      * @var NodeComparator
      */
     private $nodeComparator;
-
     /**
      * @var CallReflectionResolver
      */
     private $callReflectionResolver;
-
     /**
      * @var array<string, string[]>
      */
     private $alreadyAddedClassMethodNames = [];
-
-    public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeFactory $nodeFactory,
-        NodeNameResolver $nodeNameResolver,
-        VariableManipulator $variableManipulator,
-        CallReflectionResolver $callReflectionResolver,
-        NodeComparator $nodeComparator
-    ) {
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20210509\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    {
         $this->variableManipulator = $variableManipulator;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -90,318 +73,246 @@ final class ClassMethodAssignManipulator
         $this->callReflectionResolver = $callReflectionResolver;
         $this->nodeComparator = $nodeComparator;
     }
-
     /**
      * @return Assign[]
      */
-    public function collectReadyOnlyAssignScalarVariables(ClassMethod $classMethod): array
+    public function collectReadyOnlyAssignScalarVariables(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
-        $assignsOfScalarOrArrayToVariable = $this->variableManipulator->collectScalarOrArrayAssignsOfVariable(
-            $classMethod
-        );
-
+        $assignsOfScalarOrArrayToVariable = $this->variableManipulator->collectScalarOrArrayAssignsOfVariable($classMethod);
         // filter out [$value] = $array, array destructing
-        $readOnlyVariableAssigns = $this->filterOutArrayDestructedVariables(
-            $assignsOfScalarOrArrayToVariable,
-            $classMethod
-        );
-
+        $readOnlyVariableAssigns = $this->filterOutArrayDestructedVariables($assignsOfScalarOrArrayToVariable, $classMethod);
         $readOnlyVariableAssigns = $this->filterOutReferencedVariables($readOnlyVariableAssigns, $classMethod);
         $readOnlyVariableAssigns = $this->filterOutMultiAssigns($readOnlyVariableAssigns);
         $readOnlyVariableAssigns = $this->filterOutForeachVariables($readOnlyVariableAssigns);
-
         return $this->variableManipulator->filterOutChangedVariables($readOnlyVariableAssigns, $classMethod);
     }
-
-    public function addParameterAndAssignToMethod(
-        ClassMethod $classMethod,
-        string $name,
-        ?Type $type,
-        Assign $assign
-    ): void {
+    public function addParameterAndAssignToMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $name, ?\PHPStan\Type\Type $type, \PhpParser\Node\Expr\Assign $assign) : void
+    {
         if ($this->hasMethodParameter($classMethod, $name)) {
             return;
         }
-
         $classMethod->params[] = $this->nodeFactory->createParamFromNameAndType($name, $type);
-        $classMethod->stmts[] = new Expression($assign);
-
-        $classMethodHash = spl_object_hash($classMethod);
+        $classMethod->stmts[] = new \PhpParser\Node\Stmt\Expression($assign);
+        $classMethodHash = \spl_object_hash($classMethod);
         $this->alreadyAddedClassMethodNames[$classMethodHash][] = $name;
     }
-
     /**
      * @param Assign[] $variableAssigns
      * @return Assign[]
      */
-    private function filterOutArrayDestructedVariables(array $variableAssigns, ClassMethod $classMethod): array
+    private function filterOutArrayDestructedVariables(array $variableAssigns, \PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
         $arrayDestructionCreatedVariables = [];
-
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
-            &$arrayDestructionCreatedVariables
-        ) {
-            if (! $node instanceof Assign) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (\PhpParser\Node $node) use(&$arrayDestructionCreatedVariables) {
+            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return null;
             }
-
-            if (! $node->var instanceof Array_ && ! $node->var instanceof List_) {
+            if (!$node->var instanceof \PhpParser\Node\Expr\Array_ && !$node->var instanceof \PhpParser\Node\Expr\List_) {
                 return null;
             }
-
             foreach ($node->var->items as $arrayItem) {
                 // empty item
                 if ($arrayItem === null) {
                     continue;
                 }
-
-                if (! $arrayItem->value instanceof Variable) {
+                if (!$arrayItem->value instanceof \PhpParser\Node\Expr\Variable) {
                     continue;
                 }
-
                 /** @var string $variableName */
                 $variableName = $this->nodeNameResolver->getName($arrayItem->value);
                 $arrayDestructionCreatedVariables[] = $variableName;
             }
         });
-
-        return array_filter($variableAssigns, function (Assign $assign) use ($arrayDestructionCreatedVariables): bool {
-            return ! $this->nodeNameResolver->isNames($assign->var, $arrayDestructionCreatedVariables);
+        return \array_filter($variableAssigns, function (\PhpParser\Node\Expr\Assign $assign) use($arrayDestructionCreatedVariables) : bool {
+            return !$this->nodeNameResolver->isNames($assign->var, $arrayDestructionCreatedVariables);
         });
     }
-
     /**
      * @param Assign[] $variableAssigns
      * @return Assign[]
      */
-    private function filterOutReferencedVariables(array $variableAssigns, ClassMethod $classMethod): array
+    private function filterOutReferencedVariables(array $variableAssigns, \PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
         $referencedVariables = $this->collectReferenceVariableNames($classMethod);
-
-        return array_filter($variableAssigns, function (Assign $assign) use ($referencedVariables): bool {
-            return ! $this->nodeNameResolver->isNames($assign->var, $referencedVariables);
+        return \array_filter($variableAssigns, function (\PhpParser\Node\Expr\Assign $assign) use($referencedVariables) : bool {
+            return !$this->nodeNameResolver->isNames($assign->var, $referencedVariables);
         });
     }
-
     /**
      * E.g. $a = $b = $c = '...';
      *
      * @param Assign[] $readOnlyVariableAssigns
      * @return Assign[]
      */
-    private function filterOutMultiAssigns(array $readOnlyVariableAssigns): array
+    private function filterOutMultiAssigns(array $readOnlyVariableAssigns) : array
     {
-        return array_filter($readOnlyVariableAssigns, function (Assign $assign): bool {
-            $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
-            return ! $parent instanceof Assign;
+        return \array_filter($readOnlyVariableAssigns, function (\PhpParser\Node\Expr\Assign $assign) : bool {
+            $parent = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            return !$parent instanceof \PhpParser\Node\Expr\Assign;
         });
     }
-
     /**
      * @param Assign[] $variableAssigns
      * @return Assign[]
      */
-    private function filterOutForeachVariables(array $variableAssigns): array
+    private function filterOutForeachVariables(array $variableAssigns) : array
     {
         foreach ($variableAssigns as $key => $variableAssign) {
             $foreach = $this->findParentForeach($variableAssign);
-            if (! $foreach instanceof Foreach_) {
+            if (!$foreach instanceof \PhpParser\Node\Stmt\Foreach_) {
                 continue;
             }
-
             if ($this->nodeComparator->areNodesEqual($foreach->valueVar, $variableAssign->var)) {
                 unset($variableAssigns[$key]);
                 continue;
             }
-
             if ($this->nodeComparator->areNodesEqual($foreach->keyVar, $variableAssign->var)) {
                 unset($variableAssigns[$key]);
             }
         }
-
         return $variableAssigns;
     }
-
-    private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
+    private function hasMethodParameter(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $name) : bool
     {
         foreach ($classMethod->params as $param) {
             if ($this->nodeNameResolver->isName($param->var, $name)) {
-                return true;
+                return \true;
             }
         }
-
-        $classMethodHash = spl_object_hash($classMethod);
-        if (! isset($this->alreadyAddedClassMethodNames[$classMethodHash])) {
-            return false;
+        $classMethodHash = \spl_object_hash($classMethod);
+        if (!isset($this->alreadyAddedClassMethodNames[$classMethodHash])) {
+            return \false;
         }
-
-        return in_array($name, $this->alreadyAddedClassMethodNames[$classMethodHash], true);
+        return \in_array($name, $this->alreadyAddedClassMethodNames[$classMethodHash], \true);
     }
-
     /**
      * @return string[]
      */
-    private function collectReferenceVariableNames(ClassMethod $classMethod): array
+    private function collectReferenceVariableNames(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
         $referencedVariables = [];
-
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
-            &$referencedVariables
-        ) {
-            if (! $node instanceof Variable) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (\PhpParser\Node $node) use(&$referencedVariables) {
+            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
                 return null;
             }
-
             if ($this->nodeNameResolver->isName($node, 'this')) {
                 return null;
             }
-
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             if ($parentNode !== null && $this->isExplicitlyReferenced($parentNode)) {
                 /** @var string $variableName */
                 $variableName = $this->nodeNameResolver->getName($node);
                 $referencedVariables[] = $variableName;
                 return null;
             }
-
             $argumentPosition = null;
-            if ($parentNode instanceof Arg) {
-                $argumentPosition = $parentNode->getAttribute(AttributeKey::ARGUMENT_POSITION);
-                $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof \PhpParser\Node\Arg) {
+                $argumentPosition = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION);
+                $parentNode = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             }
-
-            if (! $parentNode instanceof Node) {
+            if (!$parentNode instanceof \PhpParser\Node) {
                 return null;
             }
-
             if ($argumentPosition === null) {
                 return null;
             }
-
             /** @var string $variableName */
             $variableName = $this->nodeNameResolver->getName($node);
-
             if ($this->isCallOrConstructorWithReference($parentNode, $node, $argumentPosition)) {
                 $referencedVariables[] = $variableName;
             }
         });
-
         return $referencedVariables;
     }
-
-    private function findParentForeach(Assign $assign): ?Foreach_
+    private function findParentForeach(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node\Stmt\Foreach_
     {
         /** @var Foreach_|FunctionLike|null $foundNode */
-        $foundNode = $this->betterNodeFinder->findFirstPreviousOfTypes($assign, [Foreach_::class, FunctionLike::class]);
-        if (! $foundNode instanceof Foreach_) {
+        $foundNode = $this->betterNodeFinder->findFirstPreviousOfTypes($assign, [\PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\FunctionLike::class]);
+        if (!$foundNode instanceof \PhpParser\Node\Stmt\Foreach_) {
             return null;
         }
-
         return $foundNode;
     }
-
-    private function isExplicitlyReferenced(Node $node): bool
+    private function isExplicitlyReferenced(\PhpParser\Node $node) : bool
     {
-        if (! property_exists($node, 'byRef')) {
-            return false;
+        if (!\property_exists($node, 'byRef')) {
+            return \false;
         }
-
-        if ($node instanceof Arg || $node instanceof ClosureUse || $node instanceof Param) {
+        if ($node instanceof \PhpParser\Node\Arg || $node instanceof \PhpParser\Node\Expr\ClosureUse || $node instanceof \PhpParser\Node\Param) {
             return $node->byRef;
         }
-
-        return false;
+        return \false;
     }
-
-    private function isCallOrConstructorWithReference(Node $node, Variable $variable, int $argumentPosition): bool
+    private function isCallOrConstructorWithReference(\PhpParser\Node $node, \PhpParser\Node\Expr\Variable $variable, int $argumentPosition) : bool
     {
         if ($this->isMethodCallWithReferencedArgument($node, $variable)) {
-            return true;
+            return \true;
         }
-
         if ($this->isFuncCallWithReferencedArgument($node, $variable)) {
-            return true;
+            return \true;
         }
         return $this->isConstructorWithReference($node, $argumentPosition);
     }
-
-    private function isMethodCallWithReferencedArgument(Node $node, Variable $variable): bool
+    private function isMethodCallWithReferencedArgument(\PhpParser\Node $node, \PhpParser\Node\Expr\Variable $variable) : bool
     {
-        if (! $node instanceof MethodCall) {
-            return false;
+        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+            return \false;
         }
-
         $methodReflection = $this->callReflectionResolver->resolveCall($node);
-        if (! $methodReflection instanceof MethodReflection) {
-            return false;
+        if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+            return \false;
         }
-
         $variableName = $this->nodeNameResolver->getName($variable);
         $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection, $node);
-        if (! $parametersAcceptor instanceof ParametersAcceptor) {
-            return false;
+        if (!$parametersAcceptor instanceof \PHPStan\Reflection\ParametersAcceptor) {
+            return \false;
         }
-
         /** @var ParameterReflection $parameterReflection */
         foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
             if ($parameterReflection->getName() !== $variableName) {
                 continue;
             }
-
-            return $parameterReflection->passedByReference()
-                ->yes();
+            return $parameterReflection->passedByReference()->yes();
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Matches e.g:
      * - array_shift($value)
      * - sort($values)
      */
-    private function isFuncCallWithReferencedArgument(Node $node, Variable $variable): bool
+    private function isFuncCallWithReferencedArgument(\PhpParser\Node $node, \PhpParser\Node\Expr\Variable $variable) : bool
     {
-        if (! $node instanceof FuncCall) {
-            return false;
+        if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
+            return \false;
         }
-
-        if (! $this->nodeNameResolver->isNames($node, ['array_shift', '*sort'])) {
-            return false;
+        if (!$this->nodeNameResolver->isNames($node, ['array_shift', '*sort'])) {
+            return \false;
         }
-
         // is 1t argument
         return $node->args[0]->value !== $variable;
     }
-
-    private function isConstructorWithReference(Node $node, int $argumentPosition): bool
+    private function isConstructorWithReference(\PhpParser\Node $node, int $argumentPosition) : bool
     {
-        if (! $node instanceof New_) {
-            return false;
+        if (!$node instanceof \PhpParser\Node\Expr\New_) {
+            return \false;
         }
-
         return $this->isParameterReferencedInMethodReflection($node, $argumentPosition);
     }
-
-    private function isParameterReferencedInMethodReflection(New_ $new, int $argumentPosition): bool
+    private function isParameterReferencedInMethodReflection(\PhpParser\Node\Expr\New_ $new, int $argumentPosition) : bool
     {
         $methodReflection = $this->callReflectionResolver->resolveConstructor($new);
         $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection, $new);
-
-        if (! $parametersAcceptor instanceof ParametersAcceptor) {
-            return false;
+        if (!$parametersAcceptor instanceof \PHPStan\Reflection\ParametersAcceptor) {
+            return \false;
         }
-
         /** @var ParameterReflection $parameterReflection */
         foreach ($parametersAcceptor->getParameters() as $parameterPosition => $parameterReflection) {
             if ($parameterPosition !== $argumentPosition) {
                 continue;
             }
-
-            return $parameterReflection->passedByReference()
-                ->yes();
+            return $parameterReflection->passedByReference()->yes();
         }
-
-        return false;
+        return \false;
     }
 }

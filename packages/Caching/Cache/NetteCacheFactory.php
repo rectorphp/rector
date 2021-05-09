@@ -1,45 +1,37 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Caching\Cache;
 
-use Nette\Caching\Cache;
-use Nette\Caching\Storages\FileStorage;
+use RectorPrefix20210509\Nette\Caching\Cache;
+use RectorPrefix20210509\Nette\Caching\Storages\FileStorage;
 use Rector\Core\Configuration\Option;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\SmartFileSystem\SmartFileSystem;
-
+use RectorPrefix20210509\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210509\Symplify\SmartFileSystem\SmartFileSystem;
 final class NetteCacheFactory
 {
     /**
      * @var ParameterProvider
      */
     private $parameterProvider;
-
     /**
      * @var SmartFileSystem
      */
     private $smartFileSystem;
-
-    public function __construct(ParameterProvider $parameterProvider, SmartFileSystem $smartFileSystem)
+    public function __construct(\RectorPrefix20210509\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20210509\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->parameterProvider = $parameterProvider;
         $this->smartFileSystem = $smartFileSystem;
     }
-
-    public function create(): Cache
+    public function create() : \RectorPrefix20210509\Nette\Caching\Cache
     {
-        $cacheDirectory = $this->parameterProvider->provideStringParameter(Option::CACHE_DIR);
-
+        $cacheDirectory = $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::CACHE_DIR);
         // ensure cache directory exists
-        if (! $this->smartFileSystem->exists($cacheDirectory)) {
+        if (!$this->smartFileSystem->exists($cacheDirectory)) {
             $this->smartFileSystem->mkdir($cacheDirectory);
         }
-
-        $fileStorage = new FileStorage($cacheDirectory);
-
+        $fileStorage = new \RectorPrefix20210509\Nette\Caching\Storages\FileStorage($cacheDirectory);
         // namespace is unique per project
-        return new Cache($fileStorage, getcwd());
+        return new \RectorPrefix20210509\Nette\Caching\Cache($fileStorage, \getcwd());
     }
 }

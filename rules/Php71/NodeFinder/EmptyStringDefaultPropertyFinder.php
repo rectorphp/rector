@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Php71\NodeFinder;
 
 use PhpParser\Node;
@@ -12,67 +11,54 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-
 final class EmptyStringDefaultPropertyFinder
 {
     /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-
     /**
      * @var array<string, PropertyProperty[]>
      */
     private $propertyPropertiesByClassName = [];
-
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
-
     /**
      * @return PropertyProperty[]
      */
-    public function find(Assign $assign): array
+    public function find(\PhpParser\Node\Expr\Assign $assign) : array
     {
-        $classLike = $assign->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $classLike = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return [];
         }
-
-        $className = $assign->getAttribute(AttributeKey::CLASS_NAME);
-        if (! is_string($className)) {
+        $className = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        if (!\is_string($className)) {
             return [];
         }
-
         if (isset($this->propertyPropertiesByClassName[$className])) {
             return $this->propertyPropertiesByClassName[$className];
         }
-
         /** @var PropertyProperty[] $propertyProperties */
-        $propertyProperties = $this->betterNodeFinder->find($classLike, function (Node $node): bool {
-            if (! $node instanceof PropertyProperty) {
-                return false;
+        $propertyProperties = $this->betterNodeFinder->find($classLike, function (\PhpParser\Node $node) : bool {
+            if (!$node instanceof \PhpParser\Node\Stmt\PropertyProperty) {
+                return \false;
             }
-
             if ($node->default === null) {
-                return false;
+                return \false;
             }
-
             return $this->isEmptyString($node->default);
         });
-
         $this->propertyPropertiesByClassName[$className] = $propertyProperties;
-
         return $propertyProperties;
     }
-
-    private function isEmptyString(Expr $expr): bool
+    private function isEmptyString(\PhpParser\Node\Expr $expr) : bool
     {
-        if (! $expr instanceof String_) {
-            return false;
+        if (!$expr instanceof \PhpParser\Node\Scalar\String_) {
+            return \false;
         }
-
         return $expr->value === '';
     }
 }

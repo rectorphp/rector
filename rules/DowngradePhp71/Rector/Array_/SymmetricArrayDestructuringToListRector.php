@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\DowngradePhp71\Rector\Array_;
 
 use PhpParser\Node;
@@ -16,60 +15,51 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\DowngradePhp71\Rector\Array_\SymmetricArrayDestructuringToListRector\SymmetricArrayDestructuringToListRectorTest
  */
-final class SymmetricArrayDestructuringToListRector extends AbstractRector
+final class SymmetricArrayDestructuringToListRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Downgrade Symmetric array destructuring to list() function', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade Symmetric array destructuring to list() function', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 [$id1, $name1] = $data;
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 list($id1, $name1) = $data;
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Array_::class];
+        return [\PhpParser\Node\Expr\Array_::class];
     }
-
     /**
      * @param Array_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Assign && $this->nodeComparator->areNodesEqual($node, $parentNode->var)) {
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $this->nodeComparator->areNodesEqual($node, $parentNode->var)) {
             return $this->processToList($node);
         }
-        if (! $parentNode instanceof Foreach_) {
+        if (!$parentNode instanceof \PhpParser\Node\Stmt\Foreach_) {
             return null;
         }
-        if (! $this->nodeComparator->areNodesEqual($node, $parentNode->valueVar)) {
+        if (!$this->nodeComparator->areNodesEqual($node, $parentNode->valueVar)) {
             return null;
         }
         return $this->processToList($node);
     }
-
-    private function processToList(Array_ $array): FuncCall
+    private function processToList(\PhpParser\Node\Expr\Array_ $array) : \PhpParser\Node\Expr\FuncCall
     {
         $args = [];
         foreach ($array->items as $arrayItem) {
-            $args[] = $arrayItem instanceof ArrayItem ? new Arg($arrayItem->value) : null;
+            $args[] = $arrayItem instanceof \PhpParser\Node\Expr\ArrayItem ? new \PhpParser\Node\Arg($arrayItem->value) : null;
         }
-
-        return new FuncCall(new Name('list'), $args);
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('list'), $args);
     }
 }

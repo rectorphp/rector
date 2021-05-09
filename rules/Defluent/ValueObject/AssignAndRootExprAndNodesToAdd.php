@@ -1,42 +1,36 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Defluent\ValueObject;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Return_;
-
 final class AssignAndRootExprAndNodesToAdd
 {
     /**
      * @var array<Expr|Return_>
      */
     private $nodesToAdd = [];
-
     /**
      * @var AssignAndRootExpr
      */
     private $assignAndRootExpr;
-
     /**
      * @param array<Expr|Return_> $nodesToAdd
      */
-    public function __construct(AssignAndRootExpr $assignAndRootExpr, array $nodesToAdd)
+    public function __construct(\Rector\Defluent\ValueObject\AssignAndRootExpr $assignAndRootExpr, array $nodesToAdd)
     {
         $this->assignAndRootExpr = $assignAndRootExpr;
         $this->nodesToAdd = $nodesToAdd;
     }
-
     /**
      * @return Expr[]|Return_[]
      */
-    public function getNodesToAdd(): array
+    public function getNodesToAdd() : array
     {
         return $this->nodesToAdd;
     }
-
-    public function getRootCallerExpr(): Expr
+    public function getRootCallerExpr() : \PhpParser\Node\Expr
     {
         return $this->assignAndRootExpr->getCallerExpr();
     }

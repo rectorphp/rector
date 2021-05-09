@@ -1,41 +1,36 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\NodeNameResolver\NodeNameResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
-
-final class ClassConstFetchNameResolver implements NodeNameResolverInterface
+final class ClassConstFetchNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-
     /**
      * @required
      */
-    public function autowireClassConstFetchNameResolver(NodeNameResolver $nodeNameResolver): void
+    public function autowireClassConstFetchNameResolver(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-
     /**
      * @return class-string<Node>
      */
-    public function getNode(): string
+    public function getNode() : string
     {
-        return ClassConstFetch::class;
+        return \PhpParser\Node\Expr\ClassConstFetch::class;
     }
-
     /**
      * @param ClassConstFetch $node
      */
-    public function resolve(Node $node): ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
         $class = $this->nodeNameResolver->getName($node->class);
         $name = $this->nodeNameResolver->getName($node->name);
@@ -45,7 +40,6 @@ final class ClassConstFetchNameResolver implements NodeNameResolverInterface
         if ($name === null) {
             return null;
         }
-
         return $class . '::' . $name;
     }
 }

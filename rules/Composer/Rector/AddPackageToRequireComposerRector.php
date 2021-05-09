@@ -1,75 +1,60 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Composer\Rector;
 
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Rector\Composer\Guard\VersionGuard;
 use Rector\Composer\ValueObject\PackageAndVersion;
-use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use RectorPrefix20210509\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\Composer\Rector\AddPackageToRequireComposerRector\AddPackageToRequireComposerRectorTest
  */
-final class AddPackageToRequireComposerRector implements ComposerRectorInterface
+final class AddPackageToRequireComposerRector implements \Rector\Composer\Contract\Rector\ComposerRectorInterface
 {
     /**
      * @var string
      */
     public const PACKAGES_AND_VERSIONS = 'packages_and_versions';
-
     /**
      * @var PackageAndVersion[]
      */
     private $packagesAndVersions = [];
-
     /**
      * @var VersionGuard
      */
     private $versionGuard;
-
-    public function __construct(VersionGuard $versionGuard)
+    public function __construct(\Rector\Composer\Guard\VersionGuard $versionGuard)
     {
         $this->versionGuard = $versionGuard;
     }
-
-    public function refactor(ComposerJson $composerJson): void
+    public function refactor(\RectorPrefix20210509\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         foreach ($this->packagesAndVersions as $packageAndVersion) {
             $composerJson->addRequiredPackage($packageAndVersion->getPackageName(), $packageAndVersion->getVersion());
         }
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add package to "require" in `composer.json`', [new ConfiguredCodeSample(
-            <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add package to "require" in `composer.json`', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 {
 }
 CODE_SAMPLE
-            ,
-            <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 {
     "require": {
         "symfony/console": "^3.4"
     }
 }
 CODE_SAMPLE
-            ,
-            [
-                self::PACKAGES_AND_VERSIONS => [new PackageAndVersion('symfony/console', '^3.4')],
-            ]
-        ),
-        ]);
+, [self::PACKAGES_AND_VERSIONS => [new \Rector\Composer\ValueObject\PackageAndVersion('symfony/console', '^3.4')]])]);
     }
-
     /**
      * @param array<string, PackageAndVersion[]> $configuration
      */
-    public function configure(array $configuration): void
+    public function configure(array $configuration) : void
     {
         $packagesAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? [];
         $this->versionGuard->validate($packagesAndVersions);

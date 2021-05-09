@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\PHPOffice\Rector\MethodCall;
 
 use PhpParser\Node;
@@ -13,21 +12,16 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @changelog https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#conditionalsetcondition
  *
  * @see \Rector\Tests\PHPOffice\Rector\MethodCall\ChangeConditionalSetConditionRector\ChangeConditionalSetConditionRectorTest
  */
-final class ChangeConditionalSetConditionRector extends AbstractRector
+final class ChangeConditionalSetConditionRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Change argument PHPExcel_Style_Conditional->setCondition() to setConditions()',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change argument PHPExcel_Style_Conditional->setCondition() to setConditions()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -37,8 +31,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -48,47 +41,38 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
-
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (! $this->isObjectType($node->var, new ObjectType('PHPExcel_Style_Conditional'))) {
+        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('PHPExcel_Style_Conditional'))) {
             return null;
         }
-
-        if (! $this->isName($node->name, 'setCondition')) {
+        if (!$this->isName($node->name, 'setCondition')) {
             return null;
         }
-
-        $node->name = new Identifier('setConditions');
+        $node->name = new \PhpParser\Node\Identifier('setConditions');
         $this->castArgumentToArrayIfNotArrayType($node);
-
         return $node;
     }
-
-    private function castArgumentToArrayIfNotArrayType(MethodCall $methodCall): void
+    private function castArgumentToArrayIfNotArrayType(\PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
         $firstArgumentValue = $methodCall->args[0]->value;
         $firstArgumentStaticType = $this->getStaticType($firstArgumentValue);
-        if ($firstArgumentStaticType instanceof ArrayType) {
+        if ($firstArgumentStaticType instanceof \PHPStan\Type\ArrayType) {
             return;
         }
-
         // cast to array if not an array
-        $methodCall->args[0]->value = new Array_($firstArgumentValue);
+        $methodCall->args[0]->value = new \PhpParser\Node\Expr\Cast\Array_($firstArgumentValue);
     }
 }

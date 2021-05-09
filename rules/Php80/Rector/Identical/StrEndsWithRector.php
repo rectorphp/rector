@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Php80\Rector\Identical;
 
 use PhpParser\Node;
@@ -16,29 +15,24 @@ use Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer;
 use Rector\Nette\ValueObject\FuncCallAndExpr;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @changelog https://wiki.php.net/rfc/add_str_starts_with_and_ends_with_functions
  *
  * @see \Rector\Tests\Php80\Rector\Identical\StrEndsWithRector\StrEndsWithRectorTest
  */
-final class StrEndsWithRector extends AbstractRector
+final class StrEndsWithRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var BinaryOpAnalyzer
      */
     private $binaryOpAnalyzer;
-
-    public function __construct(BinaryOpAnalyzer $binaryOpAnalyzer)
+    public function __construct(\Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer $binaryOpAnalyzer)
     {
         $this->binaryOpAnalyzer = $binaryOpAnalyzer;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change helper functions to str_ends_with()', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change helper functions to str_ends_with()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -47,8 +41,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -57,93 +50,76 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Identical::class, NotIdentical::class];
+        return [\PhpParser\Node\Expr\BinaryOp\Identical::class, \PhpParser\Node\Expr\BinaryOp\NotIdentical::class];
     }
-
     /**
      * @param Identical|NotIdentical $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         return $this->refactorSubstr($node) ?? $this->refactorSubstrCompare($node);
     }
-
     /**
      * Covers:
      * $isMatch = substr($haystack, -strlen($needle)) === $needle;
      */
-    private function refactorSubstr(BinaryOp $binaryOp): ?FuncCall
+    private function refactorSubstr(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node\Expr\FuncCall
     {
-        if ($binaryOp->left instanceof FuncCall && $this->isName($binaryOp->left, 'substr')) {
+        if ($binaryOp->left instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($binaryOp->left, 'substr')) {
             $substrFuncCall = $binaryOp->left;
             $comparedNeedleExpr = $binaryOp->right;
-        } elseif ($binaryOp->right instanceof FuncCall && $this->isName($binaryOp->right, 'substr')) {
+        } elseif ($binaryOp->right instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($binaryOp->right, 'substr')) {
             $substrFuncCall = $binaryOp->right;
             $comparedNeedleExpr = $binaryOp->left;
         } else {
             return null;
         }
-
         $haystack = $substrFuncCall->args[0]->value;
-
         $needle = $this->matchUnaryMinusStrlenFuncCallArgValue($substrFuncCall->args[1]->value);
-        if (! $this->nodeComparator->areNodesEqual($needle, $comparedNeedleExpr)) {
+        if (!$this->nodeComparator->areNodesEqual($needle, $comparedNeedleExpr)) {
             return null;
         }
-
         return $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
     }
-
-    private function refactorSubstrCompare(BinaryOp $binaryOp): ?FuncCall
+    private function refactorSubstrCompare(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node\Expr\FuncCall
     {
         $funcCallAndExpr = $this->binaryOpAnalyzer->matchFuncCallAndOtherExpr($binaryOp, 'substr_compare');
-        if (! $funcCallAndExpr instanceof FuncCallAndExpr) {
+        if (!$funcCallAndExpr instanceof \Rector\Nette\ValueObject\FuncCallAndExpr) {
             return null;
         }
-
         $expr = $funcCallAndExpr->getExpr();
-        if (! $this->valueResolver->isValue($expr, 0)) {
+        if (!$this->valueResolver->isValue($expr, 0)) {
             return null;
         }
-
         $substrCompareFuncCall = $funcCallAndExpr->getFuncCall();
         $haystack = $substrCompareFuncCall->args[0]->value;
         $needle = $substrCompareFuncCall->args[1]->value;
-
         $comparedNeedleExpr = $this->matchUnaryMinusStrlenFuncCallArgValue($substrCompareFuncCall->args[2]->value);
-        if (! $this->nodeComparator->areNodesEqual($needle, $comparedNeedleExpr)) {
+        if (!$this->nodeComparator->areNodesEqual($needle, $comparedNeedleExpr)) {
             return null;
         }
-
         return $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
     }
-
-    private function matchUnaryMinusStrlenFuncCallArgValue(Node $node): ?Expr
+    private function matchUnaryMinusStrlenFuncCallArgValue(\PhpParser\Node $node) : ?\PhpParser\Node\Expr
     {
-        if (! $node instanceof UnaryMinus) {
+        if (!$node instanceof \PhpParser\Node\Expr\UnaryMinus) {
             return null;
         }
-
-        if (! $node->expr instanceof FuncCall) {
+        if (!$node->expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;
         }
-
-        if (! $this->nodeNameResolver->isName($node->expr, 'strlen')) {
+        if (!$this->nodeNameResolver->isName($node->expr, 'strlen')) {
             return null;
         }
-
         /** @var FuncCall $funcCall */
         $funcCall = $node->expr;
-
         return $funcCall->args[0]->value;
     }
 }

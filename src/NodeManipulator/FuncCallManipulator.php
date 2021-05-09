@@ -1,29 +1,25 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-
 final class FuncCallManipulator
 {
     /**
      * @var ValueResolver
      */
     private $valueResolver;
-
-    public function __construct(ValueResolver $valueResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }
-
     /**
      * @param FuncCall[] $compactFuncCalls
      * @return string[]
      */
-    public function extractArgumentsFromCompactFuncCalls(array $compactFuncCalls): array
+    public function extractArgumentsFromCompactFuncCalls(array $compactFuncCalls) : array
     {
         $arguments = [];
         foreach ($compactFuncCalls as $compactFuncCall) {
@@ -32,11 +28,9 @@ final class FuncCallManipulator
                 if ($value === null) {
                     continue;
                 }
-
                 $arguments[] = $value;
             }
         }
-
         return $arguments;
     }
 }

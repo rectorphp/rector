@@ -1,40 +1,30 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\ChangesReporting\ValueObjectFactory;
 
 use Rector\Core\Differ\DefaultDiffer;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Reporting\FileDiff;
-use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
-
+use RectorPrefix20210509\Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
 final class FileDiffFactory
 {
     /**
      * @var DefaultDiffer
      */
     private $defaultDiffer;
-
     /**
      * @var ConsoleDiffer
      */
     private $consoleDiffer;
-
-    public function __construct(DefaultDiffer $defaultDiffer, ConsoleDiffer $consoleDiffer)
+    public function __construct(\Rector\Core\Differ\DefaultDiffer $defaultDiffer, \RectorPrefix20210509\Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer $consoleDiffer)
     {
         $this->defaultDiffer = $defaultDiffer;
         $this->consoleDiffer = $consoleDiffer;
     }
-
-    public function createFileDiff(File $file, string $oldContent, string $newContent): FileDiff
+    public function createFileDiff(\Rector\Core\ValueObject\Application\File $file, string $oldContent, string $newContent) : \Rector\Core\ValueObject\Reporting\FileDiff
     {
         // always keep the most recent diff
-        return new FileDiff(
-            $file->getSmartFileInfo(),
-            $this->defaultDiffer->diff($oldContent, $newContent),
-            $this->consoleDiffer->diff($oldContent, $newContent),
-            $file->getRectorWithLineChanges()
-        );
+        return new \Rector\Core\ValueObject\Reporting\FileDiff($file->getSmartFileInfo(), $this->defaultDiffer->diff($oldContent, $newContent), $this->consoleDiffer->diff($oldContent, $newContent), $file->getRectorWithLineChanges());
     }
 }

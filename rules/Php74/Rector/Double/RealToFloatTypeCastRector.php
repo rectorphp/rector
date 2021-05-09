@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Php74\Rector\Double;
 
 use PhpParser\Node;
@@ -10,18 +9,15 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @changelog https://wiki.php.net/rfc/deprecations_php_7_4
  * @see \Rector\Tests\Php74\Rector\Double\RealToFloatTypeCastRector\RealToFloatTypeCastRectorTest
  */
-final class RealToFloatTypeCastRector extends AbstractRector
+final class RealToFloatTypeCastRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change deprecated (real) to (float)', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change deprecated (real) to (float)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -32,8 +28,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -44,31 +39,26 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Double::class];
+        return [\PhpParser\Node\Expr\Cast\Double::class];
     }
-
     /**
      * @param Double $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $kind = $node->getAttribute(AttributeKey::KIND);
-        if ($kind !== Double::KIND_REAL) {
+        $kind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
+        if ($kind !== \PhpParser\Node\Expr\Cast\Double::KIND_REAL) {
             return null;
         }
-
-        $node->setAttribute(AttributeKey::KIND, Double::KIND_FLOAT);
-        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-
+        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, \PhpParser\Node\Expr\Cast\Double::KIND_FLOAT);
+        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
 }

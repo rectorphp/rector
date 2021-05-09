@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\DowngradePhp71\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -12,29 +11,23 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @changelog https://wiki.php.net/rfc/iterable
  *
  * @see \Rector\Tests\DowngradePhp71\Rector\FuncCall\DowngradeIsIterableRector\DowngradeIsIterableRectorTest
  */
-final class DowngradeIsIterableRector extends AbstractRector
+final class DowngradeIsIterableRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Change is_iterable with array and Traversable object type check',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change is_iterable with array and Traversable object type check', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($obj)
@@ -43,8 +36,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($obj)
@@ -53,25 +45,20 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (! $this->isName($node, 'is_iterable')) {
+        if (!$this->isName($node, 'is_iterable')) {
             return null;
         }
-
         /** @var mixed $arg */
         $arg = $node->args[0]->value;
         $funcCall = $this->nodeFactory->createFuncCall('is_array', [$arg]);
-        $instanceOf = new Instanceof_($arg, new FullyQualified('Traversable'));
-
-        return new BooleanOr($funcCall, $instanceOf);
+        $instanceOf = new \PhpParser\Node\Expr\Instanceof_($arg, new \PhpParser\Node\Name\FullyQualified('Traversable'));
+        return new \PhpParser\Node\Expr\BinaryOp\BooleanOr($funcCall, $instanceOf);
     }
 }

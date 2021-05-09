@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 use PhpParser\Node;
@@ -20,108 +19,85 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
-use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-
-final class YieldNodesReturnTypeInferer implements ReturnTypeInfererInterface
+use RectorPrefix20210509\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+final class YieldNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface
 {
     /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-
     /**
      * @var TypeFactory
      */
     private $typeFactory;
-
     /**
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-
-    public function __construct(
-        NodeTypeResolver $nodeTypeResolver,
-        TypeFactory $typeFactory,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
-    ) {
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \RectorPrefix20210509\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeFactory = $typeFactory;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-
     /**
      * @param ClassMethod|Function_|Closure $functionLike
      */
-    public function inferFunctionLike(FunctionLike $functionLike): Type
+    public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
     {
         $yieldNodes = $this->findCurrentScopeYieldNodes($functionLike);
-
         if ($yieldNodes === []) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
-
         $types = [];
         foreach ($yieldNodes as $yieldNode) {
             $value = $this->resolveYieldValue($yieldNode);
-            if (! $value instanceof Expr) {
+            if (!$value instanceof \PhpParser\Node\Expr) {
                 continue;
             }
-
             $resolvedType = $this->nodeTypeResolver->getStaticType($value);
-            if ($resolvedType instanceof MixedType) {
+            if ($resolvedType instanceof \PHPStan\Type\MixedType) {
                 continue;
             }
             $types[] = $resolvedType;
         }
-
         if ($types === []) {
-            return new FullyQualifiedObjectType('Iterator');
+            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType('Iterator');
         }
-
         $types = $this->typeFactory->createMixedPassedOrUnionType($types);
-        return new FullyQualifiedGenericObjectType('Iterator', [$types]);
+        return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType('Iterator', [$types]);
     }
-
-    public function getPriority(): int
+    public function getPriority() : int
     {
         return 1200;
     }
-
     /**
      * @return Yield_[]|YieldFrom[]
      */
-    private function findCurrentScopeYieldNodes(FunctionLike $functionLike): array
+    private function findCurrentScopeYieldNodes(\PhpParser\Node\FunctionLike $functionLike) : array
     {
         $yieldNodes = [];
-
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (
-            Node $node
-        ) use (&$yieldNodes): ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (\PhpParser\Node $node) use(&$yieldNodes) : ?int {
             // skip nested scope
-            if ($node instanceof FunctionLike) {
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+            if ($node instanceof \PhpParser\Node\FunctionLike) {
+                return \PhpParser\NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
-
-            if (! $node instanceof Yield_ && ! $node instanceof YieldFrom) {
+            if (!$node instanceof \PhpParser\Node\Expr\Yield_ && !$node instanceof \PhpParser\Node\Expr\YieldFrom) {
                 return null;
             }
-
             $yieldNodes[] = $node;
             return null;
         });
-
         return $yieldNodes;
     }
-
     /**
      * @param Yield_|YieldFrom $yieldExpr
      */
-    private function resolveYieldValue(Expr $yieldExpr): ?Expr
+    private function resolveYieldValue(\PhpParser\Node\Expr $yieldExpr) : ?\PhpParser\Node\Expr
     {
-        if ($yieldExpr instanceof Yield_) {
+        if ($yieldExpr instanceof \PhpParser\Node\Expr\Yield_) {
             return $yieldExpr->value;
         }
-
         return $yieldExpr->expr;
     }
 }

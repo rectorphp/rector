@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node\Expr;
@@ -11,34 +10,27 @@ use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-
 final class NullsafeManipulator
 {
-    public function processNullSafeExpr(Expr $expr): ?Expr
+    public function processNullSafeExpr(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr
     {
-        if ($expr instanceof MethodCall) {
-            return new NullsafeMethodCall($expr->var, $expr->name);
+        if ($expr instanceof \PhpParser\Node\Expr\MethodCall) {
+            return new \PhpParser\Node\Expr\NullsafeMethodCall($expr->var, $expr->name);
         }
-
-        if ($expr instanceof PropertyFetch) {
-            return new NullsafePropertyFetch($expr->var, $expr->name);
+        if ($expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            return new \PhpParser\Node\Expr\NullsafePropertyFetch($expr->var, $expr->name);
         }
-
         return null;
     }
-
-    public function processNullSafeExprResult(?Expr $expr, Identifier $nextExprIdentifier): ?Expr
+    public function processNullSafeExprResult(?\PhpParser\Node\Expr $expr, \PhpParser\Node\Identifier $nextExprIdentifier) : ?\PhpParser\Node\Expr
     {
         if ($expr === null) {
             return null;
         }
-
-        $parentIdentifier = $nextExprIdentifier->getAttribute(AttributeKey::PARENT_NODE);
-
-        if ($parentIdentifier instanceof MethodCall || $parentIdentifier instanceof NullsafeMethodCall) {
-            return new NullsafeMethodCall($expr, $nextExprIdentifier);
+        $parentIdentifier = $nextExprIdentifier->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parentIdentifier instanceof \PhpParser\Node\Expr\MethodCall || $parentIdentifier instanceof \PhpParser\Node\Expr\NullsafeMethodCall) {
+            return new \PhpParser\Node\Expr\NullsafeMethodCall($expr, $nextExprIdentifier);
         }
-
-        return new NullsafePropertyFetch($expr, $nextExprIdentifier);
+        return new \PhpParser\Node\Expr\NullsafePropertyFetch($expr, $nextExprIdentifier);
     }
 }

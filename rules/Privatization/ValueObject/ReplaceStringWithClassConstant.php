@@ -1,33 +1,27 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Privatization\ValueObject;
 
 use PHPStan\Type\ObjectType;
-
 final class ReplaceStringWithClassConstant
 {
     /**
      * @var string
      */
     private $class;
-
     /**
      * @var string
      */
     private $method;
-
     /**
      * @var class-string
      */
     private $classWithConstants;
-
     /**
      * @var int
      */
     private $argPosition;
-
     /**
      * @param class-string $classWithConstants
      */
@@ -38,26 +32,22 @@ final class ReplaceStringWithClassConstant
         $this->classWithConstants = $classWithConstants;
         $this->argPosition = $argPosition;
     }
-
-    public function getObjectType(): ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->class);
+        return new \PHPStan\Type\ObjectType($this->class);
     }
-
-    public function getMethod(): string
+    public function getMethod() : string
     {
         return $this->method;
     }
-
     /**
      * @return class-string
      */
-    public function getClassWithConstants(): string
+    public function getClassWithConstants() : string
     {
         return $this->classWithConstants;
     }
-
-    public function getArgPosition(): int
+    public function getArgPosition() : int
     {
         return $this->argPosition;
     }

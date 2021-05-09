@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\TypeDeclaration\ValueObject;
 
 /**
@@ -13,7 +12,6 @@ final class TypeStrictness
      * @var string
      */
     public const STRICTNESS_TYPE_DECLARATION = 'type_declaration';
-
     /**
      * @var string
      */

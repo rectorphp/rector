@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Transform\Rector\MethodCall;
 
 use PhpParser\Node;
@@ -11,29 +10,22 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\ReplaceParentCallByPropertyCallRectorTest
  */
-final class ReplaceParentCallByPropertyCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class ReplaceParentCallByPropertyCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
      */
     public const PARENT_CALLS_TO_PROPERTIES = 'parent_calls_to_properties';
-
     /**
      * @var ReplaceParentCallByPropertyCall[]
      */
     private $parentCallToProperties = [];
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Changes method calls in child of specific types to defined property method call',
-            [
-                new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes method calls in child of specific types to defined property method call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(SomeTypeToReplace $someTypeToReplace)
@@ -42,8 +34,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(SomeTypeToReplace $someTypeToReplace)
@@ -52,50 +43,36 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
-                    [
-                        self::PARENT_CALLS_TO_PROPERTIES => [
-                            new ReplaceParentCallByPropertyCall('SomeTypeToReplace', 'someMethodCall', 'someProperty'),
-                        ],
-                    ]
-                ),
-            ]
-        );
+, [self::PARENT_CALLS_TO_PROPERTIES => [new \Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall('SomeTypeToReplace', 'someMethodCall', 'someProperty')]])]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
-
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->parentCallToProperties as $parentCallToProperty) {
-            if (! $this->isObjectType($node->var, $parentCallToProperty->getObjectType())) {
+            if (!$this->isObjectType($node->var, $parentCallToProperty->getObjectType())) {
                 continue;
             }
-
-            if (! $this->isName($node->name, $parentCallToProperty->getMethod())) {
+            if (!$this->isName($node->name, $parentCallToProperty->getMethod())) {
                 continue;
             }
-
             $node->var = $this->nodeFactory->createPropertyFetch('this', $parentCallToProperty->getProperty());
             return $node;
         }
-
         return null;
     }
-
     /**
      * @param array<string, ReplaceParentCallByPropertyCall[]> $configuration
      */
-    public function configure(array $configuration): void
+    public function configure(array $configuration) : void
     {
         $this->parentCallToProperties = $configuration[self::PARENT_CALLS_TO_PROPERTIES] ?? [];
     }

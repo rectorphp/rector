@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Defluent\ValueObject;
 
 final class FluentCallsKind
@@ -10,7 +9,6 @@ final class FluentCallsKind
      * @var string
      */
     public const NORMAL = 'normal';
-
     /**
      * @var string
      */

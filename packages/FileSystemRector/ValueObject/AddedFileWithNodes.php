@@ -1,25 +1,21 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\FileSystemRector\ValueObject;
 
 use PhpParser\Node;
 use Rector\FileSystemRector\Contract\AddedFileInterface;
 use Rector\FileSystemRector\Contract\FileWithNodesInterface;
-
-final class AddedFileWithNodes implements AddedFileInterface, FileWithNodesInterface
+final class AddedFileWithNodes implements \Rector\FileSystemRector\Contract\AddedFileInterface, \Rector\FileSystemRector\Contract\FileWithNodesInterface
 {
     /**
      * @var string
      */
     private $filePath;
-
     /**
      * @var Node[]
      */
     private $nodes = [];
-
     /**
      * @param Node[] $nodes
      */
@@ -28,16 +24,14 @@ final class AddedFileWithNodes implements AddedFileInterface, FileWithNodesInter
         $this->filePath = $filePath;
         $this->nodes = $nodes;
     }
-
-    public function getFilePath(): string
+    public function getFilePath() : string
     {
         return $this->filePath;
     }
-
     /**
      * @return Node[]
      */
-    public function getNodes(): array
+    public function getNodes() : array
     {
         return $this->nodes;
     }

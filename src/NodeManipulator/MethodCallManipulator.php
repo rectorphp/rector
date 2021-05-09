@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
@@ -15,136 +14,107 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-
 final class MethodCallManipulator
 {
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-
     /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-
     /**
      * @var FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
-
-    public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver,
-        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
-    ) {
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
+    {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
-
     /**
      * @return string[]
      */
-    public function findMethodCallNamesOnVariable(Variable $variable): array
+    public function findMethodCallNamesOnVariable(\PhpParser\Node\Expr\Variable $variable) : array
     {
         $methodCallsOnVariable = $this->findMethodCallsOnVariable($variable);
-
         $methodCallNamesOnVariable = [];
         foreach ($methodCallsOnVariable as $methodCallOnVariable) {
             $methodName = $this->nodeNameResolver->getName($methodCallOnVariable->name);
             if ($methodName === null) {
                 continue;
             }
-
             $methodCallNamesOnVariable[] = $methodName;
         }
-
-        return array_unique($methodCallNamesOnVariable);
+        return \array_unique($methodCallNamesOnVariable);
     }
-
     /**
      * @return MethodCall[]
      */
-    public function findMethodCallsIncludingChain(MethodCall $methodCall): array
+    public function findMethodCallsIncludingChain(\PhpParser\Node\Expr\MethodCall $methodCall) : array
     {
         $chainMethodCalls = [];
-
         // 1. collect method chain call
         $currentMethodCallee = $methodCall->var;
-        while ($currentMethodCallee instanceof MethodCall) {
+        while ($currentMethodCallee instanceof \PhpParser\Node\Expr\MethodCall) {
             $chainMethodCalls[] = $currentMethodCallee;
             $currentMethodCallee = $currentMethodCallee->var;
         }
-
         // 2. collect on-same-variable calls
         $onVariableMethodCalls = [];
-        if ($currentMethodCallee instanceof Variable) {
+        if ($currentMethodCallee instanceof \PhpParser\Node\Expr\Variable) {
             $onVariableMethodCalls = $this->findMethodCallsOnVariable($currentMethodCallee);
         }
-
-        $methodCalls = array_merge($chainMethodCalls, $onVariableMethodCalls);
-
+        $methodCalls = \array_merge($chainMethodCalls, $onVariableMethodCalls);
         return $this->uniquateObjects($methodCalls);
     }
-
-    public function findAssignToVariable(Variable $variable): ?Assign
+    public function findAssignToVariable(\PhpParser\Node\Expr\Variable $variable) : ?\PhpParser\Node\Expr\Assign
     {
-        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Node) {
+        $parentNode = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node) {
             return null;
         }
-
         $variableName = $this->nodeNameResolver->getName($variable);
         if ($variableName === null) {
             return null;
         }
-
         do {
             $assign = $this->findAssignToVariableName($parentNode, $variableName);
-            if ($assign instanceof Assign) {
+            if ($assign instanceof \PhpParser\Node\Expr\Assign) {
                 return $assign;
             }
-
             $parentNode = $this->resolvePreviousNodeInSameScope($parentNode);
-        } while ($parentNode instanceof Node && ! $parentNode instanceof FunctionLike);
-
+        } while ($parentNode instanceof \PhpParser\Node && !$parentNode instanceof \PhpParser\Node\FunctionLike);
         return null;
     }
-
     /**
      * @return MethodCall[]
      */
-    public function findMethodCallsOnVariable(Variable $variable): array
+    public function findMethodCallsOnVariable(\PhpParser\Node\Expr\Variable $variable) : array
     {
         // get scope node, e.g. parent function call, method call or anonymous function
-        $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);
-        if (! $classMethod instanceof ClassMethod) {
+        $classMethod = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return [];
         }
-
         $variableName = $this->nodeNameResolver->getName($variable);
         if ($variableName === null) {
             return [];
         }
-
-        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use (
-            $variableName
-        ): bool {
-            if (! $node instanceof MethodCall) {
-                return false;
+        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (\PhpParser\Node $node) use($variableName) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+                return \false;
             }
-
             // cover fluent interfaces too
             $callerNode = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($node);
-            if (! $callerNode instanceof Variable) {
-                return false;
+            if (!$callerNode instanceof \PhpParser\Node\Expr\Variable) {
+                return \false;
             }
-
             return $this->nodeNameResolver->isName($callerNode, $variableName);
         });
     }
-
     /**
      * @see https://stackoverflow.com/a/4507991/1348344
      * @param object[] $objects
@@ -154,49 +124,41 @@ final class MethodCallManipulator
      * @phpstan-param array<T>|T[] $objects
      * @phpstan-return array<T>|T[]
      */
-    private function uniquateObjects(array $objects): array
+    private function uniquateObjects(array $objects) : array
     {
         $uniqueObjects = [];
         foreach ($objects as $object) {
-            if (in_array($object, $uniqueObjects, true)) {
+            if (\in_array($object, $uniqueObjects, \true)) {
                 continue;
             }
-
             $uniqueObjects[] = $object;
         }
-
         // re-index
-        return array_values($uniqueObjects);
+        return \array_values($uniqueObjects);
     }
-
-    private function findAssignToVariableName(Node $node, string $variableName): ?Node
+    private function findAssignToVariableName(\PhpParser\Node $node, string $variableName) : ?\PhpParser\Node
     {
-        return $this->betterNodeFinder->findFirst($node, function (Node $node) use ($variableName): bool {
-            if (! $node instanceof Assign) {
-                return false;
+        return $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $node) use($variableName) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+                return \false;
             }
-
-            if (! $node->var instanceof Variable) {
-                return false;
+            if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
+                return \false;
             }
-
             return $this->nodeNameResolver->isName($node->var, $variableName);
         });
     }
-
-    private function resolvePreviousNodeInSameScope(Node $parentNode): ?Node
+    private function resolvePreviousNodeInSameScope(\PhpParser\Node $parentNode) : ?\PhpParser\Node
     {
         $previousParentNode = $parentNode;
-        $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-
-        if (! $parentNode instanceof FunctionLike) {
+        $parentNode = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node\FunctionLike) {
             // is about to leave → try previous expression
-            $previousStatement = $previousParentNode->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-            if ($previousStatement instanceof Expression) {
+            $previousStatement = $previousParentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT);
+            if ($previousStatement instanceof \PhpParser\Node\Stmt\Expression) {
                 return $previousStatement->expr;
             }
         }
-
         return $parentNode;
     }
 }

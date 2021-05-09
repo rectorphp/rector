@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Php74\Rector\Closure;
 
 use PhpParser\Node;
@@ -13,29 +12,24 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php74\NodeAnalyzer\ClosureArrowFunctionAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @changelog https://wiki.php.net/rfc/arrow_functions_v2
  *
  * @see \Rector\Tests\Php74\Rector\Closure\ClosureToArrowFunctionRector\ClosureToArrowFunctionRectorTest
  */
-final class ClosureToArrowFunctionRector extends AbstractRector
+final class ClosureToArrowFunctionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ClosureArrowFunctionAnalyzer
      */
     private $closureArrowFunctionAnalyzer;
-
-    public function __construct(ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer)
+    public function __construct(\Rector\Php74\NodeAnalyzer\ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer)
     {
         $this->closureArrowFunctionAnalyzer = $closureArrowFunctionAnalyzer;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change closure to arrow function', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change closure to arrow function', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($meetups)
@@ -46,8 +40,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($meetups)
@@ -56,43 +49,35 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Closure::class];
+        return [\PhpParser\Node\Expr\Closure::class];
     }
-
     /**
      * @param Closure $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::ARROW_FUNCTION)) {
+        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::ARROW_FUNCTION)) {
             return null;
         }
-
         $returnExpr = $this->closureArrowFunctionAnalyzer->matchArrowFunctionExpr($node);
-        if (! $returnExpr instanceof Expr) {
+        if (!$returnExpr instanceof \PhpParser\Node\Expr) {
             return null;
         }
-
-        $arrowFunction = new ArrowFunction();
+        $arrowFunction = new \PhpParser\Node\Expr\ArrowFunction();
         $arrowFunction->params = $node->params;
         $arrowFunction->returnType = $node->returnType;
         $arrowFunction->byRef = $node->byRef;
-
         $arrowFunction->expr = $returnExpr;
-
         if ($node->static) {
-            $arrowFunction->static = true;
+            $arrowFunction->static = \true;
         }
-
         return $arrowFunction;
     }
 }

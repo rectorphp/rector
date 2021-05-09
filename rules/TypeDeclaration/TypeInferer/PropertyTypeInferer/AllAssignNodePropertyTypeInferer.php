@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node\Stmt\ClassLike;
@@ -12,41 +11,32 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
-
-final class AllAssignNodePropertyTypeInferer implements PropertyTypeInfererInterface
+final class AllAssignNodePropertyTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface
 {
     /**
      * @var AssignToPropertyTypeInferer
      */
     private $assignToPropertyTypeInferer;
-
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-
-    public function __construct(
-        AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
-        NodeNameResolver $nodeNameResolver
-    ) {
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer $assignToPropertyTypeInferer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    {
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-
-    public function inferProperty(Property $property): Type
+    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
     {
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof ClassLike) {
+        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             // anonymous class
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
-
         $propertyName = $this->nodeNameResolver->getName($property);
-
         return $this->assignToPropertyTypeInferer->inferPropertyInClassLike($propertyName, $classLike);
     }
-
-    public function getPriority(): int
+    public function getPriority() : int
     {
         return 1500;
     }

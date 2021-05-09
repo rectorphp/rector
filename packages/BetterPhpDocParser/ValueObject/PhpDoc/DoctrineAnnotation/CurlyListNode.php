@@ -1,48 +1,41 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation;
 
-final class CurlyListNode extends AbstractValuesAwareNode
+final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\AbstractValuesAwareNode
 {
-    public function __toString(): string
+    public function __toString() : string
     {
         $itemContents = '';
-        $lastItemKey = array_key_last($this->values);
-
+        \end($this->values);
+        $lastItemKey = \key($this->values);
         foreach ($this->values as $key => $value) {
-            if (is_int($key)) {
+            if (\is_int($key)) {
                 $itemContents .= $this->stringifyValue($value);
             } else {
                 $itemContents .= $key . '=' . $this->stringifyValue($value);
             }
-
             if ($lastItemKey !== $key) {
                 $itemContents .= ', ';
             }
         }
-
         return '{' . $itemContents . '}';
     }
-
     /**
      * @param mixed $value
      */
-    private function stringifyValue($value): string
+    private function stringifyValue($value) : string
     {
-        if ($value === false) {
+        if ($value === \false) {
             return 'false';
         }
-
-        if ($value === true) {
+        if ($value === \true) {
             return 'true';
         }
-
-        if (is_array($value)) {
-            return implode(', ', $value);
+        if (\is_array($value)) {
+            return \implode(', ', $value);
         }
-
         return (string) $value;
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 final class FunctionToStaticCall
@@ -10,35 +9,29 @@ final class FunctionToStaticCall
      * @var string
      */
     private $class;
-
     /**
      * @var string
      */
     private $method;
-
     /**
      * @var string
      */
     private $function;
-
     public function __construct(string $function, string $class, string $method)
     {
         $this->class = $class;
         $this->method = $method;
         $this->function = $function;
     }
-
-    public function getClass(): string
+    public function getClass() : string
     {
         return $this->class;
     }
-
-    public function getMethod(): string
+    public function getMethod() : string
     {
         return $this->method;
     }
-
-    public function getFunction(): string
+    public function getFunction() : string
     {
         return $this->function;
     }

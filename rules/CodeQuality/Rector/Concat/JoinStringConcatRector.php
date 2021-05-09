@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Concat;
 
-use Nette\Utils\Strings;
+use RectorPrefix20210509\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
@@ -13,29 +12,22 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Concat\JoinStringConcatRector\JoinStringConcatRectorTest
  */
-final class JoinStringConcatRector extends AbstractRector
+final class JoinStringConcatRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var int
      */
     private const LINE_BREAK_POINT = 100;
-
     /**
      * @var bool
      */
-    private $nodeReplacementIsRestricted = false;
-
-    public function getRuleDefinition(): RuleDefinition
+    private $nodeReplacementIsRestricted = \false;
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Joins concat of 2 strings, unless the length is too long',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Joins concat of 2 strings, unless the length is too long', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -44,8 +36,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -54,90 +45,71 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Concat::class];
+        return [\PhpParser\Node\Expr\BinaryOp\Concat::class];
     }
-
     /**
      * @param Concat $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $this->nodeReplacementIsRestricted = false;
-
-        if (! $this->isTopMostConcatNode($node)) {
+        $this->nodeReplacementIsRestricted = \false;
+        if (!$this->isTopMostConcatNode($node)) {
             return null;
         }
-
         $joinedNode = $this->joinConcatIfStrings($node);
-        if (! $joinedNode instanceof String_) {
+        if (!$joinedNode instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
-
         if ($this->nodeReplacementIsRestricted) {
             return null;
         }
-
         return $joinedNode;
     }
-
-    private function isTopMostConcatNode(Concat $concat): bool
+    private function isTopMostConcatNode(\PhpParser\Node\Expr\BinaryOp\Concat $concat) : bool
     {
-        $parent = $concat->getAttribute(AttributeKey::PARENT_NODE);
-        return ! $parent instanceof Concat;
+        $parent = $concat->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        return !$parent instanceof \PhpParser\Node\Expr\BinaryOp\Concat;
     }
-
     /**
      * @return Concat|String_
      */
-    private function joinConcatIfStrings(Concat $node): Expr
+    private function joinConcatIfStrings(\PhpParser\Node\Expr\BinaryOp\Concat $node) : \PhpParser\Node\Expr
     {
         $concat = clone $node;
-
-        if ($concat->left instanceof Concat) {
+        if ($concat->left instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
             $concat->left = $this->joinConcatIfStrings($concat->left);
         }
-
-        if ($concat->right instanceof Concat) {
+        if ($concat->right instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
             $concat->right = $this->joinConcatIfStrings($concat->right);
         }
-
-        if (! $concat->left instanceof String_) {
+        if (!$concat->left instanceof \PhpParser\Node\Scalar\String_) {
             return $node;
         }
-
-        if (! $concat->right instanceof String_) {
+        if (!$concat->right instanceof \PhpParser\Node\Scalar\String_) {
             return $node;
         }
-
         $leftValue = $concat->left->value;
         $rightValue = $concat->right->value;
-
         if ($leftValue === "\n") {
-            $this->nodeReplacementIsRestricted = true;
+            $this->nodeReplacementIsRestricted = \true;
             return $node;
         }
-
         if ($rightValue === "\n") {
-            $this->nodeReplacementIsRestricted = true;
+            $this->nodeReplacementIsRestricted = \true;
             return $node;
         }
-
-        $resultString = new String_($leftValue . $rightValue);
-        if (Strings::length($resultString->value) >= self::LINE_BREAK_POINT) {
-            $this->nodeReplacementIsRestricted = true;
+        $resultString = new \PhpParser\Node\Scalar\String_($leftValue . $rightValue);
+        if (\RectorPrefix20210509\Nette\Utils\Strings::length($resultString->value) >= self::LINE_BREAK_POINT) {
+            $this->nodeReplacementIsRestricted = \true;
             return $node;
         }
-
         return $resultString;
     }
 }

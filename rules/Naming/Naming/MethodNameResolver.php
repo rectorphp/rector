@@ -1,45 +1,37 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Naming\Naming;
 
-use Nette\Utils\Strings;
+use RectorPrefix20210509\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
-
 final class MethodNameResolver
 {
     /**
      * @var VariableNaming
      */
     private $variableNaming;
-
-    public function __construct(VariableNaming $variableNaming)
+    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming)
     {
         $this->variableNaming = $variableNaming;
     }
-
-    public function resolveGetterFromReturnedExpr(Expr $expr): ?string
+    public function resolveGetterFromReturnedExpr(\PhpParser\Node\Expr $expr) : ?string
     {
         $variableName = $this->variableNaming->resolveFromNode($expr);
         if ($variableName === null) {
             return null;
         }
-
-        return 'get' . ucfirst($variableName);
+        return 'get' . \ucfirst($variableName);
     }
-
-    public function resolveIsserFromReturnedExpr(Expr $expr): ?string
+    public function resolveIsserFromReturnedExpr(\PhpParser\Node\Expr $expr) : ?string
     {
         $variableName = $this->variableNaming->resolveFromNode($expr);
         if ($variableName === null) {
             return null;
         }
-
-        if (Strings::match($variableName, '#^(is)#')) {
+        if (\RectorPrefix20210509\Nette\Utils\Strings::match($variableName, '#^(is)#')) {
             return $variableName;
         }
-
-        return 'is' . ucfirst($variableName);
+        return 'is' . \ucfirst($variableName);
     }
 }

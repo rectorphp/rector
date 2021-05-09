@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
@@ -18,39 +17,32 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
-
-final class ScalarTypeResolver implements NodeTypeResolverInterface
+final class ScalarTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeClasses(): array
+    public function getNodeClasses() : array
     {
-        return [Scalar::class];
+        return [\PhpParser\Node\Scalar::class];
     }
-
-    public function resolve(Node $node): Type
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
-        if ($node instanceof DNumber) {
-            return new ConstantFloatType($node->value);
+        if ($node instanceof \PhpParser\Node\Scalar\DNumber) {
+            return new \PHPStan\Type\Constant\ConstantFloatType($node->value);
         }
-
-        if ($node instanceof String_) {
-            return new ConstantStringType($node->value);
+        if ($node instanceof \PhpParser\Node\Scalar\String_) {
+            return new \PHPStan\Type\Constant\ConstantStringType($node->value);
         }
-
-        if ($node instanceof LNumber) {
-            return new ConstantIntegerType($node->value);
+        if ($node instanceof \PhpParser\Node\Scalar\LNumber) {
+            return new \PHPStan\Type\Constant\ConstantIntegerType($node->value);
         }
-
-        if ($node instanceof MagicConst) {
-            return new ConstantStringType($node->getName());
+        if ($node instanceof \PhpParser\Node\Scalar\MagicConst) {
+            return new \PHPStan\Type\Constant\ConstantStringType($node->getName());
         }
-
-        if ($node instanceof Encapsed) {
-            return new MixedType();
+        if ($node instanceof \PhpParser\Node\Scalar\Encapsed) {
+            return new \PHPStan\Type\MixedType();
         }
-
-        throw new NotImplementedYetException();
+        throw new \Rector\Core\Exception\NotImplementedYetException();
     }
 }

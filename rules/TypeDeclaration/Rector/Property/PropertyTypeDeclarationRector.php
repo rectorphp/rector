@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Property;
 
 use PhpParser\Node;
@@ -13,33 +12,27 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\PropertyTypeDeclarationRectorTest
  */
-final class PropertyTypeDeclarationRector extends AbstractRector
+final class PropertyTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var PropertyTypeInferer
      */
     private $propertyTypeInferer;
-
     /**
      * @var PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-
-    public function __construct(PropertyTypeInferer $propertyTypeInferer, PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->propertyTypeInferer = $propertyTypeInferer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add @var to properties that are missing it', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add @var to properties that are missing it', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private $value;
@@ -50,8 +43,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -65,49 +57,39 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
-
     /**
      * @param Property $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (count($node->props) !== 1) {
+        if (\count($node->props) !== 1) {
             return null;
         }
-
         if ($node->type !== null) {
             return null;
         }
-
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-
         // is already set
-        if (! $phpDocInfo->getVarType() instanceof MixedType) {
+        if (!$phpDocInfo->getVarType() instanceof \PHPStan\Type\MixedType) {
             return null;
         }
-
         $type = $this->propertyTypeInferer->inferProperty($node);
-        if ($type instanceof MixedType) {
+        if ($type instanceof \PHPStan\Type\MixedType) {
             return null;
         }
-
-        if (! $node->isPrivate() && $type instanceof NullType) {
+        if (!$node->isPrivate() && $type instanceof \PHPStan\Type\NullType) {
             return null;
         }
-
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
-
         return $node;
     }
 }

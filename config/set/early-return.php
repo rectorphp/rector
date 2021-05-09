@@ -1,6 +1,7 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace RectorPrefix20210509;
 
 use Rector\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector;
 use Rector\EarlyReturn\Rector\Foreach_\ReturnAfterToEarlyOnBreakRector;
@@ -13,19 +14,18 @@ use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
 use Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryAndToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
+use RectorPrefix20210509\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+return static function (\RectorPrefix20210509\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(ChangeNestedForeachIfsToEarlyContinueRector::class);
-    $services->set(ChangeAndIfToEarlyReturnRector::class);
-    $services->set(ChangeIfElseValueAssignToEarlyReturnRector::class);
-    $services->set(ChangeNestedIfsToEarlyReturnRector::class);
-    $services->set(RemoveAlwaysElseRector::class);
-    $services->set(ReturnBinaryAndToEarlyReturnRector::class);
-    $services->set(ChangeOrIfReturnToEarlyReturnRector::class);
-    $services->set(ChangeOrIfContinueToMultiContinueRector::class);
-    $services->set(ReturnAfterToEarlyOnBreakRector::class);
-    $services->set(PreparedValueToEarlyReturnRector::class);
-    $services->set(ReturnBinaryOrToEarlyReturnRector::class);
+    $services->set(\Rector\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector::class);
+    $services->set(\Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector::class);
+    $services->set(\Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector::class);
+    $services->set(\Rector\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector::class);
+    $services->set(\Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector::class);
+    $services->set(\Rector\EarlyReturn\Rector\Return_\ReturnBinaryAndToEarlyReturnRector::class);
+    $services->set(\Rector\EarlyReturn\Rector\If_\ChangeOrIfReturnToEarlyReturnRector::class);
+    $services->set(\Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector::class);
+    $services->set(\Rector\EarlyReturn\Rector\Foreach_\ReturnAfterToEarlyOnBreakRector::class);
+    $services->set(\Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector::class);
+    $services->set(\Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector::class);
 };

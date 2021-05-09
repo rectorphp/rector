@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\FamilyTree\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -15,84 +14,62 @@ use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-
 final class PropertyUsageAnalyzer
 {
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-
     /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-
     /**
      * @var FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-
     /**
      * @var NodeRepository
      */
     private $nodeRepository;
-
-    public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        NodeNameResolver $nodeNameResolver,
-        NodeRepository $nodeRepository
-    ) {
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
+    {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->nodeRepository = $nodeRepository;
     }
-
-    public function isPropertyFetchedInChildClass(Property $property): bool
+    public function isPropertyFetchedInChildClass(\PhpParser\Node\Stmt\Property $property) : bool
     {
-        $className = $property->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         if ($className === null) {
-            return false;
+            return \false;
         }
-
-        $scope = $property->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
+        $scope = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return \false;
         }
-
         $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            throw new ShouldNotHappenException();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-
         if ($classReflection->isClass() && $classReflection->isFinal()) {
-            return false;
+            return \false;
         }
-
         $propertyName = $this->nodeNameResolver->getName($property);
-
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
-
         foreach ($childrenClassReflections as $childClassReflection) {
             $childClass = $this->nodeRepository->findClass($childClassReflection->getName());
-            if (! $childClass instanceof Class_) {
+            if (!$childClass instanceof \PhpParser\Node\Stmt\Class_) {
                 continue;
             }
-
-            $isPropertyFetched = (bool) $this->betterNodeFinder->findFirst(
-                $childClass->stmts,
-                function (Node $node) use ($propertyName): bool {
-                    return $this->nodeNameResolver->isLocalPropertyFetchNamed($node, $propertyName);
-                }
-            );
-
+            $isPropertyFetched = (bool) $this->betterNodeFinder->findFirst($childClass->stmts, function (\PhpParser\Node $node) use($propertyName) : bool {
+                return $this->nodeNameResolver->isLocalPropertyFetchNamed($node, $propertyName);
+            });
             if ($isPropertyFetched) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
 }

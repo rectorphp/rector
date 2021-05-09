@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Naming\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -16,40 +15,31 @@ use Rector\Naming\Naming\MethodNameResolver;
 use Rector\Naming\NodeRenamer\MethodCallRenamer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\Naming\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector\MakeGetterClassMethodNameStartWithGetRectorTest
  */
-final class MakeGetterClassMethodNameStartWithGetRector extends AbstractRector
+final class MakeGetterClassMethodNameStartWithGetRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
      */
     private const GETTER_NAME_PATTERN = '#^(is|should|has|was|must|get|provide|__)#';
-
     /**
      * @var MethodNameResolver
      */
     private $methodNameResolver;
-
     /**
      * @var MethodCallRenamer
      */
     private $methodCallRenamer;
-
-    public function __construct(MethodNameResolver $methodNameResolver, MethodCallRenamer $methodCallRenamer)
+    public function __construct(\Rector\Naming\Naming\MethodNameResolver $methodNameResolver, \Rector\Naming\NodeRenamer\MethodCallRenamer $methodCallRenamer)
     {
         $this->methodNameResolver = $methodNameResolver;
         $this->methodCallRenamer = $methodCallRenamer;
     }
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Change getter method names to start with get/provide',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change getter method names to start with get/provide', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -63,9 +53,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -79,75 +67,60 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
-
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->isAlreadyGetterNamedClassMethod($node)) {
             return null;
         }
-
         $getterClassMethodReturnedExpr = $this->matchGetterClassMethodReturnedExpr($node);
-        if (! $getterClassMethodReturnedExpr instanceof Expr) {
+        if (!$getterClassMethodReturnedExpr instanceof \PhpParser\Node\Expr) {
             return null;
         }
-
         $getterMethodName = $this->methodNameResolver->resolveGetterFromReturnedExpr($getterClassMethodReturnedExpr);
         if ($getterMethodName === null) {
             return null;
         }
-
         if ($this->isName($node->name, $getterMethodName)) {
             return null;
         }
-
         $this->methodCallRenamer->updateClassMethodCalls($node, $getterMethodName);
-        $node->name = new Identifier($getterMethodName);
-
+        $node->name = new \PhpParser\Node\Identifier($getterMethodName);
         return $node;
     }
-
-    private function isAlreadyGetterNamedClassMethod(ClassMethod $classMethod): bool
+    private function isAlreadyGetterNamedClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         return $this->isName($classMethod, self::GETTER_NAME_PATTERN);
     }
-
-    private function matchGetterClassMethodReturnedExpr(ClassMethod $classMethod): ?Expr
+    private function matchGetterClassMethodReturnedExpr(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Expr
     {
         $stmts = (array) $classMethod->stmts;
-        if (count($stmts) !== 1) {
+        if (\count($stmts) !== 1) {
             return null;
         }
-
         $onlyStmt = $stmts[0] ?? null;
-        if (! $onlyStmt instanceof Return_) {
+        if (!$onlyStmt instanceof \PhpParser\Node\Stmt\Return_) {
             return null;
         }
-
-        if (! $onlyStmt->expr instanceof PropertyFetch) {
+        if (!$onlyStmt->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return null;
         }
-
         $propertyStaticType = $this->getStaticType($onlyStmt->expr);
         // is handled by boolish Rector → skip here
-        if ($propertyStaticType instanceof BooleanType) {
+        if ($propertyStaticType instanceof \PHPStan\Type\BooleanType) {
             return null;
         }
-
         return $onlyStmt->expr;
     }
 }

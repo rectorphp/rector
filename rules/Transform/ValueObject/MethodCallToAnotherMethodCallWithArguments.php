@@ -1,33 +1,27 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use PHPStan\Type\ObjectType;
-
 final class MethodCallToAnotherMethodCallWithArguments
 {
     /**
      * @var string
      */
     private $type;
-
     /**
      * @var string
      */
     private $oldMethod;
-
     /**
      * @var string
      */
     private $newMethod;
-
     /**
      * @var mixed[]
      */
     private $newArguments = [];
-
     /**
      * @param mixed[] $newArguments
      */
@@ -38,26 +32,22 @@ final class MethodCallToAnotherMethodCallWithArguments
         $this->newMethod = $newMethod;
         $this->newArguments = $newArguments;
     }
-
-    public function getObjectType(): ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->type);
+        return new \PHPStan\Type\ObjectType($this->type);
     }
-
-    public function getOldMethod(): string
+    public function getOldMethod() : string
     {
         return $this->oldMethod;
     }
-
-    public function getNewMethod(): string
+    public function getNewMethod() : string
     {
         return $this->newMethod;
     }
-
     /**
      * @return mixed[]
      */
-    public function getNewArguments(): array
+    public function getNewArguments() : array
     {
         return $this->newArguments;
     }

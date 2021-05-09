@@ -1,54 +1,44 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeAnalyzer;
 
 use PHPStan\Type\CallableType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
-
 final class ObjectTypeComparator
 {
     /**
      * E.g. current E, new type A, E extends A → true
      * Also for closure/callable, iterable/Traversable/Iterator/Generator
      */
-    public function isCurrentObjectTypeSubType(Type $currentType, Type $newType): bool
+    public function isCurrentObjectTypeSubType(\PHPStan\Type\Type $currentType, \PHPStan\Type\Type $newType) : bool
     {
-        if ($newType instanceof ObjectWithoutClassType && $currentType instanceof ObjectType) {
-            return true;
+        if ($newType instanceof \PHPStan\Type\ObjectWithoutClassType && $currentType instanceof \PHPStan\Type\ObjectType) {
+            return \true;
         }
-
         if ($this->isBothCallable($currentType, $newType)) {
-            return true;
+            return \true;
         }
-
-        if (! $currentType instanceof ObjectType) {
-            return false;
+        if (!$currentType instanceof \PHPStan\Type\ObjectType) {
+            return \false;
         }
-
-        if (! $newType instanceof ObjectType) {
-            return false;
+        if (!$newType instanceof \PHPStan\Type\ObjectType) {
+            return \false;
         }
-
-        return $newType->isSuperTypeOf($currentType)
-            ->yes();
+        return $newType->isSuperTypeOf($currentType)->yes();
     }
-
-    private function isBothCallable(Type $currentType, Type $newType): bool
+    private function isBothCallable(\PHPStan\Type\Type $currentType, \PHPStan\Type\Type $newType) : bool
     {
-        if ($currentType instanceof CallableType && $this->isClosure($newType)) {
-            return true;
+        if ($currentType instanceof \PHPStan\Type\CallableType && $this->isClosure($newType)) {
+            return \true;
         }
-
-        return $newType instanceof CallableType && $this->isClosure($currentType);
+        return $newType instanceof \PHPStan\Type\CallableType && $this->isClosure($currentType);
     }
-
-    private function isClosure(Type $type): bool
+    private function isClosure(\PHPStan\Type\Type $type) : bool
     {
-        $closureObjectType = new ObjectType('Closure');
+        $closureObjectType = new \PHPStan\Type\ObjectType('Closure');
         return $closureObjectType->equals($type);
     }
 }

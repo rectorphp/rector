@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\DowngradePhp71\Rector\String_;
 
 use PhpParser\Node;
@@ -18,100 +17,79 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\DowngradePhp71\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector\DowngradeNegativeStringOffsetToStrlenRectorTest
  */
-final class DowngradeNegativeStringOffsetToStrlenRector extends AbstractRector
+final class DowngradeNegativeStringOffsetToStrlenRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Downgrade negative string offset to strlen',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade negative string offset to strlen', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 echo 'abcdef'[-2];
 echo strpos('aabbcc', 'b', -3);
 echo strpos($var, 'b', -3);
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 echo 'abcdef'[strlen('abcdef') - 2];
 echo strpos('aabbcc', 'b', strlen('aabbcc') - 3);
 echo strpos($var, 'b', strlen($var) - 3);
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [FuncCall::class, String_::class, Variable::class, PropertyFetch::class, StaticPropertyFetch::class];
+        return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Scalar\String_::class, \PhpParser\Node\Expr\Variable::class, \PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\StaticPropertyFetch::class];
     }
-
     /**
      * @param FuncCall|String_|Variable|PropertyFetch|StaticPropertyFetch $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof FuncCall) {
+        if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
             return $this->processForFuncCall($node);
         }
-
         return $this->processForStringOrVariableOrProperty($node);
     }
-
     /**
      * @param String_|Variable|PropertyFetch|StaticPropertyFetch $expr
      */
-    private function processForStringOrVariableOrProperty(Expr $expr): ?Expr
+    private function processForStringOrVariableOrProperty(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr
     {
-        $nextNode = $expr->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $nextNode instanceof UnaryMinus) {
+        $nextNode = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof \PhpParser\Node\Expr\UnaryMinus) {
             return null;
         }
-
-        $parentOfNextNode = $nextNode->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentOfNextNode instanceof ArrayDimFetch) {
+        $parentOfNextNode = $nextNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentOfNextNode instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return null;
         }
-        if (! $this->nodeComparator->areNodesEqual($parentOfNextNode->dim, $nextNode)) {
+        if (!$this->nodeComparator->areNodesEqual($parentOfNextNode->dim, $nextNode)) {
             return null;
         }
-
         /** @var UnaryMinus $dim */
         $dim = $parentOfNextNode->dim;
-
         $strlenFuncCall = $this->nodeFactory->createFuncCall('strlen', [$expr]);
-        $parentOfNextNode->dim = new Minus($strlenFuncCall, $dim->expr);
-
+        $parentOfNextNode->dim = new \PhpParser\Node\Expr\BinaryOp\Minus($strlenFuncCall, $dim->expr);
         return $expr;
     }
-
-    private function processForFuncCall(FuncCall $funcCall): ?FuncCall
+    private function processForFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
     {
         $name = $this->getName($funcCall);
         if ($name !== 'strpos') {
             return null;
         }
-
         $args = $funcCall->args;
-        if (! isset($args[2])) {
+        if (!isset($args[2])) {
             return null;
         }
-
-        if (! $args[2]->value instanceof UnaryMinus) {
+        if (!$args[2]->value instanceof \PhpParser\Node\Expr\UnaryMinus) {
             return null;
         }
-
         $strlenFuncCall = $this->nodeFactory->createFuncCall('strlen', [$args[0]]);
-        $funcCall->args[2]->value = new Minus($strlenFuncCall, $args[2]->value->expr);
-
+        $funcCall->args[2]->value = new \PhpParser\Node\Expr\BinaryOp\Minus($strlenFuncCall, $args[2]->value->expr);
         return $funcCall;
     }
 }

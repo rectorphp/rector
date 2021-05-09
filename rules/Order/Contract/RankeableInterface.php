@@ -1,15 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Order\Contract;
 
 interface RankeableInterface
 {
-    public function getName(): string;
-
+    public function getName() : string;
     /**
      * @return bool[]|int[]
      */
-    public function getRanks(): array;
+    public function getRanks() : array;
 }

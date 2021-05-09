@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
@@ -12,34 +11,30 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
-
-final class NullTypeMapper implements TypeMapperInterface
+final class NullTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
      * @return class-string<Type>
      */
-    public function getNodeClass(): string
+    public function getNodeClass() : string
     {
-        return NullType::class;
+        return \PHPStan\Type\NullType::class;
     }
-
     /**
      * @param NullType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
-        return new IdentifierTypeNode('null');
+        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('null');
     }
-
     /**
      * @param NullType $type
      */
-    public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null) : ?\PhpParser\Node
     {
-        if ($kind !== TypeKind::KIND_PROPERTY) {
+        if ($kind !== \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::KIND_PROPERTY) {
             return null;
         }
-
-        return new Name('null');
+        return new \PhpParser\Node\Name('null');
     }
 }

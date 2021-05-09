@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Privatization\NodeManipulator;
 
 use PhpParser\Node;
@@ -12,177 +11,139 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Exception\InvalidNodeTypeException;
 use Rector\Core\ValueObject\Visibility;
-use Webmozart\Assert\Assert;
-
+use RectorPrefix20210509\Webmozart\Assert\Assert;
 final class VisibilityManipulator
 {
     /**
      * @var array<class-string<Stmt>>
      */
-    private const ALLOWED_NODE_TYPES = [ClassMethod::class, Property::class, ClassConst::class, Class_::class];
-
+    private const ALLOWED_NODE_TYPES = [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\ClassConst::class, \PhpParser\Node\Stmt\Class_::class];
     /**
      * @param ClassMethod|Property|ClassConst $node
      */
-    public function makeStatic(Node $node): void
+    public function makeStatic(\PhpParser\Node $node) : void
     {
-        $this->addVisibilityFlag($node, Visibility::STATIC);
+        $this->addVisibilityFlag($node, \Rector\Core\ValueObject\Visibility::STATIC);
     }
-
     /**
      * @param ClassMethod|Class_ $node
      */
-    public function makeAbstract(Node $node): void
+    public function makeAbstract(\PhpParser\Node $node) : void
     {
-        $this->addVisibilityFlag($node, Visibility::ABSTRACT);
+        $this->addVisibilityFlag($node, \Rector\Core\ValueObject\Visibility::ABSTRACT);
     }
-
     /**
      * @param ClassMethod|Property $node
      */
-    public function makeNonStatic(Node $node): void
+    public function makeNonStatic(\PhpParser\Node $node) : void
     {
-        if (! $node->isStatic()) {
+        if (!$node->isStatic()) {
             return;
         }
-
-        $node->flags -= Class_::MODIFIER_STATIC;
+        $node->flags -= \PhpParser\Node\Stmt\Class_::MODIFIER_STATIC;
     }
-
     /**
      * @param Class_|ClassMethod $node
      */
-    public function makeFinal(Node $node): void
+    public function makeFinal(\PhpParser\Node $node) : void
     {
-        $this->addVisibilityFlag($node, Visibility::FINAL);
+        $this->addVisibilityFlag($node, \Rector\Core\ValueObject\Visibility::FINAL);
     }
-
     /**
      * @param Class_|ClassMethod $node
      */
-    public function makeNonFinal(Node $node): void
+    public function makeNonFinal(\PhpParser\Node $node) : void
     {
-        if (! $node->isFinal()) {
+        if (!$node->isFinal()) {
             return;
         }
-
-        $node->flags -= Class_::MODIFIER_FINAL;
+        $node->flags -= \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL;
     }
-
     /**
      * This way "abstract", "static", "final" are kept
      *
      * @param ClassMethod|Property|ClassConst $node
      */
-    public function removeVisibility(Node $node): void
+    public function removeVisibility(\PhpParser\Node $node) : void
     {
         $this->ensureIsClassMethodOrProperty($node, __METHOD__);
-
         // no modifier
         if ($node->flags === 0) {
             return;
         }
-
         if ($node->isPublic()) {
-            $node->flags -= Class_::MODIFIER_PUBLIC;
+            $node->flags -= \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC;
         }
-
         if ($node->isProtected()) {
-            $node->flags -= Class_::MODIFIER_PROTECTED;
+            $node->flags -= \PhpParser\Node\Stmt\Class_::MODIFIER_PROTECTED;
         }
-
         if ($node->isPrivate()) {
-            $node->flags -= Class_::MODIFIER_PRIVATE;
+            $node->flags -= \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE;
         }
     }
-
     /**
      * @param ClassMethod|Property|ClassConst $node
      */
-    public function changeNodeVisibility(Node $node, int $visibility): void
+    public function changeNodeVisibility(\PhpParser\Node $node, int $visibility) : void
     {
-        Assert::oneOf($visibility, [
-            Visibility::PUBLIC,
-            Visibility::PROTECTED,
-            Visibility::PRIVATE,
-            Visibility::STATIC,
-            Visibility::ABSTRACT,
-            Visibility::FINAL,
-        ]);
-
+        \RectorPrefix20210509\Webmozart\Assert\Assert::oneOf($visibility, [\Rector\Core\ValueObject\Visibility::PUBLIC, \Rector\Core\ValueObject\Visibility::PROTECTED, \Rector\Core\ValueObject\Visibility::PRIVATE, \Rector\Core\ValueObject\Visibility::STATIC, \Rector\Core\ValueObject\Visibility::ABSTRACT, \Rector\Core\ValueObject\Visibility::FINAL]);
         $this->replaceVisibilityFlag($node, $visibility);
     }
-
     /**
      * @param ClassMethod|Property|ClassConst $node
      */
-    public function makePublic(Node $node): void
+    public function makePublic(\PhpParser\Node $node) : void
     {
-        $this->replaceVisibilityFlag($node, Visibility::PUBLIC);
+        $this->replaceVisibilityFlag($node, \Rector\Core\ValueObject\Visibility::PUBLIC);
     }
-
     /**
      * @param ClassMethod|Property|ClassConst $node
      */
-    public function makeProtected(Node $node): void
+    public function makeProtected(\PhpParser\Node $node) : void
     {
-        $this->replaceVisibilityFlag($node, Visibility::PROTECTED);
+        $this->replaceVisibilityFlag($node, \Rector\Core\ValueObject\Visibility::PROTECTED);
     }
-
     /**
      * @param ClassMethod|Property|ClassConst $node
      */
-    public function makePrivate(Node $node): void
+    public function makePrivate(\PhpParser\Node $node) : void
     {
-        $this->replaceVisibilityFlag($node, Visibility::PRIVATE);
+        $this->replaceVisibilityFlag($node, \Rector\Core\ValueObject\Visibility::PRIVATE);
     }
-
-    public function removeFinal(Class_ $class): void
+    public function removeFinal(\PhpParser\Node\Stmt\Class_ $class) : void
     {
-        $class->flags -= Class_::MODIFIER_FINAL;
+        $class->flags -= \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL;
     }
-
     /**
      * @param Class_|ClassMethod|Property|ClassConst $node
      */
-    private function addVisibilityFlag(Node $node, int $visibility): void
+    private function addVisibilityFlag(\PhpParser\Node $node, int $visibility) : void
     {
         $this->ensureIsClassMethodOrProperty($node, __METHOD__);
         $node->flags |= $visibility;
     }
-
-    private function ensureIsClassMethodOrProperty(Node $node, string $location): void
+    private function ensureIsClassMethodOrProperty(\PhpParser\Node $node, string $location) : void
     {
         foreach (self::ALLOWED_NODE_TYPES as $allowedNodeType) {
-            if (is_a($node, $allowedNodeType, true)) {
+            if (\is_a($node, $allowedNodeType, \true)) {
                 return;
             }
         }
-
-        throw new InvalidNodeTypeException(sprintf(
-            '"%s" only accepts "%s" types. "%s" given.',
-            $location,
-            implode('", "', self::ALLOWED_NODE_TYPES),
-            get_class($node)
-        ));
+        throw new \Rector\Core\Exception\InvalidNodeTypeException(\sprintf('"%s" only accepts "%s" types. "%s" given.', $location, \implode('", "', self::ALLOWED_NODE_TYPES), \get_class($node)));
     }
-
     /**
      * @param ClassMethod|Property|ClassConst $node
      */
-    private function replaceVisibilityFlag(Node $node, int $visibility): void
+    private function replaceVisibilityFlag(\PhpParser\Node $node, int $visibility) : void
     {
-        $isStatic = $node instanceof ClassMethod && $node->isStatic();
+        $isStatic = $node instanceof \PhpParser\Node\Stmt\ClassMethod && $node->isStatic();
         if ($isStatic) {
             $this->removeVisibility($node);
         }
-
-        if ($visibility !== Visibility::STATIC && $visibility !== Visibility::ABSTRACT && $visibility !== Visibility::FINAL) {
+        if ($visibility !== \Rector\Core\ValueObject\Visibility::STATIC && $visibility !== \Rector\Core\ValueObject\Visibility::ABSTRACT && $visibility !== \Rector\Core\ValueObject\Visibility::FINAL) {
             $this->removeVisibility($node);
         }
-
         $this->addVisibilityFlag($node, $visibility);
-
         if ($isStatic) {
             $this->makeStatic($node);
         }

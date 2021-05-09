@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
-use Nette\Utils\Strings;
+use RectorPrefix20210509\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -14,25 +13,19 @@ use Rector\CodingStyle\ValueObject\ObjectMagicMethods;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRector\RemoveDoubleUnderscoreInMethodNameRectorTest
  */
-final class RemoveDoubleUnderscoreInMethodNameRector extends AbstractRector
+final class RemoveDoubleUnderscoreInMethodNameRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
      * @see https://regex101.com/r/oRrhDJ/3
      */
     private const DOUBLE_UNDERSCORE_START_REGEX = '#^__(.+)#';
-
-    public function getRuleDefinition(): RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition(
-            'Non-magic PHP object methods cannot start with "__"',
-            [
-                new CodeSample(
-                    <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Non-magic PHP object methods cannot start with "__"', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __getName($anotherObject)
@@ -41,8 +34,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function getName($anotherObject)
@@ -51,45 +43,35 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ),
-            ]
-        );
+)]);
     }
-
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
-        return [ClassMethod::class, MethodCall::class, StaticCall::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
-
     /**
      * @param ClassMethod|MethodCall|StaticCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $methodName = $this->getName($node->name);
         if ($methodName === null) {
             return null;
         }
-
-        if (in_array($methodName, ObjectMagicMethods::METHOD_NAMES, true)) {
+        if (\in_array($methodName, \Rector\CodingStyle\ValueObject\ObjectMagicMethods::METHOD_NAMES, \true)) {
             return null;
         }
-
-        if (! Strings::match($methodName, self::DOUBLE_UNDERSCORE_START_REGEX)) {
+        if (!\RectorPrefix20210509\Nette\Utils\Strings::match($methodName, self::DOUBLE_UNDERSCORE_START_REGEX)) {
             return null;
         }
-
-        $newName = Strings::substring($methodName, 2);
-
-        if (is_numeric($newName[0])) {
+        $newName = \RectorPrefix20210509\Nette\Utils\Strings::substring($methodName, 2);
+        if (\is_numeric($newName[0])) {
             return null;
         }
-
-        $node->name = new Identifier($newName);
-
+        $node->name = new \PhpParser\Node\Identifier($newName);
         return $node;
     }
 }

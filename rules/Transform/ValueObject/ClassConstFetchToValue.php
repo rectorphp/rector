@@ -1,28 +1,23 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use PHPStan\Type\ObjectType;
-
 final class ClassConstFetchToValue
 {
     /**
      * @var string
      */
     private $class;
-
     /**
      * @var string
      */
     private $constant;
-
     /**
      * @var mixed
      */
     private $value;
-
     /**
      * @param mixed $value
      */
@@ -32,17 +27,14 @@ final class ClassConstFetchToValue
         $this->constant = $constant;
         $this->value = $value;
     }
-
-    public function getObjectType(): ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->class);
+        return new \PHPStan\Type\ObjectType($this->class);
     }
-
-    public function getConstant(): string
+    public function getConstant() : string
     {
         return $this->constant;
     }
-
     /**
      * @return mixed
      */

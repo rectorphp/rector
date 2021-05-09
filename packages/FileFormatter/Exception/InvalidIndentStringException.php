@@ -1,17 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Rector\FileFormatter\Exception;
 
 use InvalidArgumentException;
-
-final class InvalidIndentStringException extends InvalidArgumentException
+final class InvalidIndentStringException extends \InvalidArgumentException
 {
-    public static function fromString(string $string): self
+    /**
+     * @return $this
+     */
+    public static function fromString(string $string)
     {
-        $message = sprintf('This is not valid indentation "%s"', $string);
-
+        $message = \sprintf('This is not valid indentation "%s"', $string);
         return new self($message);
     }
 }
