@@ -6,33 +6,44 @@ use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use Tracy\Dumper;
 
-function dn(Node $node, int $depth = 2): void
-{
-    dump_node($node, $depth);
+if (! function_exists('dn')) {
+    function dn(Node $node, int $depth = 2): void
+    {
+        dump_node($node, $depth);
+    }
 }
 
 
-function dump_node(Node $node, int $depth = 2): void
-{
-    Dumper::dump($node, [
-        Dumper::DEPTH => $depth,
-    ]);
+if (! function_exists('dump_node')) {
+    /**
+     * @param Node|Node[] $node
+     */
+    function dump_node($node, int $depth = 2): void
+    {
+        $nodes = is_array($node) ? $node : [$node];
+
+        foreach ($nodes as $node) {
+            Dumper::dump($node, [
+                Dumper::DEPTH => $depth,
+            ]);
+        }
+    }
 }
 
-/**
- * @param Node|Node[] $node
- */
-function print_node($node): void
-{
-    $standard = new Standard();
 
-    if (is_array($node)) {
-        foreach ($node as $singleNode) {
-            $printedContent = $standard->prettyPrint([$singleNode]);
+if (! function_exists('print_node')) {
+    /**
+     * @param Node|Node[] $node
+     */
+    function print_node($node): void
+    {
+        $standard = new Standard();
+
+        $nodes = is_array($node) ? $node : [$node];
+
+        foreach ($nodes as $node) {
+            $printedContent = $standard->prettyPrint([$node]);
             Dumper::dump($printedContent);
         }
-    } else {
-        $printedContent = $standard->prettyPrint([$node]);
-        Dumper::dump($printedContent);
     }
 }
