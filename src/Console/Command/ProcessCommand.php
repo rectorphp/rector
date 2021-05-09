@@ -14,7 +14,6 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\FileSystem\PhpFilesFinder;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Core\ValueObject\Application\File;
@@ -28,7 +27,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ProcessCommand extends Command
 {
@@ -46,11 +44,6 @@ final class ProcessCommand extends Command
      * @var OutputFormatterCollector
      */
     private $outputFormatterCollector;
-
-    /**
-     * @var PhpFilesFinder
-     */
-    private $phpFilesFinder;
 
     /**
      * @var ChangedFilesDetector
@@ -97,7 +90,6 @@ final class ProcessCommand extends Command
         ChangedFilesDetector $changedFilesDetector,
         Configuration $configuration,
         OutputFormatterCollector $outputFormatterCollector,
-        PhpFilesFinder $phpFilesFinder,
         MissingRectorRulesReporter $missingRectorRulesReporter,
         ApplicationFileProcessor $applicationFileProcessor,
         FileFactory $fileFactory,
@@ -110,7 +102,6 @@ final class ProcessCommand extends Command
         $this->configuration = $configuration;
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->changedFilesDetector = $changedFilesDetector;
-        $this->phpFilesFinder = $phpFilesFinder;
         $this->missingRectorRulesReporter = $missingRectorRulesReporter;
 
         parent::__construct();
