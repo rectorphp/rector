@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
+use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
@@ -273,7 +274,11 @@ final class ProcessCommand extends Command
         $filePaths = [];
         foreach ($files as $file) {
             $smartFileInfo = $file->getSmartFileInfo();
-            $filePaths[] = $smartFileInfo->getPathname();
+            $pathName = $smartFileInfo->getPathname();
+
+            if (Strings::endsWith($pathName, '.php')) {
+                $filePaths[] = $pathName;
+            }
         }
 
         $this->nodeScopeResolver->setAnalysedFiles($filePaths);
