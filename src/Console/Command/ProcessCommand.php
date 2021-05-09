@@ -281,7 +281,8 @@ final class ProcessCommand extends Command
     {
         $filePaths = [];
         foreach ($files as $file) {
-            $filePaths[] = $file->getSmartFileInfo()->getPathname();
+            $smartFileInfo = $file->getSmartFileInfo();
+            $filePaths[] = $smartFileInfo->getPathname();
         }
 
         $this->nodeScopeResolver->setAnalysedFiles($filePaths);
