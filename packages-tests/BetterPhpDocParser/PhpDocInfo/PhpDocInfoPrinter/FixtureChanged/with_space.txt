@@ -1,5 +1,0 @@
-/**
- * Test.
- * 
- * @param string $param
- */

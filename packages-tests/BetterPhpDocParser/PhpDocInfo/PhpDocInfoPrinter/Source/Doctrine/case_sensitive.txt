@@ -1,9 +1,0 @@
-/**
- * @ORM\Table(
- *   name="Content_Status", indexes={
- *     @Orm\Index(name="value_idx", columns={"value"}),
- *     @Orm\Index(name="dateFrom_idx", columns={"dateFrom"}),
- *     @Orm\Index(name="dateTo_idx", columns={"dateTo"}),
- *   }
- * )
- */

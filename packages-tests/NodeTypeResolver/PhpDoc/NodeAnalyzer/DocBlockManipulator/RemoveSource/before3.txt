@@ -1,4 +1,0 @@
-/**
- * @param ParamType $paramName
- * @param AnotherValue $anotherValue
- */

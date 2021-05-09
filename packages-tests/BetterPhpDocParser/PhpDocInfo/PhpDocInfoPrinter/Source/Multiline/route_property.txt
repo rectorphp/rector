@@ -1,7 +1,0 @@
-/**
- * @Route(
- *     "/{arg1}/{arg2}",
- *     defaults={"arg1"=null, "arg2"=""},
- *     requirements={"arg1"="\d+", "arg2"=".*"}
- * )
- */

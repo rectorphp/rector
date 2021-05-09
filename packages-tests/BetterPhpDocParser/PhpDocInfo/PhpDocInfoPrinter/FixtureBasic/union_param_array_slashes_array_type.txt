@@ -1,3 +1,0 @@
-/**
- * @param array<string|\SomeClass> $cookies
- */

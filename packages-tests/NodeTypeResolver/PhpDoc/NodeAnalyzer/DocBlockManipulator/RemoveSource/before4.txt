@@ -1,7 +1,0 @@
-/**
- * @method void setName(string $var)
- * @method getName()
- * @method addItem()
- * @method self setItems()
- * @method setEnabled (bool)
- */

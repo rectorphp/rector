@@ -1,3 +1,0 @@
-/**
- * @method int|bool|null|void main(...$args)
- */

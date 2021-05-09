@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<phpunit
-    bootstrap="tests/bootstrap.php"
-    colors="true"
-    verbose="true"
->
-</phpunit>

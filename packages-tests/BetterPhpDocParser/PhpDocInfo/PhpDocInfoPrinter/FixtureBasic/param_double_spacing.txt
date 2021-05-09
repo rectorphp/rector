@@ -1,4 +1,0 @@
-/**
- * @param string $key
- * @param  int $selected
- */

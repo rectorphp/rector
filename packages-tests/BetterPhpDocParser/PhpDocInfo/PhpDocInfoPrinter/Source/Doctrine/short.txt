@@ -1,7 +1,0 @@
-/**
- * @ORM\Table(
- *   uniqueConstraints={
- *      @UniqueConstraint(name="content_status_unique", columns={"content_id", "site_id", "lang"})
- *     }
- * )
- */

@@ -1,4 +1,0 @@
-/**
- * @link https://book.cakephp.org/4/en/core-libraries/global-constants-and-functions.html#pluginSplit
- * @psalm-return array{string|null, string}
- */

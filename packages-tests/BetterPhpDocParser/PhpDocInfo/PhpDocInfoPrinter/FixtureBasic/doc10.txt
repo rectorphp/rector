@@ -1,3 +1,0 @@
-/**
- * @customAnnotation(arg)
- */

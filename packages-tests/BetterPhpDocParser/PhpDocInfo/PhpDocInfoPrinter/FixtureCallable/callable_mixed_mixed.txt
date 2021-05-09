@@ -1,3 +1,0 @@
-/**
- * @var (callable(mixed $value, string $typeName):mixed)[]
- */

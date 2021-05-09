@@ -1,4 +1,0 @@
-/**
- * @property int    $defaultMaturity
- * @property string $pdfDirectory
- */

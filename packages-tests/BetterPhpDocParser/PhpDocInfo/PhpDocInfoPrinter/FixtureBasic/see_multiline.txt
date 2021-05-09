@@ -1,5 +1,0 @@
-/**
- * @see https://book.cakephp.org/2/en/models/associations-linking-models-together.html#relationship-types
- * hasOne => one to one
- * hasMany => one to many
- */

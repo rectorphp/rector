@@ -1,6 +1,0 @@
-/**
- * @Assert\Type(
- *     "bool"
- * )
- */
-public $anotherSerializeSingleLine;

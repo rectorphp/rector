@@ -1,3 +1,0 @@
-/**
- * @param object     $subject
- */
