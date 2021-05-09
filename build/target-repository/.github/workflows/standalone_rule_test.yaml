@@ -16,7 +16,7 @@ jobs:
                 actions:
                     -
                         name: 'Rector Prefixed'
-                        run: composer require rector/rector-prefixed:dev-main --dev
+                        run: composer require rector/rector:dev-main --dev
 
         steps:
             # see https://github.com/rectorphp/rector-prefixed-rule-test

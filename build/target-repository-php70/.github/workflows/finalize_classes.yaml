@@ -51,7 +51,7 @@ jobs:
             -   run: |
                     cd standalone
                     # run
-                    composer require rector/rector-prefixed:dev-main --dev --ansi
+                    composer require rector/rector:dev-main --dev --ansi
                     ${{ matrix.commands.install }}
 
             -
