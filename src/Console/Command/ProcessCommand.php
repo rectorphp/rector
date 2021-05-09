@@ -17,6 +17,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\PhpFilesFinder;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
+use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
@@ -191,22 +192,22 @@ final class ProcessCommand extends Command
         $this->configuration->resolveFromInput($input);
         $this->configuration->validateConfigParameters();
 
-        $paths = $this->configuration->getPaths();
-        $phpFileInfos = $this->phpFilesFinder->findInPaths($paths);
-
         // register autoloaded and included files
         $this->bootstrapFilesIncluder->includeBootstrapFiles();
 
         $this->additionalAutoloader->autoloadInput($input);
         $this->additionalAutoloader->autoloadPaths();
 
-        // PHPStan has to know about all files!
-        $this->configurePHPStanNodeScopeResolver($phpFileInfos);
+        $paths = $this->configuration->getPaths();
 
         // 0. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
 
         $files = $this->fileFactory->createFromPaths($paths);
+
+        // PHPStan has to know about all files!
+        $this->configurePHPStanNodeScopeResolver($files);
+
         $this->applicationFileProcessor->run($files);
 
         // report diffs and errors
@@ -274,13 +275,13 @@ final class ProcessCommand extends Command
     }
 
     /**
-     * @param SmartFileInfo[] $fileInfos
+     * @param File[] $files
      */
-    private function configurePHPStanNodeScopeResolver(array $fileInfos): void
+    private function configurePHPStanNodeScopeResolver(array $files): void
     {
         $filePaths = [];
-        foreach ($fileInfos as $fileInfo) {
-            $filePaths[] = $fileInfo->getPathname();
+        foreach ($files as $file) {
+            $filePaths[] = $file->getSmartFileInfo()->getPathname();
         }
 
         $this->nodeScopeResolver->setAnalysedFiles($filePaths);
